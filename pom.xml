@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.europeana</groupId>
+	<artifactId>corelib</artifactId>
+	<packaging>pom</packaging>
+	<version>2.0-SNAPSHOT</version>
+	<name>corelib</name>
+	<url>http://www.europeanalabs.eu</url>
+	<modules>
+		<module>corelib-db</module>
+		<module>corelib-definitions</module>
+		<module>corelib-solr</module>
+	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<organization>
+		<url>http://www.europeanalabs.eu</url>
+		<name>Europeana Foundation</name>
+	</organization>
+	<properties>
+		<version.europeana.core>2.0-SNAPSHOT</version.europeana.core>
+		<version.jdk>1.6</version.jdk>
+		<version.junit>4.10</version.junit>
+		
+		<version.spring.core>3.0.5.RELEASE</version.spring.core>
+		<version.commons.lang>2.6</version.commons.lang>
+		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
+		<version.solr>3.4.0</version.solr>
+		
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+</project>

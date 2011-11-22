@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>corelib</artifactId>
+		<groupId>eu.europeana</groupId>
+		<version>2.0-SNAPSHOT</version>
+	</parent>
+	<groupId>eu.europeana.corelib</groupId>
+	<artifactId>corelib-solr</artifactId>
+	<name>corelib-solr</name>
+	<url>http://www.europeanalabs.eu</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>${version.solr}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<organization>
+		<name>Europeana Foundation</name>
+	</organization>
+</project>
