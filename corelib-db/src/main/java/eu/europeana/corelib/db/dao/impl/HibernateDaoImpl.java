@@ -7,11 +7,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
-public class HibernateDao<E extends IdentifiedEntity<?>> extends HibernateDaoSupport implements Dao<E> {
+public class HibernateDaoImpl<E extends IdentifiedEntity<?>> extends HibernateDaoSupport implements Dao<E> {
 	
 	private Class<E> domainClazz = null;
 	
-	public HibernateDao(Class<E> clazz) {
+	public HibernateDaoImpl(Class<E> clazz) {
 		domainClazz = clazz;
 	}
 

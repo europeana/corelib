@@ -4,7 +4,7 @@
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0-SNAPSHOT</version>
+	<version>${version.europeana.corelib}</version>
 	<name>corelib</name>
 	<url>http://www.europeanalabs.eu</url>
 	<modules>
@@ -12,6 +12,38 @@
 		<module>corelib-definitions</module>
 		<module>corelib-solr</module>
 	</modules>
+	<organization>
+		<url>http://www.europeanalabs.eu</url>
+		<name>Europeana Foundation</name>
+	</organization>
+	<properties>
+		<version.europeana.corelib>2.0-SNAPSHOT</version.europeana.corelib>
+		<version.jdk>1.6</version.jdk>
+		<version.junit>4.10</version.junit>
+
+		<version.spring.core>3.0.5.RELEASE</version.spring.core>
+		<version.commons.lang>2.6</version.commons.lang>
+		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
+		<version.solr>3.4.0</version.solr>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<!-- best lock down version of the plugin too -->
+					<configuration>
+						<source>${version.jdk}</source>
+						<target>${version.jdk}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -20,21 +52,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<organization>
-		<url>http://www.europeanalabs.eu</url>
-		<name>Europeana Foundation</name>
-	</organization>
-	<properties>
-		<version.europeana.core>2.0-SNAPSHOT</version.europeana.core>
-		<version.jdk>1.6</version.jdk>
-		<version.junit>4.10</version.junit>
-		
-		<version.spring.core>3.0.5.RELEASE</version.spring.core>
-		<version.commons.lang>2.6</version.commons.lang>
-		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
-		<version.solr>3.4.0</version.solr>
-		
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
 </project>

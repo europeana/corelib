@@ -11,8 +11,5 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         ">
         
-    <import resource="internal/corelib-db-dao.xml"/>
-
-    <context:annotation-config/>
 
 </beans>
