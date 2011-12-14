@@ -19,12 +19,37 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.db.service;
+package eu.europeana.corelib.db.service.abstracts;
 
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import java.io.Serializable;
 
-public interface UserService extends AbstractService<User> {
+import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+
+public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> implements AbstractService<E> {
 	
+	protected Dao<E> dao;
+	
+	public final void setDao(Dao<E> dao) {
+		this.dao = dao;
+	}
+
+	@Override
+	public void store(E object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(E object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public E findByID(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

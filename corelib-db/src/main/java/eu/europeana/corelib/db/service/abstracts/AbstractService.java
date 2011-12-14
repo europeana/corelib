@@ -19,12 +19,38 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.db.service;
+package eu.europeana.corelib.db.service.abstracts;
 
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import java.io.Serializable;
 
-public interface UserService extends AbstractService<User> {
-	
+import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+
+public interface AbstractService<E extends IdentifiedEntity<?>> {
+
+	/**
+	 * 
+	 * 
+	 * @param object
+	 */
+	public void store(E object);
+
+	/**
+	 * 
+	 * 
+	 * @param object
+	 */
+	public void remove(E object);
+
+	/*
+	 * FINDERS
+	 */
+
+	/**
+	 * 
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public E findByID(final Serializable id);
 
 }

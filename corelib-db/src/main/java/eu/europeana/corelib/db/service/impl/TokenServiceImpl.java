@@ -19,12 +19,24 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.db.service;
+package eu.europeana.corelib.db.service.impl;
 
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import java.util.Calendar;
 
-public interface UserService extends AbstractService<User> {
-	
+import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.service.TokenService;
+import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+
+public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
+		TokenService {
+
+	@Override
+	public Token create(String email) {
+		Token token = new Token();
+		token.setCreated(Calendar.getInstance().getTimeInMillis());
+		token.setEmail(email);
+		token.setToken("");
+		return dao.insert(token);
+	}
 
 }

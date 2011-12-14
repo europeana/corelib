@@ -11,5 +11,16 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         ">
         
+    <bean id="corelib_db_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.DaoImpl">
+    	<!-- <property name="sessionFactory" ref="entityManagerFactory"/> -->
+    </bean>
+        
+	<bean id="corelib_db_userDao" parent="corelib_db_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.User"/>
+	</bean>        
+        
+	<bean id="corelib_db_tokenDao" parent="corelib_db_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.Token"/>
+	</bean>        
 
 </beans>

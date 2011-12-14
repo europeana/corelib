@@ -28,7 +28,7 @@
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
+			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${version.hibernate.core}</version>
 		</dependency>
 		<!-- Other -->
@@ -39,6 +39,13 @@
 		</dependency>
 		<!-- TESTING PURPOSES -->
 		<dependency>
+			<scope>test</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${version.spring.core}</version>
+		</dependency>
+		<dependency>
+			<scope>test</scope>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.2.4</version>

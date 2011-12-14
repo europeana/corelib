@@ -21,7 +21,7 @@
 		<version.jdk>1.6</version.jdk>
 		<version.junit>4.10</version.junit>
 
-		<version.spring.core>3.0.5.RELEASE</version.spring.core>
+		<version.spring.core>3.1.0.RELEASE</version.spring.core>
 		<version.commons.lang>2.6</version.commons.lang>
 		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
 		<version.solr>3.4.0</version.solr>

@@ -19,54 +19,44 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.db.dao;
+package eu.europeana.corelib.db.dao.impl;
 
 import java.io.Serializable;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 
-public interface Dao<E extends IdentifiedEntity<?>> {
+    @PersistenceContext(name="corelib_db_entityManagerFactory")
+    protected EntityManager entityManager;
 	
-	/*
-	 * FINDERS
-	 */
+	private Class<E> domainClazz = null;
+	
+	public DaoImpl(Class<E> clazz) {
+		domainClazz = clazz;
+	}
 
-	/**
-	 * Retrieve a row through a private key
-	 * 
-	 * @param pk
-	 *            A private key object
-	 * @return Returns a row
-	 */
-	E findByPK(final Serializable id);
+	public E findByPK(Serializable id) {
+		return entityManager.find(domainClazz, id);
+	}
 
-	/*
-	 * MODIFIERS
-	 */
+	public E insert(E entity) {
+		entityManager.persist(entity);
+		return entity;
+	}
 
-	/**
-	 * insert a new row into the database
-	 * 
-	 * @param object
-	 *            The new row to insert
-	 */
-	E insert(E object);
+	public E update(E object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	/**
-	 * update a row in the database
-	 * 
-	 * @param object
-	 *            Existing object to update
-	 */
-	E update(E object);
-
-	/**
-	 * Delete a existing object in the database
-	 * 
-	 * @param object
-	 *            The existing row to delete
-	 */
-	void delete(E object);
+	public void delete(E object) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

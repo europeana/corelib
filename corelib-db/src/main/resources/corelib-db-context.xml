@@ -11,8 +11,16 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         ">
         
+    <import resource="internal/corelib-db-datasource.xml"/>
     <import resource="internal/corelib-db-dao.xml"/>
 
     <context:annotation-config/>
+    
+    <bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl">
+    	<property name="dao" ref="corelib_db_tokenDao"/>
+    </bean>
+    <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl">
+    	<property name="dao" ref="corelib_db_userDao"/>
+    </bean>
 
 </beans>
