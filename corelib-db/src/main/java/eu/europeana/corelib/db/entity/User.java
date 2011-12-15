@@ -1,22 +1,22 @@
 /*
  * Copyright 2007 EDL FOUNDATION
  *
- * Licensed under the EUPL, Version 1.1 or - as soon they
+ * Licensed under the EUPL, Version 1.1 or - as soon they 
  * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
+ * versions of the EUPL (the "License");
  * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ * License.
+ * You may obtain a copy of the License at:
  *
  * http://ec.europa.eu/idabc/eupl
  *
  * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
+ * writing, software distributed under the License is
  * distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ * See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 package eu.europeana.corelib.db.entity;
@@ -38,54 +38,54 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Index;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.definitions.db.FieldSize;
+import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.users.Role;
 
 @Entity
-@Table(name = "users")
-public class User implements IdentifiedEntity<Long> {
+@Table(name = DatabaseDefinition.TABLENAME_USER)
+public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	private static final long serialVersionUID = 3830841148649674534L;
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-	
-	@Column(length = FieldSize.PERSONAL_FIELD, unique = true, nullable = false)
-    @Index(name = "email_index")
-    private String email;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-    @Column(length = FieldSize.PASSWORD)
-    private String password;
+	@Column(length = FIELDSIZE_PERSONAL, unique = true, nullable = false)
+	@Index(name = "email_index")
+	private String email;
 
-    @Column(length = FieldSize.IDENTIFIER)
-    @Index(name = "apikey_index")
-    private String apiKey;
+	@Column(length = FIELDSIZE_PASSWORD)
+	private String password;
 
-    @Column
-    @Temporal(TemporalType.DATE)
-    private Date registrationDate;
+	@Column(length = FIELDSIZE_IDENTIFIER)
+	@Index(name = "apikey_index")
+	private String apiKey;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastLogin;
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date registrationDate;
 
-    @Column(length = 25)
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.ROLE_USER;
-    
-    /**
-     * GETTERS & SETTTERS
-     */
-    
-    public Long getId() {
-    	return id;
-    }
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastLogin;
 
-    public void setEmail(String email) {
+	@Column(length = 25)
+	@Enumerated(EnumType.STRING)
+	private Role role = Role.ROLE_USER;
+
+	/**
+	 * GETTERS & SETTTERS
+	 */
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setEmail(String email) {
 		this.email = StringUtils.lowerCase(email);
 	}
-    
-    public String getEmail() {
+
+	public String getEmail() {
 		return email;
 	}
 

@@ -14,7 +14,9 @@
     <!-- 
     	Overriding dataSource with a memory based database configuration
      -->    
-    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource"/>
+    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource">
+    	<property name="url" value="jdbc:hsqldb:mem:."/>
+    </bean>
 
     <!-- 
     	Overriding entityManagerFactory with a memory based database configuration

@@ -19,13 +19,12 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.db.service.impl;
+package eu.europeana.corelib.definitions.exception;
 
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.service.UserService;
-import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+/**
+ * @author Borys Omelayenko
+ */
 
-public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
-
-
+public enum ProblemResponseAction {
+	MAIL, LOG, IGNORE
 }

@@ -28,8 +28,15 @@ package eu.europeana.corelib.definitions.db;
  * @author Gerald de Jong <geralddejong@gmail.com>
  */
 
-public class FieldSize {
-	public static final int PERSONAL_FIELD = 100;
-	public static final int PASSWORD = 64;
-	public static final int IDENTIFIER = 30;
+public interface DatabaseDefinition {
+
+	// user
+	public static final String TABLENAME_USER = "users";
+	public static final int FIELDSIZE_PERSONAL = 100;
+	public static final int FIELDSIZE_PASSWORD = 64;
+	public static final int FIELDSIZE_IDENTIFIER = 30;
+
+	// token
+	public static final String TABLENAME_TOKEN = "token";
+	public static final int FIELDSIZE_TOKEN = 32;
 }

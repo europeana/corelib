@@ -19,13 +19,25 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.db.service.impl;
+package eu.europeana.corelib.definitions.exception;
 
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.service.UserService;
-import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+public class EuropeanaException extends Exception {
+	private static final long serialVersionUID = 4759945931809288624L;
 
-public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
+	private ProblemType problem;
 
+	public EuropeanaException(ProblemType problem) {
+		this.problem = problem;
+	}
+
+	public EuropeanaException(Throwable causedBy, ProblemType problem) {
+		super(causedBy);
+		this.problem = problem;
+	}
+
+	@Override
+	public String getMessage() {
+		return problem.getMessage();
+	}
 
 }

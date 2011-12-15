@@ -1,33 +1,33 @@
 /*
  * Copyright 2007 EDL FOUNDATION
  *
- * Licensed under the EUPL, Version 1.1 or - as soon they
+ * Licensed under the EUPL, Version 1.1 or - as soon they 
  * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
+ * versions of the EUPL (the "License");
  * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ * License.
+ * You may obtain a copy of the License at:
  *
  * http://ec.europa.eu/idabc/eupl
  *
  * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
+ * writing, software distributed under the License is
  * distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ * See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 package eu.europeana.corelib.db.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
-
 public interface Dao<E extends IdentifiedEntity<?>> {
-	
+
 	/*
 	 * FINDERS
 	 */
@@ -40,6 +40,13 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @return Returns a row
 	 */
 	E findByPK(final Serializable id);
+
+	/**
+	 * Retrieve all entities from a table.
+	 * 
+	 * @return a List with all entities
+	 */
+	List<E> findAll();
 
 	/*
 	 * MODIFIERS
@@ -68,5 +75,10 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 *            The existing row to delete
 	 */
 	void delete(E object);
+
+	/**
+	 * Only for internal (test) usage, clears a table...
+	 */
+	void deleteAll();
 
 }
