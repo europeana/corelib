@@ -26,14 +26,16 @@ import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 public interface TokenService extends AbstractService<Token> {
 
+    public static final int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
+	
 	/**
 	 * Creates a new email token
 	 * 
 	 * @param email
-	 * @return
+	 * @return The created token.
 	 */
 	Token create(String email);
-
+	
 	/**
 	 * Create a random Token String with 32 characters
 	 * 

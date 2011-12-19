@@ -13,8 +13,6 @@
 	    http://www.springframework.org/schema/tx
 	    http://www.springframework.org/schema/tx/spring-tx.xsd        
         ">
-        
-    <tx:annotation-driven />
 
     <bean id="corelib_db_dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
         <property name="driverClass" value="#{europeanaProperties['db.driverClass']}"/>
@@ -33,12 +31,13 @@
         </property>
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <bean id="corelib_db_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="corelib_db_entityManagerFactory"/>
         <property name="dataSource" ref="corelib_db_dataSource"/>
     </bean>
+        
+    <tx:annotation-driven transaction-manager="corelib_db_transactionManager"/>
     
-	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor">
-	</bean>    
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
 </beans>

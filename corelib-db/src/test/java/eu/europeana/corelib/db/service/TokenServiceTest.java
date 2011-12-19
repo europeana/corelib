@@ -21,11 +21,18 @@
 
 package eu.europeana.corelib.db.service;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Calendar;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,6 +40,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,38 +50,49 @@ public class TokenServiceTest {
 	@Resource(name = "corelib_db_tokenDao")
 	private Dao<Token> dao;
 
-	@Resource(name = "corelib_db_tokenService")
+	@Resource
 	private TokenService tokenService;
 
-	@Test
-	public void testCreate() {
+	/**
+	 * Clears database tables before every test and at the end
+	 */
+	@Before
+	public void clearBetweenTest() {
 		dao.deleteAll();
-		Token token = tokenService.create("test@europeana.eu");
-		if (token == null) {
-			fail("Unable to create token");
-		}
-		if (StringUtils.isBlank(token.getId())) {
-			fail("No token generated");
-		}
-		if (StringUtils.length(token.getId()) != DatabaseDefinition.FIELDSIZE_TOKEN) {
-			fail("Token did not have the required length, current length="
-					+ StringUtils.length(token.getId()));
-		}
-		if (token.getCreated() <= 0) {
-			fail("No valid creation date (long) set, current value="
-					+ token.getCreated());
-		}
 	}
 
 	@Test
 	public void testCreateRandomToken() {
 		String token = tokenService.createRandomToken();
-		if (StringUtils.isBlank(token)) {
-			fail("Did not give back succesfully a random token");
-		}
-		if (StringUtils.length(token) != DatabaseDefinition.FIELDSIZE_TOKEN) {
-			fail("Token did not have the required length");
-		}
+		assertNotNull("No token generated", StringUtils.trimToNull(token));
+		assertEquals("Token did not have the required length, current length=" + StringUtils.length(token),
+				DatabaseDefinition.FIELDSIZE_TOKEN, StringUtils.length(token));
+	}
+
+	@Test
+	public void testCreate() {
+		Token token = tokenService.create("test@europeana.eu");
+		assertNotNull("Unable to create token", token);
+		token = tokenService.findByID(token.getToken());
+		assertNotNull("Unable to retrieve created token", token);
+		assertNotNull("No token generated", StringUtils.trimToNull(token.getId()));
+		assertNotNull("No valid creation date set", token.getCreated());
+	}
+
+	@Test
+	public void testExpiredToken() {
+		List<Token> tokens = tokenService.findAll();
+		assertTrue("Token table is empty", tokens.size() == 0);
+
+		Calendar expired = Calendar.getInstance();
+		expired.add(Calendar.MILLISECOND, -TokenService.MAX_TOKEN_AGE);
+		
+		Token token = tokenService.create("test@europeana.eu");
+		assertNotNull("Unable to create token", token);
+		// change date to expired date
+		token.setCreated(expired.getTime());
+		tokenService.store(token);
+		assertNull("Token not flagged as expired", tokenService.findByID(token.getToken()));
 	}
 
 }

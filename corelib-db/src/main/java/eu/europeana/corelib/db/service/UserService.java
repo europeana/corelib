@@ -21,10 +21,13 @@
 
 package eu.europeana.corelib.db.service;
 
+import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 public interface UserService extends AbstractService<User> {
+	
+	User create(Token token, String password);
 	
 
 }

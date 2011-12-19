@@ -27,6 +27,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
@@ -58,21 +60,20 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 		return entity;
 	}
 
-	public E update(E object) {
-		// TODO Auto-generated method stub
-		return null;
+	public E update(E entity) {
+		return entityManager.merge(entity);
 	}
 
-	public void delete(E object) {
-		// TODO Auto-generated method stub
-
+	public void delete(E entity) {
+		entityManager.remove(entity);
 	}
 
 	@Override
+	@Transactional
 	public void deleteAll() {
 		List<E> list = findAll();
 		for (E e : list) {
-			entityManager.remove(e);
+			delete(e);
 		}
 	}
 }

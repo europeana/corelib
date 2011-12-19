@@ -53,20 +53,20 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 */
 
 	/**
-	 * insert a new row into the database
-	 * 
-	 * @param object
-	 *            The new row to insert
-	 */
-	E insert(E object);
-
-	/**
-	 * update a row in the database
+	 * insert a row in the database
 	 * 
 	 * @param object
 	 *            Existing object to update
 	 */
-	E update(E object);
+	E insert(E entity);
+
+	/**
+	 * update a existing row in the database
+	 * 
+	 * @param object
+	 *            Existing object to update
+	 */
+	E update(E entity);
 
 	/**
 	 * Delete a existing object in the database
@@ -74,7 +74,7 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @param object
 	 *            The existing row to delete
 	 */
-	void delete(E object);
+	void delete(E entity);
 
 	/**
 	 * Only for internal (test) usage, clears a table...

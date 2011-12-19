@@ -24,9 +24,12 @@ package eu.europeana.corelib.db.service.abstracts;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+@Transactional
 public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>>
 		implements AbstractService<E> {
 
@@ -38,12 +41,18 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>>
 
 	@Override
 	public E store(E entity) {
-		return dao.update(entity);
+		if (entity.getId() != null) {
+			if (findByID(entity.getId()) != null) {
+				return dao.update(entity);
+			}
+		}
+		return dao.insert(entity);
 	}
 
 	@Override
 	public void remove(E entity) {
-		dao.delete(entity);
+		E persEnity = dao.findByPK(entity.getId());
+		dao.delete(persEnity);
 	}
 
 	@Override

@@ -21,27 +21,46 @@
 
 package eu.europeana.corelib.db.service.impl;
 
-import java.util.Calendar;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 
+@Transactional
 public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenService {
 
+	/**
+	 * Overriding the findByID() method to handle expiration
+	 */
+	@Override
+	public Token findByID(Serializable id) {
+		Token token = super.findByID(id);
+		if (token != null) {
+			long age = System.currentTimeMillis() - token.getCreated().getTime();
+	        if (age <= MAX_TOKEN_AGE) {
+	        	return token;
+	        }
+	        dao.delete(token);
+		}
+		return null;
+	}
+	
 	@Override
 	public Token create(String email) {
 		Token token = new Token();
-		token.setCreated(Calendar.getInstance().getTimeInMillis());
-		token.setEmail(email);
+		token.setCreated(new Date());
+		token.setEmail(StringUtils.lowerCase(email));
 		token.setToken(createRandomToken());
 		return dao.insert(token);
 	}
-
+	
 	@Override
 	public String createRandomToken() {
 		String token = UUID.randomUUID().toString();

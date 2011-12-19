@@ -42,6 +42,8 @@
 
 package eu.europeana.corelib.db.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -67,7 +69,7 @@ public class Token implements IdentifiedEntity<String>, DatabaseDefinition {
 	private String email;
 
 	@Column(nullable = false)
-	private long created;
+	private Date created;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -93,11 +95,11 @@ public class Token implements IdentifiedEntity<String>, DatabaseDefinition {
 		this.email = email;
 	}
 
-	public long getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(long created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 }

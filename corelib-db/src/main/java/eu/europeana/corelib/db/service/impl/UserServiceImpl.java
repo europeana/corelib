@@ -21,11 +21,34 @@
 
 package eu.europeana.corelib.db.service.impl;
 
+import java.util.Date;
+
+import javax.annotation.Resource;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 
+@Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
+	
+	@Resource(type=TokenService.class)
+	TokenService tokenService;
+
+	@Override
+	public User create(Token token, String password) {
+		User user = new User();
+		user.setEmail(token.getEmail());
+		user.setPassword(password);
+		user.setRegistrationDate(new Date());
+		user = dao.insert(user);
+		tokenService.remove(token);
+		return user;
+	}
 
 
 }
