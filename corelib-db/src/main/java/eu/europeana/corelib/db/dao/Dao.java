@@ -48,6 +48,26 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 */
 	List<E> findAll();
 
+	/**
+	 * Find entities by named query.
+	 * Given params will be inserted into query in order of params.
+	 * 
+	 * @param query Name of the Named Query
+	 * @param params Params in order as marked in Named Query
+	 * @return Search results, list is empty when no results match
+	 */
+	List<E> findByNamedQuery(String query, Object... params);
+
+	/**
+	 * Find entity by named query.
+	 * Given params will be inserted into query in order of params.
+	 * 
+	 * @param query Name of the Named Query
+	 * @param params Params in order as marked in Named Query
+	 * @return First matching entity, null if no matches are found
+	 */
+	E findOneByNamedQuery(String query, Object... params);
+	
 	/*
 	 * MODIFIERS
 	 */

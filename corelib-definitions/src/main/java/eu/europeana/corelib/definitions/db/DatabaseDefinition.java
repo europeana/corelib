@@ -35,6 +35,7 @@ public interface DatabaseDefinition {
 	public static final int FIELDSIZE_PERSONAL = 100;
 	public static final int FIELDSIZE_PASSWORD = 64;
 	public static final int FIELDSIZE_IDENTIFIER = 30;
+    public static final int FIELDSIZE_USERNAME = 60;
 
 	// token
 	public static final String TABLENAME_TOKEN = "token";

@@ -24,10 +24,8 @@ package eu.europeana.corelib.db.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -40,7 +38,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.Token;
-import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -81,9 +78,6 @@ public class TokenServiceTest {
 
 	@Test
 	public void testExpiredToken() {
-		List<Token> tokens = tokenService.findAll();
-		assertTrue("Token table is empty", tokens.size() == 0);
-
 		Calendar expired = Calendar.getInstance();
 		expired.add(Calendar.MILLISECOND, -TokenService.MAX_TOKEN_AGE);
 		

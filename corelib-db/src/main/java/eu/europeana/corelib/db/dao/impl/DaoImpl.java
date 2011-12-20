@@ -25,7 +25,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +49,36 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 		return entityManager.find(domainClazz, id);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> findAll() {
-		return entityManager.createQuery(
-				"SELECT e FROM " + domainClazz.getSimpleName() + " e")
-				.getResultList();
+		StringBuilder sb = new StringBuilder("SELECT e FROM ");
+		sb.append(domainClazz.getSimpleName()).append(" e");
+		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
+	}
+
+	private TypedQuery<E> createNamedQuery(String qName, Object... params) {
+		int parnr = 1;
+		TypedQuery<E> query = entityManager.createNamedQuery(qName, domainClazz);
+		if ((params != null) && (params.length > 0)) {
+			for (Object object : params) {
+				query.setParameter(parnr++, object);
+			}
+		}
+		return query;
+	}
+
+	@Override
+	public List<E> findByNamedQuery(String qName, Object... params) {
+		return createNamedQuery(qName, params).getResultList();
+	}
+
+	@Override
+	public E findOneByNamedQuery(String qName, Object... params) {
+		try {
+			return createNamedQuery(qName, params).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	public E insert(E entity) {

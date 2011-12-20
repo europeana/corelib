@@ -27,7 +27,31 @@ import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 public interface UserService extends AbstractService<User> {
 	
-	User create(Token token, String password);
+	/**
+	 * Creates a new User, based on a existing token, and given params
+	 * 
+	 * @param token A Token containing email address of user.
+	 * @param username The username for this user profile
+	 * @param password The login password (case sensitive)
+	 * @return Created user entity.
+	 */
+	User create(Token token, String username, String password);
 	
-
+	/**
+	 * Returns a User if there is a valid email provided.
+	 * 
+	 * @param email Email address of user, not case sensitive
+	 * @return A user with given email adres, null if not found.
+	 */
+	User findByEmail(String email);
+	
+	/**
+	 * Returns a User if there is a valid email and password provided.
+	 * 
+	 * @param email Email address of user, not case sensitive
+	 * @param password User's Password, case sensitive
+	 * @return A user if both params are valid, otherwise null
+	 */
+	User authenticateUser(String email, String password);
+	
 }

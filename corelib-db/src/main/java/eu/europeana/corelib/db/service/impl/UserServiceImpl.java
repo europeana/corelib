@@ -25,6 +25,8 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.entity.Token;
@@ -35,20 +37,42 @@ import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
-	
-	@Resource(type=TokenService.class)
+
+	@Resource(type = TokenService.class)
 	TokenService tokenService;
 
 	@Override
-	public User create(Token token, String password) {
+	public User create(Token token, String username, String password) {
 		User user = new User();
 		user.setEmail(token.getEmail());
-		user.setPassword(password);
+		user.setUserName(username);
+		user.setPassword(hashPassword(password));
 		user.setRegistrationDate(new Date());
 		user = dao.insert(user);
 		tokenService.remove(token);
 		return user;
 	}
 
+	@Override
+	public User findByEmail(String email) {
+		return dao.findOneByNamedQuery(User.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+
+	}
+
+	@Override
+	public User authenticateUser(String email, String password) {
+		User user = findByEmail(email);
+		if ((user != null) && StringUtils.equals(user.getPassword(), hashPassword(password))) {
+			return user;
+		}
+		return null;
+	}
+
+	private String hashPassword(String password) {
+		if (StringUtils.isNotBlank(password)) {
+			return new ShaPasswordEncoder().encodePassword(password, null);
+		}
+		return null;
+	}
 
 }

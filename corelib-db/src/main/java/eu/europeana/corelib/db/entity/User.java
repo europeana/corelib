@@ -30,6 +30,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,9 +44,14 @@ import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.users.Role;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name=User.QUERY_FINDBY_EMAIL, query="from User u where u.email = ?")
+})
 @Table(name = DatabaseDefinition.TABLENAME_USER)
 public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	private static final long serialVersionUID = 3830841148649674534L;
+	
+	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -53,6 +60,10 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	@Column(length = FIELDSIZE_PERSONAL, unique = true, nullable = false)
 	@Index(name = "email_index")
 	private String email;
+
+    @Column(length = FIELDSIZE_USERNAME)
+    @Index(name = "username_index")
+    private String userName;
 
 	@Column(length = FIELDSIZE_PASSWORD)
 	private String password;
@@ -127,6 +138,14 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }
