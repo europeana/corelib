@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <europeana [at] eledge.net>
@@ -56,12 +58,16 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 		domainClazz = clazz;
 	}
 
-	public E findByPK(Serializable id) {
+	public E findByPK(Serializable id) throws DatabaseException {
 		return findByPK(domainClazz, id);
 	}
 
-	public <T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, Serializable id) {
-		return entityManager.find(clazz, id);
+	public <T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, Serializable id) throws DatabaseException {
+		try {
+			return entityManager.find(clazz, id);
+		} catch (IllegalArgumentException e) {
+			throw new DatabaseException(e, ProblemType.INVALIDARGUMENTS);
+		}
 	}
 
 	@Override

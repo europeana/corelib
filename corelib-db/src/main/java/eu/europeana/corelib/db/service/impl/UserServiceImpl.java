@@ -29,12 +29,16 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.europeana.corelib.db.entity.SavedItem;
 import eu.europeana.corelib.db.entity.SavedSearch;
+import eu.europeana.corelib.db.entity.SocialTag;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <europeana [at] eledge.net>
@@ -49,7 +53,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	TokenService tokenService;
 
 	@Override
-	public User create(Token token, String username, String password) {
+	public User create(Token token, String username, String password) throws DatabaseException {
+		if ((token == null) || StringUtils.isBlank(token.getToken()) || StringUtils.isBlank(token.getEmail())) {
+			throw new DatabaseException(ProblemType.TOKEN_INVALID);
+		}
 		User user = new User();
 		user.setEmail(token.getEmail());
 		user.setUserName(username);
@@ -73,23 +80,49 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
-	
+
 	@Override
-	public User createSavedSearch(User user, String query, String queryString) {
+	public User createSavedSearch(User user, String query, String queryString) throws DatabaseException {
+		if ((user == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
 		user = dao.findByPK(user.getId());
-		SavedSearch savedSearch = new SavedSearch();
-		savedSearch.setUser(user);
-		savedSearch.setDateSaved(new Date());
-		savedSearch.setQuery(query);
-		savedSearch.setQueryString(queryString);
-		user.getSavedSearches().add(savedSearch);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		if (user != null) {
+			SavedSearch savedSearch = new SavedSearch();
+			savedSearch.setUser(user);
+			savedSearch.setDateSaved(new Date());
+			savedSearch.setQuery(query);
+			savedSearch.setQueryString(queryString);
+			user.getSavedSearches().add(savedSearch);
+		}
 		return user;
 	}
 
 	@Override
-	public void removeSavedSearch(Long savedSearchId) {
+	public void removeSavedSearch(Long savedSearchId) throws DatabaseException {
 		SavedSearch savedSearch = dao.findByPK(SavedSearch.class, savedSearchId);
-		savedSearch.getUser().getSavedSearches().remove(savedSearch);
+		if (savedSearch != null) {
+			savedSearch.getUser().getSavedSearches().remove(savedSearch);
+		}
+	}
+
+	@Override
+	public void removeSavedItem(Long savedItemId) throws DatabaseException {
+		SavedItem savedItem = dao.findByPK(SavedItem.class, savedItemId);
+		if (savedItem != null) {
+			savedItem.getUser().getSavedItems().remove(savedItem);
+		}
+	}
+
+	@Override
+	public void removeSocialTag(Long socialTagId) throws DatabaseException {
+		SocialTag socialTag = dao.findByPK(SocialTag.class, socialTagId);
+		if (socialTag != null) {
+			socialTag.getUser().getSocialTags().remove(socialTag);
+		}
 	}
 
 	/**

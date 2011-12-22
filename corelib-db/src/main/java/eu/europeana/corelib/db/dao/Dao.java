@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.db.exception.DatabaseException;
 
 /**
  * Generic DAO service layer. Used in combination with a DAO instance for every type
@@ -44,8 +45,9 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @param id
 	 *            A private key object
 	 * @return Returns a row
+	 * @throws DatabaseException 
 	 */
-	E findByPK(final Serializable id);
+	E findByPK(final Serializable id) throws DatabaseException;
 
 	/**
 	 * Generic variation of findByPK where the required entity can be given...
@@ -55,8 +57,9 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @param id
 	 *            A private key object
 	 * @return Returns a row
+	 * @throws DatabaseException 
 	 */
-	<T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, final Serializable id);
+	<T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, final Serializable id) throws DatabaseException;
 
 	/**
 	 * Retrieve all entities from a table.

@@ -93,7 +93,7 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
     private Set<SavedItem> savedItems = new HashSet<SavedItem>();
 
@@ -101,7 +101,7 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
     @JoinColumn(name = "userid", nullable = false)
     private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
     private Set<SocialTag> socialTags = new HashSet<SocialTag>();
 

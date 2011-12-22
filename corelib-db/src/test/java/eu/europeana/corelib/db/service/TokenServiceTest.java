@@ -24,6 +24,7 @@ package eu.europeana.corelib.db.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 
@@ -38,6 +39,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,7 +69,7 @@ public class TokenServiceTest {
 	}
 
 	@Test
-	public void testCreate() {
+	public void testCreate() throws DatabaseException {
 		Token token = tokenService.create("test@europeana.eu");
 		assertNotNull("Unable to create token", token);
 		token = tokenService.findByID(token.getToken());
@@ -76,8 +78,14 @@ public class TokenServiceTest {
 		assertNotNull("No valid creation date set", token.getCreated());
 	}
 
+	@Test(expected=DatabaseException.class)
+	public void testCreateInvalidEmail() throws DatabaseException {
+		tokenService.create(" ");
+		fail("This line should never be reached!!!");
+	}
+	
 	@Test
-	public void testExpiredToken() {
+	public void testExpiredToken() throws DatabaseException {
 		Calendar expired = Calendar.getInstance();
 		expired.add(Calendar.MILLISECOND, -TokenService.MAX_TOKEN_AGE);
 		

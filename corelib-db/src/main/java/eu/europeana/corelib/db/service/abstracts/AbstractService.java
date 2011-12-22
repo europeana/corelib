@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.db.exception.DatabaseException;
 
 /**
  * @author Willem-Jan Boogerd <europeana [at] eledge.net>
@@ -35,15 +36,17 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * 
 	 * 
 	 * @param object
+	 * @throws DatabaseException 
 	 */
-	E store(E object);
+	E store(E object) throws DatabaseException;
 
 	/**
 	 * 
 	 * 
 	 * @param object
+	 * @throws DatabaseException 
 	 */
-	void remove(E object);
+	void remove(E object) throws DatabaseException;
 
 	/*
 	 * FINDERS
@@ -61,7 +64,8 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws DatabaseException 
 	 */
-	E findByID(final Serializable id);
+	E findByID(final Serializable id) throws DatabaseException;
 
 }

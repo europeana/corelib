@@ -36,12 +36,14 @@ public enum ProblemType {
     MALFORMED_QUERY("Query to Search Engine is malformed.", ProblemResponseAction.LOG),
     UNKNOWN("unknown", ProblemResponseAction.IGNORE),
     UNABLE_TO_CHANGE_LANGUAGE("We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
-    TOKEN_EXPIRED("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
+    TOKEN_INVALID("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
     UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
     SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),
     UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
     MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
-    NONE("An exception occurred", ProblemResponseAction.MAIL); 
+    NONE("An exception occurred", ProblemResponseAction.MAIL),
+    INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL)
+    ; 
     
     private String message;
 

@@ -29,8 +29,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <europeana [at] eledge.net>
@@ -46,7 +48,12 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	 */
 	@Override
 	public Token findByID(Serializable id) {
-		Token token = super.findByID(id);
+		Token token;
+		try {
+			token = super.findByID(id);
+		} catch (DatabaseException e) {
+			return null;
+		}
 		if (token != null) {
 			long age = System.currentTimeMillis() - token.getCreated().getTime();
 	        if (age <= MAX_TOKEN_AGE) {
@@ -58,7 +65,10 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	}
 	
 	@Override
-	public Token create(String email) {
+	public Token create(String email) throws DatabaseException {
+		if (StringUtils.isBlank(email)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
 		Token token = new Token();
 		token.setCreated(new Date());
 		token.setEmail(StringUtils.lowerCase(email));

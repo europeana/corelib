@@ -1,11 +1,13 @@
 package eu.europeana.corelib.db.service;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -21,6 +23,7 @@ import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.SavedSearch;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.users.Role;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,7 +49,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testCreate() {
+	public void testCreate() throws DatabaseException{
 		final String EMAIL = "testCreate@europeana.eu";
 		final String USERNAME = "testCreate";
 		final String PASSWORD = "test";
@@ -70,9 +73,29 @@ public class UserServiceTest {
 		assertEquals("User should have USER role by default", user.getRole(), Role.ROLE_USER);
 		assertNull("Token not removed from database", tokenService.findByID(token.getToken()));
 	}
+
+	@Test(expected=DatabaseException.class)
+	public void testCreateWithoutToken() throws DatabaseException {
+		userService.create(null, "ignore", "ignore");
+		fail("This line should never be reached!!!");
+	}
+
+	@Test(expected=DatabaseException.class)
+	public void testCreateWithInvalidToken() throws DatabaseException {
+		final String EMAIL = "testCreateWithInvalidToken@europeana.eu";
+
+		Token token = new Token();
+		token.setCreated(new Date());
+		token.setEmail(EMAIL);
+		// token is invalid because the token itself is created on store
+		// and we are not actually storing this token.
+		
+		userService.create(token, "ignore", "ignore");
+		fail("This line should never be reached!!!");
+	}
 	
 	@Test
-	public void testFindByEmail() {
+	public void testFindByEmail() throws DatabaseException {
 		final String EMAIL = "testFindByEmail@europeana.eu";
 		final String USERNAME = "testFindByEmail";
 		final String PASSWORD = "test";
@@ -92,7 +115,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void testAuthenticateUser() {
+	public void testAuthenticateUser() throws DatabaseException {
 		final String EMAIL = "testAuthenticateUser@europeana.eu";
 		final String USERNAME = "testAuthenticateUser";
 		final String PASSWORD = "test";
@@ -114,7 +137,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void testCreateSavedSearch() throws Exception {
+	public void testCreateSavedSearch() throws DatabaseException {
 		final String EMAIL = "testCreateSavedSearch@europeana.eu";
 		final String USERNAME = "testCreateSavedSearch";
 		final String PASSWORD = "test";
@@ -125,6 +148,27 @@ public class UserServiceTest {
 		User user = userService.create(token, USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
+		
+		try {
+			userService.createSavedSearch(new User(), "ignore", "ignore");
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+		
+		try {
+			userService.createSavedSearch(null, "ignore", "ignore");
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+		
+		try {
+			userService.createSavedSearch(user, " ", "ignore");
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
 		
 		user = userService.createSavedSearch(user, "query1", "queryString1");
 		user = userService.createSavedSearch(user, "query2", "queryString2");

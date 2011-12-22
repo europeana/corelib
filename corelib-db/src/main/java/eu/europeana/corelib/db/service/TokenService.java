@@ -22,6 +22,7 @@
 package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 /**
@@ -33,16 +34,18 @@ import eu.europeana.corelib.db.service.abstracts.AbstractService;
  */
 public interface TokenService extends AbstractService<Token> {
 
-    public static final int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
-	
+	public static final int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
+
 	/**
 	 * Creates a new email token
 	 * 
 	 * @param email
 	 * @return The created token.
+	 * @throws DatabaseException
+	 *             When there is no valid email address provided
 	 */
-	Token create(String email);
-	
+	Token create(String email) throws DatabaseException;
+
 	/**
 	 * Create a random Token String with 32 characters
 	 * 

@@ -23,6 +23,7 @@ package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 /**
@@ -44,8 +45,10 @@ public interface UserService extends AbstractService<User> {
 	 * @param password
 	 *            The login password (case sensitive)
 	 * @return Created user entity.
+	 * @throws DatabaseException
+	 *             When the Token is invalid
 	 */
-	User create(Token token, String username, String password);
+	User create(Token token, String username, String password) throws DatabaseException;
 
 	/**
 	 * Returns a User if there is a valid email provided.
@@ -77,15 +80,36 @@ public interface UserService extends AbstractService<User> {
 	 * @param queryString
 	 *            contains the complete query string including facets
 	 * @return The User including the new saved search
+	 * @exception DatabaseException
+	 *                Thrown when no valid user of query(string) is provided
 	 */
-	User createSavedSearch(User user, String query, String queryString);
+	User createSavedSearch(User user, String query, String queryString) throws DatabaseException;
 
 	/**
 	 * Removes a SavedSearch from database and User.
 	 * 
 	 * @param savedSearchId
 	 *            The primary key of the saved search to remove
+	 * @throws DatabaseException 
 	 */
-	void removeSavedSearch(Long savedSearchId);
+	void removeSavedSearch(Long savedSearchId) throws DatabaseException;
+
+	/**
+	 * Removes a SavedItem from database and User.
+	 * 
+	 * @param savedItemId
+	 *            The primary key of the saved item to remove
+	 * @throws DatabaseException 
+	 */
+	void removeSavedItem(Long savedItemId) throws DatabaseException;
+
+	/**
+	 * Removes a SocialTag from database and User.
+	 * 
+	 * @param socialTagId
+	 *            The primary key of the social tag to remove
+	 * @throws DatabaseException 
+	 */
+	void removeSocialTag(Long socialTagId) throws DatabaseException;
 
 }

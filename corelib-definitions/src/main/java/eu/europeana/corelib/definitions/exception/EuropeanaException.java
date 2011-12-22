@@ -21,7 +21,7 @@
 
 package eu.europeana.corelib.definitions.exception;
 
-public class EuropeanaException extends Exception {
+public abstract class EuropeanaException extends Exception {
 	private static final long serialVersionUID = 4759945931809288624L;
 
 	private ProblemType problem;

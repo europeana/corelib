@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.db.exception.DatabaseException;
 
 /**
  * @author Willem-Jan Boogerd <europeana [at] eledge.net>
@@ -56,7 +57,7 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	}
 
 	@Override
-	public E store(E entity) {
+	public E store(E entity) throws DatabaseException {
 		if (entity.getId() != null) {
 			if (findByID(entity.getId()) != null) {
 				return dao.update(entity);
@@ -66,13 +67,13 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	}
 
 	@Override
-	public void remove(E entity) {
+	public void remove(E entity) throws DatabaseException {
 		E persEnity = dao.findByPK(entity.getId());
 		dao.delete(persEnity);
 	}
 
 	@Override
-	public E findByID(Serializable id) {
+	public E findByID(Serializable id) throws DatabaseException {
 		return dao.findByPK(id);
 	}
 
