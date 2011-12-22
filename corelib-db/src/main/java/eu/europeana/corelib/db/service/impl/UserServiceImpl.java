@@ -29,12 +29,19 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.europeana.corelib.db.entity.SavedSearch;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.service.UserService
+ * @see eu.europeana.corelib.db.entity.User
+ */
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
 
@@ -56,7 +63,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByEmail(String email) {
 		return dao.findOneByNamedQuery(User.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
-
 	}
 
 	@Override
@@ -67,7 +73,32 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
+	
+	@Override
+	public User createSavedSearch(User user, String query, String queryString) {
+		user = dao.findByPK(user.getId());
+		SavedSearch savedSearch = new SavedSearch();
+		savedSearch.setUser(user);
+		savedSearch.setDateSaved(new Date());
+		savedSearch.setQuery(query);
+		savedSearch.setQueryString(queryString);
+		user.getSavedSearches().add(savedSearch);
+		return user;
+	}
 
+	@Override
+	public void removeSavedSearch(Long savedSearchId) {
+		SavedSearch savedSearch = dao.findByPK(SavedSearch.class, savedSearchId);
+		savedSearch.getUser().getSavedSearches().remove(savedSearch);
+	}
+
+	/**
+	 * Hashing password using ShaPasswordEncoder.
+	 * 
+	 * @param password
+	 *            The password in initial form.
+	 * @return Hashed password as to be stored in database
+	 */
 	private String hashPassword(String password) {
 		if (StringUtils.isNotBlank(password)) {
 			return new ShaPasswordEncoder().encodePassword(password, null);

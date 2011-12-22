@@ -1,9 +1,11 @@
 package eu.europeana.corelib.db.service;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Resource;
 
@@ -16,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.entity.SavedSearch;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.definitions.users.Role;
@@ -108,7 +111,32 @@ public class UserServiceTest {
 		
 		user = userService.authenticateUser(EMAIL, PASSWORD);
 		assertNotNull("Authenticate method is NOT return user with valid password", user);
+	}
+	
+	@Test
+	public void testCreateSavedSearch() throws Exception {
+		final String EMAIL = "testCreateSavedSearch@europeana.eu";
+		final String USERNAME = "testCreateSavedSearch";
+		final String PASSWORD = "test";
 
+		Token token = tokenService.create(EMAIL);
+		assertNotNull("Unable to create token", token);
+
+		User user = userService.create(token, USERNAME, PASSWORD);
+		assertNotNull("Unable to create user", user);
+		assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
+		
+		user = userService.createSavedSearch(user, "query1", "queryString1");
+		user = userService.createSavedSearch(user, "query2", "queryString2");
+		user = userService.createSavedSearch(user, "query3", "queryString3");
+		
+		user = userService.findByEmail(EMAIL);
+		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
+		
+		SavedSearch[] savedSearches = user.getSavedSearches().toArray(new SavedSearch[user.getSavedSearches().size()]);
+		userService.removeSavedSearch(savedSearches[1].getId());
+		user = userService.findByEmail(EMAIL);
+		assertTrue("Saved Searches list should be one less!", user.getSavedSearches().size() == 2);
 	}
 
 	private String hashPassword(String password) {

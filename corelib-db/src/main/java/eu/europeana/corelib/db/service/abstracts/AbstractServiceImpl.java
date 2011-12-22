@@ -24,17 +24,33 @@ package eu.europeana.corelib.db.service.abstracts;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.service.abstracts.AbstractService
+ */
 @Transactional
-public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>>
-		implements AbstractService<E> {
+public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> implements AbstractService<E> {
+
+	@PersistenceContext(name = "corelib_db_entityManagerFactory")
+	protected EntityManager entityManager;
 
 	protected Dao<E> dao;
 
+	/**
+	 * Used by Bean configuration to inject Entity based DAO.
+	 * 
+	 * @param dao
+	 *            DAO object with entity based generic set
+	 */
 	public final void setDao(Dao<E> dao) {
 		this.dao = dao;
 	}

@@ -24,14 +24,15 @@ package eu.europeana.corelib.db.entity.abstracts;
 import java.io.Serializable;
 
 /**
+ * High level interface for database entities supported by the generic DAO.
  * 
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
  * 
- * @author wjboogerd
- *
  * @param <I>
+ *            A Serializable type used as primary key, like a Long or String
  */
 public interface IdentifiedEntity<I extends Serializable> extends Serializable {
-    
-    public I getId();
+
+	public I getId();
 
 }

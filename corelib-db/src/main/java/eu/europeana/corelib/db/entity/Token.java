@@ -53,8 +53,7 @@ import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 /**
- * @author Nicola Aloia <nicola.aloia@isti.cnr.it>
- * @author Cesare Corcordia <cesare.concordia@isti.cnr.it>
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_TOKEN)

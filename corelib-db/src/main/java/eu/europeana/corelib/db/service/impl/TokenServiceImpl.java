@@ -32,6 +32,11 @@ import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.service.TokenService
+ */
 @Transactional
 public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenService {

@@ -22,16 +22,22 @@
 package eu.europeana.corelib.db.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,6 +49,9 @@ import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.users.Role;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ */
 @Entity
 @NamedQueries({
 	@NamedQuery(name=User.QUERY_FINDBY_EMAIL, query="from User u where u.email = ?")
@@ -84,10 +93,23 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name = "userid", nullable = false)
+    private Set<SavedItem> savedItems = new HashSet<SavedItem>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+    @JoinColumn(name = "userid", nullable = false)
+    private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name = "userid", nullable = false)
+    private Set<SocialTag> socialTags = new HashSet<SocialTag>();
+
 	/**
 	 * GETTERS & SETTTERS
 	 */
 
+	@Override
 	public Long getId() {
 		return id;
 	}
@@ -147,5 +169,17 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
+	
+	public Set<SavedItem> getSavedItems() {
+		return savedItems;
+	}
+	
+	public Set<SavedSearch> getSavedSearches() {
+		return savedSearches;
+	}
+	
+	public Set<SocialTag> getSocialTags() {
+		return socialTags;
+	}
+	
 }

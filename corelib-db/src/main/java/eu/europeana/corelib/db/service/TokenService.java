@@ -24,6 +24,13 @@ package eu.europeana.corelib.db.service;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
+/**
+ * Service with dedicated Token related actions.
+ * 
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.entity.Token
+ */
 public interface TokenService extends AbstractService<Token> {
 
     public static final int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;

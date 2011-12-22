@@ -26,6 +26,12 @@ import java.util.List;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+/**
+ * Generic DAO service layer. Used in combination with a DAO instance for every type
+ * of object, although some methods are generic and can be used for every entity.
+ * 
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ */
 public interface Dao<E extends IdentifiedEntity<?>> {
 
 	/*
@@ -35,11 +41,22 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	/**
 	 * Retrieve a row through a private key
 	 * 
-	 * @param pk
+	 * @param id
 	 *            A private key object
 	 * @return Returns a row
 	 */
 	E findByPK(final Serializable id);
+
+	/**
+	 * Generic variation of findByPK where the required entity can be given...
+	 * 
+	 * @param clazz
+	 *            The class of the Entity type to retrieve
+	 * @param id
+	 *            A private key object
+	 * @return Returns a row
+	 */
+	<T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, final Serializable id);
 
 	/**
 	 * Retrieve all entities from a table.
@@ -49,52 +66,60 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	List<E> findAll();
 
 	/**
-	 * Find entities by named query.
-	 * Given params will be inserted into query in order of params.
+	 * Find entities by named query. Given params will be inserted into query in order of params.
 	 * 
-	 * @param query Name of the Named Query
-	 * @param params Params in order as marked in Named Query
+	 * @param query
+	 *            Name of the Named Query
+	 * @param params
+	 *            Parameters in order as marked in Named Query
 	 * @return Search results, list is empty when no results match
 	 */
 	List<E> findByNamedQuery(String query, Object... params);
 
 	/**
-	 * Find entity by named query.
-	 * Given params will be inserted into query in order of params.
+	 * Find entity by named query. Given params will be inserted into query in order of params.
 	 * 
-	 * @param query Name of the Named Query
-	 * @param params Params in order as marked in Named Query
+	 * @param query
+	 *            Name of the Named Query
+	 * @param params
+	 *            Params in order as marked in Named Query
 	 * @return First matching entity, null if no matches are found
 	 */
 	E findOneByNamedQuery(String query, Object... params);
-	
+
 	/*
 	 * MODIFIERS
 	 */
 
 	/**
-	 * insert a row in the database
+	 * insert a row in the database.
+	 * 
+	 * (This method is generic and can be used for other entities as well.)
 	 * 
 	 * @param object
 	 *            Existing object to update
 	 */
-	E insert(E entity);
+	public <T extends IdentifiedEntity<?>> T insert(T entity);
 
 	/**
 	 * update a existing row in the database
 	 * 
+	 * (This method is generic and can be used for other entities as well.)
+	 * 
 	 * @param object
 	 *            Existing object to update
 	 */
-	E update(E entity);
+	public <T extends IdentifiedEntity<?>> T update(T entity);
 
 	/**
 	 * Delete a existing object in the database
 	 * 
+	 * (This method is generic and can be used for other entities as well.)
+	 * 
 	 * @param object
 	 *            The existing row to delete
 	 */
-	void delete(E entity);
+	void delete(IdentifiedEntity<?> entity);
 
 	/**
 	 * Only for internal (test) usage, clears a table...

@@ -26,6 +26,9 @@ import java.util.List;
 
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ */
 public interface AbstractService<E extends IdentifiedEntity<?>> {
 
 	/**

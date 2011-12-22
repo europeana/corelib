@@ -40,4 +40,21 @@ public interface DatabaseDefinition {
 	// token
 	public static final String TABLENAME_TOKEN = "token";
 	public static final int FIELDSIZE_TOKEN = 32;
+	
+	// saved search
+	public static final String TABLENAME_SAVEDSEARCH = "SavedSearch";
+    public static final int FIELDSIZE_QUERY = 200;
+    public static final int FIELDSIZE_QUERY_STRING = 200;
+	
+	// saved item
+	public static final String TABLENAME_SAVEDITEM = "SavedItem";
+    public static final int FIELDSIZE_TITLE = 120;
+    public static final int FIELDSIZE_AUTHOR = 80;
+    public static final int FIELDSIZE_DOCTYPE = 10;
+    public static final int FIELDSIZE_EUROPEANA_URI = 256;
+    public static final int FIELDSIZE_EUROPEANA_OBJECT = 256;
+
+    // social tags
+	public static final String TABLENAME_SOCIALTAGS = "SocialTag";
+    public static final int FIELDSIZE_TAG = 60;
 }

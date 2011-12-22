@@ -34,6 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 
+/**
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.dao.Dao
+ */
 public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 
 	@PersistenceContext(name = "corelib_db_entityManagerFactory")
@@ -41,12 +46,22 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 
 	private Class<E> domainClazz = null;
 
+	/**
+	 * This constructor is used by bean configuration.
+	 * 
+	 * @param clazz
+	 *            The class type references by the main generic type of the DAO instance.
+	 */
 	public DaoImpl(Class<E> clazz) {
 		domainClazz = clazz;
 	}
 
 	public E findByPK(Serializable id) {
-		return entityManager.find(domainClazz, id);
+		return findByPK(domainClazz, id);
+	}
+
+	public <T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, Serializable id) {
+		return entityManager.find(clazz, id);
 	}
 
 	@Override
@@ -81,16 +96,16 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 		}
 	}
 
-	public E insert(E entity) {
+	public <T extends IdentifiedEntity<?>> T insert(T entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
 
-	public E update(E entity) {
+	public <T extends IdentifiedEntity<?>> T update(T entity) {
 		return entityManager.merge(entity);
 	}
 
-	public void delete(E entity) {
+	public void delete(IdentifiedEntity<?> entity) {
 		entityManager.remove(entity);
 	}
 

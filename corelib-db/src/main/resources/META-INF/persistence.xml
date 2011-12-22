@@ -5,8 +5,13 @@
 
     <persistence-unit name="europeana">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>eu.europeana.corelib.db.entity.User</class>
+        
+        <class>eu.europeana.corelib.db.entity.SavedItem</class>
+        <class>eu.europeana.corelib.db.entity.SavedSearch</class>
+        <class>eu.europeana.corelib.db.entity.SocialTag</class>
         <class>eu.europeana.corelib.db.entity.Token</class>
+        <class>eu.europeana.corelib.db.entity.User</class>
+        
     </persistence-unit>
 
 </persistence>

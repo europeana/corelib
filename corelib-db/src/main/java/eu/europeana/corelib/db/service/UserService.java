@@ -25,33 +25,67 @@ import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
+/**
+ * Service with dedicated User related actions.
+ * 
+ * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * 
+ * @see eu.europeana.corelib.db.entity.User
+ */
 public interface UserService extends AbstractService<User> {
-	
+
 	/**
 	 * Creates a new User, based on a existing token, and given params
 	 * 
-	 * @param token A Token containing email address of user.
-	 * @param username The username for this user profile
-	 * @param password The login password (case sensitive)
+	 * @param token
+	 *            A Token containing email address of user.
+	 * @param username
+	 *            The username for this user profile
+	 * @param password
+	 *            The login password (case sensitive)
 	 * @return Created user entity.
 	 */
 	User create(Token token, String username, String password);
-	
+
 	/**
 	 * Returns a User if there is a valid email provided.
 	 * 
-	 * @param email Email address of user, not case sensitive
+	 * @param email
+	 *            Email address of user, not case sensitive
 	 * @return A user with given email adres, null if not found.
 	 */
 	User findByEmail(String email);
-	
+
 	/**
 	 * Returns a User if there is a valid email and password provided.
 	 * 
-	 * @param email Email address of user, not case sensitive
-	 * @param password User's Password, case sensitive
+	 * @param email
+	 *            Email address of user, not case sensitive
+	 * @param password
+	 *            User's Password, case sensitive
 	 * @return A user if both params are valid, otherwise null
 	 */
 	User authenticateUser(String email, String password);
-	
+
+	/**
+	 * Creates and add a SavedSearch to a existing User
+	 * 
+	 * @param user
+	 *            The excising user to add the new SavedSearch to
+	 * @param query
+	 *            query contains the query as shown in searchbox
+	 * @param queryString
+	 *            contains the complete query string including facets
+	 * @return The User including the new saved search
+	 */
+	User createSavedSearch(User user, String query, String queryString);
+
+	/**
+	 * Removes a SavedSearch from database and User.
+	 * 
+	 * @param savedSearchId
+	 *            The primary key of the saved search to remove
+	 */
+	void removeSavedSearch(Long savedSearchId);
+
 }
