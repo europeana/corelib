@@ -31,7 +31,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
  * Generic DAO service layer. Used in combination with a DAO instance for every type
  * of object, although some methods are generic and can be used for every entity.
  * 
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  */
 public interface Dao<E extends IdentifiedEntity<?>> {
 

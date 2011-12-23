@@ -41,7 +41,7 @@ import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  * 
  * @see eu.europeana.corelib.db.service.UserService
  * @see eu.europeana.corelib.db.entity.User

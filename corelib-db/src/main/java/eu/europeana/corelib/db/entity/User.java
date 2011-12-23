@@ -50,7 +50,7 @@ import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.users.Role;
 
 /**
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  */
 @Entity
 @NamedQueries({

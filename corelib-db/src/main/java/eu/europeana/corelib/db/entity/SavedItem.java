@@ -29,7 +29,7 @@ import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 /**
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SAVEDITEM)

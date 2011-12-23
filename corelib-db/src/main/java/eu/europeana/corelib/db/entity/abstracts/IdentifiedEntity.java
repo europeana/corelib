@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * High level interface for database entities supported by the generic DAO.
  * 
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  * 
  * @param <I>
  *            A Serializable type used as primary key, like a Long or String

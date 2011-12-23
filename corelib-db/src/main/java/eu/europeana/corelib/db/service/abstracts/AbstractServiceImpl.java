@@ -34,7 +34,7 @@ import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.db.exception.DatabaseException;
 
 /**
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  * 
  * @see eu.europeana.corelib.db.service.abstracts.AbstractService
  */

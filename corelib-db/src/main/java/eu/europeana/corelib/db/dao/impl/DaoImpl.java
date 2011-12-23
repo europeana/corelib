@@ -37,7 +37,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
- * @author Willem-Jan Boogerd <europeana [at] eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net>
  * 
  * @see eu.europeana.corelib.db.dao.Dao
  */
