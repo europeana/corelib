@@ -25,11 +25,11 @@ import org.apache.commons.lang.StringUtils;
 
 
 /**
+ * DocType defines the different type Object types Europeana supports.
+ * 
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @author Borys Omelayenko
- * @author Gerald de Jong <geralddejong@gmail.com>
- * @author Sjoerd Siebinga <sjoerd.siebinga@gmail.com>
  */
-
 public enum DocType {
 	TEXT, IMAGE, SOUND, VIDEO, _3D;
 

@@ -42,6 +42,9 @@ import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
+/**
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class TokenServiceTest {

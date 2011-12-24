@@ -22,12 +22,10 @@
 package eu.europeana.corelib.definitions.db;
 
 /**
- * This class gathers the constant field sizes, used in both entity annotations
- * and in code that fills the field values (for limiting size).
+ * This interface contains all the database definitions, reusable by front-end to validate fields.
  * 
- * @author Gerald de Jong <geralddejong@gmail.com>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-
 public interface DatabaseDefinition {
 
 	// user
@@ -35,26 +33,26 @@ public interface DatabaseDefinition {
 	public static final int FIELDSIZE_PERSONAL = 100;
 	public static final int FIELDSIZE_PASSWORD = 64;
 	public static final int FIELDSIZE_IDENTIFIER = 30;
-    public static final int FIELDSIZE_USERNAME = 60;
+	public static final int FIELDSIZE_USERNAME = 60;
 
 	// token
 	public static final String TABLENAME_TOKEN = "token";
 	public static final int FIELDSIZE_TOKEN = 32;
-	
+
 	// saved search
 	public static final String TABLENAME_SAVEDSEARCH = "SavedSearch";
-    public static final int FIELDSIZE_QUERY = 200;
-    public static final int FIELDSIZE_QUERY_STRING = 200;
-	
+	public static final int FIELDSIZE_QUERY = 200;
+	public static final int FIELDSIZE_QUERY_STRING = 200;
+
 	// saved item
 	public static final String TABLENAME_SAVEDITEM = "SavedItem";
-    public static final int FIELDSIZE_TITLE = 120;
-    public static final int FIELDSIZE_AUTHOR = 80;
-    public static final int FIELDSIZE_DOCTYPE = 10;
-    public static final int FIELDSIZE_EUROPEANA_URI = 256;
-    public static final int FIELDSIZE_EUROPEANA_OBJECT = 256;
+	public static final int FIELDSIZE_TITLE = 120;
+	public static final int FIELDSIZE_AUTHOR = 80;
+	public static final int FIELDSIZE_DOCTYPE = 10;
+	public static final int FIELDSIZE_EUROPEANA_URI = 256;
+	public static final int FIELDSIZE_EUROPEANA_OBJECT = 256;
 
-    // social tags
+	// social tags
 	public static final String TABLENAME_SOCIALTAGS = "SocialTag";
-    public static final int FIELDSIZE_TAG = 60;
+	public static final int FIELDSIZE_TAG = 60;
 }

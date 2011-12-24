@@ -27,9 +27,9 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 
 /**
- * Service with dedicated User related actions.
+ * Service with User related actions.
  * 
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.entity.User
  */
@@ -81,10 +81,36 @@ public interface UserService extends AbstractService<User> {
 	 *            contains the complete query string including facets
 	 * @return The User including the new saved search
 	 * @exception DatabaseException
-	 *                Thrown when no valid user of query(string) is provided
+	 *                Thrown when no valid user or query(string) is provided
 	 */
 	User createSavedSearch(User user, String query, String queryString) throws DatabaseException;
 
+	/**
+	 * Creates and add a SavedItem to a existing User
+	 * 
+	 * @param user
+	 *            The excising user to add the new SavedSearch to
+	 * @param objectId
+	 *            EuropeanaObjectId
+	 * @return The User including the new saved item
+	 * @exception DatabaseException
+	 *                Thrown when no valid user or object id is provided
+	 */
+	User createSavedItem(User user, String europeanaObjectId) throws DatabaseException;
+
+	/**
+	 * 
+	 * @param user
+	 *            The excising user to add the new SavedSearch to
+	 * @param objectId
+	 *            EuropeanaObjectId
+	 * @param tag
+	 * @return The User including the new social tag
+	 * @exception DatabaseException
+	 *                Thrown when no valid user, object id or tag is provided
+	 */
+	User createSocialTag(User user, String europeanaObjectId, String tag) throws DatabaseException;
+	
 	/**
 	 * Removes a SavedSearch from database and User.
 	 * 

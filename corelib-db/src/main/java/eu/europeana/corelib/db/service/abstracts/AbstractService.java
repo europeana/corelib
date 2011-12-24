@@ -28,7 +28,7 @@ import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.db.exception.DatabaseException;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface AbstractService<E extends IdentifiedEntity<?>> {
 

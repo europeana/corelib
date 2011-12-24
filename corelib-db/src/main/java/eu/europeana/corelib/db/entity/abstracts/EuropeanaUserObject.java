@@ -15,6 +15,11 @@ import javax.persistence.TemporalType;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.solr.DocType;
 
+/**
+ * Super class Saved europeana objects in my Europeana
+ * 
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 @MappedSuperclass
 public abstract class EuropeanaUserObject extends UserConnectedEntity<Long> implements DatabaseDefinition {
 	private static final long serialVersionUID = 1L;

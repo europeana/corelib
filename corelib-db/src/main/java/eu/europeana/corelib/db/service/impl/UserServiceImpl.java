@@ -34,14 +34,18 @@ import eu.europeana.corelib.db.entity.SavedSearch;
 import eu.europeana.corelib.db.entity.SocialTag;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.solr.bean.FullBean;
+import eu.europeana.corelib.solr.service.SearchService;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.service.UserService
  * @see eu.europeana.corelib.db.entity.User
@@ -51,6 +55,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Resource(type = TokenService.class)
 	TokenService tokenService;
+
+	@Resource(type = SearchService.class)
+	SearchService searchService;
 
 	@Override
 	public User create(Token token, String username, String password) throws DatabaseException {
@@ -102,6 +109,32 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
+	public User createSavedItem(User user, String europeanaObjectId) throws DatabaseException {
+		if ((user == null) || StringUtils.isBlank(europeanaObjectId)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user = dao.findByPK(user.getId());
+		SavedItem savedItem = new SavedItem();
+		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
+		savedItem.setAuthor(StringUtils.abbreviate(bean.getPostAuthor(),
+				DatabaseDefinition.FIELDSIZE_AUTHOR));
+		return user;
+	}
+	
+	@Override
+	public User createSocialTag(User user, String europeanaObjectId, String tag) throws DatabaseException {
+		if ((user == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user = dao.findByPK(user.getId());
+		SocialTag socialTag = new SocialTag();
+		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
+		socialTag.setTag(StringUtils.abbreviate(tag,
+				DatabaseDefinition.FIELDSIZE_TAG));
+		return user;
+	}
+
+	@Override
 	public void removeSavedSearch(Long savedSearchId) throws DatabaseException {
 		SavedSearch savedSearch = dao.findByPK(SavedSearch.class, savedSearchId);
 		if (savedSearch != null) {
@@ -123,6 +156,26 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if (socialTag != null) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
+	}
+
+	private FullBean populateEuropeanaUserObject(User user, String europeanaObjectId, EuropeanaUserObject instance)
+			throws DatabaseException {
+		FullBean bean = searchService.findById(europeanaObjectId);
+		if ((user == null) || (bean == null)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		instance.setEuropeanaUri(bean.getId());
+		instance.setEuropeanaObject(bean.getThumbnail());
+		instance.setDateSaved(new Date());
+		instance.setTitle(StringUtils.abbreviate(bean.getPostTitle(),
+				DatabaseDefinition.FIELDSIZE_TITLE));
+		instance.setUser(user);
+		if (instance instanceof SavedItem) {
+			user.getSavedItems().add((SavedItem) instance);
+		} else {
+			user.getSocialTags().add((SocialTag) instance);
+		}
+		return bean;
 	}
 
 	/**

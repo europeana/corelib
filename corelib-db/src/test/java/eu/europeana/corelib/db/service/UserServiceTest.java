@@ -1,3 +1,24 @@
+/*
+ * Copyright 2007 EDL FOUNDATION
+ *
+ * Licensed under the EUPL, Version 1.1 or - as soon they 
+ * will be approved by the European Commission - subsequent
+ * versions of the EUPL (the "License");
+ * you may not use this work except in compliance with the
+ * License.
+ * You may obtain a copy of the License at:
+ *
+ * http://ec.europa.eu/idabc/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied.
+ * See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
 package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.assertEquals;
@@ -6,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import static org.easymock.EasyMock.*;
 
 import java.util.Date;
 
@@ -20,12 +43,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.entity.SavedItem;
 import eu.europeana.corelib.db.entity.SavedSearch;
+import eu.europeana.corelib.db.entity.SocialTag;
 import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.users.Role;
+import eu.europeana.corelib.solr.bean.FullBean;
+import eu.europeana.corelib.solr.service.SearchService;
+import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 
+/**
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class UserServiceTest {
@@ -181,6 +212,69 @@ public class UserServiceTest {
 		userService.removeSavedSearch(savedSearches[1].getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should be one less!", user.getSavedSearches().size() == 2);
+	}
+	
+	@Test
+	public void testCreateSavedItem() throws DatabaseException {
+		final String EMAIL = "testCreateSavedItem@europeana.eu";
+		final String USERNAME = "testCreateSavedItem";
+		final String PASSWORD = "test";
+
+		final String EUROPEANA_ID = "testCreateSavedItem";
+		
+		Token token = tokenService.create(EMAIL);
+		assertNotNull("Unable to create token", token);
+
+		User user = userService.create(token, USERNAME, PASSWORD);
+		assertNotNull("Unable to create user", user);
+		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
+		
+		userService.createSavedItem(user, EUROPEANA_ID);
+		user = userService.findByEmail(EMAIL);
+		assertTrue("Saved Items list should be one!", user.getSavedItems().size() == 1);
+		
+		SavedItem item = user.getSavedItems().iterator().next();
+		assertEquals(EUROPEANA_ID, item.getEuropeanaUri());
+		assertEquals(SearchServiceMock.THUMBNAIL, item.getEuropeanaObject());
+		assertEquals(SearchServiceMock.TITLE, item.getTitle());
+		assertEquals(SearchServiceMock.AUTHOR, item.getAuthor());
+		assertNotNull("No creation date set", item.getDateSaved());
+		
+		userService.removeSavedItem(item.getId());
+		user = userService.findByEmail(EMAIL);
+		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
+	}
+	
+	@Test
+	public void testCreateSocialTag() throws DatabaseException {
+		final String EMAIL = "testCreateSocialTag@europeana.eu";
+		final String USERNAME = "testCreateSocialTag";
+		final String PASSWORD = "test";
+
+		final String EUROPEANA_ID = "testCreateSocialTag";
+		final String TAG = "testCreateSocialTag";
+		
+		Token token = tokenService.create(EMAIL);
+		assertNotNull("Unable to create token", token);
+
+		User user = userService.create(token, USERNAME, PASSWORD);
+		assertNotNull("Unable to create user", user);
+		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
+		
+		userService.createSocialTag(user, EUROPEANA_ID, TAG);
+		user = userService.findByEmail(EMAIL);
+		assertTrue("SocialTag list should be one!", user.getSocialTags().size() == 1);
+		
+		SocialTag tag = user.getSocialTags().iterator().next();
+		assertEquals(EUROPEANA_ID, tag.getEuropeanaUri());
+		assertEquals(SearchServiceMock.THUMBNAIL, tag.getEuropeanaObject());
+		assertEquals(StringUtils.lowerCase(TAG), tag.getTag());
+		assertEquals(SearchServiceMock.TITLE, tag.getTitle());
+		assertNotNull("No creation date set", tag.getDateSaved());
+		
+		userService.removeSocialTag(tag.getId());
+		user = userService.findByEmail(EMAIL);
+		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 	}
 
 	private String hashPassword(String password) {

@@ -35,7 +35,7 @@ import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.service.TokenService
  */
@@ -71,7 +71,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		}
 		Token token = new Token();
 		token.setCreated(new Date());
-		token.setEmail(StringUtils.lowerCase(email));
+		token.setEmail(email);
 		token.setToken(createRandomToken());
 		return dao.insert(token);
 	}

@@ -49,11 +49,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_TOKEN)
@@ -91,7 +93,7 @@ public class Token implements IdentifiedEntity<String>, DatabaseDefinition {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = StringUtils.lowerCase(email);
 	}
 
 	public Date getCreated() {

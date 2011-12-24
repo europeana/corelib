@@ -25,11 +25,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SOCIALTAGS)
@@ -48,6 +50,6 @@ public class SocialTag extends EuropeanaUserObject {
 	}
 
 	public void setTag(String tag) {
-		this.tag = tag.toLowerCase();
+		this.tag = StringUtils.lowerCase(tag);
 	}
 }

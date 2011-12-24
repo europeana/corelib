@@ -36,7 +36,7 @@ import eu.europeana.corelib.db.entity.abstracts.UserConnectedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 
 /**
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SAVEDSEARCH)

@@ -11,7 +11,7 @@ import eu.europeana.corelib.db.entity.User;
 /**
  * Generic super class for entities connected to a certain user.
  * 
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @param <I>
  *            A Serializable type used as primary key, like a Long or String

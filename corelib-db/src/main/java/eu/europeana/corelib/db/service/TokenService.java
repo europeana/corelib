@@ -28,7 +28,7 @@ import eu.europeana.corelib.db.service.abstracts.AbstractService;
 /**
  * Service with dedicated Token related actions.
  * 
- * @author Willem-Jan Boogerd <www.eledge.net>
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.entity.Token
  */

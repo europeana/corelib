@@ -21,6 +21,11 @@
 
 package eu.europeana.corelib.definitions.exception;
 
+/**
+ * Abstract EuropeanaException, modules should define their own extention based on this one.
+ * 
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 public abstract class EuropeanaException extends Exception {
 	private static final long serialVersionUID = 4759945931809288624L;
 
