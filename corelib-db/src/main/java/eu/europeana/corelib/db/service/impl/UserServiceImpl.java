@@ -60,8 +60,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	SearchService searchService;
 
 	@Override
-	public User create(Token token, String username, String password) throws DatabaseException {
-		if ((token == null) || StringUtils.isBlank(token.getToken()) || StringUtils.isBlank(token.getEmail())) {
+	public User create(String tokenString, String username, String password) throws DatabaseException {
+		if (StringUtils.isBlank(tokenString) || StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		Token token = tokenService.findByID(tokenString);
+		if (token == null) {
 			throw new DatabaseException(ProblemType.TOKEN_INVALID);
 		}
 		User user = new User();
@@ -87,13 +91,26 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
-
+	
 	@Override
-	public User createSavedSearch(User user, String query, String queryString) throws DatabaseException {
-		if ((user == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
+	public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
+		if ((userId == null) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		user = dao.findByPK(user.getId());
+		User user = dao.findByPK(userId);
+		if ((user == null) || !StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user.setPassword(hashPassword(newPassword));
+		return user;
+	}
+
+	@Override
+	public User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException {
+		if ((userId == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		User user = dao.findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -109,11 +126,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSavedItem(User user, String europeanaObjectId) throws DatabaseException {
-		if ((user == null) || StringUtils.isBlank(europeanaObjectId)) {
+	public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
+		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		user = dao.findByPK(user.getId());
+		User user = dao.findByPK(userId);
 		SavedItem savedItem = new SavedItem();
 		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 		savedItem.setAuthor(StringUtils.abbreviate(bean.getPostAuthor(),
@@ -122,11 +139,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 	
 	@Override
-	public User createSocialTag(User user, String europeanaObjectId, String tag) throws DatabaseException {
-		if ((user == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
+	public User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException {
+		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		user = dao.findByPK(user.getId());
+		User user = dao.findByPK(userId);
 		SocialTag socialTag = new SocialTag();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag,

@@ -21,7 +21,6 @@
 
 package eu.europeana.corelib.db.service;
 
-import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
@@ -39,7 +38,7 @@ public interface UserService extends AbstractService<User> {
 	 * Creates a new User, based on a existing token, and given params
 	 * 
 	 * @param token
-	 *            A Token containing email address of user.
+	 *            A Token string, existing in the database
 	 * @param username
 	 *            The username for this user profile
 	 * @param password
@@ -48,7 +47,7 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 *             When the Token is invalid
 	 */
-	User create(Token token, String username, String password) throws DatabaseException;
+	User create(String token, String username, String password) throws DatabaseException;
 
 	/**
 	 * Returns a User if there is a valid email provided.
@@ -69,12 +68,27 @@ public interface UserService extends AbstractService<User> {
 	 * @return A user if both params are valid, otherwise null
 	 */
 	User authenticateUser(String email, String password);
+	
+	/**
+	 * Changes the existing password of an existing password
+	 * 
+	 * @param userId
+	 *            The id of the excising user
+	 * @param oldPassword
+	 *            User's current password, case sensitive
+	 * @param newPassword
+	 *            User's new password, case sensitive
+	 * @return A user if both params are valid, otherwise null
+	 * @exception DatabaseException
+	 *                Thrown when no valid user or passwords are provided
+	 */
+	User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException;
 
 	/**
-	 * Creates and add a SavedSearch to a existing User
+	 * Creates and add a SavedSearch to an existing User
 	 * 
-	 * @param user
-	 *            The excising user to add the new SavedSearch to
+	 * @param userId
+	 *            The id of the excising user to add the new SavedSearch to
 	 * @param query
 	 *            query contains the query as shown in searchbox
 	 * @param queryString
@@ -83,25 +97,26 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or query(string) is provided
 	 */
-	User createSavedSearch(User user, String query, String queryString) throws DatabaseException;
+	User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException;
 
 	/**
-	 * Creates and add a SavedItem to a existing User
+	 * Creates and add a SavedItem to an existing User
 	 * 
-	 * @param user
-	 *            The excising user to add the new SavedSearch to
+	 * @param userId
+	 *            The id of the excising user to add the new SavedSearch to
 	 * @param objectId
 	 *            EuropeanaObjectId
 	 * @return The User including the new saved item
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or object id is provided
 	 */
-	User createSavedItem(User user, String europeanaObjectId) throws DatabaseException;
+	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
 
 	/**
+	 * Creates and add a SocialTag to an existing user
 	 * 
-	 * @param user
-	 *            The excising user to add the new SavedSearch to
+	 * @param userId
+	 *            The id of the excising user to add the new SavedSearch to
 	 * @param objectId
 	 *            EuropeanaObjectId
 	 * @param tag
@@ -109,7 +124,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
-	User createSocialTag(User user, String europeanaObjectId, String tag) throws DatabaseException;
+	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
 	
 	/**
 	 * Removes a SavedSearch from database and User.

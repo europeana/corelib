@@ -28,8 +28,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import static org.easymock.EasyMock.*;
-
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -50,8 +48,6 @@ import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.users.Role;
-import eu.europeana.corelib.solr.bean.FullBean;
-import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 
 /**
@@ -89,7 +85,7 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 
 		user = userService.findByID(user.getId());
@@ -121,7 +117,7 @@ public class UserServiceTest {
 		// token is invalid because the token itself is created on store
 		// and we are not actually storing this token.
 		
-		userService.create(token, "ignore", "ignore");
+		userService.create(token.getToken(), "ignore", "ignore");
 		fail("This line should never be reached!!!");
 	}
 	
@@ -135,13 +131,61 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		
 		user = userService.findByEmail(EMAIL);
 		assertNotNull("Unable to retrieve user by email adres", user);
 		assertEquals("Password not correctly encoded.", user.getPassword(), HASH);
 		assertNotNull("No User ID generated", user.getId());
+		
+	}
+	
+	@Test
+	public void testChangePassword() throws DatabaseException {
+		final String EMAIL = "testChangePassword@europeana.eu";
+		final String USERNAME = "testChangePassword";
+		final String PASSWORD1 = "test";
+		final String PASSWORD2 = "changed";
+		final String HASH1 = hashPassword(PASSWORD1);
+		final String HASH2 = hashPassword(PASSWORD2);
+
+		Token token = tokenService.create(EMAIL);
+		assertNotNull("Unable to create token", token);
+
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD1);
+		assertNotNull("Unable to create user", user);
+		assertEquals("Password not correctly encoded.", user.getPassword(), HASH1);
+		
+		user = userService.changePassword(user.getId(), PASSWORD1, PASSWORD2);
+		assertEquals("Password not correctly changed/encoded.", user.getPassword(), HASH2);
+	
+		try {
+			// try changing with wrong password
+			user = userService.changePassword(user.getId(), PASSWORD1, PASSWORD2);
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+
+		try {
+			// try changing with wrong new password
+			user = userService.changePassword(user.getId(), PASSWORD2, "");
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+
+		try {
+			// try changing with wrong user id
+			user = userService.changePassword(Long.MAX_VALUE, PASSWORD1, PASSWORD2);
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+		
+		user = userService.authenticateUser(EMAIL, PASSWORD2);
+		assertNotNull("Authenticate method is NOT return user with valid password", user);
 		
 	}
 	
@@ -154,7 +198,7 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 
 		user = userService.authenticateUser(EMAIL, "invalidPassword");
@@ -176,12 +220,12 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
 		
 		try {
-			userService.createSavedSearch(new User(), "ignore", "ignore");
+			userService.createSavedSearch(Long.MAX_VALUE, "ignore", "ignore");
 			fail("This line should never be reached!!!");
 		} catch (DatabaseException e) {
 			// expecting this
@@ -195,15 +239,15 @@ public class UserServiceTest {
 		}
 		
 		try {
-			userService.createSavedSearch(user, " ", "ignore");
+			userService.createSavedSearch(user.getId(), " ", "ignore");
 			fail("This line should never be reached!!!");
 		} catch (DatabaseException e) {
 			// expecting this
 		}
 		
-		user = userService.createSavedSearch(user, "query1", "queryString1");
-		user = userService.createSavedSearch(user, "query2", "queryString2");
-		user = userService.createSavedSearch(user, "query3", "queryString3");
+		user = userService.createSavedSearch(user.getId(), "query1", "queryString1");
+		user = userService.createSavedSearch(user.getId(), "query2", "queryString2");
+		user = userService.createSavedSearch(user.getId(), "query3", "queryString3");
 		
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
@@ -225,11 +269,11 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 		
-		userService.createSavedItem(user, EUROPEANA_ID);
+		userService.createSavedItem(user.getId(), EUROPEANA_ID);
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Items list should be one!", user.getSavedItems().size() == 1);
 		
@@ -257,11 +301,11 @@ public class UserServiceTest {
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token, USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 		
-		userService.createSocialTag(user, EUROPEANA_ID, TAG);
+		userService.createSocialTag(user.getId(), EUROPEANA_ID, TAG);
 		user = userService.findByEmail(EMAIL);
 		assertTrue("SocialTag list should be one!", user.getSocialTags().size() == 1);
 		
