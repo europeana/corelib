@@ -25,22 +25,14 @@
 
 <beans 
 	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 
-	<bean id="corelib_db_dao" abstract="true"
-		class="eu.europeana.corelib.db.dao.impl.DaoImpl">
-	</bean>
 
-	<bean id="corelib_db_userDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class"	value="eu.europeana.corelib.db.entity.User" />
-	</bean>
-
-	<bean id="corelib_db_tokenDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.Token" />
-	</bean>
+	<util:properties id="europeanaProperties" location="classpath:europeana.properties" />
 
 </beans>

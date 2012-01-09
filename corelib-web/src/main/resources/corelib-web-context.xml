@@ -24,11 +24,19 @@
  -->
 
 <beans
-        xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        ">
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+        
+    <!-- USING OTHER MODULES -->    
+    <import resource="corelib-definitions-context.xml"/>
+
+    <!-- INTERNAL DEFINITIONS -->    
+    <import resource="internal/corelib-web-email.xml"/>
+        
+	<bean id="emailService" class="eu.europeana.corelib.web.service.impl.EmailServiceImpl"/>
 
 </beans>

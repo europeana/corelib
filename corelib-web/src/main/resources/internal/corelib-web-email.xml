@@ -27,20 +27,23 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="corelib_db_dao" abstract="true"
-		class="eu.europeana.corelib.db.dao.impl.DaoImpl">
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="#{europeanaProperties['smtp.host']}"/>
+        <property name="username" value="#{europeanaProperties['smtp.username']}"/>
+        <property name="password" value="#{europeanaProperties['smtp.password']}"/>
 	</bean>
 
-	<bean id="corelib_db_userDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class"	value="eu.europeana.corelib.db.entity.User" />
-	</bean>
-
-	<bean id="corelib_db_tokenDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.Token" />
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<value>
+				resource.loader=class
+				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+			</value>
+		</property>
 	</bean>
 
 </beans>

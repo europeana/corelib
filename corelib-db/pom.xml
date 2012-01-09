@@ -41,12 +41,12 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-definitions</artifactId>
-			<version>${project.version}</version>
+			<version>${version.europeana.corelib}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr</artifactId>
-			<version>${project.version}</version>
+			<version>${version.europeana.corelib}</version>
 		</dependency>
 		<!-- Spring -->
 		<dependency>

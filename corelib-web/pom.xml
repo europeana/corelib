@@ -40,6 +40,29 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!-- Corelib -->
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-db</artifactId>
+			<version>${version.europeana.corelib}</version>
+		</dependency>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${version.spring.core}</version>
+		</dependency>
+		<!-- Other -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${version.commons.lang}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${version.apache.velocity}</version>
+		</dependency>
 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

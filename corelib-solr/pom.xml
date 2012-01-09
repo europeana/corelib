@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
-			<version>${version.solr}</version>
+			<version>${version.apache.solr}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
