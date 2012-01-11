@@ -25,10 +25,11 @@
 
 <beans 
 	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -45,5 +46,22 @@
 			</value>
 		</property>
 	</bean>
+	
+	<util:map id="emailConfigs">
+        <entry key="register">
+			<bean class="eu.europeana.corelib.web.email.EmailConfig">
+                <property name="template" value="/email/confirmation"/>
+                <property name="fromEmail" value="#{europeanaProperties['system.from']}"/>
+                <property name="subject" value="My Europeana email confirmation"/>
+            </bean>
+        </entry>
+        <entry key="forgotPassword">
+			<bean class="eu.europeana.corelib.web.email.EmailConfig">
+                <property name="template" value="/email/forgot-password"/>
+                <property name="fromEmail" value="#{europeanaProperties['system.from']}"/>
+                <property name="subject" value="My Europeana reset password"/>
+            </bean>
+        </entry>
+	</util:map>
 
 </beans>
