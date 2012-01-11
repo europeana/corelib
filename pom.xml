@@ -51,7 +51,7 @@
 		<version.spring.core>3.1.0.RELEASE</version.spring.core>
 		<version.commons.lang>2.6</version.commons.lang>
 		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
-		<version.apache.solr>3.4.0</version.apache.solr>
+		<version.apache.solr>3.5.0</version.apache.solr>
 		<version.apache.velocity>1.7</version.apache.velocity>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
