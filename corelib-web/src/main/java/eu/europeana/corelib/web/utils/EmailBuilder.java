@@ -21,7 +21,6 @@
 
 package eu.europeana.corelib.web.utils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
