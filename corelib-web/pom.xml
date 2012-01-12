@@ -43,7 +43,7 @@
 		<!-- Corelib -->
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-db</artifactId>
+			<artifactId>corelib-definitions</artifactId>
 			<version>${version.europeana.corelib}</version>
 		</dependency>
 		<!-- Spring -->

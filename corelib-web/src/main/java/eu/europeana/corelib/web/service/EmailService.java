@@ -21,7 +21,7 @@
 
 package eu.europeana.corelib.web.service;
 
-import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.Token;
 
 public interface EmailService {
 	

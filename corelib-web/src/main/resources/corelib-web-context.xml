@@ -36,6 +36,6 @@
     <!-- INTERNAL DEFINITIONS -->    
     <import resource="internal/corelib-web-email.xml"/>
         
-	<bean id="emailService" class="eu.europeana.corelib.web.service.impl.EmailServiceImpl"/>
+	<bean id="corelib_web_emailService" class="eu.europeana.corelib.web.service.impl.EmailServiceImpl"/>
 
 </beans>

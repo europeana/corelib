@@ -6,6 +6,8 @@ public class EmailConfig {
 	
 	private String emailFrom;
 	
+	private String emailTo;
+	
 	private String subject;
 
 }

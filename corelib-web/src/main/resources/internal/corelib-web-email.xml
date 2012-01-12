@@ -32,13 +32,13 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="#{europeanaProperties['smtp.host']}"/>
         <property name="username" value="#{europeanaProperties['smtp.username']}"/>
         <property name="password" value="#{europeanaProperties['smtp.password']}"/>
 	</bean>
 
-	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+	<bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<value>
 				resource.loader=class
@@ -47,7 +47,7 @@
 		</property>
 	</bean>
 	
-	<util:map id="emailConfigs">
+	<util:map id="corelib_web_emailConfigs">
         <entry key="register">
 			<bean class="eu.europeana.corelib.web.email.EmailConfig">
                 <property name="template" value="/email/confirmation"/>

@@ -29,7 +29,7 @@ import javax.annotation.Resource;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.web.service.EmailService;
 import eu.europeana.corelib.web.utils.EmailBuilder;
 
