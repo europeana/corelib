@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
@@ -21,7 +22,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @MappedSuperclass
-public abstract class EuropeanaUserObject extends UserConnectedEntity<Long> implements DatabaseDefinition {
+public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> implements DatabaseDefinition, EuropeanaUserObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -54,42 +55,52 @@ public abstract class EuropeanaUserObject extends UserConnectedEntity<Long> impl
 		return id;
 	}
 
+	@Override
 	public Date getDateSaved() {
 		return dateSaved;
 	}
 
+	@Override
 	public void setDateSaved(Date dateSaved) {
 		this.dateSaved = dateSaved;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	@Override
 	public String getEuropeanaObject() {
 		return europeanaObject;
 	}
 
+	@Override
 	public void setEuropeanaObject(String europeanaObject) {
 		this.europeanaObject = europeanaObject;
 	}
 
+	@Override
 	public String getEuropeanaUri() {
 		return europeanaUri;
 	}
 
+	@Override
 	public void setEuropeanaUri(String europeanaUri) {
 		this.europeanaUri = europeanaUri;
 	}
 
+	@Override
 	public DocType getDocType() {
 		return docType;
 	}
 
+	@Override
 	public void setDocType(DocType docType) {
 		this.docType = docType;
 	}

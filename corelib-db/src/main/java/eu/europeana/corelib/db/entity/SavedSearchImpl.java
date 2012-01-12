@@ -32,15 +32,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import eu.europeana.corelib.db.entity.abstracts.UserConnectedEntity;
+import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.SavedSearch;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SAVEDSEARCH)
-public class SavedSearch extends UserConnectedEntity<Long> implements DatabaseDefinition {
+public class SavedSearchImpl extends UserConnectedImpl<Long> implements DatabaseDefinition, SavedSearch {
     private static final long serialVersionUID = 667805541628354454L;
 
     @Id
@@ -72,27 +73,33 @@ public class SavedSearch extends UserConnectedEntity<Long> implements DatabaseDe
         return id;
     }
 
-    public String getQuery() {
+    @Override
+	public String getQuery() {
         return query;
     }
 
-    public void setQuery(String query) {
+    @Override
+	public void setQuery(String query) {
         this.query = query;
     }
 
-    public String getQueryString() {
+    @Override
+	public String getQueryString() {
         return queryString;
     }
 
-    public void setQueryString(String queryString) {
+    @Override
+	public void setQueryString(String queryString) {
         this.queryString = queryString;
     }
 
-    public Date getDateSaved() {
+    @Override
+	public Date getDateSaved() {
         return dateSaved;
     }
 
-    public void setDateSaved(Date dateSaved) {
+    @Override
+	public void setDateSaved(Date dateSaved) {
         this.dateSaved = dateSaved;
     }
 }

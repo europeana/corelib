@@ -28,10 +28,11 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.entity.Token;
+import eu.europeana.corelib.db.entity.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
@@ -69,7 +70,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		if (StringUtils.isBlank(email)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		Token token = new Token();
+		TokenImpl token = new TokenImpl();
 		token.setCreated(new Date());
 		token.setEmail(email);
 		token.setToken(createRandomToken());

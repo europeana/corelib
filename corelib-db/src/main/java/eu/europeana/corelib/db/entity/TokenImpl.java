@@ -51,15 +51,16 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_TOKEN)
-public class Token implements IdentifiedEntity<String>, DatabaseDefinition {
+public class TokenImpl implements IdentifiedEntity<String>, DatabaseDefinition, Token {
 	private static final long serialVersionUID = -9185878608713327601L;
 
 	@Id
@@ -76,30 +77,37 @@ public class Token implements IdentifiedEntity<String>, DatabaseDefinition {
 	 * GETTERS & SETTTERS
 	 */
 
+	@Override
 	public String getId() {
 		return token;
 	}
 
+	@Override
 	public String getToken() {
 		return token;
 	}
 
+	@Override
 	public void setToken(String token) {
 		this.token = token;
 	}
 
+	@Override
 	public String getEmail() {
 		return email;
 	}
 
+	@Override
 	public void setEmail(String email) {
 		this.email = StringUtils.lowerCase(email);
 	}
 
+	@Override
 	public Date getCreated() {
 		return created;
 	}
 
+	@Override
 	public void setCreated(Date created) {
 		this.created = created;
 	}

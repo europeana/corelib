@@ -30,11 +30,11 @@
 	<persistence-unit name="europeana">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-		<class>eu.europeana.corelib.db.entity.SavedItem</class>
-		<class>eu.europeana.corelib.db.entity.SavedSearch</class>
-		<class>eu.europeana.corelib.db.entity.SocialTag</class>
-		<class>eu.europeana.corelib.db.entity.Token</class>
-		<class>eu.europeana.corelib.db.entity.User</class>
+		<class>eu.europeana.corelib.db.entity.SavedItemImpl</class>
+		<class>eu.europeana.corelib.db.entity.SavedSearchImpl</class>
+		<class>eu.europeana.corelib.db.entity.SocialTagImpl</class>
+		<class>eu.europeana.corelib.db.entity.TokenImpl</class>
+		<class>eu.europeana.corelib.db.entity.UserImpl</class>
 
 	</persistence-unit>
 

@@ -27,15 +27,16 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObjectImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.SocialTag;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SOCIALTAGS)
-public class SocialTag extends EuropeanaUserObject {
+public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
 
 	@Column(length = FIELDSIZE_TAG)
@@ -45,10 +46,12 @@ public class SocialTag extends EuropeanaUserObject {
 	 * GETTERS & SETTTERS
 	 */
 
+	@Override
 	public String getTag() {
 		return tag;
 	}
 
+	@Override
 	public void setTag(String tag) {
 		this.tag = StringUtils.lowerCase(tag);
 	}

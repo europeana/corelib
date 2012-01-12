@@ -29,17 +29,18 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.entity.SavedItem;
-import eu.europeana.corelib.db.entity.SavedSearch;
-import eu.europeana.corelib.db.entity.SocialTag;
-import eu.europeana.corelib.db.entity.Token;
-import eu.europeana.corelib.db.entity.User;
-import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.db.entity.SavedItemImpl;
+import eu.europeana.corelib.db.entity.SavedSearchImpl;
+import eu.europeana.corelib.db.entity.SocialTagImpl;
+import eu.europeana.corelib.db.entity.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.solr.bean.FullBean;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -48,7 +49,7 @@ import eu.europeana.corelib.solr.service.SearchService;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.service.UserService
- * @see eu.europeana.corelib.db.entity.User
+ * @see eu.europeana.corelib.db.entity.UserImpl
  */
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
@@ -68,19 +69,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if (token == null) {
 			throw new DatabaseException(ProblemType.TOKEN_INVALID);
 		}
-		User user = new User();
+		User user = new UserImpl();
 		user.setEmail(token.getEmail());
 		user.setUserName(username);
 		user.setPassword(hashPassword(password));
 		user.setRegistrationDate(new Date());
 		user = dao.insert(user);
-		tokenService.remove(token);
+		tokenService.remove((Token) token);
 		return user;
 	}
 
 	@Override
 	public User findByEmail(String email) {
-		return dao.findOneByNamedQuery(User.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+		return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		if (user != null) {
-			SavedSearch savedSearch = new SavedSearch();
+			SavedSearchImpl savedSearch = new SavedSearchImpl();
 			savedSearch.setUser(user);
 			savedSearch.setDateSaved(new Date());
 			savedSearch.setQuery(query);
@@ -131,7 +132,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = dao.findByPK(userId);
-		SavedItem savedItem = new SavedItem();
+		SavedItemImpl savedItem = new SavedItemImpl();
 		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 		savedItem.setAuthor(StringUtils.abbreviate(bean.getPostAuthor(),
 				DatabaseDefinition.FIELDSIZE_AUTHOR));
@@ -144,7 +145,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = dao.findByPK(userId);
-		SocialTag socialTag = new SocialTag();
+		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag,
 				DatabaseDefinition.FIELDSIZE_TAG));
@@ -153,7 +154,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSavedSearch(Long savedSearchId) throws DatabaseException {
-		SavedSearch savedSearch = dao.findByPK(SavedSearch.class, savedSearchId);
+		SavedSearchImpl savedSearch = dao.findByPK(SavedSearchImpl.class, savedSearchId);
 		if (savedSearch != null) {
 			savedSearch.getUser().getSavedSearches().remove(savedSearch);
 		}
@@ -161,7 +162,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSavedItem(Long savedItemId) throws DatabaseException {
-		SavedItem savedItem = dao.findByPK(SavedItem.class, savedItemId);
+		SavedItemImpl savedItem = dao.findByPK(SavedItemImpl.class, savedItemId);
 		if (savedItem != null) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
@@ -169,7 +170,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSocialTag(Long socialTagId) throws DatabaseException {
-		SocialTag socialTag = dao.findByPK(SocialTag.class, socialTagId);
+		SocialTagImpl socialTag = dao.findByPK(SocialTagImpl.class, socialTagId);
 		if (socialTag != null) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
@@ -187,10 +188,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		instance.setTitle(StringUtils.abbreviate(bean.getPostTitle(),
 				DatabaseDefinition.FIELDSIZE_TITLE));
 		instance.setUser(user);
-		if (instance instanceof SavedItem) {
-			user.getSavedItems().add((SavedItem) instance);
+		if (instance instanceof SavedItemImpl) {
+			user.getSavedItems().add((SavedItemImpl) instance);
 		} else {
-			user.getSocialTags().add((SocialTag) instance);
+			user.getSocialTags().add((SocialTagImpl) instance);
 		}
 		return bean;
 	}

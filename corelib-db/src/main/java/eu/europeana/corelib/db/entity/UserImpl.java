@@ -45,8 +45,12 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Index;
 
-import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.SavedSearch;
+import eu.europeana.corelib.definitions.db.entity.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
 
 /**
@@ -54,10 +58,10 @@ import eu.europeana.corelib.definitions.users.Role;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=User.QUERY_FINDBY_EMAIL, query="from User u where u.email = ?")
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?")
 })
 @Table(name = DatabaseDefinition.TABLENAME_USER)
-public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
+public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, User {
 	private static final long serialVersionUID = 3830841148649674534L;
 	
 	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
@@ -93,15 +97,15 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
     private Set<SavedItem> savedItems = new HashSet<SavedItem>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
     private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
     private Set<SocialTag> socialTags = new HashSet<SocialTag>();
 
@@ -114,70 +118,87 @@ public class User implements IdentifiedEntity<Long>, DatabaseDefinition {
 		return id;
 	}
 
+	@Override
 	public void setEmail(String email) {
 		this.email = StringUtils.lowerCase(email);
 	}
 
+	@Override
 	public String getEmail() {
 		return email;
 	}
 
+	@Override
 	public String getPassword() {
 		return password;
 	}
 
+	@Override
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	@Override
 	public String getApiKey() {
 		return apiKey;
 	}
 
+	@Override
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
+	@Override
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 
+	@Override
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
+	@Override
 	public Date getLastLogin() {
 		return lastLogin;
 	}
 
+	@Override
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
+	@Override
 	public Role getRole() {
 		return role;
 	}
 
+	@Override
 	public void setRole(Role role) {
 		this.role = role;
 	}
 
+	@Override
 	public String getUserName() {
 		return userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 	
+	@Override
 	public Set<SavedItem> getSavedItems() {
 		return savedItems;
 	}
 	
+	@Override
 	public Set<SavedSearch> getSavedSearches() {
 		return savedSearches;
 	}
 	
+	@Override
 	public Set<SocialTag> getSocialTags() {
 		return socialTags;
 	}

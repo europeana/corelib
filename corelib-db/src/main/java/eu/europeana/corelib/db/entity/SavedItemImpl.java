@@ -25,15 +25,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObjectImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.SavedItem;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_SAVEDITEM)
-public class SavedItem extends EuropeanaUserObject {
+public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
 	private static final long serialVersionUID = -7059004310525816113L;
 
 	@Column(length = FIELDSIZE_AUTHOR)
@@ -43,10 +44,12 @@ public class SavedItem extends EuropeanaUserObject {
 	 * GETTERS & SETTTERS
 	 */
 
+	@Override
 	public String getAuthor() {
 		return author;
 	}
 
+	@Override
 	public void setAuthor(String author) {
 		this.author = author;
 	}

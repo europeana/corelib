@@ -36,11 +36,11 @@
 	</bean>
 
 	<bean id="corelib_db_userDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class"	value="eu.europeana.corelib.db.entity.User" />
+		<constructor-arg type="java.lang.Class"	value="eu.europeana.corelib.db.entity.UserImpl" />
 	</bean>
 
 	<bean id="corelib_db_tokenDao" parent="corelib_db_dao">
-		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.Token" />
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.TokenImpl" />
 	</bean>
 
 </beans>

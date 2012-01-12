@@ -24,8 +24,8 @@ package eu.europeana.corelib.db.service.abstracts;
 import java.io.Serializable;
 import java.util.List;
 
-import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

@@ -21,16 +21,16 @@
 
 package eu.europeana.corelib.db.service;
 
-import eu.europeana.corelib.db.entity.Token;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import eu.europeana.corelib.definitions.db.entity.Token;
 
 /**
  * Service with dedicated Token related actions.
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.db.entity.Token
+ * @see eu.europeana.corelib.db.entity.TokenImpl
  */
 public interface TokenService extends AbstractService<Token> {
 

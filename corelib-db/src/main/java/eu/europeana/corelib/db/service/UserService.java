@@ -21,16 +21,16 @@
 
 package eu.europeana.corelib.db.service;
 
-import eu.europeana.corelib.db.entity.User;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import eu.europeana.corelib.definitions.db.entity.User;
 
 /**
  * Service with User related actions.
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.db.entity.User
+ * @see eu.europeana.corelib.db.entity.UserImpl
  */
 public interface UserService extends AbstractService<User> {
 

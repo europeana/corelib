@@ -41,12 +41,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.Dao;
-import eu.europeana.corelib.db.entity.SavedItem;
-import eu.europeana.corelib.db.entity.SavedSearch;
-import eu.europeana.corelib.db.entity.SocialTag;
-import eu.europeana.corelib.db.entity.Token;
-import eu.europeana.corelib.db.entity.User;
+import eu.europeana.corelib.db.entity.SavedSearchImpl;
+import eu.europeana.corelib.db.entity.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.definitions.db.entity.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.User;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 
@@ -64,10 +65,10 @@ public class UserServiceTest {
 	private TokenService tokenService;
 
 	@Resource(name = "corelib_db_tokenDao")
-	private Dao<Token> tokenDao;
+	private Dao<TokenImpl> tokenDao;
 
 	@Resource(name = "corelib_db_tokenDao")
-	private Dao<Token> userDao;
+	private Dao<TokenImpl> userDao;
 
 	@Before
 	public void prepareDatabase() {
@@ -111,7 +112,7 @@ public class UserServiceTest {
 	public void testCreateWithInvalidToken() throws DatabaseException {
 		final String EMAIL = "testCreateWithInvalidToken@europeana.eu";
 
-		Token token = new Token();
+		Token token = new TokenImpl();
 		token.setCreated(new Date());
 		token.setEmail(EMAIL);
 		// token is invalid because the token itself is created on store
@@ -252,7 +253,7 @@ public class UserServiceTest {
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
 		
-		SavedSearch[] savedSearches = user.getSavedSearches().toArray(new SavedSearch[user.getSavedSearches().size()]);
+		SavedSearchImpl[] savedSearches = user.getSavedSearches().toArray(new SavedSearchImpl[user.getSavedSearches().size()]);
 		userService.removeSavedSearch(savedSearches[1].getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should be one less!", user.getSavedSearches().size() == 2);

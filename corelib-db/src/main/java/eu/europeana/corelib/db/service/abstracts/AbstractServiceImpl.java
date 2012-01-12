@@ -30,8 +30,8 @@ import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.dao.Dao;
-import eu.europeana.corelib.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
