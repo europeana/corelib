@@ -40,11 +40,19 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!-- Corelib -->
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-definitions</artifactId>
+			<version>${version.europeana.corelib}</version>
+		</dependency>
+		<!-- SOLR -->
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
 			<version>${version.apache.solr}</version>
 		</dependency>
+		<!-- Other -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

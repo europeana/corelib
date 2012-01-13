@@ -134,7 +134,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		User user = dao.findByPK(userId);
 		SavedItemImpl savedItem = new SavedItemImpl();
 		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
-		savedItem.setAuthor(StringUtils.abbreviate(bean.getPostAuthor(),
+		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0],
 				DatabaseDefinition.FIELDSIZE_AUTHOR));
 		return user;
 	}
@@ -183,9 +183,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		instance.setEuropeanaUri(bean.getId());
-		instance.setEuropeanaObject(bean.getThumbnail());
+		instance.setEuropeanaObject(bean.getEdmObject()[0]);
 		instance.setDateSaved(new Date());
-		instance.setTitle(StringUtils.abbreviate(bean.getPostTitle(),
+		instance.setTitle(StringUtils.abbreviate(bean.getTitle(),
 				DatabaseDefinition.FIELDSIZE_TITLE));
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {

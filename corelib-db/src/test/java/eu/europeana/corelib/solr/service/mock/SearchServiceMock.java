@@ -35,16 +35,16 @@ import eu.europeana.corelib.solr.service.SearchService;
 public class SearchServiceMock implements SearchService {
 	
 	public static final String TITLE="Mock Title";
-	public static final String AUTHOR="Mock Author";
-	public static final String THUMBNAIL="MockThumbnail.jpg";
+	public static final String[] AUTHOR=new String[]{"Mock Author"};
+	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
 
 	@Override
 	public FullBean findById(String europeanaObjectId) {
 		FullBean mockBean = createMock(FullBean.class);
-		expect(mockBean.getPostTitle()).andStubReturn(TITLE);
-		expect(mockBean.getPostAuthor()).andStubReturn(AUTHOR);
+		expect(mockBean.getTitle()).andStubReturn(TITLE);
+		expect(mockBean.getDcPublisher()).andStubReturn(AUTHOR);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
-		expect(mockBean.getThumbnail()).andStubReturn(THUMBNAIL);
+		expect(mockBean.getEdmObject()).andStubReturn(THUMBNAIL);
 		replay(mockBean);
 		return mockBean;
 	}

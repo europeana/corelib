@@ -280,9 +280,9 @@ public class UserServiceTest {
 		
 		SavedItem item = user.getSavedItems().iterator().next();
 		assertEquals(EUROPEANA_ID, item.getEuropeanaUri());
-		assertEquals(SearchServiceMock.THUMBNAIL, item.getEuropeanaObject());
+		assertEquals(SearchServiceMock.THUMBNAIL[0], item.getEuropeanaObject());
 		assertEquals(SearchServiceMock.TITLE, item.getTitle());
-		assertEquals(SearchServiceMock.AUTHOR, item.getAuthor());
+		assertEquals(SearchServiceMock.AUTHOR[0], item.getAuthor());
 		assertNotNull("No creation date set", item.getDateSaved());
 		
 		userService.removeSavedItem(item.getId());
@@ -312,7 +312,7 @@ public class UserServiceTest {
 		
 		SocialTag tag = user.getSocialTags().iterator().next();
 		assertEquals(EUROPEANA_ID, tag.getEuropeanaUri());
-		assertEquals(SearchServiceMock.THUMBNAIL, tag.getEuropeanaObject());
+		assertEquals(SearchServiceMock.THUMBNAIL[0], tag.getEuropeanaObject());
 		assertEquals(StringUtils.lowerCase(TAG), tag.getTag());
 		assertEquals(SearchServiceMock.TITLE, tag.getTitle());
 		assertNotNull("No creation date set", tag.getDateSaved());
