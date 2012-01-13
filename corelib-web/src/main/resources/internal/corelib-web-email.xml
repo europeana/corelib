@@ -51,14 +51,14 @@
         <entry key="register">
 			<bean class="eu.europeana.corelib.web.email.EmailConfig">
                 <property name="template" value="/email/confirmation"/>
-                <property name="fromEmail" value="#{europeanaProperties['system.from']}"/>
+                <property name="emailFrom" value="#{europeanaProperties['system.from']}"/>
                 <property name="subject" value="My Europeana email confirmation"/>
             </bean>
         </entry>
         <entry key="forgotPassword">
 			<bean class="eu.europeana.corelib.web.email.EmailConfig">
                 <property name="template" value="/email/forgot-password"/>
-                <property name="fromEmail" value="#{europeanaProperties['system.from']}"/>
+                <property name="emailFrom" value="#{europeanaProperties['system.from']}"/>
                 <property name="subject" value="My Europeana reset password"/>
             </bean>
         </entry>
