@@ -27,16 +27,15 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 
-	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="#{europeanaProperties['smtp.host']}"/>
-        <property name="username" value="#{europeanaProperties['smtp.username']}"/>
-        <property name="password" value="#{europeanaProperties['smtp.password']}"/>
-	</bean>
+	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+		p:host="#{europeanaProperties['smtp.host']}" p:username="#{europeanaProperties['smtp.username']}"
+		p:password="#{europeanaProperties['smtp.password']}"/>
 
 	<bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
@@ -47,20 +46,20 @@
 		</property>
 	</bean>
 	
+	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype"/>
+	
 	<util:map id="corelib_web_emailConfigs">
         <entry key="register">
-			<bean class="eu.europeana.corelib.web.email.EmailConfig">
-                <property name="template" value="/email/confirmation"/>
-                <property name="emailFrom" value="#{europeanaProperties['system.from']}"/>
-                <property name="subject" value="My Europeana email confirmation"/>
-            </bean>
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/confirmation" 
+				p:emailFrom="#{europeanaProperties['system.from']}"
+				p:subject="My Europeana email confirmation"/>
         </entry>
         <entry key="forgotPassword">
-			<bean class="eu.europeana.corelib.web.email.EmailConfig">
-                <property name="template" value="/email/forgot-password"/>
-                <property name="emailFrom" value="#{europeanaProperties['system.from']}"/>
-                <property name="subject" value="My Europeana reset password"/>
-            </bean>
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/forgot-password" 
+				p:emailFrom="#{europeanaProperties['system.from']}"
+				p:subject="My Europeana reset password"/>
         </entry>
 	</util:map>
 

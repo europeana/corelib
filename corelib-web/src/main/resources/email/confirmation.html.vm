@@ -6,7 +6,7 @@
 
 <p>Please click on the following link to confirm your registration:<br />
 
-<a href="${url}">${url}</a></p>
+<a href="${url}?token=${token}">${url}?token=${token}</a></p>
 
 <p>Many thanks,<br />
 <br/>
