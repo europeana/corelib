@@ -19,19 +19,55 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.web.service;
-
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
-import eu.europeana.corelib.web.exception.EmailServiceException;
+package eu.europeana.corelib.web.email.model;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface EmailService {
+public class EmailConfig {
 	
-	void sendToken(Token token, String url) throws EmailServiceException;
+	private String template;
 	
-	void sendForgotPassword(User user, String url) throws EmailServiceException;
+	private String emailFrom;
 	
+	private String emailTo;
+	
+	private String subject;
+
+	/**
+	 * GETTERS & SETTTERS
+	 */
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	public String getEmailFrom() {
+		return emailFrom;
+	}
+
+	public void setEmailFrom(String emailFrom) {
+		this.emailFrom = emailFrom;
+	}
+
+	public String getEmailTo() {
+		return emailTo;
+	}
+
+	public void setEmailTo(String emailTo) {
+		this.emailTo = emailTo;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 }

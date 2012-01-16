@@ -21,17 +21,9 @@
 
 package eu.europeana.corelib.web.service;
 
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
-import eu.europeana.corelib.web.exception.EmailServiceException;
-
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface EmailService {
-	
-	void sendToken(Token token, String url) throws EmailServiceException;
-	
-	void sendForgotPassword(User user, String url) throws EmailServiceException;
-	
+public interface AuthorisationService {
+
 }

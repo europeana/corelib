@@ -19,19 +19,27 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.web.service;
+package eu.europeana.corelib.web.email;
 
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
+import java.util.Map;
+
+import org.springframework.mail.javamail.MimeMessagePreparator;
+
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface EmailService {
+public interface EmailBuilder extends MimeMessagePreparator {
+
+	void setTemplate(String template) throws EmailServiceException;
+
+	void setModel(Map<String, Object> model);
 	
-	void sendToken(Token token, String url) throws EmailServiceException;
-	
-	void sendForgotPassword(User user, String url) throws EmailServiceException;
-	
+	void setEmailTo(String emailTo);
+
+	void setSubject(String subject);
+
+	void setEmailFrom(String emailFrom);
+
 }

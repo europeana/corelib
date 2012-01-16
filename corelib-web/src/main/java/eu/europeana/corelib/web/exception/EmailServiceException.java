@@ -19,19 +19,23 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.web.service;
+package eu.europeana.corelib.web.exception;
 
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
-import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.definitions.exception.EuropeanaException;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface EmailService {
+public class EmailServiceException extends EuropeanaException {
+	private static final long serialVersionUID = -3889168743374306317L;
+
+	public EmailServiceException(ProblemType problem) {
+		super(problem);
+	}
 	
-	void sendToken(Token token, String url) throws EmailServiceException;
-	
-	void sendForgotPassword(User user, String url) throws EmailServiceException;
-	
+	public EmailServiceException(Throwable causedBy, ProblemType problem) {
+		super(causedBy, problem);
+	}
+
 }
