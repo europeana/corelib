@@ -26,6 +26,7 @@
 <beans
         xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
         xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -34,21 +35,22 @@
     <!-- 
     	Overriding dataSource with a memory based database configuration
      -->    
-    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource">
-    	<property name="url" value="jdbc:hsqldb:mem:."/>
-    </bean>
+    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource"
+    	p:url="jdbc:hsqldb:mem:."
+    />
 
     <!-- 
     	Overriding entityManagerFactory with a memory based database configuration
      -->    
-    <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="corelib_db_dataSource"/>
+    <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+    	p:dataSource-ref="corelib_db_dataSource"
+    >
         <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="false"/>
-                <property name="generateDdl" value="true"/>
-                <property name="databasePlatform" value="org.hibernate.dialect.HSQLDialect" />
-            </bean>
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+            	p:showSql="false"
+            	p:generateDdl="true"
+            	p:databasePlatform="org.hibernate.dialect.HSQLDialect"
+            />
         </property>
     </bean>
 

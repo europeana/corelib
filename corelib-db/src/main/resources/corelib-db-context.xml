@@ -27,6 +27,7 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -44,11 +45,9 @@
 
     <context:annotation-config/>
     
-    <bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl">
-    	<property name="dao" ref="corelib_db_tokenDao"/>
-    </bean>
-    <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl">
-    	<property name="dao" ref="corelib_db_userDao"/>
-    </bean>
+    <bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
+    	p:dao-ref="corelib_db_tokenDao"/>
+    <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
+    	p:dao-ref="corelib_db_userDao"/>
 
 </beans>
