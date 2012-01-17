@@ -45,7 +45,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	private JavaMailSender mailSender;
 
 	@Override
-	public void sendToken(final Token token, String url) throws EmailServiceException {
+	public void sendToken(final Token token, final String url) throws EmailServiceException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", token.getToken());
 		model.put("url", url);
@@ -57,7 +57,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	}
 	
 	@Override
-	public void sendForgotPassword(User user, String url) throws EmailServiceException {
+	public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("url", url);
 		EmailBuilder builder = createEmailBuilder();

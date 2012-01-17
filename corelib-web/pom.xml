@@ -44,24 +44,24 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-definitions</artifactId>
-			<version>${version.europeana.corelib}</version>
+			<version>${version.europeanaCorelib}</version>
 		</dependency>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>${version.spring.core}</version>
+			<version>${version.springCore}</version>
 		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>${version.commons.lang}</version>
+			<version>${version.commonsLang}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
-			<version>${version.apache.velocity}</version>
+			<version>${version.apacheVelocity}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -78,7 +78,7 @@
 			<scope>test</scope>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${version.spring.core}</version>
+			<version>${version.springCore}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.subethamail</groupId>

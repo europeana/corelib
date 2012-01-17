@@ -29,7 +29,7 @@
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-	<version>${version.europeana.corelib}</version>
+	<version>${version.europeanaCorelib}</version>
 	<name>corelib</name>
 	<url>http://www.europeanalabs.eu</url>
 	<modules>
@@ -44,15 +44,15 @@
 		<name>Europeana Foundation</name>
 	</organization>
 	<properties>
-		<version.europeana.corelib>2.0-SNAPSHOT</version.europeana.corelib>
+		<version.europeanaCorelib>2.0-SNAPSHOT</version.europeanaCorelib>
 		<version.jdk>1.6</version.jdk>
 		<version.junit>4.10</version.junit>
 
-		<version.spring.core>3.1.0.RELEASE</version.spring.core>
-		<version.commons.lang>2.6</version.commons.lang>
-		<version.hibernate.core>3.6.8.Final</version.hibernate.core>
-		<version.apache.solr>3.5.0</version.apache.solr>
-		<version.apache.velocity>1.7</version.apache.velocity>
+		<version.apacheSolr>3.5.0</version.apacheSolr>
+		<version.apacheVelocity>1.7</version.apacheVelocity>
+		<version.springCore>3.1.0.RELEASE</version.springCore>
+		<version.commonsLang>2.6</version.commonsLang>
+		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
