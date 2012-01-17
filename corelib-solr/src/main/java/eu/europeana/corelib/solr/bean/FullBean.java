@@ -23,8 +23,6 @@ package eu.europeana.corelib.solr.bean;
 
 import java.util.Date;
 
-import eu.europeana.corelib.definitions.solr.DocType;
-
 /**
  * Interface for the FullBean. FullBean contains all the fields exposed by the
  * SOLR engine required by Portal in order to fully present a single record page

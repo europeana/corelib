@@ -21,9 +21,6 @@
 
 package eu.europeana.corelib.solr.bean;
 
-import java.util.Date;
-
-import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
  * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine
