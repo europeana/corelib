@@ -26,10 +26,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
@@ -46,6 +48,9 @@ public abstract class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void sendToken(final Token token, final String url) throws EmailServiceException {
+		if ( (token == null) || StringUtils.isBlank(token.getToken()) || StringUtils.isBlank(token.getEmail()) || StringUtils.isBlank(url)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", token.getToken());
 		model.put("url", url);
@@ -58,12 +63,34 @@ public abstract class EmailServiceImpl implements EmailService {
 	
 	@Override
 	public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
+		if ( (user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("url", url);
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
 		builder.setTemplate("forgotPassword");
 		builder.setEmailTo(user.getEmail());
+		mailSender.send(builder);
+	}
+	
+	@Override
+	public void sendFeedback(String email, String feedback) throws EmailServiceException {
+		if ( StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("email", email);
+		model.put("feedback", feedback);
+		// one email to organisation
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("userFeedback");
+		mailSender.send(builder);
+		// and one email to user
+		builder.setTemplate("userFeedbackConfirm");
+		builder.setEmailTo(email);
 		mailSender.send(builder);
 	}
 	

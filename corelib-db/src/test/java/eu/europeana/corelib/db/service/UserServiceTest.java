@@ -28,8 +28,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,9 +43,11 @@ import eu.europeana.corelib.db.entity.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.SavedSearch;
 import eu.europeana.corelib.definitions.db.entity.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 
@@ -110,15 +110,7 @@ public class UserServiceTest {
 
 	@Test(expected=DatabaseException.class)
 	public void testCreateWithInvalidToken() throws DatabaseException {
-		final String EMAIL = "testCreateWithInvalidToken@europeana.eu";
-
-		Token token = new TokenImpl();
-		token.setCreated(new Date());
-		token.setEmail(EMAIL);
-		// token is invalid because the token itself is created on store
-		// and we are not actually storing this token.
-		
-		userService.create(token.getToken(), "ignore", "ignore");
+		userService.create("invalidToken", "ignore", "ignore");
 		fail("This line should never be reached!!!");
 	}
 	
@@ -253,7 +245,12 @@ public class UserServiceTest {
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
 		
-		SavedSearchImpl[] savedSearches = user.getSavedSearches().toArray(new SavedSearchImpl[user.getSavedSearches().size()]);
+		SavedSearch savedSearch = user.getSavedSearches().iterator().next();
+		assertEquals("query1", savedSearch.getQuery());
+		assertEquals("queryString1", savedSearch.getQueryString());
+		assertNotNull("No creation date set", savedSearch.getDateSaved());
+		
+		SavedSearch[] savedSearches = user.getSavedSearches().toArray(new SavedSearchImpl[user.getSavedSearches().size()]);
 		userService.removeSavedSearch(savedSearches[1].getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should be one less!", user.getSavedSearches().size() == 2);
@@ -274,6 +271,13 @@ public class UserServiceTest {
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 		
+		try {
+			userService.createSavedItem(Long.MAX_VALUE, EUROPEANA_ID);
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
+		
 		userService.createSavedItem(user.getId(), EUROPEANA_ID);
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Items list should be one!", user.getSavedItems().size() == 1);
@@ -283,6 +287,7 @@ public class UserServiceTest {
 		assertEquals(SearchServiceMock.THUMBNAIL[0], item.getEuropeanaObject());
 		assertEquals(SearchServiceMock.TITLE, item.getTitle());
 		assertEquals(SearchServiceMock.AUTHOR[0], item.getAuthor());
+		assertEquals(DocType.TEXT, item.getDocType());
 		assertNotNull("No creation date set", item.getDateSaved());
 		
 		userService.removeSavedItem(item.getId());
@@ -305,6 +310,13 @@ public class UserServiceTest {
 		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
 		assertNotNull("Unable to create user", user);
 		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
+		
+		try {
+			userService.createSocialTag(Long.MAX_VALUE, EUROPEANA_ID, "ignore");
+			fail("This line should never be reached!!!");
+		} catch (DatabaseException e) {
+			// expecting this
+		}
 		
 		userService.createSocialTag(user.getId(), EUROPEANA_ID, TAG);
 		user = userService.findByEmail(EMAIL);

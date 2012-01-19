@@ -24,7 +24,13 @@ package eu.europeana.corelib.solr.service.mock;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+
+import java.util.List;
+
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.bean.FullBean;
+import eu.europeana.corelib.solr.bean.IdBean;
+import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -45,8 +51,15 @@ public class SearchServiceMock implements SearchService {
 		expect(mockBean.getDcPublisher()).andStubReturn(AUTHOR);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
 		expect(mockBean.getEdmObject()).andStubReturn(THUMBNAIL);
+		expect(mockBean.getType()).andStubReturn(DocType.TEXT);
 		replay(mockBean);
 		return mockBean;
+	}
+	
+	@Override
+	public <T extends IdBean> List<T> search(Class<T> beanClazz, Query query) {
+		// not needed in this mock...
+		return null;
 	}
 
 }

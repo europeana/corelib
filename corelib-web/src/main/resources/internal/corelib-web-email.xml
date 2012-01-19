@@ -61,6 +61,21 @@
 				p:emailFrom="#{europeanaProperties['system.from']}"
 				p:subject="My Europeana reset password"/>
         </entry>
+        <entry key="userFeedback">
+		    <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+		    	p:template="/email/feedback"
+		    	p:emailFrom="#{europeanaProperties['feedback.from']}"
+		    	p:emailTo="#{europeanaProperties['feedback.to']}"
+		    	p:subject="User Feedback"
+		    />
+        </entry>
+        <entry key="userFeedbackConfirm">
+		    <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+		    	p:template="/email/feedback-confirmation"
+		    	p:emailFrom="#{europeanaProperties['feedback.from']}"
+		    	p:subject="User Feedback"
+		    />
+        </entry>
 	</util:map>
 
 </beans>

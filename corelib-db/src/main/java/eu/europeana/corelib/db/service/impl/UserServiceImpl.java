@@ -115,14 +115,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		if (user != null) {
-			SavedSearchImpl savedSearch = new SavedSearchImpl();
-			savedSearch.setUser(user);
-			savedSearch.setDateSaved(new Date());
-			savedSearch.setQuery(query);
-			savedSearch.setQueryString(queryString);
-			user.getSavedSearches().add(savedSearch);
-		}
+		SavedSearchImpl savedSearch = new SavedSearchImpl();
+		savedSearch.setUser(user);
+		savedSearch.setDateSaved(new Date());
+		savedSearch.setQuery(query);
+		savedSearch.setQueryString(queryString);
+		user.getSavedSearches().add(savedSearch);
 		return user;
 	}
 
@@ -132,6 +130,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = dao.findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
 		SavedItemImpl savedItem = new SavedItemImpl();
 		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0],
@@ -145,6 +146,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = dao.findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
 		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag,
@@ -187,6 +191,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		instance.setDateSaved(new Date());
 		instance.setTitle(StringUtils.abbreviate(bean.getTitle(),
 				DatabaseDefinition.FIELDSIZE_TITLE));
+		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {
 			user.getSavedItems().add((SavedItemImpl) instance);
