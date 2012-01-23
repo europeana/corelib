@@ -1,10 +1,9 @@
 package eu.europeana.corelib.solr.service;
 
-import java.util.List;
-
 import eu.europeana.corelib.solr.bean.FullBean;
 import eu.europeana.corelib.solr.bean.IdBean;
 import eu.europeana.corelib.solr.model.Query;
+import eu.europeana.corelib.solr.model.ResultSet;
 
 public interface SearchService {
 	
@@ -15,6 +14,6 @@ public interface SearchService {
 	 */
 	FullBean findById(String europeanaObjectId);
 	
-	<T extends IdBean> List<T> search(Class<T> beanClazz, Query query);
+	<T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query);
 
 }

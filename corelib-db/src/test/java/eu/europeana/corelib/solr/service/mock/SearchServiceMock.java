@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.bean.FullBean;
 import eu.europeana.corelib.solr.bean.IdBean;
 import eu.europeana.corelib.solr.model.Query;
+import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -57,7 +58,7 @@ public class SearchServiceMock implements SearchService {
 	}
 	
 	@Override
-	public <T extends IdBean> List<T> search(Class<T> beanClazz, Query query) {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) {
 		// not needed in this mock...
 		return null;
 	}
