@@ -24,9 +24,6 @@ package eu.europeana.corelib.solr.service.mock;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
-
-import java.util.List;
-
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.bean.FullBean;
 import eu.europeana.corelib.solr.bean.IdBean;
