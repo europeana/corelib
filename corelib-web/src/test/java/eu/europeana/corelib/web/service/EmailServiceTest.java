@@ -43,6 +43,11 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
     
 	@Before
 	public void setUp() throws Exception {
+		// sometimes the service does not completely stops...
+		if ( (wiser != null) && wiser.getServer().isRunning()){
+			wiser.getServer().stop();
+			wiser.stop();
+		}
 		wiser = new Wiser();
 		wiser.setPort(SERVER_PORT);
 		wiser.start();
@@ -62,17 +67,33 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 		assertEquals(1, wiser.getMessages().size());
 	}
 	
+	@Test(expected=EmailServiceException.class)
+	public void testSendTokenException() throws EmailServiceException {
+		emailService.sendToken(null, "testSendToken.eu/test.html");
+	}
+	
 	@Test
 	public void testSendForgotPassword() throws EmailServiceException {
 		User user = createFakeUser("testSendToken","testSendForgotPassword@testSendForgotPassword.eu");
 		emailService.sendForgotPassword(user, "testSendToken.eu/test.html");
 		assertEquals(1, wiser.getMessages().size());
 	}
+	
+	@Test(expected=EmailServiceException.class)
+	public void testSendForgotPasswordException() throws EmailServiceException {
+		User user = createFakeUser("testSendToken","testSendForgotPassword@testSendForgotPassword.eu");
+		emailService.sendForgotPassword(user, null);
+	}
 
 	@Test
 	public void testSendFeedback() throws EmailServiceException {
 		emailService.sendFeedback("testSendFeedback@testSendFeedback.eu", "Feedback Test");
 		assertEquals(2, wiser.getMessages().size());
+	}
+
+	@Test(expected=EmailServiceException.class)
+	public void testSendFeedbackException() throws EmailServiceException {
+		emailService.sendFeedback("testSendFeedback@testSendFeedback.eu", null);
 	}
 	
 	@Test(expected=EmailServiceException.class)
