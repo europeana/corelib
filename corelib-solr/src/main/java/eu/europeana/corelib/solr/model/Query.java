@@ -8,7 +8,7 @@ public class Query {
 	
 	private int start;
 	
-	private int size;
+	private int pageSize;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -41,12 +41,12 @@ public class Query {
 		return this;
 	}
 
-	public int getSize() {
-		return size;
+	public int getPageSize() {
+		return pageSize;
 	}
 
-	public Query setSize(int size) {
-		this.size = size;
+	public Query setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 		return this;
 	}
 

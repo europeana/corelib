@@ -16,6 +16,12 @@ public class ResultSet<T extends IdBean> {
 	private List<FacetField> facetFields;
 	
 	private SpellCheckResponse spellcheck;
+	
+	// statistics
+	
+	private long resultSize;
+	
+	private int searchTime;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -25,32 +31,54 @@ public class ResultSet<T extends IdBean> {
 		return results;
 	}
 
-	public void setResults(List<T> results) {
+	public ResultSet<T> setResults(List<T> results) {
 		this.results = results;
+		return this;
 	}
 
 	public Query getQuery() {
 		return query;
 	}
 
-	public void setQuery(Query query) {
+	public ResultSet<T> setQuery(Query query) {
 		this.query = query;
+		return this;
 	}
 
 	public List<FacetField> getFacetFields() {
 		return facetFields;
 	}
 
-	public void setFacetFields(List<FacetField> facetFields) {
+	public ResultSet<T> setFacetFields(List<FacetField> facetFields) {
 		this.facetFields = facetFields;
+		return this;
 	}
 
 	public SpellCheckResponse getSpellcheck() {
 		return spellcheck;
 	}
 
-	public void setSpellcheck(SpellCheckResponse spellcheck) {
+	public ResultSet<T> setSpellcheck(SpellCheckResponse spellcheck) {
 		this.spellcheck = spellcheck;
+		return this;
+	}
+
+	public long getResultSize() {
+		return resultSize;
+	}
+
+	public ResultSet<T> setResultSize(long resultSize) {
+		this.resultSize = resultSize;
+		return this;
+	}
+
+	public int getSearchTime() {
+		return searchTime;
+	}
+
+	public ResultSet<T> setSearchTime(int searchTime) {
+		this.searchTime = searchTime;
+		return this;
 	}
 	
 }
