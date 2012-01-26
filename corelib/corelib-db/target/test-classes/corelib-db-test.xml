@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+/*
+ * Copyright 2007 EDL FOUNDATION
+ *
+ * Licensed under the EUPL, Version 1.1 or - as soon they 
+ * will be approved by the European Commission - subsequent
+ * versions of the EUPL (the "License");
+ * you may not use this work except in compliance with the
+ * License.
+ * You may obtain a copy of the License at:
+ *
+ * http://ec.europa.eu/idabc/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied.
+ * See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+ -->
+
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+        xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        ">
+    
+    <!-- 
+    	Overriding dataSource with a memory based database configuration
+     -->    
+    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource"
+    	p:url="jdbc:hsqldb:mem:."
+    />
+
+    <!-- 
+    	Overriding entityManagerFactory with a memory based database configuration
+     -->    
+    <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+    	p:dataSource-ref="corelib_db_dataSource"
+    >
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+            	p:showSql="false"
+            	p:generateDdl="true"
+            	p:databasePlatform="org.hibernate.dialect.HSQLDialect"
+            />
+        </property>
+    </bean>
+
+    
+    <!-- Mocking services from other modules and overruling their configuration -->
+    
+    <bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
+
+</beans>
