@@ -51,6 +51,21 @@
 			<artifactId>solr-solrj</artifactId>
 			<version>${version.apacheSolr}</version>
 		</dependency>
+		<dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-core</artifactId>
+                <version>${version.apacheSolr}</version>
+        </dependency>
+	    <dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-test-framework</artifactId>
+			<version>${version.apacheSolr}</version>
+	    </dependency>
+	    <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+		    <version>${version.apacheSolr}</version>
+        </dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>junit</groupId>
