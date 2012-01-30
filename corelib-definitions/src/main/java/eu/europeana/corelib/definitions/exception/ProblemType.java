@@ -42,7 +42,8 @@ public enum ProblemType {
     UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
     MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
     NONE("An exception occurred", ProblemResponseAction.MAIL),
-    INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL)
+    INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
+    UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL)
     ; 
     
     private String message;
