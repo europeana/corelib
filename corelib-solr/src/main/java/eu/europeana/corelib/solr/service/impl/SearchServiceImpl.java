@@ -27,7 +27,6 @@ import javax.annotation.Resource;
 
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.solr.SolrServer;
 import eu.europeana.corelib.solr.bean.ApiBean;
 import eu.europeana.corelib.solr.bean.BriefBean;
 import eu.europeana.corelib.solr.bean.FullBean;
@@ -35,6 +34,7 @@ import eu.europeana.corelib.solr.bean.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
+import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -45,7 +45,7 @@ import eu.europeana.corelib.solr.service.SearchService;
  */
 public class SearchServiceImpl implements SearchService {
 	@Resource(name="corelib_solr_solrSelectServer1")
-	private SolrServer solrServer;
+	private SolrServerImpl solrServer;
 	
 	@Override
 	public FullBean findById(String europeanaObjectId) {

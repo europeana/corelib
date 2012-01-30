@@ -25,8 +25,8 @@ package eu.europeana.corelib.solr.bean.impl;
 import org.apache.solr.client.solrj.beans.Field;
 
 
-import eu.europeana.corelib.solr.SolrServer;
 import eu.europeana.corelib.solr.bean.IdBean;
+import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 
 /**
  * @see eu.europeana.corelib.solr.bean.IdBean

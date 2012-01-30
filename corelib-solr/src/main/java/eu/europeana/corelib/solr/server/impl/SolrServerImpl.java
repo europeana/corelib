@@ -1,4 +1,4 @@
-package eu.europeana.corelib.solr;
+package eu.europeana.corelib.solr.server.impl;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrRequest;
@@ -14,7 +14,7 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
 import org.apache.solr.core.CoreContainer;
 
-public class SolrServer extends org.apache.solr.client.solrj.SolrServer {
+public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer implements eu.europeana.corelib.solr.server.SolrServer{
 	
 	private static final long serialVersionUID = 1962389067458619600L;
 
@@ -22,7 +22,7 @@ public class SolrServer extends org.apache.solr.client.solrj.SolrServer {
 
     String baseUrl; 
 
-    public SolrServer(String baseUrl) throws Exception {
+    public SolrServerImpl(String baseUrl) throws Exception {
         this.server = isRemoteServer(baseUrl) ? makeRemoteSolrServer(baseUrl) : makeLocalSolrServer(baseUrl); 
         this.baseUrl = baseUrl;
     }
@@ -75,7 +75,6 @@ public class SolrServer extends org.apache.solr.client.solrj.SolrServer {
 
     private int suspendAfterTimeout = 0;
 
-    //    @Autowired
     public void setSuspendAfterTimeout(int suspendAfterTimeout) {
         this.suspendAfterTimeout = suspendAfterTimeout;
     }

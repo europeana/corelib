@@ -60,6 +60,7 @@
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-test-framework</artifactId>
 			<version>${version.apacheSolr}</version>
+			<scope>test</scope>
 	    </dependency>
 	    <dependency>
             <groupId>org.apache.lucene</groupId>
