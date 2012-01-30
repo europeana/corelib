@@ -23,23 +23,23 @@ package eu.europeana.corelib.definitions.db.entity;
 
 import java.util.Date;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface Token extends IdentifiedEntity<String> {
+public interface Authentication extends UserConnected<String> {
 
-	public abstract String getToken();
+	public abstract Date getExpires();
 
-	public abstract String getEmail();
+	public abstract void setExpires(Date expires);
 
-	public abstract Date getCreated();
+	public abstract String getAuthKey();
 
-	public abstract void setCreated(Date created);
+	public abstract void setAuthKey(String authKey);
 
-	public abstract void setEmail(String email);
+	public abstract void setApiKey(String apiKey);
 
-	public abstract void setToken(String token);
+	public abstract String getApiKey();
 
 }
