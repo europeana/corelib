@@ -58,13 +58,15 @@ import eu.europeana.corelib.definitions.users.Role;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?")
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?"),
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="from UserImpl u where u.apiKey = ?")
 })
 @Table(name = DatabaseDefinition.TABLENAME_USER)
 public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, User {
 	private static final long serialVersionUID = 3830841148649674534L;
 	
 	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
+	public static final String QUERY_FINDBY_APIKEY = "User.findByApiKey";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)

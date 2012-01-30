@@ -43,4 +43,8 @@
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.TokenImpl" />
 	</bean>
 
+	<bean id="corelib_db_authenticationDao" parent="corelib_db_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.AuthenticationImpl" />
+	</bean>
+
 </beans>

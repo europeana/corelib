@@ -81,7 +81,18 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public User findByEmail(String email) {
-		return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+		if (StringUtils.isNotBlank(email)) {
+			return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+		}
+		return null;
+	}
+	
+	@Override
+	public User findByApiKey(String apiKey) {
+		if (StringUtils.isNotBlank(apiKey)) {
+			return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY, apiKey);
+		}
+		return null;
 	}
 
 	@Override

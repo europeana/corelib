@@ -45,6 +45,8 @@
 
     <context:annotation-config/>
     
+    <bean name="corelib_db_authorisationService" class="eu.europeana.corelib.db.service.impl.AuthorisationServiceImpl"
+    	p:dao-ref="corelib_db_authenticationDao"/>
     <bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
     	p:dao-ref="corelib_db_tokenDao"/>
     <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"

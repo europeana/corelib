@@ -22,51 +22,20 @@
 package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.User;
 
 /**
- * Service with User related actions.
+ * The Authentication service is providing services for API purposes.
+ * API is stateless, remembering a authenticated user is not possible.
+ * 
+ * Accesssing a user account requires a valid API key and requesting a authentication key.
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
- * @see eu.europeana.corelib.db.entity.UserImpl
  */
-public interface UserService extends AbstractService<User> {
-
-	/**
-	 * Creates a new User, based on a existing token, and given params
-	 * 
-	 * @param token
-	 *            A Token string, existing in the database
-	 * @param username
-	 *            The username for this user profile
-	 * @param password
-	 *            The login password (case sensitive)
-	 * @return Created user entity.
-	 * @throws DatabaseException
-	 *             When the Token is invalid
-	 */
-	User create(String token, String username, String password) throws DatabaseException;
-
-	/**
-	 * Returns a User if there is a valid email provided.
-	 * 
-	 * @param email
-	 *            Email address of user, not case sensitive
-	 * @return A user with given email adres, null if not found.
-	 */
-	User findByEmail(String email);
-
-	/**
-	 * Returns a User if there is a valid api key provided.
-	 * 
-	 * @param apiKey
-	 *            API key of user, case sensitive
-	 * @return A user with given API key, null if not found.
-	 */
-	User findByApiKey(String apiKey);
-
+public interface AuthorisationService {
+	
+	boolean validateApiKey(String apiKey);
+	
 	/**
 	 * Returns a User if there is a valid email and password provided.
 	 * 
@@ -76,7 +45,9 @@ public interface UserService extends AbstractService<User> {
 	 *            User's Password, case sensitive
 	 * @return A user if both params are valid, otherwise null
 	 */
-	User authenticateUser(String email, String password);
+	String authenticateUser(String apiKey, String username, String password);
+	
+	User getUser(String apiKey, String authKey) throws DatabaseException;
 	
 	/**
 	 * Changes the existing password of an existing password
@@ -91,7 +62,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or passwords are provided
 	 */
-	User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException;
+	User changePassword(String apiKey, String authKey, String oldPassword, String newPassword) throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedSearch to an existing User
@@ -106,7 +77,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or query(string) is provided
 	 */
-	User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException;
+	User createSavedSearch(String apiKey, String authKey, String query, String queryString) throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedItem to an existing User
@@ -119,7 +90,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or object id is provided
 	 */
-	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
+	User createSavedItem(String apiKey, String authKey, String europeanaObjectId) throws DatabaseException;
 
 	/**
 	 * Creates and add a SocialTag to an existing user
@@ -133,7 +104,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
-	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
+	User createSocialTag(String apiKey, String authKey, String europeanaObjectId, String tag) throws DatabaseException;
 	
 	/**
 	 * Removes a SavedSearch from database and User.
@@ -142,7 +113,7 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the saved search to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSavedSearch(Long savedSearchId) throws DatabaseException;
+	void removeSavedSearch(String apiKey, String authKey, Long savedSearchId) throws DatabaseException;
 
 	/**
 	 * Removes a SavedItem from database and User.
@@ -151,7 +122,7 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the saved item to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSavedItem(Long savedItemId) throws DatabaseException;
+	void removeSavedItem(String apiKey, String authKey, Long savedItemId) throws DatabaseException;
 
 	/**
 	 * Removes a SocialTag from database and User.
@@ -160,6 +131,6 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the social tag to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSocialTag(Long socialTagId) throws DatabaseException;
+	void removeSocialTag(String apiKey, String authKey, Long socialTagId) throws DatabaseException;
 
 }
