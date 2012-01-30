@@ -11,8 +11,8 @@ public interface SearchService {
 	/**
 	 * Retrieve a record by id.
 	 * 
-	 * @param europeanaObjectId
-	 * @return FullBean or 
+	 * @param europeanaObjectId - The unique europeana id
+	 * @return A full europeana record
 	 */
 	FullBean findById(String europeanaObjectId);
 	

@@ -24,21 +24,29 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
+import com.google.code.morphia.annotations.*;
+
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.bean.FullBean;
 
 /**
  * @see eu.europeana.corelib.solr.bean.FullBean
- * 
+ * TODO: Decide how data are going to be stored in MongoDB
  * @author Yorgos.Mamakis@kb.nl
  *
  */
-public class FullBeanImpl implements FullBean {
 
+@Entity("record")
+public class FullBeanImpl implements FullBean {
+	@Id ObjectId europeana_id;
+	private String title;
+	
+	
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.title;
 	}
 
 	@Override
@@ -231,12 +239,6 @@ public class FullBeanImpl implements FullBean {
 	public void setFullDocUrl(String fullDocUrl) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -529,6 +531,12 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmConceptNote() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getId() {
 		// TODO Auto-generated method stub
 		return null;
 	}

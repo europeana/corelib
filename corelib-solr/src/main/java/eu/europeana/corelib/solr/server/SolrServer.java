@@ -1,31 +1,58 @@
 package eu.europeana.corelib.solr.server;
 
-import java.io.IOException;
-
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.util.NamedList;
-
-
+/**
+ * Interface implementing the SolrServer connection
+ * @author yorgos.mamakis@kb.nl
+ *
+ */
 public interface SolrServer {
-	
+	/**
+	 * 
+	 * @param timeout - Connection timeout
+	 */
 	public void setConnectionTimeout(int timeout);
-	
+	/**
+	 * 
+	 * @param timeout
+	 */
     public void setSoTimeout(int timeout);
     
+    /**
+     * 
+     * @param connections - Maximum connections per host
+     */
     public void setDefaultMaxConnectionsPerHost(int connections);
     
+    /**
+     * 
+     * @param connections
+     */
     public void setMaxTotalConnections(int connections);
-    
+    /**
+     * 
+     * @param suspendAfterTimeout
+     */
     public void setSuspendAfterTimeout(int suspendAfterTimeout);
     
+    /**
+     * 
+     * @return
+     */
     public boolean isActive();
     
+    /**
+     * 
+     */
     public void suspend();
     
+    /**
+     * 
+     * @return
+     */
     public String getActiveFrom();
-    
-    public NamedList<Object> request(SolrRequest request) throws SolrServerException, IOException;
-    
+    /**
+     * 
+     * @return
+     */
     public String getBaseURL();
 }
