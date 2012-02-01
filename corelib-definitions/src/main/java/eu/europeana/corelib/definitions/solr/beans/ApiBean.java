@@ -19,7 +19,7 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.solr.bean;
+package eu.europeana.corelib.definitions.solr.beans;
 
 import java.util.Date;
 
@@ -69,33 +69,27 @@ public interface ApiBean extends BriefBean {
 
     String[] getEdmPlaceLabel();
 
-    String[] getEdmPlaceBroaderTerm(); //dcterms:isPartOf of the Place 
+    String[] getEdmPlaceIsPartOf();
 
-    String[] getEdmPlaceBroaderLabel(); //dcterms:isPartOf of the Place
+    Float[] getEdmPlaceLatitude();
 
-    float getEdmPlaceLatitude();
-
-    float getEdmPlaceLongitude();
+    Float[] getEdmPlaceLongitude();
 
     String[] getEdmTimespanTerm();
 
     String[] getEdmTimespanLabel();
 
-    String[] getEdmTimespanBroaderTerm(); //ts_dcterms_isPartOf
+    String[] getEdmTimespanIsPartOf();
 
-    String[] getEdmPeriodBroaderLabel();
+    Date[] getEdmTimespanBegin();
 
-    Date getEdmPeriodBegin();
-
-    Date getEdmPeriodEnd();
+    Date[] getEdmTimespanEnd();
 
     String[] getEdmConceptTerm(); //skos:concept 
 
     String[] getEdmConceptLabel(); //skos:concept prefLabel
 
     String[] getEdmConceptBroaderTerm(); //skos:concept broader
-
-    String[] getEdmConceptBroaderLabel(); //skos:concept prefLabel (broader)
 
     String[] getEdmAgentTerm();
 

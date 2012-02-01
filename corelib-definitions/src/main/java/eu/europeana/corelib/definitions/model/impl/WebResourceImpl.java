@@ -18,28 +18,39 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
-package eu.europeana.corelib.solr.mongodb;
+package eu.europeana.corelib.definitions.model.impl;
 
 import org.bson.types.ObjectId;
 
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import com.google.code.morphia.annotations.*;
+
+import eu.europeana.corelib.definitions.model.WebResource;
 /**
- * Basic MongoDB server implementation
+ * @see eu.europeana.corelid.definitions.model.WebResource
  * @author yorgos.mamakis@kb.nl
  *
  */
-public interface MongoDBServer {
+@Entity("Webresource")
+public class WebResourceImpl implements WebResource {
+
+	@Id ObjectId webResourceId;
+	private String[] webResource;
+	private String[] webResourceDcRights;
+	private String webResourceEdmRights;
 	
-	/**
-	 * A basic implementation of a MongoDB Server connection
-	 * @param id - The object id to retrieve from the database
-	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
-	 */
-	public FullBean getFullBean(ObjectId id);
-	
-	/**
-	 * Basic information for MongoDB connection
-	 * @return Information on MongoDB server configuration
-	 */
-	public String toString();
+	@Override
+	public String[] getEdmWebResource() {
+		return this.webResource;
+	}
+
+	@Override
+	public String[] getEdmWebResourceDcRights() {
+		return this.webResourceDcRights;
+	}
+
+	@Override
+	public String getEdmWebResourceEdmRights() {
+		return this.webResourceEdmRights;
+	}
+
 }

@@ -18,28 +18,54 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
-package eu.europeana.corelib.solr.mongodb;
+package eu.europeana.corelib.definitions.model.impl;
+
+import java.util.Date;
+
+import com.google.code.morphia.annotations.*;
 
 import org.bson.types.ObjectId;
 
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.model.Agent;
 /**
- * Basic MongoDB server implementation
+ * @see eu.europeana.corelib.definitions.model.Agent
  * @author yorgos.mamakis@kb.nl
  *
  */
-public interface MongoDBServer {
+@Entity("Agent")
+public class AgentImpl implements Agent {
 	
-	/**
-	 * A basic implementation of a MongoDB Server connection
-	 * @param id - The object id to retrieve from the database
-	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
-	 */
-	public FullBean getFullBean(ObjectId id);
-	
-	/**
-	 * Basic information for MongoDB connection
-	 * @return Information on MongoDB server configuration
-	 */
-	public String toString();
+@Id ObjectId agentId;
+private String[] prefLabel;
+private String[] altLabel;
+private String[] note;
+private Date begin;
+private Date end;
+
+	@Override
+	public String[] getPrefLabel() {
+		
+		return this.prefLabel;
+	}
+
+	@Override
+	public String[] getAltLabel() {
+		return this.altLabel;
+	}
+
+	@Override
+	public String[] getNote() {
+		return this.note;
+	}
+
+	@Override
+	public Date getBegin() {
+		return this.begin;
+	}
+
+	@Override
+	public Date getEnd() {
+		return this.end;
+	}
+
 }

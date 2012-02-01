@@ -19,7 +19,7 @@
  * permissions and limitations under the Licence.
  */
 
-package eu.europeana.corelib.solr.bean;
+package eu.europeana.corelib.definitions.solr.beans;
 
 import java.util.Date;
 
@@ -32,12 +32,6 @@ import java.util.Date;
  * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
  */
 public interface FullBean extends ApiBean {
-
-	String[] getOreAggregation();
-
-	String[] getEdmAggregation();
-
-	String[] getEdmAggregatedCHO();
 
 	String[] getEdmHasView();
 
@@ -54,8 +48,6 @@ public interface FullBean extends ApiBean {
 	String[] getEdmWebResourceDcRights();
 
 	String[] getEdmWebResourceEdmRights();
-
-	String[] getEdmProvidedCHO();
 
 	String[] getOreProxy();
 
@@ -118,12 +110,14 @@ public interface FullBean extends ApiBean {
 	String[] getEdmIsNextInSequence();
 
 	String[] getUserTags();
+	
+	String[] getEdmAgentBroaderLabels();
 
 	String[] getEdmAgentSkosNote();
 
-	Date getEdmAgentBegin();
+	Date[] getEdmAgentBegin();
 
-	Date getEdmAgentEnd();
+	Date[] getEdmAgentEnd();
 
 	String[] getEdmTimeSpanSkosNote();
 

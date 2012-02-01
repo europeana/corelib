@@ -24,18 +24,17 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import org.apache.solr.client.solrj.beans.Field;
 
-
-import eu.europeana.corelib.solr.bean.IdBean;
-import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
+import eu.europeana.corelib.definitions.solr.beans.IdBean;
 
 /**
- * @see eu.europeana.corelib.solr.bean.IdBean
+ * @see eu.europeana.corelib.definitions.solr.beans.IdBean
  * 
  * @author Yorgos.Mamakis@kb.nl
  *
  */
+
 public class IdBeanImpl implements IdBean {
-	@Field("uid") // temporary solution until we have finalized what will be in there
+	@Field("europeana_id")
 	String id;
 	
 	@Override

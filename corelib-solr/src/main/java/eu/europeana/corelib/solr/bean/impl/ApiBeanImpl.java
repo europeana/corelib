@@ -26,39 +26,15 @@ package eu.europeana.corelib.solr.bean.impl;
 import java.util.Date;
 
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.bean.ApiBean;
+import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 
 /**
- * @see eu.europeana.corelib.solr.bean.ApiBean
+ * @see eu.europeana.corelib.definitions.solr.beans.ApiBean
  * 
  * @author Yorgos.Mamakis@kb.nl
  *
  */
 public class ApiBeanImpl implements ApiBean {
-
-	@Override
-	public int getIndex(){
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String getFullDocUrl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setIndex(int index) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setFullDocUrl(String fullDocUrl) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public String getId() {
@@ -150,28 +126,17 @@ public class ApiBeanImpl implements ApiBean {
 		return null;
 	}
 
+	
 	@Override
-	public String[] getEdmPlaceBroaderTerm() {
+	public Float[] getEdmPlaceLatitude() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String[] getEdmPlaceBroaderLabel() {
+	public Float[] getEdmPlaceLongitude() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public float getEdmPlaceLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float getEdmPlaceLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -186,29 +151,6 @@ public class ApiBeanImpl implements ApiBean {
 		return null;
 	}
 
-	@Override
-	public String[] getEdmTimespanBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEdmPeriodBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Date getEdmPeriodBegin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Date getEdmPeriodEnd() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String[] getEdmConceptTerm() {
@@ -229,12 +171,6 @@ public class ApiBeanImpl implements ApiBean {
 	}
 
 	@Override
-	public String[] getEdmConceptBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String[] getEdmAgentTerm() {
 		// TODO Auto-generated method stub
 		return null;
@@ -242,6 +178,30 @@ public class ApiBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmAgentLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getEdmPlaceIsPartOf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getEdmTimespanIsPartOf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Date[] getEdmTimespanBegin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Date[] getEdmTimespanEnd() {
 		// TODO Auto-generated method stub
 		return null;
 	}

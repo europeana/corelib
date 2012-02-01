@@ -18,26 +18,19 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
-
-package eu.europeana.corelib.solr.bean;
-
+package eu.europeana.corelib.definitions.model;
 
 /**
- * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine
- * for presenting each record in the result and search page.
- *    
- * NOTE: TBD what is going to be placed here
- * 
- * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
+ * Interface representing contextual classes in EDM (Agent, Place, Timespan, Concept)
+ * @author yorgos.mamakis@kb.nl
+ *
  */
-public interface BriefBean extends IdBean {
+public interface ContextualClass {
 
-	int getIndex();
-
-	String getFullDocUrl();
-
-	void setIndex(int index);
-
-	void setFullDocUrl(String fullDocUrl);
-
+	String[] getPrefLabel();
+	
+	String[] getAltLabel();
+	
+	String[] getNote();
+	
 }

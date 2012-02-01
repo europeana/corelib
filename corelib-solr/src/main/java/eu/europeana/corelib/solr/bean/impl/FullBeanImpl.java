@@ -22,17 +22,33 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
 
+import eu.europeana.corelib.definitions.model.Agent;
+import eu.europeana.corelib.definitions.model.Aggregation;
+import eu.europeana.corelib.definitions.model.Concept;
+import eu.europeana.corelib.definitions.model.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.model.Place;
+import eu.europeana.corelib.definitions.model.Proxy;
+import eu.europeana.corelib.definitions.model.Timespan;
+import eu.europeana.corelib.definitions.model.WebResource;
+import eu.europeana.corelib.definitions.model.impl.AgentImpl;
+import eu.europeana.corelib.definitions.model.impl.AggregationImpl;
+import eu.europeana.corelib.definitions.model.impl.ConceptImpl;
+import eu.europeana.corelib.definitions.model.impl.PlaceImpl;
+import eu.europeana.corelib.definitions.model.impl.ProxyImpl;
+import eu.europeana.corelib.definitions.model.impl.TimespanImpl;
+import eu.europeana.corelib.definitions.model.impl.WebResourceImpl;
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.bean.FullBean;
+import eu.europeana.corelib.definitions.solr.beans.FullBean;
 
 /**
- * @see eu.europeana.corelib.solr.bean.FullBean
+ * @see eu.europeana.corelib.definitions.solr.beans.FullBean
  * TODO: Decide how data are going to be stored in MongoDB
  * @author Yorgos.Mamakis@kb.nl
  *
@@ -42,167 +58,203 @@ import eu.europeana.corelib.solr.bean.FullBean;
 public class FullBeanImpl implements FullBean {
 	@Id ObjectId europeana_id;
 	private String title;
+	private String[] edmObject;
+	private String creator;
+	private String year;
+	private String provider;
+	private String language;
+	private DocType type;
+	private int europeanaCompleteness;
+	
+	@Reference private ArrayList<PlaceImpl> places;
+	@Reference private ArrayList<AgentImpl> agents;
+	@Reference private ArrayList<TimespanImpl> timespans;
+	@Reference private ArrayList<ConceptImpl> concepts;
+	@Reference private ArrayList<AggregationImpl> aggregations;
+	//TODO:implement proxy and check if Europeana Aggregation needs to be stored separately
+	@Reference private EuropeanaAggregation europeanaAggregation;
+	@Reference private ArrayList<ProxyImpl> proxy;
+	@Reference private ArrayList<WebResourceImpl> webResources;
 	
 	
 	@Override
 	public String getTitle() {
 		return this.title;
 	}
-
+	
+	
 	@Override
 	public String[] getEdmObject() {
-		// TODO Auto-generated method stub
-		return null;
+		//from EuropeanaAggregation unique id
+		return this.edmObject;
 	}
 
 	@Override
 	public String getCreator() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.creator;
 	}
 
 	@Override
 	public String getYear() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.year;
 	}
 
 	@Override
 	public String getProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.provider;
 	}
 
 	@Override
 	public String getDataProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		//What if more than one aggregations point to a providedCHO (more edm:dataProvider)
+		
+		ArrayList<String> aggregationDataProviders = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				aggregationDataProviders.add(aggregation.getEdmDataProvider());
+			
+		}
+		
+		//temporary in order to maintain compatibility
+		return aggregationDataProviders.get(0);
 	}
 
 	@Override
 	public String getLanguage() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.language;
 	}
 
 	@Override
 	public DocType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.type;
 	}
 
 	@Override
 	public String[] getDcTermsSpatial() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getEuropeanaCompleteness() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.europeanaCompleteness;
 	}
 
-	@Override
-	public String[] getAggregationEdmRights() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public String[] getEdmPlaceTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public String[] getEdmPlaceLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> prefLabels = new ArrayList<String>();
+		for (Place place : this.places){
+			for(String prefLabel:place.getPrefLabel()){
+				prefLabels.add(prefLabel);
+			}
+		}
+		return (String[]) prefLabels.toArray();
 	}
 
 	@Override
-	public String[] getEdmPlaceBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getEdmPlaceIsPartOf() {
+		ArrayList<String> broaderPlaces = new ArrayList<String>();
+		for (Place place : this.places){
+			for(String broaderPlace:place.getIsPartOf()){
+				broaderPlaces.add(broaderPlace);
+			}
+		}
+		return (String[]) broaderPlaces.toArray();
 	}
 
 	@Override
-	public String[] getEdmPlaceBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
+	public Float[] getEdmPlaceLatitude() {
+		ArrayList<Float> latitudes = new ArrayList<Float>();
+		for (Place place : this.places){
+				latitudes.add(place.getLatitude());
+		}
+		return (Float[]) latitudes.toArray();
 	}
 
 	@Override
-	public float getEdmPlaceLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public float getEdmPlaceLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Float[] getEdmPlaceLongitude() {
+		ArrayList<Float> longitudes = new ArrayList<Float>();
+		for (Place place : this.places){
+				longitudes.add(place.getLongitude());
+		}
+		return (Float[]) longitudes.toArray();
 	}
 
 	@Override
 	public String[] getEdmTimespanTerm() {
-		// TODO Auto-generated method stub
+		// TODO Decide what to do here
 		return null;
 	}
 
 	@Override
 	public String[] getEdmTimespanLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> prefLabels = new ArrayList<String>();
+		for (Timespan timespan : this.timespans){
+				for (String prefLabel:timespan.getPrefLabel()){
+					prefLabels.add(prefLabel);
+				}
+		}
+		return (String[]) prefLabels.toArray();
 	}
 
 	@Override
-	public String[] getEdmTimespanBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getEdmTimespanIsPartOf() {
+		ArrayList<String> broaderPeriods = new ArrayList<String>();
+		for (Timespan timespan : this.timespans){
+				for (String broaderPeriod:timespan.getIsPartOf()){
+					broaderPeriods.add(broaderPeriod);
+				}
+		}
+		return (String[]) broaderPeriods.toArray();
 	}
 
 	@Override
-	public String[] getEdmPeriodBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date[] getEdmTimespanBegin() {
+		ArrayList<Date>startDates = new ArrayList<Date>();
+		for (Timespan timespan : this.timespans){
+			
+				startDates.add(timespan.getBegin());
+			
+		}
+		return (Date[]) startDates.toArray();
 	}
 
 	@Override
-	public Date getEdmPeriodBegin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Date getEdmPeriodEnd() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date[] getEdmTimespanEnd() {
+		ArrayList<Date>endDates = new ArrayList<Date>();
+		for (Timespan timespan : this.timespans){
+			
+				endDates.add(timespan.getBegin());
+		}
+		return (Date[]) endDates.toArray();
 	}
 
 	@Override
 	public String[] getEdmConceptTerm() {
-		// TODO Auto-generated method stub
+		// TODO Decide what to put here
 		return null;
 	}
 
 	@Override
 	public String[] getEdmConceptLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> conceptLabels = new ArrayList<String> ();
+		for (Concept concept : this.concepts)
+			for (String conceptLabel : concept.getPrefLabel()){
+				conceptLabels.add(conceptLabel);
+			}
+		return (String[])conceptLabels.toArray();
 	}
 
 	@Override
 	public String[] getEdmConceptBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEdmConceptBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> broaderTerms = new ArrayList<String> ();
+		for (Concept concept : this.concepts)
+			for (String broaderTerm : concept.getBroader()){
+				broaderTerms.add(broaderTerm);
+			}
+		return (String[])broaderTerms.toArray();
 	}
 
 	@Override
@@ -213,104 +265,107 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmAgentLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getIndex() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String getFullDocUrl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setIndex(int index) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setFullDocUrl(String fullDocUrl) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String[] getOreAggregation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEdmAggregation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEdmAggregatedCHO() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> agentLabels = new ArrayList<String> ();
+		for (Agent agent : this.agents)
+			for (String agentLabel : agent.getPrefLabel()){
+				agentLabels.add(agentLabel);
+			}
+		return (String[])agentLabels.toArray();
 	}
 
 	@Override
 	public String[] getEdmHasView() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> aggregationViews = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			for (String aggregationView : aggregation.getEdmHasView()){
+				aggregationViews.add(aggregationView);
+			}
+		}
+		return (String[])aggregationViews.toArray();
 	}
 
 	@Override
 	public String[] getEdmIsShownBy() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> aggregationIsShownByList = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				aggregationIsShownByList.add(aggregation.getEdmIsShownBy());
+			
+		}
+		return (String[])aggregationIsShownByList.toArray();
 	}
 
 	@Override
 	public String[] getEdmIsShownAt() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> aggregationIsShownAtList = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				aggregationIsShownAtList.add(aggregation.getEdmIsShownAt());
+			
+		}
+		return (String[])aggregationIsShownAtList.toArray();
 	}
 
 	@Override
 	public String[] getEdmProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> aggregationProviders = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				aggregationProviders.add(aggregation.getEdmProvider());
+			
+		}
+		return (String[])aggregationProviders.toArray();
 	}
 
 	@Override
 	public String[] getAggregationDcRights() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> aggregationDcRightsList = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			for (String aggregationDcRights : aggregation.getDcRights()){
+				aggregationDcRightsList.add(aggregationDcRights);
+			}
+		}
+		return (String[])aggregationDcRightsList.toArray();
 	}
-
+	
+	@Override
+	public String[] getAggregationEdmRights() {
+		ArrayList<String> aggregationEdmRightsList = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				aggregationEdmRightsList.add(aggregation.getEdmRights());
+			
+		}
+		return (String[])aggregationEdmRightsList.toArray();
+	}
 	@Override
 	public String[] getEdmWebResource() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> webResourceUrls = new ArrayList<String> ();
+		for (WebResource webResource : this.webResources)
+			for (String webResourceUrl: webResource.getEdmWebResource()){
+				webResourceUrls.add(webResourceUrl);
+			}
+		return (String[])webResourceUrls.toArray();
 	}
 
 	@Override
 	public String[] getEdmWebResourceDcRights() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> webResourceDcRightsList = new ArrayList<String> ();
+		for (WebResource webResource : this.webResources)
+			for (String webResourceDcRights: webResource.getEdmWebResourceDcRights()){
+				webResourceDcRightsList.add(webResourceDcRights);
+			}
+		return (String[])webResourceDcRightsList.toArray();
 	}
 
 	@Override
 	public String[] getEdmWebResourceEdmRights() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEdmProvidedCHO() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> webResourceEdmRightsList = new ArrayList<String> ();
+		for (WebResource webResource : this.webResources)
+		{
+			webResourceEdmRightsList.add(webResource.getEdmWebResourceEdmRights());
+		}	
+		return (String[])webResourceEdmRightsList.toArray();
 	}
 
 	@Override
@@ -501,44 +556,86 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmAgentSkosNote() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> agentNotes = new ArrayList<String> ();
+		for (Agent agent : this.agents)
+			for (String agentNote : agent.getNote()){
+				agentNotes.add(agentNote);
+			}
+		return (String[])agentNotes.toArray();
 	}
 
 	@Override
-	public Date getEdmAgentBegin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date[] getEdmAgentBegin() {
+		ArrayList<Date> agentBeginDates = new ArrayList<Date> ();
+		for (Agent agent : this.agents){			
+				agentBeginDates.add(agent.getBegin());
+			}
+		return (Date[])agentBeginDates.toArray();
 	}
 
 	@Override
-	public Date getEdmAgentEnd() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date[] getEdmAgentEnd() {
+		ArrayList<Date> agentEndDates = new ArrayList<Date> ();
+		for (Agent agent : this.agents){			
+				agentEndDates.add(agent.getEnd());
+			}
+		return (Date[])agentEndDates.toArray();
 	}
 
 	@Override
 	public String[] getEdmTimeSpanSkosNote() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> notes = new ArrayList<String>();
+		for (Timespan timespan : this.timespans){
+				for (String note:timespan.getNote()){
+					notes.add(note);
+				}
+		}
+		return (String[]) notes.toArray();
 	}
 
 	@Override
 	public String[] getEdmPlaceSkosNote() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> notes = new ArrayList<String>();
+		for (Place place: this.places){
+				for (String note:place.getNote()){
+					notes.add(note);
+				}
+		}
+		return (String[]) notes.toArray();
 	}
 
 	@Override
 	public String[] getEdmConceptNote() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> notes = new ArrayList<String>();
+		for (Concept concept: this.concepts){
+				for (String note:concept.getNote()){
+					notes.add(note);
+				}
+		}
+		return (String[]) notes.toArray();
 	}
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
+		return this.europeana_id.toString();
+	}
+
+
+	@Override
+	public String[] getEdmPlaceTerm() {
+		// TODO What to put here
 		return null;
+	}
+
+
+	@Override
+	public String[] getEdmAgentBroaderLabels() {
+		ArrayList<String> agentLabels = new ArrayList<String> ();
+		for (Agent agent : this.agents)
+			for (String agentLabel : agent.getAltLabel()){
+				agentLabels.add(agentLabel);
+			}
+		return (String[])agentLabels.toArray();
 	}
 
 }

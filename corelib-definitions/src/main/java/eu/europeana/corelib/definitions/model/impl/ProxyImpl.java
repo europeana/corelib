@@ -18,28 +18,14 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
-package eu.europeana.corelib.solr.mongodb;
+package eu.europeana.corelib.definitions.model.impl;
 
-import org.bson.types.ObjectId;
-
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.model.Proxy;
 /**
- * Basic MongoDB server implementation
+ * @see eu.europeana.corelib.model.Proxy
  * @author yorgos.mamakis@kb.nl
  *
  */
-public interface MongoDBServer {
-	
-	/**
-	 * A basic implementation of a MongoDB Server connection
-	 * @param id - The object id to retrieve from the database
-	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
-	 */
-	public FullBean getFullBean(ObjectId id);
-	
-	/**
-	 * Basic information for MongoDB connection
-	 * @return Information on MongoDB server configuration
-	 */
-	public String toString();
+public class ProxyImpl implements Proxy {
+
 }

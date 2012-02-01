@@ -42,7 +42,7 @@ import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.definitions.db.entity.User;
 import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.solr.bean.FullBean;
+import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**

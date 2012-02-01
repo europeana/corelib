@@ -18,15 +18,20 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+package eu.europeana.corelib.definitions.model;
 
-
-package eu.europeana.corelib.solr.bean;
-
-public interface IdBean {
-	/**
-	 * 
-	 * @return The Europeana UniqueID
-	 */
-	String getId();
+import java.util.Date;
+/**
+ * EDM Timespan fields representation
+ * @author yorgos.mamakis@kb.nl
+ *
+ */
+public interface Timespan extends ContextualClass {
+	
+	Date getBegin();
+	
+	Date getEnd();
+	
+	String[] getIsPartOf();
 
 }

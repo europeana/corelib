@@ -23,29 +23,20 @@ package eu.europeana.corelib.solr.service.impl;
 
 
 
-import java.util.ArrayList;
-
 import javax.annotation.Resource;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.Datastore;
-import com.mongodb.DBObject;
-
-
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.solr.bean.ApiBean;
-import eu.europeana.corelib.solr.bean.BriefBean;
-import eu.europeana.corelib.solr.bean.FullBean;
-import eu.europeana.corelib.solr.bean.IdBean;
-import eu.europeana.corelib.solr.exceptions.MongoDBException;
+import eu.europeana.corelib.definitions.solr.beans.ApiBean;
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
+import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.mongodb.MongoDBServer;
-import eu.europeana.corelib.solr.mongodb.impl.MongoDBServerImpl;
 import eu.europeana.corelib.solr.server.SolrServer;
-import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**

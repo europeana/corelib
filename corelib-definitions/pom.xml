@@ -46,6 +46,18 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
+		 <dependency>
+        	<groupId>com.google.code.morphia</groupId>
+        	<artifactId>morphia</artifactId>
+        	<version>0.99</version>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.mongodb</groupId>
+        	<artifactId>mongo-java-driver</artifactId>
+        	<version>2.7.2</version>
+        	<scope>compile</scope>
+        </dependency>
 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

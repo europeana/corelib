@@ -18,28 +18,18 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
-package eu.europeana.corelib.solr.mongodb;
 
-import org.bson.types.ObjectId;
+package eu.europeana.corelib.definitions.solr.beans;
 
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
+
 /**
- * Basic MongoDB server implementation
- * @author yorgos.mamakis@kb.nl
- *
+ * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine
+ * for presenting each record in the result and search page.
+ *    
+ * NOTE: TBD what is going to be placed here
+ * 
+ * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
  */
-public interface MongoDBServer {
-	
-	/**
-	 * A basic implementation of a MongoDB Server connection
-	 * @param id - The object id to retrieve from the database
-	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
-	 */
-	public FullBean getFullBean(ObjectId id);
-	
-	/**
-	 * Basic information for MongoDB connection
-	 * @return Information on MongoDB server configuration
-	 */
-	public String toString();
+public interface BriefBean extends IdBean {
+
 }

@@ -1,7 +1,7 @@
 package eu.europeana.corelib.solr.service;
 
-import eu.europeana.corelib.solr.bean.FullBean;
-import eu.europeana.corelib.solr.bean.IdBean;
+import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;

@@ -23,10 +23,10 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
-import eu.europeana.corelib.solr.bean.BriefBean;
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 
 /**
- * @see eu.europeana.corelib.solr.bean.BriefBean
+ * @see eu.europeana.corelib.definitions.solr.beans.BriefBean
  * 
  * @author Yorgos.Mamakis@kb.nl
  *
@@ -37,30 +37,6 @@ public class BriefBeanImpl implements BriefBean {
 	public String getId() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public int getIndex() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String getFullDocUrl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setIndex(int index) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setFullDocUrl(String fullDocUrl) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
