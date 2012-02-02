@@ -63,15 +63,13 @@ public interface FullBean extends ApiBean {
 
 	String[] getProxyDcRights();
 
-	String[] getProxyEdmRights();
-
 	String[] getDcSource();
 
 	String[] getDcTermsAlternative();
 
 	String[] getDcTermsConformsTo();
 
-	String[] getDcTermsCreated();
+	Date[] getDcTermsCreated();
 
 	String[] getDcTermsExtent();
 
@@ -124,4 +122,10 @@ public interface FullBean extends ApiBean {
 	String[] getEdmPlaceSkosNote();
 
 	String[] getEdmConceptNote();
+
+	String[] getEdmPlaceAltLabels();
+	
+	String[] getEdmTimespanAltLabels();
+	
+	String[] getSkosConceptAltLabels();
 }
