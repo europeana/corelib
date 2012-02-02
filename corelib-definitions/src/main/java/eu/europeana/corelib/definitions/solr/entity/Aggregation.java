@@ -1,0 +1,82 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
+package eu.europeana.corelib.definitions.solr.entity;
+
+import org.bson.types.ObjectId;
+
+/**
+ * EDM Aggregation fields representation
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
+public interface Aggregation {
+	
+	/**
+	 * Retrieves the unique Aggregation Id (could be anything)
+	 * @return ObjectId representing the unique Aggregation ID
+	 */
+	ObjectId getAggregationId();
+	
+	/**
+	 * Retrieves the edm:dataProvider field from an Aggregation
+	 * @return String representing the edm:DataProvider field
+	 */
+	String getEdmDataProvider();
+	
+	/**
+	 * Retrieves the edm:hasView field from an Aggregation
+	 * @return String array representing the edm:hasView fields
+	 */
+	String[] getEdmHasView();
+	
+	/**
+	 * Retrieves the unique edm:isShownBy field from an Aggregation
+	 * @return String representing the edm:isShownBy field
+	 */
+	String getEdmIsShownBy();
+	
+	/**
+	 * Retrieves the unique edm:isShownAt field from an Aggregation
+	 * @return String representing the edm:isShownAt field
+	 */
+	String getEdmIsShownAt();
+	
+	/**
+	 * Retrieves the unique edm:object field from an Aggregation
+	 * @return String representing the edm:object field
+	 */
+	String getEdmObject();
+	
+	/**
+	 * Retrieves the unique edm:provider field from an Aggregation
+	 * @return String representing the edm:provider field
+	 */
+	String getEdmProvider();
+	
+	/**
+	 * Retrieves the dc:rights fields from an Aggregation
+	 * @return String array representing the dc:rights fields
+	 */
+	String[] getDcRights();
+	
+	/**
+	 * Retrieves the unique edm:rights field from an Aggregation
+	 * @return String representing the edm:rights fields
+	 */
+	String getEdmRights();
+	
+}
