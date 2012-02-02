@@ -24,28 +24,29 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
 
-import eu.europeana.corelib.definitions.model.Agent;
-import eu.europeana.corelib.definitions.model.Aggregation;
-import eu.europeana.corelib.definitions.model.Concept;
-import eu.europeana.corelib.definitions.model.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.model.Place;
-import eu.europeana.corelib.definitions.model.Proxy;
-import eu.europeana.corelib.definitions.model.Timespan;
-import eu.europeana.corelib.definitions.model.WebResource;
-import eu.europeana.corelib.definitions.model.impl.AgentImpl;
-import eu.europeana.corelib.definitions.model.impl.AggregationImpl;
-import eu.europeana.corelib.definitions.model.impl.ConceptImpl;
-import eu.europeana.corelib.definitions.model.impl.PlaceImpl;
-import eu.europeana.corelib.definitions.model.impl.ProxyImpl;
-import eu.europeana.corelib.definitions.model.impl.TimespanImpl;
-import eu.europeana.corelib.definitions.model.impl.WebResourceImpl;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.entity.Agent;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
+import eu.europeana.corelib.definitions.solr.entity.Concept;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.definitions.solr.entity.Proxy;
+import eu.europeana.corelib.definitions.solr.entity.Timespan;
+import eu.europeana.corelib.definitions.solr.entity.WebResource;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
@@ -58,7 +59,6 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 public class FullBeanImpl implements FullBean {
 	@Id ObjectId europeana_id;
 	private String title;
-	private String[] edmObject;
 	private String creator;
 	private String year;
 	private String provider;
@@ -73,7 +73,7 @@ public class FullBeanImpl implements FullBean {
 	@Reference private ArrayList<AggregationImpl> aggregations;
 	//TODO:implement proxy and check if Europeana Aggregation needs to be stored separately
 	@Reference private EuropeanaAggregation europeanaAggregation;
-	@Reference private ArrayList<ProxyImpl> proxy;
+	@Reference private ArrayList<ProxyImpl> proxies;
 	@Reference private ArrayList<WebResourceImpl> webResources;
 	
 	
@@ -85,8 +85,15 @@ public class FullBeanImpl implements FullBean {
 	
 	@Override
 	public String[] getEdmObject() {
-		//from EuropeanaAggregation unique id
-		return this.edmObject;
+		ArrayList<String> edmObjects = new ArrayList<String> ();
+		for (Aggregation aggregation : this.aggregations){
+			
+				edmObjects.add(aggregation.getEdmObject());
+			
+		}
+		
+		
+		return (String[])edmObjects.toArray();
 	}
 
 	@Override
@@ -131,7 +138,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getDcTermsSpatial() {
-		return null;
+		ArrayList<String> dctermsSpatialList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsSpatial : proxy.getDctermsSpatial()){
+				dctermsSpatialList.add(dctermsSpatial);
+			}
+		}
+		return (String[]) dctermsSpatialList.toArray();
 	}
 
 	@Override
@@ -144,10 +157,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmPlaceLabel() {
-		ArrayList<String> prefLabels = new ArrayList<String>();
+		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
 		for (Place place : this.places){
-			for(String prefLabel:place.getPrefLabel()){
-				prefLabels.add(prefLabel);
+			for(String[] prefLabel:place.getPrefLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(prefLabel[0]);
+				tmp.add(prefLabel[1]);
+				prefLabels.add(tmp);
 			}
 		}
 		return (String[]) prefLabels.toArray();
@@ -190,11 +206,14 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmTimespanLabel() {
-		ArrayList<String> prefLabels = new ArrayList<String>();
+		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
 		for (Timespan timespan : this.timespans){
-				for (String prefLabel:timespan.getPrefLabel()){
-					prefLabels.add(prefLabel);
-				}
+			for(String[] prefLabel:timespan.getPrefLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(prefLabel[0]);
+				tmp.add(prefLabel[1]);
+				prefLabels.add(tmp);
+			}
 		}
 		return (String[]) prefLabels.toArray();
 	}
@@ -239,12 +258,16 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmConceptLabel() {
-		ArrayList<String> conceptLabels = new ArrayList<String> ();
-		for (Concept concept : this.concepts)
-			for (String conceptLabel : concept.getPrefLabel()){
-				conceptLabels.add(conceptLabel);
+		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+		for (Concept concept: this.concepts){
+			for(String[] prefLabel:concept.getPrefLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(prefLabel[0]);
+				tmp.add(prefLabel[1]);
+				prefLabels.add(tmp);
 			}
-		return (String[])conceptLabels.toArray();
+		}
+		return (String[]) prefLabels.toArray();
 	}
 
 	@Override
@@ -265,12 +288,16 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmAgentLabel() {
-		ArrayList<String> agentLabels = new ArrayList<String> ();
-		for (Agent agent : this.agents)
-			for (String agentLabel : agent.getPrefLabel()){
-				agentLabels.add(agentLabel);
+		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+		for (Agent agent : this.agents){
+			for(String[] prefLabel:agent.getPrefLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(prefLabel[0]);
+				tmp.add(prefLabel[1]);
+				prefLabels.add(tmp);
 			}
-		return (String[])agentLabels.toArray();
+		}
+		return (String[]) prefLabels.toArray();
 	}
 
 	@Override
@@ -342,9 +369,9 @@ public class FullBeanImpl implements FullBean {
 	public String[] getEdmWebResource() {
 		ArrayList<String> webResourceUrls = new ArrayList<String> ();
 		for (WebResource webResource : this.webResources)
-			for (String webResourceUrl: webResource.getEdmWebResource()){
-				webResourceUrls.add(webResourceUrl);
-			}
+		
+				webResourceUrls.add(webResource.getEdmWebResource());
+			
 		return (String[])webResourceUrls.toArray();
 	}
 
@@ -376,158 +403,278 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getOwlSameAs() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> owlSameAsList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String owlSameAs : proxy.getOwlSameAs()){
+				owlSameAsList.add(owlSameAs);
+			}
+		}
+		return (String[]) owlSameAsList.toArray();
 	}
 
 	@Override
 	public String[] getDcCoverage() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcCoverageList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcCoverage : proxy.getDcCoverage()){
+				dcCoverageList.add(dcCoverage);
+			}
+		}
+		return (String[]) dcCoverageList.toArray();
 	}
 
 	@Override
 	public String[] getDcPublisher() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcPublisherList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcPublisher : proxy.getDcPublisher()){
+				dcPublisherList.add(dcPublisher);
+			}
+		}
+		return (String[]) dcPublisherList.toArray();
 	}
 
 	@Override
 	public String[] getDcIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcIdentifierList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcIdentifier : proxy.getDcIdentifier()){
+				dcIdentifierList.add(dcIdentifier);
+			}
+		}
+		return (String[]) dcIdentifierList.toArray();
 	}
 
 	@Override
 	public String[] getDcRelation() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcRelationList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcRelation : proxy.getDcRelation()){
+				dcRelationList.add(dcRelation);
+			}
+		}
+		return (String[]) dcRelationList.toArray();
 	}
 
 	@Override
 	public String[] getProxyDcRights() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcRightsList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcRights : proxy.getDcRights()){
+				dcRightsList.add(dcRights);
+			}
+		}
+		return (String[]) dcRightsList.toArray();
 	}
 
-	@Override
-	public String[] getProxyEdmRights() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public String[] getDcSource() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dcSourceList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dcSource : proxy.getDcSource()){
+				dcSourceList.add(dcSource);
+			}
+		}
+		return (String[]) dcSourceList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsAlternative() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsAlternativeList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsAlternative : proxy.getDctermsAlternative()){
+				dctermsAlternativeList.add(dctermsAlternative);
+			}
+		}
+		return (String[]) dctermsAlternativeList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsConformsTo() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsConformsToList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsConformsTo : proxy.getDctermsConformsTo()){
+				dctermsConformsToList.add(dctermsConformsTo);
+			}
+		}
+		return (String[]) dctermsConformsToList.toArray();
 	}
 
 	@Override
-	public String[] getDcTermsCreated() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date[] getDcTermsCreated() {
+		ArrayList<Date> dctermsCreatedList = new ArrayList<Date> ();
+		for (Proxy proxy : this.proxies){
+			for(Date dctermsCreated : proxy.getDctermsCreated()){
+				dctermsCreatedList.add(dctermsCreated);
+			}
+		}
+		return (Date[]) dctermsCreatedList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsExtent() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsExtentList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsExtent : proxy.getDctermsExtent()){
+				dctermsExtentList.add(dctermsExtent);
+			}
+		}
+		return (String[]) dctermsExtentList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsHasFormat() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsHasFormatList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsHasFormat : proxy.getDctermsHasFormat()){
+				dctermsHasFormatList.add(dctermsHasFormat);
+			}
+		}
+		return (String[]) dctermsHasFormatList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIsPartOf() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIsPartOfList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIsPartOf : proxy.getDctermsIsPartOf()){
+				dctermsIsPartOfList.add(dctermsIsPartOf);
+			}
+		}
+		return (String[]) dctermsIsPartOfList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIsReferencedBy() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIsReferencedByList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIsReferencedBy : proxy.getDctermsIsReferencedBy()){
+				dctermsIsReferencedByList.add(dctermsIsReferencedBy);
+			}
+		}
+		return (String[]) dctermsIsReferencedByList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIsReplacedBy() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIsReplacedByList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIsReplacedBy : proxy.getDctermsIsReplacedBy()){
+				dctermsIsReplacedByList.add(dctermsIsReplacedBy);
+			}
+		}
+		return (String[]) dctermsIsReplacedByList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIsRequiredBy() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIsRequiredByList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIsRequiredBy : proxy.getDctermsIsRequiredBy()){
+				dctermsIsRequiredByList.add(dctermsIsRequiredBy);
+			}
+		}
+		return (String[]) dctermsIsRequiredByList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIsVersionOf() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIsVersionOfList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIsVersionOf : proxy.getDctermsIsVersionOf()){
+				dctermsIsVersionOfList.add(dctermsIsVersionOf);
+			}
+		}
+		return (String[]) dctermsIsVersionOfList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsIssued() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsIssuedList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsIssued : proxy.getDctermsIssued()){
+				dctermsIssuedList.add(dctermsIssued);
+			}
+		}
+		return (String[]) dctermsIssuedList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsMedium() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsMediumList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsMedium : proxy.getDctermsMedium()){
+				dctermsMediumList.add(dctermsMedium);
+			}
+		}
+		return (String[]) dctermsMediumList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsProvenance() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsProvenanceList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsProvenance : proxy.getDctermsProvenance()){
+				dctermsProvenanceList.add(dctermsProvenance);
+			}
+		}
+		return (String[]) dctermsProvenanceList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsReferences() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsReferencesList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsReferences : proxy.getDctermsReferences()){
+				dctermsReferencesList.add(dctermsReferences);
+			}
+		}
+		return (String[]) dctermsReferencesList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsReplaces() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsReplacesList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsReplaces : proxy.getDctermsReplaces()){
+				dctermsReplacesList.add(dctermsReplaces);
+			}
+		}
+		return (String[]) dctermsReplacesList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsRequires() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsRequiresList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsRequires : proxy.getDctermsRequires()){
+				dctermsRequiresList.add(dctermsRequires);
+			}
+		}
+		return (String[]) dctermsRequiresList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsTableOfContents() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsTableOfContentsList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsTableOfContents : proxy.getDctermsTOC()){
+				dctermsTableOfContentsList.add(dctermsTableOfContents);
+			}
+		}
+		return (String[]) dctermsTableOfContentsList.toArray();
 	}
 
 	@Override
 	public String[] getDcTermsTemporal() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> dctermsTemporalList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			for(String dctermsTemporal : proxy.getDctermsTOC()){
+				dctermsTemporalList.add(dctermsTemporal);
+			}
+		}
+		return (String[]) dctermsTemporalList.toArray();
 	}
 
 	@Override
@@ -538,14 +685,24 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmCurrentLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> edmCurrentLocationList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+		
+				edmCurrentLocationList.add(proxy.getEdmCurrentLocation());
+		
+		}
+		return (String[])edmCurrentLocationList.toArray();
 	}
 
 	@Override
 	public String[] getEdmIsNextInSequence() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> edmIsNextInSequenceList = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			
+				edmIsNextInSequenceList.add(proxy.getEdmIsNextInSequence());
+			
+		}
+		return (String[]) edmIsNextInSequenceList.toArray();
 	}
 
 	@Override
@@ -623,19 +780,65 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmPlaceTerm() {
-		// TODO What to put here
 		return null;
 	}
 
 
 	@Override
 	public String[] getEdmAgentBroaderLabels() {
-		ArrayList<String> agentLabels = new ArrayList<String> ();
-		for (Agent agent : this.agents)
-			for (String agentLabel : agent.getAltLabel()){
-				agentLabels.add(agentLabel);
+		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+		for (Agent agent : this.agents){
+			for(String[] altLabel:agent.getAltLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(altLabel[0]);
+				tmp.add(altLabel[1]);
+				altLabels.add(tmp);
 			}
-		return (String[])agentLabels.toArray();
+		}
+		return (String[]) altLabels.toArray();
 	}
 
+	@Override
+	public String[] getEdmPlaceAltLabels() {
+		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+		for (Place place : this.places){
+			for(String[] altLabel:place.getAltLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(altLabel[0]);
+				tmp.add(altLabel[1]);
+				altLabels.add(tmp);
+			}
+		}
+		return (String[]) altLabels.toArray();
+	}
+
+
+	@Override
+	public String[] getEdmTimespanAltLabels() {
+		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+		for (Timespan timespan : this.timespans){
+			for(String[] altLabel:timespan.getAltLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(altLabel[0]);
+				tmp.add(altLabel[1]);
+				altLabels.add(tmp);
+			}
+		}
+		return (String[]) altLabels.toArray();
+	}
+
+
+	@Override
+	public String[] getSkosConceptAltLabels() {
+		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+		for (Concept concept : this.concepts){
+			for(String[] altLabel:concept.getAltLabel()){
+				ArrayList<String> tmp = new ArrayList<String>();
+				tmp.add(altLabel[0]);
+				tmp.add(altLabel[1]);
+				altLabels.add(tmp);
+			}
+		}
+		return (String[]) altLabels.toArray();
+	}
 }

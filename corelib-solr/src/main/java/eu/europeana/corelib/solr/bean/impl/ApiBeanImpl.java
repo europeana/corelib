@@ -34,14 +34,9 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
  * @author Yorgos.Mamakis@kb.nl
  *
  */
-public class ApiBeanImpl implements ApiBean {
+public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
-	@Override
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
