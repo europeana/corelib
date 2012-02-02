@@ -17,32 +17,28 @@
 
 package eu.europeana.corelib.db.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.Authentication;
 
-/**
- * @author Willem-Jan Boogerd <www.eledge.net/contact>
- */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_AUTHENTICATION)
-public class AuthenticationImpl extends UserConnectedImpl<String> implements Authentication {
-	private static final long serialVersionUID = -3859445775674333646L;
+@Table(name = DatabaseDefinition.TABLENAME_APIKEY)
+public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDefinition {
+	private static final long serialVersionUID = -1717717883751281497L;
 
-	@Column
+	@Id
+	@Column(length = FIELDSIZE_APIKEY, nullable=false)
 	private String apiKey;
 	
-	@Column
-	private String authKey;
+	@Column(length = FIELDSIZE_APIKEY, nullable=false)
+	private String privateKey;
 	
 	@Column
-	private Date expires;
+	private long usageLimit;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -50,37 +46,29 @@ public class AuthenticationImpl extends UserConnectedImpl<String> implements Aut
 
 	@Override
 	public String getId() {
-		return authKey;
-	}
-	
-	@Override
-	public void setAuthKey(String authKey) {
-		this.authKey = authKey;
-	}
-	
-	@Override
-	public String getAuthKey() {
-		return authKey;
-	}
-	
-	@Override
-	public void setExpires(Date expires) {
-		this.expires = expires;
-	}
-	
-	@Override
-	public Date getExpires() {
-		return expires;
-	}
-
-	@Override
-	public String getApiKey() {
 		return apiKey;
 	}
-
-	@Override
+	
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public long getUsageLimit() {
+		return usageLimit;
+	}
+
+	public void setUsageLimit(long usageLimit) {
+		this.usageLimit = usageLimit;
+	}
 	
+	
+
 }

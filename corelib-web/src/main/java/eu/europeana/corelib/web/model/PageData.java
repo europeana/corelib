@@ -18,6 +18,7 @@
  * See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package eu.europeana.corelib.web.model;
 
 import java.util.Locale;
@@ -126,6 +127,10 @@ public abstract class PageData {
     
     public boolean isIndexable() {
         return indexable;
+    }
+    
+    public final boolean isIndexingBlocked() {
+        return !indexable;
     }
 
     public void setGoogleAnalyticsId(String googleAnalyticsId) {

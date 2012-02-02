@@ -27,12 +27,18 @@ package eu.europeana.corelib.definitions.db;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface DatabaseDefinition {
+	
+	// apikey
+	public static final String TABLENAME_APIKEY = "apikey";
+	public static final int FIELDSIZE_APIKEY = 30;
+	
+	// authentication
+	public static final String TABLENAME_AUTHENTICATION = "authentication";
 
 	// user
 	public static final String TABLENAME_USER = "users";
 	public static final int FIELDSIZE_PERSONAL = 100;
 	public static final int FIELDSIZE_PASSWORD = 64;
-	public static final int FIELDSIZE_IDENTIFIER = 30;
 	public static final int FIELDSIZE_USERNAME = 60;
 
 	// token
