@@ -196,7 +196,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		instance.setEuropeanaUri(bean.getId());
 		instance.setEuropeanaObject(bean.getEdmObject()[0]);
 		instance.setDateSaved(new Date());
-		instance.setTitle(StringUtils.abbreviate(bean.getTitle(),
+		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0],
 				DatabaseDefinition.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());
 		instance.setUser(user);

@@ -34,7 +34,7 @@ import eu.europeana.corelib.solr.service.SearchService;
  */
 public class SearchServiceMock implements SearchService {
 	
-	public static final String TITLE="Mock Title";
+	public static final String[] TITLE=new String[]{"Mock Title"};
 	public static final String[] AUTHOR=new String[]{"Mock Author"};
 	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
 
