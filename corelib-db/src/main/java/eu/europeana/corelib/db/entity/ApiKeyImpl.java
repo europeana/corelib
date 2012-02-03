@@ -24,10 +24,14 @@ import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.ApiKey;
 
+/**
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 @Entity
 @Table(name = DatabaseDefinition.TABLENAME_APIKEY)
-public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDefinition {
+public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDefinition, ApiKey {
 	private static final long serialVersionUID = -1717717883751281497L;
 
 	@Id
@@ -49,22 +53,27 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDef
 		return apiKey;
 	}
 	
+	@Override
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
+	@Override
 	public String getPrivateKey() {
 		return privateKey;
 	}
 
+	@Override
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
 	}
 
+	@Override
 	public long getUsageLimit() {
 		return usageLimit;
 	}
 
+	@Override
 	public void setUsageLimit(long usageLimit) {
 		this.usageLimit = usageLimit;
 	}
