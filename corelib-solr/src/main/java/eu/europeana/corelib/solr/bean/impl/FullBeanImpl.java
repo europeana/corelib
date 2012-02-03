@@ -1,31 +1,24 @@
 /*
- * Copyright 2007 EDL FOUNDATION
+ * Copyright 2007-2012 The Europeana Foundation
  *
- * Licensed under the EUPL, Version 1.0 or? as soon they
- * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
- * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
  *
- * http://ec.europa.eu/idabc/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
  */
-
 
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
@@ -50,19 +43,19 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
- * TODO: Decide how data are going to be stored in MongoDB
- * @author Yorgos.Mamakis@kb.nl
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 
 @Entity("record")
 public class FullBeanImpl implements FullBean {
 	@Id ObjectId europeana_id;
-	private String title;
-	private String creator;
-	private String year;
-	private String provider;
-	private String language;
+	private String[] title;
+	private String[] creator;
+	private String[] year;
+	private String[] provider;
+	private String[] language;
 	private DocType type;
 	private int europeanaCompleteness;
 	
@@ -78,7 +71,7 @@ public class FullBeanImpl implements FullBean {
 	
 	
 	@Override
-	public String getTitle() {
+	public String[] getTitle() {
 		return this.title;
 	}
 	
@@ -97,22 +90,22 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String getCreator() {
+	public String[] getCreator() {
 		return this.creator;
 	}
 
 	@Override
-	public String getYear() {
+	public String[] getYear() {
 		return this.year;
 	}
 
 	@Override
-	public String getProvider() {
+	public String[] getProvider() {
 		return this.provider;
 	}
 
 	@Override
-	public String getDataProvider() {
+	public String[] getDataProvider() {
 		//What if more than one aggregations point to a providedCHO (more edm:dataProvider)
 		
 		ArrayList<String> aggregationDataProviders = new ArrayList<String> ();
@@ -123,11 +116,11 @@ public class FullBeanImpl implements FullBean {
 		}
 		
 		//temporary in order to maintain compatibility
-		return aggregationDataProviders.get(0);
+		return (String[])aggregationDataProviders.toArray();
 	}
 
 	@Override
-	public String getLanguage() {
+	public String[] getLanguage() {
 		return this.language;
 	}
 
@@ -199,9 +192,14 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getEdmTimespanTerm() {
-		// TODO Decide what to do here
-		return null;
+	public String[] getEdmTimespan() {
+		ArrayList<String> timespanIds = new ArrayList<String>();
+		for (Timespan timespan : this.timespans){
+			
+				timespanIds.add(timespan.getTimespanId().toString());
+			
+		}
+		return (String[]) timespanIds.toArray();
 	}
 
 	@Override
@@ -251,9 +249,14 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getEdmConceptTerm() {
-		// TODO Decide what to put here
-		return null;
+	public String[] getEdmConcept() {
+		ArrayList<String> conceptIds = new ArrayList<String>();
+		for (Concept concept : this.concepts){
+			
+				conceptIds.add(concept.getConceptId().toString());
+			
+		}
+		return (String[]) conceptIds.toArray();
 	}
 
 	@Override
@@ -281,9 +284,14 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getEdmAgentTerm() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getEdmAgent() {
+		ArrayList<String> agentIds = new ArrayList<String>();
+		for (Agent agent : this.agents){
+			
+				agentIds.add(agent.getAgentId().toString());
+			
+		}
+		return (String[]) agentIds.toArray();
 	}
 
 	@Override
@@ -397,8 +405,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getOreProxy() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> owlProxies = new ArrayList<String> ();
+		for (Proxy proxy : this.proxies){
+			
+				owlProxies.add(proxy.getProxyId().toString());
+			
+		}
+		return (String[]) owlProxies.toArray();
 	}
 
 	@Override
@@ -779,13 +792,19 @@ public class FullBeanImpl implements FullBean {
 
 
 	@Override
-	public String[] getEdmPlaceTerm() {
-		return null;
+	public String[] getEdmPlace() {
+		ArrayList<String> placeIds = new ArrayList<String>();
+		for (Place place : this.places){
+			
+				placeIds.add(place.getPlaceId().toString());
+			
+		}
+		return (String[]) placeIds.toArray();
 	}
 
 
 	@Override
-	public String[] getEdmAgentBroaderLabels() {
+	public String[] getEdmAgentAltLabels() {
 		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
 		for (Agent agent : this.agents){
 			for(String[] altLabel:agent.getAltLabel()){
@@ -840,5 +859,61 @@ public class FullBeanImpl implements FullBean {
 			}
 		}
 		return (String[]) altLabels.toArray();
+	}
+
+
+	@Override
+	public Boolean[] getEdmPreviewNoDistribute() {
+		// TODO Decide where this field is stored in EDM
+		return null;
+	}
+
+
+	@Override
+	public String getFullDocUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getDcTermsHasPart() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getEdmPlaceAltLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getEdmConceptBroaderLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getEdmTimespanBroaderTerm() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getEdmTimespanBroaderLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String[] getEdmPlaceBroaderTerm() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

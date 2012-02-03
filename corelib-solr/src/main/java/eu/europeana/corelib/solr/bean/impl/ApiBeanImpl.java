@@ -1,29 +1,25 @@
 /*
- * Copyright 2007 EDL FOUNDATION
+ * Copyright 2007-2012 The Europeana Foundation
  *
- * Licensed under the EUPL, Version 1.0 or? as soon they
- * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
- * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
  *
- * http://ec.europa.eu/idabc/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
  */
-
-
 
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.Date;
+
+import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
@@ -37,168 +33,297 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	
-	@Override
-	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public String[] getEdmObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
+    int index;
+    String fullDocUrl;
+    int score;
+    String debugQuery;
 
-	@Override
-	public String getCreator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("europeana_collectionName")
+    String[] europeanaCollectionName;
 
-	@Override
-	public String getYear() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("PROVIDER")
+    String[] provider;
 
-	@Override
-	public String getProvider() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("edm_dataProvider")
+    String[] edmDataProvider;
 
-	@Override
-	public String getDataProvider() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("edm_object")
+    String[] edmObject;
 
-	@Override
-	public String getLanguage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("europeana_completeness")
+    int europeanaCompleteness;
 
-	@Override
-	public DocType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("edm_rights")
+    String[] edmRights;
 
-	@Override
-	public String[] getDcTermsIsPartOf() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("COMPLETENESS")
+    String[] completeness;
 
-	@Override
-	public String[] getDcTermsSpatial() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("COUNTRY")
+    String[] country;
 
-	@Override
-	public int getEuropeanaCompleteness() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Field("TYPE")
+    String[] docType;
 
-	@Override
-	public String[] getAggregationEdmRights() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("LANGUAGE")
+    String[] language;
 
-	@Override
-	public String[] getEdmPlaceTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("YEAR")
+    String[] year;
 
-	@Override
-	public String[] getEdmPlaceLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("RIGHTS")
+    String[] rights;
 
-	
-	@Override
-	public Float[] getEdmPlaceLatitude() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("UGC")
+    String[] ugc;
 
-	@Override
-	public Float[] getEdmPlaceLongitude() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field
+    String[] title;
 
-	@Override
-	public String[] getEdmTimespanTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("solr_prefLabel.en")
+    String[] prefLabelEn;
 
-	@Override
-	public String[] getEdmTimespanLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Field("solr_prefLabel.ru")
+    String[] prefLabelRu;
+
+    @Field("creator")
+    String[] creator;
+    
+    String[] recordHashFirstSix;
+
+    @Field("edm_place")
+    String[] edmPlace;
+
+    @Field("edm_place_pref_label")
+    String[] edmPlacePrefLabel;
+
+    @Field("edm_place_broader_term")
+    String[] enrichmentPlaceBroaderTerm;
+
+    @Field("edm_place_alt_label")
+    String[] edmPlaceAltLabel;
+
+    @Field("edm_place_latitude")
+    Float[] edmPlaceLatitude;
+
+    @Field("edm_place_longitude")
+    Float[] edmPlaceLongitude;
+
+    @Field("edm_timespan")
+    String[] edmTimespan;
+
+    @Field("edm_timespan_label")
+    String[] edmTimespanLabel;
+
+    @Field("edm_timespan_broader_term")
+    String[] edmTimespanBroaderTerm;
+
+    @Field("edm_timespan_broader_label")
+    String[] edmTimespanBroaderLabel;
+
+    @Field("edm_timespan_begin")
+    Date[] edmTimespanBegin;
+
+    @Field("edm_timespan_end")
+    Date[] edmTimespanEnd;
+
+    @Field("edm_concept")
+    String[] edmConceptTerm;
+
+    @Field("edm_concept_label")
+    String[] edmConceptPrefLabel;
+
+    @Field("edm_concept_broader")
+    String[] edmConceptBroaderTerm;
+
+    @Field("edm_concept_broader_label")
+    String[] edmConceptBroaderLabel;
+
+    @Field("edm_agent")
+    String[] edmAgentTerm;
+
+    @Field("edm_agent_label")
+    String[] edmAgentLabel;
+
+    @Field("dcterms_hasPart")
+    String[] dctermsHasPart;
+    
+    @Field("dcterms_isPartOf")
+    String[] dctermsIsPartOf;
+
+    @Field("dcterms_spatial")
+    String[] dctermsSpatial;
 
 
-	@Override
-	public String[] getEdmConceptTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getFullDocUrl() {
+        return fullDocUrl;
+    }
 
-	@Override
-	public String[] getEdmConceptLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getId() {
+        return null;
+    }
 
-	@Override
-	public String[] getEdmConceptBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getTitle() {
+        return this.title;
+    }
 
-	@Override
-	public String[] getEdmAgentTerm() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getEdmObject() { //was getThumbnails
+        return this.edmObject;
+    }
 
-	@Override
-	public String[] getEdmAgentLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getCreator() {
+        return this.creator;
+    }
 
-	@Override
-	public String[] getEdmPlaceIsPartOf() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getYear() {
+        return this.year;
+    }
 
-	@Override
-	public String[] getEdmTimespanIsPartOf() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getProvider() {
+        return this.provider;
+    }
 
-	@Override
-	public Date[] getEdmTimespanBegin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getLanguage() {
+        return this.language;
+    }
 
-	@Override
-	public Date[] getEdmTimespanEnd() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public DocType getType() {
+        return DocType.get(docType);
+    }
+
+    public String[] getRights() {
+        return this.rights;
+    }
+
+    @Override
+    public String[] getDataProvider() {
+        return this.edmDataProvider;
+    }
+
+    @Override
+    public int getEuropeanaCompleteness() {
+        return europeanaCompleteness;
+    }
+    
+    @Override
+    public String[] getEdmPlace() {
+        return this.edmPlace;
+    }
+
+    @Override
+    public String[] getEdmPlaceBroaderTerm() {
+        return enrichmentPlaceBroaderTerm;
+    }
+
+    @Override
+    public String[] getEdmPlaceAltLabel() {
+        return edmPlaceAltLabel;
+    }
+
+    @Override
+    public String[] getEdmPlaceLabel() {
+        return edmPlacePrefLabel;
+    }
+
+    @Override
+    public Float[] getEdmPlaceLatitude() {
+        return edmPlaceLatitude;
+    }
+
+    @Override
+    public Float[] getEdmPlaceLongitude() {
+        return edmPlaceLongitude;
+    }
+
+    @Override
+    public String[] getEdmTimespan() {     
+        return edmTimespan;
+    }
+
+    @Override
+    public String[] getEdmTimespanLabel() {
+        return edmTimespanLabel;
+    }
+
+    @Override
+    public String[] getEdmTimespanBroaderTerm() {
+        return edmTimespanBroaderTerm;
+    }
+
+    @Override
+    public String[] getEdmTimespanBroaderLabel() {
+        return edmTimespanBroaderLabel;
+    }
+
+    @Override
+    public Date[] getEdmTimespanBegin() {
+        return edmTimespanBegin;
+    }
+
+    @Override
+    public Date[] getEdmTimespanEnd() {
+        return edmTimespanEnd;
+    }
+
+   @Override
+    public String[] getEdmConcept() {
+        return edmConceptTerm;
+    }
+
+    @Override
+    public String[] getEdmConceptLabel() {
+        return edmConceptPrefLabel;
+    }
+
+    @Override
+    public String[] getEdmConceptBroaderTerm() {
+        return edmConceptBroaderTerm;
+    }
+
+    @Override
+    public String[] getEdmConceptBroaderLabel() {
+        return edmConceptBroaderLabel;
+    }
+
+    @Override
+    public String[] getEdmAgent() {
+        return edmAgentTerm;
+    }
+
+    @Override
+    public String[] getEdmAgentLabel() {
+        return edmAgentLabel;
+    }
+    
+    @Override
+    public String[] getAggregationEdmRights() {
+        return this.edmRights;
+    }
+    
+    @Override
+    public String[] getDcTermsHasPart() {
+        return this.dctermsHasPart;
+    }
+
+    @Override
+    public String[] getDcTermsIsPartOf() {
+        return this.dctermsIsPartOf;
+    }
+
+    @Override
+    public String[] getDcTermsSpatial() {
+        return this.dctermsSpatial;
+    }
 
 }
