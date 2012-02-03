@@ -38,7 +38,6 @@ import eu.europeana.corelib.definitions.db.entity.User;
  */
 public class AuthorisationServiceImpl implements AuthorisationService {
 
-	@Resource
 	private Dao<Authentication> dao;
 
 	@Resource

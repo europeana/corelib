@@ -52,5 +52,7 @@
     <!-- Mocking services from other modules and overruling their configuration -->
     
     <bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
+    
+    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.mongodb.mock.MongoDBServerMock"/>
 
 </beans>

@@ -21,6 +21,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
@@ -35,6 +36,7 @@ import eu.europeana.corelib.definitions.db.entity.Authentication;
 public class AuthenticationImpl extends UserConnectedImpl<String> implements Authentication {
 	private static final long serialVersionUID = -3859445775674333646L;
 
+	@Id
 	@Column
 	private String apiKey;
 	

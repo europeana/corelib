@@ -37,6 +37,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.TokenImpl;
+import eu.europeana.corelib.db.entity.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.SavedSearch;
@@ -63,8 +64,8 @@ public class UserServiceTest {
 	@Resource(name = "corelib_db_tokenDao")
 	private Dao<TokenImpl> tokenDao;
 
-	@Resource(name = "corelib_db_tokenDao")
-	private Dao<TokenImpl> userDao;
+	@Resource(name = "corelib_db_userDao")
+	private Dao<UserImpl> userDao;
 
 	@Before
 	public void prepareDatabase() {
