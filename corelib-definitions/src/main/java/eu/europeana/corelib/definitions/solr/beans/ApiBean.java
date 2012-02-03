@@ -1,22 +1,18 @@
 /*
- * Copyright 2007 EDL FOUNDATION
+ * Copyright 2007-2012 The Europeana Foundation
  *
- * Licensed under the EUPL, Version 1.0 or? as soon they
- * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
- * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
  *
- * http://ec.europa.eu/idabc/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
  */
 
 package eu.europeana.corelib.definitions.solr.beans;
@@ -32,24 +28,24 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * 
  * @author Gerald de Jong <geralddejong@gmail.com>
  * @author Sjoerd Siebinga <sjoerd.siebinga@gmail.com>
- * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
+ * @author Yorgos Mamakis <yorgos.mamakis@ kb.nl>
  */
 
 public interface ApiBean extends BriefBean {
 
-    String getTitle();
+    String[] getTitle();
 
     String[] getEdmObject();
 
-    String getCreator(); //creator copyfields dc_creator, dc_contributor
+    String[] getCreator(); //creator copyfields dc_creator, dc_contributor
 
-    String getYear(); //YEAR copyfield dc_date
+    String[] getYear(); //YEAR copyfield dc_date
 
-    String getProvider(); //PROVIDER copyfield edm_provider
+    String[] getProvider(); //PROVIDER copyfield edm_provider
 
-    String getDataProvider(); //DATA_PROVIDER copyfield edm_dataProvider
+    String[] getDataProvider(); //DATA_PROVIDER copyfield edm_dataProvider
 
-    String getLanguage(); //LANGUAGE copyfield dc_language
+    String[] getLanguage(); //LANGUAGE copyfield dc_language
 
     DocType getType(); //TYPE copyfield edm_type
     
@@ -65,33 +61,43 @@ public interface ApiBean extends BriefBean {
 
     String[] getAggregationEdmRights();
 
-    String[] getEdmPlaceTerm();
+    String[] getEdmPlace();
 
     String[] getEdmPlaceLabel();
-
-    String[] getEdmPlaceIsPartOf();
 
     Float[] getEdmPlaceLatitude();
 
     Float[] getEdmPlaceLongitude();
 
-    String[] getEdmTimespanTerm();
+    String[] getEdmTimespan();
 
     String[] getEdmTimespanLabel();
-
-    String[] getEdmTimespanIsPartOf();
 
     Date[] getEdmTimespanBegin();
 
     Date[] getEdmTimespanEnd();
 
-    String[] getEdmConceptTerm(); //skos:concept 
+    String[] getEdmConcept(); //skos:concept 
 
     String[] getEdmConceptLabel(); //skos:concept prefLabel
 
     String[] getEdmConceptBroaderTerm(); //skos:concept broader
 
-    String[] getEdmAgentTerm();
+    String[] getEdmAgent();
 
     String[] getEdmAgentLabel();
+
+	String getFullDocUrl();
+
+	String[] getDcTermsHasPart();
+
+	String[] getEdmPlaceAltLabel();
+
+	String[] getEdmConceptBroaderLabel();
+
+	String[] getEdmTimespanBroaderTerm();
+
+	String[] getEdmTimespanBroaderLabel();
+
+	String[] getEdmPlaceBroaderTerm();
 }
