@@ -44,9 +44,9 @@
 		<module>corelib-web</module>
 	</modules>
 	<scm>
-	    <connection>scm:svn:https://europeanalabs.eu/svn/europeana/corelib</connection>
-	    <developerConnection>scm:svn:https://europeanalabs.eu/svn/europeana/corelib</developerConnection>
+	    <connection>scm:svn:https://europeanalabs.eu/svn/europeana/trunk/corelib</connection>
+	    <developerConnection>scm:svn:https://europeanalabs.eu/svn/europeana/trunk/corelib</developerConnection>
 	    <tag>HEAD</tag>
-	    <url>https://europeanalabs.eu/svn/europeana/corelib</url>
+	    <url>https://europeanalabs.eu/svn/europeana/trunk/corelib</url>
 	</scm>
 </project>
