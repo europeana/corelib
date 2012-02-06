@@ -43,6 +43,21 @@
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
 	</modules>
+	<build>
+	    <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <systemPropertyVariables>
+                        <europeana.properties>./resources/europeana-test.properties
+                        </europeana.properties>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 	<scm>
 	    <connection>scm:svn:https://europeanalabs.eu/svn/europeana/trunk/corelib</connection>
 	    <developerConnection>scm:svn:https://europeanalabs.eu/svn/europeana/trunk/corelib</developerConnection>
