@@ -25,6 +25,7 @@
 		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
 		<version>2.0-SNAPSHOT</version>
+		 <relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-db</artifactId>
