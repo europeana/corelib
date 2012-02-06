@@ -18,7 +18,7 @@
 package eu.europeana.corelib.definitions.db.entity;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
@@ -56,10 +56,10 @@ public interface User extends IdentifiedEntity<Long> {
 
 	public abstract void setUserName(String userName);
 
-	public abstract Set<SavedItem> getSavedItems();
+	public abstract List<SavedItem> getSavedItems();
 
-	public abstract Set<SavedSearch> getSavedSearches();
+	public abstract List<SavedSearch> getSavedSearches();
 
-	public abstract Set<SocialTag> getSocialTags();
+	public abstract List<SocialTag> getSocialTags();
 
 }
