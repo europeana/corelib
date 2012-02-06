@@ -34,6 +34,7 @@
         <groupId>eu.europeana</groupId>
         <artifactId>corelib</artifactId>
         <version>${version.europeanaCorelib}</version>
+        <relativePath>./pom.xml</relativePath>
 	 </parent>
 	<modules>
 		<module>corelib-db</module>
