@@ -33,6 +33,7 @@ import org.bson.types.*;
 public class ProxyImpl implements Proxy {
 
 	@Id ObjectId proxyId;
+	
 	private String[] owlSameAs;
 	private String[] dcContributor;
 	private String[] dcCoverage;
@@ -78,7 +79,9 @@ public class ProxyImpl implements Proxy {
 	
 	@Override
 	public String[] getOwlSameAs() {
+		
 		return this.owlSameAs;
+		
 	}
 
 	@Override
@@ -284,6 +287,216 @@ public class ProxyImpl implements Proxy {
 	@Override
 	public String getEdmIsNextInSequence() {
 		return this.edmIsNextInSequence;
+	}
+
+	@Override
+	public void setProxyId(ObjectId proxyId) {
+		this.proxyId = proxyId;
+	}
+
+	@Override
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
+	}
+
+	@Override
+	public void setDcContributor(String[] dcContributor) {
+		this.dcContributor = dcContributor;
+	}
+
+	@Override
+	public void setDcCoverage(String[] dcCoverage) {
+		this.dcCoverage = dcCoverage;
+	}
+
+	@Override
+	public void setDcCreator(String[] dcCreator) {
+		this.dcCreator = dcCreator;
+	}
+
+	@Override
+	public void setDcDate(Date[] dcDate) {
+		this.dcDate = dcDate;
+	}
+
+	@Override
+	public void setDcDescription(String[] dcDescription) {
+		this.dcDescription = dcDescription;
+	}
+
+	@Override
+	public void setDcFormat(String[] dcFormat) {
+		this.dcFormat = dcFormat;
+	}
+
+	@Override
+	public void setDcIdentifier(String[] dcIdentifier) {
+		this.dcIdentifier = dcIdentifier;
+	}
+
+	@Override
+	public void setDcLanguage(String[] dcLanguage) {
+		this.dcLanguage = dcLanguage;
+	}
+
+	@Override
+	public void setDcPublisher(String[] dcPublisher) {
+		this.dcPublisher = dcPublisher;
+	}
+
+	@Override
+	public void setDcRelation(String[] dcRelation) {
+		this.dcRelation = dcRelation;
+	}
+
+	@Override
+	public void setDcRights(String[] dcRights) {
+		this.dcRights = dcRights;
+	}
+
+	@Override
+	public void setDcSource(String[] dcSource) {
+		this.dcSource = dcSource;
+	}
+
+	@Override
+	public void setDcSubject(String[] dcSubject) {
+		this.dcSubject = dcSubject;
+	}
+
+	@Override
+	public void setDcTitle(String[] dcTitle) {
+		this.dcTitle = dcTitle;
+	}
+
+	@Override
+	public void setDcType(String[] dcType) {
+		this.dcType = dcType;
+	}
+
+	@Override
+	public void setDctermsAlternative(String[] dctermsAlternative) {
+		this.dctermsAlternative = dctermsAlternative;
+	}
+
+	@Override
+	public void setDctermsConformsTo(String[] dctermsConformsTo) {
+		this.dctermsConformsTo = dctermsConformsTo;
+	}
+
+	@Override
+	public void setDctermsCreated(Date[] dctermsCreated) {
+		this.dctermsCreated = dctermsCreated;
+	}
+
+	@Override
+	public void setDctermsExtent(String[] dctermsExtent) {
+		this.dctermsExtent = dctermsExtent;
+	}
+
+	@Override
+	public void setDctermsHasFormat(String[] dctermsHasFormat) {
+		this.dctermsHasFormat = dctermsHasFormat;
+	}
+
+	@Override
+	public void setDctermsHasPart(String[] dctermsHasPart) {
+		this.dctermsHasPart = dctermsHasPart;
+	}
+
+	@Override
+	public void setDctermsHasVersion(String[] dctermsHasVersion) {
+		this.dctermsHasVersion = dctermsHasVersion;
+	}
+
+	@Override
+	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
+		this.dctermsIsFormatOf = dctermsIsFormatOf;
+	}
+
+	@Override
+	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
+		this.dctermsIsPartOf = dctermsIsPartOf;
+	}
+
+	@Override
+	public void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy) {
+		this.dctermsIsReferencedBy = dctermsIsReferencedBy;
+	}
+
+	@Override
+	public void setDctermsIsReplacedBy(String[] dctermsIsReplacedBy) {
+		this.dctermsIsReplacedBy = dctermsIsReplacedBy;
+	}
+
+	@Override
+	public void setDctermsIsRequiredBy(String[] dctermsIsRequiredBy) {
+		this.dctermsIsRequiredBy = dctermsIsRequiredBy;
+	}
+
+	@Override
+	public void setDctermsIssued(String[] dctermsIssued) {
+		this.dctermsIssued = dctermsIssued;
+	}
+
+	@Override
+	public void setDctermsIsVersionOf(String[] dctermsIsVersionOf) {
+		this.dctermsIsVersionOf = dctermsIsVersionOf;
+	}
+
+	@Override
+	public void setDctermsMedium(String[] dctermsMedium) {
+		this.dctermsMedium = dctermsMedium;
+	}
+
+	@Override
+	public void setDctermsProvenance(String[] dctermsProvenance) {
+		this.dctermsProvenance = dctermsProvenance;
+	}
+
+	@Override
+	public void setDctermsReferences(String[] dctermsReferences) {
+		this.dctermsReferences = dctermsReferences;
+	}
+
+	@Override
+	public void setDctermsReplaces(String[] dctermsReplaces) {
+		this.dctermsReplaces = dctermsReplaces;
+	}
+
+	@Override
+	public void setDctermsRequires(String[] dctermsRequires) {
+		this.dctermsRequires = dctermsRequires;
+	}
+
+	@Override
+	public void setDctermsSpatial(String[] dctermsSpatial) {
+		this.dctermsSpatial = dctermsSpatial;
+	}
+
+	@Override
+	public void setDctermsTOC(String[] dctermsTOC) {
+		this.dctermsTOC = dctermsTOC;
+	}
+
+	@Override
+	public void setDctermsTemporal(String[] dctermsTemporal) {
+		this.dctermsTemporal = dctermsTemporal;
+	}
+
+	@Override
+	public void setEdmType(DocType edmType) {
+		this.edmType = edmType;
+	}
+
+	@Override
+	public void setEdmCurrentLocation(String edmCurrentLocation) {
+		this.edmCurrentLocation = edmCurrentLocation;
+	}
+
+	@Override
+	public void setEdmIsNextInSequence(String edmIsNextInSequence) {
+		this.edmIsNextInSequence = edmIsNextInSequence;
 	}
 
 }

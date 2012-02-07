@@ -24,13 +24,21 @@ import java.net.UnknownHostException;
 
 import org.bson.types.ObjectId;
 
-import com.mongodb.DB;
-import com.mongodb.Mongo;
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
+import com.mongodb.DB;
+import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.mongodb.MongoDBServer;
 
@@ -64,14 +72,24 @@ public class MongoDBServerImpl implements MongoDBServer {
 	
 	private void createDatastore(){
 		morphia = new Morphia();
-		morphia.map(FullBean.class);
+		morphia.map(FullBeanImpl.class);
+		morphia.map(AgentImpl.class);
+		morphia.map(AggregationImpl.class);
+		morphia.map(ConceptImpl.class);
+		morphia.map(ProxyImpl.class);
+		morphia.map(PlaceImpl.class);
+		morphia.map(TimespanImpl.class);
+		morphia.map(WebResourceImpl.class);
 		datastore = morphia.createDatastore(mongoServer, mongoDB.getName());
 		
 	}
-
+	@Override
+	public Datastore getDatastore(){
+		return this.datastore;
+	}
 	@Override
 	public FullBean getFullBean(ObjectId id) {		
-		return datastore.find(FullBean.class).field("europeana_id").equal(id).get();
+		return datastore.get(FullBean.class,id);
 	}
 	
 	@Override

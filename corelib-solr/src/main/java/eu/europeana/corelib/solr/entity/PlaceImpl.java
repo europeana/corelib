@@ -73,4 +73,42 @@ private float longitude;
 		return this.placeId;
 	}
 
+	@Override
+	public void setAltLabel(String[][] altLabel) {
+		this.altLabel = altLabel;
+		
+	}
+
+	@Override
+	public void setNote(String[] note) {
+		this.note = note;
+		
+	}
+
+	@Override
+	public void setPrefLabel(String[][] prefLabel) {
+		this.prefLabel = prefLabel;
+		
+	}
+	
+	@Override
+	public void setPlaceId(ObjectId placeId) {
+		this.placeId = placeId;
+	}
+	
+	@Override
+	public void setIsPartOf(String[] isPartOf) {
+		this.isPartOf = isPartOf;
+	}
+	
+	@Override
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+	
+	@Override
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
+	}
+
 }

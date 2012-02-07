@@ -33,6 +33,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 public class AgentImpl implements Agent {
 	
 @Id ObjectId agentId;
+//TODO:Does not work with multidimensional arrays find workaround
 private String[][] prefLabel;
 private String[][] altLabel;
 private String[] note;
@@ -69,5 +70,28 @@ private Date end;
 	public ObjectId getAgentId() {
 		return this.agentId;
 	}
-
+	@Override
+	public void setAgentId(ObjectId agentId) {
+		this.agentId = agentId;
+	}
+	@Override
+	public void setAltLabel(String[][] altLabel) {
+		this.altLabel = altLabel;
+	}
+	@Override
+	public void setPrefLabel(String[][] prefLabel) {
+		this.prefLabel = prefLabel;
+	}
+	@Override
+	public void setNote(String[] note) {
+		this.note = note;
+	}
+	@Override
+	public void setBegin(Date begin) {
+		this.begin = begin;
+	}
+	@Override
+	public void setEnd(Date end) {
+		this.end = end;
+	}
 }

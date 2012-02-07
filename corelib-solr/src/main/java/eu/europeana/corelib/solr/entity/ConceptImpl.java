@@ -30,6 +30,9 @@ import org.bson.types.*;
  */
 @Entity("Concept")
 public class ConceptImpl implements Concept {
+	
+
+
 @Id ObjectId conceptId;
 
 private String[][] prefLabel;
@@ -59,6 +62,32 @@ private String[] broader;
 	@Override
 	public ObjectId getConceptId() {
 		return this.conceptId;
+	}
+
+	@Override
+	public void setAltLabel(String[][] altLabel) {
+		this.altLabel=altLabel;
+		
+	}
+
+	@Override
+	public void setNote(String[] note) {
+		this.note=note;
+		
+	}
+
+	@Override
+	public void setPrefLabel(String[][] prefLabel) {
+		this.prefLabel = prefLabel;
+		
+	}
+	@Override
+	public void setConceptId(ObjectId conceptId) {
+		this.conceptId = conceptId;
+	}
+	@Override
+	public void setBroader(String[] broader) {
+		this.broader = broader;
 	}
 
 }

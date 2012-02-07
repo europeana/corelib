@@ -22,6 +22,8 @@ package eu.europeana.corelib.solr.mongodb;
 
 import org.bson.types.ObjectId;
 
+import com.google.code.morphia.Datastore;
+
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 /**
  * Basic MongoDB server implementation
@@ -42,4 +44,6 @@ public interface MongoDBServer {
 	 * @return Information on MongoDB server configuration
 	 */
 	public String toString();
+
+	public Datastore getDatastore();
 }

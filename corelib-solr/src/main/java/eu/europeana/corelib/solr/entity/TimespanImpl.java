@@ -75,5 +75,39 @@ public class TimespanImpl implements
 	public ObjectId getTimespanId() {
 		return this.timespanId;
 	}
+	@Override
+	public void setTimespanId(ObjectId timespanId) {
+		this.timespanId = timespanId;
+	}
+
+	@Override
+	public void setPrefLabel(String[][] prefLabel) {
+		this.prefLabel = prefLabel;
+	}
+	
+	@Override
+	public void setAltLabel(String[][] altLabel) {
+		this.altLabel = altLabel;
+	}
+	
+	@Override
+	public void setNote(String[] note) {
+		this.note = note;
+	}
+
+	@Override
+	public void setBegin(Date begin) {
+		this.begin = begin;
+	}
+
+	@Override
+	public void setEnd(Date end) {
+		this.end = end;
+	}
+
+	@Override
+	public void setIsPartOf(String[] isPartOf) {
+		this.isPartOf = isPartOf;
+	}
 
 }

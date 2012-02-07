@@ -68,6 +68,129 @@ public class FullBeanImpl implements FullBean {
 	@Reference private EuropeanaAggregation europeanaAggregation;
 	@Reference private ArrayList<ProxyImpl> proxies;
 	@Reference private ArrayList<WebResourceImpl> webResources;
+
+	public ArrayList<PlaceImpl> getPlaces() {
+		return places;
+	}
+
+
+	public void setPlaces(ArrayList<PlaceImpl> places) {
+		this.places = places;
+	}
+
+
+	public ArrayList<AgentImpl> getAgents() {
+		return agents;
+	}
+
+
+	public void setAgents(ArrayList<AgentImpl> agents) {
+		this.agents = agents;
+	}
+
+
+	public ArrayList<TimespanImpl> getTimespans() {
+		return timespans;
+	}
+
+
+	public void setTimespans(ArrayList<TimespanImpl> timespans) {
+		this.timespans = timespans;
+	}
+
+
+	public ArrayList<ConceptImpl> getConcepts() {
+		return concepts;
+	}
+
+
+	public void setConcepts(ArrayList<ConceptImpl> concepts) {
+		this.concepts = concepts;
+	}
+
+
+	public ArrayList<AggregationImpl> getAggregations() {
+		return aggregations;
+	}
+
+
+	public void setAggregations(ArrayList<AggregationImpl> aggregations) {
+		this.aggregations = aggregations;
+	}
+
+
+	public EuropeanaAggregation getEuropeanaAggregation() {
+		return europeanaAggregation;
+	}
+
+
+	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
+		this.europeanaAggregation = europeanaAggregation;
+	}
+
+
+	public ArrayList<ProxyImpl> getProxies() {
+		return proxies;
+	}
+
+
+	public void setProxies(ArrayList<ProxyImpl> proxies) {
+		this.proxies = proxies;
+	}
+
+
+	public ArrayList<WebResourceImpl> getWebResources() {
+		return webResources;
+	}
+
+
+	public void setWebResources(ArrayList<WebResourceImpl> webResources) {
+		this.webResources = webResources;
+	}
+
+	public ObjectId getEuropeana_id() {
+		return europeana_id;
+	}
+
+
+	public void setEuropeana_id(ObjectId europeana_id) {
+		this.europeana_id = europeana_id;
+	}
+
+
+	public void setTitle(String[] title) {
+		this.title = title;
+	}
+
+
+	public void setCreator(String[] creator) {
+		this.creator = creator;
+	}
+
+
+	public void setYear(String[] year) {
+		this.year = year;
+	}
+
+
+	public void setProvider(String[] provider) {
+		this.provider = provider;
+	}
+
+
+	public void setLanguage(String[] language) {
+		this.language = language;
+	}
+
+
+	public void setType(DocType type) {
+		this.type = type;
+	}
+
+
+	public void setEuropeanaCompleteness(int europeanaCompleteness) {
+		this.europeanaCompleteness = europeanaCompleteness;
+	}
 	
 	
 	@Override
@@ -378,7 +501,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> webResourceUrls = new ArrayList<String> ();
 		for (WebResource webResource : this.webResources)
 		
-				webResourceUrls.add(webResource.getEdmWebResource());
+				webResourceUrls.add(webResource.getWebResource());
 			
 		return (String[])webResourceUrls.toArray();
 	}
@@ -387,7 +510,7 @@ public class FullBeanImpl implements FullBean {
 	public String[] getEdmWebResourceDcRights() {
 		ArrayList<String> webResourceDcRightsList = new ArrayList<String> ();
 		for (WebResource webResource : this.webResources)
-			for (String webResourceDcRights: webResource.getEdmWebResourceDcRights()){
+			for (String webResourceDcRights: webResource.getWebResourceDcRights()){
 				webResourceDcRightsList.add(webResourceDcRights);
 			}
 		return (String[])webResourceDcRightsList.toArray();
@@ -398,7 +521,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> webResourceEdmRightsList = new ArrayList<String> ();
 		for (WebResource webResource : this.webResources)
 		{
-			webResourceEdmRightsList.add(webResource.getEdmWebResourceEdmRights());
+			webResourceEdmRightsList.add(webResource.getWebResourceEdmRights());
 		}	
 		return (String[])webResourceEdmRightsList.toArray();
 	}

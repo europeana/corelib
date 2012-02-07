@@ -35,17 +35,37 @@ public class WebResourceImpl implements WebResource {
 	private String webResourceEdmRights;
 	
 	@Override
-	public String getEdmWebResource() {
+	public String getWebResource() {
 		return this.webResource;
 	}
 
 	@Override
-	public String[] getEdmWebResourceDcRights() {
+	public void setWebResourceId(ObjectId webResourceId) {
+		this.webResourceId = webResourceId;
+	}
+
+	@Override
+	public void setWebResource(String webResource) {
+		this.webResource = webResource;
+	}
+
+	@Override
+	public void setWebResourceDcRights(String[] webResourceDcRights) {
+		this.webResourceDcRights = webResourceDcRights;
+	}
+
+	@Override
+	public void setWebResourceEdmRights(String webResourceEdmRights) {
+		this.webResourceEdmRights = webResourceEdmRights;
+	}
+
+	@Override
+	public String[] getWebResourceDcRights() {
 		return this.webResourceDcRights;
 	}
 
 	@Override
-	public String getEdmWebResourceEdmRights() {
+	public String getWebResourceEdmRights() {
 		return this.webResourceEdmRights;
 	}
 

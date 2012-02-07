@@ -31,6 +31,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         ">
        <!-- INTERNAL -->
+      <import resource="corelib-definitions-context.xml"/>
     <import resource="internal/corelib-solr-server.xml"/>
     <bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.impl.SearchServiceImpl"/>
 </beans>
