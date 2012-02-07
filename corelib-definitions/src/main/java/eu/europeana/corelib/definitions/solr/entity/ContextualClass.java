@@ -40,4 +40,8 @@ public interface ContextualClass {
 	 */
 	String[] getNote();
 	
+	void setAltLabel(String[][] altLabel);
+	void setNote(String[] note);
+	void setPrefLabel(String[][] prefLabel);
+	
 }

@@ -279,5 +279,89 @@ public interface Proxy {
 	 * @return String representing the edm:isNextInSequence fields for a Proxy
 	 */
 	String getEdmIsNextInSequence();
+
+	void setProxyId(ObjectId proxyId);
+
+	void setOwlSameAs(String[] owlSameAs);
+
+	void setDcContributor(String[] dcContributor);
+
+	void setDcCoverage(String[] dcCoverage);
+
+	void setDcCreator(String[] dcCreator);
+
+	void setDcDate(Date[] dcDate);
+
+	void setDcDescription(String[] dcDescription);
+
+	void setDcFormat(String[] dcFormat);
+
+	void setDcIdentifier(String[] dcIdentifier);
+
+	void setDcLanguage(String[] dcLanguage);
+
+	void setDcPublisher(String[] dcPublisher);
+
+	void setDcRelation(String[] dcRelation);
+
+	void setDcRights(String[] dcRights);
+
+	void setDcSource(String[] dcSource);
+
+	void setDcSubject(String[] dcSubject);
+
+	void setDcTitle(String[] dcTitle);
+
+	void setDcType(String[] dcType);
+
+	void setDctermsAlternative(String[] dctermsAlternative);
+
+	void setDctermsConformsTo(String[] dctermsConformsTo);
+
+	void setDctermsCreated(Date[] dctermsCreated);
+
+	void setDctermsExtent(String[] dctermsExtent);
+
+	void setDctermsHasFormat(String[] dctermsHasFormat);
+
+	void setDctermsHasPart(String[] dctermsHasPart);
+
+	void setDctermsHasVersion(String[] dctermsHasVersion);
+
+	void setDctermsIsFormatOf(String[] dctermsIsFormatOf);
+
+	void setDctermsIsPartOf(String[] dctermsIsPartOf);
+
+	void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
+
+	void setDctermsIsReplacedBy(String[] dctermsIsReplacedBy);
+
+	void setDctermsIsRequiredBy(String[] dctermsIsRequiredBy);
+
+	void setDctermsIssued(String[] dctermsIssued);
+
+	void setDctermsIsVersionOf(String[] dctermsIsVersionOf);
+
+	void setDctermsMedium(String[] dctermsMedium);
+
+	void setDctermsProvenance(String[] dctermsProvenance);
+
+	void setDctermsReferences(String[] dctermsReferences);
+
+	void setDctermsReplaces(String[] dctermsReplaces);
+
+	void setDctermsRequires(String[] dctermsRequires);
+
+	void setDctermsSpatial(String[] dctermsSpatial);
+
+	void setDctermsTOC(String[] dctermsTOC);
+
+	void setDctermsTemporal(String[] dctermsTemporal);
+
+	void setEdmType(DocType edmType);
+
+	void setEdmCurrentLocation(String edmCurrentLocation);
+
+	void setEdmIsNextInSequence(String edmIsNextInSequence);
 	
 }

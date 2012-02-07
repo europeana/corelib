@@ -36,4 +36,8 @@ public interface Concept extends ContextualClass{
 	 * @return A String array with all the broader terms of a concept
 	 */
 	String[] getBroader();
+
+	void setConceptId(ObjectId conceptId);
+
+	void setBroader(String[] broader);
 }

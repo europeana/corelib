@@ -35,18 +35,27 @@ public interface WebResource {
 	 * Retrieve the rdf:about attribute of a Webresource
 	 * @return A string representation attribute of a WebResource
 	 */
-	String getEdmWebResource();
+	String getWebResource();
 	
 	/**
 	 * Retrieve the dc:rights fields of a WebResource
 	 * @return String array representing the dc:rights fields of a WebResource
 	 */
-	String[] getEdmWebResourceDcRights();
+	String[] getWebResourceDcRights();
 	
 	/**
 	 * Retrieve the edm:rights field of a WebResource
 	 * @return String representing the dc:rights fields of a WebResource
 	 */
-	String getEdmWebResourceEdmRights();
+
+	String getWebResourceEdmRights();
+
+	void setWebResourceId(ObjectId webResourceId);
+
+	void setWebResource(String webResource);
+
+	void setWebResourceDcRights(String[] webResourceDcRights);
+
+	void setWebResourceEdmRights(String webResourceEdmRights);
 	
 }

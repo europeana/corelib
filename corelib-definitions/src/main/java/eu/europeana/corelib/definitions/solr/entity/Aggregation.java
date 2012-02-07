@@ -78,5 +78,23 @@ public interface Aggregation {
 	 * @return String representing the edm:rights fields
 	 */
 	String getEdmRights();
+
+	void setDcRights(String[] dcRights);
+
+	void setEdmProvider(String edmProvider);
+
+	void setEdmRights(String edmRights);
+
+	void setEdmObject(String edmObject);
+
+	void setEdmIsShownAt(String edmIsShownAt);
+
+	void setEdmIsShownBy(String edmIsShownBy);
+
+	void setEdmHasView(String[] edmHasView);
+
+	void setEdmDataProvider(String edmDataProvider);
+
+	void setAggregationId(ObjectId aggregationId);
 	
 }

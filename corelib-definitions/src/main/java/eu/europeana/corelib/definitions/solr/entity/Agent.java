@@ -44,5 +44,11 @@ public interface Agent extends ContextualClass{
 	 * @return Date representing the death of an actor
 	 */
 	Date getEnd();
+
+	void setAgentId(ObjectId agentId);
+
+	void setBegin(Date begin);
+
+	void setEnd(Date end);
 	
 }

@@ -50,4 +50,12 @@ public interface Timespan extends ContextualClass {
 	 */
 	String[] getIsPartOf();
 
+	void setTimespanId(ObjectId timespanId);
+
+	void setBegin(Date begin);
+
+	void setEnd(Date end);
+
+	void setIsPartOf(String[] isPartOf);
+
 }

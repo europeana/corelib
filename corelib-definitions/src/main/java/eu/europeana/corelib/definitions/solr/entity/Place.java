@@ -48,5 +48,13 @@ public interface Place extends ContextualClass{
 	 * @return A float representing the longitude of a Place
 	 */
 	float getLongitude();
+
+	void setIsPartOf(String[] isPartOf);
+
+	void setPlaceId(ObjectId placeId);
+
+	void setLatitude(float latitude);
+
+	void setLongitude(float longitude);
 	
 }
