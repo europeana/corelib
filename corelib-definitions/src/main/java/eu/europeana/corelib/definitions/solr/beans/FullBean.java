@@ -314,7 +314,15 @@ public interface FullBean extends ApiBean {
 	 */
 	Boolean[] getEdmPreviewNoDistribute();
 
+	/**
+	 * Retrieve the edm:isPartOf from a Place
+	 * @return A String array with the edm:isPartOf fields for all Places pointing to a CHO
+	 */
 	String[] getEdmPlaceIsPartOf();
 
+	/**
+	 * Retrieve the edm:isPartOf from a Timespan
+	 * @return A String array with the edm:isPartOf fields for all Timespans pointing to a CHO
+	 */
 	String[] getEdmTimespanIsPartOf();
 }
