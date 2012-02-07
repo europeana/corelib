@@ -236,16 +236,21 @@ public class UserServiceTest {
 		}
 		
 		user = userService.createSavedSearch(user.getId(), "query1", "queryString1");
-		user = userService.createSavedSearch(user.getId(), "query2", "queryString2");
-		user = userService.createSavedSearch(user.getId(), "query3", "queryString3");
 		
 		user = userService.findByEmail(EMAIL);
-		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
+		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 1);
 		
 		SavedSearch savedSearch = user.getSavedSearches().iterator().next();
 		assertEquals("query1", savedSearch.getQuery());
 		assertEquals("queryString1", savedSearch.getQueryString());
 		assertNotNull("No creation date set", savedSearch.getDateSaved());
+
+		
+		user = userService.createSavedSearch(user.getId(), "query2", "queryString2");
+		user = userService.createSavedSearch(user.getId(), "query3", "queryString3");
+		
+		user = userService.findByEmail(EMAIL);
+		assertTrue("Saved Searches list should have 3 elements!", user.getSavedSearches().size() == 3);
 		
 		SavedSearch[] savedSearches = user.getSavedSearches().toArray(new SavedSearchImpl[user.getSavedSearches().size()]);
 		userService.removeSavedSearch(savedSearches[1].getId());

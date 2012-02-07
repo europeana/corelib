@@ -17,9 +17,9 @@
 
 package eu.europeana.corelib.db.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -97,15 +97,15 @@ public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, Use
 
     @OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
-    private List<SavedItem> savedItems = new ArrayList<SavedItem>();
+    private Set<SavedItem> savedItems = new HashSet<SavedItem>();
 
     @OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
-    private List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+    private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
 
     @OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "userid", nullable = false)
-    private List<SocialTag> socialTags = new ArrayList<SocialTag>();
+    private Set<SocialTag> socialTags = new HashSet<SocialTag>();
 
 	/**
 	 * GETTERS & SETTTERS
@@ -187,17 +187,17 @@ public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, Use
 	}
 	
 	@Override
-	public List<SavedItem> getSavedItems() {
+	public Set<SavedItem> getSavedItems() {
 		return savedItems;
 	}
 	
 	@Override
-	public List<SavedSearch> getSavedSearches() {
+	public Set<SavedSearch> getSavedSearches() {
 		return savedSearches;
 	}
 	
 	@Override
-	public List<SocialTag> getSocialTags() {
+	public Set<SocialTag> getSocialTags() {
 		return socialTags;
 	}
 	
