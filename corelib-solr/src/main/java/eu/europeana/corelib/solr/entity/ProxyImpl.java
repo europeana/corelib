@@ -499,4 +499,8 @@ public class ProxyImpl implements Proxy {
 		this.edmIsNextInSequence = edmIsNextInSequence;
 	}
 
+	@Override
+	public boolean equals(Object o){
+		return this.getProxyId().equals(((ProxyImpl)o).getProxyId());
+	}
 }

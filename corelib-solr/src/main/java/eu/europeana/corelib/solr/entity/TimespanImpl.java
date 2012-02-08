@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 
@@ -33,8 +34,8 @@ public class TimespanImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
 	@Id ObjectId timespanId;
-	private String[][] prefLabel;
-	private String[][] altLabel;
+	private Map<String,String> prefLabel;
+	private Map<String,String> altLabel;
 	private String[] note;
 	private Date begin;
 	private Date end;
@@ -42,12 +43,12 @@ public class TimespanImpl implements
 	
 	
 	@Override
-	public String[][] getPrefLabel() {
+	public Map<String,String> getPrefLabel() {
 		return this.prefLabel;
 	}
 
 	@Override
-	public String[][] getAltLabel() {
+	public Map<String,String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -81,12 +82,12 @@ public class TimespanImpl implements
 	}
 
 	@Override
-	public void setPrefLabel(String[][] prefLabel) {
+	public void setPrefLabel(Map<String,String> prefLabel) {
 		this.prefLabel = prefLabel;
 	}
 	
 	@Override
-	public void setAltLabel(String[][] altLabel) {
+	public void setAltLabel(Map<String,String> altLabel) {
 		this.altLabel = altLabel;
 	}
 	
@@ -109,5 +110,8 @@ public class TimespanImpl implements
 	public void setIsPartOf(String[] isPartOf) {
 		this.isPartOf = isPartOf;
 	}
-
+	@Override
+	public boolean equals(Object o){
+		return this.getTimespanId().equals(((TimespanImpl)o).getTimespanId());
+	}
 }

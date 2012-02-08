@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
@@ -32,19 +35,19 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
 public class PlaceImpl implements Place {
 @Id ObjectId placeId;
 
-private String[][] prefLabel;
-private String[][] altLabel;
+private Map<String,String> prefLabel;
+private Map<String,String> altLabel;
 private String[] note;
 private String[] isPartOf;
 private float latitude;
 private float longitude;
 	@Override
-	public String[][] getPrefLabel() {
+	public Map<String,String> getPrefLabel() {
 		return this.prefLabel;
 	}
 
 	@Override
-	public String[][] getAltLabel() {
+	public Map<String,String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -74,7 +77,7 @@ private float longitude;
 	}
 
 	@Override
-	public void setAltLabel(String[][] altLabel) {
+	public void setAltLabel(Map<String,String> altLabel) {
 		this.altLabel = altLabel;
 		
 	}
@@ -86,7 +89,7 @@ private float longitude;
 	}
 
 	@Override
-	public void setPrefLabel(String[][] prefLabel) {
+	public void setPrefLabel(Map<String,String> prefLabel) {
 		this.prefLabel = prefLabel;
 		
 	}
@@ -111,4 +114,8 @@ private float longitude;
 		this.longitude = longitude;
 	}
 
+	@Override
+	public boolean equals(Object o){
+		return this.getPlaceId().equals(((PlaceImpl)o).getPlaceId());
+	}
 }

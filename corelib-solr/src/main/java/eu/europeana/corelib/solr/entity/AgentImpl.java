@@ -18,6 +18,8 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.code.morphia.annotations.*;
 
@@ -33,21 +35,21 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 public class AgentImpl implements Agent {
 	
 @Id ObjectId agentId;
-//TODO:Does not work with multidimensional arrays find workaround
-private String[][] prefLabel;
-private String[][] altLabel;
+private Map<String,String> prefLabel;
+private Map<String,String> altLabel;
 private String[] note;
+
 private Date begin;
 private Date end;
 
 	@Override
-	public String[][] getPrefLabel() {
+	public Map<String,String> getPrefLabel() {
 		
 		return this.prefLabel;
 	}
 
 	@Override
-	public String[][] getAltLabel() {
+	public Map<String,String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -75,17 +77,18 @@ private Date end;
 		this.agentId = agentId;
 	}
 	@Override
-	public void setAltLabel(String[][] altLabel) {
+	public void setAltLabel(Map<String,String> altLabel) {
 		this.altLabel = altLabel;
 	}
 	@Override
-	public void setPrefLabel(String[][] prefLabel) {
+	public void setPrefLabel(Map<String,String> prefLabel) {
 		this.prefLabel = prefLabel;
 	}
 	@Override
 	public void setNote(String[] note) {
 		this.note = note;
 	}
+	
 	@Override
 	public void setBegin(Date begin) {
 		this.begin = begin;
@@ -93,5 +96,11 @@ private Date end;
 	@Override
 	public void setEnd(Date end) {
 		this.end = end;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		
+		return this.getAgentId().equals(((AgentImpl)o).getAgentId());
 	}
 }

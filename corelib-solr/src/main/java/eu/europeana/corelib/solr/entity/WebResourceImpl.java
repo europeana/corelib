@@ -73,5 +73,8 @@ public class WebResourceImpl implements WebResource {
 	public ObjectId getWebResourceId() {
 		return this.webResourceId;
 	}
-
+	@Override
+	public boolean equals(Object o){
+		return this.getWebResourceId().equals(((WebResourceImpl)o).getWebResourceId());
+	}
 }

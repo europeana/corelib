@@ -19,6 +19,9 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
@@ -67,127 +70,123 @@ public class FullBeanImpl implements FullBean {
 	//TODO:implement proxy and check if Europeana Aggregation needs to be stored separately
 	@Reference private EuropeanaAggregation europeanaAggregation;
 	@Reference private ArrayList<ProxyImpl> proxies;
-	@Reference private ArrayList<WebResourceImpl> webResources;
-
+	
+	
+	@Override
 	public ArrayList<PlaceImpl> getPlaces() {
 		return places;
 	}
 
-
-	public void setPlaces(ArrayList<PlaceImpl> places) {
-		this.places = places;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setPlaces(ArrayList<? extends Place> places) {
+		
+			this.places = (ArrayList<PlaceImpl>) places;
+		
 	}
 
-
+	@Override
 	public ArrayList<AgentImpl> getAgents() {
 		return agents;
 	}
 
-
-	public void setAgents(ArrayList<AgentImpl> agents) {
-		this.agents = agents;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setAgents(ArrayList<? extends Agent> agents) {
+		this.agents = (ArrayList<AgentImpl>) agents;
 	}
 
-
+	@Override
 	public ArrayList<TimespanImpl> getTimespans() {
 		return timespans;
 	}
 
-
-	public void setTimespans(ArrayList<TimespanImpl> timespans) {
-		this.timespans = timespans;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setTimespans(ArrayList<? extends Timespan> timespans) {
+		this.timespans = (ArrayList<TimespanImpl>) timespans;
 	}
 
-
+	@Override
 	public ArrayList<ConceptImpl> getConcepts() {
 		return concepts;
 	}
 
-
-	public void setConcepts(ArrayList<ConceptImpl> concepts) {
-		this.concepts = concepts;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setConcepts(ArrayList<? extends Concept> concepts) {
+		this.concepts = (ArrayList<ConceptImpl>) concepts;
 	}
 
-
+	@Override
 	public ArrayList<AggregationImpl> getAggregations() {
 		return aggregations;
 	}
 
-
-	public void setAggregations(ArrayList<AggregationImpl> aggregations) {
-		this.aggregations = aggregations;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setAggregations(ArrayList<? extends Aggregation> aggregations) {
+		this.aggregations = (ArrayList<AggregationImpl>) aggregations;
 	}
 
-
+	
 	public EuropeanaAggregation getEuropeanaAggregation() {
 		return europeanaAggregation;
 	}
 
-
+	//TODO required??
 	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
 		this.europeanaAggregation = europeanaAggregation;
 	}
 
-
+	@Override
 	public ArrayList<ProxyImpl> getProxies() {
 		return proxies;
 	}
 
-
-	public void setProxies(ArrayList<ProxyImpl> proxies) {
-		this.proxies = proxies;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setProxies(ArrayList<? extends Proxy> proxies) {
+		this.proxies = (ArrayList<ProxyImpl>) proxies;
 	}
 
 
-	public ArrayList<WebResourceImpl> getWebResources() {
-		return webResources;
-	}
-
-
-	public void setWebResources(ArrayList<WebResourceImpl> webResources) {
-		this.webResources = webResources;
-	}
-
-	public ObjectId getEuropeana_id() {
-		return europeana_id;
-	}
-
-
+	@Override
 	public void setEuropeana_id(ObjectId europeana_id) {
 		this.europeana_id = europeana_id;
 	}
 
-
+	@Override
 	public void setTitle(String[] title) {
 		this.title = title;
 	}
 
-
+	@Override
 	public void setCreator(String[] creator) {
 		this.creator = creator;
 	}
 
-
+	@Override
 	public void setYear(String[] year) {
 		this.year = year;
 	}
 
-
+	@Override
 	public void setProvider(String[] provider) {
 		this.provider = provider;
 	}
 
-
+	@Override
 	public void setLanguage(String[] language) {
 		this.language = language;
 	}
 
-
+	@Override
 	public void setType(DocType type) {
 		this.type = type;
 	}
 
-
+	@Override
 	public void setEuropeanaCompleteness(int europeanaCompleteness) {
 		this.europeanaCompleteness = europeanaCompleteness;
 	}
@@ -209,7 +208,7 @@ public class FullBeanImpl implements FullBean {
 		}
 		
 		
-		return (String[])edmObjects.toArray();
+		return edmObjects.toArray(new String[edmObjects.size()]);
 	}
 
 	@Override
@@ -238,8 +237,7 @@ public class FullBeanImpl implements FullBean {
 			
 		}
 		
-		//temporary in order to maintain compatibility
-		return (String[])aggregationDataProviders.toArray();
+		return aggregationDataProviders.toArray(new String[aggregationDataProviders.size()]);
 	}
 
 	@Override
@@ -260,7 +258,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsSpatialList.add(dctermsSpatial);
 			}
 		}
-		return (String[]) dctermsSpatialList.toArray();
+		return dctermsSpatialList.toArray(new String[dctermsSpatialList.size()]);
 	}
 
 	@Override
@@ -272,17 +270,12 @@ public class FullBeanImpl implements FullBean {
 
 
 	@Override
-	public String[] getEdmPlaceLabel() {
-		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmPlaceLabel() {
+		ArrayList<Map<String,String>> prefLabels = new ArrayList<Map<String,String>>();
 		for (Place place : this.places){
-			for(String[] prefLabel:place.getPrefLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(prefLabel[0]);
-				tmp.add(prefLabel[1]);
-				prefLabels.add(tmp);
-			}
+			prefLabels.add(place.getAltLabel());
 		}
-		return (String[]) prefLabels.toArray();
+		return prefLabels;
 	}
 
 	@Override
@@ -293,7 +286,7 @@ public class FullBeanImpl implements FullBean {
 				broaderPlaces.add(broaderPlace);
 			}
 		}
-		return (String[]) broaderPlaces.toArray();
+		return broaderPlaces.toArray(new String[broaderPlaces.size()]);
 	}
 
 	@Override
@@ -302,7 +295,7 @@ public class FullBeanImpl implements FullBean {
 		for (Place place : this.places){
 				latitudes.add(place.getLatitude());
 		}
-		return (Float[]) latitudes.toArray();
+		return latitudes.toArray(new Float[latitudes.size()]);
 	}
 
 	@Override
@@ -311,7 +304,7 @@ public class FullBeanImpl implements FullBean {
 		for (Place place : this.places){
 				longitudes.add(place.getLongitude());
 		}
-		return (Float[]) longitudes.toArray();
+		return longitudes.toArray(new Float[longitudes.size()]);
 	}
 
 	@Override
@@ -322,21 +315,17 @@ public class FullBeanImpl implements FullBean {
 				timespanIds.add(timespan.getTimespanId().toString());
 			
 		}
-		return (String[]) timespanIds.toArray();
+		return timespanIds.toArray(new String[timespanIds.size()]);
 	}
 
 	@Override
-	public String[] getEdmTimespanLabel() {
-		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+	public  ArrayList<Map<String,String>> getEdmTimespanLabel() {
+		ArrayList<Map<String,String>> prefLabels = new ArrayList<Map<String,String>>();
 		for (Timespan timespan : this.timespans){
-			for(String[] prefLabel:timespan.getPrefLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(prefLabel[0]);
-				tmp.add(prefLabel[1]);
-				prefLabels.add(tmp);
+				prefLabels.add(timespan.getPrefLabel());
 			}
-		}
-		return (String[]) prefLabels.toArray();
+		
+		return prefLabels;
 	}
 
 	@Override
@@ -347,7 +336,7 @@ public class FullBeanImpl implements FullBean {
 					broaderPeriods.add(broaderPeriod);
 				}
 		}
-		return (String[]) broaderPeriods.toArray();
+		return broaderPeriods.toArray(new String[broaderPeriods.size()]);
 	}
 
 	@Override
@@ -358,7 +347,7 @@ public class FullBeanImpl implements FullBean {
 				startDates.add(timespan.getBegin());
 			
 		}
-		return (Date[]) startDates.toArray();
+		return  startDates.toArray(new Date[startDates.size()]);
 	}
 
 	@Override
@@ -366,9 +355,9 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<Date>endDates = new ArrayList<Date>();
 		for (Timespan timespan : this.timespans){
 			
-				endDates.add(timespan.getBegin());
+				endDates.add(timespan.getEnd());
 		}
-		return (Date[]) endDates.toArray();
+		return endDates.toArray(new Date[endDates.size()]);
 	}
 
 	@Override
@@ -379,21 +368,17 @@ public class FullBeanImpl implements FullBean {
 				conceptIds.add(concept.getConceptId().toString());
 			
 		}
-		return (String[]) conceptIds.toArray();
+		return conceptIds.toArray(new String[conceptIds.size()]);
 	}
 
 	@Override
-	public String[] getEdmConceptLabel() {
-		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmConceptLabel() {
+		ArrayList<Map<String,String>> prefLabels = new ArrayList<Map<String,String>>();
 		for (Concept concept: this.concepts){
-			for(String[] prefLabel:concept.getPrefLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(prefLabel[0]);
-				tmp.add(prefLabel[1]);
-				prefLabels.add(tmp);
-			}
+				prefLabels.add(concept.getPrefLabel());
+			
 		}
-		return (String[]) prefLabels.toArray();
+		return prefLabels;
 	}
 
 	@Override
@@ -403,7 +388,7 @@ public class FullBeanImpl implements FullBean {
 			for (String broaderTerm : concept.getBroader()){
 				broaderTerms.add(broaderTerm);
 			}
-		return (String[])broaderTerms.toArray();
+		return broaderTerms.toArray(new String[broaderTerms.size()]);
 	}
 
 	@Override
@@ -414,33 +399,20 @@ public class FullBeanImpl implements FullBean {
 				agentIds.add(agent.getAgentId().toString());
 			
 		}
-		return (String[]) agentIds.toArray();
+		return agentIds.toArray(new String[agentIds.size()]);
 	}
 
 	@Override
-	public String[] getEdmAgentLabel() {
-		ArrayList<ArrayList<String>> prefLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmAgentLabel() {
+		ArrayList<Map<String,String>> prefLabels = new ArrayList<Map<String,String>>();
 		for (Agent agent : this.agents){
-			for(String[] prefLabel:agent.getPrefLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(prefLabel[0]);
-				tmp.add(prefLabel[1]);
-				prefLabels.add(tmp);
-			}
+			
+				prefLabels.add(agent.getPrefLabel());
+			
 		}
-		return (String[]) prefLabels.toArray();
+		return prefLabels;
 	}
 
-	@Override
-	public String[] getEdmHasView() {
-		ArrayList<String> aggregationViews = new ArrayList<String> ();
-		for (Aggregation aggregation : this.aggregations){
-			for (String aggregationView : aggregation.getEdmHasView()){
-				aggregationViews.add(aggregationView);
-			}
-		}
-		return (String[])aggregationViews.toArray();
-	}
 
 	@Override
 	public String[] getEdmIsShownBy() {
@@ -450,7 +422,7 @@ public class FullBeanImpl implements FullBean {
 				aggregationIsShownByList.add(aggregation.getEdmIsShownBy());
 			
 		}
-		return (String[])aggregationIsShownByList.toArray();
+		return aggregationIsShownByList.toArray(new String[aggregationIsShownByList.size()]);
 	}
 
 	@Override
@@ -461,7 +433,7 @@ public class FullBeanImpl implements FullBean {
 				aggregationIsShownAtList.add(aggregation.getEdmIsShownAt());
 			
 		}
-		return (String[])aggregationIsShownAtList.toArray();
+		return aggregationIsShownAtList.toArray(new String[aggregationIsShownAtList.size()]);
 	}
 
 	@Override
@@ -472,7 +444,7 @@ public class FullBeanImpl implements FullBean {
 				aggregationProviders.add(aggregation.getEdmProvider());
 			
 		}
-		return (String[])aggregationProviders.toArray();
+		return aggregationProviders.toArray(new String[aggregationProviders.size()]);
 	}
 
 	@Override
@@ -483,7 +455,7 @@ public class FullBeanImpl implements FullBean {
 				aggregationDcRightsList.add(aggregationDcRights);
 			}
 		}
-		return (String[])aggregationDcRightsList.toArray();
+		return aggregationDcRightsList.toArray(new String[aggregationDcRightsList.size()]);
 	}
 	
 	@Override
@@ -494,36 +466,42 @@ public class FullBeanImpl implements FullBean {
 				aggregationEdmRightsList.add(aggregation.getEdmRights());
 			
 		}
-		return (String[])aggregationEdmRightsList.toArray();
+		return aggregationEdmRightsList.toArray(new String[aggregationEdmRightsList.size()]);
 	}
 	@Override
 	public String[] getEdmWebResource() {
 		ArrayList<String> webResourceUrls = new ArrayList<String> ();
-		for (WebResource webResource : this.webResources)
+		for (Aggregation aggregation: this.aggregations){
+			for (WebResource webResource : aggregation.getWebResources()){
 		
 				webResourceUrls.add(webResource.getWebResource());
-			
-		return (String[])webResourceUrls.toArray();
+			}
+		}
+		return webResourceUrls.toArray(new String[webResourceUrls.size()]);
 	}
 
 	@Override
 	public String[] getEdmWebResourceDcRights() {
 		ArrayList<String> webResourceDcRightsList = new ArrayList<String> ();
-		for (WebResource webResource : this.webResources)
+		for(Aggregation aggregation:this.aggregations){
+		for (WebResource webResource : aggregation.getWebResources())
 			for (String webResourceDcRights: webResource.getWebResourceDcRights()){
 				webResourceDcRightsList.add(webResourceDcRights);
 			}
-		return (String[])webResourceDcRightsList.toArray();
+		}
+		return webResourceDcRightsList.toArray(new String[webResourceDcRightsList.size()]);
 	}
 
 	@Override
 	public String[] getEdmWebResourceEdmRights() {
 		ArrayList<String> webResourceEdmRightsList = new ArrayList<String> ();
-		for (WebResource webResource : this.webResources)
+		for (Aggregation aggregation : this.aggregations){
+		for (WebResource webResource : aggregation.getWebResources())
 		{
 			webResourceEdmRightsList.add(webResource.getWebResourceEdmRights());
 		}	
-		return (String[])webResourceEdmRightsList.toArray();
+		}
+		return webResourceEdmRightsList.toArray(new String[webResourceEdmRightsList.size()]);
 	}
 
 	@Override
@@ -534,7 +512,7 @@ public class FullBeanImpl implements FullBean {
 				owlProxies.add(proxy.getProxyId().toString());
 			
 		}
-		return (String[]) owlProxies.toArray();
+		return owlProxies.toArray(new String[owlProxies.size()]);
 	}
 
 	@Override
@@ -545,7 +523,7 @@ public class FullBeanImpl implements FullBean {
 				owlSameAsList.add(owlSameAs);
 			}
 		}
-		return (String[]) owlSameAsList.toArray();
+		return owlSameAsList.toArray(new String[owlSameAsList.size()]);
 	}
 
 	@Override
@@ -556,7 +534,7 @@ public class FullBeanImpl implements FullBean {
 				dcCoverageList.add(dcCoverage);
 			}
 		}
-		return (String[]) dcCoverageList.toArray();
+		return dcCoverageList.toArray(new String[dcCoverageList.size()]);
 	}
 
 	@Override
@@ -567,7 +545,7 @@ public class FullBeanImpl implements FullBean {
 				dcPublisherList.add(dcPublisher);
 			}
 		}
-		return (String[]) dcPublisherList.toArray();
+		return dcPublisherList.toArray(new String[dcPublisherList.size()]);
 	}
 
 	@Override
@@ -578,7 +556,7 @@ public class FullBeanImpl implements FullBean {
 				dcIdentifierList.add(dcIdentifier);
 			}
 		}
-		return (String[]) dcIdentifierList.toArray();
+		return dcIdentifierList.toArray(new String[dcIdentifierList.size()]);
 	}
 
 	@Override
@@ -589,7 +567,7 @@ public class FullBeanImpl implements FullBean {
 				dcRelationList.add(dcRelation);
 			}
 		}
-		return (String[]) dcRelationList.toArray();
+		return dcRelationList.toArray(new String[dcRelationList.size()]);
 	}
 
 	@Override
@@ -600,7 +578,7 @@ public class FullBeanImpl implements FullBean {
 				dcRightsList.add(dcRights);
 			}
 		}
-		return (String[]) dcRightsList.toArray();
+		return dcRightsList.toArray(new String[dcRightsList.size()]);
 	}
 
 	
@@ -612,7 +590,7 @@ public class FullBeanImpl implements FullBean {
 				dcSourceList.add(dcSource);
 			}
 		}
-		return (String[]) dcSourceList.toArray();
+		return dcSourceList.toArray(new String[dcSourceList.size()]);
 	}
 
 	@Override
@@ -623,7 +601,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsAlternativeList.add(dctermsAlternative);
 			}
 		}
-		return (String[]) dctermsAlternativeList.toArray();
+		return dctermsAlternativeList.toArray(new String[dctermsAlternativeList.size()]);
 	}
 
 	@Override
@@ -634,7 +612,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsConformsToList.add(dctermsConformsTo);
 			}
 		}
-		return (String[]) dctermsConformsToList.toArray();
+		return dctermsConformsToList.toArray(new String[dctermsConformsToList.size()]);
 	}
 
 	@Override
@@ -645,7 +623,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsCreatedList.add(dctermsCreated);
 			}
 		}
-		return (Date[]) dctermsCreatedList.toArray();
+		return dctermsCreatedList.toArray(new Date[dctermsCreatedList.size()]);
 	}
 
 	@Override
@@ -656,7 +634,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsExtentList.add(dctermsExtent);
 			}
 		}
-		return (String[]) dctermsExtentList.toArray();
+		return dctermsExtentList.toArray(new String[dctermsExtentList.size()]);
 	}
 
 	@Override
@@ -667,7 +645,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsHasFormatList.add(dctermsHasFormat);
 			}
 		}
-		return (String[]) dctermsHasFormatList.toArray();
+		return dctermsHasFormatList.toArray(new String[dctermsHasFormatList.size()]);
 	}
 
 	@Override
@@ -678,7 +656,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIsPartOfList.add(dctermsIsPartOf);
 			}
 		}
-		return (String[]) dctermsIsPartOfList.toArray();
+		return dctermsIsPartOfList.toArray(new String[dctermsIsPartOfList.size()]);
 	}
 
 	@Override
@@ -689,7 +667,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIsReferencedByList.add(dctermsIsReferencedBy);
 			}
 		}
-		return (String[]) dctermsIsReferencedByList.toArray();
+		return dctermsIsReferencedByList.toArray(new String[dctermsIsReferencedByList.size()]);
 	}
 
 	@Override
@@ -700,7 +678,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIsReplacedByList.add(dctermsIsReplacedBy);
 			}
 		}
-		return (String[]) dctermsIsReplacedByList.toArray();
+		return dctermsIsReplacedByList.toArray(new String[dctermsIsReplacedByList.size()]);
 	}
 
 	@Override
@@ -711,7 +689,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIsRequiredByList.add(dctermsIsRequiredBy);
 			}
 		}
-		return (String[]) dctermsIsRequiredByList.toArray();
+		return  dctermsIsRequiredByList.toArray(new String[dctermsIsRequiredByList.size()]);
 	}
 
 	@Override
@@ -722,7 +700,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIsVersionOfList.add(dctermsIsVersionOf);
 			}
 		}
-		return (String[]) dctermsIsVersionOfList.toArray();
+		return dctermsIsVersionOfList.toArray(new String[dctermsIsVersionOfList.size()]);
 	}
 
 	@Override
@@ -733,7 +711,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsIssuedList.add(dctermsIssued);
 			}
 		}
-		return (String[]) dctermsIssuedList.toArray();
+		return dctermsIssuedList.toArray(new String[dctermsIssuedList.size()]);
 	}
 
 	@Override
@@ -744,7 +722,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsMediumList.add(dctermsMedium);
 			}
 		}
-		return (String[]) dctermsMediumList.toArray();
+		return dctermsMediumList.toArray(new String[dctermsMediumList.size()]);
 	}
 
 	@Override
@@ -755,7 +733,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsProvenanceList.add(dctermsProvenance);
 			}
 		}
-		return (String[]) dctermsProvenanceList.toArray();
+		return dctermsProvenanceList.toArray(new String[dctermsProvenanceList.size()]);
 	}
 
 	@Override
@@ -766,7 +744,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsReferencesList.add(dctermsReferences);
 			}
 		}
-		return (String[]) dctermsReferencesList.toArray();
+		return dctermsReferencesList.toArray(new String[dctermsReferencesList.size()]);
 	}
 
 	@Override
@@ -777,7 +755,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsReplacesList.add(dctermsReplaces);
 			}
 		}
-		return (String[]) dctermsReplacesList.toArray();
+		return dctermsReplacesList.toArray(new String[dctermsReplacesList.size()]);
 	}
 
 	@Override
@@ -788,7 +766,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsRequiresList.add(dctermsRequires);
 			}
 		}
-		return (String[]) dctermsRequiresList.toArray();
+		return dctermsRequiresList.toArray(new String[dctermsRequiresList.size()]);
 	}
 
 	@Override
@@ -799,7 +777,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsTableOfContentsList.add(dctermsTableOfContents);
 			}
 		}
-		return (String[]) dctermsTableOfContentsList.toArray();
+		return dctermsTableOfContentsList.toArray(new String[dctermsTableOfContentsList.size()]);
 	}
 
 	@Override
@@ -810,7 +788,7 @@ public class FullBeanImpl implements FullBean {
 				dctermsTemporalList.add(dctermsTemporal);
 			}
 		}
-		return (String[]) dctermsTemporalList.toArray();
+		return dctermsTemporalList.toArray(new String[dctermsTemporalList.size()]);
 	}
 
 	@Override
@@ -827,7 +805,7 @@ public class FullBeanImpl implements FullBean {
 				edmCurrentLocationList.add(proxy.getEdmCurrentLocation());
 		
 		}
-		return (String[])edmCurrentLocationList.toArray();
+		return edmCurrentLocationList.toArray(new String[edmCurrentLocationList.size()]);
 	}
 
 	@Override
@@ -838,7 +816,7 @@ public class FullBeanImpl implements FullBean {
 				edmIsNextInSequenceList.add(proxy.getEdmIsNextInSequence());
 			
 		}
-		return (String[]) edmIsNextInSequenceList.toArray();
+		return edmIsNextInSequenceList.toArray(new String[edmIsNextInSequenceList.size()]);
 	}
 
 	@Override
@@ -854,7 +832,7 @@ public class FullBeanImpl implements FullBean {
 			for (String agentNote : agent.getNote()){
 				agentNotes.add(agentNote);
 			}
-		return (String[])agentNotes.toArray();
+		return agentNotes.toArray(new String[agentNotes.size()]);
 	}
 
 	@Override
@@ -863,7 +841,7 @@ public class FullBeanImpl implements FullBean {
 		for (Agent agent : this.agents){			
 				agentBeginDates.add(agent.getBegin());
 			}
-		return (Date[])agentBeginDates.toArray();
+		return agentBeginDates.toArray(new Date[agentBeginDates.size()]);
 	}
 
 	@Override
@@ -872,7 +850,7 @@ public class FullBeanImpl implements FullBean {
 		for (Agent agent : this.agents){			
 				agentEndDates.add(agent.getEnd());
 			}
-		return (Date[])agentEndDates.toArray();
+		return agentEndDates.toArray(new Date[agentEndDates.size()]);
 	}
 
 	@Override
@@ -883,7 +861,7 @@ public class FullBeanImpl implements FullBean {
 					notes.add(note);
 				}
 		}
-		return (String[]) notes.toArray();
+		return  notes.toArray(new String[notes.size()]);
 	}
 
 	@Override
@@ -894,7 +872,7 @@ public class FullBeanImpl implements FullBean {
 					notes.add(note);
 				}
 		}
-		return (String[]) notes.toArray();
+		return notes.toArray(new String[notes.size()]);
 	}
 
 	@Override
@@ -905,7 +883,7 @@ public class FullBeanImpl implements FullBean {
 					notes.add(note);
 				}
 		}
-		return (String[]) notes.toArray();
+		return notes.toArray(new String[notes.size()]);
 	}
 
 	@Override
@@ -922,66 +900,53 @@ public class FullBeanImpl implements FullBean {
 				placeIds.add(place.getPlaceId().toString());
 			
 		}
-		return (String[]) placeIds.toArray();
+		return placeIds.toArray(new String[placeIds.size()]);
 	}
 
 
 	@Override
-	public String[] getEdmAgentAltLabels() {
-		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmAgentAltLabels() {
+		ArrayList<Map<String,String>> altLabels = new ArrayList<Map<String,String>>();
 		for (Agent agent : this.agents){
-			for(String[] altLabel:agent.getAltLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(altLabel[0]);
-				tmp.add(altLabel[1]);
-				altLabels.add(tmp);
-			}
+			
+				altLabels.add(agent.getAltLabel());
+			
 		}
-		return (String[]) altLabels.toArray();
+		return  altLabels;
 	}
 
 	@Override
-	public String[] getEdmPlaceAltLabels() {
-		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmPlaceAltLabels() {
+		ArrayList<Map<String,String>> altLabels = new ArrayList<Map<String,String>>();
 		for (Place place : this.places){
-			for(String[] altLabel:place.getAltLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(altLabel[0]);
-				tmp.add(altLabel[1]);
-				altLabels.add(tmp);
-			}
+			
+				altLabels.add(place.getAltLabel());
+			
 		}
-		return (String[]) altLabels.toArray();
+		return altLabels;
 	}
 
 
 	@Override
-	public String[] getEdmTimespanAltLabels() {
-		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getEdmTimespanAltLabels() {
+		ArrayList<Map<String,String>> altLabels = new ArrayList<Map<String,String>>();
 		for (Timespan timespan : this.timespans){
-			for(String[] altLabel:timespan.getAltLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(altLabel[0]);
-				tmp.add(altLabel[1]);
-				altLabels.add(tmp);
-			}
+			
+				altLabels.add(timespan.getAltLabel());
 		}
-		return (String[]) altLabels.toArray();
+		return altLabels;
 	}
 
 
 	@Override
-	public String[] getSkosConceptAltLabels() {
-		ArrayList<ArrayList<String>> altLabels = new ArrayList<ArrayList<String>>();
+	public ArrayList<Map<String,String>> getSkosConceptAltLabels() {
+		ArrayList<Map<String,String>> altLabels = new ArrayList<Map<String,String>>();
 		for (Concept concept : this.concepts){
-			for(String[] altLabel:concept.getAltLabel()){
-				ArrayList<String> tmp = new ArrayList<String>();
-				tmp.add(altLabel[0]);
-				tmp.add(altLabel[1]);
-				altLabels.add(tmp);
-			}
+			
+				altLabels.add(concept.getAltLabel());
+			
 		}
-		return (String[]) altLabels.toArray();
+		return altLabels;
 	}
 
 
@@ -1007,14 +972,14 @@ public class FullBeanImpl implements FullBean {
 
 
 	@Override
-	public String[] getEdmPlaceAltLabel() {
+	public ArrayList<Map<String,String>> getEdmPlaceAltLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public String[] getEdmConceptBroaderLabel() {
+	public ArrayList<Map<String,String>> getEdmConceptBroaderLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1028,7 +993,7 @@ public class FullBeanImpl implements FullBean {
 
 
 	@Override
-	public String[] getEdmTimespanBroaderLabel() {
+	public ArrayList<Map<String,String>> getEdmTimespanBroaderLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1039,4 +1004,5 @@ public class FullBeanImpl implements FullBean {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 
 import com.google.code.morphia.annotations.*;
@@ -35,17 +38,17 @@ public class ConceptImpl implements Concept {
 
 @Id ObjectId conceptId;
 
-private String[][] prefLabel;
-private String[][] altLabel;
+private Map<String,String> prefLabel;
+private Map<String,String> altLabel;
 private String[] note;
 private String[] broader;
 	@Override
-	public String[][] getPrefLabel() {
+	public Map<String,String> getPrefLabel() {
 		return this.prefLabel;
 	}
 
 	@Override
-	public String[][] getAltLabel() {
+	public Map<String,String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -65,7 +68,7 @@ private String[] broader;
 	}
 
 	@Override
-	public void setAltLabel(String[][] altLabel) {
+	public void setAltLabel(Map<String,String> altLabel) {
 		this.altLabel=altLabel;
 		
 	}
@@ -77,7 +80,7 @@ private String[] broader;
 	}
 
 	@Override
-	public void setPrefLabel(String[][] prefLabel) {
+	public void setPrefLabel(Map<String,String> prefLabel) {
 		this.prefLabel = prefLabel;
 		
 	}
@@ -90,4 +93,8 @@ private String[] broader;
 		this.broader = broader;
 	}
 
+	@Override
+	public boolean equals(Object o){
+		return this.getConceptId().equals(((ConceptImpl)o).getConceptId());
+	}
 }

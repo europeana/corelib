@@ -17,7 +17,9 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.beans.Field;
 
@@ -97,13 +99,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     String[] edmPlace;
 
     @Field("edm_place_pref_label")
-    String[] edmPlacePrefLabel;
+    ArrayList<Map<String,String>> edmPlacePrefLabel;
 
     @Field("edm_place_broader_term")
     String[] enrichmentPlaceBroaderTerm;
 
     @Field("edm_place_alt_label")
-    String[] edmPlaceAltLabel;
+    ArrayList<Map<String,String>> edmPlaceAltLabel;
 
     @Field("edm_place_latitude")
     Float[] edmPlaceLatitude;
@@ -115,13 +117,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     String[] edmTimespan;
 
     @Field("edm_timespan_label")
-    String[] edmTimespanLabel;
+    ArrayList<Map<String,String>> edmTimespanLabel;
 
     @Field("edm_timespan_broader_term")
     String[] edmTimespanBroaderTerm;
 
     @Field("edm_timespan_broader_label")
-    String[] edmTimespanBroaderLabel;
+    ArrayList<Map<String,String>> edmTimespanBroaderLabel;
 
     @Field("edm_timespan_begin")
     Date[] edmTimespanBegin;
@@ -133,19 +135,19 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     String[] edmConceptTerm;
 
     @Field("edm_concept_label")
-    String[] edmConceptPrefLabel;
+    ArrayList<Map<String,String>> edmConceptPrefLabel;
 
     @Field("edm_concept_broader")
     String[] edmConceptBroaderTerm;
 
     @Field("edm_concept_broader_label")
-    String[] edmConceptBroaderLabel;
+    ArrayList<Map<String,String>> edmConceptBroaderLabel;
 
     @Field("edm_agent")
     String[] edmAgentTerm;
 
     @Field("edm_agent_label")
-    String[] edmAgentLabel;
+    ArrayList<Map<String,String>> edmAgentLabel;
 
     @Field("dcterms_hasPart")
     String[] dctermsHasPart;
@@ -227,12 +229,12 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmPlaceAltLabel() {
+    public ArrayList<Map<String,String>> getEdmPlaceAltLabel() {
         return edmPlaceAltLabel;
     }
 
     @Override
-    public String[] getEdmPlaceLabel() {
+    public ArrayList<Map<String,String>> getEdmPlaceLabel() {
         return edmPlacePrefLabel;
     }
 
@@ -252,7 +254,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmTimespanLabel() {
+    public ArrayList<Map<String,String>> getEdmTimespanLabel() {
         return edmTimespanLabel;
     }
 
@@ -262,7 +264,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmTimespanBroaderLabel() {
+    public ArrayList<Map<String,String>> getEdmTimespanBroaderLabel() {
         return edmTimespanBroaderLabel;
     }
 
@@ -282,7 +284,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmConceptLabel() {
+    public ArrayList<Map<String,String>> getEdmConceptLabel() {
         return edmConceptPrefLabel;
     }
 
@@ -292,7 +294,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmConceptBroaderLabel() {
+    public ArrayList<Map<String,String>> getEdmConceptBroaderLabel() {
         return edmConceptBroaderLabel;
     }
 
@@ -302,7 +304,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public String[] getEdmAgentLabel() {
+    public ArrayList<Map<String,String>> getEdmAgentLabel() {
         return edmAgentLabel;
     }
     

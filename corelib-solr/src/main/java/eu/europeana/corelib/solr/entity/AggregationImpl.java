@@ -17,11 +17,14 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.ArrayList;
+
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.*;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
+import eu.europeana.corelib.definitions.solr.entity.WebResource;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
@@ -34,14 +37,14 @@ public class AggregationImpl implements Aggregation {
 	ObjectId aggregationId;
 
 	private String edmDataProvider;
-	private String[] edmHasView;
 	private String edmIsShownBy;
 	private String edmIsShownAt;
 	private String edmObject;
 	private String edmProvider;
 	private String edmRights;
 	private String[] dcRights;
-
+	@Embedded private ArrayList<WebResource> webResources;
+	
 	@Override
 	public void setAggregationId(ObjectId aggregationId) {
 		this.aggregationId = aggregationId;
@@ -50,11 +53,6 @@ public class AggregationImpl implements Aggregation {
 	@Override
 	public void setEdmDataProvider(String edmDataProvider) {
 		this.edmDataProvider = edmDataProvider;
-	}
-
-	@Override
-	public void setEdmHasView(String[] edmHasView) {
-		this.edmHasView = edmHasView;
 	}
 
 	@Override
@@ -93,11 +91,6 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public String[] getEdmHasView() {
-		return this.edmHasView;
-	}
-
-	@Override
 	public String getEdmIsShownBy() {
 		return this.edmIsShownBy;
 	}
@@ -130,6 +123,21 @@ public class AggregationImpl implements Aggregation {
 	@Override
 	public ObjectId getAggregationId() {
 		return this.aggregationId;
+	}
+
+	@Override
+	public ArrayList<WebResource> getWebResources() {
+		return webResources;
+	}
+
+	@Override
+	public void setWebResources(ArrayList<WebResource> webResources) {
+		this.webResources = webResources;
+	}
+
+	@Override
+	public boolean equals(Object o){
+		return this.getAggregationId().equals(((AggregationImpl)o).getAggregationId());
 	}
 
 }
