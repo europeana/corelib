@@ -18,6 +18,8 @@
 package eu.europeana.corelib.definitions.solr.beans;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 
@@ -63,7 +65,7 @@ public interface ApiBean extends BriefBean {
 
     String[] getEdmPlace();
 
-    String[] getEdmPlaceLabel();
+    List<Map<String,String>> getEdmPlaceLabel();
 
     Float[] getEdmPlaceLatitude();
 
@@ -71,7 +73,7 @@ public interface ApiBean extends BriefBean {
 
     String[] getEdmTimespan();
 
-    String[] getEdmTimespanLabel();
+    List<Map<String,String>> getEdmTimespanLabel();
 
     Date[] getEdmTimespanBegin();
 
@@ -79,25 +81,25 @@ public interface ApiBean extends BriefBean {
 
     String[] getEdmConcept(); //skos:concept 
 
-    String[] getEdmConceptLabel(); //skos:concept prefLabel
+    List<Map<String,String>> getEdmConceptLabel(); //skos:concept prefLabel
 
     String[] getEdmConceptBroaderTerm(); //skos:concept broader
 
     String[] getEdmAgent();
 
-    String[] getEdmAgentLabel();
+    List<Map<String,String>> getEdmAgentLabel();
 
 	String getFullDocUrl();
 
 	String[] getDcTermsHasPart();
 
-	String[] getEdmPlaceAltLabel();
+	List<Map<String,String>> getEdmPlaceAltLabel();
 
-	String[] getEdmConceptBroaderLabel();
+	List<Map<String,String>> getEdmConceptBroaderLabel();
 
 	String[] getEdmTimespanBroaderTerm();
 
-	String[] getEdmTimespanBroaderLabel();
+	 List<Map<String,String>> getEdmTimespanBroaderLabel();
 
 	String[] getEdmPlaceBroaderTerm();
 }

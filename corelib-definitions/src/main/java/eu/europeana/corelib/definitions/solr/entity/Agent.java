@@ -18,6 +18,7 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 /**
@@ -50,5 +51,6 @@ public interface Agent extends ContextualClass{
 	void setBegin(Date begin);
 
 	void setEnd(Date end);
+
 	
 }

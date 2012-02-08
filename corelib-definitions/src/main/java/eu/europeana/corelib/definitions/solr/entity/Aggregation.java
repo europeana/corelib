@@ -16,7 +16,11 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.ArrayList;
+
 import org.bson.types.ObjectId;
+
+
 
 /**
  * EDM Aggregation fields representation
@@ -36,12 +40,6 @@ public interface Aggregation {
 	 * @return String representing the edm:DataProvider field
 	 */
 	String getEdmDataProvider();
-	
-	/**
-	 * Retrieves the edm:hasView field from an Aggregation
-	 * @return String array representing the edm:hasView fields
-	 */
-	String[] getEdmHasView();
 	
 	/**
 	 * Retrieves the unique edm:isShownBy field from an Aggregation
@@ -91,10 +89,12 @@ public interface Aggregation {
 
 	void setEdmIsShownBy(String edmIsShownBy);
 
-	void setEdmHasView(String[] edmHasView);
-
 	void setEdmDataProvider(String edmDataProvider);
 
 	void setAggregationId(ObjectId aggregationId);
+
+	ArrayList<WebResource> getWebResources();
+
+	void setWebResources(ArrayList<WebResource> webResources);
 	
 }

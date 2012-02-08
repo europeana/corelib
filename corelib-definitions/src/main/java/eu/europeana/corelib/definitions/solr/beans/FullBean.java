@@ -17,7 +17,21 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
+
+import org.bson.types.ObjectId;
+
+import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.definitions.solr.entity.Agent;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
+import eu.europeana.corelib.definitions.solr.entity.Concept;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.definitions.solr.entity.Proxy;
+import eu.europeana.corelib.definitions.solr.entity.Timespan;
+
 
 /**
  * Interface for the FullBean. FullBean contains all the fields exposed by the
@@ -28,12 +42,6 @@ import java.util.Date;
  * @author Yorgos Mamakis <yorgos.mamakis@ kb.nl>
  */
 public interface FullBean extends ApiBean {
-
-	/**
-	 * Retrieve the edm:hasView field
-	 * @return A String array with the edm:hasView fields for an object
-	 */
-	String[] getEdmHasView();
 
 	/**
 	 * Retrieve the edm:isShownBy field
@@ -58,24 +66,6 @@ public interface FullBean extends ApiBean {
 	 * @return A String array with the dc:rights field for an Aggregation
 	 */
 	String[] getAggregationDcRights();
-
-	/**
-	 * Retrieve the edm:webResource rdf:about attribute 
-	 * @return A String array with the edm:webReource rdf:about attribute
-	 */
-	String[] getEdmWebResource();
-
-	/**
-	 * Retrieve the dc:rights from a WebResource
-	 * @return A String array with the dc:rights for all the WebResources pointing to an Aggregation
-	 */
-	String[] getEdmWebResourceDcRights();
-
-	/**
-	 * Retrieve the edm:rights from a WebResource
-	 * @return A String array with the edm:rights for all the WebResources pointing to an Aggregation
-	 */
-	String[] getEdmWebResourceEdmRights();
 
 	/**
 	 * Retrieve the ore:proxy rdf:about attribute
@@ -252,7 +242,7 @@ public interface FullBean extends ApiBean {
 	 * Retrieve skos:altLabel fields from an Agent
 	 * @return A String array with the edm:broader fields for all Agents pointing to a CHO
 	 */
-	String[] getEdmAgentAltLabels();
+	ArrayList<Map<String,String>> getEdmAgentAltLabels();
 	
 	/**
 	 * Retrieve skos:note fields from an Agent
@@ -294,19 +284,19 @@ public interface FullBean extends ApiBean {
 	 * Retrieve skos:altLabel fields from a Place
 	 * @return A String array with the skos:altLabel fields for all Places pointing to a CHO
 	 */
-	String[] getEdmPlaceAltLabels();
+	ArrayList<Map<String,String>> getEdmPlaceAltLabels();
 	
 	/**
 	 * Retrieve skos:altLabel fields from a Timespan
 	 * @return A String array with the skos:altLabel fields for all Timespans pointing to a CHO
 	 */
-	String[] getEdmTimespanAltLabels();
+	ArrayList<Map<String,String>> getEdmTimespanAltLabels();
 	
 	/**
 	 * Retrieve skos:altLabel fields from a Concept
 	 * @return A String array with the skos:altLabel fields for all Concepts pointing to a CHO
 	 */
-	String[] getSkosConceptAltLabels();
+	ArrayList<Map<String,String>> getSkosConceptAltLabels();
 	
 	/**
 	 * Retrieve whether a thumbnail should be previewed or not according to the content providers 
@@ -325,4 +315,52 @@ public interface FullBean extends ApiBean {
 	 * @return A String array with the edm:isPartOf fields for all Timespans pointing to a CHO
 	 */
 	String[] getEdmTimespanIsPartOf();
+
+	String[] getEdmWebResource();
+
+	String[] getEdmWebResourceDcRights();
+
+	String[] getEdmWebResourceEdmRights();
+
+	ArrayList<? extends Place> getPlaces();
+
+	void setPlaces(ArrayList<? extends Place> places);
+
+	ArrayList<? extends Agent> getAgents();
+
+	void setAgents(ArrayList<? extends Agent> agents);
+
+	ArrayList<? extends Timespan> getTimespans();
+
+	ArrayList<? extends Concept> getConcepts();
+
+	void setConcepts(ArrayList<? extends Concept> concepts);
+
+	void setAggregations(ArrayList<? extends Aggregation> aggregations);
+
+	ArrayList<? extends Proxy> getProxies();
+
+	void setProxies(ArrayList<? extends Proxy> proxies);
+
+	void setEuropeana_id(ObjectId europeana_id);
+
+	void setTitle(String[] title);
+
+	void setCreator(String[] creator);
+
+	void setYear(String[] year);
+
+	void setProvider(String[] provider);
+
+	void setLanguage(String[] language);
+
+	void setType(DocType type);
+
+	void setEuropeanaCompleteness(int europeanaCompleteness);
+
+	void setTimespans(ArrayList<? extends Timespan> timespans);
+
+	ArrayList<? extends Aggregation> getAggregations();
+
+
 }
