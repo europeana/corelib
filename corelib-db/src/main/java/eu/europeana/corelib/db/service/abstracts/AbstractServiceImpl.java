@@ -54,10 +54,8 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 
 	@Override
 	public E store(E entity) throws DatabaseException {
-		if (entity.getId() != null) {
-			if (findByID(entity.getId()) != null) {
-				return dao.update(entity);
-			}
+		if (entity.getId() != null && findByID(entity.getId()) != null) {
+			return dao.update(entity);
 		}
 		return dao.insert(entity);
 	}

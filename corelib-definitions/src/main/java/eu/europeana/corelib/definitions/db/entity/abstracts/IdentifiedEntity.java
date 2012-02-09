@@ -29,6 +29,6 @@ import java.io.Serializable;
  */
 public interface IdentifiedEntity<I extends Serializable> extends Serializable {
 
-	public I getId();
+	I getId();
 
 }

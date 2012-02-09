@@ -91,7 +91,7 @@ public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, Use
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 
-	@Column(length = 25)
+	@Column(length = FIELDSIZE_ROLE)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 

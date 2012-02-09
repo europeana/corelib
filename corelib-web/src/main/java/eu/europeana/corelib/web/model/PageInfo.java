@@ -22,10 +22,10 @@ package eu.europeana.corelib.web.model;
  */
 public interface PageInfo {
     
-    public String getPageName();
+    String getPageName();
     
-    public String getPageTitle();
+    String getPageTitle();
     
-    public String getTemplate();
+    String getTemplate();
 
 }

@@ -98,7 +98,7 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @param object
 	 *            Existing object to update
 	 */
-	public <T extends IdentifiedEntity<?>> T insert(T entity);
+	<T extends IdentifiedEntity<?>> T insert(T entity);
 
 	/**
 	 * update a existing row in the database
@@ -108,7 +108,7 @@ public interface Dao<E extends IdentifiedEntity<?>> {
 	 * @param object
 	 *            Existing object to update
 	 */
-	public <T extends IdentifiedEntity<?>> T update(T entity);
+	<T extends IdentifiedEntity<?>> T update(T entity);
 
 	/**
 	 * Delete a existing object in the database

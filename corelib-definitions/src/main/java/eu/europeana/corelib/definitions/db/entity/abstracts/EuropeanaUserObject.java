@@ -26,26 +26,26 @@ import eu.europeana.corelib.definitions.solr.DocType;
  */
 public interface EuropeanaUserObject extends UserConnected<Long> {
 
-	public abstract Long getId();
+	abstract Long getId();
 
-	public abstract Date getDateSaved();
+	abstract Date getDateSaved();
 
-	public abstract void setDateSaved(Date dateSaved);
+	abstract void setDateSaved(Date dateSaved);
 
-	public abstract String getTitle();
+	abstract String getTitle();
 
-	public abstract void setTitle(String title);
+	abstract void setTitle(String title);
 
-	public abstract String getEuropeanaObject();
+	abstract String getEuropeanaObject();
 
-	public abstract void setEuropeanaObject(String europeanaObject);
+	abstract void setEuropeanaObject(String europeanaObject);
 
-	public abstract String getEuropeanaUri();
+	abstract String getEuropeanaUri();
 
-	public abstract void setEuropeanaUri(String europeanaUri);
+	abstract void setEuropeanaUri(String europeanaUri);
 
-	public abstract DocType getDocType();
+	abstract DocType getDocType();
 
-	public abstract void setDocType(DocType docType);
+	abstract void setDocType(DocType docType);
 
 }
