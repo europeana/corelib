@@ -27,7 +27,9 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
@@ -53,13 +55,15 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 	
 	public static int SERVER_PORT = 2500;
 
-    private Wiser wiser;
+    private static Wiser wiser;
+    
+    private boolean runOnce = false;
     
     @Resource
     private EmailService emailService;
     
-	@Before
-	public void setUp() throws Exception {
+    @BeforeClass
+    public static void setup() {
 		// sometimes the service does not completely stops...
 		if ( (wiser != null) && wiser.getServer().isRunning()){
 			wiser.getServer().stop();
@@ -68,12 +72,19 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 		wiser = new Wiser();
 		wiser.setPort(SERVER_PORT);
 		wiser.start();
-
-		reconfigureMailSenders(applicationContext, 2500);
+    }
+    
+	@Before
+	public void clear() throws Exception {
+		if (!runOnce) {
+			reconfigureMailSenders(applicationContext, 2500);
+			runOnce = true;
+		}
+		wiser.getMessages().clear();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 		wiser.stop();
 	}
 	
