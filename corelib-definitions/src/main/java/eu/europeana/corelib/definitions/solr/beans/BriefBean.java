@@ -17,6 +17,12 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import eu.europeana.corelib.definitions.solr.DocType;
+
 
 /**
  * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine
@@ -28,5 +34,71 @@ package eu.europeana.corelib.definitions.solr.beans;
  */
 public interface BriefBean extends IdBean {
 
+	 	String[] getTitle();
 
+	    String[] getEdmObject();
+
+	    String[] getCreator(); //creator copyfields dc_creator, dc_contributor
+
+	    String[] getYear(); //YEAR copyfield dc_date
+
+	    String[] getProvider(); //PROVIDER copyfield edm_provider
+
+	    String[] getDataProvider(); //DATA_PROVIDER copyfield edm_dataProvider
+
+	    String[] getLanguage(); //LANGUAGE copyfield dc_language
+
+	    DocType getType(); //TYPE copyfield edm_type
+	    
+	    // here the dcterms namespaces starts
+
+	    String[] getDcTermsIsPartOf();
+
+	    String[] getDcTermsSpatial();
+
+	    // Ranking and Enrichment terms
+
+	    int getEuropeanaCompleteness();
+
+	    String[] getAggregationEdmRights();
+
+	    String[] getEdmPlace();
+
+	    List<Map<String,String>> getEdmPlaceLabel();
+
+	    Float[] getEdmPlaceLatitude();
+
+	    Float[] getEdmPlaceLongitude();
+
+	    String[] getEdmTimespan();
+
+	    List<Map<String,String>> getEdmTimespanLabel();
+
+	    Date[] getEdmTimespanBegin();
+
+	    Date[] getEdmTimespanEnd();
+
+	    String[] getEdmConcept(); //skos:concept 
+
+	    List<Map<String,String>> getEdmConceptLabel(); //skos:concept prefLabel
+
+	    String[] getEdmConceptBroaderTerm(); //skos:concept broader
+
+	    String[] getEdmAgent();
+
+	    List<Map<String,String>> getEdmAgentLabel();
+
+		String getFullDocUrl();
+
+		String[] getDcTermsHasPart();
+
+		List<Map<String,String>> getEdmPlaceAltLabel();
+
+		List<Map<String,String>> getEdmConceptBroaderLabel();
+
+		String[] getEdmTimespanBroaderTerm();
+
+		List<Map<String,String>> getEdmTimespanBroaderLabel();
+
+		String[] getEdmPlaceBroaderTerm();
 }
