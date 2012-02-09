@@ -14,65 +14,73 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
+
 package eu.europeana.corelib.definitions.solr.entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 
-
-
 /**
  * EDM Aggregation fields representation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public interface Aggregation {
-	
+
 	/**
 	 * Retrieves the unique Aggregation Id (could be anything)
+	 * 
 	 * @return ObjectId representing the unique Aggregation ID
 	 */
 	ObjectId getAggregationId();
-	
+
 	/**
 	 * Retrieves the edm:dataProvider field from an Aggregation
+	 * 
 	 * @return String representing the edm:DataProvider field
 	 */
 	String getEdmDataProvider();
-	
+
 	/**
 	 * Retrieves the unique edm:isShownBy field from an Aggregation
+	 * 
 	 * @return String representing the edm:isShownBy field
 	 */
 	String getEdmIsShownBy();
-	
+
 	/**
 	 * Retrieves the unique edm:isShownAt field from an Aggregation
+	 * 
 	 * @return String representing the edm:isShownAt field
 	 */
 	String getEdmIsShownAt();
-	
+
 	/**
 	 * Retrieves the unique edm:object field from an Aggregation
+	 * 
 	 * @return String representing the edm:object field
 	 */
 	String getEdmObject();
-	
+
 	/**
 	 * Retrieves the unique edm:provider field from an Aggregation
+	 * 
 	 * @return String representing the edm:provider field
 	 */
 	String getEdmProvider();
-	
+
 	/**
 	 * Retrieves the dc:rights fields from an Aggregation
+	 * 
 	 * @return String array representing the dc:rights fields
 	 */
 	String[] getDcRights();
-	
+
 	/**
 	 * Retrieves the unique edm:rights field from an Aggregation
+	 * 
 	 * @return String representing the edm:rights fields
 	 */
 	String getEdmRights();
@@ -93,8 +101,8 @@ public interface Aggregation {
 
 	void setAggregationId(ObjectId aggregationId);
 
-	ArrayList<WebResource> getWebResources();
+	List<WebResource> getWebResources();
 
-	void setWebResources(ArrayList<WebResource> webResources);
-	
+	void setWebResources(List<WebResource> webResources);
+
 }

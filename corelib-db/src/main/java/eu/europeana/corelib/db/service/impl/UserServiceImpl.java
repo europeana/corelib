@@ -51,10 +51,10 @@ import eu.europeana.corelib.solr.service.SearchService;
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
 
 	@Resource(type = TokenService.class)
-	TokenService tokenService;
+	private TokenService tokenService;
 
 	@Resource(type = SearchService.class)
-	SearchService searchService;
+	private SearchService searchService;
 
 	@Override
 	public User create(String tokenString, String username, String password) throws DatabaseException {

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.mail.BodyPart;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
@@ -53,12 +54,12 @@ public class EmailBuilderImpl implements EmailBuilder {
 	private VelocityEngine engine;
 
 	@Resource(name = "corelib_web_emailConfigs")
-	Map<String, EmailConfig> configs;
+	private Map<String, EmailConfig> configs;
 
-	EmailConfig config;
+	private EmailConfig config;
 
 	@Override
-	public void prepare(MimeMessage mimeMessage) throws Exception {
+	public void prepare(MimeMessage mimeMessage) throws MessagingException {
 
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
 		

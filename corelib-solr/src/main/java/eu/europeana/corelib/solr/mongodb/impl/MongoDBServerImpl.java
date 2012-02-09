@@ -18,6 +18,7 @@
  * See the Licence for the specific language governing
  * permissions and limitations under the Licence.
  */
+
 package eu.europeana.corelib.solr.mongodb.impl;
 
 import java.net.UnknownHostException;
@@ -45,32 +46,30 @@ import eu.europeana.corelib.solr.mongodb.MongoDBServer;
 /**
  * @see eu.europeana.corelib.solr.mongodb.MongoDBServer
  * @author yorgos.mamakis@kb.nl
- *
+ * 
  */
 public class MongoDBServerImpl implements MongoDBServer {
 
 	private Mongo mongoServer;
 	private DB mongoDB;
-	private Datastore datastore; 
+	private Datastore datastore;
 	private Morphia morphia;
+
 	public MongoDBServerImpl(String host, int port, String databaseName) throws MongoDBException {
-		try{
+		try {
 			mongoServer = new Mongo(host, port);
 			setDB(databaseName);
 			createDatastore();
-		}
-		catch(UnknownHostException e){
-			throw new MongoDBException(ProblemType.UNKNOWN_MONGO_DB_HOST);
+		} catch (UnknownHostException e) {
+			throw new MongoDBException(e, ProblemType.UNKNOWN_MONGO_DB_HOST);
 		}
 	}
-	
-	
+
 	private void setDB(String databaseName) {
 		mongoDB = mongoServer.getDB(databaseName);
 	}
-	
-	
-	private void createDatastore(){
+
+	private void createDatastore() {
 		morphia = new Morphia();
 		morphia.map(FullBeanImpl.class);
 		morphia.map(AgentImpl.class);
@@ -81,22 +80,23 @@ public class MongoDBServerImpl implements MongoDBServer {
 		morphia.map(TimespanImpl.class);
 		morphia.map(WebResourceImpl.class);
 		datastore = morphia.createDatastore(mongoServer, mongoDB.getName());
-		
+
 	}
+
 	@Override
-	public Datastore getDatastore(){
+	public Datastore getDatastore() {
 		return this.datastore;
 	}
+
 	@Override
-	public FullBean getFullBean(ObjectId id) {		
-		return datastore.get(FullBean.class,id);
+	public FullBean getFullBean(ObjectId id) {
+		return datastore.get(FullBean.class, id);
 	}
-	
+
 	@Override
-	public String toString(){
-		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"+
-				"[Port: " +mongoServer.getAddress().getPort() +"]\n" +
-				"[DB: " + mongoDB.getName() +"]\n";
+	public String toString() {
+		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n" + "[Port: "
+				+ mongoServer.getAddress().getPort() + "]\n" + "[DB: " + mongoDB.getName() + "]\n";
 	}
 
 }
