@@ -53,7 +53,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 
 @Entity("record")
 public class FullBeanImpl implements FullBean {
-	@Id ObjectId europeana_id;
+	@Id ObjectId europeanaId;
 	private String[] title;
 	private String[] creator;
 	private String[] year;
@@ -79,7 +79,7 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setPlaces(ArrayList<? extends Place> places) {
+	public void setPlaces(List<? extends Place> places) {
 		
 			this.places = (ArrayList<PlaceImpl>) places;
 		
@@ -92,7 +92,7 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setAgents(ArrayList<? extends Agent> agents) {
+	public void setAgents(List<? extends Agent> agents) {
 		this.agents = (ArrayList<AgentImpl>) agents;
 	}
 
@@ -103,7 +103,7 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setTimespans(ArrayList<? extends Timespan> timespans) {
+	public void setTimespans(List<? extends Timespan> timespans) {
 		this.timespans = (ArrayList<TimespanImpl>) timespans;
 	}
 
@@ -114,7 +114,7 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setConcepts(ArrayList<? extends Concept> concepts) {
+	public void setConcepts(List<? extends Concept> concepts) {
 		this.concepts = (ArrayList<ConceptImpl>) concepts;
 	}
 
@@ -125,7 +125,7 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setAggregations(ArrayList<? extends Aggregation> aggregations) {
+	public void setAggregations(List<? extends Aggregation> aggregations) {
 		this.aggregations = (ArrayList<AggregationImpl>) aggregations;
 	}
 
@@ -146,14 +146,14 @@ public class FullBeanImpl implements FullBean {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setProxies(ArrayList<? extends Proxy> proxies) {
+	public void setProxies(List<? extends Proxy> proxies) {
 		this.proxies = (ArrayList<ProxyImpl>) proxies;
 	}
 
 
 	@Override
-	public void setEuropeana_id(ObjectId europeana_id) {
-		this.europeana_id = europeana_id;
+	public void setEuropeanaId(ObjectId europeanaId) {
+		this.europeanaId = europeanaId;
 	}
 
 	@Override
@@ -888,7 +888,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String getId() {
-		return this.europeana_id.toString();
+		return this.europeanaId.toString();
 	}
 
 
@@ -1003,6 +1003,10 @@ public class FullBeanImpl implements FullBean {
 	public String[] getEdmPlaceBroaderTerm() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public boolean equals(Object o){
+		return this.getId().equals(((FullBean)o).getId()); 
 	}
 
 }

@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 
@@ -131,8 +132,8 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public void setWebResources(ArrayList<WebResource> webResources) {
-		this.webResources = webResources;
+	public void setWebResources(List<WebResource> webResources) {
+		this.webResources = (ArrayList<WebResource>) webResources;
 	}
 
 	@Override

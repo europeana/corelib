@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Key;
-import com.google.code.morphia.Morphia;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -37,6 +36,8 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.mongodb.MongoDBServer;
+import eu.europeana.corelib.solr.service.SearchService;
+import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 
 /**
  * 
@@ -51,7 +52,8 @@ public class FullBeanTest {
 	@Resource(name = "corelib_solr_mongoServer")
 	MongoDBServer mongoServer;
 	Datastore ds;
-
+	@Resource(name="corelib_solr_searchService")
+	SearchService searchService;
 	@Test
 	public void testRetrieve() {
 		ds = mongoServer.getDatastore();
@@ -97,7 +99,8 @@ public class FullBeanTest {
 		fullBean.setTitle(new String[]{"test"});
 		fullBean.setType(DocType.IMAGE);
 		fullBean.setYear(new String[]{"2012"});
-		ds.save(fullBean);
+		
+		Key<FullBean> fullBeanKey = ds.save(fullBean);
 		FullBean testFullBean = ds.find(FullBeanImpl.class).get();
 		assertEquals(fullBean.getId(),testFullBean.getId());
 		assertEquals(fullBean.getAgents(),testFullBean.getAgents());
@@ -115,6 +118,9 @@ public class FullBeanTest {
 		assertEquals(fullBean.getType(),testFullBean.getType());
 		assertArrayEquals(fullBean.getYear(),testFullBean.getYear());
 		assertArrayEquals(fullBean.getEdmWebResource(),testFullBean.getEdmWebResource());
+		
+		FullBean fullBeanSearch =  searchService.findById(fullBeanKey.getId().toString());
+		assertEquals(fullBean,fullBeanSearch);
 	}
 
 	

@@ -26,16 +26,21 @@ package eu.europeana.corelib.solr.service.impl;
 import javax.annotation.Resource;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.mongodb.MongoDBServer;
+import eu.europeana.corelib.solr.mongodb.impl.MongoDBServerImpl;
 import eu.europeana.corelib.solr.server.SolrServer;
 import eu.europeana.corelib.solr.service.SearchService;
 
@@ -45,16 +50,17 @@ import eu.europeana.corelib.solr.service.SearchService;
  * @author Yorgos.Mamakis@kb.nl
  *
  */
+
 public class SearchServiceImpl implements SearchService {
 	@Resource(name="corelib_solr_solrSelectServer1")
 	private SolrServer solrServer;
 	
 	@Resource(name="corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
-
+	MongoDBServer mongoServer;
+	
 	@Override
 	public FullBean findById(String europeanaObjectId) {
-		ObjectId id = new ObjectId(europeanaObjectId);
+		ObjectId id = ObjectId.massageToObjectId(europeanaObjectId);
 		return mongoServer.getFullBean(id);
 	}
 
