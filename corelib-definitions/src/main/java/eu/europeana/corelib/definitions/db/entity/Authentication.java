@@ -26,16 +26,16 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
  */
 public interface Authentication extends UserConnected<String> {
 
-	public abstract Date getExpires();
+	abstract Date getExpires();
 
-	public abstract void setExpires(Date expires);
+	abstract void setExpires(Date expires);
 
-	public abstract String getAuthKey();
+	abstract String getAuthKey();
 
-	public abstract void setAuthKey(String authKey);
+	abstract void setAuthKey(String authKey);
 
-	public abstract void setApiKey(String apiKey);
+	abstract void setApiKey(String apiKey);
 
-	public abstract String getApiKey();
+	abstract String getApiKey();
 
 }
