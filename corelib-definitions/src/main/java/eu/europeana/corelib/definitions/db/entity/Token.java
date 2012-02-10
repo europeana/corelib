@@ -26,16 +26,16 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
  */
 public interface Token extends IdentifiedEntity<String> {
 
-	abstract String getToken();
+	String getToken();
 
-	abstract String getEmail();
+	String getEmail();
 
-	abstract Date getCreated();
+	Date getCreated();
 
-	abstract void setCreated(Date created);
+	void setCreated(Date created);
 
-	abstract void setEmail(String email);
+	void setEmail(String email);
 
-	abstract void setToken(String token);
+	void setToken(String token);
 
 }

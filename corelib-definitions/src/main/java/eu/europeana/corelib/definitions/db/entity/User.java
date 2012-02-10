@@ -28,38 +28,38 @@ import eu.europeana.corelib.definitions.users.Role;
  */
 public interface User extends IdentifiedEntity<Long> {
 
-	abstract void setEmail(String email);
+	void setEmail(String email);
 
-	abstract String getEmail();
+	String getEmail();
 
-	abstract String getPassword();
+	String getPassword();
 
-	abstract void setPassword(String password);
+	void setPassword(String password);
 
-	abstract String getApiKey();
+	String getApiKey();
 
-	abstract void setApiKey(String apiKey);
+	void setApiKey(String apiKey);
 
-	abstract Date getRegistrationDate();
+	Date getRegistrationDate();
 
-	abstract void setRegistrationDate(Date registrationDate);
+	void setRegistrationDate(Date registrationDate);
 
-	abstract Date getLastLogin();
+	Date getLastLogin();
 
-	abstract void setLastLogin(Date lastLogin);
+	void setLastLogin(Date lastLogin);
 
-	abstract Role getRole();
+	Role getRole();
 
-	abstract void setRole(Role role);
+	void setRole(Role role);
 
-	abstract String getUserName();
+	String getUserName();
 
-	abstract void setUserName(String userName);
+	void setUserName(String userName);
 
-	abstract Set<SavedItem> getSavedItems();
+	Set<SavedItem> getSavedItems();
 
-	abstract Set<SavedSearch> getSavedSearches();
+	Set<SavedSearch> getSavedSearches();
 
-	abstract Set<SocialTag> getSocialTags();
+	Set<SocialTag> getSocialTags();
 
 }

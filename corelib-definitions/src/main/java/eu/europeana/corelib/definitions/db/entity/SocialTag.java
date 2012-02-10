@@ -24,8 +24,8 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
  */
 public interface SocialTag extends EuropeanaUserObject {
 
-	abstract String getTag();
+	String getTag();
 
-	abstract void setTag(String tag);
+	void setTag(String tag);
 
 }

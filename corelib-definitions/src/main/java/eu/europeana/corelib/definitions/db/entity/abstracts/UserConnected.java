@@ -26,8 +26,8 @@ import eu.europeana.corelib.definitions.db.entity.User;
  */
 public abstract interface UserConnected<I extends Serializable> extends IdentifiedEntity<I> {
 
-	abstract User getUser();
+	User getUser();
 
-	abstract void setUser(User user);
+	void setUser(User user);
 
 }

@@ -24,8 +24,8 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
  */
 public interface SavedItem extends EuropeanaUserObject {
 
-	abstract String getAuthor();
+	String getAuthor();
 
-	abstract void setAuthor(String author);
+	void setAuthor(String author);
 
 }

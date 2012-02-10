@@ -24,14 +24,14 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
  */
 public interface ApiKey extends UserConnected<String> {
 
-	abstract void setApiKey(String apiKey);
+	void setApiKey(String apiKey);
 
-	abstract String getPrivateKey();
+	String getPrivateKey();
 
-	abstract void setPrivateKey(String privateKey);
+	void setPrivateKey(String privateKey);
 
-	abstract long getUsageLimit();
+	long getUsageLimit();
 
-	abstract void setUsageLimit(long usageLimit);
+	void setUsageLimit(long usageLimit);
 
 }

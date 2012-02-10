@@ -26,16 +26,16 @@ import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
  */
 public interface SavedSearch extends UserConnected<Long> {
 
-	abstract String getQuery();
+	String getQuery();
 
-	abstract void setQuery(String query);
+	void setQuery(String query);
 
-	abstract String getQueryString();
+	String getQueryString();
 
-	abstract void setQueryString(String queryString);
+	void setQueryString(String queryString);
 
-	abstract Date getDateSaved();
+	Date getDateSaved();
 
-	abstract void setDateSaved(Date dateSaved);
+	void setDateSaved(Date dateSaved);
 
 }

@@ -25,37 +25,37 @@ package eu.europeana.corelib.definitions.db;
 public interface DatabaseDefinition {
 	
 	// apikey
-	static final String TABLENAME_APIKEY = "apikey";
-	static final int FIELDSIZE_APIKEY = 30;
+	final String TABLENAME_APIKEY = "apikey";
+	final int FIELDSIZE_APIKEY = 30;
 	
 	// authentication
-	static final String TABLENAME_AUTHENTICATION = "authentication";
+	final String TABLENAME_AUTHENTICATION = "authentication";
 
 	// user
-	static final String TABLENAME_USER = "users";
-	static final int FIELDSIZE_PERSONAL = 100;
-	static final int FIELDSIZE_PASSWORD = 64;
-	static final int FIELDSIZE_USERNAME = 60;
-	static final int FIELDSIZE_ROLE = 25;
+	final String TABLENAME_USER = "users";
+	final int FIELDSIZE_PERSONAL = 100;
+	final int FIELDSIZE_PASSWORD = 64;
+	final int FIELDSIZE_USERNAME = 60;
+	final int FIELDSIZE_ROLE = 25;
 
 	// token
-	static final String TABLENAME_TOKEN = "token";
-	static final int FIELDSIZE_TOKEN = 32;
+	final String TABLENAME_TOKEN = "token";
+	final int FIELDSIZE_TOKEN = 32;
 
 	// saved search
-	static final String TABLENAME_SAVEDSEARCH = "SavedSearch";
-	static final int FIELDSIZE_QUERY = 200;
-	static final int FIELDSIZE_QUERY_STRING = 200;
+	final String TABLENAME_SAVEDSEARCH = "SavedSearch";
+	final int FIELDSIZE_QUERY = 200;
+	final int FIELDSIZE_QUERY_STRING = 200;
 
 	// saved item
-	static final String TABLENAME_SAVEDITEM = "SavedItem";
-	static final int FIELDSIZE_TITLE = 120;
-	static final int FIELDSIZE_AUTHOR = 80;
-	static final int FIELDSIZE_DOCTYPE = 10;
-	static final int FIELDSIZE_EUROPEANA_URI = 256;
-	static final int FIELDSIZE_EUROPEANA_OBJECT = 256;
+	final String TABLENAME_SAVEDITEM = "SavedItem";
+	final int FIELDSIZE_TITLE = 120;
+	final int FIELDSIZE_AUTHOR = 80;
+	final int FIELDSIZE_DOCTYPE = 10;
+	final int FIELDSIZE_EUROPEANA_URI = 256;
+	final int FIELDSIZE_EUROPEANA_OBJECT = 256;
 
 	// social tags
-	static final String TABLENAME_SOCIALTAGS = "SocialTag";
-	static final int FIELDSIZE_TAG = 60;
+	final String TABLENAME_SOCIALTAGS = "SocialTag";
+	final int FIELDSIZE_TAG = 60;
 }
