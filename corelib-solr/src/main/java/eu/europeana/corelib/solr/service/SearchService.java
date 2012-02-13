@@ -42,9 +42,8 @@ public interface SearchService {
 	 * @param europeanaObjectId - The unique europeana id
 	 * @return A full europeana record
 	 * @throws SolrTypeException 
-	 * @throws SolrServerException 
 	 */
-	FullBean findById(String europeanaObjectId) throws SolrTypeException, SolrServerException;
+	FullBean findById(String europeanaObjectId) throws SolrTypeException;
 	
 	/**
 	 * Perform a search in SOLR based on the given query and return the results in the format of the given class.

@@ -91,7 +91,7 @@ public interface AuthorisationService {
 	 * @throws SolrServerException 
 	 * @throws SolrTypeException 
 	 */
-	User createSavedItem(String apiKey, String authKey, String europeanaObjectId) throws DatabaseException, SolrTypeException, SolrServerException;
+	User createSavedItem(String apiKey, String authKey, String europeanaObjectId) throws DatabaseException;
 
 	/**
 	 * Creates and add a SocialTag to an existing user
@@ -107,7 +107,7 @@ public interface AuthorisationService {
 	 * @throws SolrServerException 
 	 * @throws SolrTypeException 
 	 */
-	User createSocialTag(String apiKey, String authKey, String europeanaObjectId, String tag) throws DatabaseException, SolrTypeException, SolrServerException;
+	User createSocialTag(String apiKey, String authKey, String europeanaObjectId, String tag) throws DatabaseException;
 	
 	/**
 	 * Removes a SavedSearch from database and User.

@@ -18,11 +18,6 @@
 package eu.europeana.corelib.solr.model;
 
 public class Query {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1842735761373918684L;
 
 	private String query;
 	
@@ -50,7 +45,7 @@ public class Query {
 	}
 
 	public Query setRefinements(String[] refinements) {
-		this.refinements = refinements;
+		this.refinements = refinements.clone();
 		return this;
 	}
 

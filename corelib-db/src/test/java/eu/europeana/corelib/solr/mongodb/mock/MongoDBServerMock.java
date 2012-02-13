@@ -22,12 +22,12 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.solr.mongodb.MongoDBServer;
+import eu.europeana.corelib.solr.server.MongoDBServer;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.solr.mongodb.MongoDBServer
+ * @see eu.europeana.corelib.solr.server.MongoDBServer
  */
 public class MongoDBServerMock implements MongoDBServer {
 

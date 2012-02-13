@@ -120,7 +120,7 @@ public interface UserService extends AbstractService<User> {
 	 * @throws SolrServerException 
 	 * @throws SolrTypeException 
 	 */
-	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, SolrTypeException, SolrServerException;
+	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
 
 	/**
 	 * Creates and add a SocialTag to an existing user
@@ -136,7 +136,7 @@ public interface UserService extends AbstractService<User> {
 	 * @throws SolrServerException 
 	 * @throws SolrTypeException 
 	 */
-	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException, SolrTypeException, SolrServerException;
+	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
 	
 	/**
 	 * Removes a SavedSearch from database and User.

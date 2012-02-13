@@ -54,7 +54,7 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.mongodb.MongoDBServer;
+import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**

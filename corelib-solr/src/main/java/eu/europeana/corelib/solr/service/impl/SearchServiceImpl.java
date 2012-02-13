@@ -34,7 +34,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
-import eu.europeana.corelib.solr.mongodb.MongoDBServer;
+import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.server.SolrServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.utils.SolrUtil;
@@ -70,14 +70,21 @@ public class SearchServiceImpl implements SearchService {
 	MongoDBServer mongoServer;
 
 	@Override
-	public FullBean findById(String europeanaObjectId) throws SolrTypeException, SolrServerException {
+	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 		ObjectId id = ObjectId.massageToObjectId(europeanaObjectId);
 		if (!solrServer1.isActive() && !solrServer2.isActive()) {
 			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
 		}
 		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""+europeanaObjectId+"\"");
 		solrQuery.setQueryType(QueryType.MORE_LIKE_THIS.toString());
-		QueryResponse queryResponse = getSolrServer().query(solrQuery);
+		
+		QueryResponse queryResponse = null;
+		
+		try {
+			queryResponse = getSolrServer().query(solrQuery);
+		} catch (SolrServerException e) {
+			throw new SolrTypeException(e, ProblemType.UNKNOWN);
+		}
 		
 		FullBean fullBean = mongoServer.getFullBean(id);
 		

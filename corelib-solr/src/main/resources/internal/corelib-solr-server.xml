@@ -56,7 +56,7 @@
         <property name="maxTotalConnections" value="125"/>
     </bean>
     
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.mongodb.impl.MongoDBServerImpl">
+    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.MongoDBServerImpl">
     	<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
