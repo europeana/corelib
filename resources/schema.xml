@@ -91,6 +91,7 @@
 			default="NOW" multiValued="false" />
 		<field name="spell" type="textSpell" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
+		<field name="europeana_collectionName" type="string" indexed="true" stored="true" multiValued="false" />
 		<field name="europeana_id" type="string" indexed="true"
 			required="true" multiValued="false" stored="true" />
 		<field name="description" type="text" indexed="true" stored="true"
@@ -99,28 +100,17 @@
 			multiValued="true" />
 		<field name="date" type="text" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="creator" type="title" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="format" type="text" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="publisher" type="text" indexed="true" stored="true"
-			multiValued="true" />
 		<field name="subject" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
-		<field name="contributor" type="title" indexed="true" stored="true"
+		<field name="creator" type="title" indexed="true" stored="true"
 			multiValued="true" termVectors="false" />
 		<field name="source" type="text" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="language" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="rights" type="text" indexed="true" stored="true"
-			multiValued="true" />
+		<field name="dataProvider" type="string" indexed="true" stored="true" multiValued="true" />
 		<field name="identifier" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="relation" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="country" type="text" indexed="true" stored="true"
-			multivalued="true" />
+		<field name="relation" type="string" indexed="true" stored="true" multiValued="true"/>
+		<field name="usertags" type="text" indexed="true" stored="true" multiValued="true />"
 		<field name="title" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="false" />
 		<field name="who" type="text" indexed="true" stored="true"
@@ -131,15 +121,10 @@
 			multiValued="true" termVectors="false" />
 		<field name="where" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="false" />
-		<field name="CONTRIBUTOR" type="string" indexed="true" stored="true"
-			multiValued="true" />
+	
 		<field name="UGC" type="string" indexed="true" stored="true"
 			multiValued="false" />
 		<field name="LANGUAGE" type="string" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="LOCATION" type="string" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="SUBJECT" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="TYPE" type="string" indexed="true" stored="true"
 			multiValued="true" />
@@ -147,11 +132,7 @@
 			multiValued="true" />
 		<field name="PROVIDER" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="DATA_PROVIDER" type="string" indexed="true" stored="true"
-			multiValued="true" />
 		<field name="COUNTRY" type="string" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="USERTAGS" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="RIGHTS" type="string" indexed="true" stored="true"
 			multiValued="true" />
@@ -160,8 +141,8 @@
 
 		<field name="ore_aggregation" type="string" indexed="true"
 			stored="false" multiValued="false" />
-		<field name="edm_europeana_aggregation" type="string" indexed="false"
-			stored="true" multiValued="false" />
+		<field name="edm_europeana_aggregation" type="string" indexed="true"
+			stored="false" multiValued="false" />
 		<field name="edm_aggregatedCHO" type="string" indexed="true"
 			stored="false" multiValued="false" />
 		<field name="edm_dataProvider" type="string" indexed="true"
@@ -177,18 +158,18 @@
 		<field name="edm_provider" type="string" indexed="true" stored="false"
 			multiValued="false" />
 		<field name="aggr_dc_rights" type="string" indexed="true"
-			stored="true" multiValued="false" />
+			stored="true" multiValued="true" />
 		<field name="aggr_edm_rights" type="string" indexed="true"
 			stored="true" multiValued="false" />
 
 		<field name="edm_webResource" type="string" indexed="true"
 			stored="false" multiValued="false" />
-		<field name="wr_dc_rights" type="string" indexed="true" stored="false"
+		<field name="wr_dc_rights" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="wr_edm_rights" type="string" indexed="true" stored="false"
+		<field name="wr_edm_rights" type="string" indexed="true" stored="true"
 			multiValued="false" />
 
-		<field name="ore_proxy" type="string" indexed="true" stored="false"
+		<field name="ore_proxy" type="string" indexed="true" stored="true"
 			multiValued="false" />
 		<field name="owl_sameAs" type="string" indexed="true" stored="true"
 			multiValued="true" />
@@ -221,10 +202,10 @@
 		<field name="dc_source" type="string" indexed="true" stored="false"
 			multiValued="true" />
 
-		<field name="prx_dc_rights" type="string" indexed="true" stored="false"
+		<field name="prx_dc_rights" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="prx_edm_rights" type="string" indexed="true"
-			stored="false" multiValued="true" />
+			stored="true" multiValued="true" />
 
 
 		<field name="dcterms_alternative" type="text" indexed="true"
@@ -273,7 +254,7 @@
 		<field name="edm_type" type="string" indexed="true" stored="false"
 			multiValued="false" />
 		<field name="edm_currentLocation_latLon" type="latlon" indexed="true"
-			stored="false" multiValued="false" />
+			stored="true" multiValued="false" />
 		<field name="edm_isNextInSequence" type="string" indexed="true"
 			stored="false" multiValued="true" />
 
@@ -298,7 +279,10 @@
 			stored="false" multiValued="true" />
 		<field name="ag_skos_note" type="string" indexed="true" stored="false"
 			multiValued="true" />
-
+		<field name="ag_edm_begin" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="ag_edm_end" type="string" indexed="true" stored="false"
+			multiValued="true" />
 
 		<field name="edm_timespan" type="text" indexed="true" stored="false"
 			multiValued="true" />
@@ -312,7 +296,12 @@
 			stored="false" multiValued="true" />
 		<field name="ts_skos_note" type="string" indexed="true" stored="false"
 			multiValued="true" />
-
+		<field name="ts_dcterms_isPartOf" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="ts_edm_begin" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="ts_edm_end" type="string" indexed="true" stored="false"
+			multiValued="true" />
 
 		<field name="edm_place" type="string" indexed="true" stored="false"
 			multiValued="true" />
@@ -402,6 +391,18 @@
 	<copyField source="dcterms_spatial" dest="subject" />
 	<copyField source="dcterms_temporal" dest="subject" />
 	<copyField source="dc_source" dest="source" />
+	<copyField source="dc_relation" dest="relation" />
+	<copyField source="dc_hasPart" dest="relation" />
+	<copyField source="dc_hasVersion" dest="relation" />
+	<copyField source="dc_isFormatOf" dest="relation" />
+	<copyField source="dc_isPartOf" dest="relation" />
+	<copyField source="dc_isReferencedBy" dest="relation" />
+	<copyField source="dc_isReplacedBy" dest="relation" />
+	<copyField source="dc_isRequiredBy" dest="relation" />
+	<copyField source="dc_isVersionOf" dest="relation" />
+	<copyField source="dc_replaces" dest="relation" />
+	<copyField source="dc_references" dest="relation" />
+	<copyField source="dc_requires" dest="relation" />
 	<copyField source="dc_title" dest="title" />
 	<copyField source="dcterms_alternative" dest="title" />
 	<copyField source="edm_type" dest="TYPE" />
@@ -409,7 +410,7 @@
 	<copyField source="country" dest="COUNTRY" />
 	<copyField source="dc_date" dest="YEAR" />
 	<copyField source="edm_provider" dest="PROVIDER" />
-	<copyField source="edm_dataProvider" dest="DATA_PROVIDER" />
+	<copyField source="edm_dataProvider" dest="dataProvider" />
 	<copyField source="aggr_edm_rights" dest="RIGHTS" />
 	<copyField source="edm_completeness" dest="COMPLETENESS" />
 	<copyField source="edm_UGC" dest="UGC" />
