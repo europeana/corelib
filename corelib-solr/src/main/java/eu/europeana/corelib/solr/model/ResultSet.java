@@ -1,23 +1,20 @@
 /*
- * Copyright 2007 EDL FOUNDATION
+ * Copyright 2007-2012 The Europeana Foundation
  *
- * Licensed under the EUPL, Version 1.0 or? as soon they
- * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
- * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
  *
- * http://ec.europa.eu/idabc/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
  */
+
 package eu.europeana.corelib.solr.model;
 
 import java.util.List;
@@ -41,7 +38,7 @@ public class ResultSet<T extends IdBean> {
 	
 	private long resultSize;
 	
-	private int searchTime;
+	private long searchTime;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -92,12 +89,12 @@ public class ResultSet<T extends IdBean> {
 		return this;
 	}
 
-	public int getSearchTime() {
+	public long getSearchTime() {
 		return searchTime;
 	}
 
-	public ResultSet<T> setSearchTime(int searchTime) {
-		this.searchTime = searchTime;
+	public ResultSet<T> setSearchTime(long l) {
+		this.searchTime = l;
 		return this;
 	}
 	

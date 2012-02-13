@@ -18,38 +18,40 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
-
-import com.google.code.morphia.annotations.*;
 
 import org.bson.types.ObjectId;
 
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+
 import eu.europeana.corelib.definitions.solr.entity.Agent;
+
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Agent
- * @author yorgos.mamakis@kb.nl
- *
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
  */
 @Entity("Agent")
 public class AgentImpl implements Agent {
-	
-@Id ObjectId agentId;
-private Map<String,String> prefLabel;
-private Map<String,String> altLabel;
-private String[] note;
 
-private Date begin;
-private Date end;
+	@Id
+	ObjectId agentId;
+	private Map<String, String> prefLabel;
+	private Map<String, String> altLabel;
+	private String[] note;
+
+	private Date begin;
+	private Date end;
 
 	@Override
-	public Map<String,String> getPrefLabel() {
-		
+	public Map<String, String> getPrefLabel() {
+
 		return this.prefLabel;
 	}
 
 	@Override
-	public Map<String,String> getAltLabel() {
+	public Map<String, String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -72,35 +74,39 @@ private Date end;
 	public ObjectId getAgentId() {
 		return this.agentId;
 	}
+
 	@Override
 	public void setAgentId(ObjectId agentId) {
 		this.agentId = agentId;
 	}
+
 	@Override
-	public void setAltLabel(Map<String,String> altLabel) {
+	public void setAltLabel(Map<String, String> altLabel) {
 		this.altLabel = altLabel;
 	}
+
 	@Override
-	public void setPrefLabel(Map<String,String> prefLabel) {
+	public void setPrefLabel(Map<String, String> prefLabel) {
 		this.prefLabel = prefLabel;
 	}
+
 	@Override
 	public void setNote(String[] note) {
 		this.note = note;
 	}
-	
+
 	@Override
 	public void setBegin(Date begin) {
 		this.begin = begin;
 	}
+
 	@Override
 	public void setEnd(Date end) {
 		this.end = end;
 	}
-	
+
 	@Override
-	public boolean equals(Object o){
-		
-		return this.getAgentId().equals(((AgentImpl)o).getAgentId());
+	public boolean equals(Object o) {
+		return this.getAgentId().equals(((AgentImpl) o).getAgentId());
 	}
 }

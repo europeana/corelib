@@ -35,9 +35,6 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
  *
  */
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
-
-
-
     
     int index;
     String fullDocUrl;
@@ -330,6 +327,5 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     public String[] getDcTermsSpatial() {
         return this.dctermsSpatial;
     }
-	
 
 }

@@ -17,18 +17,18 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import org.bson.types.ObjectId;
+
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 
-import com.google.code.morphia.annotations.*;
-
-import org.bson.types.*;
-
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Concept
- * @author yorgos.mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 @Entity("Concept")

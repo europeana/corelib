@@ -25,7 +25,7 @@ import com.google.code.morphia.annotations.*;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Timespan
- * @author gmamakis
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 

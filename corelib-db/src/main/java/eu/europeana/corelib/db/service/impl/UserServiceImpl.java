@@ -22,6 +22,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ import eu.europeana.corelib.definitions.db.entity.User;
 import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -132,7 +134,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
+	public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, SolrTypeException, SolrServerException {
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -141,14 +143,17 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		SavedItemImpl savedItem = new SavedItemImpl();
-		FullBean bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
+		FullBean bean = null;
+		
+		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
+		
 		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0],
 				DatabaseDefinition.FIELDSIZE_AUTHOR));
 		return user;
 	}
 	
 	@Override
-	public User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException {
+	public User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException, SolrTypeException, SolrServerException {
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -188,8 +193,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	private FullBean populateEuropeanaUserObject(User user, String europeanaObjectId, EuropeanaUserObject instance)
-			throws DatabaseException {
-		FullBean bean = searchService.findById(europeanaObjectId);
+			throws DatabaseException,SolrTypeException, SolrServerException {
+		FullBean bean= searchService.findById(europeanaObjectId);
 		if ((user == null) || (bean == null)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}

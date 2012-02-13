@@ -27,6 +27,7 @@ import static org.junit.Assert.fail;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +47,7 @@ import eu.europeana.corelib.definitions.db.entity.Token;
 import eu.europeana.corelib.definitions.db.entity.User;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
+import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 
 /**
@@ -278,9 +280,20 @@ public class UserServiceTest {
 			fail("This line should never be reached!!!");
 		} catch (DatabaseException e) {
 			// expecting this
+		} catch (SolrTypeException e) {
+			// should not reach here
+		} catch (SolrServerException e) {
+			// should not reach here
 		}
 		
-		userService.createSavedItem(user.getId(), EUROPEANA_ID);
+		try {
+			userService.createSavedItem(user.getId(), EUROPEANA_ID);
+		} catch (SolrTypeException e) {
+			// should not reach here
+			e.printStackTrace();
+		} catch (SolrServerException e) {
+			//should not reach here
+		}
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Items list should be one!", user.getSavedItems().size() == 1);
 		
@@ -318,9 +331,22 @@ public class UserServiceTest {
 			fail("This line should never be reached!!!");
 		} catch (DatabaseException e) {
 			// expecting this
+		} catch (SolrTypeException e) {
+			// should not reach here
+			
+		} catch (SolrServerException e) {
+			// should not reach here
 		}
 		
-		userService.createSocialTag(user.getId(), EUROPEANA_ID, TAG);
+		
+		try {
+			userService.createSocialTag(user.getId(), EUROPEANA_ID, TAG);
+		} catch (SolrTypeException e) {
+			// should not reach here
+			e.printStackTrace();
+		} catch (SolrServerException e) {
+			// should not reach here
+		}
 		user = userService.findByEmail(EMAIL);
 		assertTrue("SocialTag list should be one!", user.getSocialTags().size() == 1);
 		

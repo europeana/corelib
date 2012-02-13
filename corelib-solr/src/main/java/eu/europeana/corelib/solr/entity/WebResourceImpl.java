@@ -23,7 +23,7 @@ import com.google.code.morphia.annotations.*;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
- * @author yorgos.mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 @Entity("Webresource")

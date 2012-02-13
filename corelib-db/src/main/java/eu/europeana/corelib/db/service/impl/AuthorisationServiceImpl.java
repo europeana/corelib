@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.solr.client.solrj.SolrServerException;
 
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.AuthenticationImpl;
@@ -32,6 +33,7 @@ import eu.europeana.corelib.db.service.AuthorisationService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.definitions.db.entity.Authentication;
 import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -107,7 +109,7 @@ public class AuthorisationServiceImpl implements AuthorisationService {
 	}
 
 	@Override
-	public User createSavedItem(String apiKey, String authKey, String europeanaObjectId) throws DatabaseException {
+	public User createSavedItem(String apiKey, String authKey, String europeanaObjectId) throws DatabaseException, SolrTypeException, SolrServerException {
 		User user = getUser(apiKey, authKey);
 		if (user != null) {
 			userService.createSavedItem(user.getId(), europeanaObjectId);
@@ -117,7 +119,7 @@ public class AuthorisationServiceImpl implements AuthorisationService {
 
 	@Override
 	public User createSocialTag(String apiKey, String authKey, String europeanaObjectId, String tag)
-			throws DatabaseException {
+			throws DatabaseException, SolrTypeException, SolrServerException {
 		User user = getUser(apiKey, authKey);
 		if (user != null) {
 			userService.createSocialTag(user.getId(), europeanaObjectId, tag);

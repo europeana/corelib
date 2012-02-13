@@ -1,4 +1,21 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.server.impl;
+
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrRequest;
@@ -26,16 +43,18 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
         this.server = isRemoteServer(baseUrl) ? makeRemoteSolrServer(baseUrl) : makeLocalSolrServer(baseUrl); 
         this.baseUrl = baseUrl;
     }
-
+    
     private boolean isRemoteServer(String baseUrl) {
         return StringUtils.startsWith(baseUrl, "http://");
     }
+    
 
     CommonsHttpSolrServer makeRemoteSolrServer(String baseUrl) throws Exception {
         CommonsHttpSolrServer remoteSolrServer = new CommonsHttpSolrServer(baseUrl);
         remoteSolrServer.setFollowRedirects(false);
         return remoteSolrServer;
     }
+    
 
     EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws Exception {
         if (System.getProperty("solr.solr.home") == null) {
@@ -47,24 +66,28 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
         return localSolrServer;
     }
 
+    @Override
     public void setConnectionTimeout(int timeout) {
         if (server instanceof CommonsHttpSolrServer) {
             ((CommonsHttpSolrServer)server).setConnectionTimeout(timeout);
         }
     }
 
+    @Override
     public void setSoTimeout(int timeout) {
         if (server instanceof CommonsHttpSolrServer) {
             ((CommonsHttpSolrServer)server).setSoTimeout(timeout);
         }
     }
 
+    @Override
     public void setDefaultMaxConnectionsPerHost(int connections) {
         if (server instanceof CommonsHttpSolrServer) {
             ((CommonsHttpSolrServer)server).setDefaultMaxConnectionsPerHost(connections);
         }
     }
 
+    @Override
     public void setMaxTotalConnections(int connections) {
         if (server instanceof CommonsHttpSolrServer) {
             ((CommonsHttpSolrServer)server).setMaxTotalConnections(connections);
@@ -75,10 +98,12 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
 
     private int suspendAfterTimeout = 0;
 
+    @Override
     public void setSuspendAfterTimeout(int suspendAfterTimeout) {
         this.suspendAfterTimeout = suspendAfterTimeout;
     }
 
+    @Override
     public boolean isActive() {
         if (activeFrom < 0) {
             return true;
@@ -90,10 +115,12 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
         return false; 
     }
 
+    @Override
     public void suspend() {
         activeFrom = new Date().getTime() + suspendAfterTimeout;
     }
 
+    @Override
     public String getActiveFrom() {
         if (activeFrom > 0) {
             return new Date(activeFrom).toString();

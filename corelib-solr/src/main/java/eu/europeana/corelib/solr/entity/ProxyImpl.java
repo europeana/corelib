@@ -25,7 +25,7 @@ import com.google.code.morphia.annotations.*;
 import org.bson.types.*;
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.Proxy
- * @author yorgos.mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 

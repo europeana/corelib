@@ -1,6 +1,25 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
+
 package eu.europeana.corelib.solr;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +56,6 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.mongodb.MongoDBServer;
 import eu.europeana.corelib.solr.service.SearchService;
-import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 
 /**
  * 
@@ -119,7 +137,13 @@ public class FullBeanTest {
 		assertArrayEquals(fullBean.getYear(),testFullBean.getYear());
 		assertArrayEquals(fullBean.getEdmWebResource(),testFullBean.getEdmWebResource());
 		
-		FullBean fullBeanSearch =  searchService.findById(fullBeanKey.getId().toString());
+		FullBean fullBeanSearch = null;
+		try {
+			fullBeanSearch = searchService.findById(fullBeanKey.getId().toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals(fullBean,fullBeanSearch);
 	}
 

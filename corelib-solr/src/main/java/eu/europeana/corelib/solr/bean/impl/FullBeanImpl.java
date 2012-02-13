@@ -27,6 +27,7 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.annotations.*;
 
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
@@ -61,7 +62,7 @@ public class FullBeanImpl implements FullBean {
 	private String[] language;
 	private DocType type;
 	private int europeanaCompleteness;
-	
+	@Transient private ArrayList<BriefBeanImpl> relatedItems;
 	@Reference private ArrayList<PlaceImpl> places;
 	@Reference private ArrayList<AgentImpl> agents;
 	@Reference private ArrayList<TimespanImpl> timespans;
@@ -1007,6 +1008,18 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public boolean equals(Object o){
 		return this.getId().equals(((FullBean)o).getId()); 
+	}
+
+	@Override
+	public List<? extends BriefBean> getRelatedItems() {
+		return this.relatedItems;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
+		this.relatedItems = (ArrayList<BriefBeanImpl>) relatedItems;
+		
 	}
 
 }

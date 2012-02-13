@@ -17,37 +17,39 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.*;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 
 import eu.europeana.corelib.definitions.solr.entity.Place;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Place
- * @author yorgos.mamakis@kb.nl
- *
+ * @author Yorgos.Mamakis@kb.nl
+ * 
  */
 @Entity("Place")
 public class PlaceImpl implements Place {
-@Id ObjectId placeId;
+	@Id
+	ObjectId placeId;
 
-private Map<String,String> prefLabel;
-private Map<String,String> altLabel;
-private String[] note;
-private String[] isPartOf;
-private float latitude;
-private float longitude;
+	private Map<String, String> prefLabel;
+	private Map<String, String> altLabel;
+	private String[] note;
+	private String[] isPartOf;
+	private float latitude;
+	private float longitude;
+
 	@Override
-	public Map<String,String> getPrefLabel() {
+	public Map<String, String> getPrefLabel() {
 		return this.prefLabel;
 	}
 
 	@Override
-	public Map<String,String> getAltLabel() {
+	public Map<String, String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -77,45 +79,45 @@ private float longitude;
 	}
 
 	@Override
-	public void setAltLabel(Map<String,String> altLabel) {
+	public void setAltLabel(Map<String, String> altLabel) {
 		this.altLabel = altLabel;
-		
+
 	}
 
 	@Override
 	public void setNote(String[] note) {
 		this.note = note;
-		
+
 	}
 
 	@Override
-	public void setPrefLabel(Map<String,String> prefLabel) {
+	public void setPrefLabel(Map<String, String> prefLabel) {
 		this.prefLabel = prefLabel;
-		
+
 	}
-	
+
 	@Override
 	public void setPlaceId(ObjectId placeId) {
 		this.placeId = placeId;
 	}
-	
+
 	@Override
 	public void setIsPartOf(String[] isPartOf) {
 		this.isPartOf = isPartOf;
 	}
-	
+
 	@Override
 	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
-	
+
 	@Override
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
 
 	@Override
-	public boolean equals(Object o){
-		return this.getPlaceId().equals(((PlaceImpl)o).getPlaceId());
+	public boolean equals(Object o) {
+		return this.getPlaceId().equals(((PlaceImpl) o).getPlaceId());
 	}
 }

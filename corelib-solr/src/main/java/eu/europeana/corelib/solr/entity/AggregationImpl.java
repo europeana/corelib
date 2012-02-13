@@ -29,7 +29,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
- * @author yorgos.mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 @Entity("Aggregation")
@@ -44,8 +44,9 @@ public class AggregationImpl implements Aggregation {
 	private String edmProvider;
 	private String edmRights;
 	private String[] dcRights;
-	@Embedded private ArrayList<WebResource> webResources;
-	
+	@Embedded
+	private ArrayList<WebResource> webResources;
+
 	@Override
 	public void setAggregationId(ObjectId aggregationId) {
 		this.aggregationId = aggregationId;
@@ -137,8 +138,9 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public boolean equals(Object o){
-		return this.getAggregationId().equals(((AggregationImpl)o).getAggregationId());
+	public boolean equals(Object o) {
+		return this.getAggregationId().equals(
+				((AggregationImpl) o).getAggregationId());
 	}
 
 }
