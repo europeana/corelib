@@ -25,37 +25,37 @@ package eu.europeana.corelib.definitions.db;
 public interface DatabaseDefinition {
 	
 	// apikey
-	final String TABLENAME_APIKEY = "apikey";
-	final int FIELDSIZE_APIKEY = 30;
+	String TABLENAME_APIKEY = "apikey";
+	int FIELDSIZE_APIKEY = 30;
 	
 	// authentication
-	final String TABLENAME_AUTHENTICATION = "authentication";
+	String TABLENAME_AUTHENTICATION = "authentication";
 
 	// user
-	final String TABLENAME_USER = "users";
-	final int FIELDSIZE_PERSONAL = 100;
-	final int FIELDSIZE_PASSWORD = 64;
-	final int FIELDSIZE_USERNAME = 60;
-	final int FIELDSIZE_ROLE = 25;
+	String TABLENAME_USER = "users";
+	int FIELDSIZE_PERSONAL = 100;
+	int FIELDSIZE_PASSWORD = 64;
+	int FIELDSIZE_USERNAME = 60;
+	int FIELDSIZE_ROLE = 25;
 
 	// token
-	final String TABLENAME_TOKEN = "token";
-	final int FIELDSIZE_TOKEN = 32;
+	String TABLENAME_TOKEN = "token";
+	int FIELDSIZE_TOKEN = 32;
 
 	// saved search
-	final String TABLENAME_SAVEDSEARCH = "SavedSearch";
-	final int FIELDSIZE_QUERY = 200;
-	final int FIELDSIZE_QUERY_STRING = 200;
+	String TABLENAME_SAVEDSEARCH = "SavedSearch";
+	int FIELDSIZE_QUERY = 200;
+	int FIELDSIZE_QUERY_STRING = 200;
 
 	// saved item
-	final String TABLENAME_SAVEDITEM = "SavedItem";
-	final int FIELDSIZE_TITLE = 120;
-	final int FIELDSIZE_AUTHOR = 80;
-	final int FIELDSIZE_DOCTYPE = 10;
-	final int FIELDSIZE_EUROPEANA_URI = 256;
-	final int FIELDSIZE_EUROPEANA_OBJECT = 256;
+	String TABLENAME_SAVEDITEM = "SavedItem";
+	int FIELDSIZE_TITLE = 120;
+	int FIELDSIZE_AUTHOR = 80;
+	int FIELDSIZE_DOCTYPE = 10;
+	int FIELDSIZE_EUROPEANA_URI = 256;
+	int FIELDSIZE_EUROPEANA_OBJECT = 256;
 
 	// social tags
-	final String TABLENAME_SOCIALTAGS = "SocialTag";
-	final int FIELDSIZE_TAG = 60;
+	String TABLENAME_SOCIALTAGS = "SocialTag";
+	int FIELDSIZE_TAG = 60;
 }

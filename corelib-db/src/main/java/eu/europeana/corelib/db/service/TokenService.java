@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.db.entity.Token;
  */
 public interface TokenService extends AbstractService<Token> {
 
-	final int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
+	int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
 
 	/**
 	 * Creates a new email token
