@@ -51,7 +51,7 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public void setWebResourceDcRights(String[] webResourceDcRights) {
-		this.webResourceDcRights = webResourceDcRights;
+		this.webResourceDcRights = webResourceDcRights.clone();
 	}
 
 	@Override

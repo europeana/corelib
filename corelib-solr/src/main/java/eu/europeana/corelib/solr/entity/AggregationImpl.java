@@ -84,7 +84,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public void setDcRights(String[] dcRights) {
-		this.dcRights = dcRights;
+		this.dcRights = dcRights.clone();
 	}
 
 	@Override

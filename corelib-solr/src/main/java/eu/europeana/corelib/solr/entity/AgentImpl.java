@@ -92,7 +92,7 @@ public class AgentImpl implements Agent {
 
 	@Override
 	public void setNote(String[] note) {
-		this.note = note;
+		this.note = note.clone();
 	}
 
 	@Override

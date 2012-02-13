@@ -296,192 +296,192 @@ public class ProxyImpl implements Proxy {
 
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
-		this.owlSameAs = owlSameAs;
+		this.owlSameAs = owlSameAs.clone();
 	}
 
 	@Override
 	public void setDcContributor(String[] dcContributor) {
-		this.dcContributor = dcContributor;
+		this.dcContributor = dcContributor.clone();
 	}
 
 	@Override
 	public void setDcCoverage(String[] dcCoverage) {
-		this.dcCoverage = dcCoverage;
+		this.dcCoverage = dcCoverage.clone();
 	}
 
 	@Override
 	public void setDcCreator(String[] dcCreator) {
-		this.dcCreator = dcCreator;
+		this.dcCreator = dcCreator.clone();
 	}
 
 	@Override
 	public void setDcDate(Date[] dcDate) {
-		this.dcDate = dcDate;
+		this.dcDate = dcDate.clone();
 	}
 
 	@Override
 	public void setDcDescription(String[] dcDescription) {
-		this.dcDescription = dcDescription;
+		this.dcDescription = dcDescription.clone();
 	}
 
 	@Override
 	public void setDcFormat(String[] dcFormat) {
-		this.dcFormat = dcFormat;
+		this.dcFormat = dcFormat.clone();
 	}
 
 	@Override
 	public void setDcIdentifier(String[] dcIdentifier) {
-		this.dcIdentifier = dcIdentifier;
+		this.dcIdentifier = dcIdentifier.clone();
 	}
 
 	@Override
 	public void setDcLanguage(String[] dcLanguage) {
-		this.dcLanguage = dcLanguage;
+		this.dcLanguage = dcLanguage.clone();
 	}
 
 	@Override
 	public void setDcPublisher(String[] dcPublisher) {
-		this.dcPublisher = dcPublisher;
+		this.dcPublisher = dcPublisher.clone();
 	}
 
 	@Override
 	public void setDcRelation(String[] dcRelation) {
-		this.dcRelation = dcRelation;
+		this.dcRelation = dcRelation.clone();
 	}
 
 	@Override
 	public void setDcRights(String[] dcRights) {
-		this.dcRights = dcRights;
+		this.dcRights = dcRights.clone();
 	}
 
 	@Override
 	public void setDcSource(String[] dcSource) {
-		this.dcSource = dcSource;
+		this.dcSource = dcSource.clone();
 	}
 
 	@Override
 	public void setDcSubject(String[] dcSubject) {
-		this.dcSubject = dcSubject;
+		this.dcSubject = dcSubject.clone();
 	}
 
 	@Override
 	public void setDcTitle(String[] dcTitle) {
-		this.dcTitle = dcTitle;
+		this.dcTitle = dcTitle.clone();
 	}
 
 	@Override
 	public void setDcType(String[] dcType) {
-		this.dcType = dcType;
+		this.dcType = dcType.clone();
 	}
 
 	@Override
 	public void setDctermsAlternative(String[] dctermsAlternative) {
-		this.dctermsAlternative = dctermsAlternative;
+		this.dctermsAlternative = dctermsAlternative.clone();
 	}
 
 	@Override
 	public void setDctermsConformsTo(String[] dctermsConformsTo) {
-		this.dctermsConformsTo = dctermsConformsTo;
+		this.dctermsConformsTo = dctermsConformsTo.clone();
 	}
 
 	@Override
 	public void setDctermsCreated(Date[] dctermsCreated) {
-		this.dctermsCreated = dctermsCreated;
+		this.dctermsCreated = dctermsCreated.clone();
 	}
 
 	@Override
 	public void setDctermsExtent(String[] dctermsExtent) {
-		this.dctermsExtent = dctermsExtent;
+		this.dctermsExtent = dctermsExtent.clone();
 	}
 
 	@Override
 	public void setDctermsHasFormat(String[] dctermsHasFormat) {
-		this.dctermsHasFormat = dctermsHasFormat;
+		this.dctermsHasFormat = dctermsHasFormat.clone();
 	}
 
 	@Override
 	public void setDctermsHasPart(String[] dctermsHasPart) {
-		this.dctermsHasPart = dctermsHasPart;
+		this.dctermsHasPart = dctermsHasPart.clone();
 	}
 
 	@Override
 	public void setDctermsHasVersion(String[] dctermsHasVersion) {
-		this.dctermsHasVersion = dctermsHasVersion;
+		this.dctermsHasVersion = dctermsHasVersion.clone();
 	}
 
 	@Override
 	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
-		this.dctermsIsFormatOf = dctermsIsFormatOf;
+		this.dctermsIsFormatOf = dctermsIsFormatOf.clone();
 	}
 
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
-		this.dctermsIsPartOf = dctermsIsPartOf;
+		this.dctermsIsPartOf = dctermsIsPartOf.clone();
 	}
 
 	@Override
 	public void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy) {
-		this.dctermsIsReferencedBy = dctermsIsReferencedBy;
+		this.dctermsIsReferencedBy = dctermsIsReferencedBy.clone();
 	}
 
 	@Override
 	public void setDctermsIsReplacedBy(String[] dctermsIsReplacedBy) {
-		this.dctermsIsReplacedBy = dctermsIsReplacedBy;
+		this.dctermsIsReplacedBy = dctermsIsReplacedBy.clone();
 	}
 
 	@Override
 	public void setDctermsIsRequiredBy(String[] dctermsIsRequiredBy) {
-		this.dctermsIsRequiredBy = dctermsIsRequiredBy;
+		this.dctermsIsRequiredBy = dctermsIsRequiredBy.clone();
 	}
 
 	@Override
 	public void setDctermsIssued(String[] dctermsIssued) {
-		this.dctermsIssued = dctermsIssued;
+		this.dctermsIssued = dctermsIssued.clone();
 	}
 
 	@Override
 	public void setDctermsIsVersionOf(String[] dctermsIsVersionOf) {
-		this.dctermsIsVersionOf = dctermsIsVersionOf;
+		this.dctermsIsVersionOf = dctermsIsVersionOf.clone();
 	}
 
 	@Override
 	public void setDctermsMedium(String[] dctermsMedium) {
-		this.dctermsMedium = dctermsMedium;
+		this.dctermsMedium = dctermsMedium.clone();
 	}
 
 	@Override
 	public void setDctermsProvenance(String[] dctermsProvenance) {
-		this.dctermsProvenance = dctermsProvenance;
+		this.dctermsProvenance = dctermsProvenance.clone();
 	}
 
 	@Override
 	public void setDctermsReferences(String[] dctermsReferences) {
-		this.dctermsReferences = dctermsReferences;
+		this.dctermsReferences = dctermsReferences.clone();
 	}
 
 	@Override
 	public void setDctermsReplaces(String[] dctermsReplaces) {
-		this.dctermsReplaces = dctermsReplaces;
+		this.dctermsReplaces = dctermsReplaces.clone();
 	}
 
 	@Override
 	public void setDctermsRequires(String[] dctermsRequires) {
-		this.dctermsRequires = dctermsRequires;
+		this.dctermsRequires = dctermsRequires.clone();
 	}
 
 	@Override
 	public void setDctermsSpatial(String[] dctermsSpatial) {
-		this.dctermsSpatial = dctermsSpatial;
+		this.dctermsSpatial = dctermsSpatial.clone();
 	}
 
 	@Override
 	public void setDctermsTOC(String[] dctermsTOC) {
-		this.dctermsTOC = dctermsTOC;
+		this.dctermsTOC = dctermsTOC.clone();
 	}
 
 	@Override
 	public void setDctermsTemporal(String[] dctermsTemporal) {
-		this.dctermsTemporal = dctermsTemporal;
+		this.dctermsTemporal = dctermsTemporal.clone();
 	}
 
 	@Override

@@ -28,7 +28,7 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Place
- * @author Yorgos.Mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 @Entity("Place")
@@ -86,7 +86,7 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public void setNote(String[] note) {
-		this.note = note;
+		this.note = note.clone();
 
 	}
 
@@ -103,7 +103,7 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public void setIsPartOf(String[] isPartOf) {
-		this.isPartOf = isPartOf;
+		this.isPartOf = isPartOf.clone();
 	}
 
 	@Override

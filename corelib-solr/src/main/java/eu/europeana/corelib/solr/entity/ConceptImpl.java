@@ -75,7 +75,7 @@ private String[] broader;
 
 	@Override
 	public void setNote(String[] note) {
-		this.note=note;
+		this.note=note.clone();
 		
 	}
 
@@ -90,7 +90,7 @@ private String[] broader;
 	}
 	@Override
 	public void setBroader(String[] broader) {
-		this.broader = broader;
+		this.broader = broader.clone();
 	}
 
 	@Override

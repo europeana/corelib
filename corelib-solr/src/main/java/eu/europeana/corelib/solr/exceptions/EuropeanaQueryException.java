@@ -21,7 +21,7 @@ import eu.europeana.corelib.definitions.exception.EuropeanaException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 /**
  * SOLR query exception
- * @author yorgos.mamakis@ kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 public class EuropeanaQueryException extends EuropeanaException {

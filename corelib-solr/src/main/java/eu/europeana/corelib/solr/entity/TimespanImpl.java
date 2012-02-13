@@ -93,7 +93,7 @@ public class TimespanImpl implements
 	
 	@Override
 	public void setNote(String[] note) {
-		this.note = note;
+		this.note = note.clone();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class TimespanImpl implements
 
 	@Override
 	public void setIsPartOf(String[] isPartOf) {
-		this.isPartOf = isPartOf;
+		this.isPartOf = isPartOf.clone();
 	}
 	@Override
 	public boolean equals(Object o){

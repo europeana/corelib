@@ -159,27 +159,27 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setTitle(String[] title) {
-		this.title = title;
+		this.title = title.clone();
 	}
 
 	@Override
 	public void setCreator(String[] creator) {
-		this.creator = creator;
+		this.creator = creator.clone();
 	}
 
 	@Override
 	public void setYear(String[] year) {
-		this.year = year;
+		this.year = year.clone();
 	}
 
 	@Override
 	public void setProvider(String[] provider) {
-		this.provider = provider;
+		this.provider = provider.clone();
 	}
 
 	@Override
 	public void setLanguage(String[] language) {
-		this.language = language;
+		this.language = language.clone();
 	}
 
 	@Override
