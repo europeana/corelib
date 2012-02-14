@@ -75,31 +75,31 @@ public class SearchServiceImpl implements SearchService {
 		if (!solrServer1.isActive() && !solrServer2.isActive()) {
 			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
 		}
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""+europeanaObjectId+"\"");
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
 		solrQuery.setQueryType(QueryType.MORE_LIKE_THIS.toString());
-		
+
 		QueryResponse queryResponse = null;
-		
+
 		try {
 			queryResponse = getSolrServer().query(solrQuery);
 		} catch (SolrServerException e) {
 			throw new SolrTypeException(e, ProblemType.UNKNOWN);
 		}
-		
+
 		FullBean fullBean = mongoServer.getFullBean(id);
-		
+
 		fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
 		return fullBean;
 	}
 
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz,Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
 
 		if (!solrServer1.isActive() && !solrServer2.isActive()) {
 			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
 		}
-		if (beanClazz.isInstance(BriefBean.class)|| beanClazz.isInstance(ApiBean.class)) {
+		if (beanClazz.isInstance(BriefBean.class) || beanClazz.isInstance(ApiBean.class)) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtil.checkTypeFacet(refinements)) {
 				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
@@ -140,6 +140,7 @@ public class SearchServiceImpl implements SearchService {
 
 	/**
 	 * Get the active SolrServer defaults to solrServer1
+	 * 
 	 * @return The solrServer to query
 	 */
 	private SolrServer getSolrServer() {

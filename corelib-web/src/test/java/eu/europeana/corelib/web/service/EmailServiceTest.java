@@ -26,7 +26,6 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

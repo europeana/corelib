@@ -23,82 +23,81 @@ import java.util.Map;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 
-
 /**
- * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine
- * for presenting each record in the result and search page.
- *    
+ * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine for presenting each record
+ * in the result and search page.
+ * 
  * NOTE: TBD what is going to be placed here
  * 
  * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
  */
 public interface BriefBean extends IdBean {
 
-	 	String[] getTitle();
+	String[] getTitle();
 
-	    String[] getEdmObject();
+	String[] getEdmObject();
 
-	    String[] getCreator(); //creator copyfields dc_creator, dc_contributor
+	String[] getCreator(); // creator copyfields dc_creator, dc_contributor
 
-	    String[] getYear(); //YEAR copyfield dc_date
+	String[] getYear(); // YEAR copyfield dc_date
 
-	    String[] getProvider(); //PROVIDER copyfield edm_provider
+	String[] getProvider(); // PROVIDER copyfield edm_provider
 
-	    String[] getDataProvider(); //DATA_PROVIDER copyfield edm_dataProvider
+	String[] getDataProvider(); // DATA_PROVIDER copyfield edm_dataProvider
 
-	    String[] getLanguage(); //LANGUAGE copyfield dc_language
+	String[] getLanguage(); // LANGUAGE copyfield dc_language
 
-	    DocType getType(); //TYPE copyfield edm_type
-	    
-	    // here the dcterms namespaces starts
+	DocType getType(); // TYPE copyfield edm_type
 
-	    String[] getDcTermsIsPartOf();
+	// here the dcterms namespaces starts
 
-	    String[] getDcTermsSpatial();
+	String[] getDcTermsIsPartOf();
 
-	    // Ranking and Enrichment terms
+	String[] getDcTermsSpatial();
 
-	    int getEuropeanaCompleteness();
+	// Ranking and Enrichment terms
 
-	    String[] getAggregationEdmRights();
+	int getEuropeanaCompleteness();
 
-	    String[] getEdmPlace();
+	String[] getAggregationEdmRights();
 
-	    List<Map<String,String>> getEdmPlaceLabel();
+	String[] getEdmPlace();
 
-	    Float[] getEdmPlaceLatitude();
+	List<Map<String, String>> getEdmPlaceLabel();
 
-	    Float[] getEdmPlaceLongitude();
+	Float[] getEdmPlaceLatitude();
 
-	    String[] getEdmTimespan();
+	Float[] getEdmPlaceLongitude();
 
-	    List<Map<String,String>> getEdmTimespanLabel();
+	String[] getEdmTimespan();
 
-	    Date[] getEdmTimespanBegin();
+	List<Map<String, String>> getEdmTimespanLabel();
 
-	    Date[] getEdmTimespanEnd();
+	Date[] getEdmTimespanBegin();
 
-	    String[] getEdmConcept(); //skos:concept 
+	Date[] getEdmTimespanEnd();
 
-	    List<Map<String,String>> getEdmConceptLabel(); //skos:concept prefLabel
+	String[] getEdmConcept(); // skos:concept
 
-	    String[] getEdmConceptBroaderTerm(); //skos:concept broader
+	List<Map<String, String>> getEdmConceptLabel(); // skos:concept prefLabel
 
-	    String[] getEdmAgent();
+	String[] getEdmConceptBroaderTerm(); // skos:concept broader
 
-	    List<Map<String,String>> getEdmAgentLabel();
+	String[] getEdmAgent();
 
-		String getFullDocUrl();
+	List<Map<String, String>> getEdmAgentLabel();
 
-		String[] getDcTermsHasPart();
+	String getFullDocUrl();
 
-		List<Map<String,String>> getEdmPlaceAltLabel();
+	String[] getDcTermsHasPart();
 
-		List<Map<String,String>> getEdmConceptBroaderLabel();
+	List<Map<String, String>> getEdmPlaceAltLabel();
 
-		String[] getEdmTimespanBroaderTerm();
+	List<Map<String, String>> getEdmConceptBroaderLabel();
 
-		List<Map<String,String>> getEdmTimespanBroaderLabel();
+	String[] getEdmTimespanBroaderTerm();
 
-		String[] getEdmPlaceBroaderTerm();
+	List<Map<String, String>> getEdmTimespanBroaderLabel();
+
+	String[] getEdmPlaceBroaderTerm();
 }

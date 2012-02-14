@@ -17,23 +17,14 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-
-import org.apache.solr.client.solrj.beans.Field;
-
-import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.ApiBean
  * 
  * @author Yorgos.Mamakis@kb.nl
- *
+ * 
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
-
-	
 
 }

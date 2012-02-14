@@ -17,23 +17,12 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import eu.europeana.corelib.definitions.solr.DocType;
-
 /**
- * Interface for the APIBean. The APIBean contains the fields exposed by the SOLR engine
- * for public access.   
- * NOTE: Draft to be crosschecked and validated over time
+ * Interface for the APIBean. The APIBean contains the fields exposed by the SOLR engine for public access. NOTE: Draft
+ * to be crosschecked and validated over time
  * 
- * @author Gerald de Jong <geralddejong@gmail.com>
- * @author Sjoerd Siebinga <sjoerd.siebinga@gmail.com>
  * @author Yorgos Mamakis <yorgos.mamakis@ kb.nl>
  */
-
 public interface ApiBean extends BriefBean {
 
-   
 }

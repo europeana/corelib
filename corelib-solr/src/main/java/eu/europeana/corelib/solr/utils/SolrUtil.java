@@ -18,34 +18,33 @@
 package eu.europeana.corelib.solr.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
 
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.model.Query;
+
 /**
  * Set of utils for SOLR queries
  * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public class SolrUtil {
-	
+
 	/**
 	 * Checks if the Facet is TYPE that everything is uppercase and known DocType according to EDM
+	 * 
 	 * @param refinements
 	 * @return
 	 */
-	public static boolean checkTypeFacet(String[] refinements){
-		for (String refinement:refinements){
-			if (StringUtils.startsWith(refinement, "TYPE:")){
-				if (!StringUtils.isAllUpperCase(StringUtils.split(refinement,":")[1]) || StringUtils.split(refinement,":").length!=2){
+	public static boolean checkTypeFacet(String[] refinements) {
+		for (String refinement : refinements) {
+			if (StringUtils.startsWith(refinement, "TYPE:")) {
+				if (!StringUtils.isAllUpperCase(StringUtils.split(refinement, ":")[1])
+						|| StringUtils.split(refinement, ":").length != 2) {
 					return false;
-				}
-				else{
-					try{
+				} else {
+					try {
 						DocType.get(refinement);
-					}
-					catch(IllegalArgumentException e){
+					} catch (IllegalArgumentException e) {
 						return false;
 					}
 				}

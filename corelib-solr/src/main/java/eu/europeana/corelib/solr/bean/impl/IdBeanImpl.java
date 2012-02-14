@@ -25,14 +25,13 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
  * @see eu.europeana.corelib.definitions.solr.beans.IdBean
  * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
-
 public class IdBeanImpl implements IdBean {
-	
+
 	@Field("europeana_id")
 	String id;
-	
+
 	@Override
 	public String getId() {
 		return this.id;

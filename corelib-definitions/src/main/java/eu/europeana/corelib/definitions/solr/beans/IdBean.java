@@ -18,8 +18,10 @@
 package eu.europeana.corelib.definitions.solr.beans;
 
 public interface IdBean {
+	
 	/**
 	 * Retrieve the Europeana object unique Id
+	 * 
 	 * @return The Europeana object UniqueID
 	 */
 	String getId();

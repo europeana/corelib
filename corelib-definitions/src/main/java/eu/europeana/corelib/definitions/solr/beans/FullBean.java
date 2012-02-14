@@ -405,8 +405,9 @@ public interface FullBean extends ApiBean {
 	void setTimespans(List<? extends Timespan> timespans);
 
 	List<? extends Aggregation> getAggregations();
-	
+
 	List<? extends BriefBean> getRelatedItems();
+
 	void setRelatedItems(List<? extends BriefBean> relatedItems);
 
 }
