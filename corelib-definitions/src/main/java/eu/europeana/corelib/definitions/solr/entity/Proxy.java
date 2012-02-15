@@ -363,5 +363,9 @@ public interface Proxy {
 	void setEdmCurrentLocation(String edmCurrentLocation);
 
 	void setEdmIsNextInSequence(String edmIsNextInSequence);
+
+	String getAbout();
+
+	void setAbout(String about);
 	
 }

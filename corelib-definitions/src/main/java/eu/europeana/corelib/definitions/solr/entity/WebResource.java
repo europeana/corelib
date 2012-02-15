@@ -57,5 +57,9 @@ public interface WebResource {
 	void setWebResourceDcRights(String[] webResourceDcRights);
 
 	void setWebResourceEdmRights(String webResourceEdmRights);
+
+	void setAbout(String about);
+
+	String getAbout();
 	
 }

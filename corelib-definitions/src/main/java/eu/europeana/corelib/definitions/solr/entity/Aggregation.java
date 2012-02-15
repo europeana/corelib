@@ -105,4 +105,8 @@ public interface Aggregation {
 
 	void setWebResources(List<WebResource> webResources);
 
+	String getAbout();
+
+	void setAbout(String about);
+
 }

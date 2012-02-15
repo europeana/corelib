@@ -54,4 +54,8 @@ public interface ContextualClass {
 
 	void setPrefLabel(Map<String, String> prefLabel);
 
+	String getAbout();
+
+	void setAbout(String about);
+
 }
