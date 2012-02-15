@@ -34,6 +34,7 @@ public class ProxyImpl implements Proxy {
 
 	@Id ObjectId proxyId;
 	
+	private String about;
 	private String[] owlSameAs;
 	private String[] dcContributor;
 	private String[] dcCoverage;
@@ -76,7 +77,16 @@ public class ProxyImpl implements Proxy {
 	private String edmCurrentLocation;
 	private String edmIsNextInSequence;
 	
-	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Override
 	public String[] getOwlSameAs() {
 		

@@ -40,8 +40,18 @@ public class TimespanImpl implements
 	private Date begin;
 	private Date end;
 	private String[] isPartOf;
+	private String about;
 	
-	
+	@Override	
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Override
 	public Map<String,String> getPrefLabel() {
 		return this.prefLabel;

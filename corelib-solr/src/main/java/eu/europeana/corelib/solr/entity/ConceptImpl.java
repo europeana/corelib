@@ -29,26 +29,37 @@ import eu.europeana.corelib.definitions.solr.entity.Concept;
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Concept
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 @Entity("Concept")
 public class ConceptImpl implements Concept {
-	
 
+	@Id
+	ObjectId conceptId;
 
-@Id ObjectId conceptId;
+	private Map<String, String> prefLabel;
+	private Map<String, String> altLabel;
+	private String[] note;
+	private String[] broader;
+	private String about;
 
-private Map<String,String> prefLabel;
-private Map<String,String> altLabel;
-private String[] note;
-private String[] broader;
 	@Override
-	public Map<String,String> getPrefLabel() {
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	@Override
+	public Map<String, String> getPrefLabel() {
 		return this.prefLabel;
 	}
 
 	@Override
-	public Map<String,String> getAltLabel() {
+	public Map<String, String> getAltLabel() {
 		return this.altLabel;
 	}
 
@@ -68,33 +79,35 @@ private String[] broader;
 	}
 
 	@Override
-	public void setAltLabel(Map<String,String> altLabel) {
-		this.altLabel=altLabel;
-		
+	public void setAltLabel(Map<String, String> altLabel) {
+		this.altLabel = altLabel;
+
 	}
 
 	@Override
 	public void setNote(String[] note) {
-		this.note=note.clone();
-		
+		this.note = note.clone();
+
 	}
 
 	@Override
-	public void setPrefLabel(Map<String,String> prefLabel) {
+	public void setPrefLabel(Map<String, String> prefLabel) {
 		this.prefLabel = prefLabel;
-		
+
 	}
+
 	@Override
 	public void setConceptId(ObjectId conceptId) {
 		this.conceptId = conceptId;
 	}
+
 	@Override
 	public void setBroader(String[] broader) {
 		this.broader = broader.clone();
 	}
 
 	@Override
-	public boolean equals(Object o){
-		return this.getConceptId().equals(((ConceptImpl)o).getConceptId());
+	public boolean equals(Object o) {
+		return this.getConceptId().equals(((ConceptImpl) o).getConceptId());
 	}
 }

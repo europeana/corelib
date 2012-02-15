@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,6 +112,8 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setRows(rowLimit);
 				solrQuery.setStart(query.getStart());
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
+				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+				solrQuery.setSortField("score",ORDER.desc);
 				SolrServer solrServer = getSolrServer();
 				solrServer.setConnectionTimeout(timeout);
 				solrServer.setSuspendAfterTimeout(suspendAfterTimeout);

@@ -37,13 +37,23 @@ public class AgentImpl implements Agent {
 
 	@Id
 	ObjectId agentId;
+	private String about;
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
 	private String[] note;
 
 	private Date begin;
 	private Date end;
-
+	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	
 	@Override
 	public Map<String, String> getPrefLabel() {
 

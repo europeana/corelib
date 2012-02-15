@@ -33,7 +33,18 @@ public class WebResourceImpl implements WebResource {
 	private String webResource;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
+	private String about;
 	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Override
 	public String getWebResource() {
 		return this.webResource;

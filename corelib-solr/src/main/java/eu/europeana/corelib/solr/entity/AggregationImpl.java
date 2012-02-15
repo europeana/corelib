@@ -44,6 +44,18 @@ public class AggregationImpl implements Aggregation {
 	private String edmProvider;
 	private String edmRights;
 	private String[] dcRights;
+	private String about;
+	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Embedded
 	private ArrayList<WebResource> webResources;
 

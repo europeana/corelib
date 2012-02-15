@@ -42,6 +42,17 @@ public class PlaceImpl implements Place {
 	private String[] isPartOf;
 	private float latitude;
 	private float longitude;
+	private String about;
+
+	@Override
+	public String getAbout() {
+		return about;
+	}
+
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
 
 	@Override
 	public Map<String, String> getPrefLabel() {
