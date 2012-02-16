@@ -109,4 +109,12 @@ public interface Aggregation {
 
 	void setAbout(String about);
 
+	String getEdmUgc();
+
+	void setEdmUgc(String edmUgc);
+
+	Boolean getEdmPreviewNoDistribute();
+
+	void setEdmPreviewNoDistribute(Boolean edmPreviewNoDistribute);
+
 }

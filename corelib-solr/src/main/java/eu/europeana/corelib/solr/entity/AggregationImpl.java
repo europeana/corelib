@@ -43,8 +43,31 @@ public class AggregationImpl implements Aggregation {
 	private String edmObject;
 	private String edmProvider;
 	private String edmRights;
+	private String edmUgc;
 	private String[] dcRights;
 	private String about;
+	private Boolean edmPreviewNoDistribute;
+	
+	
+	@Override
+	public Boolean getEdmPreviewNoDistribute() {
+		return edmPreviewNoDistribute;
+	}
+
+	@Override
+	public void setEdmPreviewNoDistribute(Boolean edmPreviewNoDistribute) {
+		this.edmPreviewNoDistribute = edmPreviewNoDistribute;
+	}
+
+	@Override
+	public String getEdmUgc() {
+		return edmUgc;
+	}
+	
+	@Override
+	public void setEdmUgc(String edmUgc) {
+		this.edmUgc = edmUgc;
+	}
 	
 	@Override
 	public String getAbout() {

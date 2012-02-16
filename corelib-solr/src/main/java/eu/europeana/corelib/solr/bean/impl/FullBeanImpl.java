@@ -90,7 +90,7 @@ public class FullBeanImpl implements FullBean {
 	@Reference
 	private ArrayList<AggregationImpl> aggregations;
 
-	// TODO:implement proxy and check if Europeana Aggregation needs to be stored separately
+	// TODO:check if Europeana Aggregation needs to be stored separately
 	@Reference
 	private EuropeanaAggregation europeanaAggregation;
 
@@ -222,7 +222,6 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> edmObjects = new ArrayList<String>();
 		for (Aggregation aggregation : this.aggregations) {
 			edmObjects.add(aggregation.getEdmObject());
-
 		}
 		return edmObjects.toArray(new String[edmObjects.size()]);
 	}
@@ -802,8 +801,11 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmUGC() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> edmUGCList = new ArrayList<String>();
+		for(Aggregation aggregation:this.aggregations){
+			edmUGCList.add(aggregation.getEdmUgc());
+		}
+		return edmUGCList.toArray(new String[edmUGCList.size()]);
 	}
 
 	@Override
@@ -956,8 +958,11 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Boolean[] getEdmPreviewNoDistribute() {
-		// TODO Decide where this field is stored in EDM
-		return null;
+		ArrayList<Boolean> edmPreviewNoDistributeList = new ArrayList<Boolean>();
+		for(Aggregation aggregation:aggregations){
+			edmPreviewNoDistributeList.add(aggregation.getEdmPreviewNoDistribute());
+		}
+		return edmPreviewNoDistributeList.toArray(new Boolean[edmPreviewNoDistributeList.size()]);
 	}
 
 	@Override
