@@ -73,6 +73,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 		ObjectId id = ObjectId.massageToObjectId(europeanaObjectId);
+		/*
 		if (!solrServer1.isActive() && !solrServer2.isActive()) {
 			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
 		}
@@ -86,10 +87,10 @@ public class SearchServiceImpl implements SearchService {
 		} catch (SolrServerException e) {
 			throw new SolrTypeException(e, ProblemType.UNKNOWN);
 		}
-
+*/
 		FullBean fullBean = mongoServer.getFullBean(id);
 
-		fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
+		//fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
 		return fullBean;
 	}
 
