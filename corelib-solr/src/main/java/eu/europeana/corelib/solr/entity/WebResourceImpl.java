@@ -29,10 +29,11 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Entity("Webresource")
 public class WebResourceImpl implements WebResource {
 
-	@Id ObjectId webResourceId;
+	@Id ObjectId id;
 	private String webResource;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
+	@Indexed
 	private String about;
 	
 	@Override
@@ -51,8 +52,8 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public void setWebResourceId(ObjectId webResourceId) {
-		this.webResourceId = webResourceId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -81,11 +82,11 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public ObjectId getWebResourceId() {
-		return this.webResourceId;
+	public ObjectId getId() {
+		return this.id;
 	}
 	@Override
 	public boolean equals(Object o){
-		return this.getWebResourceId().equals(((WebResourceImpl)o).getWebResourceId());
+		return this.getId().equals(((WebResourceImpl)o).getId());
 	}
 }

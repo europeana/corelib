@@ -24,6 +24,7 @@ import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Agent;
 
@@ -36,7 +37,8 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 public class AgentImpl implements Agent {
 
 	@Id
-	ObjectId agentId;
+	ObjectId id;
+	@Indexed
 	private String about;
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
@@ -81,13 +83,13 @@ public class AgentImpl implements Agent {
 	}
 
 	@Override
-	public ObjectId getAgentId() {
-		return this.agentId;
+	public ObjectId getId() {
+		return this.id;
 	}
 
 	@Override
-	public void setAgentId(ObjectId agentId) {
-		this.agentId = agentId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -117,6 +119,6 @@ public class AgentImpl implements Agent {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getAgentId().equals(((AgentImpl) o).getAgentId());
+		return this.getId().equals(((AgentImpl) o).getId());
 	}
 }

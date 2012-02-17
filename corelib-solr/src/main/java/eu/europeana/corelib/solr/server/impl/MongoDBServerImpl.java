@@ -28,6 +28,8 @@ import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
+import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -97,5 +99,11 @@ public class MongoDBServerImpl implements MongoDBServer {
 				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
 				+ "[DB: " + mongoDB.getName() + "]\n";
 	}
+	
+	@Override
+	public AbstractEdmEntity searchByAbout(String about){
+		return datastore.find(AbstractEdmEntity.class).field("about").equal(about).get();
+	}
 
+	
 }

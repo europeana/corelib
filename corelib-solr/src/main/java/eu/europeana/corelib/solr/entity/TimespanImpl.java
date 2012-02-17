@@ -33,13 +33,14 @@ import com.google.code.morphia.annotations.*;
 public class TimespanImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	@Id ObjectId timespanId;
+	@Id ObjectId id;
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private String[] note;
 	private Date begin;
 	private Date end;
 	private String[] isPartOf;
+	@Indexed
 	private String about;
 	
 	@Override	
@@ -83,12 +84,12 @@ public class TimespanImpl implements
 	}
 
 	@Override
-	public ObjectId getTimespanId() {
-		return this.timespanId;
+	public ObjectId getId() {
+		return this.id;
 	}
 	@Override
-	public void setTimespanId(ObjectId timespanId) {
-		this.timespanId = timespanId;
+	public void setId(ObjectId id) {
+		this.id =id;
 	}
 
 	@Override
@@ -122,6 +123,6 @@ public class TimespanImpl implements
 	}
 	@Override
 	public boolean equals(Object o){
-		return this.getTimespanId().equals(((TimespanImpl)o).getTimespanId());
+		return this.getId().equals(((TimespanImpl)o).getId());
 	}
 }

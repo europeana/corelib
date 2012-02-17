@@ -35,7 +35,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Entity("Aggregation")
 public class AggregationImpl implements Aggregation {
 	@Id
-	ObjectId aggregationId;
+	ObjectId id;
 
 	private String edmDataProvider;
 	private String edmIsShownBy;
@@ -45,6 +45,7 @@ public class AggregationImpl implements Aggregation {
 	private String edmRights;
 	private String edmUgc;
 	private String[] dcRights;
+	@Indexed
 	private String about;
 	private Boolean edmPreviewNoDistribute;
 	
@@ -83,8 +84,8 @@ public class AggregationImpl implements Aggregation {
 	private ArrayList<WebResource> webResources;
 
 	@Override
-	public void setAggregationId(ObjectId aggregationId) {
-		this.aggregationId = aggregationId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -158,8 +159,8 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public ObjectId getAggregationId() {
-		return this.aggregationId;
+	public ObjectId getId() {
+		return this.id;
 	}
 
 	@Override
@@ -174,8 +175,8 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getAggregationId().equals(
-				((AggregationImpl) o).getAggregationId());
+		return this.getId().equals(
+				((AggregationImpl) o).getId());
 	}
 
 }

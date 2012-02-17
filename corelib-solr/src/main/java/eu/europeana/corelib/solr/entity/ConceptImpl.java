@@ -23,6 +23,7 @@ import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 
@@ -35,12 +36,13 @@ import eu.europeana.corelib.definitions.solr.entity.Concept;
 public class ConceptImpl implements Concept {
 
 	@Id
-	ObjectId conceptId;
+	ObjectId id;
 
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
 	private String[] note;
 	private String[] broader;
+	@Indexed
 	private String about;
 
 	@Override
@@ -74,8 +76,8 @@ public class ConceptImpl implements Concept {
 	}
 
 	@Override
-	public ObjectId getConceptId() {
-		return this.conceptId;
+	public ObjectId getId() {
+		return this.id;
 	}
 
 	@Override
@@ -97,8 +99,8 @@ public class ConceptImpl implements Concept {
 	}
 
 	@Override
-	public void setConceptId(ObjectId conceptId) {
-		this.conceptId = conceptId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -108,6 +110,6 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getConceptId().equals(((ConceptImpl) o).getConceptId());
+		return this.getId().equals(((ConceptImpl) o).getId());
 	}
 }

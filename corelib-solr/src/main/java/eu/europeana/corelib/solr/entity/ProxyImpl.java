@@ -32,8 +32,8 @@ import org.bson.types.*;
 @Entity("Proxy")
 public class ProxyImpl implements Proxy {
 
-	@Id ObjectId proxyId;
-	
+	@Id ObjectId id;
+	@Indexed
 	private String about;
 	private String[] owlSameAs;
 	private String[] dcContributor;
@@ -290,8 +290,8 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public ObjectId getProxyId() {
-		return this.proxyId;
+	public ObjectId getId() {
+		return this.id;
 	}
 
 	@Override
@@ -300,8 +300,8 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public void setProxyId(ObjectId proxyId) {
-		this.proxyId = proxyId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -511,6 +511,6 @@ public class ProxyImpl implements Proxy {
 
 	@Override
 	public boolean equals(Object o){
-		return this.getProxyId().equals(((ProxyImpl)o).getProxyId());
+		return this.getId().equals(((ProxyImpl)o).getId());
 	}
 }

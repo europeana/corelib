@@ -23,6 +23,7 @@ import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Place;
 
@@ -34,7 +35,7 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
 @Entity("Place")
 public class PlaceImpl implements Place {
 	@Id
-	ObjectId placeId;
+	ObjectId id;
 
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
@@ -42,6 +43,7 @@ public class PlaceImpl implements Place {
 	private String[] isPartOf;
 	private float latitude;
 	private float longitude;
+	@Indexed
 	private String about;
 
 	@Override
@@ -85,8 +87,8 @@ public class PlaceImpl implements Place {
 	}
 
 	@Override
-	public ObjectId getPlaceId() {
-		return this.placeId;
+	public ObjectId getId() {
+		return this.id;
 	}
 
 	@Override
@@ -108,8 +110,8 @@ public class PlaceImpl implements Place {
 	}
 
 	@Override
-	public void setPlaceId(ObjectId placeId) {
-		this.placeId = placeId;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	@Override
@@ -129,6 +131,6 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getPlaceId().equals(((PlaceImpl) o).getPlaceId());
+		return this.getId().equals(((PlaceImpl) o).getId());
 	}
 }

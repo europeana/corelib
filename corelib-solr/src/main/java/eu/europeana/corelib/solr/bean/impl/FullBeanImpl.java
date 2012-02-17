@@ -322,7 +322,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> timespanIds = new ArrayList<String>();
 		for (Timespan timespan : this.timespans) {
 
-			timespanIds.add(timespan.getTimespanId().toString());
+			timespanIds.add(timespan.getId().toString());
 
 		}
 		return timespanIds.toArray(new String[timespanIds.size()]);
@@ -375,7 +375,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> conceptIds = new ArrayList<String>();
 		for (Concept concept : this.concepts) {
 
-			conceptIds.add(concept.getConceptId().toString());
+			conceptIds.add(concept.getId().toString());
 
 		}
 		return conceptIds.toArray(new String[conceptIds.size()]);
@@ -406,7 +406,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> agentIds = new ArrayList<String>();
 		for (Agent agent : this.agents) {
 
-			agentIds.add(agent.getAgentId().toString());
+			agentIds.add(agent.getId().toString());
 
 		}
 		return agentIds.toArray(new String[agentIds.size()]);
@@ -518,7 +518,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> owlProxies = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 
-			owlProxies.add(proxy.getProxyId().toString());
+			owlProxies.add(proxy.getId().toString());
 
 		}
 		return owlProxies.toArray(new String[owlProxies.size()]);
@@ -907,7 +907,7 @@ public class FullBeanImpl implements FullBean {
 		ArrayList<String> placeIds = new ArrayList<String>();
 		for (Place place : this.places) {
 
-			placeIds.add(place.getPlaceId().toString());
+			placeIds.add(place.getId().toString());
 
 		}
 		return placeIds.toArray(new String[placeIds.size()]);
