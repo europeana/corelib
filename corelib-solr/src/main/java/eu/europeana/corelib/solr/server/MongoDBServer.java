@@ -22,29 +22,28 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-
+import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 /**
  * Basic MongoDB server implementation
- * 
  * @author Yorgos.Mamakis@ kb.nl
+ *
  */
 public interface MongoDBServer {
-
+	
 	/**
 	 * A basic implementation of a MongoDB Server connection
-	 * 
-	 * @param id
-	 *            - The object id to retrieve from the database
+	 * @param id The object id to retrieve from the database
 	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
 	 */
 	FullBean getFullBean(ObjectId id);
-
+	
 	/**
 	 * Basic information for MongoDB connection
-	 * 
 	 * @return Information on MongoDB server configuration
 	 */
 	String toString();
 
 	Datastore getDatastore();
+
+	AbstractEdmEntity searchByAbout(String about);
 }
