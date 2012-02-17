@@ -22,6 +22,7 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 
 /**
@@ -38,6 +39,11 @@ public class MongoDBServerMock implements MongoDBServer {
 
 	@Override
 	public Datastore getDatastore() {
+		return null;
+	}
+
+	@Override
+	public AbstractEdmEntity searchByAbout(String about) {
 		return null;
 	}
 
