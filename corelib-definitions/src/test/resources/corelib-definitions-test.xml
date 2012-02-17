@@ -26,6 +26,6 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 
-	<util:properties id="europeanaProperties" location="file:./test-config/europeana-test.properties" />
+	<util:properties id="europeanaProperties" location="classpath:test-config/europeana-test.properties" />
 
 </beans>

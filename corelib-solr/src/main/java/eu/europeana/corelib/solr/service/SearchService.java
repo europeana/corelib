@@ -28,7 +28,7 @@ import eu.europeana.corelib.solr.model.ResultSet;
  * user selection. Currently the implementation uses SOLR for Brief/APIBeans and MongoDB for FullBean retrieval.
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface SearchService {
 
