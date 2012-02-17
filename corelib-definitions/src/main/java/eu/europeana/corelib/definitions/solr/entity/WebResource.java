@@ -23,13 +23,7 @@ import org.bson.types.ObjectId;
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public interface WebResource {
-	
-	/**
-	 * Retrieve the unique WebResource Id
-	 * @return ObjectId representing the the WebResource id
-	 */
-	ObjectId getWebResourceId();
+public interface WebResource  extends AbstractEdmEntity{
 	
 	/**
 	 * Retrieve the rdf:about attribute of a Webresource
@@ -49,8 +43,6 @@ public interface WebResource {
 	 */
 
 	String getWebResourceEdmRights();
-
-	void setWebResourceId(ObjectId webResourceId);
 
 	void setWebResource(String webResource);
 

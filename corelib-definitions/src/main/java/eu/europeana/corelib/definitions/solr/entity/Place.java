@@ -26,12 +26,6 @@ import org.bson.types.ObjectId;
 public interface Place extends ContextualClass{
 	
 	/**
-	 * Retrieves the unique ObjectId for a Place
-	 * @return ObjectId representing the unique Id for a Place
-	 */
-	ObjectId getPlaceId();
-	
-	/**
 	 * Retrieves the dcterms:isPartOf fields for a Place
 	 * @return A String array representing the dcterms:isPartOf fields for a Place
 	 */
@@ -50,8 +44,6 @@ public interface Place extends ContextualClass{
 	float getLongitude();
 
 	void setIsPartOf(String[] isPartOf);
-
-	void setPlaceId(ObjectId placeId);
 
 	void setLatitude(float latitude);
 

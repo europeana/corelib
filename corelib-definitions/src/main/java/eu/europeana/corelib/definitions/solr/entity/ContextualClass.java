@@ -19,13 +19,14 @@ package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Map;
 
+
 /**
  * Interface representing contextual classes in EDM (Agent, Place, Timespan, Concept)
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public interface ContextualClass {
+public interface ContextualClass extends AbstractEdmEntity {
 
 	/**
 	 * Retrieves the Preferable Label for a Contextual Class (language,value) format
@@ -57,5 +58,6 @@ public interface ContextualClass {
 	String getAbout();
 
 	void setAbout(String about);
+
 
 }

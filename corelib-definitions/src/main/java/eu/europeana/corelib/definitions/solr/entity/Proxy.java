@@ -27,12 +27,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public interface Proxy {
-	/**
-	 * Retrieve the unique Proxy Id
-	 * @return ObjectId representing the unique Id of the Proxy
-	 */
-	ObjectId getProxyId();
+public interface Proxy extends AbstractEdmEntity{
 	
 	/**
 	 * Retrieve the owl:sameAs fields for a Proxy
@@ -279,8 +274,6 @@ public interface Proxy {
 	 * @return String representing the edm:isNextInSequence fields for a Proxy
 	 */
 	String getEdmIsNextInSequence();
-
-	void setProxyId(ObjectId proxyId);
 
 	void setOwlSameAs(String[] owlSameAs);
 

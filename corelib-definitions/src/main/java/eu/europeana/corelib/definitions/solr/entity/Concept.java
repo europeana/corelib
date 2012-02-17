@@ -16,7 +16,6 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-import org.bson.types.ObjectId;
 
 /**
  * EDM Concept fields representation
@@ -26,18 +25,11 @@ import org.bson.types.ObjectId;
 public interface Concept extends ContextualClass{
 	
 	/**
-	 * Retrieves the unique concept ID of a skos:concept field
-	 * @return ObjectID representing the concept ID
-	 */
-	ObjectId getConceptId();
-	
-	/**
 	 * Retrieves the broader terms of a concept
 	 * @return A String array with all the broader terms of a concept
 	 */
 	String[] getBroader();
 
-	void setConceptId(ObjectId conceptId);
 
 	void setBroader(String[] broader);
 }

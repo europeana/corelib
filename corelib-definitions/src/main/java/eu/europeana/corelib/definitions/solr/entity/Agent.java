@@ -19,8 +19,6 @@ package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-
 /**
  * EDM Agent fields representation
  * 
@@ -29,12 +27,6 @@ import org.bson.types.ObjectId;
  */
 public interface Agent extends ContextualClass {
 
-	/**
-	 * Retrieve the unique agent id (could be anything)
-	 * 
-	 * @return the unique ObjectId
-	 */
-	ObjectId getAgentId();
 
 	/**
 	 * Retrieves the edm:begin field of an edm:Actor
@@ -50,10 +42,12 @@ public interface Agent extends ContextualClass {
 	 */
 	Date getEnd();
 
-	void setAgentId(ObjectId agentId);
+
 
 	void setBegin(Date begin);
 
 	void setEnd(Date end);
+
+
 
 }

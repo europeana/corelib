@@ -26,11 +26,6 @@ import org.bson.types.ObjectId;
  */
 public interface Timespan extends ContextualClass {
 	
-	/**
-	 * Retrieve the unique timespan Id
-	 * @return ObjectId representing the unique timespan Id 
-	 */
-	ObjectId getTimespanId();
 	
 	/**
 	 * Retrieve the edm:begin field of a Timespan
@@ -50,7 +45,6 @@ public interface Timespan extends ContextualClass {
 	 */
 	String[] getIsPartOf();
 
-	void setTimespanId(ObjectId timespanId);
 
 	void setBegin(Date begin);
 

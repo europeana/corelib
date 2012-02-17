@@ -19,7 +19,6 @@ package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
 
 /**
  * EDM Aggregation fields representation
@@ -27,14 +26,8 @@ import org.bson.types.ObjectId;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public interface Aggregation {
+public interface Aggregation extends AbstractEdmEntity {
 
-	/**
-	 * Retrieves the unique Aggregation Id (could be anything)
-	 * 
-	 * @return ObjectId representing the unique Aggregation ID
-	 */
-	ObjectId getAggregationId();
 
 	/**
 	 * Retrieves the edm:dataProvider field from an Aggregation
@@ -99,7 +92,6 @@ public interface Aggregation {
 
 	void setEdmDataProvider(String edmDataProvider);
 
-	void setAggregationId(ObjectId aggregationId);
 
 	List<WebResource> getWebResources();
 
