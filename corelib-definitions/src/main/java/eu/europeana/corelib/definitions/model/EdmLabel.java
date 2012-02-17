@@ -130,7 +130,11 @@ public enum EdmLabel {
 	WHEN("when", SolrType.INDEXED), 
 	WHERE("where", SolrType.INDEXED),
 	DATAPROVIDER("dataProvider",SolrType.INDEXED),
-	RELATION("relation", SolrType.INDEXED);
+	RELATION("relation", SolrType.INDEXED),
+	ORE_PROXY_IN("ore_proxyIn",SolrType.INDEXED),
+	ORE_PROXY_FOR("ore_proxyFor",SolrType.INDEXED),
+	PL_POSITION("pl_position_latLon",SolrType.INDEXED)
+	;
 
 
 	private String value;
@@ -141,7 +145,7 @@ public enum EdmLabel {
 		this.solrType = solrType;
 	}
 
-	public String getValue() {
+	public String toString() {
 		return value;
 	}
 	
