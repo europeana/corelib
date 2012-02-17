@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${version.springCore}</version>
+			<version>${version.springSecurity}</version>
 			<exclusions>
 				<!-- EXCLUDE THIS TO FORCE NEWEST RELEASES -->
 				<exclusion>
