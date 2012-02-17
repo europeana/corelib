@@ -32,63 +32,63 @@ import org.apache.solr.common.util.NamedList;
  * 
  */
 public interface SolrServer {
+
 	/**
 	 * 
 	 * @param timeout
 	 *            - Connection timeout
 	 */
-	public void setConnectionTimeout(int timeout);
+	void setConnectionTimeout(int timeout);
 
 	/**
 	 * 
 	 * @param timeout
 	 */
-	public void setSoTimeout(int timeout);
+	void setSoTimeout(int timeout);
 
 	/**
 	 * 
 	 * @param connections
 	 *            - Maximum connections per host
 	 */
-	public void setDefaultMaxConnectionsPerHost(int connections);
+	void setDefaultMaxConnectionsPerHost(int connections);
 
 	/**
 	 * 
 	 * @param connections
 	 */
-	public void setMaxTotalConnections(int connections);
+	void setMaxTotalConnections(int connections);
 
 	/**
 	 * 
 	 * @param suspendAfterTimeout
 	 */
-	public void setSuspendAfterTimeout(int suspendAfterTimeout);
+	void setSuspendAfterTimeout(int suspendAfterTimeout);
 
 	/**
 	 * 
 	 * @return
 	 */
-	public boolean isActive();
+	boolean isActive();
 
 	/**
      * 
      */
-	public void suspend();
+	void suspend();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public String getActiveFrom();
+	String getActiveFrom();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public String getBaseURL();
+	String getBaseURL();
 
-	public NamedList<Object> request(SolrRequest request)
-			throws SolrServerException, IOException;
+	NamedList<Object> request(SolrRequest request) throws SolrServerException, IOException;
 
-	public QueryResponse query(SolrParams params) throws SolrServerException;
+	QueryResponse query(SolrParams params) throws SolrServerException;
 }

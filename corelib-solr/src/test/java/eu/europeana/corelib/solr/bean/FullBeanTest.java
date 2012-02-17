@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.solr;
+package eu.europeana.corelib.solr.bean;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -65,13 +65,17 @@ import eu.europeana.corelib.solr.service.SearchService;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-solr-context.xml" })
+@ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class FullBeanTest {
+	
 	@Resource(name = "corelib_solr_mongoServer")
 	MongoDBServer mongoServer;
+	
 	Datastore ds;
-	@Resource(name="corelib_solr_searchService")
+	
+	@Resource(name = "corelib_solr_searchService")
 	SearchService searchService;
+
 	@Test
 	public void testRetrieve() {
 		ds = mongoServer.getDatastore();
@@ -91,10 +95,10 @@ public class FullBeanTest {
 		assertNotNull("Error creating web resource", webResource);
 		Aggregation aggregation = createAggregation(webResource);
 		assertNotNull("Error creating aggregation", aggregation);
-		FullBean fullBean = new FullBeanImpl();
+		FullBeanImpl fullBean = new FullBeanImpl();
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 		agents.add(agent);
-		ArrayList<Aggregation> aggregations = new ArrayList<Aggregation> ();
+		ArrayList<Aggregation> aggregations = new ArrayList<Aggregation>();
 		aggregations.add(aggregation);
 		ArrayList<Proxy> proxies = new ArrayList<Proxy>();
 		proxies.add(proxy);
@@ -102,41 +106,42 @@ public class FullBeanTest {
 		timespans.add(timespan);
 		ArrayList<Concept> concepts = new ArrayList<Concept>();
 		concepts.add(concept);
-		ArrayList<Place>places = new ArrayList<Place>();
+		ArrayList<Place> places = new ArrayList<Place>();
 		places.add(place);
 		fullBean.setAgents(agents);
 		fullBean.setAggregations(aggregations);
 		fullBean.setConcepts(concepts);
-		fullBean.setCreator(new String[]{"test creator"});
+		fullBean.setCreator(new String[] { "test creator" });
 		fullBean.setEuropeanaCompleteness(9);
-		fullBean.setLanguage(new String[] {"en"});
+		fullBean.setLanguage(new String[] { "en" });
 		fullBean.setPlaces(places);
-		fullBean.setProvider(new String[]{"europeana"});
+		fullBean.setProvider(new String[] { "europeana" });
 		fullBean.setProxies(proxies);
 		fullBean.setTimespans(timespans);
-		fullBean.setTitle(new String[]{"test"});
+		fullBean.setTitle(new String[] { "test" });
 		fullBean.setType(DocType.IMAGE);
-		fullBean.setYear(new String[]{"2012"});
-		
-		Key<FullBean> fullBeanKey = ds.save(fullBean);
+		fullBean.setYear(new String[] { "2012" });
+
+		Key<FullBeanImpl> fullBeanKey = ds.save(fullBean);
 		FullBean testFullBean = ds.find(FullBeanImpl.class).get();
-		assertEquals(fullBean.getId(),testFullBean.getId());
-		assertEquals(fullBean.getAgents(),testFullBean.getAgents());
-		assertEquals(fullBean.getAggregations(),testFullBean.getAggregations());
-		assertEquals(fullBean.getAggregations().get(0).getWebResources(),testFullBean.getAggregations().get(0).getWebResources());
-		assertEquals(fullBean.getConcepts(),testFullBean.getConcepts());
-		assertArrayEquals(fullBean.getCreator(),testFullBean.getCreator());
-		assertEquals(fullBean.getEuropeanaCompleteness(),testFullBean.getEuropeanaCompleteness());
-		assertArrayEquals(fullBean.getLanguage(),testFullBean.getLanguage());
-		assertEquals(fullBean.getPlaces(),testFullBean.getPlaces());
-		assertArrayEquals(fullBean.getProvider(),testFullBean.getProvider());
-		assertEquals(fullBean.getProxies(),testFullBean.getProxies());
-		assertEquals(fullBean.getTimespans(),testFullBean.getTimespans());
-		assertArrayEquals(fullBean.getTitle(),testFullBean.getTitle());
-		assertEquals(fullBean.getType(),testFullBean.getType());
-		assertArrayEquals(fullBean.getYear(),testFullBean.getYear());
-		assertArrayEquals(fullBean.getEdmWebResource(),testFullBean.getEdmWebResource());
-		
+		assertEquals(fullBean.getId(), testFullBean.getId());
+		assertEquals(fullBean.getAgents(), testFullBean.getAgents());
+		assertEquals(fullBean.getAggregations(), testFullBean.getAggregations());
+		assertEquals(fullBean.getAggregations().get(0).getWebResources(), testFullBean.getAggregations().get(0)
+				.getWebResources());
+		assertEquals(fullBean.getConcepts(), testFullBean.getConcepts());
+		assertArrayEquals(fullBean.getCreator(), testFullBean.getCreator());
+		assertEquals(fullBean.getEuropeanaCompleteness(), testFullBean.getEuropeanaCompleteness());
+		assertArrayEquals(fullBean.getLanguage(), testFullBean.getLanguage());
+		assertEquals(fullBean.getPlaces(), testFullBean.getPlaces());
+		assertArrayEquals(fullBean.getProvider(), testFullBean.getProvider());
+		assertEquals(fullBean.getProxies(), testFullBean.getProxies());
+		assertEquals(fullBean.getTimespans(), testFullBean.getTimespans());
+		assertArrayEquals(fullBean.getTitle(), testFullBean.getTitle());
+		assertEquals(fullBean.getType(), testFullBean.getType());
+		assertArrayEquals(fullBean.getYear(), testFullBean.getYear());
+		assertArrayEquals(fullBean.getEdmWebResource(), testFullBean.getEdmWebResource());
+
 		FullBean fullBeanSearch = null;
 		try {
 			fullBeanSearch = searchService.findById(fullBeanKey.getId().toString());
@@ -144,16 +149,15 @@ public class FullBeanTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals(fullBean,fullBeanSearch);
+		assertEquals(fullBean, fullBeanSearch);
 	}
 
-	
 	private Aggregation createAggregation(WebResource webResource) {
 		Aggregation aggregation = new AggregationImpl();
 		ArrayList<WebResource> webResources = new ArrayList<WebResource>();
 		webResources.add(webResource);
 		aggregation.setWebResources(webResources);
-		aggregation.setDcRights(new String[]{"test dc:rights"});
+		aggregation.setDcRights(new String[] { "test dc:rights" });
 		aggregation.setEdmDataProvider("test edm:dataProvider");
 		aggregation.setEdmIsShownAt("test edm:isShownAt");
 		aggregation.setEdmIsShownBy("test edm:isShownBy");
@@ -162,37 +166,35 @@ public class FullBeanTest {
 		aggregation.setEdmRights("test edm:rights");
 		ds.save(aggregation);
 		Aggregation testAggregation = ds.find(AggregationImpl.class).get();
-		assertEquals(aggregation,testAggregation);
+		assertEquals(aggregation, testAggregation);
 		assertEquals(aggregation.getWebResources(), testAggregation.getWebResources());
 		assertEquals(aggregation.getEdmDataProvider(), testAggregation.getEdmDataProvider());
-		assertEquals(aggregation.getEdmIsShownAt(),testAggregation.getEdmIsShownAt());
-		assertEquals(aggregation.getEdmIsShownBy(),testAggregation.getEdmIsShownBy());
-		assertEquals(aggregation.getEdmObject(),testAggregation.getEdmObject());
+		assertEquals(aggregation.getEdmIsShownAt(), testAggregation.getEdmIsShownAt());
+		assertEquals(aggregation.getEdmIsShownBy(), testAggregation.getEdmIsShownBy());
+		assertEquals(aggregation.getEdmObject(), testAggregation.getEdmObject());
 		assertEquals(aggregation.getEdmProvider(), testAggregation.getEdmProvider());
-		assertEquals(aggregation.getEdmRights(),testAggregation.getEdmRights());
+		assertEquals(aggregation.getEdmRights(), testAggregation.getEdmRights());
 		return aggregation;
 	}
 
-
 	/**
 	 * Create and save a Web resource
+	 * 
 	 * @return
 	 */
 	private WebResource createWebResource() {
 		WebResource webResource = new WebResourceImpl();
 		webResource.setWebResource("test web Resource");
-		webResource.setWebResourceDcRights(new String[]{"test dc:rights"});
+		webResource.setWebResourceDcRights(new String[] { "test dc:rights" });
 		webResource.setWebResourceEdmRights("test edm:rights");
 		ds.save(webResource);
 		WebResource testWebResource = ds.find(WebResourceImpl.class).get();
-		assertEquals(webResource,testWebResource);
-		assertEquals(webResource.getWebResource(),testWebResource.getWebResource());
-		assertEquals(webResource.getWebResourceEdmRights(),testWebResource.getWebResourceEdmRights());
+		assertEquals(webResource, testWebResource);
+		assertEquals(webResource.getWebResource(), testWebResource.getWebResource());
+		assertEquals(webResource.getWebResourceEdmRights(), testWebResource.getWebResourceEdmRights());
 		assertArrayEquals(webResource.getWebResourceDcRights(), testWebResource.getWebResourceDcRights());
 		return webResource;
 	}
-
-
 
 	/**
 	 * Create and save Concept
@@ -327,13 +329,11 @@ public class FullBeanTest {
 		ds.save(proxy);
 		Proxy testProxy = ds.find(ProxyImpl.class).get();
 		assertEquals(proxy, testProxy);
-		assertArrayEquals(proxy.getDcContributor(),
-				testProxy.getDcContributor());
+		assertArrayEquals(proxy.getDcContributor(), testProxy.getDcContributor());
 		assertArrayEquals(proxy.getDcCoverage(), testProxy.getDcCoverage());
 		assertArrayEquals(proxy.getDcCreator(), testProxy.getDcCreator());
 		assertArrayEquals(proxy.getDcDate(), testProxy.getDcDate());
-		assertArrayEquals(proxy.getDcDescription(),
-				testProxy.getDcDescription());
+		assertArrayEquals(proxy.getDcDescription(), testProxy.getDcDescription());
 		assertArrayEquals(proxy.getDcFormat(), testProxy.getDcFormat());
 		assertArrayEquals(proxy.getDcIdentifier(), testProxy.getDcIdentifier());
 		assertArrayEquals(proxy.getDcLanguage(), testProxy.getDcLanguage());
@@ -342,55 +342,32 @@ public class FullBeanTest {
 		assertArrayEquals(proxy.getDcRights(), testProxy.getDcRights());
 		assertArrayEquals(proxy.getDcSource(), testProxy.getDcSource());
 		assertArrayEquals(proxy.getDcSubject(), testProxy.getDcSubject());
-		assertArrayEquals(proxy.getDctermsAlternative(),
-				testProxy.getDctermsAlternative());
-		assertArrayEquals(proxy.getDctermsConformsTo(),
-				testProxy.getDctermsConformsTo());
-		assertArrayEquals(proxy.getDctermsCreated(),
-				testProxy.getDctermsCreated());
-		assertArrayEquals(proxy.getDctermsExtent(),
-				testProxy.getDctermsExtent());
-		assertArrayEquals(proxy.getDctermsHasFormat(),
-				testProxy.getDctermsHasFormat());
-		assertArrayEquals(proxy.getDctermsHasPart(),
-				testProxy.getDctermsHasPart());
-		assertArrayEquals(proxy.getDctermsHasVersion(),
-				testProxy.getDctermsHasVersion());
-		assertArrayEquals(proxy.getDctermsIsFormatOf(),
-				testProxy.getDctermsIsFormatOf());
-		assertArrayEquals(proxy.getDctermsIsPartOf(),
-				testProxy.getDctermsIsPartOf());
-		assertArrayEquals(proxy.getDctermsIsReferencedBy(),
-				testProxy.getDctermsIsReferencedBy());
-		assertArrayEquals(proxy.getDctermsIsReplacedBy(),
-				testProxy.getDctermsIsReplacedBy());
-		assertArrayEquals(proxy.getDctermsIsRequiredBy(),
-				testProxy.getDctermsIsRequiredBy());
-		assertArrayEquals(proxy.getDctermsIssued(),
-				testProxy.getDctermsIssued());
-		assertArrayEquals(proxy.getDctermsIsVersionOf(),
-				testProxy.getDctermsIsVersionOf());
-		assertArrayEquals(proxy.getDctermsMedium(),
-				testProxy.getDctermsMedium());
-		assertArrayEquals(proxy.getDctermsProvenance(),
-				testProxy.getDctermsProvenance());
-		assertArrayEquals(proxy.getDctermsReferences(),
-				testProxy.getDctermsReferences());
-		assertArrayEquals(proxy.getDctermsReplaces(),
-				testProxy.getDctermsReplaces());
-		assertArrayEquals(proxy.getDctermsRequires(),
-				testProxy.getDctermsRequires());
-		assertArrayEquals(proxy.getDctermsSpatial(),
-				testProxy.getDctermsSpatial());
-		assertArrayEquals(proxy.getDctermsTemporal(),
-				testProxy.getDctermsTemporal());
+		assertArrayEquals(proxy.getDctermsAlternative(), testProxy.getDctermsAlternative());
+		assertArrayEquals(proxy.getDctermsConformsTo(), testProxy.getDctermsConformsTo());
+		assertArrayEquals(proxy.getDctermsCreated(), testProxy.getDctermsCreated());
+		assertArrayEquals(proxy.getDctermsExtent(), testProxy.getDctermsExtent());
+		assertArrayEquals(proxy.getDctermsHasFormat(), testProxy.getDctermsHasFormat());
+		assertArrayEquals(proxy.getDctermsHasPart(), testProxy.getDctermsHasPart());
+		assertArrayEquals(proxy.getDctermsHasVersion(), testProxy.getDctermsHasVersion());
+		assertArrayEquals(proxy.getDctermsIsFormatOf(), testProxy.getDctermsIsFormatOf());
+		assertArrayEquals(proxy.getDctermsIsPartOf(), testProxy.getDctermsIsPartOf());
+		assertArrayEquals(proxy.getDctermsIsReferencedBy(), testProxy.getDctermsIsReferencedBy());
+		assertArrayEquals(proxy.getDctermsIsReplacedBy(), testProxy.getDctermsIsReplacedBy());
+		assertArrayEquals(proxy.getDctermsIsRequiredBy(), testProxy.getDctermsIsRequiredBy());
+		assertArrayEquals(proxy.getDctermsIssued(), testProxy.getDctermsIssued());
+		assertArrayEquals(proxy.getDctermsIsVersionOf(), testProxy.getDctermsIsVersionOf());
+		assertArrayEquals(proxy.getDctermsMedium(), testProxy.getDctermsMedium());
+		assertArrayEquals(proxy.getDctermsProvenance(), testProxy.getDctermsProvenance());
+		assertArrayEquals(proxy.getDctermsReferences(), testProxy.getDctermsReferences());
+		assertArrayEquals(proxy.getDctermsReplaces(), testProxy.getDctermsReplaces());
+		assertArrayEquals(proxy.getDctermsRequires(), testProxy.getDctermsRequires());
+		assertArrayEquals(proxy.getDctermsSpatial(), testProxy.getDctermsSpatial());
+		assertArrayEquals(proxy.getDctermsTemporal(), testProxy.getDctermsTemporal());
 		assertArrayEquals(proxy.getDctermsTOC(), testProxy.getDctermsTOC());
 		assertArrayEquals(proxy.getDcTitle(), testProxy.getDcTitle());
 		assertArrayEquals(proxy.getDcType(), testProxy.getDcType());
-		assertEquals(proxy.getEdmCurrentLocation(),
-				testProxy.getEdmCurrentLocation());
-		assertEquals(proxy.getEdmIsNextInSequence(),
-				testProxy.getEdmIsNextInSequence());
+		assertEquals(proxy.getEdmCurrentLocation(), testProxy.getEdmCurrentLocation());
+		assertEquals(proxy.getEdmIsNextInSequence(), testProxy.getEdmIsNextInSequence());
 		assertEquals(proxy.getEdmType(), testProxy.getEdmType());
 		assertArrayEquals(proxy.getOwlSameAs(), testProxy.getOwlSameAs());
 		return proxy;

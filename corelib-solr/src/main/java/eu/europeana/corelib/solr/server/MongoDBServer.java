@@ -22,25 +22,29 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+
 /**
  * Basic MongoDB server implementation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
  */
 public interface MongoDBServer {
-	
+
 	/**
 	 * A basic implementation of a MongoDB Server connection
-	 * @param id - The object id to retrieve from the database
+	 * 
+	 * @param id
+	 *            - The object id to retrieve from the database
 	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
 	 */
-	public FullBean getFullBean(ObjectId id);
-	
+	FullBean getFullBean(ObjectId id);
+
 	/**
 	 * Basic information for MongoDB connection
+	 * 
 	 * @return Information on MongoDB server configuration
 	 */
-	public String toString();
+	String toString();
 
-	public Datastore getDatastore();
+	Datastore getDatastore();
 }
