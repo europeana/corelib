@@ -37,6 +37,7 @@ import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -44,6 +45,7 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 
@@ -89,6 +91,9 @@ public class FullBeanImpl implements FullBean {
 
 	@Reference
 	private ArrayList<AggregationImpl> aggregations;
+	
+	@Reference
+	private ArrayList<ProvidedCHOImpl> providedCHOs;
 
 	// TODO:check if Europeana Aggregation needs to be stored separately
 	@Reference
@@ -172,6 +177,17 @@ public class FullBeanImpl implements FullBean {
 		this.proxies = (ArrayList<ProxyImpl>) proxies;
 	}
 
+	@Override
+	public ArrayList<ProvidedCHOImpl> getProvidedCHOs(){
+		return providedCHOs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs) {
+		this.providedCHOs = (ArrayList<ProvidedCHOImpl>) providedCHOs;
+	}
+	
 	@Override
 	public void setEuropeanaId(ObjectId europeanaId) {
 		this.europeanaId = europeanaId;
@@ -527,8 +543,8 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public String[] getOwlSameAs() {
 		ArrayList<String> owlSameAsList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String owlSameAs : proxy.getOwlSameAs()) {
+		for (ProvidedCHO providedCHO: this.providedCHOs) {
+			for (String owlSameAs : providedCHO.getOwlSameAs()) {
 				owlSameAsList.add(owlSameAs);
 			}
 		}
@@ -822,9 +838,9 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public String[] getEdmIsNextInSequence() {
 		ArrayList<String> edmIsNextInSequenceList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
+		for (ProvidedCHO providedCHO:this.providedCHOs) {
 
-			edmIsNextInSequenceList.add(proxy.getEdmIsNextInSequence());
+			edmIsNextInSequenceList.add(providedCHO.getEdmIsNextInSequence());
 
 		}
 		return edmIsNextInSequenceList.toArray(new String[edmIsNextInSequenceList.size()]);

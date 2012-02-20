@@ -43,6 +43,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -51,6 +52,7 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
@@ -95,6 +97,8 @@ public class FullBeanTest {
 		assertNotNull("Error creating web resource", webResource);
 		Aggregation aggregation = createAggregation(webResource);
 		assertNotNull("Error creating aggregation", aggregation);
+		ProvidedCHO providedCHO = createProvidedCHO();
+		assertNotNull("Error create providedCHO",providedCHO);
 		FullBeanImpl fullBean = new FullBeanImpl();
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 		agents.add(agent);
@@ -108,6 +112,8 @@ public class FullBeanTest {
 		concepts.add(concept);
 		ArrayList<Place> places = new ArrayList<Place>();
 		places.add(place);
+		ArrayList<ProvidedCHO> providedCHOs = new ArrayList<ProvidedCHO>();
+		providedCHOs.add(providedCHO);
 		fullBean.setAgents(agents);
 		fullBean.setAggregations(aggregations);
 		fullBean.setConcepts(concepts);
@@ -121,7 +127,7 @@ public class FullBeanTest {
 		fullBean.setTitle(new String[] { "test" });
 		fullBean.setType(DocType.IMAGE);
 		fullBean.setYear(new String[] { "2012" });
-
+		fullBean.setProvidedCHOs(providedCHOs);
 		Key<FullBeanImpl> fullBeanKey = ds.save(fullBean);
 		FullBean testFullBean = ds.find(FullBeanImpl.class).get();
 		assertEquals(fullBean.getId(), testFullBean.getId());
@@ -141,12 +147,11 @@ public class FullBeanTest {
 		assertEquals(fullBean.getType(), testFullBean.getType());
 		assertArrayEquals(fullBean.getYear(), testFullBean.getYear());
 		assertArrayEquals(fullBean.getEdmWebResource(), testFullBean.getEdmWebResource());
-
+		assertEquals(fullBean.getProvidedCHOs(),testFullBean.getProvidedCHOs());
 		FullBean fullBeanSearch = null;
 		try {
 			fullBeanSearch = searchService.findById(fullBeanKey.getId().toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertEquals(fullBean, fullBeanSearch);
@@ -323,9 +328,7 @@ public class FullBeanTest {
 		proxy.setDcTitle(new String[] { "test dc:title" });
 		proxy.setDcType(new String[] { "test dc:type" });
 		proxy.setEdmCurrentLocation("test edm:currentLocation");
-		proxy.setEdmIsNextInSequence("test edm:isNextInSequence");
 		proxy.setEdmType(DocType.IMAGE);
-		proxy.setOwlSameAs(new String[] { "test owl:sameAs" });
 		ds.save(proxy);
 		Proxy testProxy = ds.find(ProxyImpl.class).get();
 		assertEquals(proxy, testProxy);
@@ -367,12 +370,23 @@ public class FullBeanTest {
 		assertArrayEquals(proxy.getDcTitle(), testProxy.getDcTitle());
 		assertArrayEquals(proxy.getDcType(), testProxy.getDcType());
 		assertEquals(proxy.getEdmCurrentLocation(), testProxy.getEdmCurrentLocation());
-		assertEquals(proxy.getEdmIsNextInSequence(), testProxy.getEdmIsNextInSequence());
 		assertEquals(proxy.getEdmType(), testProxy.getEdmType());
-		assertArrayEquals(proxy.getOwlSameAs(), testProxy.getOwlSameAs());
 		return proxy;
 	}
 
+	private ProvidedCHO createProvidedCHO(){
+		ProvidedCHO providedCHO = new ProvidedCHOImpl();
+		providedCHO.setAbout("test edm:about");
+		providedCHO.setEdmIsNextInSequence("test isnextinsequence");
+		providedCHO.setOwlSameAs(new String[]{"test owlsameAs"});
+		ds.save(providedCHO);
+		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).get();
+		assertEquals(providedCHO,testProvidedCHO);
+		assertEquals(providedCHO.getAbout(), testProvidedCHO.getAbout());
+		assertEquals(providedCHO.getEdmIsNextInSequence(),testProvidedCHO.getEdmIsNextInSequence());
+		assertArrayEquals(providedCHO.getOwlSameAs(), testProvidedCHO.getOwlSameAs());
+		return providedCHO;
+	}
 	/**
 	 * Create and save an Agent
 	 * 

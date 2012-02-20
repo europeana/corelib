@@ -29,12 +29,12 @@ import com.mongodb.Mongo;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
-import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
@@ -71,6 +71,7 @@ public class MongoDBServerImpl implements MongoDBServer {
 	private void createDatastore() {
 		morphia = new Morphia();
 		morphia.map(FullBeanImpl.class);
+		morphia.map(ProvidedCHOImpl.class);
 		morphia.map(AgentImpl.class);
 		morphia.map(AggregationImpl.class);
 		morphia.map(ConceptImpl.class);

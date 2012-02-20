@@ -45,6 +45,8 @@ public class AggregationImpl implements Aggregation {
 	private String edmRights;
 	private String edmUgc;
 	private String[] dcRights;
+	private String[] hasView;
+	
 	@Indexed
 	private String about;
 	private Boolean edmPreviewNoDistribute;
@@ -171,6 +173,17 @@ public class AggregationImpl implements Aggregation {
 	@Override
 	public void setWebResources(List<WebResource> webResources) {
 		this.webResources = (ArrayList<WebResource>) webResources;
+	}
+
+	
+	@Override
+	public String[] getHasView() {
+		return hasView;
+	}
+
+	@Override
+	public void setHasView(String[] hasView) {
+		this.hasView = hasView;
 	}
 
 	@Override

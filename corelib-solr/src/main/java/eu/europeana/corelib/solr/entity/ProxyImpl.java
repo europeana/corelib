@@ -35,7 +35,6 @@ public class ProxyImpl implements Proxy {
 	@Id ObjectId id;
 	@Indexed
 	private String about;
-	private String[] owlSameAs;
 	private String[] dcContributor;
 	private String[] dcCoverage;
 	private String[] dcCreator;
@@ -75,8 +74,40 @@ public class ProxyImpl implements Proxy {
 	private String[] dctermsTemporal;
 	private DocType edmType;
 	private String edmCurrentLocation;
-	private String edmIsNextInSequence;
+	private String edmRights;
+	private String proxyIn;
+	private String proxyFor;
 	
+	@Override
+	public String getEdmRights() {
+		return edmRights;
+	}
+
+	@Override
+	public void setEdmRights(String edmRights) {
+		this.edmRights = edmRights;
+	}
+
+	@Override
+	public String getProxyIn() {
+		return proxyIn;
+	}
+
+	@Override
+	public void setProxyIn(String proxyIn) {
+		this.proxyIn = proxyIn;
+	}
+
+	@Override
+	public String getProxyFor() {
+		return proxyFor;
+	}
+
+	@Override
+	public void setProxyFor(String proxyFor) {
+		this.proxyFor = proxyFor;
+	}
+
 	@Override
 	public String getAbout() {
 		return about;
@@ -85,13 +116,6 @@ public class ProxyImpl implements Proxy {
 	@Override
 	public void setAbout(String about) {
 		this.about = about;
-	}
-
-	@Override
-	public String[] getOwlSameAs() {
-		
-		return this.owlSameAs;
-		
 	}
 
 	@Override
@@ -295,18 +319,8 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public String getEdmIsNextInSequence() {
-		return this.edmIsNextInSequence;
-	}
-
-	@Override
 	public void setId(ObjectId id) {
 		this.id = id;
-	}
-
-	@Override
-	public void setOwlSameAs(String[] owlSameAs) {
-		this.owlSameAs = owlSameAs.clone();
 	}
 
 	@Override
@@ -504,10 +518,6 @@ public class ProxyImpl implements Proxy {
 		this.edmCurrentLocation = edmCurrentLocation;
 	}
 
-	@Override
-	public void setEdmIsNextInSequence(String edmIsNextInSequence) {
-		this.edmIsNextInSequence = edmIsNextInSequence;
-	}
 
 	@Override
 	public boolean equals(Object o){
