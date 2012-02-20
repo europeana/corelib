@@ -28,8 +28,10 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.entity.Timespan;
+
 
 /**
  * Interface for the FullBean. FullBean contains all the fields exposed by the MongoDB required by Portal in order to
@@ -409,5 +411,9 @@ public interface FullBean extends ApiBean {
 	List<? extends BriefBean> getRelatedItems();
 
 	void setRelatedItems(List<? extends BriefBean> relatedItems);
+
+	List<? extends ProvidedCHO> getProvidedCHOs();
+
+	void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs);
 
 }

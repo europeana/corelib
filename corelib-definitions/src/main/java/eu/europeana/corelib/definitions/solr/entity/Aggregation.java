@@ -109,4 +109,8 @@ public interface Aggregation extends AbstractEdmEntity {
 
 	void setEdmPreviewNoDistribute(Boolean edmPreviewNoDistribute);
 
+	String[] getHasView();
+
+	void setHasView(String[] hasView);
+
 }

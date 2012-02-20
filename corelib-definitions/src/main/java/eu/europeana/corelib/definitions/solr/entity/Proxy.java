@@ -18,8 +18,6 @@ package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
@@ -28,12 +26,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
  *
  */
 public interface Proxy extends AbstractEdmEntity{
-	
-	/**
-	 * Retrieve the owl:sameAs fields for a Proxy
-	 * @return String array representing the owl:sameAs fields of a Proxy
-	 */
-	String[] getOwlSameAs();
+
 	
 	/**
 	 * Retrieve the dc:contributor fields for a Proxy
@@ -269,14 +262,6 @@ public interface Proxy extends AbstractEdmEntity{
 	 */
 	String getEdmCurrentLocation();
 	
-	/**
-	 * Retrieve the edm:isNextInSequence fields for a Proxy
-	 * @return String representing the edm:isNextInSequence fields for a Proxy
-	 */
-	String getEdmIsNextInSequence();
-
-	void setOwlSameAs(String[] owlSameAs);
-
 	void setDcContributor(String[] dcContributor);
 
 	void setDcCoverage(String[] dcCoverage);
@@ -355,10 +340,22 @@ public interface Proxy extends AbstractEdmEntity{
 
 	void setEdmCurrentLocation(String edmCurrentLocation);
 
-	void setEdmIsNextInSequence(String edmIsNextInSequence);
+
 
 	String getAbout();
 
 	void setAbout(String about);
+
+	String getEdmRights();
+
+	void setEdmRights(String edmRights);
+
+	String getProxyIn();
+
+	void setProxyIn(String proxyIn);
+
+	String getProxyFor();
+
+	void setProxyFor(String proxyFor);
 	
 }
