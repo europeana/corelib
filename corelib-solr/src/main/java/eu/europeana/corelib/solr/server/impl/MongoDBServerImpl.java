@@ -90,7 +90,7 @@ public class MongoDBServerImpl implements MongoDBServer {
 
 	@Override
 	public FullBean getFullBean(ObjectId id) {
-		return datastore.find(FullBeanImpl.class).field("europeanaId")
+		return datastore.find(FullBeanImpl.class).field("about")
 				.equal(id).get();
 	}
 

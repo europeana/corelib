@@ -26,6 +26,7 @@ import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 
@@ -59,6 +60,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 public class FullBeanImpl implements FullBean {
 	@Id
 	ObjectId europeanaId;
+	@Indexed String about;
 
 	private String[] title;
 
@@ -117,7 +119,16 @@ public class FullBeanImpl implements FullBean {
 	public ArrayList<AgentImpl> getAgents() {
 		return agents;
 	}
+	@Override
+	public String getAbout() {
+		return about;
+	}
 
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
