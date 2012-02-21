@@ -416,4 +416,8 @@ public interface FullBean extends ApiBean {
 
 	void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs);
 
+	String getAbout();
+
+	void setAbout(String about);
+
 }
