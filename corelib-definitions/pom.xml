@@ -84,8 +84,8 @@
 							<goal>schema-codegen</goal>
 						</goals>
 						<configuration>
-							<directory>src/main/resources/edm/</directory>
-							<targetDirectory>target/generated-sources/edm</targetDirectory>
+							<directory>src/main/resources/eu/</directory>
+							<targetDirectory>target/generated-sources/eu</targetDirectory>
 							<includes>
 								<include>EDM.xsd</include>
 							</includes>
@@ -100,7 +100,7 @@
 							<goal>bind</goal>
 						</goals>
 						<configuration>
-							<directory>target/generated-sources/edm</directory>
+							<directory>target/generated-sources/eu</directory>
 							<load>true</load>
 							<validate>true</validate>
 							<verify>false</verify>
