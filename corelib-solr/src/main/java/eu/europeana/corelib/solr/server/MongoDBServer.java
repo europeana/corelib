@@ -17,8 +17,6 @@
 
 package eu.europeana.corelib.solr.server;
 
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -35,7 +33,7 @@ public interface MongoDBServer {
 	 * @param id The object id to retrieve from the database
 	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
 	 */
-	FullBean getFullBean(ObjectId id);
+	FullBean getFullBean(String id);
 	
 	/**
 	 * Basic information for MongoDB connection

@@ -128,7 +128,7 @@ public class FullBeanTest {
 		fullBean.setType(DocType.IMAGE);
 		fullBean.setYear(new String[] { "2012" });
 		fullBean.setProvidedCHOs(providedCHOs);
-		Key<FullBeanImpl> fullBeanKey = ds.save(fullBean);
+		ds.save(fullBean);
 		FullBean testFullBean = ds.find(FullBeanImpl.class).get();
 		assertEquals(fullBean.getId(), testFullBean.getId());
 		assertEquals(fullBean.getAgents(), testFullBean.getAgents());
@@ -150,7 +150,7 @@ public class FullBeanTest {
 		assertEquals(fullBean.getProvidedCHOs(),testFullBean.getProvidedCHOs());
 		FullBean fullBeanSearch = null;
 		try {
-			fullBeanSearch = searchService.findById(fullBeanKey.getId().toString());
+			fullBeanSearch = searchService.findById(testFullBean.getAbout());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

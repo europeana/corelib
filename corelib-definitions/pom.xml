@@ -24,7 +24,7 @@
 	<parent>
 		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>${version.europeanaCorelib}</version>
+		<version>2.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
@@ -33,6 +33,7 @@
 	<url>http://www.europeanalabs.eu</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jibx.version>1.2.3</jibx.version>
 	</properties>
 	<dependencies>
 		<!-- Other -->
@@ -85,7 +86,7 @@
 						</goals>
 						<configuration>
 							<directory>src/main/resources/eu/</directory>
-							<targetDirectory>target/generated-sources/eu</targetDirectory>
+							<targetDirectory>target/generated-sources</targetDirectory>
 							<includes>
 								<include>EDM.xsd</include>
 							</includes>
@@ -100,7 +101,7 @@
 							<goal>bind</goal>
 						</goals>
 						<configuration>
-							<directory>target/generated-sources/eu</directory>
+							<directory>target/generated-sources</directory>
 							<load>true</load>
 							<validate>true</validate>
 							<verify>false</verify>

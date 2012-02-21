@@ -1036,7 +1036,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((FullBean) o).getId());
+		return this.getId().equals(((FullBeanImpl) o).getId());
 	}
 
 	@Override

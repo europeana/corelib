@@ -61,6 +61,6 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((ProvidedCHO) o).getId());
+		return this.getId().equals(((ProvidedCHOImpl) o).getId());
 	}
 }
