@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007 EDL FOUNDATION
+
+  Licensed under the EUPL, Version 1.1 or - as soon they
+  will be approved by the European Commission - subsequent
+  versions of the EUPL (the "Licence");
+  you may not use this work except in compliance with the
+  Licence.
+  You may obtain a copy of the Licence at:
+
+  http://ec.europa.eu/idabc/eupl
+
+  Unless required by applicable law or agreed to in
+  writing, software distributed under the Licence is
+  distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied.
+  See the Licence for the specific language governing
+  permissions and limitations under the Licence.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.europeana.eu/schemas/edm/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified" xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+  <annotation>
+    <documentation>
+      EDM First Implementation Schema: Contextual elements (vocabulary terms)
+
+      Technical contact: Borys Omelayenko
+    </documentation>
+  </annotation>
+
+  <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd" />
+  <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd" />
+  <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd" />
+  <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
+
+  <complexType name="ContextualResourceType" abstract="true">
+    <complexContent>
+      <extension base="rdf:AboutType">
+        <sequence>
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ContextualHierarchicalResourceType" abstract="false">
+    <complexContent>
+      <extension base="edm:ContextualResourceType">
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ContextualTemporalResourceType" abstract="false">
+    <complexContent>
+      <extension base="edm:ContextualHierarchicalResourceType">
+        <sequence>
+          <element name="begin" maxOccurs="unbounded" minOccurs="0" />
+          <element name="end" maxOccurs="unbounded" minOccurs="0" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="AgentType">
+    <annotation>
+      <documentation> This class comprises people, either individually or in groups, who have the potential to perform intentional actions for which they can be held responsible. Example:Leonardo da
+        Vinci, the British Museum, W3C</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="edm:ContextualTemporalResourceType">
+        <sequence>
+          <element name="timeSpan" type="rdf:ResourceType" minOccurs="0" maxOccurs="1" />
+          <!--
+            <element name="rdaGr2_dateOfBirth " type="edm:SimpleLiteral" maxOccurs="1" minOccurs="0">
+            </element>
+            <element name="rdaGr2_dateOfDeath" type="edm:SimpleLiteral" maxOccurs="1" minOccurs="0">
+            </element>
+            <element name="rdaGr2_dateOfEstablishment " type="edm:SimpleLiteral" maxOccurs="1" minOccurs="0">
+            </element>
+            <element name="rdaGr2_dateOfTermination " type="edm:SimpleLiteral" maxOccurs="1" minOccurs="0">
+            </element>
+          -->
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="PlaceType">
+    <annotation>
+      <documentation>An “extent in space, in particular on the surface of the earth, in the pure sense of physics: independent from temporal phenomena and matter” (CIDOC CRM) Example:the region of
+        space occupied by Rome today, the region of space occupied by the United Kingdom today, the region of space occupied by the Republic of Crimea in 1945</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="edm:ContextualHierarchicalResourceType">
+        <sequence>
+          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
+          <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
+          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <!--
+            <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0" />
+          -->
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="TimeSpanType">
+    <annotation>
+      <documentation>The class of “abstract temporal extents, in the sense of Galilean physics, having a beginning, an end and a duration” (CIDOC CRM) Example:2001-12-31, 01.01.01 – 02.02.02, 1503 –
+        1506 (the time span of the creation of Mona Lisa)</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="edm:ContextualTemporalResourceType">
+        <!--
+          <sequence>
+          <element name="crm_P79F.beginning_is_qualified_by" type="edm:SimpleLiteral" maxOccurs="unbounded" minOccurs="0">
+          <annotation>
+          <documentation> The start date of a time span. Type: date</documentation>
+          </annotation>
+          </element>
+          <element name="crm_P80F.end_is_qualified_by" type="edm:SimpleLiteral" maxOccurs="unbounded" minOccurs="0">
+          <annotation>
+          <documentation> The end date of a time span. Type: date</documentation>
+          </annotation>
+          </element>
+          <!- -
+          <element name="dcterms_hasPart" type="anyURI" maxOccurs="unbounded" minOccurs="0">
+          </element>
+          <element name="dcterms_isPartOf" type="anyURI" maxOccurs="unbounded" minOccurs="0">
+          </element>
+          - ->
+          </sequence>
+        -->
+        <sequence>
+        <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>

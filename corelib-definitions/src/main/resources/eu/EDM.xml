@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007 EDL FOUNDATION
+
+  Licensed under the EUPL, Version 1.1 or - as soon they
+  will be approved by the European Commission - subsequent
+  versions of the EUPL (the "Licence");
+  you may not use this work except in compliance with the
+  Licence.
+  You may obtain a copy of the Licence at:
+
+  http://ec.europa.eu/idabc/eupl
+
+  Unless required by applicable law or agreed to in
+  writing, software distributed under the Licence is
+  distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied.
+  See the Licence for the specific language governing
+  permissions and limitations under the Licence.
+-->
+<!--
+
+  Sample EDM First Implementation data file.
+
+  Technical contact: Borys Omelayenko
+-->
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:ore="http://www.openarchives.org/ore/terms/" xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd">
+
+  <ore:Aggregation rdf:about="http://aggregator.eu/artmuseum/record/000">
+    <edm:aggregatedCHO rdf:resource="http://museum.art/record/000" />
+    <edm:hasView rdf:resource="http://museum.art/images/000.jpg" />
+    <edm:dataProvider rdf:resource="http://museum.art" />
+    <edm:provider rdf:resource="http://aggregator.eu" />
+    <edm:rights rdf:resource="http://creativecommons.org/publicdomain/mark/1.0/" />
+  </ore:Aggregation>
+
+  <edm:ProvidedCHO rdf:about="http://museum.art/record/000">
+    <dc:title>Important art object</dc:title>
+    <dc:coverage>Paris</dc:coverage>
+    <dc:title>First sample EDM object</dc:title>
+    <dc:coverage>Medieval</dc:coverage>
+    <dc:creator>Acryl Painter</dc:creator>
+    <dc:creator rdf:resource="http://painting.info/apainter">WRONG</dc:creator>
+    <edm:type>IMAGE</edm:type>
+  </edm:ProvidedCHO>
+
+  <edm:WebResource rdf:about="http://museum.art/images/000.jpg">
+    <dc:rights>Free access granted by Small Art Museum</dc:rights>
+    <edm:rights rdf:resource="http://creativecommons.org/publicdomain/mark/1.0/" />
+  </edm:WebResource>
+
+  <edm:Agent rdf:about="http://museum.art/person/p-great">
+    <skos:prefLabel xml:lang="en">Painter The Great</skos:prefLabel>
+  </edm:Agent>
+
+  <edm:Place rdf:about="http://geonames.org/paris">
+    <skos:prefLabel>Paris</skos:prefLabel>
+  </edm:Place>
+
+  <edm:TimeSpan rdf:about="http://annocultor.eu/time/medieval">
+    <skos:prefLabel xml:lang="en">Middle Ages</skos:prefLabel>
+  </edm:TimeSpan>
+
+  <skos:Concept rdf:about="http://gemet.org/horse">
+    <skos:prefLabel xml:lang="en">Horse</skos:prefLabel>
+  </skos:Concept>
+
+  <edm:ProvidedCHO rdf:about="http://museum.art/record/001">
+    <dc:title>Another important art object</dc:title>
+    <dc:coverage>Lyon</dc:coverage>
+    <dc:title>Second sample EDM object</dc:title>
+    <dc:coverage>Modern</dc:coverage>
+    <dc:creator>Oil Painter</dc:creator>
+    <dc:creator rdf:resource="http://painting.info/opainter" />
+    <edm:type>IMAGE</edm:type>
+  </edm:ProvidedCHO>
+
+</rdf:RDF>

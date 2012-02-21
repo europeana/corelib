@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007 EDL FOUNDATION
+
+  Licensed under the EUPL, Version 1.1 or - as soon they
+  will be approved by the European Commission - subsequent
+  versions of the EUPL (the "Licence");
+  you may not use this work except in compliance with the
+  Licence.
+  You may obtain a copy of the Licence at:
+
+  http://ec.europa.eu/idabc/eupl
+
+  Unless required by applicable law or agreed to in
+  writing, software distributed under the Licence is
+  distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied.
+  See the Licence for the specific language governing
+  permissions and limitations under the Licence.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.openarchives.org/ore/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
+  >
+  <annotation>
+    <documentation>
+      EDM First Implementation Schema: Aggregations
+
+      Technical contact: Borys Omelayenko
+      Modelling contact:      
+    </documentation>
+  </annotation>
+
+  <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd" />
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
+  <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="EDM-MAIN.xsd" />
+  
+  <element name="Aggregation">
+  <complexType>
+    <annotation>
+      <documentation>
+        Aggregated CHO: a link to the original CHO plus a new provider
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="rdf:AboutType">
+        <sequence>
+          <element ref="edm:aggregatedCHO"  maxOccurs="1" minOccurs="1" />
+          <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="edm:dataProvider" maxOccurs="1" minOccurs="1" />
+          <element ref="edm:provider"  maxOccurs="1" minOccurs="1" />
+          <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="edm:rights" maxOccurs="1" minOccurs="1" />
+          <element ref="edm:isShownBy"  maxOccurs="1" minOccurs="0" />
+          <element ref="edm:isShownAt"  maxOccurs="1" minOccurs="0" />
+          <element ref="edm:object"  maxOccurs="1" minOccurs="0" />
+          <element ref="edm:ugc"  maxOccurs="1" minOccurs="0" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  </element>
+  
+</schema>

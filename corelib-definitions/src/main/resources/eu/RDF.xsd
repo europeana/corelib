@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007 EDL FOUNDATION
+
+  Licensed under the EUPL, Version 1.1 or - as soon they
+  will be approved by the European Commission - subsequent
+  versions of the EUPL (the "Licence");
+  you may not use this work except in compliance with the
+  Licence.
+  You may obtain a copy of the Licence at:
+
+  http://ec.europa.eu/idabc/eupl
+
+  Unless required by applicable law or agreed to in
+  writing, software distributed under the Licence is
+  distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+  express or implied.
+  See the Licence for the specific language governing
+  permissions and limitations under the Licence.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+  <annotation>
+    <documentation>
+      EDM First Implementation Schema: RDF resources and literals
+
+      Technical contact: Borys Omelayenko
+    </documentation>
+  </annotation>
+
+  <import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+  
+  <complexType name="ResourceType">
+    <attribute ref="rdf:resource" use="required" />
+  </complexType>
+
+  <complexType name="AboutType">
+    <attribute ref="rdf:about" use="required" />
+  </complexType>
+
+  <complexType name="LiteralType">
+    <simpleContent>
+      <extension base="string" >
+        <attribute ref="xml:lang" use="optional"/>
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <attribute name="resource">
+    <simpleType>
+      <restriction base="anyURI" />
+    </simpleType>
+  </attribute>
+
+  <attribute name="about">
+    <simpleType>
+      <restriction base="anyURI" />
+    </simpleType>
+  </attribute>
+
+  <complexType name="ResourceOrLiteralType">
+    <simpleContent>
+      <extension base="string">
+        <attribute ref="xml:lang" use="optional"/>
+        <attribute name="resource" use="optional">
+          <simpleType>
+            <restriction base="string" />
+          </simpleType>
+        </attribute>
+      </extension>
+    </simpleContent>
+  </complexType>
+</schema>
