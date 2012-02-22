@@ -17,8 +17,6 @@
 
 package eu.europeana.corelib.solr.mongodb.mock;
 
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -33,7 +31,7 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 public class MongoDBServerMock implements MongoDBServer {
 
 	@Override
-	public FullBean getFullBean(ObjectId id) {
+	public FullBean getFullBean(String id) {
 		return null;
 	}
 
