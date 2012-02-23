@@ -24,7 +24,6 @@
 	<persistence-unit name="europeana">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>eu.europeana.corelib.db.entity.ApiKeyImpl</class>
-		<class>eu.europeana.corelib.db.entity.AuthenticationImpl</class>
 		<class>eu.europeana.corelib.db.entity.SavedItemImpl</class>
 		<class>eu.europeana.corelib.db.entity.SavedSearchImpl</class>
 		<class>eu.europeana.corelib.db.entity.SocialTagImpl</class>
