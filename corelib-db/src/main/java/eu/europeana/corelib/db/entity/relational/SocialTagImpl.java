@@ -15,38 +15,40 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.db.entity;
+package eu.europeana.corelib.db.entity.relational;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import eu.europeana.corelib.db.entity.abstracts.EuropeanaUserObjectImpl;
+import org.apache.commons.lang.StringUtils;
+
+import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.SocialTag;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_SAVEDITEM)
-public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
-	private static final long serialVersionUID = -7059004310525816113L;
+@Table(name = DatabaseDefinition.TABLENAME_SOCIALTAGS)
+public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
+	private static final long serialVersionUID = -3635227115883742004L;
 
-	@Column(length = FIELDSIZE_AUTHOR)
-	private String author;
+	@Column(length = FIELDSIZE_TAG)
+	private String tag;
 
 	/**
 	 * GETTERS & SETTTERS
 	 */
 
 	@Override
-	public String getAuthor() {
-		return author;
+	public String getTag() {
+		return tag;
 	}
 
 	@Override
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setTag(String tag) {
+		this.tag = StringUtils.lowerCase(tag);
 	}
 }

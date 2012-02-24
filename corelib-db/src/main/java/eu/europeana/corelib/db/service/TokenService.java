@@ -26,7 +26,7 @@ import eu.europeana.corelib.definitions.db.entity.Token;
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.db.entity.TokenImpl
+ * @see eu.europeana.corelib.db.entity.relational.TokenImpl
  */
 public interface TokenService extends AbstractService<Token> {
 

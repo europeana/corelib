@@ -15,34 +15,38 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.db.entity;
+package eu.europeana.corelib.db.entity.relational;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_APIKEY)
-public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDefinition, ApiKey {
-	private static final long serialVersionUID = -1717717883751281497L;
+@Table(name = DatabaseDefinition.TABLENAME_TOKEN)
+public class TokenImpl implements IdentifiedEntity<String>, DatabaseDefinition, Token {
+	private static final long serialVersionUID = -9185878608713327601L;
 
 	@Id
-	@Column(length = FIELDSIZE_APIKEY, nullable=false)
-	private String apiKey;
-	
-	@Column(length = FIELDSIZE_APIKEY, nullable=false)
-	private String privateKey;
-	
-	@Column
-	private long usageLimit;
+	@Column(length = FIELDSIZE_TOKEN, nullable = false)
+	private String token;
+
+	@Column(length = FIELDSIZE_PERSONAL, nullable = false)
+	private String email;
+
+	@Column(nullable = false)
+	private Date created;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -50,34 +54,36 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDef
 
 	@Override
 	public String getId() {
-		return apiKey;
-	}
-	
-	@Override
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+		return token;
 	}
 
 	@Override
-	public String getPrivateKey() {
-		return privateKey;
+	public String getToken() {
+		return token;
 	}
 
 	@Override
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Override
-	public long getUsageLimit() {
-		return usageLimit;
+	public String getEmail() {
+		return email;
 	}
 
 	@Override
-	public void setUsageLimit(long usageLimit) {
-		this.usageLimit = usageLimit;
+	public void setEmail(String email) {
+		this.email = StringUtils.lowerCase(email);
 	}
-	
-	
 
+	@Override
+	public Date getCreated() {
+		return created;
+	}
+
+	@Override
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 }

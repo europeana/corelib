@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.db.entity;
+package eu.europeana.corelib.db.entity.relational;
 
 import java.util.Date;
 
@@ -28,7 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import eu.europeana.corelib.db.entity.abstracts.UserConnectedImpl;
+import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.DatabaseDefinition;
 import eu.europeana.corelib.definitions.db.entity.SavedSearch;
 

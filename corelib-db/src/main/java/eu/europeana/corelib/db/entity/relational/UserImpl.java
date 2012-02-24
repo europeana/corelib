@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.db.entity;
+package eu.europeana.corelib.db.entity.relational;
 
 import java.util.Date;
 import java.util.HashSet;

@@ -23,13 +23,12 @@
 
 	<persistence-unit name="europeana">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>eu.europeana.corelib.db.entity.ApiKeyImpl</class>
-		<class>eu.europeana.corelib.db.entity.SavedItemImpl</class>
-		<class>eu.europeana.corelib.db.entity.SavedSearchImpl</class>
-		<class>eu.europeana.corelib.db.entity.SocialTagImpl</class>
-		<class>eu.europeana.corelib.db.entity.TokenImpl</class>
-		<class>eu.europeana.corelib.db.entity.UserImpl</class>
-
+		<class>eu.europeana.corelib.db.entity.relational.ApiKeyImpl</class>
+		<class>eu.europeana.corelib.db.entity.relational.SavedItemImpl</class>
+		<class>eu.europeana.corelib.db.entity.relational.SavedSearchImpl</class>
+		<class>eu.europeana.corelib.db.entity.relational.SocialTagImpl</class>
+		<class>eu.europeana.corelib.db.entity.relational.TokenImpl</class>
+		<class>eu.europeana.corelib.db.entity.relational.UserImpl</class>
 	</persistence-unit>
 
 </persistence>

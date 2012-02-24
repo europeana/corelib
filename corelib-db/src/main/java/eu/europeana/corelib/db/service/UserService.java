@@ -29,7 +29,7 @@ import eu.europeana.corelib.solr.exceptions.SolrTypeException;
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.db.entity.UserImpl
+ * @see eu.europeana.corelib.db.entity.relational.UserImpl
  */
 public interface UserService extends AbstractService<User> {
 

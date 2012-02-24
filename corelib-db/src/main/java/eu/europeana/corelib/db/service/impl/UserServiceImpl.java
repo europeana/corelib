@@ -25,10 +25,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.entity.SavedItemImpl;
-import eu.europeana.corelib.db.entity.SavedSearchImpl;
-import eu.europeana.corelib.db.entity.SocialTagImpl;
-import eu.europeana.corelib.db.entity.UserImpl;
+import eu.europeana.corelib.db.entity.relational.SavedItemImpl;
+import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
+import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
+import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
@@ -46,7 +46,7 @@ import eu.europeana.corelib.solr.service.SearchService;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.service.UserService
- * @see eu.europeana.corelib.db.entity.UserImpl
+ * @see eu.europeana.corelib.db.entity.relational.UserImpl
  */
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
