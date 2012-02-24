@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
 import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 

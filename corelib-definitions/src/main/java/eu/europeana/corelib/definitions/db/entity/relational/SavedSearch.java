@@ -15,17 +15,27 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
+import java.util.Date;
+
+import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface SocialTag extends EuropeanaUserObject {
+public interface SavedSearch extends UserConnected<Long> {
 
-	String getTag();
+	String getQuery();
 
-	void setTag(String tag);
+	void setQuery(String query);
+
+	String getQueryString();
+
+	void setQueryString(String queryString);
+
+	Date getDateSaved();
+
+	void setDateSaved(Date dateSaved);
 
 }

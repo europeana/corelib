@@ -15,27 +15,23 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
-import java.util.Date;
-
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface Token extends IdentifiedEntity<String> {
+public interface ApiKey extends UserConnected<String> {
 
-	String getToken();
+	void setApiKey(String apiKey);
 
-	String getEmail();
+	String getPrivateKey();
 
-	Date getCreated();
+	void setPrivateKey(String privateKey);
 
-	void setCreated(Date created);
+	long getUsageLimit();
 
-	void setEmail(String email);
-
-	void setToken(String token);
+	void setUsageLimit(long usageLimit);
 
 }

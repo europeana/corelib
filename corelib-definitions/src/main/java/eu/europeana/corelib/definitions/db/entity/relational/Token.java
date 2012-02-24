@@ -15,27 +15,27 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
 import java.util.Date;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
+import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface SavedSearch extends UserConnected<Long> {
+public interface Token extends IdentifiedEntity<String> {
 
-	String getQuery();
+	String getToken();
 
-	void setQuery(String query);
+	String getEmail();
 
-	String getQueryString();
+	Date getCreated();
 
-	void setQueryString(String queryString);
+	void setCreated(Date created);
 
-	Date getDateSaved();
+	void setEmail(String email);
 
-	void setDateSaved(Date dateSaved);
+	void setToken(String token);
 
 }

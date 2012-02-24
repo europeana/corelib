@@ -15,23 +15,17 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
+import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface ApiKey extends UserConnected<String> {
+public interface SocialTag extends EuropeanaUserObject {
 
-	void setApiKey(String apiKey);
+	String getTag();
 
-	String getPrivateKey();
-
-	void setPrivateKey(String privateKey);
-
-	long getUsageLimit();
-
-	void setUsageLimit(long usageLimit);
+	void setTag(String tag);
 
 }
