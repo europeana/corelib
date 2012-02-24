@@ -49,14 +49,14 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
     }
     
 
-    CommonsHttpSolrServer makeRemoteSolrServer(String baseUrl) throws Exception {
+    private CommonsHttpSolrServer makeRemoteSolrServer(String baseUrl) throws Exception {
         CommonsHttpSolrServer remoteSolrServer = new CommonsHttpSolrServer(baseUrl);
         remoteSolrServer.setFollowRedirects(false);
         return remoteSolrServer;
     }
     
 
-    EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws Exception {
+    private EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws Exception {
         if (System.getProperty("solr.solr.home") == null) {
             System.setProperty("solr.solr.home", solrHome);
         }
