@@ -38,11 +38,11 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.subethamail.wiser.Wiser;
 
-import eu.europeana.corelib.definitions.db.entity.SavedItem;
-import eu.europeana.corelib.definitions.db.entity.SavedSearch;
-import eu.europeana.corelib.definitions.db.entity.SocialTag;
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
+import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.email.impl.EmailBuilderImpl;

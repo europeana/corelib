@@ -22,8 +22,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

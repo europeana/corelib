@@ -21,7 +21,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
-import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 
 /**

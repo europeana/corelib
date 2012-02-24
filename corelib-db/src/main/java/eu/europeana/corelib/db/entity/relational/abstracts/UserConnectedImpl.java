@@ -25,9 +25,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import eu.europeana.corelib.db.entity.relational.UserImpl;
-import eu.europeana.corelib.definitions.db.entity.User;
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.definitions.db.entity.abstracts.UserConnected;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConnected;
 
 /**
  * Generic super class for entities connected to a certain user.

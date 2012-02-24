@@ -28,7 +28,7 @@ import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
-import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**

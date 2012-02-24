@@ -19,7 +19,7 @@ package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
-import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 
 /**
  * Service with dedicated Token related actions.

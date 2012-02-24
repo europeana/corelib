@@ -41,12 +41,12 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Index;
 
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.SavedItem;
-import eu.europeana.corelib.definitions.db.entity.SavedSearch;
-import eu.europeana.corelib.definitions.db.entity.SocialTag;
-import eu.europeana.corelib.definitions.db.entity.User;
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
+import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
 
 /**

@@ -26,9 +26,9 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

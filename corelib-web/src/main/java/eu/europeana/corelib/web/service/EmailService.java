@@ -17,8 +17,8 @@
 
 package eu.europeana.corelib.web.service;
 
-import eu.europeana.corelib.definitions.db.entity.Token;
-import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
 /**

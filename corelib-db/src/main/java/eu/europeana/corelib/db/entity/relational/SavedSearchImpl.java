@@ -29,8 +29,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.SavedSearch;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

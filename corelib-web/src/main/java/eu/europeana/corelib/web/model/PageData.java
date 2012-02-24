@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.definitions.db.entity.User;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

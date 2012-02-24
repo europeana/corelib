@@ -23,8 +23,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

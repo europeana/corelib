@@ -36,8 +36,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.definitions.db.DatabaseDefinition;
-import eu.europeana.corelib.definitions.db.entity.Token;
+import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
