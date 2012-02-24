@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.definitions.db.entity.relational;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

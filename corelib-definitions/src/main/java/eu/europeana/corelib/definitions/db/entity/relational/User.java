@@ -20,7 +20,7 @@ package eu.europeana.corelib.definitions.db.entity.relational;
 import java.util.Date;
 import java.util.Set;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
 
 /**

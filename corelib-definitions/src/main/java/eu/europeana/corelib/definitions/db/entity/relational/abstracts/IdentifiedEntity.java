@@ -15,19 +15,20 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity.abstracts;
+package eu.europeana.corelib.definitions.db.entity.relational.abstracts;
 
 import java.io.Serializable;
 
-import eu.europeana.corelib.definitions.db.entity.User;
-
 /**
+ * High level interface for database entities supported by the generic DAO.
+ * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * 
+ * @param <I>
+ *            A Serializable type used as primary key, like a Long or String
  */
-public abstract interface UserConnected<I extends Serializable> extends IdentifiedEntity<I> {
+public interface IdentifiedEntity<I extends Serializable> extends Serializable {
 
-	User getUser();
-
-	void setUser(User user);
+	I getId();
 
 }

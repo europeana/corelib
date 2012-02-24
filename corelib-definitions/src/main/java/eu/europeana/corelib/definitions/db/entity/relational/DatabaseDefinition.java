@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db;
+package eu.europeana.corelib.definitions.db.entity.relational;
 
 /**
  * This interface contains all the database definitions, reusable by front-end to validate fields.

@@ -15,20 +15,37 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity.abstracts;
+package eu.europeana.corelib.definitions.db.entity.relational.abstracts;
 
-import java.io.Serializable;
+import java.util.Date;
+
+import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
- * High level interface for database entities supported by the generic DAO.
- * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
- * @param <I>
- *            A Serializable type used as primary key, like a Long or String
  */
-public interface IdentifiedEntity<I extends Serializable> extends Serializable {
+public interface EuropeanaUserObject extends UserConnected<Long> {
 
-	I getId();
+	Long getId();
+
+	Date getDateSaved();
+
+	void setDateSaved(Date dateSaved);
+
+	String getTitle();
+
+	void setTitle(String title);
+
+	String getEuropeanaObject();
+
+	void setEuropeanaObject(String europeanaObject);
+
+	String getEuropeanaUri();
+
+	void setEuropeanaUri(String europeanaUri);
+
+	DocType getDocType();
+
+	void setDocType(DocType docType);
 
 }

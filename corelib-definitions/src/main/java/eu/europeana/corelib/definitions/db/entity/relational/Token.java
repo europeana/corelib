@@ -19,7 +19,7 @@ package eu.europeana.corelib.definitions.db.entity.relational;
 
 import java.util.Date;
 
-import eu.europeana.corelib.definitions.db.entity.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

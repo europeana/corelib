@@ -15,37 +15,19 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity.abstracts;
+package eu.europeana.corelib.definitions.db.entity.relational.abstracts;
 
-import java.util.Date;
+import java.io.Serializable;
 
-import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface EuropeanaUserObject extends UserConnected<Long> {
+public abstract interface UserConnected<I extends Serializable> extends IdentifiedEntity<I> {
 
-	Long getId();
+	User getUser();
 
-	Date getDateSaved();
-
-	void setDateSaved(Date dateSaved);
-
-	String getTitle();
-
-	void setTitle(String title);
-
-	String getEuropeanaObject();
-
-	void setEuropeanaObject(String europeanaObject);
-
-	String getEuropeanaUri();
-
-	void setEuropeanaUri(String europeanaUri);
-
-	DocType getDocType();
-
-	void setDocType(DocType docType);
+	void setUser(User user);
 
 }
