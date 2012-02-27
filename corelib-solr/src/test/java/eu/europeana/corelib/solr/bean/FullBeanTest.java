@@ -22,7 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +34,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Key;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -263,8 +261,8 @@ public class FullBeanTest {
 	private Timespan createTimespan() {
 		Timespan timespan = new TimespanImpl();
 		timespan.setNote(new String[] { "test note" });
-		timespan.setBegin(new Date());
-		timespan.setEnd(new Date());
+		timespan.setBegin("test begin");
+		timespan.setEnd("test end");
 		Map<String, String> prefLabel = new HashMap<String, String>();
 		prefLabel.put("en", "test prefLabel");
 		timespan.setPrefLabel(prefLabel);
@@ -292,7 +290,7 @@ public class FullBeanTest {
 		proxy.setDcContributor(new String[] { "test dc:contributor" });
 		proxy.setDcCoverage(new String[] { "test dc:coverage" });
 		proxy.setDcCreator(new String[] { "test dc:creator" });
-		proxy.setDcDate(new Date[] { new Date() });
+		proxy.setDcDate(new String[] { "test date" });
 		proxy.setDcDescription(new String[] { "test dc:description" });
 		proxy.setDcFormat(new String[] { "test dc:format" });
 		proxy.setDcIdentifier(new String[] { "test dc:identifier" });
@@ -304,7 +302,7 @@ public class FullBeanTest {
 		proxy.setDcSubject(new String[] { "test dc:subject" });
 		proxy.setDctermsAlternative(new String[] { "test dcterms:alternative" });
 		proxy.setDctermsConformsTo(new String[] { "test dcterms:conformsTo" });
-		proxy.setDctermsCreated(new Date[] { new Date() });
+		proxy.setDctermsCreated(new String[] { "test created" });
 		proxy.setDctermsExtent(new String[] { "test dcterms:extent" });
 		proxy.setDctermsHasFormat(new String[] { "test dcterms:hasFormat" });
 		proxy.setDctermsHasPart(new String[] { "test dcterms:hasPart" });
@@ -401,10 +399,10 @@ public class FullBeanTest {
 		Map<String, String> altLabel = new HashMap<String, String>();
 		altLabel.put("en", "test altLabel");
 		agent.setPrefLabel(altLabel);
-		Date begin = new Date();
-		agent.setBegin(begin);
-		Date end = new Date();
-		agent.setEnd(end);
+		
+		agent.setBegin("test begin");
+		
+		agent.setEnd("test end");
 		ds.save(agent);
 		Agent testAgent = ds.find(AgentImpl.class).get();
 		assertEquals(agent, testAgent);

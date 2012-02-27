@@ -46,12 +46,23 @@ public class AggregationImpl implements Aggregation {
 	private String edmUgc;
 	private String[] dcRights;
 	private String[] hasView;
+	private String aggregatedCHO;
 	
 	@Indexed
 	private String about;
 	private Boolean edmPreviewNoDistribute;
 	
 	
+	@Override
+	public String getAggregatedCHO() {
+		return aggregatedCHO;
+	}
+
+	@Override
+	public void setAggregatedCHO(String aggregatedCHO) {
+		this.aggregatedCHO = aggregatedCHO;
+	}
+
 	@Override
 	public Boolean getEdmPreviewNoDistribute() {
 		return edmPreviewNoDistribute;

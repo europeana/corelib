@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -146,7 +146,7 @@ public interface FullBean extends ApiBean {
 	 * 
 	 * @return A Date array with the dcterms:created fields for all proxies pointing to a CHO
 	 */
-	Date[] getDcTermsCreated();
+	String[] getDcTermsCreated();
 
 	/**
 	 * Retrieve dcterms:extent fields from a Proxy
@@ -290,14 +290,14 @@ public interface FullBean extends ApiBean {
 	 * 
 	 * @return A Date array with the edm:begin fields for all Agents pointing to a CHO
 	 */
-	Date[] getEdmAgentBegin();
+	String[] getEdmAgentBegin();
 
 	/**
 	 * Retrieve edm:end fields from an Agent
 	 * 
 	 * @return A Date array with the edm:end fields for all Agents pointing to a CHO
 	 */
-	Date[] getEdmAgentEnd();
+	String[] getEdmAgentEnd();
 
 	/**
 	 * Retrieve skos:note fields from a Timespan

@@ -18,12 +18,9 @@
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.beans.Field;
-
-
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
@@ -126,10 +123,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     ArrayList<Map<String,String>> edmTimespanBroaderLabel;
 
     @Field("edm_timespan_begin")
-    Date[] edmTimespanBegin;
+    String[] edmTimespanBegin;
 
     @Field("edm_timespan_end")
-    Date[] edmTimespanEnd;
+    String[] edmTimespanEnd;
 
     @Field("edm_concept")
     String[] edmConceptTerm;
@@ -269,12 +266,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public Date[] getEdmTimespanBegin() {
+    public String[] getEdmTimespanBegin() {
         return edmTimespanBegin;
     }
 
     @Override
-    public Date[] getEdmTimespanEnd() {
+    public String[] getEdmTimespanEnd() {
         return edmTimespanEnd;
     }
 

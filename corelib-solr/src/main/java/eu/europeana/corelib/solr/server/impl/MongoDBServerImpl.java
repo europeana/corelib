@@ -19,8 +19,6 @@ package eu.europeana.corelib.solr.server.impl;
 
 import java.net.UnknownHostException;
 
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.DB;
@@ -28,8 +26,8 @@ import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AbstractEdmEntityImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -102,8 +100,8 @@ public class MongoDBServerImpl implements MongoDBServer {
 	}
 	
 	@Override
-	public AbstractEdmEntity searchByAbout(String about){
-		return datastore.find(AbstractEdmEntity.class).field("about").equal(about).get();
+	public AbstractEdmEntityImpl searchByAbout(String about){
+		return datastore.find(AbstractEdmEntityImpl.class).field("about").equal(about).get();
 	}
 
 	

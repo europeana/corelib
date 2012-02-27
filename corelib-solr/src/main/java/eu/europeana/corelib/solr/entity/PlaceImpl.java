@@ -43,6 +43,7 @@ public class PlaceImpl implements Place {
 	private String[] isPartOf;
 	private float latitude;
 	private float longitude;
+	
 	@Indexed
 	private String about;
 

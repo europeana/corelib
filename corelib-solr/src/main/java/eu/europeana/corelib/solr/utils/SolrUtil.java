@@ -53,4 +53,7 @@ public class SolrUtil {
 		return true;
 	}
 
+	public  static  <T> T exists (Class<T> clazz, T object) throws InstantiationException, IllegalAccessException{
+		return ( object==null? clazz.newInstance():object );
+	}
 }

@@ -18,60 +18,110 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 
 public class ConceptFieldInput {
 
-	public static SolrInputDocument createConceptSolrFields(Concept concept, SolrInputDocument solrInputDocument){
-		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(), concept.getAbout());
-		for(AltLabel altLabel: concept.getAltLabelList()){
-			solrInputDocument.addField(EdmLabel.CC_SKOS_ALT_LABEL.toString()+"."+altLabel.getLang().getLang(), altLabel.getString());
+	public static SolrInputDocument createConceptSolrFields(Concept concept,
+			SolrInputDocument solrInputDocument) {
+		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(),
+				concept.getAbout());
+		if (concept.getAltLabelList() != null) {
+			for (AltLabel altLabel : concept.getAltLabelList()) {
+				try{
+				solrInputDocument.addField(
+						EdmLabel.CC_SKOS_ALT_LABEL.toString() + "."
+								+ altLabel.getLang().getLang(),
+						altLabel.getString());
+				}
+				catch(NullPointerException e){
+					solrInputDocument.addField(EdmLabel.CC_SKOS_ALT_LABEL.toString(),
+					altLabel.getString());
+				}
+			}
 		}
-		for(PrefLabel prefLabel: concept.getPrefLabelList()){
-			solrInputDocument.addField(EdmLabel.CC_SKOS_PREF_LABEL.toString()+"."+prefLabel.getLang().getLang(), prefLabel.getString());
+		if (concept.getPrefLabelList() != null) {
+			for (PrefLabel prefLabel : concept.getPrefLabelList()) {
+				try {
+					solrInputDocument.addField(
+							EdmLabel.CC_SKOS_PREF_LABEL.toString() + "."
+									+ prefLabel.getLang().getLang(),
+							prefLabel.getString());
+				} catch (NullPointerException e) {
+					solrInputDocument.addField(
+							EdmLabel.CC_SKOS_PREF_LABEL.toString(), prefLabel.getString());
+				}
+			}
 		}
-		for(Broader broader: concept.getBroaderList()){
-			solrInputDocument.addField(EdmLabel.CC_SKOS_BROADER.toString(),broader.getBroader());
+		if (concept.getBroaderList() != null) {
+			for (Broader broader : concept.getBroaderList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_BROADER.toString(),
+						broader.getBroader());
+			}
 		}
-		for(Note note:concept.getNoteList()){
-			solrInputDocument.addField(EdmLabel.CC_SKOS_NOTE.toString(),note.getString());
+		if (concept.getNoteList() != null) {
+			for (Note note : concept.getNoteList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_NOTE.toString(),
+						note.getString());
+			}
 		}
 		return solrInputDocument;
 	}
 
-	public static List<? extends eu.europeana.corelib.definitions.solr.entity.Concept> createConceptMongoFields(	Concept concept, MongoDBServer mongoServer) {
-		List <eu.europeana.corelib.definitions.solr.entity.Concept> conceptList = new ArrayList<eu.europeana.corelib.definitions.solr.entity.Concept>();
-		//If Concept exists in Mongo
-		try{
-			conceptList.add((eu.europeana.corelib.definitions.solr.entity.Concept) mongoServer.searchByAbout(concept.getAbout()));
+	public static ConceptImpl createConceptMongoFields(Concept concept,
+			MongoDBServer mongoServer) {
+		ConceptImpl conceptMongo = new ConceptImpl();
+		try {
+			conceptMongo = (ConceptImpl) mongoServer.searchByAbout(concept
+					.getAbout());
+			conceptMongo.getAbout();
 		}
-		//If it does not exist
-		catch(NullPointerException npe){
-			eu.europeana.corelib.definitions.solr.entity.Concept conceptMongo = new ConceptImpl();
+		// If it does not exist
+		catch (NullPointerException npe) {
+			conceptMongo = new ConceptImpl();
 			conceptMongo.setAbout(concept.getAbout());
-			
-			List<String> noteList = new ArrayList<String>();
-			for(Note note : concept.getNoteList()){
-				noteList.add(note.getString());
-			}
-			conceptMongo.setNote(noteList.toArray(new String[noteList.size()]));
-			
-			List<String> broaderList = new ArrayList<String>();
-			for(Broader broader : concept.getBroaderList()){
-				broaderList.add(broader.getBroader());
-			}
-			conceptMongo.setBroader(broaderList.toArray(new String[broaderList.size()]));
-			
-			Map<String, String> prefLabelMongo = new HashMap<String, String>();
-			for (PrefLabel prefLabelJibx : concept.getPrefLabelList()) {
-				prefLabelMongo.put(prefLabelJibx.getLang().getLang(),prefLabelJibx.getString());
-			}
-			conceptMongo.setPrefLabel(prefLabelMongo);
 
-			Map<String, String> altLabelMongo = new HashMap<String, String>();
-			for (AltLabel altLabelJibx : concept.getAltLabelList()) {
-				altLabelMongo.put(altLabelJibx.getLang().getLang(),
-						altLabelJibx.getString());
+			if (concept.getNoteList() != null) {
+				List<String> noteList = new ArrayList<String>();
+				for (Note note : concept.getNoteList()) {
+					noteList.add(note.getString());
+				}
+				conceptMongo.setNote(noteList.toArray(new String[noteList
+						.size()]));
 			}
-			conceptMongo.setAltLabel(altLabelMongo);
+
+			if (concept.getBroaderList() != null) {
+				List<String> broaderList = new ArrayList<String>();
+				for (Broader broader : concept.getBroaderList()) {
+					broaderList.add(broader.getBroader());
+				}
+				conceptMongo.setBroader(broaderList
+						.toArray(new String[broaderList.size()]));
+			}
+
+			if (concept.getPrefLabelList() != null) {
+				Map<String, String> prefLabelMongo = new HashMap<String, String>();
+				for (PrefLabel prefLabelJibx : concept.getPrefLabelList()) {
+					try {
+						prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
+								prefLabelJibx.getString());
+					} catch (NullPointerException e) {
+						prefLabelMongo.put("def", prefLabelJibx.getString());
+					}
+				}
+				conceptMongo.setPrefLabel(prefLabelMongo);
+			}
+
+			if (concept.getAltLabelList() != null) {
+				Map<String, String> altLabelMongo = new HashMap<String, String>();
+				for (AltLabel altLabelJibx : concept.getAltLabelList()) {
+					try {
+						altLabelMongo.put(altLabelJibx.getLang().getLang(),
+								altLabelJibx.getString());
+					} catch (NullPointerException e) {
+						altLabelMongo.put("def", altLabelJibx.getString());
+					}
+				}
+				conceptMongo.setAltLabel(altLabelMongo);
+			}
 			mongoServer.getDatastore().save(conceptMongo);
 		}
-		return conceptList;
+		return conceptMongo;
 	}
 }

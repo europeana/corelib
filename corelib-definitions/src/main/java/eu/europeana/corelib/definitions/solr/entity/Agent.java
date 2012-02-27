@@ -33,20 +33,20 @@ public interface Agent extends ContextualClass {
 	 * 
 	 * @return Date representing the birth of an actor
 	 */
-	Date getBegin();
+	String getBegin();
 
 	/**
 	 * Retrieves the edm:end
 	 * 
 	 * @return Date representing the death of an actor
 	 */
-	Date getEnd();
+	String getEnd();
 
 
 
-	void setBegin(Date begin);
+	void setBegin(String begin);
 
-	void setEnd(Date end);
+	void setEnd(String end);
 
 
 

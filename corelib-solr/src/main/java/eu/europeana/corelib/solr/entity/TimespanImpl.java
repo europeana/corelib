@@ -16,12 +16,13 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.*;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Timespan
@@ -37,8 +38,8 @@ public class TimespanImpl implements
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private String[] note;
-	private Date begin;
-	private Date end;
+	private String begin;
+	private String end;
 	private String[] isPartOf;
 	@Indexed
 	private String about;
@@ -69,12 +70,12 @@ public class TimespanImpl implements
 	}
 
 	@Override
-	public Date getBegin() {
+	public String getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public Date getEnd() {
+	public String getEnd() {
 		return this.end;
 	}
 
@@ -108,12 +109,12 @@ public class TimespanImpl implements
 	}
 
 	@Override
-	public void setBegin(Date begin) {
+	public void setBegin(String begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(Date end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
 

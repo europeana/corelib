@@ -112,5 +112,8 @@ public interface Aggregation extends AbstractEdmEntity {
 	String[] getHasView();
 
 	void setHasView(String[] hasView);
+	
+	String getAggregatedCHO();
+	void setAggregatedCHO(String aggregatedCHO);
 
 }

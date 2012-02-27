@@ -16,8 +16,6 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-import java.util.Date;
-
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
@@ -50,7 +48,7 @@ public interface Proxy extends AbstractEdmEntity{
 	 * Retrieve the dc:date fields for a Proxy
 	 * @return Date array representing the dc:date fields for a Proxy
 	 */
-	Date[] getDcDate();
+	String[] getDcDate();
 	
 	/**
 	 * Retrieve the dc:description fields for a Proxy
@@ -134,7 +132,7 @@ public interface Proxy extends AbstractEdmEntity{
 	 * Retrieve the dcterms:created fields for a Proxy
 	 * @return Date array representing the dcterms:created fields for a Proxy
 	 */
-	Date[] getDctermsCreated();
+	String[] getDctermsCreated();
 	
 	/**
 	 * Retrieve the dcterms:extent fields for a Proxy
@@ -268,7 +266,7 @@ public interface Proxy extends AbstractEdmEntity{
 
 	void setDcCreator(String[] dcCreator);
 
-	void setDcDate(Date[] dcDate);
+	void setDcDate(String[] dcDate);
 
 	void setDcDescription(String[] dcDescription);
 
@@ -296,7 +294,7 @@ public interface Proxy extends AbstractEdmEntity{
 
 	void setDctermsConformsTo(String[] dctermsConformsTo);
 
-	void setDctermsCreated(Date[] dctermsCreated);
+	void setDctermsCreated(String[] dctermsCreated);
 
 	void setDctermsExtent(String[] dctermsExtent);
 

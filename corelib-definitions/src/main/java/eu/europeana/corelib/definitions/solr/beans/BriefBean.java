@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -73,9 +73,9 @@ public interface BriefBean extends IdBean {
 
 	List<Map<String, String>> getEdmTimespanLabel();
 
-	Date[] getEdmTimespanBegin();
+	String[] getEdmTimespanBegin();
 
-	Date[] getEdmTimespanEnd();
+	String[] getEdmTimespanEnd();
 
 	String[] getEdmConcept(); // skos:concept
 

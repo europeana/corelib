@@ -7,4 +7,8 @@ public interface AbstractEdmEntity {
 	ObjectId getId();
 
 	void setId(ObjectId id);
+	
+	String getAbout();
+	
+	void setAbout(String about);
 }

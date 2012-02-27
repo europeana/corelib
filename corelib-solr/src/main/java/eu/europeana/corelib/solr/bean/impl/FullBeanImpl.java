@@ -18,7 +18,6 @@
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -377,24 +376,24 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public Date[] getEdmTimespanBegin() {
-		ArrayList<Date> startDates = new ArrayList<Date>();
+	public String[] getEdmTimespanBegin() {
+		ArrayList<String> startDates = new ArrayList<String>();
 		for (Timespan timespan : this.timespans) {
 
 			startDates.add(timespan.getBegin());
 
 		}
-		return startDates.toArray(new Date[startDates.size()]);
+		return startDates.toArray(new String[startDates.size()]);
 	}
 
 	@Override
-	public Date[] getEdmTimespanEnd() {
-		ArrayList<Date> endDates = new ArrayList<Date>();
+	public String[] getEdmTimespanEnd() {
+		ArrayList<String> endDates = new ArrayList<String>();
 		for (Timespan timespan : this.timespans) {
 
 			endDates.add(timespan.getEnd());
 		}
-		return endDates.toArray(new Date[endDates.size()]);
+		return endDates.toArray(new String[endDates.size()]);
 	}
 
 	@Override
@@ -651,14 +650,14 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public Date[] getDcTermsCreated() {
-		ArrayList<Date> dctermsCreatedList = new ArrayList<Date>();
+	public String[] getDcTermsCreated() {
+		ArrayList<String> dctermsCreatedList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
-			for (Date dctermsCreated : proxy.getDctermsCreated()) {
+			for (String dctermsCreated : proxy.getDctermsCreated()) {
 				dctermsCreatedList.add(dctermsCreated);
 			}
 		}
-		return dctermsCreatedList.toArray(new Date[dctermsCreatedList.size()]);
+		return dctermsCreatedList.toArray(new String[dctermsCreatedList.size()]);
 	}
 
 	@Override
@@ -874,21 +873,21 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public Date[] getEdmAgentBegin() {
-		ArrayList<Date> agentBeginDates = new ArrayList<Date>();
+	public String[] getEdmAgentBegin() {
+		ArrayList<String> agentBeginDates = new ArrayList<String>();
 		for (Agent agent : this.agents) {
 			agentBeginDates.add(agent.getBegin());
 		}
-		return agentBeginDates.toArray(new Date[agentBeginDates.size()]);
+		return agentBeginDates.toArray(new String[agentBeginDates.size()]);
 	}
 
 	@Override
-	public Date[] getEdmAgentEnd() {
-		ArrayList<Date> agentEndDates = new ArrayList<Date>();
+	public String[] getEdmAgentEnd() {
+		ArrayList<String> agentEndDates = new ArrayList<String>();
 		for (Agent agent : this.agents) {
 			agentEndDates.add(agent.getEnd());
 		}
-		return agentEndDates.toArray(new Date[agentEndDates.size()]);
+		return agentEndDates.toArray(new String[agentEndDates.size()]);
 	}
 
 	@Override

@@ -17,7 +17,6 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -44,8 +43,8 @@ public class AgentImpl implements Agent {
 	private Map<String, String> altLabel;
 	private String[] note;
 
-	private Date begin;
-	private Date end;
+	private String begin;
+	private String end;
 	
 	@Override
 	public String getAbout() {
@@ -73,12 +72,12 @@ public class AgentImpl implements Agent {
 	}
 
 	@Override
-	public Date getBegin() {
+	public String getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public Date getEnd() {
+	public String getEnd() {
 		return this.end;
 	}
 
@@ -108,12 +107,12 @@ public class AgentImpl implements Agent {
 	}
 
 	@Override
-	public void setBegin(Date begin) {
+	public void setBegin(String begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(Date end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
 

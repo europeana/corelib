@@ -16,13 +16,14 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Date;
+import org.bson.types.ObjectId;
+
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
-
-import com.google.code.morphia.annotations.*;
-import org.bson.types.*;
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.Proxy
  * @author Yorgos.Mamakis@ kb.nl
@@ -38,7 +39,7 @@ public class ProxyImpl implements Proxy {
 	private String[] dcContributor;
 	private String[] dcCoverage;
 	private String[] dcCreator;
-	private Date[] dcDate;
+	private String[] dcDate;
 	private String[] dcDescription;
 	private String[] dcFormat;
 	private String[] dcIdentifier;
@@ -52,7 +53,7 @@ public class ProxyImpl implements Proxy {
 	private String[] dcType;
 	private String[] dctermsAlternative;
 	private String[] dctermsConformsTo;
-	private Date[] dctermsCreated;
+	private String[] dctermsCreated;
 	private String[] dctermsExtent;
 	private String[] dctermsHasFormat;
 	private String[] dctermsHasPart;
@@ -134,7 +135,7 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public Date[] getDcDate() {
+	public String[] getDcDate() {
 		return this.dcDate;
 	}
 
@@ -204,7 +205,7 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public Date[] getDctermsCreated() {
+	public String[] getDctermsCreated() {
 		return this.dctermsCreated;
 	}
 
@@ -339,7 +340,7 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public void setDcDate(Date[] dcDate) {
+	public void setDcDate(String[] dcDate) {
 		this.dcDate = dcDate.clone();
 	}
 
@@ -409,8 +410,8 @@ public class ProxyImpl implements Proxy {
 	}
 
 	@Override
-	public void setDctermsCreated(Date[] dctermsCreated) {
-		this.dctermsCreated = dctermsCreated.clone();
+	public void setDctermsCreated(String[] strings) {
+		this.dctermsCreated = strings.clone();
 	}
 
 	@Override
