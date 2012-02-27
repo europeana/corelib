@@ -16,7 +16,6 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-import org.bson.types.ObjectId;
 
 /**
  *  EDM WebResource Fields implementation

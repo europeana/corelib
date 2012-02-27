@@ -16,7 +16,6 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-import org.bson.types.ObjectId;
 
 /**
  * EDM Place fields representation

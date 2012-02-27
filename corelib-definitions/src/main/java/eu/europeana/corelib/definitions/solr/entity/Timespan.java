@@ -17,8 +17,6 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Date;
-
-import org.bson.types.ObjectId;
 /**
  * EDM Timespan fields representation
  * @author Yorgos.Mamakis@ kb.nl
