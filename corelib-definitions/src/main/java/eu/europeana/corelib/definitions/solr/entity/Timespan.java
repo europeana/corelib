@@ -17,6 +17,7 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Date;
+
 /**
  * EDM Timespan fields representation
  * @author Yorgos.Mamakis@ kb.nl
@@ -29,13 +30,13 @@ public interface Timespan extends ContextualClass {
 	 * Retrieve the edm:begin field of a Timespan
 	 * @return Date representing the edm:begin field of a timespan
 	 */
-	Date getBegin();
+	String getBegin();
 	
 	/**
 	 * Retrieve the edm:end field of a Timespan
 	 * @return Date representing the edm:end field of a timespan
 	 */
-	Date getEnd();
+	String getEnd();
 	
 	/**
 	 * Retrieve the dcterms:isPartOf field of a Timespan
@@ -44,9 +45,9 @@ public interface Timespan extends ContextualClass {
 	String[] getIsPartOf();
 
 
-	void setBegin(Date begin);
+	void setBegin(String begin);
 
-	void setEnd(Date end);
+	void setEnd(String end);
 
 	void setIsPartOf(String[] isPartOf);
 
