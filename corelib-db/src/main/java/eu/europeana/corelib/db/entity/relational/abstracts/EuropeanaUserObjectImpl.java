@@ -29,7 +29,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.solr.DocType;
 
@@ -39,7 +39,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @MappedSuperclass
-public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> implements DatabaseDefinition, EuropeanaUserObject {
+public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> implements RelationalDatabase, EuropeanaUserObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -29,15 +29,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_SAVEDSEARCH)
-public class SavedSearchImpl extends UserConnectedImpl<Long> implements DatabaseDefinition, SavedSearch {
+@Table(name = RelationalDatabase.TABLENAME_SAVEDSEARCH)
+public class SavedSearchImpl extends UserConnectedImpl<Long> implements RelationalDatabase, SavedSearch {
     private static final long serialVersionUID = 667805541628354454L;
 
     @Id

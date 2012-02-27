@@ -23,15 +23,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_APIKEY)
-public class ApiKeyImpl extends UserConnectedImpl<String> implements DatabaseDefinition, ApiKey {
+@Table(name = RelationalDatabase.TABLENAME_APIKEY)
+public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalDatabase, ApiKey {
 	private static final long serialVersionUID = -1717717883751281497L;
 
 	@Id

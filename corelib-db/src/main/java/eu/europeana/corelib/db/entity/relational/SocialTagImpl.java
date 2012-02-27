@@ -24,14 +24,14 @@ import javax.persistence.Table;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_SOCIALTAGS)
+@Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
 public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
 

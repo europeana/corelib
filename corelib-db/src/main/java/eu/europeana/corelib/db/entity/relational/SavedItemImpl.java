@@ -22,14 +22,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_SAVEDITEM)
+@Table(name = RelationalDatabase.TABLENAME_SAVEDITEM)
 public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
 	private static final long serialVersionUID = -7059004310525816113L;
 

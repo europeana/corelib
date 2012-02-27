@@ -33,7 +33,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
@@ -147,7 +147,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 		
 		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0],
-				DatabaseDefinition.FIELDSIZE_AUTHOR));
+				RelationalDatabase.FIELDSIZE_AUTHOR));
 		return user;
 	}
 	
@@ -163,7 +163,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag,
-				DatabaseDefinition.FIELDSIZE_TAG));
+				RelationalDatabase.FIELDSIZE_TAG));
 		return user;
 	}
 
@@ -206,7 +206,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		instance.setEuropeanaObject(bean.getEdmObject()[0]);
 		instance.setDateSaved(new Date());
 		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0],
-				DatabaseDefinition.FIELDSIZE_TITLE));
+				RelationalDatabase.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {

@@ -26,7 +26,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 
@@ -34,8 +34,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@Table(name = DatabaseDefinition.TABLENAME_TOKEN)
-public class TokenImpl implements IdentifiedEntity<String>, DatabaseDefinition, Token {
+@Table(name = RelationalDatabase.TABLENAME_TOKEN)
+public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, Token {
 	private static final long serialVersionUID = -9185878608713327601L;
 
 	@Id

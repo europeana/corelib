@@ -15,14 +15,14 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.db.entity.relational;
+package eu.europeana.corelib.definitions.db.entity;
 
 /**
  * This interface contains all the database definitions, reusable by front-end to validate fields.
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface DatabaseDefinition {
+public interface RelationalDatabase {
 	
 	// apikey
 	String TABLENAME_APIKEY = "apikey";

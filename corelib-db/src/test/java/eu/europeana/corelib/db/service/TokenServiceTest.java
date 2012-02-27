@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import eu.europeana.corelib.db.dao.Dao;
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 
 /**
@@ -65,7 +65,7 @@ public class TokenServiceTest {
 		String token = tokenService.createRandomToken();
 		assertNotNull("No token generated", StringUtils.trimToNull(token));
 		assertEquals("Token did not have the required length, current length=" + StringUtils.length(token),
-				DatabaseDefinition.FIELDSIZE_TOKEN, StringUtils.length(token));
+				RelationalDatabase.FIELDSIZE_TOKEN, StringUtils.length(token));
 	}
 
 	@Test

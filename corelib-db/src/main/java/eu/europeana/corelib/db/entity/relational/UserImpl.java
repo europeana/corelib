@@ -41,7 +41,7 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Index;
 
-import eu.europeana.corelib.definitions.db.entity.relational.DatabaseDefinition;
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
@@ -57,8 +57,8 @@ import eu.europeana.corelib.definitions.users.Role;
 	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?"),
 	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="from UserImpl u where u.apiKey = ?")
 })
-@Table(name = DatabaseDefinition.TABLENAME_USER)
-public class UserImpl implements IdentifiedEntity<Long>, DatabaseDefinition, User {
+@Table(name = RelationalDatabase.TABLENAME_USER)
+public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
 	private static final long serialVersionUID = 3830841148649674534L;
 	
 	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
