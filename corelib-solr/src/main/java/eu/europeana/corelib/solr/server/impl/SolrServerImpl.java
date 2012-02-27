@@ -24,12 +24,15 @@ import org.apache.solr.common.util.NamedList;
 
 import java.util.Date;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
 import org.apache.solr.core.CoreContainer;
+import org.xml.sax.SAXException;
 
 public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer implements eu.europeana.corelib.solr.server.SolrServer{
 	
@@ -56,7 +59,11 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
     }
     
 
+
+    EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws IOException, ParserConfigurationException, SAXException  {
+
     private EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws Exception {
+
         if (System.getProperty("solr.solr.home") == null) {
             System.setProperty("solr.solr.home", solrHome);
         }
