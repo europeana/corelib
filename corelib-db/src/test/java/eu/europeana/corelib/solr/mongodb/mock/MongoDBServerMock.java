@@ -45,4 +45,10 @@ public class MongoDBServerMock implements MongoDBServer {
 		return null;
 	}
 
+	@Override
+	public void close() {
+		return;
+		
+	}
+
 }
