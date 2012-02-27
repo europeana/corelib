@@ -88,7 +88,7 @@ public class AggregationFieldInput {
 
 		eu.europeana.corelib.definitions.solr.entity.Aggregation aggregation = findAggregation(
 				aggregations, webResource);
-		WebResource mongoWebResource = new WebResourceImpl();
+		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		mongoWebResource.setAbout(webResource.getAbout());
 		if (aggregation.getHasView() != null) {
 			List<String> hasViewList = new ArrayList<String>();
@@ -114,11 +114,11 @@ public class AggregationFieldInput {
 				.find(AggregationImpl.class).field("about")
 				.equal(aggregation.getAbout());
 		AggregationImpl updateAggregation = query.get();
-		List<WebResource> webResources = updateAggregation.getWebResources();
+		List<WebResourceImpl> webResources = updateAggregation.getWebResources();
 		webResources.add(mongoWebResource);
 		UpdateOperations<AggregationImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(AggregationImpl.class)
-				.set("webResource", webResources);
+				.set("webResources", webResources);
 		mongoServer.getDatastore().update(query, ops);
 		return aggregations;
 	}

@@ -104,5 +104,8 @@ public class MongoDBServerImpl implements MongoDBServer {
 		return datastore.find(AbstractEdmEntityImpl.class).field("about").equal(about).get();
 	}
 
-	
+	@Override
+	public void close(){
+		mongoServer.close();
+	}
 }

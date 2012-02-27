@@ -130,6 +130,7 @@ public class MongoConstructor {
 			e.printStackTrace();
 		}
 		mongoServer.getDatastore().save(fullBean);
+		mongoServer.close();
 		return fullBean;
 	}
 

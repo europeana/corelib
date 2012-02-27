@@ -88,16 +88,28 @@ public class TimespanFieldInput {
 			if (timeSpan.getPrefLabelList() != null) {
 				Map<String, String> prefLabelMongo = new HashMap<String, String>();
 				for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
+					try{
 					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
 							prefLabelJibx.getString());
+					}
+					catch(NullPointerException e){
+						prefLabelMongo.put("def",
+								prefLabelJibx.getString());
+					}
 				}
 				mongoTimespan.setPrefLabel(prefLabelMongo);
 			}
 			if (timeSpan.getAltLabelList() != null) {
 				Map<String, String> altLabelMongo = new HashMap<String, String>();
 				for (AltLabel altLabelJibx : timeSpan.getAltLabelList()) {
+					try{
 					altLabelMongo.put(altLabelJibx.getLang().getLang(),
 							altLabelJibx.getString());
+					}
+					catch(NullPointerException e){
+						altLabelMongo.put("def",
+								altLabelJibx.getString());
+					}
 				}
 				mongoTimespan.setAltLabel(altLabelMongo);
 			}

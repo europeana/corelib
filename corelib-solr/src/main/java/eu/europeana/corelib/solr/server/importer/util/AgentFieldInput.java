@@ -27,15 +27,27 @@ public class AgentFieldInput {
 				agentType.getAbout());
 		if (agentType.getAltLabelList()!=null){
 		for (AltLabel altLabel : agentType.getAltLabelList()) {
+			try{
 			solrInputDocument.addField(EdmLabel.AG_SKOS_ALT_LABEL.toString()
 					+ "." + altLabel.getLang().getLang(), altLabel.getString());
+			}
+			catch (NullPointerException e){
+				solrInputDocument.addField(EdmLabel.AG_SKOS_ALT_LABEL.toString(),
+						altLabel.getString());
+			}
 		}
 		}
 		if(agentType.getPrefLabelList()!=null){
 		for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
+			try{
 			solrInputDocument.addField(EdmLabel.AG_SKOS_PREF_LABEL.toString()
 					+ "." + prefLabel.getLang().getLang(),
 					prefLabel.getString());
+			}
+			catch(NullPointerException e){
+				solrInputDocument.addField(EdmLabel.AG_SKOS_PREF_LABEL.toString(),
+						prefLabel.getString());
+			}
 		}
 		}
 		
@@ -90,7 +102,7 @@ public class AgentFieldInput {
 		// if it does not exist
 		catch (NullPointerException npe) {
 			// Agent MongoDB Entity
-			
+			agent = new AgentImpl();
 
 			agent.setAbout(agentType.getAbout());
 			
@@ -105,7 +117,12 @@ public class AgentFieldInput {
 			if(agentType.getPrefLabelList()!=null){
 			Map<String, String> prefLabelMongo = new HashMap<String, String>();
 			for (PrefLabel prefLabelJibx : agentType.getPrefLabelList()) {
+				try{
 				prefLabelMongo.put(prefLabelJibx.getLang().getLang(),prefLabelJibx.getString());
+				}
+				catch(NullPointerException e){
+					prefLabelMongo.put("def",prefLabelJibx.getString());
+				}
 			}
 			agent.setPrefLabel(prefLabelMongo);
 			}
@@ -113,17 +130,24 @@ public class AgentFieldInput {
 			if(agentType.getAltLabelList()!=null){
 			Map<String, String> altLabelMongo = new HashMap<String, String>();
 			for (AltLabel altLabelJibx : agentType.getAltLabelList()) {
+				try{
 				altLabelMongo.put(altLabelJibx.getLang().getLang(),
 						altLabelJibx.getString());
+				}
+				catch(NullPointerException e){
+					altLabelMongo.put("def",
+							altLabelJibx.getString());
+				}
 			}
 			agent.setAltLabel(altLabelMongo);
 			}
 			
-
-			agent.setBegin(SolrUtil.exists(String.class, agentType.getBegins().get(0)));
-
-			agent.setEnd(SolrUtil.exists(String.class, agentType.getEnds().get(0)));
-
+			if(agentType.getBegins().size()>0){
+			agent.setBegin(agentType.getBegins().get(0));
+			}
+			if(agentType.getEnds().size()>0){
+			agent.setEnd(agentType.getEnds().get(0));
+			}
 			mongoServer.getDatastore().save(agent);
 		
 		}
