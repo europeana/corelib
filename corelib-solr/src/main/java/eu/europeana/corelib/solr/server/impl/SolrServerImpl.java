@@ -62,7 +62,6 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
 
     EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws IOException, ParserConfigurationException, SAXException  {
 
-    private EmbeddedSolrServer makeLocalSolrServer(String solrHome) throws Exception {
 
         if (System.getProperty("solr.solr.home") == null) {
             System.setProperty("solr.solr.home", solrHome);
