@@ -44,4 +44,6 @@ public interface MongoDBServer {
 	Datastore getDatastore();
 
 	AbstractEdmEntity searchByAbout(String about);
+
+	void close();
 }

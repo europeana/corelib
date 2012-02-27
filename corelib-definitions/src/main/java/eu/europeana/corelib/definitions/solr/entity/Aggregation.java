@@ -93,9 +93,9 @@ public interface Aggregation extends AbstractEdmEntity {
 	void setEdmDataProvider(String edmDataProvider);
 
 
-	List<WebResource> getWebResources();
+	List<? extends WebResource> getWebResources();
 
-	void setWebResources(List<WebResource> webResources);
+	void setWebResources(List<? extends WebResource> webResources);
 
 	String getAbout();
 

@@ -47,6 +47,8 @@ public class AggregationImpl implements Aggregation {
 	private String[] dcRights;
 	private String[] hasView;
 	private String aggregatedCHO;
+	@Embedded
+	private ArrayList<WebResourceImpl> webResources;
 	
 	@Indexed
 	private String about;
@@ -93,8 +95,7 @@ public class AggregationImpl implements Aggregation {
 		this.about = about;
 	}
 
-	@Embedded
-	private ArrayList<WebResource> webResources;
+	
 
 	@Override
 	public void setId(ObjectId id) {
@@ -177,13 +178,14 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public ArrayList<WebResource> getWebResources() {
+	public ArrayList<WebResourceImpl> getWebResources() {
 		return webResources;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setWebResources(List<WebResource> webResources) {
-		this.webResources = (ArrayList<WebResource>) webResources;
+	public void setWebResources(List<? extends WebResource> webResources) {
+		this.webResources = (ArrayList<WebResourceImpl>) webResources;
 	}
 
 	
