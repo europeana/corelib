@@ -92,12 +92,12 @@
    <field name="edm_isShownAt" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="edm_object" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="edm_provider" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="aggr_dc_rights" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="aggr_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="aggr_edm_rights" type="string" indexed="true" stored="true" multiValued="false" />
 
-   <field name="edm_webResource" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="edm_webResource" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="wr_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="wr_edm_rights" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="wr_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
 
    <field name="ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
    <field name="owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
