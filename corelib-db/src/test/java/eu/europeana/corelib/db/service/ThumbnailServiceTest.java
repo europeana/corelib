@@ -69,10 +69,10 @@ public class ThumbnailServiceTest {
 		
 		Assert.assertTrue(tiny.length == cache.getImages().get(ThumbSize.TINY.toString()).getImage().length );
 		
-		InputStream in = new ByteArrayInputStream(thumbnailService.retrieveThumbnail("test", ThumbSize.LARGE));
-		BufferedImage bImageFromConvert = ImageIO.read(in);
-
-		ImageIO.write(bImageFromConvert, "jpg", new File("new-darksouls.jpg"));		
+//		InputStream in = new ByteArrayInputStream(thumbnailService.retrieveThumbnail("test", ThumbSize.LARGE));
+//		BufferedImage bImageFromConvert = ImageIO.read(in);
+//
+//		ImageIO.write(bImageFromConvert, "jpg", new File("new-darksouls.jpg"));		
 		
 	}
 
