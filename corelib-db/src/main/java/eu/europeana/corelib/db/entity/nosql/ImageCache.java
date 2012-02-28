@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -37,15 +38,14 @@ public class ImageCache {
 	
 	private int width;
 	
-	private long size;
-	
-	private String format;
-	
 	private Map<String, Image> images = new HashMap<String, Image>();
 	
 	/**
 	 * CONSTRUCTORS
 	 */
+	
+	public ImageCache() {
+	}
 
 	public ImageCache(String objectId, BufferedImage original) {
 		this.objectId = objectId;
@@ -79,22 +79,6 @@ public class ImageCache {
 
 	public void setWidth(int width) {
 		this.width = width;
-	}
-
-	public long getSize() {
-		return size;
-	}
-
-	public void setSize(long size) {
-		this.size = size;
-	}
-
-	public String getFormat() {
-		return format;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
 	}
 
 	public Map<String, Image> getImages() {

@@ -17,15 +17,23 @@
 
 package eu.europeana.corelib.db.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 
+import junit.framework.Assert;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.repository.ImageCacheRepository;
+import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -35,14 +43,28 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class ThumbnailServiceTest {
 
 	@Resource
+	ImageCacheRepository repository;
+	
+	@Resource
 	ThumbnailService thumbnailService;
 	
+	@Before
+	public void setup() {
+		repository.deleteAll();
+	}
+	
 	@Test
-	public void storeTest() throws MalformedURLException {
-		String picUrl = "http://cartelfr.louvre.fr/pub/fr/image/5883_p0001730.001.jpg";
-		URL url = new URL(picUrl);
+	public void storeTest() throws IOException {
+		Assert.assertTrue("Schema not empty...", repository.count() == 0);
 		
-		thumbnailService.storeThumbnail("test", url);
+		BufferedImage image = ImageIO.read( getClass().getResourceAsStream("/images/GREATWAR.jpg") );
+		ImageCache cache = thumbnailService.storeThumbnail("test", image);
+		
+		Assert.assertTrue("Test item does not exists in MongoDB", repository.exists("test"));
+		
+		byte[] tiny = thumbnailService.retrieveThumbnail("test", ThumbSize.TINY);
+		
+		Assert.assertTrue(tiny.length == cache.getImages().get(ThumbSize.TINY.toString()).getImage().length );
 		
 	}
 

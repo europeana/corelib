@@ -36,6 +36,9 @@ public class Image {
 	/**
 	 * CONSTRUCTORS
 	 */
+	
+	public Image() {
+	}
 
 	public Image(BufferedImage original) throws IOException {
 		this.height = original.getHeight();
