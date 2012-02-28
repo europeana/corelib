@@ -20,7 +20,6 @@ package eu.europeana.corelib.solr.mongodb.mock;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 
 /**
@@ -40,15 +39,17 @@ public class MongoDBServerMock implements MongoDBServer {
 		return null;
 	}
 
-	@Override
-	public AbstractEdmEntity searchByAbout(String about) {
-		return null;
-	}
-
+	
 	@Override
 	public void close() {
 		return;
 		
+	}
+
+	@Override
+	public <T> T searchByAbout(Class<T> clazz, String about) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
