@@ -119,10 +119,15 @@ public class ContentLoader {
 		SolrServerImpl solrServer = null;
 		try {
 			solrServer = new SolrServerImpl(solrHome);
+			
+			
+			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
+		int i=0;
 		for (File f : collectionXML) {
 			try {
 				//System.out.println("Starting parsing XML... " + f.getName());
@@ -137,11 +142,17 @@ public class ContentLoader {
 				
 				SolrConstructor solrConstructor = new SolrConstructor(rdf);
 				records.add(solrConstructor.constructSolrDocument());
-			
+				i++;
+				if(i%100==0||i==collectionXML.size()){
+					System.out.println("Sending 1000 records to SOLR");
+					solrServer.add(records);
+					
+					records = new ArrayList<SolrInputDocument>();
+				}
 				
 			} catch (JiBXException e) {
 				System.out
-						.println("Error unmarshalling document from the input file. Check for Schema changes");
+						.println("Error unmarshalling document "+f.getName()+" from the input file. Check for Schema changes");
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.out.println("File does not exist");
@@ -158,19 +169,27 @@ public class ContentLoader {
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} 
 		}
 		try {
-			solrServer.add(records);
+			
 			solrServer.commit();
 			solrServer.optimize();
 			
 			System.out.println("Finished Importing");
 			QueryResponse qr = solrServer.query(new SolrQuery().setQuery("*:*"));
-			System.out.println(qr.getResults().size());
 			solrServer=null;
-			File f = new File("src/test/resources/records");
-			f.delete();
+			System.out.println("Deleting files");
+			for(File f :collectionXML){			
+				f.delete();
+			}
+			System.out.println("Files deleted");
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

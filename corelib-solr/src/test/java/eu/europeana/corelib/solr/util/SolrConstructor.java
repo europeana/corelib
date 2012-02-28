@@ -14,7 +14,7 @@ import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 
 public class SolrConstructor {
-
+	static SolrInputDocument solrInputDocument;
 	
 	private RDF rdf;
 	public SolrConstructor(RDF rdf){
@@ -23,7 +23,7 @@ public class SolrConstructor {
 	}
 	
 	public SolrInputDocument constructSolrDocument() throws InstantiationException, IllegalAccessException{
-		SolrInputDocument solrInputDocument = new SolrInputDocument();
+		solrInputDocument = new SolrInputDocument();
 		for(Choice element: rdf.getChoiceList()){
 			if(element.ifAgent()){
 				solrInputDocument = AgentFieldInput.createAgentSolrFields(element.getAgent(), solrInputDocument);
@@ -55,7 +55,7 @@ public class SolrConstructor {
 				solrInputDocument = WebResourcesFieldInput.createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
 			}
 		}
-		
+		this.rdf=null;
 		return solrInputDocument;
 	}
 }

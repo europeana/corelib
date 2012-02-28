@@ -41,7 +41,7 @@ public class MongoConstructor {
 		return this.record;
 	}
 
-	public FullBeanImpl constructFullBean() throws InstantiationException, IllegalAccessException {
+	public void constructFullBean() throws InstantiationException, IllegalAccessException {
 		fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
@@ -131,7 +131,9 @@ public class MongoConstructor {
 		}
 		mongoServer.getDatastore().save(fullBean);
 		mongoServer.close();
-		return fullBean;
+		this.record = null;
+		mongoServer= null;
+		fullBean = null;
 	}
 
 	private boolean aggregationExists(WebResourceType webResource,
