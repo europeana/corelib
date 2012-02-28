@@ -25,6 +25,9 @@
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
+	
+	<!-- INTERNAL -->
+	<import resource="corelib-definitions-test.xml" />
     
     <!-- 
     	Overriding dataSource with a memory based database configuration

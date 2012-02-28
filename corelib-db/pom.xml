@@ -40,6 +40,11 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-utils</artifactId>
+			<version>${version.europeanaCorelib}</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr</artifactId>
 			<version>${version.europeanaCorelib}</version>
 		</dependency>
@@ -49,6 +54,26 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${version.springCore}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.0.1.RELEASE</version>
+			<exclusions>
+				<!-- EXCLUDE THIS TO FORCE NEWEST RELEASES -->
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-expression</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-tx</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
