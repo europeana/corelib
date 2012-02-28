@@ -121,7 +121,7 @@ public class AggregationFieldInput {
 		mongoAggregation.setEdmIsShownBy(SolrUtil.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource());
 		mongoAggregation.setEdmObject(SolrUtil.exists(_Object.class,
-				(aggregation.getObject())).toString());
+				(aggregation.getObject())).getResource());
 		mongoAggregation.setEdmProvider(SolrUtil.exists(Provider.class,
 				(aggregation.getProvider())).getString());
 		mongoAggregation.setEdmRights(SolrUtil.exists(Rights.class,
