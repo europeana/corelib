@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -45,6 +44,7 @@ public class ImageCache {
 	 */
 	
 	public ImageCache() {
+		// left empty on purpose, do NOT remove!!
 	}
 
 	public ImageCache(String objectId, BufferedImage original) {

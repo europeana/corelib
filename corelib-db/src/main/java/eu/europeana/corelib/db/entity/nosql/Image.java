@@ -38,6 +38,7 @@ public class Image {
 	 */
 	
 	public Image() {
+		// left empty on purpose, do NOT remove!!
 	}
 
 	public Image(BufferedImage original) throws IOException {

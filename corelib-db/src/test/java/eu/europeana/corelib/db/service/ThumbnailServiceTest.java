@@ -18,7 +18,10 @@
 package eu.europeana.corelib.db.service;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -65,6 +68,11 @@ public class ThumbnailServiceTest {
 		byte[] tiny = thumbnailService.retrieveThumbnail("test", ThumbSize.TINY);
 		
 		Assert.assertTrue(tiny.length == cache.getImages().get(ThumbSize.TINY.toString()).getImage().length );
+		
+		InputStream in = new ByteArrayInputStream(thumbnailService.retrieveThumbnail("test", ThumbSize.LARGE));
+		BufferedImage bImageFromConvert = ImageIO.read(in);
+
+		ImageIO.write(bImageFromConvert, "jpg", new File("new-darksouls.jpg"));		
 		
 	}
 
