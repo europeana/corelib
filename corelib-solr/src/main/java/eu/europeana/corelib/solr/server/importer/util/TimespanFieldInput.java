@@ -69,7 +69,7 @@ public class TimespanFieldInput {
 		TimespanImpl mongoTimespan = new TimespanImpl();
 		// If timespan exists in mongo
 		try {
-			mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(timeSpan
+			mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class,timeSpan
 					.getAbout());
 			mongoTimespan.getAbout();
 		}

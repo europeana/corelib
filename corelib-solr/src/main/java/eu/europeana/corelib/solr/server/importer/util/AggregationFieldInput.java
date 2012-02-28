@@ -18,10 +18,8 @@ import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.Provider;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
@@ -48,11 +46,9 @@ public class AggregationFieldInput {
 				EdmLabel.EDM_DATA_PROVIDER.toString(),
 				SolrUtil.exists(DataProvider.class,
 						((aggregation.getDataProvider()))).getString());
-		solrInputDocument
-				.addField(
-						EdmLabel.EDM_PROVIDER.toString(),
-						SolrUtil.exists(Provider.class,
-								(aggregation.getProvider())).getString());
+		solrInputDocument.addField(EdmLabel.EDM_PROVIDER.toString(), SolrUtil
+				.exists(Provider.class, (aggregation.getProvider()))
+				.getString());
 		solrInputDocument.addField(EdmLabel.EDM_IS_SHOWN_AT.toString(),
 				SolrUtil.exists(IsShownAt.class, (aggregation.getIsShownAt()))
 						.getResource());
@@ -81,80 +77,27 @@ public class AggregationFieldInput {
 		return solrInputDocument;
 	}
 
-	public static List<AggregationImpl> appendWebResource(
-			List<AggregationImpl> aggregations, WebResourceType webResource,
+	public static AggregationImpl appendWebResource(
+			List<AggregationImpl> aggregations, List<WebResourceImpl> webResources,
 			MongoDBServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
+		AggregationImpl aggregation=findAggregation(aggregations, webResources.get(0));
+			
+		aggregation.setWebResources(webResources);
 
-		eu.europeana.corelib.definitions.solr.entity.Aggregation aggregation = findAggregation(
-				aggregations, webResource);
-		WebResourceImpl mongoWebResource = new WebResourceImpl();
-		mongoWebResource.setAbout(webResource.getAbout());
-		if (aggregation.getHasView() != null) {
-			List<String> hasViewList = new ArrayList<String>();
-			for (String hasView : aggregation.getHasView()) {
-				hasViewList.add(hasView);
-			}
-			hasViewList.add(mongoWebResource.getAbout());
-			aggregation.setHasView(hasViewList.toArray(new String[hasViewList
-					.size()]));
-		}
-		mongoWebResource.setWebResourceEdmRights(SolrUtil.exists(Rights.class,
-				webResource.getRights()).getResource());
-		if (webResource.getRightList() != null) {
-			List<String> dcRights = new ArrayList<String>();
-			for (Rights1 rights : webResource.getRightList()) {
-				dcRights.add(rights.getString());
-			}
-			mongoWebResource.setWebResourceDcRights(dcRights
-					.toArray(new String[dcRights.size()]));
-		}
-		mongoServer.getDatastore().save(mongoWebResource);
-		Query<AggregationImpl> query = mongoServer.getDatastore()
-				.find(AggregationImpl.class).field("about")
-				.equal(aggregation.getAbout());
-		AggregationImpl updateAggregation = query.get();
-		List<WebResourceImpl> webResources = updateAggregation.getWebResources();
-		webResources.add(mongoWebResource);
 		UpdateOperations<AggregationImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(AggregationImpl.class)
 				.set("webResources", webResources);
+		Query<AggregationImpl> query = mongoServer.getDatastore().find(AggregationImpl.class).filter("about", aggregation.getAbout());
 		mongoServer.getDatastore().update(query, ops);
-		return aggregations;
-	}
-
-	public static AggregationImpl createMongoAggregationFromWebResource(
-			WebResourceType webResource, MongoDBServer mongoServer)
-			throws InstantiationException, IllegalAccessException {
-		AggregationImpl aggregation = new AggregationImpl();
-		WebResource mongoWebResource = new WebResourceImpl();
-		mongoWebResource.setAbout(webResource.getAbout());
-
-		aggregation.setHasView(new String[] { webResource.getAbout() });
-
-		mongoWebResource.setWebResourceEdmRights(SolrUtil.exists(Rights.class,
-				webResource.getRights()).getResource());
-
-		if (webResource.getRightList() != null) {
-			List<String> dcRights = new ArrayList<String>();
-			for (Rights1 rights : webResource.getRightList()) {
-				dcRights.add(rights.getString());
-			}
-			mongoWebResource.setWebResourceDcRights(dcRights
-					.toArray(new String[dcRights.size()]));
-		}
-		mongoServer.getDatastore().save(mongoWebResource);
-		List<WebResource> webResources = new ArrayList<WebResource>();
-		webResources.add(mongoWebResource);
-		aggregation.setWebResources(webResources);
-		mongoServer.getDatastore().save(webResources);
-		mongoServer.getDatastore().save(aggregation);
 		return aggregation;
 	}
 
-	private static eu.europeana.corelib.definitions.solr.entity.Aggregation findAggregation(
-			List<AggregationImpl> aggregations, WebResourceType webResource) {
-		for (eu.europeana.corelib.definitions.solr.entity.Aggregation aggregation : aggregations) {
+
+
+	private static AggregationImpl findAggregation(
+			List<AggregationImpl> aggregations, WebResourceImpl webResource) {
+		for (AggregationImpl aggregation : aggregations) {
 			for (String hasView : aggregation.getHasView()) {
 				if (StringUtils.equals(hasView, webResource.getAbout())) {
 					return aggregation;
@@ -208,7 +151,12 @@ public class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
+		try{
 		mongoServer.getDatastore().save(mongoAggregation);
+		}
+		catch(Exception e){
+			//DUP UNIQUE IDENTIFIER
+		}
 		return mongoAggregation;
 	}
 

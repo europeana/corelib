@@ -17,7 +17,6 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
@@ -33,12 +32,12 @@ import eu.europeana.corelib.solr.util.SolrConstructor;
 
 public class ContentLoader {
 
-	private static String solrHome="src/test/resources/solr";
+	private static String solrHome = "src/test/resources/solr";
 	private static String mongoHost = "localhost";
 	private static String mongoPort = "27017";
 	private static String databaseName = "europeana";
 	private static String collectionName = "src/test/resources/records.zip";
-	
+
 	/**
 	 * Method to load content in SOLR and MongoDB
 	 * 
@@ -52,7 +51,7 @@ public class ContentLoader {
 			params.put(StringUtils.split(parameter, ":")[0],
 					StringUtils.split(parameter, ":")[1]);
 		}
-		
+
 		if (params.get("solrHome") != null
 				&& params.get("solrHome").length() > 0) {
 			solrHome = params.get("solrHome");
@@ -99,19 +98,17 @@ public class ContentLoader {
 			System.out.println("Using default collectionName: "
 					+ collectionName);
 		}
-
 		ArrayList<File> collectionXML = new ArrayList<File>();
 		if (isZipped(collectionName)) {
 			collectionXML = unzip(collectionName);
 		} else {
-			if(new File(collectionName).isDirectory()){
-			for (File file : new File(collectionName).listFiles()) {
-				if (StringUtils.endsWith(file.getName(), ".xml")) {
-					collectionXML.add(file);
+			if (new File(collectionName).isDirectory()) {
+				for (File file : new File(collectionName).listFiles()) {
+					if (StringUtils.endsWith(file.getName(), ".xml")) {
+						collectionXML.add(file);
+					}
 				}
-			}
-			}
-			else{
+			} else {
 				collectionXML.add(new File(collectionName));
 			}
 		}
@@ -119,48 +116,45 @@ public class ContentLoader {
 		SolrServerImpl solrServer = null;
 		try {
 			solrServer = new SolrServerImpl(solrHome);
-			
-			
-			
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			
 			e1.printStackTrace();
 		}
-		int i=0;
+		int i = 0;
+		try {
+			MongoConstructor.setParameters(new MongoDBServerImpl(
+					mongoHost, Integer.parseInt(mongoPort), databaseName));
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (MongoDBException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for (File f : collectionXML) {
 			try {
-				//System.out.println("Starting parsing XML... " + f.getName());
-
 				IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
 				IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f),
 						null);
-				MongoConstructor mongoConstructor = new MongoConstructor(rdf, new MongoDBServerImpl(mongoHost, Integer.parseInt(mongoPort), databaseName));
-				mongoConstructor.constructFullBean();
 				
-				
-				SolrConstructor solrConstructor = new SolrConstructor(rdf);
-				records.add(solrConstructor.constructSolrDocument());
+				MongoConstructor.constructFullBean(rdf);
+				records.add(SolrConstructor.constructSolrDocument(rdf));
 				i++;
-				if(i%100==0||i==collectionXML.size()){
+				if (i % 1000 == 0 || i == collectionXML.size()) {
 					System.out.println("Sending 1000 records to SOLR");
 					solrServer.add(records);
-					
-					records = new ArrayList<SolrInputDocument>();
+					records.clear();
 				}
-				
+
 			} catch (JiBXException e) {
-				System.out
-						.println("Error unmarshalling document "+f.getName()+" from the input file. Check for Schema changes");
+				System.out.println("Error unmarshalling document "
+						+ f.getName()
+						+ " from the input file. Check for Schema changes");
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.out.println("File does not exist");
-				
+
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MongoDBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InstantiationException e) {
@@ -175,18 +169,18 @@ public class ContentLoader {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
 		}
 		try {
-			
+
 			solrServer.commit();
 			solrServer.optimize();
-			
+
 			System.out.println("Finished Importing");
-			QueryResponse qr = solrServer.query(new SolrQuery().setQuery("*:*"));
-			solrServer=null;
+			solrServer.query(new SolrQuery().setQuery("*:*"));
+			solrServer = null;
 			System.out.println("Deleting files");
-			for(File f :collectionXML){			
+			for (File f : collectionXML) {
 				f.delete();
 			}
 			System.out.println("Files deleted");
@@ -211,19 +205,16 @@ public class ContentLoader {
 		String fileName = "";
 		ArrayList<File> records = new ArrayList<File>();
 		try {
-
 			FileInputStream fis = new FileInputStream(collectionName);
 			ZipInputStream zis = new ZipInputStream(
 					new BufferedInputStream(fis));
 			ZipEntry entry;
+			File workingDir = new File("src/test/resources/records");
+			workingDir.mkdir();
 			while ((entry = zis.getNextEntry()) != null) {
-				//System.out.println("Extracting: " + entry);
 				int count;
 				byte data[] = new byte[2048];
-				 File workingDir = new File("src/test/resources/records");
-				 workingDir.mkdir();
-				
-				fileName = workingDir.getAbsolutePath()+"/" + entry.getName();
+				fileName = workingDir.getAbsolutePath() + "/" + entry.getName();
 				records.add(new File(fileName));
 				FileOutputStream fos = new FileOutputStream(fileName);
 				dest = new BufferedOutputStream(fos, 2048);
@@ -252,6 +243,6 @@ public class ContentLoader {
 	 */
 	private static boolean isZipped(String collectionName) {
 		return StringUtils.endsWith(collectionName, ".gzip")
-				|| StringUtils.endsWith(collectionName, "zip");
+				|| StringUtils.endsWith(collectionName, ".zip");
 	}
 }

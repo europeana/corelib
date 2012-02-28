@@ -33,7 +33,7 @@ public class WebResourceImpl implements WebResource {
 	private String webResource;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
-	@Indexed
+	
 	private String about;
 	
 	@Override

@@ -50,7 +50,7 @@ public class AggregationImpl implements Aggregation {
 	@Embedded
 	private ArrayList<WebResourceImpl> webResources;
 	
-	@Indexed
+	@Indexed(unique=true, dropDups=true)
 	private String about;
 	private Boolean edmPreviewNoDistribute;
 	

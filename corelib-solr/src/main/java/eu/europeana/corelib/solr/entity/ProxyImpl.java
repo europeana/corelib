@@ -34,7 +34,7 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
 public class ProxyImpl implements Proxy {
 
 	@Id ObjectId id;
-	@Indexed
+	@Indexed(unique=true)
 	private String about;
 	private String[] dcContributor;
 	private String[] dcCoverage;

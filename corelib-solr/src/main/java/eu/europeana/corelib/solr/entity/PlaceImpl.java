@@ -44,7 +44,7 @@ public class PlaceImpl implements Place {
 	private float latitude;
 	private float longitude;
 	
-	@Indexed
+	@Indexed(unique=true)
 	private String about;
 
 	@Override

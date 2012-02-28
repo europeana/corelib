@@ -77,8 +77,9 @@ public class MongoDBServerImpl implements MongoDBServer {
 		morphia.map(PlaceImpl.class);
 		morphia.map(TimespanImpl.class);
 		morphia.map(WebResourceImpl.class);
+		
 		datastore = morphia.createDatastore(mongoServer, mongoDB.getName());
-
+		datastore.ensureIndexes();
 	}
 
 	@Override
@@ -100,8 +101,8 @@ public class MongoDBServerImpl implements MongoDBServer {
 	}
 	
 	@Override
-	public AbstractEdmEntityImpl searchByAbout(String about){
-		return datastore.find(AbstractEdmEntityImpl.class).field("about").equal(about).get();
+	public <T> T searchByAbout(Class<T> clazz, String about){
+		return datastore.find(clazz).field("about").equal(about).get();
 	}
 
 	@Override

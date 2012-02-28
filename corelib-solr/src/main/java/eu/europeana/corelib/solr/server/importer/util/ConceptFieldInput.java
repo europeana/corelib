@@ -24,15 +24,15 @@ public class ConceptFieldInput {
 				concept.getAbout());
 		if (concept.getAltLabelList() != null) {
 			for (AltLabel altLabel : concept.getAltLabelList()) {
-				try{
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_ALT_LABEL.toString() + "."
-								+ altLabel.getLang().getLang(),
-						altLabel.getString());
-				}
-				catch(NullPointerException e){
-					solrInputDocument.addField(EdmLabel.CC_SKOS_ALT_LABEL.toString(),
-					altLabel.getString());
+				try {
+					solrInputDocument.addField(
+							EdmLabel.CC_SKOS_ALT_LABEL.toString() + "."
+									+ altLabel.getLang().getLang(),
+							altLabel.getString());
+				} catch (NullPointerException e) {
+					solrInputDocument.addField(
+							EdmLabel.CC_SKOS_ALT_LABEL.toString(),
+							altLabel.getString());
 				}
 			}
 		}
@@ -45,7 +45,8 @@ public class ConceptFieldInput {
 							prefLabel.getString());
 				} catch (NullPointerException e) {
 					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_PREF_LABEL.toString(), prefLabel.getString());
+							EdmLabel.CC_SKOS_PREF_LABEL.toString(),
+							prefLabel.getString());
 				}
 			}
 		}
@@ -67,13 +68,12 @@ public class ConceptFieldInput {
 	public static ConceptImpl createConceptMongoFields(Concept concept,
 			MongoDBServer mongoServer) {
 		ConceptImpl conceptMongo = new ConceptImpl();
-		try {
-			conceptMongo = (ConceptImpl) mongoServer.searchByAbout(concept
-					.getAbout());
-			conceptMongo.getAbout();
-		}
-		// If it does not exist
-		catch (NullPointerException npe) {
+
+		conceptMongo = (ConceptImpl) mongoServer.searchByAbout(ConceptImpl.class,concept
+				.getAbout());
+		if (conceptMongo == null) {
+			// If it does not exist
+
 			conceptMongo = new ConceptImpl();
 			conceptMongo.setAbout(concept.getAbout());
 
@@ -122,6 +122,7 @@ public class ConceptFieldInput {
 			}
 			mongoServer.getDatastore().save(conceptMongo);
 		}
+
 		return conceptMongo;
 	}
 }

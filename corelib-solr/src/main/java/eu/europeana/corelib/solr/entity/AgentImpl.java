@@ -37,7 +37,7 @@ public class AgentImpl implements Agent {
 
 	@Id
 	ObjectId id;
-	@Indexed
+	@Indexed(unique=true)
 	private String about;
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;

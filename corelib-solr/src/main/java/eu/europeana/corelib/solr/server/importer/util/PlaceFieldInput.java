@@ -74,7 +74,7 @@ public class PlaceFieldInput {
 		PlaceImpl place = new PlaceImpl();
 		// If place exists in mongo
 		try {
-			place = (PlaceImpl) mongoServer.searchByAbout(placeType.getAbout());
+			place = (PlaceImpl) mongoServer.searchByAbout(PlaceImpl.class,placeType.getAbout());
 			place.getAbout();
 		}
 		// if it does not exist

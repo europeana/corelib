@@ -41,7 +41,7 @@ public class TimespanImpl implements
 	private String begin;
 	private String end;
 	private String[] isPartOf;
-	@Indexed
+	@Indexed(unique=true)
 	private String about;
 	
 	@Override	

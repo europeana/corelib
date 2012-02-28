@@ -42,7 +42,7 @@ public class ConceptImpl implements Concept {
 	private Map<String, String> altLabel;
 	private String[] note;
 	private String[] broader;
-	@Indexed
+	@Indexed(unique=true)
 	private String about;
 
 	@Override

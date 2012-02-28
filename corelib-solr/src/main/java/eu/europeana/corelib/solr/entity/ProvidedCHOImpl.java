@@ -12,7 +12,8 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Id ObjectId id;
-	@Indexed String about;
+	@Indexed(unique=true)
+	String about;
 	private String[] owlSameAs;
 	private String edmIsNextInSequence;
 	

@@ -94,7 +94,7 @@ public class AgentFieldInput {
 			MongoDBServer mongoServer) throws MappingException, InstantiationException, IllegalAccessException {
 		AgentImpl agent = new AgentImpl();
 		try {
-			agent= (AgentImpl) mongoServer.searchByAbout(agentType
+			agent= (AgentImpl) mongoServer.searchByAbout(AgentImpl.class,agentType
 					.getAbout());
 			agent.getAbout();
 		}

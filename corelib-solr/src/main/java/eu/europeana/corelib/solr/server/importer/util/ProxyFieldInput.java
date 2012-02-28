@@ -448,8 +448,13 @@ public class ProxyFieldInput {
 		mongoProxy.setDcSubject(subject.toArray(new String[subject.size()]));
 		mongoProxy.setDcTitle(title.toArray(new String[title.size()]));
 		mongoProxy.setDcType(type.toArray(new String[type.size()]));
+		try{
 		mongoServer.getDatastore().save(mongoProxy);
-
+		}
+		catch(Exception e)
+		{
+			//IF THAT HAPPENS THERE ARE NO UNIQUE IDENTIFIERS
+		}
 		return mongoProxy;
 	}
 

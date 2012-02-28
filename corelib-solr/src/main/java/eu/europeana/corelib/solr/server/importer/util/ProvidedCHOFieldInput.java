@@ -53,7 +53,12 @@ public class ProvidedCHOFieldInput {
 				mongoProvidedCHO.setOwlSameAs(owlSameAsList
 						.toArray(new String[owlSameAsList.size()]));
 			}
+			try{
 			mongoServer.getDatastore().save(mongoProvidedCHO);
+			}
+			catch(Exception e){
+				//IF THIS HAPPENS NO UNIQUE IDENTIFIERS WHERE PROVIDED BY THE DATAPROVIDERS
+			}
 			return mongoProvidedCHO;
 		}
 	}
