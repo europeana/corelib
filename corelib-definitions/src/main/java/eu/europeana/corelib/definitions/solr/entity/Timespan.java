@@ -16,7 +16,6 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-import java.util.Date;
 
 /**
  * EDM Timespan fields representation

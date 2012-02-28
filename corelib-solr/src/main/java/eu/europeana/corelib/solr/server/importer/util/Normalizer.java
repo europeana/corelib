@@ -3,8 +3,6 @@ package eu.europeana.corelib.solr.server.importer.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Class for record normalization
  * (retrieve data from a controlled vocabulary rather than storing a URI)
