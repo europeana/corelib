@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.util;
 
 import java.util.ArrayList;
@@ -24,6 +40,10 @@ import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 
+/**
+ * A FullBean Constructor from an EDM XML
+ * @author Yorgos.Mamakis@ kb.nl
+ */
 public class MongoConstructor {
 	private static RDF record;
 	private static FullBeanImpl fullBean;
@@ -31,15 +51,31 @@ public class MongoConstructor {
 
 
 
+        /**
+         * Set the MongoDB Server
+         * 
+         * @param mongoServer 
+         */
 	public static void setParameters( MongoDBServer mongoServer){
 		
 		MongoConstructor.mongoServer = mongoServer;
 	}
 	
+        /**
+         * Retrieve the JiBX RDF Entity
+         * 
+         * @return JiBX RDF Entity
+         */
 	public static RDF getRecord() {
 		return MongoConstructor.record;
 	}
 
+        /**
+         * Construct a FullBean out of A JiBX RDF record
+         * @param record The JiBX RDF record
+         * @throws InstantiationException
+         * @throws IllegalAccessException 
+         */
 	public static void constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
 		fullBean = new FullBeanImpl();
 		MongoConstructor.record = record;
