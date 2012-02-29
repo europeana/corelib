@@ -16,36 +16,59 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-
 /**
  * EDM Place fields representation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
-public interface Place extends ContextualClass{
-	
+public interface Place extends ContextualClass {
+
 	/**
 	 * Retrieves the dcterms:isPartOf fields for a Place
-	 * @return A String array representing the dcterms:isPartOf fields for a Place
+	 * 
+	 * @return A String array representing the dcterms:isPartOf fields for a
+	 *         Place
 	 */
 	String[] getIsPartOf();
-	
+
 	/**
 	 * Retrieves the latitude of a Place
+	 * 
 	 * @return A float representing the latitude of a Place
 	 */
 	float getLatitude();
-	
+
 	/**
 	 * Retrieves the longitude of a Place
+	 * 
 	 * @return A float representing the longitude of a Place
 	 */
 	float getLongitude();
 
+	/**
+	 * Set the dcterms:isPartOf fields for a Place
+	 * 
+	 * @param isPartOf
+	 *            A String array representing the dcterms:isPartOf fields for a
+	 *            Place
+	 */
 	void setIsPartOf(String[] isPartOf);
 
+	/**
+	 * Set the latitude for a place
+	 * 
+	 * @param latitude
+	 *            A float representing the latitude of a Place
+	 */
 	void setLatitude(float latitude);
 
+	/**
+	 * Set the longitude for a place
+	 * 
+	 * @param longitude
+	 *            A float representing the longitude of a Place
+	 */
 	void setLongitude(float longitude);
-	
+
 }

@@ -19,9 +19,9 @@ package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.Map;
 
-
 /**
- * Interface representing contextual classes in EDM (Agent, Place, Timespan, Concept)
+ * Interface representing contextual classes in EDM (Agent, Place, Timespan,
+ * Concept)
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
@@ -29,16 +29,20 @@ import java.util.Map;
 public interface ContextualClass extends AbstractEdmEntity {
 
 	/**
-	 * Retrieves the Preferable Label for a Contextual Class (language,value) format
+	 * Retrieves the Preferable Label for a Contextual Class (language,value)
+	 * format
 	 * 
-	 * @return A multidimensional String array for the Preferable Labels of a contextual class (one per language)
+	 * @return A Map<String,String> for the Preferable Labels of a contextual
+	 *         class (one per language)
 	 */
 	Map<String, String> getPrefLabel();
 
 	/**
-	 * Retrieves the Alternative Label for a Contextual Class (language,value) format
+	 * Retrieves the Alternative Label for a Contextual Class (language,value)
+	 * format
 	 * 
-	 * @return A multidimensional String array for the Alternative Labels of a contextual class (one per language)
+	 * @return A Map<String,String> for the Alternative Labels of a contextual
+	 *         class (one per language)
 	 */
 	Map<String, String> getAltLabel();
 
@@ -49,15 +53,30 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 */
 	String[] getNote();
 
+	/**
+	 * Set the altLabel for a Contextual Class
+	 * 
+	 * @param altLabel
+	 *            A Map<String,String> for the Alternative Labels of a
+	 *            contextual class (one per language)
+	 */
 	void setAltLabel(Map<String, String> altLabel);
 
+	/**
+	 * Set the notes for a Contextual Class
+	 * 
+	 * @param note
+	 *            A String array with notes for the Contextual Class
+	 */
 	void setNote(String[] note);
 
+	/**
+	 * Set the prefLabel for a Contextual Class
+	 * 
+	 * @param prefLabel
+	 *            A Map<String,String> for the Preferable Labels of a contextual
+	 *            class (one per language)
+	 */
 	void setPrefLabel(Map<String, String> prefLabel);
-
-	String getAbout();
-
-	void setAbout(String about);
-
 
 }

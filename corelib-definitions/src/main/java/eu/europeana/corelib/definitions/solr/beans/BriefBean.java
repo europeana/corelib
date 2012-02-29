@@ -27,7 +27,6 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine for presenting each record
  * in the result and search page.
  * 
- * NOTE: TBD what is going to be placed here
  * 
  * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
  */

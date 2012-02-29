@@ -17,7 +17,6 @@
 
 package eu.europeana.corelib.definitions.solr.entity;
 
-
 /**
  * EDM Agent fields representation
  * 
@@ -26,27 +25,34 @@ package eu.europeana.corelib.definitions.solr.entity;
  */
 public interface Agent extends ContextualClass {
 
-
 	/**
-	 * Retrieves the edm:begin field of an edm:Actor
+	 * Retrieves the edm:begin field of an edm:Agent
 	 * 
-	 * @return Date representing the birth of an actor
+	 * @return Date representing the birth of an agent
 	 */
 	String getBegin();
 
 	/**
-	 * Retrieves the edm:end
+	 * Retrieves the edm:end for an edm:Agent
 	 * 
-	 * @return Date representing the death of an actor
+	 * @return Date representing the death of an agent
 	 */
 	String getEnd();
 
-
-
+	/**
+	 * Set the edm:begin field for an edm:Agent
+	 * 
+	 * @param begin
+	 *            String representing a valid date
+	 */
 	void setBegin(String begin);
 
+	/**
+	 * Set the edm:end field for an edm:Agent
+	 * 
+	 * @param end
+	 *            String representing a valid date
+	 */
 	void setEnd(String end);
-
-
 
 }

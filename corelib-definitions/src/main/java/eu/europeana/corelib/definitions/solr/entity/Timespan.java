@@ -16,38 +16,58 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-
 /**
  * EDM Timespan fields representation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public interface Timespan extends ContextualClass {
-	
-	
+
 	/**
 	 * Retrieve the edm:begin field of a Timespan
-	 * @return Date representing the edm:begin field of a timespan
+	 * 
+	 * @return Stringrepresenting the edm:begin field of a timespan
 	 */
 	String getBegin();
-	
+
 	/**
 	 * Retrieve the edm:end field of a Timespan
-	 * @return Date representing the edm:end field of a timespan
+	 * 
+	 * @return String representing the edm:end field of a timespan
 	 */
 	String getEnd();
-	
+
 	/**
 	 * Retrieve the dcterms:isPartOf field of a Timespan
-	 * @return String array representing the dcterms:isPartOf fields of a timespan
+	 * 
+	 * @return String array representing the dcterms:isPartOf fields of a
+	 *         timespan
 	 */
 	String[] getIsPartOf();
 
-
+	/**
+	 * Set the edm:begin field for a Timespan. It expects to find a date.
+	 * 
+	 * @param begin
+	 *            the edm:begin field for a Timespan
+	 */
 	void setBegin(String begin);
 
+	/**
+	 * Set the edm:end field for a Timespan. It expects to find a date.
+	 * 
+	 * @param end
+	 *            the edm:end field for a Timespan
+	 */
 	void setEnd(String end);
 
+	/**
+	 * Set the isPartOf fields for a Timespan.
+	 * 
+	 * @param isPartOf
+	 *            A String array representing the isPartOf fields for a Timespan
+	 */
 	void setIsPartOf(String[] isPartOf);
 
 }

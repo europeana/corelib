@@ -16,20 +16,26 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-
 /**
  * EDM Concept fields representation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
-public interface Concept extends ContextualClass{
-	
+public interface Concept extends ContextualClass {
+
 	/**
 	 * Retrieves the broader terms of a concept
+	 * 
 	 * @return A String array with all the broader terms of a concept
 	 */
 	String[] getBroader();
 
-
+	/**
+	 * Set the broader terms for a concept
+	 * 
+	 * @param broader
+	 *            A string array with all the broader terms of a concept
+	 */
 	void setBroader(String[] broader);
 }

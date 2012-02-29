@@ -16,41 +16,43 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
-
 /**
- *  EDM WebResource Fields implementation
+ * EDM WebResource Fields implementation
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
-public interface WebResource  extends AbstractEdmEntity{
-	
-	/**
-	 * Retrieve the rdf:about attribute of a Webresource
-	 * @return A string representation attribute of a WebResource
-	 */
-	String getWebResource();
-	
+public interface WebResource extends AbstractEdmEntity {
+
 	/**
 	 * Retrieve the dc:rights fields of a WebResource
+	 * 
 	 * @return String array representing the dc:rights fields of a WebResource
 	 */
 	String[] getWebResourceDcRights();
-	
+
 	/**
 	 * Retrieve the edm:rights field of a WebResource
-	 * @return String representing the dc:rights fields of a WebResource
+	 * 
+	 * @return String representing the edm:rights fields of a WebResource
 	 */
-
 	String getWebResourceEdmRights();
 
-	void setWebResource(String webResource);
-
+	/**
+	 * Set the dc:rights fields of a WebResource
+	 * 
+	 * @param webResourceDcRights
+	 *            String array representing the dc:rights fields of a
+	 *            WebResource
+	 */
 	void setWebResourceDcRights(String[] webResourceDcRights);
 
+	/**
+	 * Set the edm:rights field of a WebResource
+	 * 
+	 * @param webResourceEdmRights
+	 *            String representing the edm:rights fields of a WebResource
+	 */
 	void setWebResourceEdmRights(String webResourceEdmRights);
 
-	void setAbout(String about);
-
-	String getAbout();
-	
 }
