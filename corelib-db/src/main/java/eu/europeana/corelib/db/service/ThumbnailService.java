@@ -14,5 +14,7 @@ public interface ThumbnailService {
 	ImageCache storeThumbnail(String objectId, URL url) throws IOException;
 	
 	byte[] retrieveThumbnail(String objectId, ThumbSize size);
+	
+	void deleteThumbnail(String objectId);
 
 }

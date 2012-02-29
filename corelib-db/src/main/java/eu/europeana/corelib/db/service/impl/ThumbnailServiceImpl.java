@@ -81,5 +81,10 @@ public class ThumbnailServiceImpl implements ThumbnailService {
 
 		return repository.save(cache);
 	}
+	
+	@Override
+	public void deleteThumbnail(String objectId) {
+		repository.delete(objectId);
+	}
 
 }

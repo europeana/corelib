@@ -58,12 +58,12 @@
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-run</artifactId>
-			<version>${jibx.version}</version>
+			<version>${version.jibx}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-extras</artifactId>
-			<version>${jibx.version}</version>
+			<version>${version.jibx}</version>
 		</dependency>
 	</dependencies>
 		<build>

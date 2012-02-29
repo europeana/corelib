@@ -78,7 +78,7 @@
 		<version.springSecurity>3.1.0.RELEASE</version.springSecurity>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
-		<jibx.version>1.2.3</jibx.version>
+		<version.jibx>1.2.3</version.jibx>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
