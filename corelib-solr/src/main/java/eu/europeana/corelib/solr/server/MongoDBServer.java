@@ -14,35 +14,58 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
-
 package eu.europeana.corelib.solr.server;
 
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+
 /**
  * Basic MongoDB server implementation
+ *
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
 public interface MongoDBServer {
-	
-	/**
-	 * A basic implementation of a MongoDB Server connection
-	 * @param id The object id to retrieve from the database
-	 * @return A document from MongoDB - case where the user selects to retrieve one specific object
-	 */
-	FullBean getFullBean(String id);
-	
-	/**
-	 * Basic information for MongoDB connection
-	 * @return Information on MongoDB server configuration
-	 */
-	String toString();
 
-	Datastore getDatastore();
+    /**
+     * A basic implementation of a MongoDB Server connection
+     *
+     * @param id The object id to retrieve from the database
+     * @return A document from MongoDB - case where the user selects to retrieve
+     * one specific object
+     */
+    FullBean getFullBean(String id);
 
-	void close();
+    /**
+     * Basic information for MongoDB connection
+     *
+     * @return Information on MongoDB server configuration
+     */
+    String toString();
 
-	<T> T searchByAbout(Class<T> clazz, String about);
+    /**
+     * Return the datastore from a MongoDB Server
+     *
+     * @return The datastore from the MongoDB Server
+     */
+    Datastore getDatastore();
+
+    /**
+     *Close the conncetion to the MongoDB Server
+     */
+    void close();
+
+    /**
+     * Search using the rdf:about field of an EDM entity
+     * @param <T> 
+     *          The Class type of an EDM Entity
+     * @param clazz
+     *          The Class name of an EDM entity
+     * @param about
+     *          The unique identifier of an EDM Entity
+     * @return 
+     *          The EDM Mongo Entity
+     */
+    <T> T searchByAbout(Class<T> clazz, String about);
 }

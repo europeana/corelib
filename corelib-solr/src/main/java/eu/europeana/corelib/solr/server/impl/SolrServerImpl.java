@@ -34,6 +34,10 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.core.CoreContainer;
 import org.xml.sax.SAXException;
 
+/**
+ * @see eu.europeana.corelib.solr.server.SolrServer
+ * @author Yorgos.Mamakis@ kb.nl
+ */
 public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer implements eu.europeana.corelib.solr.server.SolrServer{
 	
 	private static final long serialVersionUID = 1962389067458619600L;

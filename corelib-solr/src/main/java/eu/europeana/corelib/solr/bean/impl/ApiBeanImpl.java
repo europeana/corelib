@@ -22,7 +22,7 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.ApiBean
  * 
- * @author Yorgos.Mamakis@kb.nl
+ * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
