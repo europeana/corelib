@@ -69,7 +69,7 @@ public class AgentFieldInput {
         }
         if (agentType.getPrefLabelList() != null) {
             for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
-                if(prefLabel.getLang()) {
+                if(prefLabel.getLang()!=null) {
                     solrInputDocument.addField(
                             EdmLabel.AG_SKOS_PREF_LABEL.toString() + "."
                             + prefLabel.getLang().getLang(),

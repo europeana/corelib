@@ -119,7 +119,7 @@ public class TimespanFieldInput {
             if (timeSpan.getPrefLabelList() != null) {
                 Map<String, String> prefLabelMongo = new HashMap<String, String>();
                 for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
-                    if(prefLabel.getLang()!=null) {
+                    if(prefLabelJibx.getLang()!=null) {
                         prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
                                 prefLabelJibx.getString());
                     } else {

@@ -119,7 +119,7 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
                 } catch (SolrServerException e) {
-                    throw new SolrTypeException(ProblemType.MALFORMED_QUERY, e);
+                    throw new SolrTypeException(ProblemType.MALFORMED_QUERY);
                 }
 
             } else {
