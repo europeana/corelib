@@ -1,3 +1,20 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
+
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
@@ -25,8 +42,24 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.utils.SolrUtil;
 
+/**
+ * Constructor for an Aggregation TODO:update/delete
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
+ */
 public class AggregationFieldInput {
-
+	/**
+	 * Fill in a SolrInputDocument with Aggregation specific fields
+	 * 
+	 * @param aggregation
+	 *            A JiBX entity that represents an Aggregation
+	 * @param solrInputDocument
+	 *            The SolrInputDocument to alter
+	 * @return The SolrInputDocument with Aggregation specific values
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static SolrInputDocument createAggregationSolrFields(
 			Aggregation aggregation, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
@@ -77,24 +110,50 @@ public class AggregationFieldInput {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Append a List of Webresources to an aggregation TODO: what happens when
+	 * there are more than one aggregations
+	 * 
+	 * @param aggregations
+	 *            The List of aggregations in a record
+	 * @param webResources
+	 *            The List of webresources to be appended to an aggregation
+	 * @param mongoServer
+	 *            The instance of the MongoDBServer the aggregation is going to
+	 *            be saved
+	 * @return The aggregation Object that was altered (???to be converted to
+	 *         ArrayList of aggregations???)
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static AggregationImpl appendWebResource(
-			List<AggregationImpl> aggregations, List<WebResourceImpl> webResources,
-			MongoDBServer mongoServer) throws InstantiationException,
-			IllegalAccessException {
-		AggregationImpl aggregation=findAggregation(aggregations, webResources.get(0));
-			
+			List<AggregationImpl> aggregations,
+			List<WebResourceImpl> webResources, MongoDBServer mongoServer)
+			throws InstantiationException, IllegalAccessException {
+		AggregationImpl aggregation = findAggregation(aggregations,
+				webResources.get(0));
+
 		aggregation.setWebResources(webResources);
 
 		UpdateOperations<AggregationImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(AggregationImpl.class)
 				.set("webResources", webResources);
-		Query<AggregationImpl> query = mongoServer.getDatastore().find(AggregationImpl.class).filter("about", aggregation.getAbout());
+		Query<AggregationImpl> query = mongoServer.getDatastore()
+				.find(AggregationImpl.class)
+				.filter("about", aggregation.getAbout());
 		mongoServer.getDatastore().update(query, ops);
 		return aggregation;
 	}
 
-
-
+	/**
+	 * Retrieve the aggregation in which the webresources will be saved in
+	 * 
+	 * @param aggregations
+	 *            The list of aggregations to search on
+	 * @param webResource
+	 *            The webresource from which the aggregation is extracted
+	 * @return The aggregation that is going to be altered
+	 */
 	private static AggregationImpl findAggregation(
 			List<AggregationImpl> aggregations, WebResourceImpl webResource) {
 		for (AggregationImpl aggregation : aggregations) {
@@ -107,6 +166,20 @@ public class AggregationFieldInput {
 		return null;
 	}
 
+	/**
+	 * Create an Aggregation MongoDBEntity. The webresources are not inserted at
+	 * this method. as the aggregation may be created before the web resources
+	 * are encountered in the EDM parsing or after.
+	 * 
+	 * @param aggregation
+	 *            The JiBX Aggregation entity
+	 * @param mongoServer
+	 *            The mongoServer instance that Aggregation is going to be saved
+	 *            in
+	 * @return The MongoDB Aggregation entity
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
 			MongoDBServer mongoServer) throws InstantiationException,
@@ -151,11 +224,11 @@ public class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
-		try{
-		mongoServer.getDatastore().save(mongoAggregation);
-		}
-		catch(Exception e){
-			//DUP UNIQUE IDENTIFIER
+		try {
+			mongoServer.getDatastore().save(mongoAggregation);
+		} catch (Exception e) {
+			// DUP UNIQUE IDENTIFIER
+			// TODO:change that
 		}
 		return mongoAggregation;
 	}

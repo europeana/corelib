@@ -20,7 +20,6 @@ package eu.europeana.corelib.solr.server;
 import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 /**
  * Basic MongoDB server implementation
  * @author Yorgos.Mamakis@ kb.nl

@@ -53,7 +53,18 @@ public class SolrUtil {
 		return true;
 	}
 
+	/**
+	 * Method that check if an object exists and return it
+	 * @param clazz
+	 * 			The class type of the object
+	 * @param object
+	 * 			The object to check if it exists
+	 * @return the object
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public  static  <T> T exists (Class<T> clazz, T object) throws InstantiationException, IllegalAccessException{
 		return ( object==null? clazz.newInstance():object );
 	}
+	
 }

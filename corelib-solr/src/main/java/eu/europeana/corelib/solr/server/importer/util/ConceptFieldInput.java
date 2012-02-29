@@ -1,3 +1,20 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
+
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
@@ -16,20 +33,36 @@ import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 
-public class ConceptFieldInput {
 
+/**
+ * Constructor for Concepts
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
+ */
+public class ConceptFieldInput {
+	
+	/**
+	 * Retrun a SolrInputDocument with the Concept fields filled in
+	 * 
+	 * @param concept
+	 *            The JiBX Entity holding the Concept field values
+	 * @param solrInputDocument
+	 *            The SolrInputDocument to alter
+	 * @return The SolrInputDocument with the filled in values for a Concept
+	 */
 	public static SolrInputDocument createConceptSolrFields(Concept concept,
 			SolrInputDocument solrInputDocument) {
 		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(),
 				concept.getAbout());
 		if (concept.getAltLabelList() != null) {
 			for (AltLabel altLabel : concept.getAltLabelList()) {
-				try {
+				if (altLabel.getLang() != null) {
 					solrInputDocument.addField(
 							EdmLabel.CC_SKOS_ALT_LABEL.toString() + "."
 									+ altLabel.getLang().getLang(),
 							altLabel.getString());
-				} catch (NullPointerException e) {
+				} else {
 					solrInputDocument.addField(
 							EdmLabel.CC_SKOS_ALT_LABEL.toString(),
 							altLabel.getString());
@@ -38,12 +71,12 @@ public class ConceptFieldInput {
 		}
 		if (concept.getPrefLabelList() != null) {
 			for (PrefLabel prefLabel : concept.getPrefLabelList()) {
-				try {
+				if (prefLabel.getLang() != null) {
 					solrInputDocument.addField(
 							EdmLabel.CC_SKOS_PREF_LABEL.toString() + "."
 									+ prefLabel.getLang().getLang(),
 							prefLabel.getString());
-				} catch (NullPointerException e) {
+				} else {
 					solrInputDocument.addField(
 							EdmLabel.CC_SKOS_PREF_LABEL.toString(),
 							prefLabel.getString());
@@ -65,12 +98,21 @@ public class ConceptFieldInput {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Retrieves a MongoDB Concept Entity
+	 * 
+	 * @param concept
+	 * 			The JiBX Concept Entity that has the field values of the Concept
+	 * @param mongoServer
+	 * 			The MongoDBServer instance that is going to be used to save the MongoDB Concept
+	 * @return The MongoDB Concept Entity
+	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
 			MongoDBServer mongoServer) {
 		ConceptImpl conceptMongo = new ConceptImpl();
 
-		conceptMongo = (ConceptImpl) mongoServer.searchByAbout(ConceptImpl.class,concept
-				.getAbout());
+		conceptMongo = (ConceptImpl) mongoServer.searchByAbout(
+				ConceptImpl.class, concept.getAbout());
 		if (conceptMongo == null) {
 			// If it does not exist
 
@@ -98,10 +140,10 @@ public class ConceptFieldInput {
 			if (concept.getPrefLabelList() != null) {
 				Map<String, String> prefLabelMongo = new HashMap<String, String>();
 				for (PrefLabel prefLabelJibx : concept.getPrefLabelList()) {
-					try {
+					if (prefLabelJibx.getLang() != null) {
 						prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
 								prefLabelJibx.getString());
-					} catch (NullPointerException e) {
+					} else {
 						prefLabelMongo.put("def", prefLabelJibx.getString());
 					}
 				}
@@ -111,18 +153,19 @@ public class ConceptFieldInput {
 			if (concept.getAltLabelList() != null) {
 				Map<String, String> altLabelMongo = new HashMap<String, String>();
 				for (AltLabel altLabelJibx : concept.getAltLabelList()) {
-					try {
+					if (altLabelJibx.getLang() != null) {
 						altLabelMongo.put(altLabelJibx.getLang().getLang(),
 								altLabelJibx.getString());
-					} catch (NullPointerException e) {
+					} else {
 						altLabelMongo.put("def", altLabelJibx.getString());
 					}
 				}
 				conceptMongo.setAltLabel(altLabelMongo);
 			}
 			mongoServer.getDatastore().save(conceptMongo);
+		} else {
+			// TODO:update concept
 		}
-
 		return conceptMongo;
 	}
 }
