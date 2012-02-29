@@ -196,7 +196,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public void setHasView(String[] hasView) {
-		this.hasView = hasView;
+		this.hasView = hasView.clone();
 	}
 
 	@Override

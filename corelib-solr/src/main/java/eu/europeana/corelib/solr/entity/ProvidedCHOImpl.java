@@ -62,7 +62,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
-		this.owlSameAs = owlSameAs;
+		this.owlSameAs = owlSameAs.clone();
 	}
 
 	@Override

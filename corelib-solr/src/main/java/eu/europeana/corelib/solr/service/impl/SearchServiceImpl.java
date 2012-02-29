@@ -14,7 +14,6 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
-
 package eu.europeana.corelib.solr.service.impl;
 
 import javax.annotation.Resource;
@@ -42,113 +41,103 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
- * 
+ *
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
-
 public class SearchServiceImpl implements SearchService {
 
-	@Resource(name = "corelib_solr_solrSelectServer1")
-	private SolrServer solrServer1;
+    @Resource(name = "corelib_solr_solrSelectServer1")
+    private SolrServer solrServer1;
+    @Resource(name = "corelib_solr_solrSelectServer2")
+    private SolrServer solrServer2;
+    @Value("#{europeanaProperties['solr1.facetLimit']}")
+    private int facetLimit;
+    @Value("#{europeanaProperties['solr1.rowLimit']}")
+    private int rowLimit;
+    @Value("#{europeanaProperties['solr1.timeout']}")
+    private int timeout;
+    @Value("#{europeanaProperties['solr1.suspendAfterTimeout']}")
+    private int suspendAfterTimeout;
+    @Resource(name = "corelib_solr_mongoServer")
+    MongoDBServer mongoServer;
 
-	@Resource(name = "corelib_solr_solrSelectServer2")
-	private SolrServer solrServer2;
+    @Override
+    public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 
-	@Value("#{europeanaProperties['solr1.facetLimit']}")
-	private int facetLimit;
+        /*
+         * if (!solrServer1.isActive() && !solrServer2.isActive()) { throw new
+         * SolrTypeException(ProblemType.SOLR_UNREACHABLE); } SolrQuery
+         * solrQuery = new SolrQuery().setQuery("europeana_id:\"" +
+         * europeanaObjectId + "\"");
+         * solrQuery.setQueryType(QueryType.MORE_LIKE_THIS.toString());
+         *
+         * QueryResponse queryResponse = null;
+         *
+         * try { queryResponse = getSolrServer().query(solrQuery); } catch
+         * (SolrServerException e) { throw new SolrTypeException(e,
+         * ProblemType.UNKNOWN); }
+         */
+        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 
-	@Value("#{europeanaProperties['solr1.rowLimit']}")
-	private int rowLimit;
+        //fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
+        return fullBean;
+    }
 
-	@Value("#{europeanaProperties['solr1.timeout']}")
-	private int timeout;
+    @Override
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException {
+        ResultSet<T> resultSet = new ResultSet<T>();
 
-	@Value("#{europeanaProperties['solr1.suspendAfterTimeout']}")
-	private int suspendAfterTimeout;
+        if (!solrServer1.isActive() && !solrServer2.isActive()) {
+            throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+        }
+        if (beanClazz.isInstance(BriefBean.class) || beanClazz.isInstance(ApiBean.class)) {
+            String[] refinements = query.getRefinements();
+            if (SolrUtil.checkTypeFacet(refinements)) {
+                SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
+                solrQuery.setFacet(true);
+                for (String refinement : refinements) {
+                    solrQuery.addFacetField(refinement);
+                }
+                solrQuery.setFacetLimit(facetLimit);
+                solrQuery.setRows(rowLimit);
+                solrQuery.setStart(query.getStart());
+                solrQuery.setQueryType(QueryType.ADVANCED.toString());
+                solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+                solrQuery.setSortField("score", ORDER.desc);
+                SolrServer solrServer = getSolrServer();
+                solrServer.setConnectionTimeout(timeout);
+                solrServer.setSuspendAfterTimeout(suspendAfterTimeout);
+                solrServer.setMaxTotalConnections(1000);
+                solrServer.setSoTimeout(timeout);
+                solrServer.setDefaultMaxConnectionsPerHost(1);
+                try {
+                    QueryResponse queryResponse = solrServer.query(solrQuery);
+                    resultSet.setResults(queryResponse.getBeans(beanClazz));
+                    resultSet.setFacetFields(queryResponse.getFacetFields());
+                    resultSet.setResultSize(queryResponse.getResults().size());
+                    resultSet.setSearchTime(queryResponse.getElapsedTime());
+                    resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+                } catch (SolrServerException e) {
+                    throw new SolrTypeException(ProblemType.MALFORMED_QUERY, e);
+                }
 
-	@Resource(name = "corelib_solr_mongoServer")
-	MongoDBServer mongoServer;
+            } else {
+                throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+            }
 
-	@Override
-	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-		
-		/*
-		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		}
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
-		solrQuery.setQueryType(QueryType.MORE_LIKE_THIS.toString());
+        } else {
+            throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+        }
+        return resultSet;
+    }
 
-		QueryResponse queryResponse = null;
-
-		try {
-			queryResponse = getSolrServer().query(solrQuery);
-		} catch (SolrServerException e) {
-			throw new SolrTypeException(e, ProblemType.UNKNOWN);
-		}
-*/
-		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-
-		//fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
-		return fullBean;
-	}
-
-	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException {
-		ResultSet<T> resultSet = new ResultSet<T>();
-
-		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		}
-		if (beanClazz.isInstance(BriefBean.class) || beanClazz.isInstance(ApiBean.class)) {
-			String[] refinements = query.getRefinements();
-			if (SolrUtil.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
-				solrQuery.setFacet(true);
-				for (String refinement : refinements) {
-					solrQuery.addFacetField(refinement);
-				}
-				solrQuery.setFacetLimit(facetLimit);
-				solrQuery.setRows(rowLimit);
-				solrQuery.setStart(query.getStart());
-				solrQuery.setQueryType(QueryType.ADVANCED.toString());
-				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-				solrQuery.setSortField("score",ORDER.desc);
-				SolrServer solrServer = getSolrServer();
-				solrServer.setConnectionTimeout(timeout);
-				solrServer.setSuspendAfterTimeout(suspendAfterTimeout);
-				solrServer.setMaxTotalConnections(1000);
-				solrServer.setSoTimeout(timeout);
-				solrServer.setDefaultMaxConnectionsPerHost(1);
-				try {
-					QueryResponse queryResponse = solrServer.query(solrQuery);
-					resultSet.setResults(queryResponse.getBeans(beanClazz));
-					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().size());
-					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
-				} catch (SolrServerException e) {
-					throw new SolrTypeException(ProblemType.MALFORMED_QUERY);
-				}
-
-			} else {
-				throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
-			}
-
-		} else {
-			throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
-		}
-		return resultSet;
-	}
-
-	/**
-	 * Get the active SolrServer defaults to solrServer1
-	 * 
-	 * @return The solrServer to query
-	 */
-	private SolrServer getSolrServer() {
-		return solrServer1.isActive() ? solrServer1 : solrServer2;
-	}
-
+    /**
+     * Get the active SolrServer defaults to solrServer1
+     *
+     * @return The solrServer to query
+     */
+    private SolrServer getSolrServer() {
+        return (solrServer1.isActive() ? solrServer1 : solrServer2);
+    }
 }

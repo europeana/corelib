@@ -104,13 +104,9 @@ public class TimespanFieldInput {
      */
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
             MongoDBServer mongoServer) {
-        TimespanImpl mongoTimespan = new TimespanImpl();
-        // If timespan exists in mongo
-        try {
-            mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
+        TimespanImpl mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
             mongoTimespan.getAbout();
-        } // if it does not exist
-        catch (NullPointerException npe) {
+      if(mongoTimespan==null) {
             mongoTimespan = new TimespanImpl();
             mongoTimespan.setAbout(timeSpan.getAbout());
             if (timeSpan.getNoteList() != null) {
@@ -123,10 +119,10 @@ public class TimespanFieldInput {
             if (timeSpan.getPrefLabelList() != null) {
                 Map<String, String> prefLabelMongo = new HashMap<String, String>();
                 for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
-                    try {
+                    if(prefLabel.getLang()!=null) {
                         prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
                                 prefLabelJibx.getString());
-                    } catch (NullPointerException e) {
+                    } else {
                         prefLabelMongo.put("def",
                                 prefLabelJibx.getString());
                     }
@@ -136,10 +132,10 @@ public class TimespanFieldInput {
             if (timeSpan.getAltLabelList() != null) {
                 Map<String, String> altLabelMongo = new HashMap<String, String>();
                 for (AltLabel altLabelJibx : timeSpan.getAltLabelList()) {
-                    try {
+                    if(altLabelJibx.getLang()!=null) {
                         altLabelMongo.put(altLabelJibx.getLang().getLang(),
                                 altLabelJibx.getString());
-                    } catch (NullPointerException e) {
+                    } else {
                         altLabelMongo.put("def",
                                 altLabelJibx.getString());
                     }

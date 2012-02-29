@@ -72,8 +72,7 @@ public class SolrServerImpl extends org.apache.solr.client.solrj.SolrServer impl
         }
         CoreContainer.Initializer initializer = new CoreContainer.Initializer();
         CoreContainer coreContainer = initializer.initialize();
-        EmbeddedSolrServer localSolrServer = new EmbeddedSolrServer(coreContainer, "");
-        return localSolrServer;
+        return new EmbeddedSolrServer(coreContainer, "");
     }
 
     @Override

@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.beans.Field;
@@ -33,127 +33,127 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
  */
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     
-    int index;
-    String fullDocUrl;
-    int score;
-    String debugQuery;
+    private int index;
+    private String fullDocUrl;
+    private int score;
+    private String debugQuery;
 
     @Field("europeana_collectionName")
-    String[] europeanaCollectionName;
+    private String[] europeanaCollectionName;
 
     @Field("PROVIDER")
-    String[] provider;
+    private String[] provider;
 
     @Field("edm_dataProvider")
-    String[] edmDataProvider;
+    private String[] edmDataProvider;
 
     @Field("edm_object")
-    String[] edmObject;
+    private String[] edmObject;
 
     @Field("europeana_completeness")
-    int europeanaCompleteness;
+    private int europeanaCompleteness;
 
     @Field("edm_rights")
-    String[] edmRights;
+    private String[] edmRights;
 
     @Field("COMPLETENESS")
-    String[] completeness;
+    private String[] completeness;
 
     @Field("COUNTRY")
-    String[] country;
+    private String[] country;
 
     @Field("TYPE")
-    String[] docType;
+    private String[] docType;
 
     @Field("LANGUAGE")
-    String[] language;
+    private String[] language;
 
     @Field("YEAR")
-    String[] year;
+    private String[] year;
 
     @Field("RIGHTS")
-    String[] rights;
+    private String[] rights;
 
     @Field("UGC")
-    String[] ugc;
+    private String[] ugc;
 
     @Field ("title")
-    String[] title;
+    private String[] title;
 
-    @Field("solr_prefLabel.en")
-    String[] prefLabelEn;
+    @Field("edm_prefLabel.en")
+    private String[] prefLabelEn;
 
-    @Field("solr_prefLabel.ru")
-    String[] prefLabelRu;
+    @Field("edm_prefLabel.ru")
+    private String[] prefLabelRu;
 
     @Field("creator")
-    String[] creator;
+    private String[] creator;
     
     @Field("europeana_recordHashFirst")
-    String[] recordHashFirstSix;
+    private String[] recordHashFirstSix;
 
     @Field("edm_place")
-    String[] edmPlace;
+    private String[] edmPlace;
 
     @Field("edm_place_pref_label")
-    ArrayList<Map<String,String>> edmPlacePrefLabel;
+    private List<Map<String,String>> edmPlacePrefLabel;
 
     @Field("edm_place_broader_term")
-    String[] enrichmentPlaceBroaderTerm;
+    private String[] enrichmentPlaceBroaderTerm;
 
     @Field("edm_place_alt_label")
-    ArrayList<Map<String,String>> edmPlaceAltLabel;
+    private List<Map<String,String>> edmPlaceAltLabel;
 
     @Field("edm_place_latLon")
-    Float[] edmPlaceLatitude;
+    private Float[] edmPlaceLatitude;
 
     @Field("edm_place_latLon")
-    Float[] edmPlaceLongitude;
+    private Float[] edmPlaceLongitude;
 
     @Field("edm_timespan")
-    String[] edmTimespan;
+    private String[] edmTimespan;
 
     @Field("edm_timespan_label")
-    ArrayList<Map<String,String>> edmTimespanLabel;
+    private List<Map<String,String>> edmTimespanLabel;
 
     @Field("edm_timespan_broader_term")
-    String[] edmTimespanBroaderTerm;
+    private String[] edmTimespanBroaderTerm;
 
     @Field("edm_timespan_broader_label")
-    ArrayList<Map<String,String>> edmTimespanBroaderLabel;
+    private List<Map<String,String>> edmTimespanBroaderLabel;
 
     @Field("edm_timespan_begin")
-    String[] edmTimespanBegin;
+    private String[] edmTimespanBegin;
 
     @Field("edm_timespan_end")
-    String[] edmTimespanEnd;
+    private String[] edmTimespanEnd;
 
     @Field("edm_concept")
-    String[] edmConceptTerm;
+    private String[] edmConceptTerm;
 
     @Field("edm_concept_label")
-    ArrayList<Map<String,String>> edmConceptPrefLabel;
+    private List<Map<String,String>> edmConceptPrefLabel;
 
     @Field("edm_concept_broader")
-    String[] edmConceptBroaderTerm;
+    private String[] edmConceptBroaderTerm;
 
     @Field("edm_concept_broader_label")
-    ArrayList<Map<String,String>> edmConceptBroaderLabel;
+    private List<Map<String,String>> edmConceptBroaderLabel;
 
     @Field("edm_agent")
-    String[] edmAgentTerm;
+    private String[] edmAgentTerm;
 
     @Field("edm_agent_label")
-    ArrayList<Map<String,String>> edmAgentLabel;
+    private List<Map<String,String>> edmAgentLabel;
 
     @Field("dcterms_hasPart")
-    String[] dctermsHasPart;
+    private String[] dctermsHasPart;
     
     @Field("dcterms_isPartOf")
-    String[] dctermsIsPartOf;
+    private String[] dctermsIsPartOf;
 
     @Field("dcterms_spatial")
-    String[] dctermsSpatial;
+    private String[] dctermsSpatial;
 
 
     @Override
@@ -226,12 +226,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmPlaceAltLabel() {
+    public List<Map<String,String>> getEdmPlaceAltLabel() {
         return edmPlaceAltLabel;
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmPlaceLabel() {
+    public List<Map<String,String>> getEdmPlaceLabel() {
         return edmPlacePrefLabel;
     }
 
@@ -251,7 +251,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmTimespanLabel() {
+    public List<Map<String,String>> getEdmTimespanLabel() {
         return edmTimespanLabel;
     }
 
@@ -261,7 +261,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmTimespanBroaderLabel() {
+    public List<Map<String,String>> getEdmTimespanBroaderLabel() {
         return edmTimespanBroaderLabel;
     }
 
@@ -281,7 +281,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmConceptLabel() {
+    public List<Map<String,String>> getEdmConceptLabel() {
         return edmConceptPrefLabel;
     }
 
@@ -291,7 +291,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmConceptBroaderLabel() {
+    public List<Map<String,String>> getEdmConceptBroaderLabel() {
         return edmConceptBroaderLabel;
     }
 
@@ -301,7 +301,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public ArrayList<Map<String,String>> getEdmAgentLabel() {
+    public List<Map<String,String>> getEdmAgentLabel() {
         return edmAgentLabel;
     }
     

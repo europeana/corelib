@@ -55,12 +55,12 @@ public class AgentFieldInput {
                 agentType.getAbout());
         if (agentType.getAltLabelList() != null) {
             for (AltLabel altLabel : agentType.getAltLabelList()) {
-                try {
+                if(altLabel.getLang()!=null) {
                     solrInputDocument.addField(
                             EdmLabel.AG_SKOS_ALT_LABEL.toString() + "."
                             + altLabel.getLang().getLang(),
                             altLabel.getString());
-                } catch (NullPointerException e) {
+                } else {
                     solrInputDocument.addField(
                             EdmLabel.AG_SKOS_ALT_LABEL.toString(),
                             altLabel.getString());
@@ -69,12 +69,12 @@ public class AgentFieldInput {
         }
         if (agentType.getPrefLabelList() != null) {
             for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
-                try {
+                if(prefLabel.getLang()) {
                     solrInputDocument.addField(
                             EdmLabel.AG_SKOS_PREF_LABEL.toString() + "."
                             + prefLabel.getLang().getLang(),
                             prefLabel.getString());
-                } catch (NullPointerException e) {
+                } else {
                     solrInputDocument.addField(
                             EdmLabel.AG_SKOS_PREF_LABEL.toString(),
                             prefLabel.getString());
