@@ -187,13 +187,13 @@ public class FullBeanTest {
 	 */
 	private WebResource createWebResource() {
 		WebResource webResource = new WebResourceImpl();
-		webResource.setWebResource("test web Resource");
+		webResource.setAbout("test web Resource");
 		webResource.setWebResourceDcRights(new String[] { "test dc:rights" });
 		webResource.setWebResourceEdmRights("test edm:rights");
 		ds.save(webResource);
 		WebResource testWebResource = ds.find(WebResourceImpl.class).get();
 		assertEquals(webResource, testWebResource);
-		assertEquals(webResource.getWebResource(), testWebResource.getWebResource());
+		assertEquals(webResource.getAbout(), testWebResource.getAbout());
 		assertEquals(webResource.getWebResourceEdmRights(), testWebResource.getWebResourceEdmRights());
 		assertArrayEquals(webResource.getWebResourceDcRights(), testWebResource.getWebResourceDcRights());
 		return webResource;
