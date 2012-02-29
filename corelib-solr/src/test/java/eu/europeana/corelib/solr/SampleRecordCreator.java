@@ -32,19 +32,20 @@ public class SampleRecordCreator {
 	/**
 	 * @param args
 	 */
-	private static final String START_DOCUMENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-																					  "<rdf:RDF xmlns:dcterms=\"http://purl.org/dc/terms/\"\n"+
-																					  "xmlns:edm=\"http://www.europeana.eu/schemas/edm/\"\n"+
-																					  "xmlns:enrichment=\"http://www.europeana.eu/schemas/edm/enrichment/\"\n"+
-																					  "xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n"+
-																					  "xmlns:wgs84=\"http://www.w3.org/2003/01/geo/wgs84_pos#\"\n"+
-																					  "xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\"\n"+
-																					  "xmlns:oai=\"http://www.openarchives.org/OAI/2.0/\"\n"+
-																					  "xmlns:ore=\"http://www.openarchives.org/ore/terms/\"\n"+
-																					  "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
-																					  "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"+
-																					  "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"+
-																					  "xsi:schemaLocation=\"http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd\">\n";
+	private static final String START_DOCUMENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<rdf:RDF xmlns:dcterms=\"http://purl.org/dc/terms/\"\n"
+			+ "xmlns:edm=\"http://www.europeana.eu/schemas/edm/\"\n"
+			+ "xmlns:enrichment=\"http://www.europeana.eu/schemas/edm/enrichment/\"\n"
+			+ "xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n"
+			+ "xmlns:wgs84=\"http://www.w3.org/2003/01/geo/wgs84_pos#\"\n"
+			+ "xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\"\n"
+			+ "xmlns:oai=\"http://www.openarchives.org/OAI/2.0/\"\n"
+			+ "xmlns:ore=\"http://www.openarchives.org/ore/terms/\"\n"
+			+ "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"
+			+ "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+			+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+			+ "xsi:schemaLocation=\"http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd\">\n";
+
 	public static void main(String[] args) {
 		File file = new File("src/test/resources/09102_Ag_EU_MIMO_EDM.xml");
 		File saveFolder = new File("src/test/resources/records");
@@ -62,7 +63,7 @@ public class SampleRecordCreator {
 
 				case XMLStreamConstants.START_DOCUMENT:
 					System.out.println("Started parsing the document...");
-					
+
 					break;
 				case XMLStreamConstants.START_ELEMENT:
 
@@ -79,26 +80,27 @@ public class SampleRecordCreator {
 					if (!StringUtils.equals("rdf:RDF", xml.getName()
 							.getPrefix() + ":" + xml.getName().getLocalPart())) {
 						xmlString.append("<" + xml.getName().getPrefix() + ":"
-								+ xml.getName().getLocalPart() + ""); 
-						if(xml.getAttributeCount()>0){
-							xmlString.append(" " + xml.getAttributePrefix(0) + ":"
-									+ xml.getAttributeLocalName(0) + "=\""
-									+ xml.getAttributeValue(0)+"\">");
-						}
-						else {
+								+ xml.getName().getLocalPart() + "");
+						if (xml.getAttributeCount() > 0) {
+							xmlString.append(" " + xml.getAttributePrefix(0)
+									+ ":" + xml.getAttributeLocalName(0)
+									+ "=\"" + xml.getAttributeValue(0) + "\">");
+						} else {
 							xmlString.append(">");
 						}
 					}
-					
+
 					break;
 
 				case XMLStreamConstants.CHARACTERS:
-					String normalized = StringUtils.replace(xml.getText(), "&", "&amp;");
-					normalized = StringUtils.replace(normalized, "\"", StringUtils.replace(xml.getText(), "&", "&quot;"));
+					String normalized = StringUtils.replace(xml.getText(), "&",
+							"&amp;");
+					normalized = StringUtils.replace(normalized, "\"",
+							StringUtils.replace(xml.getText(), "&", "&quot;"));
 					xmlString.append(normalized);
 					break;
 				case XMLStreamConstants.END_ELEMENT:
-					
+
 					xmlString.append("</" + xml.getName().getPrefix() + ":"
 							+ xml.getName().getLocalPart() + ">");
 					if (StringUtils.equals("ore:Aggregation", xml.getName()
@@ -106,17 +108,16 @@ public class SampleRecordCreator {
 						xmlString.append("</rdf:RDF>");
 						saveFile(recordFile, xmlString);
 					}
-				
+
 					break;
 				case XMLStreamConstants.END_DOCUMENT:
-					
-					
+
 					break;
 				}
 				xml.next();
 			}
 			System.out.println("Finished parsing documents...");
-			System.out.println("Found "+records +" records");
+			System.out.println("Found " + records + " records");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

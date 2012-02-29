@@ -58,7 +58,7 @@ public class MongoConstructor {
 				try {
 					providedCHOs.add(ProvidedCHOFieldInput
 							.createProvidedCHOMongoFields(element.getProvidedCHO(),
-									mongoServer, false));
+									mongoServer));
 					if(proxies.size()>0){
 						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),element.getProvidedCHO(), mongoServer));
 					}
