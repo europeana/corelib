@@ -510,7 +510,7 @@ public class FullBeanImpl implements FullBean {
 		for (Aggregation aggregation : this.aggregations) {
 			for (WebResource webResource : aggregation.getWebResources()) {
 
-				webResourceUrls.add(webResource.getWebResource());
+				webResourceUrls.add(webResource.getAbout());
 			}
 		}
 		return webResourceUrls.toArray(new String[webResourceUrls.size()]);
