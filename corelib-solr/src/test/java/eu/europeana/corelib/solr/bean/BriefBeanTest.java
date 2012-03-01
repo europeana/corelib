@@ -17,32 +17,58 @@
 
 package eu.europeana.corelib.solr.bean;
 
-import javax.annotation.Resource;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.model.Query;
+import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.SolrServer;
+import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
+import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 
 /**
  * Unit tests for BriefBean
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class BriefBeanTest {
-	
-	@Resource(name="corelib_solr_solrSelectServer1")
+
 	SolrServer solrServer;
-	
+	private static String solrHome = "src/test/resources/solr";
+
 	@Test
-	public void testBriefBean(){
-		/*assertNotNull(solrServer);
-		//assertTrue(solrServer.isActive());
-		BriefBean briefBean = new BriefBeanImpl();
-		assertNull(briefBean.getId());*/
+	public void testBriefBean() {
+		try {
+			solrServer = new SolrServerImpl(solrHome);
+			assertNotNull(solrServer);
+			assertTrue(solrServer.isActive());
+			SearchServiceImpl searchService = new SearchServiceImpl(solrServer);
+			Query query = new Query();
+			
+			query.setPageSize(12);
+			
+			query.setQuery("*:*");
+			query.setStart(0);
+			
+			
+			System.out.println(query.getQuery());
+			ResultSet<BriefBeanImpl> briefBeanResults = searchService.search(BriefBeanImpl.class, query);
+			
+			assertTrue(briefBeanResults.getResultSize()>0);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
