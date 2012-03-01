@@ -105,7 +105,7 @@ public class TimespanFieldInput {
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
             MongoDBServer mongoServer) {
         TimespanImpl mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
-            mongoTimespan.getAbout();
+            
       if(mongoTimespan==null) {
             mongoTimespan = new TimespanImpl();
             mongoTimespan.setAbout(timeSpan.getAbout());
