@@ -71,7 +71,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		user.setUserName(username);
 		user.setPassword(hashPassword(password));
 		user.setRegistrationDate(new Date());
-		user = dao.insert(user);
+		user = getDao().insert(user);
 		tokenService.remove((Token) token);
 		return user;
 	}
@@ -79,7 +79,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByEmail(String email) {
 		if (StringUtils.isNotBlank(email)) {
-			return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
 		}
 		return null;
 	}
@@ -87,7 +87,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByApiKey(String apiKey) {
 		if (StringUtils.isNotBlank(apiKey)) {
-			return dao.findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY, apiKey);
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY, apiKey);
 		}
 		return null;
 	}
@@ -106,7 +106,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if ((userId == null) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		User user = dao.findByPK(userId);
+		User user = getDao().findByPK(userId);
 		if ((user == null) || !StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -119,7 +119,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if ((userId == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		User user = dao.findByPK(userId);
+		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -137,7 +137,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		User user = dao.findByPK(userId);
+		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -156,7 +156,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		User user = dao.findByPK(userId);
+		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -169,7 +169,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSavedSearch(Long savedSearchId) throws DatabaseException {
-		SavedSearchImpl savedSearch = dao.findByPK(SavedSearchImpl.class, savedSearchId);
+		SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class, savedSearchId);
 		if (savedSearch != null) {
 			savedSearch.getUser().getSavedSearches().remove(savedSearch);
 		}
@@ -177,7 +177,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSavedItem(Long savedItemId) throws DatabaseException {
-		SavedItemImpl savedItem = dao.findByPK(SavedItemImpl.class, savedItemId);
+		SavedItemImpl savedItem = getDao().findByPK(SavedItemImpl.class, savedItemId);
 		if (savedItem != null) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
@@ -185,7 +185,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public void removeSocialTag(Long socialTagId) throws DatabaseException {
-		SocialTagImpl socialTag = dao.findByPK(SocialTagImpl.class, socialTagId);
+		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class, socialTagId);
 		if (socialTag != null) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}

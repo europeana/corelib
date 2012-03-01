@@ -40,7 +40,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 
 	@PersistenceContext(name = "corelib_db_entityManagerFactory")
-	protected EntityManager entityManager;
+	private EntityManager entityManager;
 
 	private Class<E> domainClazz = null;
 

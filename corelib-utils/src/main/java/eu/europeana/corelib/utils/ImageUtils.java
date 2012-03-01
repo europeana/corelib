@@ -31,6 +31,10 @@ import org.imgscalr.Scalr;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class ImageUtils {
+	
+	private ImageUtils() {
+		// do not allow instances of this class
+	}
 
 	public static BufferedImage scale(BufferedImage org, int width, int height) throws IOException {
 		if (org != null) {

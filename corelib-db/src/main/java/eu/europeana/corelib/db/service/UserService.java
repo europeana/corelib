@@ -17,12 +17,9 @@
 
 package eu.europeana.corelib.db.service;
 
-import org.apache.solr.client.solrj.SolrServerException;
-
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
-import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 
 /**
  * Service with User related actions.
@@ -117,8 +114,6 @@ public interface UserService extends AbstractService<User> {
 	 * @return The User including the new saved item
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or object id is provided
-	 * @throws SolrServerException 
-	 * @throws SolrTypeException 
 	 */
 	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
 
@@ -133,8 +128,6 @@ public interface UserService extends AbstractService<User> {
 	 * @return The User including the new social tag
 	 * @exception DatabaseException
 	 *                Thrown when no valid user, object id or tag is provided
-	 * @throws SolrServerException 
-	 * @throws SolrTypeException 
 	 */
 	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
 	

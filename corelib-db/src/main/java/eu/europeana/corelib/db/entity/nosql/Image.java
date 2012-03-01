@@ -72,7 +72,7 @@ public class Image {
 	}
 
 	public void setImage(byte[] image) {
-		this.image = image;
+		this.image = image.clone();
 	}
 
 }

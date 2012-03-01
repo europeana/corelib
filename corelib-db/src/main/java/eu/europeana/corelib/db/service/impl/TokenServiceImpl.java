@@ -56,7 +56,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	        if (age <= MAX_TOKEN_AGE) {
 	        	return token;
 	        }
-	        dao.delete(token);
+	        getDao().delete(token);
 		}
 		return null;
 	}
@@ -70,7 +70,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		token.setCreated(new Date());
 		token.setEmail(email);
 		token.setToken(createRandomToken());
-		return dao.insert(token);
+		return getDao().insert(token);
 	}
 	
 	@Override
