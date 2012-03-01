@@ -50,21 +50,9 @@ public class ThumbnailServiceImpl implements ThumbnailService {
 	}
 
 	@Override
-	public byte[] retrieveThumbnail(String objectId, ThumbSize size) {
-		Assert.notNull(objectId);
-		Assert.notNull(size);
-		ImageCache cache = repository.findOne(objectId);
-		if (cache != null) {
-			return cache.getImages().get(size.toString()).getImage();
-		}
-		return null;
-	}
-
-	@Override
 	public ImageCache storeThumbnail(String objectId, BufferedImage originalImage) throws IOException {
 		Assert.notNull(objectId);
 		Assert.notNull(originalImage);
-		
 		ImageCache cache = new ImageCache(objectId, originalImage);
 
 		BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
@@ -81,9 +69,27 @@ public class ThumbnailServiceImpl implements ThumbnailService {
 
 		return repository.save(cache);
 	}
+
+	@Override
+	public byte[] retrieveThumbnail(String objectId, ThumbSize size) {
+		Assert.notNull(objectId);
+		Assert.notNull(size);
+		ImageCache cache = repository.findOne(objectId);
+		if (cache != null) {
+			return cache.getImages().get(size.toString()).getImage();
+		}
+		return null;
+	}
+	
+	@Override
+	public ImageCache retrieveImageCache(String objectId) {
+		Assert.notNull(objectId);
+		return repository.findOne(objectId);
+	}
 	
 	@Override
 	public void deleteThumbnail(String objectId) {
+		Assert.notNull(objectId);
 		repository.delete(objectId);
 	}
 
