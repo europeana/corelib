@@ -23,7 +23,8 @@ package eu.europeana.corelib.definitions.solr;
 public enum QueryType {
 	
 	ADVANCED("advanced"), 
-	MORE_LIKE_THIS("moreLikeThis");
+	MORE_LIKE_THIS("moreLikeThis"),
+	SIMPLE("search");
 
 	private String queryType;
 

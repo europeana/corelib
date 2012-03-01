@@ -17,6 +17,11 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.solr.client.solrj.beans.Field;
+
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 
 /**
@@ -26,5 +31,110 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
  * 
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
+
+	@Field("edm_concept")
+    private String[] edmConceptTerm;
+
+    @Field("edm_concept_label")
+    private List<Map<String,String>> edmConceptPrefLabel;
+
+    @Field("edm_concept_broader")
+    private String[] edmConceptBroaderTerm;
+
+    @Field("edm_concept_broader_label")
+    private List<Map<String,String>> edmConceptBroaderLabel;
+    
+    @Field("edm_timespan_broader_term")
+    private String[] edmTimespanBroaderTerm;
+
+    @Field("edm_timespan_broader_label")
+    private List<Map<String,String>> edmTimespanBroaderLabel;
+
+    @Field("pl_prefLabel.en")
+    private String[] prefLabelEn;
+
+    @Field("pl_prefLabel.ru")
+    private String[] prefLabelRu;
+    
+    @Field("europeana_recordHashFirst")
+    private String[] recordHashFirstSix;
+    
+    @Field("UGC")
+    private String[] ugc;
+    
+    @Field("edm_rights")
+    private String[] edmRights;
+
+    @Field("COMPLETENESS")
+    private String[] completeness;
+
+    @Field("COUNTRY")
+    private String[] country;
+    
+    private int score;
+    private String debugQuery;
+
+    @Field("europeana_collectionName")
+    private String[] europeanaCollectionName;
+    private int index;
+    
+    @Field("edm_place_broader_term")
+    private String[] enrichmentPlaceBroaderTerm;
+
+    @Field("edm_place_alt_label")
+    private List<Map<String,String>> edmPlaceAltLabel;
+
+    @Field("dcterms_isPartOf")
+    private String[] dctermsIsPartOf;
+
+	 @Override
+	    public String[] getEdmPlaceBroaderTerm() {
+	        return enrichmentPlaceBroaderTerm;
+	    }
+
+	    @Override
+	    public List<Map<String,String>> getEdmPlaceAltLabel() {
+	        return edmPlaceAltLabel;
+	    }
+	    
+	    @Override
+	    public String[] getEdmTimespanBroaderTerm() {
+	        return edmTimespanBroaderTerm;
+	    }
+
+	    @Override
+	    public List<Map<String,String>> getEdmTimespanBroaderLabel() {
+	        return edmTimespanBroaderLabel;
+	    }
+	    
+	    @Override
+	    public String[] getEdmConcept() {
+	        return edmConceptTerm;
+	    }
+
+	    @Override
+	    public List<Map<String,String>> getEdmConceptLabel() {
+	        return edmConceptPrefLabel;
+	    }
+
+	    @Override
+	    public String[] getEdmConceptBroaderTerm() {
+	        return edmConceptBroaderTerm;
+	    }
+
+	    @Override
+	    public List<Map<String,String>> getEdmConceptBroaderLabel() {
+	        return edmConceptBroaderLabel;
+	    }
+	    
+	    @Override
+	    public String[] getAggregationEdmRights() {
+	        return this.edmRights;
+	    }
+	    
+	    @Override
+	    public String[] getDcTermsIsPartOf() {
+	        return this.dctermsIsPartOf;
+	    }
 
 }

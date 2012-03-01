@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Interface for the APIBean. The APIBean contains the fields exposed by the SOLR engine for public access. NOTE: Draft
  * to be crosschecked and validated over time
@@ -25,4 +28,23 @@ package eu.europeana.corelib.definitions.solr.beans;
  */
 public interface ApiBean extends BriefBean {
 
+	String[] getDcTermsIsPartOf();
+	
+	String[] getAggregationEdmRights();
+	
+	String[] getEdmConcept(); // skos:concept
+
+	List<Map<String, String>> getEdmConceptLabel(); // skos:concept prefLabel
+
+	String[] getEdmConceptBroaderTerm(); // skos:concept broader
+
+	List<Map<String, String>> getEdmPlaceAltLabel();
+
+	List<Map<String, String>> getEdmConceptBroaderLabel();
+
+	String[] getEdmTimespanBroaderTerm();
+
+	List<Map<String, String>> getEdmTimespanBroaderLabel();
+
+	String[] getEdmPlaceBroaderTerm();
 }

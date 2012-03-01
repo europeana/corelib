@@ -30,22 +30,26 @@ import eu.europeana.corelib.definitions.solr.DocType;
 public class SolrUtil {
 
 	/**
-	 * Checks if the Facet is TYPE that everything is uppercase and known DocType according to EDM
+	 * Checks if the Facet is TYPE that everything is uppercase and known
+	 * DocType according to EDM
 	 * 
 	 * @param refinements
 	 * @return
 	 */
 	public static boolean checkTypeFacet(String[] refinements) {
-		for (String refinement : refinements) {
-			if (StringUtils.startsWith(refinement, "TYPE:")) {
-				if (!StringUtils.isAllUpperCase(StringUtils.split(refinement, ":")[1])
-						|| StringUtils.split(refinement, ":").length != 2) {
-					return false;
-				} else {
-					try {
-						DocType.get(refinement);
-					} catch (IllegalArgumentException e) {
+		if (refinements != null) {
+			for (String refinement : refinements) {
+				if (StringUtils.startsWith(refinement, "TYPE:")) {
+					if (!StringUtils.isAllUpperCase(StringUtils.split(
+							refinement, ":")[1])
+							|| StringUtils.split(refinement, ":").length != 2) {
 						return false;
+					} else {
+						try {
+							DocType.get(refinement);
+						} catch (IllegalArgumentException e) {
+							return false;
+						}
 					}
 				}
 			}
@@ -55,16 +59,18 @@ public class SolrUtil {
 
 	/**
 	 * Method that check if an object exists and return it
+	 * 
 	 * @param clazz
-	 * 			The class type of the object
+	 *            The class type of the object
 	 * @param object
-	 * 			The object to check if it exists
+	 *            The object to check if it exists
 	 * @return the object
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public  static  <T> T exists (Class<T> clazz, T object) throws InstantiationException, IllegalAccessException{
-		return ( object==null? clazz.newInstance():object );
+	public static <T> T exists(Class<T> clazz, T object)
+			throws InstantiationException, IllegalAccessException {
+		return (object == null ? clazz.newInstance() : object);
 	}
-	
+
 }

@@ -17,15 +17,14 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
-
 import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
- * Interface for the BriefBean. The BriefBean contains the fields exposed by the SOLR engine for presenting each record
- * in the result and search page.
+ * Interface for the BriefBean. The BriefBean contains the fields exposed by the
+ * SOLR engine for presenting each record in the result and search page.
  * 
  * 
  * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
@@ -50,15 +49,11 @@ public interface BriefBean extends IdBean {
 
 	// here the dcterms namespaces starts
 
-	String[] getDcTermsIsPartOf();
-
 	String[] getDcTermsSpatial();
 
 	// Ranking and Enrichment terms
 
 	int getEuropeanaCompleteness();
-
-	String[] getAggregationEdmRights();
 
 	String[] getEdmPlace();
 
@@ -76,12 +71,6 @@ public interface BriefBean extends IdBean {
 
 	String[] getEdmTimespanEnd();
 
-	String[] getEdmConcept(); // skos:concept
-
-	List<Map<String, String>> getEdmConceptLabel(); // skos:concept prefLabel
-
-	String[] getEdmConceptBroaderTerm(); // skos:concept broader
-
 	String[] getEdmAgent();
 
 	List<Map<String, String>> getEdmAgentLabel();
@@ -90,13 +79,4 @@ public interface BriefBean extends IdBean {
 
 	String[] getDcTermsHasPart();
 
-	List<Map<String, String>> getEdmPlaceAltLabel();
-
-	List<Map<String, String>> getEdmConceptBroaderLabel();
-
-	String[] getEdmTimespanBroaderTerm();
-
-	List<Map<String, String>> getEdmTimespanBroaderLabel();
-
-	String[] getEdmPlaceBroaderTerm();
 }
