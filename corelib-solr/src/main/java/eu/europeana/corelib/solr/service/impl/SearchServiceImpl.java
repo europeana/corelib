@@ -36,6 +36,7 @@ import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.server.SolrServer;
 import eu.europeana.corelib.solr.service.SearchService;
+import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtil;
 
 /**
@@ -73,22 +74,31 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 
-		/*
-		 * if (!solrServer1.isActive() && !solrServer2.isActive()) { throw new
-		 * SolrTypeException(ProblemType.SOLR_UNREACHABLE); } SolrQuery
-		 * solrQuery = new SolrQuery().setQuery("europeana_id:\"" +
-		 * europeanaObjectId + "\"");
-		 * solrQuery.setQueryType(QueryType.MORE_LIKE_THIS.toString());
-		 * 
-		 * QueryResponse queryResponse = null;
-		 * 
-		 * try { queryResponse = getSolrServer().query(solrQuery); } catch
-		 * (SolrServerException e) { throw new SolrTypeException(e,
-		 * ProblemType.UNKNOWN); }
-		 */
+		if (!solrServer1.isActive() && !solrServer2.isActive()) {
+			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+		}
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
+				+ europeanaObjectId + "\"");
+		solrQuery.set("mlt",true);
+		String[] mlt = new String[MoreLikeThis.values().length];
+		int i=0;
+		for (MoreLikeThis mltField : MoreLikeThis.values()){
+			mlt[i]=mltField.toString();
+			i++;
+		}
+		solrQuery.set("mlt.fl", mlt);
+		solrQuery.setQueryType(QueryType.ADVANCED.toString());
+		QueryResponse queryResponse = null;
+
+		try {
+			queryResponse = getSolrServer().query(solrQuery);
+		} catch (SolrServerException e) {
+			throw new SolrTypeException(e, ProblemType.UNKNOWN);
+		}
+
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 
-		// fullBean.setRelatedItems(queryResponse.getBeans(BriefBean.class));
+		fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
 		return fullBean;
 	}
 
@@ -127,7 +137,8 @@ public class SearchServiceImpl implements SearchService {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					System.out.println("querying " + solrQuery.getQuery());
 					resultSet.setResults(queryResponse.getBeans(beanClazz));
-					System.out.println(queryResponse.getBeans(beanClazz).size());
+					System.out
+							.println(queryResponse.getBeans(beanClazz).size());
 					resultSet.setFacetFields(queryResponse.getFacetFields());
 					resultSet.setResultSize(queryResponse.getResults().size());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
