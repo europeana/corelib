@@ -59,7 +59,7 @@ public class FullBeanImpl implements FullBean {
 
     @Id
     ObjectId europeanaId;
-    @Indexed
+    @Indexed(unique=true)
     String about;
     private String[] title;
     private String[] creator;

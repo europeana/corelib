@@ -90,15 +90,17 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setQueryType(QueryType.ADVANCED.toString());
 		QueryResponse queryResponse = null;
 
+		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		try {
 			queryResponse = getSolrServer().query(solrQuery);
+			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
 		} catch (SolrServerException e) {
-			throw new SolrTypeException(e, ProblemType.UNKNOWN);
+			//LOG HERE
 		}
 
-		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+		
 
-		fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
+		
 		return fullBean;
 	}
 
