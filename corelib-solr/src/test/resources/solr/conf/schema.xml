@@ -50,25 +50,25 @@
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
    <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="europeana_id" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-   <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
+   <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="location" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="date" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="creator" type="title" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="format" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="publisher" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="subject" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
-   <field name="contributor" type="title" indexed="true" stored="true" multiValued="true" termVectors="false"/>
+   <field name="contributor" type="title" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="source" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="language" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="rights" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="identifier" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="relation" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="country" type="text" indexed="true" stored="true" multivalued="true" />
-   <field name="title" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
-   <field name="who" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
-   <field name="when" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
-   <field name="what" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
-   <field name="where" type="text" indexed="true" stored="true" multiValued="true" termVectors="false"/>
+   <field name="title" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="who" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="when" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="what" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="where" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="CONTRIBUTOR" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="UGC" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="LANGUAGE" type="string" indexed="true" stored="true" multiValued="true" />
