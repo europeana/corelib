@@ -137,10 +137,9 @@ public class SearchServiceImpl implements SearchService {
 				solrServer.setDefaultMaxConnectionsPerHost(1);
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
-					System.out.println("querying " + solrQuery.getQuery());
+					
 					resultSet.setResults(queryResponse.getBeans(beanClazz));
-					System.out
-							.println(queryResponse.getBeans(beanClazz).size());
+					
 					resultSet.setFacetFields(queryResponse.getFacetFields());
 					resultSet.setResultSize(queryResponse.getResults().size());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
