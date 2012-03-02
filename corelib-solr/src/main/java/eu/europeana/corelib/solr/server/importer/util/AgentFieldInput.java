@@ -109,7 +109,7 @@ public class AgentFieldInput {
 	}
 
 	/**
-	 * Create a Mongo Entity of type Agent from the JiBX AgentType object
+	 * Create or Update a Mongo Entity of type Agent from the JiBX AgentType object
 	 * 
 	 * Mapping from the JibXBinding Fields to the MongoDB Entity Fields The
 	 * fields mapped are the rdf:about (String -> String) skos:note(List<Note>
@@ -122,8 +122,7 @@ public class AgentFieldInput {
 	 *            - JiBX representation of an Agent EDM entity
 	 * @param mongoServer
 	 *            - The mongoServer to save the entity
-	 * @return A list with the agent created (EDM allows more than one Agent
-	 *         entities per ProvidedCHO)
+	 * @return The created Agent
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 * @throws MappingException
@@ -146,7 +145,14 @@ public class AgentFieldInput {
 		return agent;
 	}
 
-	// Make it look nicer TODO: the same for SOLR
+	/**
+	 * Update an already stored Agent Mongo Entity
+	 * 
+	 * @param agent The agent to update
+	 * @param agentType The JiBX Agent Entity
+	 * @param mongoServer The MongoDB Server to save the Agent to
+	 * @return The new Agent MongoDB Entity
+	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
 			AgentType agentType, MongoDBServer mongoServer) {
 		if (agent.getBegin() != null
@@ -246,6 +252,11 @@ public class AgentFieldInput {
 				agentType.getAbout());
 	}
 
+	/**
+	 * Create new Agent MongoDB Entity from JiBX Agent Entity
+	 * @param agentType
+	 * @return
+	 */
 	private static AgentImpl createNewAgent(AgentType agentType) {
 		AgentImpl agent = new AgentImpl();
 
