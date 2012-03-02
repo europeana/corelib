@@ -144,6 +144,8 @@ public class ContentLoader {
             e1.printStackTrace();
         }
         int i = 0;
+        int failed=0;
+        int imported=0;
         try {
             MongoConstructor.setParameters(new MongoDBServerImpl(
                     mongoHost, Integer.parseInt(mongoPort), databaseName));
@@ -158,19 +160,22 @@ public class ContentLoader {
             try {
                 IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
                 IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+                i++;
                 RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f),
                         null);
 
                 MongoConstructor.constructFullBean(rdf);
                 records.add(SolrConstructor.constructSolrDocument(rdf));
-                i++;
+                
                 if (i % 1000 == 0 || i == collectionXML.size()) {
-                    System.out.println("Sending 1000 records to SOLR");
+                    System.out.println("Sending " + i + " records to SOLR");
+                    imported+= records.size();
                     solrServer.add(records);
                     records.clear();
                 }
 
             } catch (JiBXException e) {
+            	failed++;
                 System.out.println("Error unmarshalling document "
                         + f.getName()
                         + " from the input file. Check for Schema changes");
@@ -201,7 +206,9 @@ public class ContentLoader {
             solrServer.optimize();
 
             System.out.println("Finished Importing");
-            solrServer.query(new SolrQuery().setQuery("*:*"));
+            System.out.println("Records read: "+i);
+            System.out.println("Records imported: " + imported);
+            System.out.println("Records failed: "+ failed);
             solrServer = null;
             System.out.println("Deleting files");
             for (File f : collectionXML) {

@@ -196,14 +196,52 @@ public class AgentFieldInput {
 							newNoteList.toArray(new String[newNoteList.size()]));
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}
-		
-		if(agent.getAltLabel()!=null){
+
+		if (agent.getAltLabel() != null) {
 			Map<String, String> newAltLabelMap = agent.getAltLabel();
-			for(AltLabel altLabel: agentType.getAltLabelList()){
-				//if(MongoUtil.contains(newAltLabelMap, key, val))
+			for (AltLabel altLabel : agentType.getAltLabelList()) {
+				if (altLabel.getLang() != null) {
+					if (!MongoUtil.contains(newAltLabelMap, altLabel.getLang()
+							.getLang(), altLabel.getString())) {
+						newAltLabelMap.put(altLabel.getLang().getLang(),
+								altLabel.getString());
+					}
+				} else {
+					newAltLabelMap.put("def", altLabel.getString());
+				}
 			}
+			Query<AgentImpl> updateQuery = mongoServer.getDatastore()
+					.createQuery(AgentImpl.class).field("about")
+					.equal(agent.getAbout());
+			UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
+					.createUpdateOperations(AgentImpl.class)
+					.set("altLabel", newAltLabelMap);
+			mongoServer.getDatastore().update(updateQuery, ops);
 		}
 
+		if (agent.getPrefLabel() != null) {
+			Map<String, String> newPrefLabelMap = agent.getPrefLabel();
+			if (agentType.getPrefLabelList() != null) {
+				for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
+					if (prefLabel.getLang() != null) {
+						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+								.getLang().getLang(), prefLabel.getString())) {
+							newPrefLabelMap.put(prefLabel.getLang().getLang(),
+									prefLabel.getString());
+						}
+					} else {
+						newPrefLabelMap.put("def", prefLabel.getString());
+					}
+				}
+				Query<AgentImpl> updateQuery = mongoServer.getDatastore()
+						.createQuery(AgentImpl.class).field("about")
+						.equal(agent.getAbout());
+				UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
+						.createUpdateOperations(AgentImpl.class)
+						.set("prefLabel", newPrefLabelMap);
+				mongoServer.getDatastore().update(updateQuery, ops);
+			}
+		}
 		return (AgentImpl) mongoServer.searchByAbout(AgentImpl.class,
 				agentType.getAbout());
 	}
