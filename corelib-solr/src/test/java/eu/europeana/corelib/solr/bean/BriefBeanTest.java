@@ -58,9 +58,6 @@ public class BriefBeanTest {
 			
 			query.setQuery("*:*");
 			query.setStart(0);
-			
-			
-			System.out.println(query.getQuery());
 			ResultSet<BriefBeanImpl> briefBeanResults = searchService.search(BriefBeanImpl.class, query);
 			
 			assertTrue(briefBeanResults.getResultSize()>0);
