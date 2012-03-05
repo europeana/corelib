@@ -1,0 +1,19 @@
+<binding xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/2004/02/skos/core#" default="elements" prefix="skos"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Concept" name="Concept">
+    <structure map-as="edm:ContextualHierarchicalResourceType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Broader" get-method="getBroaderList" set-method="setBroaderList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PrefLabel" name="prefLabel">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AltLabel" name="altLabel">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Broader" name="broader">
+    <value style="text" get-method="getBroader" set-method="setBroader"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Note" name="note">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+</binding>

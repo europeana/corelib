@@ -1,0 +1,9 @@
+<binding trim-whitespace="true">
+  <namespace uri="http://www.w3.org/2003/01/geo/wgs84_pos#" default="elements" prefix="wgs84"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PosLat" name="pos_lat">
+    <value style="text" get-method="getPosLat" set-method="setPosLat"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PosLong" name="pos_long">
+    <value style="text" get-method="getPosLong" set-method="setPosLong"/>
+  </mapping>
+</binding>

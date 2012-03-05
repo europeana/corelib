@@ -1,0 +1,86 @@
+<binding xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.europeana.eu/schemas/edm/" default="elements" prefix="edm"/>
+  <mapping abstract="true" type-name="edm:RDF" class="eu.europeana.corelib.definitions.jibx.RDF">
+    <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
+      <structure type="eu.europeana.corelib.definitions.jibx.RDF$Choice" ordered="false" choice="true">
+        <structure map-as="edm:ProvidedCHOType" test-method="ifProvidedCHO" get-method="getProvidedCHO" set-method="setProvidedCHO" usage="optional" name="ProvidedCHO"/>
+        <structure map-as="edm:WebResourceType" test-method="ifWebResource" get-method="getWebResource" set-method="setWebResource" usage="optional" name="WebResource"/>
+        <structure map-as="edm:AgentType" test-method="ifAgent" get-method="getAgent" set-method="setAgent" usage="optional" name="Agent"/>
+        <structure map-as="edm:PlaceType" test-method="ifPlace" get-method="getPlace" set-method="setPlace" usage="optional" name="Place"/>
+        <structure map-as="edm:TimeSpanType" test-method="ifTimeSpan" get-method="getTimeSpan" set-method="setTimeSpan" usage="optional" name="TimeSpan"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Concept" test-method="ifConcept" get-method="getConcept" set-method="setConcept" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Aggregation" test-method="ifAggregation" get-method="getAggregation" set-method="setAggregation" usage="optional"/>
+      </structure>
+    </collection>
+  </mapping>
+  <mapping abstract="true" type-name="edm:ProvidedCHOType" class="eu.europeana.corelib.definitions.jibx.ProvidedCHOType">
+    <structure map-as="edm:EuropeanaType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure map-as="rdf:ResourceType" get-method="getIsNextInSequence" set-method="setIsNextInSequence" usage="optional" name="isNextInSequence"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:WebResourceType" class="eu.europeana.corelib.definitions.jibx.WebResourceType">
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Rights1" get-method="getRightList" set-method="setRightList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Rights" get-method="getRights" set-method="setRights"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:EuropeanaType" class="eu.europeana.corelib.definitions.jibx.EuropeanaType">
+    <structure map-as="dc:DCType"/>
+    <value style="element" name="type" get-method="getType" set-method="setType" format="edm:EdmType"/>
+    <structure map-as="rdf:ResourceType" get-method="getCurrentLocation" set-method="setCurrentLocation" usage="optional" name="currentLocation"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Rights" name="rights">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AggregatedCHO" name="aggregatedCHO">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasView" name="hasView">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.DataProvider" name="dataProvider">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Provider" name="provider">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsShownBy" name="isShownBy">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsShownAt" name="isShownAt">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx._Object" name="object">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Ugc" name="ugc">
+    <value style="text" get-method="getUgc" set-method="setUgc" format="edm:UGCType"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:ContextualResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualResourceType">
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.PrefLabel" get-method="getPrefLabelList" set-method="setPrefLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.AltLabel" get-method="getAltLabelList" set-method="setAltLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Note" get-method="getNoteList" set-method="setNoteList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:ContextualHierarchicalResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualHierarchicalResourceType">
+    <structure map-as="edm:ContextualResourceType"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:ContextualTemporalResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualTemporalResourceType">
+    <structure map-as="edm:ContextualHierarchicalResourceType"/>
+    <structure usage="optional" name="begin"/>
+    <structure usage="optional" name="end"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:AgentType" class="eu.europeana.corelib.definitions.jibx.AgentType">
+    <structure map-as="edm:ContextualTemporalResourceType"/>
+    <structure map-as="rdf:ResourceType" get-method="getTimeSpan" set-method="setTimeSpan" usage="optional" name="timeSpan"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:PlaceType" class="eu.europeana.corelib.definitions.jibx.PlaceType">
+    <structure map-as="edm:ContextualHierarchicalResourceType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.PosLat" get-method="getPosLat" set-method="setPosLat" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.PosLong" get-method="getPosLong" set-method="setPosLong" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:TimeSpanType" class="eu.europeana.corelib.definitions.jibx.TimeSpanType">
+    <structure map-as="edm:ContextualTemporalResourceType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+</binding>

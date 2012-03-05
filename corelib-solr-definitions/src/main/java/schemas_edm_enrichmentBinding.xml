@@ -1,0 +1,27 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.europeana.eu/schemas/edm/enrichment/" default="elements" prefix="enrichment"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AgentTerm" name="agent_term">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AgentLabel" name="agent_label">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.ConceptTerm" name="concept_term">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.ConceptLabel" name="concept_label">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PeriodTerm" name="period_term">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PeriodLabel" name="period_label">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PlaceTerm" name="place_term">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PlaceLabel" name="place_label">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+</binding>

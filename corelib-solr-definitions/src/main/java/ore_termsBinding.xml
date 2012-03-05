@@ -1,0 +1,16 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.openarchives.org/ore/terms/" default="elements" prefix="ore"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Aggregation" name="Aggregation">
+    <structure map-as="rdf:AboutType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.AggregatedCHO" get-method="getAggregatedCHO" set-method="setAggregatedCHO"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasView" get-method="getHasViewList" set-method="setHasViewList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DataProvider" get-method="getDataProvider" set-method="setDataProvider"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Provider" get-method="getProvider" set-method="setProvider"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Rights1" get-method="getRightList" set-method="setRightList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Rights" get-method="getRights" set-method="setRights"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsShownBy" get-method="getIsShownBy" set-method="setIsShownBy" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsShownAt" get-method="getIsShownAt" set-method="setIsShownAt" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx._Object" get-method="getObject" set-method="setObject" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Ugc" get-method="getUgc" set-method="setUgc" usage="optional"/>
+  </mapping>
+</binding>
