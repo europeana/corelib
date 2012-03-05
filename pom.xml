@@ -106,16 +106,17 @@
 		</dependency>
 	</dependencies>
 
-<distributionManagement>
-    <repository>
-        <id>europeanalabs.eu</id>
-        <name>europeanalabs.eu-releases</name>
-        <url>http://europeanalabs.eu/artifactory/libs-releases-local</url>
-    </repository>
-    <snapshotRepository>
-        <id>europeanalabs.eu</id>
-        <name>europeanalabs.eu-snapshots</name>
-        <url>http://europeanalabs.eu/artifactory/libs-snapshots-local</url>
-    </snapshotRepository>
-</distributionManagement>
+	<distributionManagement>
+	    <repository>
+	        <id>europeanalabs.eu</id>
+	        <name>europeanalabs.eu-releases</name>
+	        <url>http://europeanalabs.eu/artifactory/libs-releases-local</url>
+	    </repository>
+	    <snapshotRepository>
+	        <id>europeanalabs.eu</id>
+	        <name>europeanalabs.eu-snapshots</name>
+	        <url>http://europeanalabs.eu/artifactory/libs-snapshots-local</url>
+	    </snapshotRepository>
+	</distributionManagement>
+	
 </project>
