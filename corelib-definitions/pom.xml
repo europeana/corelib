@@ -1,21 +1,13 @@
 <?xml version="1.0"?>
 
-<!-- 
-  Copyright 2007-2012 The Europeana Foundation
-
-  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
-  by the European Commission;
-  You may not use this work except in compliance with the Licence.
-  
-  You may obtain a copy of the Licence at:
-  http://joinup.ec.europa.eu/software/page/eupl
-
-  Unless required by applicable law or agreed to in writing, software distributed under 
-  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
-  any kind, either express or implied.
-  See the Licence for the specific language governing permissions and limitations under 
-  the Licence.
- -->
+<!-- Copyright 2007-2012 The Europeana Foundation Licenced under the EUPL, 
+	Version 1.1 (the "Licence") and subsequent versions as approved by the European 
+	Commission; You may not use this work except in compliance with the Licence. 
+	You may obtain a copy of the Licence at: http://joinup.ec.europa.eu/software/page/eupl 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the Licence is distributed on an "AS IS" basis, without warranties 
+	or conditions of any kind, either express or implied. See the Licence for 
+	the specific language governing permissions and limitations under the Licence. -->
 
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
@@ -31,10 +23,6 @@
 	<artifactId>corelib-definitions</artifactId>
 	<name>corelib-definitions</name>
 	<url>http://www.europeanalabs.eu</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jibx.version>1.2.3</jibx.version>
-	</properties>
 	<dependencies>
 		<!-- Other -->
 		<dependency>
@@ -42,75 +30,21 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
-		 <dependency>
-        	<groupId>com.google.code.morphia</groupId>
-        	<artifactId>morphia</artifactId>
-        	<version>0.99</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.mongodb</groupId>
-        	<artifactId>mongo-java-driver</artifactId>
-        	<version>2.7.2</version>
-        	<scope>compile</scope>
-        </dependency>
-    <!-- JIBX dependencies -->
 		<dependency>
-			<groupId>org.jibx</groupId>
-			<artifactId>jibx-run</artifactId>
-			<version>${version.jibx}</version>
+			<groupId>com.google.code.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>0.99</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jibx</groupId>
-			<artifactId>jibx-extras</artifactId>
-			<version>${version.jibx}</version>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.7.2</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
-		<build>
-
-	<!-- ================================================ -->
-	<!-- JIBX plugin Configuration                        -->
-	<!-- ================================================ -->
-
-		<defaultGoal>install</defaultGoal>
+	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.jibx</groupId>
-				<artifactId>maven-jibx-plugin</artifactId>
-				<version>${jibx.version}</version>
-				<executions>
-					<execution>
-						<id>generate-java-code-from-schema (EDM)</id>
-						<goals>
-							<goal>schema-codegen</goal>
-						</goals>
-						<configuration>
-							<directory>src/main/resources/eu/</directory>
-							<targetDirectory>target/generated-sources</targetDirectory>
-							<includes>
-								<include>EDM.xsd</include>
-							</includes>
-							<options>
-								<package>eu.europeana.corelib.definitions.jibx</package>
-							</options>
-						</configuration>
-					</execution>
-					<execution>
-						<id>compile-binding (EDM)</id>
-						<goals>
-							<goal>bind</goal>
-						</goals>
-						<configuration>
-							<directory>target/generated-sources</directory>
-							<load>true</load>
-							<validate>true</validate>
-							<verify>false</verify>
-						</configuration>
-					</execution>
-					<!-- -->
-				</executions>
-			</plugin>
-			
 			<plugin>
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -122,42 +56,7 @@
 			</plugin>
 
 		</plugins>
-
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.jibx</groupId>
-										<artifactId>
-											maven-jibx-plugin
-										</artifactId>
-										<versionRange>
-											[1.2.3,)
-										</versionRange>
-										<goals>
-											<goal>bind</goal>
-											<goal>schema-codegen</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		</build>
+	</build>
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>
