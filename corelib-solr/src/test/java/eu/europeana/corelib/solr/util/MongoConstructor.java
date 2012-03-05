@@ -14,6 +14,7 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
+
 package eu.europeana.corelib.solr.util;
 
 import java.util.ArrayList;
@@ -42,43 +43,40 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 
 /**
  * A FullBean Constructor from an EDM XML
+ * 
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class MongoConstructor {
-	private static RDF record;
-	private static FullBeanImpl fullBean;
-	private static MongoDBServer mongoServer;
 
+//	private RDF record;
 
+//	private FullBeanImpl fullBean;
 
-        /**
-         * Set the MongoDB Server
-         * 
-         * @param mongoServer 
-         */
-	public static void setParameters( MongoDBServer mongoServer){
-		
-		MongoConstructor.mongoServer = mongoServer;
-	}
+	private MongoDBServer mongoServer;
 	
-        /**
-         * Retrieve the JiBX RDF Entity
-         * 
-         * @return JiBX RDF Entity
-         */
-	public static RDF getRecord() {
-		return MongoConstructor.record;
+	public void setMongoServer(MongoDBServer mongoServer) {
+		this.mongoServer = mongoServer;
 	}
 
-        /**
-         * Construct a FullBean out of A JiBX RDF record
-         * @param record The JiBX RDF record
-         * @throws InstantiationException
-         * @throws IllegalAccessException 
-         */
-	public static void constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
-		fullBean = new FullBeanImpl();
-		MongoConstructor.record = record;
+/*	*//**
+	 * Retrieve the JiBX RDF Entity
+	 * 
+	 * @return JiBX RDF Entity
+	 *//*
+	public RDF getRecord() {
+		return record;
+	}
+*/
+	/**
+	 * Construct a FullBean out of A JiBX RDF record
+	 * 
+	 * @param record
+	 *            The JiBX RDF record
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public void constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
+		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
 		List<ConceptImpl> concepts = new ArrayList<ConceptImpl>();
@@ -92,14 +90,14 @@ public class MongoConstructor {
 
 			if (element.ifProvidedCHO()) {
 				try {
-					providedCHOs.add(ProvidedCHOFieldInput
-							.createProvidedCHOMongoFields(element.getProvidedCHO(),
-									mongoServer));
-					if(proxies.size()>0){
-						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),element.getProvidedCHO(), mongoServer));
-					}
-					else{
-						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),element.getProvidedCHO(), mongoServer));
+					providedCHOs.add(ProvidedCHOFieldInput.createProvidedCHOMongoFields(element.getProvidedCHO(),
+							mongoServer));
+					if (proxies.size() > 0) {
+						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
+								element.getProvidedCHO(), mongoServer));
+					} else {
+						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProvidedCHO(),
+								mongoServer));
 					}
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
@@ -110,40 +108,41 @@ public class MongoConstructor {
 				}
 			}
 			if (element.ifAggregation()) {
-				aggregations.add(AggregationFieldInput.createAggregationMongoFields(element.getAggregation(), mongoServer));
-				if(webResources.size()>0){
-					aggregations.set(0,AggregationFieldInput.appendWebResource(aggregations,webResources, mongoServer));
+				aggregations.add(AggregationFieldInput.createAggregationMongoFields(element.getAggregation(),
+						mongoServer));
+				if (webResources.size() > 0) {
+					aggregations.set(0,
+							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
 				}
-				if(proxies.size()>0){
-					proxies.set(0,ProxyFieldInput.addProxyForMongo(proxies.get(0),element.getAggregation(),mongoServer));
+				if (proxies.size() > 0) {
+					proxies.set(0,
+							ProxyFieldInput.addProxyForMongo(proxies.get(0), element.getAggregation(), mongoServer));
+				} else {
+					proxies.add(ProxyFieldInput.addProxyForMongo(new ProxyImpl(), element.getAggregation(), mongoServer));
 				}
-				else{
-					proxies.add(ProxyFieldInput.addProxyForMongo(new ProxyImpl(),element.getAggregation(),mongoServer));
-				}
-				
+
 			}
 			if (element.ifConcept()) {
-				concepts.add(ConceptFieldInput.createConceptMongoFields(
-						element.getConcept(), mongoServer));
+				concepts.add(ConceptFieldInput.createConceptMongoFields(element.getConcept(), mongoServer));
 			}
 			if (element.ifPlace()) {
-				places.add(PlaceFieldInput.createPlaceMongoFields(
-						element.getPlace(), mongoServer));
+				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer));
 			}
-			
+
 			if (element.ifWebResource()) {
-				webResources.add(WebResourcesFieldInput.createWebResourceMongoField(element.getWebResource(), mongoServer));
-				if(aggregations.size()>0){
-					aggregations.set(0, AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
+				webResources.add(WebResourcesFieldInput.createWebResourceMongoField(element.getWebResource(),
+						mongoServer));
+				if (aggregations.size() > 0) {
+					aggregations.set(0,
+							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
 				}
-				
+
 			}
 			if (element.ifTimeSpan()) {
-				timespans
-						.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(),mongoServer));
+				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer));
 			}
 			if (element.ifAgent()) {
-				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(),mongoServer));
+				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer));
 			}
 		}
 
@@ -153,19 +152,15 @@ public class MongoConstructor {
 		fullBean.setAgents(agents);
 
 		fullBean.setAggregations(aggregations);
-		try{
-		fullBean.setConcepts(concepts);
-		fullBean.setPlaces(places);
-		fullBean.setTimespans(timespans);
-		fullBean.setProxies(proxies);}
-		catch(Exception e){
+		try {
+			fullBean.setConcepts(concepts);
+			fullBean.setPlaces(places);
+			fullBean.setTimespans(timespans);
+			fullBean.setProxies(proxies);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		MongoConstructor.record = null;
-		
-		fullBean = null;
-	}
 
+	}
 
 }

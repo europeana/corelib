@@ -31,246 +31,225 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
+import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.server.impl.MongoDBServerImpl;
-import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 import eu.europeana.corelib.solr.util.MongoConstructor;
 import eu.europeana.corelib.solr.util.SolrConstructor;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance
- *
+ * 
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class ContentLoader {
 
-    private static String solrHome = "src/test/resources/solr";
-    private static String mongoHost = "localhost";
-    private static String mongoPort = "27017";
-    private static String databaseName = "europeana";
-    private static String collectionName = "src/test/resources/records.zip";
+	private static String collectionName = "src/test/resources/records.zip";
 
-    /**
-     * Method to load content in SOLR and MongoDB
-     *
-     * @param args solrHome parameter holding "solr.solr.home"
-     *                      mongoHost the host the mongoDB is located
-     *                      mongoPort the port mongoDB listens
-     *                      databaseName the databaseName to save
-     *                      collectionName the name of the collection (an XML, a folder or a Zip file)
-     *
-     */
-    public static void main(String[] args) {
-        Map<String, String> params = new HashMap<String, String>();
-        for (String parameter : args) {
-            params.put(StringUtils.split(parameter, ":")[0],
-                    StringUtils.split(parameter, ":")[1]);
-        }
+	private MongoDBServer mongoDBServer;
 
-        if (params.get("solrHome") != null
-                && params.get("solrHome").length() > 0) {
-            solrHome = params.get("solrHome");
-        } else {
-            System.out.println("Parameter solrHome is not set correctly");
-            System.out.println("Using default solrHome: " + solrHome);
-        }
+	private SolrServer solrServer;
 
-        if (params.get("mongoHost") != null
-                && params.get("mongoHost").length() > 0) {
-            mongoHost = params.get("mongoHost");
-        } else {
-            System.out.println("Parameter mongoHost is not set correctly");
-            System.out.println("Using default mongoHost: " + mongoHost);
-        }
+	private List<File> collectionXML = new ArrayList<File>();
 
-        if (params.get("mongoPort") != null
-                && params.get("mongoPort").length() > 0) {
-            try {
-                Integer.parseInt(mongoPort);
-                mongoPort = params.get("mongoPort");
-            } catch (NumberFormatException nbe) {
-                System.out.println("Parameter mongoPort is not set correctly");
-                System.out.println("Using default mongoPort: " + mongoPort);
-            }
-        } else {
-            System.out.println("Parameter mongoPort is not set correctly");
-            System.out.println("Using default mongoPort: " + mongoPort);
-        }
+	private List<SolrInputDocument> records = new ArrayList<SolrInputDocument>();
 
-        if (params.get("databaseName") != null
-                && params.get("databaseName").length() > 0) {
-            databaseName = params.get("databaseName");
-        } else {
-            System.out.println("Parameter databaseName is not set correctly");
-            System.out.println("Using default databaseName: " + databaseName);
-        }
+	private int i = 0;
+	private int failed = 0;
+	private int imported = 0;
+	
+	private static ContentLoader instance = null;
 
-        if (params.get("collectionName") != null
-                && params.get("collectionName").length() > 0) {
-            collectionName = params.get("collectionName");
-        } else {
-            System.out.println("Parameter collectionName is not set correctly");
-            System.out.println("Using default collectionName: "
-                    + collectionName);
-        }
-        ArrayList<File> collectionXML = new ArrayList<File>();
-        if (isZipped(collectionName)) {
-            collectionXML = unzip(collectionName);
-        } else {
-            if (new File(collectionName).isDirectory()) {
-                for (File file : new File(collectionName).listFiles()) {
-                    if (StringUtils.endsWith(file.getName(), ".xml")) {
-                        collectionXML.add(file);
-                    }
-                }
-            } else {
-                collectionXML.add(new File(collectionName));
-            }
-        }
-        List<SolrInputDocument> records = new ArrayList<SolrInputDocument>();
-        SolrServerImpl solrServer = null;
-        try {
-            solrServer = new SolrServerImpl(solrHome);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        int i = 0;
-        int failed=0;
-        int imported=0;
-        try {
-            MongoConstructor.setParameters(new MongoDBServerImpl(
-                    mongoHost, Integer.parseInt(mongoPort), databaseName));
-        } catch (NumberFormatException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (MongoDBException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        for (File f : collectionXML) {
-            try {
-                IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
-                IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-                i++;
-                RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f),
-                        null);
+	public static ContentLoader getInstance(MongoDBServer mongoDBServer, SolrServer solrServer) {
+		if (instance == null) {
+			instance = new ContentLoader(mongoDBServer, solrServer);
+		}
+		return instance;
+	}
 
-                MongoConstructor.constructFullBean(rdf);
-                records.add(SolrConstructor.constructSolrDocument(rdf));
-                
-                if (i % 1000 == 0 || i == collectionXML.size()) {
-                    System.out.println("Sending " + i + " records to SOLR");
-                    imported+= records.size();
-                    solrServer.add(records);
-                    records.clear();
-                }
+	private ContentLoader(MongoDBServer mongoDBServer, SolrServer solrServer) {
+		this.mongoDBServer = mongoDBServer;
+		this.solrServer = solrServer;
+	}
 
-            } catch (JiBXException e) {
-            	failed++;
-                System.out.println("Error unmarshalling document "
-                        + f.getName()
-                        + " from the input file. Check for Schema changes");
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                System.out.println("File does not exist");
+	public void readRecords(String collectionName) {
+		if (StringUtils.isBlank(collectionName)) {
+			System.out.println("Parameter collectionName is not set correctly");
+			System.out.println("Using default collectionName: " + collectionName);
+		}
+		if (isZipped(collectionName)) {
+			collectionXML = unzip(collectionName);
+		} else {
+			if (new File(collectionName).isDirectory()) {
+				for (File file : new File(collectionName).listFiles()) {
+					if (StringUtils.endsWith(file.getName(), ".xml")) {
+						collectionXML.add(file);
+					}
+				}
+			} else {
+				collectionXML.add(new File(collectionName));
+			}
+		}
+	}
 
-            } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SolrServerException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        try {
+	public void parse() {
+		MongoConstructor mongoConstructor = new MongoConstructor();
+		mongoConstructor.setMongoServer(mongoDBServer);
+		for (File f : collectionXML) {
+			try {
+				IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
+				IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+				i++;
+				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
 
-            solrServer.commit();
-            solrServer.optimize();
+				mongoConstructor.constructFullBean(rdf);
+				records.add(SolrConstructor.constructSolrDocument(rdf));
 
-            System.out.println("Finished Importing");
-            System.out.println("Records read: "+i);
-            System.out.println("Records imported: " + imported);
-            System.out.println("Records failed: "+ failed);
-            solrServer = null;
-            System.out.println("Deleting files");
-            for (File f : collectionXML) {
-                f.delete();
-            }
-            System.out.println("Files deleted");
-        } catch (SolrServerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+				if (i % 1000 == 0 || i == collectionXML.size()) {
+					System.out.println("Sending " + i + " records to SOLR");
+					imported += records.size();
+					solrServer.add(records);
+					records.clear();
+				}
 
-    /**
-     * Unzip a zipped collection file
-     *
-     * @param collectionName The path to the collection file
-     * @return The unzipped file
-     */
-    private static ArrayList<File> unzip(String collectionName) {
-        BufferedOutputStream dest = null;
-        String fileName = "";
-        ArrayList<File> records = new ArrayList<File>();
-        try {
-            FileInputStream fis = new FileInputStream(collectionName);
-            ZipInputStream zis = new ZipInputStream(
-                    new BufferedInputStream(fis));
-            ZipEntry entry;
-            File workingDir = new File("src/test/resources/records");
-            workingDir.mkdir();
-            while ((entry = zis.getNextEntry()) != null) {
-                int count;
-                byte data[] = new byte[2048];
-                fileName = workingDir.getAbsolutePath() + "/" + entry.getName();
-                records.add(new File(fileName));
-                FileOutputStream fos = new FileOutputStream(fileName);
-                dest = new BufferedOutputStream(fos, 2048);
-                while ((count = zis.read(data, 0, 2048)) != -1) {
-                    dest.write(data, 0, count);
-                }
-                dest.flush();
-                dest.close();
+			} catch (JiBXException e) {
+				failed++;
+				System.out.println("Error unmarshalling document " + f.getName()
+						+ " from the input file. Check for Schema changes");
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				System.out.println("File does not exist");
 
-            }
-            zis.close();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void commit() {
+		try {
 
-        } catch (Exception e) {
-            System.out.println("The zip file is destroyed. Could not import records");
-            e.printStackTrace();
-        }
-        return records;
-    }
+			solrServer.commit();
+			solrServer.optimize();
 
-    /**
-     * Check if the collection file is zipped
-     *
-     * @param collectionName
-     * @return true if it is in gzip or zip format, false if not
-     */
-    private static boolean isZipped(String collectionName) {
-        return StringUtils.endsWith(collectionName, ".gzip")
-                || StringUtils.endsWith(collectionName, ".zip");
-    }
+			System.out.println("Finished Importing");
+			System.out.println("Records read: " + i);
+			System.out.println("Records imported: " + imported);
+			System.out.println("Records failed: " + failed);
+			solrServer = null;
+			System.out.println("Deleting files");
+			for (File f : collectionXML) {
+				f.delete();
+			}
+			System.out.println("Files deleted");
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Unzip a zipped collection file
+	 * 
+	 * @param collectionName
+	 *            The path to the collection file
+	 * @return The unzipped file
+	 */
+	private ArrayList<File> unzip(String collectionName) {
+		BufferedOutputStream dest = null;
+		String fileName = "";
+		ArrayList<File> records = new ArrayList<File>();
+		try {
+			FileInputStream fis = new FileInputStream(collectionName);
+			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+			ZipEntry entry;
+			File workingDir = new File("src/test/resources/records");
+			workingDir.mkdir();
+			while ((entry = zis.getNextEntry()) != null) {
+				int count;
+				byte data[] = new byte[2048];
+				fileName = workingDir.getAbsolutePath() + "/" + entry.getName();
+				records.add(new File(fileName));
+				FileOutputStream fos = new FileOutputStream(fileName);
+				dest = new BufferedOutputStream(fos, 2048);
+				while ((count = zis.read(data, 0, 2048)) != -1) {
+					dest.write(data, 0, count);
+				}
+				dest.flush();
+				dest.close();
+
+			}
+			zis.close();
+
+		} catch (Exception e) {
+			System.out.println("The zip file is destroyed. Could not import records");
+			e.printStackTrace();
+		}
+		return records;
+	}
+
+	/**
+	 * Check if the collection file is zipped
+	 * 
+	 * @param collectionName
+	 * @return true if it is in gzip or zip format, false if not
+	 */
+	private boolean isZipped(String collectionName) {
+		return StringUtils.endsWith(collectionName, ".gzip") || StringUtils.endsWith(collectionName, ".zip");
+	}
+	
+	/**
+	 * Method to load content in SOLR and MongoDB
+	 * 
+	 * @param args
+	 *            solrHome parameter holding "solr.solr.home" mongoHost the host the mongoDB is located mongoPort the
+	 *            port mongoDB listens databaseName the databaseName to save collectionName the name of the collection
+	 *            (an XML, a folder or a Zip file)
+	 * 
+	 */
+	public static void main(String[] args) {
+		
+		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml", "/corelib-solr-test.xml" );
+		
+		SolrServer solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
+		MongoDBServer mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);
+		
+		if ( (solrServer != null) && (mongoDBServer != null)) {
+			
+			ContentLoader contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
+			contentLoader.readRecords(collectionName);
+			contentLoader.parse();
+			contentLoader.commit();
+			
+		}
+		
+	}
+
 }

@@ -17,13 +17,9 @@
 
 package eu.europeana.corelib.solr.utils;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrServerException;
 
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 
 /**
  * Set of utils for SOLR queries
@@ -75,9 +71,5 @@ public class SolrUtil {
 	public static <T> T exists(Class<T> clazz, T object)
 			throws InstantiationException, IllegalAccessException {
 		return (object == null ? clazz.newInstance() : object);
-	}
-	
-	public static void delete(String id, SolrServerImpl solrServer) throws SolrServerException, IOException{
-		solrServer.deleteById(id);
 	}
 }

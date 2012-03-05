@@ -55,9 +55,7 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.server.impl.SolrServerImpl;
 import eu.europeana.corelib.solr.service.SearchService;
-import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 
 /**
  * 
@@ -73,20 +71,15 @@ public class FullBeanTest {
 	@Resource(name = "corelib_solr_mongoServer")
 	MongoDBServer mongoServer;
 	
-	Datastore ds;
-	
 	@Resource(name = "corelib_solr_searchService")
 	SearchService searchService;
+	
+	private Datastore ds;
 
 	@Test
 	public void testRetrieve() {
-		
 		ds = mongoServer.getDatastore();
-		try {
-			searchService = new SearchServiceImpl(new SolrServerImpl("src/test/resources/solr"));
-		} catch (Exception e1) {
-			//SHOULD NOT ARRIVE HERE
-		}
+		
 		assertNotNull("Error creating datastore", ds);
 		Agent agent = createAgent();
 		assertNotNull("Error creating agent", agent);

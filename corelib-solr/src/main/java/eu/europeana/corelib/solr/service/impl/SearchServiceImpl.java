@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,6 @@ import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.server.SolrServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtil;
@@ -47,36 +47,30 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  */
 public class SearchServiceImpl implements SearchService {
 
-	@Resource(name = "corelib_solr_solrSelectServer1")
-	private SolrServer solrServer1;
-	@Resource(name = "corelib_solr_solrSelectServer2")
-	private SolrServer solrServer2;
+	@Resource(name = "corelib_solr_solrServer")
+	private SolrServer solrServer;
+	
+	@Resource(name = "corelib_solr_mongoServer")
+	MongoDBServer mongoServer;
+	
 	@Value("#{europeanaProperties['solr1.facetLimit']}")
 	private int facetLimit;
 
-	@Value("#{europeanaProperties['solr1.timeout']}")
-	private int timeout;
-	@Value("#{europeanaProperties['solr1.suspendAfterTimeout']}")
-	private int suspendAfterTimeout;
-	@Resource(name = "corelib_solr_mongoServer")
-	MongoDBServer mongoServer;
-
-	public SearchServiceImpl(SolrServer solrServer) {
-		super();
-		solrServer1 = solrServer;
-
-	}
 
 	public SearchServiceImpl() {
-
+	}
+	
+	public SearchServiceImpl(SolrServer solrServer) {
+		super();
+		this.solrServer = solrServer;
 	}
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 
-		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		}
+//		if (!solrServer1.isActive() && !solrServer2.isActive()) {
+//			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+//		}
 		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
 				+ europeanaObjectId + "\"");
 		solrQuery.set("mlt",true);
@@ -92,15 +86,11 @@ public class SearchServiceImpl implements SearchService {
 
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		try {
-			queryResponse = getSolrServer().query(solrQuery);
+			queryResponse = solrServer.query(solrQuery);
 			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
 		} catch (SolrServerException e) {
 			//LOG HERE
 		}
-
-		
-
-		
 		return fullBean;
 	}
 
@@ -109,9 +99,9 @@ public class SearchServiceImpl implements SearchService {
 			Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
 
-		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		}
+//		if (!solrServer1.isActive() && !solrServer2.isActive()) {
+//			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+//		}
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtil.checkTypeFacet(refinements)) {
@@ -129,12 +119,6 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
-				SolrServer solrServer = getSolrServer();
-				solrServer.setConnectionTimeout(timeout);
-				solrServer.setSuspendAfterTimeout(suspendAfterTimeout);
-				solrServer.setMaxTotalConnections(1000);
-				solrServer.setSoTimeout(timeout);
-				solrServer.setDefaultMaxConnectionsPerHost(1);
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					
@@ -158,13 +142,8 @@ public class SearchServiceImpl implements SearchService {
 		}
 		return resultSet;
 	}
-
-	/**
-	 * Get the active SolrServer defaults to solrServer1
-	 * 
-	 * @return The solrServer to query
-	 */
-	private SolrServer getSolrServer() {
-		return (solrServer1.isActive() ? solrServer1 : solrServer2);
+	
+	public void setSolrServer(SolrServer solrServer) {
+		this.solrServer = solrServer;
 	}
 }
