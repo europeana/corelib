@@ -22,15 +22,13 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
-
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.utils.MongoUtil;
 import eu.europeana.corelib.solr.utils.SolrUtil;
 
 /**
@@ -109,10 +107,9 @@ public class ProvidedCHOFieldInput {
                     SolrUtil.exists(ResourceType.class, providedCHO.getIsNextInSequence()).getResource())) {
                 mongoProvidedCHO.setEdmIsNextInSequence(SolrUtil.exists(
                         ResourceType.class, providedCHO.getIsNextInSequence()).getResource());
-                UpdateOperations<ProvidedCHOImpl> ops = mongoServer.getDatastore().createUpdateOperations(ProvidedCHOImpl.class).set("edmIsNextInSequence",
-                        providedCHO.getIsNextInSequence().getResource());
-                Query<ProvidedCHOImpl> query = mongoServer.getDatastore().find(ProvidedCHOImpl.class).filter("about", providedCHO.getAbout());
-                mongoServer.getDatastore().update(query, ops);
+                MongoUtil.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
+  						"edmIsNextInSequence", providedCHO.getIsNextInSequence().getResource());
+              
             }
             //then the sameAs list
             List<String> owlSameAsList = null;
@@ -121,12 +118,16 @@ public class ProvidedCHOFieldInput {
                 for (SameAs sameAs : providedCHO.getSameAList()) {
                     owlSameAsList.add(sameAs.getResource());
                 }
-                UpdateOperations<ProvidedCHOImpl> ops = mongoServer.getDatastore().createUpdateOperations(ProvidedCHOImpl.class).set("owlSameAs", owlSameAsList);
-                Query<ProvidedCHOImpl> query = mongoServer.getDatastore().find(ProvidedCHOImpl.class).filter("about", providedCHO.getAbout());
-                mongoServer.getDatastore().update(query, ops);
+                MongoUtil.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
+  						"owlSameAs", owlSameAsList);
             }
 
         }
         return mongoProvidedCHO;
     }
+    
+    public static void deleteProvideCHOFromMongo(String about, MongoDBServer mongoServer){
+    	MongoUtil.delete(ProvidedCHOImpl.class,about,mongoServer);
+    }
+    
 }

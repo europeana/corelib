@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -31,6 +32,7 @@ import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.utils.MongoUtil;
 
 /**
  * Constructor for a Timespan
@@ -107,58 +109,144 @@ public class TimespanFieldInput {
         TimespanImpl mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
             
       if(mongoTimespan==null) {
-            mongoTimespan = new TimespanImpl();
-            mongoTimespan.setAbout(timeSpan.getAbout());
-            if (timeSpan.getNoteList() != null) {
-                List<String> noteList = new ArrayList<String>();
-                for (Note note : timeSpan.getNoteList()) {
-                    noteList.add(note.getString());
-                }
-                mongoTimespan.setNote(noteList.toArray(new String[noteList.size()]));
-            }
-            if (timeSpan.getPrefLabelList() != null) {
-                Map<String, String> prefLabelMongo = new HashMap<String, String>();
-                for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
-                    if(prefLabelJibx.getLang()!=null) {
-                        prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-                                prefLabelJibx.getString());
-                    } else {
-                        prefLabelMongo.put("def",
-                                prefLabelJibx.getString());
-                    }
-                }
-                mongoTimespan.setPrefLabel(prefLabelMongo);
-            }
-            if (timeSpan.getAltLabelList() != null) {
-                Map<String, String> altLabelMongo = new HashMap<String, String>();
-                for (AltLabel altLabelJibx : timeSpan.getAltLabelList()) {
-                    if(altLabelJibx.getLang()!=null) {
-                        altLabelMongo.put(altLabelJibx.getLang().getLang(),
-                                altLabelJibx.getString());
-                    } else {
-                        altLabelMongo.put("def",
-                                altLabelJibx.getString());
-                    }
-                }
-                mongoTimespan.setAltLabel(altLabelMongo);
-            }
-            if (timeSpan.getIsPartOfList() != null) {
-                List<String> isPartOfList = new ArrayList<String>();
-                for (IsPartOf isPartOf : timeSpan.getIsPartOfList()) {
-                    isPartOfList.add(isPartOf.getString());
-                }
-                mongoTimespan.setIsPartOf(isPartOfList.toArray(new String[isPartOfList.size()]));
-            }
-
-
-            if (timeSpan.getBegins() != null) {
-                mongoTimespan.setBegin(timeSpan.getBegins().get(0));
-            }
-            if (timeSpan.getEnds() != null) {
-                mongoTimespan.setEnd(timeSpan.getEnds().get(0));
-            }
+           	mongoTimespan = createNewTimespan(timeSpan);
             mongoServer.getDatastore().save(mongoTimespan);
         }
+      else{
+    	  mongoTimespan = updateTimespan(mongoTimespan,timeSpan,mongoServer);
+      }
         return mongoTimespan;
     }
+
+	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
+			TimeSpanType timeSpan, MongoDBServer mongoServer) {
+		if (mongoTimespan.getBegin() != null
+  				&& !StringUtils.equals(timeSpan.getBegins().get(0),
+  						mongoTimespan.getBegin())) {
+			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"begin", timeSpan.getBegins().get(0));
+  			
+
+  		}
+  		if (mongoTimespan.getEnd() != null
+  				&& !StringUtils.equals(timeSpan.getEnds().get(0),
+  						mongoTimespan.getEnd())) {
+  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"end", timeSpan.getEnds().get(0));
+  			
+  		}
+
+  		if (mongoTimespan.getNote() != null) {
+  			List<String> newNoteList = new ArrayList<String>();
+  			for (Note noteJibx : timeSpan.getNoteList()) {
+  				if (!MongoUtil.contains(mongoTimespan.getNote(), noteJibx.getString())) {
+  					newNoteList.add(noteJibx.getString());
+  				}
+  			}
+  			for (String note : mongoTimespan.getNote()) {
+  				newNoteList.add(note);
+  			}
+
+  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"note", newNoteList);
+  			
+  		}
+
+  		if (mongoTimespan.getAltLabel() != null) {
+  			Map<String, String> newAltLabelMap = mongoTimespan.getAltLabel();
+  			if (timeSpan.getAltLabelList() != null) {
+  				for (AltLabel altLabel : timeSpan.getAltLabelList()) {
+  					if (altLabel.getLang() != null) {
+  						if (!MongoUtil.contains(newAltLabelMap, altLabel
+  								.getLang().getLang(), altLabel.getString())) {
+  							newAltLabelMap.put(altLabel.getLang().getLang(),
+  									altLabel.getString());
+  						}
+  					} else {
+  						newAltLabelMap.put("def", altLabel.getString());
+  					}
+  				}
+  			}
+  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"altLabel", newAltLabelMap);
+
+  		}
+
+  		if (mongoTimespan.getPrefLabel() != null) {
+  			Map<String, String> newPrefLabelMap = mongoTimespan.getPrefLabel();
+  			if (timeSpan.getPrefLabelList() != null) {
+  				for (PrefLabel prefLabel : timeSpan.getPrefLabelList()) {
+  					if (prefLabel.getLang() != null) {
+  						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+  								.getLang().getLang(), prefLabel.getString())) {
+  							newPrefLabelMap.put(prefLabel.getLang().getLang(),
+  									prefLabel.getString());
+  						}
+  					} else {
+  						newPrefLabelMap.put("def", prefLabel.getString());
+  					}
+  				}
+  				MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+  						"prefLabel", newPrefLabelMap);
+
+  			}
+  		}
+  		return (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class,
+  				timeSpan.getAbout());
+		
+	}
+
+	private static TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
+		TimespanImpl mongoTimespan = new TimespanImpl();
+        mongoTimespan.setAbout(timeSpan.getAbout());
+        if (timeSpan.getNoteList() != null) {
+            List<String> noteList = new ArrayList<String>();
+            for (Note note : timeSpan.getNoteList()) {
+                noteList.add(note.getString());
+            }
+            mongoTimespan.setNote(noteList.toArray(new String[noteList.size()]));
+        }
+        if (timeSpan.getPrefLabelList() != null) {
+            Map<String, String> prefLabelMongo = new HashMap<String, String>();
+            for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
+                if(prefLabelJibx.getLang()!=null) {
+                    prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
+                            prefLabelJibx.getString());
+                } else {
+                    prefLabelMongo.put("def",
+                            prefLabelJibx.getString());
+                }
+            }
+            mongoTimespan.setPrefLabel(prefLabelMongo);
+        }
+        if (timeSpan.getAltLabelList() != null) {
+            Map<String, String> altLabelMongo = new HashMap<String, String>();
+            for (AltLabel altLabelJibx : timeSpan.getAltLabelList()) {
+                if(altLabelJibx.getLang()!=null) {
+                    altLabelMongo.put(altLabelJibx.getLang().getLang(),
+                            altLabelJibx.getString());
+                } else {
+                    altLabelMongo.put("def",
+                            altLabelJibx.getString());
+                }
+            }
+            mongoTimespan.setAltLabel(altLabelMongo);
+        }
+        if (timeSpan.getIsPartOfList() != null) {
+            List<String> isPartOfList = new ArrayList<String>();
+            for (IsPartOf isPartOf : timeSpan.getIsPartOfList()) {
+                isPartOfList.add(isPartOf.getString());
+            }
+            mongoTimespan.setIsPartOf(isPartOfList.toArray(new String[isPartOfList.size()]));
+        }
+
+
+        if (timeSpan.getBegins() != null) {
+            mongoTimespan.setBegin(timeSpan.getBegins().get(0));
+        }
+        if (timeSpan.getEnds() != null) {
+            mongoTimespan.setEnd(timeSpan.getEnds().get(0));
+        }
+		return mongoTimespan;
+	}
 }

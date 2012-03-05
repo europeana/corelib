@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.utils.MongoUtil;
 import eu.europeana.corelib.solr.utils.SolrUtil;
 
 /**
@@ -81,5 +82,9 @@ public class WebResourcesFieldInput {
         }
         mongoWebResource.setWebResourceDcRights(dcRightsList.toArray(new String[dcRightsList.size()]));
         return mongoWebResource;
+    }
+    
+    public static void deleteWebResourceFromMongo(String about, MongoDBServer mongoServer){
+    	MongoUtil.delete(WebResourceImpl.class, about, mongoServer);
     }
 }

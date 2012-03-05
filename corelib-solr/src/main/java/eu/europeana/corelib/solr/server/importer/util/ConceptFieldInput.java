@@ -24,15 +24,15 @@ import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Broader;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-
+import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.utils.MongoUtil;
 
 /**
  * Constructor for Concepts
@@ -41,7 +41,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
  * 
  */
 public class ConceptFieldInput {
-	
+
 	/**
 	 * Retrun a SolrInputDocument with the Concept fields filled in
 	 * 
@@ -99,72 +99,152 @@ public class ConceptFieldInput {
 	}
 
 	/**
-	 * Retrieves a MongoDB Concept Entity
+	 * Creates or updates a MongoDB Concept Entity
 	 * 
 	 * @param concept
-	 * 			The JiBX Concept Entity that has the field values of the Concept
+	 *            The JiBX Concept Entity that has the field values of the
+	 *            Concept
 	 * @param mongoServer
-	 * 			The MongoDBServer instance that is going to be used to save the MongoDB Concept
+	 *            The MongoDBServer instance that is going to be used to save
+	 *            the MongoDB Concept
 	 * @return The MongoDB Concept Entity
 	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
 			MongoDBServer mongoServer) {
-		ConceptImpl conceptMongo = new ConceptImpl();
 
-		conceptMongo = (ConceptImpl) mongoServer.searchByAbout(
+		ConceptImpl conceptMongo = (ConceptImpl) mongoServer.searchByAbout(
 				ConceptImpl.class, concept.getAbout());
 		if (conceptMongo == null) {
 			// If it does not exist
-
-			conceptMongo = new ConceptImpl();
-			conceptMongo.setAbout(concept.getAbout());
-
-			if (concept.getNoteList() != null) {
-				List<String> noteList = new ArrayList<String>();
-				for (Note note : concept.getNoteList()) {
-					noteList.add(note.getString());
-				}
-				conceptMongo.setNote(noteList.toArray(new String[noteList
-						.size()]));
-			}
-
-			if (concept.getBroaderList() != null) {
-				List<String> broaderList = new ArrayList<String>();
-				for (Broader broader : concept.getBroaderList()) {
-					broaderList.add(broader.getBroader());
-				}
-				conceptMongo.setBroader(broaderList
-						.toArray(new String[broaderList.size()]));
-			}
-
-			if (concept.getPrefLabelList() != null) {
-				Map<String, String> prefLabelMongo = new HashMap<String, String>();
-				for (PrefLabel prefLabelJibx : concept.getPrefLabelList()) {
-					if (prefLabelJibx.getLang() != null) {
-						prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-								prefLabelJibx.getString());
-					} else {
-						prefLabelMongo.put("def", prefLabelJibx.getString());
-					}
-				}
-				conceptMongo.setPrefLabel(prefLabelMongo);
-			}
-
-			if (concept.getAltLabelList() != null) {
-				Map<String, String> altLabelMongo = new HashMap<String, String>();
-				for (AltLabel altLabelJibx : concept.getAltLabelList()) {
-					if (altLabelJibx.getLang() != null) {
-						altLabelMongo.put(altLabelJibx.getLang().getLang(),
-								altLabelJibx.getString());
-					} else {
-						altLabelMongo.put("def", altLabelJibx.getString());
-					}
-				}
-				conceptMongo.setAltLabel(altLabelMongo);
-			}
+			conceptMongo = createNewConcept(concept);
 			mongoServer.getDatastore().save(conceptMongo);
 		} else {
-			// TODO:update concept
+			conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
+		}
+		return conceptMongo;
+	}
+
+	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
+			Concept concept, MongoDBServer mongoServer) {
+
+		if (conceptMongo.getNote() != null) {
+			List<String> newNoteList = new ArrayList<String>();
+			for (Note noteJibx : concept.getNoteList()) {
+				if (MongoUtil.contains(conceptMongo.getNote(),
+						noteJibx.getString())) {
+					newNoteList.add(noteJibx.getString());
+				}
+			}
+			for (String note : conceptMongo.getNote()) {
+				newNoteList.add(note);
+			}
+			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+					mongoServer, "note", newNoteList);
+		}
+
+		if (conceptMongo.getAltLabel() != null) {
+			Map<String, String> newAltLabelMap = conceptMongo.getAltLabel();
+			if (concept.getAltLabelList() != null) {
+				for (AltLabel altLabel : concept.getAltLabelList()) {
+					if (altLabel.getLang() != null) {
+						if (!MongoUtil.contains(newAltLabelMap, altLabel
+								.getLang().getLang(), altLabel.getString())) {
+							newAltLabelMap.put(altLabel.getLang().getLang(),
+									altLabel.getString());
+						}
+					} else {
+						newAltLabelMap.put("def", altLabel.getString());
+					}
+				}
+			}
+			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+					mongoServer, "end", newAltLabelMap);
+
+		}
+
+		if (conceptMongo.getPrefLabel() != null) {
+			Map<String, String> newPrefLabelMap = conceptMongo.getPrefLabel();
+			if (concept.getPrefLabelList() != null) {
+				for (PrefLabel prefLabel : concept.getPrefLabelList()) {
+					if (prefLabel.getLang() != null) {
+						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+								.getLang().getLang(), prefLabel.getString())) {
+							newPrefLabelMap.put(prefLabel.getLang().getLang(),
+									prefLabel.getString());
+						}
+					} else {
+						newPrefLabelMap.put("def", prefLabel.getString());
+					}
+				}
+				MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+						mongoServer, "prefLabel", newPrefLabelMap);
+			
+			}
+		}
+
+		if (conceptMongo.getBroader() != null) {
+			List<String> broaderList = new ArrayList<String>();
+			for (Broader broaderJibx : concept.getBroaderList()) {
+				if (!MongoUtil.contains(conceptMongo.getBroader(),
+						broaderJibx.getBroader())) {
+					broaderList.add(broaderJibx.getBroader());
+				}
+			}
+			for (String broader : conceptMongo.getBroader()) {
+				broaderList.add(broader);
+			}
+			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+					mongoServer, "broader", broaderList);
+		}
+		return (ConceptImpl) mongoServer.searchByAbout(ConceptImpl.class,
+				concept.getAbout());
+	}
+
+	private static ConceptImpl createNewConcept(Concept concept) {
+		ConceptImpl conceptMongo = new ConceptImpl();
+		conceptMongo.setAbout(concept.getAbout());
+
+		if (concept.getNoteList() != null) {
+			List<String> noteList = new ArrayList<String>();
+			for (Note note : concept.getNoteList()) {
+				noteList.add(note.getString());
+			}
+			conceptMongo.setNote(noteList.toArray(new String[noteList.size()]));
+		}
+
+		if (concept.getBroaderList() != null) {
+			List<String> broaderList = new ArrayList<String>();
+			for (Broader broader : concept.getBroaderList()) {
+				broaderList.add(broader.getBroader());
+			}
+			conceptMongo.setBroader(broaderList.toArray(new String[broaderList
+					.size()]));
+		}
+
+		if (concept.getPrefLabelList() != null) {
+			Map<String, String> prefLabelMongo = new HashMap<String, String>();
+			for (PrefLabel prefLabelJibx : concept.getPrefLabelList()) {
+				if (prefLabelJibx.getLang() != null) {
+					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
+							prefLabelJibx.getString());
+				} else {
+					prefLabelMongo.put("def", prefLabelJibx.getString());
+				}
+			}
+			conceptMongo.setPrefLabel(prefLabelMongo);
+		}
+
+		if (concept.getAltLabelList() != null) {
+			Map<String, String> altLabelMongo = new HashMap<String, String>();
+			for (AltLabel altLabelJibx : concept.getAltLabelList()) {
+				if (altLabelJibx.getLang() != null) {
+					altLabelMongo.put(altLabelJibx.getLang().getLang(),
+							altLabelJibx.getString());
+				} else {
+					altLabelMongo.put("def", altLabelJibx.getString());
+				}
+			}
+			conceptMongo.setAltLabel(altLabelMongo);
 		}
 		return conceptMongo;
 	}

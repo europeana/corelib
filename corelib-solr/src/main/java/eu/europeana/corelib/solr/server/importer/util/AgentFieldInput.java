@@ -25,8 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.google.code.morphia.mapping.MappingException;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -43,7 +41,7 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-// TODO: Normalizer
+
 public class AgentFieldInput {
 
 	/**
@@ -109,7 +107,8 @@ public class AgentFieldInput {
 	}
 
 	/**
-	 * Create or Update a Mongo Entity of type Agent from the JiBX AgentType object
+	 * Create or Update a Mongo Entity of type Agent from the JiBX AgentType
+	 * object
 	 * 
 	 * Mapping from the JibXBinding Fields to the MongoDB Entity Fields The
 	 * fields mapped are the rdf:about (String -> String) skos:note(List<Note>
@@ -148,9 +147,12 @@ public class AgentFieldInput {
 	/**
 	 * Update an already stored Agent Mongo Entity
 	 * 
-	 * @param agent The agent to update
-	 * @param agentType The JiBX Agent Entity
-	 * @param mongoServer The MongoDB Server to save the Agent to
+	 * @param agent
+	 *            The agent to update
+	 * @param agentType
+	 *            The JiBX Agent Entity
+	 * @param mongoServer
+	 *            The MongoDB Server to save the Agent to
 	 * @return The new Agent MongoDB Entity
 	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
@@ -158,26 +160,13 @@ public class AgentFieldInput {
 		if (agent.getBegin() != null
 				&& !StringUtils.equals(agentType.getBegins().get(0),
 						agent.getBegin())) {
-
-			Query<AgentImpl> updateQuery = mongoServer.getDatastore()
-					.createQuery(AgentImpl.class).field("about")
-					.equal(agent.getAbout());
-			UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
-					.createUpdateOperations(AgentImpl.class)
-					.set("begin", agentType.getBegins().get(0));
-			mongoServer.getDatastore().update(updateQuery, ops);
-
+			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "begin", agentType.getBegins().get(0));
 		}
+		
 		if (agent.getEnd() != null
 				&& !StringUtils.equals(agentType.getEnds().get(0),
 						agent.getEnd())) {
-			Query<AgentImpl> updateQuery = mongoServer.getDatastore()
-					.createQuery(AgentImpl.class).field("about")
-					.equal(agent.getAbout());
-			UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
-					.createUpdateOperations(AgentImpl.class)
-					.set("end", agentType.getEnds().get(0));
-			mongoServer.getDatastore().update(updateQuery, ops);
+			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "end", agentType.getEnds().get(0));
 
 		}
 
@@ -192,37 +181,25 @@ public class AgentFieldInput {
 				newNoteList.add(note);
 			}
 
-			Query<AgentImpl> updateQuery = mongoServer.getDatastore()
-					.createQuery(AgentImpl.class).field("about")
-					.equal(agent.getAbout());
-			UpdateOperations<AgentImpl> ops = mongoServer
-					.getDatastore()
-					.createUpdateOperations(AgentImpl.class)
-					.set("note",
-							newNoteList.toArray(new String[newNoteList.size()]));
-			mongoServer.getDatastore().update(updateQuery, ops);
+			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "note", newNoteList);
 		}
 
 		if (agent.getAltLabel() != null) {
 			Map<String, String> newAltLabelMap = agent.getAltLabel();
-			for (AltLabel altLabel : agentType.getAltLabelList()) {
-				if (altLabel.getLang() != null) {
-					if (!MongoUtil.contains(newAltLabelMap, altLabel.getLang()
-							.getLang(), altLabel.getString())) {
-						newAltLabelMap.put(altLabel.getLang().getLang(),
-								altLabel.getString());
+			if (agentType.getAltLabelList() != null) {
+				for (AltLabel altLabel : agentType.getAltLabelList()) {
+					if (altLabel.getLang() != null) {
+						if (!MongoUtil.contains(newAltLabelMap, altLabel
+								.getLang().getLang(), altLabel.getString())) {
+							newAltLabelMap.put(altLabel.getLang().getLang(),
+									altLabel.getString());
+						}
+					} else {
+						newAltLabelMap.put("def", altLabel.getString());
 					}
-				} else {
-					newAltLabelMap.put("def", altLabel.getString());
 				}
 			}
-			Query<AgentImpl> updateQuery = mongoServer.getDatastore()
-					.createQuery(AgentImpl.class).field("about")
-					.equal(agent.getAbout());
-			UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
-					.createUpdateOperations(AgentImpl.class)
-					.set("altLabel", newAltLabelMap);
-			mongoServer.getDatastore().update(updateQuery, ops);
+			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "altLabel", newAltLabelMap);
 		}
 
 		if (agent.getPrefLabel() != null) {
@@ -239,13 +216,7 @@ public class AgentFieldInput {
 						newPrefLabelMap.put("def", prefLabel.getString());
 					}
 				}
-				Query<AgentImpl> updateQuery = mongoServer.getDatastore()
-						.createQuery(AgentImpl.class).field("about")
-						.equal(agent.getAbout());
-				UpdateOperations<AgentImpl> ops = mongoServer.getDatastore()
-						.createUpdateOperations(AgentImpl.class)
-						.set("prefLabel", newPrefLabelMap);
-				mongoServer.getDatastore().update(updateQuery, ops);
+				MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "prefLabel", newPrefLabelMap);
 			}
 		}
 		return (AgentImpl) mongoServer.searchByAbout(AgentImpl.class,
@@ -254,6 +225,7 @@ public class AgentFieldInput {
 
 	/**
 	 * Create new Agent MongoDB Entity from JiBX Agent Entity
+	 * 
 	 * @param agentType
 	 * @return
 	 */

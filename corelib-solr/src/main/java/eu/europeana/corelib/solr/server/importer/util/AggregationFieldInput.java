@@ -23,9 +23,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
-
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.DataProvider;
@@ -40,6 +37,7 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.utils.MongoUtil;
 import eu.europeana.corelib.solr.utils.SolrUtil;
 
 /**
@@ -134,14 +132,10 @@ public class AggregationFieldInput {
 				webResources.get(0));
 
 		aggregation.setWebResources(webResources);
+		MongoUtil.update(AggregationImpl.class, aggregation.getAbout(), mongoServer,
+				"webResources", webResources);
 
-		UpdateOperations<AggregationImpl> ops = mongoServer.getDatastore()
-				.createUpdateOperations(AggregationImpl.class)
-				.set("webResources", webResources);
-		Query<AggregationImpl> query = mongoServer.getDatastore()
-				.find(AggregationImpl.class)
-				.filter("about", aggregation.getAbout());
-		mongoServer.getDatastore().update(query, ops);
+	
 		return aggregation;
 	}
 
@@ -224,13 +218,14 @@ public class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
-		try {
-			mongoServer.getDatastore().save(mongoAggregation);
-		} catch (Exception e) {
-			// DUP UNIQUE IDENTIFIER
-			// TODO:change that
-		}
+		if (mongoServer.searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
+			mongoServer.getDatastore().delete(AggregationImpl.class,mongoAggregation.getAbout());
+		} 
+		mongoServer.getDatastore().save(mongoAggregation);
 		return mongoAggregation;
 	}
 
+	public static void deleteAggregationFromMongo(String about, MongoDBServer mongoServer){
+		MongoUtil.delete(Aggregation.class,about,mongoServer);
+	}
 }
