@@ -219,7 +219,7 @@ public class AggregationFieldInput {
 
 		}
 		if (mongoServer.searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
-			mongoServer.getDatastore().delete(AggregationImpl.class,mongoAggregation.getAbout());
+			MongoUtil.delete(AggregationImpl.class, aggregation.getAbout(), mongoServer);
 		} 
 		mongoServer.getDatastore().save(mongoAggregation);
 		return mongoAggregation;

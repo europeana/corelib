@@ -33,7 +33,7 @@ public class MongoUtil {
 
 	public static void delete(Class<?> clazz, String about,
 			MongoDBServer mongoServer) {
-		mongoServer.getDatastore().delete(clazz, about);
+		mongoServer.getDatastore().delete(mongoServer.getDatastore().createQuery(clazz).filter("about", about));
 	}
 
 	/**
