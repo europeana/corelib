@@ -24,9 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -42,9 +40,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.server.impl.MongoDBServerImpl;
 import eu.europeana.corelib.solr.util.MongoConstructor;
 import eu.europeana.corelib.solr.util.SolrConstructor;
 
@@ -127,7 +123,7 @@ public class ContentLoader {
 				failed++;
 				System.out.println("Error unmarshalling document " + f.getName()
 						+ " from the input file. Check for Schema changes");
-				e.printStackTrace();
+			//	e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.out.println("File does not exist");
 
