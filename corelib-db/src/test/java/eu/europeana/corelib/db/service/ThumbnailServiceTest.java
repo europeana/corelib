@@ -18,10 +18,7 @@
 package eu.europeana.corelib.db.service;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;

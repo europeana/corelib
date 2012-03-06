@@ -24,11 +24,13 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
+
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Document(collection="ImageCache")
-public class ImageCache {
+public class ImageCache implements NoSqlEntity {
 	
 	@Id
 	private String objectId;

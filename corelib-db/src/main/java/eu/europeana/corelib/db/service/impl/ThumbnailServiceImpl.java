@@ -24,22 +24,29 @@ import java.net.URL;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.util.Assert;
 
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.repository.ImageCacheRepository;
 import eu.europeana.corelib.db.service.ThumbnailService;
+import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 import eu.europeana.corelib.utils.ImageUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public class ThumbnailServiceImpl implements ThumbnailService {
+public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, String> implements ThumbnailService {
 
 	@Resource
 	private ImageCacheRepository repository;
+	
+	@Override
+	protected CrudRepository<ImageCache, String> getReposity() {
+		return repository;
+	}
 
 	@Override
 	public ImageCache storeThumbnail(String objectId, URL url) throws IOException {
@@ -81,16 +88,4 @@ public class ThumbnailServiceImpl implements ThumbnailService {
 		return null;
 	}
 	
-	@Override
-	public ImageCache retrieveImageCache(String objectId) {
-		Assert.notNull(objectId);
-		return repository.findOne(objectId);
-	}
-	
-	@Override
-	public void deleteThumbnail(String objectId) {
-		Assert.notNull(objectId);
-		repository.delete(objectId);
-	}
-
 }

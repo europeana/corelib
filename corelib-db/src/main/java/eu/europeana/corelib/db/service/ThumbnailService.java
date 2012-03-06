@@ -35,8 +35,4 @@ public interface ThumbnailService {
 	
 	byte[] retrieveThumbnail(String objectId, ThumbSize size);
 	
-	ImageCache retrieveImageCache(String objectId);
-	
-	void deleteThumbnail(String objectId);
-
 }
