@@ -51,7 +51,9 @@ import eu.europeana.corelib.solr.util.SolrConstructor;
  */
 public class ContentLoader {
 
-	private static String collectionName = "src/test/resources/records.zip";
+	private static String COLLECTION = "src/test/resources/records.zip";
+	
+	private static String TEMP_DIR = "/tmp/europeana/records";
 
 	private MongoDBServer mongoDBServer;
 
@@ -186,8 +188,8 @@ public class ContentLoader {
 			FileInputStream fis = new FileInputStream(collectionName);
 			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
 			ZipEntry entry;
-			File workingDir = new File("src/test/resources/records");
-			workingDir.mkdir();
+			File workingDir = new File(TEMP_DIR);
+			workingDir.mkdirs();
 			while ((entry = zis.getNextEntry()) != null) {
 				int count;
 				byte data[] = new byte[2048];
@@ -240,7 +242,7 @@ public class ContentLoader {
 		if ( (solrServer != null) && (mongoDBServer != null)) {
 			
 			ContentLoader contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
-			contentLoader.readRecords(collectionName);
+			contentLoader.readRecords(COLLECTION);
 			contentLoader.parse();
 			contentLoader.commit();
 			
