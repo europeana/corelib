@@ -22,12 +22,13 @@ import java.io.IOException;
 import java.net.URL;
 
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlService;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface ThumbnailService {
+public interface ThumbnailService extends AbstractNoSqlService<ImageCache, String> {
 	
 	ImageCache storeThumbnail(String objectId, BufferedImage image) throws IOException;
 	
