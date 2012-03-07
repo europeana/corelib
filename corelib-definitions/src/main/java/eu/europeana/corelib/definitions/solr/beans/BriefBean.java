@@ -35,8 +35,6 @@ public interface BriefBean extends IdBean {
 
 	String[] getEdmObject();
 
-	String[] getCreator(); // creator copyfields dc_creator, dc_contributor
-
 	String[] getYear(); // YEAR copyfield dc_date
 
 	String[] getProvider(); // PROVIDER copyfield edm_provider
@@ -79,4 +77,7 @@ public interface BriefBean extends IdBean {
 
 	String[] getDcTermsHasPart();
 
+	String[] getDcCreator();
+
+	String[] getDcContributor();
 }

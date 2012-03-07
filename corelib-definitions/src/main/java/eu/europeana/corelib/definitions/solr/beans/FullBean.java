@@ -420,4 +420,6 @@ public interface FullBean extends ApiBean {
 
 	void setAbout(String about);
 
+	String[] getCreator();
+
 }

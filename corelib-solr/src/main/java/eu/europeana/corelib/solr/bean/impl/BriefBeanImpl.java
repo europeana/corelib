@@ -62,8 +62,11 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("title")
 	private String[] title;
 
-	@Field("creator")
-	private String[] creator;
+	@Field("dc_creator")
+	private String[] dcCreator;
+	
+	@Field("dc_contributor")
+	private String[] dcContributor;
 
 	@Field("edm_place")
 	private String[] edmPlace;
@@ -122,8 +125,13 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	@Override
-	public String[] getCreator() {
-		return this.creator;
+	public String[] getDcCreator() {
+		return this.dcCreator;
+	}
+	
+	@Override
+	public String[] getDcContributor() {
+		return this.dcContributor;
 	}
 
 	@Override
