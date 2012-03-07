@@ -392,7 +392,6 @@ public interface FullBean extends ApiBean {
 
 	void setTitle(String[] title);
 
-	void setCreator(String[] creator);
 
 	void setYear(String[] year);
 
@@ -419,7 +418,5 @@ public interface FullBean extends ApiBean {
 	String getAbout();
 
 	void setAbout(String about);
-
-	String[] getCreator();
 
 }

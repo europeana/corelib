@@ -62,7 +62,7 @@ public class FullBeanImpl implements FullBean {
 	@Indexed(unique = true)
 	String about;
 	private String[] title;
-	private String[] creator;
+
 	private String[] year;
 	private String[] provider;
 	private String[] language;
@@ -195,11 +195,7 @@ public class FullBeanImpl implements FullBean {
 		this.title = title.clone();
 	}
 
-	@Override
-	public void setCreator(String[] creator) {
-		this.creator = creator.clone();
-	}
-
+	
 	@Override
 	public void setYear(String[] year) {
 		this.year = year.clone();
@@ -239,11 +235,7 @@ public class FullBeanImpl implements FullBean {
 		return edmObjects.toArray(new String[edmObjects.size()]);
 	}
 
-	@Override
-	public String[] getCreator() {
-		return this.creator;
-	}
-
+	
 	@Override
 	public String[] getYear() {
 		return this.year;

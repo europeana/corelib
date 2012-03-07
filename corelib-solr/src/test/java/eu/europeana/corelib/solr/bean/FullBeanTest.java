@@ -116,7 +116,7 @@ public class FullBeanTest {
 		fullBean.setAbout("test about");
 		fullBean.setAggregations(aggregations);
 		fullBean.setConcepts(concepts);
-		fullBean.setCreator(new String[] { "test creator" });
+		
 		fullBean.setEuropeanaCompleteness(9);
 		fullBean.setLanguage(new String[] { "en" });
 		fullBean.setPlaces(places);
@@ -136,7 +136,7 @@ public class FullBeanTest {
 		assertEquals(fullBean.getAggregations().get(0).getWebResources(), testFullBean.getAggregations().get(0)
 				.getWebResources());
 		assertEquals(fullBean.getConcepts(), testFullBean.getConcepts());
-		assertArrayEquals(fullBean.getCreator(), testFullBean.getCreator());
+		
 		assertEquals(fullBean.getEuropeanaCompleteness(), testFullBean.getEuropeanaCompleteness());
 		assertArrayEquals(fullBean.getLanguage(), testFullBean.getLanguage());
 		assertEquals(fullBean.getPlaces(), testFullBean.getPlaces());

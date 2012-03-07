@@ -53,7 +53,6 @@
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="location" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="date" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="creator" type="title" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="format" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="publisher" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="subject" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
@@ -229,8 +228,6 @@
    <copyField source="dc_subject" dest="spell"/>
    <copyField source="dc_title" dest="spell"/>
    <copyField source="dc_description" dest="spell"/>
-   <copyField source="dc_contributor" dest="creator" />
-   <copyField source="dc_creator" dest="creator" />
    <copyField source="dc_date" dest="date" />
    <copyField source="dcterms_created" dest="date" />
    <copyField source="dcterms_issued" dest="date" />
