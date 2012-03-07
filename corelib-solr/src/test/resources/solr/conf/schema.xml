@@ -103,9 +103,9 @@
    <field name="owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
    <field name="ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="dc_contributor" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_coverage" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dc_creator" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_date" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dc_description" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dc_format" type="string" indexed="true" stored="false" multiValued="true" />
