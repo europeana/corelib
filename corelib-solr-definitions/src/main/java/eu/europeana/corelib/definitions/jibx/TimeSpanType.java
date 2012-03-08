@@ -7,7 +7,7 @@ import java.util.List;
 /** 
  * The class of "abstract temporal extents, in the sense
  of Galilean physics, having a beginning, an end and a duration"
- (CIDOC CRM) Example:2001-12-31, 01.01.01 – 02.02.02, 1503 –
+ (CIDOC CRM) Example:2001-12-31/ 01.01.01 – 02.02.02/ 1503 –
  1506 (the time span of the creation of Mona Lisa)
 
  * 
