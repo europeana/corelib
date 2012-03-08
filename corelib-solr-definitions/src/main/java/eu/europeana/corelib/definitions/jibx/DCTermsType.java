@@ -145,14 +145,16 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'alternative' element value. 
-                      An alternative name for the resource. This can be any form of the title that is used as a substitute or an alternative to the formal
-                      title of the resource including abbreviations or
-                      translations of the title. Example:
-                      <alternative xmlns="http://www.w3.org/2001/XMLSchema">Ocho semanas</alternative>
-                      (When
-                      <title xmlns="http://www.w3.org/2001/XMLSchema">Eight weeks</title>
-                      ) Type: String
-                    
+        								An alternative name for the resource. This can be any form of
+        								the title that is used as a substitute or an alternative to the
+        								formal
+        								title of the resource including abbreviations or
+        								translations of the title. Example:
+        								<alternative xmlns="http://www.w3.org/2001/XMLSchema">Ocho semanas</alternative>
+        								(When
+        								<title xmlns="http://www.w3.org/2001/XMLSchema">Eight weeks</title>
+        								) Type: String
+        							
          * 
          * @return value
          */
@@ -162,14 +164,16 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'alternative' element value. 
-                      An alternative name for the resource. This can be any form of the title that is used as a substitute or an alternative to the formal
-                      title of the resource including abbreviations or
-                      translations of the title. Example:
-                      <alternative xmlns="http://www.w3.org/2001/XMLSchema">Ocho semanas</alternative>
-                      (When
-                      <title xmlns="http://www.w3.org/2001/XMLSchema">Eight weeks</title>
-                      ) Type: String
-                    
+        								An alternative name for the resource. This can be any form of
+        								the title that is used as a substitute or an alternative to the
+        								formal
+        								title of the resource including abbreviations or
+        								translations of the title. Example:
+        								<alternative xmlns="http://www.w3.org/2001/XMLSchema">Ocho semanas</alternative>
+        								(When
+        								<title xmlns="http://www.w3.org/2001/XMLSchema">Eight weeks</title>
+        								) Type: String
+        							
          * 
          * @param alternative
          */
@@ -189,10 +193,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'conformsTo' element value. 
-                      An established standard to which the described resource conforms. Example:
-                      <conformsTo xmlns="http://www.w3.org/2001/XMLSchema">W3C WCAG 2.0</conformsTo>
-                      (for an HTML document that conforms to web content accessibility guidelines). Type: String
-                    
+        								An established standard to which the described resource
+        								conforms. Example:
+        								<conformsTo xmlns="http://www.w3.org/2001/XMLSchema">W3C WCAG 2.0</conformsTo>
+        								(for an HTML document that conforms to web content
+        								accessibility guidelines). Type: String
+        							
          * 
          * @return value
          */
@@ -202,10 +208,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'conformsTo' element value. 
-                      An established standard to which the described resource conforms. Example:
-                      <conformsTo xmlns="http://www.w3.org/2001/XMLSchema">W3C WCAG 2.0</conformsTo>
-                      (for an HTML document that conforms to web content accessibility guidelines). Type: String
-                    
+        								An established standard to which the described resource
+        								conforms. Example:
+        								<conformsTo xmlns="http://www.w3.org/2001/XMLSchema">W3C WCAG 2.0</conformsTo>
+        								(for an HTML document that conforms to web content
+        								accessibility guidelines). Type: String
+        							
          * 
          * @param conformsTo
          */
@@ -225,11 +233,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'created' element value. 
-                      Date of creation of the resource Example:
-                      <created xmlns="http://www.w3.org/2001/XMLSchema">1564</created>
-                      <created xmlns="http://www.w3.org/2001/XMLSchema">Iron Age</created>
-                      Type: String
-                    
+        								Date of creation of the resource Example:
+        								<created xmlns="http://www.w3.org/2001/XMLSchema">1564</created>
+        								<created xmlns="http://www.w3.org/2001/XMLSchema">Iron Age</created>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -239,11 +247,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'created' element value. 
-                      Date of creation of the resource Example:
-                      <created xmlns="http://www.w3.org/2001/XMLSchema">1564</created>
-                      <created xmlns="http://www.w3.org/2001/XMLSchema">Iron Age</created>
-                      Type: String
-                    
+        								Date of creation of the resource Example:
+        								<created xmlns="http://www.w3.org/2001/XMLSchema">1564</created>
+        								<created xmlns="http://www.w3.org/2001/XMLSchema">Iron Age</created>
+        								Type: String
+        							
          * 
          * @param created
          */
@@ -263,12 +271,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'extent' element value. 
-                      The size or duration of the resource. Example:
-                      <extent xmlns="http://www.w3.org/2001/XMLSchema">13 cm</extent>
-                      (the width of an original object).
-                      <extent xmlns="http://www.w3.org/2001/XMLSchema">34 minutes</extent>
-                      (the length of an audio file). Type: String
-                    
+        								The size or duration of the resource. Example:
+        								<extent xmlns="http://www.w3.org/2001/XMLSchema">13 cm</extent>
+        								(the width of an original object).
+        								<extent xmlns="http://www.w3.org/2001/XMLSchema">34 minutes</extent>
+        								(the length of an audio file). Type: String
+        							
          * 
          * @return value
          */
@@ -278,12 +286,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'extent' element value. 
-                      The size or duration of the resource. Example:
-                      <extent xmlns="http://www.w3.org/2001/XMLSchema">13 cm</extent>
-                      (the width of an original object).
-                      <extent xmlns="http://www.w3.org/2001/XMLSchema">34 minutes</extent>
-                      (the length of an audio file). Type: String
-                    
+        								The size or duration of the resource. Example:
+        								<extent xmlns="http://www.w3.org/2001/XMLSchema">13 cm</extent>
+        								(the width of an original object).
+        								<extent xmlns="http://www.w3.org/2001/XMLSchema">34 minutes</extent>
+        								(the length of an audio file). Type: String
+        							
          * 
          * @param extent
          */
@@ -303,10 +311,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'hasFormat' element value. 
-                      A related resource that is substantially the same as the pre-existing described resource, but in another format. Example:
-                      <hasFormat xmlns="http://www.w3.org/2001/XMLSchema"> http://upload.wikimedia.org/wikipedia/en/f/f3/Europeana _logo.png </hasFormat>
-                      where the resource being described is a tiff image file. Type: String
-                    
+        								A related resource that is substantially the same as the
+        								pre-existing described resource, but in another format.
+        								Example:
+        								<hasFormat xmlns="http://www.w3.org/2001/XMLSchema">
+        									http://upload.wikimedia.org/wikipedia/en/f/f3/Europeana
+        									_logo.png </hasFormat>
+        								where the resource being described is a tiff image file. Type:
+        								String
+        							
          * 
          * @return value
          */
@@ -316,10 +329,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'hasFormat' element value. 
-                      A related resource that is substantially the same as the pre-existing described resource, but in another format. Example:
-                      <hasFormat xmlns="http://www.w3.org/2001/XMLSchema"> http://upload.wikimedia.org/wikipedia/en/f/f3/Europeana _logo.png </hasFormat>
-                      where the resource being described is a tiff image file. Type: String
-                    
+        								A related resource that is substantially the same as the
+        								pre-existing described resource, but in another format.
+        								Example:
+        								<hasFormat xmlns="http://www.w3.org/2001/XMLSchema">
+        									http://upload.wikimedia.org/wikipedia/en/f/f3/Europeana
+        									_logo.png </hasFormat>
+        								where the resource being described is a tiff image file. Type:
+        								String
+        							
          * 
          * @param hasFormat
          */
@@ -367,12 +385,16 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'hasVersion' element value. 
-                      A related resource that is a version, edition, or adaptation of the described resource. Changes in version imply substantive changes in
-                      content rather than differences in format.
-                      Example:
-                      <hasVersion xmlns="http://www.w3.org/2001/XMLSchema"> The Sorcerer’s Apprentice (translation by Edwin Zeydel, 1955) </hasVersion>
-                      . In this example the 1955 translation is a version of the described resource. Type: String
-                    
+        								A related resource that is a version, edition, or adaptation of
+        								the described resource. Changes in version imply substantive
+        								changes in
+        								content rather than differences in format.
+        								Example:
+        								<hasVersion xmlns="http://www.w3.org/2001/XMLSchema"> The Sorcerer's Apprentice (translation by Edwin
+        									Zeydel, 1955) </hasVersion>
+        								. In this example the 1955 translation is a version of the
+        								described resource. Type: String
+        							
          * 
          * @return value
          */
@@ -382,12 +404,16 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'hasVersion' element value. 
-                      A related resource that is a version, edition, or adaptation of the described resource. Changes in version imply substantive changes in
-                      content rather than differences in format.
-                      Example:
-                      <hasVersion xmlns="http://www.w3.org/2001/XMLSchema"> The Sorcerer’s Apprentice (translation by Edwin Zeydel, 1955) </hasVersion>
-                      . In this example the 1955 translation is a version of the described resource. Type: String
-                    
+        								A related resource that is a version, edition, or adaptation of
+        								the described resource. Changes in version imply substantive
+        								changes in
+        								content rather than differences in format.
+        								Example:
+        								<hasVersion xmlns="http://www.w3.org/2001/XMLSchema"> The Sorcerer's Apprentice (translation by Edwin
+        									Zeydel, 1955) </hasVersion>
+        								. In this example the 1955 translation is a version of the
+        								described resource. Type: String
+        							
          * 
          * @param hasVersion
          */
@@ -407,10 +433,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'isFormatOf' element value. 
-                      A related resource that is substantially the same as the described resource, but in another format. Example:
-                      <isFormatOf xmlns="http://www.w3.org/2001/XMLSchema">Europeana_logo.tiff</isFormatOf>
-                      where the resource being described is a png image file. Type: String
-                    
+        								A related resource that is substantially the same as the
+        								described resource, but in another format. Example:
+        								<isFormatOf xmlns="http://www.w3.org/2001/XMLSchema">Europeana_logo.tiff</isFormatOf>
+        								where the resource being described is a png image file. Type:
+        								String
+        							
          * 
          * @return value
          */
@@ -420,10 +448,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'isFormatOf' element value. 
-                      A related resource that is substantially the same as the described resource, but in another format. Example:
-                      <isFormatOf xmlns="http://www.w3.org/2001/XMLSchema">Europeana_logo.tiff</isFormatOf>
-                      where the resource being described is a png image file. Type: String
-                    
+        								A related resource that is substantially the same as the
+        								described resource, but in another format. Example:
+        								<isFormatOf xmlns="http://www.w3.org/2001/XMLSchema">Europeana_logo.tiff</isFormatOf>
+        								where the resource being described is a png image file. Type:
+        								String
+        							
          * 
          * @param isFormatOf
          */
@@ -471,11 +501,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'isReferencedBy' element value. 
-                      A related resource that references, cites, or otherwise points to the described resource. Example:
-                      <isReferencedBy xmlns="http://www.w3.org/2001/XMLSchema"> Till, Nicholas (1994) Mozart and the Enlightenment: Truth, Virtue and Beauty in Mozart’s Operas, W. W. Norton &amp;
-                        Company </isReferencedBy>
-                      Type: String
-                    
+        								A related resource that references, cites, or otherwise points
+        								to the described resource. Example:
+        								<isReferencedBy xmlns="http://www.w3.org/2001/XMLSchema"> Till, Nicholas (1994) Mozart and the
+        									Enlightenment: Truth, Virtue and Beauty in Mozart's Operas, W.
+        									W. Norton &amp;
+        									Company
+        								</isReferencedBy>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -485,11 +519,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'isReferencedBy' element value. 
-                      A related resource that references, cites, or otherwise points to the described resource. Example:
-                      <isReferencedBy xmlns="http://www.w3.org/2001/XMLSchema"> Till, Nicholas (1994) Mozart and the Enlightenment: Truth, Virtue and Beauty in Mozart’s Operas, W. W. Norton &amp;
-                        Company </isReferencedBy>
-                      Type: String
-                    
+        								A related resource that references, cites, or otherwise points
+        								to the described resource. Example:
+        								<isReferencedBy xmlns="http://www.w3.org/2001/XMLSchema"> Till, Nicholas (1994) Mozart and the
+        									Enlightenment: Truth, Virtue and Beauty in Mozart's Operas, W.
+        									W. Norton &amp;
+        									Company
+        								</isReferencedBy>
+        								Type: String
+        							
          * 
          * @param isReferencedBy
          */
@@ -509,10 +547,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'isReplacedBy' element value. 
-                      A related resource that supplants, displaces, or supersedes the described resource. Example:
-                      <isReplacedBy xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2009/01/05/bylaws/ </isReplacedBy>
-                      where the resource described is an older version (http://dublincore.org/about/2006/01/01/bylaws/) Type: String
-                    
+        								A related resource that supplants, displaces, or supersedes the
+        								described resource. Example:
+        								<isReplacedBy xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2009/01/05/bylaws/ </isReplacedBy>
+        								where the resource described is an older version
+        								(http://dublincore.org/about/2006/01/01/bylaws/) Type: String
+        							
          * 
          * @return value
          */
@@ -522,10 +562,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'isReplacedBy' element value. 
-                      A related resource that supplants, displaces, or supersedes the described resource. Example:
-                      <isReplacedBy xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2009/01/05/bylaws/ </isReplacedBy>
-                      where the resource described is an older version (http://dublincore.org/about/2006/01/01/bylaws/) Type: String
-                    
+        								A related resource that supplants, displaces, or supersedes the
+        								described resource. Example:
+        								<isReplacedBy xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2009/01/05/bylaws/ </isReplacedBy>
+        								where the resource described is an older version
+        								(http://dublincore.org/about/2006/01/01/bylaws/) Type: String
+        							
          * 
          * @param isReplacedBy
          */
@@ -545,10 +587,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'isRequiredBy' element value. 
-                      A related resource that requires the described resource to support its function, delivery or coherence. Example:
-                      <isRequiredBy xmlns="http://www.w3.org/2001/XMLSchema"> http://www.myslides.com/myslideshow.ppt </isRequiredBy>
-                      where the image being described is required for an online slideshow. Type: String
-                    
+        								A related resource that requires the described resource to
+        								support its function, delivery or coherence. Example:
+        								<isRequiredBy xmlns="http://www.w3.org/2001/XMLSchema"> http://www.myslides.com/myslideshow.ppt </isRequiredBy>
+        								where the image being described is required for an online
+        								slideshow. Type: String
+        							
          * 
          * @return value
          */
@@ -558,10 +602,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'isRequiredBy' element value. 
-                      A related resource that requires the described resource to support its function, delivery or coherence. Example:
-                      <isRequiredBy xmlns="http://www.w3.org/2001/XMLSchema"> http://www.myslides.com/myslideshow.ppt </isRequiredBy>
-                      where the image being described is required for an online slideshow. Type: String
-                    
+        								A related resource that requires the described resource to
+        								support its function, delivery or coherence. Example:
+        								<isRequiredBy xmlns="http://www.w3.org/2001/XMLSchema"> http://www.myslides.com/myslideshow.ppt </isRequiredBy>
+        								where the image being described is required for an online
+        								slideshow. Type: String
+        							
          * 
          * @param isRequiredBy
          */
@@ -581,10 +627,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'issued' element value. 
-                      Date of formal issuance (e.g., publication) of the resource. Example:
-                      <issued xmlns="http://www.w3.org/2001/XMLSchema">1993</issued>
-                      Type: String
-                    
+        								Date of formal issuance (e.g., publication) of the resource.
+        								Example:
+        								<issued xmlns="http://www.w3.org/2001/XMLSchema">1993</issued>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -594,10 +641,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'issued' element value. 
-                      Date of formal issuance (e.g., publication) of the resource. Example:
-                      <issued xmlns="http://www.w3.org/2001/XMLSchema">1993</issued>
-                      Type: String
-                    
+        								Date of formal issuance (e.g., publication) of the resource.
+        								Example:
+        								<issued xmlns="http://www.w3.org/2001/XMLSchema">1993</issued>
+        								Type: String
+        							
          * 
          * @param issued
          */
@@ -617,12 +665,14 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'isVersionOf' element value. 
-                      A related resource of which the described resource is a version, edition, or adaptation. Changes in version imply substantive changes in
-                      content rather than differences in format
-                      Example:
-                      <isVersionOf xmlns="http://www.w3.org/2001/XMLSchema">ESE Version 0.5</isVersionOf>
-                      Type: String
-                    
+        								A related resource of which the described resource is a
+        								version, edition, or adaptation. Changes in version imply
+        								substantive changes in
+        								content rather than differences in format
+        								Example:
+        								<isVersionOf xmlns="http://www.w3.org/2001/XMLSchema">ESE Version 0.5</isVersionOf>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -632,12 +682,14 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'isVersionOf' element value. 
-                      A related resource of which the described resource is a version, edition, or adaptation. Changes in version imply substantive changes in
-                      content rather than differences in format
-                      Example:
-                      <isVersionOf xmlns="http://www.w3.org/2001/XMLSchema">ESE Version 0.5</isVersionOf>
-                      Type: String
-                    
+        								A related resource of which the described resource is a
+        								version, edition, or adaptation. Changes in version imply
+        								substantive changes in
+        								content rather than differences in format
+        								Example:
+        								<isVersionOf xmlns="http://www.w3.org/2001/XMLSchema">ESE Version 0.5</isVersionOf>
+        								Type: String
+        							
          * 
          * @param isVersionOf
          */
@@ -657,10 +709,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'medium' element value. 
-                      The material or physical carrier of the resource. Example:
-                      <medium xmlns="http://www.w3.org/2001/XMLSchema">metal</medium>
-                      Type: String
-                    
+        								The material or physical carrier of the resource. Example:
+        								<medium xmlns="http://www.w3.org/2001/XMLSchema">metal</medium>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -670,10 +722,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'medium' element value. 
-                      The material or physical carrier of the resource. Example:
-                      <medium xmlns="http://www.w3.org/2001/XMLSchema">metal</medium>
-                      Type: String
-                    
+        								The material or physical carrier of the resource. Example:
+        								<medium xmlns="http://www.w3.org/2001/XMLSchema">metal</medium>
+        								Type: String
+        							
          * 
          * @param medium
          */
@@ -693,12 +745,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'provenance' element value. 
-                      A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity,
-                      integrity and interpretation. This may include a
-                      description of any changes successive custodians made to the resource. Example:
-                      <provenance xmlns="http://www.w3.org/2001/XMLSchema"> Donated by The National Library in 1965 </provenance>
-                      Type: String
-                    
+        								A statement of any changes in ownership and custody of the
+        								resource since its creation that are significant for its
+        								authenticity,
+        								integrity and interpretation. This may include a
+        								description of any changes successive custodians made to the resource.
+        								Example:
+        								<provenance xmlns="http://www.w3.org/2001/XMLSchema"> Donated by The National Library in 1965 </provenance>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -708,12 +763,15 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'provenance' element value. 
-                      A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity,
-                      integrity and interpretation. This may include a
-                      description of any changes successive custodians made to the resource. Example:
-                      <provenance xmlns="http://www.w3.org/2001/XMLSchema"> Donated by The National Library in 1965 </provenance>
-                      Type: String
-                    
+        								A statement of any changes in ownership and custody of the
+        								resource since its creation that are significant for its
+        								authenticity,
+        								integrity and interpretation. This may include a
+        								description of any changes successive custodians made to the resource.
+        								Example:
+        								<provenance xmlns="http://www.w3.org/2001/XMLSchema"> Donated by The National Library in 1965 </provenance>
+        								Type: String
+        							
          * 
          * @param provenance
          */
@@ -733,10 +791,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'references' element value. 
-                      A related resource that is referenced, cited, or otherwise pointed to by the described resource Example:
-                      <references xmlns="http://www.w3.org/2001/XMLSchema"> Honderd jaar Noorse schilderkunst </references>
-                      Type: String
-                    
+        								A related resource that is referenced, cited, or otherwise
+        								pointed to by the described resource Example:
+        								<references xmlns="http://www.w3.org/2001/XMLSchema"> Honderd jaar Noorse schilderkunst </references>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -746,10 +805,11 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'references' element value. 
-                      A related resource that is referenced, cited, or otherwise pointed to by the described resource Example:
-                      <references xmlns="http://www.w3.org/2001/XMLSchema"> Honderd jaar Noorse schilderkunst </references>
-                      Type: String
-                    
+        								A related resource that is referenced, cited, or otherwise
+        								pointed to by the described resource Example:
+        								<references xmlns="http://www.w3.org/2001/XMLSchema"> Honderd jaar Noorse schilderkunst </references>
+        								Type: String
+        							
          * 
          * @param references
          */
@@ -769,10 +829,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'replaces' element value. 
-                      A related resource that is supplanted, displaced, or superseded by the described resource. Example:
-                      <replaces xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2006/01/01/bylaws/ </replaces>
-                      where the resource described is a newer version (http://dublincore.org/about/2009/01/05/bylaws/) Type: String
-                    
+        								A related resource that is supplanted, displaced, or superseded
+        								by the described resource. Example:
+        								<replaces xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2006/01/01/bylaws/ </replaces>
+        								where the resource described is a newer version
+        								(http://dublincore.org/about/2009/01/05/bylaws/) Type: String
+        							
          * 
          * @return value
          */
@@ -782,10 +844,12 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'replaces' element value. 
-                      A related resource that is supplanted, displaced, or superseded by the described resource. Example:
-                      <replaces xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2006/01/01/bylaws/ </replaces>
-                      where the resource described is a newer version (http://dublincore.org/about/2009/01/05/bylaws/) Type: String
-                    
+        								A related resource that is supplanted, displaced, or superseded
+        								by the described resource. Example:
+        								<replaces xmlns="http://www.w3.org/2001/XMLSchema"> http://dublincore.org/about/2006/01/01/bylaws/ </replaces>
+        								where the resource described is a newer version
+        								(http://dublincore.org/about/2009/01/05/bylaws/) Type: String
+        							
          * 
          * @param replaces
          */
@@ -805,10 +869,14 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'requires' element value. 
-                      A related resource that is required by the described resource to support its function, delivery or coherence. Example:
-                      <requires xmlns="http://www.w3.org/2001/XMLSchema"> http://ads.ahds.ac.uk/project/userinfo/css/oldbrowsers.css </requires>
-                      where the resource described is a HTML file at http://ads.ahds.ac.uk/project/userinfo/digitalTextArchiving.html Type: String
-                    
+        								A related resource that is required by the described resource
+        								to support its function, delivery or coherence. Example:
+        								<requires xmlns="http://www.w3.org/2001/XMLSchema">
+        									http://ads.ahds.ac.uk/project/userinfo/css/oldbrowsers.css </requires>
+        								where the resource described is a HTML file at
+        								http://ads.ahds.ac.uk/project/userinfo/digitalTextArchiving.html
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -818,10 +886,14 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'requires' element value. 
-                      A related resource that is required by the described resource to support its function, delivery or coherence. Example:
-                      <requires xmlns="http://www.w3.org/2001/XMLSchema"> http://ads.ahds.ac.uk/project/userinfo/css/oldbrowsers.css </requires>
-                      where the resource described is a HTML file at http://ads.ahds.ac.uk/project/userinfo/digitalTextArchiving.html Type: String
-                    
+        								A related resource that is required by the described resource
+        								to support its function, delivery or coherence. Example:
+        								<requires xmlns="http://www.w3.org/2001/XMLSchema">
+        									http://ads.ahds.ac.uk/project/userinfo/css/oldbrowsers.css </requires>
+        								where the resource described is a HTML file at
+        								http://ads.ahds.ac.uk/project/userinfo/digitalTextArchiving.html
+        								Type: String
+        							
          * 
          * @param requires
          */
@@ -841,10 +913,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'spatial' element value. 
-                      Spatial characteristics of the resource. Example:
-                      <spatial xmlns="http://www.w3.org/2001/XMLSchema">Portugal</spatial>
-                      Type: String
-                    
+        								Spatial characteristics of the resource. Example:
+        								<spatial xmlns="http://www.w3.org/2001/XMLSchema">Portugal</spatial>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -854,10 +926,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'spatial' element value. 
-                      Spatial characteristics of the resource. Example:
-                      <spatial xmlns="http://www.w3.org/2001/XMLSchema">Portugal</spatial>
-                      Type: String
-                    
+        								Spatial characteristics of the resource. Example:
+        								<spatial xmlns="http://www.w3.org/2001/XMLSchema">Portugal</spatial>
+        								Type: String
+        							
          * 
          * @param spatial
          */
@@ -877,10 +949,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'tableOfContents' element value. 
-                      A list of subunits of the resource. Example:
-                      <tableOfContents xmlns="http://www.w3.org/2001/XMLSchema"> Chapter 1. Introduction, Chapter 2. History </tableOfContents>
-                      Type: String
-                    
+        								A list of subunits of the resource. Example:
+        								<tableOfContents xmlns="http://www.w3.org/2001/XMLSchema"> Chapter 1. Introduction, Chapter 2. History </tableOfContents>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -890,10 +962,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'tableOfContents' element value. 
-                      A list of subunits of the resource. Example:
-                      <tableOfContents xmlns="http://www.w3.org/2001/XMLSchema"> Chapter 1. Introduction, Chapter 2. History </tableOfContents>
-                      Type: String
-                    
+        								A list of subunits of the resource. Example:
+        								<tableOfContents xmlns="http://www.w3.org/2001/XMLSchema"> Chapter 1. Introduction, Chapter 2. History </tableOfContents>
+        								Type: String
+        							
          * 
          * @param tableOfContents
          */
@@ -913,10 +985,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Get the 'temporal' element value. 
-                      Temporal characteristics of the resource Example:
-                      <temporal xmlns="http://www.w3.org/2001/XMLSchema">Roman</temporal>
-                      Type: String
-                    
+        								Temporal characteristics of the resource Example:
+        								<temporal xmlns="http://www.w3.org/2001/XMLSchema">Roman</temporal>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -926,10 +998,10 @@ public class DCTermsType extends AboutType
 
         /** 
          * Set the 'temporal' element value. 
-                      Temporal characteristics of the resource Example:
-                      <temporal xmlns="http://www.w3.org/2001/XMLSchema">Roman</temporal>
-                      Type: String
-                    
+        								Temporal characteristics of the resource Example:
+        								<temporal xmlns="http://www.w3.org/2001/XMLSchema">Roman</temporal>
+        								Type: String
+        							
          * 
          * @param temporal
          */

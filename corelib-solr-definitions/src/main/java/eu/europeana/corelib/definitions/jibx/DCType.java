@@ -124,10 +124,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'contributor' element value. 
-                      An entity responsible for making contributions to the resource. Example:
-                      <contributor xmlns="http://www.w3.org/2001/XMLSchema">Maria Callas</contributor>
-                      Type: String
-                    
+        								An entity responsible for making contributions to the resource.
+        								Example:
+        								<contributor xmlns="http://www.w3.org/2001/XMLSchema">Maria Callas</contributor>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -137,10 +138,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'contributor' element value. 
-                      An entity responsible for making contributions to the resource. Example:
-                      <contributor xmlns="http://www.w3.org/2001/XMLSchema">Maria Callas</contributor>
-                      Type: String
-                    
+        								An entity responsible for making contributions to the resource.
+        								Example:
+        								<contributor xmlns="http://www.w3.org/2001/XMLSchema">Maria Callas</contributor>
+        								Type: String
+        							
          * 
          * @param contributor
          */
@@ -160,12 +162,15 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'coverage' element value. 
-                      The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant. This may be a named place, a
-                      location, a spatial coordinate, a period, date, date range or a named administrative entity. Example:
-                      <coverage xmlns="http://www.w3.org/2001/XMLSchema">1995-1996</coverage>
-                      <coverage xmlns="http://www.w3.org/2001/XMLSchema">Boston, MA</coverage>
-                      Type: String
-                    
+        								The spatial or temporal topic of the resource, the spatial
+        								applicability of the resource, or the jurisdiction under which
+        								the resource is relevant. This may be a named place, a
+        								location, a spatial coordinate, a period, date, date range or a
+        								named administrative entity. Example:
+        								<coverage xmlns="http://www.w3.org/2001/XMLSchema">1995-1996</coverage>
+        								<coverage xmlns="http://www.w3.org/2001/XMLSchema">Boston, MA</coverage>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -175,12 +180,15 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'coverage' element value. 
-                      The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant. This may be a named place, a
-                      location, a spatial coordinate, a period, date, date range or a named administrative entity. Example:
-                      <coverage xmlns="http://www.w3.org/2001/XMLSchema">1995-1996</coverage>
-                      <coverage xmlns="http://www.w3.org/2001/XMLSchema">Boston, MA</coverage>
-                      Type: String
-                    
+        								The spatial or temporal topic of the resource, the spatial
+        								applicability of the resource, or the jurisdiction under which
+        								the resource is relevant. This may be a named place, a
+        								location, a spatial coordinate, a period, date, date range or a
+        								named administrative entity. Example:
+        								<coverage xmlns="http://www.w3.org/2001/XMLSchema">1995-1996</coverage>
+        								<coverage xmlns="http://www.w3.org/2001/XMLSchema">Boston, MA</coverage>
+        								Type: String
+        							
          * 
          * @param coverage
          */
@@ -200,10 +208,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'creator' element value. 
-                      An entity primarily responsible for making the resource. This may be a person, organisation or a service. Example:
-                      <creator xmlns="http://www.w3.org/2001/XMLSchema">Shakespeare, William</creator>
-                      Type: String
-                    
+        								An entity primarily responsible for making the resource. This
+        								may be a person, organisation or a service. Example:
+        								<creator xmlns="http://www.w3.org/2001/XMLSchema">Shakespeare, William</creator>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -213,10 +222,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'creator' element value. 
-                      An entity primarily responsible for making the resource. This may be a person, organisation or a service. Example:
-                      <creator xmlns="http://www.w3.org/2001/XMLSchema">Shakespeare, William</creator>
-                      Type: String
-                    
+        								An entity primarily responsible for making the resource. This
+        								may be a person, organisation or a service. Example:
+        								<creator xmlns="http://www.w3.org/2001/XMLSchema">Shakespeare, William</creator>
+        								Type: String
+        							
          * 
          * @param creator
          */
@@ -236,10 +246,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'date' element value. 
-                      A point or period of time associated with an event in the lifecycle of the resource. Example:
-                      <date xmlns="http://www.w3.org/2001/XMLSchema">17th century</date>
-                      (For example the date when an object was repaired) Type: String
-                    
+        								A point or period of time associated with an event in the
+        								lifecycle of the resource. Example:
+        								<date xmlns="http://www.w3.org/2001/XMLSchema">17th century</date>
+        								(For example the date when an object was repaired) Type: String
+        							
          * 
          * @return value
          */
@@ -249,10 +260,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'date' element value. 
-                      A point or period of time associated with an event in the lifecycle of the resource. Example:
-                      <date xmlns="http://www.w3.org/2001/XMLSchema">17th century</date>
-                      (For example the date when an object was repaired) Type: String
-                    
+        								A point or period of time associated with an event in the
+        								lifecycle of the resource. Example:
+        								<date xmlns="http://www.w3.org/2001/XMLSchema">17th century</date>
+        								(For example the date when an object was repaired) Type: String
+        							
          * 
          * @param date
          */
@@ -272,14 +284,16 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'description' element value. 
-                      An account of the resource. Example:
-                      <description xmlns="http://www.w3.org/2001/XMLSchema">
-                        Illustrated guide to airport markings and lighting signals, with particular reference to SMGCS (Surface Movement Guidance and Control System) for airports with low
-                        visibility
-                        conditions.
-                      </description>
-                      Type: String
-                    
+        								An account of the resource. Example:
+        								<description xmlns="http://www.w3.org/2001/XMLSchema">
+        									Illustrated guide to airport markings and lighting signals, with
+        									particular reference to SMGCS (Surface Movement Guidance and
+        									Control System) for airports with low
+        									visibility
+        									conditions.
+        								</description>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -289,14 +303,16 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'description' element value. 
-                      An account of the resource. Example:
-                      <description xmlns="http://www.w3.org/2001/XMLSchema">
-                        Illustrated guide to airport markings and lighting signals, with particular reference to SMGCS (Surface Movement Guidance and Control System) for airports with low
-                        visibility
-                        conditions.
-                      </description>
-                      Type: String
-                    
+        								An account of the resource. Example:
+        								<description xmlns="http://www.w3.org/2001/XMLSchema">
+        									Illustrated guide to airport markings and lighting signals, with
+        									particular reference to SMGCS (Surface Movement Guidance and
+        									Control System) for airports with low
+        									visibility
+        									conditions.
+        								</description>
+        								Type: String
+        							
          * 
          * @param description
          */
@@ -316,8 +332,8 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'identifier' element value. 
-                      identifier
-                    
+        								identifier
+        							
          * 
          * @return value
          */
@@ -327,8 +343,8 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'identifier' element value. 
-                      identifier
-                    
+        								identifier
+        							
          * 
          * @param identifier
          */
@@ -348,10 +364,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'format' element value. 
-                      The file format, physical medium or dimensions of the resource. Example:
-                      <format xmlns="http://www.w3.org/2001/XMLSchema">image/jpeg</format>
-                      Type: String
-                    
+        								The file format, physical medium or dimensions of the resource.
+        								Example:
+        								<format xmlns="http://www.w3.org/2001/XMLSchema">image/jpeg</format>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -361,10 +378,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'format' element value. 
-                      The file format, physical medium or dimensions of the resource. Example:
-                      <format xmlns="http://www.w3.org/2001/XMLSchema">image/jpeg</format>
-                      Type: String
-                    
+        								The file format, physical medium or dimensions of the resource.
+        								Example:
+        								<format xmlns="http://www.w3.org/2001/XMLSchema">image/jpeg</format>
+        								Type: String
+        							
          * 
          * @param format
          */
@@ -384,10 +402,10 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'language' element value. 
-                      A language of the resource. Example:
-                      <language xmlns="http://www.w3.org/2001/XMLSchema">it</language>
-                      Type: String
-                    
+        								A language of the resource. Example:
+        								<language xmlns="http://www.w3.org/2001/XMLSchema">it</language>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -397,10 +415,10 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'language' element value. 
-                      A language of the resource. Example:
-                      <language xmlns="http://www.w3.org/2001/XMLSchema">it</language>
-                      Type: String
-                    
+        								A language of the resource. Example:
+        								<language xmlns="http://www.w3.org/2001/XMLSchema">it</language>
+        								Type: String
+        							
          * 
          * @param language
          */
@@ -420,10 +438,12 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'publisher' element value. 
-                      An entity responsible for making the resource available. Examples of a publisher include a person, an organisation and a service. Example:
-                      <publisher xmlns="http://www.w3.org/2001/XMLSchema">Oxford University Press</publisher>
-                      Type: String
-                    
+        								An entity responsible for making the resource available.
+        								Examples of a publisher include a person, an organisation and a
+        								service. Example:
+        								<publisher xmlns="http://www.w3.org/2001/XMLSchema">Oxford University Press</publisher>
+        								Type: String
+        								
          * 
          * @return value
          */
@@ -433,10 +453,12 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'publisher' element value. 
-                      An entity responsible for making the resource available. Examples of a publisher include a person, an organisation and a service. Example:
-                      <publisher xmlns="http://www.w3.org/2001/XMLSchema">Oxford University Press</publisher>
-                      Type: String
-                    
+        								An entity responsible for making the resource available.
+        								Examples of a publisher include a person, an organisation and a
+        								service. Example:
+        								<publisher xmlns="http://www.w3.org/2001/XMLSchema">Oxford University Press</publisher>
+        								Type: String
+        								
          * 
          * @param publisher
          */
@@ -456,10 +478,13 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'relation' element value. 
-                      A related resource. The recommended best practice is to identify the resource using a formal identification scheme. Example:
-                      <relation xmlns="http://www.w3.org/2001/XMLSchema">maps.crace.1/33</relation>
-                      (This is the shelf mark for a map held in the British Library’s Crace Collection). Type: String
-                    
+        								A related resource. The recommended best practice is to
+        								identify the resource using a formal identification scheme.
+        								Example:
+        								<relation xmlns="http://www.w3.org/2001/XMLSchema">maps.crace.1/33</relation>
+        								(This is the shelf mark for a map held in the British Library's
+        								Crace Collection). Type: String
+        							
          * 
          * @return value
          */
@@ -469,10 +494,13 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'relation' element value. 
-                      A related resource. The recommended best practice is to identify the resource using a formal identification scheme. Example:
-                      <relation xmlns="http://www.w3.org/2001/XMLSchema">maps.crace.1/33</relation>
-                      (This is the shelf mark for a map held in the British Library’s Crace Collection). Type: String
-                    
+        								A related resource. The recommended best practice is to
+        								identify the resource using a formal identification scheme.
+        								Example:
+        								<relation xmlns="http://www.w3.org/2001/XMLSchema">maps.crace.1/33</relation>
+        								(This is the shelf mark for a map held in the British Library's
+        								Crace Collection). Type: String
+        							
          * 
          * @param relation
          */
@@ -520,11 +548,12 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'source' element value. 
-                      A related resource from which the described resource is derived in whole or in part. Example:
-                      <source xmlns="http://www.w3.org/2001/XMLSchema">Security Magazine pp 3-12</source>
-                      <source xmlns="http://www.w3.org/2001/XMLSchema">BAM portal</source>
-                      Type: String
-                    
+        								A related resource from which the described resource is derived
+        								in whole or in part. Example:
+        								<source xmlns="http://www.w3.org/2001/XMLSchema">Security Magazine pp 3-12</source>
+        								<source xmlns="http://www.w3.org/2001/XMLSchema">BAM portal</source>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -534,11 +563,12 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'source' element value. 
-                      A related resource from which the described resource is derived in whole or in part. Example:
-                      <source xmlns="http://www.w3.org/2001/XMLSchema">Security Magazine pp 3-12</source>
-                      <source xmlns="http://www.w3.org/2001/XMLSchema">BAM portal</source>
-                      Type: String
-                    
+        								A related resource from which the described resource is derived
+        								in whole or in part. Example:
+        								<source xmlns="http://www.w3.org/2001/XMLSchema">Security Magazine pp 3-12</source>
+        								<source xmlns="http://www.w3.org/2001/XMLSchema">BAM portal</source>
+        								Type: String
+        							
          * 
          * @param source
          */
@@ -558,10 +588,10 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'subject' element value. 
-                      The topic of the resource. Example:
-                      <subject xmlns="http://www.w3.org/2001/XMLSchema">submarine</subject>
-                      Type: String
-                    
+        								The topic of the resource. Example:
+        								<subject xmlns="http://www.w3.org/2001/XMLSchema">submarine</subject>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -571,10 +601,10 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'subject' element value. 
-                      The topic of the resource. Example:
-                      <subject xmlns="http://www.w3.org/2001/XMLSchema">submarine</subject>
-                      Type: String
-                    
+        								The topic of the resource. Example:
+        								<subject xmlns="http://www.w3.org/2001/XMLSchema">submarine</subject>
+        								Type: String
+        							
          * 
          * @param subject
          */
@@ -594,10 +624,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'title' element value. 
-                      A name given to the resource. Typically, a Title will be a name by which the resource is formally known. Example:
-                      <title xmlns="http://www.w3.org/2001/XMLSchema">Taal vitaal</title>
-                      Type: String
-                    
+        								A name given to the resource. Typically, a Title will be a name
+        								by which the resource is formally known. Example:
+        								<title xmlns="http://www.w3.org/2001/XMLSchema">Taal vitaal</title>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -607,10 +638,11 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'title' element value. 
-                      A name given to the resource. Typically, a Title will be a name by which the resource is formally known. Example:
-                      <title xmlns="http://www.w3.org/2001/XMLSchema">Taal vitaal</title>
-                      Type: String
-                    
+        								A name given to the resource. Typically, a Title will be a name
+        								by which the resource is formally known. Example:
+        								<title xmlns="http://www.w3.org/2001/XMLSchema">Taal vitaal</title>
+        								Type: String
+        							
          * 
          * @param title
          */
@@ -630,12 +662,14 @@ public class DCType extends DCTermsType
 
         /** 
          * Get the 'type' element value. 
-                      The nature or genre of the resource. Type includes terms describing general categories, functions, genres, or aggregation levels for content. Example:
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">painting</type>
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">photograph</type>
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">coin</type>
-                      Type: String
-                    
+        								The nature or genre of the resource. Type includes terms
+        								describing general categories, functions, genres, or
+        								aggregation levels for content. Example:
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">painting</type>
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">photograph</type>
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">coin</type>
+        								Type: String
+        							
          * 
          * @return value
          */
@@ -645,12 +679,14 @@ public class DCType extends DCTermsType
 
         /** 
          * Set the 'type' element value. 
-                      The nature or genre of the resource. Type includes terms describing general categories, functions, genres, or aggregation levels for content. Example:
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">painting</type>
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">photograph</type>
-                      <type xmlns="http://www.w3.org/2001/XMLSchema">coin</type>
-                      Type: String
-                    
+        								The nature or genre of the resource. Type includes terms
+        								describing general categories, functions, genres, or
+        								aggregation levels for content. Example:
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">painting</type>
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">photograph</type>
+        								<type xmlns="http://www.w3.org/2001/XMLSchema">coin</type>
+        								Type: String
+        							
          * 
          * @param type
          */

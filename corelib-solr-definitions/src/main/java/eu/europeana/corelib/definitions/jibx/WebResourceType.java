@@ -6,7 +6,8 @@ import java.util.List;
 
 /** 
  * 
- An URL for an image, or anything else that can be downloaded and represents a CHO.
+ An URL for an image, or anything else that can be downloaded and
+ represents a CHO.
 
  * 
  * Schema fragment(s) for this class:

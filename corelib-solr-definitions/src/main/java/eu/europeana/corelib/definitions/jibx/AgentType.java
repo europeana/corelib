@@ -2,8 +2,11 @@
 package eu.europeana.corelib.definitions.jibx;
 
 /** 
- *  This class comprises people, either individually or in groups, who have the potential to perform intentional actions for which they can be held responsible. Example:Leonardo da
+ *  This class comprises people, either individually or
+ in groups, who have the potential to perform intentional actions for
+ which they can be held responsible. Example:Leonardo da
  Vinci, the British Museum, W3C
+
  * 
  * Schema fragment(s) for this class:
  * <pre>

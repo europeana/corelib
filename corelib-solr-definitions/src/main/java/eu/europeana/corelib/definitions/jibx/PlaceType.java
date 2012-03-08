@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** 
- * An “extent in space, in particular on the surface of the earth, in the pure sense of physics: independent from temporal phenomena and matter” (CIDOC CRM) Example:the region of
- space occupied by Rome today, the region of space occupied by the United Kingdom today, the region of space occupied by the Republic of Crimea in 1945
+ * An "extent in space, in particular on the surface of
+ the earth, in the pure sense of physics: independent from temporal
+ phenomena and matter" (CIDOC CRM) Example:the region of
+ space occupied by Rome today, the region of space occupied by the United
+ Kingdom today, the region of space occupied by the Republic of
+ Crimea in 1945
+
  * 
  * Schema fragment(s) for this class:
  * <pre>
