@@ -52,7 +52,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public String[] getOwlSameAs() {
-		return this.owlSameAs.clone();
+		return (this.owlSameAs!=null?this.owlSameAs.clone():null);
 	}
 
 	@Override

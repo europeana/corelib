@@ -42,7 +42,7 @@ public class ConceptImpl implements Concept {
 	private Map<String, String> altLabel;
 	private String[] note;
 	private String[] broader;
-	@Indexed(unique=true)
+	@Indexed(unique = true)
 	private String about;
 
 	@Override
@@ -67,12 +67,12 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public String[] getNote() {
-		return this.note.clone();
+		return (this.note != null ? this.note.clone() : null);
 	}
 
 	@Override
 	public String[] getBroader() {
-		return this.broader.clone();
+		return (this.broader != null ? this.broader.clone() : null);
 	}
 
 	@Override
@@ -110,17 +110,17 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null) {
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()) {
 			return this.getId().equals(((ConceptImpl) o).getId());
 		}
 		return false;
 	}
-	
+
 	@Override
-	public int hashCode(){ 
+	public int hashCode() {
 		return this.about.hashCode();
 	}
 }

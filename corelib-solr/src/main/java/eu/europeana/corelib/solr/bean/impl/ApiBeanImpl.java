@@ -33,108 +33,111 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Field("edm_concept")
-    private String[] edmConceptTerm;
+	private String[] edmConceptTerm;
 
-    @Field("edm_concept_label")
-    private List<Map<String,String>> edmConceptPrefLabel;
+	@Field("edm_concept_label")
+	private List<Map<String, String>> edmConceptPrefLabel;
 
-    @Field("edm_concept_broader")
-    private String[] edmConceptBroaderTerm;
+	@Field("edm_concept_broader")
+	private String[] edmConceptBroaderTerm;
 
-    @Field("edm_concept_broader_label")
-    private List<Map<String,String>> edmConceptBroaderLabel;
-    
-    @Field("edm_timespan_broader_term")
-    private String[] edmTimespanBroaderTerm;
+	@Field("edm_concept_broader_label")
+	private List<Map<String, String>> edmConceptBroaderLabel;
 
-    @Field("edm_timespan_broader_label")
-    private List<Map<String,String>> edmTimespanBroaderLabel;
+	@Field("edm_timespan_broader_term")
+	private String[] edmTimespanBroaderTerm;
 
-    @Field("pl_prefLabel.en")
-    private String[] prefLabelEn;
+	@Field("edm_timespan_broader_label")
+	private List<Map<String, String>> edmTimespanBroaderLabel;
 
-    @Field("pl_prefLabel.ru")
-    private String[] prefLabelRu;
-    
-    @Field("europeana_recordHashFirst")
-    private String[] recordHashFirstSix;
-    
-    @Field("UGC")
-    private String[] ugc;
-    
-    @Field("edm_rights")
-    private String[] edmRights;
+	@Field("pl_prefLabel.en")
+	private String[] prefLabelEn;
 
-    @Field("COMPLETENESS")
-    private String[] completeness;
+	@Field("pl_prefLabel.ru")
+	private String[] prefLabelRu;
 
-    @Field("COUNTRY")
-    private String[] country;
-    
-    private int score;
-    private String debugQuery;
+	@Field("europeana_recordHashFirst")
+	private String[] recordHashFirstSix;
 
-    @Field("europeana_collectionName")
-    private String[] europeanaCollectionName;
-    private int index;
-    
-    @Field("edm_place_broader_term")
-    private String[] enrichmentPlaceBroaderTerm;
+	@Field("UGC")
+	private String[] ugc;
 
-    @Field("edm_place_alt_label")
-    private List<Map<String,String>> edmPlaceAltLabel;
+	@Field("edm_rights")
+	private String[] edmRights;
 
-    @Field("dcterms_isPartOf")
-    private String[] dctermsIsPartOf;
+	@Field("COMPLETENESS")
+	private String[] completeness;
 
-	 @Override
-	    public String[] getEdmPlaceBroaderTerm() {
-	        return enrichmentPlaceBroaderTerm.clone();
-	    }
+	@Field("COUNTRY")
+	private String[] country;
 
-	    @Override
-	    public List<Map<String,String>> getEdmPlaceAltLabel() {
-	        return edmPlaceAltLabel;
-	    }
-	    
-	    @Override
-	    public String[] getEdmTimespanBroaderTerm() {
-	        return edmTimespanBroaderTerm.clone();
-	    }
+	private int score;
+	private String debugQuery;
 
-	    @Override
-	    public List<Map<String,String>> getEdmTimespanBroaderLabel() {
-	        return edmTimespanBroaderLabel;
-	    }
-	    
-	    @Override
-	    public String[] getEdmConcept() {
-	        return edmConceptTerm.clone();
-	    }
+	@Field("europeana_collectionName")
+	private String[] europeanaCollectionName;
+	private int index;
 
-	    @Override
-	    public List<Map<String,String>> getEdmConceptLabel() {
-	        return edmConceptPrefLabel;
-	    }
+	@Field("edm_place_broader_term")
+	private String[] enrichmentPlaceBroaderTerm;
 
-	    @Override
-	    public String[] getEdmConceptBroaderTerm() {
-	        return edmConceptBroaderTerm.clone();
-	    }
+	@Field("edm_place_alt_label")
+	private List<Map<String, String>> edmPlaceAltLabel;
 
-	    @Override
-	    public List<Map<String,String>> getEdmConceptBroaderLabel() {
-	        return edmConceptBroaderLabel;
-	    }
-	    
-	    @Override
-	    public String[] getAggregationEdmRights() {
-	        return this.edmRights.clone();
-	    }
-	    
-	    @Override
-	    public String[] getDctermsIsPartOf() {
-	        return this.dctermsIsPartOf.clone();
-	    }
+	@Field("dcterms_isPartOf")
+	private String[] dctermsIsPartOf;
+
+	@Override
+	public String[] getEdmPlaceBroaderTerm() {
+		return (enrichmentPlaceBroaderTerm != null ? enrichmentPlaceBroaderTerm
+				.clone() : null);
+	}
+
+	@Override
+	public List<Map<String, String>> getEdmPlaceAltLabel() {
+		return edmPlaceAltLabel;
+	}
+
+	@Override
+	public String[] getEdmTimespanBroaderTerm() {
+		return (edmTimespanBroaderTerm != null ? edmTimespanBroaderTerm.clone()
+				: null);
+	}
+
+	@Override
+	public List<Map<String, String>> getEdmTimespanBroaderLabel() {
+		return edmTimespanBroaderLabel;
+	}
+
+	@Override
+	public String[] getEdmConcept() {
+		return (edmConceptTerm != null ? edmConceptTerm.clone() : null);
+	}
+
+	@Override
+	public List<Map<String, String>> getEdmConceptLabel() {
+		return edmConceptPrefLabel;
+	}
+
+	@Override
+	public String[] getEdmConceptBroaderTerm() {
+		return (edmConceptBroaderTerm != null ? edmConceptBroaderTerm.clone()
+				: null);
+	}
+
+	@Override
+	public List<Map<String, String>> getEdmConceptBroaderLabel() {
+		return edmConceptBroaderLabel;
+	}
+
+	@Override
+	public String[] getAggregationEdmRights() {
+		return (edmRights != null ? this.edmRights.clone() : null);
+	}
+
+	@Override
+	public String[] getDctermsIsPartOf() {
+		return (dctermsIsPartOf != null ? this.dctermsIsPartOf.clone() : null);
+	}
 
 }

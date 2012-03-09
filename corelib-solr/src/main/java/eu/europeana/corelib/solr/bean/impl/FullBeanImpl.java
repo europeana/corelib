@@ -91,7 +91,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<PlaceImpl> getPlaces() {
-		return places;
+		return this.places;
 	}
 
 
@@ -102,12 +102,12 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<AgentImpl> getAgents() {
-		return agents;
+		return this.agents;
 	}
 
 	@Override
 	public String getAbout() {
-		return about;
+		return this.about;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<TimespanImpl> getTimespans() {
-		return timespans;
+		return this.timespans;
 	}
 
 
@@ -134,7 +134,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<ConceptImpl> getConcepts() {
-		return concepts;
+		return this.concepts;
 	}
 
 
@@ -145,7 +145,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<AggregationImpl> getAggregations() {
-		return aggregations;
+		return this.aggregations;
 	}
 
 
@@ -155,7 +155,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	public EuropeanaAggregation getEuropeanaAggregation() {
-		return europeanaAggregation;
+		return this.europeanaAggregation;
 	}
 
 	// TODO required??
@@ -166,7 +166,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<ProxyImpl> getProxies() {
-		return proxies;
+		return this.proxies;
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<ProvidedCHOImpl> getProvidedCHOs() {
-		return providedCHOs;
+		return this.providedCHOs;
 	}
 
 	
@@ -223,7 +223,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getTitle() {
-		return this.title.clone();
+		return (this.title!=null?this.title.clone():null);
 	}
 
 	@Override
@@ -238,12 +238,12 @@ public class FullBeanImpl implements FullBean {
 	
 	@Override
 	public String[] getYear() {
-		return this.year.clone();
+		return (this.year!=null?this.year.clone():null);
 	}
 
 	@Override
 	public String[] getProvider() {
-		return this.provider.clone();
+		return (this.provider!=null?this.provider.clone():null);
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getLanguage() {
-		return this.language.clone();
+		return (this.language!=null?this.language.clone():null);
 	}
 
 	@Override

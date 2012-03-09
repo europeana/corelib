@@ -38,7 +38,7 @@ public class WebResourceImpl implements WebResource {
 	
 	@Override
 	public String getAbout() {
-		return about;
+		return this.about;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String[] getWebResourceDcRights() {
-		return this.webResourceDcRights.clone();
+		return (this.webResourceDcRights!=null?this.webResourceDcRights.clone():null);
 	}
 
 	@Override

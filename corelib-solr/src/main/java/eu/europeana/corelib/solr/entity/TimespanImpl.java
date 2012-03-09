@@ -66,7 +66,7 @@ public class TimespanImpl implements
 
 	@Override
 	public String[] getNote() {
-		return this.note.clone();
+		return (this.note!=null?this.note.clone():null);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class TimespanImpl implements
 
 	@Override
 	public String[] getIsPartOf() {
-		return this.isPartOf.clone();
+		return (this.isPartOf!=null?this.isPartOf.clone():null);
 	}
 
 	@Override

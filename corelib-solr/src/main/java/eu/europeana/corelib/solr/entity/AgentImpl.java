@@ -68,7 +68,7 @@ public class AgentImpl implements Agent {
 
 	@Override
 	public String[] getNote() {
-		return this.note.clone();
+		return (this.note!=null?this.note.clone():null);
 	}
 
 	@Override

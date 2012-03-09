@@ -69,12 +69,12 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public String[] getNote() {
-		return this.note.clone();
+		return (this.note!=null?this.note.clone():null);
 	}
 
 	@Override
 	public String[] getIsPartOf() {
-		return this.isPartOf.clone();
+		return (this.isPartOf!=null?this.isPartOf.clone():null);
 	}
 
 	@Override
@@ -143,6 +143,6 @@ public class PlaceImpl implements Place {
 	
 	@Override
 	public int hashCode(){ 
-		return this.about.hashCode();
+		return (int) (this.about!=null?this.about.hashCode():this.latitude*100+this.longitude);
 	}
 }

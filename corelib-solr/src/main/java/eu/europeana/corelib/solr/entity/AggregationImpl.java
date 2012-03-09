@@ -59,7 +59,7 @@ public class AggregationImpl implements Aggregation {
 	
 	@Override
 	public String getAggregatedCHO() {
-		return aggregatedCHO;
+		return this.aggregatedCHO;
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public Boolean getEdmPreviewNoDistribute() {
-		return edmPreviewNoDistribute;
+		return this.edmPreviewNoDistribute;
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String getEdmUgc() {
-		return edmUgc;
+		return this.edmUgc;
 	}
 	
 	@Override
@@ -89,7 +89,7 @@ public class AggregationImpl implements Aggregation {
 	
 	@Override
 	public String getAbout() {
-		return about;
+		return this.about;
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getDcRights() {
-		return this.dcRights.clone();
+		return (this.dcRights!=null?this.dcRights.clone():null);
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public List<WebResourceImpl> getWebResources() {
-		return webResources;
+		return this.webResources;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -193,7 +193,7 @@ public class AggregationImpl implements Aggregation {
 	
 	@Override
 	public String[] getHasView() {
-		return hasView.clone();
+		return (this.hasView!=null?hasView.clone():null);
 	}
 
 	@Override

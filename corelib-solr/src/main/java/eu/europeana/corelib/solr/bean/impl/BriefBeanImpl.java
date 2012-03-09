@@ -116,37 +116,37 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getTitle() {
-		return this.title.clone();
+		return (this.title!=null ? this.title.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmObject() { // was getThumbnails
-		return this.edmObject.clone();
+		return (this.edmObject!=null ? this.edmObject.clone() : null);
 	}
 
 	@Override
 	public String[] getDcCreator() {
-		return this.dcCreator.clone();
+		return (this.dcCreator!=null ? this.dcCreator.clone() : null);
 	}
 	
 	@Override
 	public String[] getDcContributor() {
-		return this.dcContributor.clone();
+		return (this.dcContributor!=null?this.dcContributor.clone():null);
 	}
 
 	@Override
 	public String[] getYear() {
-		return this.year.clone();
+		return (this.year!= null ? this.year.clone() :null);
 	}
 
 	@Override
 	public String[] getProvider() {
-		return this.provider.clone();
+		return (this.provider!=null ? this.provider.clone() : null);
 	}
 
 	@Override
 	public String[] getLanguage() {
-		return this.language.clone();
+		return (this.language!=null ? this.language.clone() : null);
 	}
 
 	@Override
@@ -155,12 +155,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	public String[] getRights() {
-		return this.rights.clone();
+		return (this.rights!=null ? this.rights.clone() :null );
 	}
 
 	@Override
 	public String[] getDataProvider() {
-		return this.edmDataProvider.clone();
+		return (this.edmDataProvider!=null ? this.edmDataProvider.clone() : null);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmPlace() {
-		return this.edmPlace.clone();
+		return (this.edmPlace !=null ? this.edmPlace.clone() : null);
 	}
 
 	@Override
@@ -180,52 +180,52 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public Float[] getEdmPlaceLatitude() {
-		return edmPlaceLatitude.clone();
+		return (this.edmPlaceLatitude !=null ? this.edmPlaceLatitude.clone() :null);
 	}
 
 	@Override
 	public Float[] getEdmPlaceLongitude() {
-		return edmPlaceLongitude.clone();
+		return (this.edmPlaceLongitude!=null ? this.edmPlaceLongitude.clone() :null);
 	}
 
 	@Override
 	public String[] getEdmTimespan() {
-		return edmTimespan.clone();
+		return (this.edmTimespan!=null ? this.edmTimespan.clone() : null);
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmTimespanLabel() {
-		return edmTimespanLabel;
+		return this.edmTimespanLabel;
 	}
 
 	@Override
 	public String[] getEdmTimespanBegin() {
-		return edmTimespanBegin.clone();
+		return (this.edmTimespanBegin!=null ? this.edmTimespanBegin.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmTimespanEnd() {
-		return edmTimespanEnd.clone();
+		return (this.edmTimespan != null ? this.edmTimespanEnd.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmAgent() {
-		return edmAgentTerm.clone();
+		return (this.edmAgentTerm != null ? this.edmAgentTerm.clone() : null);
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmAgentLabel() {
-		return edmAgentLabel;
+		return this.edmAgentLabel;
 	}
 
 	@Override
 	public String[] getDctermsHasPart() {
-		return this.dctermsHasPart.clone();
+		return (this.dctermsHasPart != null ? this.dctermsHasPart.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsSpatial() {
-		return this.dctermsSpatial.clone();
+		return (this.dctermsSpatial != null ? this.dctermsSpatial.clone() : null);
 	}
 
 }
