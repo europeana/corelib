@@ -110,6 +110,17 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((ConceptImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((ConceptImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

@@ -18,7 +18,8 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.*;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 /**
@@ -74,8 +75,20 @@ public class WebResourceImpl implements WebResource {
 	public ObjectId getId() {
 		return this.id;
 	}
+	
 	@Override
-	public boolean equals(Object o){
-		return this.getId().equals(((WebResourceImpl)o).getId());
+	public boolean equals(Object o) {
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((WebResourceImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

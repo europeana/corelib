@@ -96,7 +96,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setPlaces(List<? extends Place> places) {
-		this.places = (ArrayList<PlaceImpl>) places;
+		this.places = (List<PlaceImpl>) places;
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
-		this.agents = (ArrayList<AgentImpl>) agents;
+		this.agents = (List<AgentImpl>) agents;
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setTimespans(List<? extends Timespan> timespans) {
-		this.timespans = (ArrayList<TimespanImpl>) timespans;
+		this.timespans = (List<TimespanImpl>) timespans;
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setConcepts(List<? extends Concept> concepts) {
-		this.concepts = (ArrayList<ConceptImpl>) concepts;
+		this.concepts = (List<ConceptImpl>) concepts;
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setAggregations(List<? extends Aggregation> aggregations) {
-		this.aggregations = (ArrayList<AggregationImpl>) aggregations;
+		this.aggregations = (List<AggregationImpl>) aggregations;
 	}
 
 	public EuropeanaAggregation getEuropeanaAggregation() {
@@ -171,7 +171,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setProxies(List<? extends Proxy> proxies) {
-		this.proxies = (ArrayList<ProxyImpl>) proxies;
+		this.proxies = (List<ProxyImpl>) proxies;
 	}
 
 	@Override
@@ -1049,7 +1049,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((FullBeanImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((FullBeanImpl) o).getId());
+		}
+		return false;
 	}
 
 	@Override
@@ -1060,7 +1066,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
-		this.relatedItems = (ArrayList<BriefBeanImpl>) relatedItems;
+		this.relatedItems = (List<BriefBeanImpl>) relatedItems;
 
 	}
 
@@ -1084,5 +1090,10 @@ public class FullBeanImpl implements FullBean {
 			}
 		}
 		return dcCreatorList.toArray(new String[dcCreatorList.size()]);
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

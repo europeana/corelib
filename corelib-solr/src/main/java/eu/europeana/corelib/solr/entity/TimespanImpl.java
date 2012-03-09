@@ -123,7 +123,18 @@ public class TimespanImpl implements
 		this.isPartOf = isPartOf.clone();
 	}
 	@Override
-	public boolean equals(Object o){
-		return this.getId().equals(((TimespanImpl)o).getId());
+	public boolean equals(Object o) {
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((TimespanImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

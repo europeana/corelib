@@ -82,6 +82,17 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((ProvidedCHOImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((ProvidedCHOImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

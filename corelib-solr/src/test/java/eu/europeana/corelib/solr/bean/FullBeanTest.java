@@ -154,6 +154,7 @@ public class FullBeanTest {
 
 	private Aggregation createAggregation(WebResource webResource) {
 		Aggregation aggregation = new AggregationImpl();
+		aggregation.setAbout("test about");
 		ArrayList<WebResource> webResources = new ArrayList<WebResource>();
 		webResources.add(webResource);
 		aggregation.setWebResources(webResources);
@@ -203,6 +204,7 @@ public class FullBeanTest {
 	 */
 	private Concept createConcept() {
 		Concept concept = new ConceptImpl();
+		concept.setAbout("about");
 		concept.setNote(new String[] { "test note" });
 		concept.setBroader(new String[] { "test broader" });
 		Map<String, String> prefLabel = new HashMap<String, String>();
@@ -228,6 +230,7 @@ public class FullBeanTest {
 	 */
 	private Place createPlace() {
 		Place place = new PlaceImpl();
+		place.setAbout("test about");
 		place.setIsPartOf(new String[] { "test isPartOf" });
 		place.setLatitude(0f);
 		place.setLongitude(0f);
@@ -257,6 +260,7 @@ public class FullBeanTest {
 	 */
 	private Timespan createTimespan() {
 		Timespan timespan = new TimespanImpl();
+		timespan.setAbout("test about");
 		timespan.setNote(new String[] { "test note" });
 		timespan.setBegin("test begin");
 		timespan.setEnd("test end");
@@ -284,6 +288,7 @@ public class FullBeanTest {
 	 */
 	private Proxy createProxy() {
 		Proxy proxy = new ProxyImpl();
+		proxy.setAbout("about");
 		proxy.setDcContributor(new String[] { "test dc:contributor" });
 		proxy.setDcCoverage(new String[] { "test dc:coverage" });
 		proxy.setDcCreator(new String[] { "test dc:creator" });
@@ -389,6 +394,7 @@ public class FullBeanTest {
 	 */
 	private Agent createAgent() {
 		Agent agent = new AgentImpl();
+		agent.setAbout("test about");
 		agent.setNote(new String[] { "test note" });
 		Map<String, String> prefLabel = new HashMap<String, String>();
 		prefLabel.put("en", "test prefLabel");

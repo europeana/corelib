@@ -132,6 +132,17 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((PlaceImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((PlaceImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

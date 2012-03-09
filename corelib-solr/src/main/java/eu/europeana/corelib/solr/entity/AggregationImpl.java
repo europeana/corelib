@@ -17,12 +17,14 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.*;
+import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -48,7 +50,7 @@ public class AggregationImpl implements Aggregation {
 	private String[] hasView;
 	private String aggregatedCHO;
 	@Embedded
-	private ArrayList<WebResourceImpl> webResources;
+	private List<WebResourceImpl> webResources;
 	
 	@Indexed(unique=true, dropDups=true)
 	private String about;
@@ -178,14 +180,14 @@ public class AggregationImpl implements Aggregation {
 	}
 
 	@Override
-	public ArrayList<WebResourceImpl> getWebResources() {
+	public List<WebResourceImpl> getWebResources() {
 		return webResources;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setWebResources(List<? extends WebResource> webResources) {
-		this.webResources = (ArrayList<WebResourceImpl>) webResources;
+		this.webResources = (List<WebResourceImpl>) webResources;
 	}
 
 	
@@ -201,8 +203,17 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(
-				((AggregationImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((AggregationImpl) o).getId());
+		}
+		return false;
 	}
 
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
+	}
 }

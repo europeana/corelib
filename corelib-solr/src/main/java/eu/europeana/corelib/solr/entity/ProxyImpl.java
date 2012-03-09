@@ -521,7 +521,18 @@ public class ProxyImpl implements Proxy {
 
 
 	@Override
-	public boolean equals(Object o){
-		return this.getId().equals(((ProxyImpl)o).getId());
+	public boolean equals(Object o) {
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((ProxyImpl) o).getId());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }

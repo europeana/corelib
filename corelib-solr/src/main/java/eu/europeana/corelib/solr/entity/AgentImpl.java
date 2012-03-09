@@ -118,6 +118,17 @@ public class AgentImpl implements Agent {
 
 	@Override
 	public boolean equals(Object o) {
-		return this.getId().equals(((AgentImpl) o).getId());
+		if(o==null){
+			return false;
+		}
+		if(o.getClass() == this.getClass()){
+			return this.getId().equals(((AgentImpl) o).getId());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){ 
+		return this.about.hashCode();
 	}
 }
