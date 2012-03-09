@@ -47,7 +47,7 @@ public interface BriefBean extends IdBean {
 
 	// here the dcterms namespaces starts
 
-	String[] getDcTermsSpatial();
+	String[] getDctermsSpatial();
 
 	// Ranking and Enrichment terms
 
@@ -75,7 +75,7 @@ public interface BriefBean extends IdBean {
 
 	String getFullDocUrl();
 
-	String[] getDcTermsHasPart();
+	String[] getDctermsHasPart();
 
 	String[] getDcCreator();
 

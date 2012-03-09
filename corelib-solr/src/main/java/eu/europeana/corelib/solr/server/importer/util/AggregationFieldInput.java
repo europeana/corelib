@@ -47,6 +47,10 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  * 
  */
 public class AggregationFieldInput {
+	
+	private AggregationFieldInput(){
+		
+	}
 	/**
 	 * Fill in a SolrInputDocument with Aggregation specific fields
 	 * 

@@ -29,6 +29,9 @@ import eu.europeana.corelib.definitions.solr.DocType;
  */
 public class SolrUtil {
 
+	private SolrUtil(){
+		
+	}
 	/**
 	 * Checks if the Facet is TYPE that everything is uppercase and known
 	 * DocType according to EDM

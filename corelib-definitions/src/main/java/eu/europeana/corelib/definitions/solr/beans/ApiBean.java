@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public interface ApiBean extends BriefBean {
 
-	String[] getDcTermsIsPartOf();
+	String[] getDctermsIsPartOf();
 	
 	String[] getAggregationEdmRights();
 	

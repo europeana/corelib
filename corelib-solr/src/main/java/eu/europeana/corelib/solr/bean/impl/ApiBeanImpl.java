@@ -133,7 +133,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	    }
 	    
 	    @Override
-	    public String[] getDcTermsIsPartOf() {
+	    public String[] getDctermsIsPartOf() {
 	        return this.dctermsIsPartOf.clone();
 	    }
 

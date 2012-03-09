@@ -219,12 +219,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	@Override
-	public String[] getDcTermsHasPart() {
+	public String[] getDctermsHasPart() {
 		return this.dctermsHasPart.clone();
 	}
 
 	@Override
-	public String[] getDcTermsSpatial() {
+	public String[] getDctermsSpatial() {
 		return this.dctermsSpatial.clone();
 	}
 

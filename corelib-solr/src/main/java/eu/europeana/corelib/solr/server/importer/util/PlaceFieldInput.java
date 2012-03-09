@@ -41,6 +41,9 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  */
 public class PlaceFieldInput {
 
+	private PlaceFieldInput(){
+		
+	}
 	/**
 	 * Create a SolrInputDocument with the Place field values filled in
 	 * 

@@ -11,7 +11,7 @@ public enum MoreLikeThis {
 			"contributor"), TITLE("title"), WHO("who"), WHAT("what"), WHERE(
 			"where"), WHEN("when");
 
-	String mlt;
+	private String mlt;
 
 	MoreLikeThis(String mlt) {
 		this.mlt = mlt;

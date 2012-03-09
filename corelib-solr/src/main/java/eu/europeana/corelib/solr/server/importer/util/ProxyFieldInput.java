@@ -40,6 +40,10 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  */
 public class ProxyFieldInput {
 
+	
+	private ProxyFieldInput(){
+		
+	}
 	/**
 	 * Create a SolrInputDocument with the Proxy fields filled in
 	 * 

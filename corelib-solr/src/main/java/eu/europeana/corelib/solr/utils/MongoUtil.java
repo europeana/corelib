@@ -12,6 +12,10 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 
 public class MongoUtil {
 
+	private MongoUtil(){
+		//Constructor must be private
+	}
+	
 	public static boolean contains(String[] str1, String str2) {
 		for (String str : str1) {
 			if (StringUtils.equals(str, str2)) {

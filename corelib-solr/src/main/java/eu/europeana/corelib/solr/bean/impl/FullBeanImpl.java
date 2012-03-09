@@ -54,6 +54,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
+@SuppressWarnings("unchecked")
 @Entity("record")
 public class FullBeanImpl implements FullBean {
 
@@ -93,7 +94,7 @@ public class FullBeanImpl implements FullBean {
 		return places;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void setPlaces(List<? extends Place> places) {
 		this.places = (List<PlaceImpl>) places;
@@ -114,7 +115,7 @@ public class FullBeanImpl implements FullBean {
 		this.about = about;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
 		this.agents = (List<AgentImpl>) agents;
@@ -125,7 +126,7 @@ public class FullBeanImpl implements FullBean {
 		return timespans;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void setTimespans(List<? extends Timespan> timespans) {
 		this.timespans = (List<TimespanImpl>) timespans;
@@ -136,7 +137,7 @@ public class FullBeanImpl implements FullBean {
 		return concepts;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void setConcepts(List<? extends Concept> concepts) {
 		this.concepts = (List<ConceptImpl>) concepts;
@@ -147,7 +148,7 @@ public class FullBeanImpl implements FullBean {
 		return aggregations;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void setAggregations(List<? extends Aggregation> aggregations) {
 		this.aggregations = (List<AggregationImpl>) aggregations;
@@ -168,7 +169,6 @@ public class FullBeanImpl implements FullBean {
 		return proxies;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setProxies(List<? extends Proxy> proxies) {
 		this.proxies = (List<ProxyImpl>) proxies;
@@ -179,7 +179,7 @@ public class FullBeanImpl implements FullBean {
 		return providedCHOs;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs) {
 		this.providedCHOs = (List<ProvidedCHOImpl>) providedCHOs;
@@ -271,7 +271,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsSpatial() {
+	public String[] getDctermsSpatial() {
 		ArrayList<String> dctermsSpatialList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsSpatial : proxy.getDctermsSpatial()) {
@@ -621,7 +621,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsAlternative() {
+	public String[] getDctermsAlternative() {
 		List<String> dctermsAlternativeList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsAlternative : proxy.getDctermsAlternative()) {
@@ -633,7 +633,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsConformsTo() {
+	public String[] getDctermsConformsTo() {
 		List<String> dctermsConformsToList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsConformsTo : proxy.getDctermsConformsTo()) {
@@ -645,7 +645,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsCreated() {
+	public String[] getDctermsCreated() {
 		List<String> dctermsCreatedList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsCreated : proxy.getDctermsCreated()) {
@@ -657,7 +657,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsExtent() {
+	public String[] getDctermsExtent() {
 		List<String> dctermsExtentList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsExtent : proxy.getDctermsExtent()) {
@@ -668,7 +668,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsHasFormat() {
+	public String[] getDctermsHasFormat() {
 		List<String> dctermsHasFormatList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsHasFormat : proxy.getDctermsHasFormat()) {
@@ -680,7 +680,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIsPartOf() {
+	public String[] getDctermsIsPartOf() {
 		List<String> dctermsIsPartOfList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIsPartOf : proxy.getDctermsIsPartOf()) {
@@ -692,7 +692,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIsReferencedBy() {
+	public String[] getDctermsIsReferencedBy() {
 		List<String> dctermsIsReferencedByList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIsReferencedBy : proxy
@@ -705,7 +705,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIsReplacedBy() {
+	public String[] getDctermsIsReplacedBy() {
 		List<String> dctermsIsReplacedByList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIsReplacedBy : proxy.getDctermsIsReplacedBy()) {
@@ -717,7 +717,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIsRequiredBy() {
+	public String[] getDctermsIsRequiredBy() {
 		List<String> dctermsIsRequiredByList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIsRequiredBy : proxy.getDctermsIsRequiredBy()) {
@@ -729,7 +729,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIsVersionOf() {
+	public String[] getDctermsIsVersionOf() {
 		List<String> dctermsIsVersionOfList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIsVersionOf : proxy.getDctermsIsVersionOf()) {
@@ -741,7 +741,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsIssued() {
+	public String[] getDctermsIssued() {
 		List<String> dctermsIssuedList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsIssued : proxy.getDctermsIssued()) {
@@ -752,7 +752,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsMedium() {
+	public String[] getDctermsMedium() {
 		List<String> dctermsMediumList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsMedium : proxy.getDctermsMedium()) {
@@ -763,7 +763,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsProvenance() {
+	public String[] getDctermsProvenance() {
 		List<String> dctermsProvenanceList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsProvenance : proxy.getDctermsProvenance()) {
@@ -775,7 +775,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsReferences() {
+	public String[] getDctermsReferences() {
 		List<String> dctermsReferencesList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsReferences : proxy.getDctermsReferences()) {
@@ -787,7 +787,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsReplaces() {
+	public String[] getDctermsReplaces() {
 		List<String> dctermsReplacesList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsReplaces : proxy.getDctermsReplaces()) {
@@ -799,7 +799,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsRequires() {
+	public String[] getDctermsRequires() {
 		List<String> dctermsRequiresList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsRequires : proxy.getDctermsRequires()) {
@@ -811,7 +811,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsTableOfContents() {
+	public String[] getDctermsTableOfContents() {
 		List<String> dctermsTableOfContentsList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsTableOfContents : proxy.getDctermsTOC()) {
@@ -823,7 +823,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsTemporal() {
+	public String[] getDctermsTemporal() {
 		List<String> dctermsTemporalList = new ArrayList<String>();
 		for (Proxy proxy : this.proxies) {
 			for (String dctermsTemporal : proxy.getDctermsTOC()) {
@@ -1012,7 +1012,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getDcTermsHasPart() {
+	public String[] getDctermsHasPart() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1063,7 +1063,6 @@ public class FullBeanImpl implements FullBean {
 		return this.relatedItems;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
 		this.relatedItems = (List<BriefBeanImpl>) relatedItems;

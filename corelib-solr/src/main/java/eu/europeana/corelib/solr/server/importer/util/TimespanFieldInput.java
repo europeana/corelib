@@ -41,6 +41,9 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  */
 public class TimespanFieldInput {
 
+	private TimespanFieldInput(){
+		
+	}
     /**
      * Create a SolrInputDocument with the Timespan fileds filled in
      *

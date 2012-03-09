@@ -44,6 +44,9 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
 
 public class AgentFieldInput {
 
+	private AgentFieldInput(){
+		
+	}
 	/**
 	 * Fill in a SolrInputDocument with Agent specific fields
 	 * 

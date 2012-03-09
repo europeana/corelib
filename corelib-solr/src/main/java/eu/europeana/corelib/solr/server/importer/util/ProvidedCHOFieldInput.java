@@ -42,6 +42,10 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  */
 public class ProvidedCHOFieldInput {
 
+	
+	private ProvidedCHOFieldInput(){
+		
+	}
     /**
      * Method filling in a SolrInputDocument with the fields of a providedCHO
      *

@@ -132,126 +132,126 @@ public interface FullBean extends ApiBean {
 	 * 
 	 * @return A String array with the dcterms:alternative fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsAlternative();
+	String[] getDctermsAlternative();
 
 	/**
 	 * Retrieve dcterms:conformsTo fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:conformsTo fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsConformsTo();
+	String[] getDctermsConformsTo();
 
 	/**
 	 * Retrieve dcterms:created fields from a Proxy
 	 * 
 	 * @return A Date array with the dcterms:created fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsCreated();
+	String[] getDctermsCreated();
 
 	/**
 	 * Retrieve dcterms:extent fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:extent fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsExtent();
+	String[] getDctermsExtent();
 
 	/**
 	 * Retrieve dcterms:hasFormat fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:hasFormat fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsHasFormat();
+	String[] getDctermsHasFormat();
 
 	/**
 	 * Retrieve dcterms:isPartOf fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:isPartOf fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIsPartOf();
+	String[] getDctermsIsPartOf();
 
 	/**
 	 * Retrieve dcterms:isReferencedBy fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:isReferencedBy fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIsReferencedBy();
+	String[] getDctermsIsReferencedBy();
 
 	/**
 	 * Retrieve dcterms:isReplacedBy fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:isReplacedBy fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIsReplacedBy();
+	String[] getDctermsIsReplacedBy();
 
 	/**
 	 * Retrieve dcterms:isRequiredBy fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:isRequiredby fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIsRequiredBy();
+	String[] getDctermsIsRequiredBy();
 
 	/**
 	 * Retrieve dcterms:isVersionOf fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:isVersionOf fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIsVersionOf();
+	String[] getDctermsIsVersionOf();
 
 	/**
 	 * Retrieve dcterms:issued fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:issued fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsIssued();
+	String[] getDctermsIssued();
 
 	/**
 	 * Retrieve dcterms:medium fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:medium fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsMedium();
+	String[] getDctermsMedium();
 
 	/**
 	 * Retrieve dcterms:provenance fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:provenance fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsProvenance();
+	String[] getDctermsProvenance();
 
 	/**
 	 * Retrieve dcterms:reference fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:reference fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsReferences();
+	String[] getDctermsReferences();
 
 	/**
 	 * Retrieve dcterms:replaces fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:replaces fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsReplaces();
+	String[] getDctermsReplaces();
 
 	/**
 	 * Retrieve dcterms:requires fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:requires fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsRequires();
+	String[] getDctermsRequires();
 
 	/**
 	 * Retrieve dcterms:tableOfContents fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:tableOfContents fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsTableOfContents();
+	String[] getDctermsTableOfContents();
 
 	/**
 	 * Retrieve dcterms:temporal fields from a Proxy
 	 * 
 	 * @return A String array with the dcterms:temporal fields for all proxies pointing to a CHO
 	 */
-	String[] getDcTermsTemporal();
+	String[] getDctermsTemporal();
 
 	String[] getEdmUGC();
 

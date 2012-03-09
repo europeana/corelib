@@ -42,6 +42,10 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  */
 public class ConceptFieldInput {
 
+	
+	private ConceptFieldInput(){
+		
+	}
 	/**
 	 * Retrun a SolrInputDocument with the Concept fields filled in
 	 * 
