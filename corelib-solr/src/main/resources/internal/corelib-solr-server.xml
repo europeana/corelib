@@ -42,38 +42,13 @@
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer">
         <constructor-arg>
         	<bean class="org.apache.solr.core.CoreContainer">
-		        <constructor-arg value="src/test/resources/solr"/>
+		        <constructor-arg value="target/test-classes/solr"/>
 		        <constructor-arg value="classpath:solr/solr.xml"/>
         	</bean>
         </constructor-arg>
         <constructor-arg value="collection1"/>
 	</bean>
 
-<!-- 	<bean id="corelib_solr_solrSelectServer1" class="eu.europeana.corelib.solr.server.impl.SolrServerImpl">
-        <constructor-arg value="#{europeanaProperties['solr1.selectUrl']}"/>
-        <property name="soTimeout" value="#{europeanaProperties['solr1.timeout']}"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr1.timeout']}"/>
-        <property name="suspendAfterTimeout" value="#{europeanaProperties['solr1.suspendAfterTimeout']}"></property>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-    </bean>
-
-    <bean id="corelib_solr_solrSelectServer2" class="eu.europeana.corelib.solr.server.impl.SolrServerImpl">
-        <constructor-arg value="#{europeanaProperties['solr2.selectUrl']}"/>
-        <property name="soTimeout" value="#{europeanaProperties['solr2.timeout']}"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr2.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-    </bean>
-
-    <bean id="corelib_solr_solrUpdateServer" class="eu.europeana.corelib.solr.server.impl.SolrServerImpl">
-        <constructor-arg value="#{europeanaProperties['solr.updateUrl']}"/>
-        <property name="soTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-    </bean> -->
-    
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.MongoDBServerImpl">
     	<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
