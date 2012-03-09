@@ -32,7 +32,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
  * Constructor for Concepts
@@ -134,7 +134,7 @@ public final class ConceptFieldInput {
 		if (conceptMongo.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : concept.getNoteList()) {
-				if (MongoUtil.contains(conceptMongo.getNote(),
+				if (MongoUtils.contains(conceptMongo.getNote(),
 						noteJibx.getString())) {
 					newNoteList.add(noteJibx.getString());
 				}
@@ -142,7 +142,7 @@ public final class ConceptFieldInput {
 			for (String note : conceptMongo.getNote()) {
 				newNoteList.add(note);
 			}
-			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+			MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
 					mongoServer, "note", newNoteList);
 		}
 
@@ -151,7 +151,7 @@ public final class ConceptFieldInput {
 			if (concept.getAltLabelList() != null) {
 				for (AltLabel altLabel : concept.getAltLabelList()) {
 					if (altLabel.getLang() != null) {
-						if (!MongoUtil.contains(newAltLabelMap, altLabel
+						if (!MongoUtils.contains(newAltLabelMap, altLabel
 								.getLang().getLang(), altLabel.getString())) {
 							newAltLabelMap.put(altLabel.getLang().getLang(),
 									altLabel.getString());
@@ -161,7 +161,7 @@ public final class ConceptFieldInput {
 					}
 				}
 			}
-			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+			MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
 					mongoServer, "end", newAltLabelMap);
 
 		}
@@ -171,7 +171,7 @@ public final class ConceptFieldInput {
 			if (concept.getPrefLabelList() != null) {
 				for (PrefLabel prefLabel : concept.getPrefLabelList()) {
 					if (prefLabel.getLang() != null) {
-						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
 								.getLang().getLang(), prefLabel.getString())) {
 							newPrefLabelMap.put(prefLabel.getLang().getLang(),
 									prefLabel.getString());
@@ -180,7 +180,7 @@ public final class ConceptFieldInput {
 						newPrefLabelMap.put("def", prefLabel.getString());
 					}
 				}
-				MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+				MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
 						mongoServer, "prefLabel", newPrefLabelMap);
 			
 			}
@@ -189,7 +189,7 @@ public final class ConceptFieldInput {
 		if (conceptMongo.getBroader() != null) {
 			List<String> broaderList = new ArrayList<String>();
 			for (Broader broaderJibx : concept.getBroaderList()) {
-				if (!MongoUtil.contains(conceptMongo.getBroader(),
+				if (!MongoUtils.contains(conceptMongo.getBroader(),
 						broaderJibx.getBroader())) {
 					broaderList.add(broaderJibx.getBroader());
 				}
@@ -197,7 +197,7 @@ public final class ConceptFieldInput {
 			for (String broader : conceptMongo.getBroader()) {
 				broaderList.add(broader);
 			}
-			MongoUtil.update(ConceptImpl.class, conceptMongo.getAbout(),
+			MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
 					mongoServer, "broader", broaderList);
 		}
 		return (ConceptImpl) mongoServer.searchByAbout(ConceptImpl.class,

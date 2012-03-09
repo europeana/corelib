@@ -28,8 +28,8 @@ import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
-import eu.europeana.corelib.solr.utils.SolrUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Class constructing a SOLR document and MongoDB representation of a
@@ -68,7 +68,7 @@ public final class ProvidedCHOFieldInput {
         }
         solrInputDocument.addField(
                 EdmLabel.EDM_IS_NEXT_IN_SEQUENCE.toString(),
-                SolrUtil.exists(ResourceType.class,
+                SolrUtils.exists(ResourceType.class,
                 providedCHO.getIsNextInSequence()).getResource());
 
         return solrInputDocument;
@@ -93,7 +93,7 @@ public final class ProvidedCHOFieldInput {
         if (mongoProvidedCHO == null) {
             mongoProvidedCHO = new ProvidedCHOImpl();
             mongoProvidedCHO.setAbout(providedCHO.getAbout());
-            mongoProvidedCHO.setEdmIsNextInSequence(SolrUtil.exists(
+            mongoProvidedCHO.setEdmIsNextInSequence(SolrUtils.exists(
                     ResourceType.class, providedCHO.getIsNextInSequence()).getResource());
             List<String> owlSameAsList = new ArrayList<String>();
             if (providedCHO.getSameAList() != null) {
@@ -107,10 +107,10 @@ public final class ProvidedCHOFieldInput {
             //update the ProvidedCHO
             //Start by updating the isNextInSequence fields
             if (!StringUtils.equals(mongoProvidedCHO.getEdmIsNextInSequence(),
-                    SolrUtil.exists(ResourceType.class, providedCHO.getIsNextInSequence()).getResource())) {
-                mongoProvidedCHO.setEdmIsNextInSequence(SolrUtil.exists(
+                    SolrUtils.exists(ResourceType.class, providedCHO.getIsNextInSequence()).getResource())) {
+                mongoProvidedCHO.setEdmIsNextInSequence(SolrUtils.exists(
                         ResourceType.class, providedCHO.getIsNextInSequence()).getResource());
-                MongoUtil.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
+                MongoUtils.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
   						"edmIsNextInSequence", providedCHO.getIsNextInSequence().getResource());
               
             }
@@ -121,7 +121,7 @@ public final class ProvidedCHOFieldInput {
                 for (SameAs sameAs : providedCHO.getSameAList()) {
                     owlSameAsList.add(sameAs.getResource());
                 }
-                MongoUtil.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
+                MongoUtils.update(ProvidedCHOImpl.class, mongoProvidedCHO.getAbout(), mongoServer,
   						"owlSameAs", owlSameAsList);
             }
 
@@ -130,7 +130,7 @@ public final class ProvidedCHOFieldInput {
     }
     
     public static void deleteProvideCHOFromMongo(String about, MongoDBServer mongoServer){
-    	MongoUtil.delete(ProvidedCHOImpl.class,about,mongoServer);
+    	MongoUtils.delete(ProvidedCHOImpl.class,about,mongoServer);
     }
     
 }

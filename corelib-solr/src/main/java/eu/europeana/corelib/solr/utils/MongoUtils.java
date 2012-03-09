@@ -10,9 +10,9 @@ import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.solr.server.MongoDBServer;
 
-public final class MongoUtil {
+public final class MongoUtils {
 
-	private MongoUtil(){
+	private MongoUtils(){
 		//Constructor must be private
 	}
 	

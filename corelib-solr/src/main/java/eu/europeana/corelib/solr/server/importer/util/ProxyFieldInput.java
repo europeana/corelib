@@ -30,8 +30,8 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
-import eu.europeana.corelib.solr.utils.SolrUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Constructor for the Proxy Entity
@@ -60,15 +60,15 @@ public final class ProxyFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				providedCHO.getAbout());
-		solrInputDocument.addField(EdmLabel.EDM_TYPE.toString(), SolrUtil
+		solrInputDocument.addField(EdmLabel.EDM_TYPE.toString(), SolrUtils
 				.exists(EdmType.class, (providedCHO.getType())).toString());
 		solrInputDocument.addField(
 				EdmLabel.EDM_CURRENT_LOCATION.toString(),
-				SolrUtil.exists(ResourceType.class,
+				SolrUtils.exists(ResourceType.class,
 						(providedCHO.getCurrentLocation())).getResource());
 
 		solrInputDocument.addField(EdmLabel.ORE_PROXY_FOR.toString(),
-				SolrUtil.exists(String.class, providedCHO.getAbout()));
+				SolrUtils.exists(String.class, providedCHO.getAbout()));
 
 		// Retrieve the dcterms namespace fields
 		List<eu.europeana.corelib.definitions.jibx.DCTermsType.Choice> dcTermsList = providedCHO
@@ -267,12 +267,12 @@ public final class ProxyFieldInput {
 
 		mongoProxy.setAbout(providedCHO.getAbout());
 
-		mongoProxy.setEdmCurrentLocation(SolrUtil.exists(ResourceType.class,
+		mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
 				(providedCHO.getCurrentLocation())).getResource());
-		mongoProxy.setEdmType(DocType.get(SolrUtil.exists(EdmType.class,
+		mongoProxy.setEdmType(DocType.get(SolrUtils.exists(EdmType.class,
 				(providedCHO.getType())).toString()));
 
-		mongoProxy.setProxyFor(SolrUtil.exists(String.class,
+		mongoProxy.setProxyFor(SolrUtils.exists(String.class,
 				providedCHO.getAbout()));
 
 		List<String> alternatives = new ArrayList<String>();
@@ -505,7 +505,7 @@ public final class ProxyFieldInput {
 		mongoProxy.setDcTitle(title.toArray(new String[title.size()]));
 		mongoProxy.setDcType(type.toArray(new String[type.size()]));
 		if (mongoServer.searchByAbout(ProxyImpl.class, mongoProxy.getAbout()) != null) {
-			MongoUtil.delete(ProxyImpl.class, mongoProxy.getAbout(), mongoServer);
+			MongoUtils.delete(ProxyImpl.class, mongoProxy.getAbout(), mongoServer);
 		} 
 		mongoServer.getDatastore().save(mongoProxy);
 		return mongoProxy;
@@ -529,7 +529,7 @@ public final class ProxyFieldInput {
 			Aggregation aggregation, MongoDBServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 
-		proxy.setProxyIn(SolrUtil.exists(String.class, aggregation.getAbout()));
+		proxy.setProxyIn(SolrUtils.exists(String.class, aggregation.getAbout()));
 		return proxy;
 	}
 
@@ -548,11 +548,11 @@ public final class ProxyFieldInput {
 			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY_IN.toString(),
-				SolrUtil.exists(String.class, aggregation.getAbout()));
+				SolrUtils.exists(String.class, aggregation.getAbout()));
 		return solrInputDocument;
 	}
 	
 	public static void deleteProxyFromMongo(String about, MongoDBServer mongoServer){
-		MongoUtil.delete(ProxyImpl.class, about, mongoServer);
+		MongoUtils.delete(ProxyImpl.class, about, mongoServer);
 	}
 }

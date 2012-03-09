@@ -32,7 +32,7 @@ import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
  * Constructor for a Timespan
@@ -126,7 +126,7 @@ public final class TimespanFieldInput {
 		if (mongoTimespan.getBegin() != null
   				&& !StringUtils.equals(timeSpan.getBegins().get(0),
   						mongoTimespan.getBegin())) {
-			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"begin", timeSpan.getBegins().get(0));
   			
 
@@ -134,7 +134,7 @@ public final class TimespanFieldInput {
   		if (mongoTimespan.getEnd() != null
   				&& !StringUtils.equals(timeSpan.getEnds().get(0),
   						mongoTimespan.getEnd())) {
-  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+  			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"end", timeSpan.getEnds().get(0));
   			
   		}
@@ -142,7 +142,7 @@ public final class TimespanFieldInput {
   		if (mongoTimespan.getNote() != null) {
   			List<String> newNoteList = new ArrayList<String>();
   			for (Note noteJibx : timeSpan.getNoteList()) {
-  				if (!MongoUtil.contains(mongoTimespan.getNote(), noteJibx.getString())) {
+  				if (!MongoUtils.contains(mongoTimespan.getNote(), noteJibx.getString())) {
   					newNoteList.add(noteJibx.getString());
   				}
   			}
@@ -150,7 +150,7 @@ public final class TimespanFieldInput {
   				newNoteList.add(note);
   			}
 
-  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+  			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"note", newNoteList);
   			
   		}
@@ -160,7 +160,7 @@ public final class TimespanFieldInput {
   			if (timeSpan.getAltLabelList() != null) {
   				for (AltLabel altLabel : timeSpan.getAltLabelList()) {
   					if (altLabel.getLang() != null) {
-  						if (!MongoUtil.contains(newAltLabelMap, altLabel
+  						if (!MongoUtils.contains(newAltLabelMap, altLabel
   								.getLang().getLang(), altLabel.getString())) {
   							newAltLabelMap.put(altLabel.getLang().getLang(),
   									altLabel.getString());
@@ -170,7 +170,7 @@ public final class TimespanFieldInput {
   					}
   				}
   			}
-  			MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+  			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"altLabel", newAltLabelMap);
 
   		}
@@ -180,7 +180,7 @@ public final class TimespanFieldInput {
   			if (timeSpan.getPrefLabelList() != null) {
   				for (PrefLabel prefLabel : timeSpan.getPrefLabelList()) {
   					if (prefLabel.getLang() != null) {
-  						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+  						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
   								.getLang().getLang(), prefLabel.getString())) {
   							newPrefLabelMap.put(prefLabel.getLang().getLang(),
   									prefLabel.getString());
@@ -189,7 +189,7 @@ public final class TimespanFieldInput {
   						newPrefLabelMap.put("def", prefLabel.getString());
   					}
   				}
-  				MongoUtil.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
+  				MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
   						"prefLabel", newPrefLabelMap);
 
   			}

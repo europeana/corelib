@@ -37,7 +37,7 @@ import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
-import eu.europeana.corelib.solr.utils.SolrUtil;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
@@ -104,7 +104,7 @@ public class SearchServiceImpl implements SearchService {
 //		}
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
-			if (SolrUtil.checkTypeFacet(refinements)) {
+			if (SolrUtils.checkTypeFacet(refinements)) {
 				SolrQuery solrQuery = new SolrQuery()
 						.setQuery(query.getQuery());
 				solrQuery.setFacet(true);

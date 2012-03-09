@@ -27,9 +27,9 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public final class SolrUtil {
+public final class SolrUtils {
 
-	private SolrUtil(){
+	private SolrUtils(){
 		
 	}
 	/**

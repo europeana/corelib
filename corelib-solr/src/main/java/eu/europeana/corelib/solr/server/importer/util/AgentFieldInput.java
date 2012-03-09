@@ -33,7 +33,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
  * Constructor of Agent Fields. 
@@ -163,20 +163,20 @@ public final class AgentFieldInput {
 		if (agent.getBegin() != null
 				&& !StringUtils.equals(agentType.getBegins().get(0),
 						agent.getBegin())) {
-			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "begin", agentType.getBegins().get(0));
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "begin", agentType.getBegins().get(0));
 		}
 		
 		if (agent.getEnd() != null
 				&& !StringUtils.equals(agentType.getEnds().get(0),
 						agent.getEnd())) {
-			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "end", agentType.getEnds().get(0));
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "end", agentType.getEnds().get(0));
 
 		}
 
 		if (agent.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : agentType.getNoteList()) {
-				if (!MongoUtil.contains(agent.getNote(), noteJibx.getString())) {
+				if (!MongoUtils.contains(agent.getNote(), noteJibx.getString())) {
 					newNoteList.add(noteJibx.getString());
 				}
 			}
@@ -184,7 +184,7 @@ public final class AgentFieldInput {
 				newNoteList.add(note);
 			}
 
-			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "note", newNoteList);
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "note", newNoteList);
 		}
 
 		if (agent.getAltLabel() != null) {
@@ -192,7 +192,7 @@ public final class AgentFieldInput {
 			if (agentType.getAltLabelList() != null) {
 				for (AltLabel altLabel : agentType.getAltLabelList()) {
 					if (altLabel.getLang() != null) {
-						if (!MongoUtil.contains(newAltLabelMap, altLabel
+						if (!MongoUtils.contains(newAltLabelMap, altLabel
 								.getLang().getLang(), altLabel.getString())) {
 							newAltLabelMap.put(altLabel.getLang().getLang(),
 									altLabel.getString());
@@ -202,7 +202,7 @@ public final class AgentFieldInput {
 					}
 				}
 			}
-			MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "altLabel", newAltLabelMap);
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "altLabel", newAltLabelMap);
 		}
 
 		if (agent.getPrefLabel() != null) {
@@ -210,7 +210,7 @@ public final class AgentFieldInput {
 			if (agentType.getPrefLabelList() != null) {
 				for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
 					if (prefLabel.getLang() != null) {
-						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
 								.getLang().getLang(), prefLabel.getString())) {
 							newPrefLabelMap.put(prefLabel.getLang().getLang(),
 									prefLabel.getString());
@@ -219,7 +219,7 @@ public final class AgentFieldInput {
 						newPrefLabelMap.put("def", prefLabel.getString());
 					}
 				}
-				MongoUtil.update(AgentImpl.class, agent.getAbout(), mongoServer, "prefLabel", newPrefLabelMap);
+				MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "prefLabel", newPrefLabelMap);
 			}
 		}
 		return (AgentImpl) mongoServer.searchByAbout(AgentImpl.class,

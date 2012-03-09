@@ -27,8 +27,8 @@ import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
-import eu.europeana.corelib.solr.utils.SolrUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Class Creating a MongoDB Web Resource
@@ -58,7 +58,7 @@ public final class WebResourcesFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.EDM_WEB_RESOURCE.toString(),
 				webResource.getAbout());
-		solrInputDocument.addField(EdmLabel.WR_EDM_RIGHTS.toString(), SolrUtil
+		solrInputDocument.addField(EdmLabel.WR_EDM_RIGHTS.toString(), SolrUtils
 				.exists(Rights.class, (webResource.getRights())).getResource());
 		if (webResource.getRightList() != null) {
 			for (Rights1 dcRights : webResource.getRightList()) {
@@ -100,6 +100,6 @@ public final class WebResourcesFieldInput {
 
 	public static void deleteWebResourceFromMongo(String about,
 			MongoDBServer mongoServer) {
-		MongoUtil.delete(WebResourceImpl.class, about, mongoServer);
+		MongoUtils.delete(WebResourceImpl.class, about, mongoServer);
 	}
 }

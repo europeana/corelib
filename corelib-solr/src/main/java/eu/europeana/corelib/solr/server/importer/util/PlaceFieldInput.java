@@ -31,7 +31,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.utils.MongoUtil;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 
 
 /**
@@ -153,14 +153,14 @@ public final class PlaceFieldInput {
 		if (place.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : placeType.getNoteList()) {
-				if (MongoUtil.contains(place.getNote(), noteJibx.getString())) {
+				if (MongoUtils.contains(place.getNote(), noteJibx.getString())) {
 					newNoteList.add(noteJibx.getString());
 				}
 			}
 			for (String note : place.getNote()) {
 				newNoteList.add(note);
 			}
-			MongoUtil.update(PlaceImpl.class, place.getAbout(), mongoServer,
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"note", newNoteList);
 
 		}
@@ -170,7 +170,7 @@ public final class PlaceFieldInput {
 			if (placeType.getAltLabelList() != null) {
 				for (AltLabel altLabel : placeType.getAltLabelList()) {
 					if (altLabel.getLang() != null) {
-						if (!MongoUtil.contains(newAltLabelMap, altLabel
+						if (!MongoUtils.contains(newAltLabelMap, altLabel
 								.getLang().getLang(), altLabel.getString())) {
 							newAltLabelMap.put(altLabel.getLang().getLang(),
 									altLabel.getString());
@@ -180,7 +180,7 @@ public final class PlaceFieldInput {
 					}
 				}
 			}
-			MongoUtil.update(PlaceImpl.class, place.getAbout(), mongoServer,
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"altLabel", newAltLabelMap);
 
 		}
@@ -190,7 +190,7 @@ public final class PlaceFieldInput {
 			if (placeType.getPrefLabelList() != null) {
 				for (PrefLabel prefLabel : placeType.getPrefLabelList()) {
 					if (prefLabel.getLang() != null) {
-						if (!MongoUtil.contains(newPrefLabelMap, prefLabel
+						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
 								.getLang().getLang(), prefLabel.getString())) {
 							newPrefLabelMap.put(prefLabel.getLang().getLang(),
 									prefLabel.getString());
@@ -199,7 +199,7 @@ public final class PlaceFieldInput {
 						newPrefLabelMap.put("def", prefLabel.getString());
 					}
 				}
-				MongoUtil.update(PlaceImpl.class, place.getAbout(),
+				MongoUtils.update(PlaceImpl.class, place.getAbout(),
 						mongoServer, "prefLabel", newPrefLabelMap);
 			}
 		}
@@ -208,7 +208,7 @@ public final class PlaceFieldInput {
 			List<String> isPartOfList = new ArrayList<String>();
 			if (placeType.getIsPartOfList() != null) {
 				for (IsPartOf isPartOfJibx : placeType.getIsPartOfList()) {
-					if (MongoUtil.contains(place.getIsPartOf(),
+					if (MongoUtils.contains(place.getIsPartOf(),
 							isPartOfJibx.getResource())) {
 						isPartOfList.add(isPartOfJibx.getResource());
 					}
@@ -217,18 +217,18 @@ public final class PlaceFieldInput {
 			for (String isPartOf : place.getIsPartOf()) {
 				isPartOfList.add(isPartOf);
 			}
-			MongoUtil.update(PlaceImpl.class, place.getAbout(), mongoServer,
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"isPartOf", isPartOfList);
 		}
 		if (placeType.getPosLat() != null) {
 
-			MongoUtil.update(PlaceImpl.class, place.getAbout(), mongoServer,
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"latitude", placeType.getPosLat().getPosLat());
 		}
 
 		if (placeType.getPosLong() != null) {
 
-			MongoUtil.update(PlaceImpl.class, place.getAbout(), mongoServer,
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"longitude", placeType.getPosLong().getPosLong());
 		}
 		return (PlaceImpl) mongoServer.searchByAbout(PlaceImpl.class,
