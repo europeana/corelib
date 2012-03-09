@@ -35,12 +35,11 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  * Class constructing a SOLR document and MongoDB representation of a
  * ProvidedCHO
  *
- * TODO:Implement deletes
  *
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public class ProvidedCHOFieldInput {
+public final class ProvidedCHOFieldInput {
 
 	
 	private ProvidedCHOFieldInput(){

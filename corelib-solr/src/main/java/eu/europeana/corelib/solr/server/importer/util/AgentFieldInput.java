@@ -36,13 +36,13 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.utils.MongoUtil;
 
 /**
- * Constructor of Agent Fields. TODO:update
+ * Constructor of Agent Fields. 
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 
-public class AgentFieldInput {
+public final class AgentFieldInput {
 
 	private AgentFieldInput(){
 		

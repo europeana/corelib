@@ -39,7 +39,7 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
-public class PlaceFieldInput {
+public final class PlaceFieldInput {
 
 	private PlaceFieldInput(){
 		

@@ -39,7 +39,7 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
-public class TimespanFieldInput {
+public final class TimespanFieldInput {
 
 	private TimespanFieldInput(){
 		

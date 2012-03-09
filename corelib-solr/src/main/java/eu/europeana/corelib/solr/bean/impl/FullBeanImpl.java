@@ -337,7 +337,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public ArrayList<Map<String, String>> getEdmTimespanLabel() {
+	public List<Map<String, String>> getEdmTimespanLabel() {
 		ArrayList<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
 		for (Timespan timespan : this.timespans) {
 			prefLabels.add(timespan.getPrefLabel());

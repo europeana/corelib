@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 public class IdBeanImpl implements IdBean {
 
 	@Field("europeana_id")
-	String id;
+	private String id;
 
 	@Override
 	public String getId() {

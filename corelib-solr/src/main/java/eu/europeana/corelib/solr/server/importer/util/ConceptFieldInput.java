@@ -40,7 +40,7 @@ import eu.europeana.corelib.solr.utils.MongoUtil;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public class ConceptFieldInput {
+public final class ConceptFieldInput {
 
 	
 	private ConceptFieldInput(){

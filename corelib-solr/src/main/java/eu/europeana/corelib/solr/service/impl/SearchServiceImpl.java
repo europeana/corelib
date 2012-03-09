@@ -130,14 +130,18 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setSpellcheck(queryResponse
 							.getSpellCheckResponse());
 				} catch (SolrServerException e) {
+					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+					
 				}
 
 			} else {
+				resultSet = null;
 				throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
 			}
 
 		} else {
+			resultSet = null;
 			throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
 		}
 		return resultSet;

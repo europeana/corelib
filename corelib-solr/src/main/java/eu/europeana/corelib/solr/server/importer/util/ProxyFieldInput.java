@@ -38,7 +38,7 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
-public class ProxyFieldInput {
+public final class ProxyFieldInput {
 
 	
 	private ProxyFieldInput(){

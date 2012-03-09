@@ -33,9 +33,9 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
 /**
  * Class Creating a MongoDB Web Resource
  * 
- * @author gmamakis
+ * @author Yorgos.Mamakis@ kb.nl
  */
-public class WebResourcesFieldInput {
+public final class WebResourcesFieldInput {
 
 	private WebResourcesFieldInput() {
 

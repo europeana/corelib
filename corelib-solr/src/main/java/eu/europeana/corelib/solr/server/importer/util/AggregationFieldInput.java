@@ -46,7 +46,7 @@ import eu.europeana.corelib.solr.utils.SolrUtil;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public class AggregationFieldInput {
+public final class AggregationFieldInput {
 	
 	private AggregationFieldInput(){
 		
