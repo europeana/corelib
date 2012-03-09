@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Entity("Webresource")
 public class WebResourceImpl implements WebResource {
 
-	@Id ObjectId id;
+	@Id private ObjectId id;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
 	
@@ -63,7 +63,7 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String[] getWebResourceDcRights() {
-		return this.webResourceDcRights;
+		return this.webResourceDcRights.clone();
 	}
 
 	@Override

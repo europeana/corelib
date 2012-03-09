@@ -37,7 +37,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Entity("Aggregation")
 public class AggregationImpl implements Aggregation {
 	@Id
-	ObjectId id;
+	private ObjectId id;
 
 	private String edmDataProvider;
 	private String edmIsShownBy;
@@ -166,7 +166,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getDcRights() {
-		return this.dcRights;
+		return this.dcRights.clone();
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class AggregationImpl implements Aggregation {
 	
 	@Override
 	public String[] getHasView() {
-		return hasView;
+		return hasView.clone();
 	}
 
 	@Override

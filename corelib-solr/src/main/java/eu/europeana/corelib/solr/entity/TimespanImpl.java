@@ -34,7 +34,7 @@ import com.google.code.morphia.annotations.Indexed;
 public class TimespanImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	@Id ObjectId id;
+	@Id private ObjectId id;
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private String[] note;
@@ -66,7 +66,7 @@ public class TimespanImpl implements
 
 	@Override
 	public String[] getNote() {
-		return this.note;
+		return this.note.clone();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class TimespanImpl implements
 
 	@Override
 	public String[] getIsPartOf() {
-		return this.isPartOf;
+		return this.isPartOf.clone();
 	}
 
 	@Override

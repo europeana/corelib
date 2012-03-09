@@ -28,8 +28,8 @@ import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
  */
 public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
-	String about;
-	ObjectId id;
+	private String about;
+	private ObjectId id;
 	@Override
 	public ObjectId getId() {
 		

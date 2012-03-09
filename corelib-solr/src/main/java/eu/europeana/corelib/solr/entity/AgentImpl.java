@@ -36,7 +36,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 public class AgentImpl implements Agent {
 
 	@Id
-	ObjectId id;
+	private ObjectId id;
 	@Indexed(unique=true)
 	private String about;
 	private Map<String, String> prefLabel;
@@ -68,7 +68,7 @@ public class AgentImpl implements Agent {
 
 	@Override
 	public String[] getNote() {
-		return this.note;
+		return this.note.clone();
 	}
 
 	@Override

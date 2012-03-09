@@ -36,7 +36,7 @@ import eu.europeana.corelib.definitions.solr.entity.Concept;
 public class ConceptImpl implements Concept {
 
 	@Id
-	ObjectId id;
+	private ObjectId id;
 
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
@@ -67,12 +67,12 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public String[] getNote() {
-		return this.note;
+		return this.note.clone();
 	}
 
 	@Override
 	public String[] getBroader() {
-		return this.broader;
+		return this.broader.clone();
 	}
 
 	@Override

@@ -32,9 +32,9 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl implements ProvidedCHO {
 
-	@Id ObjectId id;
+	@Id private ObjectId id;
 	@Indexed(unique=true)
-	String about;
+	private String about;
 	private String[] owlSameAs;
 	private String edmIsNextInSequence;
 	
@@ -52,7 +52,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public String[] getOwlSameAs() {
-		return this.owlSameAs;
+		return this.owlSameAs.clone();
 	}
 
 	@Override

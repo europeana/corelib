@@ -35,7 +35,7 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
 @Entity("Place")
 public class PlaceImpl implements Place {
 	@Id
-	ObjectId id;
+	private ObjectId id;
 
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
@@ -69,12 +69,12 @@ public class PlaceImpl implements Place {
 
 	@Override
 	public String[] getNote() {
-		return this.note;
+		return this.note.clone();
 	}
 
 	@Override
 	public String[] getIsPartOf() {
-		return this.isPartOf;
+		return this.isPartOf.clone();
 	}
 
 	@Override

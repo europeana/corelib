@@ -33,7 +33,7 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
 @Entity("Proxy")
 public class ProxyImpl implements Proxy {
 
-	@Id ObjectId id;
+	@Id private ObjectId id;
 	@Indexed(unique=true)
 	private String about;
 	private String[] dcContributor;
@@ -121,187 +121,187 @@ public class ProxyImpl implements Proxy {
 
 	@Override
 	public String[] getDcContributor() {
-		return this.dcContributor;
+		return this.dcContributor.clone();
 	}
 
 	@Override
 	public String[] getDcCoverage() {
-		return this.dcCoverage;
+		return this.dcCoverage.clone();
 	}
 
 	@Override
 	public String[] getDcCreator() {
-		return this.dcCreator;
+		return this.dcCreator.clone();
 	}
 
 	@Override
 	public String[] getDcDate() {
-		return this.dcDate;
+		return this.dcDate.clone();
 	}
 
 	@Override
 	public String[] getDcDescription() {
-		return this.dcDescription;
+		return this.dcDescription.clone();
 	}
 
 	@Override
 	public String[] getDcFormat() {
-		return this.dcFormat;
+		return this.dcFormat.clone();
 	}
 
 	@Override
 	public String[] getDcIdentifier() {
-		return this.dcIdentifier;
+		return this.dcIdentifier.clone();
 	}
 
 	@Override
 	public String[] getDcLanguage() {
-		return this.dcLanguage;
+		return this.dcLanguage.clone();
 	}
 
 	@Override
 	public String[] getDcPublisher() {
-		return this.dcPublisher;
+		return this.dcPublisher.clone();
 	}
 
 	@Override
 	public String[] getDcRelation() {
-		return this.dcRelation;
+		return this.dcRelation.clone();
 	}
 
 	@Override
 	public String[] getDcRights() {
-		return this.dcRights;
+		return this.dcRights.clone();
 	}
 
 	@Override
 	public String[] getDcSource() {
-		return this.dcSource;
+		return this.dcSource.clone();
 	}
 
 	@Override
 	public String[] getDcSubject() {
-		return this.dcSubject;
+		return this.dcSubject.clone();
 	}
 
 	@Override
 	public String[] getDcTitle() {
-		return this.dcTitle;
+		return this.dcTitle.clone();
 	}
 
 	@Override
 	public String[] getDcType() {
-		return this.dcType;
+		return this.dcType.clone();
 	}
 
 	@Override
 	public String[] getDctermsAlternative() {
-		return this.dctermsAlternative;
+		return this.dctermsAlternative.clone();
 	}
 
 	@Override
 	public String[] getDctermsConformsTo() {
-		return this.dctermsConformsTo;
+		return this.dctermsConformsTo.clone();
 	}
 
 	@Override
 	public String[] getDctermsCreated() {
-		return this.dctermsCreated;
+		return this.dctermsCreated.clone();
 	}
 
 	@Override
 	public String[] getDctermsExtent() {
-		return this.dctermsExtent;
+		return this.dctermsExtent.clone();
 	}
 
 	@Override
 	public String[] getDctermsHasFormat() {
-		return this.dctermsHasFormat;
+		return this.dctermsHasFormat.clone();
 	}
 
 	@Override
 	public String[] getDctermsHasPart() {
-		return this.dctermsHasPart;
+		return this.dctermsHasPart.clone();
 	}
 
 	@Override
 	public String[] getDctermsHasVersion() {
-		return this.dctermsHasVersion;
+		return this.dctermsHasVersion.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsFormatOf() {
-		return this.dctermsIsFormatOf;
+		return this.dctermsIsFormatOf.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsPartOf() {
-		return this.dctermsIsPartOf;
+		return this.dctermsIsPartOf.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsReferencedBy() {
-		return this.dctermsIsReferencedBy;
+		return this.dctermsIsReferencedBy.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsReplacedBy() {
-		return this.dctermsIsReplacedBy;
+		return this.dctermsIsReplacedBy.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsRequiredBy() {
-		return this.dctermsIsRequiredBy;
+		return this.dctermsIsRequiredBy.clone();
 	}
 
 	@Override
 	public String[] getDctermsIssued() {
-		return this.dctermsIssued;
+		return this.dctermsIssued.clone();
 	}
 
 	@Override
 	public String[] getDctermsIsVersionOf() {
-		return this.dctermsIsVersionOf;
+		return this.dctermsIsVersionOf.clone();
 	}
 
 	@Override
 	public String[] getDctermsMedium() {
-		return this.dctermsMedium;
+		return this.dctermsMedium.clone();
 	}
 
 	@Override
 	public String[] getDctermsProvenance() {
-		return this.dctermsProvenance;
+		return this.dctermsProvenance.clone();
 	}
 
 	@Override
 	public String[] getDctermsReferences() {
-		return this.dctermsReferences;
+		return this.dctermsReferences.clone();
 	}
 
 	@Override
 	public String[] getDctermsReplaces() {
-		return this.dctermsReplaces;
+		return this.dctermsReplaces.clone();
 	}
 
 	@Override
 	public String[] getDctermsRequires() {
-		return this.dctermsRequires;
+		return this.dctermsRequires.clone();
 	}
 
 	@Override
 	public String[] getDctermsSpatial() {
-		return this.dctermsSpatial;
+		return this.dctermsSpatial.clone();
 	}
 
 	@Override
 	public String[] getDctermsTOC() {
-		return this.dctermsTOC;
+		return this.dctermsTOC.clone();
 	}
 
 	@Override
 	public String[] getDctermsTemporal() {
-		return this.dctermsTemporal;
+		return this.dctermsTemporal.clone();
 	}
 
 	@Override

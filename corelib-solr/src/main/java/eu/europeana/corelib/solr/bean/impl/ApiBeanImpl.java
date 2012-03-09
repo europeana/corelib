@@ -89,7 +89,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	 @Override
 	    public String[] getEdmPlaceBroaderTerm() {
-	        return enrichmentPlaceBroaderTerm;
+	        return enrichmentPlaceBroaderTerm.clone();
 	    }
 
 	    @Override
@@ -99,7 +99,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	    
 	    @Override
 	    public String[] getEdmTimespanBroaderTerm() {
-	        return edmTimespanBroaderTerm;
+	        return edmTimespanBroaderTerm.clone();
 	    }
 
 	    @Override
@@ -109,7 +109,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	    
 	    @Override
 	    public String[] getEdmConcept() {
-	        return edmConceptTerm;
+	        return edmConceptTerm.clone();
 	    }
 
 	    @Override
@@ -119,7 +119,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	    @Override
 	    public String[] getEdmConceptBroaderTerm() {
-	        return edmConceptBroaderTerm;
+	        return edmConceptBroaderTerm.clone();
 	    }
 
 	    @Override
@@ -129,12 +129,12 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	    
 	    @Override
 	    public String[] getAggregationEdmRights() {
-	        return this.edmRights;
+	        return this.edmRights.clone();
 	    }
 	    
 	    @Override
 	    public String[] getDcTermsIsPartOf() {
-	        return this.dctermsIsPartOf;
+	        return this.dctermsIsPartOf.clone();
 	    }
 
 }

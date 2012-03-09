@@ -58,9 +58,9 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 public class FullBeanImpl implements FullBean {
 
 	@Id
-	ObjectId europeanaId;
+	private ObjectId europeanaId;
 	@Indexed(unique = true)
-	String about;
+	private String about;
 	private String[] title;
 
 	private String[] year;
@@ -1018,13 +1018,13 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public ArrayList<Map<String, String>> getEdmPlaceAltLabel() {
+	public List<Map<String, String>> getEdmPlaceAltLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ArrayList<Map<String, String>> getEdmConceptBroaderLabel() {
+	public List<Map<String, String>> getEdmConceptBroaderLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1036,7 +1036,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public ArrayList<Map<String, String>> getEdmTimespanBroaderLabel() {
+	public List<Map<String, String>> getEdmTimespanBroaderLabel() {
 		// TODO Auto-generated method stub
 		return null;
 	}
