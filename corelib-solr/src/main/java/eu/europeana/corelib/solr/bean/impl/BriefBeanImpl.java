@@ -116,37 +116,37 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getTitle() {
-		return this.title;
+		return this.title.clone();
 	}
 
 	@Override
 	public String[] getEdmObject() { // was getThumbnails
-		return this.edmObject;
+		return this.edmObject.clone();
 	}
 
 	@Override
 	public String[] getDcCreator() {
-		return this.dcCreator;
+		return this.dcCreator.clone();
 	}
 	
 	@Override
 	public String[] getDcContributor() {
-		return this.dcContributor;
+		return this.dcContributor.clone();
 	}
 
 	@Override
 	public String[] getYear() {
-		return this.year;
+		return this.year.clone();
 	}
 
 	@Override
 	public String[] getProvider() {
-		return this.provider;
+		return this.provider.clone();
 	}
 
 	@Override
 	public String[] getLanguage() {
-		return this.language;
+		return this.language.clone();
 	}
 
 	@Override
@@ -155,12 +155,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	public String[] getRights() {
-		return this.rights;
+		return this.rights.clone();
 	}
 
 	@Override
 	public String[] getDataProvider() {
-		return this.edmDataProvider;
+		return this.edmDataProvider.clone();
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmPlace() {
-		return this.edmPlace;
+		return this.edmPlace.clone();
 	}
 
 	@Override
@@ -180,17 +180,17 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public Float[] getEdmPlaceLatitude() {
-		return edmPlaceLatitude;
+		return edmPlaceLatitude.clone();
 	}
 
 	@Override
 	public Float[] getEdmPlaceLongitude() {
-		return edmPlaceLongitude;
+		return edmPlaceLongitude.clone();
 	}
 
 	@Override
 	public String[] getEdmTimespan() {
-		return edmTimespan;
+		return edmTimespan.clone();
 	}
 
 	@Override
@@ -200,17 +200,17 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmTimespanBegin() {
-		return edmTimespanBegin;
+		return edmTimespanBegin.clone();
 	}
 
 	@Override
 	public String[] getEdmTimespanEnd() {
-		return edmTimespanEnd;
+		return edmTimespanEnd.clone();
 	}
 
 	@Override
 	public String[] getEdmAgent() {
-		return edmAgentTerm;
+		return edmAgentTerm.clone();
 	}
 
 	@Override
@@ -220,12 +220,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getDcTermsHasPart() {
-		return this.dctermsHasPart;
+		return this.dctermsHasPart.clone();
 	}
 
 	@Override
 	public String[] getDcTermsSpatial() {
-		return this.dctermsSpatial;
+		return this.dctermsSpatial.clone();
 	}
 
 }

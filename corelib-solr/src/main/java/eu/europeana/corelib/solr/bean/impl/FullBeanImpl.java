@@ -182,7 +182,7 @@ public class FullBeanImpl implements FullBean {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs) {
-		this.providedCHOs = (ArrayList<ProvidedCHOImpl>) providedCHOs;
+		this.providedCHOs = (List<ProvidedCHOImpl>) providedCHOs;
 	}
 
 	@Override
@@ -223,7 +223,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getTitle() {
-		return this.title;
+		return this.title.clone();
 	}
 
 	@Override
@@ -238,12 +238,12 @@ public class FullBeanImpl implements FullBean {
 	
 	@Override
 	public String[] getYear() {
-		return this.year;
+		return this.year.clone();
 	}
 
 	@Override
 	public String[] getProvider() {
-		return this.provider;
+		return this.provider.clone();
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getLanguage() {
-		return this.language;
+		return this.language.clone();
 	}
 
 	@Override
