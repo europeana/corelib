@@ -75,7 +75,7 @@ public class MongoConstructor {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public void constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
+	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
@@ -89,6 +89,7 @@ public class MongoConstructor {
 		for (Choice element : elements) {
 
 			if (element.ifProvidedCHO()) {
+				fullBean.setAbout(element.getProvidedCHO().getAbout());
 				try {
 					providedCHOs.add(ProvidedCHOFieldInput.createProvidedCHOMongoFields(element.getProvidedCHO(),
 							mongoServer));
@@ -160,7 +161,7 @@ public class MongoConstructor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return fullBean;
 	}
 
 }

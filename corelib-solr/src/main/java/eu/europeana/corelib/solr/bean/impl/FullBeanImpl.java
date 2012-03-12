@@ -1093,6 +1093,6 @@ public class FullBeanImpl implements FullBean {
 	
 	@Override
 	public int hashCode(){ 
-		return this.about.hashCode();
+		return this.providedCHOs.hashCode();
 	}
 }

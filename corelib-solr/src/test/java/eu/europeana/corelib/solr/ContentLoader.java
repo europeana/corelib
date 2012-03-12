@@ -40,9 +40,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.util.MongoConstructor;
 import eu.europeana.corelib.solr.util.SolrConstructor;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance
@@ -110,8 +112,12 @@ public class ContentLoader {
 				IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
-
-				mongoConstructor.constructFullBean(rdf);
+				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+				if(mongoDBServer.searchByAbout(FullBeanImpl.class, fullBean.getAbout())!=null){
+					MongoUtils.updateFullBean(fullBean, mongoDBServer);
+				}else {
+					mongoDBServer.getDatastore().save(fullBean);
+				}
 				records.add(SolrConstructor.constructSolrDocument(rdf));
 
 				if (i % 1000 == 0 || i == collectionXML.size()) {
@@ -248,7 +254,12 @@ public class ContentLoader {
 				contentLoader.readRecords(COLLECTION);
 				contentLoader.parse();
 				contentLoader.commit();
-			} finally {
+			} 
+			catch(Exception e){
+				e.printStackTrace();
+			}
+				finally {
+			
 				if (contentLoader != null) {
 					contentLoader.cleanFiles();
 				}

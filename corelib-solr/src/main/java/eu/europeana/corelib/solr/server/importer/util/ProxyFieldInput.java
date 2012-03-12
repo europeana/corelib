@@ -505,9 +505,10 @@ public final class ProxyFieldInput {
 		mongoProxy.setDcTitle(title.toArray(new String[title.size()]));
 		mongoProxy.setDcType(type.toArray(new String[type.size()]));
 		if (mongoServer.searchByAbout(ProxyImpl.class, mongoProxy.getAbout()) != null) {
-			MongoUtils.delete(ProxyImpl.class, mongoProxy.getAbout(), mongoServer);
-		} 
+			MongoUtils.updateProxy(mongoProxy, mongoServer);
+		} else {
 		mongoServer.getDatastore().save(mongoProxy);
+		}
 		return mongoProxy;
 	}
 
