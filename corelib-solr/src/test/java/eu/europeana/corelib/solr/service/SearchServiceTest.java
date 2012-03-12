@@ -25,15 +25,14 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.solr.ContentLoader;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
@@ -79,7 +78,7 @@ public class SearchServiceTest {
 	
 	@Test
 	public void findAllTest() throws SolrTypeException {
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class, new Query("*:*"));
+		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
 		
 	}

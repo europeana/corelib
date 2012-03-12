@@ -18,6 +18,7 @@ package eu.europeana.corelib.solr.service.impl;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -125,7 +126,7 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setResults(queryResponse.getBeans(beanClazz));
 					
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().size());
+					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
 					resultSet.setSpellcheck(queryResponse
 							.getSpellCheckResponse());
