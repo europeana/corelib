@@ -46,10 +46,7 @@ public class BriefBeanTest {
 	
 	@Test
 	public void testBriefBean() throws Exception {
-		Query query = new Query();
-		query.setPageSize(12);
-		query.setQuery("*:*");
-		query.setStart(0);
+		Query query = new Query("*:*");
 		ResultSet<BriefBeanImpl> briefBeanResults = searchServer.search(BriefBeanImpl.class, query);
 		
 		assertTrue(briefBeanResults.getResultSize()>0);

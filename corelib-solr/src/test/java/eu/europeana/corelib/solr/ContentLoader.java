@@ -101,7 +101,7 @@ public class ContentLoader {
 		}
 	}
 
-	public void parse() {
+	public int parse() {
 		MongoConstructor mongoConstructor = new MongoConstructor();
 		mongoConstructor.setMongoServer(mongoDBServer);
 		for (File f : collectionXML) {
@@ -146,6 +146,7 @@ public class ContentLoader {
 				e.printStackTrace();
 			}
 		}
+		return failed;
 	}
 	
 	public void commit() {
@@ -159,18 +160,19 @@ public class ContentLoader {
 			System.out.println("Records imported: " + imported);
 			System.out.println("Records failed: " + failed);
 			solrServer = null;
-			System.out.println("Deleting files");
-			for (File f : collectionXML) {
-				f.delete();
-			}
-			System.out.println("Files deleted");
 		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void cleanFiles() {
+		System.out.println("Deleting files");
+		for (File f : collectionXML) {
+			f.delete();
+		}
+		System.out.println("Files deleted");
 	}
 
 	/**
@@ -240,11 +242,17 @@ public class ContentLoader {
 		MongoDBServer mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);
 		
 		if ( (solrServer != null) && (mongoDBServer != null)) {
-			
-			ContentLoader contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
-			contentLoader.readRecords(COLLECTION);
-			contentLoader.parse();
-			contentLoader.commit();
+			ContentLoader contentLoader = null;
+			try {
+				contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
+				contentLoader.readRecords(COLLECTION);
+				contentLoader.parse();
+				contentLoader.commit();
+			} finally {
+				if (contentLoader != null) {
+					contentLoader.cleanFiles();
+				}
+			}
 			
 		}
 		

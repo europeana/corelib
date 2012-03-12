@@ -35,7 +35,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Key;
-import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;

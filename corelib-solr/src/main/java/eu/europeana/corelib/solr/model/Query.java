@@ -28,6 +28,17 @@ public class Query {
 	private int pageSize;
 
 	/**
+	 * CONSTRUCTORS
+	 */
+	
+	public Query(String query) {
+		this.query = query;
+		start = 1;
+		pageSize = 12;
+	}
+	
+
+	/**
 	 * GETTERS & SETTTERS
 	 */
 
