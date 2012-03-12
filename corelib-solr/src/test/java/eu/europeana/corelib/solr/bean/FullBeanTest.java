@@ -34,6 +34,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -127,8 +129,8 @@ public class FullBeanTest {
 		fullBean.setType(DocType.IMAGE);
 		fullBean.setYear(new String[] { "2012" });
 		fullBean.setProvidedCHOs(providedCHOs);
-		ds.save(fullBean);
-		FullBean testFullBean = ds.find(FullBeanImpl.class).get();
+		Key<FullBeanImpl> fullBeanKey = ds.save(fullBean);
+		FullBean testFullBean = ds.find(FullBeanImpl.class).filter("_id", fullBeanKey.getId()).get();
 		assertEquals(fullBean.getId(), testFullBean.getId());
 		assertEquals(fullBean.getAbout(),testFullBean.getAbout());
 		assertEquals(fullBean.getAgents(), testFullBean.getAgents());
@@ -165,8 +167,8 @@ public class FullBeanTest {
 		aggregation.setEdmObject("test edm:Object");
 		aggregation.setEdmProvider("test edm:provider");
 		aggregation.setEdmRights("test edm:rights");
-		ds.save(aggregation);
-		Aggregation testAggregation = ds.find(AggregationImpl.class).get();
+		Key<Aggregation> aggregationKey = ds.save(aggregation);
+		Aggregation testAggregation = ds.find(AggregationImpl.class).filter("_id", aggregationKey.getId()).get();
 		assertEquals(aggregation, testAggregation);
 		assertEquals(aggregation.getWebResources(), testAggregation.getWebResources());
 		assertEquals(aggregation.getEdmDataProvider(), testAggregation.getEdmDataProvider());
@@ -188,8 +190,8 @@ public class FullBeanTest {
 		webResource.setAbout("test web Resource");
 		webResource.setWebResourceDcRights(new String[] { "test dc:rights" });
 		webResource.setWebResourceEdmRights("test edm:rights");
-		ds.save(webResource);
-		WebResource testWebResource = ds.find(WebResourceImpl.class).get();
+		Key<WebResource> webResourceKey = ds.save(webResource);
+		WebResource testWebResource = ds.find(WebResourceImpl.class).filter("_id", webResourceKey.getId()).get();
 		assertEquals(webResource, testWebResource);
 		assertEquals(webResource.getAbout(), testWebResource.getAbout());
 		assertEquals(webResource.getWebResourceEdmRights(), testWebResource.getWebResourceEdmRights());
@@ -213,8 +215,8 @@ public class FullBeanTest {
 		Map<String, String> altLabel = new HashMap<String, String>();
 		altLabel.put("en", "test altLabel");
 		concept.setAltLabel(altLabel);
-		ds.save(concept);
-		Concept testConcept = ds.find(ConceptImpl.class).get();
+		Key<Concept>conceptKey = ds.save(concept);
+		Concept testConcept = ds.find(ConceptImpl.class).filter("_id", conceptKey.getId()).get();
 		assertEquals(concept, testConcept);
 		assertEquals(concept.getAltLabel(), testConcept.getAltLabel());
 		assertEquals(concept.getPrefLabel(), testConcept.getPrefLabel());
@@ -241,8 +243,8 @@ public class FullBeanTest {
 		Map<String, String> altLabel = new HashMap<String, String>();
 		altLabel.put("en", "test altLabel");
 		place.setAltLabel(altLabel);
-		ds.save(place);
-		Place testPlace = ds.find(PlaceImpl.class).get();
+		Key<Place>placeKey  = ds.save(place);
+		Place testPlace = ds.find(PlaceImpl.class).filter("_id", placeKey.getId()).get();
 		assertEquals(place, testPlace);
 		assertArrayEquals(place.getIsPartOf(), testPlace.getIsPartOf());
 		assertArrayEquals(place.getNote(), testPlace.getNote());
@@ -271,8 +273,8 @@ public class FullBeanTest {
 		altLabel.put("en", "testAltLabel");
 		timespan.setAltLabel(altLabel);
 		timespan.setIsPartOf(new String[] { "test isPartOf" });
-		ds.save(timespan);
-		Timespan testTimespan = ds.find(TimespanImpl.class).get();
+		Key<Timespan> timespanKey = ds.save(timespan);
+		Timespan testTimespan = ds.find(TimespanImpl.class).filter("_id",timespanKey.getId()).get();
 		assertEquals(timespan.getAltLabel(), testTimespan.getAltLabel());
 		assertEquals(timespan.getPrefLabel(), testTimespan.getPrefLabel());
 		assertEquals(timespan.getBegin(), testTimespan.getBegin());
@@ -329,8 +331,8 @@ public class FullBeanTest {
 		proxy.setDcType(new String[] { "test dc:type" });
 		proxy.setEdmCurrentLocation("test edm:currentLocation");
 		proxy.setEdmType(DocType.IMAGE);
-		ds.save(proxy);
-		Proxy testProxy = ds.find(ProxyImpl.class).get();
+		Key<Proxy> proxyKey = ds.save(proxy);
+		Proxy testProxy = ds.find(ProxyImpl.class).filter("_id", proxyKey.getId()).get();
 		assertEquals(proxy, testProxy);
 		assertArrayEquals(proxy.getDcContributor(), testProxy.getDcContributor());
 		assertArrayEquals(proxy.getDcCoverage(), testProxy.getDcCoverage());
@@ -379,8 +381,8 @@ public class FullBeanTest {
 		providedCHO.setAbout("test edm:about");
 		providedCHO.setEdmIsNextInSequence("test isnextinsequence");
 		providedCHO.setOwlSameAs(new String[]{"test owlsameAs"});
-		ds.save(providedCHO);
-		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).get();
+		Key<ProvidedCHO> providedCHOKey = ds.save(providedCHO);
+		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).filter("_id", providedCHOKey.getId()).get();
 		assertEquals(providedCHO,testProvidedCHO);
 		assertEquals(providedCHO.getAbout(), testProvidedCHO.getAbout());
 		assertEquals(providedCHO.getEdmIsNextInSequence(),testProvidedCHO.getEdmIsNextInSequence());
@@ -406,8 +408,8 @@ public class FullBeanTest {
 		agent.setBegin("test begin");
 		
 		agent.setEnd("test end");
-		ds.save(agent);
-		Agent testAgent = ds.find(AgentImpl.class).get();
+		Key<Agent> agentKey = ds.save(agent);
+		Agent testAgent = ds.find(AgentImpl.class).filter("_id", agentKey.getId()).get();
 		assertEquals(agent, testAgent);
 		assertEquals(agent.getAltLabel(), testAgent.getAltLabel());
 		assertEquals(agent.getPrefLabel(), testAgent.getPrefLabel());
