@@ -79,6 +79,7 @@ public class SearchServiceTest {
 	@Test
 	public void findAllTest() throws SolrTypeException {
 		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
+		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
 		
 	}
