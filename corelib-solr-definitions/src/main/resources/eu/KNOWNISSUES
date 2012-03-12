@@ -1,0 +1,46 @@
+Issues and comments on EDM schema XSD files, 11-11-23
+-- Antoine Isaac 
+
+====================== Disclaimer
+
+This document just draws a flat lists the issues and questions raised, in a flat way. Some issues are merely cosmetic, like the presence of element type, which are in fact not used. Others are more important, as they should impact (marginally, though) the way we communicate on EDM with data providers.
+
+====================== Issues/Questions
+
+General:
+- Current organization of EDM.xsd, EDM-MAIN.xsd and RDF.xsd (with EDM.xsd and RDF.xsd having the same targetNamespace) causes problems for parsers like Xerces. Re-organization (e.g. merging EDm.xsd with EDM-MAIN.xsd or RDF.xsd) may be needed.
+
+EDM-MAIN.xsd
+- enrichments and EuropeanaAggregation. These elements are not to be used yet for data provider's data. They were commented out, as they could be misleading for providers:
+-- according to the EDM specs, the enrichments should go on the Europeana proxy, not the aggregation (we know for sure they're about the object, so they fit perfectly on the proxy!).
+-- neither Europeana aggregation nor enrichment elements should be in the schema for data ingestion. If providers have links to contextual resources to submit, to represent them they should use the "normal" properties (for instance, dc:subject, dc:creator) with a resource as object (not a literal).
+-- creating a second "Europeana-specific schema" seems a better option. In fact this is what we had in mind when we created http://europeanalabs.eu/wiki/EDMObjectTemplatesEuropeana, which is different from 
+- a new value for edm:type has been introduced (3D) which is not yet in the remainder of the documentation
+
+CONTEXT.xsd
+- there are discrepancies with the EDM object templates and the EDM spec itself:
+-- 3 new elements (begin, end, timespan) are introduced in the EDM namespace. Additionally, these are used instead of the ones recommended in the object templates.
+
+DC.xsd
+- DCType is defined as an extension of DCTermsType: it may have to be the other way round.
+
+DCTERMS.xsd
+- does not have elementFormDefault="qualified". As a result elements in this xsd do not belong in dcterms namespace as they probably should.
+
+
+====================== Cardinality 
+
+- problem of cardinality and order of sub-elements. Our templates specify min and max occurrences [1]. To represent them in XML schema, one must also constrain the order of the elements representing these properties, which is done in NTUA's schema. Personally, I'd favor dropping all occurrence constraints so as NOT to have an order constraint on elements. But XML experts (Borys, and Nicola for ESE) seem to prefer keeping the constraints, and putting a sequence. 
+Note that we can make different decisions, for different parts of the schema. For the DC elements gathered in the DCType type (DC.xsd), sequence is especially irrelevant--there's no occurrence constraint in fact. Nicola in the ESE schema [2] has represented them using a group and a choice, I think this is better.
+[1] http://europeanalabs.eu/wiki/EDMObjectTemplatesProviders
+[2] http://www.europeana.eu/schemas/ese/ESE-V3.4.xsd 
+
+- There are cardinality constraints that are probably difficult to capture in XML schema. You would have to play with sequences etc. And we can probably live without for a while: as long as the ingestion tooling does more validation than what the schema specifies...
+For provided CHO:
+-- Either dc:coverage or dc:subject or dc:type or dcterms:spatial must be provided
+-- Either dc:description or dc:title must be provided.
+-- dc:language is Mandatory for TEXT objects, strongly recommended for other object types with a language element.
+-- either isShownBy OR isShownAt is Mandatory
+For contextual resources:
+-- skos:prefLabel (currently maxOccurs="unbounded" minOccurs="0") should have a miximum occurrence of 1 *per language tag*. This might be just impossible to implement in XML schema in fact.
+
