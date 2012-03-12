@@ -1,21 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>corelib</artifactId>
-    <groupId>eu.europeana</groupId>
-    <version>2.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <groupId>eu.europeana.corelib</groupId>
-  <artifactId>corelib-solr-definitions</artifactId>
-  <name>corelib-solr-definitions</name>
-  <description>corelib-solr-definitions</description>
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>corelib</artifactId>
+		<groupId>eu.europeana</groupId>
+		<version>2.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>eu.europeana.corelib</groupId>
+	<artifactId>corelib-solr-definitions</artifactId>
+	<name>corelib-solr-definitions</name>
+	<description>corelib-solr-definitions</description>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jibx.version>1.2.3</jibx.version>
 	</properties>
 	<dependencies>
-	<!-- JIBX dependencies -->
+		<!-- JIBX dependencies -->
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-run</artifactId>
