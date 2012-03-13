@@ -17,9 +17,12 @@
 
 package eu.europeana.corelib.solr.service;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -69,6 +72,8 @@ public class SearchServiceTest {
 			contentLoader.readRecords(COLLECTION);
 			Assert.assertTrue("records failed to load...",contentLoader.parse() == 0);
 			contentLoader.commit();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		} finally {
 			if (contentLoader != null) {
 				contentLoader.cleanFiles();
@@ -86,8 +91,17 @@ public class SearchServiceTest {
 	
 	@AfterClass
 	public static void removeTestData() {
-		// doesn't need to delete solr data, as it is written in temp directory.
 		mongoDBServer.getDatastore().getDB().dropDatabase();
+		try {
+			solrServer.deleteByQuery("*:*");
+			solrServer.commit();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
