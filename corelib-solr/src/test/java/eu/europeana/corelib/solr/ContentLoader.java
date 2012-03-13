@@ -130,7 +130,7 @@ public class ContentLoader {
 			} catch (JiBXException e) {
 				failed++;
 				System.out.println("Error unmarshalling document " + f.getName()
-						+ " from the input file. Check for Schema changes");
+						+ " from the input file. Check for Schema changes ("+e.getMessage()+")");
 			//	e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.out.println("File does not exist");
