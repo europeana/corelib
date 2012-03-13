@@ -18,13 +18,16 @@
 package eu.europeana.corelib.solr.service;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,69 +58,63 @@ public class SearchServiceTest {
 	@Resource
 	private SearchService searchService;
 	
-	private static MongoDBServer mongoDBServer;
+	@Resource
+	private MongoDBServer mongoDBServer;
 	
-	private static SolrServer solrServer;
+	@Resource(name="corelib_solr_solrEmbedded")
+	private SolrServer solrServer;
 	
-	private static boolean dataLoaded = false;
+	private boolean dataLoaded = false;
 	
-	@BeforeClass
-	public static void loadTestData() {
-		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml", "/corelib-solr-test.xml" );
-		solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
-		mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);
-		SearchService searchService = context.getBean(SearchService.class);
-
-		ContentLoader contentLoader = null;
-		try {
-			contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
-			contentLoader.readRecords(COLLECTION);
-			Assert.assertTrue("records failed to load...",contentLoader.parse() == 0);
-			contentLoader.commit();
-			dataLoaded = true;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			if (contentLoader != null) {
-				contentLoader.cleanFiles();
+	private int testCount = 0;
+	
+	@Before
+	public void loadTestData() {
+		if (!dataLoaded) {
+			System.out.println("LOADING TEST DATA...");
+			ContentLoader contentLoader = null;
+			try {
+				contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
+				contentLoader.readRecords(COLLECTION);
+				Assert.assertTrue("records failed to load...",contentLoader.parse() == 0);
+				contentLoader.commit();
+				dataLoaded = true;
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			} finally {
+				if (contentLoader != null) {
+					contentLoader.cleanFiles();
+				}
 			}
-		}
-		// running test in LOADER...
-		try {
-			ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
-			Assert.assertNotNull("Did not got any results", results);
-			System.out.println(results.getResults());
-			Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
-		} catch (SolrTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
 	@Test
 	public void findAllTest() throws SolrTypeException {
-		System.out.println(solrServer.toString());
+		testCount++;
 		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
 		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
-		System.out.println(results.getResults());
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
 		
 	}
 	
-	@AfterClass
-	public static void removeTestData() {
-		mongoDBServer.getDatastore().getDB().dropDatabase();
-		try {
-			dataLoaded = false;
-			solrServer.deleteByQuery("*:*");
-			solrServer.commit();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@After
+	public void removeTestData() {
+		if (testCount == 1) {
+			System.out.println("CLEANING TEST DATA...");
+			mongoDBServer.getDatastore().getDB().dropDatabase();
+			try {
+				dataLoaded = false;
+				solrServer.deleteByQuery("*:*");
+				solrServer.commit();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

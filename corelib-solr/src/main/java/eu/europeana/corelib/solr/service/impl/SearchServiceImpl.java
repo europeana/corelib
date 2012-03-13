@@ -140,6 +140,5 @@ public class SearchServiceImpl implements SearchService {
 	
 	public void setSolrServer(SolrServer solrServer) {
 		this.solrServer = solrServer;
-		System.out.println("SOLR set: "+solrServer.toString());
 	}
 }
