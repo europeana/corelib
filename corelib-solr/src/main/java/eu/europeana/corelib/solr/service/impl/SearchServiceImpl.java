@@ -26,7 +26,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.solr.Facets;
+import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.definitions.solr.QueryType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -50,26 +50,25 @@ public class SearchServiceImpl implements SearchService {
 
 	// provided by setter
 	private SolrServer solrServer;
-	
+
 	@Resource(name = "corelib_solr_mongoServer")
 	private MongoDBServer mongoServer;
-	
+
 	@Value("#{europeanaProperties['solr1.facetLimit']}")
 	private int facetLimit;
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 
-//		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-//			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-//		}
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
-				+ europeanaObjectId + "\"");
-		solrQuery.set("mlt",true);
+		// if (!solrServer1.isActive() && !solrServer2.isActive()) {
+		// throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+		// }
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
+		solrQuery.set("mlt", true);
 		String[] mlt = new String[MoreLikeThis.values().length];
-		int i=0;
-		for (MoreLikeThis mltField : MoreLikeThis.values()){
-			mlt[i]=mltField.toString();
+		int i = 0;
+		for (MoreLikeThis mltField : MoreLikeThis.values()) {
+			mlt[i] = mltField.toString();
 			i++;
 		}
 		solrQuery.set("mlt.fl", mlt);
@@ -81,32 +80,28 @@ public class SearchServiceImpl implements SearchService {
 			queryResponse = solrServer.query(solrQuery);
 			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
 		} catch (SolrServerException e) {
-			//LOG HERE
+			// LOG HERE
 		}
 		return fullBean;
 	}
 
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz,
-			Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
 
-//		if (!solrServer1.isActive() && !solrServer2.isActive()) {
-//			throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-//		}
+		// if (!solrServer1.isActive() && !solrServer2.isActive()) {
+		// throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
+		// }
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery()
-						.setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 				solrQuery.setFacet(true);
-				for(Facets facet:Facets.values()){
+				for(Facet facet:query.getFacets()){
 					solrQuery.addFacetField(facet.toString());
 				}
 				if (refinements != null) {
-					
-						solrQuery.addFilterQuery(refinements);
-					
+					solrQuery.addFilterQuery(refinements);
 				}
 				solrQuery.setFacetLimit(facetLimit);
 				solrQuery.setRows(query.getPageSize());
@@ -116,18 +111,17 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setSortField("score", ORDER.desc);
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
-					
+
 					resultSet.setResults(queryResponse.getBeans(beanClazz));
-					
+
 					resultSet.setFacetFields(queryResponse.getFacetFields());
 					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse
-							.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-					
+
 				}
 
 			} else {
@@ -141,7 +135,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		return resultSet;
 	}
-	
+
 	public void setSolrServer(SolrServer solrServer) {
 		this.solrServer = solrServer;
 	}

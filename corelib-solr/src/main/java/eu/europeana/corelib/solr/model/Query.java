@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.model;
 
+import eu.europeana.corelib.definitions.solr.Facet;
+
 public class Query {
 
 	private String query;
@@ -26,6 +28,8 @@ public class Query {
 	private int start;
 	
 	private int pageSize;
+	
+	private Facet[] facets = Facet.values();
 
 	/**
 	 * CONSTRUCTORS
@@ -76,6 +80,14 @@ public class Query {
 	public Query setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 		return this;
+	}
+	
+	public Facet[] getFacets() {
+		return facets;
+	}
+	
+	public void setFacets(Facet[] facets) {
+		this.facets = facets;
 	}
 
 }
