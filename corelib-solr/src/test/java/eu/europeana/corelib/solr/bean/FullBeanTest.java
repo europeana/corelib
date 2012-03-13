@@ -70,10 +70,8 @@ import eu.europeana.corelib.solr.service.SearchService;
 public class FullBeanTest {
 	
 	@Resource(name = "corelib_solr_mongoServer")
-	MongoDBServer mongoServer;
+	private MongoDBServer mongoServer;
 	
-	@Resource(name = "corelib_solr_searchService")
-	SearchService searchService;
 	
 	private Datastore ds;
 
