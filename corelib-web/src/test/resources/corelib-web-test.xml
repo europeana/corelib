@@ -24,6 +24,9 @@
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
+	
+	<!-- INTERNAL -->
+	<import resource="corelib-definitions-test.xml" />
         
     <!-- OVERRIDE MAIL SERVER CONFIG TO LOCAL MOCK TEST SERVER -->    
 	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
