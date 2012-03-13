@@ -31,7 +31,9 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 	
-	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer">
+	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used... -->
+	
+	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
         <constructor-arg value="#{europeanaProperties['solr1.selectUrl']}"/>
 		<property name="followRedirects" value="false"/>	
         <property name="connectionTimeout" value="#{europeanaProperties['solr1.timeout']}"/>
@@ -39,7 +41,7 @@
         <property name="maxTotalConnections" value="125"/>
 	</bean>
 	
-	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer">
+	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
         <constructor-arg>
         	<bean class="org.apache.solr.core.CoreContainer">
 		        <constructor-arg value="target/test-classes/solr"/>
