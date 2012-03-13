@@ -18,7 +18,6 @@ package eu.europeana.corelib.solr.service.impl;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -48,7 +47,7 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
  */
 public class SearchServiceImpl implements SearchService {
 
-	@Resource(name = "corelib_solr_solrServer")
+	// provided by setter
 	private SolrServer solrServer;
 	
 	@Resource(name = "corelib_solr_mongoServer")
@@ -56,15 +55,6 @@ public class SearchServiceImpl implements SearchService {
 	
 	@Value("#{europeanaProperties['solr1.facetLimit']}")
 	private int facetLimit;
-
-
-	public SearchServiceImpl() {
-	}
-	
-	public SearchServiceImpl(SolrServer solrServer) {
-		super();
-		this.solrServer = solrServer;
-	}
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
@@ -150,5 +140,6 @@ public class SearchServiceImpl implements SearchService {
 	
 	public void setSolrServer(SolrServer solrServer) {
 		this.solrServer = solrServer;
+		System.out.println("SOLR set: "+solrServer.toString());
 	}
 }

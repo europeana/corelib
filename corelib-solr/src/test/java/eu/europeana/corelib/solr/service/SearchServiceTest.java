@@ -33,7 +33,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.solr.ContentLoader;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
@@ -53,18 +52,21 @@ public class SearchServiceTest {
 
 	private static String COLLECTION = "src/test/resources/records-test.zip";
 	
-	@Resource()
+	@Resource
 	private SearchService searchService;
 	
 	private static MongoDBServer mongoDBServer;
 	
 	private static SolrServer solrServer;
 	
+	private static boolean dataLoaded = false;
+	
 	@BeforeClass
 	public static void loadTestData() {
 		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml", "/corelib-solr-test.xml" );
 		solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
 		mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);
+		SearchService searchService = context.getBean(SearchService.class);
 
 		ContentLoader contentLoader = null;
 		try {
@@ -72,6 +74,7 @@ public class SearchServiceTest {
 			contentLoader.readRecords(COLLECTION);
 			Assert.assertTrue("records failed to load...",contentLoader.parse() == 0);
 			contentLoader.commit();
+			dataLoaded = true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -79,12 +82,25 @@ public class SearchServiceTest {
 				contentLoader.cleanFiles();
 			}
 		}
+		// running test in LOADER...
+		try {
+			ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
+			Assert.assertNotNull("Did not got any results", results);
+			System.out.println(results.getResults());
+			Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
+		} catch (SolrTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void findAllTest() throws SolrTypeException {
+		System.out.println(solrServer.toString());
+		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
 		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
+		System.out.println(results.getResults());
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(), results.getResultSize() == 205);
 		
 	}
@@ -93,6 +109,7 @@ public class SearchServiceTest {
 	public static void removeTestData() {
 		mongoDBServer.getDatastore().getDB().dropDatabase();
 		try {
+			dataLoaded = false;
 			solrServer.deleteByQuery("*:*");
 			solrServer.commit();
 		} catch (SolrServerException e) {
