@@ -42,9 +42,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
-import eu.europeana.corelib.solr.util.MongoConstructor;
-import eu.europeana.corelib.solr.util.SolrConstructor;
+import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrConstructor;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance
