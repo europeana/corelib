@@ -58,9 +58,9 @@ public class SearchServiceTest {
 	@Resource(name = "corelib_solr_solrEmbedded")
 	private SolrServer solrServer;
 
-	private boolean dataLoaded = false;
+	private static boolean dataLoaded = false;
 
-	private int testCount = 0;
+	private static int testCount = 0;
 
 	@Before
 	public void loadTestData() {
@@ -93,12 +93,22 @@ public class SearchServiceTest {
 				results.getResultSize() == 205);
 		Assert.assertTrue("Did not return expected facet list: " + results.getFacetFields().size(),
 				results.getFacetFields().size() == 7);
-
 	}
 
+	@Test
+	public void findAllWithTextFilterTest() throws SolrTypeException {
+		testCount++;
+		Query query = new Query("*:*");
+		query.setRefinements(new String[]{"text:drums"});
+		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, query);
+		Assert.assertNotNull("Did not got any results", results);
+		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
+				results.getResultSize() == 2);
+	}
+	
 	@After
 	public void removeTestData() {
-		if (testCount == 1) {
+		if (testCount == 2) {
 			System.out.println("CLEANING TEST DATA...");
 			mongoDBServer.getDatastore().getDB().dropDatabase();
 			try {
