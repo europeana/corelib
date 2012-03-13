@@ -104,9 +104,9 @@ public class SearchServiceImpl implements SearchService {
 					solrQuery.addFacetField(facet.toString());
 				}
 				if (refinements != null) {
-					for (String refinement : refinements) {
-						
-					}
+					
+						solrQuery.addFilterQuery(refinements);
+					
 				}
 				solrQuery.setFacetLimit(facetLimit);
 				solrQuery.setRows(query.getPageSize());
