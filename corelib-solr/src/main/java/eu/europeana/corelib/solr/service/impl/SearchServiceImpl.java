@@ -26,6 +26,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.definitions.solr.Facets;
 import eu.europeana.corelib.definitions.solr.QueryType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -99,9 +100,12 @@ public class SearchServiceImpl implements SearchService {
 				SolrQuery solrQuery = new SolrQuery()
 						.setQuery(query.getQuery());
 				solrQuery.setFacet(true);
+				for(Facets facet:Facets.values()){
+					solrQuery.addFacetField(facet.toString());
+				}
 				if (refinements != null) {
 					for (String refinement : refinements) {
-						solrQuery.addFacetField(refinement);
+						
 					}
 				}
 				solrQuery.setFacetLimit(facetLimit);
