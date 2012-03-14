@@ -18,10 +18,10 @@
 package eu.europeana.corelib.db.service;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlService;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
@@ -30,9 +30,9 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
  */
 public interface ThumbnailService extends AbstractNoSqlService<ImageCache, String> {
 	
-	ImageCache storeThumbnail(String objectId, BufferedImage image) throws IOException;
+	ImageCache storeThumbnail(String objectId, BufferedImage image) throws DatabaseException;
 	
-	ImageCache storeThumbnail(String objectId, URL url) throws IOException;
+	ImageCache storeThumbnail(String objectId, URL url) throws DatabaseException;
 	
 	byte[] retrieveThumbnail(String objectId, ThumbSize size);
 	

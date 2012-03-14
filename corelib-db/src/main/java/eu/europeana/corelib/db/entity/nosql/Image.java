@@ -42,9 +42,9 @@ public class Image {
 	}
 
 	public Image(BufferedImage original) throws IOException {
-		this.height = original.getHeight();
-		this.width = original.getWidth();
-		this.image = ImageUtils.toByteArray(original);
+		setHeight(original.getHeight());
+		setWidth(original.getWidth());
+		setImage(ImageUtils.toByteArray(original));
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class Image {
 	}
 
 	public byte[] getImage() {
-		return image;
+		return image.clone();
 	}
 
 	public void setImage(byte[] image) {

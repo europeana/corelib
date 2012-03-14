@@ -50,9 +50,9 @@ public class ImageCache implements NoSqlEntity {
 	}
 
 	public ImageCache(String objectId, BufferedImage original) {
-		this.objectId = objectId;
-		this.height = original.getHeight();
-		this.width = original.getWidth();
+		setObjectId(objectId);
+		setHeight(original.getHeight());
+		setWidth(original.getWidth());
 	}
 	
 	/**

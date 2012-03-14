@@ -31,7 +31,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.repository.ImageCacheRepository;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
@@ -54,22 +56,29 @@ public class ThumbnailServiceTest {
 	}
 	
 	@Test
-	public void storeTest() throws IOException {
+	public void storeTest() throws IOException, DatabaseException {
+		final String ID = "test";
+		
 		Assert.assertTrue("Schema not empty...", repository.count() == 0);
 		
 		BufferedImage image = ImageIO.read( getClass().getResourceAsStream("/images/GREATWAR.jpg") );
-		ImageCache cache = thumbnailService.storeThumbnail("test", image);
+		ImageCache cache = thumbnailService.storeThumbnail(ID, image);
 		
 		Assert.assertTrue("Test item does not exists in MongoDB", repository.exists("test"));
 		
-		byte[] tiny = thumbnailService.retrieveThumbnail("test", ThumbSize.TINY);
+		byte[] tiny = thumbnailService.retrieveThumbnail(ID, ThumbSize.TINY);
 		
 		Assert.assertTrue(tiny.length == cache.getImages().get(ThumbSize.TINY.toString()).getImage().length );
 		
-//		InputStream in = new ByteArrayInputStream(thumbnailService.retrieveThumbnail("test", ThumbSize.LARGE));
-//		BufferedImage bImageFromConvert = ImageIO.read(in);
-//
-//		ImageIO.write(bImageFromConvert, "jpg", new File("new-darksouls.jpg"));		
+		ImageCache imageCache = thumbnailService.findByID(ID);
+		
+		Assert.assertEquals(image.getHeight(), imageCache.getHeight());
+		Assert.assertEquals(image.getWidth(), imageCache.getWidth());
+		
+		Image tinyImage = imageCache.getImages().get(ThumbSize.TINY.toString());
+		
+		Assert.assertTrue(tinyImage.getHeight() > 0);
+		Assert.assertTrue(tinyImage.getWidth() > 0);
 		
 	}
 

@@ -29,9 +29,11 @@ import org.springframework.util.Assert;
 
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.repository.ImageCacheRepository;
 import eu.europeana.corelib.db.service.ThumbnailService;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 import eu.europeana.corelib.utils.ImageUtils;
 
@@ -42,37 +44,45 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 	@Resource
 	private ImageCacheRepository repository;
-	
+
 	@Override
 	protected CrudRepository<ImageCache, String> getReposity() {
 		return repository;
 	}
 
 	@Override
-	public ImageCache storeThumbnail(String objectId, URL url) throws IOException {
+	public ImageCache storeThumbnail(String objectId, URL url) throws DatabaseException {
 		Assert.notNull(objectId);
 		Assert.notNull(url);
-		BufferedImage originalImage = ImageIO.read(url);
-		return storeThumbnail(objectId, originalImage);
+		try {
+			BufferedImage originalImage = ImageIO.read(url);
+			return storeThumbnail(objectId, originalImage);
+		} catch (IOException e) {
+			throw new DatabaseException(e, ProblemType.UNKNOWN);
+		}
 	}
 
 	@Override
-	public ImageCache storeThumbnail(String objectId, BufferedImage originalImage) throws IOException {
+	public ImageCache storeThumbnail(String objectId, BufferedImage originalImage) throws DatabaseException {
 		Assert.notNull(objectId);
 		Assert.notNull(originalImage);
 		ImageCache cache = new ImageCache(objectId, originalImage);
 
-		BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
-				ThumbSize.TINY.getMaxHeight());
-		cache.getImages().put(ThumbSize.TINY.toString(), new Image(tiny));
+		try {
+			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
+					ThumbSize.TINY.getMaxHeight());
+			cache.getImages().put(ThumbSize.TINY.toString(), new Image(tiny));
 
-		BufferedImage medium = ImageUtils.scale(originalImage, ThumbSize.MEDIUM.getMaxWidth(),
-				ThumbSize.MEDIUM.getMaxHeight());
-		cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(medium));
+			BufferedImage medium = ImageUtils.scale(originalImage, ThumbSize.MEDIUM.getMaxWidth(),
+					ThumbSize.MEDIUM.getMaxHeight());
+			cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(medium));
 
-		BufferedImage large = ImageUtils.scale(originalImage, ThumbSize.LARGE.getMaxWidth(),
-				ThumbSize.LARGE.getMaxHeight());
-		cache.getImages().put(ThumbSize.LARGE.toString(), new Image(large));
+			BufferedImage large = ImageUtils.scale(originalImage, ThumbSize.LARGE.getMaxWidth(),
+					ThumbSize.LARGE.getMaxHeight());
+			cache.getImages().put(ThumbSize.LARGE.toString(), new Image(large));
+		} catch (IOException e) {
+			throw new DatabaseException(e, ProblemType.UNKNOWN);
+		}
 
 		return repository.save(cache);
 	}
@@ -87,5 +97,5 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		}
 		return null;
 	}
-	
+
 }

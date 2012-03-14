@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.utils.DateUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -79,11 +80,11 @@ public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, 
 
 	@Override
 	public Date getCreated() {
-		return created;
+		return DateUtils.clone(created);
 	}
 
 	@Override
 	public void setCreated(Date created) {
-		this.created = created;
+		this.created = DateUtils.clone(created);
 	}
 }

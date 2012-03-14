@@ -48,6 +48,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
+import eu.europeana.corelib.utils.DateUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -148,22 +149,22 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 
 	@Override
 	public Date getRegistrationDate() {
-		return registrationDate;
+		return DateUtils.clone(registrationDate);
 	}
 
 	@Override
 	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
+		this.registrationDate = DateUtils.clone(registrationDate);
 	}
 
 	@Override
 	public Date getLastLogin() {
-		return lastLogin;
+		return DateUtils.clone(lastLogin);
 	}
 
 	@Override
 	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
+		this.lastLogin = DateUtils.clone(lastLogin);
 	}
 
 	@Override

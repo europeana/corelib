@@ -31,6 +31,7 @@ import javax.persistence.TemporalType;
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
+import eu.europeana.corelib.utils.DateUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -91,11 +92,11 @@ public class SavedSearchImpl extends UserConnectedImpl<Long> implements Relation
 
     @Override
 	public Date getDateSaved() {
-        return dateSaved;
+        return DateUtils.clone(dateSaved);
     }
 
     @Override
 	public void setDateSaved(Date dateSaved) {
-        this.dateSaved = dateSaved;
+        this.dateSaved = DateUtils.clone(dateSaved);
     }
 }
