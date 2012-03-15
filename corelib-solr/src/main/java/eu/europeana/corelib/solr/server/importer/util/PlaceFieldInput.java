@@ -119,8 +119,7 @@ public final class PlaceFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static PlaceImpl createPlaceMongoFields(PlaceType placeType,
-			MongoDBServer mongoServer) throws InstantiationException,
-			IllegalAccessException {
+			MongoDBServer mongoServer) {
 
 		// If place exists in mongo
 

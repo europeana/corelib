@@ -75,100 +75,56 @@ public final class ProxyFieldInput {
 				.getChoiceList();
 		if (dcTermsList != null) {
 			for (eu.europeana.corelib.definitions.jibx.DCTermsType.Choice choice : dcTermsList) {
-				if (choice.ifAlternative()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_ALTERNATIVE
 							.toString(), choice.getAlternative().getString());
-				}
-				if (choice.ifConformsTo()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_CONFORMS_TO
 							.toString(), choice.getConformsTo().getResource());
-				}
-				if (choice.ifCreated()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_CREATED
 							.toString(), choice.getCreated().getResource());
-				}
-				if (choice.ifExtent()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_EXTENT
 							.toString(), choice.getExtent().getResource());
-				}
-				if (choice.ifHasFormat()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_HAS_FORMAT
 							.toString(), choice.getHasFormat().getResource());
-				}
-				if (choice.ifHasPart()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_HAS_PART
 							.toString(), choice.getHasPart().getResource());
-				}
-				if (choice.ifHasVersion()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_HAS_VERSION
 							.toString(), choice.getHasVersion().getResource());
-				}
-				if (choice.ifIsFormatOf()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_IS_FORMAT_OF
 							.toString(), choice.getIsFormatOf().getResource());
-				}
-				if (choice.ifIsPartOf()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_IS_PART_OF
 							.toString(), choice.getIsPartOf().getResource());
-				}
-				if (choice.ifIsReferencedBy()) {
 					solrInputDocument.addField(
 							EdmLabel.DCTERMS_IS_REFERENCED_BY.toString(),
 							choice.getIsReferencedBy().getResource());
-				}
-				if (choice.ifIsReplacedBy()) {
 					solrInputDocument
 							.addField(
 									EdmLabel.DCTERMS_IS_REPLACED_BY.toString(),
 									choice.getIsReplacedBy().getResource());
-				}
-				if (choice.ifIsRequiredBy()) {
 					solrInputDocument
 							.addField(
 									EdmLabel.DCTERMS_IS_REQUIRED_BY.toString(),
 									choice.getIsRequiredBy().getResource());
-				}
-				if (choice.ifIssued()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_ISSUED
 							.toString(), choice.getIssued().getResource());
-				}
-				if (choice.ifIsVersionOf()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_IS_VERSION_OF
 							.toString(), choice.getIsVersionOf().getResource());
-				}
-				if (choice.ifMedium()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_MEDIUM
 							.toString(), choice.getMedium().getResource());
-				}
-				if (choice.ifProvenance()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_PROVENANCE
 							.toString(), choice.getProvenance().getResource());
-				}
-				if (choice.ifReferences()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_REFERENCES
 							.toString(), choice.getReferences().getResource());
-				}
-				if (choice.ifReplaces()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_REPLACES
 							.toString(), choice.getReplaces().getResource());
-				}
-				if (choice.ifRequires()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_REQUIRES
 							.toString(), choice.getRequires().getResource());
-				}
-				if (choice.ifSpatial()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_SPATIAL
 							.toString(), choice.getSpatial().getResource());
-				}
-				if (choice.ifTableOfContents()) {
 					solrInputDocument.addField(
 							EdmLabel.DCTERMS_TABLE_OF_CONTENTS.toString(),
 							choice.getTableOfContents().getResource());
-				}
-				if (choice.ifTemporal()) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_TEMPORAL
 							.toString(), choice.getTemporal().getResource());
-				}
 			}
 		}
 
@@ -177,71 +133,37 @@ public final class ProxyFieldInput {
 				.getChoiceList1s();
 		if (dcList != null) {
 			for (eu.europeana.corelib.definitions.jibx.DCType.Choice choice : dcList) {
-				if (choice.ifContributor()) {
 					solrInputDocument.addField(EdmLabel.DC_CONTRIBUTOR
 							.toString(), choice.getContributor().getResource());
-				}
-				if (choice.ifCoverage()) {
 					solrInputDocument.addField(EdmLabel.DC_COVERAGE.toString(),
 							choice.getCoverage().getResource());
-				}
-				if (choice.ifCreator()) {
 					solrInputDocument.addField(EdmLabel.DC_CREATOR.toString(),
 							choice.getCreator().getResource());
-				}
-				if (choice.ifDate()) {
 					solrInputDocument.addField(EdmLabel.DC_DATE.toString(),
 							choice.getDate().getResource());
-				}
-				if (choice.ifDescription()) {
 					solrInputDocument.addField(EdmLabel.DC_DESCRIPTION
 							.toString(), choice.getDescription().getResource());
-				}
-				if (choice.ifFormat()) {
 					solrInputDocument.addField(EdmLabel.DC_FORMAT.toString(),
 							choice.getFormat().getResource());
-				}
-				if (choice.ifIdentifier()) {
 					solrInputDocument.addField(EdmLabel.DC_IDENTIFIER
 							.toString(), choice.getIdentifier().getString());
-				}
-				if (choice.ifLanguage()) {
 					solrInputDocument.addField(EdmLabel.DC_LANGUAGE.toString(),
 							choice.getLanguage().getString());
-				}
-				if (choice.ifPublisher()) {
 					solrInputDocument.addField(
 							EdmLabel.DC_PUBLISHER.toString(), choice
 									.getPublisher().getResource());
-				}
-				if (choice.ifRelation()) {
 					solrInputDocument.addField(EdmLabel.DC_RELATION.toString(),
 							choice.getRelation().getResource());
-				}
-				if (choice.ifRights()) {
 					solrInputDocument.addField(EdmLabel.PRX_DC_RIGHTS
 							.toString(), choice.getRights().getResource());
-				}
-
-				if (choice.ifSource()) {
 					solrInputDocument.addField(EdmLabel.DC_SOURCE.toString(),
 							choice.getSource().getResource());
-				}
-
-				if (choice.ifSubject()) {
 					solrInputDocument.addField(EdmLabel.DC_SUBJECT.toString(),
 							choice.getSubject().getResource());
-				}
-
-				if (choice.ifTitle()) {
 					solrInputDocument.addField(EdmLabel.DC_TITLE.toString(),
 							choice.getTitle().getString());
-				}
-
-				if (choice.ifType()) {
 					solrInputDocument.addField(EdmLabel.DC_TYPE.toString(),
 							choice.getType().getResource());
-				}
 			}
 		}
 		return solrInputDocument;
@@ -305,73 +227,29 @@ public final class ProxyFieldInput {
 		if (dcTermsList != null) {
 			for (Choice dcTerm : dcTermsList) {
 
-				if (dcTerm.ifAlternative()) {
 					alternatives.add(dcTerm.getAlternative().getString());
-				}
-				if (dcTerm.ifConformsTo()) {
-					conformsTo.add(dcTerm.getConformsTo().getString());
-				}
-				if (dcTerm.ifCreated()) {
-					created.add(dcTerm.getCreated().getString());
-				}
-				if (dcTerm.ifExtent()) {
-					extent.add(dcTerm.getExtent().getString());
-				}
-				if (dcTerm.ifHasFormat()) {
-					hasFormat.add(dcTerm.getHasFormat().getString());
-				}
-				if (dcTerm.ifHasPart()) {
-					hasPart.add(dcTerm.getHasPart().getString());
-				}
-				if (dcTerm.ifHasVersion()) {
-					hasVersion.add(dcTerm.getHasVersion().getString());
-				}
-				if (dcTerm.ifIsFormatOf()) {
-					isFormatOf.add(dcTerm.getIsFormatOf().getString());
-				}
-				if (dcTerm.ifIsPartOf()) {
-					isPartOf.add(dcTerm.getIsPartOf().getString());
-				}
-				if (dcTerm.ifIsReferencedBy()) {
-					isReferencedBy.add(dcTerm.getIsReferencedBy().getString());
-				}
-				if (dcTerm.ifIsReplacedBy()) {
-					isReplacedBy.add(dcTerm.getIsReplacedBy().getString());
-				}
-				if (dcTerm.ifIsRequiredBy()) {
-					isRequiredBy.add(dcTerm.getIsRequiredBy().getString());
-				}
-				if (dcTerm.ifIssued()) {
-					issued.add(dcTerm.getIssued().getString());
-				}
-				if (dcTerm.ifIsVersionOf()) {
-					isVersionOf.add(dcTerm.getIsVersionOf().getString());
-				}
-				if (dcTerm.ifMedium()) {
-					medium.add(dcTerm.getMedium().getString());
-				}
-				if (dcTerm.ifProvenance()) {
-					provenance.add(dcTerm.getProvenance().getString());
-				}
-				if (dcTerm.ifReferences()) {
-					references.add(dcTerm.getReferences().getString());
-				}
-				if (dcTerm.ifReplaces()) {
-					replaces.add(dcTerm.getReplaces().getString());
-				}
-				if (dcTerm.ifRequires()) {
-					requires.add(dcTerm.getRequires().getString());
-				}
-				if (dcTerm.ifSpatial()) {
-					spatial.add(dcTerm.getSpatial().getString());
-				}
-				if (dcTerm.ifTableOfContents()) {
+					conformsTo.add(dcTerm.getConformsTo().getResource());
+					created.add(dcTerm.getCreated().getResource());
+					extent.add(dcTerm.getExtent().getResource());
+					hasFormat.add(dcTerm.getHasFormat().getResource());
+					hasPart.add(dcTerm.getHasPart().getResource());
+					hasVersion.add(dcTerm.getHasVersion().getResource());
+					isFormatOf.add(dcTerm.getIsFormatOf().getResource());
+					isPartOf.add(dcTerm.getIsPartOf().getResource());
+					isReferencedBy.add(dcTerm.getIsReferencedBy().getResource());
+					isReplacedBy.add(dcTerm.getIsReplacedBy().getResource());
+					isRequiredBy.add(dcTerm.getIsRequiredBy().getResource());
+					issued.add(dcTerm.getIssued().getResource());
+					isVersionOf.add(dcTerm.getIsVersionOf().getResource());
+					medium.add(dcTerm.getMedium().getResource());
+					provenance.add(dcTerm.getProvenance().getResource());
+					references.add(dcTerm.getReferences().getResource());
+					replaces.add(dcTerm.getReplaces().getResource());
+					requires.add(dcTerm.getRequires().getResource());
+					spatial.add(dcTerm.getSpatial().getResource());
 					tableOfContents
-							.add(dcTerm.getTableOfContents().getString());
-				}
-				if (dcTerm.ifTemporal()) {
-					temporal.add(dcTerm.getTemporal().getString());
-				}
+							.add(dcTerm.getTableOfContents().getResource());
+					temporal.add(dcTerm.getTemporal().getResource());
 			}
 		}
 		List<String> contributor = new ArrayList<String>();
@@ -392,55 +270,21 @@ public final class ProxyFieldInput {
 
 		if (dcList != null) {
 			for (eu.europeana.corelib.definitions.jibx.DCType.Choice dc : dcList) {
-				if (dc.ifContributor()) {
-					contributor.add(dc.getContributor().getString());
-				}
-				if (dc.ifCoverage()) {
-					coverage.add(dc.getCoverage().getString());
-				}
-				if (dc.ifCreator()) {
-					creator.add(dc.getCreator().getString());
-				}
-				if (dc.ifDate()) {
-					date.add(dc.getDate().getString());
-				}
-				if (dc.ifDescription()) {
-					description.add(dc.getDescription().getString());
-				}
-				if (dc.ifFormat()) {
-					format.add(dc.getFormat().getString());
-				}
-				if (dc.ifIdentifier()) {
+					contributor.add(dc.getContributor().getResource());
+					coverage.add(dc.getCoverage().getResource());
+					creator.add(dc.getCreator().getResource());
+					date.add(dc.getDate().getResource());
+					description.add(dc.getDescription().getResource());
+					format.add(dc.getFormat().getResource());
 					identifier.add(dc.getIdentifier().getString());
-				}
-				if (dc.ifLanguage()) {
 					language.add(dc.getLanguage().getString());
-				}
-				if (dc.ifPublisher()) {
-					publisher.add(dc.getPublisher().getString());
-				}
-				if (dc.ifRelation()) {
-					relation.add(dc.getRelation().getString());
-				}
-				if (dc.ifRights()) {
-					rights.add(dc.getRights().getString());
-				}
-
-				if (dc.ifSource()) {
-					source.add(dc.getSource().getString());
-				}
-
-				if (dc.ifSubject()) {
-					subject.add(dc.getSubject().getString());
-				}
-
-				if (dc.ifTitle()) {
+					publisher.add(dc.getPublisher().getResource());
+					relation.add(dc.getRelation().getResource());
+					rights.add(dc.getRights().getResource());
+					source.add(dc.getSource().getResource());
+					subject.add(dc.getSubject().getResource());
 					title.add(dc.getTitle().getString());
-				}
-
-				if (dc.ifType()) {
-					type.add(dc.getType().getString());
-				}
+					type.add(dc.getType().getResource());
 			}
 		}
 		mongoProxy.setDctermsAlternative(alternatives

@@ -130,8 +130,7 @@ public final class AgentFieldInput {
 	 * @throws MappingException
 	 */
 	public static AgentImpl createAgentMongoEntity(AgentType agentType,
-			MongoDBServer mongoServer) throws MappingException,
-			InstantiationException, IllegalAccessException {
+			MongoDBServer mongoServer) {
 
 		AgentImpl agent = (AgentImpl) mongoServer.searchByAbout(
 				AgentImpl.class, agentType.getAbout());

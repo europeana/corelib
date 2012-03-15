@@ -76,6 +76,7 @@ public class FullBeanTest {
 
 	@Test
 	public void testRetrieve() {
+		assertNotNull("Error getting server",mongoServer);
 		ds = mongoServer.getDatastore();
 		
 		assertNotNull("Error creating datastore", ds);

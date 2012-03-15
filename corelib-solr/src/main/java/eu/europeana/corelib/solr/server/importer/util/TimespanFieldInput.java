@@ -92,7 +92,7 @@ public final class TimespanFieldInput {
             for (IsPartOf isPartOf : timespan.getIsPartOfList()) {
                 solrInputDocument.addField(
                         EdmLabel.TS_DCTERMS_ISPART_OF.toString(),
-                        isPartOf.getString());
+                        isPartOf.getResource());
             }
         }
         return solrInputDocument;
@@ -238,7 +238,7 @@ public final class TimespanFieldInput {
         if (timeSpan.getIsPartOfList() != null) {
             List<String> isPartOfList = new ArrayList<String>();
             for (IsPartOf isPartOf : timeSpan.getIsPartOfList()) {
-                isPartOfList.add(isPartOf.getString());
+                isPartOfList.add(isPartOf.getResource());
             }
             mongoTimespan.setIsPartOf(isPartOfList.toArray(new String[isPartOfList.size()]));
         }

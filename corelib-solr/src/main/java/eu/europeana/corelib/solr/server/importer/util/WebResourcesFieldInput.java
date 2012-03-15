@@ -63,7 +63,7 @@ public final class WebResourcesFieldInput {
 		if (webResource.getRightList() != null) {
 			for (Rights1 dcRights : webResource.getRightList()) {
 				solrInputDocument.addField(EdmLabel.WR_DC_RIGHTS.toString(),
-						dcRights.getString());
+						dcRights.getResource());
 			}
 		}
 		return solrInputDocument;

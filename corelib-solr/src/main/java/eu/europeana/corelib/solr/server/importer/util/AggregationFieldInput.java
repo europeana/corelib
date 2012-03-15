@@ -197,6 +197,7 @@ public final class AggregationFieldInput {
 				(aggregation.getProvider())).getString());
 		mongoAggregation.setEdmRights(SolrUtils.exists(Rights.class,
 				(aggregation.getRights())).getString());
+	
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString());
@@ -209,7 +210,7 @@ public final class AggregationFieldInput {
 				dcRightsList.add(rights.getString());
 			}
 
-			mongoAggregation.setHasView(dcRightsList
+			mongoAggregation.setDcRights(dcRightsList
 					.toArray(new String[dcRightsList.size()]));
 		}
 
