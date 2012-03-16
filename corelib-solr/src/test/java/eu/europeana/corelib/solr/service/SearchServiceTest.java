@@ -74,7 +74,8 @@ public class SearchServiceTest {
 				contentLoader.commit();
 				dataLoaded = true;
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
+				//System.out.println(e.printStackTrace());
 			} finally {
 				if (contentLoader != null) {
 					contentLoader.cleanFiles();
