@@ -17,8 +17,13 @@
 
 package eu.europeana.corelib.solr.utils;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.common.SolrInputDocument;
+
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
+import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
@@ -74,5 +79,28 @@ public final class SolrUtils {
 	public static <T> T exists(Class<T> clazz, T object)
 			throws InstantiationException, IllegalAccessException {
 		return (object == null ? clazz.newInstance() : object);
+	}
+	
+	public static void addResourceOrLiteralType(SolrInputDocument destination, EdmLabel label, ResourceOrLiteralType type) {
+		String value = getValueOfResourceOrLiteralType(type);
+		if (value != null) {
+			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
+			solrInputDocument.addField(label.toString(), value);
+		}
+	}
+	
+	public static void addResourceOrLiteralType(List<String> destination, ResourceOrLiteralType type) {
+		String value = getValueOfResourceOrLiteralType(type);
+		if (value != null) {
+			destination.add(value);
+		}
+	}
+	
+	public static String getValueOfResourceOrLiteralType(ResourceOrLiteralType type) {
+		String value = null;
+		if (type != null) {
+			value = StringUtils.isNotEmpty(type.getResource()) ? type.getResource() : type.getString();
+		}
+		return value;
 	}
 }

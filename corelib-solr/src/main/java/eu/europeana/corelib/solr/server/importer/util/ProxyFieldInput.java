@@ -79,15 +79,16 @@ public final class ProxyFieldInput {
 					solrInputDocument.addField(EdmLabel.DCTERMS_ALTERNATIVE
 							.toString(), choice.getAlternative().getString());
 				}
-				if (choice.getConformsTo() != null) {
-					solrInputDocument
-							.addField(
-									EdmLabel.DCTERMS_CONFORMS_TO.toString(),
-									choice.getConformsTo().getResource() != null ? choice
-											.getConformsTo().getResource()
-											: choice.getConformsTo()
-													.getString());
-				}
+				SolrUtils.addResourceOrLiteralType(solrInputDocument, EdmLabel.DCTERMS_CONFORMS_TO, choice.getConformsTo());
+//				if (choice.getConformsTo() != null) {
+//					solrInputDocument
+//							.addField(
+//									EdmLabel.DCTERMS_CONFORMS_TO.toString(),
+//									choice.getConformsTo().getResource() != null ? choice
+//											.getConformsTo().getResource()
+//											: choice.getConformsTo()
+//													.getString());
+//				}
 				if (choice.getCreated() != null) {
 					solrInputDocument.addField(EdmLabel.DCTERMS_CREATED
 							.toString(),
