@@ -38,12 +38,17 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-definitions</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>${version.europeanaCorelib}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr-definitions</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<version>${version.europeanaCorelib}</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-utils</artifactId>
+			<version>${version.europeanaCorelib}</version>
 		</dependency>
 		<!-- SOLR -->
 		<dependency>

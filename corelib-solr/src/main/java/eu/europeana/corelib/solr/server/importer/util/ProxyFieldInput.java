@@ -32,6 +32,7 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.MongoDBServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * Constructor for the Proxy Entity
@@ -263,67 +264,43 @@ public final class ProxyFieldInput {
 				SolrUtils.addResourceOrLiteralType(type, dc.getType());
 			}
 		}
-		mongoProxy.setDctermsAlternative(alternatives
-				.toArray(new String[alternatives.size()]));
-		mongoProxy.setDctermsConformsTo(conformsTo
-				.toArray(new String[conformsTo.size()]));
-		mongoProxy
-				.setDctermsCreated(created.toArray(new String[created.size()]));
-		mongoProxy.setDctermsExtent(extent.toArray(new String[extent.size()]));
-		mongoProxy.setDctermsHasFormat(hasFormat.toArray(new String[hasFormat
-				.size()]));
-		mongoProxy
-				.setDctermsHasPart(hasPart.toArray(new String[hasPart.size()]));
-		mongoProxy.setDctermsHasVersion(hasVersion
-				.toArray(new String[hasVersion.size()]));
-		mongoProxy.setDctermsIsFormatOf(isFormatOf
-				.toArray(new String[isFormatOf.size()]));
-		mongoProxy.setDctermsIsPartOf(isPartOf.toArray(new String[isPartOf
-				.size()]));
-		mongoProxy.setDctermsIsReferencedBy(isReferencedBy
-				.toArray(new String[isReferencedBy.size()]));
-		mongoProxy.setDctermsIsReplacedBy(isReplacedBy
-				.toArray(new String[isReplacedBy.size()]));
-		mongoProxy.setDctermsIsRequiredBy(isRequiredBy
-				.toArray(new String[isRequiredBy.size()]));
-		mongoProxy.setDctermsIssued(issued.toArray(new String[issued.size()]));
-		mongoProxy.setDctermsIsVersionOf(isVersionOf
-				.toArray(new String[isVersionOf.size()]));
-		mongoProxy.setDctermsMedium(medium.toArray(new String[medium.size()]));
-		mongoProxy.setDctermsProvenance(provenance
-				.toArray(new String[provenance.size()]));
-		mongoProxy.setDctermsReferences(references
-				.toArray(new String[references.size()]));
-		mongoProxy.setDctermsReplaces(replaces.toArray(new String[replaces
-				.size()]));
-		mongoProxy.setDctermsRequires(requires.toArray(new String[requires
-				.size()]));
-		mongoProxy
-				.setDctermsSpatial(spatial.toArray(new String[spatial.size()]));
-		mongoProxy.setDctermsTemporal(temporal.toArray(new String[temporal
-				.size()]));
-		mongoProxy.setDctermsTOC(tableOfContents
-				.toArray(new String[tableOfContents.size()]));
-
-		mongoProxy.setDcContributor(contributor.toArray(new String[contributor
-				.size()]));
-		mongoProxy.setDcCoverage(coverage.toArray(new String[coverage.size()]));
-		mongoProxy.setDcCreator(creator.toArray(new String[creator.size()]));
-		mongoProxy.setDcDate(date.toArray(new String[date.size()]));
-		mongoProxy.setDcDescription(description.toArray(new String[description
-				.size()]));
-		mongoProxy.setDcFormat(format.toArray(new String[format.size()]));
-		mongoProxy.setDcIdentifier(identifier.toArray(new String[identifier
-				.size()]));
-		mongoProxy.setDcLanguage(language.toArray(new String[language.size()]));
-		mongoProxy
-				.setDcPublisher(publisher.toArray(new String[publisher.size()]));
-		mongoProxy.setDcRelation(relation.toArray(new String[relation.size()]));
-		mongoProxy.setDcRights(rights.toArray(new String[rights.size()]));
-		mongoProxy.setDcSource(source.toArray(new String[source.size()]));
-		mongoProxy.setDcSubject(subject.toArray(new String[subject.size()]));
-		mongoProxy.setDcTitle(title.toArray(new String[title.size()]));
-		mongoProxy.setDcType(type.toArray(new String[type.size()]));
+		mongoProxy.setDctermsAlternative(StringArrayUtils.toArray(alternatives));
+		mongoProxy.setDctermsConformsTo(StringArrayUtils.toArray(conformsTo));
+		mongoProxy.setDctermsCreated(StringArrayUtils.toArray(created));
+		mongoProxy.setDctermsExtent(StringArrayUtils.toArray(extent));
+		mongoProxy.setDctermsHasFormat(StringArrayUtils.toArray(hasFormat));
+		mongoProxy.setDctermsHasPart(StringArrayUtils.toArray(hasPart));
+		mongoProxy.setDctermsHasVersion(StringArrayUtils.toArray(hasVersion));
+		mongoProxy.setDctermsIsFormatOf(StringArrayUtils.toArray(isFormatOf));
+		mongoProxy.setDctermsIsPartOf(StringArrayUtils.toArray(isPartOf));
+		mongoProxy.setDctermsIsReferencedBy(StringArrayUtils.toArray(isReferencedBy));
+		mongoProxy.setDctermsIsReplacedBy(StringArrayUtils.toArray(isReplacedBy));
+		mongoProxy.setDctermsIsRequiredBy(StringArrayUtils.toArray(isRequiredBy));
+		mongoProxy.setDctermsIssued(StringArrayUtils.toArray(issued));
+		mongoProxy.setDctermsIsVersionOf(StringArrayUtils.toArray(isVersionOf));
+		mongoProxy.setDctermsMedium(StringArrayUtils.toArray(medium));
+		mongoProxy.setDctermsProvenance(StringArrayUtils.toArray(provenance));
+		mongoProxy.setDctermsReferences(StringArrayUtils.toArray(references));
+		mongoProxy.setDctermsReplaces(StringArrayUtils.toArray(replaces));
+		mongoProxy.setDctermsRequires(StringArrayUtils.toArray(requires));
+		mongoProxy.setDctermsSpatial(StringArrayUtils.toArray(spatial));
+		mongoProxy.setDctermsTemporal(StringArrayUtils.toArray(temporal));
+		mongoProxy.setDctermsTOC(StringArrayUtils.toArray(tableOfContents));
+		mongoProxy.setDcContributor(StringArrayUtils.toArray(contributor));
+		mongoProxy.setDcCoverage(StringArrayUtils.toArray(coverage));
+		mongoProxy.setDcCreator(StringArrayUtils.toArray(creator));
+		mongoProxy.setDcDate(StringArrayUtils.toArray(date));
+		mongoProxy.setDcDescription(StringArrayUtils.toArray(description));
+		mongoProxy.setDcFormat(StringArrayUtils.toArray(format));
+		mongoProxy.setDcIdentifier(StringArrayUtils.toArray(identifier));
+		mongoProxy.setDcLanguage(StringArrayUtils.toArray(language));
+		mongoProxy.setDcPublisher(StringArrayUtils.toArray(publisher));
+		mongoProxy.setDcRelation(StringArrayUtils.toArray(relation));
+		mongoProxy.setDcRights(StringArrayUtils.toArray(rights));
+		mongoProxy.setDcSource(StringArrayUtils.toArray(source));
+		mongoProxy.setDcSubject(StringArrayUtils.toArray(subject));
+		mongoProxy.setDcTitle(StringArrayUtils.toArray(title));
+		mongoProxy.setDcType(StringArrayUtils.toArray(type));
 		if (mongoServer.searchByAbout(ProxyImpl.class, mongoProxy.getAbout()) != null) {
 			MongoUtils.updateProxy(mongoProxy, mongoServer);
 		} else {
