@@ -54,7 +54,7 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	private MongoDBServer mongoServer;
 
-	@Value("#{europeanaProperties['solr1.facetLimit']}")
+	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
 	@Override

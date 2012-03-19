@@ -32,10 +32,10 @@
         http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
 	">
 
-	<bean id="corelib_db_dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="#{europeanaProperties['db.driverClass']}" />
-		<property name="jdbcUrl" value="#{europeanaProperties['db.jdbcUrl']}" />
-		<property name="user" value="#{europeanaProperties['db.user']}" />
+	<bean id="corelib_db_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="#{europeanaProperties['db.driverClass']}" />
+		<property name="url" value="#{europeanaProperties['db.jdbcUrl']}" />
+		<property name="username" value="#{europeanaProperties['db.user']}" />
 		<property name="password" value="#{europeanaProperties['db.password']}" />
 	</bean>
 
@@ -46,6 +46,7 @@
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
 				p:showSql="false"
 				p:generateDdl="true"
+				p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"
 			/>
 		</property>
 	</bean>

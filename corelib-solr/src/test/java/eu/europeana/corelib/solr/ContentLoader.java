@@ -53,7 +53,7 @@ import eu.europeana.corelib.solr.utils.SolrConstructor;
  */
 public class ContentLoader {
 
-	private static String COLLECTION = "src/test/resources/records.zip";
+	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records.zip";
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 
@@ -242,7 +242,7 @@ public class ContentLoader {
 	 */
 	public static void main(String[] args) {
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml", "/corelib-solr-test.xml" );
+		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml" );
 		
 		SolrServer solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
 		MongoDBServer mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);

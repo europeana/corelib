@@ -34,9 +34,9 @@
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used... -->
 	
 	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr1.selectUrl']}"/>
+        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
 		<property name="followRedirects" value="false"/>	
-        <property name="connectionTimeout" value="#{europeanaProperties['solr1.timeout']}"/>
+        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
         <property name="defaultMaxConnectionsPerHost" value="64"/>
         <property name="maxTotalConnections" value="125"/>
 	</bean>
@@ -44,8 +44,8 @@
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
         <constructor-arg>
         	<bean class="org.apache.solr.core.CoreContainer">
-		        <constructor-arg value="target/test-classes/solr"/>
-		        <constructor-arg value="classpath:solr/solr.xml"/>
+		        <constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
+		        <constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
         	</bean>
         </constructor-arg>
         <constructor-arg value="collection1"/>
