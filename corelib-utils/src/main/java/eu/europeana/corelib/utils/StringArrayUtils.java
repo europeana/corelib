@@ -18,7 +18,7 @@ public class StringArrayUtils {
     
     public static String[] toArray(List<String> list) {
     	if (list != null) {
-    		list.toArray(new String[list.size()]);
+    		return list.toArray(new String[list.size()]);
     	}
     	return new String[]{};
     }
