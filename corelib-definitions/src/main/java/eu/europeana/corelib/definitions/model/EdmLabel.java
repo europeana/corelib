@@ -133,7 +133,8 @@ public enum EdmLabel {
 	RELATION("relation", SolrType.INDEXED),
 	ORE_PROXY_IN("ore_proxyIn",SolrType.INDEXED),
 	ORE_PROXY_FOR("ore_proxyFor",SolrType.INDEXED),
-	PL_POSITION("pl_position_latLon",SolrType.INDEXED)
+	PL_POSITION("pl_position_latLon",SolrType.INDEXED),
+	NULL("null",null)
 	;
 
 

@@ -83,6 +83,7 @@
 		<version.eclipseJetty>8.1.2.v20120308</version.eclipseJetty>
 		<version.mongoDriver>2.7.3</version.mongoDriver>
 		<version.mongoMorphia>0.99-SNAPSHOT-208patch</version.mongoMorphia>
+		<version.woodstox>3.2.9</version.woodstox>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

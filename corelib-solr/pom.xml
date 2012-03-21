@@ -1,21 +1,13 @@
 <?xml version="1.0"?>
 
-<!-- 
-  Copyright 2007-2012 The Europeana Foundation
-
-  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
-  by the European Commission;
-  You may not use this work except in compliance with the Licence.
-  
-  You may obtain a copy of the Licence at:
-  http://joinup.ec.europa.eu/software/page/eupl
-
-  Unless required by applicable law or agreed to in writing, software distributed under 
-  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
-  any kind, either express or implied.
-  See the Licence for the specific language governing permissions and limitations under 
-  the Licence.
- -->
+<!-- Copyright 2007-2012 The Europeana Foundation Licenced under the EUPL, 
+	Version 1.1 (the "Licence") and subsequent versions as approved by the European 
+	Commission; You may not use this work except in compliance with the Licence. 
+	You may obtain a copy of the Licence at: http://joinup.ec.europa.eu/software/page/eupl 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the Licence is distributed on an "AS IS" basis, without warranties 
+	or conditions of any kind, either express or implied. See the Licence for 
+	the specific language governing permissions and limitations under the Licence. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -57,34 +49,39 @@
 			<version>${version.apacheSolr}</version>
 		</dependency>
 		<dependency>
-                <groupId>org.apache.solr</groupId>
-                <artifactId>solr-core</artifactId>
-                <version>${version.apacheSolr}</version>
-        </dependency>
-	    <dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>${version.apacheSolr}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-test-framework</artifactId>
 			<version>${version.apacheSolr}</version>
 			<scope>test</scope>
-	    </dependency>
-	    <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-		    <version>${version.apacheSolr}</version>
-        </dependency>
-        <!-- MONGODB -->
-        <dependency>
-        	<groupId>org.mongodb</groupId>
-        	<artifactId>mongo-java-driver</artifactId>
-        	<version>${version.mongoDriver}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.google.code.morphia</groupId>
-        	<artifactId>morphia</artifactId>
-        	<version>${version.mongoMorphia}</version>
-        	<scope>compile</scope>
-        </dependency>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>wstx-asl</artifactId>
+			<version>${version.woodstox}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${version.apacheSolr}</version>
+		</dependency>
+		<!-- MONGODB -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${version.mongoDriver}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${version.mongoMorphia}</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
