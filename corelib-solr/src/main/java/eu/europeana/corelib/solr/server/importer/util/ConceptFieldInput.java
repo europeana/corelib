@@ -47,7 +47,7 @@ public final class ConceptFieldInput {
 		
 	}
 	/**
-	 * Retrun a SolrInputDocument with the Concept fields filled in
+	 * Return a SolrInputDocument with the Concept fields filled in
 	 * 
 	 * @param concept
 	 *            The JiBX Entity holding the Concept field values
