@@ -17,23 +17,18 @@
   the Licence.
  -->
 
-<beans
+<beans 
 	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-    ">
-    
-	<!-- INTERNAL -->
-	<import resource="corelib-definitions-context.xml" />
-	<import resource="internal/corelib-solr-datasource.xml" />
-	<import resource="internal/corelib-solr-server.xml" />
-	
-	<!-- SERVICES -->
-	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.impl.SearchServiceImpl"
-		p:solrServer-ref="corelib_solr_solrServer"
-	/>
-	
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+
+	<bean id="corelib_solr_mongo" class="com.mongodb.Mongo">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
+	</bean>
+
 </beans>

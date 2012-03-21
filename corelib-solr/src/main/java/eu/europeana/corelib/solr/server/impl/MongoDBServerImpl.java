@@ -17,14 +17,11 @@
 
 package eu.europeana.corelib.solr.server.impl;
 
-import java.net.UnknownHostException;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -46,27 +43,18 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 public class MongoDBServerImpl implements MongoDBServer {
 
 	private Mongo mongoServer;
-	private DB mongoDB;
+	private String databaseName;
 	private Datastore datastore;
-	private Morphia morphia;
 
-	public MongoDBServerImpl(String host, int port, String databaseName)
+	public MongoDBServerImpl(Mongo mongoServer, String databaseName)
 			throws MongoDBException {
-		try {
-			mongoServer = new Mongo(host, port);
-			setDB(databaseName);
-			createDatastore();
-		} catch (UnknownHostException e) {
-			throw new MongoDBException(e, ProblemType.UNKNOWN_MONGO_DB_HOST);
-		}
-	}
-
-	private void setDB(String databaseName) {
-		mongoDB = mongoServer.getDB(databaseName);
+		this.mongoServer = mongoServer;
+		this.databaseName = databaseName;
+		createDatastore();
 	}
 
 	private void createDatastore() {
-		morphia = new Morphia();
+		Morphia morphia = new Morphia();
 		morphia.map(FullBeanImpl.class);
 		morphia.map(ProvidedCHOImpl.class);
 		morphia.map(AgentImpl.class);
@@ -77,7 +65,7 @@ public class MongoDBServerImpl implements MongoDBServer {
 		morphia.map(TimespanImpl.class);
 		morphia.map(WebResourceImpl.class);
 		
-		datastore = morphia.createDatastore(mongoServer, mongoDB.getName());
+		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
 	}
 
@@ -96,7 +84,7 @@ public class MongoDBServerImpl implements MongoDBServer {
 	public String toString() {
 		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
 				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
-				+ "[DB: " + mongoDB.getName() + "]\n";
+				+ "[DB: " + databaseName + "]\n";
 	}
 	
 	@Override
