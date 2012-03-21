@@ -19,7 +19,6 @@ package eu.europeana.corelib.solr.server.impl;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
-import com.mongodb.DB;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
