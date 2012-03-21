@@ -30,10 +30,35 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
  */
 public interface ThumbnailService extends AbstractNoSqlService<ImageCache, String> {
 	
-	ImageCache storeThumbnail(String objectId, BufferedImage image) throws DatabaseException;
+	/**
+	 * Create and store thumbnails of given images.
+	 * 
+	 * @param objectId permanent ID of image to store image.
+	 * @param collectionId collection ID to which the object belongs.
+	 * @param image A BufferedImage instance with the original image
+	 * @param url The URL as a String of the original location of the image, can be null.
+	 * @return The stored entity.
+	 * @throws DatabaseException 
+	 */
+	ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage image, String url) throws DatabaseException;
 	
-	ImageCache storeThumbnail(String objectId, URL url) throws DatabaseException;
+	/**
+	 * 
+	 * @param objectId permanent ID of image to store image.
+	 * @param collectionId collection ID to which the object belongs.
+	 * @param url URL object where to download the image to store.
+	 * @return The stored entity.
+	 * @throws DatabaseException
+	 */
+	ImageCache storeThumbnail(String objectId, String collectionId, URL url) throws DatabaseException;
 	
+	/**
+	 * Retrieve a byte[] with the stored thumbnail, can be used for streaming the image.
+	 * 
+	 * @param objectId permanent ID of image to store image.
+	 * @param size The ThumbSize of the requested image
+	 * @return byte[] of thumbnail, or null of not found
+	 */
 	byte[] retrieveThumbnail(String objectId, ThumbSize size);
 	
 }

@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 
@@ -34,7 +34,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
 @Transactional
 public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> implements AbstractService<E> {
 
-	private Dao<E> dao;
+	private RelationalDao<E> dao;
 
 	@Override
 	public E store(E entity) throws DatabaseException {
@@ -66,7 +66,7 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	 * @param dao
 	 *            DAO object with entity based generic set
 	 */
-	public final void setDao(Dao<E> dao) {
+	public final void setDao(RelationalDao<E> dao) {
 		this.dao = dao;
 	}
 	
@@ -75,7 +75,7 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	 * 
 	 * @return Generic DAO class
 	 */
-	protected Dao<E> getDao() {
+	protected RelationalDao<E> getDao() {
 		return dao;
 	}
 }

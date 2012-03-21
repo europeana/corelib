@@ -27,7 +27,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.exception.ProblemType;
@@ -35,9 +35,9 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.db.dao.Dao
+ * @see eu.europeana.corelib.db.dao.RelationalDao
  */
-public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
+public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
 	@PersistenceContext(name = "corelib_db_entityManagerFactory")
 	private EntityManager entityManager;
@@ -50,7 +50,7 @@ public class DaoImpl<E extends IdentifiedEntity<?>> implements Dao<E> {
 	 * @param clazz
 	 *            The class type references by the main generic type of the DAO instance.
 	 */
-	public DaoImpl(Class<E> clazz) {
+	public RelationalDaoImpl(Class<E> clazz) {
 		domainClazz = clazz;
 	}
 

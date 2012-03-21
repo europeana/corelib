@@ -36,7 +36,6 @@
     <!-- INTERNAL DEFINITIONS -->    
     <import resource="internal/corelib-db-datasource.xml"/>
     <import resource="internal/corelib-db-dao.xml"/>
-    <import resource="internal/corelib-db-repository.xml"/>
 
     <context:annotation-config/>
     
@@ -44,6 +43,7 @@
     	p:dao-ref="corelib_db_tokenDao"/>
     <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
     	p:dao-ref="corelib_db_userDao"/>
-    <bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"/>
+    <bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"
+    	p:dao-ref="corelib_db_imageDao"/>
 
 </beans>

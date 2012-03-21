@@ -21,16 +21,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.util.Assert;
 
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.repository.ImageCacheRepository;
 import eu.europeana.corelib.db.service.ThumbnailService;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
 import eu.europeana.corelib.definitions.exception.ProblemType;
@@ -42,31 +39,23 @@ import eu.europeana.corelib.utils.ImageUtils;
  */
 public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, String> implements ThumbnailService {
 
-	@Resource
-	private ImageCacheRepository repository;
-
 	@Override
-	protected CrudRepository<ImageCache, String> getReposity() {
-		return repository;
-	}
-
-	@Override
-	public ImageCache storeThumbnail(String objectId, URL url) throws DatabaseException {
+	public ImageCache storeThumbnail(String objectId, String collectionId, URL url) throws DatabaseException {
 		Assert.notNull(objectId);
 		Assert.notNull(url);
 		try {
 			BufferedImage originalImage = ImageIO.read(url);
-			return storeThumbnail(objectId, originalImage);
+			return storeThumbnail(objectId, collectionId, originalImage, url.toString());
 		} catch (IOException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}
 	}
 
 	@Override
-	public ImageCache storeThumbnail(String objectId, BufferedImage originalImage) throws DatabaseException {
+	public ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage originalImage, String url) throws DatabaseException {
 		Assert.notNull(objectId);
 		Assert.notNull(originalImage);
-		ImageCache cache = new ImageCache(objectId, originalImage);
+		ImageCache cache = new ImageCache(objectId, collectionId, url, originalImage);
 
 		try {
 			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
@@ -84,14 +73,14 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}
 
-		return repository.save(cache);
+		return store(cache);
 	}
 
 	@Override
 	public byte[] retrieveThumbnail(String objectId, ThumbSize size) {
 		Assert.notNull(objectId);
 		Assert.notNull(size);
-		ImageCache cache = repository.findOne(objectId);
+		ImageCache cache = findByID(objectId);
 		if (cache != null) {
 			return cache.getImages().get(size.toString()).getImage();
 		}

@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.db.dao.Dao;
+import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
@@ -47,7 +47,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
 public class TokenServiceTest {
 
 	@Resource(name = "corelib_db_tokenDao")
-	private Dao<TokenImpl> dao;
+	private RelationalDao<TokenImpl> dao;
 
 	@Resource
 	private TokenService tokenService;

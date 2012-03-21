@@ -29,7 +29,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface Dao<E extends IdentifiedEntity<?>> {
+public interface RelationalDao<E extends IdentifiedEntity<?>> {
 
 	/*
 	 * FINDERS

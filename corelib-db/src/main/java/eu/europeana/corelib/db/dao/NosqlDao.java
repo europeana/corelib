@@ -15,56 +15,21 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.db.service.abstracts;
+package eu.europeana.corelib.db.dao;
 
 import java.io.Serializable;
+
+import com.google.code.morphia.dao.DAO;
 
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 /**
+ * Generic DAO service layer. Used in combination with a DAO instance for every type
+ * of object, although some methods are generic and can be used for every entity.
+ * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface AbstractNoSqlService<E extends NoSqlEntity, T extends Serializable> {
+public interface NosqlDao<E extends NoSqlEntity, T extends Serializable> extends DAO<E, T> {
 
-	/**
-	 * 
-	 * 
-	 * @param object
-	 */
-	E store(E object);
-
-	/**
-	 * 
-	 * 
-	 * @param object
-	 */
-	void remove(final T id);
-
-	/*
-	 * FINDERS
-	 */
-
-	/**
-	 * Find all elements for this service.
-	 * 
-	 * @return All entities for the defined entity type
-	 */
-	 Iterable<E> findAll();
-
-	/**
-	 * 
-	 * 
-	 * @param id
-	 * @return
-	 */
-	E findByID(final T id);
-	
-	/**
-	 * Checks if a entity with the given ID exists.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	boolean exists(final T id);
 
 }

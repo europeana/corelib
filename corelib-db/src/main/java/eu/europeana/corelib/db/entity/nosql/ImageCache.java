@@ -21,19 +21,26 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-@Document(collection="ImageCache")
+@Entity("ImageCache")
 public class ImageCache implements NoSqlEntity {
 	
 	@Id
 	private String objectId;
+	
+	@Indexed(unique=false)
+	private String collectionId;
+	
+	@Indexed(unique=false)
+	private String originalUrl;
 	
 	private int height;
 	
@@ -49,8 +56,10 @@ public class ImageCache implements NoSqlEntity {
 		// left empty on purpose, do NOT remove!!
 	}
 
-	public ImageCache(String objectId, BufferedImage original) {
+	public ImageCache(String objectId, String collectionId, String url, BufferedImage original) {
 		setObjectId(objectId);
+		setCollectionId(collectionId);
+		setOriginalUrl(url);
 		setHeight(original.getHeight());
 		setWidth(original.getWidth());
 	}
@@ -85,6 +94,22 @@ public class ImageCache implements NoSqlEntity {
 
 	public Map<String, Image> getImages() {
 		return images;
+	}
+
+	public String getOriginalUrl() {
+		return originalUrl;
+	}
+
+	public void setOriginalUrl(String originalUrl) {
+		this.originalUrl = originalUrl;
+	}
+
+	public String getCollectionId() {
+		return collectionId;
+	}
+
+	public void setCollectionId(String collectionId) {
+		this.collectionId = collectionId;
 	}
 
 }

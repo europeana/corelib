@@ -22,14 +22,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd        
-        http://www.springframework.org/schema/data/mongo
-        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
 	">
 
 	<bean id="corelib_db_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -59,18 +56,16 @@
 
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 	
-	<mongo:mongo 
-		host="#{europeanaProperties['mongodb.host']}" 
-		port="#{europeanaProperties['mongodb.port']}"
-	/>
-	
-	<mongo:db-factory dbname="#{europeanaProperties['mongodb.dbname']}"/>
-
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg ref="mongoDbFactory" />
+	<bean id="corelib_db_mongo" class="com.mongodb.Mongo">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
 	</bean>
 	
-	<!-- Use this post processor to translate any MongoExceptions thrown in @Repository annotated classes -->
-	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>	
+	<bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia"/>
+
+    <bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia" factory-method="createDatastore">
+        <constructor-arg ref="corelib_db_mongo"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
+    </bean> 
 
 </beans>

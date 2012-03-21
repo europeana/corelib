@@ -31,10 +31,10 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.repository.ImageCacheRepository;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
@@ -44,33 +44,34 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class ThumbnailServiceTest {
 
-	@Resource
-	ImageCacheRepository repository;
+	@Resource(name="corelib_db_imageDao")
+	NosqlDao<ImageCache, String> imageDao;
 	
 	@Resource
 	ThumbnailService thumbnailService;
 	
 	@Before
 	public void setup() {
-		repository.deleteAll();
+		imageDao.getCollection().drop();
 	}
 	
 	@Test
 	public void storeTest() throws IOException, DatabaseException {
-		final String ID = "test";
+		final String OBJ_ID = "objectTest";
+		final String COL_ID = "collectionTest";
 		
-		Assert.assertTrue("Schema not empty...", repository.count() == 0);
+		Assert.assertTrue("Schema not empty...", imageDao.count() == 0);
 		
 		BufferedImage image = ImageIO.read( getClass().getResourceAsStream("/images/GREATWAR.jpg") );
-		ImageCache cache = thumbnailService.storeThumbnail(ID, image);
+		ImageCache cache = thumbnailService.storeThumbnail(OBJ_ID, COL_ID, image, "/images/GREATWAR.jpg");
 		
-		Assert.assertTrue("Test item does not exists in MongoDB", repository.exists("test"));
+		Assert.assertTrue("Test item does not exists in MongoDB", imageDao.exists("_id",OBJ_ID));
 		
-		byte[] tiny = thumbnailService.retrieveThumbnail(ID, ThumbSize.TINY);
+		byte[] tiny = thumbnailService.retrieveThumbnail(OBJ_ID, ThumbSize.TINY);
 		
 		Assert.assertTrue(tiny.length == cache.getImages().get(ThumbSize.TINY.toString()).getImage().length );
 		
-		ImageCache imageCache = thumbnailService.findByID(ID);
+		ImageCache imageCache = thumbnailService.findByID(OBJ_ID);
 		
 		Assert.assertEquals(image.getHeight(), imageCache.getHeight());
 		Assert.assertEquals(image.getWidth(), imageCache.getWidth());
@@ -78,7 +79,7 @@ public class ThumbnailServiceTest {
 		Image tinyImage = imageCache.getImages().get(ThumbSize.TINY.toString());
 		
 		Assert.assertTrue(tinyImage.getHeight() > 0);
-		Assert.assertTrue(tinyImage.getWidth() > 0);
+		Assert.assertEquals(tinyImage.getWidth(), ThumbSize.TINY.getMaxWidth());
 		
 	}
 
