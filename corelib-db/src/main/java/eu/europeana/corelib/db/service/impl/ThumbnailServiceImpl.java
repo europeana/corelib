@@ -41,6 +41,12 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 	@Override
 	public ImageCache storeThumbnail(String objectId, String collectionId, URL url) throws DatabaseException {
+		return storeThumbnail(objectId, DEFAULT_IMAGEID, collectionId, url);
+	}
+	
+	@Override
+	public ImageCache storeThumbnail(String objectId, String imageId, String collectionId, URL url)
+			throws DatabaseException {
 		Assert.notNull(objectId);
 		Assert.notNull(url);
 		try {
@@ -53,9 +59,16 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 	@Override
 	public ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage originalImage, String url) throws DatabaseException {
+		return storeThumbnail(objectId, DEFAULT_IMAGEID, collectionId, originalImage, url);
+	}
+	
+	@Override
+	public ImageCache storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage,
+			String url) throws DatabaseException {
 		Assert.notNull(objectId);
+		Assert.notNull(imageId);
 		Assert.notNull(originalImage);
-		ImageCache cache = new ImageCache(objectId, collectionId, url, originalImage);
+		ImageCache cache = new ImageCache(objectId, imageId, collectionId, url, originalImage);
 
 		try {
 			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
@@ -75,12 +88,19 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 		return store(cache);
 	}
-
+	
 	@Override
 	public byte[] retrieveThumbnail(String objectId, ThumbSize size) {
+		return retrieveThumbnail(objectId, DEFAULT_IMAGEID, size);
+	}
+	
+	@Override
+	public byte[] retrieveThumbnail(String objectId, String imageId, ThumbSize size) {
 		Assert.notNull(objectId);
+		Assert.notNull(imageId);
 		Assert.notNull(size);
-		ImageCache cache = findByID(objectId);
+		StringBuilder sb = new StringBuilder(objectId).append(COMBINE_CHAR).append(imageId);
+		ImageCache cache = findByID(sb.toString());
 		if (cache != null) {
 			return cache.getImages().get(size.toString()).getImage();
 		}
@@ -91,5 +111,5 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache findByOriginalUrl(String url) throws DatabaseException {
 		return getDao().findOne("originalUrl", url);
 	}
-
+	
 }

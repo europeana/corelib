@@ -26,6 +26,7 @@ import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
+import eu.europeana.corelib.db.service.ThumbnailService;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -34,7 +35,7 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 public class ImageCache implements NoSqlEntity {
 	
 	@Id
-	private String objectId;
+	private String imageId;
 	
 	@Indexed(unique=false)
 	private String collectionId;
@@ -56,8 +57,8 @@ public class ImageCache implements NoSqlEntity {
 		// left empty on purpose, do NOT remove!!
 	}
 
-	public ImageCache(String objectId, String collectionId, String url, BufferedImage original) {
-		setObjectId(objectId);
+	public ImageCache(String objectId, String imageId, String collectionId, String url, BufferedImage original) {
+		setImageId(new StringBuilder(objectId).append(ThumbnailService.COMBINE_CHAR).append(imageId).toString());
 		setCollectionId(collectionId);
 		setOriginalUrl(url);
 		setHeight(original.getHeight());
@@ -68,12 +69,12 @@ public class ImageCache implements NoSqlEntity {
 	 * GETTERS & SETTTERS
 	 */
 
-	public String getObjectId() {
-		return objectId;
+	public String getImageId() {
+		return imageId;
 	}
 
-	public void setObjectId(String objectId) {
-		this.objectId = objectId;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 	public int getHeight() {
