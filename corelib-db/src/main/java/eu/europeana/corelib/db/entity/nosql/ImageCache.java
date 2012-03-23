@@ -38,6 +38,9 @@ public class ImageCache implements NoSqlEntity {
 	private String imageId;
 	
 	@Indexed(unique=false)
+	private String objectId;
+	
+	@Indexed(unique=false)
 	private String collectionId;
 	
 	@Indexed(unique=false)
@@ -59,6 +62,7 @@ public class ImageCache implements NoSqlEntity {
 
 	public ImageCache(String objectId, String imageId, String collectionId, String url, BufferedImage original) {
 		setImageId(new StringBuilder(objectId).append(ThumbnailService.COMBINE_CHAR).append(imageId).toString());
+		setObjectId(objectId);
 		setCollectionId(collectionId);
 		setOriginalUrl(url);
 		setHeight(original.getHeight());
@@ -111,6 +115,14 @@ public class ImageCache implements NoSqlEntity {
 
 	public void setCollectionId(String collectionId) {
 		this.collectionId = collectionId;
+	}
+
+	public String getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 
 }
