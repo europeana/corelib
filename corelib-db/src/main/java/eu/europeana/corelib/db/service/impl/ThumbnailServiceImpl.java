@@ -86,5 +86,10 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		}
 		return null;
 	}
+	
+	@Override
+	public ImageCache findByOriginalUrl(String url) throws DatabaseException {
+		return getDao().findOne("originalUrl", url);
+	}
 
 }

@@ -61,4 +61,13 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 */
 	byte[] retrieveThumbnail(String objectId, ThumbSize size);
 	
+	/**
+	 * Find a ImageCache by it's original image url
+	 * 
+	 * @param url A String representation of the image url
+	 * @return ImageCache entity if found, null if there are no matches
+	 * @throws DatabaseException
+	 */
+	ImageCache findByOriginalUrl(String url) throws DatabaseException;
+	
 }
