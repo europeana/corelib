@@ -25,6 +25,12 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.definitions.solr.beans.ApiBean;
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
+import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 
 /**
  * Set of utils for SOLR queries
@@ -34,12 +40,12 @@ import eu.europeana.corelib.definitions.solr.DocType;
  */
 public final class SolrUtils {
 
-	private SolrUtils(){
-		
+	private SolrUtils() {
+
 	}
+
 	/**
-	 * Checks if the Facet is TYPE that everything is uppercase and known
-	 * DocType according to EDM
+	 * Checks if the Facet is TYPE that everything is uppercase and known DocType according to EDM
 	 * 
 	 * @param refinements
 	 * @return
@@ -48,8 +54,7 @@ public final class SolrUtils {
 		if (refinements != null) {
 			for (String refinement : refinements) {
 				if (StringUtils.startsWith(refinement, "TYPE:")) {
-					if (!StringUtils.isAllUpperCase(StringUtils.split(
-							refinement, ":")[1])
+					if (!StringUtils.isAllUpperCase(StringUtils.split(refinement, ":")[1])
 							|| StringUtils.split(refinement, ":").length != 2) {
 						return false;
 					} else {
@@ -76,31 +81,46 @@ public final class SolrUtils {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static <T> T exists(Class<T> clazz, T object)
-			throws InstantiationException, IllegalAccessException {
+	public static <T> T exists(Class<T> clazz, T object) throws InstantiationException, IllegalAccessException {
 		return (object == null ? clazz.newInstance() : object);
 	}
-	
-	public static void addResourceOrLiteralType(SolrInputDocument destination, EdmLabel label, ResourceOrLiteralType type) {
+
+	public static void addResourceOrLiteralType(SolrInputDocument destination, EdmLabel label,
+			ResourceOrLiteralType type) {
 		String value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
 			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
 			solrInputDocument.addField(label.toString(), value);
 		}
 	}
-	
+
 	public static void addResourceOrLiteralType(List<String> destination, ResourceOrLiteralType type) {
 		String value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
 			destination.add(value);
 		}
 	}
-	
+
 	public static String getValueOfResourceOrLiteralType(ResourceOrLiteralType type) {
 		String value = null;
 		if (type != null) {
 			value = StringUtils.isNotEmpty(type.getResource()) ? type.getResource() : type.getString();
 		}
 		return value;
+	}
+
+	public static Class<? extends IdBeanImpl> getImplementationClass(Class<? extends IdBean> interfaze) {
+		if (interfaze != null) {
+			if (interfaze == ApiBean.class) {
+				return ApiBeanImpl.class;
+			}
+			if (interfaze == BriefBean.class) {
+				return BriefBeanImpl.class;
+			}
+			if (interfaze == IdBean.class) {
+				return IdBeanImpl.class;
+			}
+		}
+		return null;
 	}
 }

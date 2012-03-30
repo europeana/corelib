@@ -45,13 +45,13 @@ public interface SearchService {
 	/**
 	 * Perform a search in SOLR based on the given query and return the results in the format of the given class.
 	 * 
-	 * @param beanClazz
+	 * @param beanInterface
 	 *            The required bean type, should be ApiBean or BriefBean
 	 * @param query
 	 *            Model class containing the search specification.
 	 * @return The search results, including facets, breadcrumb and original query.
 	 * @throws SolrTypeException
 	 */
-	<T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException;
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
 
 }

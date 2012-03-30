@@ -31,8 +31,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.solr.ContentLoader;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
@@ -88,7 +88,7 @@ public class SearchServiceTest {
 	public void findAllTest() throws SolrTypeException {
 		testCount++;
 		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
-		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, new Query("*:*"));
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class, new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
 				results.getResultSize() == 205);
@@ -101,7 +101,7 @@ public class SearchServiceTest {
 		testCount++;
 		Query query = new Query("*:*");
 		query.setRefinements(new String[]{"text:drums"});
-		ResultSet<BriefBeanImpl> results = searchService.search(BriefBeanImpl.class, query);
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
 				results.getResultSize() == 2);

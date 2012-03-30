@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -32,6 +34,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
@@ -85,9 +88,11 @@ public class SearchServiceImpl implements SearchService {
 		return fullBean;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
 		// if (!solrServer1.isActive() && !solrServer2.isActive()) {
 		// throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
@@ -112,7 +117,7 @@ public class SearchServiceImpl implements SearchService {
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults(queryResponse.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 
 					resultSet.setFacetFields(queryResponse.getFacetFields());
 					resultSet.setResultSize(queryResponse.getResults().getNumFound());

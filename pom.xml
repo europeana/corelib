@@ -80,7 +80,7 @@
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
 		<version.jibx>1.2.3</version.jibx>
-		<version.eclipseJetty>8.1.2.v20120308</version.eclipseJetty>
+		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.7.3</version.mongoDriver>
 		<version.mongoMorphia>0.99-SNAPSHOT-208patch</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
