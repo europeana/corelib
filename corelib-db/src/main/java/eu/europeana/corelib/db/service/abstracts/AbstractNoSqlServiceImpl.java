@@ -35,8 +35,7 @@ public abstract class AbstractNoSqlServiceImpl<E extends NoSqlEntity, T extends 
 	
 	@Override
 	public boolean exists(T id) {
-		// TODO
-		return false;
+		return dao.exists("_id", id);
 	}
 
 

@@ -99,8 +99,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		Assert.notNull(objectId);
 		Assert.notNull(imageId);
 		Assert.notNull(size);
-		StringBuilder sb = new StringBuilder(objectId).append(COMBINE_CHAR).append(imageId);
-		ImageCache cache = findByID(sb.toString());
+		ImageCache cache = findByID(objectId, imageId);
 		if (cache != null) {
 			return cache.getImages().get(size.toString()).getImage();
 		}
@@ -110,6 +109,28 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	@Override
 	public ImageCache findByOriginalUrl(String url) throws DatabaseException {
 		return getDao().findOne("originalUrl", url);
+	}
+	
+	@Override
+	public ImageCache findByID(String objectId) {
+		return findByID(objectId, DEFAULT_IMAGEID);
+	}
+	
+	public ImageCache findByID(String objectId, String imageId) {
+		return super.findByID(getId(objectId, imageId));
+	}
+	
+	@Override
+	public boolean exists(String objectId) {
+		return exists(objectId, DEFAULT_IMAGEID);
+	}
+	
+	public boolean exists(String objectId, String imageId) {
+		return super.exists(getId(objectId, imageId));
+	}
+	
+	private String getId(String objectId, String imageId) {
+		return new StringBuilder(objectId).append(COMBINE_CHAR).append(imageId).toString();
 	}
 	
 }

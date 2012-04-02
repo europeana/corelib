@@ -65,7 +65,7 @@ public class ThumbnailServiceTest {
 		BufferedImage image = ImageIO.read( getClass().getResourceAsStream("/images/GREATWAR.jpg") );
 		ImageCache cache = thumbnailService.storeThumbnail(OBJ_ID, COL_ID, image, "/images/GREATWAR.jpg");
 		
-		Assert.assertTrue("Test item does not exists in MongoDB", imageDao.exists("_id",OBJ_ID));
+		Assert.assertTrue("Test item does not exists in MongoDB", thumbnailService.exists(OBJ_ID));
 		
 		byte[] tiny = thumbnailService.retrieveThumbnail(OBJ_ID, ThumbSize.TINY);
 		
