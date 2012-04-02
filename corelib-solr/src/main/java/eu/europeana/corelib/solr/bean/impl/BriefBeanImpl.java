@@ -110,11 +110,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	@Override
-	public String getId() {
-		return null;
-	}
-
-	@Override
 	public String[] getTitle() {
 		return (this.title!=null ? this.title.clone() : null);
 	}
