@@ -116,6 +116,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		return findByID(objectId, DEFAULT_IMAGEID);
 	}
 	
+	@Override
 	public ImageCache findByID(String objectId, String imageId) {
 		return super.findByID(getId(objectId, imageId));
 	}
@@ -125,6 +126,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		return exists(objectId, DEFAULT_IMAGEID);
 	}
 	
+	@Override
 	public boolean exists(String objectId, String imageId) {
 		return super.exists(getId(objectId, imageId));
 	}
