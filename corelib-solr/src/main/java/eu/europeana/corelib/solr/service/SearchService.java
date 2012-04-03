@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.service;
 
+import java.util.List;
+
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
@@ -53,5 +55,16 @@ public interface SearchService {
 	 * @throws SolrTypeException
 	 */
 	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
+	
+	/**
+	 * returns a list of search suggestions
+	 * 
+	 * @param query
+	 * 			The search term to find suggestions for
+	 * @param pageSize
+	 * 			Amount of requested suggestions
+	 * @return List of search suggestions
+	 */
+	List<String> suggestions(String query, int pageSize);
 
 }

@@ -62,10 +62,6 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-
-		// if (!solrServer1.isActive() && !solrServer2.isActive()) {
-		// throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		// }
 		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
 		solrQuery.set("mlt", true);
 		String[] mlt = new String[MoreLikeThis.values().length];
@@ -94,9 +90,6 @@ public class SearchServiceImpl implements SearchService {
 		ResultSet<T> resultSet = new ResultSet<T>();
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
-		// if (!solrServer1.isActive() && !solrServer2.isActive()) {
-		// throw new SolrTypeException(ProblemType.SOLR_UNREACHABLE);
-		// }
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtils.checkTypeFacet(refinements)) {
@@ -139,6 +132,12 @@ public class SearchServiceImpl implements SearchService {
 			throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
 		}
 		return resultSet;
+	}
+	
+	@Override
+	public List<String> suggestions(String query, int pageSize) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void setSolrServer(SolrServer solrServer) {
