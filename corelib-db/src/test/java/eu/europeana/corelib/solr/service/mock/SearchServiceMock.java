@@ -20,6 +20,9 @@ package eu.europeana.corelib.solr.service.mock;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+
+import java.util.List;
+
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -53,6 +56,12 @@ public class SearchServiceMock implements SearchService {
 	@Override
 	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) {
 		// not needed in this mock...
+		return null;
+	}
+
+	@Override
+	public List<String> suggestions(String query, int pageSize) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

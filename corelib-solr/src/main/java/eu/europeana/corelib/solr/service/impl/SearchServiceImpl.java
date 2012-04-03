@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.solr.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,6 +26,8 @@ import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.TermsResponse;
+import org.apache.solr.client.solrj.response.TermsResponse.Term;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
@@ -60,9 +63,14 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
+	private static final String TERMS_QUERY_TYPE = "/terms";
+
+	private static final String TERMS_REGEX_FLAG = "case_insensitive";
+
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
+				+ europeanaObjectId + "\"");
 		solrQuery.set("mlt", true);
 		String[] mlt = new String[MoreLikeThis.values().length];
 		int i = 0;
@@ -77,7 +85,8 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		try {
 			queryResponse = solrServer.query(solrQuery);
-			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
+			fullBean.setRelatedItems(queryResponse
+					.getBeans(BriefBeanImpl.class));
 		} catch (SolrServerException e) {
 			// LOG HERE
 		}
@@ -86,16 +95,19 @@ public class SearchServiceImpl implements SearchService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
+			Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils
+				.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery()
+						.setQuery(query.getQuery());
 				solrQuery.setFacet(true);
-				for(Facet facet:query.getFacets()){
+				for (Facet facet : query.getFacets()) {
 					solrQuery.addFacetField(facet.toString());
 				}
 				if (refinements != null) {
@@ -104,18 +116,22 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setFacetLimit(facetLimit);
 				solrQuery.setRows(query.getPageSize());
 				solrQuery.setStart(query.getStart());
+				// These are going to change when we import ASSETS as well
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse
+							.getBeans(beanClazz));
 
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().getNumFound());
+					resultSet.setResultSize(queryResponse.getResults()
+							.getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse
+							.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
@@ -133,11 +149,31 @@ public class SearchServiceImpl implements SearchService {
 		}
 		return resultSet;
 	}
-	
+
 	@Override
-	public List<String> suggestions(String query, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> suggestions(String query, int pageSize)
+			throws SolrTypeException {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQueryType(TERMS_QUERY_TYPE);
+		solrQuery.setTerms(true);
+		solrQuery.setTermsLimit(pageSize);
+
+		solrQuery.setTermsPrefix(query);
+		solrQuery.setTermsRegexFlag(TERMS_REGEX_FLAG);
+		try {
+			QueryResponse queryResponse = solrServer.query(solrQuery);
+			TermsResponse response = queryResponse.getTermsResponse();
+			List<String> results = new ArrayList<String>();
+			for (Term term : response.getTerms("spell")) {
+				results.add(term.getTerm());
+			}
+			return results;
+		} catch (SolrServerException e) {
+
+			throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+
+		}
+
 	}
 
 	public void setSolrServer(SolrServer solrServer) {

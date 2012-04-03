@@ -24,7 +24,8 @@ public enum QueryType {
 	
 	ADVANCED("advanced"), 
 	MORE_LIKE_THIS("moreLikeThis"),
-	SIMPLE("search");
+	SIMPLE("search"),
+	BM25F("bm25f");
 
 	private String queryType;
 

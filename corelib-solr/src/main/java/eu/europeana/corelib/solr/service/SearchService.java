@@ -64,7 +64,8 @@ public interface SearchService {
 	 * @param pageSize
 	 * 			Amount of requested suggestions
 	 * @return List of search suggestions
+	 * @throws SolrTypeException 
 	 */
-	List<String> suggestions(String query, int pageSize);
+	List<String> suggestions(String query, int pageSize) throws SolrTypeException;
 
 }
