@@ -160,6 +160,7 @@ public class SearchServiceImpl implements SearchService {
 
 		solrQuery.setTermsPrefix(query);
 		solrQuery.setTermsRegexFlag(TERMS_REGEX_FLAG);
+		solrQuery.addTermsField("spell");
 		try {
 			QueryResponse queryResponse = solrServer.query(solrQuery);
 			TermsResponse response = queryResponse.getTermsResponse();
