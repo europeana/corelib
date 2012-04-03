@@ -24,6 +24,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
+import eu.europeana.corelib.solr.model.Term;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query search or a FullBean in the case of a
@@ -57,7 +58,7 @@ public interface SearchService {
 	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
 	
 	/**
-	 * returns a list of search suggestions
+	 * returns a list of search suggestions and frequencies
 	 * 
 	 * @param query
 	 * 			The search term to find suggestions for
@@ -66,6 +67,6 @@ public interface SearchService {
 	 * @return List of search suggestions
 	 * @throws SolrTypeException 
 	 */
-	List<String> suggestions(String query, int pageSize) throws SolrTypeException;
+	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
 
 }

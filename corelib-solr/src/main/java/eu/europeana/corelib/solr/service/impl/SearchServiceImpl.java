@@ -69,8 +69,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
-				+ europeanaObjectId + "\"");
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
 		solrQuery.set("mlt", true);
 		String[] mlt = new String[MoreLikeThis.values().length];
 		int i = 0;
@@ -85,8 +84,7 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		try {
 			queryResponse = solrServer.query(solrQuery);
-			fullBean.setRelatedItems(queryResponse
-					.getBeans(BriefBeanImpl.class));
+			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
 		} catch (SolrServerException e) {
 			// LOG HERE
 		}
@@ -95,17 +93,14 @@ public class SearchServiceImpl implements SearchService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
-			Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SolrUtils
-				.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery()
-						.setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 				solrQuery.setFacet(true);
 				for (Facet facet : query.getFacets()) {
 					solrQuery.addFacetField(facet.toString());
@@ -123,15 +118,12 @@ public class SearchServiceImpl implements SearchService {
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults((List<T>) queryResponse
-							.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults()
-							.getNumFound());
+					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse
-							.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
@@ -151,8 +143,7 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<String> suggestions(String query, int pageSize)
-			throws SolrTypeException {
+	public List<eu.europeana.corelib.solr.model.Term> suggestions(String query, int pageSize) throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQueryType(TERMS_QUERY_TYPE);
 		solrQuery.setTerms(true);
@@ -164,9 +155,9 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			QueryResponse queryResponse = solrServer.query(solrQuery);
 			TermsResponse response = queryResponse.getTermsResponse();
-			List<String> results = new ArrayList<String>();
+			List<eu.europeana.corelib.solr.model.Term> results = new ArrayList<eu.europeana.corelib.solr.model.Term>();
 			for (Term term : response.getTerms("spell")) {
-				results.add(term.getTerm());
+				results.add(new eu.europeana.corelib.solr.model.Term(term.getTerm(), term.getFrequency()));
 			}
 			return results;
 		} catch (SolrServerException e) {

@@ -59,7 +59,7 @@ public class Query {
 		return refinements;
 	}
 
-	public Query setRefinements(String[] refinements) {
+	public Query setRefinements(String... refinements) {
 		this.refinements = refinements.clone();
 		return this;
 	}
