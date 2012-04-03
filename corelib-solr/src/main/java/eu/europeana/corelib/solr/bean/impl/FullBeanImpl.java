@@ -308,21 +308,21 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public Float[] getEdmPlaceLatitude() {
+	public Float getEdmPlaceLatitude() {
 		List<Float> latitudes = new ArrayList<Float>();
 		for (Place place : this.places) {
 			latitudes.add(place.getLatitude());
 		}
-		return latitudes.toArray(new Float[latitudes.size()]);
+		return latitudes.toArray(new Float[latitudes.size()])[0];
 	}
 
 	@Override
-	public Float[] getEdmPlaceLongitude() {
+	public Float getEdmPlaceLongitude() {
 		List<Float> longitudes = new ArrayList<Float>();
 		for (Place place : this.places) {
 			longitudes.add(place.getLongitude());
 		}
-		return longitudes.toArray(new Float[longitudes.size()]);
+		return longitudes.toArray(new Float[longitudes.size()])[0];
 	}
 
 	@Override

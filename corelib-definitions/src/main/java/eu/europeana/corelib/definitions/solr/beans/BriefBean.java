@@ -57,9 +57,9 @@ public interface BriefBean extends IdBean {
 
 	List<Map<String, String>> getEdmPlaceLabel();
 
-	Float[] getEdmPlaceLatitude();
+	Float getEdmPlaceLatitude();
 
-	Float[] getEdmPlaceLongitude();
+	Float getEdmPlaceLongitude();
 
 	String[] getEdmTimespan();
 

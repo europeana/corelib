@@ -9,7 +9,6 @@
     <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
     <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
     <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="latlon" class="solr.LatLonType" subFieldSuffix="_latLon"/>
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
@@ -144,7 +143,8 @@
 
    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="false" />
    <field name="edm_type" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="edm_currentLocation_latLon" type="latlon" indexed="true" stored="false" multiValued="false" />
+   <field name="edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
+    <field name="edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
    <field name="edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
             
    <field name="europeana_recordHashFirstSix" type="string" indexed="true" stored="false" multiValued="false" />
