@@ -28,6 +28,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
+import eu.europeana.corelib.solr.model.Term;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -60,7 +61,7 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
-	public List<String> suggestions(String query, int pageSize) {
+	public List<Term> suggestions(String query, int pageSize) {
 		// TODO Auto-generated method stub
 		return null;
 	}
