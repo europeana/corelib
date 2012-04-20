@@ -26,13 +26,27 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 
 /**
  * Denormalization Utility. It retrieves the description of a reference URI according to the stored mappings
- * @author gmamakis
+ * @author Yorgos.Mamakis@ kb.nl
  *
  */
 public class Extractor {
 	@Resource(name = "corelib_solr_mongoServer")
 	private MongoDBServer mongoServer;
 
+	/**
+	 * Constructor for use with object injection
+	 */
+	public Extractor(){
+		
+	}
+	
+	/**
+	 * Constructor with the MongoDBServer for use without object Injection
+	 * @param server
+	 */
+	public Extractor(MongoDBServer server){
+		this.mongoServer = server;
+	}
 	/**
 	 * Return the stored controlled vocabulary from its URI
 	 * @param URI The URI to search with
@@ -43,6 +57,13 @@ public class Extractor {
 				.filter("URI", URI).get();
 	}
 
+	/**
+	 * Retrieve all the stored controlled vocabularies
+	 * @return A list with all the stored controlled vocabularies
+	 */
+	public List<ControlledVocabularyImpl> getControlledVocabularies(){
+		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class).asList();
+	}
 	/**
 	 * Denormalization method
 	 * @param resource The URI to retrieve the denormalized information from
@@ -91,6 +112,7 @@ public class Extractor {
 							tempList.add(controlledVocabulary.getEdmLabel(element).toString());
 							tempList.add(xml.getElementText());
 							mapped = true;
+							denormalizedValues.add(tempList);
 							tempList= new ArrayList<String>();
 						}
 					}
@@ -99,6 +121,7 @@ public class Extractor {
 					if(!mapped){
 						tempList.add(controlledVocabulary.getEdmLabel(element).toString());
 						tempList.add(xml.getElementText());
+						denormalizedValues.add(tempList);
 						tempList= new ArrayList<String>();
 					}
 				}

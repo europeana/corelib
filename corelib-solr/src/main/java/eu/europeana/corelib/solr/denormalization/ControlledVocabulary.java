@@ -89,9 +89,47 @@ public interface ControlledVocabulary {
 	 * @param location The location of the vocabulary (a local file or URL string)
 	 * @return An empty map whose keys are the original fields
 	 */
-	Map<String, EdmLabel> readSchema(String remoteLocation, String localLocation);
+	Map<String, EdmLabel> readSchema(String localLocation);
 
+	/**
+	 * Set the Controlled Vocabulary location
+	 * @param location - The location to set
+	 */
 	void setLocation(String location);
 
+	/**
+	 * Get vocabulary location
+	 * @return The Controlled vocabulary
+	 */
 	String getLocation();
+
+	/**
+	 * Set the vocabulary name
+	 * @param name - the name of the vocabulary to set
+	 */
+	void setName(String name);
+
+	/**
+	 * Set the URI of the vocabulary TODO: check if needed
+	 * @param URI The URI to set
+	 */
+	void setURI(String URI);
+
+	/**
+	 * Retrieve the URI of the controlled vocabulary TODO: Check if needed
+	 * @return The URI of the controlled vocabulary
+	 */
+	String getURI();
+
+	/**
+	 * Retrieve the suffix of the controlled vocabulary
+	 * @return The suffix of the controlled vocabulary
+	 */
+	String getSuffix();
+
+	/**
+	 * Set the suffix of the controlled vocabulary
+	 * @param suffix The suffix of the controlled vocabulary
+	 */
+	void setSuffix(String suffix);
 }

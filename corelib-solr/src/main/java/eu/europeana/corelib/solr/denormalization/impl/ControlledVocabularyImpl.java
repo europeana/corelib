@@ -1,16 +1,8 @@
 package eu.europeana.corelib.solr.denormalization.impl;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -35,9 +27,9 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 
 	@Id
 	ObjectId id;
-	@Indexed(unique = true)
+	
 	private String URI;
-
+	@Indexed(unique = true)
 	private String name;
 	private String location;
 
@@ -47,39 +39,42 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	private String suffix;
 	private Map<String, EdmLabel> elements;
 
-	private ControlledVocabularyImpl(String name) {
+	
+
+	public ControlledVocabularyImpl(String name) {
+		super();
 		this.name = name;
+		
 	}
 
-	private ControlledVocabularyImpl(String name, String location) {
-		this.name = name;
-		this.location = location;
-	}
-
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public String getSuffix() {
-		return this.suffix;
-	}
-
-	public void setURI(String URI) {
-		this.URI = URI;
-	}
-
-	public String getURI() {
-		return this.URI;
+	
+	@Override
+	public String getLocation() {
+		return location;
 	}
 
 	@Override
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	@Override
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 
 	@Override
-	public String getLocation() {
-		return this.location;
+	public String getSuffix() {
+		return this.suffix;
+	}
+
+	@Override
+	public void setURI(String URI) {
+		this.URI = URI;
+	}
+
+	@Override
+	public String getURI() {
+		return this.URI;
 	}
 
 	@Override
@@ -97,6 +92,10 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 		return this.name;
 	}
 
+	@Override
+	public void setName(String name){
+		this.name = name;
+	}
 	@Override
 	public EdmLabel getEdmLabel(String field) {
 		return this.elements.get(field);
@@ -119,37 +118,10 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	}
 
 	@Override
-	public Map<String, EdmLabel> readSchema(String remoteLocation,
-			String localLocation) {
-		return isUrl(location) ? readFromUrl(remoteLocation, localLocation)
-				: readFromFile(localLocation);
+	public Map<String, EdmLabel> readSchema(String location) {
+		return readFromFile(location);
 	}
 
-	private Map<String, EdmLabel> readFromUrl(String remoteLocation,
-			String localLocation) {
-		try {
-			URLConnection urlConnection = new URL(remoteLocation)
-					.openConnection();
-			int in = 0;
-			InputStream inputStream = urlConnection.getInputStream();
-			OutputStream fileOutputStream = new BufferedOutputStream(
-					new FileOutputStream(localLocation));
-			byte[] buffer = new byte[1024];
-			while ((in = inputStream.read(buffer)) != 1) {
-				fileOutputStream.write(buffer, 0, in);
-			}
-			inputStream.close();
-			fileOutputStream.close();
-
-		} catch (MalformedURLException e) {
-			// Should never reach here
-			e.printStackTrace();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-		return readFromFile(localLocation);
-	}
 
 	private Map<String, EdmLabel> readFromFile(String localLocation) {
 
@@ -186,18 +158,11 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 			// Should never happen
 			e.printStackTrace();
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return this.elements;
 	}
 
-	private boolean isUrl(String location) {
-		try {
-			new URL(location);
-			return true;
-		} catch (MalformedURLException e) {
-			return false;
-		}
-	}
+	
 }

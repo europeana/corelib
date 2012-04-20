@@ -19,7 +19,7 @@ package eu.europeana.corelib.definitions.model;
 
 /**
  * Enumeration holding the Solr Structure and field definitions
- * TODO: Check if needed
+ * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */

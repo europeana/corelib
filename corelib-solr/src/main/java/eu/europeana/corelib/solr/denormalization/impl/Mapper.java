@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import com.google.code.morphia.query.Query;
+
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
 import eu.europeana.corelib.solr.server.MongoDBServer;
@@ -19,7 +21,11 @@ public class Mapper {
 	private MongoDBServer mongoServer;
 	
 	private ControlledVocabulary controlledVocabulary;
-	private Mapper(ControlledVocabulary controlledVocabulary){
+	
+	public Mapper(){
+		
+	}
+	public Mapper(ControlledVocabulary controlledVocabulary){
 		this.controlledVocabulary=controlledVocabulary;
 	}
 	
@@ -29,17 +35,28 @@ public class Mapper {
 	 * @param europeanaField The EuropeanaField
 	 */
 	public void mapField(String field, EdmLabel europeanaField){
+		if(controlledVocabulary!=null){
 		controlledVocabulary.setMappedField(field, europeanaField);
-		
+		}
 	}
 	
 	/**
 	 * Method saving the mapping of the controlled vocabulary
 	 */
 	public void saveMapping(){
+		if(controlledVocabulary!=null){
 		sanitize(controlledVocabulary);
 		mongoServer.getDatastore().save(controlledVocabulary);
-		
+		}
+	}
+	
+	/**
+	 * Method removing a vocabulary by name
+	 * @param vocabularyName The vocabulary name to remove
+	 */
+	public void removeVocabulary(String vocabularyName){
+		Query<ControlledVocabularyImpl> query = mongoServer.getDatastore().find(ControlledVocabularyImpl.class).filter("name", vocabularyName);
+		mongoServer.getDatastore().delete(query);
 	}
 	
 	/**
