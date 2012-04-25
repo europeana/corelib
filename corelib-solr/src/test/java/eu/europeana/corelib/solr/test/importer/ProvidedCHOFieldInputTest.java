@@ -19,7 +19,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,7 +27,7 @@ import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 public class ProvidedCHOFieldInputTest {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testProvidedCHO() {

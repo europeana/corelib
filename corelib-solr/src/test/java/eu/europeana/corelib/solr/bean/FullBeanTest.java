@@ -55,7 +55,7 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 
 /**
  * 
@@ -69,7 +69,7 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 public class FullBeanTest {
 	
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 	
 	
 	private Datastore ds;

@@ -27,7 +27,7 @@ import eu.europeana.corelib.definitions.jibx.Ugc;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,7 +35,7 @@ import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 public class AggregationFieldInputTest {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testAggregation() {

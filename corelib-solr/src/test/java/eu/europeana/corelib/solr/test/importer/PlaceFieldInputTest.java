@@ -24,7 +24,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +32,7 @@ import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 public class PlaceFieldInputTest {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testPlace() {

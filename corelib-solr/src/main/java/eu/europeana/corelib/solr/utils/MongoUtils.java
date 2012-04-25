@@ -12,7 +12,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 
 public final class MongoUtils {
 
@@ -40,7 +40,7 @@ public final class MongoUtils {
 	}
 
 	public static void delete(Class<?> clazz, String about,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 		mongoServer.getDatastore().delete(
 				mongoServer.getDatastore().createQuery(clazz)
 						.filter("about", about));
@@ -62,7 +62,7 @@ public final class MongoUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> void update(Class<T> clazz, String about,
-			MongoDBServer mongoServer, String field, Object value) {
+			EdmMongoServer mongoServer, String field, Object value) {
 		if (value != null) {
 			Query<T> updateQuery = mongoServer.getDatastore()
 					.createQuery(clazz).field("about").equal(about);
@@ -92,7 +92,7 @@ public final class MongoUtils {
 
 	// TODO: beautify this
 	public static <T, V> void updateEntity(Class<T> clazz, String about,
-			MongoDBServer mongoServer, String field, Object value) {
+			EdmMongoServer mongoServer, String field, Object value) {
 		if (value != null) {
 			Query<T> updateQuery = mongoServer.getDatastore()
 					.createQuery(clazz).field("about").equal(about);
@@ -104,7 +104,7 @@ public final class MongoUtils {
 	}
 
 	public static void updateAggregation(AggregationImpl mongoAggregation,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 		update(AggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
 				"aggregatedCHO", mongoAggregation.getAggregatedCHO());
 
@@ -141,7 +141,7 @@ public final class MongoUtils {
 
 	}
 
-	public static void updateProxy(ProxyImpl proxy, MongoDBServer mongoServer) {
+	public static void updateProxy(ProxyImpl proxy, EdmMongoServer mongoServer) {
 
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "dcContributor",
 				proxy.getDcContributor());
@@ -231,7 +231,7 @@ public final class MongoUtils {
 	}
 
 	public static void updateFullBean(FullBean fullBean,
-			MongoDBServer mongoDBServer) {
+			EdmMongoServer mongoDBServer) {
 
 		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
 				"aggregations", fullBean.getAggregations());

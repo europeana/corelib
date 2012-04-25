@@ -19,7 +19,7 @@ import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 
 
@@ -27,7 +27,7 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class WebResourcesFieldInputTest {
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 	
 	@Test
 	public void testWebResource(){

@@ -41,7 +41,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
@@ -57,7 +57,7 @@ public class ContentLoader {
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 
-	private MongoDBServer mongoDBServer;
+	private EdmMongoServer mongoDBServer;
 
 	private SolrServer solrServer;
 
@@ -71,14 +71,14 @@ public class ContentLoader {
 	
 	private static ContentLoader instance = null;
 
-	public static ContentLoader getInstance(MongoDBServer mongoDBServer, SolrServer solrServer) {
+	public static ContentLoader getInstance(EdmMongoServer mongoDBServer, SolrServer solrServer) {
 		if (instance == null) {
 			instance = new ContentLoader(mongoDBServer, solrServer);
 		}
 		return instance;
 	}
 
-	private ContentLoader(MongoDBServer mongoDBServer, SolrServer solrServer) {
+	private ContentLoader(EdmMongoServer mongoDBServer, SolrServer solrServer) {
 		this.mongoDBServer = mongoDBServer;
 		this.solrServer = solrServer;
 	}
@@ -245,7 +245,7 @@ public class ContentLoader {
 		ApplicationContext context = new ClassPathXmlApplicationContext( "/corelib-solr-context.xml" );
 		
 		SolrServer solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
-		MongoDBServer mongoDBServer =  context.getBean("corelib_solr_mongoServer", MongoDBServer.class);
+		EdmMongoServer mongoDBServer =  context.getBean("corelib_solr_mongoServer", EdmMongoServer.class);
 		
 		if ( (solrServer != null) && (mongoDBServer != null)) {
 			ContentLoader contentLoader = null;

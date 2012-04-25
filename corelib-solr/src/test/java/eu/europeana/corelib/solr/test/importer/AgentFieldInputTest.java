@@ -23,7 +23,7 @@ import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,7 +31,7 @@ import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 public class AgentFieldInputTest {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testAgent() {

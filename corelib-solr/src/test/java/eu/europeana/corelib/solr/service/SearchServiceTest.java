@@ -36,7 +36,7 @@ import eu.europeana.corelib.solr.ContentLoader;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.Query;
 import eu.europeana.corelib.solr.model.ResultSet;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -53,7 +53,7 @@ public class SearchServiceTest {
 	private SearchService searchService;
 
 	@Resource
-	private MongoDBServer mongoDBServer;
+	private EdmMongoServer mongoDBServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
 	private SolrServer solrServer;

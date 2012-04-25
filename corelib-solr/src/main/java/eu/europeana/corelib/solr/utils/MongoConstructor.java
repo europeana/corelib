@@ -31,7 +31,7 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
@@ -52,9 +52,9 @@ public class MongoConstructor {
 
 //	private FullBeanImpl fullBean;
 
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 	
-	public void setMongoServer(MongoDBServer mongoServer) {
+	public void setMongoServer(EdmMongoServer mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 

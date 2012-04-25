@@ -51,7 +51,7 @@
         <constructor-arg value="collection1"/>
 	</bean>
 
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.MongoDBServerImpl">
+    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
     	<constructor-arg ref="corelib_solr_mongo"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
     </bean>

@@ -26,7 +26,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +34,7 @@ import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 public class ProxyFieldInputTest {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testProxy() {
