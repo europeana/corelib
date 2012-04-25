@@ -32,7 +32,7 @@ import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
@@ -130,7 +130,7 @@ public final class AgentFieldInput {
 	 * @throws MappingException
 	 */
 	public static AgentImpl createAgentMongoEntity(AgentType agentType,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 
 		AgentImpl agent = (AgentImpl) mongoServer.searchByAbout(
 				AgentImpl.class, agentType.getAbout());
@@ -158,7 +158,7 @@ public final class AgentFieldInput {
 	 * @return The new Agent MongoDB Entity
 	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
-			AgentType agentType, MongoDBServer mongoServer) {
+			AgentType agentType, EdmMongoServer mongoServer) {
 		if (agent.getBegin() != null
 				&& !StringUtils.equals(agentType.getBegins().get(0),
 						agent.getBegin())) {

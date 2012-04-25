@@ -27,7 +27,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
@@ -85,7 +85,7 @@ public final class ProvidedCHOFieldInput {
      * @throws IllegalAccessException
      */
     public static ProvidedCHOImpl createProvidedCHOMongoFields(
-            ProvidedCHOType providedCHO, MongoDBServer mongoServer)
+            ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
             throws InstantiationException, IllegalAccessException {
         ProvidedCHOImpl mongoProvidedCHO = mongoServer.searchByAbout(
                 ProvidedCHOImpl.class, providedCHO.getAbout());
@@ -129,7 +129,7 @@ public final class ProvidedCHOFieldInput {
         return mongoProvidedCHO;
     }
     
-    public static void deleteProvideCHOFromMongo(String about, MongoDBServer mongoServer){
+    public static void deleteProvideCHOFromMongo(String about, EdmMongoServer mongoServer){
     	MongoUtils.delete(ProvidedCHOImpl.class,about,mongoServer);
     }
     

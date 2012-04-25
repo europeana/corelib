@@ -31,7 +31,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
@@ -108,7 +108,7 @@ public final class TimespanFieldInput {
      * @return The MongoDB Entity
      */
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
-            MongoDBServer mongoServer) {
+            EdmMongoServer mongoServer) {
         TimespanImpl mongoTimespan = (TimespanImpl) mongoServer.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
             
       if(mongoTimespan==null) {
@@ -122,7 +122,7 @@ public final class TimespanFieldInput {
     }
 
 	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
-			TimeSpanType timeSpan, MongoDBServer mongoServer) {
+			TimeSpanType timeSpan, EdmMongoServer mongoServer) {
 		if (mongoTimespan.getBegin() != null
   				&& !StringUtils.equals(timeSpan.getBegins().get(0),
   						mongoTimespan.getBegin())) {

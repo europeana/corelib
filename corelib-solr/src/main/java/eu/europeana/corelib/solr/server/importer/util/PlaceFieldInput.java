@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
 
@@ -119,7 +119,7 @@ public final class PlaceFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static PlaceImpl createPlaceMongoFields(PlaceType placeType,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 
 		// If place exists in mongo
 
@@ -147,7 +147,7 @@ public final class PlaceFieldInput {
 	 * @return The updated Mongo Place Entity
 	 */
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 
 		if (place.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();

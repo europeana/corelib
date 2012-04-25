@@ -42,7 +42,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	
 
 	public ControlledVocabularyImpl(String name) {
-		super();
+		
 		this.name = name;
 		
 	}

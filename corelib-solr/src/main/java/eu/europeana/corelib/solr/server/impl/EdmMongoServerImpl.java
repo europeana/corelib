@@ -32,20 +32,20 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 
 /**
- * @see eu.europeana.corelib.solr.server.MongoDBServer
+ * @see eu.europeana.corelib.solr.server.EdmMongoServer
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public class MongoDBServerImpl implements MongoDBServer {
+public class EdmMongoServerImpl implements EdmMongoServer {
 
 	private Mongo mongoServer;
 	private String databaseName;
 	private Datastore datastore;
 
-	public MongoDBServerImpl(Mongo mongoServer, String databaseName)
+	public EdmMongoServerImpl(Mongo mongoServer, String databaseName)
 			throws MongoDBException {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;

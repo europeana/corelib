@@ -22,8 +22,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
-import eu.europeana.corelib.solr.server.MongoDBServer;
-
 /**
  * Denormalization Utility. It retrieves the description of a reference URI according to the stored mappings
  * @author Yorgos.Mamakis@ kb.nl
@@ -31,7 +29,7 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
  */
 public class Extractor {
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private VocabularyMongoServer mongoServer;
 
 	/**
 	 * Constructor for use with object injection
@@ -44,7 +42,7 @@ public class Extractor {
 	 * Constructor with the MongoDBServer for use without object Injection
 	 * @param server
 	 */
-	public Extractor(MongoDBServer server){
+	public Extractor(VocabularyMongoServer server){
 		this.mongoServer = server;
 	}
 	/**
@@ -62,7 +60,7 @@ public class Extractor {
 	 * @return A list with all the stored controlled vocabularies
 	 */
 	public List<ControlledVocabularyImpl> getControlledVocabularies(){
-		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class).asList();
+		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class)!=null?mongoServer.getDatastore().find(ControlledVocabularyImpl.class).asList():null;
 	}
 	/**
 	 * Denormalization method

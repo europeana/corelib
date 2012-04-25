@@ -36,7 +36,7 @@ import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
@@ -130,7 +130,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl appendWebResource(
 			List<AggregationImpl> aggregations,
-			List<WebResourceImpl> webResources, MongoDBServer mongoServer)
+			List<WebResourceImpl> webResources, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations,
 				webResources.get(0));
@@ -180,7 +180,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
-			MongoDBServer mongoServer) throws InstantiationException,
+			EdmMongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		mongoAggregation.setAbout(aggregation.getAbout());
@@ -231,7 +231,7 @@ public final class AggregationFieldInput {
 		return mongoAggregation;
 	}
 
-	public static void deleteAggregationFromMongo(String about, MongoDBServer mongoServer){
+	public static void deleteAggregationFromMongo(String about, EdmMongoServer mongoServer){
 		MongoUtils.delete(Aggregation.class,about,mongoServer);
 	}
 }

@@ -29,7 +29,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -154,7 +154,7 @@ public final class ProxyFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
-			ProvidedCHOType providedCHO, MongoDBServer mongoServer)
+			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 
 		mongoProxy.setAbout(providedCHO.getAbout());
@@ -324,7 +324,7 @@ public final class ProxyFieldInput {
 	 */
 
 	public static ProxyImpl addProxyForMongo(ProxyImpl proxy,
-			Aggregation aggregation, MongoDBServer mongoServer)
+			Aggregation aggregation, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 
 		proxy.setProxyIn(SolrUtils.exists(String.class, aggregation.getAbout()));
@@ -351,7 +351,7 @@ public final class ProxyFieldInput {
 	}
 
 	public static void deleteProxyFromMongo(String about,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 		MongoUtils.delete(ProxyImpl.class, about, mongoServer);
 	}
 }

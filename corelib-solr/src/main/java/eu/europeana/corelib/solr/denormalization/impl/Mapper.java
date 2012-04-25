@@ -9,7 +9,7 @@ import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 /**
  * Mapper class for Controlled Vocabularies
  * @author yorgos.mamakis@ kb.nl
@@ -18,7 +18,7 @@ import eu.europeana.corelib.solr.server.MongoDBServer;
 public class Mapper {
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private MongoDBServer mongoServer;
+	private EdmMongoServer mongoServer;
 	
 	private ControlledVocabulary controlledVocabulary;
 	

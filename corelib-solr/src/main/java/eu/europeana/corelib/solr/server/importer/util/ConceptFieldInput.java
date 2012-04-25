@@ -31,7 +31,7 @@ import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.server.MongoDBServer;
+import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
 /**
@@ -114,7 +114,7 @@ public final class ConceptFieldInput {
 	 * @return The MongoDB Concept Entity
 	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
-			MongoDBServer mongoServer) {
+			EdmMongoServer mongoServer) {
 
 		ConceptImpl conceptMongo = (ConceptImpl) mongoServer.searchByAbout(
 				ConceptImpl.class, concept.getAbout());
@@ -129,7 +129,7 @@ public final class ConceptFieldInput {
 	}
 
 	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
-			Concept concept, MongoDBServer mongoServer) {
+			Concept concept, EdmMongoServer mongoServer) {
 
 		if (conceptMongo.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();

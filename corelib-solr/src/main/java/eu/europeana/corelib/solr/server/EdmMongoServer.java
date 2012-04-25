@@ -16,8 +16,6 @@
  */
 package eu.europeana.corelib.solr.server;
 
-import com.google.code.morphia.Datastore;
-
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 
 /**
@@ -26,7 +24,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public interface MongoDBServer {
+public interface EdmMongoServer extends MongoServer{
 
     /**
      * A basic implementation of a MongoDB Server connection
@@ -36,25 +34,6 @@ public interface MongoDBServer {
      * one specific object
      */
     FullBean getFullBean(String id);
-
-    /**
-     * Basic information for MongoDB connection
-     *
-     * @return Information on MongoDB server configuration
-     */
-    String toString();
-
-    /**
-     * Return the datastore from a MongoDB Server
-     *
-     * @return The datastore from the MongoDB Server
-     */
-    Datastore getDatastore();
-
-    /**
-     *Close the conncetion to the MongoDB Server
-     */
-    void close();
 
     /**
      * Search using the rdf:about field of an EDM entity
