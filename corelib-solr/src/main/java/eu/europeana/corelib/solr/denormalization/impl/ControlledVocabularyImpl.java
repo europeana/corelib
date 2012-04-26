@@ -3,6 +3,7 @@ package eu.europeana.corelib.solr.denormalization.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -119,12 +120,13 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 
 	@Override
 	public Map<String, EdmLabel> readSchema(String location) {
+		elements = new HashMap<String, EdmLabel>();
 		return readFromFile(location);
 	}
 
 
 	private Map<String, EdmLabel> readFromFile(String localLocation) {
-
+		
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
 		try {
@@ -141,6 +143,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 				case XMLStreamConstants.START_ELEMENT:
 					element = xml.getName().getPrefix() + ":"
 							+ xml.getName().getLocalPart();
+					System.out.println(element);
 					elements.put(element, EdmLabel.NULL);
 					int i = 0;
 					while (i < xml.getAttributeCount()) {
@@ -151,6 +154,8 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 					}
 					xml.next();
 					break;
+				default:
+					xml.next();
 				}
 			}
 

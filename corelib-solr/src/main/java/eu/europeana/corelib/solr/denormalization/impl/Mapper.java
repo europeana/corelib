@@ -3,13 +3,10 @@ package eu.europeana.corelib.solr.denormalization.impl;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
 import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
-import eu.europeana.corelib.solr.server.EdmMongoServer;
 /**
  * Mapper class for Controlled Vocabularies
  * @author yorgos.mamakis@ kb.nl
@@ -17,16 +14,17 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
  */
 public class Mapper {
 
-	@Resource(name = "corelib_solr_mongoServer")
-	private EdmMongoServer mongoServer;
+	
+	private VocabularyMongoServer mongoServer;
 	
 	private ControlledVocabulary controlledVocabulary;
 	
 	public Mapper(){
 		
 	}
-	public Mapper(ControlledVocabulary controlledVocabulary){
+	public Mapper(ControlledVocabulary controlledVocabulary, VocabularyMongoServer mongoServer){
 		this.controlledVocabulary=controlledVocabulary;
+		this.mongoServer = mongoServer;
 	}
 	
 	/**

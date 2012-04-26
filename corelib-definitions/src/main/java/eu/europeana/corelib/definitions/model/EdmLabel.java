@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.definitions.model;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Enumeration holding the Solr Structure and field definitions
  * 
@@ -152,6 +154,15 @@ public enum EdmLabel {
 	
 	public SolrType getSolrType(){
 		return solrType;
+	}
+	
+	public static EdmLabel getEdmLabel(String value){
+		for (EdmLabel edmLabel: EdmLabel.values()){
+			if (StringUtils.equals(edmLabel.toString(), value)){
+				return edmLabel;
+			}
+		}
+		return null;
 	}
 	
 	/**
