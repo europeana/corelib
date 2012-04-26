@@ -28,7 +28,9 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	private String suffix;
 	private Map<String, EdmLabel> elements;
 
-	
+	public ControlledVocabularyImpl(){
+		
+	}
 
 	public ControlledVocabularyImpl(String name) {
 		

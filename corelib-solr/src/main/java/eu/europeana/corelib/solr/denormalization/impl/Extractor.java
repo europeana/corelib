@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -31,58 +30,73 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
 
 /**
- * Denormalization Utility. It retrieves the description of a reference URI according to the stored mappings
+ * Denormalization Utility. It retrieves the description of a reference URI
+ * according to the stored mappings
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public class Extractor {
-	@Resource(name = "corelib_solr_mongoServer")
 	private VocabularyMongoServer mongoServer;
 	private static ControlledVocabulary vocabulary;
 
 	/**
 	 * Constructor for use with object injection
 	 */
-	public Extractor(ControlledVocabulary controlledVocabulary){
-		vocabulary =controlledVocabulary;
+	public Extractor(ControlledVocabulary controlledVocabulary) {
+		vocabulary = controlledVocabulary;
 	}
-	
+
 	/**
 	 * Constructor with the MongoDBServer for use without object Injection
+	 * 
 	 * @param server
 	 */
-	public Extractor(ControlledVocabulary controlledVocabulary,VocabularyMongoServer server){
+	public Extractor(ControlledVocabulary controlledVocabulary,
+			VocabularyMongoServer server) {
 		vocabulary = controlledVocabulary;
 		this.mongoServer = server;
 	}
+
 	/**
 	 * Return the stored controlled vocabulary from its URI
-	 * @param URI The URI to search with
+	 * 
+	 * @param URI
+	 *            The URI to search with
 	 * @return The stored ControlledVocabulary to be used
 	 */
 	public ControlledVocabulary getControlledVocabulary(String URI) {
-		vocabulary = mongoServer.getDatastore().find(ControlledVocabularyImpl.class)
-		.filter("URI", URI).get();
+		vocabulary = mongoServer.getDatastore()
+				.find(ControlledVocabularyImpl.class).filter("URI", URI).get();
 		return vocabulary;
 	}
 
 	/**
 	 * Retrieve all the stored controlled vocabularies
+	 * 
 	 * @return A list with all the stored controlled vocabularies
 	 */
-	public List<ControlledVocabularyImpl> getControlledVocabularies(){
-		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class)!=null?mongoServer.getDatastore().find(ControlledVocabularyImpl.class).asList():null;
+	public List<ControlledVocabularyImpl> getControlledVocabularies() {
+		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class) != null ? mongoServer
+				.getDatastore().find(ControlledVocabularyImpl.class).asList()
+				: null;
 	}
+
 	/**
 	 * Denormalization method
-	 * @param resource The URI to retrieve the denormalized information from
-	 * @param controlledVocabulary The controlled vocabulary holding the mappings
-	 * @return A List of pairs of strings representing the <Europeana Mapped Field , Denormalized values> 
+	 * 
+	 * @param resource
+	 *            The URI to retrieve the denormalized information from
+	 * @param controlledVocabulary
+	 *            The controlled vocabulary holding the mappings
+	 * @return A List of pairs of strings representing the <Europeana Mapped
+	 *         Field , Denormalized values>
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
 	public List<List<String>> denormalize(String resource,
-			ControlledVocabularyImpl controlledVocabulary) throws MalformedURLException, IOException {
+			ControlledVocabularyImpl controlledVocabulary)
+			throws MalformedURLException, IOException {
 		List<List<String>> denormalizedValues = new ArrayList<List<String>>();
 		String suffix = controlledVocabulary.getSuffix();
 		String xmlString = retrieveValueFromResource(resource + suffix != null ? suffix
@@ -93,7 +107,7 @@ public class Extractor {
 			source = new StreamSource(new ByteArrayInputStream(
 					xmlString.getBytes()), "UTF-8");
 			XMLStreamReader xml = inFactory.createXMLStreamReader(source);
-			String element="";
+			String element = "";
 			boolean mapped = false;
 			while (xml.hasNext()) {
 				List<String> tempList = new ArrayList<String>();
@@ -102,36 +116,35 @@ public class Extractor {
 
 					break;
 				case XMLStreamConstants.START_ELEMENT:
-					 element = xml.getPrefix() + ":"+ xml.getLocalName();
-					 
+					element = xml.getPrefix() + ":" + xml.getLocalName();
+
 					if (isMapped(element)) {
-						if(xml.getAttributeCount()>0){
-							String attribute = xml.getAttributePrefix(0)+":"+xml.getAttributeLocalName(0);
-							if(isMapped(element+"_"+attribute)){
+						if (xml.getAttributeCount() > 0) {
+							String attribute = xml.getAttributePrefix(0) + ":"
+									+ xml.getAttributeLocalName(0);
+							if (isMapped(element + "_" + attribute)) {
 								mapped = false;
 								tempList.add(getEdmLabel(attribute).toString());
 								tempList.add(xml.getAttributeValue(0));
 								denormalizedValues.add(tempList);
-								tempList= new ArrayList<String>();
+								tempList = new ArrayList<String>();
 							}
 							xml.next();
-						}
-						else
-						{
+						} else {
 							tempList.add(getEdmLabel(element).toString());
 							tempList.add(xml.getElementText());
 							mapped = true;
 							denormalizedValues.add(tempList);
-							tempList= new ArrayList<String>();
+							tempList = new ArrayList<String>();
 						}
 					}
 					break;
 				case XMLStreamConstants.CHARACTERS:
-					if(!mapped){
+					if (!mapped) {
 						tempList.add(getEdmLabel(element).toString());
 						tempList.add(xml.getElementText());
 						denormalizedValues.add(tempList);
-						tempList= new ArrayList<String>();
+						tempList = new ArrayList<String>();
 					}
 				}
 				xml.next();
@@ -142,24 +155,29 @@ public class Extractor {
 		}
 		return denormalizedValues;
 	}
-/**
- * Retrieve an XML string from a ControlledVocabulary
- * @param resource - The name of the resource to retrieve
- * @return An XML string representing the RDF/XML resource from an online Controlled Vocabulary
- * @throws MalformedURLException
- * @throws IOException
- */
-	private String retrieveValueFromResource(String resource) throws MalformedURLException, IOException {
+
+	/**
+	 * Retrieve an XML string from a ControlledVocabulary
+	 * 
+	 * @param resource
+	 *            - The name of the resource to retrieve
+	 * @return An XML string representing the RDF/XML resource from an online
+	 *         Controlled Vocabulary
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
+	private String retrieveValueFromResource(String resource)
+			throws MalformedURLException, IOException {
 		URLConnection urlConnection = new URL(resource).openConnection();
 		InputStream inputStream = urlConnection.getInputStream();
 		StringWriter writer = new StringWriter();
-		IOUtils.copy(inputStream, writer, "UTF-8");;
+		IOUtils.copy(inputStream, writer, "UTF-8");
+		;
 		return writer.toString();
 	}
-	
-	
+
 	public EdmLabel getEdmLabel(String field) {
-		
+
 		return vocabulary.getElements().get(field);
 	}
 
@@ -176,17 +194,16 @@ public class Extractor {
 		}
 		return null;
 	}
-	
+
 	public boolean isMapped(String field) {
 		return vocabulary.getElements().containsKey(field);
 	}
-	
+
 	public Map<String, EdmLabel> readSchema(String location) {
-		
+
 		vocabulary.setElements(readFromFile(location));
 		return vocabulary.getElements();
 	}
-
 
 	private Map<String, EdmLabel> readFromFile(String localLocation) {
 		Map<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
@@ -226,7 +243,7 @@ public class Extractor {
 			// Should never happen
 			e.printStackTrace();
 		} catch (XMLStreamException e) {
-			
+
 			e.printStackTrace();
 		}
 		return elements;
