@@ -17,11 +17,6 @@
 
 package eu.europeana.corelib.definitions.exception;
 
-/**
- * @author Borys Omelayenko
- * @author Gerald de Jong <geralddejong@gmail.com>
- */
-
 public enum ProblemType {
     MATCH_ALL_DOCS("org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
     UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),

@@ -17,10 +17,6 @@
 
 package eu.europeana.corelib.definitions.exception;
 
-/**
- * @author Borys Omelayenko
- */
-
 public enum ProblemResponseAction {
 	MAIL, LOG, IGNORE
 }
