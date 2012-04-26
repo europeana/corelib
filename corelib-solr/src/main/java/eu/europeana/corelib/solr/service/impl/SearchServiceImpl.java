@@ -82,11 +82,13 @@ public class SearchServiceImpl implements SearchService {
 		QueryResponse queryResponse = null;
 
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		try {
-			queryResponse = solrServer.query(solrQuery);
-			fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
-		} catch (SolrServerException e) {
-			// LOG HERE
+		if (fullBean != null) {
+			try {
+				queryResponse = solrServer.query(solrQuery);
+				fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
+			} catch (SolrServerException e) {
+				// LOG HERE
+			}
 		}
 		return fullBean;
 	}
