@@ -38,44 +38,6 @@ public interface ControlledVocabulary {
 	 */
 	Map<String, EdmLabel> getElements();
 
-	/**
-	 * Get the Europeana field that has been mapped to the specific controlled
-	 * vocabulary field
-	 * 
-	 * @param field
-	 *            The controlled vocabulary field
-	 * @return The mapped EdmLabel
-	 */
-	EdmLabel getEdmLabel(String field);
-
-	/**
-	 * Set the mapping between a Europeana Field and a Controlled Vocabulary
-	 * Field
-	 * 
-	 * @param field
-	 *            The original controlled vocabulary field
-	 * @param fieldToMap
-	 *            The Europeanafield
-	 */
-	void setMappedField(String fieldToMap, EdmLabel europeanaField);
-
-	/**
-	 * Get the original field from the mapped europeana field
-	 * 
-	 * @param europeanaField
-	 *            The europeana field to search for
-	 * @return The original field
-	 */
-	String getMappedField(EdmLabel europeanaField);
-
-	/**
-	 * Return if a field is mapped
-	 * 
-	 * @param field
-	 *            The name of the field
-	 * @return true if the field has been mapped, false else
-	 */
-	boolean isMapped(String field);
 
 	/**
 	 * Get the ControlledVocabulary name (Unique)
@@ -84,12 +46,6 @@ public interface ControlledVocabulary {
 	 */
 	String getName();
 
-	/**
-	 * Create a controlled vocabulary from a schema
-	 * @param location The location of the vocabulary (a local file or URL string)
-	 * @return An empty map whose keys are the original fields
-	 */
-	Map<String, EdmLabel> readSchema(String localLocation);
 
 	/**
 	 * Set the Controlled Vocabulary location
@@ -132,4 +88,6 @@ public interface ControlledVocabulary {
 	 * @param suffix The suffix of the controlled vocabulary
 	 */
 	void setSuffix(String suffix);
+
+	void setElements(Map<String, EdmLabel> elements);
 }
