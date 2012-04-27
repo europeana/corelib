@@ -22,12 +22,10 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
-import eu.europeana.corelib.definitions.solr.beans.IdBean;
-
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public class ResultSet<T extends IdBean> {
+public class ResultSet<T> {
 	
 	private Query query;
 

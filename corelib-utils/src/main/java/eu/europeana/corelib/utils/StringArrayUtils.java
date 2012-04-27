@@ -6,6 +6,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class StringArrayUtils {
     
+	public static final String[] EMPTY_ARRAY = new String[0];
+	
     public static boolean isNotBlank(String[] array) {
         return ((array != null) && 
                 (array.length > 0) && 

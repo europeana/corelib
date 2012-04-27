@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.model;
 
 import eu.europeana.corelib.definitions.solr.Facet;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -63,7 +64,11 @@ public class Query {
 	}
 
 	public Query setRefinements(String... refinements) {
-		this.refinements = refinements.clone();
+		if (refinements != null) {
+			this.refinements = refinements.clone();
+		} else {
+			this.refinements = StringArrayUtils.EMPTY_ARRAY;
+		}
 		return this;
 	}
 
@@ -89,8 +94,13 @@ public class Query {
 		return facets;
 	}
 	
-	public void setFacets(Facet[] facets) {
-		this.facets = facets;
+	public Query setFacets(Facet[] facets) {
+		if (facets != null) {
+			this.facets = facets.clone();
+		} else {
+			this.facets = Facet.values();
+		}
+		return this;
 	}
 
 }
