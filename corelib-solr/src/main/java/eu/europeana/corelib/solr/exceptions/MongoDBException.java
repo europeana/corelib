@@ -14,10 +14,12 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
+
 package eu.europeana.corelib.solr.exceptions;
 
 import eu.europeana.corelib.definitions.exception.EuropeanaException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+
 /**
  * Basic MongoDBException
  * 

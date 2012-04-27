@@ -19,16 +19,13 @@ package eu.europeana.corelib.solr.exceptions;
 
 import eu.europeana.corelib.definitions.exception.EuropeanaException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+
 /**
  * SOLR query exception
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
 public class EuropeanaQueryException extends EuropeanaException {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7386298508128415225L;
 
 	public EuropeanaQueryException(ProblemType problem) {

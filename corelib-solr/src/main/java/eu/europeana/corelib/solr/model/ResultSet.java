@@ -24,6 +24,9 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 
+/**
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 public class ResultSet<T extends IdBean> {
 	
 	private Query query;

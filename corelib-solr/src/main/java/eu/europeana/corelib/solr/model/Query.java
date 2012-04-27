@@ -19,6 +19,9 @@ package eu.europeana.corelib.solr.model;
 
 import eu.europeana.corelib.definitions.solr.Facet;
 
+/**
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ */
 public class Query {
 
 	private String query;
