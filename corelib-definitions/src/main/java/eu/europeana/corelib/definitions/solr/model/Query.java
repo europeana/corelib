@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.solr.model;
+package eu.europeana.corelib.definitions.solr.model;
 
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.StringArrayUtils;

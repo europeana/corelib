@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
+import eu.europeana.corelib.definitions.solr.model.Query;
+
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */

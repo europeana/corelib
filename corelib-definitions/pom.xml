@@ -24,6 +24,12 @@
 	<name>corelib-definitions</name>
 	<url>http://www.europeanalabs.eu</url>
 	<dependencies>
+		<!-- Corelib -->
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-utils</artifactId>
+			<version>${version.europeanaCorelib}</version>
+		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-lang</groupId>
