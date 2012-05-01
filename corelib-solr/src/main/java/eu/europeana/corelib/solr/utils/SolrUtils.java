@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.utils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +34,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.server.importer.util.Dereferencer;
 
 /**
  * Set of utils for SOLR queries
@@ -86,25 +90,39 @@ public final class SolrUtils {
 	}
 
 	public static void addResourceOrLiteralType(SolrInputDocument destination, EdmLabel label,
-			ResourceOrLiteralType type) {
-		String value = getValueOfResourceOrLiteralType(type);
+			ResourceOrLiteralType type) throws MalformedURLException, IOException {
+		List<List<String>> value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
 			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
-			solrInputDocument.addField(label.toString(), value);
+			for(List<String> values : value){
+				solrInputDocument.addField(label.toString(), values.get(1));
+			}
 		}
 	}
 
-	public static void addResourceOrLiteralType(List<String> destination, ResourceOrLiteralType type) {
-		String value = getValueOfResourceOrLiteralType(type);
+	public static void addResourceOrLiteralType(List<String> destination,
+			ResourceOrLiteralType type) throws MalformedURLException, IOException {
+		List<List<String>> value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
-			destination.add(value);
+			for(List<String> values: value){
+				destination.add(values.get(1));
+			}
 		}
 	}
 
-	public static String getValueOfResourceOrLiteralType(ResourceOrLiteralType type) {
-		String value = null;
+	public static List<List<String>> getValueOfResourceOrLiteralType(
+			ResourceOrLiteralType type) throws MalformedURLException, IOException {
+		List<List<String>> value  = new ArrayList<List<String>>();
 		if (type != null) {
-			value = StringUtils.isNotEmpty(type.getResource()) ? type.getResource() : type.getString();
+			
+			if(StringUtils.isNotEmpty(type.getResource()))
+				{
+					value = Dereferencer.normalize(type.getResource());
+				}
+			else{
+				value = Dereferencer.normalize(type.getString());
+			}
+			
 		}
 		return value;
 	}

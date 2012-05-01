@@ -16,6 +16,9 @@
  */
 package eu.europeana.corelib.solr.utils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
@@ -38,14 +41,17 @@ public class SolrConstructor {
 	static SolrInputDocument solrInputDocument;
 	
         /**
-         * Construct a SolrInputDocument from a JiBX RDF Entity
-         * 
-         * @param rdf The JiBX RDF Entity
-         * @return SolrInputDocument with an full EDM XML record
-         * @throws InstantiationException
-         * @throws IllegalAccessException 
-         */
-	public static SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException{
+	 * Construct a SolrInputDocument from a JiBX RDF Entity
+	 * 
+	 * @param rdf
+	 *            The JiBX RDF Entity
+	 * @return SolrInputDocument with an full EDM XML record
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 */
+	public static SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
 		solrInputDocument = new SolrInputDocument();
 		
 		for(Choice element: rdf.getChoiceList()){

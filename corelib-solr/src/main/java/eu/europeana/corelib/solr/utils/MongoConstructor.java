@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.utils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +76,10 @@ public class MongoConstructor {
 	 *            The JiBX RDF record
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws IOException 
+	 * @throws MalformedURLException 
 	 */
-	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException {
+	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
