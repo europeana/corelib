@@ -1120,11 +1120,12 @@
       -->
     <lst name="spellchecker">
       <str name="name">default</str>
-      <str name="field">name</str>
+      <str name="field">spell</str>
       <str name="spellcheckIndexDir">spellchecker</str>
       <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
       	<float name="thresholdTokenFrequency">.01</float>
       -->
+      <str name="buildOnOptimize">true</str>  <!--enable this on production-->
     </lst>
 
     <!-- a spellchecker that uses a different distance measure -->

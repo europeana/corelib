@@ -117,6 +117,13 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
+				// enable spellcheck
+	            if ( solrQuery.getStart() == null || solrQuery.getStart().intValue() <= 1 ) {
+	                solrQuery.setParam("spellcheck", true);
+	                solrQuery.setParam("spellcheck.collate", true);
+	                solrQuery.setParam("spellcheck.extendedResults", true);
+	                solrQuery.setParam("spellcheck.onlyMorePopular", true);
+	            }
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
