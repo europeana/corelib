@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -17,6 +19,7 @@ import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
  */
 public class Mapper {
 
+	@Resource(name="corelib_solr_vocabularyMongoServer")
 	private VocabularyMongoServer mongoServer;
 
 	private static ControlledVocabulary controlledVocabulary;

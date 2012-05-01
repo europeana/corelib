@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -37,6 +38,7 @@ import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
  * 
  */
 public class Extractor {
+	@Resource(name="corelib_solr_vocabularyMongoServer")
 	private VocabularyMongoServer mongoServer;
 	private static ControlledVocabulary vocabulary;
 

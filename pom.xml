@@ -82,7 +82,7 @@
 		<version.jibx>1.2.3</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.7.3</version.mongoDriver>
-		<version.mongoMorphia>0.99-SNAPSHOT-208patch</version.mongoMorphia>
+		<version.mongoMorphia>0.99</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -107,10 +107,8 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
+			<scope>test</scope>		</dependency>
 	</dependencies>
-
 	<distributionManagement>
 	    <repository>
 	        <id>europeanalabs.eu</id>

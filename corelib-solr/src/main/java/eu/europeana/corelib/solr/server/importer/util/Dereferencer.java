@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.solr.denormalization.impl.ControlledVocabularyImpl;
@@ -22,6 +24,10 @@ import eu.europeana.corelib.solr.denormalization.impl.VocabularyMongoServer;
 
 public class Dereferencer {
 
+	@Resource(name="corelib_solr_vocabularyMongoServer")
+	private VocabularyMongoServer server;
+	
+	@Resource(name="corelib_solr_vocabularyMongoServer")
 	/**
 	 * Lookup the URI provided in a control vocabulary and return its
 	 * description
