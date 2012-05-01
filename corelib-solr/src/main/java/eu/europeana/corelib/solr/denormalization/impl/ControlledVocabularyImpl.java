@@ -38,6 +38,10 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 		
 	}
 
+	@Override
+	public ObjectId getId(){
+		return id;
+	}
 	
 	@Override
 	public String getLocation() {

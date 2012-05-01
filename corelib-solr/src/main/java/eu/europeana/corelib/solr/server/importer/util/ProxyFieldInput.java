@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.server.importer.util;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,10 +57,12 @@ public final class ProxyFieldInput {
 	 * @return The altered SolrInputDocument with the Proxy fields filled in
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws IOException 
+	 * @throws MalformedURLException 
 	 */
 	public static SolrInputDocument createProxySolrFields(
 			ProvidedCHOType providedCHO, SolrInputDocument solrInputDocument)
-			throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				providedCHO.getAbout());
 		solrInputDocument.addField(EdmLabel.EDM_TYPE.toString(), SolrUtils
@@ -152,10 +156,12 @@ public final class ProxyFieldInput {
 	 * @return The MongoDB Proxy Entity
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws IOException
+	 * @throws MalformedURLException
 	 */
 	public static ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
 			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
-			throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 
 		mongoProxy.setAbout(providedCHO.getAbout());
 

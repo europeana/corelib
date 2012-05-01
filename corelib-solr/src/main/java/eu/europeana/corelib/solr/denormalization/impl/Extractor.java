@@ -68,7 +68,7 @@ public class Extractor {
 	public ControlledVocabulary getControlledVocabulary(String URI) {
 		vocabulary = mongoServer.getDatastore()
 				.find(ControlledVocabularyImpl.class).filter("URI", URI).get();
-		return vocabulary;
+		return vocabulary != null ? vocabulary : null;
 	}
 
 	/**
@@ -95,63 +95,72 @@ public class Extractor {
 	 * @throws IOException
 	 */
 	public List<List<String>> denormalize(String resource,
-			ControlledVocabularyImpl controlledVocabulary)
-			throws MalformedURLException, IOException {
+			ControlledVocabulary controlledVocabulary) {
 		List<List<String>> denormalizedValues = new ArrayList<List<String>>();
-		String suffix = controlledVocabulary.getSuffix();
-		String xmlString = retrieveValueFromResource(resource + suffix != null ? suffix
+		String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
+				.getSuffix() : "";
+		String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
+				+ suffix
 				: "");
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
-		try {
-			source = new StreamSource(new ByteArrayInputStream(
-					xmlString.getBytes()), "UTF-8");
-			XMLStreamReader xml = inFactory.createXMLStreamReader(source);
-			String element = "";
-			boolean mapped = false;
-			while (xml.hasNext()) {
-				List<String> tempList = new ArrayList<String>();
-				switch (xml.getEventType()) {
-				case XMLStreamConstants.START_DOCUMENT:
+		if (xmlString.length() > 0) {
+			try {
+				source = new StreamSource(new ByteArrayInputStream(
+						xmlString.getBytes()), "UTF-8");
+				XMLStreamReader xml = inFactory.createXMLStreamReader(source);
+				String element = "";
+				boolean mapped = false;
+				while (xml.hasNext()) {
+					List<String> tempList = new ArrayList<String>();
+					switch (xml.getEventType()) {
+					case XMLStreamConstants.START_DOCUMENT:
+						xml.next();
+						break;
+					case XMLStreamConstants.START_ELEMENT:
+						element = xml.getPrefix() + ":" + xml.getLocalName();
 
-					break;
-				case XMLStreamConstants.START_ELEMENT:
-					element = xml.getPrefix() + ":" + xml.getLocalName();
-
-					if (isMapped(element)) {
-						if (xml.getAttributeCount() > 0) {
-							String attribute = xml.getAttributePrefix(0) + ":"
-									+ xml.getAttributeLocalName(0);
-							if (isMapped(element + "_" + attribute)) {
-								mapped = false;
-								tempList.add(getEdmLabel(attribute).toString());
-								tempList.add(xml.getAttributeValue(0));
+						if (isMapped(element)) {
+							if (xml.getAttributeCount() > 0) {
+								String attribute = xml.getAttributePrefix(0)
+										+ ":" + xml.getAttributeLocalName(0);
+								if (isMapped(element + "_" + attribute)) {
+									mapped = false;
+									tempList.add(getEdmLabel(attribute)
+											.toString());
+									tempList.add(xml.getAttributeValue(0));
+									denormalizedValues.add(tempList);
+									tempList = new ArrayList<String>();
+								}
+								xml.next();
+							} else {
+								tempList.add(getEdmLabel(element).toString());
+								tempList.add(xml.getElementText());
+								mapped = true;
 								denormalizedValues.add(tempList);
 								tempList = new ArrayList<String>();
 							}
-							xml.next();
-						} else {
+						}
+						xml.next();
+						break;
+					case XMLStreamConstants.CHARACTERS:
+						if (!mapped) {
 							tempList.add(getEdmLabel(element).toString());
 							tempList.add(xml.getElementText());
-							mapped = true;
 							denormalizedValues.add(tempList);
 							tempList = new ArrayList<String>();
 						}
+						xml.next();
+						break;
+					default:
+						xml.next();
+						break;
 					}
-					break;
-				case XMLStreamConstants.CHARACTERS:
-					if (!mapped) {
-						tempList.add(getEdmLabel(element).toString());
-						tempList.add(xml.getElementText());
-						denormalizedValues.add(tempList);
-						tempList = new ArrayList<String>();
-					}
+
 				}
-				xml.next();
+			} catch (XMLStreamException e) {
+
 			}
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return denormalizedValues;
 	}
@@ -166,19 +175,26 @@ public class Extractor {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	private String retrieveValueFromResource(String resource)
-			throws MalformedURLException, IOException {
-		URLConnection urlConnection = new URL(resource).openConnection();
-		InputStream inputStream = urlConnection.getInputStream();
-		StringWriter writer = new StringWriter();
-		IOUtils.copy(inputStream, writer, "UTF-8");
-		;
-		return writer.toString();
+	private String retrieveValueFromResource(String resource) {
+		URLConnection urlConnection;
+		try {
+			urlConnection = new URL(resource).openConnection();
+
+			InputStream inputStream = urlConnection.getInputStream();
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(inputStream, writer, "UTF-8");
+			return writer.toString();
+		} catch (MalformedURLException e) {
+			return "";
+		} catch (IOException e) {
+			return "";
+		}
 	}
 
 	public EdmLabel getEdmLabel(String field) {
 
-		return vocabulary.getElements().get(field);
+		return vocabulary != null ? vocabulary.getElements().get(field)
+				: EdmLabel.NULL;
 	}
 
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
@@ -196,7 +212,8 @@ public class Extractor {
 	}
 
 	public boolean isMapped(String field) {
-		return vocabulary.getElements().containsKey(field);
+		return vocabulary != null ? vocabulary.getElements().containsKey(field)
+				: false;
 	}
 
 	public Map<String, EdmLabel> readSchema(String location) {

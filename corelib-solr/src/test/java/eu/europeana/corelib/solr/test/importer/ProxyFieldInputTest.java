@@ -2,6 +2,8 @@ package eu.europeana.corelib.solr.test.importer;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +39,15 @@ public class ProxyFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testProxy() {
+	public void testProxy() throws MalformedURLException, IOException {
 		// The fields of the proxy come from the ProvidedCHO
 		ProvidedCHOType proxy = createProxyFields();
 		testMongo(proxy);
 		testSolr(proxy);
 	}
 
-	private void testSolr(ProvidedCHOType proxy) {
+	private void testSolr(ProvidedCHOType proxy) throws MalformedURLException,
+			IOException {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
 			solrDocument = ProxyFieldInput.createProxySolrFields(proxy,
@@ -262,6 +265,12 @@ public class ProxyFieldInputTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

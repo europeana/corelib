@@ -6,8 +6,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.google.code.morphia.query.Query;
-
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
 
@@ -51,9 +49,8 @@ public class Mapper {
 	 */
 	public void saveMapping() {
 		if (controlledVocabulary != null) {
-			sanitize(controlledVocabulary);
+		//	sanitize(controlledVocabulary);
 			mongoServer.getDatastore().save(controlledVocabulary);
-			System.out.println("Saved vocabulary");
 		}
 	}
 
@@ -64,32 +61,27 @@ public class Mapper {
 	 *            The vocabulary name to remove
 	 */
 	public void removeVocabulary(String vocabularyName) {
-		Query<ControlledVocabularyImpl> query = mongoServer.getDatastore()
-				.find(ControlledVocabularyImpl.class)
-				.filter("name", vocabularyName);
-		mongoServer.getDatastore().delete(query);
+		
+		mongoServer.getDatastore().delete(ControlledVocabularyImpl.class,mongoServer.getDatastore().find(ControlledVocabularyImpl.class).filter("name", vocabularyName).get().getId());
 	}
 
 	/**
 	 * Sanitizing method that removes unmapped fields (the controlled vocabulary
 	 * is initialized with full mappings)
-	 * 
+	 * ????REQUIRED????
 	 * @param controlledVocabulary
 	 *            The controlled vocabulary to sanitize
 	 */
 	private void sanitize(ControlledVocabulary controlledVocabulary) {
 		Set<Entry<String, EdmLabel>> elements = controlledVocabulary
 				.getElements().entrySet();
-		System.out.println(controlledVocabulary.getElements().size());
 		Iterator<Entry<String, EdmLabel>> iterator = elements.iterator();
 		while (iterator.hasNext()) {
 			Entry<String, EdmLabel> entry = iterator.next();
-			System.out.println(entry.getKey());
 
 			if (StringUtils.equals(entry.getValue().toString(), "null")) {
 				iterator.remove();
 			}
 		}
-		System.out.println("out of sanitize while");
 	}
 }

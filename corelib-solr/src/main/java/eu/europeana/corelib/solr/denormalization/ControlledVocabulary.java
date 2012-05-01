@@ -19,6 +19,8 @@ package eu.europeana.corelib.solr.denormalization;
 
 import java.util.Map;
 
+import org.bson.types.ObjectId;
+
 import eu.europeana.corelib.definitions.model.EdmLabel;
 
 /**
@@ -90,4 +92,7 @@ public interface ControlledVocabulary {
 	void setSuffix(String suffix);
 
 	void setElements(Map<String, EdmLabel> elements);
+
+
+	ObjectId getId();
 }
