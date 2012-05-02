@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -24,10 +23,12 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.context.ApplicationContext;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.context.AppContext;
 import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
 
 /**
@@ -38,8 +39,8 @@ import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
  * 
  */
 public class Extractor {
-	@Resource(name="corelib_solr_vocabularyMongoServer")
-	private VocabularyMongoServer mongoServer;
+	
+	private static VocabularyMongoServer mongoServer;
 	private static ControlledVocabulary vocabulary;
 
 	/**
@@ -47,6 +48,8 @@ public class Extractor {
 	 */
 	public Extractor(ControlledVocabulary controlledVocabulary) {
 		vocabulary = controlledVocabulary;
+		ApplicationContext applicationContext = AppContext.getApplicationContext();
+		mongoServer = (VocabularyMongoServer) applicationContext.getBean("corelib_solr_vocabularyMongoServer");
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class Extractor {
 	public Extractor(ControlledVocabulary controlledVocabulary,
 			VocabularyMongoServer server) {
 		vocabulary = controlledVocabulary;
-		this.mongoServer = server;
+		mongoServer = server;
 	}
 
 	/**
@@ -222,6 +225,20 @@ public class Extractor {
 
 		vocabulary.setElements(readFromFile(location));
 		return vocabulary.getElements();
+	}
+
+	public void removeVocabulary(String vocabularyName) {
+
+		mongoServer.getDatastore().delete(
+				ControlledVocabularyImpl.class,
+				mongoServer.getDatastore().find(ControlledVocabularyImpl.class)
+						.filter("name", vocabularyName).get().getId());
+	}
+
+	public void saveMapping() {
+		if (vocabulary != null) {
+			mongoServer.getDatastore().save(vocabulary);
+		}
 	}
 
 	private Map<String, EdmLabel> readFromFile(String localLocation) {

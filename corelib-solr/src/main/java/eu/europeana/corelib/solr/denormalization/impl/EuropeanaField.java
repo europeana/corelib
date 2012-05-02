@@ -11,6 +11,8 @@ import java.util.List;
 public class EuropeanaField {
 	/**
 	 * Enumeration holding the fields that should be checked for normalization
+	 * (plus the contextual entities... they are missing now, but should be included)
+	 * Also check the reference field prior to checking dereference
 	 * 
 	 * @author Yorgos.Mamakis@ kb.nl
 	 * 

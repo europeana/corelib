@@ -23,7 +23,7 @@ public class VocabularyMongoServer implements MongoServer {
 	}
 
 	public VocabularyMongoServer(Mongo mongoServer, String databaseName) {
-		super();
+		
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		createDatastore();
