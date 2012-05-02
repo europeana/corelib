@@ -76,6 +76,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Field("europeana_collectionName")
 	private String[] europeanaCollectionName;
+	
 	private int index;
 
 	@Field("edm_place_broader_term")
@@ -138,6 +139,51 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Override
 	public String[] getDctermsIsPartOf() {
 		return (dctermsIsPartOf != null ? this.dctermsIsPartOf.clone() : null);
+	}
+
+	@Override
+	public String[] getUgc() {
+		return ugc;
+	}
+
+	@Override
+	public void setUgc(String[] ugc) {
+		this.ugc = ugc;
+	}
+
+	@Override
+	public String[] getEdmRights() {
+		return edmRights;
+	}
+
+	@Override
+	public void setEdmRights(String[] edmRights) {
+		this.edmRights = edmRights;
+	}
+
+	@Override
+	public String[] getCountry() {
+		return country;
+	}
+
+	@Override
+	public void setCountry(String[] country) {
+		this.country = country;
+	}
+
+	@Override
+	public String[] getEuropeanaCollectionName() {
+		return europeanaCollectionName;
+	}
+
+	@Override
+	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
+		this.europeanaCollectionName = europeanaCollectionName;
+	}
+
+	@Override
+	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
+		this.dctermsIsPartOf = dctermsIsPartOf;
 	}
 
 }

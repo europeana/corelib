@@ -17,6 +17,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	@Id
 	ObjectId id;
 	
+	@Indexed (unique = true)
 	private String URI;
 	@Indexed(unique = true)
 	private String name;

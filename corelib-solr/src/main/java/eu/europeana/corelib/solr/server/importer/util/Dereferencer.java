@@ -47,9 +47,9 @@ public class Dereferencer {
 		if (isURI(uri)) {
 			Extractor extractor = new Extractor(new ControlledVocabularyImpl(),
 					server);
-			if (extractor.getControlledVocabulary(uri) != null) {
+			if (extractor.getControlledVocabulary("URI",uri) != null) {
 				values.addAll(extractor.denormalize(uri,
-						extractor.getControlledVocabulary(uri)));
+						extractor.getControlledVocabulary("URI",uri)));
 			}
 
 		}

@@ -39,7 +39,7 @@ import eu.europeana.corelib.solr.denormalization.ControlledVocabulary;
  * 
  */
 public class Extractor {
-	
+
 	private static VocabularyMongoServer mongoServer;
 	private static ControlledVocabulary vocabulary;
 
@@ -48,8 +48,10 @@ public class Extractor {
 	 */
 	public Extractor(ControlledVocabulary controlledVocabulary) {
 		vocabulary = controlledVocabulary;
-		ApplicationContext applicationContext = AppContext.getApplicationContext();
-		mongoServer = (VocabularyMongoServer) applicationContext.getBean("corelib_solr_vocabularyMongoServer");
+		ApplicationContext applicationContext = AppContext
+				.getApplicationContext();
+		mongoServer = (VocabularyMongoServer) applicationContext
+				.getBean("corelib_solr_vocabularyMongoServer");
 	}
 
 	/**
@@ -64,15 +66,20 @@ public class Extractor {
 	}
 
 	/**
-	 * Return the stored controlled vocabulary from its URI
+	 * Return the stored controlled vocabulary from a field. Valid values are
+	 * "name" and "URI" as they are the fields indexed in MongoDB
 	 * 
-	 * @param URI
-	 *            The URI to search with
+	 * @param field
+	 *            The field to search on
+	 * @param value
+	 *            The value to search for
 	 * @return The stored ControlledVocabulary to be used
 	 */
-	public ControlledVocabulary getControlledVocabulary(String URI) {
+	public ControlledVocabulary getControlledVocabulary(String field,
+			String value) {
 		vocabulary = mongoServer.getDatastore()
-				.find(ControlledVocabularyImpl.class).filter("URI", URI).get();
+				.find(ControlledVocabularyImpl.class).filter(field, value)
+				.get();
 		return vocabulary != null ? vocabulary : null;
 	}
 
@@ -203,7 +210,10 @@ public class Extractor {
 	}
 
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
-		vocabulary.getElements().put(fieldToMap, europeanaField);
+		Map<String, EdmLabel> elements = vocabulary.getElements() != null ? vocabulary
+				.getElements() : new HashMap<String, EdmLabel>();
+		elements.put(fieldToMap, europeanaField);
+		vocabulary.setElements(elements);
 
 	}
 

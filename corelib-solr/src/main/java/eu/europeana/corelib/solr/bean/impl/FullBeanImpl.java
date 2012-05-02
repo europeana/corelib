@@ -1095,4 +1095,67 @@ public class FullBeanImpl implements FullBean {
 	public int hashCode(){ 
 		return this.providedCHOs.hashCode();
 	}
+
+
+	@Override
+	public String[] getUgc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setUgc(String[] ugc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public String[] getEdmRights() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setEdmRights(String[] edmRights) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public String[] getCountry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setCountry(String[] country) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public String[] getEuropeanaCollectionName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
+		// TODO Auto-generated method stub
+		
+	}
 }
