@@ -100,11 +100,21 @@ public class SearchServiceTest {
 	public void findAllWithTextFilterTest() throws SolrTypeException {
 		testCount++;
 		Query query = new Query("*:*");
+		
 		query.setRefinements(new String[]{"text:drums"});
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
 				results.getResultSize() == 2);
+		
+	}
+	
+	@Test
+	public void testSpellCheck() throws SolrTypeException{
+		Query query = new Query("musi");
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+		Assert.assertNotNull(results.getSpellcheck());
+		
 	}
 	
 	@After
