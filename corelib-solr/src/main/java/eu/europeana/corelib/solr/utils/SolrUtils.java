@@ -115,7 +115,9 @@ public final class SolrUtils {
 					destination.add(values.get(1));
 				} else {
 					List<String> fieldValues = mapLists.get(values.get(0).toString());
-					fieldValues.add(values.get(1));
+					if(!fieldValues.contains(values.get(1))){
+						fieldValues.add(values.get(1));
+					}
 				}
 			}
 		}
