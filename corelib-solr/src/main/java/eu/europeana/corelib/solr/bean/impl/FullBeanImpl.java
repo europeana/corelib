@@ -47,6 +47,7 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
@@ -60,40 +61,58 @@ public class FullBeanImpl implements FullBean {
 
 	@Id
 	private ObjectId europeanaId;
+
 	@Indexed(unique = true)
 	private String about;
+
 	private String[] title;
 
 	private String[] year;
+
 	private String[] provider;
+
 	private String[] language;
+
 	private DocType type;
+
 	private int europeanaCompleteness;
+
 	@Transient
 	private List<BriefBeanImpl> relatedItems;
+
 	@Reference
 	private List<PlaceImpl> places;
+
 	@Reference
 	private List<AgentImpl> agents;
+
 	@Reference
 	private List<TimespanImpl> timespans;
+
 	@Reference
 	private List<ConceptImpl> concepts;
+
 	@Reference
 	private List<AggregationImpl> aggregations;
+
 	@Reference
 	private List<ProvidedCHOImpl> providedCHOs;
+
 	// TODO:check if Europeana Aggregation needs to be stored separately
 	@Reference
 	private EuropeanaAggregation europeanaAggregation;
+
 	@Reference
 	private List<ProxyImpl> proxies;
+
+	/**
+	 * GETTERS & SETTTERS
+	 */
 
 	@Override
 	public List<PlaceImpl> getPlaces() {
 		return this.places;
 	}
-
 
 	@Override
 	public void setPlaces(List<? extends Place> places) {
@@ -115,10 +134,13 @@ public class FullBeanImpl implements FullBean {
 		this.about = about;
 	}
 
-
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
-		this.agents = (List<AgentImpl>) agents;
+		if (agents != null) {
+			this.agents = (List<AgentImpl>) agents;
+		} else {
+			this.agents = null;
+		}
 	}
 
 	@Override
@@ -126,17 +148,19 @@ public class FullBeanImpl implements FullBean {
 		return this.timespans;
 	}
 
-
 	@Override
 	public void setTimespans(List<? extends Timespan> timespans) {
-		this.timespans = (List<TimespanImpl>) timespans;
+		if (timespans != null) {
+			this.timespans = (List<TimespanImpl>) timespans;
+		} else {
+			this.timespans = null;
+		}
 	}
 
 	@Override
 	public List<ConceptImpl> getConcepts() {
 		return this.concepts;
 	}
-
 
 	@Override
 	public void setConcepts(List<? extends Concept> concepts) {
@@ -148,7 +172,6 @@ public class FullBeanImpl implements FullBean {
 		return this.aggregations;
 	}
 
-
 	@Override
 	public void setAggregations(List<? extends Aggregation> aggregations) {
 		this.aggregations = (List<AggregationImpl>) aggregations;
@@ -159,8 +182,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	// TODO required??
-	public void setEuropeanaAggregation(
-			EuropeanaAggregation europeanaAggregation) {
+	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
 		this.europeanaAggregation = europeanaAggregation;
 	}
 
@@ -179,7 +201,6 @@ public class FullBeanImpl implements FullBean {
 		return this.providedCHOs;
 	}
 
-	
 	@Override
 	public void setProvidedCHOs(List<? extends ProvidedCHO> providedCHOs) {
 		this.providedCHOs = (List<ProvidedCHOImpl>) providedCHOs;
@@ -195,7 +216,6 @@ public class FullBeanImpl implements FullBean {
 		this.title = title.clone();
 	}
 
-	
 	@Override
 	public void setYear(String[] year) {
 		this.year = year.clone();
@@ -223,46 +243,48 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getTitle() {
-		return (this.title!=null?this.title.clone():null);
+		return (this.title != null ? this.title.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmObject() {
-		ArrayList<String> edmObjects = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			edmObjects.add(aggregation.getEdmObject());
+		if (this.aggregations != null) {
+			ArrayList<String> edmObjects = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				edmObjects.add(aggregation.getEdmObject());
+			}
+			return StringArrayUtils.toArray(edmObjects);
 		}
-		return edmObjects.toArray(new String[edmObjects.size()]);
+		return null;
 	}
 
-	
 	@Override
 	public String[] getYear() {
-		return (this.year!=null?this.year.clone():null);
+		return (this.year != null ? this.year.clone() : null);
 	}
 
 	@Override
 	public String[] getProvider() {
-		return (this.provider!=null?this.provider.clone():null);
+		return (this.provider != null ? this.provider.clone() : null);
 	}
 
 	@Override
 	public String[] getDataProvider() {
 		// What if more than one aggregations point to a providedCHO (more
 		// edm:dataProvider)
-		ArrayList<String> aggregationDataProviders = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-
-			aggregationDataProviders.add(aggregation.getEdmDataProvider());
-
+		if (this.aggregations != null) {
+			ArrayList<String> aggregationDataProvidersList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				aggregationDataProvidersList.add(aggregation.getEdmDataProvider());
+			}
+			return StringArrayUtils.toArray(aggregationDataProvidersList);
 		}
-		return aggregationDataProviders
-				.toArray(new String[aggregationDataProviders.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getLanguage() {
-		return (this.language!=null?this.language.clone():null);
+		return (this.language != null ? this.language.clone() : null);
 	}
 
 	@Override
@@ -272,14 +294,14 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getDctermsSpatial() {
-		ArrayList<String> dctermsSpatialList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsSpatial : proxy.getDctermsSpatial()) {
-				dctermsSpatialList.add(dctermsSpatial);
+		if (this.proxies != null) {
+			ArrayList<String> dctermsSpatialList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsSpatialList, proxy.getDctermsSpatial());
 			}
+			return StringArrayUtils.toArray(dctermsSpatialList);
 		}
-		return dctermsSpatialList
-				.toArray(new String[dctermsSpatialList.size()]);
+		return null;
 	}
 
 	@Override
@@ -289,582 +311,632 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<Map<String, String>> getEdmPlaceLabel() {
-		List<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
-		for (Place place : this.places) {
-			prefLabels.add(place.getAltLabel());
+		if (this.places != null) {
+			List<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
+			for (Place place : this.places) {
+				prefLabels.add(place.getAltLabel());
+			}
+			return prefLabels;
 		}
-		return prefLabels;
+		return null;
 	}
 
 	@Override
 	public String[] getEdmPlaceIsPartOf() {
-		List<String> broaderPlaces = new ArrayList<String>();
-		for (Place place : this.places) {
-			for (String broaderPlace : place.getIsPartOf()) {
-				broaderPlaces.add(broaderPlace);
+		if (this.places != null) {
+			List<String> broaderPlacesList = new ArrayList<String>();
+			for (Place place : this.places) {
+				StringArrayUtils.addToList(broaderPlacesList, place.getIsPartOf());
 			}
+			return StringArrayUtils.toArray(broaderPlacesList);
 		}
-		return broaderPlaces.toArray(new String[broaderPlaces.size()]);
+		return null;
 	}
 
 	@Override
 	public Float getEdmPlaceLatitude() {
-		List<Float> latitudes = new ArrayList<Float>();
-		for (Place place : this.places) {
-			latitudes.add(place.getLatitude());
+		if (this.places != null) {
+			List<Float> latitudesList = new ArrayList<Float>();
+			for (Place place : this.places) {
+				latitudesList.add(place.getLatitude());
+			}
+			return latitudesList.toArray(new Float[latitudesList.size()])[0];
 		}
-		return latitudes.toArray(new Float[latitudes.size()])[0];
+		return null;
 	}
 
 	@Override
 	public Float getEdmPlaceLongitude() {
-		List<Float> longitudes = new ArrayList<Float>();
-		for (Place place : this.places) {
-			longitudes.add(place.getLongitude());
+		if (this.places != null) {
+			List<Float> longitudesList = new ArrayList<Float>();
+			for (Place place : this.places) {
+				longitudesList.add(place.getLongitude());
+			}
+			return longitudesList.toArray(new Float[longitudesList.size()])[0];
 		}
-		return longitudes.toArray(new Float[longitudes.size()])[0];
+		return null;
 	}
 
 	@Override
 	public String[] getEdmTimespan() {
-		List<String> timespanIds = new ArrayList<String>();
-		for (Timespan timespan : this.timespans) {
-
-			timespanIds.add(timespan.getId().toString());
-
+		if (this.timespans != null) {
+			List<String> timespanIds = new ArrayList<String>();
+			for (Timespan timespan : this.timespans) {
+				if (timespan.getId() != null) {
+					timespanIds.add(timespan.getId().toString());
+				}
+			}
+			return StringArrayUtils.toArray(timespanIds);
 		}
-		return timespanIds.toArray(new String[timespanIds.size()]);
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmTimespanLabel() {
-		ArrayList<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
-		for (Timespan timespan : this.timespans) {
-			prefLabels.add(timespan.getPrefLabel());
+		if (this.timespans != null) {
+			ArrayList<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
+			for (Timespan timespan : this.timespans) {
+				prefLabels.add(timespan.getPrefLabel());
+			}
+			return prefLabels;
 		}
-
-		return prefLabels;
+		return null;
 	}
 
 	@Override
 	public String[] getEdmTimespanIsPartOf() {
-		List<String> broaderPeriods = new ArrayList<String>();
-		for (Timespan timespan : this.timespans) {
-			for (String broaderPeriod : timespan.getIsPartOf()) {
-				broaderPeriods.add(broaderPeriod);
+		if (this.timespans != null) {
+			List<String> broaderPeriodList = new ArrayList<String>();
+			for (Timespan timespan : this.timespans) {
+				StringArrayUtils.addToList(broaderPeriodList, timespan.getIsPartOf());
 			}
+			return StringArrayUtils.toArray(broaderPeriodList);
 		}
-		return broaderPeriods.toArray(new String[broaderPeriods.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmTimespanBegin() {
-		List<String> startDates = new ArrayList<String>();
-		for (Timespan timespan : this.timespans) {
-
-			startDates.add(timespan.getBegin());
-
+		if (this.timespans != null) {
+			List<String> startDateList = new ArrayList<String>();
+			for (Timespan timespan : this.timespans) {
+				startDateList.add(timespan.getBegin());
+			}
+			return StringArrayUtils.toArray(startDateList);
 		}
-		return startDates.toArray(new String[startDates.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmTimespanEnd() {
-		ArrayList<String> endDates = new ArrayList<String>();
-		for (Timespan timespan : this.timespans) {
-
-			endDates.add(timespan.getEnd());
+		if (this.timespans != null) {
+			ArrayList<String> endDateList = new ArrayList<String>();
+			for (Timespan timespan : this.timespans) {
+				endDateList.add(timespan.getEnd());
+			}
+			return StringArrayUtils.toArray(endDateList);
 		}
-		return endDates.toArray(new String[endDates.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmConcept() {
-		List<String> conceptIds = new ArrayList<String>();
-		for (Concept concept : this.concepts) {
-
-			conceptIds.add(concept.getId().toString());
-
+		if (this.concepts != null) {
+			List<String> conceptIdList = new ArrayList<String>();
+			for (Concept concept : this.concepts) {
+				conceptIdList.add(concept.getId().toString());
+			}
+			return StringArrayUtils.toArray(conceptIdList);
 		}
-		return conceptIds.toArray(new String[conceptIds.size()]);
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmConceptLabel() {
-		List<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
-		for (Concept concept : this.concepts) {
-			prefLabels.add(concept.getPrefLabel());
-
+		if (this.concepts != null) {
+			List<Map<String, String>> prefLabelList = new ArrayList<Map<String, String>>();
+			for (Concept concept : this.concepts) {
+				prefLabelList.add(concept.getPrefLabel());
+			}
+			return prefLabelList;
 		}
-		return prefLabels;
+		return null;
 	}
 
 	@Override
 	public String[] getEdmConceptBroaderTerm() {
-		List<String> broaderTerms = new ArrayList<String>();
-		for (Concept concept : this.concepts) {
-			for (String broaderTerm : concept.getBroader()) {
-				broaderTerms.add(broaderTerm);
+		if (this.concepts != null) {
+			List<String> broaderTermList = new ArrayList<String>();
+			for (Concept concept : this.concepts) {
+				StringArrayUtils.addToList(broaderTermList, concept.getBroader());
 			}
+			return StringArrayUtils.toArray(broaderTermList);
 		}
-		return broaderTerms.toArray(new String[broaderTerms.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmAgent() {
-		List<String> agentIds = new ArrayList<String>();
-		for (Agent agent : this.agents) {
-
-			agentIds.add(agent.getId().toString());
-
+		if (this.agents != null) {
+			List<String> agentIdList = new ArrayList<String>();
+			for (Agent agent : this.agents) {
+				if (agent.getId() != null) {
+					agentIdList.add(agent.getId().toString());
+				}
+			}
+			return StringArrayUtils.toArray(agentIdList);
 		}
-		return agentIds.toArray(new String[agentIds.size()]);
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmAgentLabel() {
-		List<Map<String, String>> prefLabels = new ArrayList<Map<String, String>>();
-		for (Agent agent : this.agents) {
-
-			prefLabels.add(agent.getPrefLabel());
-
+		if (this.agents != null) {
+			List<Map<String, String>> prefLabelList = new ArrayList<Map<String, String>>();
+			for (Agent agent : this.agents) {
+				prefLabelList.add(agent.getPrefLabel());
+			}
+			return prefLabelList;
 		}
-		return prefLabels;
+		return null;
 	}
 
 	@Override
 	public String[] getEdmIsShownBy() {
-		List<String> aggregationIsShownByList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-
-			aggregationIsShownByList.add(aggregation.getEdmIsShownBy());
-
+		if (this.aggregations != null) {
+			List<String> aggregationIsShownByList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				aggregationIsShownByList.add(aggregation.getEdmIsShownBy());
+			}
+			return StringArrayUtils.toArray(aggregationIsShownByList);
 		}
-		return aggregationIsShownByList
-				.toArray(new String[aggregationIsShownByList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmIsShownAt() {
-		List<String> aggregationIsShownAtList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-
-			aggregationIsShownAtList.add(aggregation.getEdmIsShownAt());
-
+		if (this.aggregations != null) {
+			List<String> aggregationIsShownAtList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				aggregationIsShownAtList.add(aggregation.getEdmIsShownAt());
+			}
+			return StringArrayUtils.toArray(aggregationIsShownAtList);
 		}
-		return aggregationIsShownAtList
-				.toArray(new String[aggregationIsShownAtList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmProvider() {
-		List<String> aggregationProviders = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-
-			aggregationProviders.add(aggregation.getEdmProvider());
-
+		if (this.aggregations != null) {
+			List<String> aggregationProviderList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				aggregationProviderList.add(aggregation.getEdmProvider());
+			}
+			return StringArrayUtils.toArray(aggregationProviderList);
 		}
-		return aggregationProviders.toArray(new String[aggregationProviders
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getAggregationDcRights() {
-		List<String> aggregationDcRightsList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			for (String aggregationDcRights : aggregation.getDcRights()) {
-				aggregationDcRightsList.add(aggregationDcRights);
+		if (this.aggregations != null) {
+			List<String> aggregationDcRightsList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				StringArrayUtils.addToList(aggregationDcRightsList, aggregation.getDcRights());
 			}
+			return StringArrayUtils.toArray(aggregationDcRightsList);
 		}
-		return aggregationDcRightsList
-				.toArray(new String[aggregationDcRightsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getAggregationEdmRights() {
-		List<String> aggregationEdmRightsList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-
-			aggregationEdmRightsList.add(aggregation.getEdmRights());
-
+		if (this.aggregations != null) {
+			List<String> aggregationEdmRightsList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				aggregationEdmRightsList.add(aggregation.getEdmRights());
+			}
+			return StringArrayUtils.toArray(aggregationEdmRightsList);
 		}
-		return aggregationEdmRightsList
-				.toArray(new String[aggregationEdmRightsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmWebResource() {
-		List<String> webResourceUrls = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			for (WebResource webResource : aggregation.getWebResources()) {
-
-				webResourceUrls.add(webResource.getAbout());
+		if (this.aggregations != null) {
+			List<String> webResourceUrlList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				if (aggregation.getWebResources() != null) {
+					for (WebResource webResource : aggregation.getWebResources()) {
+						webResourceUrlList.add(webResource.getAbout());
+					}
+				}
 			}
+			return StringArrayUtils.toArray(webResourceUrlList);
 		}
-		return webResourceUrls.toArray(new String[webResourceUrls.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmWebResourceDcRights() {
-		List<String> webResourceDcRightsList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			for (WebResource webResource : aggregation.getWebResources()) {
-				for (String webResourceDcRights : webResource
-						.getWebResourceDcRights()) {
-					webResourceDcRightsList.add(webResourceDcRights);
+		if (this.aggregations != null) {
+			List<String> webResourceDcRightsList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				if (aggregation.getWebResources() != null) {
+					for (WebResource webResource : aggregation.getWebResources()) {
+						StringArrayUtils.addToList(webResourceDcRightsList, webResource.getWebResourceDcRights());
+					}
 				}
 			}
+			return StringArrayUtils.toArray(webResourceDcRightsList);
 		}
-		return webResourceDcRightsList
-				.toArray(new String[webResourceDcRightsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmWebResourceEdmRights() {
-		List<String> webResourceEdmRightsList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			for (WebResource webResource : aggregation.getWebResources()) {
-				webResourceEdmRightsList.add(webResource
-						.getWebResourceEdmRights());
+		if (this.aggregations != null) {
+			List<String> webResourceEdmRightsList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				if (aggregation.getWebResources() != null) {
+					for (WebResource webResource : aggregation.getWebResources()) {
+						webResourceEdmRightsList.add(webResource.getWebResourceEdmRights());
+					}
+				}
 			}
+			return StringArrayUtils.toArray(webResourceEdmRightsList);
 		}
-		return webResourceEdmRightsList
-				.toArray(new String[webResourceEdmRightsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getOreProxy() {
-		List<String> owlProxies = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-
-			owlProxies.add(proxy.getId().toString());
-
+		if (this.proxies != null) {
+			List<String> owlProxyList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				if (proxy.getId() != null) {
+					owlProxyList.add(proxy.getId().toString());
+				}
+			}
+			return StringArrayUtils.toArray(owlProxyList);
 		}
-		return owlProxies.toArray(new String[owlProxies.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getOwlSameAs() {
-		List<String> owlSameAsList = new ArrayList<String>();
-		for (ProvidedCHO providedCHO : this.providedCHOs) {
-			for (String owlSameAs : providedCHO.getOwlSameAs()) {
-				owlSameAsList.add(owlSameAs);
+		if (this.providedCHOs != null) {
+			List<String> owlSameAsList = new ArrayList<String>();
+			for (ProvidedCHO providedCHO : this.providedCHOs) {
+				StringArrayUtils.addToList(owlSameAsList, providedCHO.getOwlSameAs());
 			}
+			return StringArrayUtils.toArray(owlSameAsList);
 		}
-		return owlSameAsList.toArray(new String[owlSameAsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcCoverage() {
-		List<String> dcCoverageList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcCoverage : proxy.getDcCoverage()) {
-				dcCoverageList.add(dcCoverage);
+		if (this.proxies != null) {
+			List<String> dcCoverageList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcCoverageList, proxy.getDcCoverage());
 			}
+			return StringArrayUtils.toArray(dcCoverageList);
 		}
-		return dcCoverageList.toArray(new String[dcCoverageList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcPublisher() {
-		List<String> dcPublisherList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcPublisher : proxy.getDcPublisher()) {
-				dcPublisherList.add(dcPublisher);
+		if (this.proxies != null) {
+			List<String> dcPublisherList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcPublisherList, proxy.getDcPublisher());
 			}
+			return StringArrayUtils.toArray(dcPublisherList);
 		}
-		return dcPublisherList.toArray(new String[dcPublisherList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcIdentifier() {
-		List<String> dcIdentifierList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcIdentifier : proxy.getDcIdentifier()) {
-				dcIdentifierList.add(dcIdentifier);
+		if (this.proxies != null) {
+			List<String> dcIdentifierList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcIdentifierList, proxy.getDcIdentifier());
 			}
+			return StringArrayUtils.toArray(dcIdentifierList);
 		}
-		return dcIdentifierList.toArray(new String[dcIdentifierList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcRelation() {
-		List<String> dcRelationList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcRelation : proxy.getDcRelation()) {
-				dcRelationList.add(dcRelation);
+		if (this.proxies != null) {
+			List<String> dcRelationList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcRelationList, proxy.getDcRelation());
 			}
+			return StringArrayUtils.toArray(dcRelationList);
 		}
-		return dcRelationList.toArray(new String[dcRelationList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getProxyDcRights() {
-		List<String> dcRightsList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcRights : proxy.getDcRights()) {
-				dcRightsList.add(dcRights);
+		if (this.proxies != null) {
+			List<String> dcRightsList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcRightsList, proxy.getDcRights());
 			}
+			return StringArrayUtils.toArray(dcRightsList);
 		}
-		return dcRightsList.toArray(new String[dcRightsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcSource() {
-		List<String> dcSourceList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dcSource : proxy.getDcSource()) {
-				dcSourceList.add(dcSource);
+		if (this.proxies != null) {
+			List<String> dcSourceList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dcSourceList, proxy.getDcSource());
 			}
+			return StringArrayUtils.toArray(dcSourceList);
 		}
-		return dcSourceList.toArray(new String[dcSourceList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsAlternative() {
-		List<String> dctermsAlternativeList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsAlternative : proxy.getDctermsAlternative()) {
-				dctermsAlternativeList.add(dctermsAlternative);
+		if (this.proxies != null) {
+			List<String> dctermsAlternativeList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsAlternativeList, proxy.getDctermsAlternative());
 			}
+			return StringArrayUtils.toArray(dctermsAlternativeList);
 		}
-		return dctermsAlternativeList.toArray(new String[dctermsAlternativeList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsConformsTo() {
-		List<String> dctermsConformsToList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsConformsTo : proxy.getDctermsConformsTo()) {
-				dctermsConformsToList.add(dctermsConformsTo);
+		if (this.proxies != null) {
+			List<String> dctermsConformsToList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsConformsToList, proxy.getDctermsConformsTo());
 			}
+			return StringArrayUtils.toArray(dctermsConformsToList);
 		}
-		return dctermsConformsToList.toArray(new String[dctermsConformsToList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsCreated() {
-		List<String> dctermsCreatedList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsCreated : proxy.getDctermsCreated()) {
-				dctermsCreatedList.add(dctermsCreated);
+		if (this.proxies != null) {
+			List<String> dctermsCreatedList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsCreatedList, proxy.getDctermsCreated());
 			}
+			return StringArrayUtils.toArray(dctermsCreatedList);
 		}
-		return dctermsCreatedList
-				.toArray(new String[dctermsCreatedList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsExtent() {
-		List<String> dctermsExtentList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsExtent : proxy.getDctermsExtent()) {
-				dctermsExtentList.add(dctermsExtent);
+		if (this.proxies != null) {
+			List<String> dctermsExtentList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsExtentList, proxy.getDctermsExtent());
 			}
+			return StringArrayUtils.toArray(dctermsExtentList);
 		}
-		return dctermsExtentList.toArray(new String[dctermsExtentList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsHasFormat() {
-		List<String> dctermsHasFormatList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsHasFormat : proxy.getDctermsHasFormat()) {
-				dctermsHasFormatList.add(dctermsHasFormat);
+		if (this.proxies != null) {
+			List<String> dctermsHasFormatList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsHasFormatList, proxy.getDctermsHasFormat());
 			}
+			return StringArrayUtils.toArray(dctermsHasFormatList);
 		}
-		return dctermsHasFormatList.toArray(new String[dctermsHasFormatList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIsPartOf() {
-		List<String> dctermsIsPartOfList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIsPartOf : proxy.getDctermsIsPartOf()) {
-				dctermsIsPartOfList.add(dctermsIsPartOf);
+		if (this.proxies != null) {
+			List<String> dctermsIsPartOfList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIsPartOfList, proxy.getDctermsIsPartOf());
 			}
+			return StringArrayUtils.toArray(dctermsIsPartOfList);
 		}
-		return dctermsIsPartOfList.toArray(new String[dctermsIsPartOfList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIsReferencedBy() {
-		List<String> dctermsIsReferencedByList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIsReferencedBy : proxy
-					.getDctermsIsReferencedBy()) {
-				dctermsIsReferencedByList.add(dctermsIsReferencedBy);
+		if (this.proxies != null) {
+			List<String> dctermsIsReferencedByList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIsReferencedByList, proxy.getDctermsIsReferencedBy());
 			}
+			return StringArrayUtils.toArray(dctermsIsReferencedByList);
 		}
-		return dctermsIsReferencedByList
-				.toArray(new String[dctermsIsReferencedByList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIsReplacedBy() {
-		List<String> dctermsIsReplacedByList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIsReplacedBy : proxy.getDctermsIsReplacedBy()) {
-				dctermsIsReplacedByList.add(dctermsIsReplacedBy);
+		if (this.proxies != null) {
+			List<String> dctermsIsReplacedByList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIsReplacedByList, proxy.getDctermsIsReplacedBy());
 			}
+			return StringArrayUtils.toArray(dctermsIsReplacedByList);
 		}
-		return dctermsIsReplacedByList
-				.toArray(new String[dctermsIsReplacedByList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIsRequiredBy() {
-		List<String> dctermsIsRequiredByList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIsRequiredBy : proxy.getDctermsIsRequiredBy()) {
-				dctermsIsRequiredByList.add(dctermsIsRequiredBy);
+		if (this.proxies != null) {
+			List<String> dctermsIsRequiredByList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIsRequiredByList, proxy.getDctermsIsRequiredBy());
 			}
+			return StringArrayUtils.toArray(dctermsIsRequiredByList);
 		}
-		return dctermsIsRequiredByList
-				.toArray(new String[dctermsIsRequiredByList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIsVersionOf() {
-		List<String> dctermsIsVersionOfList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIsVersionOf : proxy.getDctermsIsVersionOf()) {
-				dctermsIsVersionOfList.add(dctermsIsVersionOf);
+		if (this.proxies != null) {
+			List<String> dctermsIsVersionOfList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIsVersionOfList, proxy.getDctermsIsVersionOf());
 			}
+			return StringArrayUtils.toArray(dctermsIsVersionOfList);
 		}
-		return dctermsIsVersionOfList.toArray(new String[dctermsIsVersionOfList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsIssued() {
-		List<String> dctermsIssuedList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsIssued : proxy.getDctermsIssued()) {
-				dctermsIssuedList.add(dctermsIssued);
+		if (this.proxies != null) {
+			List<String> dctermsIssuedList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsIssuedList, proxy.getDctermsIssued());
 			}
+			return StringArrayUtils.toArray(dctermsIssuedList);
 		}
-		return dctermsIssuedList.toArray(new String[dctermsIssuedList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsMedium() {
-		List<String> dctermsMediumList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsMedium : proxy.getDctermsMedium()) {
-				dctermsMediumList.add(dctermsMedium);
+		if (this.proxies != null) {
+			List<String> dctermsMediumList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsMediumList, proxy.getDctermsMedium());
 			}
+			return StringArrayUtils.toArray(dctermsMediumList);
 		}
-		return dctermsMediumList.toArray(new String[dctermsMediumList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsProvenance() {
-		List<String> dctermsProvenanceList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsProvenance : proxy.getDctermsProvenance()) {
-				dctermsProvenanceList.add(dctermsProvenance);
+		if (this.proxies != null) {
+			List<String> dctermsProvenanceList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsProvenanceList, proxy.getDctermsProvenance());
 			}
+			return StringArrayUtils.toArray(dctermsProvenanceList);
 		}
-		return dctermsProvenanceList.toArray(new String[dctermsProvenanceList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsReferences() {
-		List<String> dctermsReferencesList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsReferences : proxy.getDctermsReferences()) {
-				dctermsReferencesList.add(dctermsReferences);
+		if (this.proxies != null) {
+			List<String> dctermsReferencesList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsReferencesList, proxy.getDctermsReferences());
 			}
+			return StringArrayUtils.toArray(dctermsReferencesList);
 		}
-		return dctermsReferencesList.toArray(new String[dctermsReferencesList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsReplaces() {
-		List<String> dctermsReplacesList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsReplaces : proxy.getDctermsReplaces()) {
-				dctermsReplacesList.add(dctermsReplaces);
+		if (this.proxies != null) {
+			List<String> dctermsReplacesList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsReplacesList, proxy.getDctermsReplaces());
 			}
+			return StringArrayUtils.toArray(dctermsReplacesList);
 		}
-		return dctermsReplacesList.toArray(new String[dctermsReplacesList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsRequires() {
-		List<String> dctermsRequiresList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsRequires : proxy.getDctermsRequires()) {
-				dctermsRequiresList.add(dctermsRequires);
+		if (this.proxies != null) {
+			List<String> dctermsRequiresList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsRequiresList, proxy.getDctermsRequires());
 			}
+			return StringArrayUtils.toArray(dctermsRequiresList);
 		}
-		return dctermsRequiresList.toArray(new String[dctermsRequiresList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsTableOfContents() {
-		List<String> dctermsTableOfContentsList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsTableOfContents : proxy.getDctermsTOC()) {
-				dctermsTableOfContentsList.add(dctermsTableOfContents);
+		if (this.proxies != null) {
+			List<String> dctermsTableOfContentsList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsTableOfContentsList, proxy.getDctermsTOC());
 			}
+			return StringArrayUtils.toArray(dctermsTableOfContentsList);
 		}
-		return dctermsTableOfContentsList
-				.toArray(new String[dctermsTableOfContentsList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDctermsTemporal() {
-		List<String> dctermsTemporalList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-			for (String dctermsTemporal : proxy.getDctermsTOC()) {
-				dctermsTemporalList.add(dctermsTemporal);
+		if (this.proxies != null) {
+			List<String> dctermsTemporalList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				StringArrayUtils.addToList(dctermsTemporalList, proxy.getDctermsTemporal());
 			}
+			return StringArrayUtils.toArray(dctermsTemporalList);
 		}
-		return dctermsTemporalList.toArray(new String[dctermsTemporalList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmUGC() {
-		List<String> edmUGCList = new ArrayList<String>();
-		for (Aggregation aggregation : this.aggregations) {
-			edmUGCList.add(aggregation.getEdmUgc());
+		if (this.aggregations != null) {
+			List<String> edmUGCList = new ArrayList<String>();
+			for (Aggregation aggregation : this.aggregations) {
+				edmUGCList.add(aggregation.getEdmUgc());
+			}
+			return StringArrayUtils.toArray(edmUGCList);
 		}
-		return edmUGCList.toArray(new String[edmUGCList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmCurrentLocation() {
-		List<String> edmCurrentLocationList = new ArrayList<String>();
-		for (Proxy proxy : this.proxies) {
-
-			edmCurrentLocationList.add(proxy.getEdmCurrentLocation());
-
+		if (this.proxies != null) {
+			List<String> edmCurrentLocationList = new ArrayList<String>();
+			for (Proxy proxy : this.proxies) {
+				edmCurrentLocationList.add(proxy.getEdmCurrentLocation());
+			}
+			return StringArrayUtils.toArray(edmCurrentLocationList);
 		}
-		return edmCurrentLocationList.toArray(new String[edmCurrentLocationList
-				.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmIsNextInSequence() {
-		List<String> edmIsNextInSequenceList = new ArrayList<String>();
-		for (ProvidedCHO providedCHO : this.providedCHOs) {
-
-			edmIsNextInSequenceList.add(providedCHO.getEdmIsNextInSequence());
-
+		if (this.providedCHOs != null) {
+			List<String> edmIsNextInSequenceList = new ArrayList<String>();
+			for (ProvidedCHO providedCHO : this.providedCHOs) {
+				edmIsNextInSequenceList.add(providedCHO.getEdmIsNextInSequence());
+			}
+			return StringArrayUtils.toArray(edmIsNextInSequenceList);
 		}
-		return edmIsNextInSequenceList
-				.toArray(new String[edmIsNextInSequenceList.size()]);
+		return null;
 	}
 
 	@Override
@@ -875,134 +947,156 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmAgentSkosNote() {
-		List<String> agentNotes = new ArrayList<String>();
-		for (Agent agent : this.agents) {
-			for (String agentNote : agent.getNote()) {
-				agentNotes.add(agentNote);
+		if (this.agents != null) {
+			List<String> agentNotes = new ArrayList<String>();
+			for (Agent agent : this.agents) {
+				StringArrayUtils.addToList(agentNotes, agent.getNote());
 			}
+			return StringArrayUtils.toArray(agentNotes);
 		}
-		return agentNotes.toArray(new String[agentNotes.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmAgentBegin() {
-		List<String> agentBeginDates = new ArrayList<String>();
-		for (Agent agent : this.agents) {
-			agentBeginDates.add(agent.getBegin());
+		if (this.agents != null) {
+			List<String> agentBeginDates = new ArrayList<String>();
+			for (Agent agent : this.agents) {
+				agentBeginDates.add(agent.getBegin());
+			}
+			return StringArrayUtils.toArray(agentBeginDates);
 		}
-		return agentBeginDates.toArray(new String[agentBeginDates.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmAgentEnd() {
-		List<String> agentEndDates = new ArrayList<String>();
-		for (Agent agent : this.agents) {
-			agentEndDates.add(agent.getEnd());
+		if (this.agents != null) {
+			List<String> agentEndDates = new ArrayList<String>();
+			for (Agent agent : this.agents) {
+				agentEndDates.add(agent.getEnd());
+			}
+			return StringArrayUtils.toArray(agentEndDates);
 		}
-		return agentEndDates.toArray(new String[agentEndDates.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmTimeSpanSkosNote() {
-		List<String> notes = new ArrayList<String>();
-		for (Timespan timespan : this.timespans) {
-			for (String note : timespan.getNote()) {
-				notes.add(note);
+		if (this.timespans != null) {
+			List<String> notes = new ArrayList<String>();
+			for (Timespan timespan : this.timespans) {
+				StringArrayUtils.addToList(notes, timespan.getNote());
 			}
+			return StringArrayUtils.toArray(notes);
 		}
-		return notes.toArray(new String[notes.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmPlaceSkosNote() {
-		List<String> notes = new ArrayList<String>();
-		for (Place place : this.places) {
-			for (String note : place.getNote()) {
-				notes.add(note);
+		if (this.places != null) {
+			List<String> notes = new ArrayList<String>();
+			for (Place place : this.places) {
+				StringArrayUtils.addToList(notes, place.getNote());
 			}
+			return StringArrayUtils.toArray(notes);
 		}
-		return notes.toArray(new String[notes.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getEdmConceptNote() {
-		List<String> notes = new ArrayList<String>();
-		for (Concept concept : this.concepts) {
-			for (String note : concept.getNote()) {
-				notes.add(note);
+		if (this.concepts != null) {
+			List<String> notes = new ArrayList<String>();
+			for (Concept concept : this.concepts) {
+				StringArrayUtils.addToList(notes, concept.getNote());
 			}
+			return StringArrayUtils.toArray(notes);
 		}
-		return notes.toArray(new String[notes.size()]);
+		return null;
 	}
 
 	@Override
 	public String getId() {
-		return this.europeanaId.toString();
+		if (this.europeanaId != null) {
+			return this.europeanaId.toString();
+		}
+		return null;
 	}
 
 	@Override
 	public String[] getEdmPlace() {
-		List<String> placeIds = new ArrayList<String>();
-		for (Place place : this.places) {
-
-			placeIds.add(place.getId().toString());
-
+		if (this.places != null) {
+			List<String> placeIds = new ArrayList<String>();
+			for (Place place : this.places) {
+				if (place.getId() != null) {
+					placeIds.add(place.getId().toString());
+				}
+			}
+			return StringArrayUtils.toArray(placeIds);
 		}
-		return placeIds.toArray(new String[placeIds.size()]);
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmAgentAltLabels() {
-		List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
-		for (Agent agent : this.agents) {
-
-			altLabels.add(agent.getAltLabel());
-
+		if (this.agents != null) {
+			List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
+			for (Agent agent : this.agents) {
+				altLabels.add(agent.getAltLabel());
+			}
+			return altLabels;
 		}
-		return altLabels;
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmPlaceAltLabels() {
-		List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
-		for (Place place : this.places) {
-
-			altLabels.add(place.getAltLabel());
-
+		if (this.places != null) {
+			List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
+			for (Place place : this.places) {
+				altLabels.add(place.getAltLabel());
+			}
+			return altLabels;
 		}
-		return altLabels;
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmTimespanAltLabels() {
-		List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
-		for (Timespan timespan : this.timespans) {
-
-			altLabels.add(timespan.getAltLabel());
+		if (this.timespans != null) {
+			List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
+			for (Timespan timespan : this.timespans) {
+				altLabels.add(timespan.getAltLabel());
+			}
+			return altLabels;
 		}
-		return altLabels;
+		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> getSkosConceptAltLabels() {
-		List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
-		for (Concept concept : this.concepts) {
-
-			altLabels.add(concept.getAltLabel());
-
+		if (this.concepts != null) {
+			List<Map<String, String>> altLabels = new ArrayList<Map<String, String>>();
+			for (Concept concept : this.concepts) {
+				altLabels.add(concept.getAltLabel());
+			}
+			return altLabels;
 		}
-		return altLabels;
+		return null;
 	}
 
 	@Override
 	public Boolean[] getEdmPreviewNoDistribute() {
-		List<Boolean> edmPreviewNoDistributeList = new ArrayList<Boolean>();
-		for (Aggregation aggregation : aggregations) {
-			edmPreviewNoDistributeList.add(aggregation
-					.getEdmPreviewNoDistribute());
+		if (this.aggregations != null) {
+			List<Boolean> edmPreviewNoDistributeList = new ArrayList<Boolean>();
+			for (Aggregation aggregation : aggregations) {
+				edmPreviewNoDistributeList.add(aggregation.getEdmPreviewNoDistribute());
+			}
+			return edmPreviewNoDistributeList.toArray(new Boolean[edmPreviewNoDistributeList.size()]);
 		}
-		return edmPreviewNoDistributeList
-				.toArray(new Boolean[edmPreviewNoDistributeList.size()]);
+		return null;
 	}
 
 	@Override
@@ -1049,10 +1143,10 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null) {
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()) {
 			return this.getId().equals(((FullBeanImpl) o).getId());
 		}
 		return false;
@@ -1071,31 +1165,32 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getDcCreator() {
-		List<String> dcCreatorList = new ArrayList<String>();
-		for (Proxy proxy : proxies) {
-			for (String dcCreator : proxy.getDcCreator()) {
-				dcCreatorList.add(dcCreator);
+		if (this.proxies != null) {
+			List<String> dcCreatorList = new ArrayList<String>();
+			for (Proxy proxy : proxies) {
+				StringArrayUtils.addToList(dcCreatorList, proxy.getDcCreator());
 			}
+			return StringArrayUtils.toArray(dcCreatorList);
 		}
-		return dcCreatorList.toArray(new String[dcCreatorList.size()]);
+		return null;
 	}
 
 	@Override
 	public String[] getDcContributor() {
-		List<String> dcCreatorList = new ArrayList<String>();
-		for (Proxy proxy : proxies) {
-			for (String dcCreator : proxy.getDcCreator()) {
-				dcCreatorList.add(dcCreator);
+		if (this.proxies != null) {
+			List<String> dcContributorList = new ArrayList<String>();
+			for (Proxy proxy : proxies) {
+				StringArrayUtils.addToList(dcContributorList, proxy.getDcContributor());
 			}
+			return StringArrayUtils.toArray(dcContributorList);
 		}
-		return dcCreatorList.toArray(new String[dcCreatorList.size()]);
-	}
-	
-	@Override
-	public int hashCode(){ 
-		return this.providedCHOs.hashCode();
+		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		return this.providedCHOs.hashCode();
+	}
 
 	@Override
 	public String[] getUgc() {
@@ -1103,13 +1198,11 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
-
 	@Override
 	public void setUgc(String[] ugc) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public String[] getEdmRights() {
@@ -1117,13 +1210,11 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
-
 	@Override
 	public void setEdmRights(String[] edmRights) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public String[] getCountry() {
@@ -1131,13 +1222,11 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
-
 	@Override
 	public void setCountry(String[] country) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
@@ -1145,17 +1234,15 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
-
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

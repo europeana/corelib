@@ -25,6 +25,13 @@ public class StringArrayUtils {
     	return new String[]{};
     }
     
+    public static void addToList(List<String> list, String[] toAdd) {
+    	if ( (list != null) && (isNotBlank(toAdd)) ) {
+    		for (String string : toAdd) {
+				list.add(string);
+			}
+    	}
+    }
 
     public static String formatList(String[] items) {
 		if (isNotBlank(items)) {
