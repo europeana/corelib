@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
@@ -49,7 +50,8 @@ public final class SolrUtils {
 	}
 
 	/**
-	 * Checks if the Facet is TYPE that everything is uppercase and known DocType according to EDM
+	 * Checks if the Facet is TYPE that everything is uppercase and known
+	 * DocType according to EDM
 	 * 
 	 * @param refinements
 	 * @return
@@ -57,18 +59,13 @@ public final class SolrUtils {
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
-				if (StringUtils.startsWith(refinement, "TYPE:")) {
-					if (!StringUtils.isAllUpperCase(StringUtils.split(refinement, ":")[1])
-							|| StringUtils.split(refinement, ":").length != 2) {
-						return false;
-					} else {
-						try {
-							DocType.get(refinement);
-						} catch (IllegalArgumentException e) {
-							return false;
-						}
-					}
+
+				try {
+					DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
+				} catch (IllegalArgumentException e) {
+					return false;
 				}
+
 			}
 		}
 		return true;
@@ -85,49 +82,63 @@ public final class SolrUtils {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static <T> T exists(Class<T> clazz, T object) throws InstantiationException, IllegalAccessException {
+	public static <T> T exists(Class<T> clazz, T object)
+			throws InstantiationException, IllegalAccessException {
 		return (object == null ? clazz.newInstance() : object);
 	}
 
-	public static void addResourceOrLiteralType(SolrInputDocument destination, EdmLabel label,
-			ResourceOrLiteralType type) throws MalformedURLException, IOException {
+	public static void addResourceOrLiteralType(SolrInputDocument destination,
+			EdmLabel label, ResourceOrLiteralType type)
+			throws MalformedURLException, IOException {
 		List<List<String>> value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
 			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
-			for(List<String> values : value){
-				solrInputDocument.addField(label.toString(), values.get(1));
+			for (List<String> values : value) {
+				if (StringUtils.equals(values.get(0), "original")) {
+					solrInputDocument.addField(label.toString(), values.get(1));
+				} else {
+					solrInputDocument.addField(values.get(0), values.get(1));
+				}
 			}
 		}
 	}
 
 	public static void addResourceOrLiteralType(List<String> destination,
-			ResourceOrLiteralType type) throws MalformedURLException, IOException {
+			ResourceOrLiteralType type, Map<String,List<String>> mapLists) throws MalformedURLException,
+			IOException {
+
 		List<List<String>> value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
-			for(List<String> values: value){
-				destination.add(values.get(1));
+
+			for (List<String> values : value) {
+				if (StringUtils.equals(values.get(0), "original")) {
+					destination.add(values.get(1));
+				} else {
+					List<String> fieldValues = mapLists.get(values.get(0).toString());
+					fieldValues.add(values.get(1));
+				}
 			}
 		}
 	}
 
 	public static List<List<String>> getValueOfResourceOrLiteralType(
-			ResourceOrLiteralType type) throws MalformedURLException, IOException {
-		List<List<String>> value  = new ArrayList<List<String>>();
+			ResourceOrLiteralType type) throws MalformedURLException,
+			IOException {
+		List<List<String>> value = new ArrayList<List<String>>();
 		if (type != null) {
-			
-			if(StringUtils.isNotEmpty(type.getResource()))
-				{
-					value = Dereferencer.normalize(type.getResource());
-				}
-			else{
+
+			if (StringUtils.isNotEmpty(type.getResource())) {
+				value = Dereferencer.normalize(type.getResource());
+			} else {
 				value = Dereferencer.normalize(type.getString());
 			}
-			
+
 		}
 		return value;
 	}
 
-	public static Class<? extends IdBeanImpl> getImplementationClass(Class<? extends IdBean> interfaze) {
+	public static Class<? extends IdBeanImpl> getImplementationClass(
+			Class<? extends IdBean> interfaze) {
 		if (interfaze != null) {
 			if (interfaze == ApiBean.class) {
 				return ApiBeanImpl.class;

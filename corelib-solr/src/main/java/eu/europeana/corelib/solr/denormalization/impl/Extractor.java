@@ -23,6 +23,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.ctc.wstx.stax.WstxInputFactory;
@@ -77,9 +78,16 @@ public class Extractor {
 	 */
 	public ControlledVocabulary getControlledVocabulary(String field,
 			String value) {
+		String vocabularyName;
+		if (StringUtils.endsWith(value, "/")) {
+			vocabularyName = StringUtils.substringBeforeLast(
+					StringUtils.substringBeforeLast(value, "/"), "/");
+		} else {
+			vocabularyName = StringUtils.substringBeforeLast(value, "/");
+		}
 		vocabulary = mongoServer.getDatastore()
-				.find(ControlledVocabularyImpl.class).filter(field, value)
-				.get();
+				.find(ControlledVocabularyImpl.class)
+				.filter(field, vocabularyName).get();
 		return vocabulary != null ? vocabulary : null;
 	}
 
@@ -122,7 +130,7 @@ public class Extractor {
 						xmlString.getBytes()), "UTF-8");
 				XMLStreamReader xml = inFactory.createXMLStreamReader(source);
 				String element = "";
-				boolean mapped = false;
+				//boolean mapped = false;
 				while (xml.hasNext()) {
 					List<String> tempList = new ArrayList<String>();
 					switch (xml.getEventType()) {
@@ -130,14 +138,16 @@ public class Extractor {
 						xml.next();
 						break;
 					case XMLStreamConstants.START_ELEMENT:
-						element = xml.getPrefix() + ":" + xml.getLocalName();
+						element = (xml.getPrefix() != null ? xml.getPrefix()
+								+ ":" : "")
+								+ xml.getLocalName();
 
 						if (isMapped(element)) {
 							if (xml.getAttributeCount() > 0) {
 								String attribute = xml.getAttributePrefix(0)
 										+ ":" + xml.getAttributeLocalName(0);
 								if (isMapped(element + "_" + attribute)) {
-									mapped = false;
+									//mapped = false;
 									tempList.add(getEdmLabel(attribute)
 											.toString());
 									tempList.add(xml.getAttributeValue(0));
@@ -148,22 +158,23 @@ public class Extractor {
 							} else {
 								tempList.add(getEdmLabel(element).toString());
 								tempList.add(xml.getElementText());
-								mapped = true;
+							//	mapped = true;
 								denormalizedValues.add(tempList);
 								tempList = new ArrayList<String>();
 							}
 						}
 						xml.next();
 						break;
-					case XMLStreamConstants.CHARACTERS:
-						if (!mapped) {
+					/*case XMLStreamConstants.CHARACTERS:
+						if (mapped) {
 							tempList.add(getEdmLabel(element).toString());
-							tempList.add(xml.getElementText());
+							tempList.add(xml.getText());
 							denormalizedValues.add(tempList);
 							tempList = new ArrayList<String>();
 						}
 						xml.next();
 						break;
+					*/
 					default:
 						xml.next();
 						break;
@@ -203,12 +214,30 @@ public class Extractor {
 		}
 	}
 
+	/**
+	 * Retrieve the value of a field. The value retrieved is part of the
+	 * EdmLabel enumeration
+	 * 
+	 * @param field
+	 *            The field to check
+	 * @return The EdmLabel the field has been mapped to
+	 */
 	public EdmLabel getEdmLabel(String field) {
 
 		return vocabulary != null ? vocabulary.getElements().get(field)
 				: EdmLabel.NULL;
 	}
 
+	/**
+	 * Map a field to an EdmLabel. Short for <code>
+	 * Map<String,EdmLabel> mappings = new HashMap<String,EdmLabel>();
+	 * mappings.put(field,edmLabel);
+	 * vocabulary.setElements(mappings);
+	 * </code>
+	 * 
+	 * @param fieldToMap
+	 * @param europeanaField
+	 */
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
 		Map<String, EdmLabel> elements = vocabulary.getElements() != null ? vocabulary
 				.getElements() : new HashMap<String, EdmLabel>();
@@ -227,8 +256,9 @@ public class Extractor {
 	}
 
 	public boolean isMapped(String field) {
-		return vocabulary != null ? vocabulary.getElements().containsKey(field)
-				: false;
+
+		return vocabulary != null ? (vocabulary.getElements().get(field)
+				.equals(EdmLabel.NULL) ? false : true) : false;
 	}
 
 	public Map<String, EdmLabel> readSchema(String location) {
@@ -267,9 +297,9 @@ public class Extractor {
 					xml.next();
 					break;
 				case XMLStreamConstants.START_ELEMENT:
-					element = xml.getName().getPrefix() + ":"
+					element = (xml.getName().getPrefix().length() > 0 ? xml
+							.getName().getPrefix() + ":" : "")
 							+ xml.getName().getLocalPart();
-					System.out.println(element);
 					elements.put(element, EdmLabel.NULL);
 					int i = 0;
 					while (i < xml.getAttributeCount()) {
