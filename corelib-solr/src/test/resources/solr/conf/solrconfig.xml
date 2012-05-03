@@ -728,6 +728,7 @@
      <lst name="defaults">
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
+       <str name="spellcheck.count">10</str>
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -1128,6 +1129,7 @@
       <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
       	<float name="thresholdTokenFrequency">.01</float>
       -->
+      
       <str name="buildOnOptimize">true</str>  <!--enable this on production-->
     </lst>
 
