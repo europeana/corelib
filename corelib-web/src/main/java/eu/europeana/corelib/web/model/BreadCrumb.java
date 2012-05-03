@@ -21,14 +21,17 @@
 
 package eu.europeana.corelib.web.model;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class BreadCrumb {
 
-	private String href;
 	
 	private String display;
+	
+	private String href;
 	
 	private boolean last = false;
 	
@@ -37,12 +40,29 @@ public class BreadCrumb {
 		this.href = href;
 	}
 	
+	public BreadCrumb(String display, String param, String value, String prevHref) {
+		this.display = display;
+		this.href = createHref(param, value, prevHref);
+	}
+	
 	public String getDisplay() {
 		return display;
 	}
 	
 	public String getHref() {
 		return href;
+	}
+	
+	private String createHref(String param, String value, String prevHref) {
+		StringBuilder sb = new StringBuilder();
+		if (StringUtils.isNotBlank(prevHref)) {
+			sb.append(prevHref);
+			sb.append("&amp;");
+		}
+		sb.append(param);
+		sb.append("=");
+		sb.append(value);
+		return sb.toString();
 	}
 	
 	public boolean isLast() {

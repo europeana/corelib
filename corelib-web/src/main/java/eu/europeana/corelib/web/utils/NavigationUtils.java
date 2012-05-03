@@ -38,11 +38,13 @@ public class NavigationUtils {
 
 	public static List<BreadCrumb> createBreadCrumbList(Query q) {
 		List<BreadCrumb> crumbs = new ArrayList<BreadCrumb>();
-		crumbs.add(new BreadCrumb(q.getQuery(), null));
+		BreadCrumb crumb = new BreadCrumb(q.getQuery(), "query", q.getQuery(), null);
+		crumbs.add(crumb);
 		for (String refinement : q.getRefinements()) {
-			crumbs.add(new BreadCrumb(refinement, null));
+			crumb = new BreadCrumb(refinement, "qf", refinement, crumb.getHref());
+			crumbs.add(crumb);
 		}
-		crumbs.get(crumbs.size()-1).markAsLast();
+		crumb.markAsLast();
 		return crumbs;
 	}
 	
