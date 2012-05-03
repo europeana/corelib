@@ -59,13 +59,14 @@ public final class SolrUtils {
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
-
-				try {
-					DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
-				} catch (IllegalArgumentException e) {
-					return false;
+				if (StringUtils.contains(refinement, "TYPE:")) {
+					try {
+						DocType.get(StringUtils.substringAfter(refinement,
+								"TYPE:"));
+					} catch (IllegalArgumentException e) {
+						return false;
+					}
 				}
-
 			}
 		}
 		return true;
@@ -104,8 +105,8 @@ public final class SolrUtils {
 	}
 
 	public static void addResourceOrLiteralType(List<String> destination,
-			ResourceOrLiteralType type, Map<String,List<String>> mapLists) throws MalformedURLException,
-			IOException {
+			ResourceOrLiteralType type, Map<String, List<String>> mapLists)
+			throws MalformedURLException, IOException {
 
 		List<List<String>> value = getValueOfResourceOrLiteralType(type);
 		if (value != null) {
@@ -114,8 +115,9 @@ public final class SolrUtils {
 				if (StringUtils.equals(values.get(0), "original")) {
 					destination.add(values.get(1));
 				} else {
-					List<String> fieldValues = mapLists.get(values.get(0).toString());
-					if(!fieldValues.contains(values.get(1))){
+					List<String> fieldValues = mapLists.get(values.get(0)
+							.toString());
+					if (!fieldValues.contains(values.get(1))) {
 						fieldValues.add(values.get(1));
 					}
 				}
