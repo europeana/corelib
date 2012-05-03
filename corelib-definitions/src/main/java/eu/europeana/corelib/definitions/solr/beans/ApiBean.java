@@ -47,4 +47,22 @@ public interface ApiBean extends BriefBean {
 	List<Map<String, String>> getEdmTimespanBroaderLabel();
 
 	String[] getEdmPlaceBroaderTerm();
+
+	String[] getUgc();
+
+	void setUgc(String[] ugc);
+
+	String[] getEdmRights();
+
+	void setEdmRights(String[] edmRights);
+
+	String[] getCountry();
+
+	void setCountry(String[] country);
+
+	String[] getEuropeanaCollectionName();
+
+	void setEuropeanaCollectionName(String[] europeanaCollectionName);
+
+	void setDctermsIsPartOf(String[] dctermsIsPartOf);
 }
