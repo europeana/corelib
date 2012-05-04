@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -130,7 +131,6 @@ public class Extractor {
 						xmlString.getBytes()), "UTF-8");
 				XMLStreamReader xml = inFactory.createXMLStreamReader(source);
 				String element = "";
-				//boolean mapped = false;
 				while (xml.hasNext()) {
 					List<String> tempList = new ArrayList<String>();
 					switch (xml.getEventType()) {
@@ -147,8 +147,7 @@ public class Extractor {
 								String attribute = xml.getAttributePrefix(0)
 										+ ":" + xml.getAttributeLocalName(0);
 								if (isMapped(element + "_" + attribute)) {
-									//mapped = false;
-									tempList.add(getEdmLabel(attribute)
+									tempList.add(getEdmLabel(element + "_" + attribute)
 											.toString());
 									tempList.add(xml.getAttributeValue(0));
 									denormalizedValues.add(tempList);
@@ -158,23 +157,13 @@ public class Extractor {
 							} else {
 								tempList.add(getEdmLabel(element).toString());
 								tempList.add(xml.getElementText());
-							//	mapped = true;
 								denormalizedValues.add(tempList);
 								tempList = new ArrayList<String>();
 							}
 						}
 						xml.next();
 						break;
-					/*case XMLStreamConstants.CHARACTERS:
-						if (mapped) {
-							tempList.add(getEdmLabel(element).toString());
-							tempList.add(xml.getText());
-							denormalizedValues.add(tempList);
-							tempList = new ArrayList<String>();
-						}
-						xml.next();
-						break;
-					*/
+					
 					default:
 						xml.next();
 						break;
@@ -257,8 +246,14 @@ public class Extractor {
 
 	public boolean isMapped(String field) {
 
-		return vocabulary != null ? (vocabulary.getElements().get(field)
-				.equals(EdmLabel.NULL) ? false : true) : false;
+		if(vocabulary!=null){
+			for (Entry<String, EdmLabel> entry : vocabulary.getElements().entrySet()){
+				if (StringUtils.contains(entry.getKey(), field) && !entry.getValue().equals(EdmLabel.NULL)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public Map<String, EdmLabel> readSchema(String location) {
