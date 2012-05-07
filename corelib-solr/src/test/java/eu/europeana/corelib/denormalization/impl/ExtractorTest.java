@@ -38,7 +38,7 @@ public class ExtractorTest {
 		assertEquals(1, extractor.getControlledVocabularies().size());
 		assertNotNull(extractor.getControlledVocabulary("name", "testVocabulary"));
 		ControlledVocabularyImpl retrieveVocabulary = (ControlledVocabularyImpl) extractor.getControlledVocabulary("name","testVocabulary");
-		ControlledVocabularyImpl retrieveVocabularyUri = (ControlledVocabularyImpl) extractor.getControlledVocabulary("URI","http://testuri");
+		ControlledVocabularyImpl retrieveVocabularyUri = (ControlledVocabularyImpl) extractor.getControlledVocabulary("URI","http://testuri/record");
 		assertEquals(retrieveVocabulary.getId(),retrieveVocabularyUri.getId());
 		assertEquals(vocabulary.getName(),retrieveVocabulary.getName());
 		assertEquals(1, retrieveVocabulary.getElements().size());
