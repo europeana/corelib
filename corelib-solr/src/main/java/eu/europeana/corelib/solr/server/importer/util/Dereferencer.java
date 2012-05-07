@@ -25,6 +25,7 @@ public class Dereferencer {
 
 	private static VocabularyMongoServer server;
 
+	
 	/**
 	 * Lookup the URI provided in a control vocabulary and return its
 	 * description
@@ -37,8 +38,12 @@ public class Dereferencer {
 	 */
 	public static List<List<String>> normalize(String uri)
 			throws MalformedURLException, IOException {
-		ApplicationContext applicationContext = AppContext.getApplicationContext();
-		server = (VocabularyMongoServer) applicationContext.getBean("corelib_solr_vocabularyMongoServer");
+		if (server == null) {
+			ApplicationContext applicationContext = AppContext
+					.getApplicationContext();
+			server = (VocabularyMongoServer) applicationContext
+					.getBean("corelib_solr_vocabularyMongoServer");
+		}
 		List<List<String>> values = new ArrayList<List<String>>();
 		List<String> originalValue = new ArrayList<String>();
 		originalValue.add("original");
@@ -47,9 +52,9 @@ public class Dereferencer {
 		if (isURI(uri)) {
 			Extractor extractor = new Extractor(new ControlledVocabularyImpl(),
 					server);
-			if (extractor.getControlledVocabulary("URI",uri) != null) {
+			if (extractor.getControlledVocabulary("URI", uri) != null) {
 				values.addAll(extractor.denormalize(uri,
-						extractor.getControlledVocabulary("URI",uri)));
+						extractor.getControlledVocabulary("URI", uri)));
 			}
 
 		}
@@ -73,5 +78,9 @@ public class Dereferencer {
 			return false;
 		}
 
+	}
+	
+	public static void setServer(VocabularyMongoServer server){
+		Dereferencer.server = server;
 	}
 }

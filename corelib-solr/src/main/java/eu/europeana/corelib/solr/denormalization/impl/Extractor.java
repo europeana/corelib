@@ -86,6 +86,7 @@ public class Extractor {
 		} else {
 			vocabularyName = StringUtils.substringBeforeLast(value, "/");
 		}
+		
 		vocabulary = mongoServer.getDatastore()
 				.find(ControlledVocabularyImpl.class)
 				.filter(field, vocabularyName).get();
