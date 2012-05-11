@@ -68,6 +68,12 @@ public class SearchServiceImpl implements SearchService {
 	private static final String TERMS_REGEX_FLAG = "case_insensitive";
 
 	@Override
+	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
 		solrQuery.set("mlt", true);

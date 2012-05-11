@@ -44,6 +44,16 @@ public interface SearchService {
 	 * @throws SolrTypeException
 	 */
 	FullBean findById(String europeanaObjectId) throws SolrTypeException;
+	
+	/**
+	 * Retrieve a record by splitted collectionId and recordId
+	 * 
+	 * @param europeanaObjectId
+	 *            - The unique europeana id
+	 * @return A full europeana record
+	 * @throws SolrTypeException
+	 */
+	FullBean findById(String collectionId, String recordId) throws SolrTypeException;
 
 	/**
 	 * Perform a search in SOLR based on the given query and return the results in the format of the given class.

@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.model.Term;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -42,6 +43,12 @@ public class SearchServiceMock implements SearchService {
 	public static final String[] AUTHOR=new String[]{"Mock Author"};
 	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
 
+	@Override
+	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
+		// not needed in this mock...
+		return null;
+	}
+	
 	@Override
 	public FullBean findById(String europeanaObjectId) {
 		FullBean mockBean = createMock(FullBean.class);
