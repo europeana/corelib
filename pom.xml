@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   Copyright 2007-2012 The Europeana Foundation
 
@@ -15,10 +14,7 @@
   any kind, either express or implied.
   See the Licence for the specific language governing permissions and limitations under 
   the Licence.
- -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+ --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
@@ -37,7 +33,9 @@
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
 		<!-- <module>corelib-solr-definitions</module> -->
-	</modules>
+    	<module>corelib-solr-dereference</module>
+    <module>corelib-solr-tools</module>
+  </modules>
 	<repositories>
         <repository>
             <id>releases</id>
