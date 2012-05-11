@@ -36,7 +36,7 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>com.google.code.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<version>0.99</version>
