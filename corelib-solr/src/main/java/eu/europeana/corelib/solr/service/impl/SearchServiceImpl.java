@@ -45,6 +45,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
@@ -69,8 +70,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
-		// TODO Auto-generated method stub
-		return null;
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
 	}
 	
 	@Override
