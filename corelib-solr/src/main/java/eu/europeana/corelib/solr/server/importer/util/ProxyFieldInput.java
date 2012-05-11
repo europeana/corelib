@@ -32,6 +32,7 @@ import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -202,7 +203,7 @@ public final class ProxyFieldInput {
 	 * @throws MalformedURLException
 	 */
 	public static ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
-			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
+			ProvidedCHOType providedCHO, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 
 		mongoProxy.setAbout(providedCHO.getAbout());
@@ -389,7 +390,7 @@ public final class ProxyFieldInput {
 		mongoProxy.setDcSubject(StringArrayUtils.toArray(subject));
 		mongoProxy.setDcTitle(StringArrayUtils.toArray(title));
 		mongoProxy.setDcType(StringArrayUtils.toArray(type));
-		if (mongoServer.searchByAbout(ProxyImpl.class, mongoProxy.getAbout()) != null) {
+		if (((EdmMongoServer)mongoServer).searchByAbout(ProxyImpl.class, mongoProxy.getAbout()) != null) {
 			MongoUtils.updateProxy(mongoProxy, mongoServer);
 		} else {
 			mongoServer.getDatastore().save(mongoProxy);
@@ -412,7 +413,7 @@ public final class ProxyFieldInput {
 	 */
 
 	public static ProxyImpl addProxyForMongo(ProxyImpl proxy,
-			Aggregation aggregation, EdmMongoServer mongoServer)
+			Aggregation aggregation, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 
 		proxy.setProxyIn(SolrUtils.exists(String.class, aggregation.getAbout()));

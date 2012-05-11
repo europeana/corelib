@@ -9,6 +9,7 @@ import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -62,7 +63,7 @@ public final class MongoUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> void update(Class<T> clazz, String about,
-			EdmMongoServer mongoServer, String field, Object value) {
+			MongoServer mongoServer, String field, Object value) {
 		if (value != null) {
 			Query<T> updateQuery = mongoServer.getDatastore()
 					.createQuery(clazz).field("about").equal(about);
@@ -104,7 +105,7 @@ public final class MongoUtils {
 	}
 
 	public static void updateAggregation(AggregationImpl mongoAggregation,
-			EdmMongoServer mongoServer) {
+			MongoServer mongoServer) {
 		update(AggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
 				"aggregatedCHO", mongoAggregation.getAggregatedCHO());
 
@@ -141,7 +142,7 @@ public final class MongoUtils {
 
 	}
 
-	public static void updateProxy(ProxyImpl proxy, EdmMongoServer mongoServer) {
+	public static void updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
 
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "dcContributor",
 				proxy.getDcContributor());

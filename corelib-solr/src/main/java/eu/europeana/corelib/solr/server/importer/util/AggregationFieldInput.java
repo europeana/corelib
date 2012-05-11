@@ -34,6 +34,7 @@ import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
@@ -130,7 +131,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl appendWebResource(
 			List<AggregationImpl> aggregations,
-			List<WebResourceImpl> webResources, EdmMongoServer mongoServer)
+			List<WebResourceImpl> webResources, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations,
 				webResources.get(0));
@@ -180,7 +181,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
-			EdmMongoServer mongoServer) throws InstantiationException,
+			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		mongoAggregation.setAbout(aggregation.getAbout());
@@ -223,7 +224,7 @@ public final class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
-		if (mongoServer.searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
+		if (((EdmMongoServer)mongoServer).searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
 			MongoUtils.updateAggregation(mongoAggregation,mongoServer);
 		} else {
 		mongoServer.getDatastore().save(mongoAggregation);

@@ -25,6 +25,7 @@ import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -79,7 +80,7 @@ public final class WebResourcesFieldInput {
 	 * @return The WebResource MongoEntity
 	 */
 	public static WebResourceImpl createWebResourceMongoField(
-			WebResourceType webResource, EdmMongoServer mongoServer) {
+			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		mongoWebResource.setAbout(webResource.getAbout());
 		if (webResource.getRights() != null) {

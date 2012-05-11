@@ -1,6 +1,8 @@
 package eu.europeana.corelib.solr.test.importer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,11 +23,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.dereference.impl.ControlledVocabularyImpl;
+import eu.europeana.corelib.dereference.impl.Extractor;
+import eu.europeana.corelib.dereference.impl.VocabularyMongoServer;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.denormalization.impl.ControlledVocabularyImpl;
-import eu.europeana.corelib.solr.denormalization.impl.Extractor;
-import eu.europeana.corelib.solr.denormalization.impl.VocabularyMongoServer;
-import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
 
@@ -33,7 +35,7 @@ import eu.europeana.corelib.solr.utils.SolrConstructor;
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class DereferencerTest {
 	@Resource(name = "corelib_solr_mongoServer")
-	EdmMongoServer mongoDBServer;
+	MongoServer mongoDBServer;
 	@Resource(name = "corelib_solr_solrEmbedded")
 	SolrServer solrServer;
 	@Resource(name = "corelib_solr_vocabularyMongoServer")

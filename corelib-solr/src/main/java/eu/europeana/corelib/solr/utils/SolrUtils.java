@@ -35,7 +35,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.server.importer.util.Dereferencer;
+import eu.europeana.corelib.dereference.impl.Dereferencer;
 
 /**
  * Set of utils for SOLR queries

@@ -30,6 +30,7 @@ import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -114,9 +115,9 @@ public final class ConceptFieldInput {
 	 * @return The MongoDB Concept Entity
 	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
-			EdmMongoServer mongoServer) {
+			MongoServer mongoServer) {
 
-		ConceptImpl conceptMongo = (ConceptImpl) mongoServer.searchByAbout(
+		ConceptImpl conceptMongo = (ConceptImpl) ((EdmMongoServer)mongoServer).searchByAbout(
 				ConceptImpl.class, concept.getAbout());
 		if (conceptMongo == null) {
 			// If it does not exist
@@ -129,7 +130,7 @@ public final class ConceptFieldInput {
 	}
 
 	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
-			Concept concept, EdmMongoServer mongoServer) {
+			Concept concept, MongoServer mongoServer) {
 
 		if (conceptMongo.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();
@@ -200,7 +201,7 @@ public final class ConceptFieldInput {
 			MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
 					mongoServer, "broader", broaderList);
 		}
-		return (ConceptImpl) mongoServer.searchByAbout(ConceptImpl.class,
+		return (ConceptImpl) ((EdmMongoServer)mongoServer).searchByAbout(ConceptImpl.class,
 				concept.getAbout());
 	}
 

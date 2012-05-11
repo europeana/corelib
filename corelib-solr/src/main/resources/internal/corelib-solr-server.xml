@@ -56,7 +56,7 @@
     	<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
     </bean>
     
-     <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.solr.denormalization.impl.VocabularyMongoServer">
+     <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
     	<constructor-arg ref="corelib_solr_mongo"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
     </bean>

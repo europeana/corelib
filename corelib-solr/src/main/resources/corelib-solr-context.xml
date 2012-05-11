@@ -35,5 +35,5 @@
 	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.impl.SearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrServer"
 	/>
-	<bean id="corelib_solr_applicationContextProvider" class="eu.europeana.corelib.solr.context.ApplicationContextProvider"/>	
+	<bean id="corelib_solr_applicationContextProvider" class="eu.europeana.corelib.tools.ApplicationContextProvider"/>	
 </beans>

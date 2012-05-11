@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -130,9 +131,9 @@ public final class AgentFieldInput {
 	 * @throws MappingException
 	 */
 	public static AgentImpl createAgentMongoEntity(AgentType agentType,
-			EdmMongoServer mongoServer) {
+			MongoServer mongoServer) {
 
-		AgentImpl agent = (AgentImpl) mongoServer.searchByAbout(
+		AgentImpl agent = (AgentImpl) ((EdmMongoServer)mongoServer).searchByAbout(
 				AgentImpl.class, agentType.getAbout());
 
 		// if it does not exist
@@ -158,7 +159,7 @@ public final class AgentFieldInput {
 	 * @return The new Agent MongoDB Entity
 	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
-			AgentType agentType, EdmMongoServer mongoServer) {
+			AgentType agentType, MongoServer mongoServer) {
 		if (agent.getBegin() != null
 				&& !StringUtils.equals(agentType.getBegins().get(0),
 						agent.getBegin())) {
@@ -221,7 +222,7 @@ public final class AgentFieldInput {
 				MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "prefLabel", newPrefLabelMap);
 			}
 		}
-		return (AgentImpl) mongoServer.searchByAbout(AgentImpl.class,
+		return (AgentImpl) ((EdmMongoServer)mongoServer).searchByAbout(AgentImpl.class,
 				agentType.getAbout());
 	}
 

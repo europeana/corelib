@@ -24,6 +24,7 @@ import java.util.List;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.RDF.Choice;
+import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -33,7 +34,6 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
@@ -54,9 +54,9 @@ public class MongoConstructor {
 
 //	private FullBeanImpl fullBean;
 
-	private EdmMongoServer mongoServer;
+	private MongoServer mongoServer;
 	
-	public void setMongoServer(EdmMongoServer mongoServer) {
+	public void setMongoServer(MongoServer mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 

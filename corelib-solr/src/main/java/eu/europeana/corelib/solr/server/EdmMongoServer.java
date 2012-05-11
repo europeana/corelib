@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.server;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.solr.MongoServer;
 
 /**
  * Basic MongoDB server implementation
