@@ -253,7 +253,7 @@ public class UserServiceTest {
 
 		SavedSearch[] savedSearches = user.getSavedSearches().toArray(
 				new SavedSearchImpl[user.getSavedSearches().size()]);
-		userService.removeSavedSearch(savedSearches[1].getId());
+		userService.removeSavedSearch(user.getId(), savedSearches[1].getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Searches list should be one less!", user.getSavedSearches().size() == 2);
 	}
@@ -292,7 +292,7 @@ public class UserServiceTest {
 		assertEquals(DocType.TEXT, item.getDocType());
 		assertNotNull("No creation date set", item.getDateSaved());
 
-		userService.removeSavedItem(item.getId());
+		userService.removeSavedItem(user.getId(), item.getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 	}
@@ -331,7 +331,7 @@ public class UserServiceTest {
 		assertEquals(SearchServiceMock.TITLE[0], tag.getTitle());
 		assertNotNull("No creation date set", tag.getDateSaved());
 
-		userService.removeSocialTag(tag.getId());
+		userService.removeSocialTag(user.getId(), tag.getId());
 		user = userService.findByEmail(EMAIL);
 		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 	}

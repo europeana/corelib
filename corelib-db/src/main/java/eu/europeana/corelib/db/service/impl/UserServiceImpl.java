@@ -83,7 +83,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
-	
+
 	@Override
 	public User findByApiKey(String apiKey) {
 		if (StringUtils.isNotBlank(apiKey)) {
@@ -100,7 +100,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
-	
+
 	@Override
 	public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
 		if ((userId == null) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
@@ -143,14 +143,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		SavedItemImpl savedItem = new SavedItemImpl();
 		FullBean bean = null;
-		
+
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
-		
-		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0],
-				RelationalDatabase.FIELDSIZE_AUTHOR));
+
+		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0], RelationalDatabase.FIELDSIZE_AUTHOR));
 		return user;
 	}
-	
+
 	@Override
 	public User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException {
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
@@ -162,31 +161,30 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
-		socialTag.setTag(StringUtils.abbreviate(tag,
-				RelationalDatabase.FIELDSIZE_TAG));
+		socialTag.setTag(StringUtils.abbreviate(tag, RelationalDatabase.FIELDSIZE_TAG));
 		return user;
 	}
 
 	@Override
-	public void removeSavedSearch(Long savedSearchId) throws DatabaseException {
+	public void removeSavedSearch(Long userId, Long savedSearchId) throws DatabaseException {
 		SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class, savedSearchId);
-		if (savedSearch != null) {
+		if ((savedSearch != null) && savedSearch.getUser().getId().equals(userId)) {
 			savedSearch.getUser().getSavedSearches().remove(savedSearch);
 		}
 	}
 
 	@Override
-	public void removeSavedItem(Long savedItemId) throws DatabaseException {
+	public void removeSavedItem(Long userId, Long savedItemId) throws DatabaseException {
 		SavedItemImpl savedItem = getDao().findByPK(SavedItemImpl.class, savedItemId);
-		if (savedItem != null) {
+		if ((savedItem != null) && savedItem.getUser().getId().equals(userId)) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
 	}
 
 	@Override
-	public void removeSocialTag(Long socialTagId) throws DatabaseException {
+	public void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException {
 		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class, socialTagId);
-		if (socialTag != null) {
+		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
 	}
@@ -205,8 +203,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		instance.setEuropeanaUri(bean.getId());
 		instance.setEuropeanaObject(bean.getEdmObject()[0]);
 		instance.setDateSaved(new Date());
-		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0],
-				RelationalDatabase.FIELDSIZE_TITLE));
+		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0], RelationalDatabase.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {

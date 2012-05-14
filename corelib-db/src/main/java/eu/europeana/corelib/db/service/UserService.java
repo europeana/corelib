@@ -138,7 +138,7 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the saved search to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSavedSearch(Long savedSearchId) throws DatabaseException;
+	void removeSavedSearch(Long userId, Long savedSearchId) throws DatabaseException;
 
 	/**
 	 * Removes a SavedItem from database and User.
@@ -147,7 +147,7 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the saved item to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSavedItem(Long savedItemId) throws DatabaseException;
+	void removeSavedItem(Long userId, Long savedItemId) throws DatabaseException;
 
 	/**
 	 * Removes a SocialTag from database and User.
@@ -156,6 +156,6 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the social tag to remove
 	 * @throws DatabaseException 
 	 */
-	void removeSocialTag(Long socialTagId) throws DatabaseException;
+	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
 
 }
