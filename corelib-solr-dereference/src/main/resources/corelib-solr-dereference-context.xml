@@ -28,8 +28,8 @@
     
 	<!-- INTERNAL -->
 	<import resource="corelib-definitions-context.xml" />
-	<import resource="internal/corelib-solr-datasource.xml" />
-	<import resource="internal/corelib-solr-server.xml" />
+	<import resource="internal/corelib-solr-dereference-datasource.xml" />
+	<import resource="internal/corelib-solr-dereference-server.xml" />
 	
 	<!-- SERVICES -->
 	<bean id="corelib_solr_applicationContextProvider" class="eu.europeana.corelib.tools.ApplicationContextProvider"/>	
