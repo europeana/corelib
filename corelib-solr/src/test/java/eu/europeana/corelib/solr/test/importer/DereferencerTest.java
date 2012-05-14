@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,9 +75,9 @@ public class DereferencerTest {
 				System.getProperty("user.dir"), "corelib") ? System
 				.getProperty("user.dir") + "/corelib-solr" : System
 				.getProperty("user.dir");
-		URI = "file://" + workingDir + "/src/test/resources/test_files";
+		URI = "file://" + workingDir + "/target/test_files";
 		controlledVocabulary.setURI("file://" + workingDir
-				+ "/src/test/resources/test_files");
+				+ "/target/test_files");
 		Extractor extractor = new Extractor(controlledVocabulary,
 				vocabularyMongoDBServer);
 		try {
@@ -94,13 +95,13 @@ public class DereferencerTest {
 		extractor.saveMapping();
 		MongoConstructor mongoConstructor = new MongoConstructor();
 		mongoConstructor.setMongoServer(mongoDBServer);
-		fixFile(new File(workingDir + "/src/test/resources/test_files/edm.xml"));
+		fixFile(getClass().getResourceAsStream("/test_files/edm.xml"),
+				workingDir + "/target/test_files/edm.xml");
 		try {
 			IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
 			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 			RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(
-					new File(workingDir
-							+ "/src/test/resources/test_files/edm.xml")), null);
+					new File(workingDir + "/target/test_files/edm.xml")), null);
 			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
 
 			mongoDBServer.getDatastore().save(fullBean);
@@ -123,39 +124,38 @@ public class DereferencerTest {
 
 	}
 
-	private void fixFile(File file) {
+	private void fixFile(InputStream is, String destination) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
-			Document doc = dbf.newDocumentBuilder().parse(file);
+			Document doc = dbf.newDocumentBuilder().parse(is);
 			Element root = doc.getDocumentElement();
 			NodeList list = root.getElementsByTagName("dc:contributor");
-			Text URIText = doc.createTextNode(URI+"/sample");
+			Text URIText = doc.createTextNode(URI + "/sample");
 			Node child = list.item(0).getFirstChild();
-				if(child!=null){
-					list.item(0).removeChild(child);
-				}
-				list.item(0).appendChild(URIText);
-				
-				
-			
+			if (child != null) {
+				list.item(0).removeChild(child);
+			}
+			list.item(0).appendChild(URIText);
+
 			NodeList list2 = root.getElementsByTagName("dc:publisher");
 			Node child2 = list2.item(0).getFirstChild();
-			Text URIText2 = doc.createTextNode(URI+"/sample");
-			if(child2!=null){
+			Text URIText2 = doc.createTextNode(URI + "/sample");
+			if (child2 != null) {
 				list2.item(0).removeChild(child2);
 			}
-				list2.item(0).appendChild(URIText2);
-			NodeList list3 = root.getElementsByTagName("dcterms:isReferencedBy");
+			list2.item(0).appendChild(URIText2);
+			NodeList list3 = root
+					.getElementsByTagName("dcterms:isReferencedBy");
 			NamedNodeMap map = list3.item(0).getAttributes();
 			Node resource = map.getNamedItem("rdf:resource");
-			resource.setNodeValue(URI+"/sample");
+			resource.setNodeValue(URI + "/sample");
 			map.setNamedItem(resource);
-			  TransformerFactory tranFactory = TransformerFactory.newInstance();  
-			  Transformer aTransformer = tranFactory.newTransformer();  
-			  Source src = new DOMSource(doc);  
-			  Result dest = new StreamResult(file);
-			  aTransformer.transform(src, dest);
-			 
+			TransformerFactory tranFactory = TransformerFactory.newInstance();
+			Transformer aTransformer = tranFactory.newTransformer();
+			Source src = new DOMSource(doc);
+			Result dest = new StreamResult(destination);
+			aTransformer.transform(src, dest);
+
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
