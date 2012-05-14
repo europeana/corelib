@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:dbpprop="http://dbpedia.org/property/" >
+<test_contributor>CONTIBUTOR</test_contributor>
+<test_publisher>PUBLISHER</test_publisher>
+<test_created>CREATED</test_created>
+<test_alternative rdf:resource="ALTERNATIVE"></test_alternative>
+</rdf:RDF> 
