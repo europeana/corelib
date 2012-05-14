@@ -257,7 +257,7 @@ public class Extractor {
 		return false;
 	}
 
-	public Map<String, EdmLabel> readSchema(String location) {
+	public Map<String, EdmLabel> readSchema(String location) throws FileNotFoundException {
 
 		vocabulary.setElements(readFromFile(location));
 		return vocabulary.getElements();
@@ -277,7 +277,7 @@ public class Extractor {
 		}
 	}
 
-	private Map<String, EdmLabel> readFromFile(String localLocation) {
+	private Map<String, EdmLabel> readFromFile(String localLocation) throws FileNotFoundException {
 		Map<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
@@ -312,8 +312,7 @@ public class Extractor {
 			}
 
 		} catch (FileNotFoundException e) {
-			// Should never happen
-			e.printStackTrace();
+			throw e;
 		} catch (XMLStreamException e) {
 
 			e.printStackTrace();
