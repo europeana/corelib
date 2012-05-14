@@ -8,7 +8,7 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. See the Licence for 
 	the specific language governing permissions and limitations under the Licence. -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://purl.org/dc/terms/"
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" elementFormDefault="qualified">
 	<annotation>
 		<documentation>
 			EDM First Implementation Schema: DC Terms
