@@ -38,7 +38,7 @@ import eu.europeana.corelib.solr.service.SearchService;
  * @see eu.europeana.corelib.solr.service.SearchService
  */
 public class SearchServiceMock implements SearchService {
-	
+
 	public static final String[] TITLE=new String[]{"Mock Title"};
 	public static final String[] AUTHOR=new String[]{"Mock Author"};
 	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
@@ -72,5 +72,15 @@ public class SearchServiceMock implements SearchService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	public FullBean resolve(String collectionId, String recordId)
+			throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
