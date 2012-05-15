@@ -48,9 +48,7 @@ public class EuropeanaUriUtils {
 	 */
 
 	public static String createEuropeanaId(String collectionId, String recordId) {
-		collectionId = sanitizeCollectionId(collectionId);
-		recordId = sanitizeRecordId(recordId);
-		return "/" + collectionId + "/" + recordId;
+		return "/" + sanitizeCollectionId(collectionId) + "/" + sanitizeRecordId(recordId);
 	}
 
 	private static String sanitizeRecordId(String recordId) {

@@ -18,7 +18,25 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
+		  <dependency>
+        	<groupId>org.mongodb</groupId>
+        	<artifactId>mongo-java-driver</artifactId>
+        	<version>${version.mongoDriver}</version>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.google.code.morphia</groupId>
+        	<artifactId>morphia</artifactId>
+        	<version>${version.mongoMorphia}</version>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-solr-dereference</artifactId>
+			<version>${version.europeanaCorelib}</version>
+		</dependency>
     <dependency>
+    
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.10</version>
