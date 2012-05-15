@@ -69,13 +69,55 @@ public class SearchServiceImpl implements SearchService {
 	private static final String TERMS_REGEX_FLAG = "case_insensitive";
 
 	@Override
-	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
+	public FullBean findById(String collectionId, String recordId)
+			throws SolrTypeException {
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId,
+				recordId));
 	}
-	
+
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\"" + europeanaObjectId + "\"");
+
+		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+		if (fullBean != null) {
+			try {
+				fullBean.setRelatedItems(findMoreLikeThis(europeanaObjectId)
+						.getBeans(BriefBeanImpl.class));
+			} catch (SolrServerException e) {
+				// LOG HERE
+			}
+		}
+
+		return fullBean;
+	}
+
+	@Override
+	public FullBean resolve(String collectionId, String recordId)
+			throws SolrTypeException {
+		return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId,
+				recordId));
+	}
+
+	@Override
+	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
+
+		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
+		if (fullBean != null) {
+			try {
+				fullBean.setRelatedItems(findMoreLikeThis(europeanaObjectId)
+						.getBeans(BriefBeanImpl.class));
+			} catch (SolrServerException e) {
+				// LOG
+			}
+		}
+
+		return fullBean;
+	}
+
+	private QueryResponse findMoreLikeThis(String europeanaObjectId)
+			throws SolrServerException {
+		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
+				+ europeanaObjectId + "\"");
 		solrQuery.set("mlt", true);
 		String[] mlt = new String[MoreLikeThis.values().length];
 		int i = 0;
@@ -85,30 +127,23 @@ public class SearchServiceImpl implements SearchService {
 		}
 		solrQuery.set("mlt.fl", mlt);
 		solrQuery.setQueryType(QueryType.ADVANCED.toString());
-		QueryResponse queryResponse = null;
+		return solrServer.query(solrQuery);
 
-		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		if (fullBean != null) {
-			try {
-				queryResponse = solrServer.query(solrQuery);
-				fullBean.setRelatedItems(queryResponse.getBeans(BriefBeanImpl.class));
-			} catch (SolrServerException e) {
-				// LOG HERE
-			}
-		}
-		return fullBean;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
+			Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils
+				.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery()
+						.setQuery(query.getQuery());
 				solrQuery.setFacet(true);
 				for (Facet facet : query.getFacets()) {
 					solrQuery.addFacetField(facet.toString());
@@ -124,24 +159,27 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
 				// enable spellcheck
-	            if ( solrQuery.getStart() == null || solrQuery.getStart().intValue() <= 1 ) {
-	                solrQuery.setParam("spellcheck", "on");
-	                solrQuery.setParam("spellcheck.collate", "true");
-	                solrQuery.setParam("spellcheck.extendedResults", "true");
-	                solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-	                solrQuery.setParam("spellcheck.q", query.getQuery());
-	               
-	                
-	            }
+				if (solrQuery.getStart() == null
+						|| solrQuery.getStart().intValue() <= 1) {
+					solrQuery.setParam("spellcheck", "on");
+					solrQuery.setParam("spellcheck.collate", "true");
+					solrQuery.setParam("spellcheck.extendedResults", "true");
+					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+					solrQuery.setParam("spellcheck.q", query.getQuery());
+
+				}
 				try {
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse
+							.getBeans(beanClazz));
 
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().getNumFound());
+					resultSet.setResultSize(queryResponse.getResults()
+							.getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse
+							.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
@@ -161,7 +199,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<eu.europeana.corelib.solr.model.Term> suggestions(String query, int pageSize) throws SolrTypeException {
+	public List<eu.europeana.corelib.solr.model.Term> suggestions(String query,
+			int pageSize) throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQueryType(TERMS_QUERY_TYPE);
 		solrQuery.setTerms(true);
@@ -175,7 +214,8 @@ public class SearchServiceImpl implements SearchService {
 			TermsResponse response = queryResponse.getTermsResponse();
 			List<eu.europeana.corelib.solr.model.Term> results = new ArrayList<eu.europeana.corelib.solr.model.Term>();
 			for (Term term : response.getTerms("spell")) {
-				results.add(new eu.europeana.corelib.solr.model.Term(term.getTerm(), term.getFrequency()));
+				results.add(new eu.europeana.corelib.solr.model.Term(term
+						.getTerm(), term.getFrequency()));
 			}
 			return results;
 		} catch (SolrServerException e) {

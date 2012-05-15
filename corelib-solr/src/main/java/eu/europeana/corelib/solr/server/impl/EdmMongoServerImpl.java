@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.server.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
@@ -33,6 +36,8 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 /**
  * @see eu.europeana.corelib.solr.server.EdmMongoServer
@@ -63,7 +68,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PlaceImpl.class);
 		morphia.map(TimespanImpl.class);
 		morphia.map(WebResourceImpl.class);
-		
+
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
 	}
@@ -75,24 +80,46 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public FullBean getFullBean(String id) {
-		return datastore.find(FullBeanImpl.class).field("about")
-				.equal(id).get();
+		//If the id requested exists
+		if (datastore.find(FullBeanImpl.class).field("about").equal(id).get() != null) {
+			return datastore.find(FullBeanImpl.class).field("about").equal(id)
+					.get();
+		}
+		
+		return null;
 	}
 
+	@Override
+	public FullBean resolve(String id) {
+		EuropeanaIdMongoServer europeanaIdMongoServer = new EuropeanaIdMongoServer(
+				mongoServer, "EuropeanaId");
+		//If it does not check whether it has been set in the past, 
+		//if it exists retrieve the newID and update the lastAccess field
+		if (europeanaIdMongoServer.newIdExists(id)) {
+			List<EuropeanaId> newIDList = europeanaIdMongoServer
+					.retrieveEuropeanaIdFromOld(id);
+			EuropeanaId newId= newIDList.get(0);
+			newId.setLastAccess(new Date().getTime());
+			europeanaIdMongoServer.saveEuropeanaId(newId);
+			return datastore.find(FullBeanImpl.class).field("about")
+					.equal(newIDList.get(0).getNewId()).get();
+		}
+		return null;
+	}
 	@Override
 	public String toString() {
 		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
 				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
 				+ "[DB: " + databaseName + "]\n";
 	}
-	
+
 	@Override
-	public <T> T searchByAbout(Class<T> clazz, String about){
+	public <T> T searchByAbout(Class<T> clazz, String about) {
 		return datastore.find(clazz).field("about").equal(about).get();
 	}
 
 	@Override
-	public void close(){
+	public void close() {
 		mongoServer.close();
 	}
 }

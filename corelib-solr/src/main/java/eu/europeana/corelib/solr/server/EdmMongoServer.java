@@ -48,4 +48,6 @@ public interface EdmMongoServer extends MongoServer{
      *          The EDM Mongo Entity
      */
     <T> T searchByAbout(Class<T> clazz, String about);
+
+	FullBean resolve(String id);
 }
