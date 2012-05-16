@@ -137,7 +137,7 @@
 
 	<simpleType name="UGCType">
 		<restriction base="string">
-			<enumeration value="TRUE" />
+			<enumeration value="true" />
 		</restriction>
 	</simpleType>
 
