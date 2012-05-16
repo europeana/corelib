@@ -52,7 +52,7 @@ public class SearchServiceTest {
 	@Resource
 	private SearchService searchService;
 
-	@Resource
+	@Resource(name="corelib_solr_mongoServer")
 	private EdmMongoServer mongoDBServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
