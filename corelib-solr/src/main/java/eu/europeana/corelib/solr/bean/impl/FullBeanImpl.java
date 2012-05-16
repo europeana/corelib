@@ -76,7 +76,7 @@ public class FullBeanImpl implements FullBean {
 	private DocType type;
 
 	private int europeanaCompleteness;
-
+	
 	@Transient
 	private List<BriefBeanImpl> relatedItems;
 
