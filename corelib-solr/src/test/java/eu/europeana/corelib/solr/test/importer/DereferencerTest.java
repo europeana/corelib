@@ -75,9 +75,9 @@ public class DereferencerTest {
 				System.getProperty("user.dir"), "corelib") ? System
 				.getProperty("user.dir") + "/corelib-solr" : System
 				.getProperty("user.dir");
-		URI = "file://" + workingDir + "/target/test_files";
+		URI = "file://" + workingDir + "/target/test-classes/test_files";
 		controlledVocabulary.setURI("file://" + workingDir
-				+ "/target/test_files");
+				+ "/target/test-classes/test_files");
 		Extractor extractor = new Extractor(controlledVocabulary,
 				vocabularyMongoDBServer);
 		try {
@@ -96,12 +96,12 @@ public class DereferencerTest {
 		MongoConstructor mongoConstructor = new MongoConstructor();
 		mongoConstructor.setMongoServer(mongoDBServer);
 		fixFile(getClass().getResourceAsStream("/test_files/edm.xml"),
-				workingDir + "/target/test_files/edm.xml");
+				workingDir + "/target/test-classes/test_files/edm.xml");
 		try {
 			IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
 			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 			RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(
-					new File(workingDir + "/target/test_files/edm.xml")), null);
+					new File(workingDir + "/target/test-classes/test_files/edm.xml")), null);
 			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
 
 			mongoDBServer.getDatastore().save(fullBean);
