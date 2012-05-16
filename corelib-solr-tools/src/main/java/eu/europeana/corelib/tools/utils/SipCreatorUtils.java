@@ -28,7 +28,8 @@ public class SipCreatorUtils {
 	public static String getHashField(String collectionId, String fileName) {
 		String inputString = readFile(repository + collectionId + INPUT_FOLDER
 				+ fileName + SUFFIX);
-		return StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION,
+		
+		return inputString == null?null:StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION,
 				END_HASH_FUNCTION);
 	}
 
@@ -44,9 +45,9 @@ public class SipCreatorUtils {
 				strFileContents += new String(contents, 0, bytesRead);
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
-			e.printStackTrace();
+			return null;
 		}
 		return strFileContents;
 	}

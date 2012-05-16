@@ -1,9 +1,12 @@
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.solr.MongoServer;
@@ -105,16 +108,41 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param oldId The oldId
 	 * @param newId The newId
 	 */
-	public void setLastAccessed(String oldId, String newId) {
-		// TODO: update last accessed
+	public void setLastAccessed(String oldId) {
+		List<EuropeanaId> oldIdList = retrieveEuropeanaIdFromOld(oldId);
+		EuropeanaId oldEuropeanaId = oldIdList.get(0);
+		oldEuropeanaId.setLastAccess(new Date().getTime());
+		Query<EuropeanaId> updateQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId);
+		UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
+				.set("lastAccess", oldEuropeanaId.getLastAccess());
+		datastore.update(updateQuery, ops);
 	}
 
 	/**
-	 * Save the europeanaId
+	 * Save the europeanaId a update any references to it
 	 * @param europeanaId The europeanaId to save
 	 */
 	public void saveEuropeanaId(EuropeanaId europeanaId) {
-		datastore.save(europeanaId);
+		List<EuropeanaId> oldIdList = retrieveEuropeanaIdFromOld(europeanaId.getOldId());
+		if(oldIdList.size()>0){
+			EuropeanaId oldId = oldIdList.get(0);
+			EuropeanaId newId = new EuropeanaId();
+			newId.setOldId(oldId.getNewId());
+			newId.setNewId(europeanaId.getNewId());
+			newId.setTimestamp(new Date().getTime());
+			newId.setLastAccess(0);
+			datastore.save(newId);
+			oldId.setNewId(europeanaId.getNewId());
+			Query<EuropeanaId> updateQuery = datastore
+					.createQuery(EuropeanaId.class).field("oldId").equal(oldId.getOldId());
+			UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
+					.set("newId", oldId.getNewId());
+			datastore.update(updateQuery, ops);
+		}
+		else{
+			datastore.save(europeanaId);
+		}
 	}
 
 	/**
