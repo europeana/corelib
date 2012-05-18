@@ -107,6 +107,8 @@ public final class TimespanFieldInput {
      * @param mongoServer
      *              The MongoDB Server to save the Timespan Entity
      * @return The MongoDB Entity
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
             MongoServer mongoServer) {
@@ -123,7 +125,7 @@ public final class TimespanFieldInput {
     }
 
 	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
-			TimeSpanType timeSpan, MongoServer mongoServer) {
+			TimeSpanType timeSpan, MongoServer mongoServer)  {
 		if (mongoTimespan.getBegin() != null
   				&& !StringUtils.equals(timeSpan.getBegins().get(0),
   						mongoTimespan.getBegin())) {

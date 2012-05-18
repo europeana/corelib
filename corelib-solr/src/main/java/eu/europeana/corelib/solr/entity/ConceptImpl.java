@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
@@ -32,17 +32,16 @@ import eu.europeana.corelib.definitions.solr.entity.Concept;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Entity("Concept")
+@Embedded
 public class ConceptImpl implements Concept {
 
-	@Id
 	private ObjectId id;
 
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
 	private String[] note;
 	private String[] broader;
-	@Indexed(unique = true)
+	@Indexed(unique = false)
 	private String about;
 
 	@Override
@@ -114,7 +113,7 @@ public class ConceptImpl implements Concept {
 			return false;
 		}
 		if (o.getClass() == this.getClass()) {
-			return this.getId().equals(((ConceptImpl) o).getId());
+			return this.getAbout().equals(((ConceptImpl) o).getAbout());
 		}
 		return false;
 	}

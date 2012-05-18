@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
@@ -32,9 +32,8 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Entity("Place")
+@Embedded
 public class PlaceImpl implements Place {
-	@Id
 	private ObjectId id;
 
 	private Map<String, String> prefLabel;
@@ -44,7 +43,7 @@ public class PlaceImpl implements Place {
 	private float latitude;
 	private float longitude;
 	
-	@Indexed(unique=true)
+	@Indexed(unique=false)
 	private String about;
 
 	@Override
@@ -136,7 +135,7 @@ public class PlaceImpl implements Place {
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((PlaceImpl) o).getId());
+			return ((PlaceImpl) o).getAbout()!=null?this.getAbout().equals(((PlaceImpl) o).getAbout()):false;
 		}
 		return false;
 	}

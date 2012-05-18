@@ -20,8 +20,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
 
 /**
@@ -30,18 +29,18 @@ import com.google.code.morphia.annotations.Indexed;
  *
  */
 
-@Entity("Timespan")
+@Embedded
 public class TimespanImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	@Id private ObjectId id;
+	private ObjectId id;
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private String[] note;
 	private String begin;
 	private String end;
 	private String[] isPartOf;
-	@Indexed(unique=true)
+	@Indexed(unique=false)
 	private String about;
 	
 	@Override	

@@ -18,24 +18,24 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
+
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
-@Entity("Webresource")
+@Embedded
 public class WebResourceImpl implements WebResource {
 
-	@Id private ObjectId id;
+	private ObjectId id;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
-	
+
 	private String about;
-	
+
 	@Override
 	public String getAbout() {
 		return this.about;
@@ -63,7 +63,8 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String[] getWebResourceDcRights() {
-		return (this.webResourceDcRights!=null?this.webResourceDcRights.clone():null);
+		return (this.webResourceDcRights != null ? this.webResourceDcRights
+				.clone() : null);
 	}
 
 	@Override
@@ -75,20 +76,20 @@ public class WebResourceImpl implements WebResource {
 	public ObjectId getId() {
 		return this.id;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if(o==null){
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((WebResourceImpl) o).getId());
+			return this.getAbout().equals(((WebResourceImpl) o).getAbout());
 		}
 		return false;
 	}
-	
+
 	@Override
-	public int hashCode(){ 
+	public int hashCode() {
 		return this.about.hashCode();
 	}
 }

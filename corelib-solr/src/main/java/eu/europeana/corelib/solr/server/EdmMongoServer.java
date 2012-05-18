@@ -46,6 +46,8 @@ public interface EdmMongoServer extends MongoServer{
      *          The unique identifier of an EDM Entity
      * @return 
      *          The EDM Mongo Entity
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
     <T> T searchByAbout(Class<T> clazz, String about);
 

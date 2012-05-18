@@ -53,7 +53,7 @@ import eu.europeana.corelib.solr.utils.SolrConstructor;
  */
 public class ContentLoader {
 
-	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records.zip";
+	private static String COLLECTION = "/home/gmamakis/workspace3/corelib/corelib-solr/src/test/resources/records.zip";
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 

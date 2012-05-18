@@ -35,7 +35,7 @@ public class ConceptFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testConcept(){
+	public void testConcept() {
 		assertNotNull(mongoServer);
 		//create concept from jibx bindings
 		Concept concept = new Concept();

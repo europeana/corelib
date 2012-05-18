@@ -21,7 +21,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
 import com.google.code.morphia.Morphia;
+import com.google.code.morphia.query.Query;
+import com.mongodb.DBObject;
+import com.mongodb.DBRef;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -113,9 +117,18 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				+ "[DB: " + databaseName + "]\n";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T searchByAbout(Class<T> clazz, String about) {
-		return datastore.find(clazz).field("about").equal(about).get();
+		
+		
+		if(!clazz.isInstance(FullBeanImpl.class)){
+			return datastore.find(clazz,"about",about).get();
+		}
+		else{
+			DBObject ref = (DBObject)datastore.find(clazz,"about",about).get();
+			return (T) ref;
+		}
 	}
 
 	@Override

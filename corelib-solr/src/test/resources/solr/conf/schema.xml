@@ -49,6 +49,7 @@
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
    <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="europeana_id" type="string" indexed="true" required="true" multiValued="false" stored="true" />
+   <!-- <field name="europeana_collectionName" type="string" indexed="true" required="true" multiValued="false" stored="true" />-->
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="location" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="date" type="text" indexed="true" stored="true" multiValued="true" />

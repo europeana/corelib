@@ -34,7 +34,7 @@ public class AgentFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testAgent() {
+	public void testAgent(){
 		assertNotNull(mongoServer);
 		AgentType agentType = new AgentType();
 		agentType.setAbout("test about");

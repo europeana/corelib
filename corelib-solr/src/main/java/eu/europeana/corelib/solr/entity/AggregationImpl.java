@@ -25,6 +25,7 @@ import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
+import com.google.code.morphia.annotations.Reference;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -34,9 +35,8 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Entity("Aggregation")
+@Embedded
 public class AggregationImpl implements Aggregation {
-	@Id
 	private ObjectId id;
 
 	private String edmDataProvider;
@@ -207,7 +207,7 @@ public class AggregationImpl implements Aggregation {
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((AggregationImpl) o).getId());
+			return this.getAbout().equals(((AggregationImpl) o).getAbout());
 		}
 		return false;
 	}

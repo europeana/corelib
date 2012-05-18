@@ -146,9 +146,11 @@ public final class PlaceFieldInput {
 	 * @param placeType The JiBX Entity from which the Mongo Place Entity will be updated
 	 * @param mongoServer The server on which the Place will be updated
 	 * @return The updated Mongo Place Entity
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
-			MongoServer mongoServer) {
+			MongoServer mongoServer)  {
 
 		if (place.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();

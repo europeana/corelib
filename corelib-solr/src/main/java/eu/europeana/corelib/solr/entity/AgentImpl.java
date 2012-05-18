@@ -21,8 +21,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Agent;
@@ -32,12 +31,11 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Entity("Agent")
+@Embedded
 public class AgentImpl implements Agent {
 
-	@Id
 	private ObjectId id;
-	@Indexed(unique=true)
+	@Indexed(unique=false)
 	private String about;
 	private Map<String, String> prefLabel;
 	private Map<String, String> altLabel;
@@ -122,7 +120,7 @@ public class AgentImpl implements Agent {
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((AgentImpl) o).getId());
+			return this.getAbout().equals(((AgentImpl) o).getAbout());
 		}
 		return false;
 	}

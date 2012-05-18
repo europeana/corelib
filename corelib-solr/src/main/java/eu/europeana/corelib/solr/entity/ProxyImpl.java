@@ -18,8 +18,7 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -30,11 +29,11 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
  *
  */
 
-@Entity("Proxy")
+@Embedded
 public class ProxyImpl implements Proxy {
 
-	@Id private ObjectId id;
-	@Indexed(unique=true)
+	private ObjectId id;
+	@Indexed(unique=false)
 	private String about;
 	private String[] dcContributor;
 	private String[] dcCoverage;
@@ -526,7 +525,7 @@ public class ProxyImpl implements Proxy {
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((ProxyImpl) o).getId());
+			return this.getProxyIn().equals(((ProxyImpl) o).getProxyIn());
 		}
 		return false;
 	}

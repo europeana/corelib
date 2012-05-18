@@ -22,10 +22,11 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Index;
 import com.google.code.morphia.annotations.Indexed;
-import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -80,29 +81,33 @@ public class FullBeanImpl implements FullBean {
 	@Transient
 	private List<BriefBeanImpl> relatedItems;
 
-	@Reference
+	@Embedded
+	@Indexed (unique=false)
 	private List<PlaceImpl> places;
 
-	@Reference
+	@Embedded
+	@Indexed (unique=false)
 	private List<AgentImpl> agents;
 
-	@Reference
+	@Embedded
+	@Indexed (unique=false)
 	private List<TimespanImpl> timespans;
 
-	@Reference
+	@Embedded
+	@Indexed (unique=false)
 	private List<ConceptImpl> concepts;
 
-	@Reference
+	@Embedded
 	private List<AggregationImpl> aggregations;
 
-	@Reference
+	@Embedded
 	private List<ProvidedCHOImpl> providedCHOs;
 
 	// TODO:check if Europeana Aggregation needs to be stored separately
-	@Reference
+	@Embedded
 	private EuropeanaAggregation europeanaAggregation;
 
-	@Reference
+	@Embedded
 	private List<ProxyImpl> proxies;
 
 	/**

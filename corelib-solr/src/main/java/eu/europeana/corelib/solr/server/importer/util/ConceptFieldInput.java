@@ -113,9 +113,11 @@ public final class ConceptFieldInput {
 	 *            The MongoDBServer instance that is going to be used to save
 	 *            the MongoDB Concept
 	 * @return The MongoDB Concept Entity
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
-			MongoServer mongoServer) {
+			MongoServer mongoServer)  {
 
 		ConceptImpl conceptMongo = (ConceptImpl) ((EdmMongoServer)mongoServer).searchByAbout(
 				ConceptImpl.class, concept.getAbout());
@@ -130,7 +132,7 @@ public final class ConceptFieldInput {
 	}
 
 	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
-			Concept concept, MongoServer mongoServer) {
+			Concept concept, MongoServer mongoServer)  {
 
 		if (conceptMongo.getNote() != null) {
 			List<String> newNoteList = new ArrayList<String>();

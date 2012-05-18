@@ -131,7 +131,7 @@ public final class AgentFieldInput {
 	 * @throws MappingException
 	 */
 	public static AgentImpl createAgentMongoEntity(AgentType agentType,
-			MongoServer mongoServer) {
+			MongoServer mongoServer)  {
 
 		AgentImpl agent = (AgentImpl) ((EdmMongoServer)mongoServer).searchByAbout(
 				AgentImpl.class, agentType.getAbout());
@@ -157,9 +157,11 @@ public final class AgentFieldInput {
 	 * @param mongoServer
 	 *            The MongoDB Server to save the Agent to
 	 * @return The new Agent MongoDB Entity
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
-			AgentType agentType, MongoServer mongoServer) {
+			AgentType agentType, MongoServer mongoServer)  {
 		if (agent.getBegin() != null
 				&& !StringUtils.equals(agentType.getBegins().get(0),
 						agent.getBegin())) {

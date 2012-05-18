@@ -19,8 +19,7 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
@@ -29,11 +28,11 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
-@Entity("ProvidedCHO")
+@Embedded
 public class ProvidedCHOImpl implements ProvidedCHO {
 
-	@Id private ObjectId id;
-	@Indexed(unique=true)
+	private ObjectId id;
+	@Indexed(unique=true, dropDups=true)
 	private String about;
 	private String[] owlSameAs;
 	private String edmIsNextInSequence;
@@ -86,7 +85,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((ProvidedCHOImpl) o).getId());
+			return this.getAbout().equals(((ProvidedCHOImpl) o).getAbout());
 		}
 		return false;
 	}
