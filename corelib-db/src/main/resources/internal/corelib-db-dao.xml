@@ -41,4 +41,8 @@
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.relational.TokenImpl" />
 	</bean>
 
+	<bean id="corelib_db_apiKeyDao" parent="corelib_db_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.relational.ApiKeyImpl" />
+	</bean>
+
 </beans>
