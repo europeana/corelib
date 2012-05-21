@@ -406,7 +406,7 @@ public class FullBeanTest {
 		
 		agent.setEnd("test end");
 		Key<Agent> agentKey = ds.save(agent);
-		Agent testAgent = ds.find(AgentImpl.class).filter("_id", agentKey.getId()).get();
+		Agent testAgent = ds.find(AgentImpl.class).filter("about", agent.getAbout()).get();
 		assertEquals(agent, testAgent);
 		assertEquals(agent.getAltLabel(), testAgent.getAltLabel());
 		assertEquals(agent.getPrefLabel(), testAgent.getPrefLabel());
