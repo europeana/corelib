@@ -29,7 +29,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-db</artifactId>
-	<name>corelib-db</name>
+	<name>Europeana CoreLibrary Database</name>
 	<url>http://www.europeanalabs.eu</url>
 	<dependencies>
 		<!-- Corelib -->
