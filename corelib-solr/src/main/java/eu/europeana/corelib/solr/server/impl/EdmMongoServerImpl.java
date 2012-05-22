@@ -21,11 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Key;
 import com.google.code.morphia.Morphia;
-import com.google.code.morphia.query.Query;
 import com.mongodb.DBObject;
-import com.mongodb.DBRef;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -135,4 +132,5 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	public void close() {
 		mongoServer.close();
 	}
+
 }

@@ -26,13 +26,16 @@
         <filter class="solr.SnowballPorterFilterFactory" language="English" protected="protwords.txt"/>
       </analyzer>
     </fieldType>
-      <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" >
+      <fieldType name="textSpell" class="solr.TextField" >
       <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
+
+    
+    
+    
       <fieldType name="title" class="solr.TextField" positionIncrementGap="100">
           <analyzer>
               <tokenizer class="solr.WhitespaceTokenizerFactory"/>
@@ -47,9 +50,14 @@
    <field name="manu_exact" type="string" indexed="true" stored="false"/>
    <!--<field name="payloads" type="payloads" indexed="true" stored="true"/>-->
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-   <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true"/> 
+   <field name="titleSpell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
+   <field name="whoSpell" type="textSpell" indexed="true" stored="true" multiValued="true" />
+   <field name="whereSpell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
+   <field name="whenSpell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
+   <field name="whatSpell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
    <field name="europeana_id" type="string" indexed="true" required="true" multiValued="false" stored="true" />
-   <!-- <field name="europeana_collectionName" type="string" indexed="true" required="true" multiValued="false" stored="true" />-->
+   <field name="europeana_collectionName" type="string" indexed="true" required="false" multiValued="true" stored="true" />
    <field name="description" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="location" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="date" type="text" indexed="true" stored="true" multiValued="true" />
@@ -85,34 +93,34 @@
    <field name="ore_aggregation" type="string" indexed="true" stored="false" multiValued="false"/>
    <field name="edm_europeana_aggregation" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="edm_aggregatedCHO" type="string" indexed="true" stored="false" multiValued="false"/>
-   <field name="edm_dataProvider" type="string" indexed="true" stored="false" multiValued="false"/>
+   <field name="edm_dataProvider" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="edm_hasView" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="edm_isShownBy" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="edm_isShownAt" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="edm_object" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="edm_provider" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="edm_provider" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="aggr_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="aggr_edm_rights" type="string" indexed="true" stored="true" multiValued="false" />
 
    <field name="edm_webResource" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="wr_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="wr_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="wr_edm_rights" type="string" indexed="true" stored="true" multiValued="true" />
 
    <field name="ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
    <field name="owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
    <field name="ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
    <field name="dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="dc_coverage" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="dc_date" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_date" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_description" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dc_format" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dc_language" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_language" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dc_subject" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dc_title" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dc_type" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dc_title" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dc_type" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dc_source" type="string" indexed="true" stored="false" multiValued="true" />
@@ -121,7 +129,7 @@
    <field name="prx_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
 
  
-   <field name="dcterms_alternative" type="text" indexed="true" stored="false" multiValued="true" />
+   <field name="dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
    <field name="dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
@@ -140,10 +148,10 @@
    <field name="dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="dcterms_temporal" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
 
    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="false" />
-   <field name="edm_type" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="edm_type" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
     <field name="edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
    <field name="edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
@@ -154,17 +162,17 @@
    <field name="europeana_previewNoDistribute" type="boolean" indexed="true" stored="true" multiValued="false" />
 
    <field name="edm_agent" type="string" indexed="true" stored="false" multiValued="true"/>
-   <field name="ag_skos_prefLabel" type="text" indexed="true" stored="false" multiValued="true" />
+   <field name="ag_skos_prefLabel" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="ag_skos_altLabel" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="ag_skos_prefLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
-   <field name="ag_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
+   <field name="ag_skos_altLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="ag_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
 
 
    <field name="edm_timespan" type="text" indexed="true" stored="false" multiValued="true"/>
-   <field name="ts_skos_prefLabel" type="text" indexed="true" stored="false" multiValued="true" />
+   <field name="ts_skos_prefLabel" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="ts_skos_altLabel" type="text" indexed="true" stored="false" multiValued="true" />
-   <dynamicField name="ts_skos_prefLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="ts_skos_prefLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="ts_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="ts_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
 
@@ -179,9 +187,9 @@
 
 
    <field name="skos_concept" type="string" indexed="true" stored="false" multiValued="true"/>
-   <field name="cc_skos_prefLabel" type="text" indexed="true" stored="false" multiValued="true" />
+   <field name="cc_skos_prefLabel" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="cc_skos_altLabel" type="text" indexed="true" stored="false" multiValued="true" />
-   <dynamicField name="cc_skos_prefLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="cc_skos_prefLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="cc_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="cc_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="cc_skos_broader" type="string" indexed="true" stored="false" multiValued="true" />
@@ -211,7 +219,7 @@
    <copyField source="dc_title" dest="text" />
    <copyField source="dc_type" dest="text" />
    <copyField source="edm_type" dest="text" />
-   <copyField source="dc_type" dest="what" />
+    <copyField source="dc_type" dest="what" />
    <copyField source="dc_subject" dest="what" />
    <copyField source="dc_format" dest="what" />
    <copyField source="dc_coverage" dest="when" />
@@ -224,11 +232,11 @@
    <copyField source="dc_coverage" dest="where" />
    <copyField source="dcterms_spatial" dest="where" />
    <copyField source="dc_subject" dest="where" />
-   <copyField source="dc_contributor" dest="spell" />
+  <!-- <copyField source="dc_contributor" dest="spell" />
    <copyField source="dc_creator" dest="spell" />
    <copyField source="dc_subject" dest="spell"/>
    <copyField source="dc_title" dest="spell"/>
-   <copyField source="dc_description" dest="spell"/>
+   <copyField source="dc_description" dest="spell"/> -->
    <copyField source="dc_date" dest="date" />
    <copyField source="dcterms_created" dest="date" />
    <copyField source="dcterms_issued" dest="date" />
@@ -272,4 +280,19 @@
    <copyField source="ag_skos_note" dest="text" />
    <copyField source="pl_skos_note" dest="text" />
    <copyField source="cc_skos_note" dest="text" />
+   <copyField source="dc_contributor" dest="whoSpell" />
+   <copyField source="dc_creator" dest="whoSpell" />
+     <copyField source="dc_coverage" dest="whereSpell" />
+   <copyField source="dcterms_spatial" dest="whereSpell" />
+   <copyField source="dc_subject" dest="whereSpell" />
+     <copyField source="dc_type" dest="whatSpell" />
+   <copyField source="dc_subject" dest="whatSpell" />
+   <copyField source="dc_format" dest="whatSpell" />
+   <copyField source="dc_coverage" dest="whenSpell" />
+   <copyField source="dcterms_created" dest="whenSpell" />
+   <copyField source="dcterms_temporal" dest="whenSpell" />
+   <copyField source="dc_date" dest="whenSpell" />
+   <copyField source="dc_subject" dest="whenSpell" />
+   <copyField source="dc_title" dest="titleSpell" />
+   <copyField source="dcterms_alternative" dest="titleSpell" />
 </schema>
