@@ -19,7 +19,7 @@
  * permissions and limitations under the License.
  */
 
-package eu.europeana.corelib.web.model;
+package eu.europeana.corelib.definitions.model.web;
 
 import org.apache.commons.lang.StringUtils;
 

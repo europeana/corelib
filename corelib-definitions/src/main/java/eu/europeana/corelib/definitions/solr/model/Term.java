@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.solr.model;
+package eu.europeana.corelib.definitions.solr.model;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

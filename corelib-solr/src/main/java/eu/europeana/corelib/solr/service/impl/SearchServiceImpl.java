@@ -36,12 +36,12 @@ import eu.europeana.corelib.definitions.solr.QueryType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
-import eu.europeana.corelib.solr.model.Term;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
@@ -238,7 +238,7 @@ public class SearchServiceImpl implements SearchService {
 	 * 
 	 * }
 	 */
-	public List<eu.europeana.corelib.solr.model.Term> suggestions(String query,
+	public List<Term> suggestions(String query,
 			int pageSize) throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setFacet(true);
@@ -248,7 +248,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setRows(0);
 		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell",
 				"whenSpell", "titleSpell");
-		List<eu.europeana.corelib.solr.model.Term> results = new ArrayList<eu.europeana.corelib.solr.model.Term>();
+		List<Term> results = new ArrayList<Term>();
 
 		try {
 			QueryResponse response = solrServer.query(solrQuery);
