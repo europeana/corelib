@@ -26,9 +26,12 @@ public class Term {
 	
 	private long frequency;
 	
-	public Term(String term, long frequency) {
+	private String field;
+	
+	public Term(String term, long frequency, String field) {
 		this.term = term;
 		this.frequency = frequency;
+		this.field = field;
 	}
 
 	public String getTerm() {
@@ -47,4 +50,11 @@ public class Term {
 		this.frequency = frequency;
 	}
 
+	public String getField(){
+		return this.field;
+	}
+	
+	public void setField(String field){
+		this.field = field;
+	}
 }

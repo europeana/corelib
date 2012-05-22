@@ -22,7 +22,6 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Embedded;
-import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Concept;

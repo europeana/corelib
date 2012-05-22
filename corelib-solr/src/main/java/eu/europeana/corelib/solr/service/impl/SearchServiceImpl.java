@@ -25,9 +25,9 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.TermsResponse;
-import org.apache.solr.client.solrj.response.TermsResponse.Term;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
@@ -41,6 +41,7 @@ import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
+import eu.europeana.corelib.solr.model.Term;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
@@ -64,9 +65,9 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final String TERMS_QUERY_TYPE = "/terms";
+	// private static final String TERMS_QUERY_TYPE = "/terms";
 
-	private static final String TERMS_REGEX_FLAG = "case_insensitive";
+	// private static final String TERMS_REGEX_FLAG = "case_insensitive";
 
 	@Override
 	public FullBean findById(String collectionId, String recordId)
@@ -198,32 +199,110 @@ public class SearchServiceImpl implements SearchService {
 		return resultSet;
 	}
 
-	@Override
+	/*
+	 * @Override public List<eu.europeana.corelib.solr.model.Term>
+	 * suggestions(String query, int pageSize) throws SolrTypeException {
+	 * SolrQuery solrQuery = new SolrQuery();
+	 * solrQuery.setQueryType(TERMS_QUERY_TYPE); solrQuery.setTerms(true);
+	 * solrQuery.setTermsLimit(pageSize); solrQuery.setTermsPrefix(query);
+	 * solrQuery.setTermsRegexFlag(TERMS_REGEX_FLAG);
+	 * solrQuery.addTermsField("titleSpell");
+	 * solrQuery.addTermsField("whoSpell");
+	 * solrQuery.addTermsField("whatSpell");
+	 * solrQuery.addTermsField("whenSpell");
+	 * solrQuery.addTermsField("whereSpell"); try { QueryResponse queryResponse
+	 * = solrServer.query(solrQuery); TermsResponse response =
+	 * queryResponse.getTermsResponse();
+	 * List<eu.europeana.corelib.solr.model.Term> results = new
+	 * ArrayList<eu.europeana.corelib.solr.model.Term>(); for (Term term :
+	 * response.getTerms("titleSpell")) { results.add(new
+	 * eu.europeana.corelib.solr.model.Term(term .getTerm(),
+	 * term.getFrequency(), "Title")); } for(Term term :
+	 * response.getTerms("whoSpell")){ results.add(new
+	 * eu.europeana.corelib.solr.model.Term(term .getTerm(),
+	 * term.getFrequency(), "Person")); } for (Term term :
+	 * response.getTerms("whenSpell")){ results.add(new
+	 * eu.europeana.corelib.solr.model.Term(term .getTerm(),
+	 * term.getFrequency(), "Date")); } for (Term term :
+	 * response.getTerms("whatSpell")){ results.add(new
+	 * eu.europeana.corelib.solr.model.Term(term .getTerm(),
+	 * term.getFrequency(), "Subject")); } for (Term term :
+	 * response.getTerms("whereSpell")){ results.add(new
+	 * eu.europeana.corelib.solr.model.Term(term .getTerm(),
+	 * term.getFrequency(), "Place")); } return results; } catch
+	 * (SolrServerException e) {
+	 * 
+	 * throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 	public List<eu.europeana.corelib.solr.model.Term> suggestions(String query,
 			int pageSize) throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQueryType(TERMS_QUERY_TYPE);
-		solrQuery.setTerms(true);
-		solrQuery.setTermsLimit(pageSize);
+		solrQuery.setFacet(true);
+		solrQuery.setFacetMinCount(1);
+		solrQuery.setFacetPrefix(query);
+		solrQuery.setQuery("*:*");
+		solrQuery.setRows(0);
+		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell",
+				"whenSpell", "titleSpell");
+		List<eu.europeana.corelib.solr.model.Term> results = new ArrayList<eu.europeana.corelib.solr.model.Term>();
 
-		solrQuery.setTermsPrefix(query);
-		solrQuery.setTermsRegexFlag(TERMS_REGEX_FLAG);
-		solrQuery.addTermsField("spell");
 		try {
-			QueryResponse queryResponse = solrServer.query(solrQuery);
-			TermsResponse response = queryResponse.getTermsResponse();
-			List<eu.europeana.corelib.solr.model.Term> results = new ArrayList<eu.europeana.corelib.solr.model.Term>();
-			for (Term term : response.getTerms("spell")) {
-				results.add(new eu.europeana.corelib.solr.model.Term(term
-						.getTerm(), term.getFrequency()));
+			QueryResponse response = solrServer.query(solrQuery);
+			FacetField who = response.getFacetField("whoSpell");
+
+			List<Count> whoSuggestions = who.getValues();
+			if (whoSuggestions != null) {
+				for (Count whoSuggestion : whoSuggestions) {
+					results.add(new Term(whoSuggestion.getName(), whoSuggestion
+							.getCount(), "Person"));
+				}
 			}
-			return results;
-		} catch (SolrServerException e) {
 
-			throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+			FacetField what = response.getFacetField("whatSpell");
 
+			List<Count> whatSuggestions = what.getValues();
+			if (whatSuggestions != null) {
+				for (Count whatSuggestion : whatSuggestions) {
+					results.add(new Term(whatSuggestion.getName(),
+							whatSuggestion.getCount(), "Subject"));
+				}
+
+			}
+			FacetField when = response.getFacetField("whenSpell");
+
+			List<Count> whenSuggestions = when.getValues();
+			if (whenSuggestions != null) {
+				for (Count whenSuggestion : whenSuggestions) {
+					results.add(new Term(whenSuggestion.getName(),
+							whenSuggestion.getCount(), "Period"));
+				}
+			}
+			FacetField where = response.getFacetField("whereSpell");
+
+			List<Count> whereSuggestions = where.getValues();
+			if (whereSuggestions != null) {
+				for (Count whereSuggestion : whereSuggestions) {
+					results.add(new Term(whereSuggestion.getName(),
+							whereSuggestion.getCount(), "Place"));
+				}
+			}
+			FacetField title = response.getFacetField("titleSpell");
+
+			List<Count> titleSuggestions = title.getValues();
+			if (titleSuggestions != null) {
+				for (Count titleSuggestion : titleSuggestions) {
+					results.add(new Term(titleSuggestion.getName(),
+							titleSuggestion.getCount(), "Title"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+		return results;
 	}
 
 	public void setSolrServer(SolrServer solrServer) {

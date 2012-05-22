@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -36,6 +37,7 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.solr.ContentLoader;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
+import eu.europeana.corelib.solr.model.Term;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 
 /**
@@ -84,6 +86,15 @@ public class SearchServiceTest {
 		}
 	}
 
+	@Test
+	public void findSuggestions() throws SolrTypeException{
+		List<Term> terms  = searchService.suggestions("kleine p", 1);
+		Assert.assertEquals(terms.size(),1);
+		Assert.assertEquals(terms.get(0).getField(),"Title");
+		Assert.assertEquals(terms.get(0).getFrequency(),1);
+		Assert.assertEquals(terms.get(0).getTerm(),"kleine pauke");
+	}
+	
 	@Test
 	public void findAllTest() throws SolrTypeException {
 		testCount++;

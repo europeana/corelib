@@ -80,12 +80,8 @@ public class DereferencerTest {
 				+ "/target/test-classes/test_files");
 		Extractor extractor = new Extractor(controlledVocabulary,
 				vocabularyMongoDBServer);
-		try {
 			extractor.readSchema(workingDir
 					+ "/src/test/resources/test_files/sample.xml");
-		} catch (FileNotFoundException g) {
-			g.printStackTrace();
-		}
 
 		extractor.setMappedField("test_contributor", EdmLabel.DC_CONTRIBUTOR);
 		extractor.setMappedField("test_publisher", EdmLabel.DC_PUBLISHER);
