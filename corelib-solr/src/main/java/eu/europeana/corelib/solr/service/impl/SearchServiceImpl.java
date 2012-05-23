@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -238,20 +239,24 @@ public class SearchServiceImpl implements SearchService {
 	 * 
 	 * }
 	 */
-	public List<Term> suggestions(String query,
-			int pageSize) throws SolrTypeException {
+
+	public List<Term> suggestions(String query, int pageSize)
+			throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setFacet(true);
 		solrQuery.setFacetMinCount(1);
 		solrQuery.setFacetPrefix(query);
+		solrQuery.setFacetLimit(pageSize);
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
 		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell",
 				"whenSpell", "titleSpell");
 		List<Term> results = new ArrayList<Term>();
 
+		QueryResponse response;
 		try {
-			QueryResponse response = solrServer.query(solrQuery);
+			response = solrServer.query(solrQuery);
+
 			FacetField who = response.getFacetField("whoSpell");
 
 			List<Count> whoSuggestions = who.getValues();
@@ -299,10 +304,12 @@ public class SearchServiceImpl implements SearchService {
 							titleSuggestion.getCount(), "Title"));
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SolrServerException e) {
+			// LOG
 		}
-		return results;
+		Collections.sort(results);
+		return results.size() > pageSize ? results.subList(0, pageSize)
+				: results;
 	}
 
 	public void setSolrServer(SolrServer solrServer) {

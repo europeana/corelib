@@ -20,7 +20,7 @@ package eu.europeana.corelib.definitions.solr.model;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public class Term {
+public class Term implements Comparable<Term>{
 	
 	private String term;
 	
@@ -56,5 +56,20 @@ public class Term {
 	
 	public void setField(String field){
 		this.field = field;
+	}
+
+	@Override
+	public int compareTo(Term o) {
+		final int SMALLER=-1;
+		final int EQUALS=0;
+		final int GREATER=1;
+		if(frequency<o.getFrequency()){
+			return SMALLER;
+		}
+		if(frequency>o.getFrequency()){
+			return GREATER;
+		}
+			return EQUALS;
+		
 	}
 }
