@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class SipCreatorUtils extends MappingParser{
 
-	private static String repository;
+	private String repository;
 	private final static String INPUT_FOLDER = "/input_source/";
 	private final static String SUFFIX = ".xml.mapping";
 	private final static String BEGIN_HASH_FUNCTION_RECORD = "createEuropeanaURI(input.record.";
@@ -26,7 +26,7 @@ public class SipCreatorUtils extends MappingParser{
 	}
 
 	public void setRepository(String repository) {
-		SipCreatorUtils.repository = repository;
+		this.repository = repository;
 	}
 	
 	

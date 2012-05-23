@@ -14,9 +14,12 @@ public class SipCreatorUtilsTest {
 				.getProperty("user.dir") + "/corelib-solr-tools" : System
 				.getProperty("user.dir");
 		SipCreatorUtils sipCreatorUtils = new SipCreatorUtils();
-		sipCreatorUtils.setRepository(workingDir+"/src/test/resources/");
+		String repository = workingDir+"/src/test/resources/";
+		sipCreatorUtils.setRepository(repository);
 		assertEquals("europeana_isShownBy[0]",sipCreatorUtils.getHashField("9200103", "9200103_Ag_EU_TEL_Gallica_a0142"));
-		
+		PreSipCreatorUtils preSipCreatorUtils = new PreSipCreatorUtils();
+		preSipCreatorUtils.setRepository(repository);
+		assertEquals("europeana_isShownAt", preSipCreatorUtils.getHashField("00735", "00735_A_DE_Landesarchiv_ese_5_0000013080"));
 	}
 
 }
