@@ -34,8 +34,8 @@
 		<module>corelib-web</module>
 		<!-- <module>corelib-solr-definitions</module> -->
     	<module>corelib-solr-dereference</module>
-    <module>corelib-solr-tools</module>
-  </modules>
+    	<module>corelib-solr-tools</module>
+	</modules>
 	<repositories>
         <repository>
             <id>releases</id>
@@ -69,8 +69,10 @@
 	<properties>
 		<version.europeanaCorelib>2.0-SNAPSHOT</version.europeanaCorelib>
 		<version.europeanaApi2>2.0-SNAPSHOT</version.europeanaApi2>
+		
 		<version.jdk>1.6</version.jdk>
 		<version.junit>4.10</version.junit>
+		<version.servletJstl>1.2</version.servletJstl>
 
 		<version.apacheSolr>3.5.0</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
