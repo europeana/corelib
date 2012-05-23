@@ -18,11 +18,11 @@ public class PreSipCreatorUtils extends MappingParser {
 		if (inputString != null) {
 			String[] lines = StringUtils.split(inputString, LINE_SPLITTER);
 			for (String line : lines) {
-				if (StringUtils.isNotBlank(line)
-						&& StringUtils.contains(line, IDENTIFIER)
+				if (StringUtils.contains(line, IDENTIFIER)
 						&& StringUtils.contains(line, RECORD_SPLITTER)) {
-					return StringUtils.replace(StringUtils.substringBetween(line, RECORD_SPLITTER,
-							IDENTIFIER).trim(),":","_");
+					return StringUtils.replace(
+							StringUtils.substringBetween(line, RECORD_SPLITTER,
+									IDENTIFIER).trim(), ":", "_");
 				}
 			}
 		}
