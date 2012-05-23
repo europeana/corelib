@@ -13,8 +13,9 @@ public class SipCreatorUtilsTest {
 				System.getProperty("user.dir"), "corelib") ? System
 				.getProperty("user.dir") + "/corelib-solr-tools" : System
 				.getProperty("user.dir");
-		SipCreatorUtils.setRepository(workingDir+"/src/test/resources/");
-		assertEquals("europeana_isShownBy[0]",SipCreatorUtils.getHashField("9200103", "9200103_Ag_EU_TEL_Gallica_a0142"));
+		SipCreatorUtils sipCreatorUtils = new SipCreatorUtils();
+		sipCreatorUtils.setRepository(workingDir+"/src/test/resources/");
+		assertEquals("europeana_isShownBy[0]",sipCreatorUtils.getHashField("9200103", "9200103_Ag_EU_TEL_Gallica_a0142"));
 		
 	}
 
