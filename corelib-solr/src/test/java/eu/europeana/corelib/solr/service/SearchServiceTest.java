@@ -18,6 +18,8 @@
 package eu.europeana.corelib.solr.service;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -54,7 +56,7 @@ public class SearchServiceTest {
 	@Resource
 	private SearchService searchService;
 
-	@Resource(name="corelib_solr_mongoServer")
+	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoDBServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
@@ -64,20 +66,31 @@ public class SearchServiceTest {
 
 	private static int testCount = 0;
 
+	private static int no_of_tests = 0;
+
 	@Before
 	public void loadTestData() {
+		for (Method method : this.getClass().getMethods()) {
+			for (Annotation annotation : method.getAnnotations()) {
+				if (annotation.annotationType().equals(org.junit.Test.class)) {
+					no_of_tests++;
+				}
+			}
+		}
 		if (!dataLoaded) {
 			System.out.println("LOADING TEST DATA...");
 			ContentLoader contentLoader = null;
 			try {
-				contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
+				contentLoader = ContentLoader.getInstance(mongoDBServer,
+						solrServer);
 				contentLoader.readRecords(COLLECTION);
-				Assert.assertTrue("records failed to load...", contentLoader.parse() == 0);
+				Assert.assertTrue("records failed to load...",
+						contentLoader.parse() == 0);
 				contentLoader.commit();
 				dataLoaded = true;
 			} catch (Exception e) {
 				e.printStackTrace();
-				//System.out.println(e.printStackTrace());
+				// System.out.println(e.printStackTrace());
 			} finally {
 				if (contentLoader != null) {
 					contentLoader.cleanFiles();
@@ -87,50 +100,56 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void findSuggestions() throws SolrTypeException{
-		List<Term> terms  = searchService.suggestions("kleine p", 1);
-		Assert.assertEquals(terms.size(),1);
-		Assert.assertEquals(terms.get(0).getField(),"Title");
-		Assert.assertEquals(terms.get(0).getFrequency(),1);
-		Assert.assertEquals(terms.get(0).getTerm(),"kleine pauke");
+	public void findSuggestions() throws SolrTypeException {
+		testCount++;
+		List<Term> terms = searchService.suggestions("kleine p", 1);
+		Assert.assertEquals(terms.size(), 1);
+		Assert.assertEquals(terms.get(0).getField(), "Title");
+		Assert.assertEquals(terms.get(0).getFrequency(), 1);
+		Assert.assertEquals(terms.get(0).getTerm(), "kleine pauke");
 	}
-	
+
 	@Test
 	public void findAllTest() throws SolrTypeException {
 		testCount++;
 		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class, new Query("*:*"));
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+				new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
-		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
-				results.getResultSize() == 205);
-		Assert.assertTrue("Did not return expected facet list: " + results.getFacetFields().size(),
-				results.getFacetFields().size() == 7);
+		Assert.assertTrue("Did not return expected amount of results: "
+				+ results.getResultSize(), results.getResultSize() == 205);
+		Assert.assertTrue("Did not return expected facet list: "
+				+ results.getFacetFields().size(), results.getFacetFields()
+				.size() == 7);
 	}
 
 	@Test
 	public void findAllWithTextFilterTest() throws SolrTypeException {
 		testCount++;
 		Query query = new Query("*:*");
-		
-		query.setRefinements(new String[]{"text:drums"});
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+
+		query.setRefinements(new String[] { "text:drums" });
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+				query);
 		Assert.assertNotNull("Did not got any results", results);
-		Assert.assertTrue("Did not return expected amount of results: " + results.getResultSize(),
-				results.getResultSize() == 2);
-		
+		Assert.assertTrue("Did not return expected amount of results: "
+				+ results.getResultSize(), results.getResultSize() == 2);
+
 	}
-	
+
 	@Test
-	public void testSpellCheck() throws SolrTypeException{
+	public void testSpellCheck() throws SolrTypeException {
+		testCount++;
 		Query query = new Query("musi");
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+				query);
 		Assert.assertNotNull(results.getSpellcheck());
-		
+
 	}
-	
+
 	@After
 	public void removeTestData() {
-		if (testCount == 2) {
+		if (testCount == no_of_tests) {
 			System.out.println("CLEANING TEST DATA...");
 			mongoDBServer.getDatastore().getDB().dropDatabase();
 			try {
