@@ -59,9 +59,9 @@ public class ContentLoader {
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 
-	private EdmMongoServer mongoDBServer;
+	private static EdmMongoServer mongoDBServer;
 
-	private SolrServer solrServer;
+	private static SolrServer solrServer;
 
 	private List<File> collectionXML = new ArrayList<File>();
 
