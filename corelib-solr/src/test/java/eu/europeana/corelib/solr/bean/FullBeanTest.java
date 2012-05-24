@@ -329,7 +329,7 @@ public class FullBeanTest {
 		proxy.setEdmCurrentLocation("test edm:currentLocation");
 		proxy.setEdmType(DocType.IMAGE);
 		Key<Proxy> proxyKey = ds.save(proxy);
-		Proxy testProxy = ds.find(ProxyImpl.class).filter("_id", proxyKey.getId()).get();
+		Proxy testProxy = ds.find(ProxyImpl.class).filter("about", proxy.getAbout()).get();
 		assertEquals(proxy, testProxy);
 		assertArrayEquals(proxy.getDcContributor(), testProxy.getDcContributor());
 		assertArrayEquals(proxy.getDcCoverage(), testProxy.getDcCoverage());
