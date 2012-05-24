@@ -90,7 +90,6 @@ public class SearchServiceTest {
 				dataLoaded = true;
 			} catch (Exception e) {
 				e.printStackTrace();
-				// System.out.println(e.printStackTrace());
 			} finally {
 				if (contentLoader != null) {
 					contentLoader.cleanFiles();
