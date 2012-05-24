@@ -127,7 +127,7 @@ public class TimespanImpl implements
 			return false;
 		}
 		if(o.getClass() == this.getClass()){
-			return this.getId().equals(((TimespanImpl) o).getId());
+			return this.getAbout().equals(((TimespanImpl) o).getAbout());
 		}
 		return false;
 	}
