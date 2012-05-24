@@ -116,7 +116,7 @@ public class SearchServiceTest {
 				new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "
-				+ results.getResultSize(), results.getResultSize() == 205);
+				+ results.getResultSize(), results.getResultSize() >= 205);
 		Assert.assertTrue("Did not return expected facet list: "
 				+ results.getFacetFields().size(), results.getFacetFields()
 				.size() == 7);
