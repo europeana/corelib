@@ -165,7 +165,7 @@ public class FullBeanTest {
 		aggregation.setEdmProvider("test edm:provider");
 		aggregation.setEdmRights("test edm:rights");
 		Key<Aggregation> aggregationKey = ds.save(aggregation);
-		Aggregation testAggregation = ds.find(AggregationImpl.class).filter("_id", aggregationKey.getId()).get();
+		Aggregation testAggregation = ds.find(AggregationImpl.class).filter("about", aggregation.getAbout()).get();
 		assertEquals(aggregation, testAggregation);
 		assertEquals(aggregation.getWebResources(), testAggregation.getWebResources());
 		assertEquals(aggregation.getEdmDataProvider(), testAggregation.getEdmDataProvider());
@@ -188,7 +188,7 @@ public class FullBeanTest {
 		webResource.setWebResourceDcRights(new String[] { "test dc:rights" });
 		webResource.setWebResourceEdmRights("test edm:rights");
 		Key<WebResource> webResourceKey = ds.save(webResource);
-		WebResource testWebResource = ds.find(WebResourceImpl.class).filter("_id", webResourceKey.getId()).get();
+		WebResource testWebResource = ds.find(WebResourceImpl.class).filter("about", webResource.getAbout()).get();
 		assertEquals(webResource, testWebResource);
 		assertEquals(webResource.getAbout(), testWebResource.getAbout());
 		assertEquals(webResource.getWebResourceEdmRights(), testWebResource.getWebResourceEdmRights());
@@ -213,7 +213,7 @@ public class FullBeanTest {
 		altLabel.put("en", "test altLabel");
 		concept.setAltLabel(altLabel);
 		Key<Concept>conceptKey = ds.save(concept);
-		Concept testConcept = ds.find(ConceptImpl.class).filter("_id", conceptKey.getId()).get();
+		Concept testConcept = ds.find(ConceptImpl.class).filter("about", concept.getAbout()).get();
 		assertEquals(concept, testConcept);
 		assertEquals(concept.getAltLabel(), testConcept.getAltLabel());
 		assertEquals(concept.getPrefLabel(), testConcept.getPrefLabel());
@@ -241,7 +241,7 @@ public class FullBeanTest {
 		altLabel.put("en", "test altLabel");
 		place.setAltLabel(altLabel);
 		Key<Place>placeKey  = ds.save(place);
-		Place testPlace = ds.find(PlaceImpl.class).filter("_id", placeKey.getId()).get();
+		Place testPlace = ds.find(PlaceImpl.class).filter("about", place.getAbout()).get();
 		assertEquals(place, testPlace);
 		assertArrayEquals(place.getIsPartOf(), testPlace.getIsPartOf());
 		assertArrayEquals(place.getNote(), testPlace.getNote());
@@ -271,7 +271,7 @@ public class FullBeanTest {
 		timespan.setAltLabel(altLabel);
 		timespan.setIsPartOf(new String[] { "test isPartOf" });
 		Key<Timespan> timespanKey = ds.save(timespan);
-		Timespan testTimespan = ds.find(TimespanImpl.class).filter("_id",timespanKey.getId()).get();
+		Timespan testTimespan = ds.find(TimespanImpl.class).filter("about",timespan.getAbout()).get();
 		assertEquals(timespan.getAltLabel(), testTimespan.getAltLabel());
 		assertEquals(timespan.getPrefLabel(), testTimespan.getPrefLabel());
 		assertEquals(timespan.getBegin(), testTimespan.getBegin());
@@ -379,7 +379,7 @@ public class FullBeanTest {
 		providedCHO.setEdmIsNextInSequence("test isnextinsequence");
 		providedCHO.setOwlSameAs(new String[]{"test owlsameAs"});
 		Key<ProvidedCHO> providedCHOKey = ds.save(providedCHO);
-		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).filter("_id", providedCHOKey.getId()).get();
+		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).filter("about", providedCHO.getAbout()).get();
 		assertEquals(providedCHO,testProvidedCHO);
 		assertEquals(providedCHO.getAbout(), testProvidedCHO.getAbout());
 		assertEquals(providedCHO.getEdmIsNextInSequence(),testProvidedCHO.getEdmIsNextInSequence());
