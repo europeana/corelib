@@ -42,8 +42,8 @@ import eu.europeana.corelib.tools.AppContext;
  */
 public class Extractor {
 
-	private static VocabularyMongoServer mongoServer;
-	private static ControlledVocabulary vocabulary;
+	private VocabularyMongoServer mongoServer;
+	private ControlledVocabulary vocabulary;
 
 	/**
 	 * Constructor for use with object injection
@@ -136,7 +136,7 @@ public class Extractor {
 					List<String> tempList = new ArrayList<String>();
 					switch (xml.getEventType()) {
 					case XMLStreamConstants.START_DOCUMENT:
-						xml.next();
+						
 						break;
 					case XMLStreamConstants.START_ELEMENT:
 						element = (xml.getPrefix() != null ? xml.getPrefix()
@@ -162,14 +162,12 @@ public class Extractor {
 								tempList = new ArrayList<String>();
 							}
 						}
-						xml.next();
 						break;
 					
 					default:
-						xml.next();
 						break;
 					}
-
+					xml.next();
 				}
 			} catch (XMLStreamException e) {
 
