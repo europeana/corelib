@@ -143,47 +143,47 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getUgc() {
-		return ugc;
+		return ugc!=null?this.ugc.clone():null;
 	}
 
 	@Override
 	public void setUgc(String[] ugc) {
-		this.ugc = ugc;
+		this.ugc = ugc.clone();
 	}
 
 	@Override
 	public String[] getEdmRights() {
-		return edmRights;
+		return edmRights!=null?this.edmRights.clone():null;
 	}
 
 	@Override
 	public void setEdmRights(String[] edmRights) {
-		this.edmRights = edmRights;
+		this.edmRights = edmRights.clone();
 	}
 
 	@Override
 	public String[] getCountry() {
-		return country;
+		return country!=null?this.country.clone():null;
 	}
 
 	@Override
 	public void setCountry(String[] country) {
-		this.country = country;
+		this.country = country.clone();
 	}
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		return europeanaCollectionName;
+		return europeanaCollectionName!=null?this.europeanaCollectionName.clone():null;
 	}
 
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
-		this.europeanaCollectionName = europeanaCollectionName;
+		this.europeanaCollectionName = europeanaCollectionName.clone();
 	}
 
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
-		this.dctermsIsPartOf = dctermsIsPartOf;
+		this.dctermsIsPartOf = dctermsIsPartOf.clone();
 	}
 
 }
