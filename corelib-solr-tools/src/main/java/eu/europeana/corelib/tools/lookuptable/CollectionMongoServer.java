@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.util.List;
+
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
@@ -108,5 +110,9 @@ public class CollectionMongoServer implements MongoServer {
 	 */
 	public void saveCollection(Collection collection) {
 		datastore.save(collection);
+	}
+	
+	public List<Collection> retrieveAllCollections(){
+		return datastore.find(Collection.class).asList();
 	}
 }

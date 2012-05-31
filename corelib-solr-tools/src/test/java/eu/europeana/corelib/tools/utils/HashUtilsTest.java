@@ -1,22 +1,113 @@
 package eu.europeana.corelib.tools.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class HashUtilsTest {
 
-	private final static String HASH = "98D5BC61D9FDFD00B075E5B6899C55DB874AE7AD";
-	//PRE-SIPCREATOR
-	private final static String HASH2 = "D1F3E145D8B1B11804267529669CE0E97E48FF37";
+	// PRE-SIPCREATOR
+
 	@Test
 	public void testHashCreation() {
-		//Using real life data
-		String identifier = "http://gallica.bnf.fr/ark:/12148/btv1b9059254q/f1.zoom";
-		
-		String identifier2 = "http://www.landesarchiv-bw.de/plink/?f=5-170636";
-		assertEquals(HASH, HashUtils.createHash(identifier));
-		assertEquals(HASH2, HashUtils.createHash(identifier2));
+		// Using real life data
+
+		System.out.println("**************GENERATING HASHES*********************************");
+		String workingDir = StringUtils.endsWith(
+				System.getProperty("user.dir"), "corelib") ? System
+				.getProperty("user.dir") + "/corelib-solr-tools" : System
+				.getProperty("user.dir");
+		SipCreatorUtils sipCreatorUtils = new SipCreatorUtils();
+		String repository = workingDir + "/src/test/resources/";
+		sipCreatorUtils.setRepository(repository);
+		System.out
+				.println("**************READING COLLECTION MAPPING FROM SIP-CREATOR*******");
+		assertEquals("europeana_isShownBy[0]", sipCreatorUtils.getHashField(
+				"9200103", "9200103_Ag_EU_TEL_Gallica_a0142"));
+		String sipCreatorHashField = sipCreatorUtils.getHashField("9200103",
+				"9200103_Ag_EU_TEL_Gallica_a0142");
+		System.out.println("The field used to create the SIP-Creator Hash is: "
+				+ sipCreatorHashField+"\n\n");
+		PreSipCreatorUtils preSipCreatorUtils = new PreSipCreatorUtils();
+		preSipCreatorUtils.setRepository(repository);
+		System.out
+				.println("**************READING COLLECTION MAPPING PRESIP-CREATOR*********");
+		assertEquals("europeana_isShownAt", preSipCreatorUtils.getHashField(
+				"00735", "00735_A_DE_Landesarchiv_ese_5_0000013080"));
+		String preSipCreatorHashField = preSipCreatorUtils.getHashField(
+				"00735", "00735_A_DE_Landesarchiv_ese_5_0000013080");
+		System.out
+				.println("The field used to create the pre-SIPCreator Hash is: "
+						+ preSipCreatorHashField+"\n\n");
+		List<String> info = readFromFile(
+				workingDir
+						+ "/src/test/resources/9200103/input_source/9200103_Ag_EU_TEL_Gallica_a0142_1.xml",
+				sipCreatorHashField);
+		String identifier = info.get(0);
+		String hash = info.get(1);
+		System.out.println("Hashing Record: " + identifier);
+		System.out.println("Actual Europeana Hash: " + hash);
+		System.out.println("Generated Europeana Hash: "
+				+ HashUtils.createHash(identifier));
+		List<String> info2 = readFromFile(
+				workingDir
+						+ "/src/test/resources/00735/mappings/00735_A_DE_Landesarchiv_ese_5_0000013080_1.xml",
+				preSipCreatorHashField);
+		String identifier2 = info2.get(0);
+		String hash2 = info2.get(1);
+		System.out.println("Hashing Record: " + identifier2);
+		assertEquals(hash, HashUtils.createHash(identifier));
+		assertEquals(hash2, HashUtils.createHash(identifier2));
+		System.out.println("Actual Europeana Hash: " + hash2);
+		System.out.println("Generated Europeana Hash: "
+				+ HashUtils.createHash(identifier2));
+	}
+
+	private List<String> readFromFile(String location, String field) {
+		final String EUROPEANA_URI = "europeana:uri";
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(new File(location));
+			List<String> europeanaFields = new ArrayList<String>();
+			Element root = doc.getDocumentElement();
+			int fieldIndex = StringUtils.substringBetween(field, "[", "]") != null ? Integer
+					.parseInt(StringUtils.substringBetween(field, "[", "]"))
+					: 0;
+			NodeList fieldList = root.getElementsByTagName(StringUtils.replace(
+					StringUtils.split(field, '[')[0], "_", ":"));
+			europeanaFields.add(fieldList.item(fieldIndex).getTextContent());
+			String uri = root.getElementsByTagName(EUROPEANA_URI).item(0)
+					.getTextContent();
+			String[] fields = StringUtils.split(uri, "/");
+
+			europeanaFields.add(fields[fields.length - 1]);
+			return europeanaFields;
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
