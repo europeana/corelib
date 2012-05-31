@@ -107,11 +107,21 @@ public class DereferencerTest {
 			solrServer.optimize();
 			assertEquals(2, fullBean.getDcPublisher().length);
 			assertEquals(2, fullBean.getDcContributor().length);
+			for(String dcPublisher : fullBean.getDcPublisher()){
+				System.out.println("After:" + dcPublisher);
+			}
 			assertTrue(contains(fullBean.getDcPublisher(), PUBLISHER));
 			assertTrue(contains(fullBean.getDcContributor(), CONTRIBUTOR));
+			for(String dcPublisher : fullBean.getDcContributor()){
+				System.out.println("After:" + dcPublisher);
+			}
 			assertEquals(fullBean.getDctermsIsReferencedBy().length, 2);
+			for(String dcPublisher : fullBean.getDctermsIsReferencedBy()){
+				System.out.println("After:" + dcPublisher);
+			}
 			assertTrue(contains(fullBean.getDctermsIsReferencedBy(),
 					ALTERNATIVE));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
