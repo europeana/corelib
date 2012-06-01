@@ -72,6 +72,8 @@ public class FullBeanImpl implements FullBean {
 	private String[] provider;
 
 	private String[] language;
+	
+	private String timestamp;
 
 	private DocType type;
 
@@ -1248,5 +1250,11 @@ public class FullBeanImpl implements FullBean {
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String getTimestamp() {
+		
+		return timestamp;
 	}
 }

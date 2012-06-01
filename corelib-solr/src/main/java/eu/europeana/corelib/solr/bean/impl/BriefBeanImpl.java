@@ -34,6 +34,9 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	private String fullDocUrl;
+	
+	@Field("timestamp")
+	private String timestamp;
 
 	@Field("PROVIDER")
 	private String[] provider;
@@ -221,6 +224,11 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Override
 	public String[] getDctermsSpatial() {
 		return (this.dctermsSpatial != null ? this.dctermsSpatial.clone() : null);
+	}
+
+	@Override
+	public String getTimestamp() {
+		return timestamp;
 	}
 
 }
