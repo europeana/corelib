@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	private String fullDocUrl;
 	
 	@Field("timestamp")
-	private String timestamp;
+	private Date timestamp;
 
 	@Field("PROVIDER")
 	private String[] provider;
@@ -227,7 +228,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	@Override
-	public String getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 

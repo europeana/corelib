@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +74,7 @@ public class FullBeanImpl implements FullBean {
 
 	private String[] language;
 	
-	private String timestamp;
+	private Date timestamp;
 
 	private DocType type;
 
@@ -108,6 +109,11 @@ public class FullBeanImpl implements FullBean {
 	@Embedded
 	private EuropeanaAggregation europeanaAggregation;
 
+	private String[] who;
+	private String[] what;
+	private String[] where;
+	private String[] when;
+	
 	@Embedded
 	private List<ProxyImpl> proxies;
 
@@ -1195,7 +1201,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public int hashCode() {
-		return this.providedCHOs.hashCode();
+		return this.about.hashCode();
 	}
 
 	@Override
@@ -1248,13 +1254,52 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String getTimestamp() {
+	public Date getTimestamp() {
 		
 		return timestamp;
+	}
+	
+	@Override
+	public String[] getWho() {
+		return who;
+	}
+
+	@Override
+	public void setWho(String[] who) {
+		this.who = who;
+	}
+
+	@Override
+	public String[] getWhat() {
+		return what;
+	}
+
+	@Override
+	public void setWhat(String[] what) {
+		this.what = what;
+	}
+
+	@Override
+	public String[] getWhere() {
+		return where;
+	}
+
+	@Override
+	public void setWhere(String[] where) {
+		this.where = where;
+	}
+
+	@Override
+	public String[] getWhen() {
+		return when;
+	}
+
+	@Override
+	public void setWhen(String[] when) {
+		this.when = when;
 	}
 }

@@ -552,6 +552,6 @@ public class ProxyImpl implements Proxy {
 
 	@Override
 	public int hashCode() {
-		return this.about.hashCode();
+		return this.about!=null?this.about.hashCode():this.id.hashCode();
 	}
 }

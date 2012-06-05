@@ -89,7 +89,6 @@
    <field name="USERTAGS" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="RIGHTS" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="COMPLETENESS" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="edm_completeness" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="ore_aggregation" type="string" indexed="true" stored="false" multiValued="false"/>
    <field name="edm_europeana_aggregation" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="edm_aggregatedCHO" type="string" indexed="true" stored="false" multiValued="false"/>
@@ -258,7 +257,7 @@
    <copyField source="edm_provider" dest="PROVIDER" />
    <copyField source="edm_dataProvider" dest="DATA_PROVIDER" />
    <copyField source="aggr_edm_rights" dest="RIGHTS" />
-   <copyField source="edm_completeness" dest="COMPLETENESS" />
+   <copyField source="europeana_completeness" dest="COMPLETENESS" />
    <copyField source="edm_UGC" dest="UGC" />
    <copyField source="ag_skos_prefLabel.*" dest="text" />
    <copyField source="ag_skos_altLabel.*" dest="text" />
