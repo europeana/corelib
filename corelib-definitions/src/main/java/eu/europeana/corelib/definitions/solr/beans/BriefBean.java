@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -81,5 +82,5 @@ public interface BriefBean extends IdBean {
 
 	String[] getDcContributor();
 
-	String getTimestamp();
+	Date getTimestamp();
 }

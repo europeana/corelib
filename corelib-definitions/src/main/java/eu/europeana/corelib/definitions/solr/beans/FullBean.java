@@ -419,4 +419,20 @@ public interface FullBean extends ApiBean {
 
 	void setAbout(String about);
 
+	void setWhen(String[] when);
+
+	String[] getWhen();
+
+	void setWhere(String[] where);
+
+	String[] getWhere();
+
+	void setWhat(String[] what);
+
+	String[] getWhat();
+
+	void setWho(String[] who);
+
+	String[] getWho();
+
 }
