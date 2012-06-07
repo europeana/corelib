@@ -19,6 +19,8 @@ package eu.europeana.corelib.solr.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -65,6 +67,8 @@ public class SearchServiceImpl implements SearchService {
 
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
+
+	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -156,10 +160,12 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setFacetLimit(facetLimit);
 				solrQuery.setRows(query.getPageSize());
 				solrQuery.setStart(query.getStart());
+
 				// These are going to change when we import ASSETS as well
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
+
 				// enable spellcheck
 				if (solrQuery.getStart() == null
 						|| solrQuery.getStart().intValue() <= 1) {
@@ -168,9 +174,18 @@ public class SearchServiceImpl implements SearchService {
 					solrQuery.setParam("spellcheck.extendedResults", "true");
 					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
 					solrQuery.setParam("spellcheck.q", query.getQuery());
-
 				}
+
+				// add extra parameters if any
+				if (query.getParameters() != null) {
+					Map<String, String> parameters = query.getParameters();
+					for (String key : parameters.keySet()) {
+						solrQuery.setParam(key, parameters.get(key));
+					}
+				}
+
 				try {
+					log.info("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
 					resultSet.setResults((List<T>) queryResponse

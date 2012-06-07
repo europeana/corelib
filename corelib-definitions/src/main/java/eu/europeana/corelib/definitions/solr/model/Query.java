@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.definitions.solr.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
@@ -25,6 +28,17 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public class Query {
 
+	/**
+	 * Default start parameter for Solr
+	 */
+	private static final int DEFAULT_START = 0;
+	
+	/**
+	 * Default number of items in the SERP
+	 */
+	private static final int DEFAULT_PAGE_SIZE = 12;
+	
+	
 	private String query;
 	
 	private String[] refinements;
@@ -34,6 +48,8 @@ public class Query {
 	private int pageSize;
 	
 	private Facet[] facets = Facet.values();
+	
+	private Map<String, String> parameters = new HashMap<String, String>();
 
 	/**
 	 * CONSTRUCTORS
@@ -41,8 +57,8 @@ public class Query {
 	
 	public Query(String query) {
 		this.query = query;
-		start = 1;
-		pageSize = 12;
+		start = DEFAULT_START;
+		pageSize = DEFAULT_PAGE_SIZE;
 	}
 	
 
@@ -102,5 +118,23 @@ public class Query {
 		}
 		return this;
 	}
-
+	
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+	
+	/**
+	 * Adds Solr parameters to the Query object
+	 *
+	 * @param key
+	 *   The parameter name
+	 * @param value
+	 *   The value of the parameter
+	 * @return 
+	 *   The Query object
+	 */
+	public Query setParameter(String key, String value) {
+		parameters.put(key, value);
+		return this;
+	}
 }
