@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
@@ -45,6 +46,8 @@ import eu.europeana.corelib.dereference.impl.Dereferencer;
  */
 public final class SolrUtils {
 
+	private static final Logger log = Logger.getLogger(SolrUtils.class.getName());
+
 	private SolrUtils() {
 
 	}
@@ -61,9 +64,9 @@ public final class SolrUtils {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")) {
 					try {
-						DocType.get(StringUtils.substringAfter(refinement,
-								"TYPE:"));
+						DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
 					} catch (IllegalArgumentException e) {
+						log.severe(e.getMessage());
 						return false;
 					}
 				}
