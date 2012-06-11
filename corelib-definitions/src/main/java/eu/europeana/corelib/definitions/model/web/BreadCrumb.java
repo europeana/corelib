@@ -72,5 +72,8 @@ public class BreadCrumb {
 	public void markAsLast() {
 		last = true;
 	}
-
+	
+	public String toString() {
+		return display + ", " + href + " (" + last + ")";
+	}
 }
