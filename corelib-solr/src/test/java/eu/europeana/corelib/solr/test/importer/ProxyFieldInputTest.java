@@ -57,6 +57,9 @@ public class ProxyFieldInputTest {
 			assertEquals(proxy.getCurrentLocation().getResource(),
 					solrDocument.getFieldValue(EdmLabel.EDM_CURRENT_LOCATION
 							.toString()));
+			assertEquals(proxy.getIsNextInSequence().getResource(),
+					solrDocument.getFieldValue(EdmLabel.EDM_IS_NEXT_IN_SEQUENCE
+							.toString()));
 			assertEquals(proxy.getType().toString(),
 					solrDocument.getFieldValue(EdmLabel.EDM_TYPE.toString()));
 			List<DCTermsType.Choice> dcterms = proxy.getChoiceList();
@@ -184,6 +187,8 @@ public class ProxyFieldInputTest {
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()
 					.toString());
+			assertEquals(proxy.getIsNextInSequence(),
+					mongoProxy.getEdmIsNextInSequence());
 			List<Choice> dcterms = proxy.getChoiceList();
 			assertEquals(dcterms.get(0).getAlternative().getString(),
 					mongoProxy.getDctermsAlternative()[0]);
@@ -282,6 +287,9 @@ public class ProxyFieldInputTest {
 		proxy.setAbout("test about");
 		ResourceType currentLocation = new ResourceType();
 		currentLocation.setResource("test current location");
+		ResourceType isNextInSequence = new ResourceType();
+		isNextInSequence.setResource("test is next in sequence");
+		proxy.setIsNextInSequence(isNextInSequence);
 		proxy.setCurrentLocation(currentLocation);
 		proxy.setType(EdmType.IMAGE);
 		proxy.setChoiceList(createDcTermsList());

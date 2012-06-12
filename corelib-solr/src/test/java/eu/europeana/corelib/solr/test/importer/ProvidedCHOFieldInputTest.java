@@ -15,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
-import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
@@ -33,9 +32,7 @@ public class ProvidedCHOFieldInputTest {
 	public void testProvidedCHO() {
 		ProvidedCHOType providedCHO = new ProvidedCHOType();
 		providedCHO.setAbout("test about");
-		ResourceType isNextInSequence = new ResourceType();
-		isNextInSequence.setResource("test is next in sequence");
-		providedCHO.setIsNextInSequence(isNextInSequence);
+		
 		List<SameAs> sameAsList = new ArrayList<SameAs>();
 		SameAs sameAs = new SameAs();
 		sameAs.setResource("test same as");
@@ -49,8 +46,7 @@ public class ProvidedCHOFieldInputTest {
 			assertEquals(providedCHO.getAbout(), providedCHOMongo.getAbout());
 			assertEquals(providedCHO.getSameAList().get(0).getResource(),
 					providedCHOMongo.getOwlSameAs()[0]);
-			assertEquals(providedCHO.getIsNextInSequence().getResource(),
-					providedCHOMongo.getEdmIsNextInSequence());
+			
 			SolrInputDocument solrDocument = new SolrInputDocument();
 			solrDocument = ProvidedCHOFieldInput.createProvidedCHOFields(
 					providedCHO, solrDocument);
