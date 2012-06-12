@@ -1,8 +1,10 @@
 package eu.europeana.corelib.solr.entity;
 
+import com.google.code.morphia.annotations.Embedded;
+
 import eu.europeana.corelib.definitions.solr.entity.PhysicalThing;
 import eu.europeana.corelib.utils.StringArrayUtils;
-
+@Embedded
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
 
