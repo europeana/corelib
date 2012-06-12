@@ -1,17 +1,11 @@
 package eu.europeana.corelib.solr.entity;
 
-import org.bson.types.ObjectId;
-
-import com.google.code.morphia.annotations.Indexed;
-
 import eu.europeana.corelib.definitions.solr.entity.PhysicalThing;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
-public class PhysicalThingImpl implements PhysicalThing {
+public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
-	private ObjectId id;
-	@Indexed(unique = false)
-	private String about;
+
 	private String[] dcContributor;
 	private String[] dcCoverage;
 	private String[] dcCreator;
@@ -76,16 +70,7 @@ public class PhysicalThingImpl implements PhysicalThing {
 
 
 
-	@Override
-	public String getAbout() {
-		return this.about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
+	
 	@Override
 	public String[] getDcContributor() {
 		return (StringArrayUtils.isNotBlank(dcContributor) ? this.dcContributor.clone() : null);
@@ -296,15 +281,7 @@ public class PhysicalThingImpl implements PhysicalThing {
 		return this.edmCurrentLocation;
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
+	
 
 	@Override
 	public void setDcContributor(String[] dcContributor) {
