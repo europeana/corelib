@@ -14,43 +14,37 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
+
 package eu.europeana.corelib.definitions.solr.entity;
 
-import eu.europeana.corelib.definitions.solr.DocType;
-
 /**
- * Provider Proxy fields representation
- * 
+ * Europeana specific proxy
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
-public interface Proxy extends BasicProxy {
+public interface EuropeanaProxy extends BasicProxy {
 
 	/**
-	 * Retrieve the edm:type fields for a Proxy
-	 * 
-	 * @return DocType representing the edm:type fields for a Proxy
+	 * Setter for the user tags
+	 * @param userTag
 	 */
-	DocType getEdmType();
-
-	/**
-	 * Set the edmType field for a Proxy
-	 * 
-	 * @param edmType
-	 * 			String array containing the edmType of a Proxy
-	 */
-	void setEdmType(DocType edmType);
+	void setUserTag(String[] userTag);
 	
 	/**
-	 * Get the edm:unstored field (not to be implemented!!!)
-	 * @return 
+	 * Getter for the user tags
+	 * @return The edm:userTag of the specific Europeana proxy.
 	 */
-	String[] getEdmUnstored();
+	String[] getUserTag();
 	
 	/**
-	 * Set the edm:unstored field (not to be implemented!!!)
-	 * @param edmUnstored
+	 * Setter for the Europeana specific Proxy year
+	 * @param year
 	 */
-	void setEdmUnstored(String[] edmUnstored);
-
+	void setEdmYear(String[] year);
+	
+	/**
+	 * Getter of the Europeana specific Proxy Year
+	 * @return The edm:year for the specific Europeana Proxy
+	 */
+	String[] getEdmYear();
 }

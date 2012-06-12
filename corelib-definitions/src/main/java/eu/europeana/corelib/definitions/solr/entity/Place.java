@@ -71,4 +71,23 @@ public interface Place extends ContextualClass {
 	 */
 	void setLongitude(float longitude);
 
+	void setAltitude(float altitude);
+	
+	float getAltitude();
+	
+	void setPosition(float[] position);
+	
+	float[] getPosition();
+	
+	void setSkosHiddenLabel(String[] skosHiddenLabel);
+	
+	String[] getSkosHiddenLabel();
+	
+	void setDcTermsHasPart(String[] dcTermsHasPart);
+	
+	String[] getDcTermsHasPart();
+	
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
 }

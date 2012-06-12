@@ -54,5 +54,65 @@ public interface Agent extends ContextualClass {
 	 *            String representing a valid date
 	 */
 	void setEnd(String end);
-
+	
+	void setEdmWasPresentAt(String[] edmWasPresentAt);
+	
+	String[] getEdmWasPresentAt();
+	
+	void setEdmHasMet(String[] edmHasMet);
+	
+	String[] getEdmHasMet();
+	
+	void setEdmIsRelatedTo(String[] edmIsRelatedTo);
+	
+	String[] getEdmIsRelatedTo();
+	
+	void setSkosHiddenLabel(String[] skosHiddenLabel);
+	
+	String[] getSkosHiddenLabel();
+	
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
+	
+	void setFoafName(String[] foafName);
+	
+	String[] getFoafName();
+	
+	void setDcDate(String[] dcDate);
+	
+	String[] getDcDate();
+	
+	void setDcIdentifier(String[] dcIdentifier);
+	
+	String[] getDcIdentifier();
+	
+	void setRdaGr2DateOfBirth(String rdaGr2DateOfBirth);
+	
+	String getRdaGr2DateOfBirth();
+	
+	void setRdaGr2DateOfDeath(String rdaGr2DateOfDeath);
+	
+	String getRdaGr2DateOfDeath();
+	
+	void setRdaGr2DateOfEstablishment(String rdaGr2DateOfEstablishment);
+	
+	String getRdaGr2DateOfEstablishment();
+	
+	void setRdaGr2DateOfTermination(String rdaGr2DateOfTermination);
+	
+	String getRdaGr2DateOfTermination();
+	
+	void setRdaGr2Gender(String rdaGr2Gender);
+	
+	String getRdaGr2Gender();
+	
+	void setRdaGr2ProfessionOrOccupation(String rdaGr2ProfessionOrOccupation);
+	
+	String getRdaGr2ProfessionOrOccupation();
+	
+	void setRdaGr2BiographicalInformation(String rdaGr2BiographicalInformation);
+	
+	String getRdaGr2BiographicalInformation();
+	
 }

@@ -15,11 +15,53 @@
  *  the Licence.
  */
 package eu.europeana.corelib.definitions.solr.entity;
+
+import java.util.List;
+
 /**
- * TODO: see if required
+ * Europeana specific aggregation
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public interface EuropeanaAggregation extends Aggregation {
+public interface EuropeanaAggregation extends AbstractEdmEntity {
 
+	String getAggregatedCHO();
+	
+	void setAggregatedCHO(String aggregatedCHO);
+	
+	String[] getAggregates();
+	
+	void setAggregates(String[] aggregates);
+	
+	String getDcCreator();
+	
+	void setDcCreator(String dcCreator);
+	
+	String getEdmLandingPage();
+	
+	void setEdmLandingPage(String edmLandingPage);
+	
+	String getEdmIsShownBy();
+	
+	void setEdmIsShownBy(String edmIsShownBy);
+	
+	String getEdmHasView();
+	
+	void setEdmHasView(String edmHasView);
+	
+	String getEdmCountry();
+	
+	void setEdmCountry(String edmCountry);
+	
+	String getEdmLanguage();
+	
+	void setEdmLanguage(String edmLanguage);
+	
+	String getEdmRights();
+	
+	void setEdmRights(String edmRights);
+
+	List<? extends WebResource> getWebResources();
+
+	void setWebResources(List<? extends WebResource> webResources);
 }

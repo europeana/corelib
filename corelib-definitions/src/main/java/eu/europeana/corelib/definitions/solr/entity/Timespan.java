@@ -69,5 +69,22 @@ public interface Timespan extends ContextualClass {
 	 *            A String array representing the isPartOf fields for a Timespan
 	 */
 	void setIsPartOf(String[] isPartOf);
-
+	
+	void setDctermsHasPart(String[] hasPart);
+	
+	String[] getDctermsHasPart();
+	
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
+	
+	String[] getCrmP79FBeginningIsQualifiedBy();
+	
+	void setCrmP97FBeginningIsQualifiedBy(String[] crmP79FBeginningIsQualifiedBy);
+	
+	String[] getCrmP80FEndIsQualifiedBy();
+	
+	void setCrmP80FEndIsQualifiedBy(String[] crmP80FEndIsQualifiedBy);
+	
+	
 }

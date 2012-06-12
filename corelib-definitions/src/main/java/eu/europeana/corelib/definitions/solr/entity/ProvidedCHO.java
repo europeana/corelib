@@ -9,13 +9,7 @@ public interface ProvidedCHO extends AbstractEdmEntity {
 	 */
 	String[] getOwlSameAs();
 
-	/**
-	 * Retrieve the edm:isNextInSequence fields for a ProvidedCHO
-	 * 
-	 * @return String representing the edm:isNextInSequence fields for a
-	 *         ProvidedCHO
-	 */
-	String getEdmIsNextInSequence();
+	
 
 	/**
 	 * Set the owl:sameAs fields for a ProvidedCHO
@@ -26,13 +20,6 @@ public interface ProvidedCHO extends AbstractEdmEntity {
 	 */
 	void setOwlSameAs(String[] owlSameAs);
 
-	/**
-	 * Set the edm:isNextInSequence fields for a ProvidedCHO
-	 * 
-	 * @param edmIsNextInSequence
-	 *            String representing the edm:isNextInSequence fields for a
-	 *            ProvidedCHO
-	 */
-	void setEdmIsNextInSequence(String edmIsNextInSequence);
+	
 
 }
