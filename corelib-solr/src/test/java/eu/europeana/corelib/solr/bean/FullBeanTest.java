@@ -326,11 +326,13 @@ public class FullBeanTest {
 		proxy.setDctermsTOC(new String[] { "test dcterms:spatial" });
 		proxy.setDcTitle(new String[] { "test dc:title" });
 		proxy.setDcType(new String[] { "test dc:type" });
+		proxy.setEdmIsNextInSequence("test isnextinsequence");
 		proxy.setEdmCurrentLocation("test edm:currentLocation");
 		proxy.setEdmType(DocType.IMAGE);
 		Key<Proxy> proxyKey = ds.save(proxy);
 		Proxy testProxy = ds.find(ProxyImpl.class).filter("about", proxy.getAbout()).get();
 		assertEquals(proxy, testProxy);
+		
 		assertArrayEquals(proxy.getDcContributor(), testProxy.getDcContributor());
 		assertArrayEquals(proxy.getDcCoverage(), testProxy.getDcCoverage());
 		assertArrayEquals(proxy.getDcCreator(), testProxy.getDcCreator());
@@ -368,6 +370,7 @@ public class FullBeanTest {
 		assertArrayEquals(proxy.getDctermsTOC(), testProxy.getDctermsTOC());
 		assertArrayEquals(proxy.getDcTitle(), testProxy.getDcTitle());
 		assertArrayEquals(proxy.getDcType(), testProxy.getDcType());
+		assertEquals(proxy.getEdmIsNextInSequence(),testProxy.getEdmIsNextInSequence());
 		assertEquals(proxy.getEdmCurrentLocation(), testProxy.getEdmCurrentLocation());
 		assertEquals(proxy.getEdmType(), testProxy.getEdmType());
 		return proxy;
@@ -376,13 +379,13 @@ public class FullBeanTest {
 	private ProvidedCHO createProvidedCHO(){
 		ProvidedCHO providedCHO = new ProvidedCHOImpl();
 		providedCHO.setAbout("test edm:about");
-		providedCHO.setEdmIsNextInSequence("test isnextinsequence");
+		
 		providedCHO.setOwlSameAs(new String[]{"test owlsameAs"});
 		Key<ProvidedCHO> providedCHOKey = ds.save(providedCHO);
 		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).filter("about", providedCHO.getAbout()).get();
 		assertEquals(providedCHO,testProvidedCHO);
 		assertEquals(providedCHO.getAbout(), testProvidedCHO.getAbout());
-		assertEquals(providedCHO.getEdmIsNextInSequence(),testProvidedCHO.getEdmIsNextInSequence());
+		
 		assertArrayEquals(providedCHO.getOwlSameAs(), testProvidedCHO.getOwlSameAs());
 		return providedCHO;
 	}
