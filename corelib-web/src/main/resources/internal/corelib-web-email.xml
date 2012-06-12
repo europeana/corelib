@@ -43,33 +43,33 @@
 	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype"/>
 	
 	<util:map id="corelib_web_emailConfigs">
-        <entry key="register">
+		<entry key="register">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/confirmation" 
 				p:emailFrom="#{europeanaProperties['system.from']}"
 				p:subject="My Europeana email confirmation"/>
-        </entry>
-        <entry key="forgotPassword">
+		</entry>
+		<entry key="forgotPassword">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/forgot-password" 
 				p:emailFrom="#{europeanaProperties['system.from']}"
 				p:subject="My Europeana reset password"/>
-        </entry>
-        <entry key="userFeedback">
-		    <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-		    	p:template="/email/feedback"
-		    	p:emailFrom="#{europeanaProperties['feedback.from']}"
-		    	p:emailTo="#{europeanaProperties['feedback.to']}"
-		    	p:subject="User Feedback"
-		    />
-        </entry>
-        <entry key="userFeedbackConfirm">
-		    <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-		    	p:template="/email/feedback-confirmation"
-		    	p:emailFrom="#{europeanaProperties['feedback.from']}"
-		    	p:subject="User Feedback"
-		    />
-        </entry>
+		</entry>
+		<entry key="userFeedback">
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/feedback"
+				p:emailFrom="#{europeanaProperties['feedback.from']}"
+				p:emailTo="#{europeanaProperties['feedback.to']}"
+				p:subject="User Feedback"
+			/>
+		</entry>
+		<entry key="userFeedbackConfirm">
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/feedback-confirmation"
+				p:emailFrom="#{europeanaProperties['feedback.from']}"
+				p:subject="User Feedback"
+			/>
+		</entry>
 	</util:map>
 
 </beans>

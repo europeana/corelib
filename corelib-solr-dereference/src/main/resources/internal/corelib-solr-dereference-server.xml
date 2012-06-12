@@ -34,26 +34,26 @@
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used...
 	
 	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
+		<constructor-arg value="#{europeanaProperties['solr.url']}"/>
 		<property name="followRedirects" value="false"/>	
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
+		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
+		<property name="defaultMaxConnectionsPerHost" value="64"/>
+		<property name="maxTotalConnections" value="125"/>
 	</bean>
 	
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
-        <constructor-arg>
-        	<bean class="org.apache.solr.core.CoreContainer">
-		        <constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
-		        <constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
-        	</bean>
-        </constructor-arg>
-        <constructor-arg value="collection1"/>
+		<constructor-arg>
+			<bean class="org.apache.solr.core.CoreContainer">
+				<constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
+				<constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg value="collection1"/>
 	</bean>
  -->
-    
-     <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
-    	<constructor-arg ref="corelib_solr_mongo"/>
-    	<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
-    </bean>
+
+	<bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
+		<constructor-arg ref="corelib_solr_mongo"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
+	</bean>
 </beans>
