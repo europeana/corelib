@@ -26,7 +26,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public class Query {
+public class Query implements Cloneable {
 
 	/**
 	 * Default start parameter for Solr
@@ -61,7 +61,6 @@ public class Query {
 		pageSize = DEFAULT_PAGE_SIZE;
 	}
 	
-
 	/**
 	 * GETTERS & SETTTERS
 	 */
@@ -136,5 +135,10 @@ public class Query {
 	public Query setParameter(String key, String value) {
 		parameters.put(key, value);
 		return this;
+	}
+
+	@Override
+	public Query clone() throws CloneNotSupportedException {
+		return (Query) super.clone();
 	}
 }
