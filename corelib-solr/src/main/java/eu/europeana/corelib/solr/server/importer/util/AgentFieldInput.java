@@ -115,10 +115,12 @@ public final class AgentFieldInput {
 	 * object
 	 * 
 	 * Mapping from the JibXBinding Fields to the MongoDB Entity Fields The
-	 * fields mapped are the rdf:about (String -> String) skos:note(List<Note>
-	 * -> String[]) skos:prefLabel(List<PrefLabel> -> HashMap<String,String>
-	 * (lang,description)) skos:altLabel(List<AltLabel> ->
-	 * HashMap<String,String> (lang,description)) edm:begin (String -> Date)
+	 * fields mapped are the 
+	 * rdf:about (String -> String) 
+	 * skos:note(List<Note> -> String[]) 
+	 * skos:prefLabel(List<PrefLabel> -> HashMap<String,String>(lang,description)) 
+	 * skos:altLabel(List<AltLabel> -> HashMap<String,String>(lang,description)) 
+	 * edm:begin (String -> Date)
 	 * edm:end (String -> Date)
 	 * 
 	 * @param agentType
