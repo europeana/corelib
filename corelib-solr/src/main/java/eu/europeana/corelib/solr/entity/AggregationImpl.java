@@ -26,6 +26,7 @@ import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
@@ -46,6 +47,10 @@ public class AggregationImpl implements Aggregation {
 	private String[] dcRights;
 	private String[] hasView;
 	private String aggregatedCHO;
+	private String[] aggregates;
+	private String[] edmUnstored;
+	
+
 	@Embedded
 	private List<WebResourceImpl> webResources;
 	
@@ -163,7 +168,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getDcRights() {
-		return (this.dcRights!=null?this.dcRights.clone():null);
+		return (StringArrayUtils.isNotBlank(this.dcRights)?this.dcRights.clone():null);
 	}
 
 	@Override
@@ -190,7 +195,7 @@ public class AggregationImpl implements Aggregation {
 	
 	@Override
 	public String[] getHasView() {
-		return (this.hasView!=null?hasView.clone():null);
+		return (StringArrayUtils.isNotBlank(this.hasView)?this.hasView.clone():null);
 	}
 
 	@Override
@@ -212,5 +217,21 @@ public class AggregationImpl implements Aggregation {
 	@Override
 	public int hashCode(){ 
 		return this.about!=null?this.about.hashCode():this.id.hashCode();
+	}
+	@Override
+	public String[] getAggregates() {
+		return (StringArrayUtils.isNotBlank(this.aggregates)?this.aggregates.clone():null);
+	}
+	@Override
+	public void setAggregates(String[] aggregates) {
+		this.aggregates = aggregates;
+	}
+	@Override
+	public String[] getEdmUnstored() {
+		return (StringArrayUtils.isNotBlank(this.edmUnstored)?this.edmUnstored.clone():null);
+	}
+	@Override
+	public void setEdmUnstored(String[] edmUnstored) {
+		this.edmUnstored = edmUnstored;
 	}
 }

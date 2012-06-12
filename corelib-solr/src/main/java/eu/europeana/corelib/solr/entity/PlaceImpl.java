@@ -17,14 +17,10 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Map;
-
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Embedded;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Place;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Place
@@ -32,47 +28,27 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
  * 
  */
 @Embedded
-public class PlaceImpl implements Place {
-	private ObjectId id;
+public class PlaceImpl extends ContextualClassImpl implements Place {
+	
 
-	private Map<String, String> prefLabel;
-	private Map<String, String> altLabel;
-	private String[] note;
 	private String[] isPartOf;
 	private float latitude;
 	private float longitude;
+	private float altitude;
+	private float[] position;
+	private String[] skosHiddenLabel;
+	private String[] dcTermsHasPart;
+	private String[] owlSameAs;
 	
-	@Indexed(unique=false)
-	private String about;
+	
 
-	@Override
-	public String getAbout() {
-		return about;
-	}
 
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	@Override
-	public Map<String, String> getPrefLabel() {
-		return this.prefLabel;
-	}
-
-	@Override
-	public Map<String, String> getAltLabel() {
-		return this.altLabel;
-	}
-
-	@Override
-	public String[] getNote() {
-		return (this.note!=null?this.note.clone():null);
-	}
+	
+	
 
 	@Override
 	public String[] getIsPartOf() {
-		return (this.isPartOf!=null?this.isPartOf.clone():null);
+		return (StringArrayUtils.isNotBlank(isPartOf)?this.isPartOf.clone():null);
 	}
 
 	@Override
@@ -85,33 +61,7 @@ public class PlaceImpl implements Place {
 		return this.longitude;
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setAltLabel(Map<String, String> altLabel) {
-		this.altLabel = altLabel;
-
-	}
-
-	@Override
-	public void setNote(String[] note) {
-		this.note = note.clone();
-
-	}
-
-	@Override
-	public void setPrefLabel(Map<String, String> prefLabel) {
-		this.prefLabel = prefLabel;
-
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
+	
 
 	@Override
 	public void setIsPartOf(String[] isPartOf) {
@@ -141,6 +91,59 @@ public class PlaceImpl implements Place {
 	
 	@Override
 	public int hashCode(){ 
-		return (int) (this.about!=null?this.about.hashCode():this.latitude*100+this.longitude);
+		return (int) (this.getAbout()!=null?this.getAbout().hashCode():this.latitude*100+this.longitude);
+	}
+
+	@Override
+	public void setAltitude(float altitude) {
+		this.altitude = altitude;
+		
+	}
+
+	@Override
+	public float getAltitude() {
+		return this.altitude;
+	}
+
+	@Override
+	public void setPosition(float[] position) {
+		this.position = position;
+		
+	}
+
+	@Override
+	public float[] getPosition() {
+		return this.position!=null? this.position.clone(): null;
+	}
+
+	@Override
+	public void setSkosHiddenLabel(String[] skosHiddenLabel) {
+		this.skosHiddenLabel = skosHiddenLabel;
+	}
+
+	@Override
+	public String[] getSkosHiddenLabel() {
+		return (StringArrayUtils.isNotBlank(skosHiddenLabel) ? this.skosHiddenLabel.clone() : null);
+	}
+
+	@Override
+	public void setDcTermsHasPart(String[] dcTermsHasPart) {
+		this.dcTermsHasPart = dcTermsHasPart;
+	}
+
+	@Override
+	public String[] getDcTermsHasPart() {
+		return (StringArrayUtils.isNotBlank(dcTermsHasPart) ? this.dcTermsHasPart.clone() : null);
+	}
+
+	@Override
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
+		
+	}
+	
+	@Override
+	public String[] getOwlSameAs(){
+		return (StringArrayUtils.isNotBlank(owlSameAs) ? this.owlSameAs.clone() : null);
 	}
 }

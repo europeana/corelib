@@ -104,8 +104,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Embedded
 	private List<ProvidedCHOImpl> providedCHOs;
-
-	// TODO:check if Europeana Aggregation needs to be stored separately
+	
 	@Embedded
 	private EuropeanaAggregation europeanaAggregation;
 
@@ -193,7 +192,7 @@ public class FullBeanImpl implements FullBean {
 		return this.europeanaAggregation;
 	}
 
-	// TODO required??
+	
 	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
 		this.europeanaAggregation = europeanaAggregation;
 	}
@@ -941,10 +940,10 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmIsNextInSequence() {
-		if (this.providedCHOs != null) {
+		if (this.proxies != null) {
 			List<String> edmIsNextInSequenceList = new ArrayList<String>();
-			for (ProvidedCHO providedCHO : this.providedCHOs) {
-				edmIsNextInSequenceList.add(providedCHO.getEdmIsNextInSequence());
+			for (Proxy proxy : this.proxies) {
+				edmIsNextInSequenceList.add(proxy.getEdmIsNextInSequence());
 			}
 			return StringArrayUtils.toArray(edmIsNextInSequenceList);
 		}

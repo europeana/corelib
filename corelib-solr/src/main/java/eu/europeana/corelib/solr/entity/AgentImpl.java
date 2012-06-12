@@ -17,14 +17,10 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Map;
-
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Embedded;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Agent;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Agent
@@ -32,42 +28,34 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
  * 
  */
 @Embedded
-public class AgentImpl implements Agent {
+public class AgentImpl extends ContextualClassImpl implements Agent {
 
-	private ObjectId id;
-	@Indexed(unique=false)
-	private String about;
-	private Map<String, String> prefLabel;
-	private Map<String, String> altLabel;
-	private String[] note;
+
+	
 
 	private String begin;
 	private String end;
 	
-	@Override
-	public String getAbout() {
-		return about;
-	}
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
+	private String[] edmWasPresentAt;
+	private String[] edmHasMet;
+	private String[] edmIsRelatedTo;
+	private String[] skosHiddenLabel;
+	private String[] owlSameAs;
+	private String[] foafName;
+	private String[] dcDate;
+	private String[] dcIdentifier;
 	
-	@Override
-	public Map<String, String> getPrefLabel() {
-
-		return this.prefLabel;
-	}
-
-	@Override
-	public Map<String, String> getAltLabel() {
-		return this.altLabel;
-	}
-
-	@Override
-	public String[] getNote() {
-		return (this.note!=null?this.note.clone():null);
-	}
+	private String rdaGr2DateOfBirth;
+	private String rdaGr2DateOfDeath;
+	private String rdaGr2DateOfEstablishment;
+	private String rdaGr2DateOfTermination;
+	private String rdaGr2Gender;
+	private String rdaGr2ProfessionOrOccupation;
+	private String rdaGr2BiographicalInformation;
+	
+	
+	
+	
 
 	@Override
 	public String getBegin() {
@@ -79,30 +67,8 @@ public class AgentImpl implements Agent {
 		return this.end;
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
-	@Override
-	public void setAltLabel(Map<String, String> altLabel) {
-		this.altLabel = altLabel;
-	}
-
-	@Override
-	public void setPrefLabel(Map<String, String> prefLabel) {
-		this.prefLabel = prefLabel;
-	}
-
-	@Override
-	public void setNote(String[] note) {
-		this.note = note.clone();
-	}
+	
+	
 
 	@Override
 	public void setBegin(String begin) {
@@ -127,6 +93,142 @@ public class AgentImpl implements Agent {
 	
 	@Override
 	public int hashCode(){ 
-		return this.about.hashCode();
+		return this.getAbout().hashCode();
+	}
+	@Override
+	public void setEdmWasPresentAt(String[] edmWasPresentAt) {
+		this.edmWasPresentAt = edmWasPresentAt;
+		
+	}
+	@Override
+	public String[] getEdmWasPresentAt() {
+		return (StringArrayUtils.isNotBlank(this.edmWasPresentAt)?this.edmWasPresentAt.clone():null);
+	}
+	@Override
+	public void setEdmHasMet(String[] edmHasMet) {
+		this.edmHasMet = edmHasMet;
+		
+	}
+	@Override
+	public String[] getEdmHasMet() {
+		return (StringArrayUtils.isNotBlank(this.edmHasMet)?this.edmHasMet.clone():null);
+	}
+	@Override
+	public void setEdmIsRelatedTo(String[] edmIsRelatedTo) {
+		this.edmIsRelatedTo = edmIsRelatedTo;
+		
+	}
+	@Override
+	public String[] getEdmIsRelatedTo() {
+		return (StringArrayUtils.isNotBlank(this.edmIsRelatedTo)?this.edmIsRelatedTo.clone():null);
+	}
+	@Override
+	public void setSkosHiddenLabel(String[] skosHiddenLabel) {
+		this.skosHiddenLabel = skosHiddenLabel;
+		
+	}
+	@Override
+	public String[] getSkosHiddenLabel() {
+		return (StringArrayUtils.isNotBlank(this.skosHiddenLabel)?this.skosHiddenLabel.clone():null);
+	}
+	@Override
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
+		
+	}
+	@Override
+	public String[] getOwlSameAs() {
+		return (StringArrayUtils.isNotBlank(this.owlSameAs)?this.owlSameAs.clone():null);
+	}
+	@Override
+	public void setFoafName(String[] foafName) {
+		this.foafName = foafName;
+		
+	}
+	@Override
+	public String[] getFoafName() {
+		return (StringArrayUtils.isNotBlank(this.foafName)?this.foafName.clone():null);
+	}
+	@Override
+	public void setDcDate(String[] dcDate) {
+		this.dcDate = dcDate;
+		
+	}
+	@Override
+	public String[] getDcDate() {
+		return (StringArrayUtils.isNotBlank(this.dcDate)?this.dcDate.clone():null);
+	}
+	@Override
+	public void setDcIdentifier(String[] dcIdentifier) {
+		this.dcIdentifier = dcIdentifier;
+		
+	}
+	@Override
+	public String[] getDcIdentifier() {
+		return (StringArrayUtils.isNotBlank(this.dcIdentifier)?this.dcIdentifier.clone():null);
+	}
+	@Override
+	public void setRdaGr2DateOfBirth(String rdaGr2DateOfBirth) {
+		this.rdaGr2DateOfBirth = rdaGr2DateOfBirth;
+		
+	}
+	@Override
+	public String getRdaGr2DateOfBirth() {
+		
+		return this.rdaGr2DateOfBirth;
+	}
+	@Override
+	public void setRdaGr2DateOfDeath(String rdaGr2DateOfDeath) {
+		this.rdaGr2DateOfDeath = rdaGr2DateOfDeath;
+		
+	}
+	@Override
+	public String getRdaGr2DateOfDeath() {
+		return this.rdaGr2DateOfDeath;
+	}
+	@Override
+	public void setRdaGr2DateOfEstablishment(String rdaGr2DateOfEstablishment) {
+		this.rdaGr2DateOfEstablishment = rdaGr2DateOfEstablishment;
+		
+	}
+	@Override
+	public String getRdaGr2DateOfEstablishment() {
+		return this.rdaGr2DateOfEstablishment;
+	}
+	@Override
+	public void setRdaGr2DateOfTermination(String rdaGr2DateOfTermination) {
+		this.rdaGr2DateOfTermination = rdaGr2DateOfTermination;
+	}
+	@Override
+	public String getRdaGr2DateOfTermination() {
+		return this.rdaGr2DateOfTermination;
+	}
+	@Override
+	public void setRdaGr2Gender(String rdaGr2Gender) {
+		this.rdaGr2Gender = rdaGr2Gender;
+		
+	}
+	@Override
+	public String getRdaGr2Gender() {
+		return this.rdaGr2Gender;
+	}
+	@Override
+	public void setRdaGr2ProfessionOrOccupation(
+			String rdaGr2ProfessionOrOccupation) {
+		this.rdaGr2ProfessionOrOccupation = rdaGr2ProfessionOrOccupation;
+	}
+	@Override
+	public String getRdaGr2ProfessionOrOccupation() {
+		return this.rdaGr2ProfessionOrOccupation;
+	}
+	@Override
+	public void setRdaGr2BiographicalInformation(
+			String rdaGr2BiographicalInformation) {
+		this.rdaGr2BiographicalInformation = rdaGr2BiographicalInformation;
+		
+	}
+	@Override
+	public String getRdaGr2BiographicalInformation() {
+		return this.rdaGr2BiographicalInformation;
 	}
 }

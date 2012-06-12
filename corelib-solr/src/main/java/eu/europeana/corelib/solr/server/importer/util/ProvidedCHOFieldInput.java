@@ -19,7 +19,6 @@ package eu.europeana.corelib.solr.server.importer.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
@@ -98,9 +97,7 @@ public final class ProvidedCHOFieldInput {
 			mongoProvidedCHO = new ProvidedCHOImpl();
 
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
-			mongoProvidedCHO.setEdmIsNextInSequence(SolrUtils.exists(
-					ResourceType.class, providedCHO.getIsNextInSequence())
-					.getResource());
+			
 			List<String> owlSameAsList = new ArrayList<String>();
 			if (providedCHO.getSameAList() != null) {
 				for (SameAs sameAs : providedCHO.getSameAList()) {
@@ -112,20 +109,7 @@ public final class ProvidedCHOFieldInput {
 			mongoServer.getDatastore().save(mongoProvidedCHO);
 		} else {
 			// update the ProvidedCHO
-			// Start by updating the isNextInSequence fields
-			if (!StringUtils.equals(
-					mongoProvidedCHO.getEdmIsNextInSequence(),
-					SolrUtils.exists(ResourceType.class,
-							providedCHO.getIsNextInSequence()).getResource())) {
-				mongoProvidedCHO.setEdmIsNextInSequence(SolrUtils.exists(
-						ResourceType.class, providedCHO.getIsNextInSequence())
-						.getResource());
-				MongoUtils.update(ProvidedCHOImpl.class, mongoProvidedCHO
-						.getAbout(), mongoServer, "edmIsNextInSequence",
-						providedCHO.getIsNextInSequence().getResource());
-
-			}
-			// then the sameAs list
+			// Start by the sameAs list
 			List<String> owlSameAsList = null;
 			if (providedCHO.getSameAList() != null) {
 				owlSameAsList = new ArrayList<String>();

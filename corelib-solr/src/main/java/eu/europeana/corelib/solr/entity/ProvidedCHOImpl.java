@@ -35,7 +35,6 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 	@Indexed(unique=true, dropDups=true)
 	private String about;
 	private String[] owlSameAs;
-	private String edmIsNextInSequence;
 	
 
 	@Override
@@ -54,20 +53,14 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 		return (this.owlSameAs!=null?this.owlSameAs.clone():null);
 	}
 
-	@Override
-	public String getEdmIsNextInSequence() {
-		return this.edmIsNextInSequence;
-	}
+	
 
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
 		this.owlSameAs = owlSameAs.clone();
 	}
 
-	@Override
-	public void setEdmIsNextInSequence(String edmIsNextInSequence) {
-		this.edmIsNextInSequence = edmIsNextInSequence;
-	}
+	
 
 	@Override
 	public String getAbout() {

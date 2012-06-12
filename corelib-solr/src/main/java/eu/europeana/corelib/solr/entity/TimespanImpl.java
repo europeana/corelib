@@ -16,12 +16,9 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Map;
-
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Embedded;
-import com.google.code.morphia.annotations.Indexed;
+
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Timespan
@@ -30,43 +27,22 @@ import com.google.code.morphia.annotations.Indexed;
  */
 
 @Embedded
-public class TimespanImpl implements
+public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	private ObjectId id;
-	private Map<String,String> prefLabel;
-	private Map<String,String> altLabel;
-	private String[] note;
+
+	
 	private String begin;
 	private String end;
 	private String[] isPartOf;
-	@Indexed(unique=false)
-	private String about;
+	private String[] dctermsHasPart;
 	
-	@Override	
-	public String getAbout() {
-		return about;
-	}
 
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	@Override
-	public Map<String,String> getPrefLabel() {
-		return this.prefLabel;
-	}
-
-	@Override
-	public Map<String,String> getAltLabel() {
-		return this.altLabel;
-	}
-
-	@Override
-	public String[] getNote() {
-		return (this.note!=null?this.note.clone():null);
-	}
+	private String[] owlSameAs;
+	private String[] crmP79FBeginningIsQualifiedBy;
+	private String[] crmP80FEndIsQualifiedBy;
+	
+	
 
 	@Override
 	public String getBegin() {
@@ -80,32 +56,11 @@ public class TimespanImpl implements
 
 	@Override
 	public String[] getIsPartOf() {
-		return (this.isPartOf!=null?this.isPartOf.clone():null);
+		return (StringArrayUtils.isNotBlank(isPartOf)?this.isPartOf.clone():null);
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-	@Override
-	public void setId(ObjectId id) {
-		this.id =id;
-	}
-
-	@Override
-	public void setPrefLabel(Map<String,String> prefLabel) {
-		this.prefLabel = prefLabel;
-	}
 	
-	@Override
-	public void setAltLabel(Map<String,String> altLabel) {
-		this.altLabel = altLabel;
-	}
 	
-	@Override
-	public void setNote(String[] note) {
-		this.note = note.clone();
-	}
 
 	@Override
 	public void setBegin(String begin) {
@@ -134,6 +89,50 @@ public class TimespanImpl implements
 	
 	@Override
 	public int hashCode(){ 
-		return this.about.hashCode();
+		return this.getAbout().hashCode();
 	}
+
+	@Override
+	public String[] getDctermsHasPart() {
+		return (StringArrayUtils.isNotBlank(dctermsHasPart)?this.dctermsHasPart.clone():null);
+	}
+
+	@Override
+	public void setDctermsHasPart(String[] dctermsHasPart) {
+		this.dctermsHasPart = dctermsHasPart;
+	}
+	
+	@Override
+	public String[] getOwlSameAs() {
+		return (StringArrayUtils.isNotBlank(owlSameAs)?this.owlSameAs.clone():null);
+	}
+
+	@Override
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
+	}
+
+	@Override
+	public String[] getCrmP79FBeginningIsQualifiedBy() {
+		return (StringArrayUtils.isNotBlank(crmP79FBeginningIsQualifiedBy)?this.crmP79FBeginningIsQualifiedBy.clone():null);
+	}
+	
+	@Override
+	public String[] getCrmP80FEndIsQualifiedBy() {
+		return (StringArrayUtils.isNotBlank(crmP80FEndIsQualifiedBy)?this.crmP80FEndIsQualifiedBy.clone():null);
+	}
+
+	@Override
+	public void setCrmP80FEndIsQualifiedBy(String[] crmP80FEndIsQualifiedBy) {
+		this.crmP80FEndIsQualifiedBy = crmP80FEndIsQualifiedBy;
+	}
+
+	@Override
+	public void setCrmP97FBeginningIsQualifiedBy(
+			String[] crmP79FBeginningIsQualifiedBy) {
+		this.crmP79FBeginningIsQualifiedBy = crmP79FBeginningIsQualifiedBy;
+		
+	}
+
+
 }

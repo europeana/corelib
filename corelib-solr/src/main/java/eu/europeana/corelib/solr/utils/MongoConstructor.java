@@ -50,25 +50,13 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
  */
 public class MongoConstructor {
 
-//	private RDF record;
-
-//	private FullBeanImpl fullBean;
-
 	private MongoServer mongoServer;
 	
 	public void setMongoServer(MongoServer mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 
-/*	*//**
-	 * Retrieve the JiBX RDF Entity
-	 * 
-	 * @return JiBX RDF Entity
-	 *//*
-	public RDF getRecord() {
-		return record;
-	}
-*/
+
 	/**
 	 * Construct a FullBean out of A JiBX RDF record
 	 * 

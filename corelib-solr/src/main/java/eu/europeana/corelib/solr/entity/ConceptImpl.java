@@ -17,14 +17,10 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Map;
-
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Embedded;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Concept;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Concept
@@ -32,74 +28,31 @@ import eu.europeana.corelib.definitions.solr.entity.Concept;
  * 
  */
 @Embedded
-public class ConceptImpl implements Concept {
+public class ConceptImpl extends ContextualClassImpl implements Concept {
 
-	private ObjectId id;
-
-	private Map<String, String> prefLabel;
-	private Map<String, String> altLabel;
-	private String[] note;
+	
 	private String[] broader;
-	@Indexed(unique = false)
-	private String about;
-
-	@Override
-	public String getAbout() {
-		return about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	@Override
-	public Map<String, String> getPrefLabel() {
-		return this.prefLabel;
-	}
-
-	@Override
-	public Map<String, String> getAltLabel() {
-		return this.altLabel;
-	}
-
-	@Override
-	public String[] getNote() {
-		return (this.note != null ? this.note.clone() : null);
-	}
-
+	private String[] hiddenLabel;
+	private String[] narrower;
+	private String[] related;
+	private String[] broadMatch;
+	private String[] narrowMatch;
+	private String[] exactMatch;
+	private String[] relatedMatch;
+	private String[] closeMatch;
+	private String[] notation;
+	private String[] inScheme;
+	
+	
+	
 	@Override
 	public String[] getBroader() {
-		return (this.broader != null ? this.broader.clone() : null);
+		return (StringArrayUtils.isNotBlank(broader) ? this.broader.clone() : null);
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
+	
 
-	@Override
-	public void setAltLabel(Map<String, String> altLabel) {
-		this.altLabel = altLabel;
-
-	}
-
-	@Override
-	public void setNote(String[] note) {
-		this.note = note.clone();
-
-	}
-
-	@Override
-	public void setPrefLabel(Map<String, String> prefLabel) {
-		this.prefLabel = prefLabel;
-
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
+	
 
 	@Override
 	public void setBroader(String[] broader) {
@@ -119,6 +72,113 @@ public class ConceptImpl implements Concept {
 
 	@Override
 	public int hashCode() {
-		return this.about.hashCode();
+		return this.getAbout().hashCode();
+	}
+
+	@Override
+	public String[] getNarrower() {
+		return (StringArrayUtils.isNotBlank(narrower) ? this.narrower.clone() : null);
+	}
+
+	@Override
+	public void setNarrower(String[] narrower) {
+		this.narrower=narrower;
+		
+	}
+
+	@Override
+	public String[] getRelated() {
+		return (StringArrayUtils.isNotBlank(related) ? this.related.clone() : null);
+	}
+
+	@Override
+	public void setRelated(String[] related) {
+		this.related = related;
+		
+	}
+
+	@Override
+	public String[] getBroadMatch() {
+		
+		return (StringArrayUtils.isNotBlank(broadMatch) ? this.broadMatch.clone() : null);
+	}
+
+	@Override
+	public void setBroadMatch(String[] broadMatch) {
+		this.broadMatch = broadMatch;
+		
+	}
+
+	@Override
+	public String[] getNarrowMatch() {
+		
+		return (StringArrayUtils.isNotBlank(narrowMatch) ? this.narrowMatch.clone() : null);
+	}
+
+	@Override
+	public void setNarrowMatch(String[] narrowMatch) {
+		this.narrowMatch = narrowMatch;
+		
+	}
+
+	@Override
+	public String[] getRelatedMatch() {
+		return (StringArrayUtils.isNotBlank(relatedMatch) ? this.relatedMatch.clone() : null);
+	}
+
+	@Override
+	public void setRelatedMatch(String[] relatedMatch) {
+		this.relatedMatch = relatedMatch;
+	}
+
+	@Override
+	public String[] getExactMatch() {
+		return (StringArrayUtils.isNotBlank(exactMatch) ? this.exactMatch.clone() : null);
+	}
+
+	@Override
+	public void setExactMatch(String[] exactMatch) {
+		this.exactMatch = exactMatch;
+		
+	}
+
+	@Override
+	public String[] getCloseMatch() {
+		return (StringArrayUtils.isNotBlank(closeMatch) ? this.closeMatch.clone() : null);
+	}
+
+	@Override
+	public void setCloseMatch(String[] closeMatch) {
+		this.closeMatch = closeMatch;
+	}
+
+	@Override
+	public String[] getNotation() {
+		return (StringArrayUtils.isNotBlank(notation) ? this.notation.clone() : null);
+	}
+
+	@Override
+	public void setNotation(String[] notation) {
+		this.notation = notation;
+	}
+
+	@Override
+	public String[] getInScheme() {
+		return (StringArrayUtils.isNotBlank(inScheme) ? this.inScheme.clone() : null);
+	}
+
+	@Override
+	public void setInScheme(String[] inScheme) {
+		this.inScheme = inScheme;
+	}
+
+	@Override
+	public String[] getHiddenLabel() {
+		return (StringArrayUtils.isNotBlank(hiddenLabel) ? this.hiddenLabel.clone() : null);
+	}
+
+	@Override
+	public void setHiddenLabel(String[] hiddenLabel) {
+		this.hiddenLabel = hiddenLabel;
 	}
 }
