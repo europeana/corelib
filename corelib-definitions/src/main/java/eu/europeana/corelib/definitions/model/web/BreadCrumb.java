@@ -28,11 +28,29 @@ import org.apache.commons.lang.StringUtils;
  */
 public class BreadCrumb {
 
-	
+	/**
+	 * The human-readable label of the breadcrumb item
+	 */
 	private String display;
 	
+	/**
+	 * The full query URL
+	 */
 	private String href;
 	
+	/**
+	 * The actual query param specific for this breadcrumb item
+	 */
+	private String param = null;
+	
+	/**
+	 * The value belongs to the param (this is usually the raw form of the display)
+	 */
+	private String value = null;
+	
+	/**
+	 * Flag notifies whether it is the last item of the breadcumbs list
+	 */
 	private boolean last = false;
 	
 	public BreadCrumb(String display, String href) {
@@ -42,6 +60,8 @@ public class BreadCrumb {
 	
 	public BreadCrumb(String display, String param, String value, String prevHref) {
 		this.display = display;
+		this.param = param;
+		this.value = value;
 		this.href = createHref(param, value, prevHref);
 	}
 	
@@ -73,7 +93,16 @@ public class BreadCrumb {
 		last = true;
 	}
 	
-	public String toString() {
-		return display + ", " + href + " (" + last + ")";
+	public String getParam() {
+		return param;
 	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public String toString() {
+		return String.format("%s / %s=%s full: %s (%b)", display, param, value, href, last);
+	}
+
 }
