@@ -188,19 +188,14 @@ public class SearchServiceImpl implements SearchService {
 					log.info("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults((List<T>) queryResponse
-							.getBeans(beanClazz));
-
+					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults()
-							.getNumFound());
+					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse
-							.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-
 				}
 
 			} else {
