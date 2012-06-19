@@ -33,16 +33,15 @@ public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 	@Indexed(unique=false)
 	private String about;
 	private ObjectId id;
+
 	@Override
 	public ObjectId getId() {
-		
 		return this.id;
 	}
 
 	@Override
 	public void setId(ObjectId id) {
 		this.id=id;
-
 	}
 
 	@Override
@@ -54,5 +53,4 @@ public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 	public void setAbout(String about) {
 		this.about = about;
 	}
-
 }

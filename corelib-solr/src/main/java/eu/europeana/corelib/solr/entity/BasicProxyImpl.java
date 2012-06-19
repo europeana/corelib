@@ -2,7 +2,7 @@ package eu.europeana.corelib.solr.entity;
 
 import eu.europeana.corelib.definitions.solr.entity.BasicProxy;
 
-public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy{
+public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	private String proxyIn;
 	private String proxyFor;

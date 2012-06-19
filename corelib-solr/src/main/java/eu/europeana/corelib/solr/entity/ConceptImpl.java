@@ -30,7 +30,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Embedded
 public class ConceptImpl extends ContextualClassImpl implements Concept {
 
-	
 	private String[] broader;
 	private String[] narrower;
 	private String[] related;
@@ -41,17 +40,11 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	private String[] closeMatch;
 	private String[] notation;
 	private String[] inScheme;
-	
-	
-	
+
 	@Override
 	public String[] getBroader() {
 		return (StringArrayUtils.isNotBlank(broader) ? this.broader.clone() : null);
 	}
-
-	
-
-	
 
 	@Override
 	public void setBroader(String[] broader) {
@@ -171,4 +164,3 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 		this.inScheme = inScheme;
 	}
 }
-	

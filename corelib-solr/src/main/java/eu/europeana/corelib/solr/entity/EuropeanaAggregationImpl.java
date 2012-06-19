@@ -16,9 +16,9 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
 	ObjectId id;
 
-
 	@Indexed(unique=true, dropDups=true)
 	private String about;
+
 	@Embedded
 	private List<WebResourceImpl> webResources;
 	
@@ -40,7 +40,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setId(ObjectId id) {
 		this.id=id;
-
 	}
 
 	@Override
@@ -66,14 +65,12 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
 	@Override
 	public String[] getAggregates() {
-		
 		return (StringArrayUtils.isNotBlank(this.aggregates)?this.aggregates.clone():null);
 	}
 
 	@Override
 	public void setAggregates(String[] aggregates) {
 		this.aggregates = aggregates;
-
 	}
 
 	@Override
@@ -84,7 +81,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setDcCreator(String dcCreator) {
 		this.dcCreator = dcCreator;
-
 	}
 
 	@Override
@@ -95,7 +91,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setEdmLandingPage(String edmLandingPage) {
 		this.edmLandingPage = edmLandingPage;
-
 	}
 
 	@Override
@@ -116,7 +111,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setEdmHasView(String edmHasView) {
 		this.edmHasView = edmHasView;
-
 	}
 
 	@Override
@@ -127,7 +121,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setEdmCountry(String edmCountry) {
 		this.edmCountry = edmCountry;
-
 	}
 
 	@Override
@@ -148,7 +141,6 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	@Override
 	public void setEdmRights(String edmRights) {
 		this.edmRights = edmRights;
-
 	}
 	
 	@Override

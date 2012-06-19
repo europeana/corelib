@@ -29,7 +29,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 @Embedded
 public class PlaceImpl extends ContextualClassImpl implements Place {
-	
 
 	private String[] isPartOf;
 	private float latitude;
@@ -39,12 +38,6 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	private String[] skosHiddenLabel;
 	private String[] dcTermsHasPart;
 	private String[] owlSameAs;
-	
-	
-
-
-	
-	
 
 	@Override
 	public String[] getIsPartOf() {
@@ -60,8 +53,6 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	public float getLongitude() {
 		return this.longitude;
 	}
-
-	
 
 	@Override
 	public void setIsPartOf(String[] isPartOf) {

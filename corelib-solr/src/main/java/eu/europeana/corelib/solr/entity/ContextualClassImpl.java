@@ -16,13 +16,11 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 
 	@Override
 	public Map<String, String> getPrefLabel() {
-
 		return this.prefLabel;
 	}
 
 	@Override
 	public Map<String, String> getHiddenLabel() {
-
 		return this.hiddenLabel;
 	}
 
@@ -50,6 +48,7 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	public void setHiddenLabel(Map<String, String> hiddenLabel) {
 		this.hiddenLabel = hiddenLabel;
 	}
+
 	@Override
 	public void setNote(String[] note) {
 		this.note = note.clone();

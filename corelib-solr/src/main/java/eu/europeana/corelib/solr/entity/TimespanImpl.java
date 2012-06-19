@@ -30,19 +30,14 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-
-	
 	private String begin;
 	private String end;
 	private String[] isPartOf;
 	private String[] dctermsHasPart;
-	
 
 	private String[] owlSameAs;
 	private String[] crmP79FBeginningIsQualifiedBy;
 	private String[] crmP80FEndIsQualifiedBy;
-	
-	
 
 	@Override
 	public String getBegin() {
@@ -58,9 +53,6 @@ public class TimespanImpl extends ContextualClassImpl implements
 	public String[] getIsPartOf() {
 		return (StringArrayUtils.isNotBlank(isPartOf)?this.isPartOf.clone():null);
 	}
-
-	
-	
 
 	@Override
 	public void setBegin(String begin) {
@@ -133,6 +125,4 @@ public class TimespanImpl extends ContextualClassImpl implements
 		this.crmP79FBeginningIsQualifiedBy = crmP79FBeginningIsQualifiedBy;
 		
 	}
-
-
 }

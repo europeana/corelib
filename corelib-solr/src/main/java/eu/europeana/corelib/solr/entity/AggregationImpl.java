@@ -49,7 +49,6 @@ public class AggregationImpl implements Aggregation {
 	private String aggregatedCHO;
 	private String[] aggregates;
 	private String[] edmUnstored;
-	
 
 	@Embedded
 	private List<WebResourceImpl> webResources;
@@ -57,7 +56,6 @@ public class AggregationImpl implements Aggregation {
 	@Indexed(unique=true, dropDups=true)
 	private String about;
 	private Boolean edmPreviewNoDistribute;
-	
 	
 	@Override
 	public String getAggregatedCHO() {
@@ -98,8 +96,6 @@ public class AggregationImpl implements Aggregation {
 	public void setAbout(String about) {
 		this.about = about;
 	}
-
-	
 
 	@Override
 	public void setId(ObjectId id) {

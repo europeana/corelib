@@ -1,5 +1,8 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
+/**
+ * Provided Cultural Heritage Object
+ */
 public interface ProvidedCHO extends AbstractEdmEntity {
 
 	/**
@@ -9,8 +12,6 @@ public interface ProvidedCHO extends AbstractEdmEntity {
 	 */
 	String[] getOwlSameAs();
 
-	
-
 	/**
 	 * Set the owl:sameAs fields for a ProvidedCHO
 	 * 
@@ -19,7 +20,4 @@ public interface ProvidedCHO extends AbstractEdmEntity {
 	 *            ProvidedCHO
 	 */
 	void setOwlSameAs(String[] owlSameAs);
-
-	
-
 }

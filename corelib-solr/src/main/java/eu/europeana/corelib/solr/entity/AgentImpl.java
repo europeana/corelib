@@ -30,12 +30,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Embedded
 public class AgentImpl extends ContextualClassImpl implements Agent {
 
-
-	
-
 	private String begin;
 	private String end;
-	
+
 	private String[] edmWasPresentAt;
 	private String[] edmHasMet;
 	private String[] edmIsRelatedTo;
@@ -44,7 +41,7 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	private String[] foafName;
 	private String[] dcDate;
 	private String[] dcIdentifier;
-	
+
 	private String rdaGr2DateOfBirth;
 	private String rdaGr2DateOfDeath;
 	private String rdaGr2DateOfEstablishment;
@@ -52,10 +49,6 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	private String rdaGr2Gender;
 	private String rdaGr2ProfessionOrOccupation;
 	private String rdaGr2BiographicalInformation;
-	
-	
-	
-	
 
 	@Override
 	public String getBegin() {
@@ -66,9 +59,6 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	public String getEnd() {
 		return this.end;
 	}
-
-	
-	
 
 	@Override
 	public void setBegin(String begin) {

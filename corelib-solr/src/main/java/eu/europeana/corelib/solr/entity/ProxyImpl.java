@@ -42,7 +42,6 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored;
-		
 	}
 	
 	@Override
