@@ -42,7 +42,7 @@
 		        <constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
         	</bean>
         </constructor-arg>
-         <constructor-arg value=""/>
+         <constructor-arg value="collection1"/>
 	</bean>
 
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
