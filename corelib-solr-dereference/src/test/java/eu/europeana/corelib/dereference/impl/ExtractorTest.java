@@ -33,7 +33,7 @@ public class ExtractorTest {
 		
 		Extractor extractor = new Extractor(vocabulary, mongoServer);
 		assertNotNull(extractor);
-		extractor.setMappedField("test_contributor", EdmLabel.DC_CONTRIBUTOR);
+		extractor.setMappedField("test_contributor", EdmLabel.PROVIDER_DC_CONTRIBUTOR);
 		extractor.saveMapping();
 		assertEquals(1, extractor.getControlledVocabularies().size());
 		assertNotNull(extractor.getControlledVocabulary("name", "testVocabulary"));
@@ -46,9 +46,9 @@ public class ExtractorTest {
 		assertEquals(vocabulary.getSuffix(),retrieveVocabulary.getSuffix());
 		assertEquals(vocabulary.getURI(),retrieveVocabulary.getURI());
 		assertTrue(retrieveVocabulary.getElements().containsKey("test_contributor"));
-		assertEquals(EdmLabel.DC_CONTRIBUTOR, retrieveVocabulary.getElements().get("test_contributor"));
-		assertEquals(EdmLabel.DC_CONTRIBUTOR,extractor.getEdmLabel("test_contributor"));
-		assertEquals("test_contributor", extractor.getMappedField(EdmLabel.DC_CONTRIBUTOR));
+		assertEquals(EdmLabel.PROVIDER_DC_CONTRIBUTOR, retrieveVocabulary.getElements().get("test_contributor"));
+		assertEquals(EdmLabel.PROVIDER_DC_CONTRIBUTOR,extractor.getEdmLabel("test_contributor"));
+		assertEquals("test_contributor", extractor.getMappedField(EdmLabel.PROVIDER_DC_CONTRIBUTOR));
 	}
 	
 	@After
