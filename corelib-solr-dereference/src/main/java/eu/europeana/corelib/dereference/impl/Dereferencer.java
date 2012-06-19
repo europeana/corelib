@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 
-import eu.europeana.corelib.dereference.impl.ControlledVocabularyImpl;
-import eu.europeana.corelib.dereference.impl.Extractor;
-import eu.europeana.corelib.dereference.impl.VocabularyMongoServer;
 import eu.europeana.corelib.tools.AppContext;
 
 /**

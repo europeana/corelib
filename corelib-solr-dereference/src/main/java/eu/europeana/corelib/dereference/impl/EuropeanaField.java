@@ -3,6 +3,8 @@ package eu.europeana.corelib.dereference.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Class holding the mappable Europeana Fields for denormalization
  * @author yorgos.mamakis@ kb.nl
@@ -65,5 +67,12 @@ public class EuropeanaField {
 	
 	public void setField(UriField field){
 		this.uriField = field;
+	}
+	
+	public static boolean contains (String field){
+		for(UriField uriField: UriField.values()){
+			if (StringUtils.equals(uriField.toString(), field));
+		}
+		return false;
 	}
 }
