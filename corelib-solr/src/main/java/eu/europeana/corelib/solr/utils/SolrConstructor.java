@@ -74,7 +74,7 @@ public class SolrConstructor {
 			else if(element.ifProvidedCHO()){
 				
 				solrInputDocument = ProvidedCHOFieldInput.createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
-				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProvidedCHO(), solrInputDocument);
+				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProvidedCHO(), solrInputDocument, rdf);
 			}
 		
 			else if (element.ifTimeSpan()) {

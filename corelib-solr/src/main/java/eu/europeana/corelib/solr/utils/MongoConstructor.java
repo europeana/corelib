@@ -87,22 +87,20 @@ public class MongoConstructor {
 							mongoServer));
 					if (proxies.size() > 0) {
 						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
-								element.getProvidedCHO(), mongoServer));
+								element.getProvidedCHO(), mongoServer, record));
 					} else {
 						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProvidedCHO(),
-								mongoServer));
+								mongoServer, record));
 					}
 				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			if (element.ifAggregation()) {
 				aggregations.add(AggregationFieldInput.createAggregationMongoFields(element.getAggregation(),
-						mongoServer));
+						mongoServer, record));
 				if (webResources.size() > 0) {
 					aggregations.set(0,
 							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
@@ -116,10 +114,10 @@ public class MongoConstructor {
 
 			}
 			if (element.ifConcept()) {
-				concepts.add(ConceptFieldInput.createConceptMongoFields(element.getConcept(), mongoServer));
+				concepts.add(ConceptFieldInput.createConceptMongoFields(element.getConcept(), mongoServer, record));
 			}
 			if (element.ifPlace()) {
-				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer));
+				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer, record));
 			}
 
 			if (element.ifWebResource()) {
@@ -132,10 +130,10 @@ public class MongoConstructor {
 
 			}
 			if (element.ifTimeSpan()) {
-				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer));
+				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer, record));
 			}
 			if (element.ifAgent()) {
-				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer));
+				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer, record));
 			}
 		}
 
