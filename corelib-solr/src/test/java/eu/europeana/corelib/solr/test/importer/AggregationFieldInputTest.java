@@ -48,17 +48,17 @@ public class AggregationFieldInputTest {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
 			solrDocument = AggregationFieldInput.createAggregationSolrFields(aggregation, solrDocument);
-			assertEquals(aggregation.getAbout(),solrDocument.getFieldValue(EdmLabel.ORE_AGGREGATION.toString()));
-			assertEquals(aggregation.getAggregatedCHO().getResource(), solrDocument.getFieldValue(EdmLabel.EDM_AGGREGATED_CHO.toString()));
-			assertEquals(aggregation.getDataProvider().getString(), solrDocument.getFieldValue(EdmLabel.EDM_DATA_PROVIDER.toString()));
-			assertEquals(aggregation.getHasViewList().get(0).getResource(), solrDocument.getFieldValue(EdmLabel.EDM_HASVIEW.toString()));
-			assertEquals(aggregation.getIsShownAt().getResource(), solrDocument.getFieldValue(EdmLabel.EDM_IS_SHOWN_AT.toString()));
-			assertEquals(aggregation.getIsShownBy().getResource(), solrDocument.getFieldValue(EdmLabel.EDM_IS_SHOWN_BY.toString()));
-			assertEquals(aggregation.getObject().getResource(), solrDocument.getFieldValue(EdmLabel.EDM_OBJECT.toString()));
-			assertEquals(aggregation.getProvider().getString(), solrDocument.getFieldValue(EdmLabel.EDM_PROVIDER.toString()));
+			assertEquals(aggregation.getAbout(),solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString()));
+			assertEquals(aggregation.getAggregatedCHO().getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_AGGREGATED_CHO.toString()));
+			assertEquals(aggregation.getDataProvider().getString(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER.toString()));
+			assertEquals(aggregation.getHasViewList().get(0).getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_HASVIEW.toString()));
+			assertEquals(aggregation.getIsShownAt().getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT.toString()));
+			assertEquals(aggregation.getIsShownBy().getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString()));
+			assertEquals(aggregation.getObject().getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_OBJECT.toString()));
+			assertEquals(aggregation.getProvider().getString(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER.toString()));
 			assertEquals(aggregation.getUgc().getUgc().toString(), solrDocument.getFieldValue(EdmLabel.EDM_UGC.toString()));
-			assertEquals(aggregation.getRights().getString(), solrDocument.getFieldValue(EdmLabel.AGGR_EDM_RIGHTS.toString()));
-			assertEquals(aggregation.getRightList().get(0).getString(), solrDocument.getFieldValues(EdmLabel.AGGR_DC_RIGHTS.toString()).toArray()[0].toString());
+			assertEquals(aggregation.getRights().getString(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS.toString()));
+			assertEquals(aggregation.getRightList().get(0).getString(), solrDocument.getFieldValues(EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString()).toArray()[0].toString());
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,7 +72,7 @@ public class AggregationFieldInputTest {
 	private void testMongo(Aggregation aggregation) {
 		try {
 			AggregationImpl aggregationMongo = AggregationFieldInput
-					.createAggregationMongoFields(aggregation, mongoServer);
+					.createAggregationMongoFields(aggregation, mongoServer, null);
 			assertEquals(aggregation.getAbout(), aggregationMongo.getAbout());
 			assertEquals(aggregation.getAggregatedCHO().getResource(),
 					aggregationMongo.getAggregatedCHO());

@@ -64,7 +64,7 @@ public class ConceptFieldInputTest {
 		concept.setPrefLabelList(prefLabelList);
 		
 		//store in mongo
-		ConceptImpl conceptMongo = ConceptFieldInput.createConceptMongoFields(concept, mongoServer);
+		ConceptImpl conceptMongo = ConceptFieldInput.createConceptMongoFields(concept, mongoServer, null);
 		assertEquals(concept.getAbout(), conceptMongo.getAbout());
 		assertEquals(concept.getNoteList().get(0).getString(),
 				conceptMongo.getNote()[0]);

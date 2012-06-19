@@ -82,11 +82,11 @@ public class DereferencerTest {
 			extractor.readSchema(workingDir
 					+ "/src/test/resources/test_files/sample.xml");
 
-		extractor.setMappedField("test_contributor", EdmLabel.DC_CONTRIBUTOR);
-		extractor.setMappedField("test_publisher", EdmLabel.DC_PUBLISHER);
-		extractor.setMappedField("test_created", EdmLabel.DCTERMS_CREATED);
+		extractor.setMappedField("test_contributor", EdmLabel.PROVIDER_DC_CONTRIBUTOR);
+		extractor.setMappedField("test_publisher", EdmLabel.PROVIDER_DC_PUBLISHER);
+		extractor.setMappedField("test_created", EdmLabel.PROVIDER_DCTERMS_CREATED);
 		extractor.setMappedField("test_alternative_rdf:resource",
-				EdmLabel.DCTERMS_IS_REFERENCED_BY);
+				EdmLabel.PROVIDER_DCTERMS_IS_REFERENCED_BY);
 		extractor.saveMapping();
 		MongoConstructor mongoConstructor = new MongoConstructor();
 		mongoConstructor.setMongoServer(mongoDBServer);
