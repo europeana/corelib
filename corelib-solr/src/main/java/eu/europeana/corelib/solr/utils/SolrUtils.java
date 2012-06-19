@@ -149,6 +149,8 @@ public final class SolrUtils {
 					temp.add(type.getResource());
 				} else if (StringUtils.isNotEmpty(type.getString())) {
 					temp.add(type.getString());
+				} else {
+					temp.add("");
 				}
 				value.add(temp);
 			}
