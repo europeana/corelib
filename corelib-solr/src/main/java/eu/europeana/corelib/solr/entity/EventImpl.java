@@ -11,7 +11,6 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	private String[] edmHappenedAt;
 	private String[] edmOccuredAt;
 	private String[] sameAs;
-	private String[] skosHiddenLabel;
 	private String[] dcIdentifier;
 	private String[] dctermsHasPart;
 	private String[] dctermsIsPartOf;
@@ -52,17 +51,8 @@ public class EventImpl extends ContextualClassImpl implements Event {
 
 	}
 
-	@Override
-	public String[] getHiddenLabel() {
-		
-		return (StringArrayUtils.isNotBlank(skosHiddenLabel) ? this.skosHiddenLabel.clone() : null);
-	}
-
-	@Override
-	public void setHiddenLabel(String[] hiddenLabel) {
-		this.skosHiddenLabel = hiddenLabel;
-
-	}
+	
+	
 
 	@Override
 	public String[] getDcIdentifier() {

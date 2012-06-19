@@ -32,7 +32,6 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	
 	private String[] broader;
-	private String[] hiddenLabel;
 	private String[] narrower;
 	private String[] related;
 	private String[] broadMatch;
@@ -171,14 +170,5 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	public void setInScheme(String[] inScheme) {
 		this.inScheme = inScheme;
 	}
-
-	@Override
-	public String[] getHiddenLabel() {
-		return (StringArrayUtils.isNotBlank(hiddenLabel) ? this.hiddenLabel.clone() : null);
-	}
-
-	@Override
-	public void setHiddenLabel(String[] hiddenLabel) {
-		this.hiddenLabel = hiddenLabel;
-	}
 }
+	
