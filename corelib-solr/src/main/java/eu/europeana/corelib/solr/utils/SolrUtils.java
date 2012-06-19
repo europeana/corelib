@@ -23,20 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.dereference.impl.Dereferencer;
+import eu.europeana.corelib.dereference.impl.EuropeanaField;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.dereference.impl.Dereferencer;
 
 /**
  * Set of utils for SOLR queries
@@ -45,9 +46,7 @@ import eu.europeana.corelib.dereference.impl.Dereferencer;
  * 
  */
 public final class SolrUtils {
-
 	private static final Logger log = Logger.getLogger(SolrUtils.class.getName());
-
 	private SolrUtils() {
 
 	}
@@ -64,7 +63,8 @@ public final class SolrUtils {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")) {
 					try {
-						DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
+						DocType.get(StringUtils.substringAfter(refinement,
+								"TYPE:"));
 					} catch (IllegalArgumentException e) {
 						log.severe(e.getMessage());
 						return false;
@@ -92,9 +92,10 @@ public final class SolrUtils {
 	}
 
 	public static void addResourceOrLiteralType(SolrInputDocument destination,
-			EdmLabel label, ResourceOrLiteralType type)
+			EdmLabel label, ResourceOrLiteralType type, RDF rdf)
 			throws MalformedURLException, IOException {
-		List<List<String>> value = getValueOfResourceOrLiteralType(type);
+		List<List<String>> value = getValueOfResourceOrLiteralType(type, label,
+				rdf);
 		if (value != null) {
 			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
 			for (List<String> values : value) {
@@ -108,10 +109,12 @@ public final class SolrUtils {
 	}
 
 	public static void addResourceOrLiteralType(List<String> destination,
-			ResourceOrLiteralType type, Map<String, List<String>> mapLists)
+			EdmLabel label, ResourceOrLiteralType type,
+			Map<String, List<String>> mapLists, RDF rdf)
 			throws MalformedURLException, IOException {
 
-		List<List<String>> value = getValueOfResourceOrLiteralType(type);
+		List<List<String>> value = getValueOfResourceOrLiteralType(type, label,
+				rdf);
 		if (value != null) {
 
 			for (List<String> values : value) {
@@ -129,17 +132,31 @@ public final class SolrUtils {
 	}
 
 	public static List<List<String>> getValueOfResourceOrLiteralType(
-			ResourceOrLiteralType type) throws MalformedURLException,
-			IOException {
+			ResourceOrLiteralType type, EdmLabel label, RDF rdf)
+			throws MalformedURLException, IOException {
 		List<List<String>> value = new ArrayList<List<String>>();
 		if (type != null) {
-
-			if (StringUtils.isNotEmpty(type.getResource())) {
-				value = Dereferencer.normalize(type.getResource());
+			if (EuropeanaField.contains(label.toString())) {
+				if (StringUtils.isNotEmpty(type.getResource())) {
+					value = Dereferencer.normalize(type.getResource());
+				} else if (StringUtils.isNotEmpty(type.getString())) {
+					value = Dereferencer.normalize(type.getString());
+				}
 			} else {
-				value = Dereferencer.normalize(type.getString());
+				List<String> temp = new ArrayList<String>();
+				temp.add("original");
+				if (StringUtils.isNotEmpty(type.getResource())) {
+					temp.add(type.getResource());
+				} else if (StringUtils.isNotEmpty(type.getString())) {
+					temp.add(type.getString());
+				}
+				value.add(temp);
 			}
 
+		}
+		for (List<String> entry : value) {
+
+			// TODO: cannot be implemented unless the fields are there
 		}
 		return value;
 	}
