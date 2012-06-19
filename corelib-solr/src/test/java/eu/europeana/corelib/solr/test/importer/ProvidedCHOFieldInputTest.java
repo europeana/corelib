@@ -53,11 +53,9 @@ public class ProvidedCHOFieldInputTest {
 			assertEquals(
 					providedCHO.getAbout(),
 					solrDocument.getFieldValue(EdmLabel.EUROPEANA_ID.toString()));
-			assertEquals(providedCHO.getIsNextInSequence().getResource(),
-					solrDocument.getFieldValue(EdmLabel.EDM_IS_NEXT_IN_SEQUENCE
-							.toString()));
+			
 			assertEquals(providedCHO.getSameAList().get(0).getResource(),
-					solrDocument.getFieldValue(EdmLabel.OWL_SAMEAS.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROVIDER_OWL_SAMEAS.toString()));
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
