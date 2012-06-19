@@ -260,8 +260,10 @@
    <field name="edm_agent" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="ag_skos_prefLabel" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="ag_skos_altLabel" type="text" indexed="true" stored="false" multiValued="true" />
-   <field name="ag_skos_prefLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
-   <field name="ag_skos_altLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="ag_skos_prefLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="ag_skos_altLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
+   <field name="ag_skos_hiddenLabel" type="text" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="ag_skos_hiddenLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="ag_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="ag_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="ag_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -275,10 +277,10 @@
 	<field name="ag_rdagr2_dateOfEstablishment" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="ag_rdagr2_dateOfTermination" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="ag_rdagr2_gender" type="string" indexed="true" stored="false" multiValued="true"/>
-	<field name="ag_rdagr2_professionOrOccupation" indexed="true" stored="false" multiValued="true"/>
-	<field name="ag_rdagr2_biographicalInformation" indexed="true" stored="false" multiValued="true"/>
-	<field name="ag_edm_begin" indexed="true" stored="false" multiValued="true"/>
-	<field name="ag_edm_end" indexed="true" stored="false" multiValued="true"/>
+	<field name="ag_rdagr2_professionOrOccupation" type="string" indexed="true" stored="false" multiValued="true"/>
+	<field name="ag_rdagr2_biographicalInformation" type="string" indexed="true" stored="false" multiValued="true"/>
+	<field name="ag_edm_begin" type="string" indexed="true" stored="false" multiValued="true"/>
+	<field name="ag_edm_end" type="string" indexed="true" stored="false" multiValued="true"/>
 	
 	<!-- TIMESPAN -->
    <field name="edm_timespan" type="text" indexed="true" stored="false" multiValued="true"/>
@@ -361,60 +363,60 @@
 	
 	<!-- PHYSICAL THING -->	   
    <field name="edm_physicalThing" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="europeana_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
    
-   <field name="europeana_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_date" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_description" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_format" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_language" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_title" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_type" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_source" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_date" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_description" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_format" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_language" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_title" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_type" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_source" type="string" indexed="true" stored="false" multiValued="true" />
 		
-   <field name="europeana_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
 
  
-   <field name="europeana_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
-   <field name="europeana_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isRequiredBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isVersionOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_hasVersion" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_issued" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_medium" type="string" indexed="true" stored="false" multiValued="true" />   
-   <field name="europeana_dcterms_provenance" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_references" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_replaces" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="europeana_edm_type" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="europeana_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
-    <field name="europeana_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
-   <field name="europeana_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_incorporates" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isDerivativeOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isRelatedTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isRepresentationOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isSimilarTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
+   <field name="europeana_pt_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
+   <field name="europeana_pt_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_isRequiredBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_isVersionOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_hasVersion" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_issued" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_medium" type="string" indexed="true" stored="false" multiValued="true" />   
+   <field name="europeana_pt_dcterms_provenance" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_references" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_replaces" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
+	<field name="europeana_pt_edm_type" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="europeana_pt_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
+    <field name="europeana_pt_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
+   <field name="europeana_pt_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_incorporates" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_isDerivativeOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_isRelatedTo" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_isRepresentationOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_isSimilarTo" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="europeana_pt_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
    
   
    
