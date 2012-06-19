@@ -28,6 +28,7 @@ import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
@@ -111,7 +112,7 @@ public final class TimespanFieldInput {
      * @throws InstantiationException 
      */
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
-            MongoServer mongoServer) {
+            MongoServer mongoServer, RDF rdf) {
         TimespanImpl mongoTimespan = (TimespanImpl) ((EdmMongoServer)mongoServer).searchByAbout(TimespanImpl.class, timeSpan.getAbout());
             
       if(mongoTimespan==null) {

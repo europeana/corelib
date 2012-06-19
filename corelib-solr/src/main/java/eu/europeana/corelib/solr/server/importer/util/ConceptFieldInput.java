@@ -29,6 +29,7 @@ import eu.europeana.corelib.definitions.jibx.Broader;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -91,7 +92,7 @@ public final class ConceptFieldInput {
 		if (concept.getBroaderList() != null) {
 			for (Broader broader : concept.getBroaderList()) {
 				solrInputDocument.addField(EdmLabel.CC_SKOS_BROADER.toString(),
-						broader.getBroader());
+						broader.getResource());
 			}
 		}
 		if (concept.getNoteList() != null) {
@@ -117,7 +118,7 @@ public final class ConceptFieldInput {
 	 * @throws InstantiationException 
 	 */
 	public static ConceptImpl createConceptMongoFields(Concept concept,
-			MongoServer mongoServer)  {
+			MongoServer mongoServer, RDF rdf)  {
 
 		ConceptImpl conceptMongo = (ConceptImpl) ((EdmMongoServer)mongoServer).searchByAbout(
 				ConceptImpl.class, concept.getAbout());
@@ -193,8 +194,8 @@ public final class ConceptFieldInput {
 			List<String> broaderList = new ArrayList<String>();
 			for (Broader broaderJibx : concept.getBroaderList()) {
 				if (!MongoUtils.contains(conceptMongo.getBroader(),
-						broaderJibx.getBroader())) {
-					broaderList.add(broaderJibx.getBroader());
+						broaderJibx.getResource())) {
+					broaderList.add(broaderJibx.getResource());
 				}
 			}
 			for (String broader : conceptMongo.getBroader()) {
@@ -222,7 +223,7 @@ public final class ConceptFieldInput {
 		if (concept.getBroaderList() != null) {
 			List<String> broaderList = new ArrayList<String>();
 			for (Broader broader : concept.getBroaderList()) {
-				broaderList.add(broader.getBroader());
+				broaderList.add(broader.getResource());
 			}
 			conceptMongo.setBroader(broaderList.toArray(new String[broaderList
 					.size()]));

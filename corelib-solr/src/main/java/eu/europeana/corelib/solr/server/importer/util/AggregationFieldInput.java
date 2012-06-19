@@ -30,6 +30,7 @@ import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.Provider;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx._Object;
@@ -67,31 +68,31 @@ public final class AggregationFieldInput {
 			Aggregation aggregation, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
 
-		solrInputDocument.addField(EdmLabel.ORE_AGGREGATION.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString(),
 				aggregation.getAbout());
 		solrInputDocument.addField(
-				EdmLabel.EDM_AGGREGATED_CHO.toString(),
+				EdmLabel.PROVIDER_AGGREGATION_EDM_AGGREGATED_CHO.toString(),
 				SolrUtils.exists(AggregatedCHO.class,
 						(aggregation.getAggregatedCHO())).getResource());
 		solrInputDocument
 				.addField(
-						EdmLabel.EDM_OBJECT.toString(),
+						EdmLabel.PROVIDER_AGGREGATION_EDM_OBJECT.toString(),
 						SolrUtils.exists(_Object.class,
 								(aggregation.getObject())).getResource());
 		solrInputDocument.addField(
-				EdmLabel.EDM_DATA_PROVIDER.toString(),
+				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER.toString(),
 				SolrUtils.exists(DataProvider.class,
 						((aggregation.getDataProvider()))).getString());
-		solrInputDocument.addField(EdmLabel.EDM_PROVIDER.toString(), SolrUtils
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER.toString(), SolrUtils
 				.exists(Provider.class, (aggregation.getProvider()))
 				.getString());
-		solrInputDocument.addField(EdmLabel.EDM_IS_SHOWN_AT.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT.toString(),
 				SolrUtils.exists(IsShownAt.class, (aggregation.getIsShownAt()))
 						.getResource());
-		solrInputDocument.addField(EdmLabel.EDM_IS_SHOWN_BY.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
-		solrInputDocument.addField(EdmLabel.AGGR_EDM_RIGHTS.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS.toString(),
 				SolrUtils.exists(Rights.class, (aggregation.getRights()))
 						.getString());
 		if (aggregation.getUgc() != null) {
@@ -100,13 +101,13 @@ public final class AggregationFieldInput {
 		}
 		if (aggregation.getRightList() != null) {
 			for (Rights1 rights : aggregation.getRightList()) {
-				solrInputDocument.addField(EdmLabel.AGGR_DC_RIGHTS.toString(),
+				solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString(),
 						rights.getString());
 			}
 		}
 		if (aggregation.getHasViewList() != null) {
 			for (HasView hasView : aggregation.getHasViewList()) {
-				solrInputDocument.addField(EdmLabel.EDM_HASVIEW.toString(),
+				solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_HASVIEW.toString(),
 						hasView.getResource());
 			}
 		}
@@ -181,7 +182,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
-			MongoServer mongoServer) throws InstantiationException,
+			MongoServer mongoServer, RDF rdf) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		mongoAggregation.setAbout(aggregation.getAbout());

@@ -28,6 +28,7 @@ import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
@@ -120,7 +121,7 @@ public final class PlaceFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static PlaceImpl createPlaceMongoFields(PlaceType placeType,
-			MongoServer mongoServer) {
+			MongoServer mongoServer, RDF rdf) {
 
 		// If place exists in mongo
 
