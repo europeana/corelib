@@ -63,12 +63,12 @@ public final class ProvidedCHOFieldInput {
 				providedCHO.getAbout());
 		if (providedCHO.getSameAList() != null) {
 			for (SameAs sameAs : providedCHO.getSameAList()) {
-				solrInputDocument.addField(EdmLabel.OWL_SAMEAS.toString(),
+				solrInputDocument.addField(EdmLabel.PROVIDER_OWL_SAMEAS.toString(),
 						sameAs.getResource());
 			}
 		}
 		solrInputDocument.addField(
-				EdmLabel.EDM_IS_NEXT_IN_SEQUENCE.toString(),
+				EdmLabel.PROVIDER_EDM_IS_NEXT_IN_SEQUENCE.toString(),
 				SolrUtils.exists(ResourceType.class,
 						providedCHO.getIsNextInSequence()).getResource());
 

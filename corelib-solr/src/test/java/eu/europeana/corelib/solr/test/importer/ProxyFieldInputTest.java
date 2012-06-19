@@ -23,6 +23,7 @@ import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.Rights1;
@@ -183,7 +184,7 @@ public class ProxyFieldInputTest {
 		ProxyImpl mongoProxy = new ProxyImpl();
 		try {
 			mongoProxy = ProxyFieldInput.createProxyMongoFields(mongoProxy,
-					proxy, mongoServer, null);
+					proxy, mongoServer, new RDF());
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()
 					.toString());
