@@ -79,4 +79,8 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 */
 	void setPrefLabel(Map<String, String> prefLabel);
 
+	void setHiddenLabel(Map<String, String> hiddenLabel);
+
+	Map<String, String> getHiddenLabel();
+
 }

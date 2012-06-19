@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
+
 public interface Event extends ContextualClass {
 	
 	void setEdmHappenedAt(String[] edmHappenedAt);
@@ -14,9 +15,6 @@ public interface Event extends ContextualClass {
 	
 	void setSameAs(String[] sameAs);
 	
-	String[] getHiddenLabel();
-	
-	void setHiddenLabel(String[] hiddenLabel);
 	
 	String[] getDcIdentifier();
 	

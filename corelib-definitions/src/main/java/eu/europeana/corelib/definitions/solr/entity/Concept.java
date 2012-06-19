@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.Map;
+
 /**
  * EDM Concept fields representation
  * 
@@ -39,9 +41,9 @@ public interface Concept extends ContextualClass {
 	 */
 	void setBroader(String[] broader);
 	
-	String[] getHiddenLabel();
+	Map<String,String> getHiddenLabel();
 	
-	void setHiddenLabel(String[] hiddenLabel);
+	void setHiddenLabel(Map<String,String> hiddenLabel);
 	
 	String[] getNarrower();
 	
