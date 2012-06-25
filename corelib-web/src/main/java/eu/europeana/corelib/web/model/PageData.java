@@ -71,7 +71,9 @@ public abstract class PageData {
     private boolean embedded = false;
     
     private String announceMsg = null;
-    
+
+    private String theme = "default";
+
 //    public List<PortalLanguage> getPortalLanguages() {
 //        return PortalLanguage.getSupported();
 //    }
@@ -269,4 +271,11 @@ public abstract class PageData {
 		this.announceMsg = announceMsg;
 	}
 
+    public String getTheme() {
+		return theme;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
+	}
 }
