@@ -243,7 +243,6 @@ public class ContentLoader {
 	 *            solrHome parameter holding "solr.solr.home" mongoHost the host the mongoDB is located mongoPort the
 	 *            port mongoDB listens databaseName the databaseName to save collectionName the name of the collection
 	 *            (an XML, a folder or a Zip file)
-	 * 
 	 */
 	public static void main(String[] args) {
 		
@@ -259,19 +258,15 @@ public class ContentLoader {
 				contentLoader.readRecords(COLLECTION);
 				contentLoader.parse();
 				contentLoader.commit();
-			} 
+			}
 			catch(Exception e){
 				e.printStackTrace();
 			}
-				finally {
-			
+			finally {
 				if (contentLoader != null) {
 					contentLoader.cleanFiles();
 				}
 			}
-			
 		}
-		
 	}
-
 }
