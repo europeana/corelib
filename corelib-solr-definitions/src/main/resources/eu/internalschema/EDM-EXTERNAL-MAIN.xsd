@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007-2012 The Europeana Foundation
+ 
+   Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+   by the European Commission;
+   You may not use this work except in compliance with the Licence.
+  
+   You may obtain a copy of the Licence at:
+   http://joinup.ec.europa.eu/software/page/eupl
+ 
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+   any kind, either express or implied.
+   See the Licence for the specific language governing permissions and limitations under
+   the Licence.
+-->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.europeana.eu/schemas/edm/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
+    xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
+    xmlns:ore="http://www.openarchives.org/ore/terms/">
+
+    <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
+    <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
+    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
+
+    <complexType name="RDF">
+        <sequence minOccurs="0" maxOccurs="unbounded">
+            <choice>
+                <element name="ProvidedCHO" type="edm:ProvidedCHOType"/>
+                <element name="WebResource" type="edm:WebResourceType"/>
+                <element name="Agent" type="edm:AgentType"/>
+                <element name="Place" type="edm:PlaceType"/>
+                <element name="TimeSpan" type="edm:TimeSpanType"/>
+                <element ref="skos:Concept"/>
+                <element ref="ore:Aggregation"/>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="ProvidedCHOType">
+        <annotation>
+            <documentation>
+                This class comprises the Cultural Heritage objects that Europeana collects descriptions about.
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:BaseProvidedCHOType"/>
+        </complexContent>
+    </complexType>
+
+
+    <complexType name="WebResourceType">
+        <annotation>
+            <documentation>
+                Information Resources that have at least one Web Representation and at least a URI.
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:BaseWebResourceType"/>
+        </complexContent>
+    </complexType>
+
+    <complexType name="AgentType">
+        <annotation>
+            <documentation> This class comprises people, either individually or in groups, who have
+                the potential to perform intentional actions for which they can be held responsible.
+                Example:Leonardo da Vinci, the British Museum, W3C
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:AgentBaseType"> </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="PlaceType">
+        <annotation>
+            <documentation>An "extent in space, in particular on the surface of the earth, in the
+                pure sense of physics: independent from temporal phenomena and matter" (CIDOC CRM)
+                Example:the region of space occupied by Rome today, the region of space occupied by
+                the United Kingdom today, the region of space occupied by the Republic of Crimea in
+                1945</documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:PlaceBaseType"> </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="TimeSpanType">
+        <annotation>
+            <documentation>The class of "abstract temporal extents, in the sense of Galilean
+                physics, having a beginning, an end and a duration" (CIDOC CRM) Example:2001-12-31,
+                01.01.01 – 02.02.02, 1503 – 1506 (the time span of the creation of Mona
+                Lisa)</documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:TimeSpanBaseType"> </extension>
+        </complexContent>
+    </complexType>
+
+
+</schema>

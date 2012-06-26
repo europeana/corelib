@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007-2012 The Europeana Foundation
+ 
+   Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+   by the European Commission;
+   You may not use this work except in compliance with the Licence.
+  
+   You may obtain a copy of the Licence at:
+   http://joinup.ec.europa.eu/software/page/eupl
+ 
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+   any kind, either express or implied.
+   See the Licence for the specific language governing permissions and limitations under
+   the Licence.
+-->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.europeana.eu/schemas/edm/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
+    xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
+    xmlns:ore="http://www.openarchives.org/ore/terms/"
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" xmlns:foaf="http://xmlns.com/foaf/0.1">
+
+    <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
+    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
+    <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
+    <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd"/>
+    <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+    <import namespace="http://www.europeana.eu/schemas/edm/enrichment/"
+        schemaLocation="ENRICHMENT.xsd"/>
+    <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
+    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
+    <import namespace="http://rdvocab.info/ElementsGr2" schemaLocation="RDAGR2.xsd"/>
+    <import namespace="http://xmlns.com/foaf/0.1" schemaLocation="FOAF.xsd"/>
+    <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
+    <include schemaLocation="CONTEXTS.xsd"/>
+
+    <complexType name="RDF">
+        <sequence minOccurs="0" maxOccurs="unbounded">
+            <choice>
+                <element name="ProvidedCHO" type="edm:ProvidedCHOType"/>
+                <element name="WebResource" type="edm:WebResourceType"/>
+                <element name="Agent" type="edm:AgentType"/>
+                <element name="Place" type="edm:PlaceType"/>
+                <element name="TimeSpan" type="edm:TimeSpanType"/>
+                <element ref="skos:Concept"/>
+                <element ref="ore:Aggregation"/>
+                <element name="Proxy" type="edm:ProxyType"/>
+                <element name="EuropeanaAggrgation" type="edm:EuropeanaAggregationType"/>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="EuropeanaAggregationType">
+        <annotation>
+            <documentation> The set of resources related to a single cultural heritage object that
+                collectively represent that object in Europeana. Such set consists of: all
+                descriptions about the object that Europeana collects from (possibly different)
+                content providers, including thumbnails and other forms of abstractions, as well as
+                of the description of the object Europeana builds. </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="rdf:AboutType">
+                <sequence>
+                    <element name="aggregatedCHO" type="rdf:ResourceType" maxOccurs="1"
+                        minOccurs="1"/>
+                    <element name="dataProvider" type="rdf:ResourceType" maxOccurs="1" minOccurs="1"/>
+                    <element name="provider" type="rdf:ResourceType" maxOccurs="1" minOccurs="1"/>
+                    <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:landingPage" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:language" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+
+    <complexType name="ProvidedCHOType">
+        <complexContent>
+            <extension base="edm:BaseProvidedCHOType">
+                <annotation>
+                    <documentation> This class comprises the Cultural Heritage objects that
+                        Europeana collects descriptions about. </documentation>
+                </annotation>
+                <sequence>
+                    <element ref="edm:userTag" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:year" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:hasType" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:incorporates" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isDerivativeOf" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isRepresentationOf" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="ProxyType">
+        <complexContent>
+            <extension base="edm:ProvidedCHOType">
+                <annotation>
+                    <documentation>A proxy is a resource that stands for an aggregated resource A in
+                        the context of a specific aggregation. The URI of a proxy then can be used
+                        in assertions specific to the aggregated resource A in the context of that
+                        aggregation
+                        (http://www.openarchives.org/ore/1.0/primer.html).</documentation>
+                </annotation>
+                <sequence>
+                    <element ref="enrichment:agent_label" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:agent_term" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:concept_label" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:concept_term" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:period_label" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:period_term" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:place_label" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="enrichment:place_term" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="ore:proxyFor" maxOccurs="1" minOccurs="0"/>
+                    <element ref="ore:proxyIn" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="WebResourceType">
+        <complexContent>
+            <annotation>
+                <documentation>A proxy is a resource that stands for an aggregated resource A in the
+                    context of a specific aggregation. The URI of a proxy then can be used in
+                    assertions specific to the aggregated resource A in the context of that
+                    aggregation (http://www.openarchives.org/ore/1.0/primer.html).</documentation>
+            </annotation>
+            <extension base="edm:BaseWebResourceType">
+                <sequence>
+                    <element ref="dc:description" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dc:source" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:issued" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:conformsTo" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:created" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:isFormatOf" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="AgentType">
+        <annotation>
+            <documentation> This class comprises people, either individually or in groups, who have
+                the potential to perform intentional actions for which they can be held responsible.
+                Example:Leonardo da Vinci, the British Museum, W3C </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:AgentBaseType">
+                <sequence>
+                    <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="foaf:name" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dc:date" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="rdaGr2:dateOfBirth" maxOccurs="1" minOccurs="0"/>
+                    <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
+                    <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
+                    <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
+                    <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
+                    <element ref="rdaGr2:biographicalInformation" maxOccurs="1" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="PlaceType">
+        <annotation>
+            <documentation>An "extent in space, in particular on the surface of the earth, in the
+                pure sense of physics: independent from temporal phenomena and matter" (CIDOC CRM)
+                Example: the region of space occupied by Rome today, the region of space occupied by
+                the United Kingdom today, the region of space occupied by the Republic of Crimea in
+                1945 </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:PlaceBaseType">
+                <sequence>
+                    <element ref="wgs84:alt" maxOccurs="1" minOccurs="0"/>
+                    <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="TimeSpanType">
+        <annotation>
+            <documentation>The class of "abstract temporal extents, in the sense of Galilean
+                physics, having a beginning, an end and a duration" (CIDOC CRM) Example:2001-12-31,
+                01.01.01 – 02.02.02, 1503 – 1506 (the time span of the creation of Mona Lisa)
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="edm:TimeSpanBaseType">
+                <sequence>
+                    <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+
+</schema>
