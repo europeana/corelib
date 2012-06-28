@@ -46,7 +46,6 @@
           <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element name="begin" maxOccurs="unbounded" minOccurs="0" />
           <element name="end" maxOccurs="unbounded" minOccurs="0" />
-          <element name="timeSpan" type="rdf:ResourceType" minOccurs="0" maxOccurs="1" />
         </sequence>
       </extension>
     </complexContent>

@@ -29,16 +29,18 @@
     xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" xmlns:foaf="http://xmlns.com/foaf/0.1">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
-    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
+
     <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
     <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd"/>
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
     <import namespace="http://www.europeana.eu/schemas/edm/enrichment/"
         schemaLocation="ENRICHMENT.xsd"/>
     <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
-    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
     <import namespace="http://rdvocab.info/ElementsGr2" schemaLocation="RDAGR2.xsd"/>
     <import namespace="http://xmlns.com/foaf/0.1" schemaLocation="FOAF.xsd"/>
+    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
+    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
+    
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
 
@@ -53,7 +55,7 @@
                 <element ref="skos:Concept"/>
                 <element ref="ore:Aggregation"/>
                 <element name="Proxy" type="edm:ProxyType"/>
-                <element name="EuropeanaAggrgation" type="edm:EuropeanaAggregationType"/>
+                <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType"/>
             </choice>
         </sequence>
     </complexType>
@@ -88,23 +90,13 @@
 
     <complexType name="ProvidedCHOType">
         <complexContent>
-            <extension base="edm:BaseProvidedCHOType">
+            <extension base="rdf:AboutType">
                 <annotation>
                     <documentation> This class comprises the Cultural Heritage objects that
                         Europeana collects descriptions about. </documentation>
                 </annotation>
                 <sequence>
-                    <element ref="edm:userTag" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:year" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:hasType" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:incorporates" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isDerivativeOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isRepresentationOf" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
             </extension>
         </complexContent>
@@ -112,7 +104,7 @@
 
     <complexType name="ProxyType">
         <complexContent>
-            <extension base="edm:ProvidedCHOType">
+            <extension base="edm:BaseProvidedCHOType">
                 <annotation>
                     <documentation>A proxy is a resource that stands for an aggregated resource A in
                         the context of a specific aggregation. The URI of a proxy then can be used
@@ -121,6 +113,11 @@
                         (http://www.openarchives.org/ore/1.0/primer.html).</documentation>
                 </annotation>
                 <sequence>
+                    <element ref="edm:userTag" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:year" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="ore:proxyFor" maxOccurs="1" minOccurs="0"/>
+                    <element ref="ore:proxyIn" maxOccurs="unbounded" minOccurs="0"/>
+                    <!--
                     <element ref="enrichment:agent_label" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:agent_term" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:concept_label" maxOccurs="unbounded" minOccurs="0"/>
@@ -129,8 +126,7 @@
                     <element ref="enrichment:period_term" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:place_label" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:place_term" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="ore:proxyFor" maxOccurs="1" minOccurs="0"/>
-                    <element ref="ore:proxyIn" maxOccurs="unbounded" minOccurs="0"/>
+                    -->
                 </sequence>
             </extension>
         </complexContent>

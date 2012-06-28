@@ -25,9 +25,8 @@
             EDM First Implementation Schema: wrapped up as RDF/XML (For Europeana Internal Use Only)
         </documentation>
     </annotation>
+    
     <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="EDM-INTERNAL-MAIN.xsd" />
-    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd" />
-    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd" />
     
     <element name="RDF" type="edm:RDF" />
     

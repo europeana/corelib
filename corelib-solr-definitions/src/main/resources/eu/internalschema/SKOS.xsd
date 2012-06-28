@@ -23,12 +23,10 @@
   <annotation>
     <documentation>
       EDM First Implementation Schema: SKOS
-
-      Technical contact: Borys Omelayenko
     </documentation>
   </annotation>
 
-  <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="CONTEXTS.xsd" />
+
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
 
   <element name="Concept">

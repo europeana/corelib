@@ -48,24 +48,9 @@
             <documentation>Base class for ProvidedCHO implementations</documentation>
         </annotation>
         <complexContent>
-            <extension base="edm:EuropeanaType">
+            <extension base="edm:BaseCHOElements">
                 <sequence>
-                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0">
-                        <annotation>
-                            <documentation> The built-in OWL property owl:sameAs links an individual
-                                to an individual. Such an owl:sameAs statement indicates that two
-                                URI references actually refer to the same thing: the individuals
-                                have the same "identity". </documentation>
-                        </annotation>
-                    </element>
-                    <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0">
-                        <annotation>
-                            <documentation> edm:isNextInSequence relates two resources S and R that
-                                are ordered parts of the same resource A, and such that S comes
-                                immediately after R in the order created by their being parts of A.
-                            </documentation>
-                        </annotation>
-                    </element>
+
                 </sequence>
             </extension>
         </complexContent>
@@ -86,16 +71,80 @@
         </complexContent>
     </complexType>
 
+
+    <complexType name="BaseCHOElements">
+        <complexContent>
+            <extension base="edm:EuropeanaType">
+                <sequence minOccurs="1" maxOccurs="1">
+                        <!-- EDM SPECIFIC ELEMENTS -->
+                        <element ref="edm:currentLocation" maxOccurs="1" minOccurs="0"/>
+                        <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:hasType" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:incorporates" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:isDerivativeOf" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
+                        <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:isRepresentationOf" maxOccurs="1" minOccurs="0"/>
+                        <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="edm:type" maxOccurs="1" minOccurs="1"/>
+                        <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+
     <complexType name="EuropeanaType">
         <annotation>
             <documentation> EuropeanaType contains the Europeana Properties in addition to DC.
             </documentation>
         </annotation>
         <complexContent>
-            <extension base="dc:DCType">
-                <sequence>
-                    <element name="type" type="edm:EdmType" maxOccurs="1" minOccurs="1"/>
-                    <element ref="edm:currentLocation" maxOccurs="1" minOccurs="0"/>
+            <extension base="rdf:AboutType">
+                <sequence minOccurs="0" maxOccurs="unbounded">
+                    <choice>
+                    <!-- DCTerms -->
+                    <element ref="dcterms:alternative" />
+                    <element ref="dcterms:conformsTo" />
+                    <element ref="dcterms:created" />
+                    <element ref="dcterms:extent" />
+                    <element ref="dcterms:hasFormat" />
+                    <element ref="dcterms:hasPart" />
+                    <element ref="dcterms:hasVersion" />
+                    <element ref="dcterms:isFormatOf" />
+                    <element ref="dcterms:isPartOf" />
+                    <element ref="dcterms:isReferencedBy" />
+                    <element ref="dcterms:isReplacedBy" />
+                    <element ref="dcterms:isRequiredBy" />
+                    <element ref="dcterms:issued" />
+                    <element ref="dcterms:isVersionOf" />
+                    <element ref="dcterms:medium" />
+                    <element ref="dcterms:provenance" />
+                    <element ref="dcterms:references" />
+                    <element ref="dcterms:replaces" />
+                    <element ref="dcterms:requires" />
+                    <element ref="dcterms:spatial" />
+                    <element ref="dcterms:tableOfContents" />
+                    <element ref="dcterms:temporal" />
+                    <!-- DC -->
+                    <element ref="dc:contributor" />
+                    <element ref="dc:coverage" />
+                    <element ref="dc:creator" />
+                    <element ref="dc:date" />
+                    <element ref="dc:description" />
+                    <element ref="dc:identifier" />
+                    <element ref="dc:format" />
+                    <element ref="dc:language" />
+                    <element ref="dc:publisher" />
+                    <element ref="dc:relation" />
+                    <element ref="dc:rights" />
+                    <element ref="dc:source" />
+                    <element ref="dc:subject" />
+                    <element ref="dc:title" />
+                    <element ref="dc:type" />
+                    </choice>
                 </sequence>
             </extension>
         </complexContent>
@@ -414,5 +463,10 @@
         </annotation>
     </element>
 
+    <element name="type" type="edm:EdmType">
+        <annotation>
+            <documentation>An enumeration stating the type of EDM content provided</documentation>
+        </annotation>
+    </element>
 
 </schema>

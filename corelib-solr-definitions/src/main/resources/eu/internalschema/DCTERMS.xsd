@@ -1,70 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2007 EDL FOUNDATION
-
-  Licensed under the EUPL, Version 1.1 or - as soon they
-  will be approved by the European Commission - subsequent
-  versions of the EUPL (the "Licence");
-  you may not use this work except in compliance with the
-  Licence.
-  You may obtain a copy of the Licence at:
-
-  http://ec.europa.eu/idabc/eupl
-
-  Unless required by applicable law or agreed to in
-  writing, software distributed under the Licence is
-  distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-  express or implied.
-  See the Licence for the specific language governing
-  permissions and limitations under the Licence.
+  Copyright 2007-2012 The Europeana Foundation
+ 
+   Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+   by the European Commission;
+   You may not use this work except in compliance with the Licence.
+  
+   You may obtain a copy of the Licence at:
+   http://joinup.ec.europa.eu/software/page/eupl
+ 
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+   any kind, either express or implied.
+   See the Licence for the specific language governing permissions and limitations under
+   the Licence.
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://purl.org/dc/terms/" 
   xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" elementFormDefault="qualified">
   <annotation>
     <documentation>
       EDM First Implementation Schema: DC Terms
-
-      Technical contact: Borys Omelayenko
-      Modelling contact:
     </documentation>
   </annotation>
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
-  <complexType name="DCTermsType">
-    <complexContent>
-      <extension base="rdf:AboutType">
-        <sequence minOccurs="0" maxOccurs="unbounded">
-          <choice>
-            <element ref="dcterms:alternative" />
-            <element ref="dcterms:conformsTo" />
-            <element ref="dcterms:created" />
-            <element ref="dcterms:extent" />
-            <element ref="dcterms:hasFormat" />
-            <element ref="dcterms:hasPart" />
-            <element ref="dcterms:hasVersion" />
-            <element ref="dcterms:isFormatOf" />
-            <element ref="dcterms:isPartOf" />
-            <element ref="dcterms:isReferencedBy" />
-            <element ref="dcterms:isReplacedBy" />
-            <element ref="dcterms:isRequiredBy" />
-            <element ref="dcterms:issued" />
-            <element ref="dcterms:isVersionOf" />
-            <element ref="dcterms:medium" />
-            <element ref="dcterms:provenance" />
-            <element ref="dcterms:references" />
-            <element ref="dcterms:replaces" />
-            <element ref="dcterms:requires" />
-            <element ref="dcterms:spatial" />
-            <element ref="dcterms:tableOfContents" />
-            <element ref="dcterms:temporal" />
-          </choice>
-        </sequence>
-      </extension>
-    </complexContent>
-  </complexType>
-  
+    
   <element name="isPartOf" type="rdf:ResourceOrLiteralType">
   </element>
+  
   <element name="isReferencedBy" type="rdf:ResourceOrLiteralType">
     <annotation>
       <documentation>
