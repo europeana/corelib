@@ -84,8 +84,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(EuropeanaProxyImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
-		datastore.getDB().authenticate(this.username, this.password.toCharArray());
+		
 		datastore = morphia.createDatastore(mongoServer, databaseName);
+		datastore.getDB().authenticate(this.username, this.password.toCharArray());
 		datastore.ensureIndexes();
 		
 	}
