@@ -54,12 +54,17 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	private Mongo mongoServer;
 	private String databaseName;
+	private String username;
+	private String password;
 	private Datastore datastore;
-
-	public EdmMongoServerImpl(Mongo mongoServer, String databaseName)
+	private static final String EUROPEANA_ID_DB="EuropeanaId";
+	public EdmMongoServerImpl(Mongo mongoServer, String databaseName, String username, String password)
 			throws MongoDBException {
 		this.mongoServer = mongoServer;
+		
 		this.databaseName = databaseName;
+		this.username = username;
+		this.password = password;
 		createDatastore();
 	}
 
@@ -79,9 +84,10 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(EuropeanaProxyImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
-
+		datastore.getDB().authenticate(this.username, this.password.toCharArray());
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
+		
 	}
 
 	@Override
@@ -103,7 +109,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean resolve(String id) {
 		EuropeanaIdMongoServer europeanaIdMongoServer = new EuropeanaIdMongoServer(
-				mongoServer, "EuropeanaId");
+				mongoServer, EUROPEANA_ID_DB);
 		//If it does not check whether it has been set in the past, 
 		//if it exists retrieve the newID and update the lastAccess field
 		if (europeanaIdMongoServer.newIdExists(id)) {
