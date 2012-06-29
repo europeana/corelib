@@ -18,6 +18,7 @@ public class EuropeanaHttpClient extends HttpClient {
 		this.password = password;
 		this.server = getServer(url);
 		this.port = getPort(url);
+		this.getParams().setAuthenticationPreemptive(true);
 		Credentials credentials = new UsernamePasswordCredentials(this.username, this.password);
 		
 		this.getState().setCredentials(new AuthScope(this.server, this.port, AuthScope.ANY_REALM), credentials);
