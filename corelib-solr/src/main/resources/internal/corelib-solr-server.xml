@@ -37,8 +37,8 @@
 	</bean>
 	
 	<bean id = "corelib_solr_httpClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['mongo.username']}" />
-		<constructor-arg value="#{europeanaProperties['mongo.password']}" />
+		<constructor-arg value="#{europeanaProperties['mongodb.username']}" />
+		<constructor-arg value="#{europeanaProperties['mongodb.password']}" />
 		 <constructor-arg value="#{europeanaProperties['solr.url']}"/> 
 	</bean>
 	
@@ -55,8 +55,8 @@
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
     	<constructor-arg ref="corelib_solr_mongo"/>
     	<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
-    	<constructor-arg value="#{europeanaProperties['mongo.username']}"/>
-    	<constructor-arg value="#{europeanaProperties['mongo.password']}"/>
+    	<constructor-arg value="#{europeanaProperties['mongodb.username']}"/>
+    	<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
     </bean>
     
      <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
