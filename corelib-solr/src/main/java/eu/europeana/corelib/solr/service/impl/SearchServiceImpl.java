@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.solr.service.impl;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,10 +25,12 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -46,6 +49,8 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
+import eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient;
+
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
@@ -65,10 +70,13 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 
+	@Resource (name = "corelib_solr_httpClient")
+	private EuropeanaHttpClient httpClient;
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getName());
+	private static final Logger log = Logger.getLogger(SearchServiceImpl.class
+			.getName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -188,11 +196,14 @@ public class SearchServiceImpl implements SearchService {
 					log.info("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 
-					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse
+							.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().getNumFound());
+					resultSet.setResultSize(queryResponse.getResults()
+							.getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse
+							.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
@@ -323,6 +334,16 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	public void setSolrServer(SolrServer solrServer) {
-		this.solrServer = solrServer;
+
+		if (solrServer instanceof CommonsHttpSolrServer) {
+			try {
+				this.solrServer = new CommonsHttpSolrServer(((CommonsHttpSolrServer) solrServer).getBaseURL(), httpClient);
+			} catch (MalformedURLException e) {
+				//LOG HERE
+			}
+		}
+		else{
+			this.solrServer = solrServer;
+		}
 	}
 }
