@@ -31,45 +31,47 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public abstract class PageData {
-    
+
     public static final String PARAM_MODEL = "model";
 
     private Locale locale;
-        
+
     private User user;
-    
+
     private boolean debug = false;
-    
+
     private boolean minify = true;
-    
+
     private boolean indexable = false;
-    
+
     private String googleAnalyticsId = "UA-XXXXXXXX-1";
 
     private String googleMapsId;
-    
+
+    private String googlePlusPublisherId = null;
+
     private String bingTranslateId;
 
     private String addThisId;
-    
+
     private String facebookId;
-    
+
     private String portalName;
-    
+
     private String cacheUrl;
-    
+
     private String portalServer;
-    
+
     private PageInfo pageInfo;
-    
+
     private String pageTitle;
-    
+
     private String metaCanonicalUrl;
-    
+
     private String currentUrl;
-    
+
     private boolean embedded = false;
-    
+
     private String announceMsg = null;
 
     private String theme = "default";
@@ -271,11 +273,19 @@ public abstract class PageData {
 		this.announceMsg = announceMsg;
 	}
 
-    public String getTheme() {
+	public String getTheme() {
 		return theme;
 	}
 
 	public void setTheme(String theme) {
 		this.theme = theme;
+	}
+
+	public String getGooglePlusPublisherId() {
+		return googlePlusPublisherId;
+	}
+
+	public void setGooglePlusPublisherId(String googlePlusPublisherId) {
+		this.googlePlusPublisherId = googlePlusPublisherId;
 	}
 }
