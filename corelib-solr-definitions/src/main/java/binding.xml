@@ -1,6 +1,6 @@
 <binding xmlns:edm="http://www.europeana.eu/schemas/edm/" name="binding" package="eu.europeana.corelib.definitions.jibx" trim-whitespace="true">
   <format label="edm:EdmType" type="eu.europeana.corelib.definitions.jibx.EdmType" enum-value-method="xmlValue"/>
-  <format label="edm:UGCType" type="eu.europeana.corelib.definitions.jibx.UGCType"/>
+  <format label="edm:UGCType" type="eu.europeana.corelib.definitions.jibx.UGCType" enum-value-method="xmlValue"/>
   <include path="_1999_02_22rdfsyntaxnsBinding.xml"/>
   <include path="schemas_edmBinding.xml"/>
   <include path="dc_elements_11Binding.xml"/>

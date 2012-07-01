@@ -11,7 +11,7 @@
     <structure map-as="rdf:LiteralType"/>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.Broader" name="broader">
-    <value style="text" get-method="getBroader" set-method="setBroader"/>
+    <structure map-as="rdf:ResourceType"/>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.Note" name="note">
     <structure map-as="rdf:LiteralType"/>

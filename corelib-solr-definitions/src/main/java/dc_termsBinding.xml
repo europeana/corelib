@@ -1,5 +1,5 @@
 <binding xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
-  <namespace uri="http://purl.org/dc/terms/" prefix="dcterms"/>
+  <namespace uri="http://purl.org/dc/terms/" default="elements" prefix="dcterms"/>
   <mapping abstract="true" type-name="dcterms:DCTermsType" class="eu.europeana.corelib.definitions.jibx.DCTermsType">
     <structure map-as="rdf:AboutType"/>
     <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
@@ -29,7 +29,7 @@
       </structure>
     </collection>
   </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.IsPartOf" name="isPartOf" ns="http://purl.org/dc/terms/">
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsPartOf" name="isPartOf">
     <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
 </binding>
