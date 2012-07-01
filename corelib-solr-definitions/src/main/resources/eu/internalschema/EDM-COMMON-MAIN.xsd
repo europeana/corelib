@@ -18,14 +18,16 @@
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     targetNamespace="http://www.europeana.eu/schemas/edm/"
-    xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
+    xmlns:dcterms="http://purl.org/dc/terms/" 
     xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
-    xmlns:ore="http://www.openarchives.org/ore/terms/">
+    xmlns:ore="http://www.openarchives.org/ore/terms/"
+    elementFormDefault="qualified">
     <annotation>
         <documentation> EDM First Implementation Schema: Main schema in the EDM namespace, to be
             wrapped up in RDF </documentation>
@@ -57,15 +59,25 @@
     </complexType>
 
 
-    <complexType name="BaseWebResourceType">
+    <complexType name="WebResourceType">
         <annotation>
-            <documentation>Base class for WebResource implementations.,</documentation>
+            <documentation>Base class for WebResource implementations</documentation>
         </annotation>
         <complexContent>
             <extension base="rdf:AboutType">
                 <sequence>
+                    <element ref="dc:description" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
+                    <element ref="dc:source" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:issued" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:conformsTo" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:created" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:isFormatOf" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
                 </sequence>
             </extension>
         </complexContent>
@@ -98,7 +110,7 @@
 
     <complexType name="EuropeanaType">
         <annotation>
-            <documentation> EuropeanaType contains the Europeana Properties in addition to DC.
+            <documentation> EuropeanaType contains the DC &amp; DCTERMS elements.
             </documentation>
         </annotation>
         <complexContent>
@@ -440,6 +452,7 @@
                 in sequence to page 33 of the same title. </documentation>
         </annotation>
     </element>
+    
     <element name="landingPage" type="rdf:ResourceType">
         <annotation>
             <documentation>This property captures the relation between an aggregation representing a
@@ -449,6 +462,7 @@
                 http://www.culture.gouv.fr/public/mistral/joconde_fr?ACTION=CHERCHER&amp;FIELD_1=REF&amp;VALUE_1=000PE025604</documentation>
         </annotation>
     </element>
+    
     <element name="country" type="rdf:LiteralType">
         <annotation>
             <documentation>This is the name of the country in which the Provider is based or
@@ -456,6 +470,7 @@
                 &lt;edm:country&gt;AL&lt;/edm:country&gt; </documentation>
         </annotation>
     </element>
+    
     <element name="language" type="rdf:LiteralType">
         <annotation>
             <documentation>A language assigned to the resource with reference to the Provider.

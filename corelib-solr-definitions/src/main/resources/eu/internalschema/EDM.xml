@@ -44,8 +44,8 @@
     <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
   </edm:WebResource>
   <edm:Place rdf:about="http://sws.geonames.org/6255147/">
-    <skos:prefLabel xml:lang="de">Asien</skos:prefLabel>
     <skos:altLabel>wohl Asien</skos:altLabel>
+    <skos:prefLabel xml:lang="de">Asien</skos:prefLabel>
   </edm:Place>
   <skos:Concept rdf:about="http://www.mimo-db.eu/InstrumentsKeywords/2887">
     <skos:prefLabel>Kettledrum</skos:prefLabel>
@@ -54,13 +54,13 @@
     <skos:prefLabel xml:lang="en">211.11 (Separate) vessel drums</skos:prefLabel>
   </skos:Concept>
   <ore:Aggregation rdf:about="http://www.mimo-db.eu/ULEI/M0003309">
-    <edm:aggregatedCHO rdf:resource="#ULEI:M0003309"/>
-    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
+    <edm:aggregatedCHO rdf:resource="#ULEI:M0003309"/>    
     <edm:dataProvider>Museum für Musikinstrumente der Universität Leipzig</edm:dataProvider>
+    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
+    <edm:isShownAt rdf:resource="http://www.mimo-db.eu/ULEI/M0003309"/>
+    <edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
+    <edm:object rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
     <edm:provider>MIMO - Musical Instrument Museums Online</edm:provider>
     <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
-    <edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
-    <edm:isShownAt rdf:resource="http://www.mimo-db.eu/ULEI/M0003309"/>
-    <edm:object rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/3718.jpg"/>
   </ore:Aggregation>
 </rdf:RDF>

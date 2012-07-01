@@ -16,8 +16,18 @@
    the Licence.
 -->
 
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.europeana.eu/schemas/edm/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified" xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="http://www.europeana.eu/schemas/edm/" 
+  xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:dcterms="http://purl.org/dc/terms/" 
+  xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" 
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" 
+  xmlns:foaf="http://xmlns.com/foaf/0.1"
+  elementFormDefault="qualified">
 
   <annotation>
     <documentation>
@@ -26,67 +36,93 @@
   </annotation>
 
   <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd" />
-  <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd" />
   <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd" />
-  <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
+  <import namespace="http://xmlns.com/foaf/0.1" schemaLocation="FOAF.xsd"/>
+  <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd" />
+  <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
-
-
-  <complexType name="AgentBaseType">
+  <import namespace="http://rdvocab.info/ElementsGr2" schemaLocation="RDAGR2.xsd"/>
+  <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
+  <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
+  
+  <complexType name="AgentType">
     <annotation>
-      <documentation> This class comprises people, either individually or in groups, who have the potential to perform intentional actions for which they can be held responsible. Example:Leonardo da
-        Vinci, the British Museum, W3C
+      <documentation> This class comprises people, either individually or in groups, who have
+        the potential to perform intentional actions for which they can be held responsible.
+        Example:Leonardo da Vinci, the British Museum, W3C
       </documentation>
     </annotation>
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element name="begin" maxOccurs="unbounded" minOccurs="0" />
           <element name="end" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="dc:date" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="foaf:name" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="rdaGr2:biographicalInformation" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:dateOfBirth" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
+          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
         </sequence>
       </extension>
     </complexContent>
   </complexType>
 
-  <complexType name="PlaceBaseType">
+  <complexType name="PlaceType">
     <annotation>
-      <documentation>An "extent in space, in particular on the surface of the earth, in the pure sense of physics: independent from temporal phenomena and matter" (CIDOC CRM) Example:the region of
-        space occupied by Rome today, the region of space occupied by the United Kingdom today, the region of space occupied by the Republic of Crimea in 1945</documentation>
+      <documentation>An "extent in space, in particular on the surface of the earth, in the
+        pure sense of physics: independent from temporal phenomena and matter" (CIDOC CRM)
+        Example:the region of space occupied by Rome today, the region of space occupied by
+        the United Kingdom today, the region of space occupied by the Republic of Crimea in
+        1945</documentation>
     </annotation>
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
           <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="wgs84:alt" maxOccurs="1" minOccurs="0"/>
           <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
-          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
         </sequence>
       </extension>
     </complexContent>
   </complexType>
 
 
-  <complexType name="TimeSpanBaseType">
+  <complexType name="TimeSpanType">
     <annotation>
-      <documentation>The class of "abstract temporal extents, in the sense of Galilean physics, having a beginning, an end and a duration" (CIDOC CRM) Example:2001-12-31, 01.01.01 – 02.02.02, 1503 –
-        1506 (the time span of the creation of Mona Lisa)</documentation>
+      <documentation>The class of "abstract temporal extents, in the sense of Galilean
+        physics, having a beginning, an end and a duration" (CIDOC CRM) Example:2001-12-31,
+        01.01.01 – 02.02.02, 1503 – 1506 (the time span of the creation of Mona
+        Lisa)</documentation>
     </annotation>
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
-          <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
           <element name="begin" maxOccurs="unbounded" minOccurs="0" />
           <element name="end" maxOccurs="unbounded" minOccurs="0" />
           <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
+          <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
         </sequence>
       </extension>
     </complexContent>
