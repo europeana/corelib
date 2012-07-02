@@ -31,47 +31,49 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public abstract class PageData {
-
+    
     public static final String PARAM_MODEL = "model";
+    
+    private static final String EUROPEANA_PROVIDERS="europeana-providers.html";
+    
+    private static final String PROVIDER_DESCRIPTION=", Overview of collections included in Europeana";
 
     private Locale locale;
-
+        
     private User user;
-
+    
     private boolean debug = false;
-
+    
     private boolean minify = true;
-
+    
     private boolean indexable = false;
-
+    
     private String googleAnalyticsId = "UA-XXXXXXXX-1";
 
     private String googleMapsId;
-
-    private String googlePlusPublisherId = null;
-
+    
     private String bingTranslateId;
 
     private String addThisId;
-
+    
     private String facebookId;
-
+    
     private String portalName;
-
+    
     private String cacheUrl;
-
+    
     private String portalServer;
-
+    
     private PageInfo pageInfo;
-
+    
     private String pageTitle;
-
+    
     private String metaCanonicalUrl;
-
+    
     private String currentUrl;
-
+    
     private boolean embedded = false;
-
+    
     private String announceMsg = null;
 
     private String theme = "default";
@@ -202,10 +204,15 @@ public abstract class PageData {
     }
 
     public String getPageTitle() {
-        if (StringUtils.isBlank(pageTitle)) {
-            return pageInfo.getPageTitle();
-        }
-        return pageTitle;
+    	String pageTitle = "";
+		if (StringUtils.isBlank(this.pageTitle)) {
+			pageTitle = pageInfo.getPageTitle();
+		} else {
+			pageTitle = this.pageTitle;
+		}
+
+		return StringUtils.equals(getPageName(), EUROPEANA_PROVIDERS) ? pageTitle
+				+ PROVIDER_DESCRIPTION : pageTitle;
     }
 
     public void setCurrentUrl(String currentUrl) {
@@ -273,19 +280,11 @@ public abstract class PageData {
 		this.announceMsg = announceMsg;
 	}
 
-	public String getTheme() {
+    public String getTheme() {
 		return theme;
 	}
 
 	public void setTheme(String theme) {
 		this.theme = theme;
-	}
-
-	public String getGooglePlusPublisherId() {
-		return googlePlusPublisherId;
-	}
-
-	public void setGooglePlusPublisherId(String googlePlusPublisherId) {
-		this.googlePlusPublisherId = googlePlusPublisherId;
 	}
 }
