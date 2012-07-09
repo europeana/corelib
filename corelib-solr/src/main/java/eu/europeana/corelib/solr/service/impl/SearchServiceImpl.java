@@ -205,6 +205,7 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setSpellcheck(queryResponse
 							.getSpellCheckResponse());
 				} catch (SolrServerException e) {
+					log.severe("SolrServerException: " + e.getMessage());
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
