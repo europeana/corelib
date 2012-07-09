@@ -28,39 +28,38 @@
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used... -->
 	
 	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
-		<property name="followRedirects" value="false"/>	
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-        
+		<constructor-arg value="#{europeanaProperties['solr.url']}"/>
+		<property name="followRedirects" value="false"/>
+		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
+		<property name="defaultMaxConnectionsPerHost" value="64"/>
+		<property name="maxTotalConnections" value="125"/>
 	</bean>
 	
-	<bean id = "corelib_solr_httpClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['mongodb.username']}" />
-		<constructor-arg value="#{europeanaProperties['mongodb.password']}" />
-		 <constructor-arg value="#{europeanaProperties['solr.url']}"/> 
+	<bean id="corelib_solr_httpClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
+		<constructor-arg value="#{europeanaProperties['solr.username']}" />
+		<constructor-arg value="#{europeanaProperties['solr.password']}" />
+		<constructor-arg value="#{europeanaProperties['solr.url']}"/> 
 	</bean>
 	
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
-        <constructor-arg>
-        	<bean class="org.apache.solr.core.CoreContainer">
-		        <constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
-		        <constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
-        	</bean>
-        </constructor-arg>
-         <constructor-arg value="metadata"/>
+		<constructor-arg>
+			<bean class="org.apache.solr.core.CoreContainer">
+				<constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
+				<constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg value="metadata"/>
 	</bean>
 
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
-    	<constructor-arg ref="corelib_solr_mongo"/>
-    	<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
-    	<constructor-arg value="#{europeanaProperties['mongodb.username']}"/>
-    	<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
-    </bean>
-    
-     <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
-    	<constructor-arg ref="corelib_solr_mongo"/>
-    	<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
-    </bean>
+	<bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
+		<constructor-arg ref="corelib_solr_mongo"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.username']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
+	</bean>
+
+	<bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
+		<constructor-arg ref="corelib_solr_mongo"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
+	</bean>
 </beans>
