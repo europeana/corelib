@@ -67,9 +67,6 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	@Value("#{europeanaProperties['portal.bing.translate.key']}")
 	private String portalBingTranslateId;
 
-	@Value("#{europeanaProperties['portal.google.plus.publisher.id']}")
-	private String portalGooglePlusPublisherId;
-
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView)
 			throws Exception {
@@ -102,7 +99,6 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			model.setAddThisId(StringUtils.trimToEmpty(portalAddthisId));
 			model.setFacebookId(StringUtils.trimToEmpty(portalFacebookId));
 			model.setBingTranslateId(StringUtils.trimToEmpty(portalBingTranslateId));
-			model.setGooglePlusPublisherId(StringUtils.trimToEmpty(portalGooglePlusPublisherId));
 		}
 	}
 

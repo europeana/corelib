@@ -50,8 +50,6 @@ public abstract class PageData {
 
 	private String googleAnalyticsId = "UA-XXXXXXXX-1";
 
-	private String googlePlusPublisherId;
-
 	private String googleMapsId;
 
 	private String bingTranslateId;
@@ -77,8 +75,6 @@ public abstract class PageData {
 	private boolean embedded = false;
 
 	private String announceMsg = null;
-
-	private String theme = "default";
 
 	// public List<PortalLanguage> getPortalLanguages() {
 	// return PortalLanguage.getSupported();
@@ -213,9 +209,9 @@ public abstract class PageData {
 			pageTitle = this.pageTitle;
 		}
 
-		return StringUtils.equals(getPageName(), EUROPEANA_PROVIDERS) ? pageTitle
-				+ PROVIDER_DESCRIPTION
-				: pageTitle;
+		return StringUtils.equals(getPageName(), EUROPEANA_PROVIDERS) 
+			? pageTitle + PROVIDER_DESCRIPTION
+			: pageTitle;
 	}
 
 	public void setCurrentUrl(String currentUrl) {
@@ -286,20 +282,4 @@ public abstract class PageData {
 		this.announceMsg = announceMsg;
 	}
 
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public void setGooglePlusPublisherId(String googlePlusPublisherId) {
-		this.googlePlusPublisherId = googlePlusPublisherId;
-
-	}
-
-	public String getGooglePlusPublisherId() {
-		return googlePlusPublisherId;
-	}
 }
