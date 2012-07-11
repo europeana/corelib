@@ -90,8 +90,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
-		return (enrichmentPlaceBroaderTerm != null ? enrichmentPlaceBroaderTerm
-				.clone() : null);
+		return (enrichmentPlaceBroaderTerm != null ? enrichmentPlaceBroaderTerm.clone() : null);
 	}
 
 	@Override
@@ -122,8 +121,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmConceptBroaderTerm() {
-		return (edmConceptBroaderTerm != null ? edmConceptBroaderTerm.clone()
-				: null);
+		return (edmConceptBroaderTerm != null ? edmConceptBroaderTerm.clone() : null);
 	}
 
 	@Override
@@ -143,7 +141,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getUgc() {
-		return ugc!=null?this.ugc.clone():null;
+		return ugc != null ? this.ugc.clone() : null;
 	}
 
 	@Override
@@ -153,7 +151,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmRights() {
-		return edmRights!=null?this.edmRights.clone():null;
+		return edmRights != null ? this.edmRights.clone() : null;
 	}
 
 	@Override
@@ -163,7 +161,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getCountry() {
-		return country!=null?this.country.clone():null;
+		return country != null ? this.country.clone() : null;
 	}
 
 	@Override
@@ -173,7 +171,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		return europeanaCollectionName!=null?this.europeanaCollectionName.clone():null;
+		return europeanaCollectionName != null ? this.europeanaCollectionName.clone() : null;
 	}
 
 	@Override
@@ -185,5 +183,4 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
 		this.dctermsIsPartOf = dctermsIsPartOf.clone();
 	}
-
 }
