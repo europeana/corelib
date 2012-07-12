@@ -20,6 +20,8 @@ package eu.europeana.corelib.solr.server.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.DBObject;
@@ -57,11 +59,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private String username;
 	private String password;
 	private Datastore datastore;
-	private static final String EUROPEANA_ID_DB="EuropeanaId";
-	public EdmMongoServerImpl(Mongo mongoServer, String databaseName, String username, String password)
-			throws MongoDBException {
+	private static final String EUROPEANA_ID_DB = "EuropeanaId";
+
+	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
+			String username, String password) throws MongoDBException {
 		this.mongoServer = mongoServer;
-		
+
 		this.databaseName = databaseName;
 		this.username = username;
 		this.password = password;
@@ -84,11 +87,15 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(EuropeanaProxyImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
-		
+
 		datastore = morphia.createDatastore(mongoServer, databaseName);
-		datastore.getDB().authenticate(this.username, this.password.toCharArray());
+		if (StringUtils.isNotBlank(this.username)
+				&& StringUtils.isNotBlank(this.password)) {
+			datastore.getDB().authenticate(this.username,
+					this.password.toCharArray());
+		}
 		datastore.ensureIndexes();
-		
+
 	}
 
 	@Override
@@ -98,12 +105,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public FullBean getFullBean(String id) {
-		//If the id requested exists
+		// If the id requested exists
 		if (datastore.find(FullBeanImpl.class).field("about").equal(id).get() != null) {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id)
 					.get();
 		}
-		
+
 		return null;
 	}
 
@@ -111,12 +118,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	public FullBean resolve(String id) {
 		EuropeanaIdMongoServer europeanaIdMongoServer = new EuropeanaIdMongoServer(
 				mongoServer, EUROPEANA_ID_DB);
-		//If it does not check whether it has been set in the past, 
-		//if it exists retrieve the newID and update the lastAccess field
+		// If it does not check whether it has been set in the past,
+		// if it exists retrieve the newID and update the lastAccess field
 		if (europeanaIdMongoServer.newIdExists(id)) {
 			List<EuropeanaId> newIDList = europeanaIdMongoServer
 					.retrieveEuropeanaIdFromOld(id);
-			EuropeanaId newId= newIDList.get(0);
+			EuropeanaId newId = newIDList.get(0);
 			newId.setLastAccess(new Date().getTime());
 			europeanaIdMongoServer.saveEuropeanaId(newId);
 			return datastore.find(FullBeanImpl.class).field("about")
@@ -124,6 +131,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		}
 		return null;
 	}
+
 	@Override
 	public String toString() {
 		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
@@ -134,13 +142,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T searchByAbout(Class<T> clazz, String about) {
-		
-		
-		if(!clazz.isInstance(FullBeanImpl.class)){
-			return datastore.find(clazz,"about",about).get();
-		}
-		else{
-			DBObject ref = (DBObject)datastore.find(clazz,"about",about).get();
+
+		if (!clazz.isInstance(FullBeanImpl.class)) {
+			return datastore.find(clazz, "about", about).get();
+		} else {
+			DBObject ref = (DBObject) datastore.find(clazz, "about", about)
+					.get();
 			return (T) ref;
 		}
 	}

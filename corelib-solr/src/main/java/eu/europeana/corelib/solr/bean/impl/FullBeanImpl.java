@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Embedded;
@@ -36,6 +37,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaProxy;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -44,6 +46,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaProxyImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -106,6 +109,9 @@ public class FullBeanImpl implements FullBean {
 	private List<ProvidedCHOImpl> providedCHOs;
 	
 	@Embedded
+	private EuropeanaProxy europeanaProxy;
+	
+	@Embedded
 	private EuropeanaAggregation europeanaAggregation;
 
 	private String[] who;
@@ -113,13 +119,31 @@ public class FullBeanImpl implements FullBean {
 	private String[] where;
 	private String[] when;
 	
+	private String[] edmTimespanBroaderTerm;
+	private List<Map<String,String>> edmTimespanBroaderLabel;
+	private List<Map<String,String>> edmConceptBroaderLabel;
+	
+	private String[] edmPlaceBroaderTerm;
+	
+	
+
 	@Embedded
 	private List<ProxyImpl> proxies;
 
+	private String[] europeanaCollectionName;
 	/**
 	 * GETTERS & SETTTERS
 	 */
 
+	@Override
+	public EuropeanaProxy getEuropeanaProxy(){
+		return this.europeanaProxy;
+	}
+	
+	@Override
+	public void setEuropeanaProxy(EuropeanaProxy europeanaProxy){
+		this.europeanaProxy = europeanaProxy;
+	}
 	@Override
 	public List<PlaceImpl> getPlaces() {
 		return this.places;
@@ -1122,6 +1146,8 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
+
+	
 	@Override
 	public List<Map<String, String>> getEdmPlaceAltLabel() {
 		// TODO Auto-generated method stub
@@ -1130,28 +1156,44 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public List<Map<String, String>> getEdmConceptBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.edmConceptBroaderLabel;
 	}
 
 	@Override
 	public String[] getEdmTimespanBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.edmTimespanBroaderTerm;
 	}
 
 	@Override
 	public List<Map<String, String>> getEdmTimespanBroaderLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.edmTimespanBroaderLabel;
 	}
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.edmPlaceBroaderTerm;
 	}
 
+	@Override
+	public void setEdmTimespanBroaderTerm(String[] edmTimespanBroaderTerm) {
+		this.edmTimespanBroaderTerm = edmTimespanBroaderTerm;
+	}
+	@Override
+	public void setEdmTimespanBroaderLabel(
+			List<Map<String, String>> edmTimespanBroaderLabel) {
+		this.edmTimespanBroaderLabel = edmTimespanBroaderLabel;
+	}
+	@Override
+	public void setEdmConceptBroaderLabel(
+			List<Map<String, String>> edmConceptBroaderLabel) {
+		this.edmConceptBroaderLabel = edmConceptBroaderLabel;
+	}
+	@Override
+	public void setEdmPlaceBroaderTerm(String[] edmPlaceBroaderTerm) {
+		this.edmPlaceBroaderTerm = edmPlaceBroaderTerm;
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) {
@@ -1200,7 +1242,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public int hashCode() {
-		return this.about.hashCode();
+		return StringUtils.isNotBlank(this.about)?this.about.hashCode():this.europeanaId.toStringMongod().hashCode();
 	}
 
 	@Override
@@ -1241,13 +1283,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.europeanaCollectionName;
 	}
 
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
-		// TODO Auto-generated method stub
+		this.europeanaCollectionName = europeanaCollectionName;
 
 	}
 

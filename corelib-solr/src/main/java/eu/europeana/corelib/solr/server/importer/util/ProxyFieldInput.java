@@ -26,7 +26,6 @@ import java.util.Map;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.DCTermsType.Choice;
 import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.RDF;
@@ -85,11 +84,11 @@ public final class ProxyFieldInput {
 		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY_FOR.toString(),
 				SolrUtils.exists(String.class, providedCHO.getAbout()));
 
-		// Retrieve the dcterms namespace fields
-		List<eu.europeana.corelib.definitions.jibx.DCTermsType.Choice> dcTermsList = providedCHO
+		// Retrieve the dcterms and dc namespace fields
+		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = providedCHO
 				.getChoiceList();
-		if (dcTermsList != null) {
-			for (eu.europeana.corelib.definitions.jibx.DCTermsType.Choice choice : dcTermsList) {
+		if (europeanaTypeList != null) {
+			for (eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice choice : europeanaTypeList) {
 				if (choice.getAlternative() != null) {
 					solrInputDocument.addField(EdmLabel.PROVIDER_DCTERMS_ALTERNATIVE
 							.toString(), choice.getAlternative().getString());
@@ -142,14 +141,6 @@ public final class ProxyFieldInput {
 						choice.getTableOfContents(), rdf);
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
 						EdmLabel.PROVIDER_DCTERMS_TEMPORAL, choice.getTemporal(), rdf);
-			}
-		}
-
-		// Retrieve the dc namespace fields
-		List<eu.europeana.corelib.definitions.jibx.DCType.Choice> dcList = providedCHO
-				.getChoiceList1s();
-		if (dcList != null) {
-			for (eu.europeana.corelib.definitions.jibx.DCType.Choice choice : dcList) {
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
 						EdmLabel.PROVIDER_DC_CONTRIBUTOR, choice.getContributor(), rdf);
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
@@ -186,9 +177,10 @@ public final class ProxyFieldInput {
 				}
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
 						EdmLabel.PROVIDER_DC_TYPE, choice.getType(), rdf);
-
 			}
 		}
+
+		
 		return solrInputDocument;
 	}
 
@@ -301,66 +293,60 @@ public final class ProxyFieldInput {
 		mapLists.put(EdmLabel.PROVIDER_DC_TYPE.toString(), type);
 
 		
-		List<Choice> dcTermsList = providedCHO.getChoiceList();
-		List<eu.europeana.corelib.definitions.jibx.DCType.Choice> dcList = providedCHO
-				.getChoiceList1s();
+		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = providedCHO.getChoiceList();
+		
 
-		if (dcTermsList != null) {
-			for (Choice dcTerm : dcTermsList) {
+		if (europeanaTypeList != null) {
+			for (eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice europeanaType : europeanaTypeList) {
 
-				if (dcTerm.getAlternative() != null) {
-					alternatives.add(dcTerm.getAlternative().getString());
+				if (europeanaType.getAlternative() != null) {
+					alternatives.add(europeanaType.getAlternative().getString());
 				}
-				SolrUtils.addResourceOrLiteralType(conformsTo, EdmLabel.PROVIDER_DCTERMS_CONFORMS_TO, dcTerm.getConformsTo(),mapLists,rdf);
-				SolrUtils.addResourceOrLiteralType(created,EdmLabel.PROVIDER_DCTERMS_CREATED, dcTerm.getCreated(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(extent, EdmLabel.PROVIDER_DCTERMS_EXTENT,dcTerm.getExtent(),mapLists,rdf);
-				SolrUtils.addResourceOrLiteralType(hasFormat, EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT,dcTerm.getHasFormat(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(hasPart,EdmLabel.PROVIDER_DCTERMS_HAS_PART, dcTerm.getHasPart(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(hasVersion,EdmLabel.PROVIDER_DCTERMS_HAS_VERSION, dcTerm.getHasVersion(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isFormatOf, EdmLabel.PROVIDER_DCTERMS_IS_FORMAT_OF,dcTerm.getIsFormatOf(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isPartOf, EdmLabel.PROVIDER_DCTERMS_IS_PART_OF,dcTerm.getIsPartOf(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isReferencedBy, EdmLabel.PROVIDER_DCTERMS_IS_REFERENCED_BY,dcTerm.getIsReferencedBy(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isReplacedBy, EdmLabel.PROVIDER_DCTERMS_IS_REPLACED_BY,dcTerm.getIsReplacedBy(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isRequiredBy, EdmLabel.PROVIDER_DCTERMS_IS_REQUIRED_BY,dcTerm.getIsRequiredBy(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(issued, EdmLabel.PROVIDER_DCTERMS_ISSUED,dcTerm.getIssued(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(isVersionOf, EdmLabel.PROVIDER_DCTERMS_IS_VERSION_OF,dcTerm.getIsVersionOf(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(medium, EdmLabel.PROVIDER_DCTERMS_MEDIUM,dcTerm.getMedium(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(provenance, EdmLabel.PROVIDER_DCTERMS_PROVENANCE,dcTerm.getProvenance(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(references, EdmLabel.PROVIDER_DCTERMS_REFERENCES,dcTerm.getReferences(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(replaces,EdmLabel.PROVIDER_DCTERMS_REPLACES, dcTerm.getReplaces(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(requires, EdmLabel.PROVIDER_DCTERMS_REQUIRES,dcTerm.getRequires(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(spatial, EdmLabel.PROVIDER_DCTERMS_SPATIAL,dcTerm.getSpatial(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(tableOfContents, EdmLabel.PROVIDER_DCTERMS_TABLE_OF_CONTENTS,dcTerm.getTableOfContents(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(temporal,EdmLabel.PROVIDER_DCTERMS_TEMPORAL, dcTerm.getTemporal(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(conformsTo, EdmLabel.PROVIDER_DCTERMS_CONFORMS_TO, europeanaType.getConformsTo(),mapLists,rdf);
+				SolrUtils.addResourceOrLiteralType(created,EdmLabel.PROVIDER_DCTERMS_CREATED, europeanaType.getCreated(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(extent, EdmLabel.PROVIDER_DCTERMS_EXTENT,europeanaType.getExtent(),mapLists,rdf);
+				SolrUtils.addResourceOrLiteralType(hasFormat, EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT,europeanaType.getHasFormat(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(hasPart,EdmLabel.PROVIDER_DCTERMS_HAS_PART, europeanaType.getHasPart(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(hasVersion,EdmLabel.PROVIDER_DCTERMS_HAS_VERSION, europeanaType.getHasVersion(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isFormatOf, EdmLabel.PROVIDER_DCTERMS_IS_FORMAT_OF,europeanaType.getIsFormatOf(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isPartOf, EdmLabel.PROVIDER_DCTERMS_IS_PART_OF,europeanaType.getIsPartOf(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isReferencedBy, EdmLabel.PROVIDER_DCTERMS_IS_REFERENCED_BY,europeanaType.getIsReferencedBy(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isReplacedBy, EdmLabel.PROVIDER_DCTERMS_IS_REPLACED_BY,europeanaType.getIsReplacedBy(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isRequiredBy, EdmLabel.PROVIDER_DCTERMS_IS_REQUIRED_BY,europeanaType.getIsRequiredBy(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(issued, EdmLabel.PROVIDER_DCTERMS_ISSUED,europeanaType.getIssued(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(isVersionOf, EdmLabel.PROVIDER_DCTERMS_IS_VERSION_OF,europeanaType.getIsVersionOf(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(medium, EdmLabel.PROVIDER_DCTERMS_MEDIUM,europeanaType.getMedium(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(provenance, EdmLabel.PROVIDER_DCTERMS_PROVENANCE,europeanaType.getProvenance(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(references, EdmLabel.PROVIDER_DCTERMS_REFERENCES,europeanaType.getReferences(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(replaces,EdmLabel.PROVIDER_DCTERMS_REPLACES, europeanaType.getReplaces(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(requires, EdmLabel.PROVIDER_DCTERMS_REQUIRES,europeanaType.getRequires(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(spatial, EdmLabel.PROVIDER_DCTERMS_SPATIAL,europeanaType.getSpatial(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(tableOfContents, EdmLabel.PROVIDER_DCTERMS_TABLE_OF_CONTENTS,europeanaType.getTableOfContents(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(temporal,EdmLabel.PROVIDER_DCTERMS_TEMPORAL, europeanaType.getTemporal(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(contributor, EdmLabel.PROVIDER_DC_CONTRIBUTOR,europeanaType.getContributor(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(coverage, EdmLabel.PROVIDER_DC_COVERAGE,europeanaType.getCoverage(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(creator, EdmLabel.PROVIDER_DC_CREATOR,europeanaType.getCreator(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(date,EdmLabel.PROVIDER_DC_DATE, europeanaType.getDate(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(description,EdmLabel.PROVIDER_DC_DESCRIPTION,europeanaType.getDescription(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(format, EdmLabel.PROVIDER_DC_FORMAT,europeanaType.getFormat(), mapLists, rdf);
+				if (europeanaType.getIdentifier() != null) {
+					identifier.add(europeanaType.getIdentifier().getString());
+				}
+				if (europeanaType.getLanguage() != null) {
+					language.add(europeanaType.getLanguage().getString());
+				}
+				SolrUtils.addResourceOrLiteralType(publisher, EdmLabel.PROVIDER_DC_PUBLISHER,europeanaType.getPublisher(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(relation, EdmLabel.PROVIDER_DC_RELATION,europeanaType.getRelation(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(rights, EdmLabel.PROVIDER_DC_RIGHTS,europeanaType.getRights(), mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(source, EdmLabel.PROVIDER_DC_SOURCE,europeanaType.getSource(),mapLists, rdf);
+				SolrUtils.addResourceOrLiteralType(subject, EdmLabel.PROVIDER_DC_SUBJECT,europeanaType.getSubject(),mapLists, rdf);
+				if (europeanaType.getTitle() != null) {
+					title.add(europeanaType.getTitle().getString());
+				}
+				SolrUtils.addResourceOrLiteralType(type, EdmLabel.PROVIDER_DC_TYPE,europeanaType.getType(),mapLists, rdf);
 			}
 		}
 	
-
-		if (dcList != null) {
-			for (eu.europeana.corelib.definitions.jibx.DCType.Choice dc : dcList) {
-				SolrUtils.addResourceOrLiteralType(contributor, EdmLabel.PROVIDER_DC_CONTRIBUTOR,dc.getContributor(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(coverage, EdmLabel.PROVIDER_DC_COVERAGE,dc.getCoverage(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(creator, EdmLabel.PROVIDER_DC_CREATOR,dc.getCreator(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(date,EdmLabel.PROVIDER_DC_DATE, dc.getDate(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(description,EdmLabel.PROVIDER_DC_DESCRIPTION,dc.getDescription(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(format, EdmLabel.PROVIDER_DC_FORMAT,dc.getFormat(), mapLists, rdf);
-				if (dc.getIdentifier() != null) {
-					identifier.add(dc.getIdentifier().getString());
-				}
-				if (dc.getLanguage() != null) {
-					language.add(dc.getLanguage().getString());
-				}
-				SolrUtils.addResourceOrLiteralType(publisher, EdmLabel.PROVIDER_DC_PUBLISHER,dc.getPublisher(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(relation, EdmLabel.PROVIDER_DC_RELATION,dc.getRelation(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(rights, EdmLabel.PROVIDER_DC_RIGHTS,dc.getRights(), mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(source, EdmLabel.PROVIDER_DC_SOURCE,dc.getSource(),mapLists, rdf);
-				SolrUtils.addResourceOrLiteralType(subject, EdmLabel.PROVIDER_DC_SUBJECT,dc.getSubject(),mapLists, rdf);
-				if (dc.getTitle() != null) {
-					title.add(dc.getTitle().getString());
-				}
-				SolrUtils.addResourceOrLiteralType(type, EdmLabel.PROVIDER_DC_TYPE,dc.getType(),mapLists, rdf);
-			}
-		}
 		mongoProxy.setDctermsAlternative(StringArrayUtils.toArray(alternatives));
 		mongoProxy.setDctermsConformsTo(StringArrayUtils.toArray(conformsTo));
 		mongoProxy.setDctermsCreated(StringArrayUtils.toArray(created));

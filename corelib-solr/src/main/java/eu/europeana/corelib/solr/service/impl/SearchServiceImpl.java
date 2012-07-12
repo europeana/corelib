@@ -335,9 +335,10 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	public void setSolrServer(SolrServer solrServer) {
-
+		//If it is instance of CommonsHTTPSolrServer
 		if (solrServer instanceof CommonsHttpSolrServer) {
 			try {
+				//Create a new solrServer. HttpClient is final and provided upon construction
 				this.solrServer = new CommonsHttpSolrServer(((CommonsHttpSolrServer) solrServer).getBaseURL(), httpClient);
 			} catch (MalformedURLException e) {
 				//LOG HERE
