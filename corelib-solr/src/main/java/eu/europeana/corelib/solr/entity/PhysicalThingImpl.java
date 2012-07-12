@@ -95,7 +95,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDcDescription() {
-		return (StringArrayUtils.isNotBlank(dcDate) ? this.dcDescription.clone() : null);
+		return (StringArrayUtils.isNotBlank(dcDescription) ? this.dcDescription.clone() : null);
 	}
 
 	@Override
