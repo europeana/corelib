@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaProxy;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -435,4 +436,18 @@ public interface FullBean extends ApiBean {
 	String[] getWho();
 
 	EuropeanaAggregation getEuropeanaAggregation();
+
+	void setEuropeanaProxy(EuropeanaProxy europeanaProxy);
+
+	EuropeanaProxy getEuropeanaProxy();
+
+	void setEdmTimespanBroaderTerm(String[] edmTimespanBroaderTerm);
+
+	void setEdmTimespanBroaderLabel(
+			List<Map<String, String>> edmTimespanBroaderLabel);
+
+	void setEdmConceptBroaderLabel(
+			List<Map<String, String>> edmConceptBroaderLabel);
+
+	void setEdmPlaceBroaderTerm(String[] edmPlaceBroaderTerm);
 }
