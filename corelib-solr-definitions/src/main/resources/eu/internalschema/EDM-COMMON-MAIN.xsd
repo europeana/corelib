@@ -100,7 +100,7 @@
                         <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
                         <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
                         <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
-                        <element ref="edm:type" maxOccurs="1" minOccurs="1"/>
+                        <element name="type" maxOccurs="1" minOccurs="1" type="edm:EdmType"/>
                         <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
             </extension>
@@ -477,11 +477,11 @@
                 Example:&lt;edm:language&gt;ro&lt;/edm:language&gt; </documentation>
         </annotation>
     </element>
-
+<!-- 
     <element name="type" type="edm:EdmType">
         <annotation>
             <documentation>An enumeration stating the type of EDM content provided</documentation>
         </annotation>
     </element>
-
+-->
 </schema>
