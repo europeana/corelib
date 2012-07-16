@@ -141,7 +141,7 @@ _:node16k3ng1n7x7 a owl:Restriction ;
 _:node16k3ng1n7x8 a rdf:Property ;
 	owl:inverseOf edm:aggregatedCHO .
 
-edm:ProvidedCHO skos:note "This class has been mostly motivated by the need to assign a type to the “central node” in the EDM pattern, during the ingestion process, related to the XML expression of EDM at that stage. It was especially intended to fit the cases where edm:PhysicalThing  cannot be used as the type of the resource standing for the real-world object (independently of any specific data contributor perspective)."@en ;
+edm:ProvidedCHO skos:note "This class has been mostly motivated by the need to assign a type to the "central node" in the EDM pattern, during the ingestion process, related to the XML expression of EDM at that stage. It was especially intended to fit the cases where edm:PhysicalThing  cannot be used as the type of the resource standing for the real-world object (independently of any specific data contributor perspective)."@en ;
 	skos:example "Mona Lisa, Winged Victory of Samothrace"@en ;
 	skos:scopeNote "Rationale: This class is the range of edm:aggregatedCHO. A resource of type ProvidedCHO can be the subject of statements using edm:isRelatedTo or any more specific property."@en .
 
@@ -210,7 +210,7 @@ happened."""@en ;
 
 edm:hasMet a rdf:Property ;
 	rdfs:label "Has Met"@en ;
-	skos:definition "edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of “meetings” between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role."@en ;
+	skos:definition "edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object "has met" in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role."@en ;
 	rdfs:subPropertyOf dc:relation ;
 	rdfs:domain _:node16k3ng1n7x16 .
 
@@ -241,7 +241,7 @@ _:node16k3ng1n7x19 rdf:rest rdf:nil .
 edm:hasType a owl:ObjectProperty ;
 	rdfs:label "Has Type"@en ;
 	skos:definition """This property relates a resource with the concepts it belongs to in a suitable
-type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the “Objects” facet in Getty's Art and Architecture Thesaurus). It does not capture aboutness."""@en ;
+type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the "Objects" facet in Getty's Art and Architecture Thesaurus). It does not capture aboutness."""@en ;
 	rdfs:subPropertyOf edm:isRelatedTo ;
 	owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P2F.has_type> ;
 	rdfs:domain _:node16k3ng1n7x23 .

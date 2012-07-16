@@ -125,9 +125,9 @@ descriptions about the object that Europeana collects from (possibly different) 
         <rdfs:subClassOf rdf:resource="http://www.europeana.eu/schemas/edm/NonInformationResource"/>
         <owl:equivalentClass rdf:resource="&abc;Temporality"/>
         <owl:equivalentClass rdf:resource="&core;Event"/>
-        <skos:definition>An event is a change “of states in cultural, social or physical systems,
+        <skos:definition>An event is a change "of states in cultural, social or physical systems,
  regardless of scale, brought about by a series or group of coherent physical,
-cultural, technological or legal phenomena” (E5 Event in CIDOC CRM) or a “set of coherent phenomena or cultural manifestations bounded in time and  space” (E4 Period in CIDOC CRM)
+cultural, technological or legal phenomena" (E5 Event in CIDOC CRM) or a "set of coherent phenomena or cultural manifestations bounded in time and  space" (E4 Period in CIDOC CRM)
 </skos:definition>
         <skos:note>Events are identified either by the content provider or by Europeana enrichment at ingestion time</skos:note>
         <skos:example>the act of painting Mona Lisa</skos:example>
@@ -202,8 +202,8 @@ things Europeana refers to in the descriptions of Cultural Heritage Objects
         <owl:equivalentClass rdf:resource="&DOLCE-Lite;time-interval"/>
         <owl:equivalentClass rdf:resource="&cidoc_crm_v5;E52.Time-Span"/>
         <rdfs:label>time span</rdfs:label>
-        <skos:definition>The class of “abstract temporal extents, in the sense of Galilean physics,
- having a beginning, an end and a duration” (CIDOC CRM)</skos:definition>
+        <skos:definition>The class of "abstract temporal extents, in the sense of Galilean physics,
+ having a beginning, an end and a duration" (CIDOC CRM)</skos:definition>
     </owl:Class>
     
 
@@ -269,7 +269,7 @@ happened.</skos:definition>
 
     <rdf:Property rdf:about="http://www.europeana.eu/schemas/edm/hasMet">
         <rdfs:label>has met</rdfs:label>
-        <skos:definition>ens:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of “meetings” between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role.</skos:definition>
+        <skos:definition>ens:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object "has met" in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&dc;relation"/>
         <rdfs:domain rdf:resource="&rdfs;Resource"/>        
         <rdfs:domain>
