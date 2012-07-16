@@ -309,7 +309,7 @@ happened.</skos:definition>
 
     <rdf:Property rdf:about="&edm;hasMet">
         <rdfs:label xml:lang="en">Has Met</rdfs:label>
-        <skos:definition xml:lang="en">edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role.</skos:definition>
+        <skos:definition xml:lang="en">edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object "has met" in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&dc;relation"/>      
         <rdfs:domain>
             <owl:Class>

@@ -210,7 +210,7 @@ happened."""@en ;
 
 edm:hasMet a rdf:Property ;
 	rdfs:label "Has Met"@en ;
-	skos:definition "edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role."@en ;
+	skos:definition "edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of "meetings" between people and other things in space-time. Therefore we name this relationship as the things the object "has met" in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role."@en ;
 	rdfs:subPropertyOf dc:relation ;
 	rdfs:domain _:node16k3ng1n7x16 .
 
