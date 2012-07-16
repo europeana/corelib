@@ -135,7 +135,7 @@
       <documentation>
         A related resource. The recommended best practice is to identify the resource using a formal identification scheme. Example:
         <relation>maps.crace.1/33</relation>
-        (This is the shelf mark for a map held in the British Library’s Crace Collection). Type: String
+        (This is the shelf mark for a map held in the British Library's Crace Collection). Type: String
       </documentation>
     </annotation>
   </element>

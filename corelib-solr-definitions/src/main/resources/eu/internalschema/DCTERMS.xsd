@@ -31,7 +31,7 @@
     <annotation>
       <documentation>
         A related resource that references, cites, or otherwise points to the described resource. Example:
-        <isReferencedBy> Till, Nicholas (1994) Mozart and the Enlightenment: Truth, Virtue and Beauty in Mozart’s Operas, W. W. Norton &amp;
+        <isReferencedBy> Till, Nicholas (1994) Mozart and the Enlightenment: Truth, Virtue and Beauty in Mozart's Operas, W. W. Norton &amp;
           Company </isReferencedBy>
         Type: String
       </documentation>
@@ -178,7 +178,7 @@
         A related resource that is a version, edition, or adaptation of the described resource. Changes in version imply substantive changes in
         content rather than differences in format.
         Example:
-        <hasVersion> The Sorcerer’s Apprentice (translation by Edwin Zeydel, 1955) </hasVersion>
+        <hasVersion> The Sorcerer's Apprentice (translation by Edwin Zeydel, 1955) </hasVersion>
         . In this example the 1955 translation is a version of the described resource. Type: String
       </documentation>
     </annotation>

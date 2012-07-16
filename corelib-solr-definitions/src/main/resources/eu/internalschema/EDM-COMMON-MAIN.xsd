@@ -215,7 +215,7 @@
                 to capture both these cases, the domain of edm:hasView is ore:Aggregation and its
                 range is edm:WebResource Example: An ore:Aggregation of Mona Lisa contributed by
                 Louvre may have as view a low resolution digital image of Mona Lisa. The issue
-                number 56 of “Le Temps” contributed by BNF may have as view a text of some parts of
+                number 56 of "Le Temps" contributed by BNF may have as view a text of some parts of
                 the issue </documentation>
         </annotation>
     </element>
@@ -264,10 +264,10 @@
 
     <element name="isShownBy" type="rdf:ResourceType">
         <annotation>
-            <documentation> An unambiguous URL reference to the digital object on the provider’s web
+            <documentation> An unambiguous URL reference to the digital object on the provider's web
                 site in the best available resolution/quality. See also edm:isShownAt. This is a URL
                 that will be active in the Europeana interface. It will lead users to the digital
-                object on the provider’s website where they can view or play it. The digital object
+                object on the provider's website where they can view or play it. The digital object
                 needs to be directly accessible by the URL and reasonably independent at that
                 location. If the URL includes short copyright information with the pointer to the
                 object it can be entered in edm:isShownBy. Use edm:isShownAt for digital objects
@@ -279,10 +279,10 @@
 
     <element name="isShownAt" type="rdf:ResourceType">
         <annotation>
-            <documentation>An unambiguous URL reference to the digital object on the provider’s web
+            <documentation>An unambiguous URL reference to the digital object on the provider's web
                 site in its full information context. See also edm:isShownBy.This is a URL that will
                 be active in the Europeana interface. It will lead users to the digital object
-                displayed on the provider’s web site in its full information context. Use
+                displayed on the provider's web site in its full information context. Use
                 edm:isShownAt if you display the digital object with extra information (such as
                 header, banner etc). Example:
                 &lt;edm:isShownAt&gt;http://www.photo.rmn.fr/cf/htm/CPICZ.aspx?E=2C6NU0VFLVNY&lt;/edm:isShownAt&gt;
@@ -306,7 +306,7 @@
             <documentation>This element is used to identify user generated content (also called user
                 created content). It should be applied to all digitised or born digital content
                 contributed by the general public and collected by Europeana through a crowdsourcing
-                initiative or project. The only value this element can take is “TRUE” to indicate
+                initiative or project. The only value this element can take is "TRUE" to indicate
                 that the object is user generated. It should be entered in uppercase. If the content
                 is not user generated then the element should not be provided.
                 Example:&lt;edm:UGC&gt;TRUE&lt;edm:UGC&gt; </documentation>
@@ -317,9 +317,9 @@
         <annotation>
             <documentation> edm:hasMet relates a resource with the objects or phenomena that have
                 happened to or have happened together with the resource under consideration. We can
-                abstractly think of history and the present as a series of “meetings” between people
+                abstractly think of history and the present as a series of "meetings" between people
                 and other things in space-time. Therefore we name this relationship as the things
-                the object “has met” in the course of its existence. These meetings are events in
+                the object "has met" in the course of its existence. These meetings are events in
                 the proper sense, in which other people and things participate in any role.
                 Example:The location of an object may be due to a transport, move to a place, or
                 because it has been created at that spot. </documentation>
@@ -330,7 +330,7 @@
         <annotation>
             <documentation>This property relates a resource with the concepts it belongs to in a
                 suitable type system such as MIME or any thesaurus that captures categories of
-                objects in a given field (e.g., the “Objects” facet in Getty’s Art and Architecture
+                objects in a given field (e.g., the "Objects" facet in Getty's Art and Architecture
                 Thesaurus). It does not capture aboutness. Example:The type of Mona Lisa is (AAT)
                 Painting. The type of a digital image of Mona Lisa may be JPEG. </documentation>
         </annotation>
@@ -346,10 +346,10 @@
                 presentation. Therefore, incorporated resources do in general not form proper parts.
                 Incorporated resources are not part of the same resource, but are taken from other
                 resources, and have an independent history. Therefore edm:incorporates is not a
-                sub-property of dcterm:hasPart. Example:The movie “A Clockwork Orange” incorporates
-                Rossini’s symphony from “La Gazza Ladra” in its original soundtrack. “E.A.Poe, The
-                Raven (poem)” is incorporated in “Emerson Lake &amp; Palmers Tales of Mystery
-                (music)” which is incorporated in “Concert Recording 1973 (vinyl)”. </documentation>
+                sub-property of dcterm:hasPart. Example:The movie "A Clockwork Orange"" incorporates
+                Rossini's symphony from "La Gazza Ladra" in its original soundtrack. "E.A.Poe, The
+                Raven (poem)" is incorporated in "Emerson Lake &amp; Palmers Tales of Mystery
+                (music)" which is incorporated in "Concert Recording 1973 (vinyl)". </documentation>
         </annotation>
     </element>
 
@@ -417,7 +417,7 @@
         <annotation>
             <documentation>This property describes a relation between a physical thing and the
                 information resource that is contained in it, visible at it or otherwise carried by
-                it, if applicable. Example: An item of the Gutenberg’s edition realizes the Bible
+                it, if applicable. Example: An item of the Gutenberg's edition realizes the Bible
             </documentation>
         </annotation>
     </element>
@@ -457,7 +457,7 @@
         <annotation>
             <documentation>This property captures the relation between an aggregation representing a
                 cultural heritage object and the Web resource representing that object on the
-                provider’s web site. Example: Mona Lisa, represented by the Europeana aggregation
+                provider's web site. Example: Mona Lisa, represented by the Europeana aggregation
                 europeana:ea-monalisa, has landing page
                 http://www.culture.gouv.fr/public/mistral/joconde_fr?ACTION=CHERCHER&amp;FIELD_1=REF&amp;VALUE_1=000PE025604</documentation>
         </annotation>
@@ -466,7 +466,7 @@
     <element name="country" type="rdf:LiteralType">
         <annotation>
             <documentation>This is the name of the country in which the Provider is based or
-                “Europe” in the case of Europe-wide projects. Example:
+                "Europe" in the case of Europe-wide projects. Example:
                 &lt;edm:country&gt;AL&lt;/edm:country&gt; </documentation>
         </annotation>
     </element>
