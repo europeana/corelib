@@ -122,7 +122,7 @@ descriptions about the object that Europeana collects from (possibly different) 
 
     <owl:Class rdf:about="&edm;EuropeanaObject">
         <rdfs:label xml:lang="en">Europeana Object</rdfs:label>
-        <skos:definition xml:lang="en">Any object that is the result of Europeana’s activities</skos:definition>
+        <skos:definition xml:lang="en">Any object that is the result of Europeana's activities</skos:definition>
         <rdfs:subClassOf rdf:resource="&edm;WebResource"/>
         <skos:example xml:lang="en">Any instance of the class EuropeanaAggregation</skos:example>
         <skos:example xml:lang="en">An annotation created by a user through the Europeana portal</skos:example>
@@ -334,7 +334,7 @@ happened.</skos:definition>
     <owl:ObjectProperty rdf:about="&edm;hasType">
         <rdfs:label xml:lang="en">Has Type</rdfs:label>
         <skos:definition xml:lang="en">This property relates a resource with the concepts it belongs to in a suitable
-type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the “Objects” facet in Getty’s Art and Architecture Thesaurus). It does not capture aboutness.</skos:definition>
+type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the “Objects” facet in Getty's Art and Architecture Thesaurus). It does not capture aboutness.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&edm;isRelatedTo"/>
         <owl:equivalentProperty rdf:resource="&crm;P2F.has_type"/>
         <rdfs:domain>
@@ -480,7 +480,7 @@ properties have typically to do either with the things that have happened to or 
         <rdfs:label xml:lang="en">Landing Page</rdfs:label>
         <skos:definition xml:lang="en">This property captures the relation between an aggregation representing a
 Cultural Heritage Object and the Web Resource representing that Object on
-the provider’s web site.</skos:definition>
+the provider's web site.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&ore;aggregates"/>
         <rdfs:range rdf:resource="&edm;WebResource"/>
     </owl:ObjectProperty>
@@ -555,7 +555,7 @@ overlaps with the occurrence of that event</skos:definition>
 
     <owl:ObjectProperty rdf:about="&edm;isShownAt">
         <rdfs:label xml:lang="en">Is Shown At</rdfs:label>
-        <skos:definition xml:lang="en">An unambiguous URL reference to the digital object on the provider’s web site in its full information context.</skos:definition>
+        <skos:definition xml:lang="en">An unambiguous URL reference to the digital object on the provider's web site in its full information context.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&edm;landingPage"/>
         <rdfs:range rdf:resource="&edm;WebResource"/>
     </owl:ObjectProperty>
@@ -564,7 +564,7 @@ overlaps with the occurrence of that event</skos:definition>
 
     <owl:ObjectProperty rdf:about="&edm;isShownBy">
         <rdfs:label xml:lang="en">Is Shown By</rdfs:label>
-        <skos:definition xml:lang="en">An unambiguous URL reference to the digital object on the provider’s web site in the best available resolution/quality.</skos:definition>
+        <skos:definition xml:lang="en">An unambiguous URL reference to the digital object on the provider's web site in the best available resolution/quality.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&edm;hasView"/>
         <rdfs:range rdf:resource="&edm;WebResource"/>
     </owl:ObjectProperty>    

@@ -110,7 +110,7 @@ descriptions about the object that Europeana collects from (possibly different) 
     <owl:Class rdf:about="http://www.europeana.eu/schemas/edm/EuropeanaObject">
         <rdfs:label>Europeana object</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.europeana.eu/schemas/edm/WebResource"/>
-        <skos:definition>Any object that is the result of Europeana’s activities</skos:definition>
+        <skos:definition>Any object that is the result of Europeana's activities</skos:definition>
         <skos:example>Any instance of the class EuropeanaAggregation</skos:example>
         <skos:example>An annotation created by a user through the Europeana portal</skos:example>
         <skos:example>Any content created by the users through the service made available by Europeana for that purpose</skos:example>
@@ -291,7 +291,7 @@ happened.</skos:definition>
     <owl:ObjectProperty rdf:about="http://www.europeana.eu/schemas/edm/hasType">
         <rdfs:label>has type</rdfs:label>
         <skos:definition>This property relates a resource with the concepts it belongs to in a suitable
-type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the “Objects” facet in Getty’s Art and Architecture Thesaurus). It does not capture aboutness.</skos:definition>
+type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the "Objects" facet in Getty's Art and Architecture Thesaurus). It does not capture aboutness.</skos:definition>
         <rdfs:range rdf:resource="http://www.europeana.eu/schemas/edm/NonInformationResource"/>
         <owl:equivalentProperty rdf:resource="&cidoc_crm_v5;P2F.has_type"/>
         <rdfs:subPropertyOf rdf:resource="http://www.europeana.eu/schemas/edm/isRelatedTo"/>
@@ -431,7 +431,7 @@ properties have typically to do either with the things that have happened to or 
         <rdfs:label xml:lang="en">landing page</rdfs:label>
         <skos:definition>This property captures the relation between an aggregation representing a
 Cultural Heritage Object and the Web Resource representing that Object on
-the provider’s web site.</skos:definition>
+the provider's web site.</skos:definition>
         <rdfs:range rdf:resource="http://www.europeana.eu/schemas/edm/WebResource"/>
         <rdfs:subPropertyOf rdf:resource="&ore;aggregates"/>
     </owl:ObjectProperty>
@@ -573,7 +573,7 @@ realizes.</skos:definition>
 
     <owl:ObjectProperty rdf:about="http://www.europeana.eu/schemas/edm/isShownAt">
         <rdfs:label>is shown at</rdfs:label>
-        <skos:definition>An unambiguous URL reference to the digital object on the provider’s web site in its full information context.</skos:definition>
+        <skos:definition>An unambiguous URL reference to the digital object on the provider's web site in its full information context.</skos:definition>
         <rdfs:range rdf:resource="http://www.europeana.eu/schemas/edm/WebResource"/>
         <rdfs:subPropertyOf rdf:resource="http://www.europeana.eu/schemas/edm/landingPage"/>
     </owl:ObjectProperty>
@@ -582,7 +582,7 @@ realizes.</skos:definition>
 
     <owl:ObjectProperty rdf:about="http://www.europeana.eu/schemas/edm/isShownBy">
         <rdfs:label>is shown by</rdfs:label>
-        <skos:definition>An unambiguous URL reference to the digital object on the provider’s web site in the best available resolution/quality.</skos:definition>
+        <skos:definition>An unambiguous URL reference to the digital object on the provider's web site in the best available resolution/quality.</skos:definition>
         <rdfs:range rdf:resource="http://www.europeana.eu/schemas/edm/WebResource"/>
         <rdfs:subPropertyOf rdf:resource="http://www.europeana.eu/schemas/edm/hasView"/>
     </owl:ObjectProperty>    
