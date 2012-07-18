@@ -17,7 +17,6 @@
 
 package eu.europeana.corelib.db.entity.nosql;
 
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,10 +45,7 @@ public class ImageCache implements NoSqlEntity {
 	@Indexed(unique=false)
 	private String originalUrl;
 	
-	private int height;
-	
-	private int width;
-	
+
 	private Map<String, Image> images = new HashMap<String, Image>();
 	
 	/**
@@ -60,13 +56,12 @@ public class ImageCache implements NoSqlEntity {
 		// left empty on purpose, do NOT remove!!
 	}
 
-	public ImageCache(String objectId, String imageId, String collectionId, String url, BufferedImage original) {
+	public ImageCache(String objectId, String imageId, String collectionId, String url) {
 		setImageId(new StringBuilder(objectId).append(ThumbnailService.COMBINE_CHAR).append(imageId).toString());
 		setObjectId(objectId);
 		setCollectionId(collectionId);
 		setOriginalUrl(url);
-		setHeight(original.getHeight());
-		setWidth(original.getWidth());
+	
 	}
 	
 	/**
@@ -81,21 +76,6 @@ public class ImageCache implements NoSqlEntity {
 		this.imageId = imageId;
 	}
 
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
 
 	public Map<String, Image> getImages() {
 		return images;

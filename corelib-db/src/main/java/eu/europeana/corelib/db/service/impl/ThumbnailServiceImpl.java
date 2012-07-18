@@ -80,7 +80,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		sanitycheck("storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage," +
 			"String url)",objectId,imageId,collectionId,originalImage);
 		
-		ImageCache cache = new ImageCache(objectId, imageId, collectionId, url, originalImage);
+		ImageCache cache = new ImageCache(objectId, imageId, collectionId, url);
 
 		try {
 			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),

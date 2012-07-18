@@ -73,9 +73,6 @@ public class ThumbnailServiceTest {
 		
 		ImageCache imageCache = thumbnailService.findByID(OBJ_ID);
 		
-		Assert.assertEquals(image.getHeight(), imageCache.getHeight());
-		Assert.assertEquals(image.getWidth(), imageCache.getWidth());
-		
 		Image tinyImage = imageCache.getImages().get(ThumbSize.TINY.toString());
 		
 		Assert.assertTrue(tinyImage.getHeight() > 0);
