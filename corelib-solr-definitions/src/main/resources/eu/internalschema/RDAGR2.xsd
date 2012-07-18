@@ -26,27 +26,22 @@
 
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
 
-    <element name="dateOfBirth" type="rdf:LiteralType">
-        
+    <element name="dateOfBirth" type="rdf:LiteralType">    
     </element>
     
     <element name="dateOfDeath" type="rdf:LiteralType">
-        
     </element>
     
     <element name="dateOfEstablishment" type="rdf:LiteralType">
-        
     </element>
     
     <element name="dateOfTermination" type="rdf:LiteralType">
-        
     </element>
 
-    <element name="professionOrOccupation" type="rdf:LiteralType">
-        
+    <element name="professionOrOccupation" type="rdf:ResourceOrLiteralType">
     </element>
     
-    <element name="gender" type="rdf:ResourceOrLiteralType"/>
+    <element name="gender" type="rdf:LiteralType"/>
     <element name="biographicalInformation" type="rdf:LiteralType"/>
 
 </schema>

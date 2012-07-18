@@ -22,7 +22,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
   xmlns:dcterms="http://purl.org/dc/terms/" 
-  xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" 
+  xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#" 
   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
   xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" 
@@ -55,23 +55,24 @@
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
-          <element name="begin" maxOccurs="unbounded" minOccurs="0" />
-          <element name="end" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element ref="dc:date" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="edm:begin" maxOccurs="1" minOccurs="0" />
+          <element ref="edm:end" maxOccurs="1" minOccurs="0" />
           <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="foaf:name" maxOccurs="unbounded" minOccurs="0"/>
-          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="rdaGr2:biographicalInformation" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfBirth" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:dateOfDeath" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
-          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>
@@ -88,15 +89,15 @@
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
+          <element ref="wgs84_pos:lat" maxOccurs="1" minOccurs="0" />
+          <element ref="wgs84_pos:long" maxOccurs="1" minOccurs="0" />
+          <element ref="wgs84_pos:alt" maxOccurs="1" minOccurs="0"/>
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
-          <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="wgs84:alt" maxOccurs="1" minOccurs="0"/>
-          <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
-          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
         </sequence>
       </extension>
     </complexContent>
@@ -112,16 +113,14 @@
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
-          <element name="begin" maxOccurs="unbounded" minOccurs="0" />
-          <element name="end" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
-          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
           <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
           <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
-          <element ref="wgs84:pos_lat" maxOccurs="1" minOccurs="0" />
-          <element ref="wgs84:pos_long" maxOccurs="1" minOccurs="0" />
+          <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="edm:begin" maxOccurs="1" minOccurs="0" />
+          <element ref="edm:end" maxOccurs="1" minOccurs="0" />
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>

@@ -28,8 +28,8 @@
 
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
   
-  <element name="pos_lat" type="float" />
-  <element name="pos_long" type="float" />
+  <element name="lat" type="rdf:LiteralType" />
+  <element name="long" type="rdf:LiteralType" />
   <element name="alt" type="rdf:LiteralType" />
 
 </schema>

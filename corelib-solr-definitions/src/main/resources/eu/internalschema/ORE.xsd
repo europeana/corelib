@@ -44,8 +44,8 @@
                         <element ref="edm:aggregatedCHO"  maxOccurs="1" minOccurs="1" />
                         <element ref="edm:dataProvider" maxOccurs="1" minOccurs="1" />
                         <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0" />
-                        <element ref="edm:isShownAt"  maxOccurs="1" minOccurs="0" />
                         <element ref="edm:isShownBy"  maxOccurs="1" minOccurs="0" />
+                        <element ref="edm:isShownAt"  maxOccurs="1" minOccurs="0" />
                         <element ref="edm:object"  maxOccurs="1" minOccurs="0" />
                         <element ref="edm:provider"  maxOccurs="1" minOccurs="1" />
                         <element ref="edm:rights" maxOccurs="1" minOccurs="1" />
@@ -62,6 +62,8 @@
     <element name="proxyIn" type="rdf:ResourceType">
     </element>    
 
+    <element name="aggregates" type="rdf:ResourceType">
+    </element>    
 
     
 </schema>

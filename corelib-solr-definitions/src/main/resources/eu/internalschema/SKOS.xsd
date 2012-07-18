@@ -34,16 +34,18 @@
        <complexContent>
          <extension base="rdf:AboutType">
            <sequence>
+             <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
              <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
              <element ref="skos:broader" maxOccurs="unbounded" minOccurs="0" />
+             <element ref="skos:narrower" maxOccurs="unbounded" minOccurs="0" />
+             <element ref="skos:related" maxOccurs="unbounded" minOccurs="0" />
              <element ref="skos:broadMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:closeMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:exactMatch" maxOccurs="unbounded" minOccurs="0" />             
              <element ref="skos:narrowMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:notation" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
              <element ref="skos:relatedMatch" maxOccurs="unbounded" minOccurs="0" />
+             <element ref="skos:exactMatch" maxOccurs="unbounded" minOccurs="0" />   
+             <element ref="skos:closeMatch" maxOccurs="unbounded" minOccurs="0" />
+             <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
+             <element ref="skos:notation" maxOccurs="unbounded" minOccurs="0" />
            </sequence>
          </extension>
        </complexContent> 
@@ -60,6 +62,8 @@
   <element name="prefLabel" type="rdf:LiteralType" />
   <element name="altLabel" type="rdf:LiteralType" />
   <element name="broader" type="rdf:ResourceType" />
+  <element name="narrower" type="rdf:ResourceType" />
+  <element name="related" type="rdf:ResourceType" />
   <element name="inScheme" type="rdf:ResourceType" />
   <element name="note" type="rdf:LiteralType" />
 

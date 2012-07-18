@@ -26,8 +26,7 @@
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
     xmlns:ore="http://www.openarchives.org/ore/terms/"
-    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" 
-    xmlns:foaf="http://xmlns.com/foaf/0.1">
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" xmlns:foaf="http://xmlns.com/foaf/0.1">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
 
@@ -41,7 +40,7 @@
     <import namespace="http://xmlns.com/foaf/0.1" schemaLocation="FOAF.xsd"/>
     <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
-    
+
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
 
@@ -73,15 +72,14 @@
             <extension base="rdf:AboutType">
                 <sequence>
                     <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:aggregatedCHO"  maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
-                    <element ref="edm:dataProvider" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:landingPage" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:language" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:provider"  maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
+                    <element ref="ore:aggregates" maxOccurs="1" minOccurs="0"/>
                 </sequence>
             </extension>
         </complexContent>
@@ -117,7 +115,9 @@
                     <element ref="edm:year" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="ore:proxyFor" maxOccurs="1" minOccurs="0"/>
                     <element ref="ore:proxyIn" maxOccurs="unbounded" minOccurs="0"/>
-                    <!--
+                    <!-- 
+                        The fields below are meant to be used for enrichment purposes but they 
+                        are not currently being used. Probably they will be removed in a future release.
                     <element ref="enrichment:agent_label" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:agent_term" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="enrichment:concept_label" maxOccurs="unbounded" minOccurs="0"/>
