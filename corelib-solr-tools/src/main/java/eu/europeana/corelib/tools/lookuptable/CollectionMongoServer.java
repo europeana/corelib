@@ -19,6 +19,8 @@ package eu.europeana.corelib.tools.lookuptable;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
@@ -109,7 +111,9 @@ public class CollectionMongoServer implements MongoServer {
 	 * @param collection The collection to save
 	 */
 	public void saveCollection(Collection collection) {
-		datastore.save(collection);
+		if(StringUtils.isNotBlank(findOldCollectionId(collection.getNewCollectionId()))){
+			datastore.save(collection);
+		}
 	}
 	
 	public List<Collection> retrieveAllCollections(){
