@@ -45,7 +45,6 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
 /**
@@ -114,14 +113,14 @@ public class ContentLoader {
 				IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
-				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf, true);
 				fullBean.setAbout(EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout()));
 				if(mongoDBServer.searchByAbout(FullBeanImpl.class, fullBean.getAbout())!=null){
 					MongoUtils.updateFullBean(fullBean, mongoDBServer);
 				}else {
 					mongoDBServer.getDatastore().save(fullBean);
 				}
-				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf);
+				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf, true);
 				document.setField("europeana_id", fullBean.getAbout());
 				records.add(document);
 

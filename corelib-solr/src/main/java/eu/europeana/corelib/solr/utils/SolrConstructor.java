@@ -51,7 +51,7 @@ public class SolrConstructor {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public static SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
+	public static SolrInputDocument constructSolrDocument(RDF rdf, boolean shouldDereference) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
 		solrInputDocument = new SolrInputDocument();
 		
 		for(Choice element: rdf.getChoiceList()){
@@ -74,7 +74,7 @@ public class SolrConstructor {
 			else if(element.ifProvidedCHO()){
 				
 				solrInputDocument = ProvidedCHOFieldInput.createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
-				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProvidedCHO(), solrInputDocument, rdf);
+				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProvidedCHO(), solrInputDocument, rdf, shouldDereference);
 			}
 		
 			else if (element.ifTimeSpan()) {
@@ -85,7 +85,6 @@ public class SolrConstructor {
 				solrInputDocument = WebResourcesFieldInput.createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
 			}
 		}
-		rdf=null;
 		return solrInputDocument;
 	}
 }

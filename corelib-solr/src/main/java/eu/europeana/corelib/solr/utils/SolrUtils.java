@@ -92,10 +92,10 @@ public final class SolrUtils {
 	}
 
 	public static void addResourceOrLiteralType(SolrInputDocument destination,
-			EdmLabel label, ResourceOrLiteralType type, RDF rdf)
+			EdmLabel label, ResourceOrLiteralType type, RDF rdf, boolean shouldDereference)
 			throws MalformedURLException, IOException {
 		List<List<String>> value = getValueOfResourceOrLiteralType(type, label,
-				rdf);
+				rdf, shouldDereference);
 		if (value != null) {
 			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
 			for (List<String> values : value) {
@@ -110,11 +110,11 @@ public final class SolrUtils {
 
 	public static void addResourceOrLiteralType(List<String> destination,
 			EdmLabel label, ResourceOrLiteralType type,
-			Map<String, List<String>> mapLists, RDF rdf)
+			Map<String, List<String>> mapLists, RDF rdf, boolean shouldDereference)
 			throws MalformedURLException, IOException {
 
 		List<List<String>> value = getValueOfResourceOrLiteralType(type, label,
-				rdf);
+				rdf,shouldDereference);
 		if (value != null) {
 
 			for (List<String> values : value) {
@@ -132,15 +132,31 @@ public final class SolrUtils {
 	}
 
 	public static List<List<String>> getValueOfResourceOrLiteralType(
-			ResourceOrLiteralType type, EdmLabel label, RDF rdf)
+			ResourceOrLiteralType type, EdmLabel label, RDF rdf, boolean shouldDereference)
 			throws MalformedURLException, IOException {
 		List<List<String>> value = new ArrayList<List<String>>();
 		if (type != null) {
+			
 			if (EuropeanaField.contains(label.toString())) {
+				if(shouldDereference){
 				if (StringUtils.isNotEmpty(type.getResource())) {
 					value = Dereferencer.normalize(type.getResource());
 				} else if (StringUtils.isNotEmpty(type.getString())) {
 					value = Dereferencer.normalize(type.getString());
+				}
+				}
+				else{
+					if (StringUtils.isNotEmpty(type.getResource())) {
+						List<String> originalValue = new ArrayList<String>();
+						originalValue.add("original");
+						originalValue.add(type.getResource());
+						value.add(originalValue);
+					} else if (StringUtils.isNotEmpty(type.getString())) {
+						List<String> originalValue = new ArrayList<String>();
+						originalValue.add("original");
+						originalValue.add(type.getString());
+						value.add(originalValue);
+					}
 				}
 			} else {
 				List<String> temp = new ArrayList<String>();
@@ -156,10 +172,7 @@ public final class SolrUtils {
 			}
 
 		}
-		for (List<String> entry : value) {
 
-			// TODO: cannot be implemented unless the fields are there
-		}
 		return value;
 	}
 

@@ -67,7 +67,7 @@ public class MongoConstructor {
 	 * @throws IOException 
 	 * @throws MalformedURLException 
 	 */
-	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
+	public FullBeanImpl constructFullBean(RDF record, boolean shouldDereference) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
@@ -87,10 +87,10 @@ public class MongoConstructor {
 							mongoServer));
 					if (proxies.size() > 0) {
 						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
-								element.getProvidedCHO(), mongoServer, record));
+								element.getProvidedCHO(), mongoServer, record, shouldDereference));
 					} else {
 						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProvidedCHO(),
-								mongoServer, record));
+								mongoServer, record, shouldDereference));
 					}
 				} catch (InstantiationException e) {
 					e.printStackTrace();

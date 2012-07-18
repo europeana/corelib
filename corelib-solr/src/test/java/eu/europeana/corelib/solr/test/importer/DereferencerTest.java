@@ -97,11 +97,11 @@ public class DereferencerTest {
 			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 			RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(
 					new File(workingDir + "/target/test-classes/test_files/edm.xml")), null);
-			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf, true);
 
 			mongoDBServer.getDatastore().save(fullBean);
 			SolrInputDocument solrDocument = SolrConstructor
-					.constructSolrDocument(rdf);
+					.constructSolrDocument(rdf, true);
 			solrServer.add(solrDocument);
 			solrServer.commit();
 			solrServer.optimize();
