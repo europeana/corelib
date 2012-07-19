@@ -113,6 +113,7 @@ public class ContentLoader {
 				IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
+				
 				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf, true);
 				fullBean.setAbout(EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout()));
 				if(mongoDBServer.searchByAbout(FullBeanImpl.class, fullBean.getAbout())!=null){
