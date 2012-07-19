@@ -134,12 +134,12 @@ public class AggregationFieldInputTest {
 		Ugc ugc = new Ugc();
 		ugc.setUgc(UGCType.TRUE);
 		aggregation.setUgc(ugc);
-		Rights rights = new Rights();
+		Rights1 rights = new Rights1();
 		rights.setString("test rights");
 		aggregation.setRights(rights);
-		List<Rights1> rightsList = new ArrayList<Rights1>();
-		Rights1 rights1 = new Rights1();
-		rights1.setString("test rights 1");
+		List<Rights> rightsList = new ArrayList<Rights>();
+		Rights rights1 = new Rights();
+		rights.setString("test rights 1");
 		rightsList.add(rights1);
 		aggregation.setRightList(rightsList);
 		return aggregation;

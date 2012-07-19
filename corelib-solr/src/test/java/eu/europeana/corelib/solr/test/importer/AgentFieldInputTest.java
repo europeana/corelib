@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.Begin;
+import eu.europeana.corelib.definitions.jibx.End;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
@@ -47,12 +49,12 @@ public class AgentFieldInputTest {
 		assertNotNull(altLabel);
 		altLabelList.add(altLabel);
 		agentType.setAltLabelList(altLabelList);
-		List<String> beginList = new ArrayList<String>();
-		beginList.add("test begin");
-		agentType.setBegins(beginList);
-		List<String> endList = new ArrayList<String>();
-		endList.add("test end");
-		agentType.setEnds(endList);
+		Begin begin = new Begin();
+		begin.setString("test begin");
+		agentType.setBegin(begin);
+		End end = new End();
+		end.setString("test end");
+		agentType.setEnd(end);
 		List<Note> noteList = new ArrayList<Note>();
 		Note note = new Note();
 		note.setString("test note");
@@ -71,8 +73,8 @@ public class AgentFieldInputTest {
 		AgentImpl agent = AgentFieldInput.createAgentMongoEntity(agentType,
 				mongoServer, null);
 		assertEquals(agentType.getAbout(), agent.getAbout());
-		assertEquals(agentType.getBegins().get(0), agent.getBegin());
-		assertEquals(agentType.getEnds().get(0), agent.getEnd());
+		assertEquals(agentType.getBegin().getString(), agent.getBegin());
+		assertEquals(agentType.getEnd().getString(), agent.getEnd());
 		assertEquals(agentType.getNoteList().get(0).getString(),
 				agent.getNote()[0]);
 		assertTrue(agent.getAltLabel().containsKey(
@@ -91,10 +93,10 @@ public class AgentFieldInputTest {
 		assertEquals(agentType.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.EDM_AGENT.toString())
 						.toString());
-		assertEquals(agentType.getBegins().get(0),
+		assertEquals(agentType.getBegin().getString(),
 				solrDocument.getFieldValues(EdmLabel.AG_EDM_BEGIN.toString())
 						.toArray()[0].toString());
-		assertEquals(agentType.getEnds().get(0),
+		assertEquals(agentType.getEnd().getString(),
 				solrDocument.getFieldValues(EdmLabel.AG_EDM_END.toString())
 						.toArray()[0].toString());
 		assertEquals(agentType.getNoteList().get(0).getString(),

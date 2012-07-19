@@ -33,11 +33,11 @@ public class WebResourcesFieldInputTest {
 	public void testWebResource(){
 		WebResourceType webResource = new WebResourceType();
 		webResource.setAbout("test about");
-		Rights rights = new Rights();
+		Rights1 rights = new Rights1();
 		rights.setResource("test resource");
 		webResource.setRights(rights);
-		List<Rights1> rightsList = new ArrayList<Rights1>();
-		Rights1 rights1 = new Rights1();
+		List<Rights> rightsList = new ArrayList<Rights>();
+		Rights rights1 = new Rights();
 		rights1.setResource("test rights");
 		rightsList.add(rights1);
 		webResource.setRightList(rightsList);

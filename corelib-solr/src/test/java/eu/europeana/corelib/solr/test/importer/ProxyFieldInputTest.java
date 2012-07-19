@@ -41,17 +41,17 @@ import eu.europeana.corelib.definitions.jibx.IsReplacedBy;
 import eu.europeana.corelib.definitions.jibx.IsRequiredBy;
 import eu.europeana.corelib.definitions.jibx.IsVersionOf;
 import eu.europeana.corelib.definitions.jibx.Issued;
-import eu.europeana.corelib.definitions.jibx.Language1;
+import eu.europeana.corelib.definitions.jibx.Language;
 import eu.europeana.corelib.definitions.jibx.Medium;
 import eu.europeana.corelib.definitions.jibx.Provenance;
-import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.Publisher;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.References;
 import eu.europeana.corelib.definitions.jibx.Relation;
 import eu.europeana.corelib.definitions.jibx.Replaces;
 import eu.europeana.corelib.definitions.jibx.Requires;
-import eu.europeana.corelib.definitions.jibx.Rights1;
+import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Source;
 import eu.europeana.corelib.definitions.jibx.Spatial;
 import eu.europeana.corelib.definitions.jibx.Subject;
@@ -74,12 +74,12 @@ public class ProxyFieldInputTest {
 	@Test
 	public void testProxy() throws MalformedURLException, IOException {
 		// The fields of the proxy come from the ProvidedCHO
-		ProvidedCHOType proxy = createProxyFields();
+		ProxyType proxy = createProxyFields();
 		testMongo(proxy);
 		testSolr(proxy);
 	}
 
-	private void testSolr(ProvidedCHOType proxy) throws MalformedURLException,
+	private void testSolr(ProxyType proxy) throws MalformedURLException,
 			IOException {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
@@ -212,7 +212,7 @@ public class ProxyFieldInputTest {
 		}
 	}
 
-	private void testMongo(ProvidedCHOType proxy) {
+	private void testMongo(ProxyType proxy) {
 		ProxyImpl mongoProxy = new ProxyImpl();
 		try {
 			mongoProxy = ProxyFieldInput.createProxyMongoFields(mongoProxy,
@@ -314,8 +314,8 @@ public class ProxyFieldInputTest {
 
 	}
 
-	private ProvidedCHOType createProxyFields() {
-		ProvidedCHOType proxy = new ProvidedCHOType();
+	private ProxyType createProxyFields() {
+		ProxyType proxy = new ProxyType();
 		proxy.setAbout("test about");
 		CurrentLocation currentLocation = new CurrentLocation();
 		currentLocation.setResource("test current location");
@@ -449,7 +449,7 @@ public class ProxyFieldInputTest {
 		identifier.setString("test identifier");
 		dcterms.setIdentifier(identifier);
 		dcterms.clearChoiceListSelect();
-		Language1 language = new Language1();
+		Language language = new Language();
 		language.setString("test language");
 		dcterms.setLanguage(language);
 		dcterms.clearChoiceListSelect();
@@ -461,7 +461,7 @@ public class ProxyFieldInputTest {
 		relation.setResource("test relation");
 		dcterms.setRelation(relation);
 		dcterms.clearChoiceListSelect();
-		Rights1 rights = new Rights1();
+		Rights rights = new Rights();
 		rights.setResource("test rights");
 		dcterms.setRights(rights);
 		dcterms.clearChoiceListSelect();

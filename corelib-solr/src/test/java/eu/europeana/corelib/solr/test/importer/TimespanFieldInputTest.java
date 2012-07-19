@@ -17,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.Begin;
+import eu.europeana.corelib.definitions.jibx.End;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.Note;
@@ -47,12 +49,12 @@ public class TimespanFieldInputTest {
 		assertNotNull(altLabel);
 		altLabelList.add(altLabel);
 		timespan.setAltLabelList(altLabelList);
-		List<String> beginList = new ArrayList<String>();
-		beginList.add("test begin");
-		timespan.setBegins(beginList);
-		List<String> endList = new ArrayList<String>();
-		endList.add("test end");
-		timespan.setEnds(endList);
+		Begin begin = new Begin();
+		begin.setString("test begin");
+		timespan.setBegin(begin);
+		End end = new End();
+		end.setString("test end");
+		timespan.setEnd(end);
 		List<Note> noteList = new ArrayList<Note>();
 		Note note = new Note();
 		note.setString("test note");
@@ -77,8 +79,8 @@ public class TimespanFieldInputTest {
 		TimespanImpl timespanMongo = TimespanFieldInput
 				.createTimespanMongoField(timespan, mongoServer, null);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
-		assertEquals(timespan.getBegins().get(0), timespanMongo.getBegin());
-		assertEquals(timespan.getEnds().get(0), timespanMongo.getEnd());
+		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin());
+		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd());
 		assertEquals(timespan.getNoteList().get(0).getString(),
 				timespanMongo.getNote()[0]);
 		assertTrue(timespanMongo.getAltLabel().containsKey(
@@ -98,10 +100,10 @@ public class TimespanFieldInputTest {
 		assertEquals(timespan.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.EDM_TIMESPAN.toString())
 						.toString());
-		assertEquals(timespan.getBegins().get(0),
+		assertEquals(timespan.getBegin().getString(),
 				solrDocument.getFieldValues(EdmLabel.TS_EDM_BEGIN.toString())
 						.toArray()[0].toString());
-		assertEquals(timespan.getEnds().get(0),
+		assertEquals(timespan.getEnd().getString(),
 				solrDocument.getFieldValues(EdmLabel.TS_EDM_END.toString())
 						.toArray()[0].toString());
 		assertEquals(timespan.getNoteList().get(0).getString(),
