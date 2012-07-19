@@ -115,37 +115,37 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getTitle() {
-		return (this.title!=null ? this.title.clone() : null);
+		return (this.title != null ? this.title.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmObject() { // was getThumbnails
-		return (this.edmObject!=null ? this.edmObject.clone() : null);
+		return (this.edmObject != null ? this.edmObject.clone() : null);
 	}
 
 	@Override
 	public String[] getDcCreator() {
-		return (this.dcCreator!=null ? this.dcCreator.clone() : null);
+		return (this.dcCreator != null ? this.dcCreator.clone() : null);
 	}
 	
 	@Override
 	public String[] getDcContributor() {
-		return (this.dcContributor!=null?this.dcContributor.clone():null);
+		return (this.dcContributor != null ? this.dcContributor.clone() : null);
 	}
 
 	@Override
 	public String[] getYear() {
-		return (this.year!= null ? this.year.clone() :null);
+		return (this.year != null ? this.year.clone() : null);
 	}
 
 	@Override
 	public String[] getProvider() {
-		return (this.provider!=null ? this.provider.clone() : null);
+		return (this.provider != null ? this.provider.clone() : null);
 	}
 
 	@Override
 	public String[] getLanguage() {
-		return (this.language!=null ? this.language.clone() : null);
+		return (this.language != null ? this.language.clone() : null);
 	}
 
 	@Override
@@ -154,12 +154,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	public String[] getRights() {
-		return (this.rights!=null ? this.rights.clone() :null );
+		return (this.rights != null ? this.rights.clone() : null);
 	}
 
 	@Override
 	public String[] getDataProvider() {
-		return (this.edmDataProvider!=null ? this.edmDataProvider.clone() : null);
+		return (this.edmDataProvider != null ? this.edmDataProvider.clone() : null);
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmPlace() {
-		return (this.edmPlace !=null ? this.edmPlace.clone() : null);
+		return (this.edmPlace != null ? this.edmPlace.clone() : null);
 	}
 
 	@Override
@@ -179,17 +179,17 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public Float getEdmPlaceLatitude() {
-		return (this.edmPlaceLatitude !=null ? this.edmPlaceLatitude :null);
+		return (this.edmPlaceLatitude != null ? this.edmPlaceLatitude : null);
 	}
 
 	@Override
 	public Float getEdmPlaceLongitude() {
-		return (this.edmPlaceLongitude!=null ? this.edmPlaceLongitude :null);
+		return (this.edmPlaceLongitude != null ? this.edmPlaceLongitude : null);
 	}
 
 	@Override
 	public String[] getEdmTimespan() {
-		return (this.edmTimespan!=null ? this.edmTimespan.clone() : null);
+		return (this.edmTimespan != null ? this.edmTimespan.clone() : null);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmTimespanBegin() {
-		return (this.edmTimespanBegin!=null ? this.edmTimespanBegin.clone() : null);
+		return (this.edmTimespanBegin != null ? this.edmTimespanBegin.clone() : null);
 	}
 
 	@Override
