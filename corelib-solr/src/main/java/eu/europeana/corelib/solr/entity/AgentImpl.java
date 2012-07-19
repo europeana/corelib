@@ -36,7 +36,6 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	private String[] edmWasPresentAt;
 	private String[] edmHasMet;
 	private String[] edmIsRelatedTo;
-	private String[] skosHiddenLabel;
 	private String[] owlSameAs;
 	private String[] foafName;
 	private String[] dcDate;
@@ -112,15 +111,7 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	public String[] getEdmIsRelatedTo() {
 		return (StringArrayUtils.isNotBlank(this.edmIsRelatedTo)?this.edmIsRelatedTo.clone():null);
 	}
-	@Override
-	public void setSkosHiddenLabel(String[] skosHiddenLabel) {
-		this.skosHiddenLabel = skosHiddenLabel;
-		
-	}
-	@Override
-	public String[] getSkosHiddenLabel() {
-		return (StringArrayUtils.isNotBlank(this.skosHiddenLabel)?this.skosHiddenLabel.clone():null);
-	}
+	
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
 		this.owlSameAs = owlSameAs;

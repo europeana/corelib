@@ -35,7 +35,6 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	private float longitude;
 	private float altitude;
 	private float[] position;
-	private String[] skosHiddenLabel;
 	private String[] dcTermsHasPart;
 	private String[] owlSameAs;
 
@@ -107,15 +106,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 		return this.position!=null? this.position.clone(): null;
 	}
 
-	@Override
-	public void setSkosHiddenLabel(String[] skosHiddenLabel) {
-		this.skosHiddenLabel = skosHiddenLabel;
-	}
-
-	@Override
-	public String[] getSkosHiddenLabel() {
-		return (StringArrayUtils.isNotBlank(skosHiddenLabel) ? this.skosHiddenLabel.clone() : null);
-	}
+	
 
 	@Override
 	public void setDcTermsHasPart(String[] dcTermsHasPart) {

@@ -111,6 +111,7 @@ public final class AggregationFieldInput {
 						hasView.getResource());
 			}
 		}
+		
 		return solrInputDocument;
 	}
 

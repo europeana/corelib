@@ -23,11 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
+import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
+import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
@@ -108,12 +111,86 @@ public final class SolrUtils {
 		}
 	}
 
+	public static void addLiteralType(SolrInputDocument destination,
+			EdmLabel label, LiteralType type, RDF rdf, boolean shouldDereference)
+			throws MalformedURLException, IOException {
+		List<List<String>> value = getValueOfLiteralType(type, label,
+				rdf, shouldDereference);
+		if (value != null) {
+			SolrInputDocument solrInputDocument = (SolrInputDocument) destination;
+			for (List<String> values : value) {
+				if (StringUtils.equals(values.get(0), "original")) {
+					solrInputDocument.addField(label.toString(), values.get(1));
+				} else {
+					solrInputDocument.addField(values.get(0), values.get(1));
+				}
+			}
+		}
+	}
+	private static List<List<String>> getValueOfLiteralType(LiteralType type,
+			EdmLabel label, RDF rdf, boolean shouldDereference) throws MalformedURLException, IOException {
+		List<List<String>> value = new ArrayList<List<String>>();
+		if (type != null) {
+			
+			if (EuropeanaField.contains(label.toString())) {
+				if(shouldDereference){
+				if (StringUtils.isNotEmpty(type.getString())) {
+					value = Dereferencer.normalize(type.getString());
+				}
+				}
+				else{
+					 if (StringUtils.isNotEmpty(type.getString())) {
+						List<String> originalValue = new ArrayList<String>();
+						originalValue.add("original");
+						originalValue.add(type.getString());
+						value.add(originalValue);
+					}
+				}
+			} else {
+				List<String> temp = new ArrayList<String>();
+				temp.add("original");
+				if (StringUtils.isNotEmpty(type.getString())) {
+					temp.add(type.getString());
+				} else {
+					temp.add("");
+				}
+				value.add(temp);
+			}
+
+		}
+
+		return value;
+	}
+
 	public static void addResourceOrLiteralType(List<String> destination,
 			EdmLabel label, ResourceOrLiteralType type,
 			Map<String, List<String>> mapLists, RDF rdf, boolean shouldDereference)
 			throws MalformedURLException, IOException {
 
 		List<List<String>> value = getValueOfResourceOrLiteralType(type, label,
+				rdf,shouldDereference);
+		if (value != null) {
+
+			for (List<String> values : value) {
+				if (StringUtils.equals(values.get(0), "original")) {
+					destination.add(values.get(1));
+				} else {
+					List<String> fieldValues = mapLists.get(values.get(0)
+							.toString());
+					if (!fieldValues.contains(values.get(1))) {
+						fieldValues.add(values.get(1));
+					}
+				}
+			}
+		}
+	}
+	
+	public static void addLiteralType(List<String> destination,
+			EdmLabel label, LiteralType type,
+			Map<String, List<String>> mapLists, RDF rdf, boolean shouldDereference)
+			throws MalformedURLException, IOException {
+
+		List<List<String>> value = getValueOfLiteralType(type, label,
 				rdf,shouldDereference);
 		if (value != null) {
 
@@ -176,6 +253,58 @@ public final class SolrUtils {
 		return value;
 	}
 
+	public static String[] resourceOrLiteralListToArray(List<? extends ResourceOrLiteralType> list){
+		if(list!=null){
+			String[] arr = new String[list.size()];
+			int i=0;
+			for(ResourceOrLiteralType obj : list){
+				arr[i] = obj.getResource()!=null?obj.getResource():obj.getString();
+				i++;
+			}
+			return arr;
+		}
+		return new String[]{};
+	}
+	
+	public static String[] literalListToArray(List<? extends LiteralType> list){
+		if(list!=null){
+			String[] arr = new String[list.size()];
+			int i=0;
+			for(LiteralType obj : list){
+				arr[i] = obj.getString();
+				i++;
+			}
+			return arr;
+		}
+		return new String[]{};
+	}
+	
+	public static String[] resourceListToArray(List<? extends ResourceType> list){
+		if(list!=null){
+			String[] arr = new String[list.size()];
+			int i=0;
+			for(ResourceType obj : list){
+				arr[i] = obj.getResource();
+				i++;
+			}
+			return arr;
+		}
+		return new String[]{};
+	}
+	
+	public static String getLiteralString(LiteralType obj){
+		if (obj!=null){
+			return obj.getString()!=null?obj.getString():null;
+		}
+		return null;
+	}
+	
+	public static String getResourceOrLiteralString(ResourceOrLiteralType obj){
+		if (obj!=null){
+			return obj.getResource()!=null?obj.getResource():obj.getString();
+		}
+		return null;
+	}
 	public static Class<? extends IdBeanImpl> getImplementationClass(
 			Class<? extends IdBean> interfaze) {
 		if (interfaze != null) {

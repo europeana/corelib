@@ -117,7 +117,7 @@ public class MongoConstructor {
 				concepts.add(ConceptFieldInput.createConceptMongoFields(element.getConcept(), mongoServer, record));
 			}
 			if (element.ifPlace()) {
-				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer, record));
+				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer));
 			}
 
 			if (element.ifWebResource()) {
@@ -130,10 +130,10 @@ public class MongoConstructor {
 
 			}
 			if (element.ifTimeSpan()) {
-				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer, record));
+				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer));
 			}
 			if (element.ifAgent()) {
-				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer, record));
+				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer));
 			}
 		}
 

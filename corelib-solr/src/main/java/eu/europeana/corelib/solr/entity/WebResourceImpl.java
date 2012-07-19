@@ -35,7 +35,16 @@ public class WebResourceImpl implements WebResource {
 	private String webResourceEdmRights;
 
 	private String about;
-
+	private String[] dcDescription;
+	private String[] dcFormat;
+	private String[] dcSource;
+	private String[] dctermsExtent;
+	private String[] dctermsIssued;
+	private String[] dctermsConformsTo;
+	private String[] dctermsCreated;
+	private String[] dctermsIsFormatOf;
+	private String[] dctermsHasPart;
+	private String isNextInSequence;
 	@Override
 	public String getAbout() {
 		return this.about;
@@ -49,6 +58,89 @@ public class WebResourceImpl implements WebResource {
 	@Override
 	public void setId(ObjectId id) {
 		this.id = id;
+	}
+
+	@Override
+	public String[] getDcDescription() {
+		return dcDescription;
+	}
+
+	@Override
+	public void setDcDescription(String[] dcDescription) {
+		this.dcDescription = dcDescription;
+	}
+
+	@Override
+	public String[] getDcFormat() {
+		return dcFormat;
+	}
+	@Override
+	public void setDcFormat(String[] dcFormat) {
+		this.dcFormat = dcFormat;
+	}
+	@Override
+	public String[] getDcSource() {
+		return dcSource;
+	}
+	@Override
+	public void setDcSource(String[] dcSource) {
+		this.dcSource = dcSource;
+	}
+	@Override
+	public String[] getDctermsExtent() {
+		return dctermsExtent;
+	}
+	@Override
+	public void setDctermsExtent(String[] dctermsExtent) {
+		this.dctermsExtent = dctermsExtent;
+	}
+	@Override
+	public String[] getDctermsIssued() {
+		return dctermsIssued;
+	}
+	@Override
+	public void setDctermsIssued(String[] dctermsIssued) {
+		this.dctermsIssued = dctermsIssued;
+	}
+	@Override
+	public String[] getDctermsConformsTo() {
+		return dctermsConformsTo;
+	}
+	@Override
+	public void setDctermsConformsTo(String[] dctermsConformsTo) {
+		this.dctermsConformsTo = dctermsConformsTo;
+	}
+	@Override
+	public String[] getDctermsCreated() {
+		return dctermsCreated;
+	}
+	@Override
+	public void setDctermsCreated(String[] dctermsCreated) {
+		this.dctermsCreated = dctermsCreated;
+	}
+	@Override
+	public String[] getDctermsIsFormatOf() {
+		return dctermsIsFormatOf;
+	}
+	@Override
+	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
+		this.dctermsIsFormatOf = dctermsIsFormatOf;
+	}
+	@Override
+	public String[] getDctermsHasPart() {
+		return dctermsHasPart;
+	}
+	@Override
+	public void setDctermsHasPart(String[] dctermsHasPart) {
+		this.dctermsHasPart = dctermsHasPart;
+	}
+	@Override
+	public String getIsNextInSequence() {
+		return isNextInSequence;
+	}
+	@Override
+	public void setIsNextInSequence(String isNextInSequence) {
+		this.isNextInSequence = isNextInSequence;
 	}
 
 	@Override

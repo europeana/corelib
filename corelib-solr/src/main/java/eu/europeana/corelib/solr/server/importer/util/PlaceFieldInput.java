@@ -28,12 +28,12 @@ import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 
 /**
@@ -121,7 +121,7 @@ public final class PlaceFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static PlaceImpl createPlaceMongoFields(PlaceType placeType,
-			MongoServer mongoServer, RDF rdf) {
+			MongoServer mongoServer) {
 
 		// If place exists in mongo
 
@@ -248,7 +248,7 @@ public final class PlaceFieldInput {
 	private static PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
 		place.setAbout(placeType.getAbout());
-
+		
 		if (placeType.getLat() != null) {
 			place.setLatitude(Float.parseFloat(placeType.getLat().getString()));
 		}
@@ -256,14 +256,7 @@ public final class PlaceFieldInput {
 		if (placeType.getLong() != null) {
 			place.setLongitude(Float.parseFloat(placeType.getLong().getString()));
 		}
-
-		if (placeType.getNoteList() != null) {
-			List<String> noteList = new ArrayList<String>();
-			for (Note note : placeType.getNoteList()) {
-				noteList.add(note.getString());
-			}
-			place.setNote(noteList.toArray(new String[noteList.size()]));
-		}
+		place.setNote(SolrUtils.literalListToArray(placeType.getNoteList()));
 
 		if (placeType.getPrefLabelList() != null) {
 			Map<String, String> prefLabelMongo = new HashMap<String, String>();
@@ -291,14 +284,10 @@ public final class PlaceFieldInput {
 			place.setAltLabel(altLabelMongo);
 		}
 
-		if (placeType.getIsPartOfList() != null) {
-			List<String> isPartOfList = new ArrayList<String>();
-			for (IsPartOf isPartOf : placeType.getIsPartOfList()) {
-				isPartOfList.add(isPartOf.getString());
-			}
-			place.setIsPartOf(isPartOfList.toArray(new String[isPartOfList
-					.size()]));
-		}
+		place.setIsPartOf(SolrUtils.resourceOrLiteralListToArray(placeType.getIsPartOfList()));
+		place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
+		place.setDcTermsHasPart(SolrUtils.resourceOrLiteralListToArray(placeType.getHasPartList()));
+		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType.getSameAList()));
 		return place;
 	}
 }

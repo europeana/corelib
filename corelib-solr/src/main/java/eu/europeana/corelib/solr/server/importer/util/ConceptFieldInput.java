@@ -25,16 +25,25 @@ import java.util.Map;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.BroadMatch;
 import eu.europeana.corelib.definitions.jibx.Broader;
+import eu.europeana.corelib.definitions.jibx.CloseMatch;
 import eu.europeana.corelib.definitions.jibx.Concept;
+import eu.europeana.corelib.definitions.jibx.ExactMatch;
+import eu.europeana.corelib.definitions.jibx.NarrowMatch;
+import eu.europeana.corelib.definitions.jibx.Narrower;
+import eu.europeana.corelib.definitions.jibx.Notation;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.RDF;
+import eu.europeana.corelib.definitions.jibx.Related;
+import eu.europeana.corelib.definitions.jibx.RelatedMatch;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Constructor for Concepts
@@ -99,6 +108,54 @@ public final class ConceptFieldInput {
 			for (Note note : concept.getNoteList()) {
 				solrInputDocument.addField(EdmLabel.CC_SKOS_NOTE.toString(),
 						note.getString());
+			}
+		}
+		if (concept.getBroadMatchList() != null) {
+			for (BroadMatch broadMatch: concept.getBroadMatchList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_BROADMATCH.toString(),
+						broadMatch.getResource());
+			}
+		}
+		if (concept.getCloseMatchList() != null) {
+			for (CloseMatch closeMatch: concept.getCloseMatchList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_CLOSEMATCH.toString(),
+						closeMatch.getResource());
+			}
+		}
+		if (concept.getExactMatchList() != null) {
+			for (ExactMatch exactMatch: concept.getExactMatchList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_EXACTMATCH.toString(),
+						exactMatch.getResource());
+			}
+		}
+		if (concept.getNarrowerList() != null) {
+			for (Narrower narrower: concept.getNarrowerList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_NARROWER.toString(),
+						narrower.getResource());
+			}
+		}
+		if (concept.getNarrowMatchList() != null) {
+			for (NarrowMatch narrowMatch: concept.getNarrowMatchList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_NARROWMATCH.toString(),
+						narrowMatch.getResource());
+			}
+		}
+		if (concept.getRelatedMatchList() != null) {
+			for (RelatedMatch relatedMatch: concept.getRelatedMatchList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_RELATEDMATCH.toString(),
+						relatedMatch.getResource());
+			}
+		}
+		if (concept.getRelatedList() != null) {
+			for (Related related: concept.getRelatedList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_RELATED.toString(),
+						related.getResource());
+			}
+		}
+		if (concept.getNotationList() != null) {
+			for (Notation notation: concept.getNotationList()) {
+				solrInputDocument.addField(EdmLabel.CC_SKOS_NOTATIONS.toString(),
+						notation.getString());
 			}
 		}
 		return solrInputDocument;
@@ -211,23 +268,16 @@ public final class ConceptFieldInput {
 	private static ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
 		conceptMongo.setAbout(concept.getAbout());
-
-		if (concept.getNoteList() != null) {
-			List<String> noteList = new ArrayList<String>();
-			for (Note note : concept.getNoteList()) {
-				noteList.add(note.getString());
-			}
-			conceptMongo.setNote(noteList.toArray(new String[noteList.size()]));
-		}
-
-		if (concept.getBroaderList() != null) {
-			List<String> broaderList = new ArrayList<String>();
-			for (Broader broader : concept.getBroaderList()) {
-				broaderList.add(broader.getResource());
-			}
-			conceptMongo.setBroader(broaderList.toArray(new String[broaderList
-					.size()]));
-		}
+		conceptMongo.setNote(SolrUtils.literalListToArray(concept.getNoteList()));
+		conceptMongo.setBroader(SolrUtils.resourceListToArray(concept.getBroaderList()));
+		conceptMongo.setBroadMatch(SolrUtils.resourceListToArray(concept.getBroadMatchList()));
+		conceptMongo.setCloseMatch(SolrUtils.resourceListToArray(concept.getCloseMatchList()));
+		conceptMongo.setExactMatch(SolrUtils.resourceListToArray(concept.getExactMatchList()));
+		conceptMongo.setNarrower(SolrUtils.resourceListToArray(concept.getNarrowerList()));
+		conceptMongo.setNarrowMatch(SolrUtils.resourceListToArray(concept.getNarrowMatchList()));
+		conceptMongo.setNotation(SolrUtils.literalListToArray(concept.getNotationList()));
+		conceptMongo.setRelated(SolrUtils.resourceListToArray(concept.getRelatedList()));
+		conceptMongo.setRelatedMatch(SolrUtils.resourceListToArray(concept.getRelatedMatchList()));
 
 		if (concept.getPrefLabelList() != null) {
 			Map<String, String> prefLabelMongo = new HashMap<String, String>();

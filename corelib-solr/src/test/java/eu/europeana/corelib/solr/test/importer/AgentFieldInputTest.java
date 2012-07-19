@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class AgentFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testAgent(){
+	public void testAgent() throws MalformedURLException, IOException{
 		assertNotNull(mongoServer);
 		AgentType agentType = new AgentType();
 		agentType.setAbout("test about");
@@ -71,7 +73,7 @@ public class AgentFieldInputTest {
 
 		//store in mongo
 		AgentImpl agent = AgentFieldInput.createAgentMongoEntity(agentType,
-				mongoServer, null);
+				mongoServer);
 		assertEquals(agentType.getAbout(), agent.getAbout());
 		assertEquals(agentType.getBegin().getString(), agent.getBegin());
 		assertEquals(agentType.getEnd().getString(), agent.getEnd());

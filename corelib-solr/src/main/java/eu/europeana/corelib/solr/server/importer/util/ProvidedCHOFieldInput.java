@@ -29,6 +29,7 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Class constructing a SOLR document and MongoDB representation of a
@@ -97,14 +98,9 @@ public final class ProvidedCHOFieldInput {
 			mongoProvidedCHO = new ProvidedCHOImpl();
 
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
-			List<String> owlSameAsList = new ArrayList<String>();
-			if (providedCHO.getSameAList() != null) {
-				for (SameAs sameAs : providedCHO.getSameAList()) {
-					owlSameAsList.add(sameAs.getResource());
-				}
-				mongoProvidedCHO.setOwlSameAs(owlSameAsList
-						.toArray(new String[owlSameAsList.size()]));
-			}
+			
+				mongoProvidedCHO.setOwlSameAs(SolrUtils.resourceListToArray(providedCHO.getSameAList()));
+			
 			mongoServer.getDatastore().save(mongoProvidedCHO);
 		} else {
 			// update the ProvidedCHO

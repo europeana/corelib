@@ -77,7 +77,7 @@ public class PlaceFieldInputTest {
 		place.setLong(posLong);
 		// create mongo place
 		PlaceImpl placeMongo = PlaceFieldInput.createPlaceMongoFields(place,
-				mongoServer, null);
+				mongoServer);
 		assertEquals(place.getAbout(), placeMongo.getAbout());
 		assertEquals(place.getNoteList().get(0).getString(),
 				placeMongo.getNote()[0]);

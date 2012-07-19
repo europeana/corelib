@@ -77,7 +77,7 @@ public class TimespanFieldInputTest {
 		// create mongo
 
 		TimespanImpl timespanMongo = TimespanFieldInput
-				.createTimespanMongoField(timespan, mongoServer, null);
+				.createTimespanMongoField(timespan, mongoServer);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
 		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin());
 		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd());

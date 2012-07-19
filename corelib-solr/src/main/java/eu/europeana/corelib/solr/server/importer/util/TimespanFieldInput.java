@@ -28,13 +28,13 @@ import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Constructor for a Timespan
@@ -108,7 +108,7 @@ public final class TimespanFieldInput {
      * @throws InstantiationException 
      */
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
-            MongoServer mongoServer, RDF rdf) {
+            MongoServer mongoServer) {
         TimespanImpl mongoTimespan = (TimespanImpl) ((EdmMongoServer)mongoServer).searchByAbout(TimespanImpl.class, timeSpan.getAbout());
             
       if(mongoTimespan==null) {
@@ -202,13 +202,7 @@ public final class TimespanFieldInput {
 	private static TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();
         mongoTimespan.setAbout(timeSpan.getAbout());
-        if (timeSpan.getNoteList() != null) {
-            List<String> noteList = new ArrayList<String>();
-            for (Note note : timeSpan.getNoteList()) {
-                noteList.add(note.getString());
-            }
-            mongoTimespan.setNote(noteList.toArray(new String[noteList.size()]));
-        }
+        mongoTimespan.setNote(SolrUtils.literalListToArray(timeSpan.getNoteList()));
         if (timeSpan.getPrefLabelList() != null) {
             Map<String, String> prefLabelMongo = new HashMap<String, String>();
             for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
@@ -235,15 +229,9 @@ public final class TimespanFieldInput {
             }
             mongoTimespan.setAltLabel(altLabelMongo);
         }
-        if (timeSpan.getIsPartOfList() != null) {
-            List<String> isPartOfList = new ArrayList<String>();
-            for (IsPartOf isPartOf : timeSpan.getIsPartOfList()) {
-                isPartOfList.add(isPartOf.getResource());
-            }
-            mongoTimespan.setIsPartOf(isPartOfList.toArray(new String[isPartOfList.size()]));
-        }
-
-
+        mongoTimespan.setIsPartOf(SolrUtils.resourceOrLiteralListToArray(timeSpan.getIsPartOfList()));
+        mongoTimespan.setDctermsHasPart(SolrUtils.resourceOrLiteralListToArray(timeSpan.getHasPartList()));
+        mongoTimespan.setOwlSameAs(SolrUtils.resourceListToArray(timeSpan.getSameAList()));
         if (timeSpan.getBegin() != null) {
             mongoTimespan.setBegin(timeSpan.getBegin().getString());
         }
