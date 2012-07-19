@@ -216,7 +216,7 @@ public class ProxyFieldInputTest {
 		ProxyImpl mongoProxy = new ProxyImpl();
 		try {
 			mongoProxy = ProxyFieldInput.createProxyMongoFields(mongoProxy,
-					proxy, mongoServer, new RDF(), true);
+					proxy, mongoServer);
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()
 					.toString());
