@@ -79,10 +79,6 @@ public interface Place extends ContextualClass {
 	
 	float[] getPosition();
 	
-	void setSkosHiddenLabel(String[] skosHiddenLabel);
-	
-	String[] getSkosHiddenLabel();
-	
 	void setDcTermsHasPart(String[] dcTermsHasPart);
 	
 	String[] getDcTermsHasPart();

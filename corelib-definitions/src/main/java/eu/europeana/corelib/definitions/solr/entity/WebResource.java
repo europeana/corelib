@@ -55,4 +55,44 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	void setWebResourceEdmRights(String webResourceEdmRights);
 
+	void setIsNextInSequence(String isNextInSequence);
+
+	String getIsNextInSequence();
+
+	void setDctermsHasPart(String[] dctermsHasPart);
+
+	String[] getDctermsHasPart();
+
+	void setDctermsIsFormatOf(String[] dctermsIsFormatOf);
+
+	String[] getDctermsIsFormatOf();
+
+	void setDctermsCreated(String[] dctermsCreated);
+
+	String[] getDctermsCreated();
+
+	String[] getDctermsConformsTo();
+
+	void setDctermsConformsTo(String[] dctermsConformsTo);
+
+	void setDctermsIssued(String[] dctermsIssued);
+
+	String[] getDctermsIssued();
+
+	String[] getDcDescription();
+
+	void setDcDescription(String[] dcDescription);
+
+	String[] getDcFormat();
+
+	void setDcFormat(String[] dcFormat);
+
+	String[] getDcSource();
+
+	void setDcSource(String[] dcSource);
+
+	String[] getDctermsExtent();
+
+	void setDctermsExtent(String[] dctermsExtent);
+
 }

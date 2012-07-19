@@ -199,7 +199,7 @@ public enum EdmLabel {
 	CC_SKOS_HIDDEN_LABEL("cc_skos_hiddenLabel", SolrType.NOT_STORED),
 	CC_SKOS_NARROWER("cc_skos_narrower", SolrType.NOT_STORED),
 	CC_SKOS_RELATED("cc_skos_related", SolrType.NOT_STORED),
-	CC_SKOS_BROADDMATCH("cc_skos_broadMatch", SolrType.NOT_STORED),
+	CC_SKOS_BROADMATCH("cc_skos_broadMatch", SolrType.NOT_STORED),
 	CC_SKOS_NARROWMATCH("cc_skos_narrowMatch", SolrType.NOT_STORED),
 	CC_SKOS_RELATEDMATCH("cc_skos_relatedMatch", SolrType.NOT_STORED),
 	CC_SKOS_EXACTMATCH("cc_skos_exactMatch", SolrType.NOT_STORED),
@@ -237,7 +237,9 @@ public enum EdmLabel {
 	TS_CRM_P80F_END_IS_QUALIFIED_BY("ts_crm_P80F_end_is_qualified_by", SolrType.NOT_STORED),
 	
 	//EDM_AGENT
-	EDM_AGENT("edm_agent",SolrType.NOT_STORED), 
+	EDM_AGENT("edm_agent",SolrType.NOT_STORED),
+	AG_DC_DATE("ag_dc_date",SolrType.NOT_STORED),
+	AG_DC_IDENTIFIER("ag_dc_identifier", SolrType.NOT_STORED),
 	AG_SKOS_PREF_LABEL("ag_skos_prefLabel",	SolrType.FACET), 
 	AG_SKOS_ALT_LABEL("ag_skos_altLabel",SolrType.NOT_STORED), 
 	AG_SKOS_NOTE("ag_skos_note",SolrType.NOT_STORED), 

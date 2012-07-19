@@ -67,9 +67,6 @@ public interface Agent extends ContextualClass {
 	
 	String[] getEdmIsRelatedTo();
 	
-	void setSkosHiddenLabel(String[] skosHiddenLabel);
-	
-	String[] getSkosHiddenLabel();
 	
 	void setOwlSameAs(String[] owlSameAs);
 	
