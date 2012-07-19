@@ -50,7 +50,7 @@
 							<directory>src/main/resources/eu/internalschema</directory>
 							<targetDirectory>src/main/java</targetDirectory>
 							<includes>
-								<include>EDM.xsd</include>
+								<include>EDM-INTERNAL.xsd</include>
 							</includes>
 							<options>
 								<package>eu.europeana.corelib.definitions.jibx</package>
