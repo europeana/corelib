@@ -100,11 +100,11 @@ public final class PlaceFieldInput {
 						note.getString());
 			}
 		}
-		if (place.getPosLong() != null && place.getPosLat() != null) {
+		if (place.getLong() != null && place.getLat() != null) {
 			solrInputDocument.addField(EdmLabel.PL_POSITION.toString(), place
-					.getPosLat().getPosLat()
+					.getLat().getString()
 					+ ","
-					+ place.getPosLong().getPosLong());
+					+ place.getLong().getString());
 		}
 		return solrInputDocument;
 	}
@@ -223,16 +223,16 @@ public final class PlaceFieldInput {
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"isPartOf", isPartOfList);
 		}
-		if (placeType.getPosLat() != null) {
+		if (placeType.getLat() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"latitude", placeType.getPosLat().getPosLat());
+					"latitude", placeType.getLat().getString());
 		}
 
-		if (placeType.getPosLong() != null) {
+		if (placeType.getLong() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"longitude", placeType.getPosLong().getPosLong());
+					"longitude", placeType.getLong().getString());
 		}
 		return (PlaceImpl) ((EdmMongoServer)mongoServer).searchByAbout(PlaceImpl.class,
 				placeType.getAbout());
@@ -249,12 +249,12 @@ public final class PlaceFieldInput {
 		PlaceImpl place = new PlaceImpl();
 		place.setAbout(placeType.getAbout());
 
-		if (placeType.getPosLat() != null) {
-			place.setLatitude(placeType.getPosLat().getPosLat());
+		if (placeType.getLat() != null) {
+			place.setLatitude(Float.parseFloat(placeType.getLat().getString()));
 		}
 
-		if (placeType.getPosLong() != null) {
-			place.setLongitude(placeType.getPosLong().getPosLong());
+		if (placeType.getLong() != null) {
+			place.setLongitude(Float.parseFloat(placeType.getLong().getString()));
 		}
 
 		if (placeType.getNoteList() != null) {

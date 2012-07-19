@@ -97,16 +97,16 @@ public final class AgentFieldInput {
 						note.getString());
 			}
 		}
-		if (agentType.getBegins() != null) {
-			for (String begin : agentType.getBegins()) {
+		if (agentType.getBegin() != null) {
+			
 				solrInputDocument.addField(EdmLabel.AG_EDM_BEGIN.toString(),
-						begin);
-			}
+						agentType.getBegin().getString());
+			
 		}
-		if (agentType.getEnds() != null) {
-			for (String end : agentType.getEnds()) {
-				solrInputDocument.addField(EdmLabel.AG_EDM_END.toString(), end);
-			}
+		if (agentType.getEnd() != null) {
+		
+				solrInputDocument.addField(EdmLabel.AG_EDM_END.toString(), agentType.getEnd().getString());
+			
 		}
 		return solrInputDocument;
 	}
@@ -166,15 +166,15 @@ public final class AgentFieldInput {
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
 			AgentType agentType, MongoServer mongoServer)  {
 		if (agent.getBegin() != null
-				&& !StringUtils.equals(agentType.getBegins().get(0),
+				&& !StringUtils.equals(agentType.getBegin().getString(),
 						agent.getBegin())) {
-			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "begin", agentType.getBegins().get(0));
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "begin", agentType.getBegin().getString());
 		}
 		
 		if (agent.getEnd() != null
-				&& !StringUtils.equals(agentType.getEnds().get(0),
+				&& !StringUtils.equals(agentType.getEnd().getString(),
 						agent.getEnd())) {
-			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "end", agentType.getEnds().get(0));
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer, "end", agentType.getEnd().getString());
 
 		}
 
@@ -239,9 +239,10 @@ public final class AgentFieldInput {
 	 */
 	private static AgentImpl createNewAgent(AgentType agentType) {
 		AgentImpl agent = new AgentImpl();
-
+		
 		agent.setAbout(agentType.getAbout());
 
+		
 		if (agentType.getNoteList() != null) {
 			List<String> noteList = new ArrayList<String>();
 			for (Note note : agentType.getNoteList()) {
@@ -276,11 +277,11 @@ public final class AgentFieldInput {
 			agent.setAltLabel(altLabelMongo);
 		}
 
-		if (agentType.getBegins().size() > 0) {
-			agent.setBegin(agentType.getBegins().get(0));
+		if (agentType.getBegin()!=null) {
+			agent.setBegin(agentType.getBegin().getString());
 		}
-		if (agentType.getEnds().size() > 0) {
-			agent.setEnd(agentType.getEnds().get(0));
+		if (agentType.getEnd().getString()!=null) {
+			agent.setEnd(agentType.getEnd().getString());
 		}
 		return agent;
 	}

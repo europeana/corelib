@@ -19,17 +19,16 @@ package eu.europeana.corelib.solr.server.importer.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
-import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
-import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
  * Class constructing a SOLR document and MongoDB representation of a
@@ -63,15 +62,16 @@ public final class ProvidedCHOFieldInput {
 				providedCHO.getAbout());
 		if (providedCHO.getSameAList() != null) {
 			for (SameAs sameAs : providedCHO.getSameAList()) {
-				solrInputDocument.addField(EdmLabel.PROVIDER_OWL_SAMEAS.toString(),
+				solrInputDocument.addField(
+						EdmLabel.PROVIDER_OWL_SAMEAS.toString(),
 						sameAs.getResource());
 			}
 		}
-		solrInputDocument.addField(
-				EdmLabel.PROVIDER_EDM_IS_NEXT_IN_SEQUENCE.toString(),
-				SolrUtils.exists(ResourceType.class,
-						providedCHO.getIsNextInSequence()).getResource());
+		
 
+		solrInputDocument.addField(
+				EdmLabel.EUROPEANA_COLLECTIONNAME.toString(),
+				StringUtils.substringBetween(providedCHO.getAbout(), "/", "/"));
 		return solrInputDocument;
 	}
 
@@ -97,7 +97,6 @@ public final class ProvidedCHOFieldInput {
 			mongoProvidedCHO = new ProvidedCHOImpl();
 
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
-			
 			List<String> owlSameAsList = new ArrayList<String>();
 			if (providedCHO.getSameAList() != null) {
 				for (SameAs sameAs : providedCHO.getSameAList()) {
@@ -124,8 +123,6 @@ public final class ProvidedCHOFieldInput {
 		}
 		return mongoProvidedCHO;
 	}
-
-	
 
 	public static void deleteProvideCHOFromMongo(String about,
 			EdmMongoServer mongoServer) {

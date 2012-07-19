@@ -60,9 +60,9 @@ public final class WebResourcesFieldInput {
 		solrInputDocument.addField(EdmLabel.EDM_WEB_RESOURCE.toString(),
 				webResource.getAbout());
 		solrInputDocument.addField(EdmLabel.WR_EDM_RIGHTS.toString(), SolrUtils
-				.exists(Rights.class, (webResource.getRights())).getResource());
+				.exists(Rights1.class, (webResource.getRights())).getResource());
 		if (webResource.getRightList() != null) {
-			for (Rights1 dcRights : webResource.getRightList()) {
+			for (Rights dcRights : webResource.getRightList()) {
 				solrInputDocument.addField(EdmLabel.WR_DC_RIGHTS.toString(),
 						dcRights.getResource());
 			}
@@ -90,7 +90,7 @@ public final class WebResourcesFieldInput {
 
 		List<String> dcRightsList = new ArrayList<String>();
 		if (webResource.getRightList() != null) {
-			for (Rights1 dcRights : webResource.getRightList()) {
+			for (Rights dcRights : webResource.getRightList()) {
 				dcRightsList.add(dcRights.getResource());
 			}
 		}

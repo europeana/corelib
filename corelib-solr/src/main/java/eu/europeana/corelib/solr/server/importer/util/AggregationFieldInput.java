@@ -93,14 +93,14 @@ public final class AggregationFieldInput {
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
 		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS.toString(),
-				SolrUtils.exists(Rights.class, (aggregation.getRights()))
+				SolrUtils.exists(Rights1.class, (aggregation.getRights()))
 						.getString());
 		if (aggregation.getUgc() != null) {
 			solrInputDocument.addField(EdmLabel.EDM_UGC.toString(), aggregation
 					.getUgc().getUgc().toString());
 		}
 		if (aggregation.getRightList() != null) {
-			for (Rights1 rights : aggregation.getRightList()) {
+			for (Rights rights : aggregation.getRightList()) {
 				solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString(),
 						rights.getString());
 			}
@@ -197,7 +197,7 @@ public final class AggregationFieldInput {
 				(aggregation.getObject())).getResource());
 		mongoAggregation.setEdmProvider(SolrUtils.exists(Provider.class,
 				(aggregation.getProvider())).getString());
-		mongoAggregation.setEdmRights(SolrUtils.exists(Rights.class,
+		mongoAggregation.setEdmRights(SolrUtils.exists(Rights1.class,
 				(aggregation.getRights())).getString());
 	
 		if (aggregation.getUgc() != null) {
@@ -208,7 +208,7 @@ public final class AggregationFieldInput {
 				(aggregation.getAggregatedCHO())).getResource());
 		if (aggregation.getRightList() != null) {
 			List<String> dcRightsList = new ArrayList<String>();
-			for (Rights1 rights : aggregation.getRightList()) {
+			for (Rights rights : aggregation.getRightList()) {
 				dcRightsList.add(rights.getString());
 			}
 

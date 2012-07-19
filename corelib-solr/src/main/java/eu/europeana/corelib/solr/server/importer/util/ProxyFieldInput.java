@@ -27,7 +27,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EdmType;
-import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -64,28 +64,28 @@ public final class ProxyFieldInput {
 	 * @throws MalformedURLException
 	 */
 	public static SolrInputDocument createProxySolrFields(
-			ProvidedCHOType providedCHO, SolrInputDocument solrInputDocument, RDF rdf, boolean shouldDereference)
+			ProxyType proxy, SolrInputDocument solrInputDocument, RDF rdf, boolean shouldDereference)
 			throws InstantiationException, IllegalAccessException,
 			MalformedURLException, IOException {
 		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY.toString(),
-				providedCHO.getAbout());
+				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(), SolrUtils
-				.exists(EdmType.class, (providedCHO.getType())).toString());
+				.exists(EdmType.class, (proxy.getType())).toString());
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_EDM_CURRENT_LOCATION_LAT.toString(),
 				SolrUtils.exists(ResourceType.class,
-						(providedCHO.getCurrentLocation())).getResource());
+						(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_EDM_CURRENT_LOCATION_LONG.toString(),
 				SolrUtils.exists(ResourceType.class,
-						(providedCHO.getCurrentLocation())).getResource());
+						(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_IS_NEXT_IN_SEQUENCE.toString(),  SolrUtils
-				.exists(ResourceType.class, (providedCHO.getIsNextInSequence())).getResource());
+				.exists(ResourceType.class, (proxy.getIsNextInSequence())).getResource());
 		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY_FOR.toString(),
-				SolrUtils.exists(String.class, providedCHO.getAbout()));
+				SolrUtils.exists(String.class, proxy.getAbout()));
 
 		// Retrieve the dcterms and dc namespace fields
-		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = providedCHO
+		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy
 				.getChoiceList();
 		if (europeanaTypeList != null) {
 			for (eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice choice : europeanaTypeList) {
@@ -201,20 +201,20 @@ public final class ProxyFieldInput {
 	 * @throws MalformedURLException
 	 */
 	public static ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
-			ProvidedCHOType providedCHO, MongoServer mongoServer, RDF rdf, boolean shouldDereference)
+			ProxyType proxy, MongoServer mongoServer, RDF rdf, boolean shouldDereference)
 			throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 
-		mongoProxy.setAbout(providedCHO.getAbout());
+		mongoProxy.setAbout(proxy.getAbout());
 
 		mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
-				(providedCHO.getCurrentLocation())).getResource());
+				(proxy.getCurrentLocation())).getResource());
 		mongoProxy.setEdmIsNextInSequence(SolrUtils.exists(ResourceType.class,
-				(providedCHO.getIsNextInSequence())).getResource());
+				(proxy.getIsNextInSequence())).getResource());
 		mongoProxy.setEdmType(DocType.get(SolrUtils.exists(EdmType.class,
-				(providedCHO.getType())).toString()));
+				(proxy.getType())).toString()));
 
 		mongoProxy.setProxyFor(SolrUtils.exists(String.class,
-				providedCHO.getAbout()));
+				proxy.getAbout()));
 		Map <String,List<String>> mapLists = new HashMap<String, List<String>>();
 		List<String> alternatives = new ArrayList<String>();
 		mapLists.put(EdmLabel.PROVIDER_DCTERMS_ALTERNATIVE.toString(), alternatives);
@@ -293,7 +293,7 @@ public final class ProxyFieldInput {
 		mapLists.put(EdmLabel.PROVIDER_DC_TYPE.toString(), type);
 
 		
-		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = providedCHO.getChoiceList();
+		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy.getChoiceList();
 		
 
 		if (europeanaTypeList != null) {

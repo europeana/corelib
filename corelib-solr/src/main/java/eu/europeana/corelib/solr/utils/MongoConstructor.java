@@ -87,9 +87,9 @@ public class MongoConstructor {
 							mongoServer));
 					if (proxies.size() > 0) {
 						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
-								element.getProvidedCHO(), mongoServer, record, shouldDereference));
+								element.getProxy(), mongoServer, record, shouldDereference));
 					} else {
-						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProvidedCHO(),
+						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProxy(),
 								mongoServer, record, shouldDereference));
 					}
 				} catch (InstantiationException e) {

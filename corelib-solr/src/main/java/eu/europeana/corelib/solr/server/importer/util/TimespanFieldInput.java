@@ -79,16 +79,12 @@ public final class TimespanFieldInput {
                         note.getString());
             }
         }
-        if (timespan.getBegins() != null) {
-            for (String begin : timespan.getBegins()) {
+        if (timespan.getBegin() != null) {
                 solrInputDocument.addField(EdmLabel.TS_EDM_BEGIN.toString(),
-                        begin);
-            }
+                		timespan.getBegin().getString());
         }
-        if (timespan.getEnds() != null) {
-            for (String end : timespan.getEnds()) {
-                solrInputDocument.addField(EdmLabel.TS_EDM_END.toString(), end);
-            }
+        if (timespan.getEnd() != null) {
+                solrInputDocument.addField(EdmLabel.TS_EDM_END.toString(), timespan.getEnd().getString());
         }
         if (timespan.getIsPartOfList() != null) {
             for (IsPartOf isPartOf : timespan.getIsPartOfList()) {
@@ -128,18 +124,18 @@ public final class TimespanFieldInput {
 	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
 			TimeSpanType timeSpan, MongoServer mongoServer)  {
 		if (mongoTimespan.getBegin() != null
-  				&& !StringUtils.equals(timeSpan.getBegins().get(0),
+  				&& !StringUtils.equals(timeSpan.getBegin().getString(),
   						mongoTimespan.getBegin())) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"begin", timeSpan.getBegins().get(0));
+					"begin", timeSpan.getBegin().getString());
   			
 
   		}
   		if (mongoTimespan.getEnd() != null
-  				&& !StringUtils.equals(timeSpan.getEnds().get(0),
+  				&& !StringUtils.equals(timeSpan.getEnd().getString(),
   						mongoTimespan.getEnd())) {
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"end", timeSpan.getEnds().get(0));
+					"end", timeSpan.getEnd().getString());
   			
   		}
 
@@ -248,11 +244,11 @@ public final class TimespanFieldInput {
         }
 
 
-        if (timeSpan.getBegins() != null) {
-            mongoTimespan.setBegin(timeSpan.getBegins().get(0));
+        if (timeSpan.getBegin() != null) {
+            mongoTimespan.setBegin(timeSpan.getBegin().getString());
         }
-        if (timeSpan.getEnds() != null) {
-            mongoTimespan.setEnd(timeSpan.getEnds().get(0));
+        if (timeSpan.getEnd() != null) {
+            mongoTimespan.setEnd(timeSpan.getEnd().getString());
         }
 		return mongoTimespan;
 	}
