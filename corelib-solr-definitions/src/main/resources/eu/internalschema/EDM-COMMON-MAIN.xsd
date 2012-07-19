@@ -102,6 +102,23 @@
             <extension base="rdf:AboutType">
                 <sequence minOccurs="0" maxOccurs="unbounded">
                     <choice>
+                        <!-- DC -->
+                        <element ref="dc:contributor"/>
+                        <element ref="dc:coverage"/>
+                        <element ref="dc:creator"/>
+                        <element ref="dc:date"/>
+                        <element ref="dc:description"/>
+                        <element ref="dc:identifier"/>
+                        <element ref="dc:format"/>
+                        <element ref="dc:language"/>
+                        <element ref="dc:publisher"/>
+                        <element ref="dc:relation"/>
+                        <element ref="dc:rights"/>
+                        <element ref="dc:source"/>
+                        <element ref="dc:subject"/>
+                        <element ref="dc:title"/>
+                        <element ref="dc:type"/>
+                        
                         <!-- DCTerms -->
                         <element ref="dcterms:alternative"/>
                         <element ref="dcterms:conformsTo"/>
@@ -125,22 +142,7 @@
                         <element ref="dcterms:spatial"/>
                         <element ref="dcterms:tableOfContents"/>
                         <element ref="dcterms:temporal"/>
-                        <!-- DC -->
-                        <element ref="dc:contributor"/>
-                        <element ref="dc:coverage"/>
-                        <element ref="dc:creator"/>
-                        <element ref="dc:date"/>
-                        <element ref="dc:description"/>
-                        <element ref="dc:identifier"/>
-                        <element ref="dc:format"/>
-                        <element ref="dc:language"/>
-                        <element ref="dc:publisher"/>
-                        <element ref="dc:relation"/>
-                        <element ref="dc:rights"/>
-                        <element ref="dc:source"/>
-                        <element ref="dc:subject"/>
-                        <element ref="dc:title"/>
-                        <element ref="dc:type"/>
+
                         <element ref="owl:sameAs"/>
                     </choice>
                 </sequence>
@@ -327,33 +329,6 @@
                 Lab by digitizing Mona Lisa is a representation of Mona Lisa </documentation>
         </annotation>
     </element>
-    
-    <element name="isSimilarTo" type="rdf:ResourceType">
-        <annotation>
-            <documentation>Definition The most generic derivation property, covering also the case
-                of questionable derivation. Is Similar To asserts that parts of the contents of one
-                resource exhibit common features with respect to ideas, shapes, structures, colors,
-                words, plots, topics with the contents of the related resource. Those common
-                features may be attributed to a common origin or influence (in particular for
-                derivation), but also to more generic cultural or psychological factors.
-            </documentation>
-        </annotation>
-    </element>
-    
-    <element name="isSuccessorOf" type="rdf:ResourceType">
-        <annotation>
-            <documentation>This property captures the relation between the continuation of a
-                resource and that resource. This applies to a story, a serial, a journal etc. No
-                content of the successor resource is identical or has a similar form with that of
-                the precursor. The similarity is only in the context, subjects and figures of a
-                plot. Successors typically form part of a common whole - such as a trilogy, a
-                journal, etc. Example: "The Two Towers" is a successor of "Fellowship of the Ring".
-                The issue 57 of "Le Temps" is a successor of issue 56 of the Le Temps.
-            </documentation>
-        </annotation>
-    </element>
-
-
     <element name="isShownAt" type="rdf:ResourceType">
         <annotation>
             <documentation>An unambiguous URL reference to the digital object on the provider's web
@@ -382,6 +357,31 @@
         </annotation>
     </element>
     
+    <element name="isSimilarTo" type="rdf:ResourceType">
+        <annotation>
+            <documentation>Definition The most generic derivation property, covering also the case
+                of questionable derivation. Is Similar To asserts that parts of the contents of one
+                resource exhibit common features with respect to ideas, shapes, structures, colors,
+                words, plots, topics with the contents of the related resource. Those common
+                features may be attributed to a common origin or influence (in particular for
+                derivation), but also to more generic cultural or psychological factors.
+            </documentation>
+        </annotation>
+    </element>
+    
+    <element name="isSuccessorOf" type="rdf:ResourceType">
+        <annotation>
+            <documentation>This property captures the relation between the continuation of a
+                resource and that resource. This applies to a story, a serial, a journal etc. No
+                content of the successor resource is identical or has a similar form with that of
+                the precursor. The similarity is only in the context, subjects and figures of a
+                plot. Successors typically form part of a common whole - such as a trilogy, a
+                journal, etc. Example: "The Two Towers" is a successor of "Fellowship of the Ring".
+                The issue 57 of "Le Temps" is a successor of issue 56 of the Le Temps.
+            </documentation>
+        </annotation>
+    </element>
+
     <element name="landingPage" type="rdf:ResourceType">
         <annotation>
             <documentation>This property captures the relation between an aggregation representing a
