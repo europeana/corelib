@@ -139,7 +139,7 @@ public class AggregationFieldInputTest {
 		aggregation.setRights(rights);
 		List<Rights> rightsList = new ArrayList<Rights>();
 		Rights rights1 = new Rights();
-		rights.setString("test rights 1");
+		rights1.setString("test rights 1");
 		rightsList.add(rights1);
 		aggregation.setRightList(rightsList);
 		return aggregation;
