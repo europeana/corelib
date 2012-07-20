@@ -19,7 +19,8 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
@@ -30,9 +31,10 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
-@Embedded
+@Entity("ProvidedCHO")
 public class ProvidedCHOImpl implements ProvidedCHO {
-
+	
+	@Id
 	private ObjectId id;
 
 	@Indexed(unique=true, dropDups=true)

@@ -57,7 +57,7 @@ public class SampleRecordCreator {
             + "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"
             + "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
             + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-            + "xsi:schemaLocation=\"http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd\">\n";
+            + "xsi:schemaLocation=\"http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM-INTERNAL.xsd\">\n";
 
     /**
      * @param args

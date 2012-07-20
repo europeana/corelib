@@ -22,6 +22,8 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
@@ -33,8 +35,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Embedded
+@Entity("Aggregation")
 public class AggregationImpl implements Aggregation {
+	@Id
 	private ObjectId id;
 
 	private String edmDataProvider;
@@ -52,11 +55,11 @@ public class AggregationImpl implements Aggregation {
 
 	@Embedded
 	private List<WebResourceImpl> webResources;
-	
-	@Indexed(unique=true, dropDups=true)
+
+	@Indexed(unique = true, dropDups = true)
 	private String about;
 	private Boolean edmPreviewNoDistribute;
-	
+
 	@Override
 	public String getAggregatedCHO() {
 		return this.aggregatedCHO;
@@ -81,12 +84,12 @@ public class AggregationImpl implements Aggregation {
 	public String getEdmUgc() {
 		return this.edmUgc;
 	}
-	
+
 	@Override
 	public void setEdmUgc(String edmUgc) {
 		this.edmUgc = edmUgc;
 	}
-	
+
 	@Override
 	public String getAbout() {
 		return this.about;
@@ -164,7 +167,8 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getDcRights() {
-		return (StringArrayUtils.isNotBlank(this.dcRights)?this.dcRights.clone():null);
+		return (StringArrayUtils.isNotBlank(this.dcRights) ? this.dcRights
+				.clone() : null);
 	}
 
 	@Override
@@ -188,10 +192,10 @@ public class AggregationImpl implements Aggregation {
 		this.webResources = (List<WebResourceImpl>) webResources;
 	}
 
-	
 	@Override
 	public String[] getHasView() {
-		return (StringArrayUtils.isNotBlank(this.hasView)?this.hasView.clone():null);
+		return (StringArrayUtils.isNotBlank(this.hasView) ? this.hasView
+				.clone() : null);
 	}
 
 	@Override
@@ -201,31 +205,37 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null) {
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()) {
 			return this.getAbout().equals(((AggregationImpl) o).getAbout());
 		}
 		return false;
 	}
 
 	@Override
-	public int hashCode(){ 
-		return this.about!=null?this.about.hashCode():this.id.hashCode();
+	public int hashCode() {
+		return this.about != null ? this.about.hashCode() : this.id.hashCode();
 	}
+
 	@Override
 	public String[] getAggregates() {
-		return (StringArrayUtils.isNotBlank(this.aggregates)?this.aggregates.clone():null);
+		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates
+				.clone() : null);
 	}
+
 	@Override
 	public void setAggregates(String[] aggregates) {
 		this.aggregates = aggregates;
 	}
+
 	@Override
 	public String[] getEdmUnstored() {
-		return (StringArrayUtils.isNotBlank(this.edmUnstored)?this.edmUnstored.clone():null);
+		return (StringArrayUtils.isNotBlank(this.edmUnstored) ? this.edmUnstored
+				.clone() : null);
 	}
+
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored;

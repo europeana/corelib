@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -27,7 +27,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Embedded
+@Entity("Place")
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	private String[] isPartOf;

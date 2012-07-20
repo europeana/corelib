@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.BroadMatch;
@@ -192,7 +193,7 @@ public final class ConceptFieldInput {
 	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
 			Concept concept, MongoServer mongoServer)  {
 
-		if (conceptMongo.getNote() != null) {
+		if (conceptMongo.getNote() != null && concept.getNoteList()!=null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : concept.getNoteList()) {
 				if (MongoUtils.contains(conceptMongo.getNote(),
@@ -267,6 +268,7 @@ public final class ConceptFieldInput {
 
 	private static ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
+		conceptMongo.setId(new ObjectId());
 		conceptMongo.setAbout(concept.getAbout());
 		conceptMongo.setNote(SolrUtils.literalListToArray(concept.getNoteList()));
 		conceptMongo.setBroader(SolrUtils.resourceListToArray(concept.getBroaderList()));

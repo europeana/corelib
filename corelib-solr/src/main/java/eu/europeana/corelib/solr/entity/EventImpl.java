@@ -1,11 +1,11 @@
 package eu.europeana.corelib.solr.entity;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.Event;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
-@Embedded
+@Entity("Event")
 public class EventImpl extends ContextualClassImpl implements Event {
 
 	private String[] edmHappenedAt;

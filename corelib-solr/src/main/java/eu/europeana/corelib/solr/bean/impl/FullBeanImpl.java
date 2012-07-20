@@ -24,10 +24,10 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
+import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -46,6 +46,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaProxyImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
@@ -86,33 +87,29 @@ public class FullBeanImpl implements FullBean {
 	@Transient
 	private List<BriefBeanImpl> relatedItems;
 
-	@Embedded
-	@Indexed (unique=false)
+	@Reference
 	private List<PlaceImpl> places;
 
-	@Embedded
-	@Indexed (unique=false)
+	@Reference
 	private List<AgentImpl> agents;
 
-	@Embedded
-	@Indexed (unique=false)
+	@Reference
 	private List<TimespanImpl> timespans;
 
-	@Embedded
-	@Indexed (unique=false)
+	@Reference
 	private List<ConceptImpl> concepts;
 
-	@Embedded
+	@Reference
 	private List<AggregationImpl> aggregations;
 
-	@Embedded
+	@Reference
 	private List<ProvidedCHOImpl> providedCHOs;
 	
-	@Embedded
-	private EuropeanaProxy europeanaProxy;
+	@Reference
+	private EuropeanaProxyImpl europeanaProxy;
 	
-	@Embedded
-	private EuropeanaAggregation europeanaAggregation;
+	@Reference
+	private EuropeanaAggregationImpl europeanaAggregation;
 
 	private String[] who;
 	private String[] what;
@@ -127,7 +124,7 @@ public class FullBeanImpl implements FullBean {
 	
 	
 
-	@Embedded
+	@Reference
 	private List<ProxyImpl> proxies;
 
 	private String[] europeanaCollectionName;
@@ -136,13 +133,13 @@ public class FullBeanImpl implements FullBean {
 	 */
 
 	@Override
-	public EuropeanaProxy getEuropeanaProxy(){
+	public EuropeanaProxyImpl getEuropeanaProxy(){
 		return this.europeanaProxy;
 	}
 	
 	@Override
 	public void setEuropeanaProxy(EuropeanaProxy europeanaProxy){
-		this.europeanaProxy = europeanaProxy;
+		this.europeanaProxy = (EuropeanaProxyImpl) europeanaProxy;
 	}
 	@Override
 	public List<PlaceImpl> getPlaces() {
@@ -171,11 +168,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
-		if (agents != null) {
 			this.agents = (List<AgentImpl>) agents;
-		} else {
-			this.agents = null;
-		}
 	}
 
 	@Override
@@ -185,11 +178,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setTimespans(List<? extends Timespan> timespans) {
-		if (timespans != null) {
 			this.timespans = (List<TimespanImpl>) timespans;
-		} else {
-			this.timespans = null;
-		}
 	}
 
 	@Override
@@ -217,7 +206,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	
-	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
+	public void setEuropeanaAggregation(EuropeanaAggregationImpl europeanaAggregation) {
 		this.europeanaAggregation = europeanaAggregation;
 	}
 

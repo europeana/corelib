@@ -16,7 +16,7 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.utils.StringArrayUtils;
 
@@ -26,7 +26,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  *
  */
 
-@Embedded
+@Entity("Timespan")
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 

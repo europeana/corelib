@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
@@ -96,7 +97,7 @@ public final class ProvidedCHOFieldInput {
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
-
+			mongoProvidedCHO.setId(new ObjectId());
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
 			
 				mongoProvidedCHO.setOwlSameAs(SolrUtils.resourceListToArray(providedCHO.getSameAList()));

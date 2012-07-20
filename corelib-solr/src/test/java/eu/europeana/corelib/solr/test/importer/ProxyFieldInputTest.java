@@ -46,7 +46,6 @@ import eu.europeana.corelib.definitions.jibx.Medium;
 import eu.europeana.corelib.definitions.jibx.Provenance;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.Publisher;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.References;
 import eu.europeana.corelib.definitions.jibx.Relation;
 import eu.europeana.corelib.definitions.jibx.Replaces;
@@ -84,7 +83,7 @@ public class ProxyFieldInputTest {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
 			solrDocument = ProxyFieldInput.createProxySolrFields(proxy,
-					solrDocument, null, true);
+					solrDocument);
 			assertEquals(proxy.getAbout(),
 					solrDocument.getFieldValue(EdmLabel.PROVIDER_ORE_PROXY.toString()));
 			assertEquals(proxy.getCurrentLocation().getResource(),

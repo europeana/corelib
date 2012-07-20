@@ -21,11 +21,11 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -60,8 +60,7 @@ public final class ProxyFieldInput {
 	 * @throws MalformedURLException
 	 */
 	public static SolrInputDocument createProxySolrFields(ProxyType proxy,
-			SolrInputDocument solrInputDocument, RDF rdf,
-			boolean shouldDereference) throws InstantiationException,
+			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException, MalformedURLException, IOException {
 		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY.toString(),
 				proxy.getAbout());
@@ -251,7 +250,7 @@ public final class ProxyFieldInput {
 			MalformedURLException, IOException {
 
 		mongoProxy.setAbout(proxy.getAbout());
-
+		mongoProxy.setId(new ObjectId());
 		mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
 				(proxy.getCurrentLocation())).getResource());
 		mongoProxy.setEdmIsNextInSequence(SolrUtils.exists(ResourceType.class,
@@ -271,8 +270,10 @@ public final class ProxyFieldInput {
 				.getIsDerivativeOfList()));
 		mongoProxy.setEdmIsRelatedTo(SolrUtils
 				.resourceOrLiteralListToArray(proxy.getIsRelatedToList()));
-		mongoProxy.setEdmIsRepresentationOf(proxy.getIsRepresentationOf()
-				.getResource());
+		if (proxy.getIsRepresentationOf() != null) {
+			mongoProxy.setEdmIsRepresentationOf(proxy.getIsRepresentationOf()
+					.getResource());
+		}
 		mongoProxy.setEdmIsSimilarTo(SolrUtils.resourceListToArray(proxy
 				.getIsSimilarToList()));
 		mongoProxy.setEdmRealizes(SolrUtils.resourceListToArray(proxy
@@ -306,24 +307,32 @@ public final class ProxyFieldInput {
 						.setDctermsHasVersion(SolrUtils
 								.resourceOrLiteralToArray(europeanaType
 										.getHasVersion()));
-				mongoProxy.setDctermsIsFormatOf(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getIsFormatOf()));
+				mongoProxy
+						.setDctermsIsFormatOf(SolrUtils
+								.resourceOrLiteralToArray(europeanaType
+										.getIsFormatOf()));
 				mongoProxy.setDctermsIsPartOf(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getIsPartOf()));
 				mongoProxy.setDctermsIsReferencedBy(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getIsReferencedBy()));
+						.resourceOrLiteralToArray(europeanaType
+								.getIsReferencedBy()));
 				mongoProxy.setDctermsIsReplacedBy(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getIsReplacedBy()));
+						.resourceOrLiteralToArray(europeanaType
+								.getIsReplacedBy()));
 				mongoProxy.setDctermsIsRequiredBy(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getIsRequiredBy()));
+						.resourceOrLiteralToArray(europeanaType
+								.getIsRequiredBy()));
 				mongoProxy.setDctermsIssued(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getIssued()));
 				mongoProxy.setDctermsIsVersionOf(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getIsVersionOf()));
+						.resourceOrLiteralToArray(europeanaType
+								.getIsVersionOf()));
 				mongoProxy.setDctermsMedium(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getMedium()));
-				mongoProxy.setDctermsProvenance(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getProvenance()));
+				mongoProxy
+						.setDctermsProvenance(SolrUtils
+								.resourceOrLiteralToArray(europeanaType
+										.getProvenance()));
 				mongoProxy.setDctermsReplaces(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getReplaces()));
 				mongoProxy.setDctermsRequires(SolrUtils
@@ -331,11 +340,13 @@ public final class ProxyFieldInput {
 				mongoProxy.setDctermsSpatial(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getSpatial()));
 				mongoProxy.setDctermsTOC(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getTableOfContents()));
+						.resourceOrLiteralToArray(europeanaType
+								.getTableOfContents()));
 				mongoProxy.setDctermsTemporal(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getTemporal()));
 				mongoProxy.setDcContributor(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getContributor()));
+						.resourceOrLiteralToArray(europeanaType
+								.getContributor()));
 				mongoProxy.setDcCoverage(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getCoverage()));
 				mongoProxy.setDcCreator(SolrUtils
@@ -343,17 +354,22 @@ public final class ProxyFieldInput {
 				mongoProxy.setDcDate(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getDate()));
 				mongoProxy.setDcDescription(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getDescription()));
+						.resourceOrLiteralToArray(europeanaType
+								.getDescription()));
 				mongoProxy.setDcFormat(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getFormat()));
 				if (europeanaType.getIdentifier() != null) {
-					mongoProxy.setDcIdentifier(new String[]{europeanaType.getIdentifier().getString()});
+					mongoProxy.setDcIdentifier(new String[] { europeanaType
+							.getIdentifier().getString() });
 				}
 				if (europeanaType.getLanguage() != null) {
-					mongoProxy.setDcLanguage(new String[]{europeanaType.getLanguage().getString()});
+					mongoProxy.setDcLanguage(new String[] { europeanaType
+							.getLanguage().getString() });
 				}
-				mongoProxy.setDcPublisher(SolrUtils
-						.resourceOrLiteralToArray(europeanaType.getPublisher()));
+				mongoProxy
+						.setDcPublisher(SolrUtils
+								.resourceOrLiteralToArray(europeanaType
+										.getPublisher()));
 				mongoProxy.setDcRelation(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getRelation()));
 				mongoProxy.setDcRights(SolrUtils
@@ -363,7 +379,8 @@ public final class ProxyFieldInput {
 				mongoProxy.setDcSubject(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getSubject()));
 				if (europeanaType.getTitle() != null) {
-					mongoProxy.setDcTitle(new String[] {europeanaType.getTitle().getString()});
+					mongoProxy.setDcTitle(new String[] { europeanaType
+							.getTitle().getString() });
 				}
 				mongoProxy.setDcType(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getType()));

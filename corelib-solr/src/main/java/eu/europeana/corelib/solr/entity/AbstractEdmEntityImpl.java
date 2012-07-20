@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
+import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
@@ -30,8 +31,10 @@ import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
  */
 public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
-	@Indexed(unique=false)
+	@Indexed(unique = true)
 	private String about;
+	
+	@Id
 	private ObjectId id;
 
 	@Override
@@ -41,7 +44,7 @@ public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
 	@Override
 	public void setId(ObjectId id) {
-		this.id=id;
+		this.id = id;
 	}
 
 	@Override

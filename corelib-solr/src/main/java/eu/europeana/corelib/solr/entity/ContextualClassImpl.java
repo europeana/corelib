@@ -2,11 +2,9 @@ package eu.europeana.corelib.solr.entity;
 
 import java.util.Map;
 
-import com.google.code.morphia.annotations.Embedded;
-
 import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 
-@Embedded
+
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
 	
 	private Map<String,String> prefLabel;

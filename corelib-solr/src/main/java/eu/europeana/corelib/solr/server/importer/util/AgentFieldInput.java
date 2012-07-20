@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import com.google.code.morphia.mapping.MappingException;
 
@@ -268,7 +269,7 @@ public final class AgentFieldInput {
 
 		}
 
-		if (agent.getNote() != null) {
+		if (agent.getNote() != null&& agentType.getNoteList()!=null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : agentType.getNoteList()) {
 				if (!MongoUtils.contains(agent.getNote(), noteJibx.getString())) {
@@ -336,7 +337,7 @@ public final class AgentFieldInput {
 	private static AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
-
+		agent.setId(new ObjectId());
 		agent.setAbout(agentType.getAbout());
 
 		agent.setDcDate(SolrUtils.resourceOrLiteralListToArray(agentType

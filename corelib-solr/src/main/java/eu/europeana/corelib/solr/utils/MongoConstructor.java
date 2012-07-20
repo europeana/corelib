@@ -67,7 +67,7 @@ public class MongoConstructor {
 	 * @throws IOException 
 	 * @throws MalformedURLException 
 	 */
-	public FullBeanImpl constructFullBean(RDF record, boolean shouldDereference) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
+	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
@@ -85,17 +85,20 @@ public class MongoConstructor {
 				try {
 					providedCHOs.add(ProvidedCHOFieldInput.createProvidedCHOMongoFields(element.getProvidedCHO(),
 							mongoServer));
-					if (proxies.size() > 0) {
-						proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
-								element.getProxy(), mongoServer));
-					} else {
-						proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProxy(),
-								mongoServer));
-					}
+					
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
+				}
+			}
+			if(element.ifProxy()){
+				if (proxies.size() > 0) {
+					proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
+							element.getProxy(), mongoServer));
+				} else {
+					proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProxy(),
+							mongoServer));
 				}
 			}
 			if (element.ifAggregation()) {
@@ -140,14 +143,25 @@ public class MongoConstructor {
 		AggregationImpl aggregation = aggregations.get(0);
 		aggregation.setWebResources(webResources);
 		fullBean.setProvidedCHOs(providedCHOs);
-		fullBean.setAgents(agents);
-
+		
+		
 		fullBean.setAggregations(aggregations);
 		try {
+			if(agents.size()>0){
+				fullBean.setAgents(agents);
+			}
+			if(concepts.size()>0){
 			fullBean.setConcepts(concepts);
+			}
+			if(places.size()>0){
 			fullBean.setPlaces(places);
+			}
+			if(timespans.size()>0){
 			fullBean.setTimespans(timespans);
+			}
+			if(proxies.size()>0){
 			fullBean.setProxies(proxies);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

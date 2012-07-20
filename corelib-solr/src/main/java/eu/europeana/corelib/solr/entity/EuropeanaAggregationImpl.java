@@ -2,26 +2,30 @@ package eu.europeana.corelib.solr.entity;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
-@Embedded
+@Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
+	@Id
 	ObjectId id;
 
-	@Indexed(unique=true, dropDups=true)
+	@Indexed(unique = true, dropDups = true)
 	private String about;
 
-	@Embedded
+	@Resource
 	private List<WebResourceImpl> webResources;
-	
+
 	private String aggregatedCHO;
 	private String[] aggregates;
 	private String dcCreator;
@@ -30,8 +34,8 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	private String edmHasView;
 	private String edmCountry;
 	private String edmLanguage;
-	private String edmRights; 
-	
+	private String edmRights;
+
 	@Override
 	public ObjectId getId() {
 		return this.id;
@@ -39,7 +43,7 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
 	@Override
 	public void setId(ObjectId id) {
-		this.id=id;
+		this.id = id;
 	}
 
 	@Override
@@ -49,7 +53,7 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
 	@Override
 	public void setAbout(String about) {
-		this.about=about;
+		this.about = about;
 
 	}
 
@@ -65,7 +69,8 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 
 	@Override
 	public String[] getAggregates() {
-		return (StringArrayUtils.isNotBlank(this.aggregates)?this.aggregates.clone():null);
+		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates
+				.clone() : null);
 	}
 
 	@Override
@@ -142,12 +147,12 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	public void setEdmRights(String edmRights) {
 		this.edmRights = edmRights;
 	}
-	
+
 	@Override
 	public List<? extends WebResource> getWebResources() {
 		return webResources;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setWebResources(List<? extends WebResource> webResources) {

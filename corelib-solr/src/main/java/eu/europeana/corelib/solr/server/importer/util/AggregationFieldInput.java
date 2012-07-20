@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
@@ -186,6 +187,7 @@ public final class AggregationFieldInput {
 			MongoServer mongoServer, RDF rdf) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
+		mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
 
 		mongoAggregation.setEdmDataProvider(SolrUtils.exists(DataProvider.class,

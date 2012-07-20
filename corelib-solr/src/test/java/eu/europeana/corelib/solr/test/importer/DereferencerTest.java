@@ -98,8 +98,8 @@ public class DereferencerTest {
 			RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(
 					new File(workingDir + "/target/test-classes/test_files/edm.xml")), null);
 			SolrInputDocument solrDocument = SolrConstructor
-					.constructSolrDocument(rdf, true);
-			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf, true);
+					.constructSolrDocument(rdf);
+			FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
 
 			mongoDBServer.getDatastore().save(fullBean);
 			

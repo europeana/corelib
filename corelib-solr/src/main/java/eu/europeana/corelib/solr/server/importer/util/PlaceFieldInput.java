@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
@@ -35,7 +36,6 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
-
 /**
  * Constructor of a Place EDM Entity
  * 
@@ -43,9 +43,10 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
  */
 public final class PlaceFieldInput {
 
-	private PlaceFieldInput(){
-		
+	private PlaceFieldInput() {
+
 	}
+
 	/**
 	 * Create a SolrInputDocument with the Place field values filled in
 	 * 
@@ -102,9 +103,7 @@ public final class PlaceFieldInput {
 		}
 		if (place.getLong() != null && place.getLat() != null) {
 			solrInputDocument.addField(EdmLabel.PL_POSITION.toString(), place
-					.getLat().getString()
-					+ ","
-					+ place.getLong().getString());
+					.getLat().getString() + "," + place.getLong().getString());
 		}
 		return solrInputDocument;
 	}
@@ -125,8 +124,8 @@ public final class PlaceFieldInput {
 
 		// If place exists in mongo
 
-		PlaceImpl place = (PlaceImpl) ((EdmMongoServer)mongoServer).searchByAbout(
-				PlaceImpl.class, placeType.getAbout());
+		PlaceImpl place = (PlaceImpl) ((EdmMongoServer) mongoServer)
+				.searchByAbout(PlaceImpl.class, placeType.getAbout());
 
 		// if it does not exist
 		if (place == null) {
@@ -143,17 +142,21 @@ public final class PlaceFieldInput {
 	 * Update a Mongo Place Entity. In the update process everything is appended
 	 * rather than deleted and reconstructed
 	 * 
-	 * @param place The Mongo Place Entity to update
-	 * @param placeType The JiBX Entity from which the Mongo Place Entity will be updated
-	 * @param mongoServer The server on which the Place will be updated
+	 * @param place
+	 *            The Mongo Place Entity to update
+	 * @param placeType
+	 *            The JiBX Entity from which the Mongo Place Entity will be
+	 *            updated
+	 * @param mongoServer
+	 *            The server on which the Place will be updated
 	 * @return The updated Mongo Place Entity
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
-			MongoServer mongoServer)  {
+			MongoServer mongoServer) {
 
-		if (place.getNote() != null) {
+		if (place.getNote() != null && placeType.getNoteList()!=null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : placeType.getNoteList()) {
 				if (MongoUtils.contains(place.getNote(), noteJibx.getString())) {
@@ -234,8 +237,8 @@ public final class PlaceFieldInput {
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"longitude", placeType.getLong().getString());
 		}
-		return (PlaceImpl) ((EdmMongoServer)mongoServer).searchByAbout(PlaceImpl.class,
-				placeType.getAbout());
+		return (PlaceImpl) ((EdmMongoServer) mongoServer).searchByAbout(
+				PlaceImpl.class, placeType.getAbout());
 	}
 
 	/**
@@ -247,14 +250,16 @@ public final class PlaceFieldInput {
 	 */
 	private static PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
+		place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());
-		
+
 		if (placeType.getLat() != null) {
 			place.setLatitude(Float.parseFloat(placeType.getLat().getString()));
 		}
 
 		if (placeType.getLong() != null) {
-			place.setLongitude(Float.parseFloat(placeType.getLong().getString()));
+			place.setLongitude(Float
+					.parseFloat(placeType.getLong().getString()));
 		}
 		place.setNote(SolrUtils.literalListToArray(placeType.getNoteList()));
 
@@ -284,10 +289,15 @@ public final class PlaceFieldInput {
 			place.setAltLabel(altLabelMongo);
 		}
 
-		place.setIsPartOf(SolrUtils.resourceOrLiteralListToArray(placeType.getIsPartOfList()));
-		place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
-		place.setDcTermsHasPart(SolrUtils.resourceOrLiteralListToArray(placeType.getHasPartList()));
-		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType.getSameAList()));
+		place.setIsPartOf(SolrUtils.resourceOrLiteralListToArray(placeType
+				.getIsPartOfList()));
+		if (placeType.getAlt() != null) {
+			place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
+		}
+		place.setDcTermsHasPart(SolrUtils
+				.resourceOrLiteralListToArray(placeType.getHasPartList()));
+		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType
+				.getSameAList()));
 		return place;
 	}
 }

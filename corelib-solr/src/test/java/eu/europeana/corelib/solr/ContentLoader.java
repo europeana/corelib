@@ -54,7 +54,7 @@ import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
  */
 public class ContentLoader {
 
-	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test.zip";
+	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test4.zip";
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 
@@ -114,14 +114,15 @@ public class ContentLoader {
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
 				
-				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf, true);
-				fullBean.setAbout(EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout()));
-				if(mongoDBServer.searchByAbout(FullBeanImpl.class, fullBean.getAbout())!=null){
+				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+				String about = EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout());
+				fullBean.setAbout(about);
+				if(mongoDBServer.getFullBean(about)!=null){
 					MongoUtils.updateFullBean(fullBean, mongoDBServer);
 				}else {
 					mongoDBServer.getDatastore().save(fullBean);
 				}
-				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf, true);
+				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf);
 				document.setField("europeana_id", fullBean.getAbout());
 				records.add(document);
 
@@ -136,7 +137,7 @@ public class ContentLoader {
 				failed++;
 				System.out.println("Error unmarshalling document " + f.getName()
 						+ " from the input file. Check for Schema changes ("+e.getMessage()+")");
-			//	e.printStackTrace();
+				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.out.println("File does not exist");
 

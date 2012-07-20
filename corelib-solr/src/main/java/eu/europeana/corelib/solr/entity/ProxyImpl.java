@@ -16,7 +16,8 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Transient;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -28,10 +29,11 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * 
  */
 
-@Embedded
+@Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
 	private DocType edmType;
+	@Transient
 	private String[] edmUnstored;
 	
 	@Override

@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.ConformsTo;
 import eu.europeana.corelib.definitions.jibx.Created;
@@ -225,6 +226,7 @@ public final class WebResourcesFieldInput {
 	public static WebResourceImpl createWebResourceMongoField(
 			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
+		mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
 		mongoWebResource.setWebResourceEdmRights(webResource.getRights()
 				.getResource());
@@ -250,8 +252,10 @@ public final class WebResourcesFieldInput {
 				.resourceOrLiteralListToArray(webResource.getIsFormatOfList()));
 		mongoWebResource.setDctermsIssued(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getIssuedList()));
+		if(webResource.getIsNextInSequence()!=null){
 		mongoWebResource.setIsNextInSequence(webResource.getIsNextInSequence()
 				.getResource());
+		}
 		return mongoWebResource;
 	}
 
