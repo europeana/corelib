@@ -48,7 +48,7 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
-
+//TODO: to be moved in UIM
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class DereferencerTest {
@@ -64,7 +64,7 @@ public class DereferencerTest {
 	private static String PUBLISHER = "PUBLISHER";
 	private static String ALTERNATIVE = "ALTERNATIVE";
 
-	@Test
+	
 	public void testDereference() {
 		ControlledVocabularyImpl controlledVocabulary = new ControlledVocabularyImpl();
 		controlledVocabulary.setName("dereferencetest");
@@ -106,6 +106,7 @@ public class DereferencerTest {
 			solrServer.add(solrDocument);
 			solrServer.commit();
 			solrServer.optimize();
+			
 			assertEquals(2, fullBean.getDcPublisher().length);
 			assertEquals(2, fullBean.getDcContributor().length);
 			for(String dcPublisher : fullBean.getDcPublisher()){
