@@ -91,7 +91,7 @@ public final class MongoUtils {
 		}
 	}
 
-	// TODO: beautify this
+	// TODO: fix this... it stores the entity rather than the reference to the entity
 	public static <T, V> void updateEntity(Class<T> clazz, String about,
 			EdmMongoServer mongoServer, String field, Object value) {
 		if (value != null) {

@@ -25,6 +25,7 @@ import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
+import com.google.code.morphia.annotations.Reference;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -53,7 +54,7 @@ public class AggregationImpl implements Aggregation {
 	private String[] aggregates;
 	private String[] edmUnstored;
 
-	@Embedded
+	@Reference
 	private List<WebResourceImpl> webResources;
 
 	@Indexed(unique = true, dropDups = true)

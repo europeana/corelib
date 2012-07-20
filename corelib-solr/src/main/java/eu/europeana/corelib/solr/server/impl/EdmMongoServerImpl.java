@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
-import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -139,17 +138,13 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				+ "[DB: " + databaseName + "]\n";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T searchByAbout(Class<T> clazz, String about) {
 
-		if (!clazz.isInstance(FullBeanImpl.class)) {
-			return datastore.find(clazz, "about", about).get();
-		} else {
-			DBObject ref = (DBObject) datastore.find(clazz, "about", about)
-					.get();
-			return (T) ref;
-		}
+			return datastore.find(clazz, "about", about)
+			.get();
+			 
+		
 	}
 
 	@Override

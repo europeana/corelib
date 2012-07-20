@@ -117,9 +117,7 @@ public class ContentLoader {
 				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
 				String about = EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout());
 				fullBean.setAbout(about);
-				if(mongoDBServer.getFullBean(about)!=null){
-					MongoUtils.updateFullBean(fullBean, mongoDBServer);
-				}else {
+				if(mongoDBServer.getFullBean(about)==null){
 					mongoDBServer.getDatastore().save(fullBean);
 				}
 				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf);
