@@ -103,7 +103,7 @@ public class MongoConstructor {
 			}
 			if (element.ifAggregation()) {
 				aggregations.add(AggregationFieldInput.createAggregationMongoFields(element.getAggregation(),
-						mongoServer, record));
+						mongoServer));
 				if (webResources.size() > 0) {
 					aggregations.set(0,
 							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));

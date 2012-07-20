@@ -31,7 +31,6 @@ import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.Provider;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx._Object;
@@ -184,7 +183,7 @@ public final class AggregationFieldInput {
 	 */
 	public static AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
-			MongoServer mongoServer, RDF rdf) throws InstantiationException,
+			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		mongoAggregation.setId(new ObjectId());

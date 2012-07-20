@@ -72,7 +72,7 @@ public class AggregationFieldInputTest {
 	private void testMongo(Aggregation aggregation) {
 		try {
 			AggregationImpl aggregationMongo = AggregationFieldInput
-					.createAggregationMongoFields(aggregation, mongoServer, null);
+					.createAggregationMongoFields(aggregation, mongoServer);
 			assertEquals(aggregation.getAbout(), aggregationMongo.getAbout());
 			assertEquals(aggregation.getAggregatedCHO().getResource(),
 					aggregationMongo.getAggregatedCHO());

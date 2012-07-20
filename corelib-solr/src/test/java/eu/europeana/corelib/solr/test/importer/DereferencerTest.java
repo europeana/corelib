@@ -49,7 +49,7 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
 //TODO: to be moved in UIM
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class DereferencerTest {
 	@Resource(name = "corelib_solr_mongoServer")
