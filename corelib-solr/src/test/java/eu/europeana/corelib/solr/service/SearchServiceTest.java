@@ -51,7 +51,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class SearchServiceTest {
 
-	private static String COLLECTION = "src/test/resources/records-test.zip";
+	private static String COLLECTION = "src/test/resources/records-test4.zip";
 
 	@Resource
 	private SearchService searchService;

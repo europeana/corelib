@@ -95,46 +95,14 @@ public final class ProxyFieldInput {
 						EdmLabel.PROVIDER_DCTERMS_CONFORMS_TO,
 						choice.getConformsTo());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_CREATED,
-						choice.getConformsTo());
-				if (choice.getCreated() != null) {
-					if (choice.getCreated().getResource() != null) {
-						solrInputDocument.addField(
-								EdmLabel.PROVIDER_DCTERMS_CREATED.toString(),
-								choice.getCreated().getResource());
-					}
-					if (choice.getCreated().getString() != null) {
-						solrInputDocument.addField(
-								EdmLabel.PROVIDER_DCTERMS_CREATED.toString(),
-								choice.getCreated().getString());
-					}
-				}
-				if (choice.getExtent() != null) {
-					if (choice.getExtent().getResource() != null) {
-						solrInputDocument.addField(
-								EdmLabel.PROVIDER_DCTERMS_EXTENT.toString(),
-								choice.getExtent().getResource());
-					}
-					if (choice.getExtent().getString() != null) {
-						solrInputDocument.addField(
-								EdmLabel.PROVIDER_DCTERMS_EXTENT.toString(),
-								choice.getExtent().getString());
-					}
-				}
-				if (choice.getHasFormat() != null) {
-					if (choice.getHasFormat().getResource() != null) {
-						solrInputDocument
-								.addField(EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT
-										.toString(), choice.getHasFormat()
-										.getResource());
-					}
-					if (choice.getHasFormat().getString() != null) {
-						solrInputDocument
-								.addField(EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT
-										.toString(), choice.getHasFormat()
-										.getString());
-					}
-				}
+						EdmLabel.PROVIDER_DCTERMS_CREATED, choice.getCreated());
+				SolrUtils.addResourceOrLiteralType(solrInputDocument,
+						EdmLabel.PROVIDER_DCTERMS_EXTENT, choice.getExtent());
+			
+				SolrUtils
+				.addResourceOrLiteralType(solrInputDocument,
+						EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT,
+						choice.getHasFormat());
 				SolrUtils
 						.addResourceOrLiteralType(solrInputDocument,
 								EdmLabel.PROVIDER_DCTERMS_HAS_PART,
@@ -333,6 +301,10 @@ public final class ProxyFieldInput {
 						.setDctermsProvenance(SolrUtils
 								.resourceOrLiteralToArray(europeanaType
 										.getProvenance()));
+				mongoProxy
+						.setDctermsReferences(SolrUtils
+								.resourceOrLiteralToArray(europeanaType
+										.getReferences()));
 				mongoProxy.setDctermsReplaces(SolrUtils
 						.resourceOrLiteralToArray(europeanaType.getReplaces()));
 				mongoProxy.setDctermsRequires(SolrUtils

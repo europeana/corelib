@@ -420,6 +420,7 @@ public class ProxyFieldInputTest {
 		Temporal temporal = new Temporal();
 		temporal.setResource("temporal");
 		dcterms.setTemporal(temporal);
+		dcterms.clearChoiceListSelect();
 		Contributor contributor = new Contributor();
 		contributor.setResource("test contributor");
 		dcterms.setContributor(contributor);

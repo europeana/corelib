@@ -18,8 +18,7 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -29,10 +28,9 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@Entity("WebResource")
+@Embedded
 public class WebResourceImpl implements WebResource {
 
-	@Id
 	private ObjectId id;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
