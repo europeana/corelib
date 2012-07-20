@@ -19,7 +19,15 @@
   See the Licence for the specific language governing
   permissions and limitations under the Licence.
 -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" targetNamespace="http://www.w3.org/2004/02/skos/core#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:xml="http://www.w3.org/XML/1998/namespace" elementFormDefault="qualified" attributeFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
+  xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+  xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+  targetNamespace="http://www.w3.org/2004/02/skos/core#" 
+  elementFormDefault="qualified" 
+  attributeFormDefault="qualified">
+  
   <annotation>
     <documentation>
       EDM First Implementation Schema: SKOS
@@ -33,19 +41,22 @@
     <complexType>
        <complexContent>
          <extension base="rdf:AboutType">
-           <sequence>
-             <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:broader" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:narrower" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:related" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:broadMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:narrowMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:relatedMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:exactMatch" maxOccurs="unbounded" minOccurs="0" />   
-             <element ref="skos:closeMatch" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
-             <element ref="skos:notation" maxOccurs="unbounded" minOccurs="0" />
+           <sequence minOccurs="0" maxOccurs="unbounded">
+             <choice>
+             <element ref="skos:prefLabel"/>
+             <element ref="skos:altLabel"/>
+             <element ref="skos:broader"/>
+             <element ref="skos:narrower"/>
+             <element ref="skos:related"/>
+             <element ref="skos:broadMatch"/>  
+             <element ref="skos:narrowMatch"/>  
+             <element ref="skos:relatedMatch"/>
+             <element ref="skos:exactMatch"/>
+             <element ref="skos:closeMatch"/>
+             <element ref="skos:note"/>
+             <element ref="skos:notation"/>
+             <element ref="skos:inScheme"/>
+             </choice>
            </sequence>
          </extension>
        </complexContent> 

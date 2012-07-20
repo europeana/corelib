@@ -33,7 +33,8 @@
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
     <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
-
+    <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
+    
     <complexType name="RDF">
         <sequence minOccurs="0" maxOccurs="unbounded">
             <choice>
@@ -55,7 +56,11 @@
             </documentation>
         </annotation>
         <complexContent>
-            <extension base="edm:BaseProvidedCHOType"/>
+            <extension base="edm:BaseProvidedCHOType">
+                <sequence>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
         </complexContent>
     </complexType>
 
