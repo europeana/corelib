@@ -55,7 +55,7 @@ public class ProvidedCHOFieldInputTest {
 					solrDocument.getFieldValue(EdmLabel.EUROPEANA_ID.toString()));
 			
 			assertEquals(providedCHO.getSameAList().get(0).getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_OWL_SAMEAS.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_OWL_SAMEAS.toString()));
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

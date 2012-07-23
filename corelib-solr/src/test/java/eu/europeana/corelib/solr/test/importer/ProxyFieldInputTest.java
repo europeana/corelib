@@ -85,121 +85,162 @@ public class ProxyFieldInputTest {
 			solrDocument = ProxyFieldInput.createProxySolrFields(proxy,
 					solrDocument);
 			assertEquals(proxy.getAbout(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_ORE_PROXY.toString()));
-			assertEquals(proxy.getCurrentLocation().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_CURRENT_LOCATION_LAT
+					solrDocument.getFieldValue(EdmLabel.ORE_PROXY
 							.toString()));
-			assertEquals(proxy.getIsNextInSequence().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_IS_NEXT_IN_SEQUENCE
-							.toString()));
+			assertEquals(
+					proxy.getCurrentLocation().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION_LAT
+									.toString()));
+			assertEquals(
+					proxy.getIsNextInSequence().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE
+									.toString()));
 			assertEquals(proxy.getType().toString(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_TYPE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_TYPE
+							.toString()));
 			List<EuropeanaType.Choice> dcterms = proxy.getChoiceList();
-			assertEquals(dcterms.get(0).getAlternative().getString(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_ALTERNATIVE
-							.toString()));
-			assertEquals(dcterms.get(0).getConformsTo().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_CONFORMS_TO
-							.toString()));
+			assertEquals(
+					dcterms.get(0).getAlternative().getString(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_ALTERNATIVE
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getConformsTo().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_CONFORMS_TO
+									.toString()));
 			assertEquals(dcterms.get(0).getCreated().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_CREATED
-							.toString()));
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_CREATED
+									.toString()));
 			assertEquals(dcterms.get(0).getExtent().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_EXTENT
+					solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_EXTENT
 							.toString()));
 			assertEquals(dcterms.get(0).getHasFormat().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT
-							.toString()));
-			assertEquals(dcterms.get(0).getHasPart().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_HAS_PART
-							.toString()));
-			assertEquals(dcterms.get(0).getHasVersion().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_HAS_VERSION
-							.toString()));
-			assertEquals(dcterms.get(0).getIsFormatOf().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_FORMAT_OF
-							.toString()));
-			assertEquals(dcterms.get(0).getIsPartOf().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_PART_OF
-							.toString()));
-			assertEquals(dcterms.get(0).getIsReferencedBy().getResource(),
 					solrDocument
-							.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_REFERENCED_BY
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_FORMAT
 									.toString()));
-			assertEquals(dcterms.get(0).getIsReplacedBy().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_REPLACED_BY
-							.toString()));
-			assertEquals(dcterms.get(0).getIsRequiredBy().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_REQUIRED_BY
-							.toString()));
+			assertEquals(dcterms.get(0).getHasPart().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_PART
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getHasVersion().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_VERSION
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getIsFormatOf().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_FORMAT_OF
+									.toString()));
+			assertEquals(dcterms.get(0).getIsPartOf().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_PART_OF
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getIsReferencedBy().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REFERENCED_BY
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getIsReplacedBy().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REPLACED_BY
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getIsRequiredBy().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REQUIRED_BY
+									.toString()));
 			assertEquals(dcterms.get(0).getIssued().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_ISSUED
+					solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_ISSUED
 							.toString()));
-			assertEquals(dcterms.get(0).getIsVersionOf().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_IS_VERSION_OF
-							.toString()));
+			assertEquals(
+					dcterms.get(0).getIsVersionOf().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_VERSION_OF
+									.toString()));
 			assertEquals(dcterms.get(0).getMedium().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_MEDIUM
+					solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_MEDIUM
 							.toString()));
 			assertEquals(dcterms.get(0).getProvenance().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_PROVENANCE
-							.toString()));
-			assertEquals(dcterms.get(0).getReferences().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_REFERENCES
-							.toString()));
-			assertEquals(dcterms.get(0).getReplaces().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_REPLACES
-							.toString()));
-			assertEquals(dcterms.get(0).getRequires().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_REQUIRES
-							.toString()));
-			assertEquals(dcterms.get(0).getSpatial().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_SPATIAL
-							.toString()));
-			assertEquals(dcterms.get(0).getTableOfContents().getResource(),
 					solrDocument
-							.getFieldValue(EdmLabel.PROVIDER_DCTERMS_TABLE_OF_CONTENTS
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_PROVENANCE
+									.toString()));
+			assertEquals(dcterms.get(0).getReferences().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_REFERENCES
+									.toString()));
+			assertEquals(dcterms.get(0).getReplaces().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_REPLACES
+									.toString()));
+			assertEquals(dcterms.get(0).getRequires().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_REQUIRES
+									.toString()));
+			assertEquals(dcterms.get(0).getSpatial().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_SPATIAL
+									.toString()));
+			assertEquals(
+					dcterms.get(0).getTableOfContents().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_TABLE_OF_CONTENTS
 									.toString()));
 			assertEquals(dcterms.get(0).getTemporal().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DCTERMS_TEMPORAL
-							.toString()));
+					solrDocument
+							.getFieldValue(EdmLabel.PROXY_DCTERMS_TEMPORAL
+									.toString()));
 
-		
 			assertEquals(dcterms.get(0).getContributor().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_CONTRIBUTOR
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_CONTRIBUTOR
 							.toString()));
 			assertEquals(dcterms.get(0).getCoverage().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_COVERAGE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_COVERAGE
+							.toString()));
 			assertEquals(dcterms.get(0).getCreator().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_CREATOR.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_CREATOR
+							.toString()));
 			assertEquals(dcterms.get(0).getDate().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_DATE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_DATE
+							.toString()));
 			assertEquals(dcterms.get(0).getDescription().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_DESCRIPTION
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_DESCRIPTION
 							.toString()));
 			assertEquals(dcterms.get(0).getFormat().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_FORMAT.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_FORMAT
+							.toString()));
 			assertEquals(dcterms.get(0).getIdentifier().getString(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_IDENTIFIER
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_IDENTIFIER
 							.toString()));
 			assertEquals(dcterms.get(0).getLanguage().getString(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_LANGUAGE.toString()));
-			assertEquals(
-					dcterms.get(0).getPublisher().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_PUBLISHER.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_LANGUAGE
+							.toString()));
+			assertEquals(dcterms.get(0).getPublisher().getResource(),
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_PUBLISHER
+							.toString()));
 			assertEquals(dcterms.get(0).getRelation().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_RELATION.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_RELATION
+							.toString()));
 			assertEquals(dcterms.get(0).getRights().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_RIGHTS
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_RIGHTS
 							.toString()));
 			assertEquals(dcterms.get(0).getSource().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_SOURCE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_SOURCE
+							.toString()));
 			assertEquals(dcterms.get(0).getSubject().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_SUBJECT.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_SUBJECT
+							.toString()));
 			assertEquals(dcterms.get(0).getTitle().getString(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_TITLE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_TITLE
+							.toString()));
 			assertEquals(dcterms.get(0).getType().getResource(),
-					solrDocument.getFieldValue(EdmLabel.PROVIDER_DC_TYPE.toString()));
+					solrDocument.getFieldValue(EdmLabel.PROXY_DC_TYPE
+							.toString()));
 
 			// continue from here
 		} catch (InstantiationException e) {

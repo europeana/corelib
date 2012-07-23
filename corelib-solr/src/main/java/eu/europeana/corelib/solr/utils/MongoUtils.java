@@ -62,6 +62,7 @@ public final class MongoUtils {
 	 * @param value
 	 *            The value to update
 	 */
+	
 	@SuppressWarnings("unchecked")
 	public static <T> void update(Class<T> clazz, String about,
 			MongoServer mongoServer, String field, Object value) {
@@ -92,20 +93,9 @@ public final class MongoUtils {
 		}
 	}
 
-	// TODO: fix this... it stores the entity rather than the reference to the entity
-	public static <T, V> void updateEntity(Class<T> clazz, String about,
-			EdmMongoServer mongoServer, String field, Object value) {
-		if (value != null) {
-			Query<T> updateQuery = mongoServer.getDatastore()
-					.createQuery(clazz).field("about").equal(about);
-			UpdateOperations<T> ops = mongoServer.getDatastore()
-					.createUpdateOperations(clazz).set(field, value);
-
-			mongoServer.getDatastore().update(updateQuery, ops);
-		}
-	}
-
-	public static void updateAggregation(AggregationImpl mongoAggregation,
+	/*
+	
+		public static void updateAggregation(AggregationImpl mongoAggregation,
 			MongoServer mongoServer) {
 		update(AggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
 				"aggregatedCHO", mongoAggregation.getAggregatedCHO());
@@ -232,6 +222,7 @@ public final class MongoUtils {
 				proxy.getProxyFor());
 	}
 
+	
 	public static void updateFullBean(FullBean fullBean,
 			EdmMongoServer mongoDBServer) {
 
@@ -248,5 +239,5 @@ public final class MongoUtils {
 		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
 				"places", fullBean.getPlaces());
 	}
-
+*/
 }

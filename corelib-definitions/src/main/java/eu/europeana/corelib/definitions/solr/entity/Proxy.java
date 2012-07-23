@@ -53,4 +53,7 @@ public interface Proxy extends BasicProxy {
 	 */
 	void setEdmUnstored(String[] edmUnstored);
 
+	boolean isEuropeanaProxy();
+
+	void setEuropeanaProxy(boolean europeanaProxy);
 }

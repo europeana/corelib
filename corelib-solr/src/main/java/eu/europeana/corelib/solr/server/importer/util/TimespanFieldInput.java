@@ -26,16 +26,20 @@ import org.apache.solr.common.SolrInputDocument;
 import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * Constructor for a Timespan
@@ -195,6 +199,43 @@ public final class TimespanFieldInput {
 
   			}
   		}
+  		
+		if (mongoTimespan.getDctermsHasPart() != null) {
+			List<String> dcTermsHasPart = new ArrayList<String>();
+			if (timeSpan.getHasPartList() != null) {
+				for (HasPart hasPartJibx : timeSpan.getHasPartList()) {
+					if (!MongoUtils.contains(mongoTimespan.getDctermsHasPart(),
+							hasPartJibx.getResource())) {
+						dcTermsHasPart.add(hasPartJibx.getResource());
+					}
+				}
+			}
+			for (String isPartOf : mongoTimespan.getIsPartOf()) {
+				dcTermsHasPart.add(isPartOf);
+			}
+			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"dctermsHasPart", StringArrayUtils.toArray(dcTermsHasPart));
+		}
+		
+		if (mongoTimespan.getOwlSameAs() != null) {
+			List<String> owlSameAs = new ArrayList<String>();
+			if (timeSpan.getSameAList() != null) {
+				for (SameAs sameAsJibx : timeSpan.getSameAList()) {
+					if (!MongoUtils.contains(mongoTimespan.getOwlSameAs(),
+							sameAsJibx.getResource())) {
+						owlSameAs.add(sameAsJibx.getResource());
+					}
+				}
+			}
+			for (String isPartOf : mongoTimespan.getIsPartOf()) {
+				owlSameAs.add(isPartOf);
+			}
+			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(), mongoServer,
+					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
+		}
+		
+  		
+  		
   		return (TimespanImpl) ((EdmMongoServer)mongoServer).searchByAbout(TimespanImpl.class,
   				timeSpan.getAbout());
 		

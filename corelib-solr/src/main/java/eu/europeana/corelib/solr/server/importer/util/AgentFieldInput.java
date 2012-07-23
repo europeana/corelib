@@ -259,8 +259,65 @@ public final class AgentFieldInput {
 					"begin", agentType.getBegin().getString());
 		}
 
+		if(agentType.getDateList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dcDate", SolrUtils.resourceOrLiteralListToArray(agentType.getDateList()));
+		}
 		
+		if(agentType.getIdentifierList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dcIdentifier", SolrUtils.literalListToArray(agentType.getIdentifierList()));
+		}
 		
+		if(agentType.getBiographicalInformation()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"biographicalInformation", SolrUtils.getLiteralString(agentType.getBiographicalInformation()));
+		}
+		
+		if(agentType.getDateOfBirth()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dateOfBirth", SolrUtils.getLiteralString(agentType.getDateOfBirth()));
+		}
+		
+		if(agentType.getDateOfDeath()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dateOfDeath", SolrUtils.getLiteralString(agentType.getDateOfDeath()));
+		}
+		
+		if(agentType.getDateOfEstablishment()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dateOfEstablishment", SolrUtils.getLiteralString(agentType.getDateOfEstablishment()));
+		}
+		if(agentType.getDateOfTermination()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"dateOfTermination", SolrUtils.getLiteralString(agentType.getDateOfTermination()));
+		}
+		if(agentType.getGender()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"gender", SolrUtils.getLiteralString(agentType.getGender()));
+		}
+		if(agentType.getHasMetList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"hasMet", SolrUtils.literalListToArray(agentType.getHasMetList()));
+		}
+		if(agentType.getIsRelatedToList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"isRelatedTo", SolrUtils.resourceOrLiteralListToArray(agentType.getIsRelatedToList()));
+		}
+		if(agentType.getNameList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"name", SolrUtils.literalListToArray(agentType.getNameList()));
+		}
+		if(agentType.getSameAList()!=null){
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"sameAs", SolrUtils.resourceListToArray(agentType.getSameAList()));
+		}
+		if(agentType.getProfessionOrOccupation()!=null){
+			if(agentType.getHasMetList()!=null){
+				MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+						"professionOrOccupation", SolrUtils.getResourceOrLiteralString(agentType.getProfessionOrOccupation()));
+			}
+		}
 		if (agent.getEnd() != null
 				&& !StringUtils.equals(agentType.getEnd().getString(),
 						agent.getEnd())) {

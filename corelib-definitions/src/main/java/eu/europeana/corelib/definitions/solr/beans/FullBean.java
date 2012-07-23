@@ -437,10 +437,6 @@ public interface FullBean extends ApiBean {
 
 	EuropeanaAggregation getEuropeanaAggregation();
 
-	void setEuropeanaProxy(EuropeanaProxy europeanaProxy);
-
-	EuropeanaProxy getEuropeanaProxy();
-
 	void setEdmTimespanBroaderTerm(String[] edmTimespanBroaderTerm);
 
 	void setEdmTimespanBroaderLabel(

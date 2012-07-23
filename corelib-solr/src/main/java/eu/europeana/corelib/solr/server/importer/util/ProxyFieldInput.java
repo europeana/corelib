@@ -62,24 +62,25 @@ public final class ProxyFieldInput {
 	public static SolrInputDocument createProxySolrFields(ProxyType proxy,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException, MalformedURLException, IOException {
-		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY.toString(),
+		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(),
 				SolrUtils.exists(EdmType.class, (proxy.getType())).toString());
 		solrInputDocument.addField(
-				EdmLabel.PROVIDER_EDM_CURRENT_LOCATION_LAT.toString(),
+				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LAT.toString(),
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(
-				EdmLabel.PROVIDER_EDM_CURRENT_LOCATION_LONG.toString(),
+				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LONG.toString(),
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(
-				EdmLabel.PROVIDER_EDM_IS_NEXT_IN_SEQUENCE.toString(),
+				EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString(),
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getIsNextInSequence())).getResource());
-		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY_FOR.toString(),
+		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_FOR.toString(),
 				SolrUtils.exists(String.class, proxy.getAbout()));
+		solrInputDocument.addField(EdmLabel.EDM_ISEUROPEANA_PROXY.toString(), proxy.getEuropeanaProxy().isEuropeanaProxy());
 
 		// Retrieve the dcterms and dc namespace fields
 		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy
@@ -88,111 +89,111 @@ public final class ProxyFieldInput {
 			for (eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice choice : europeanaTypeList) {
 				if (choice.getAlternative() != null) {
 					solrInputDocument.addField(
-							EdmLabel.PROVIDER_DCTERMS_ALTERNATIVE.toString(),
+							EdmLabel.PROXY_DCTERMS_ALTERNATIVE.toString(),
 							choice.getAlternative().getString());
 				}
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_CONFORMS_TO,
+						EdmLabel.PROXY_DCTERMS_CONFORMS_TO,
 						choice.getConformsTo());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_CREATED, choice.getCreated());
+						EdmLabel.PROXY_DCTERMS_CREATED, choice.getCreated());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_EXTENT, choice.getExtent());
+						EdmLabel.PROXY_DCTERMS_EXTENT, choice.getExtent());
 			
 				SolrUtils
 				.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_HAS_FORMAT,
+						EdmLabel.PROXY_DCTERMS_HAS_FORMAT,
 						choice.getHasFormat());
 				SolrUtils
 						.addResourceOrLiteralType(solrInputDocument,
-								EdmLabel.PROVIDER_DCTERMS_HAS_PART,
+								EdmLabel.PROXY_DCTERMS_HAS_PART,
 								choice.getHasPart());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_HAS_VERSION,
+						EdmLabel.PROXY_DCTERMS_HAS_VERSION,
 						choice.getHasVersion());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_FORMAT_OF,
+						EdmLabel.PROXY_DCTERMS_IS_FORMAT_OF,
 						choice.getIsFormatOf());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_PART_OF,
+						EdmLabel.PROXY_DCTERMS_IS_PART_OF,
 						choice.getIsPartOf());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_REFERENCED_BY,
+						EdmLabel.PROXY_DCTERMS_IS_REFERENCED_BY,
 						choice.getIsReferencedBy());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_REPLACED_BY,
+						EdmLabel.PROXY_DCTERMS_IS_REPLACED_BY,
 						choice.getIsReplacedBy());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_REQUIRED_BY,
+						EdmLabel.PROXY_DCTERMS_IS_REQUIRED_BY,
 						choice.getIsRequiredBy());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_ISSUED, choice.getIssued());
+						EdmLabel.PROXY_DCTERMS_ISSUED, choice.getIssued());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_IS_VERSION_OF,
+						EdmLabel.PROXY_DCTERMS_IS_VERSION_OF,
 						choice.getIsVersionOf());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_MEDIUM, choice.getMedium());
+						EdmLabel.PROXY_DCTERMS_MEDIUM, choice.getMedium());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_PROVENANCE,
+						EdmLabel.PROXY_DCTERMS_PROVENANCE,
 						choice.getProvenance());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_REFERENCES,
+						EdmLabel.PROXY_DCTERMS_REFERENCES,
 						choice.getReferences());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_REPLACES,
+						EdmLabel.PROXY_DCTERMS_REPLACES,
 						choice.getReplaces());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_REQUIRES,
+						EdmLabel.PROXY_DCTERMS_REQUIRES,
 						choice.getRequires());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_SPATIAL, choice.getSpatial());
+						EdmLabel.PROXY_DCTERMS_SPATIAL, choice.getSpatial());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_TABLE_OF_CONTENTS,
+						EdmLabel.PROXY_DCTERMS_TABLE_OF_CONTENTS,
 						choice.getTableOfContents());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DCTERMS_TEMPORAL,
+						EdmLabel.PROXY_DCTERMS_TEMPORAL,
 						choice.getTemporal());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_CONTRIBUTOR,
+						EdmLabel.PROXY_DC_CONTRIBUTOR,
 						choice.getContributor());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_COVERAGE, choice.getCoverage());
+						EdmLabel.PROXY_DC_COVERAGE, choice.getCoverage());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_CREATOR, choice.getCreator());
+						EdmLabel.PROXY_DC_CREATOR, choice.getCreator());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_DATE, choice.getDate());
+						EdmLabel.PROXY_DC_DATE, choice.getDate());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_DESCRIPTION,
+						EdmLabel.PROXY_DC_DESCRIPTION,
 						choice.getDescription());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_FORMAT, choice.getFormat());
+						EdmLabel.PROXY_DC_FORMAT, choice.getFormat());
 				if (choice.getIdentifier() != null) {
-					solrInputDocument.addField(EdmLabel.PROVIDER_DC_IDENTIFIER
+					solrInputDocument.addField(EdmLabel.PROXY_DC_IDENTIFIER
 							.toString(), choice.getIdentifier().getString());
 				}
 				if (choice.getLanguage() != null) {
-					solrInputDocument.addField(EdmLabel.PROVIDER_DC_LANGUAGE
+					solrInputDocument.addField(EdmLabel.PROXY_DC_LANGUAGE
 							.toString(), choice.getLanguage().getString());
 				}
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_PUBLISHER, choice.getPublisher());
+						EdmLabel.PROXY_DC_PUBLISHER, choice.getPublisher());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_RELATION, choice.getRelation());
+						EdmLabel.PROXY_DC_RELATION, choice.getRelation());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_RIGHTS, choice.getRights());
+						EdmLabel.PROXY_DC_RIGHTS, choice.getRights());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_SOURCE, choice.getSource());
+						EdmLabel.PROXY_DC_SOURCE, choice.getSource());
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_SUBJECT, choice.getSubject());
+						EdmLabel.PROXY_DC_SUBJECT, choice.getSubject());
 				if (choice.getTitle() != null) {
-					solrInputDocument.addField(EdmLabel.PROVIDER_DC_TITLE
+					solrInputDocument.addField(EdmLabel.PROXY_DC_TITLE
 							.toString(), choice.getTitle().getString());
 				}
 				SolrUtils.addResourceOrLiteralType(solrInputDocument,
-						EdmLabel.PROVIDER_DC_TYPE, choice.getType());
+						EdmLabel.PROXY_DC_TYPE, choice.getType());
 			}
 		}
-
+		
 		return solrInputDocument;
 	}
 
@@ -219,6 +220,7 @@ public final class ProxyFieldInput {
 
 		mongoProxy.setAbout(proxy.getAbout());
 		mongoProxy.setId(new ObjectId());
+		mongoProxy.setEuropeanaProxy(proxy.getEuropeanaProxy().isEuropeanaProxy());
 		mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
 				(proxy.getCurrentLocation())).getResource());
 		mongoProxy.setEdmIsNextInSequence(SolrUtils.exists(ResourceType.class,
@@ -358,12 +360,12 @@ public final class ProxyFieldInput {
 						.resourceOrLiteralToArray(europeanaType.getType()));
 			}
 		}
-		if (((EdmMongoServer) mongoServer).searchByAbout(ProxyImpl.class,
-				mongoProxy.getAbout()) != null) {
-			MongoUtils.updateProxy(mongoProxy, mongoServer);
-		} else {
+		//if (((EdmMongoServer) mongoServer).searchByAbout(ProxyImpl.class,
+	//			mongoProxy.getAbout()) != null) {
+		//	MongoUtils.updateProxy(mongoProxy, mongoServer);
+	//	} else {
 			mongoServer.getDatastore().save(mongoProxy);
-		}
+	//	}
 		return mongoProxy;
 	}
 
@@ -403,7 +405,7 @@ public final class ProxyFieldInput {
 	public static SolrInputDocument addProxyForSolr(Aggregation aggregation,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException {
-		solrInputDocument.addField(EdmLabel.PROVIDER_ORE_PROXY_IN.toString(),
+		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(),
 				SolrUtils.exists(String.class, aggregation.getAbout()));
 		return solrInputDocument;
 	}

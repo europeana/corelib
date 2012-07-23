@@ -55,7 +55,6 @@ public class ConceptFieldInputTest {
 		assertNotNull(note);
 		choice.setNote(note);
 		choice.clearChoiceListSelect();
-		List<PrefLabel> prefLabelList = new ArrayList<PrefLabel>();
 		PrefLabel prefLabel = new PrefLabel();
 		prefLabel.setLang(lang);
 		prefLabel.setString("test pred label");

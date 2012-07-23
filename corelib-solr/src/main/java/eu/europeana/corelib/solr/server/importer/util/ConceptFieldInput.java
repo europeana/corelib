@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.jibx.Broader;
 import eu.europeana.corelib.definitions.jibx.CloseMatch;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.ExactMatch;
+import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.NarrowMatch;
 import eu.europeana.corelib.definitions.jibx.Narrower;
 import eu.europeana.corelib.definitions.jibx.Notation;
@@ -39,6 +40,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Related;
 import eu.europeana.corelib.definitions.jibx.RelatedMatch;
+import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -191,21 +193,35 @@ public final class ConceptFieldInput {
 		return conceptMongo;
 	}
 
+	private static List<String> createObjectList(String[] originalValues,
+			Object obj) {
+
+		List<String> newList = new ArrayList<String>();
+		String str = "";
+		if (obj instanceof ResourceType) {
+			str = ((ResourceType) obj).getResource();
+		} else {
+			str = ((LiteralType) obj).getString();
+		}
+
+		if (!MongoUtils.contains(originalValues, str)) {
+			newList.add(str);
+		}
+
+		for (String arrStr : originalValues) {
+			newList.add(arrStr);
+		}
+		return newList;
+	}
+
 	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
 			Concept concept, MongoServer mongoServer) {
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
 				if (conceptMongo.getNote() != null) {
-					List<String> newNoteList = new ArrayList<String>();
-					Note noteJibx = choice.getNote();
-					if (!MongoUtils.contains(conceptMongo.getNote(),
-							noteJibx.getString())) {
-						newNoteList.add(noteJibx.getString());
-					}
 
-					for (String note : conceptMongo.getNote()) {
-						newNoteList.add(note);
-					}
+					List<String> newNoteList = createObjectList(
+							conceptMongo.getNote(), choice.getNote());
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "note",
 							newNoteList);
@@ -258,19 +274,94 @@ public final class ConceptFieldInput {
 			}
 			if (choice.ifBroader()) {
 				if (conceptMongo.getBroader() != null) {
-					List<String> broaderList = new ArrayList<String>();
-					Broader broaderJibx = choice.getBroader();
-					if (!MongoUtils.contains(conceptMongo.getBroader(),
-							broaderJibx.getResource())) {
-						broaderList.add(broaderJibx.getResource());
-					}
-
-					for (String broader : conceptMongo.getBroader()) {
-						broaderList.add(broader);
-					}
+					List<String> broaderList = createObjectList(
+							conceptMongo.getBroader(), choice.getBroader());
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "broader",
 							broaderList);
+				}
+			}
+			if (choice.ifBroadMatch()) {
+				if (conceptMongo.getBroadMatch() != null) {
+					List<String> broadMatchList = createObjectList(conceptMongo.getBroadMatch(), choice.getBroadMatch());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "broadMatch",
+							broadMatchList);
+				}
+			}
+			if (choice.ifCloseMatch()) {
+				if (conceptMongo.getCloseMatch() != null) {
+					List<String> closeMatchList = createObjectList(conceptMongo.getCloseMatch(),choice.getCloseMatch());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "closeMatch",
+							closeMatchList);
+				}
+			}
+			if (choice.ifExactMatch()) {
+				if (conceptMongo.getExactMatch() != null) {
+					List<String> exactMatchList =createObjectList(conceptMongo.getExactMatch(),choice.getExactMatch());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "exactMatch",
+							exactMatchList);
+				}
+			}
+
+			if (choice.ifNarrowMatch()) {
+				if (conceptMongo.getNarrowMatch() != null) {
+					List<String> narrowMatchList = createObjectList(conceptMongo.getNarrowMatch(),choice.getNarrowMatch());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "narrowMatch",
+							narrowMatchList);
+				}
+			}
+
+			if (choice.ifInScheme()) {
+				if (conceptMongo.getInScheme() != null) {
+					List<String> inSchemeList = createObjectList(conceptMongo.getInScheme(),choice.getInScheme());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "inScheme",
+							inSchemeList);
+				}
+			}
+			
+			if (choice.ifNarrower()) {
+				if (conceptMongo.getNarrower() != null) {
+					List<String> narrowerList= createObjectList(conceptMongo.getNarrower(),choice.getNarrower());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "narrower",
+							narrowerList);
+				}
+			}
+			if (choice.ifInScheme()) {
+				if (conceptMongo.getInScheme() != null) {
+					List<String> inSchemeList = createObjectList(conceptMongo.getInScheme(),choice.getInScheme());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "inScheme",
+							inSchemeList);
+				}
+			}
+			if (choice.ifNotation()) {
+				if (conceptMongo.getNotation() != null) {
+					List<String> notationList = createObjectList(conceptMongo.getNotation(),choice.getNotation());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "notation",
+							notationList);
+				}
+			}
+			if (choice.ifRelated()) {
+				if (conceptMongo.getRelated() != null) {
+					List<String> relatedList = createObjectList(conceptMongo.getRelated(),choice.getRelated());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "related",
+							relatedList);
+				}
+			}
+			if (choice.ifRelatedMatch()) {
+				if (conceptMongo.getRelated() != null) {
+					List<String> relatedMatchList = createObjectList(conceptMongo.getRelatedMatch(),choice.getRelatedMatch());
+					MongoUtils.update(ConceptImpl.class,
+							conceptMongo.getAbout(), mongoServer, "relatedMatch",
+							relatedMatchList);
 				}
 			}
 		}
@@ -289,47 +380,47 @@ public final class ConceptFieldInput {
 						conceptMongo.getNote(),
 						SolrUtils.getLiteralString(choice.getNote())));
 			}
-			if(choice.ifBroader()){
+			if (choice.ifBroader()) {
 				conceptMongo.setBroader(StringArrayUtils.addToArray(
 						conceptMongo.getBroader(),
 						SolrUtils.getResourceString(choice.getBroader())));
 			}
-			if(choice.ifBroadMatch()){
+			if (choice.ifBroadMatch()) {
 				conceptMongo.setBroadMatch(StringArrayUtils.addToArray(
 						conceptMongo.getBroadMatch(),
 						SolrUtils.getResourceString(choice.getBroadMatch())));
 			}
-			if(choice.ifCloseMatch()){
+			if (choice.ifCloseMatch()) {
 				conceptMongo.setCloseMatch(StringArrayUtils.addToArray(
 						conceptMongo.getCloseMatch(),
 						SolrUtils.getResourceString(choice.getCloseMatch())));
 			}
-			if(choice.ifExactMatch()){
+			if (choice.ifExactMatch()) {
 				conceptMongo.setExactMatch(StringArrayUtils.addToArray(
 						conceptMongo.getExactMatch(),
 						SolrUtils.getResourceString(choice.getExactMatch())));
 			}
-			if(choice.ifNarrower()){
+			if (choice.ifNarrower()) {
 				conceptMongo.setNarrower(StringArrayUtils.addToArray(
 						conceptMongo.getNarrower(),
 						SolrUtils.getResourceString(choice.getNarrower())));
 			}
-			if(choice.ifNarrowMatch()){
+			if (choice.ifNarrowMatch()) {
 				conceptMongo.setNarrowMatch(StringArrayUtils.addToArray(
 						conceptMongo.getNarrowMatch(),
 						SolrUtils.getResourceString(choice.getNarrowMatch())));
 			}
-			if(choice.ifNotation()){
+			if (choice.ifNotation()) {
 				conceptMongo.setNotation(StringArrayUtils.addToArray(
 						conceptMongo.getNotation(),
 						SolrUtils.getLiteralString(choice.getNotation())));
 			}
-			if(choice.ifRelated()){
+			if (choice.ifRelated()) {
 				conceptMongo.setRelated(StringArrayUtils.addToArray(
 						conceptMongo.getRelated(),
 						SolrUtils.getResourceString(choice.getRelated())));
 			}
-			if(choice.ifRelatedMatch()){
+			if (choice.ifRelatedMatch()) {
 				conceptMongo.setCloseMatch(StringArrayUtils.addToArray(
 						conceptMongo.getRelatedMatch(),
 						SolrUtils.getResourceString(choice.getRelatedMatch())));
@@ -338,26 +429,26 @@ public final class ConceptFieldInput {
 			if (choice.ifPrefLabel()) {
 				Map<String, String> prefLabelMongo = new HashMap<String, String>();
 				PrefLabel prefLabelJibx = choice.getPrefLabel();
-					if (prefLabelJibx.getLang() != null) {
-						prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-								prefLabelJibx.getString());
-					} else {
-						prefLabelMongo.put("def", prefLabelJibx.getString());
-					}
-				
+				if (prefLabelJibx.getLang() != null) {
+					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
+							prefLabelJibx.getString());
+				} else {
+					prefLabelMongo.put("def", prefLabelJibx.getString());
+				}
+
 				conceptMongo.setPrefLabel(prefLabelMongo);
 			}
 
 			if (choice.ifAltLabel()) {
 				Map<String, String> altLabelMongo = new HashMap<String, String>();
 				AltLabel altLabelJibx = choice.getAltLabel();
-					if (altLabelJibx.getLang() != null) {
-						altLabelMongo.put(altLabelJibx.getLang().getLang(),
-								altLabelJibx.getString());
-					} else {
-						altLabelMongo.put("def", altLabelJibx.getString());
-					}
-				
+				if (altLabelJibx.getLang() != null) {
+					altLabelMongo.put(altLabelJibx.getLang().getLang(),
+							altLabelJibx.getString());
+				} else {
+					altLabelMongo.put("def", altLabelJibx.getString());
+				}
+
 				conceptMongo.setPrefLabel(altLabelMongo);
 			}
 		}

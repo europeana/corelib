@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.context.ApplicationContext;
 
+import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.tools.AppContext;
 
 /**
@@ -33,7 +36,7 @@ public class Dereferencer {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public static List<List<String>> normalize(String uri)
+	public static Map<EdmLabel,List<String>> normalize(String uri)
 			throws MalformedURLException, IOException {
 		if (server == null) {
 			ApplicationContext applicationContext = AppContext
@@ -41,16 +44,16 @@ public class Dereferencer {
 			server = (VocabularyMongoServer) applicationContext
 					.getBean("corelib_solr_vocabularyMongoServer");
 		}
-		List<List<String>> values = new ArrayList<List<String>>();
+		Map<EdmLabel,List<String>> values = new HashMap<EdmLabel,List<String>>();
 		List<String> originalValue = new ArrayList<String>();
-		originalValue.add("original");
+		
 		originalValue.add(uri);
-		values.add(originalValue);
+		values.put(EdmLabel.ORIGINAL,originalValue);
 		if (isURI(uri)) {
 			Extractor extractor = new Extractor(new ControlledVocabularyImpl(),
 					server);
 			if (extractor.getControlledVocabulary("URI", uri) != null) {
-				values.addAll(extractor.denormalize(uri,
+				values.putAll(extractor.denormalize(uri,
 						extractor.getControlledVocabulary("URI", uri)));
 			}
 

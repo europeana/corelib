@@ -65,7 +65,7 @@ public final class ProvidedCHOFieldInput {
 		if (providedCHO.getSameAList() != null) {
 			for (SameAs sameAs : providedCHO.getSameAList()) {
 				solrInputDocument.addField(
-						EdmLabel.PROVIDER_OWL_SAMEAS.toString(),
+						EdmLabel.PROXY_OWL_SAMEAS.toString(),
 						sameAs.getResource());
 			}
 		}

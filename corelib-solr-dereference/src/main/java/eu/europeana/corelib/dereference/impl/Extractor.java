@@ -116,9 +116,9 @@ public class Extractor {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public List<List<String>> denormalize(String resource,
+	public Map<EdmLabel, List<String>> denormalize(String resource,
 			ControlledVocabulary controlledVocabulary) {
-		List<List<String>> denormalizedValues = new ArrayList<List<String>>();
+		Map<EdmLabel,List<String>> denormalizedValues = new HashMap<EdmLabel, List<String>>();
 		String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
 				.getSuffix() : "";
 		String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
@@ -148,18 +148,32 @@ public class Extractor {
 								String attribute = xml.getAttributePrefix(0)
 										+ ":" + xml.getAttributeLocalName(0);
 								if (isMapped(element + "_" + attribute)) {
-									tempList.add(getEdmLabel(element + "_" + attribute)
-											.toString());
-									tempList.add(xml.getAttributeValue(0));
-									denormalizedValues.add(tempList);
-									tempList = new ArrayList<String>();
+									if(!denormalizedValues.containsKey(element+"_"+attribute)){
+										tempList.add(xml.getAttributeValue(0));
+										denormalizedValues.put(getEdmLabel(element + "_" + attribute),tempList);
+										tempList = new ArrayList<String>();
+									}
+									else{
+										tempList = denormalizedValues.get(getEdmLabel(element + "_" + attribute));
+										tempList.add(xml.getAttributeValue(0));
+										denormalizedValues.put(getEdmLabel(element + "_" + attribute),tempList);
+										tempList = new ArrayList<String>();
+									}
+									
 								}
 								xml.next();
 							} else {
-								tempList.add(getEdmLabel(element).toString());
-								tempList.add(xml.getElementText());
-								denormalizedValues.add(tempList);
-								tempList = new ArrayList<String>();
+								if(!denormalizedValues.containsKey(element)){
+									tempList.add(xml.getAttributeValue(0));
+									denormalizedValues.put(getEdmLabel(element),tempList);
+									tempList = new ArrayList<String>();
+								}
+								else{
+									tempList = denormalizedValues.get(getEdmLabel(element));
+									tempList.add(xml.getAttributeValue(0));
+									denormalizedValues.put(getEdmLabel(element),tempList);
+									tempList = new ArrayList<String>();
+								}
 							}
 						}
 						break;

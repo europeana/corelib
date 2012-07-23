@@ -36,6 +36,10 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	@Transient
 	private String[] edmUnstored;
 	
+	private boolean europeanaProxy;
+	
+	
+
 	@Override
 	public String[] getEdmUnstored() {
 		return (StringArrayUtils.isNotBlank(edmUnstored)?this.edmUnstored.clone():null);
@@ -54,5 +58,15 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	@Override
 	public DocType getEdmType() {
 		return this.edmType;
+	}
+	
+	@Override
+	public boolean isEuropeanaProxy() {
+		return europeanaProxy;
+	}
+
+	@Override
+	public void setEuropeanaProxy(boolean europeanaProxy) {
+		this.europeanaProxy = europeanaProxy;
 	}
 }

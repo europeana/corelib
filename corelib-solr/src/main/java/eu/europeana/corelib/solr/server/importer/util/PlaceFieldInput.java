@@ -25,16 +25,19 @@ import org.apache.solr.common.SolrInputDocument;
 import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * Constructor of a Place EDM Entity
@@ -102,8 +105,35 @@ public final class PlaceFieldInput {
 			}
 		}
 		if (place.getLong() != null && place.getLat() != null) {
-			solrInputDocument.addField(EdmLabel.PL_POSITION.toString(), place
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT_LONG.toString(), place
 					.getLat().getString() + "," + place.getLong().getString());
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT.toString(), place
+					.getLat().getString());
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LONG.toString(), place
+					.getLong().getString());
+		}
+		
+		if (place.getHasPartList() != null) {
+			for (HasPart hasPart : place.getHasPartList()) {
+				if (hasPart.getString() != null) {
+					solrInputDocument.addField(
+							EdmLabel.PL_DCTERMS_HASPART.toString(),
+							hasPart.getString());
+				}
+				if (hasPart.getResource() != null) {
+					solrInputDocument.addField(
+							EdmLabel.PL_DCTERMS_HASPART.toString(),
+							hasPart.getResource());
+
+				}
+			}
+		}
+
+		if (place.getSameAList() != null) {
+			for (SameAs sameAs : place.getSameAList()) {
+				solrInputDocument.addField(EdmLabel.PL_OWL_SAMEAS.toString(),
+						sameAs.getResource());
+			}
 		}
 		return solrInputDocument;
 	}
@@ -156,7 +186,7 @@ public final class PlaceFieldInput {
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
 			MongoServer mongoServer) {
 
-		if (place.getNote() != null && placeType.getNoteList()!=null) {
+		if (place.getNote() != null && placeType.getNoteList() != null) {
 			List<String> newNoteList = new ArrayList<String>();
 			for (Note noteJibx : placeType.getNoteList()) {
 				if (MongoUtils.contains(place.getNote(), noteJibx.getString())) {
@@ -214,7 +244,7 @@ public final class PlaceFieldInput {
 			List<String> isPartOfList = new ArrayList<String>();
 			if (placeType.getIsPartOfList() != null) {
 				for (IsPartOf isPartOfJibx : placeType.getIsPartOfList()) {
-					if (MongoUtils.contains(place.getIsPartOf(),
+					if (!MongoUtils.contains(place.getIsPartOf(),
 							isPartOfJibx.getResource())) {
 						isPartOfList.add(isPartOfJibx.getResource());
 					}
@@ -224,8 +254,44 @@ public final class PlaceFieldInput {
 				isPartOfList.add(isPartOf);
 			}
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"isPartOf", isPartOfList);
+					"isPartOf", StringArrayUtils.toArray(isPartOfList));
 		}
+		
+		if (place.getDcTermsHasPart() != null) {
+			List<String> dcTermsHasPart = new ArrayList<String>();
+			if (placeType.getHasPartList() != null) {
+				for (HasPart hasPartJibx : placeType.getHasPartList()) {
+					if (!MongoUtils.contains(place.getDcTermsHasPart(),
+							hasPartJibx.getResource())) {
+						dcTermsHasPart.add(hasPartJibx.getResource());
+					}
+				}
+			}
+			for (String isPartOf : place.getIsPartOf()) {
+				dcTermsHasPart.add(isPartOf);
+			}
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+					"dcTermsHasPart", StringArrayUtils.toArray(dcTermsHasPart));
+		}
+		
+		if (place.getOwlSameAs() != null) {
+			List<String> owlSameAs = new ArrayList<String>();
+			if (placeType.getSameAList() != null) {
+				for (SameAs sameAsJibx : placeType.getSameAList()) {
+					if (!MongoUtils.contains(place.getOwlSameAs(),
+							sameAsJibx.getResource())) {
+						owlSameAs.add(sameAsJibx.getResource());
+					}
+				}
+			}
+			for (String isPartOf : place.getIsPartOf()) {
+				owlSameAs.add(isPartOf);
+			}
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
+		}
+		
+		
 		if (placeType.getLat() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,

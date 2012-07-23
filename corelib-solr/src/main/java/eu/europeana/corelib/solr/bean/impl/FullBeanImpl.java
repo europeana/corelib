@@ -47,7 +47,6 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
-import eu.europeana.corelib.solr.entity.EuropeanaProxyImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -105,8 +104,6 @@ public class FullBeanImpl implements FullBean {
 	@Reference
 	private List<ProvidedCHOImpl> providedCHOs;
 	
-	@Reference
-	private EuropeanaProxyImpl europeanaProxy;
 	
 	@Reference
 	private EuropeanaAggregationImpl europeanaAggregation;
@@ -132,15 +129,7 @@ public class FullBeanImpl implements FullBean {
 	 * GETTERS & SETTTERS
 	 */
 
-	@Override
-	public EuropeanaProxyImpl getEuropeanaProxy(){
-		return this.europeanaProxy;
-	}
-	
-	@Override
-	public void setEuropeanaProxy(EuropeanaProxy europeanaProxy){
-		this.europeanaProxy = (EuropeanaProxyImpl) europeanaProxy;
-	}
+
 	@Override
 	public List<PlaceImpl> getPlaces() {
 		return this.places;

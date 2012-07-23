@@ -45,9 +45,9 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	
 	void setEdmIsShownBy(String edmIsShownBy);
 	
-	String getEdmHasView();
+	String[] getEdmHasView();
 	
-	void setEdmHasView(String edmHasView);
+	void setEdmHasView(String[] edmHasView);
 	
 	String getEdmCountry();
 	

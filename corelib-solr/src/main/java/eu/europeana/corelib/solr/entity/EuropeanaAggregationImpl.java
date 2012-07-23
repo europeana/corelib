@@ -2,28 +2,18 @@ package eu.europeana.corelib.solr.entity;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.bson.types.ObjectId;
-
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 @Entity("EuropeanaAggregation")
-public class EuropeanaAggregationImpl implements EuropeanaAggregation {
+public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
-	@Id
-	ObjectId id;
 
-	@Indexed(unique = true, dropDups = true)
-	private String about;
-
-	@Resource
+	@Embedded
 	private List<WebResourceImpl> webResources;
 
 	private String aggregatedCHO;
@@ -31,31 +21,12 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	private String dcCreator;
 	private String edmLandingPage;
 	private String edmIsShownBy;
-	private String edmHasView;
+	private String[] edmHasView;
 	private String edmCountry;
 	private String edmLanguage;
 	private String edmRights;
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getAbout() {
-		return this.about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-
-	}
+	
 
 	@Override
 	public String getAggregatedCHO() {
@@ -109,12 +80,12 @@ public class EuropeanaAggregationImpl implements EuropeanaAggregation {
 	}
 
 	@Override
-	public String getEdmHasView() {
+	public String[] getEdmHasView() {
 		return this.edmHasView;
 	}
 
 	@Override
-	public void setEdmHasView(String edmHasView) {
+	public void setEdmHasView(String[] edmHasView) {
 		this.edmHasView = edmHasView;
 	}
 

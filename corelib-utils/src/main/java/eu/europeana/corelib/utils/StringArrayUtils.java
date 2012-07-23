@@ -1,5 +1,7 @@
 package eu.europeana.corelib.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,5 +56,11 @@ public class StringArrayUtils {
 		return "";
 	}
     
+    public static String[] addToArray(String[] items, String str){
+    	List<String> itemList = new ArrayList<String>(Arrays.asList(items));
+    	itemList.add(str);
+    	return itemList.toArray(new String[itemList.size()]);
+    	
+    }
 
 }
