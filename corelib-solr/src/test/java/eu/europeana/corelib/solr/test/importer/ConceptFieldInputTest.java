@@ -37,76 +37,95 @@ public class ConceptFieldInputTest {
 	@Test
 	public void testConcept() {
 		assertNotNull(mongoServer);
-		//create concept from jibx bindings
+		// create concept from jibx bindings
 		Concept concept = new Concept();
 		concept.setAbout("test about");
-		List<AltLabel> altLabelList = new ArrayList<AltLabel>();
+		Concept.Choice choice = new Concept.Choice();
+
 		AltLabel altLabel = new AltLabel();
 		Lang lang = new Lang();
 		lang.setLang("en");
 		altLabel.setLang(lang);
 		altLabel.setString("test alt label");
 		assertNotNull(altLabel);
-		altLabelList.add(altLabel);
-		concept.setAltLabelList(altLabelList);
-		List<Note> noteList = new ArrayList<Note>();
+		choice.setAltLabel(altLabel);
+		choice.clearChoiceListSelect();
 		Note note = new Note();
 		note.setString("test note");
 		assertNotNull(note);
-		noteList.add(note);
-		concept.setNoteList(noteList);
+		choice.setNote(note);
+		choice.clearChoiceListSelect();
 		List<PrefLabel> prefLabelList = new ArrayList<PrefLabel>();
 		PrefLabel prefLabel = new PrefLabel();
 		prefLabel.setLang(lang);
 		prefLabel.setString("test pred label");
 		assertNotNull(prefLabel);
-		prefLabelList.add(prefLabel);
-		concept.setPrefLabelList(prefLabelList);
-		
-		//store in mongo
-		ConceptImpl conceptMongo = ConceptFieldInput.createConceptMongoFields(concept, mongoServer, null);
+		choice.setPrefLabel(prefLabel);
+		choice.clearChoiceListSelect();
+		List<Concept.Choice> choiceList = new ArrayList<Concept.Choice>();
+		choiceList.add(choice);
+		concept.setChoiceList(choiceList);
+		// store in mongo
+		ConceptImpl conceptMongo = ConceptFieldInput.createConceptMongoFields(
+				concept, mongoServer, null);
 		assertEquals(concept.getAbout(), conceptMongo.getAbout());
-		assertEquals(concept.getNoteList().get(0).getString(),
-				conceptMongo.getNote()[0]);
-		assertTrue(conceptMongo.getAltLabel().containsKey(
-				concept.getAltLabelList().get(0).getLang().getLang()));
-		assertTrue(conceptMongo.getPrefLabel().containsKey(
-				concept.getPrefLabelList().get(0).getLang().getLang()));
-		assertTrue(conceptMongo.getAltLabel().containsValue(
-				concept.getAltLabelList().get(0).getString()));
-		assertTrue(conceptMongo.getPrefLabel().containsValue(
-				concept.getPrefLabelList().get(0).getString()));
-		
-		//create solr document
+		for (Concept.Choice choice2 : concept.getChoiceList()) {
+			if (choice2.ifNote()) {
+				assertEquals(choice2.getNote().getString(),
+						conceptMongo.getNote()[0]);
+			}
+			if (choice2.ifAltLabel()) {
+				assertTrue(conceptMongo.getAltLabel().containsKey(
+						choice2.getAltLabel().getLang().getLang()));
+				assertTrue(conceptMongo.getAltLabel().containsValue(
+						choice2.getAltLabel().getString()));
+			}
+			if (choice2.ifPrefLabel()) {
+				assertTrue(conceptMongo.getPrefLabel().containsKey(
+						choice2.getPrefLabel().getLang().getLang()));
+				assertTrue(conceptMongo.getPrefLabel().containsValue(
+						choice2.getPrefLabel().getString()));
+			}
+		}
+		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		solrDocument = ConceptFieldInput.createConceptSolrFields(concept,
 				solrDocument);
 		assertEquals(concept.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.SKOS_CONCEPT.toString())
 						.toString());
-		assertEquals(concept.getNoteList().get(0).getString(),
-				solrDocument.getFieldValues(EdmLabel.CC_SKOS_NOTE.toString())
+		for (Concept.Choice choice3 : concept.getChoiceList()) {
+			if (choice3.ifNote()) {
+				assertEquals(choice3.getNote().getString(), solrDocument
+						.getFieldValues(EdmLabel.CC_SKOS_NOTE.toString())
 						.toArray()[0].toString());
-		assertEquals(
-				concept.getAltLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.CC_SKOS_ALT_LABEL.toString()
-								+ "."
-								+ concept.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
+			}
+			if (choice3.ifAltLabel()) {
+				assertEquals(
+						choice3.getAltLabel().getString(),
+						solrDocument.getFieldValues(
+								EdmLabel.CC_SKOS_ALT_LABEL.toString()
+										+ "."
+										+ choice3.getAltLabel().getLang()
+												.getLang()).toArray()[0]
+								.toString());
+			}
 
-		assertEquals(
-				concept.getPrefLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.CC_SKOS_PREF_LABEL.toString()
-								+ "."
-								+ concept.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
-
+			if (choice3.ifPrefLabel()) {
+				assertEquals(
+						choice3.getPrefLabel().getString(),
+						solrDocument.getFieldValues(
+								EdmLabel.CC_SKOS_PREF_LABEL.toString()
+										+ "."
+										+ choice3.getPrefLabel().getLang()
+												.getLang()).toArray()[0]
+								.toString());
+			}
+		}
 	}
-	
+
 	@After
-	public void cleanup(){
+	public void cleanup() {
 		mongoServer.getDatastore().getDB().dropDatabase();
 	}
 }

@@ -17,18 +17,14 @@
 
 package eu.europeana.corelib.solr.utils;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.LiteralType;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -36,8 +32,6 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
-import eu.europeana.corelib.dereference.impl.Dereferencer;
-import eu.europeana.corelib.dereference.impl.EuropeanaField;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
@@ -180,6 +174,12 @@ public final class SolrUtils {
 		return null;
 	}
 
+	public static String getResourceString(ResourceType obj) {
+		if (obj != null) {
+			return obj.getResource() != null ? obj.getResource() : null;
+		}
+		return null;
+	}
 	public static Class<? extends IdBeanImpl> getImplementationClass(
 			Class<? extends IdBean> interfaze) {
 		if (interfaze != null) {
