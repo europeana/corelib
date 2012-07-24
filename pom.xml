@@ -100,16 +100,6 @@
 						<target>${version.jdk}</target>
 					</configuration>
 				</plugin>
-				<plugin>
-	                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.5</version>
-               <configuration>
-                    <systemPropertyVariables>
-	                        <europeana.properties>../corelib-definitions/src/main/resources/europeana-test.properties
-                        </europeana.properties>
-                   </systemPropertyVariables>
-	                </configuration>
-	            </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
