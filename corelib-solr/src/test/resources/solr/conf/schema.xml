@@ -129,127 +129,68 @@
    <field name="wr_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="false"/>
    
 	<!--PROVIDER PROXY RELATED-->
-   <field name="provider_ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="provider_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="provider_ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="provider_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_date" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_description" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dc_format" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dc_language" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_title" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_type" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dc_source" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_date" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_description" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_format" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_language" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_title" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_type" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_source" type="string" indexed="true" stored="false" multiValued="true" />
 		
-   <field name="provider_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
 
  
-   <field name="provider_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
-   <field name="provider_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_isRequiredBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_isVersionOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_hasVersion" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_issued" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_medium" type="string" indexed="true" stored="false" multiValued="true" />   
-   <field name="provider_dcterms_provenance" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_references" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_replaces" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="provider_edm_type" type="string" indexed="true" stored="true" multiValued="false" />
-	<field name="provider_edm_unstored" type="string" indexed="true" stored="false" multiValued="true"/>
-   <field name="provider_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
-    <field name="provider_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
-   <field name="provider_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_hasType" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_incorporates" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_isDerivativeOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_isRelatedTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_isRepresentationOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_isSimilarTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="provider_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
+   <field name="proxy_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
+   <field name="proxy_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_isRequiredBy" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_isVersionOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_hasVersion" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_issued" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_medium" type="string" indexed="true" stored="false" multiValued="true" />   
+   <field name="proxy_dcterms_provenance" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_references" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_replaces" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
+	<field name="proxy_edm_type" type="string" indexed="true" stored="true" multiValued="false" />
+	<field name="proxy_edm_unstored" type="string" indexed="true" stored="false" multiValued="true"/>
+   <field name="proxy_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
+    <field name="proxy_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_hasType" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_incorporates" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_isDerivativeOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_isRelatedTo" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_isRepresentationOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_isSimilarTo" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="europeana_previewNoDistribute" type="boolean" indexed="true" stored="true" multiValued="false" />
     <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="false" />
    
-   <!--EUROPEANA PROXY RELATED-->
-   <field name="europeana_ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="europeana_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="europeana_ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="europeana_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_date" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_description" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_format" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_language" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_publisher" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_subject" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_title" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_type" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dc_identifier" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_relation" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dc_source" type="string" indexed="true" stored="false" multiValued="true" />
-		
-   <field name="europeana_dc_rights" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_rights" type="string" indexed="true" stored="false" multiValued="true" />
-
- 
-   <field name="europeana_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
-   <field name="europeana_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isRequiredBy" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_isVersionOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_hasVersion" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_issued" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_medium" type="string" indexed="true" stored="false" multiValued="true" />   
-   <field name="europeana_dcterms_provenance" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_references" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_replaces" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_requires" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="europeana_edm_userTag" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="europeana_edm_year" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="europeana_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
-    <field name="europeana_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
-   <field name="europeana_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_hasType" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_incorporates" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isDerivativeOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isRelatedTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isRepresentationOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isSimilarTo" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
-   
+  
   
    
    
@@ -293,6 +234,7 @@
 	<dynamicField name="ts_skos_hiddenLabel.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="ts_dcterms_hasPart" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="ts_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
+	<field name="ts_dcterms_isPartOf_label" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="ts_owl_sameAs" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="ts_crm_P79F_beginning_is_qualified_by" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="ts_crm_P80F_end_is_qualified_by" type="string" indexed="true" stored="false" multiValued="true" />	
@@ -306,6 +248,7 @@
    <dynamicField name="pl_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="pl_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="pl_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="pl_dcterms_isPartOf_label" type="string" indexed="true" stored="false" multiValue="true"/>
 	<field name="pl_wgs84_pos_lat" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="pl_wgs84_pos_long" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="pl_wgs84_pos_alt" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -323,6 +266,7 @@
    <dynamicField name="cc_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="cc_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="cc_skos_broader" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="cc_skos_broaderLabel" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="cc_skos_hiddenLabel" type="string" indexed="true" stored="false" multiValued="true"/>
    <dynamicField name="cc_skos_hiddenLabel.*" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="cc_skos_narrower" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -427,65 +371,64 @@
  <uniqueKey>europeana_id</uniqueKey> 
  <defaultSearchField>text</defaultSearchField>
  <solrQueryParser defaultOperator="AND"/>
-   <copyField source="provider_dcterms_alternative" dest="text" />
-   <copyField source="provider_dc_contributor" dest="text" />
-   <copyField source="provider_dc_coverage" dest="text" />
-   <copyField source="provider_dcterms_created" dest="text" />
-   <copyField source="provider_dc_creator" dest="text" />
-   <copyField source="provider_dc_date" dest="text" />
-   <copyField source="provider_dc_description" dest="text" />
-   <copyField source="provider_dcterms_issued" dest="text" />
-   <copyField source="provider_dc_language" dest="text" />
-   <copyField source="provider_dcterms_provenance" dest="text" />
-   <copyField source="provider_dc_publisher" dest="text" />
-   <copyField source="provider_dc_rights" dest="text" />
+   <copyField source="proxy_dcterms_alternative" dest="text" />
+   <copyField source="proxy_dc_contributor" dest="text" />
+   <copyField source="proxy_dc_coverage" dest="text" />
+   <copyField source="proxy_dcterms_created" dest="text" />
+   <copyField source="proxy_dc_creator" dest="text" />
+   <copyField source="proxy_dc_date" dest="text" />
+   <copyField source="proxy_dc_description" dest="text" />
+   <copyField source="proxy_dcterms_issued" dest="text" />
+   <copyField source="proxy_dc_language" dest="text" />
+   <copyField source="proxy_dcterms_provenance" dest="text" />
+   <copyField source="proxy_dc_publisher" dest="text" />
+   <copyField source="proxy_dc_rights" dest="text" />
    <copyField source="provider_aggregation_dc_rights" dest="text" />
-   <copyField source="provider_edm_rights" dest="text" />
+   <copyField source="proxy_edm_rights" dest="text" />
    <copyField source="provider_aggregation_edm_rights" dest="text" />
-   <copyField source="provider_dc_source" dest="text" />
-   <copyField source="provider_dcterms_spatial" dest="text" />
-   <copyField source="provider_dc_subject" dest="text" />
-   <copyField source="provider_dcterms_temporal" dest="text" />
-   <copyField source="provider_dc_title" dest="text" />
-   <copyField source="provider_dc_type" dest="text" />
-   <copyField source="provider_edm_type" dest="text" />
-    <copyField source="provider_dc_type" dest="what" />
-   <copyField source="provider_dc_subject" dest="what" />
-   <copyField source="provider_dc_format" dest="what" />
-   <copyField source="provider_dc_coverage" dest="when" />
-   <copyField source="provider_dcterms_created" dest="when" />
-   <copyField source="provider_dcterms_temporal" dest="when" />
-   <copyField source="provider_dc_date" dest="when" />
-   <copyField source="provider_dc_subject" dest="when" />
-   <copyField source="provider_dc_contributor" dest="who" />
-   <copyField source="provider_dc_creator" dest="who" />
-   <copyField source="provider_dc_coverage" dest="where" />
-   <copyField source="provider_dcterms_spatial" dest="where" />
-   <copyField source="provider_dc_subject" dest="where" />
-   <copyField source="provider_dc_contributor" dest="spell" />
-   <copyField source="provider_dc_creator" dest="spell" />
-   <copyField source="provider_dc_subject" dest="spell"/>
-   <copyField source="provider_dc_title" dest="spell"/>
-   <copyField source="provider_dc_description" dest="spell"/> 
-   <copyField source="provider_dc_date" dest="date" />
-   <copyField source="provider_dcterms_created" dest="date" />
-   <copyField source="provider_dcterms_issued" dest="date" />
-   <copyField source="provider_dc_description" dest="description" />
-   <copyField source="provider_dcterms_tableOfContents" dest="description" />
-   <copyField source="provider_dc_identifier" dest="identifier" />
-   <copyField source="provider_dcterms_spatial" dest="location" />
-   <copyField source="provider_dc_subject" dest="subject" />
-   <copyField source="provider_dc_coverage" dest="subject" />
-   <copyField source="provider_dcterms_spatial" dest="subject" />
-   <copyField source="provider_dcterms_temporal" dest="subject" />
-   <copyField source="provider_dc_source" dest="source" />
-   <copyField source="provider_dc_title" dest="title" />
-   <copyField source="provider_dcterms_alternative" dest="title" />
-   <copyField source="provider_edm_type" dest="TYPE" />
-   <copyField source="provider_dc_language" dest="LANGUAGE" />
+   <copyField source="proxy_dc_source" dest="text" />
+   <copyField source="proxy_dcterms_spatial" dest="text" />
+   <copyField source="proxy_dc_subject" dest="text" />
+   <copyField source="proxy_dcterms_temporal" dest="text" />
+   <copyField source="proxy_dc_title" dest="text" />
+   <copyField source="proxy_dc_type" dest="text" />
+   <copyField source="proxy_edm_type" dest="text" />
+    <copyField source="proxy_dc_type" dest="what" />
+   <copyField source="proxy_dc_subject" dest="what" />
+   <copyField source="proxy_dc_format" dest="what" />
+   <copyField source="proxy_dc_coverage" dest="when" />
+   <copyField source="proxy_dcterms_created" dest="when" />
+   <copyField source="proxy_dcterms_temporal" dest="when" />
+   <copyField source="proxy_dc_date" dest="when" />
+   <copyField source="proxy_dc_subject" dest="when" />
+   <copyField source="proxy_dc_contributor" dest="who" />
+   <copyField source="proxy_dc_creator" dest="who" />
+   <copyField source="proxy_dc_coverage" dest="where" />
+   <copyField source="proxy_dcterms_spatial" dest="where" />
+   <copyField source="proxy_dc_subject" dest="where" />
+   <copyField source="proxy_dc_contributor" dest="spell" />
+   <copyField source="proxy_dc_creator" dest="spell" />
+   <copyField source="proxy_dc_subject" dest="spell"/>
+   <copyField source="proxy_dc_title" dest="spell"/>
+   <copyField source="proxy_dc_description" dest="spell"/> 
+   <copyField source="proxy_dc_date" dest="date" />
+   <copyField source="proxy_dcterms_created" dest="date" />
+   <copyField source="proxy_dcterms_issued" dest="date" />
+   <copyField source="proxy_dc_description" dest="description" />
+   <copyField source="proxy_dcterms_tableOfContents" dest="description" />
+   <copyField source="proxy_dc_identifier" dest="identifier" />
+   <copyField source="proxy_dcterms_spatial" dest="location" />
+   <copyField source="proxy_dc_subject" dest="subject" />
+   <copyField source="proxy_dc_coverage" dest="subject" />
+   <copyField source="proxy_dcterms_spatial" dest="subject" />
+   <copyField source="proxy_dcterms_temporal" dest="subject" />
+   <copyField source="proxy_dc_source" dest="source" />
+   <copyField source="proxy_dc_title" dest="title" />
+   <copyField source="proxy_dcterms_alternative" dest="title" />
+   <copyField source="proxy_edm_type" dest="TYPE" />
+   <copyField source="proxy_dc_language" dest="LANGUAGE" />
    <copyField source="country" dest="COUNTRY" />
-   <copyField source="provider_dc_date" dest="YEAR" />
-   <copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
+   <copyField source="proxy_dc_date" dest="YEAR" />
    <copyField source="provider_aggregation_edm_dataProvider" dest="DATA_PROVIDER" />
    <copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
    <copyField source="europeana_completeness" dest="COMPLETENESS" />
@@ -525,19 +468,19 @@
    <copyField source="pl_skos_note" dest="text" />
    <copyField source="cc_skos_note" dest="text" />
    <copyField source="evt_skos_note" dest="text" />
-   <copyField source="provider_dc_contributor" dest="whoSpell" />
-   <copyField source="provider_dc_creator" dest="whoSpell" />
-     <copyField source="provider_dc_coverage" dest="whereSpell" />
-   <copyField source="provider_dcterms_spatial" dest="whereSpell" />
-   <copyField source="provider_dc_subject" dest="whereSpell" />
-     <copyField source="provider_dc_type" dest="whatSpell" />
-   <copyField source="provider_dc_subject" dest="whatSpell" />
-   <copyField source="provider_dc_format" dest="whatSpell" />
-   <copyField source="provider_dc_coverage" dest="whenSpell" />
-   <copyField source="provider_dcterms_created" dest="whenSpell" />
-   <copyField source="provider_dcterms_temporal" dest="whenSpell" />
-   <copyField source="provider_dc_date" dest="whenSpell" />
-   <copyField source="provider_dc_subject" dest="whenSpell" />
-   <copyField source="provider_dc_title" dest="titleSpell" />
-   <copyField source="provider_dcterms_alternative" dest="titleSpell" />
+   <copyField source="proxy_dc_contributor" dest="whoSpell" />
+   <copyField source="proxy_dc_creator" dest="whoSpell" />
+     <copyField source="proxy_dc_coverage" dest="whereSpell" />
+   <copyField source="proxy_dcterms_spatial" dest="whereSpell" />
+   <copyField source="proxy_dc_subject" dest="whereSpell" />
+     <copyField source="proxy_dc_type" dest="whatSpell" />
+   <copyField source="proxy_dc_subject" dest="whatSpell" />
+   <copyField source="proxy_dc_format" dest="whatSpell" />
+   <copyField source="proxy_dc_coverage" dest="whenSpell" />
+   <copyField source="proxy_dcterms_created" dest="whenSpell" />
+   <copyField source="proxy_dcterms_temporal" dest="whenSpell" />
+   <copyField source="proxy_dc_date" dest="whenSpell" />
+   <copyField source="proxy_dc_subject" dest="whenSpell" />
+   <copyField source="proxy_dc_title" dest="titleSpell" />
+   <copyField source="proxy_dcterms_alternative" dest="titleSpell" />
 </schema>
