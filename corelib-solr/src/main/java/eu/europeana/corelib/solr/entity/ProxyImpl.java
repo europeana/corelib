@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Indexed;
 import com.google.code.morphia.annotations.Transient;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -32,6 +33,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
+	@Indexed(unique=false)
+	private String about;
+	
 	private DocType edmType;
 	@Transient
 	private String[] edmUnstored;
@@ -69,4 +73,14 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	public void setEuropeanaProxy(boolean europeanaProxy) {
 		this.europeanaProxy = europeanaProxy;
 	}
+	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 }

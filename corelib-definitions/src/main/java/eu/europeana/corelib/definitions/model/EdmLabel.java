@@ -74,7 +74,7 @@ public enum EdmLabel {
 	WR_DCTERMS_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
 
 	// PROVIDER PROXY
-	ORE_PROXY("ore_proxy", SolrType.INDEXED), 
+	ORE_PROXY("proxy_ore_proxy", SolrType.INDEXED), 
 	EDM_ISEUROPEANA_PROXY("edm_europeana_proxy",SolrType.NOT_STORED),
 	PROXY_OWL_SAMEAS("proxy_owl_sameAs", SolrType.INDEXED), 
 	PROXY_DC_COVERAGE("proxy_dc_coverage", SolrType.FACET), 

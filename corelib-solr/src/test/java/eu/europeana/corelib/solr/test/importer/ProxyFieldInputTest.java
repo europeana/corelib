@@ -26,6 +26,7 @@ import eu.europeana.corelib.definitions.jibx.CurrentLocation;
 import eu.europeana.corelib.definitions.jibx.Date;
 import eu.europeana.corelib.definitions.jibx.Description;
 import eu.europeana.corelib.definitions.jibx.EdmType;
+import eu.europeana.corelib.definitions.jibx.EuropeanaProxy;
 import eu.europeana.corelib.definitions.jibx.EuropeanaType;
 import eu.europeana.corelib.definitions.jibx.Extent;
 import eu.europeana.corelib.definitions.jibx.Format;
@@ -362,6 +363,9 @@ public class ProxyFieldInputTest {
 		IsNextInSequence isNextInSequence = new IsNextInSequence();
 		isNextInSequence.setResource("test is next in sequence");
 		proxy.setIsNextInSequence(isNextInSequence);
+		EuropeanaProxy europeanaProxy = new EuropeanaProxy();
+		europeanaProxy.setEuropeanaProxy(true);
+		proxy.setEuropeanaProxy(europeanaProxy);
 		proxy.setCurrentLocation(currentLocation);
 		proxy.setType(EdmType.IMAGE);
 		proxy.setChoiceList(createEuropeanaTermsList());

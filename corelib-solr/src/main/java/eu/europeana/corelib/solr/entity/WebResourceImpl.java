@@ -34,7 +34,7 @@ public class WebResourceImpl implements WebResource {
 	private ObjectId id;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
-	@Indexed(unique=true)
+	@Indexed(unique=false)
 	private String about;
 	private String[] dcDescription;
 	private String[] dcFormat;

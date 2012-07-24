@@ -123,12 +123,10 @@ public class PlaceFieldInputTest {
 
 		assertEquals(place.getLat().getString(),
 				solrDocument
-						.getFieldValue(EdmLabel.PL_POSITION.toString())
-						.toString().split(",")[0]);
+						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
 		assertEquals(place.getLong().getString(),
 				solrDocument
-						.getFieldValue(EdmLabel.PL_POSITION.toString())
-						.toString().split(",")[1]);
+						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
 
 		assertEquals(place.getIsPartOfList().get(0).getString(), solrDocument
 				.getFieldValue(EdmLabel.PL_DCTERMS_ISPART_OF.toString())
