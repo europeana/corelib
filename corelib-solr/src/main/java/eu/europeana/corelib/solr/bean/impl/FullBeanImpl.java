@@ -37,7 +37,6 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.solr.entity.EuropeanaProxy;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -189,14 +188,15 @@ public class FullBeanImpl implements FullBean {
 	public void setAggregations(List<? extends Aggregation> aggregations) {
 		this.aggregations = (List<AggregationImpl>) aggregations;
 	}
-
+	
+	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
 		return this.europeanaAggregation;
 	}
 
-	
-	public void setEuropeanaAggregation(EuropeanaAggregationImpl europeanaAggregation) {
-		this.europeanaAggregation = europeanaAggregation;
+	@Override
+	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
+		this.europeanaAggregation =(EuropeanaAggregationImpl) europeanaAggregation;
 	}
 
 	@Override
