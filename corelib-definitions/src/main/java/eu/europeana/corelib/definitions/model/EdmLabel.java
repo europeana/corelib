@@ -30,7 +30,7 @@ public enum EdmLabel {
 	TIMESTAMP("timestamp", SolrType.INDEXED), 
 	EUROPEANA_COLLECTIONNAME("europeana_collectionName", SolrType.INDEXED), 
 	EUROPEANA_ID("europeana_id", SolrType.INDEXED), 
-	PROVIDER_EDM_TYPE("provider_edm_type", SolrType.FACET),
+	PROVIDER_EDM_TYPE("proxy_edm_type", SolrType.FACET),
 	
 	// Provider Aggregation Fields
 	PROVIDER_AGGREGATION_ORE_AGGREGATION("provider_aggregation_ore_aggregation", SolrType.NOT_STORED), 
