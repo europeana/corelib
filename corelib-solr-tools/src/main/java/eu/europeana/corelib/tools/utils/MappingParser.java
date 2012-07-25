@@ -25,6 +25,7 @@ public abstract class MappingParser {
 			while ((bytesRead = bin.read(contents)) != -1) {
 				strFileContents += new String(contents, 0, bytesRead);
 			}
+			fin.close();
 		} catch (FileNotFoundException e) {
 			return null;
 		} catch (IOException e) {

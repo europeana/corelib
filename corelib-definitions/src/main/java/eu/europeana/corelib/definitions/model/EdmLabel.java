@@ -84,7 +84,7 @@ public enum EdmLabel {
 	PROXY_DC_DATE("proxy_dc_date", SolrType.FACET), 
 	PROXY_DC_FORMAT("proxy_dc_format", SolrType.NOT_STORED), 
 	PROXY_DC_IDENTIFIER("proxy_dc_identifier", SolrType.NOT_STORED), 
-	PROXY_DC_LANGUAGE("proxy_dc_language", SolrType.NOT_STORED), 
+	PROXY_DC_LANGUAGE("proxy_dc_language", SolrType.FACET), 
 	PROXY_DC_PUBLISHER("proxy_dc_publisher", SolrType.NOT_STORED), 
 	PROXY_DC_RELATION("proxy_dc_relation", SolrType.NOT_STORED), 
 	PROXY_DC_RIGHTS("proxy_dc_rights", SolrType.FACET), 
