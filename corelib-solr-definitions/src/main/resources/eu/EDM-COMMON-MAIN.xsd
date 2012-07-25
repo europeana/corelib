@@ -102,6 +102,23 @@
             <extension base="rdf:AboutType">
                 <sequence minOccurs="0" maxOccurs="unbounded">
                     <choice>
+                        <!-- DC -->
+                        <element ref="dc:contributor"/>
+                        <element ref="dc:coverage"/>
+                        <element ref="dc:creator"/>
+                        <element ref="dc:date"/>
+                        <element ref="dc:description"/>
+                        <element ref="dc:format"/>
+                        <element ref="dc:identifier"/>
+                        <element ref="dc:language"/>
+                        <element ref="dc:publisher"/>
+                        <element ref="dc:relation"/>
+                        <element ref="dc:rights"/>
+                        <element ref="dc:source"/>
+                        <element ref="dc:subject"/>
+                        <element ref="dc:title"/>
+                        <element ref="dc:type"/>
+                        
                         <!-- DCTerms -->
                         <element ref="dcterms:alternative"/>
                         <element ref="dcterms:conformsTo"/>
@@ -125,23 +142,6 @@
                         <element ref="dcterms:spatial"/>
                         <element ref="dcterms:tableOfContents"/>
                         <element ref="dcterms:temporal"/>
-                        
-                        <!-- DC -->
-                        <element ref="dc:contributor"/>
-                        <element ref="dc:coverage"/>
-                        <element ref="dc:creator"/>
-                        <element ref="dc:date"/>
-                        <element ref="dc:description"/>
-                        <element ref="dc:format"/>
-                        <element ref="dc:identifier"/>
-                        <element ref="dc:language"/>
-                        <element ref="dc:publisher"/>
-                        <element ref="dc:relation"/>
-                        <element ref="dc:rights"/>
-                        <element ref="dc:source"/>
-                        <element ref="dc:subject"/>
-                        <element ref="dc:title"/>
-                        <element ref="dc:type"/>
                     </choice>
                 </sequence>
             </extension>

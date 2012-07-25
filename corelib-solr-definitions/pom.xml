@@ -47,7 +47,7 @@
 							<goal>schema-codegen</goal>
 						</goals>
 						<configuration>
-							<directory>src/main/resources/eu/internalschema</directory>
+							<directory>src/main/resources/eu</directory>
 							<targetDirectory>src/main/java</targetDirectory>
 							<includes>
 								<include>EDM-INTERNAL.xsd</include>
