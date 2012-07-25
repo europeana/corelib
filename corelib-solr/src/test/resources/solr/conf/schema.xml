@@ -248,11 +248,11 @@
    <dynamicField name="pl_skos_altLabel.*" type="text" indexed="true" stored="false" multiValued="true" />
    <field name="pl_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="pl_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="pl_dcterms_isPartOf_label" type="string" indexed="true" stored="false" multiValue="true"/>
+   <field name="pl_dcterms_isPartOf_label" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="pl_wgs84_pos_lat" type="string" indexed="true" stored="false" multiValued="true" />
 	<field name="pl_wgs84_pos_long" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="pl_wgs84_pos_alt" type="string" indexed="true" stored="false" multiValued="true"/>
-	<field name="pl_wgs84_pos_lat_long" type="string" indexed="true" stored="false" multivalued="true"/> <!-- copyfield -->
+	<field name="pl_wgs84_pos_lat_long" type="string" indexed="true" stored="false" multiValued="true"/> <!-- copyfield -->
 	<field name="pl_skos_hiddenLabel" type="string" indexed="true" stored="false" multiValued="true"/>
 	<dynamicField name="pl_skos_hiddenLabel.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="pl_dcterms_hasPart" type="string" indexed="true" stored="false" multiValued="true"/>
