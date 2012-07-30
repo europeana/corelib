@@ -118,6 +118,7 @@ public enum EdmLabel {
 	EDM_UGC("edm_UGC",SolrType.FACET), 
 	PROXY_EDM_CURRENT_LOCATION_LAT("proxy_edm_currentLocation_lat", SolrType.NOT_STORED), 
 	PROXY_EDM_CURRENT_LOCATION_LONG("proxy_edm_currentLocation_long", SolrType.NOT_STORED), 
+	PROXY_EDM_CURRENT_LOCATION("proxy_edm_currentLocation", SolrType.NOT_STORED),
 	PROXY_EDM_UNSTORED("proxy_edm_unstored", SolrType.NOT_STORED), 
 	PROXY_EDM_IS_NEXT_IN_SEQUENCE("proxy_edm_isNextInSequence", SolrType.NOT_STORED), 
 	PROXY_EDM_HAS_TYPE("proxy_edm_hasType", SolrType.NOT_STORED), 

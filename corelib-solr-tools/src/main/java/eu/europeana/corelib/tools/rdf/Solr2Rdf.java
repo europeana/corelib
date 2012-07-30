@@ -14,8 +14,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -67,7 +65,6 @@ public class Solr2Rdf {
 
 	private RDF transformDoc() throws TransformerException, JiBXException, IOException {
 		String output = out.toString("UTF-8");
-		System.out.println("Output:" + output);
 		ByteArrayOutputStream transformedOutput = new ByteArrayOutputStream();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		Transformer transform = tFactory.newTransformer(new StreamSource("src/main/resources/convertToEdm.xsl"));
@@ -76,18 +73,16 @@ public class Solr2Rdf {
 		transform.transform(new SAXSource(new InputSource(new ByteArrayInputStream(output.getBytes()))),new StreamResult(transformedOutput));
 		transformedOutput.flush();
 		String edmString = transformedOutput.toString("UTF-8");
-		System.out.println("Edm:" + edmString);
 		transformedOutput.close();
 		IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
 
 		IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+		out.close();
 		return (RDF) uctx.unmarshalDocument(new StringReader(edmString));
 	}
 
 	private void serializeDoc() throws SAXException, IOException {
 		hd.endElement("", "", "record");
-		
-		//out.flush();
 	}
 
 	public RDF constructFromSolrDocument(SolrInputDocument solrDocument)
@@ -98,12 +93,6 @@ public class Solr2Rdf {
 		return transformDoc();
 	}
 
-	private TransformerHandler createDocument()
-			throws TransformerConfigurationException {
-		SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory
-				.newInstance();
-		return tf.newTransformerHandler();
-	}
 
 	private void createXMLFromSolr(SolrInputDocument solrDocument)
 			throws SAXException {

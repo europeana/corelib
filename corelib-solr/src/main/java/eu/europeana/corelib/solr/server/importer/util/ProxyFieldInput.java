@@ -66,14 +66,17 @@ public final class ProxyFieldInput {
 				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(),
 				SolrUtils.exists(EdmType.class, (proxy.getType())).toString());
-		solrInputDocument.addField(
+		/*solrInputDocument.addField(
 				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LAT.toString(),
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(
 				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LONG.toString(),
 				SolrUtils.exists(ResourceType.class,
-						(proxy.getCurrentLocation())).getResource());
+						(proxy.getCurrentLocation())).getResource());*/
+		solrInputDocument.addField(EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString(),
+		SolrUtils.exists(ResourceType.class,
+				(proxy.getCurrentLocation())).getResource());
 		solrInputDocument.addField(
 				EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString(),
 				SolrUtils.exists(ResourceType.class,
