@@ -91,7 +91,7 @@ public class ProxyFieldInputTest {
 			assertEquals(
 					proxy.getCurrentLocation().getResource(),
 					solrDocument
-							.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION_LAT
+							.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION
 									.toString()));
 			assertEquals(
 					proxy.getIsNextInSequence().getResource(),
