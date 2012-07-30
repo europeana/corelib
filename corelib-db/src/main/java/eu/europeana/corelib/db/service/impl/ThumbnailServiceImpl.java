@@ -187,7 +187,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 				StringBuilder sb = new StringBuilder();
 				sb.append("One of the arguments provided for method ");
 				sb.append(methodname);
-				sb.append("had a bull value (argument no ");
+				sb.append("had a null value (argument no ");
 				sb.append(i);
 				sb.append(")");
 				throw new IllegalArgumentException(sb.toString());
