@@ -116,9 +116,9 @@ public class Extractor {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public Map<EdmLabel, List<String>> denormalize(String resource,
+	public Map<String, List<String>> denormalize(String resource,
 			ControlledVocabulary controlledVocabulary) {
-		Map<EdmLabel,List<String>> denormalizedValues = new HashMap<EdmLabel, List<String>>();
+		Map<String,List<String>> denormalizedValues = new HashMap<String, List<String>>();
 		String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
 				.getSuffix() : "";
 		String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
@@ -224,10 +224,10 @@ public class Extractor {
 	 *            The field to check
 	 * @return The EdmLabel the field has been mapped to
 	 */
-	public EdmLabel getEdmLabel(String field) {
+	public String getEdmLabel(String field) {
 
-		return vocabulary != null ? vocabulary.getElements().get(field)
-				: EdmLabel.NULL;
+		return vocabulary != null ? vocabulary.getElements().get(field).toString()
+				: EdmLabel.NULL.toString();
 	}
 
 	/**

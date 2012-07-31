@@ -65,6 +65,8 @@ public class Solr2Rdf {
 
 	private RDF transformDoc() throws TransformerException, JiBXException, IOException {
 		String output = out.toString("UTF-8");
+		System.out.println(output);
+		
 		ByteArrayOutputStream transformedOutput = new ByteArrayOutputStream();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		Transformer transform = tFactory.newTransformer(new StreamSource("src/main/resources/convertToEdm.xsl"));
@@ -97,6 +99,7 @@ public class Solr2Rdf {
 	private void createXMLFromSolr(SolrInputDocument solrDocument)
 			throws SAXException {
 		for (Entry<String, SolrInputField> solrField : solrDocument.entrySet()) {
+			if(solrField.getValue()!=null && solrField.getValue().getValues()!=null){
 			for (Object str : solrField.getValue().getValues().toArray()) {
 				if(str instanceof String){
 					createXMLElement(solrField.getKey(), (String) str);
@@ -104,6 +107,7 @@ public class Solr2Rdf {
 				else if (str instanceof Boolean){
 					createXMLElement(solrField.getKey(),Boolean.toString((Boolean)str));
 				}
+			}
 			}
 		}
 	}

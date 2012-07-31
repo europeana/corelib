@@ -439,6 +439,9 @@
 				<xsl:element name="skos:prefLabel">
 				<xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_prefLabel.')]" />
 				</xsl:element>
+				<xsl:element name = "skos:prefLabel">
+					<xsl:value-of select="cc_skos_prefLabel"/>
+				</xsl:element>
 				<xsl:element name="skos:altLabel">
 				<xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_altLabel.')]" />
 				</xsl:element>
@@ -1033,26 +1036,25 @@
 		</xsl:template>
 		<xsl:template match="//*[starts-with(local-name(),'cc_skos_prefLabel.')]">
 			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), '.')"/>
+			<xsl:value-of select="substring-after(local-name(), 'cc_skos_prefLabel.')"/>
 			</xsl:variable>
 			<xsl:variable name="val">
 			<xsl:value-of select="."/>
 			</xsl:variable>
+			
 				<xsl:attribute name="xml:lang">
-					 <xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_prefLabel.')]"/>
 					 <xsl:value-of select="$lang"/>
 				</xsl:attribute>
 					<xsl:value-of select="$val"/>
 		</xsl:template>
 		<xsl:template match="//*[starts-with(local-name(),'cc_skos_altLabel.')]">
 			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), '.')"/>
+			<xsl:value-of select="substring-after(local-name(), 'cc_skos_altLabel.')"/>
 			</xsl:variable>
 			<xsl:variable name="val">
 			<xsl:value-of select="."/>
 			</xsl:variable>
 				<xsl:attribute name="xml:lang">
-					 <xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_altLabel.')]"/>
 					 <xsl:value-of select="$lang"/>
 				</xsl:attribute>
 					<xsl:value-of select="$val"/>

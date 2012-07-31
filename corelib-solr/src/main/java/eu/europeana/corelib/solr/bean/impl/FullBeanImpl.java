@@ -117,6 +117,7 @@ public class FullBeanImpl implements FullBean {
 	private List<Map<String,String>> edmConceptBroaderLabel;
 	
 	private String[] edmPlaceBroaderTerm;
+	private String previewNoDistribute;
 	
 	
 
@@ -1320,5 +1321,13 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setWhen(String[] when) {
 		this.when = when;
+	}
+	@Override
+	public String getPreviewNoDistribute() {
+		return previewNoDistribute;
+	}
+	@Override
+	public void setPreviewNoDistribute(String previewNoDistribute) {
+		this.previewNoDistribute = previewNoDistribute;
 	}
 }

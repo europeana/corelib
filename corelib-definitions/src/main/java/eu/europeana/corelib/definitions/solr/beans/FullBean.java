@@ -447,4 +447,8 @@ public interface FullBean extends ApiBean {
 	void setEdmPlaceBroaderTerm(String[] edmPlaceBroaderTerm);
 
 	void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation);
+
+	String getPreviewNoDistribute();
+
+	void setPreviewNoDistribute(String previewNoDistribute);
 }

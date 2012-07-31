@@ -36,7 +36,7 @@ public class Dereferencer {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public static Map<EdmLabel,List<String>> normalize(String uri)
+	public static Map<String,List<String>> normalize(String uri)
 			throws MalformedURLException, IOException {
 		if (server == null) {
 			ApplicationContext applicationContext = AppContext
@@ -44,11 +44,11 @@ public class Dereferencer {
 			server = (VocabularyMongoServer) applicationContext
 					.getBean("corelib_solr_vocabularyMongoServer");
 		}
-		Map<EdmLabel,List<String>> values = new HashMap<EdmLabel,List<String>>();
+		Map<String,List<String>> values = new HashMap<String,List<String>>();
 		List<String> originalValue = new ArrayList<String>();
 		
 		originalValue.add(uri);
-		values.put(EdmLabel.ORIGINAL,originalValue);
+		values.put(EdmLabel.ORIGINAL.toString(),originalValue);
 		if (isURI(uri)) {
 			Extractor extractor = new Extractor(new ControlledVocabularyImpl(),
 					server);
