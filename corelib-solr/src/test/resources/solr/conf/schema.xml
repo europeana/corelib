@@ -129,10 +129,12 @@
    <field name="wr_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="false"/>
    
 	<!--PROVIDER PROXY RELATED-->
-   <field name="proxy_ore_proxy" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_ore_proxy" type="string" indexed="true" stored="false" multiValued="true" />
+      <field name="edm_europeana_proxy" type="string" indexed="true" stored="false" multiValued="true" />
+   
    <field name="proxy_owl_sameAs" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="proxy_ore_proxyFor" type="string" indexed="true" stored="false" multiValued="false" />
-   <field name="proxy_ore_proxyIn" type="string" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_ore_proxyFor" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_ore_proxyIn" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dc_contributor" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="proxy_dc_coverage" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="proxy_dc_creator" type="string" indexed="true" stored="true" multiValued="true" />
@@ -172,10 +174,11 @@
    <field name="proxy_dcterms_spatial" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_tableOfContents" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_temporal" type="string" indexed="true" stored="true" multiValued="true" />
-	<field name="proxy_edm_type" type="string" indexed="true" stored="true" multiValued="false" />
+	<field name="proxy_edm_type" type="string" indexed="true" stored="true" multiValued="true" />
 	<field name="proxy_edm_unstored" type="string" indexed="true" stored="false" multiValued="true"/>
-   <field name="proxy_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="false" />
-    <field name="proxy_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="false" />
+   <field name="proxy_edm_currentLocation_lat" type="tfloat" indexed="true" stored="false" multiValued="true" />
+    <field name="proxy_edm_currentLocation_lon" type="tfloat" indexed="true" stored="false" multiValued="true" />
+     <field name="proxy_edm_currentLocation" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_isNextInSequence" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_hasMet" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_hasType" type="string" indexed="true" stored="false" multiValued="true" />
@@ -187,8 +190,8 @@
    <field name="proxy_edm_isSuccessorOf" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="europeana_previewNoDistribute" type="boolean" indexed="true" stored="true" multiValued="false" />
-    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="false" />
+   <field name="europeana_previewNoDistribute" type="boolean" indexed="true" stored="true" multiValued="true" />
+    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="true" />
    
   
   
