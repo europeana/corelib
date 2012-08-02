@@ -51,7 +51,7 @@ public class Solr2Rdf {
 		hd.startElement("", "", "record", atts);
 	}
 
-	public RDF constructFromMap(SolrInputDocument solrDocument,
+	public String constructFromMap(SolrInputDocument solrDocument,
 			Map<String, List<String>> map) throws SAXException, IOException,
 			TransformerException, JiBXException {
 
@@ -66,9 +66,8 @@ public class Solr2Rdf {
 		return transformDoc();
 	}
 
-	private RDF transformDoc() throws TransformerException, JiBXException, IOException {
+	private String transformDoc() throws TransformerException, JiBXException, IOException {
 		String output = out.toString("UTF-8");
-		System.out.println(output);
 		
 		ByteArrayOutputStream transformedOutput = new ByteArrayOutputStream();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -79,18 +78,18 @@ public class Solr2Rdf {
 		transformedOutput.flush();
 		String edmString = transformedOutput.toString("UTF-8");
 		transformedOutput.close();
-		IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
-
-		IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+		
 		out.close();
-		return (RDF) uctx.unmarshalDocument(new StringReader(edmString));
+		
+		System.out.println(edmString);
+		return edmString;
 	}
 
 	private void serializeDoc() throws SAXException, IOException {
 		hd.endElement("", "", "record");
 	}
 
-	public RDF constructFromSolrDocument(SolrInputDocument solrDocument)
+	public String constructFromSolrDocument(SolrInputDocument solrDocument)
 			throws SAXException, IOException, TransformerException, JiBXException {
 
 		createXMLFromSolr(solrDocument);

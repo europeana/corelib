@@ -3,6 +3,7 @@ package eu.europeana.corelib.tools.rdf;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,9 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.jibx.runtime.BindingDirectory;
+import org.jibx.runtime.IBindingFactory;
+import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -44,7 +48,10 @@ public class Solr2RdfTest {
 		assertNotNull(solr2rdf);
 		SolrInputDocument solrDocument = createSolrDocument();
 		try {
-			RDF rdf = solr2rdf.constructFromSolrDocument(solrDocument);
+			IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
+
+			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+			RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(solr2rdf.constructFromSolrDocument(solrDocument)));
 			assertNotNull(rdf);
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
@@ -83,7 +90,10 @@ public class Solr2RdfTest {
 		SolrInputDocument solrDocument = createSolrDocument();
 		Map<String,List<String>> testMap = createMap();
 		try {
-			RDF rdf = solr2rdf.constructFromMap(solrDocument,testMap);
+			IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
+
+			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+			RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(solr2rdf.constructFromMap(solrDocument,testMap)));
 			assertNotNull(rdf);
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
