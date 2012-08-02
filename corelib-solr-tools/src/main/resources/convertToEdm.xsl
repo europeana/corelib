@@ -297,16 +297,26 @@
 				<xsl:attribute name="rdf:about">
 					<xsl:value-of select="edm_agent" />
 				</xsl:attribute>
-				<xsl:if test="//*[starts-with(local-name(),'ag_skos_prefLabel')]">
+				<xsl:for-each select="ag_skos_prefLabel">
 				<xsl:element name="skos:prefLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'ag_skos_prefLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
-				<xsl:if test="//*[starts-with(local-name(),'ag_skos_altLabel')]">
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
+				<xsl:for-each select="ag_skos_altLabel">
 				<xsl:element name="skos:altLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'ag_skos_altLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
 				<xsl:if test="//*/ag_skos_note">
 				<xsl:element name="skos:note">
 					<xsl:value-of select = "ag_skos_note"/>
@@ -415,16 +425,27 @@
 				<xsl:attribute name="rdf:about">
 					<xsl:value-of select="edm_timespan"/>
 				</xsl:attribute>
-				<xsl:if test="//*[starts-with(local-name(),'ts_skos_prefLabel')]">
+				<xsl:for-each select="ts_skos_prefLabel">
 				<xsl:element name="skos:prefLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'ts_skos_prefLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
-				<xsl:if test="//*[starts-with(local-name(),'ts_skos_prefLabel')]">
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
+				<xsl:for-each select="ts_skos_altLabel">
 				<xsl:element name="skos:altLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'ts_skos_altLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
+				
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
 				<xsl:if test="//*/ts_skos_note">
 				<xsl:element name="skos:note">
 					<xsl:value-of select = "ts_skos_note"/>
@@ -494,16 +515,26 @@
 					<xsl:value-of select = "pl_wgs84_pos_alt"/>
 				</xsl:element>
 				</xsl:if>
-				<xsl:if test="//*[starts-with(local-name(),'pl_skos_prefLabel')]">
+				<xsl:for-each select="pl_skos_prefLabel">
 				<xsl:element name="skos:prefLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'pl_skos_prefLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
-				<xsl:if test="//*[starts-with(local-name(),'pl_skos_altLabel')]">
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
+				<xsl:for-each select="pl_skos_altLabel">
 				<xsl:element name="skos:altLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'pl_skos_altLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
 				<xsl:if test="//*/pl_skos_note">
 				<xsl:element name="skos:note">
 					<xsl:value-of select = "pl_skos_note"/>
@@ -549,16 +580,26 @@
 				<xsl:attribute name="rdf:about">
 					<xsl:value-of select="skos_concept"/>
 				</xsl:attribute>
-				<xsl:if test="//*[starts-with(local-name(),'cc_skos_prefLabel')]">
+				<xsl:for-each select="cc_skos_prefLabel">
 				<xsl:element name="skos:prefLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_prefLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
-				<xsl:if test="//*[starts-with(local-name(),'cc_skos_altLabel')]">
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
+				<xsl:for-each select="cc_skos_altLabel">
 				<xsl:element name="skos:altLabel">
-				<xsl:apply-templates select="//*[starts-with(local-name(),'cc_skos_altLabel')]" />
-				</xsl:element>
+				<xsl:if test="@xml:lang">
+				<xsl:attribute name="xml:lang">
+				<xsl:value-of select="@xml:lang"/>
+				</xsl:attribute>
 				</xsl:if>
+				<xsl:value-of select="."/>
+				</xsl:element>
+				</xsl:for-each>
 				<xsl:if test="//*/cc_skos_note">
 				<xsl:element name="skos:note">
 					<xsl:value-of select = "cc_skos_note"/>
@@ -1292,117 +1333,5 @@
 			</xsl:element>
 			</xsl:if>
 			</rdf:RDF>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'cc_skos_prefLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'cc_skos_prefLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'cc_skos_altLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'cc_skos_altLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'ts_skos_prefLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'ts_skos_prefLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'ts_skos_altLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'ts_skos_altLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'ag_skos_prefLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'ag_skos_prefLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'ag_skos_altLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'ag_skos_altLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'pl_skos_prefLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'pl_skos_prefLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
-		</xsl:template>
-		<xsl:template match="//*[starts-with(local-name(),'pl_skos_altLabel')]">
-			<xsl:variable name="lang">
-			<xsl:value-of select="substring-after(local-name(), 'pl_skos_altLabel.')"/>
-			</xsl:variable>
-			<xsl:variable name="val">
-			<xsl:value-of select="."/>
-			</xsl:variable>
-			<xsl:if test="not(string-length($lang)=0)">
-				<xsl:attribute name="xml:lang">
-					 <xsl:value-of select="$lang"/>
-				</xsl:attribute>
-				</xsl:if>
-					<xsl:value-of select="$val"/>
 		</xsl:template>
 </xsl:stylesheet>

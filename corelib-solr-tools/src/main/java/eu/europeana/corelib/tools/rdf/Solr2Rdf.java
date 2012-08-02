@@ -18,6 +18,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
 import org.apache.xml.serialize.OutputFormat;
@@ -117,7 +118,11 @@ public class Solr2Rdf {
 	private void createXMLElement(String name, String value)
 			throws SAXException {
 		AttributesImpl atts = new AttributesImpl();
-		hd.startElement("", "", name, atts);
+		String[] elems = StringUtils.split(name,".");
+		if(elems.length>1){
+			atts.addAttribute("", "", "xml:lang", "CDATA", elems[1]);
+		}
+		hd.startElement("", "", elems[0], atts);
 		hd.characters(value.toCharArray(), 0, value.length());
 		hd.endElement("", "", name);
 		
