@@ -65,16 +65,16 @@ public final class TimespanFieldInput {
         if (timespan.getAltLabelList() != null) {
             for (AltLabel altLabel : timespan.getAltLabelList()) {
                 solrInputDocument.addField(
-                        EdmLabel.TS_SKOS_ALT_LABEL.toString() + "."
-                        + altLabel.getLang().getLang(),
+                        EdmLabel.TS_SKOS_ALT_LABEL.toString() + (altLabel.getLang()!=null? "."
+                        + altLabel.getLang().getLang():""),
                         altLabel.getString());
             }
         }
         if (timespan.getPrefLabelList() != null) {
             for (PrefLabel prefLabel : timespan.getPrefLabelList()) {
                 solrInputDocument.addField(
-                        EdmLabel.TS_SKOS_PREF_LABEL.toString() + "."
-                        + prefLabel.getLang().getLang(),
+                        EdmLabel.TS_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null?"."
+                        + prefLabel.getLang().getLang():""),
                         prefLabel.getString());
             }
         }

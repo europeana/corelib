@@ -67,8 +67,8 @@ public final class PlaceFieldInput {
 			for (AltLabel altLabel : place.getAltLabelList()) {
 				if (altLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.PL_SKOS_ALT_LABEL.toString() + "."
-									+ altLabel.getLang().getLang(),
+							EdmLabel.PL_SKOS_ALT_LABEL.toString() + (altLabel.getLang()!=null? "."
+									+ altLabel.getLang().getLang():""),
 							altLabel.getString());
 				} else {
 					solrInputDocument.addField(
@@ -81,8 +81,8 @@ public final class PlaceFieldInput {
 			for (PrefLabel prefLabel : place.getPrefLabelList()) {
 				if (prefLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.PL_SKOS_PREF_LABEL.toString() + "."
-									+ prefLabel.getLang().getLang(),
+							EdmLabel.PL_SKOS_PREF_LABEL.toString() +(prefLabel.getLang()!=null? "."
+									+ prefLabel.getLang().getLang():""),
 							prefLabel.getString());
 				} else {
 					solrInputDocument.addField(

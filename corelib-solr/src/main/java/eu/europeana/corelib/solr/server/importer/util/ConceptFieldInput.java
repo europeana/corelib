@@ -79,8 +79,8 @@ public final class ConceptFieldInput {
 				AltLabel altLabel = choice.getAltLabel();
 				if (altLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_ALT_LABEL.toString() + "."
-									+ altLabel.getLang().getLang(),
+							EdmLabel.CC_SKOS_ALT_LABEL.toString() +(altLabel.getLang()!=null? "."
+									+ altLabel.getLang().getLang():""),
 							altLabel.getString());
 				} else {
 					solrInputDocument.addField(
@@ -93,8 +93,8 @@ public final class ConceptFieldInput {
 				PrefLabel prefLabel = choice.getPrefLabel();
 				if (prefLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_PREF_LABEL.toString() + "."
-									+ prefLabel.getLang().getLang(),
+							EdmLabel.CC_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null?"."
+									+ prefLabel.getLang().getLang() :""),
 							prefLabel.getString());
 				} else {
 					solrInputDocument.addField(

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -54,7 +55,8 @@ public class Solr2Rdf {
 			TransformerException, JiBXException {
 
 		createXMLFromSolr(solrDocument);
-		for (Entry<String, List<String>> mapField : map.entrySet()) {
+		Map<String,List<String>> synchronizedMap = Collections.synchronizedMap(map);
+		for (Entry<String, List<String>> mapField : synchronizedMap.entrySet()) {
 			for (String str : mapField.getValue()) {
 				createXMLElement(mapField.getKey(), (String) str);
 			}
@@ -117,7 +119,7 @@ public class Solr2Rdf {
 		AttributesImpl atts = new AttributesImpl();
 		hd.startElement("", "", name, atts);
 		hd.characters(value.toCharArray(), 0, value.length());
-		hd.endElement("", "", "USER");
+		hd.endElement("", "", name);
 		
 	}
 }

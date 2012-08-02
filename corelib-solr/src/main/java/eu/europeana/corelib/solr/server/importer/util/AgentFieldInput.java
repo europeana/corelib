@@ -74,8 +74,8 @@ public final class AgentFieldInput {
 			for (AltLabel altLabel : agentType.getAltLabelList()) {
 				if (altLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_ALT_LABEL.toString() + "."
-									+ altLabel.getLang().getLang(),
+							EdmLabel.AG_SKOS_ALT_LABEL.toString() +(altLabel.getLang()!=null? "."
+									+ altLabel.getLang().getLang() :""),
 							altLabel.getString());
 				} else {
 					solrInputDocument.addField(
@@ -88,8 +88,8 @@ public final class AgentFieldInput {
 			for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
 				if (prefLabel.getLang() != null) {
 					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_PREF_LABEL.toString() + "."
-									+ prefLabel.getLang().getLang(),
+							EdmLabel.AG_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null? "."
+									+ prefLabel.getLang().getLang() :""),
 							prefLabel.getString());
 				} else {
 					solrInputDocument.addField(
