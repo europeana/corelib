@@ -54,7 +54,7 @@ import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
  */
 public class ContentLoader {
 
-	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test4.zip";
+	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test-update.zip";
 	
 	private static String TEMP_DIR = "/tmp/europeana/records";
 

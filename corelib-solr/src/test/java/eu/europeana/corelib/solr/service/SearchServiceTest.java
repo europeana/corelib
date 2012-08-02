@@ -51,7 +51,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 @ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class SearchServiceTest {
 
-	private static String COLLECTION = "src/test/resources/records-test4.zip";
+	private static String COLLECTION = "src/test/resources/records-test-update.zip";
 
 	@Resource
 	private SearchService searchService;
@@ -116,7 +116,7 @@ public class SearchServiceTest {
 				new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "
-				+ results.getResultSize(), results.getResultSize() >= 205);
+				+ results.getResultSize(), results.getResultSize() >= 189);
 		Assert.assertTrue("Did not return expected facet list: "
 				+ results.getFacetFields().size(), results.getFacetFields()
 				.size() == 7);
