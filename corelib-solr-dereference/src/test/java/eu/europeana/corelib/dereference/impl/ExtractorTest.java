@@ -47,7 +47,7 @@ public class ExtractorTest {
 		assertEquals(vocabulary.getURI(),retrieveVocabulary.getURI());
 		assertTrue(retrieveVocabulary.getElements().containsKey("test_contributor"));
 		assertEquals(EdmLabel.PROXY_DC_CONTRIBUTOR, retrieveVocabulary.getElements().get("test_contributor"));
-		assertEquals(EdmLabel.PROXY_DC_CONTRIBUTOR,extractor.getEdmLabel("test_contributor"));
+		assertEquals(EdmLabel.PROXY_DC_CONTRIBUTOR.toString(),extractor.getEdmLabel("test_contributor"));
 		assertEquals("test_contributor", extractor.getMappedField(EdmLabel.PROXY_DC_CONTRIBUTOR));
 	}
 	
