@@ -42,10 +42,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("PROVIDER")
 	private String[] provider;
 
-	@Field("edm_dataProvider")
+	@Field("provider_aggregation_edm_dataProvider")
 	private String[] edmDataProvider;
 
-	@Field("edm_object")
+	@Field("provider_aggregation_edm_object")
 	private String[] edmObject;
 
 	@Field("europeana_completeness")
@@ -66,46 +66,46 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("title")
 	private String[] title;
 
-	@Field("dc_creator")
+	@Field("proxy_dc_creator")
 	private String[] dcCreator;
 	
-	@Field("dc_contributor")
+	@Field("proxy_dc_contributor")
 	private String[] dcContributor;
 
 	@Field("edm_place")
 	private String[] edmPlace;
 
-	@Field("edm_place_pref_label")
+	@Field("pl_skos_prefLabel")
 	private List<Map<String, String>> edmPlacePrefLabel;
 
-	@Field("edm_place_lat")
+	@Field("pl_wgs84_pos_lat")
 	private Float edmPlaceLatitude;
 
-	@Field("edm_place_lon")
+	@Field("pl_wgs84_pos_long")
 	private Float edmPlaceLongitude;
 
 	@Field("edm_timespan")
 	private String[] edmTimespan;
 
-	@Field("edm_timespan_label")
+	@Field("ts_skos_prefLabel")
 	private List<Map<String, String>> edmTimespanLabel;
 
-	@Field("edm_timespan_begin")
+	@Field("ts_crm_P79F_beginning_is_qualified_by")
 	private String[] edmTimespanBegin;
 
-	@Field("edm_timespan_end")
+	@Field("ts_crm_P80F_end_is_qualified_by")
 	private String[] edmTimespanEnd;
 
 	@Field("edm_agent")
 	private String[] edmAgentTerm;
 
-	@Field("edm_agent_label")
+	@Field("ag_skos_prefLabel")
 	private List<Map<String, String>> edmAgentLabel;
 
-	@Field("dcterms_hasPart")
+	@Field("proxy_dcterms_hasPart")
 	private String[] dctermsHasPart;
 
-	@Field("dcterms_spatial")
+	@Field("proxy_dcterms_spatial")
 	private String[] dctermsSpatial;
 
 	@Override
