@@ -41,6 +41,33 @@ public class Image {
 		// left empty on purpose, do NOT remove!!
 	}
 
+	
+	/**
+	 * Alternative constructor that instantiates the image
+	 * object with a byte array instead. This is mainly
+	 * used to maintain XMP information since BufferedImage
+	 * removes this kind of info.
+	 * 
+	 * @param imagebytes the image binary
+	 */
+	public Image(byte[] imagebytes){
+		setImage(imagebytes);
+		try {
+			BufferedImage tmp = ImageUtils.toBufferedImage(imagebytes);
+			setHeight(tmp.getHeight());
+			setWidth(tmp.getWidth());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * @param original
+	 * @throws IOException
+	 */
 	public Image(BufferedImage original) throws IOException {
 		setHeight(original.getHeight());
 		setWidth(original.getWidth());

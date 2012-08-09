@@ -18,23 +18,110 @@
 package eu.europeana.corelib.db.service.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.ImageWriteException;
+import org.apache.sanselan.Sanselan;
+import org.apache.sanselan.formats.jpeg.xmp.JpegXmpRewriter;
+
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.ThumbnailService;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
+import eu.europeana.corelib.db.util.XMPUtils;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 import eu.europeana.corelib.utils.ImageUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @author Georgios Markakis <gwarkx@hotmail.com>
+ *
+ * @since 6 May 2012
  */
 public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, String> implements ThumbnailService {
 
+
+	/* (non-Javadoc)
+	 * @see eu.europeana.corelib.db.service.ThumbnailService#storeThumbnail(java.lang.String, java.lang.String, java.awt.image.BufferedImage, java.lang.String, eu.europeana.corelib.definitions.jibx.RDF)
+	 */
+	@Override
+	public ImageCache storeThumbnail(String objectId, String collectionId,
+			BufferedImage image, String url, RDF edmInfo)
+			throws DatabaseException {
+		sanitycheck("storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage," +
+				"String url)",objectId,collectionId,image);
+			
+		    JpegXmpRewriter xmpWriter=new JpegXmpRewriter();
+		
+			ImageCache cache = new ImageCache(objectId, DEFAULT_IMAGEID, collectionId, url);
+
+			try {
+				BufferedImage tiny = ImageUtils.scale(image, ThumbSize.TINY.getMaxWidth(),
+						ThumbSize.TINY.getMaxHeight());
+
+				BufferedImage medium = ImageUtils.scale(image, ThumbSize.MEDIUM.getMaxWidth(),
+						ThumbSize.MEDIUM.getMaxHeight());
+
+				BufferedImage large = ImageUtils.scale(image, ThumbSize.LARGE.getMaxWidth(),
+						ThumbSize.LARGE.getMaxHeight());
+				
+				byte[] tinybyteorig = ImageUtils.toByteArray(tiny);
+				byte[] mediumbyteorig = ImageUtils.toByteArray(medium);
+				byte[] largebyteorig = ImageUtils.toByteArray(large);
+				
+
+				ByteArrayOutputStream tinyOutputStream = new ByteArrayOutputStream();
+				ByteArrayOutputStream mediumOutputStream = new ByteArrayOutputStream();
+				ByteArrayOutputStream largeOutputStream = new ByteArrayOutputStream();
+				
+				
+				String xmp = XMPUtils.fetchXMP(edmInfo);
+				xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmp);
+				xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmp);
+				xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmp);
+				
+				tinyOutputStream.flush();
+				byte[] tinyconverted = tinyOutputStream.toByteArray();
+				tinyOutputStream.close();
+				
+				
+				mediumOutputStream.flush();
+				byte[] mediumconverted = mediumOutputStream.toByteArray();
+				mediumOutputStream.close();
+				
+				largeOutputStream.flush();
+				byte[] largeconverted = largeOutputStream.toByteArray();
+				largeOutputStream.close();
+				
+				String xmps = Sanselan.getXmpXml(tinyconverted);
+				//System.out.println("Writing");
+				
+				//System.out.println(xmps);
+				
+				cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(mediumconverted));
+				cache.getImages().put(ThumbSize.TINY.toString(), new Image(tinyconverted));
+				cache.getImages().put(ThumbSize.LARGE.toString(), new Image(largeconverted));
+				
+			} catch (IOException e) {
+				throw new DatabaseException(e, ProblemType.UNKNOWN);
+			} catch (ImageReadException e) {
+				throw new DatabaseException(e, ProblemType.UNKNOWN);
+			} catch (ImageWriteException e) {
+				throw new DatabaseException(e, ProblemType.UNKNOWN);
+			}
+
+			return store(cache);
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#storeThumbnail(java.lang.String, java.lang.String, java.net.URL)
 	 */
@@ -194,6 +281,28 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			}
 		}
 		
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see eu.europeana.corelib.db.service.ThumbnailService#extractXMPInfo(java.lang.String, java.lang.String, eu.europeana.corelib.definitions.model.ThumbSize)
+	 */
+	@Override
+	public String extractXMPInfo(String objectId, String imageId, ThumbSize size) {
+		 byte[] imgbyte = retrieveThumbnail(objectId,size);
+		 String xmp = "";
+		 try {
+			xmp = Sanselan.getXmpXml(imgbyte);
+		} catch (ImageReadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		return xmp;
 	}
 	
 }

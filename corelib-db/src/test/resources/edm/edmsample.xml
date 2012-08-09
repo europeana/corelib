@@ -1,0 +1,39 @@
+<?xml version="1.0"  standalone="yes"?>
+<rdf:RDF xmlns:edm="http://www.europeana.eu/schemas/edm/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:ore="http://www.openarchives.org/ore/terms/"
+	xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdaGr2="http://rdvocab.info/ElementsGr2"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:crm="http://www.cidoc-crm.org/rdfs/cidoc_crm_v5.0.2_english_label.rdfs#"
+	xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:xalan="http://xml.apache.org/xalan" xmlns:dcterms="http://purl.org/dc/terms/">
+	<edm:ProvidedCHO rdf:about="#ULEI:M0003707" />
+	<edm:WebResource rdf:about="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg">
+		<dc:description>in Sopranlage</dc:description>
+		<dc:rights>Â© Museum fÃ¼r Musikinstrumente der UniversitÃ¤t Leipzig
+		</dc:rights>
+		<edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+	</edm:WebResource>
+	<skos:Concept rdf:about="http://www.mimo-db.eu/InstrumentsKeywords/3570">
+		<skos:prefLabel>Irregular violin</skos:prefLabel>
+	</skos:Concept>
+	<ore:Aggregation rdf:about="http://www.mimo-db.eu/ULEI/M0003707">
+		<edm:aggregatedCHO rdf:resource="#ULEI:M0003707" />
+		<edm:dataProvider>Museum fÃ¼r Musikinstrumente der UniversitÃ¤t
+			Leipzig</edm:dataProvider>
+		<edm:hasView rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
+		<edm:isShownAt rdf:resource="http://www.mimo-db.eu/ULEI/M0003707" />
+		<edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
+		<edm:object rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
+		<edm:provider>MIMO - Musical Instrument Museums Online</edm:provider>
+		<edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+	</ore:Aggregation>
+	<edm:Proxy rdf:about="#ULEI:M0003707">
+		<dc:coverage />
+		<dc:description>in Sopranlage</dc:description>
+		<dc:identifier>#ULEI:M0003707</dc:identifier>
+		<dc:title>Philomele</dc:title>
+		<dc:type rdf:resource="http://www.mimo-db.eu/InstrumentsKeywords/3570" />
+		<edm:type>IMAGE</edm:type>
+	</edm:Proxy>
+</rdf:RDF>

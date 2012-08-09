@@ -23,15 +23,36 @@ import java.net.URL;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlService;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @author Georgios Markakis <gwarkx@hotmail.com>
+ *
+ * 6 Aug 2012
  */
 public interface ThumbnailService extends AbstractNoSqlService<ImageCache, String> {
 	
 	String DEFAULT_IMAGEID = "0"; 
 	String COMBINE_CHAR = "_";
+	
+	
+	/**
+	 * Create and store thumbnails of given images. This method also adds XMP metadata information
+	 * to all generated thumbnails given the information found in the EDM xml document which is related 
+	 * to theses images.
+	 * 
+	 * @param objectId permanent ID of image to store image.
+	 * @param collectionId collection ID to which the object belongs.
+	 * @param image A BufferedImage instance with the original image
+	 * @param url The URL as a String of the original location of the image, can be null.
+	 * @param edminfo the JIBX RDF representation of the original EDM "record"
+	 * @return The stored entity.
+	 * @throws DatabaseException 
+	 */
+	ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage image, String url,RDF edmInfo) throws DatabaseException;
+	
 	
 	/**
 	 * Create and store thumbnails of given images.
@@ -125,5 +146,19 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @return Returns a ImageCache object if found
 	 */
 	public abstract ImageCache findByID(String objectId, String imageId);
+	
+	
+	/**
+	 * Extracts the XMP info contained in the Europeana thumbnail
+	 * 
+	 * @param objectId permanent ID of image to store image.
+	 * @param imageId Alternative Image ID when there is more then one image for this object
+	 * @param size The ThumbSize of the requested image
+	 * @return the XMP info embedded in the thumbnail
+	 */
+	public String extractXMPInfo(String objectId, String imageId,ThumbSize size);
+	
+	
+	
 	
 }
