@@ -89,7 +89,9 @@ public class XMPUtils {
 				.get(EDMXMPValues.xmpRights_WebStatement);
 
 		StringBuffer xml = new StringBuffer();
+		
 		xml.append("<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>");
+		
 		xml.append("<x:xmpmeta xmlns:x='adobe:ns:meta/'>");
 		
 		
