@@ -20,6 +20,8 @@ package eu.europeana.corelib.definitions.solr.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
@@ -84,6 +86,14 @@ public class Query implements Cloneable {
 		} else {
 			this.refinements = StringArrayUtils.EMPTY_ARRAY;
 		}
+		return this;
+	}
+	
+	public Query addRefinement(String refinement) {
+		if (this.refinements == null) {
+			this.refinements = StringArrayUtils.EMPTY_ARRAY;
+		}
+		this.refinements = (String[]) ArrayUtils.add(this.refinements, refinement);
 		return this;
 	}
 
