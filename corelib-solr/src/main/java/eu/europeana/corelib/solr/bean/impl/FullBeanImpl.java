@@ -349,24 +349,28 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Float getEdmPlaceLatitude() {
-		if (this.places != null) {
+		if (this.places != null && this.places.size() > 0) {
 			List<Float> latitudesList = new ArrayList<Float>();
 			for (Place place : this.places) {
 				latitudesList.add(place.getLatitude());
 			}
-			return latitudesList.toArray(new Float[latitudesList.size()])[0];
+			if (latitudesList.size() > 0) {
+				return latitudesList.toArray(new Float[latitudesList.size()])[0];
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public Float getEdmPlaceLongitude() {
-		if (this.places != null) {
+		if (this.places != null && this.places.size() > 0) {
 			List<Float> longitudesList = new ArrayList<Float>();
 			for (Place place : this.places) {
 				longitudesList.add(place.getLongitude());
 			}
-			return longitudesList.toArray(new Float[longitudesList.size()])[0];
+			if (longitudesList.size() > 0) {
+				return longitudesList.toArray(new Float[longitudesList.size()])[0];
+			}
 		}
 		return null;
 	}
