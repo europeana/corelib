@@ -17,7 +17,9 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.BriefBean
+ * 
+ * TODO: check edmTimespanLabel, edmPlacePrefLabel
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
@@ -174,6 +178,22 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public List<Map<String, String>> getEdmPlaceLabel() {
+		if (edmPlacePrefLabel != null && 
+				edmPlacePrefLabel.size() > 0) {
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			for (int i = 0, max = edmPlacePrefLabel.size(); i < max; i++) {
+				Object label = edmPlacePrefLabel.get(i);
+				if (label.getClass().getName() == "java.lang.String") {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("def", (String)label);
+					list.add(map);
+				} else {
+					list.add((Map<String, String>)label);
+				}
+			}
+			return list;
+		}
+
 		return edmPlacePrefLabel;
 	}
 
@@ -194,6 +214,21 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public List<Map<String, String>> getEdmTimespanLabel() {
+		if (edmTimespanLabel != null 
+				&& edmTimespanLabel.size() > 0) {
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			for (int i = 0, max = edmTimespanLabel.size(); i < max; i++) {
+				Object label = edmTimespanLabel.get(i);
+				if (label.getClass().getName() == "java.lang.String") {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("def", (String)label);
+					list.add(map);
+				} else {
+					list.add((Map<String, String>)label);
+				}
+			}
+			return list;
+		}
 		return this.edmTimespanLabel;
 	}
 
