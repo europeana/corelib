@@ -18,6 +18,8 @@
 package eu.europeana.corelib.web.email.model;
 
 /**
+ * Container of email-related configurations.
+ * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class EmailConfig {

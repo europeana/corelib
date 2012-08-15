@@ -32,6 +32,14 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
 import eu.europeana.corelib.utils.DateUtils;
 
 /**
+ * Token table contains three columns:
+ * - token: a unique identifier, used in registration. The user should send back the same token to confirm the validity of the email address
+ * - email: an email address
+ * - created: when the token created.
+ * 
+ * When a user is registered an email is sent out (EmailServiceImpl.sendToken()) and he/she should clikc the URL:
+ *   ${url}?token=${token}
+ * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
@@ -39,13 +47,22 @@ import eu.europeana.corelib.utils.DateUtils;
 public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, Token {
 	private static final long serialVersionUID = -9185878608713327601L;
 
+	/**
+	 * The identifier
+	 */
 	@Id
 	@Column(length = FIELDSIZE_TOKEN, nullable = false)
 	private String token;
 
+	/**
+	 * Email address
+	 */
 	@Column(length = FIELDSIZE_PERSONAL, nullable = false)
 	private String email;
 
+	/**
+	 * The date the token created
+	 */
 	@Column(nullable = false)
 	private Date created;
 
