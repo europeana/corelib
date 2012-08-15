@@ -27,9 +27,12 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
-	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
-		p:host="#{europeanaProperties['smtp.host']}" p:username="#{europeanaProperties['smtp.username']}"
-		p:password="#{europeanaProperties['smtp.password']}"/>
+	<bean id="corelib_web_mailSender" 
+		class="org.springframework.mail.javamail.JavaMailSenderImpl"
+		p:host="#{europeanaProperties['smtp.host']}"
+		p:username="#{europeanaProperties['smtp.username']}"
+		p:password="#{europeanaProperties['smtp.password']}"
+	/>
 
 	<bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
@@ -40,7 +43,7 @@
 		</property>
 	</bean>
 	
-	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype"/>
+	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype" />
 	
 	<util:map id="corelib_web_emailConfigs">
 		<entry key="register">
