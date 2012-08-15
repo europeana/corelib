@@ -19,6 +19,7 @@ package eu.europeana.corelib.web.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -39,12 +40,25 @@ import eu.europeana.corelib.web.service.EmailService;
  */
 public abstract class EmailServiceImpl implements EmailService {
 
+	private final Logger log = Logger.getLogger(getClass().getName());
+
 	@Resource
 	private JavaMailSender mailSender;
 
+	/**
+	 * Sends a token to user as part of registration confirmation
+	 * 
+	 * @param token
+	 *   The token to send to the user
+	 * @param url
+	 *   The URL of registration confirm page
+	 */
 	@Override
 	public void sendToken(final Token token, final String url) throws EmailServiceException {
-		if ( (token == null) || StringUtils.isBlank(token.getToken()) || StringUtils.isBlank(token.getEmail()) || StringUtils.isBlank(url)) {
+		if ( (token == null) 
+			|| StringUtils.isBlank(token.getToken()) 
+			|| StringUtils.isBlank(token.getEmail()) 
+			|| StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -52,11 +66,20 @@ public abstract class EmailServiceImpl implements EmailService {
 		model.put("url", url);
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
-		builder.setTemplate("register");
+		builder.setTemplate("register"); // see corelib_web_emailConfigs
 		builder.setEmailTo(token.getEmail());
 		mailSender.send(builder);
+		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
 	}
 	
+	/**
+	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
+	 * 
+	 * @param user
+	 *   The user object
+	 * @param url
+	 *   The URL of the password reset page
+	 */
 	@Override
 	public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
 		if ( (user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
@@ -69,8 +92,17 @@ public abstract class EmailServiceImpl implements EmailService {
 		builder.setTemplate("forgotPassword");
 		builder.setEmailTo(user.getEmail());
 		mailSender.send(builder);
+		log.info(String.format("Sent forgot password (URL=%s) to %s", url, user.getEmail()));
 	}
 	
+	/**
+	 * Sends the user's feedback to the site admin, and sends an thanking email to the user
+	 * 
+	 * @param email
+	 *   The user's email address
+	 * @param feedback
+	 *   The user's feedback
+	 */
 	@Override
 	public void sendFeedback(String email, String feedback) throws EmailServiceException {
 		if ( StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
@@ -79,15 +111,18 @@ public abstract class EmailServiceImpl implements EmailService {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("email", email);
 		model.put("feedback", feedback);
+
 		// one email to organisation
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
 		builder.setTemplate("userFeedback");
 		mailSender.send(builder);
+
 		// and one email to user
 		builder.setTemplate("userFeedbackConfirm");
 		builder.setEmailTo(email);
 		mailSender.send(builder);
+		log.info(String.format("Sent feedback of %s", email));
 	}
 	
 	/**
