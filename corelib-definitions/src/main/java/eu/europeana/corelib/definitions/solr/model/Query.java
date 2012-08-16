@@ -17,10 +17,14 @@
 
 package eu.europeana.corelib.definitions.solr.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -150,5 +154,32 @@ public class Query implements Cloneable {
 	@Override
 	public Query clone() throws CloneNotSupportedException {
 		return (Query) super.clone();
+	}
+	
+	public String toString() {
+		List<String> params = new ArrayList<String>();
+		params.add("q=" + query);
+		params.add("start=" + start);
+		params.add("rows=" + pageSize);
+
+		if (refinements != null) {
+			for (String refinement : refinements) {
+				params.add("qf=" + refinement);
+			}
+		}
+
+		if (facets != null) {
+			for (Facet facet : facets) {
+				params.add("facet.field=" + facet);
+			}
+		}
+
+		if (parameters != null) {
+			for (Entry<String, String> parameter : parameters.entrySet()) {
+				params.add(parameter.getKey() + "=" + parameter.getValue());
+			}
+		}
+		
+		return StringUtils.join(params, "&");
 	}
 }
