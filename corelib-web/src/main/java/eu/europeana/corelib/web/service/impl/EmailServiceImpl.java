@@ -55,9 +55,9 @@ public abstract class EmailServiceImpl implements EmailService {
 	 */
 	@Override
 	public void sendToken(final Token token, final String url) throws EmailServiceException {
-		if ( (token == null) 
-			|| StringUtils.isBlank(token.getToken()) 
-			|| StringUtils.isBlank(token.getEmail()) 
+		if ( (token == null)
+			|| StringUtils.isBlank(token.getToken())
+			|| StringUtils.isBlank(token.getEmail())
 			|| StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
