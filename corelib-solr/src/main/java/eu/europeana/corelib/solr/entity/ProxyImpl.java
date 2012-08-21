@@ -35,35 +35,34 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
 	@Indexed(unique=false)
 	private String about;
-	
+
 	private DocType edmType;
+
 	@Transient
 	private String[] edmUnstored;
-	
+
 	private boolean europeanaProxy;
-	
-	
 
 	@Override
 	public String[] getEdmUnstored() {
-		return (StringArrayUtils.isNotBlank(edmUnstored)?this.edmUnstored.clone():null);
+		return (StringArrayUtils.isNotBlank(edmUnstored) ? this.edmUnstored.clone() : null);
 	}
 
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored;
 	}
-	
+
 	@Override
 	public void setEdmType(DocType edmType) {
 		this.edmType = edmType;
 	}
-	
+
 	@Override
 	public DocType getEdmType() {
 		return this.edmType;
 	}
-	
+
 	@Override
 	public boolean isEuropeanaProxy() {
 		return europeanaProxy;
@@ -73,14 +72,14 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	public void setEuropeanaProxy(boolean europeanaProxy) {
 		this.europeanaProxy = europeanaProxy;
 	}
-	
+
 	@Override
 	public String getAbout() {
 		return about;
 	}
+
 	@Override
 	public void setAbout(String about) {
 		this.about = about;
 	}
-
 }

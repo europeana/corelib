@@ -103,7 +103,6 @@ public class FullBeanImpl implements FullBean {
 	@Reference
 	private List<ProvidedCHOImpl> providedCHOs;
 	
-	
 	@Reference
 	private EuropeanaAggregationImpl europeanaAggregation;
 
@@ -118,18 +117,15 @@ public class FullBeanImpl implements FullBean {
 	
 	private String[] edmPlaceBroaderTerm;
 	private String previewNoDistribute;
-	
-	
 
 	@Reference
 	private List<ProxyImpl> proxies;
 
 	private String[] europeanaCollectionName;
+
 	/**
 	 * GETTERS & SETTTERS
 	 */
-
-
 	@Override
 	public List<PlaceImpl> getPlaces() {
 		return this.places;
@@ -197,7 +193,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
-		this.europeanaAggregation =(EuropeanaAggregationImpl) europeanaAggregation;
+		this.europeanaAggregation = (EuropeanaAggregationImpl) europeanaAggregation;
 	}
 
 	@Override
@@ -1129,8 +1125,6 @@ public class FullBeanImpl implements FullBean {
 		return null;
 	}
 
-
-	
 	@Override
 	public List<Map<String, String>> getEdmPlaceAltLabel() {
 		// TODO Auto-generated method stub
@@ -1144,7 +1138,6 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmTimespanBroaderTerm() {
-		
 		return this.edmTimespanBroaderTerm;
 	}
 
@@ -1155,7 +1148,6 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
-		
 		return this.edmPlaceBroaderTerm;
 	}
 
@@ -1163,20 +1155,24 @@ public class FullBeanImpl implements FullBean {
 	public void setEdmTimespanBroaderTerm(String[] edmTimespanBroaderTerm) {
 		this.edmTimespanBroaderTerm = edmTimespanBroaderTerm;
 	}
+
 	@Override
 	public void setEdmTimespanBroaderLabel(
 			List<Map<String, String>> edmTimespanBroaderLabel) {
 		this.edmTimespanBroaderLabel = edmTimespanBroaderLabel;
 	}
+
 	@Override
 	public void setEdmConceptBroaderLabel(
 			List<Map<String, String>> edmConceptBroaderLabel) {
 		this.edmConceptBroaderLabel = edmConceptBroaderLabel;
 	}
+
 	@Override
 	public void setEdmPlaceBroaderTerm(String[] edmPlaceBroaderTerm) {
 		this.edmPlaceBroaderTerm = edmPlaceBroaderTerm;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) {
@@ -1196,7 +1192,6 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
 		this.relatedItems = (List<BriefBeanImpl>) relatedItems;
-
 	}
 
 	@Override
@@ -1225,7 +1220,9 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public int hashCode() {
-		return StringUtils.isNotBlank(this.about)?this.about.hashCode():this.europeanaId.toStringMongod().hashCode();
+		return StringUtils.isNotBlank(this.about) 
+			? this.about.hashCode() 
+			: this.europeanaId.toStringMongod().hashCode();
 	}
 
 	@Override
@@ -1237,7 +1234,6 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setUgc(String[] ugc) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -1249,7 +1245,6 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setEdmRights(String[] edmRights) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -1261,19 +1256,16 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setCountry(String[] country) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		
 		return this.europeanaCollectionName;
 	}
 
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
 		this.europeanaCollectionName = europeanaCollectionName;
-
 	}
 
 	@Override
@@ -1283,10 +1275,9 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Date getTimestamp() {
-		
 		return timestamp;
 	}
-	
+
 	@Override
 	public String[] getWho() {
 		return who;
@@ -1326,10 +1317,12 @@ public class FullBeanImpl implements FullBean {
 	public void setWhen(String[] when) {
 		this.when = when;
 	}
+
 	@Override
 	public String getPreviewNoDistribute() {
 		return previewNoDistribute;
 	}
+
 	@Override
 	public void setPreviewNoDistribute(String previewNoDistribute) {
 		this.previewNoDistribute = previewNoDistribute;

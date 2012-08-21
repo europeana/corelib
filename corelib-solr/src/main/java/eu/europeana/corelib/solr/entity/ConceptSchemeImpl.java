@@ -23,19 +23,16 @@ public class ConceptSchemeImpl implements ConceptScheme {
 
 	@Override
 	public ObjectId getId() {
-
 		return this.id;
 	}
 
 	@Override
 	public void setId(ObjectId id) {
 		this.id = id;
-
 	}
 
 	@Override
 	public String getAbout() {
-
 		return this.about;
 	}
 
@@ -46,20 +43,17 @@ public class ConceptSchemeImpl implements ConceptScheme {
 
 	@Override
 	public String[] getDcTitle() {
-		return (StringArrayUtils.isNotBlank(dcTitle) ? this.dcTitle.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dcTitle) ? this.dcTitle.clone() : null);
 	}
 
 	@Override
 	public void setDcTitle(String[] dcTitle) {
 		this.dcTitle = dcTitle;
-
 	}
 
 	@Override
 	public String[] getDcCreator() {
-		return (StringArrayUtils.isNotBlank(dcCreator) ? this.dcCreator.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dcCreator) ? this.dcCreator.clone() : null);
 	}
 
 	@Override
@@ -69,8 +63,7 @@ public class ConceptSchemeImpl implements ConceptScheme {
 
 	@Override
 	public String[] getHasTopConceptOf() {
-		return (StringArrayUtils.isNotBlank(hasTopConceptOf) ? this.hasTopConceptOf
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(hasTopConceptOf) ? this.hasTopConceptOf.clone() : null);
 	}
 
 	@Override
@@ -87,5 +80,4 @@ public class ConceptSchemeImpl implements ConceptScheme {
 	public void setNote(String[] note) {
 		this.note = note;
 	}
-
 }

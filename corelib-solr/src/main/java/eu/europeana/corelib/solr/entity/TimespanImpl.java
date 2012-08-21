@@ -51,7 +51,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 
 	@Override
 	public String[] getIsPartOf() {
-		return (StringArrayUtils.isNotBlank(isPartOf)?this.isPartOf.clone():null);
+		return (StringArrayUtils.isNotBlank(isPartOf) ? this.isPartOf.clone() : null);
 	}
 
 	@Override
@@ -68,17 +68,18 @@ public class TimespanImpl extends ContextualClassImpl implements
 	public void setIsPartOf(String[] isPartOf) {
 		this.isPartOf = isPartOf.clone();
 	}
+
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null){
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()){
 			return this.getAbout().equals(((TimespanImpl) o).getAbout());
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode(){ 
 		return this.getAbout().hashCode();
@@ -86,17 +87,17 @@ public class TimespanImpl extends ContextualClassImpl implements
 
 	@Override
 	public String[] getDctermsHasPart() {
-		return (StringArrayUtils.isNotBlank(dctermsHasPart)?this.dctermsHasPart.clone():null);
+		return (StringArrayUtils.isNotBlank(dctermsHasPart) ? this.dctermsHasPart.clone() : null);
 	}
 
 	@Override
 	public void setDctermsHasPart(String[] dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
-	
+
 	@Override
 	public String[] getOwlSameAs() {
-		return (StringArrayUtils.isNotBlank(owlSameAs)?this.owlSameAs.clone():null);
+		return (StringArrayUtils.isNotBlank(owlSameAs) ? this.owlSameAs.clone() : null);
 	}
 
 	@Override
@@ -106,12 +107,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 
 	@Override
 	public String[] getCrmP79FBeginningIsQualifiedBy() {
-		return (StringArrayUtils.isNotBlank(crmP79FBeginningIsQualifiedBy)?this.crmP79FBeginningIsQualifiedBy.clone():null);
+		return (StringArrayUtils.isNotBlank(crmP79FBeginningIsQualifiedBy) ? this.crmP79FBeginningIsQualifiedBy.clone() : null);
 	}
-	
+
 	@Override
 	public String[] getCrmP80FEndIsQualifiedBy() {
-		return (StringArrayUtils.isNotBlank(crmP80FEndIsQualifiedBy)?this.crmP80FEndIsQualifiedBy.clone():null);
+		return (StringArrayUtils.isNotBlank(crmP80FEndIsQualifiedBy) ? this.crmP80FEndIsQualifiedBy.clone() : null);
 	}
 
 	@Override
@@ -120,9 +121,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public void setCrmP97FBeginningIsQualifiedBy(
-			String[] crmP79FBeginningIsQualifiedBy) {
+	public void setCrmP97FBeginningIsQualifiedBy(String[] crmP79FBeginningIsQualifiedBy) {
 		this.crmP79FBeginningIsQualifiedBy = crmP79FBeginningIsQualifiedBy;
-		
 	}
 }

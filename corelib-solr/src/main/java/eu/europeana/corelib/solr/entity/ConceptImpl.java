@@ -75,7 +75,6 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	@Override
 	public void setNarrower(String[] narrower) {
 		this.narrower=narrower;
-		
 	}
 
 	@Override
@@ -86,31 +85,26 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	@Override
 	public void setRelated(String[] related) {
 		this.related = related;
-		
 	}
 
 	@Override
 	public String[] getBroadMatch() {
-		
 		return (StringArrayUtils.isNotBlank(broadMatch) ? this.broadMatch.clone() : null);
 	}
 
 	@Override
 	public void setBroadMatch(String[] broadMatch) {
 		this.broadMatch = broadMatch;
-		
 	}
 
 	@Override
 	public String[] getNarrowMatch() {
-		
 		return (StringArrayUtils.isNotBlank(narrowMatch) ? this.narrowMatch.clone() : null);
 	}
 
 	@Override
 	public void setNarrowMatch(String[] narrowMatch) {
 		this.narrowMatch = narrowMatch;
-		
 	}
 
 	@Override
@@ -131,7 +125,6 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	@Override
 	public void setExactMatch(String[] exactMatch) {
 		this.exactMatch = exactMatch;
-		
 	}
 
 	@Override

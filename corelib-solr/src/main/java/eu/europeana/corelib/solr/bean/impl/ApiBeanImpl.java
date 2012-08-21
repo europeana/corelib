@@ -100,8 +100,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmTimespanBroaderTerm() {
-		return (edmTimespanBroaderTerm != null ? edmTimespanBroaderTerm.clone()
-				: null);
+		return (edmTimespanBroaderTerm != null ? edmTimespanBroaderTerm.clone() : null);
 	}
 
 	@Override

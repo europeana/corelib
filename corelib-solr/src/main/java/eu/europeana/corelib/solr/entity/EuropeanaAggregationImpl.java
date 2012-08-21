@@ -12,7 +12,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
-
 	@Embedded
 	private List<WebResourceImpl> webResources;
 
@@ -26,8 +25,6 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	private String edmLanguage;
 	private String edmRights;
 
-	
-
 	@Override
 	public String getAggregatedCHO() {
 		return this.aggregatedCHO;
@@ -40,8 +37,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public String[] getAggregates() {
-		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates.clone() : null);
 	}
 
 	@Override

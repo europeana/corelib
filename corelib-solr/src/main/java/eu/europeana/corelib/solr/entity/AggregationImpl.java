@@ -167,8 +167,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getDcRights() {
-		return (StringArrayUtils.isNotBlank(this.dcRights) ? this.dcRights
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(this.dcRights) ? this.dcRights.clone() : null);
 	}
 
 	@Override
@@ -194,8 +193,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getHasView() {
-		return (StringArrayUtils.isNotBlank(this.hasView) ? this.hasView
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(this.hasView) ? this.hasView.clone() : null);
 	}
 
 	@Override
@@ -221,8 +219,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getAggregates() {
-		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(this.aggregates) ? this.aggregates.clone() : null);
 	}
 
 	@Override
@@ -232,8 +229,7 @@ public class AggregationImpl implements Aggregation {
 
 	@Override
 	public String[] getEdmUnstored() {
-		return (StringArrayUtils.isNotBlank(this.edmUnstored) ? this.edmUnstored
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(this.edmUnstored) ? this.edmUnstored.clone() : null);
 	}
 
 	@Override

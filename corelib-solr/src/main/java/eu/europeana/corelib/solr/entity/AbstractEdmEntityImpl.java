@@ -33,7 +33,7 @@ public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
 	@Indexed(unique = true, dropDups=true)
 	private String about;
-	
+
 	@Id
 	private ObjectId id;
 

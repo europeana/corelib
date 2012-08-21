@@ -7,7 +7,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("PhysicalThing")
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
-
 	private String[] dcContributor;
 	private String[] dcCoverage;
 	private String[] dcCreator;
@@ -70,9 +69,6 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 		this.edmRights = edmRights;
 	}
 
-
-
-	
 	@Override
 	public String[] getDcContributor() {
 		return (StringArrayUtils.isNotBlank(dcContributor) ? this.dcContributor.clone() : null);
@@ -150,20 +146,17 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDctermsAlternative() {
-		return (StringArrayUtils.isNotBlank(dctermsAlternative) ? this.dctermsAlternative
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(dctermsAlternative) ? this.dctermsAlternative.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsConformsTo() {
-		return (StringArrayUtils.isNotBlank(dctermsConformsTo) ? this.dctermsConformsTo.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsConformsTo) ? this.dctermsConformsTo.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsCreated() {
-		return (StringArrayUtils.isNotBlank(dctermsCreated) ? this.dctermsCreated.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsCreated) ? this.dctermsCreated.clone() : null);
 	}
 
 	@Override
@@ -173,50 +166,42 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDctermsHasFormat() {
-		return (StringArrayUtils.isNotBlank(dctermsHasFormat) ? this.dctermsHasFormat.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsHasFormat) ? this.dctermsHasFormat.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsHasPart() {
-		return (StringArrayUtils.isNotBlank(dctermsHasPart) ? this.dctermsHasPart.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsHasPart) ? this.dctermsHasPart.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsHasVersion() {
-		return (StringArrayUtils.isNotBlank(dctermsHasVersion) ? this.dctermsHasVersion.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsHasVersion) ? this.dctermsHasVersion.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsIsFormatOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsFormatOf) ? this.dctermsIsFormatOf.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsIsFormatOf) ? this.dctermsIsFormatOf.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsIsPartOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsPartOf) ? this.dctermsIsPartOf.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsIsPartOf) ? this.dctermsIsPartOf.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsIsReferencedBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsReferencedBy) ? this.dctermsIsReferencedBy
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(dctermsIsReferencedBy) ? this.dctermsIsReferencedBy.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsIsReplacedBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsReplacedBy) ? this.dctermsIsReplacedBy
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(dctermsIsReplacedBy) ? this.dctermsIsReplacedBy.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsIsRequiredBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsRequiredBy) ? this.dctermsIsRequiredBy
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(dctermsIsRequiredBy) ? this.dctermsIsRequiredBy.clone() : null);
 	}
 
 	@Override
@@ -226,8 +211,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDctermsIsVersionOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsVersionOf) ? this.dctermsIsVersionOf
-				.clone() : null);
+		return (StringArrayUtils.isNotBlank(dctermsIsVersionOf) ? this.dctermsIsVersionOf.clone() : null);
 	}
 
 	@Override
@@ -237,32 +221,27 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDctermsProvenance() {
-		return (StringArrayUtils.isNotBlank(dctermsProvenance) ? this.dctermsProvenance.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsProvenance) ? this.dctermsProvenance.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsReferences() {
-		return (StringArrayUtils.isNotBlank(dctermsReferences) ? this.dctermsReferences.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsReferences) ? this.dctermsReferences.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsReplaces() {
-		return (StringArrayUtils.isNotBlank(dctermsReplaces) ? this.dctermsReplaces.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsReplaces) ? this.dctermsReplaces.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsRequires() {
-		return (StringArrayUtils.isNotBlank(dctermsRequires) ? this.dctermsRequires.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsRequires) ? this.dctermsRequires.clone() : null);
 	}
 
 	@Override
 	public String[] getDctermsSpatial() {
-		return (StringArrayUtils.isNotBlank(dctermsSpatial) ? this.dctermsSpatial.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsSpatial) ? this.dctermsSpatial.clone() : null);
 	}
 
 	@Override
@@ -272,18 +251,13 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getDctermsTemporal() {
-		return (StringArrayUtils.isNotBlank(dctermsTemporal) ? this.dctermsTemporal.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(dctermsTemporal) ? this.dctermsTemporal.clone() : null);
 	}
-
-
 
 	@Override
 	public String getEdmCurrentLocation() {
 		return this.edmCurrentLocation;
 	}
-
-	
 
 	@Override
 	public void setDcContributor(String[] dcContributor) {
@@ -470,14 +444,10 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 		this.dctermsTemporal = dctermsTemporal.clone();
 	}
 
-	
-
 	@Override
 	public void setEdmCurrentLocation(String edmCurrentLocation) {
 		this.edmCurrentLocation = edmCurrentLocation;
 	}
-
-	
 
 	@Override
 	public void setRdfType(String[] rdfType) {
@@ -486,32 +456,27 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getRdfType() {
-		return (StringArrayUtils.isNotBlank(rdfType) ? this.rdfType.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(rdfType) ? this.rdfType.clone() : null);
 	}
 
 	@Override
 	public String[] getEdmHasMet() {
-		return (StringArrayUtils.isNotBlank(edmHasMet) ? this.edmHasMet.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmHasMet) ? this.edmHasMet.clone() : null);
 	}
 
 	@Override
 	public void setEdmHasMet(String[] edmHasMet) {
 		this.edmHasMet = edmHasMet;
-		
 	}
 
 	@Override
 	public String[] getEdmHasType() {
-		return (StringArrayUtils.isNotBlank(edmHasType) ? this.edmHasType.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmHasType) ? this.edmHasType.clone() : null);
 	}
 
 	@Override
 	public void setEdmHasType(String[] edmHasType) {
 		this.edmHasType = edmHasType;
-		
 	}
 
 	@Override
@@ -521,38 +486,32 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getEdmIncorporates() {
-		return (StringArrayUtils.isNotBlank(edmIncorporates) ? this.edmIncorporates.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmIncorporates) ? this.edmIncorporates.clone() : null);
 	}
 
 	@Override
 	public void setEdmIsDerivativeOf(String[] edmIsDerivativeOf) {
 		this.edmIsDerivativeOf= edmIsDerivativeOf;
-		
 	}
 
 	@Override
 	public String[] getEdmIsDerivativeOf() {
-		return (StringArrayUtils.isNotBlank(edmIsDerivativeOf) ? this.edmIsDerivativeOf.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmIsDerivativeOf) ? this.edmIsDerivativeOf.clone() : null);
 	}
 
 	@Override
 	public void setEdmIsRelatedTo(String[] edmIsRelatedTo) {
 		this.edmIsRelatedTo = edmIsRelatedTo;
-		
 	}
 
 	@Override
 	public String[] getEdmIsRelatedTo() {
-		return (StringArrayUtils.isNotBlank(edmIsRelatedTo) ? this.edmIsRelatedTo.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmIsRelatedTo) ? this.edmIsRelatedTo.clone() : null);
 	}
 
 	@Override
 	public void setEdmIsRepresentationOf(String edmIsRepresentationOf) {
 		this.edmIsRepresentationOf = edmIsRepresentationOf;
-		
 	}
 
 	@Override
@@ -567,8 +526,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getEdmIsSimilarTo() {
-		return (StringArrayUtils.isNotBlank(edmIsSimilarTo) ? this.edmIsSimilarTo.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmIsSimilarTo) ? this.edmIsSimilarTo.clone() : null);
 	}
 
 	@Override
@@ -578,20 +536,17 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getEdmIsSuccessorOf() {
-		return (StringArrayUtils.isNotBlank(edmIsSuccessorOf) ? this.edmIsSuccessorOf.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmIsSuccessorOf) ? this.edmIsSuccessorOf.clone() : null);
 	}
 
 	@Override
 	public void setEdmRealizes(String[] edmRealizes) {
 		this.edmRealizes = edmRealizes;
-		
 	}
 
 	@Override
 	public String[] getEdmRealizes() {
-		return (StringArrayUtils.isNotBlank(edmRealizes) ? this.edmRealizes.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmRealizes) ? this.edmRealizes.clone() : null);
 	}
 
 	@Override
@@ -601,18 +556,16 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public String[] getEdmWasPresentAt() {
-		return (StringArrayUtils.isNotBlank(edmWasPresentAt) ? this.edmWasPresentAt.clone()
-				: null);
+		return (StringArrayUtils.isNotBlank(edmWasPresentAt) ? this.edmWasPresentAt.clone() : null);
 	}
 
 	@Override
 	public String getEdmIsNextInSequence() {
 		return this.edmIsNextInSequence;
 	}
-	
+
 	@Override
 	public void setEdmIsNextInSequence(String edmIsNextInSequence) {
 		this.edmIsNextInSequence = edmIsNextInSequence;
 	}
-
 }

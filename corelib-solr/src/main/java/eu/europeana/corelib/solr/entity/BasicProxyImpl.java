@@ -26,15 +26,16 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 	public void setProxyFor(String proxyFor) {
 		this.proxyFor = proxyFor;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) {
 			return false;
 		}
 		if (o.getClass() == this.getClass()) {
-			return (this.getProxyIn() != null && ((ProxyImpl) o).getProxyIn() != null) ? this
-					.getProxyIn().equals(((ProxyImpl) o).getProxyIn()) : this
-					.getAbout().equals(((ProxyImpl) o).getAbout());
+			return (this.getProxyIn() != null && ((ProxyImpl) o).getProxyIn() != null) 
+				? this.getProxyIn().equals(((ProxyImpl) o).getProxyIn()) 
+				: this.getAbout().equals(((ProxyImpl) o).getAbout());
 		}
 		return false;
 	}

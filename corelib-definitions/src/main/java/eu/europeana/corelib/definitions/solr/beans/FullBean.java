@@ -45,21 +45,21 @@ public interface FullBean extends ApiBean {
 	/**
 	 * Retrieve the edm:isShownBy field
 	 * 
-	 * @return A String array with the edm:isShownBy fields for an object
+	 * @return A String array with the edm:isShownBy fields for an object (of type Aggregation)
 	 */
 	String[] getEdmIsShownBy();
 
 	/**
 	 * Retrieve the edm:isShownAt field
 	 * 
-	 * @return A String array with the edm:isShownAt fields for an object
+	 * @return A String array with the edm:isShownAt fields for an object (of type Aggregation)
 	 */
 	String[] getEdmIsShownAt();
 
 	/**
 	 * Retrieve the edm:provider field
 	 * 
-	 * @return A String array with the edm:provider fields for an object
+	 * @return A String array with the edm:provider fields for an object (of type Aggregation)
 	 */
 	String[] getEdmProvider();
 
@@ -390,7 +390,6 @@ public interface FullBean extends ApiBean {
 	void setEuropeanaId(ObjectId europeanaId);
 
 	void setTitle(String[] title);
-
 
 	void setYear(String[] year);
 

@@ -29,7 +29,7 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 
 	@Override
 	public String[] getNote() {
-		return (this.note!=null?this.note.clone():null);
+		return (this.note != null ? this.note.clone() : null);
 	}
 
 	@Override

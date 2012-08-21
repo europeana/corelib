@@ -40,7 +40,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	@Override
 	public String[] getIsPartOf() {
-		return (StringArrayUtils.isNotBlank(isPartOf)?this.isPartOf.clone():null);
+		return (StringArrayUtils.isNotBlank(isPartOf) ? this.isPartOf.clone() : null);
 	}
 
 	@Override
@@ -70,24 +70,23 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null){
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
-			return ((PlaceImpl) o).getAbout()!=null?this.getAbout().equals(((PlaceImpl) o).getAbout()):false;
+		if (o.getClass() == this.getClass()){
+			return ((PlaceImpl) o).getAbout() != null ? this.getAbout().equals(((PlaceImpl) o).getAbout()) : false;
 		}
 		return false;
 	}
 	
 	@Override
 	public int hashCode(){ 
-		return (int) (this.getAbout()!=null?this.getAbout().hashCode():this.latitude*100+this.longitude);
+		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : this.latitude * 100 + this.longitude);
 	}
 
 	@Override
 	public void setAltitude(float altitude) {
 		this.altitude = altitude;
-		
 	}
 
 	@Override
@@ -98,15 +97,12 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	@Override
 	public void setPosition(float[] position) {
 		this.position = position;
-		
 	}
 
 	@Override
 	public float[] getPosition() {
-		return this.position!=null? this.position.clone(): null;
+		return this.position != null ? this.position.clone() : null;
 	}
-
-	
 
 	@Override
 	public void setDcTermsHasPart(String[] dcTermsHasPart) {
@@ -121,9 +117,8 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
 		this.owlSameAs = owlSameAs;
-		
 	}
-	
+
 	@Override
 	public String[] getOwlSameAs(){
 		return (StringArrayUtils.isNotBlank(owlSameAs) ? this.owlSameAs.clone() : null);

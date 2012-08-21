@@ -36,5 +36,4 @@ public class IdBeanImpl implements IdBean {
 	public String getId() {
 		return this.id;
 	}
-
 }

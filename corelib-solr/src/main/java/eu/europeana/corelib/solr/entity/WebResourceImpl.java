@@ -25,8 +25,8 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
- * @author Yorgos.Mamakis@ kb.nl
  * 
+ * @author Yorgos.Mamakis@ kb.nl
  */
 @Embedded
 public class WebResourceImpl implements WebResource {
@@ -46,6 +46,7 @@ public class WebResourceImpl implements WebResource {
 	private String[] dctermsIsFormatOf;
 	private String[] dctermsHasPart;
 	private String isNextInSequence;
+
 	@Override
 	public String getAbout() {
 		return this.about;
@@ -75,70 +76,87 @@ public class WebResourceImpl implements WebResource {
 	public String[] getDcFormat() {
 		return dcFormat;
 	}
+
 	@Override
 	public void setDcFormat(String[] dcFormat) {
 		this.dcFormat = dcFormat;
 	}
+
 	@Override
 	public String[] getDcSource() {
 		return dcSource;
 	}
+
 	@Override
 	public void setDcSource(String[] dcSource) {
 		this.dcSource = dcSource;
 	}
+
 	@Override
 	public String[] getDctermsExtent() {
 		return dctermsExtent;
 	}
+
 	@Override
 	public void setDctermsExtent(String[] dctermsExtent) {
 		this.dctermsExtent = dctermsExtent;
 	}
+
 	@Override
 	public String[] getDctermsIssued() {
 		return dctermsIssued;
 	}
+
 	@Override
 	public void setDctermsIssued(String[] dctermsIssued) {
 		this.dctermsIssued = dctermsIssued;
 	}
+
 	@Override
 	public String[] getDctermsConformsTo() {
 		return dctermsConformsTo;
 	}
+
 	@Override
 	public void setDctermsConformsTo(String[] dctermsConformsTo) {
 		this.dctermsConformsTo = dctermsConformsTo;
 	}
+
 	@Override
 	public String[] getDctermsCreated() {
 		return dctermsCreated;
 	}
+
 	@Override
 	public void setDctermsCreated(String[] dctermsCreated) {
 		this.dctermsCreated = dctermsCreated;
 	}
+
 	@Override
 	public String[] getDctermsIsFormatOf() {
 		return dctermsIsFormatOf;
 	}
+
 	@Override
 	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
 		this.dctermsIsFormatOf = dctermsIsFormatOf;
 	}
+
 	@Override
 	public String[] getDctermsHasPart() {
 		return dctermsHasPart;
 	}
+
 	@Override
 	public void setDctermsHasPart(String[] dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
+
 	@Override
 	public String getIsNextInSequence() {
 		return isNextInSequence;
 	}
+
 	@Override
 	public void setIsNextInSequence(String isNextInSequence) {
 		this.isNextInSequence = isNextInSequence;
@@ -156,8 +174,7 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String[] getWebResourceDcRights() {
-		return (this.webResourceDcRights != null ? this.webResourceDcRights
-				.clone() : null);
+		return (this.webResourceDcRights != null ? this.webResourceDcRights.clone() : null);
 	}
 
 	@Override
@@ -172,10 +189,10 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o == null){
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()){
 			return this.getAbout().equals(((WebResourceImpl) o).getAbout());
 		}
 		return false;

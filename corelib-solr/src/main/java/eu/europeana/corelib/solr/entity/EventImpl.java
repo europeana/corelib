@@ -25,7 +25,6 @@ public class EventImpl extends ContextualClassImpl implements Event {
 
 	@Override
 	public String[] getEdmHappenedAt() {
-		
 		return (StringArrayUtils.isNotBlank(edmHappenedAt) ? this.edmHappenedAt.clone() : null);
 	}
 
@@ -41,18 +40,13 @@ public class EventImpl extends ContextualClassImpl implements Event {
 
 	@Override
 	public String[] getSameAs() {
-		
 		return (StringArrayUtils.isNotBlank(sameAs) ? this.sameAs.clone() : null);
 	}
 
 	@Override
 	public void setSameAs(String[] sameAs) {
 		this.sameAs = sameAs;
-
 	}
-
-	
-	
 
 	@Override
 	public String[] getDcIdentifier() {
@@ -72,7 +66,6 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	@Override
 	public void setDctermsHasPart(String[] dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
-
 	}
 
 	@Override
@@ -83,7 +76,6 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
 		this.dctermsIsPartOf = dctermsIsPartOf;
-
 	}
 
 	@Override
@@ -94,14 +86,12 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	@Override
 	public void setCrmP120FOccursBefore(String[] crmP120FOccursBefore) {
 		this.crmP120FOccursBefore = crmP120FOccursBefore;
-
 	}
 
 	@Override
 	public String[] getEdmHasType() {
 		return (StringArrayUtils.isNotBlank(edmHasType) ? this.edmHasType.clone() : null);
 	}
-	
 
 	@Override
 	public void setEdmHasType(String[] edmHasType) {
@@ -111,12 +101,10 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	@Override
 	public String[] getEdmIsRelatedTo() {
 		return (StringArrayUtils.isNotBlank(edmIsRelatedTo) ? this.edmIsRelatedTo.clone() : null);
-	
 	}
 
 	@Override
 	public void setEdmIsRelatedTo(String[] edmIsRelatedTo) {
 		this.edmIsRelatedTo = edmIsRelatedTo;
 	}
-
 }

@@ -25,7 +25,7 @@ import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 /**
- * ProvidedCHO (edm:ProvidedCHO) means provided cultural heitage object
+ * ProvidedCHO (edm:ProvidedCHO) means provided cultural heritage object
  * 
  * @see eu.europeana.corelib.definitions.solr.entity.ProvidedCHO
  * 
@@ -53,7 +53,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 
 	@Override
 	public String[] getOwlSameAs() {
-		return (this.owlSameAs!=null?this.owlSameAs.clone():null);
+		return (this.owlSameAs!=null ? this.owlSameAs.clone() : null);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode(){ 
 		return this.about.hashCode();

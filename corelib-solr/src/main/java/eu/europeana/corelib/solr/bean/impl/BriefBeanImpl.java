@@ -266,5 +266,4 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	public Date getTimestamp() {
 		return timestamp;
 	}
-
 }
