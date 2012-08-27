@@ -40,7 +40,7 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 public class SolrConstructor {
 	static SolrInputDocument solrInputDocument;
 	
-        /**
+	/**
 	 * Construct a SolrInputDocument from a JiBX RDF Entity
 	 * 
 	 * @param rdf
@@ -53,11 +53,10 @@ public class SolrConstructor {
 	 */
 	public static SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
 		solrInputDocument = new SolrInputDocument();
-		
+
 		for(Choice element: rdf.getChoiceList()){
 			if(element.ifAgent()){
 				solrInputDocument = AgentFieldInput.createAgentSolrFields(element.getAgent(), solrInputDocument);
-				
 			}
 			else if(element.ifAggregation()){
 				solrInputDocument = AggregationFieldInput.createAggregationSolrFields(element.getAggregation(), solrInputDocument);
@@ -65,24 +64,18 @@ public class SolrConstructor {
 			}
 			else if(element.ifConcept()){
 				solrInputDocument = ConceptFieldInput.createConceptSolrFields(element.getConcept(),solrInputDocument);
-				
 			}
 			else if(element.ifPlace()){
 				solrInputDocument = PlaceFieldInput.createPlaceSolrFields(element.getPlace(),solrInputDocument) ;
-				
 			}
 			else if(element.ifProvidedCHO()){
-				
 				solrInputDocument = ProvidedCHOFieldInput.createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
-				
 			}
 			else if(element.ifProxy()){
 				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProxy(), solrInputDocument);
 			}
-		
 			else if (element.ifTimeSpan()) {
 				solrInputDocument = TimespanFieldInput.createTimespanSolrFields(element.getTimeSpan(), solrInputDocument);
-				
 			}
 			else{
 				solrInputDocument = WebResourcesFieldInput.createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
