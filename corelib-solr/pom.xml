@@ -118,6 +118,12 @@
 			<version>${version.junit}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Jackson for JSON serialization -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-xc</artifactId>
+			<version>${version.codehausJackson}</version>
+		</dependency>
 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

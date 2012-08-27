@@ -18,6 +18,8 @@
 package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
@@ -31,9 +33,10 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl implements ProvidedCHO {
-	
+
 	@Id
 	private ObjectId id;
 

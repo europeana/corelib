@@ -16,16 +16,19 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Timespan
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
  */
-
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Timespan")
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {

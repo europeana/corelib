@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.Place;
@@ -27,6 +30,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Place")
 public class PlaceImpl extends ContextualClassImpl implements Place {
 

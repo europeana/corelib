@@ -17,6 +17,8 @@
 package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Indexed;
@@ -28,12 +30,14 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Embedded
 public class WebResourceImpl implements WebResource {
 
 	private ObjectId id;
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
+
 	@Indexed(unique=false)
 	private String about;
 	private String[] dcDescription;

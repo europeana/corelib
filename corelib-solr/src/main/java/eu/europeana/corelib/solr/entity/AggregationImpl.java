@@ -20,6 +20,8 @@ package eu.europeana.corelib.solr.entity;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
@@ -35,6 +37,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Aggregation")
 public class AggregationImpl implements Aggregation {
 	@Id

@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.Concept;
@@ -24,9 +27,10 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.Concept
- * @author Yorgos.Mamakis@ kb.nl
  * 
+ * @author Yorgos.Mamakis@ kb.nl
  */
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Concept")
 public class ConceptImpl extends ContextualClassImpl implements Concept {
 

@@ -16,6 +16,9 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Indexed;
 import com.google.code.morphia.annotations.Transient;
@@ -29,7 +32,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 

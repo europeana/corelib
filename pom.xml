@@ -85,6 +85,7 @@
 		<version.mongoDriver>2.7.3</version.mongoDriver>
 		<version.mongoMorphia>0.99</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
+		<version.codehausJackson>1.9.9</version.codehausJackson>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

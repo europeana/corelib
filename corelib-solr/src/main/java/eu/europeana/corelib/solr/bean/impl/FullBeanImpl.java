@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
@@ -56,9 +58,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
  */
 @SuppressWarnings("unchecked")
+@JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("record")
 public class FullBeanImpl implements FullBean {
 
@@ -502,9 +504,11 @@ public class FullBeanImpl implements FullBean {
 			for (Aggregation aggregation : this.aggregations) {
 				aggregationIsShownByList.add(aggregation.getEdmIsShownBy());
 			}
-			return StringArrayUtils.toArray(aggregationIsShownByList);
+			if (aggregationIsShownByList.size() > 0) {
+				return StringArrayUtils.toArray(aggregationIsShownByList);
+			}
 		}
-		return null;
+		return new String[]{};
 	}
 
 	@Override
