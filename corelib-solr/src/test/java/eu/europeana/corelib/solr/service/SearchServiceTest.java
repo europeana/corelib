@@ -119,7 +119,7 @@ public class SearchServiceTest {
 				+ results.getResultSize(), results.getResultSize() >= 189);
 		Assert.assertTrue("Did not return expected facet list: "
 				+ results.getFacetFields().size(), results.getFacetFields()
-				.size() == 7);
+				.size() == 8);
 	}
 
 	@Test
