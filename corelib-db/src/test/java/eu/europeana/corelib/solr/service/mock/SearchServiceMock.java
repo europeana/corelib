@@ -53,9 +53,9 @@ public class SearchServiceMock implements SearchService {
 	public FullBean findById(String europeanaObjectId) {
 		FullBean mockBean = createMock(FullBean.class);
 		expect(mockBean.getTitle()).andStubReturn(TITLE);
-		expect(mockBean.getDcPublisher()).andStubReturn(AUTHOR);
+		expect(mockBean.getProxies().get(0).getDcPublisher()).andStubReturn(AUTHOR);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
-		expect(mockBean.getEdmObject()).andStubReturn(THUMBNAIL);
+		expect(mockBean.getAggregations().get(0).getEdmObject()).andStubReturn(THUMBNAIL[0]);
 		expect(mockBean.getType()).andStubReturn(DocType.TEXT);
 		replay(mockBean);
 		return mockBean;

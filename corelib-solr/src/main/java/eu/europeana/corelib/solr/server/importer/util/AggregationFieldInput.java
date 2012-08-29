@@ -227,11 +227,11 @@ public final class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
-		//if (((EdmMongoServer)mongoServer).searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
-		//	MongoUtils.updateAggregation(mongoAggregation,mongoServer);
-		//} else {
+		if (((EdmMongoServer)mongoServer).searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
+			//TODO:update Aggregation
+		} else {
 		mongoServer.getDatastore().save(mongoAggregation);
-		//}
+		}
 		return mongoAggregation;
 	}
 

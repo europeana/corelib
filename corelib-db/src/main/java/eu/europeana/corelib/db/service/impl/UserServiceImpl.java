@@ -146,7 +146,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 
-		savedItem.setAuthor(StringUtils.abbreviate(bean.getDcPublisher()[0], RelationalDatabase.FIELDSIZE_AUTHOR));
+		savedItem.setAuthor(StringUtils.abbreviate(bean.getProxies().get(0).getDcPublisher()[0], RelationalDatabase.FIELDSIZE_AUTHOR));
 		return user;
 	}
 
@@ -201,7 +201,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		instance.setEuropeanaUri(bean.getId());
-		instance.setEuropeanaObject(bean.getEdmObject()[0]);
+		instance.setEuropeanaObject(bean.getAggregations().get(0).getEdmObject());
 		instance.setDateSaved(new Date());
 		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0], RelationalDatabase.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());

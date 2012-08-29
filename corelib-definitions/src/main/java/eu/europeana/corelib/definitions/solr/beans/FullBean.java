@@ -17,8 +17,8 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.bson.types.ObjectId;
 
@@ -40,332 +40,10 @@ import eu.europeana.corelib.definitions.solr.entity.Timespan;
  * 
  * @author Yorgos Mamakis <yorgos.mamakis@ kb.nl>
  */
-public interface FullBean extends ApiBean {
+public interface FullBean extends IdBean {
 
-	/**
-	 * Retrieve the edm:isShownBy field
-	 * 
-	 * @return A String array with the edm:isShownBy fields for an object (of type Aggregation)
-	 */
-	String[] getEdmIsShownBy();
-
-	/**
-	 * Retrieve the edm:isShownAt field
-	 * 
-	 * @return A String array with the edm:isShownAt fields for an object (of type Aggregation)
-	 */
-	String[] getEdmIsShownAt();
-
-	/**
-	 * Retrieve the edm:provider field
-	 * 
-	 * @return A String array with the edm:provider fields for an object (of type Aggregation)
-	 */
-	String[] getEdmProvider();
-
-	/**
-	 * Retrieve the dc:rights field for an Aggregation
-	 * 
-	 * @return A String array with the dc:rights field for an Aggregation
-	 */
-	String[] getAggregationDcRights();
-
-	/**
-	 * Retrieve the ore:proxy rdf:about attribute
-	 * 
-	 * @return A string array with the rdf:about fields for all proxies pointing to a CHO
-	 */
-	String[] getOreProxy();
-
-	/**
-	 * Retrieve the owl:sameAs field from a Proxy
-	 * 
-	 * @return A String array with the owl:sameAs for each proxy pointing to a CHO
-	 */
-	String[] getOwlSameAs();
-
-	/**
-	 * Retrieve dc:coverage fields from a Proxy
-	 * 
-	 * @return A String array with the dc:coverage fields for all proxies pointing to a CHO
-	 */
-	String[] getDcCoverage();
-
-	/**
-	 * Retrieve dc:publisher fields from a Proxy
-	 * 
-	 * @return A String array with the dc:publisher fields for all proxies pointing to a CHO
-	 */
-	String[] getDcPublisher();
-
-	/**
-	 * Retrieve dc:identifier fields from a Proxy
-	 * 
-	 * @return A String array with the dc:identifier fields for all proxies pointing to a CHO
-	 */
-	String[] getDcIdentifier();
-
-	/**
-	 * Retrieve dc:relation fields from a Proxy
-	 * 
-	 * @return A String array with the dc:relation fields for all proxies pointing to a CHO
-	 */
-	String[] getDcRelation();
-
-	/**
-	 * Retrieve dc:rights fields from a Proxy
-	 * 
-	 * @return A String array with the dc:rights fields for all proxies pointing to a CHO
-	 */
-	String[] getProxyDcRights();
-
-	/**
-	 * Retrieve dc:source fields from a Proxy
-	 * 
-	 * @return A String array with the dc:source fields for all proxies pointing to a CHO
-	 */
-	String[] getDcSource();
-
-	/**
-	 * Retrieve dcterms:alternative fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:alternative fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsAlternative();
-
-	/**
-	 * Retrieve dcterms:conformsTo fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:conformsTo fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsConformsTo();
-
-	/**
-	 * Retrieve dcterms:created fields from a Proxy
-	 * 
-	 * @return A Date array with the dcterms:created fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsCreated();
-
-	/**
-	 * Retrieve dcterms:extent fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:extent fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsExtent();
-
-	/**
-	 * Retrieve dcterms:hasFormat fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:hasFormat fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsHasFormat();
-
-	/**
-	 * Retrieve dcterms:isPartOf fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:isPartOf fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIsPartOf();
-
-	/**
-	 * Retrieve dcterms:isReferencedBy fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:isReferencedBy fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIsReferencedBy();
-
-	/**
-	 * Retrieve dcterms:isReplacedBy fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:isReplacedBy fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIsReplacedBy();
-
-	/**
-	 * Retrieve dcterms:isRequiredBy fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:isRequiredby fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIsRequiredBy();
-
-	/**
-	 * Retrieve dcterms:isVersionOf fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:isVersionOf fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIsVersionOf();
-
-	/**
-	 * Retrieve dcterms:issued fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:issued fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsIssued();
-
-	/**
-	 * Retrieve dcterms:medium fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:medium fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsMedium();
-
-	/**
-	 * Retrieve dcterms:provenance fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:provenance fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsProvenance();
-
-	/**
-	 * Retrieve dcterms:reference fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:reference fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsReferences();
-
-	/**
-	 * Retrieve dcterms:replaces fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:replaces fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsReplaces();
-
-	/**
-	 * Retrieve dcterms:requires fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:requires fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsRequires();
-
-	/**
-	 * Retrieve dcterms:tableOfContents fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:tableOfContents fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsTableOfContents();
-
-	/**
-	 * Retrieve dcterms:temporal fields from a Proxy
-	 * 
-	 * @return A String array with the dcterms:temporal fields for all proxies pointing to a CHO
-	 */
-	String[] getDctermsTemporal();
-
-	String[] getEdmUGC();
-
-	/**
-	 * Retrieve edm:currentLocation fields from a Proxy
-	 * 
-	 * @return A String array with the edm:currentLocation fields for all proxies pointing to a CHO
-	 */
-	String[] getEdmCurrentLocation();
-
-	/**
-	 * Retrieve edm:isNextInSequence fields from a Proxy
-	 * 
-	 * @return A String array with the edm:isNextInSequence fields for all proxies pointing to a CHO
-	 */
-	String[] getEdmIsNextInSequence();
 
 	String[] getUserTags();
-
-	/**
-	 * Retrieve skos:altLabel fields from an Agent
-	 * 
-	 * @return A String array with the edm:broader fields for all Agents pointing to a CHO
-	 */
-	List<Map<String, String>> getEdmAgentAltLabels();
-
-	/**
-	 * Retrieve skos:note fields from an Agent
-	 * 
-	 * @return A String array with the skos:note fields for all Agents pointing to a CHO
-	 */
-	String[] getEdmAgentSkosNote();
-
-	/**
-	 * Retrieve edm:begin fields from an Agent
-	 * 
-	 * @return A Date array with the edm:begin fields for all Agents pointing to a CHO
-	 */
-	String[] getEdmAgentBegin();
-
-	/**
-	 * Retrieve edm:end fields from an Agent
-	 * 
-	 * @return A Date array with the edm:end fields for all Agents pointing to a CHO
-	 */
-	String[] getEdmAgentEnd();
-
-	/**
-	 * Retrieve skos:note fields from a Timespan
-	 * 
-	 * @return A String array with the skos:note fields for all Timespans pointing to a CHO
-	 */
-	String[] getEdmTimeSpanSkosNote();
-
-	/**
-	 * Retrieve skos:note fields from a Place
-	 * 
-	 * @return A String array with the skos:note fields for all Places pointing to a CHO
-	 */
-	String[] getEdmPlaceSkosNote();
-
-	/**
-	 * Retrieve skos:note fields from a Concept
-	 * 
-	 * @return A String array with the skos:note fields for all Concepts pointing to a CHO
-	 */
-	String[] getEdmConceptNote();
-
-	/**
-	 * Retrieve skos:altLabel fields from a Place
-	 * 
-	 * @return A String array with the skos:altLabel fields for all Places pointing to a CHO
-	 */
-	List<Map<String, String>> getEdmPlaceAltLabels();
-
-	/**
-	 * Retrieve skos:altLabel fields from a Timespan
-	 * 
-	 * @return A String array with the skos:altLabel fields for all Timespans pointing to a CHO
-	 */
-	List<Map<String, String>> getEdmTimespanAltLabels();
-
-	/**
-	 * Retrieve skos:altLabel fields from a Concept
-	 * 
-	 * @return A String array with the skos:altLabel fields for all Concepts pointing to a CHO
-	 */
-	List<Map<String, String>> getSkosConceptAltLabels();
-
-	/**
-	 * Retrieve whether a thumbnail should be previewed or not according to the content providers
-	 * 
-	 * @return A Boolean array to decide whether Europeana should show previews of distant files or not
-	 */
-	Boolean[] getEdmPreviewNoDistribute();
-
-	/**
-	 * Retrieve the edm:isPartOf from a Place
-	 * 
-	 * @return A String array with the edm:isPartOf fields for all Places pointing to a CHO
-	 */
-	String[] getEdmPlaceIsPartOf();
-
-	/**
-	 * Retrieve the edm:isPartOf from a Timespan
-	 * 
-	 * @return A String array with the edm:isPartOf fields for all Timespans pointing to a CHO
-	 */
-	String[] getEdmTimespanIsPartOf();
-
-	String[] getEdmWebResource();
-
-	String[] getEdmWebResourceDcRights();
-
-	String[] getEdmWebResourceEdmRights();
 
 	List<? extends Place> getPlaces();
 
@@ -435,19 +113,32 @@ public interface FullBean extends ApiBean {
 
 	EuropeanaAggregation getEuropeanaAggregation();
 
-	void setEdmTimespanBroaderTerm(String[] edmTimespanBroaderTerm);
-
-	void setEdmTimespanBroaderLabel(
-			List<Map<String, String>> edmTimespanBroaderLabel);
-
-	void setEdmConceptBroaderLabel(
-			List<Map<String, String>> edmConceptBroaderLabel);
-
-	void setEdmPlaceBroaderTerm(String[] edmPlaceBroaderTerm);
-
 	void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation);
 
-	String getPreviewNoDistribute();
+	String[] getTitle();
 
-	void setPreviewNoDistribute(String previewNoDistribute);
+	String[] getYear();
+
+	String[] getProvider();
+
+	String[] getLanguage();
+
+	DocType getType();
+
+	int getEuropeanaCompleteness();
+
+
+	String[] getEuropeanaCollectionName();
+
+
+	String[] getCountry();
+
+
+	void setCountry(String[] country);
+
+
+	Date getTimestamp();
+
+
+	void setEuropeanaCollectionName(String[] europeanaCollectionName);
 }

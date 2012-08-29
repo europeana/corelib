@@ -145,7 +145,6 @@ public class FullBeanTest {
 		assertArrayEquals(fullBean.getTitle(), testFullBean.getTitle());
 		assertEquals(fullBean.getType(), testFullBean.getType());
 		assertArrayEquals(fullBean.getYear(), testFullBean.getYear());
-		assertArrayEquals(fullBean.getEdmWebResource(), testFullBean.getEdmWebResource());
 		assertEquals(fullBean.getProvidedCHOs(),testFullBean.getProvidedCHOs());
 		
 		
