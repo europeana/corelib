@@ -18,7 +18,7 @@
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    targetNamespace="http://rdvocab.info/ElementsGr2">
+    targetNamespace="http://rdvocab.info/ElementsGr2/">
 
     <annotation>
         <documentation> Europeana representation of the RDA Group 2 Element Vocabulary</documentation>

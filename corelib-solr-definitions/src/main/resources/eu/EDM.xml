@@ -20,7 +20,7 @@
 -->
 <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
   xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
-  xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:oai="http://www.openarchives.org/OAI/2.0/"
   xmlns:ore="http://www.openarchives.org/ore/terms/"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -44,8 +44,8 @@
     <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
   </edm:WebResource>
   <edm:Place rdf:about="http://sws.geonames.org/6255147/">
-    <skos:altLabel>wohl Asien</skos:altLabel>
     <skos:prefLabel xml:lang="de">Asien</skos:prefLabel>
+    <skos:altLabel>wohl Asien</skos:altLabel>
   </edm:Place>
   <skos:Concept rdf:about="http://www.mimo-db.eu/InstrumentsKeywords/2887">
     <skos:prefLabel>Kettledrum</skos:prefLabel>
