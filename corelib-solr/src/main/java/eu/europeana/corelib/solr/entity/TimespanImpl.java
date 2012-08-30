@@ -33,22 +33,20 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	private String begin;
-	private String end;
+	private String[] begin;
+	private String[] end;
 	private String[] isPartOf;
 	private String[] dctermsHasPart;
 
 	private String[] owlSameAs;
-	private String[] crmP79FBeginningIsQualifiedBy;
-	private String[] crmP80FEndIsQualifiedBy;
 
 	@Override
-	public String getBegin() {
+	public String[] getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public String getEnd() {
+	public String[] getEnd() {
 		return this.end;
 	}
 
@@ -58,12 +56,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public void setBegin(String begin) {
+	public void setBegin(String[] begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(String end) {
+	public void setEnd(String[] end) {
 		this.end = end;
 	}
 
@@ -108,23 +106,5 @@ public class TimespanImpl extends ContextualClassImpl implements
 		this.owlSameAs = owlSameAs;
 	}
 
-	@Override
-	public String[] getCrmP79FBeginningIsQualifiedBy() {
-		return (StringArrayUtils.isNotBlank(crmP79FBeginningIsQualifiedBy) ? this.crmP79FBeginningIsQualifiedBy.clone() : null);
-	}
-
-	@Override
-	public String[] getCrmP80FEndIsQualifiedBy() {
-		return (StringArrayUtils.isNotBlank(crmP80FEndIsQualifiedBy) ? this.crmP80FEndIsQualifiedBy.clone() : null);
-	}
-
-	@Override
-	public void setCrmP80FEndIsQualifiedBy(String[] crmP80FEndIsQualifiedBy) {
-		this.crmP80FEndIsQualifiedBy = crmP80FEndIsQualifiedBy;
-	}
-
-	@Override
-	public void setCrmP97FBeginningIsQualifiedBy(String[] crmP79FBeginningIsQualifiedBy) {
-		this.crmP79FBeginningIsQualifiedBy = crmP79FBeginningIsQualifiedBy;
-	}
+	
 }

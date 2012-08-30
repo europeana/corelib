@@ -18,6 +18,7 @@
 package eu.europeana.corelib.db.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -39,6 +40,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
+import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.service.SearchService;
 
@@ -145,8 +148,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		FullBean bean = null;
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
-
-		savedItem.setAuthor(StringUtils.abbreviate(bean.getProxies().get(0).getDcPublisher()[0], RelationalDatabase.FIELDSIZE_AUTHOR));
+		List<? extends Proxy> proxies = bean.getProxies();
+		Proxy proxy = proxies.get(0);
+		savedItem.setAuthor(StringUtils.abbreviate(proxy.getDcPublisher()[0], RelationalDatabase.FIELDSIZE_AUTHOR));
 		return user;
 	}
 

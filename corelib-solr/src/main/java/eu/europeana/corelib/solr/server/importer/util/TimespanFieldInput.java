@@ -130,7 +130,7 @@ public final class TimespanFieldInput {
 			TimeSpanType timeSpan, MongoServer mongoServer)  {
 		if (mongoTimespan.getBegin() != null
   				&& !StringUtils.equals(timeSpan.getBegin().getString(),
-  						mongoTimespan.getBegin())) {
+  						mongoTimespan.getBegin()[0])) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"begin", timeSpan.getBegin().getString());
   			
@@ -138,7 +138,7 @@ public final class TimespanFieldInput {
   		}
   		if (mongoTimespan.getEnd() != null
   				&& !StringUtils.equals(timeSpan.getEnd().getString(),
-  						mongoTimespan.getEnd())) {
+  						mongoTimespan.getEnd()[0])) {
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"end", timeSpan.getEnd().getString());
   			
@@ -276,10 +276,10 @@ public final class TimespanFieldInput {
         mongoTimespan.setDctermsHasPart(SolrUtils.resourceOrLiteralListToArray(timeSpan.getHasPartList()));
         mongoTimespan.setOwlSameAs(SolrUtils.resourceListToArray(timeSpan.getSameAList()));
         if (timeSpan.getBegin() != null) {
-            mongoTimespan.setBegin(timeSpan.getBegin().getString());
+            mongoTimespan.setBegin(new String[]{timeSpan.getBegin().getString()});
         }
         if (timeSpan.getEnd() != null) {
-            mongoTimespan.setEnd(timeSpan.getEnd().getString());
+            mongoTimespan.setEnd(new String[]{timeSpan.getEnd().getString()});
         }
 		return mongoTimespan;
 	}

@@ -260,8 +260,8 @@ public class FullBeanTest {
 		Timespan timespan = new TimespanImpl();
 		timespan.setAbout("test about");
 		timespan.setNote(new String[] { "test note" });
-		timespan.setBegin("test begin");
-		timespan.setEnd("test end");
+		timespan.setBegin(new String[]{"test begin"});
+		timespan.setEnd(new String[] {"test end"});
 		Map<String, String> prefLabel = new HashMap<String, String>();
 		prefLabel.put("en", "test prefLabel");
 		timespan.setPrefLabel(prefLabel);

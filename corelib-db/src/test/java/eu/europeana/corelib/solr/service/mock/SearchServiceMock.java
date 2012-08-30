@@ -21,13 +21,19 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
+import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -42,20 +48,31 @@ public class SearchServiceMock implements SearchService {
 	public static final String[] TITLE=new String[]{"Mock Title"};
 	public static final String[] AUTHOR=new String[]{"Mock Author"};
 	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
-
+	public static final List<? extends Aggregation> aggregations2 = new ArrayList<AggregationImpl>();
 	@Override
 	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
 		// not needed in this mock...
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public FullBean findById(String europeanaObjectId) {
 		FullBean mockBean = createMock(FullBean.class);
+		Proxy proxy = createMock(Proxy.class);
+		AggregationImpl aggregation =createMock(AggregationImpl.class);
+		FullBean bean2 = new FullBeanImpl();
+		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
+		aggregations.add(aggregation);
+		List<Proxy> proxies = new ArrayList<Proxy>();
+		proxies.add(proxy);
+		bean2.setProxies(proxies);
+		bean2.setAggregations(aggregations);
 		expect(mockBean.getTitle()).andStubReturn(TITLE);
-		expect(mockBean.getProxies().get(0).getDcPublisher()).andStubReturn(AUTHOR);
+		
+		expect(bean2.getProxies().get(0).getDcPublisher()).andStubReturn(AUTHOR);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
-		expect(mockBean.getAggregations().get(0).getEdmObject()).andStubReturn(THUMBNAIL[0]);
+		expect(bean2.getAggregations().get(0).getEdmObject()).andStubReturn(THUMBNAIL[0]);
 		expect(mockBean.getType()).andStubReturn(DocType.TEXT);
 		replay(mockBean);
 		return mockBean;
