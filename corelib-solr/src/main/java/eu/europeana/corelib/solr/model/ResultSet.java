@@ -28,19 +28,19 @@ import eu.europeana.corelib.definitions.solr.model.Query;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class ResultSet<T> {
-	
+
 	private Query query;
 
 	private List<T> results;
-	
+
 	private List<FacetField> facetFields;
-	
+
 	private SpellCheckResponse spellcheck;
-	
+
 	// statistics
-	
+
 	private long resultSize;
-	
+
 	private long searchTime;
 
 	/**
@@ -100,5 +100,4 @@ public class ResultSet<T> {
 		this.searchTime = l;
 		return this;
 	}
-	
 }

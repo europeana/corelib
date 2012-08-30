@@ -105,6 +105,4 @@ public class TimespanImpl extends ContextualClassImpl implements
 	public void setOwlSameAs(String[] owlSameAs) {
 		this.owlSameAs = owlSameAs;
 	}
-
-	
 }

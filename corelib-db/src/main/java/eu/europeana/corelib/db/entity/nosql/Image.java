@@ -26,22 +26,21 @@ import eu.europeana.corelib.utils.ImageUtils;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class Image {
-	
+
 	private int height;
-	
+
 	private int width;
-	
+
 	private byte[] image;
-	
+
 	/**
 	 * CONSTRUCTORS
 	 */
-	
+
 	public Image() {
 		// left empty on purpose, do NOT remove!!
 	}
 
-	
 	/**
 	 * Alternative constructor that instantiates the image
 	 * object with a byte array instead. This is mainly
@@ -60,8 +59,7 @@ public class Image {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * 
@@ -101,5 +99,4 @@ public class Image {
 	public void setImage(byte[] image) {
 		this.image = image.clone();
 	}
-
 }

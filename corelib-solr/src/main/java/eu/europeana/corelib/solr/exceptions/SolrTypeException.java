@@ -28,11 +28,11 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  */
 public class SolrTypeException extends EuropeanaException {
 	private static final long serialVersionUID = 1354282016526186556L;
-	
+
 	public SolrTypeException(ProblemType problemType) {
 		super(problemType);
 	}
-	
+
 	public SolrTypeException(Throwable causedBy, ProblemType problemType){
 		super(causedBy,problemType);
 	}

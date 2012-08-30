@@ -121,5 +121,4 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 	public void setDocType(DocType docType) {
 		this.docType = docType;
 	}
-	
 }

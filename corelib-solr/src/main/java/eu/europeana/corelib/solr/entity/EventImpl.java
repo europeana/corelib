@@ -17,7 +17,7 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	private String[] crmP120FOccursBefore;
 	private String[] edmHasType;
 	private String[] edmIsRelatedTo;
-	
+
 	@Override
 	public void setEdmHappenedAt(String[] edmHappenedAt) {
 		this.edmHappenedAt = edmHappenedAt;

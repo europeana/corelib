@@ -58,70 +58,64 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			throws DatabaseException {
 		sanitycheck("storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage," +
 				"String url)",objectId,collectionId,image);
-			
-		    JpegXmpRewriter xmpWriter=new JpegXmpRewriter();
-		
-			ImageCache cache = new ImageCache(objectId, DEFAULT_IMAGEID, collectionId, url);
+		JpegXmpRewriter xmpWriter=new JpegXmpRewriter();
 
-			try {
-				BufferedImage tiny = ImageUtils.scale(image, ThumbSize.TINY.getMaxWidth(),
-						ThumbSize.TINY.getMaxHeight());
+		ImageCache cache = new ImageCache(objectId, DEFAULT_IMAGEID, collectionId, url);
 
-				BufferedImage medium = ImageUtils.scale(image, ThumbSize.MEDIUM.getMaxWidth(),
-						ThumbSize.MEDIUM.getMaxHeight());
+		try {
+			BufferedImage tiny = ImageUtils.scale(image, ThumbSize.TINY.getMaxWidth(),
+					ThumbSize.TINY.getMaxHeight());
 
-				BufferedImage large = ImageUtils.scale(image, ThumbSize.LARGE.getMaxWidth(),
-						ThumbSize.LARGE.getMaxHeight());
-				
-				byte[] tinybyteorig = ImageUtils.toByteArray(tiny);
-				byte[] mediumbyteorig = ImageUtils.toByteArray(medium);
-				byte[] largebyteorig = ImageUtils.toByteArray(large);
-				
+			BufferedImage medium = ImageUtils.scale(image, ThumbSize.MEDIUM.getMaxWidth(),
+					ThumbSize.MEDIUM.getMaxHeight());
 
-				ByteArrayOutputStream tinyOutputStream = new ByteArrayOutputStream();
-				ByteArrayOutputStream mediumOutputStream = new ByteArrayOutputStream();
-				ByteArrayOutputStream largeOutputStream = new ByteArrayOutputStream();
-				
-				
-				String xmp = XMPUtils.fetchXMP(edmInfo);
-				xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmp);
-				xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmp);
-				xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmp);
-				
-				tinyOutputStream.flush();
-				byte[] tinyconverted = tinyOutputStream.toByteArray();
-				tinyOutputStream.close();
-				
-				
-				mediumOutputStream.flush();
-				byte[] mediumconverted = mediumOutputStream.toByteArray();
-				mediumOutputStream.close();
-				
-				largeOutputStream.flush();
-				byte[] largeconverted = largeOutputStream.toByteArray();
-				largeOutputStream.close();
-				
-				String xmps = Sanselan.getXmpXml(tinyconverted);
-				//System.out.println("Writing");
-				
-				//System.out.println(xmps);
-				
-				cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(mediumconverted));
-				cache.getImages().put(ThumbSize.TINY.toString(), new Image(tinyconverted));
-				cache.getImages().put(ThumbSize.LARGE.toString(), new Image(largeconverted));
-				
-			} catch (IOException e) {
-				throw new DatabaseException(e, ProblemType.UNKNOWN);
-			} catch (ImageReadException e) {
-				throw new DatabaseException(e, ProblemType.UNKNOWN);
-			} catch (ImageWriteException e) {
-				throw new DatabaseException(e, ProblemType.UNKNOWN);
-			}
+			BufferedImage large = ImageUtils.scale(image, ThumbSize.LARGE.getMaxWidth(),
+					ThumbSize.LARGE.getMaxHeight());
 
-			return store(cache);
+			byte[] tinybyteorig = ImageUtils.toByteArray(tiny);
+			byte[] mediumbyteorig = ImageUtils.toByteArray(medium);
+			byte[] largebyteorig = ImageUtils.toByteArray(large);
+
+			ByteArrayOutputStream tinyOutputStream = new ByteArrayOutputStream();
+			ByteArrayOutputStream mediumOutputStream = new ByteArrayOutputStream();
+			ByteArrayOutputStream largeOutputStream = new ByteArrayOutputStream();
+
+			String xmp = XMPUtils.fetchXMP(edmInfo);
+			xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmp);
+			xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmp);
+			xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmp);
+
+			tinyOutputStream.flush();
+			byte[] tinyconverted = tinyOutputStream.toByteArray();
+			tinyOutputStream.close();
+
+			mediumOutputStream.flush();
+			byte[] mediumconverted = mediumOutputStream.toByteArray();
+			mediumOutputStream.close();
+
+			largeOutputStream.flush();
+			byte[] largeconverted = largeOutputStream.toByteArray();
+			largeOutputStream.close();
+
+			String xmps = Sanselan.getXmpXml(tinyconverted);
+			//System.out.println("Writing");
+
+			//System.out.println(xmps);
+			cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(mediumconverted));
+			cache.getImages().put(ThumbSize.TINY.toString(), new Image(tinyconverted));
+			cache.getImages().put(ThumbSize.LARGE.toString(), new Image(largeconverted));
+
+		} catch (IOException e) {
+			throw new DatabaseException(e, ProblemType.UNKNOWN);
+		} catch (ImageReadException e) {
+			throw new DatabaseException(e, ProblemType.UNKNOWN);
+		} catch (ImageWriteException e) {
+			throw new DatabaseException(e, ProblemType.UNKNOWN);
+		}
+
+		return store(cache);
 	}
-	
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#storeThumbnail(java.lang.String, java.lang.String, java.net.URL)
 	 */
@@ -129,7 +123,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache storeThumbnail(String objectId, String collectionId, URL url) throws DatabaseException {
 		return storeThumbnail(objectId, DEFAULT_IMAGEID, collectionId, url);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#storeThumbnail(java.lang.String, java.lang.String, java.lang.String, java.net.URL)
 	 */
@@ -139,7 +133,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 		sanitycheck("storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage"
 				,objectId,imageId,collectionId);
-		
+
 		try {
 			BufferedImage originalImage = ImageIO.read(url);
 			return storeThumbnail(objectId, collectionId, originalImage, url.toString());
@@ -155,7 +149,6 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage originalImage, String url) throws DatabaseException {
 		return storeThumbnail(objectId, DEFAULT_IMAGEID, collectionId, originalImage, url);
 	}
-	
 
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#storeThumbnail(java.lang.String, java.lang.String, java.lang.String, java.awt.image.BufferedImage, java.lang.String)
@@ -166,7 +159,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 		sanitycheck("storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage originalImage," +
 			"String url)",objectId,imageId,collectionId,originalImage);
-		
+
 		ImageCache cache = new ImageCache(objectId, imageId, collectionId, url);
 
 		try {
@@ -187,7 +180,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 
 		return store(cache);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#retrieveThumbnail(java.lang.String, eu.europeana.corelib.definitions.model.ThumbSize)
 	 */
@@ -195,22 +188,22 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public byte[] retrieveThumbnail(String objectId, ThumbSize size) {
 		return retrieveThumbnail(objectId, DEFAULT_IMAGEID, size);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#retrieveThumbnail(java.lang.String, java.lang.String, eu.europeana.corelib.definitions.model.ThumbSize)
 	 */
 	@Override
 	public byte[] retrieveThumbnail(String objectId, String imageId, ThumbSize size) {
-		
+
 		sanitycheck("retrieveThumbnail(String objectId, String imageId, ThumbSize size)",objectId,imageId);
-		
+
 		ImageCache cache = findByID(objectId, imageId);
 		if (cache != null) {
 			return cache.getImages().get(size.toString()).getImage();
 		}
 		return null;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#findByOriginalUrl(java.lang.String)
 	 */
@@ -218,7 +211,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache findByOriginalUrl(String url) throws DatabaseException {
 		return getDao().findOne("originalUrl", url);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl#findByID(java.io.Serializable)
 	 */
@@ -226,7 +219,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache findByID(String objectId) {
 		return findByID(objectId, DEFAULT_IMAGEID);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#findByID(java.lang.String, java.lang.String)
 	 */
@@ -234,7 +227,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public ImageCache findByID(String objectId, String imageId) {
 		return super.findByID(getId(objectId, imageId));
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl#exists(java.io.Serializable)
 	 */
@@ -242,7 +235,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public boolean exists(String objectId) {
 		return exists(objectId, DEFAULT_IMAGEID);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#exists(java.lang.String, java.lang.String)
 	 */
@@ -250,7 +243,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	public boolean exists(String objectId, String imageId) {
 		return super.exists(getId(objectId, imageId));
 	}
-	
+
 	/**
 	 * @param objectId
 	 * @param imageId
@@ -259,7 +252,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	private String getId(String objectId, String imageId) {
 		return new StringBuilder(objectId).append(COMBINE_CHAR).append(imageId).toString();
 	}
-	
+
 	/**
 	 * Checks whether some of the declared values a null.
 	 * Throws an IllegalArgumentException in that case   
@@ -268,7 +261,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	 */
 	private void sanitycheck(String methodname,Object... checkables){
 		int length = checkables.length;
-		
+
 		for(int i = 0; i<length; i++ ){
 			if (checkables[i] == null){
 				StringBuilder sb = new StringBuilder();
@@ -280,10 +273,7 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 				throw new IllegalArgumentException(sb.toString());
 			}
 		}
-		
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#extractXMPInfo(java.lang.String, java.lang.String, eu.europeana.corelib.definitions.model.ThumbSize)
@@ -304,5 +294,4 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		 
 		return xmp;
 	}
-	
 }

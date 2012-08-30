@@ -92,7 +92,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					this.password.toCharArray());
 		}
 		datastore.ensureIndexes();
-
 	}
 
 	@Override
@@ -104,10 +103,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	public FullBean getFullBean(String id) {
 		// If the id requested exists
 		if (datastore.find(FullBeanImpl.class).field("about").equal(id).get() != null) {
-			return datastore.find(FullBeanImpl.class).field("about").equal(id)
-					.get();
+			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 		}
-
 		return null;
 	}
 
@@ -138,16 +135,11 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public <T> T searchByAbout(Class<T> clazz, String about) {
-
-			return datastore.find(clazz, "about", about)
-			.get();
-			 
-		
+			return datastore.find(clazz, "about", about).get();
 	}
 
 	@Override
 	public void close() {
 		mongoServer.close();
 	}
-
 }

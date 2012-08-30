@@ -6,7 +6,7 @@ import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
-	
+
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private Map<String,String> hiddenLabel;

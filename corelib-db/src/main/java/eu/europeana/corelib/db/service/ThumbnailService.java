@@ -33,11 +33,10 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
  * 6 Aug 2012
  */
 public interface ThumbnailService extends AbstractNoSqlService<ImageCache, String> {
-	
+
 	String DEFAULT_IMAGEID = "0"; 
 	String COMBINE_CHAR = "_";
-	
-	
+
 	/**
 	 * Create and store thumbnails of given images. This method also adds XMP metadata information
 	 * to all generated thumbnails given the information found in the EDM xml document which is related 
@@ -52,8 +51,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @throws DatabaseException 
 	 */
 	ImageCache storeThumbnail(String objectId, String collectionId, BufferedImage image, String url,RDF edmInfo) throws DatabaseException;
-	
-	
+
 	/**
 	 * Create and store thumbnails of given images.
 	 * 
@@ -77,7 +75,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @throws DatabaseException 
 	 */
 	ImageCache storeThumbnail(String objectId, String imageId, String collectionId, BufferedImage image, String url) throws DatabaseException;
-	
+
 	/**
 	 * Downloads Image and Create and store thumbnails of given URL.
 	 * 
@@ -100,7 +98,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @throws DatabaseException
 	 */
 	ImageCache storeThumbnail(String objectId, String imageId, String collectionId, URL url) throws DatabaseException;
-	
+
 	/**
 	 * Retrieve a byte[] with the stored thumbnail, can be used for streaming the image.
 	 * 
@@ -119,7 +117,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @return byte[] of thumbnail, or null of not found
 	 */
 	byte[] retrieveThumbnail(String objectId, String imageId, ThumbSize size);
-	
+
 	/**
 	 * Find a ImageCache by it's original image url
 	 * 
@@ -146,8 +144,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @return Returns a ImageCache object if found
 	 */
 	public abstract ImageCache findByID(String objectId, String imageId);
-	
-	
+
 	/**
 	 * Extracts the XMP info contained in the Europeana thumbnail
 	 * 
@@ -157,8 +154,4 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @return the XMP info embedded in the thumbnail
 	 */
 	public String extractXMPInfo(String objectId, String imageId,ThumbSize size);
-	
-	
-	
-	
 }

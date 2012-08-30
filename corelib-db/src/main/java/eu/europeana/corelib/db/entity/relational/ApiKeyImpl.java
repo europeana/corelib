@@ -37,10 +37,10 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	@Id
 	@Column(length = FIELDSIZE_APIKEY, nullable=false)
 	private String apiKey;
-	
+
 	@Column(length = FIELDSIZE_APIKEY, nullable=false)
 	private String privateKey;
-	
+
 	@Column
 	private long usageLimit;
 
@@ -52,7 +52,7 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	public String getId() {
 		return apiKey;
 	}
-	
+
 	@Override
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
@@ -77,7 +77,4 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	public void setUsageLimit(long usageLimit) {
 		this.usageLimit = usageLimit;
 	}
-	
-	
-
 }

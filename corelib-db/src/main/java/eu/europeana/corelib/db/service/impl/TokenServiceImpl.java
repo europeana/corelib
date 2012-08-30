@@ -53,14 +53,14 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		}
 		if (token != null) {
 			long age = System.currentTimeMillis() - token.getCreated().getTime();
-	        if (age <= MAX_TOKEN_AGE) {
-	        	return token;
-	        }
-	        getDao().delete(token);
+			if (age <= MAX_TOKEN_AGE) {
+				return token;
+			}
+			getDao().delete(token);
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Token create(String email) throws DatabaseException {
 		if (StringUtils.isBlank(email)) {
@@ -72,11 +72,10 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		token.setToken(createRandomToken());
 		return getDao().insert(token);
 	}
-	
+
 	@Override
 	public String createRandomToken() {
 		String token = UUID.randomUUID().toString();
 		return StringUtils.remove(token, "-");
 	}
-
 }

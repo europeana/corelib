@@ -73,7 +73,7 @@ public interface UserService extends AbstractService<User> {
 	 * @return A user if both params are valid, otherwise null
 	 */
 	User authenticateUser(String email, String password);
-	
+
 	/**
 	 * Changes the existing password of an existing password
 	 * 
@@ -130,7 +130,7 @@ public interface UserService extends AbstractService<User> {
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
 	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
-	
+
 	/**
 	 * Removes a SavedSearch from database and User.
 	 * 
@@ -157,5 +157,4 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException 
 	 */
 	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
-
 }

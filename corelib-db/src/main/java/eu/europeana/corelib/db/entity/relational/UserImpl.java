@@ -61,7 +61,7 @@ import eu.europeana.corelib.utils.DateUtils;
 @Table(name = RelationalDatabase.TABLENAME_USER)
 public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
 	private static final long serialVersionUID = 3830841148649674534L;
-	
+
 	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
 	public static final String QUERY_FINDBY_APIKEY = "User.findByApiKey";
 
@@ -186,20 +186,19 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	@Override
 	public Set<SavedItem> getSavedItems() {
 		return savedItems;
 	}
-	
+
 	@Override
 	public Set<SavedSearch> getSavedSearches() {
 		return savedSearches;
 	}
-	
+
 	@Override
 	public Set<SocialTag> getSocialTags() {
 		return socialTags;
 	}
-	
 }

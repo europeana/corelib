@@ -20,12 +20,9 @@ public class EuropeanaHttpClient extends HttpClient {
 		this.port = getPort(url);
 		this.getParams().setAuthenticationPreemptive(true);
 		Credentials credentials = new UsernamePasswordCredentials(this.username, this.password);
-		
 		this.getState().setCredentials(new AuthScope(this.server, this.port, AuthScope.ANY_REALM), credentials);
 	}
 
-	
-	
 	private int getPort(String url) {
 		String temp = StringUtils.remove(url, "http://");
 		return StringUtils.isNotBlank(StringUtils.substringBetween(temp, ":",
@@ -34,9 +31,6 @@ public class EuropeanaHttpClient extends HttpClient {
 	}
 
 	private String getServer(String url) {
-		
-		return StringUtils.substringBetween(url, "htpp://",
-				":");
+		return StringUtils.substringBetween(url, "htpp://", ":");
 	}
-
 }

@@ -73,13 +73,13 @@ public class FullBeanImpl implements FullBean {
 	private String[] provider;
 
 	private String[] language;
-	
+
 	private Date timestamp;
 
 	private DocType type;
 
 	private int europeanaCompleteness;
-	
+
 	@Transient
 	private List<BriefBeanImpl> relatedItems;
 
@@ -100,19 +100,20 @@ public class FullBeanImpl implements FullBean {
 
 	@Reference
 	private List<ProvidedCHOImpl> providedCHOs;
-	
+
 	@Reference
 	private EuropeanaAggregationImpl europeanaAggregation;
+
+	@Reference
+	private List<ProxyImpl> proxies;
 
 	private String[] who;
 	private String[] what;
 	private String[] where;
 	private String[] when;
-	
+
 	private String[] country;
 	private String[] userTags;
-	@Reference
-	private List<ProxyImpl> proxies;
 
 	private String[] europeanaCollectionName;
 
@@ -146,7 +147,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setAgents(List<? extends Agent> agents) {
-			this.agents = (List<AgentImpl>) agents;
+		this.agents = (List<AgentImpl>) agents;
 	}
 
 	@Override
@@ -156,7 +157,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public void setTimespans(List<? extends Timespan> timespans) {
-			this.timespans = (List<TimespanImpl>) timespans;
+		this.timespans = (List<TimespanImpl>) timespans;
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class FullBeanImpl implements FullBean {
 	public void setAggregations(List<? extends Aggregation> aggregations) {
 		this.aggregations = (List<AggregationImpl>) aggregations;
 	}
-	
+
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
 		return this.europeanaAggregation;
@@ -249,7 +250,6 @@ public class FullBeanImpl implements FullBean {
 		return (this.title != null ? this.title.clone() : null);
 	}
 
-	
 	@Override
 	public String[] getYear() {
 		return (this.year != null ? this.year.clone() : null);
@@ -259,8 +259,6 @@ public class FullBeanImpl implements FullBean {
 	public String[] getProvider() {
 		return (this.provider != null ? this.provider.clone() : null);
 	}
-
-	
 
 	@Override
 	public String[] getLanguage() {
@@ -277,16 +275,15 @@ public class FullBeanImpl implements FullBean {
 		return this.europeanaCompleteness;
 	}
 
-	
 	@Override
 	public String[] getUserTags() {
-		
 		return this.userTags;
 	}
 
 	public void setUserTags(String[] userTags){
 		this.userTags = userTags;
 	}
+
 	@Override
 	public String getId() {
 		if (this.europeanaId != null) {
@@ -294,7 +291,6 @@ public class FullBeanImpl implements FullBean {
 		}
 		return null;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -305,7 +301,6 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getCountry() {
-		
 		return this.country;
 	}
 
@@ -369,17 +364,13 @@ public class FullBeanImpl implements FullBean {
 		this.when = when;
 	}
 
-
 	@Override
 	public List<? extends BriefBean> getRelatedItems() {
-		
 		return this.relatedItems;
 	}
 
 	@Override
 	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
 		this.relatedItems = (List<BriefBeanImpl>) relatedItems;
-		
 	}
-
 }

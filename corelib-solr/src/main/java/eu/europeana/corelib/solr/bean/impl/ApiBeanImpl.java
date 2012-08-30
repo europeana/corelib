@@ -76,7 +76,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Field("europeana_collectionName")
 	private String[] europeanaCollectionName;
-	
+
 	private int index;
 
 	@Field("edm_place_broader_term")

@@ -82,7 +82,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode(){ 
 		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : this.latitude * 100 + this.longitude);

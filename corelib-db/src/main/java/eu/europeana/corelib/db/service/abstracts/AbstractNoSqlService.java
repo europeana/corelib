@@ -58,7 +58,7 @@ public interface AbstractNoSqlService<E extends NoSqlEntity, T extends Serializa
 	 * @return
 	 */
 	E findByID(final T id);
-	
+
 	/**
 	 * Checks if a entity with the given ID exists.
 	 * 

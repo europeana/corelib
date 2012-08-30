@@ -32,26 +32,25 @@ import eu.europeana.corelib.db.service.ThumbnailService;
  */
 @Entity("ImageCache")
 public class ImageCache implements NoSqlEntity {
-	
+
 	@Id
 	private String imageId;
-	
+
 	@Indexed(unique=false)
 	private String objectId;
-	
+
 	@Indexed(unique=false)
 	private String collectionId;
-	
+
 	@Indexed(unique=false)
 	private String originalUrl;
-	
 
 	private Map<String, Image> images = new HashMap<String, Image>();
-	
+
 	/**
 	 * CONSTRUCTORS
 	 */
-	
+
 	public ImageCache() {
 		// left empty on purpose, do NOT remove!!
 	}
@@ -61,13 +60,11 @@ public class ImageCache implements NoSqlEntity {
 		setObjectId(objectId);
 		setCollectionId(collectionId);
 		setOriginalUrl(url);
-	
 	}
-	
+
 	/**
 	 * GETTERS & SETTTERS
 	 */
-
 	public String getImageId() {
 		return imageId;
 	}
@@ -75,7 +72,6 @@ public class ImageCache implements NoSqlEntity {
 	public void setImageId(String imageId) {
 		this.imageId = imageId;
 	}
-
 
 	public Map<String, Image> getImages() {
 		return images;
@@ -104,5 +100,4 @@ public class ImageCache implements NoSqlEntity {
 	public void setObjectId(String objectId) {
 		this.objectId = objectId;
 	}
-
 }

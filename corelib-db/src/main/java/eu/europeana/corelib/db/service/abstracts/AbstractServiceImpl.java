@@ -69,7 +69,7 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	public final void setDao(RelationalDao<E> dao) {
 		this.dao = dao;
 	}
-	
+
 	/**
 	 * Getter for DAO, only available for internal usage.
 	 * 
