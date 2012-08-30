@@ -29,14 +29,14 @@ public interface Timespan extends ContextualClass {
 	 * 
 	 * @return Stringrepresenting the edm:begin field of a timespan
 	 */
-	String getBegin();
+	String[] getBegin();
 
 	/**
 	 * Retrieve the edm:end field of a Timespan
 	 * 
 	 * @return String representing the edm:end field of a timespan
 	 */
-	String getEnd();
+	String[] getEnd();
 
 	/**
 	 * Retrieve the dcterms:isPartOf field of a Timespan
@@ -52,7 +52,7 @@ public interface Timespan extends ContextualClass {
 	 * @param begin
 	 *            the edm:begin field for a Timespan
 	 */
-	void setBegin(String begin);
+	void setBegin(String[] begin);
 
 	/**
 	 * Set the edm:end field for a Timespan. It expects to find a date.
@@ -60,7 +60,7 @@ public interface Timespan extends ContextualClass {
 	 * @param end
 	 *            the edm:end field for a Timespan
 	 */
-	void setEnd(String end);
+	void setEnd(String[] end);
 
 	/**
 	 * Set the isPartOf fields for a Timespan.
@@ -78,13 +78,7 @@ public interface Timespan extends ContextualClass {
 	
 	String[] getOwlSameAs();
 	
-	String[] getCrmP79FBeginningIsQualifiedBy();
-	
-	void setCrmP97FBeginningIsQualifiedBy(String[] crmP79FBeginningIsQualifiedBy);
-	
-	String[] getCrmP80FEndIsQualifiedBy();
-	
-	void setCrmP80FEndIsQualifiedBy(String[] crmP80FEndIsQualifiedBy);
+
 	
 	
 }
