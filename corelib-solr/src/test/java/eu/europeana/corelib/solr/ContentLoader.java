@@ -42,6 +42,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
+import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
@@ -106,7 +107,7 @@ public class ContentLoader {
 
 	public int parse() {
 		MongoConstructor mongoConstructor = new MongoConstructor();
-		mongoConstructor.setMongoServer(mongoDBServer);
+		mongoConstructor.setMongoServer((EdmMongoServerImpl) mongoDBServer);
 		for (File f : collectionXML) {
 			try {
 				IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
