@@ -19,14 +19,11 @@ package eu.europeana.corelib.solr.entity;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -39,9 +36,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Aggregation")
-public class AggregationImpl implements Aggregation {
-	@Id
-	private ObjectId id;
+public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
 	private String edmDataProvider;
 	private String edmIsShownBy;
@@ -59,8 +54,6 @@ public class AggregationImpl implements Aggregation {
 	@Embedded
 	private List<WebResourceImpl> webResources;
 
-	@Indexed(unique = true, dropDups = true)
-	private String about;
 	private Boolean edmPreviewNoDistribute;
 
 	@Override
@@ -93,21 +86,7 @@ public class AggregationImpl implements Aggregation {
 		this.edmUgc = edmUgc;
 	}
 
-	@Override
-	public String getAbout() {
-		return this.about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
+	
 	@Override
 	public void setEdmDataProvider(String edmDataProvider) {
 		this.edmDataProvider = edmDataProvider;
@@ -178,10 +157,7 @@ public class AggregationImpl implements Aggregation {
 		return this.edmRights;
 	}
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
+
 
 	@Override
 	public List<WebResourceImpl> getWebResources() {

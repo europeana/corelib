@@ -40,8 +40,7 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
-	private String fullDocUrl;
-
+	
 	@Field("timestamp")
 	private Date timestamp;
 
@@ -74,7 +73,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Field("proxy_dc_creator")
 	private String[] dcCreator;
-
+	
 	@Field("proxy_dc_contributor")
 	private String[] dcContributor;
 
@@ -114,10 +113,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("proxy_dcterms_spatial")
 	private String[] dctermsSpatial;
 
-	@Override
-	public String getFullDocUrl() {
-		return fullDocUrl;
-	}
 
 	@Override
 	public String[] getTitle() {
@@ -133,7 +128,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	public String[] getDcCreator() {
 		return (this.dcCreator != null ? this.dcCreator.clone() : null);
 	}
-
+	
 	@Override
 	public String[] getDcContributor() {
 		return (this.dcContributor != null ? this.dcContributor.clone() : null);

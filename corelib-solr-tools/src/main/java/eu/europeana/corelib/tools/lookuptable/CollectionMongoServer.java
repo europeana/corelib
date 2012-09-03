@@ -111,9 +111,7 @@ public class CollectionMongoServer implements MongoServer {
 	 * @param collection The collection to save
 	 */
 	public void saveCollection(Collection collection) {
-		if(StringUtils.isNotBlank(findOldCollectionId(collection.getNewCollectionId()))){
 			datastore.save(collection);
-		}
 	}
 	
 	public List<Collection> retrieveAllCollections(){

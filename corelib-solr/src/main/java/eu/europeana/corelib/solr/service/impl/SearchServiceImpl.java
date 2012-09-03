@@ -95,7 +95,7 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		if (fullBean != null) {
 			try {
-				fullBean.setRelatedItems(findMoreLikeThis(europeanaObjectId)
+				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId)
 						.getBeans(BriefBeanImpl.class));
 			} catch (SolrServerException e) {
 				// LOG HERE
@@ -118,7 +118,7 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
 		if (fullBean != null) {
 			try {
-				fullBean.setRelatedItems(findMoreLikeThis(europeanaObjectId)
+				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId)
 						.getBeans(BriefBeanImpl.class));
 			} catch (SolrServerException e) {
 				// LOG

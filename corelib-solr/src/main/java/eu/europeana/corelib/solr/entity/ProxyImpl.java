@@ -20,12 +20,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Indexed;
-import com.google.code.morphia.annotations.Transient;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
-import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.Proxy
@@ -36,25 +33,18 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
-	@Indexed(unique=false)
-	private String about;
+
 
 	private DocType edmType;
 
-	@Transient
-	private String[] edmUnstored;
 
+	private String[] year;
+	
+	
+
+	private String[] userTags;
+	
 	private boolean europeanaProxy;
-
-	@Override
-	public String[] getEdmUnstored() {
-		return (StringArrayUtils.isNotBlank(edmUnstored) ? this.edmUnstored.clone() : null);
-	}
-
-	@Override
-	public void setEdmUnstored(String[] edmUnstored) {
-		this.edmUnstored = edmUnstored;
-	}
 
 	@Override
 	public void setEdmType(DocType edmType) {
@@ -76,13 +66,21 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 		this.europeanaProxy = europeanaProxy;
 	}
 
+	
 	@Override
-	public String getAbout() {
-		return about;
+	public String[] getYear() {
+		return year;
 	}
-
 	@Override
-	public void setAbout(String about) {
-		this.about = about;
+	public void setYear(String[] year) {
+		this.year = year;
+	}
+	@Override
+	public String[] getUserTags() {
+		return userTags;
+	}
+	@Override
+	public void setUserTags(String[] userTags) {
+		this.userTags = userTags;
 	}
 }

@@ -17,13 +17,12 @@
 
 package eu.europeana.corelib.solr.entity;
 
-import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
+import com.google.code.morphia.annotations.Property;
+import com.google.code.morphia.annotations.Serialized;
 
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 /**
@@ -35,24 +34,10 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("ProvidedCHO")
-public class ProvidedCHOImpl implements ProvidedCHO {
+public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 
-	@Id
-	private ObjectId id;
-
-	@Indexed(unique=true, dropDups=true)
-	private String about;
+	@Serialized
 	private String[] owlSameAs;
-
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
 
 	@Override
 	public String[] getOwlSameAs() {
@@ -64,16 +49,7 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 		this.owlSameAs = owlSameAs.clone();
 	}
 
-	@Override
-	public String getAbout() {
-		return this.about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
+	
 	@Override
 	public boolean equals(Object o) {
 		if(o==null){
@@ -89,4 +65,6 @@ public class ProvidedCHOImpl implements ProvidedCHO {
 	public int hashCode(){ 
 		return this.about.hashCode();
 	}
+
+	
 }

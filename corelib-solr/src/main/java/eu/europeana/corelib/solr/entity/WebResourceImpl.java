@@ -34,7 +34,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Embedded
 public class WebResourceImpl implements WebResource {
 
-	private ObjectId id;
+	private ObjectId id = new ObjectId();
 	private String[] webResourceDcRights;
 	private String webResourceEdmRights;
 

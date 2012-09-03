@@ -2,9 +2,7 @@ package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregates;
@@ -18,7 +16,7 @@ import eu.europeana.corelib.definitions.jibx.LandingPage;
 import eu.europeana.corelib.definitions.jibx.Language1;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.definitions.solr.entity.WebResource;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
@@ -78,12 +76,11 @@ public final class EuropeanaAggregationFieldInput {
 		return solrInputDocument;
 	}
 
-	public static EuropeanaAggregationImpl appendWebResource(
-			List<EuropeanaAggregationImpl> aggregations,
+	public static EuropeanaAggregation appendWebResource(
+			EuropeanaAggregation aggregation,
 			List<WebResourceImpl> webResources, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-		EuropeanaAggregationImpl aggregation = findEuropeanaAggregation(
-				aggregations, webResources.get(0));
+		
 
 		aggregation.setWebResources(webResources);
 		MongoUtils.update(EuropeanaAggregationImpl.class,
@@ -93,26 +90,13 @@ public final class EuropeanaAggregationFieldInput {
 		return aggregation;
 	}
 
-	private static EuropeanaAggregationImpl findEuropeanaAggregation(
-			List<EuropeanaAggregationImpl> aggregations,
-			WebResourceImpl webResource) {
-		for (EuropeanaAggregationImpl aggregation : aggregations) {
-			for (WebResource hasView : aggregation.getWebResources()) {
-				if (StringUtils.equals(hasView.getAbout(),
-						webResource.getAbout())) {
-					return aggregation;
-				}
-			}
-		}
-		return null;
-	}
-
+	
 	public static EuropeanaAggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType aggregation,
 			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		EuropeanaAggregationImpl mongoAggregation = new EuropeanaAggregationImpl();
-		mongoAggregation.setId(new ObjectId());
+		//mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
 		mongoAggregation.setDcCreator(SolrUtils.exists(Creator.class,
 				aggregation.getCreator()).getString());

@@ -26,6 +26,7 @@ import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
+import eu.europeana.corelib.solr.server.importer.util.EuropeanaAggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
@@ -76,6 +77,10 @@ public class SolrConstructor {
 			}
 			else if (element.ifTimeSpan()) {
 				solrInputDocument = TimespanFieldInput.createTimespanSolrFields(element.getTimeSpan(), solrInputDocument);
+			}
+			else if(element.ifEuropeanaAggregation()){
+				solrInputDocument = EuropeanaAggregationFieldInput.createAggregationSolrFields(element.getEuropeanaAggregation(), solrInputDocument);
+				solrInputDocument = ProxyFieldInput.addProxyForSolr(element.getEuropeanaAggregation(), solrInputDocument);
 			}
 			else{
 				solrInputDocument = WebResourcesFieldInput.createWebResourceSolrFields(element.getWebResource(), solrInputDocument);

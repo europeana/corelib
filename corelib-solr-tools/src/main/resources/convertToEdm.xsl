@@ -701,9 +701,9 @@
 				</xsl:if>
 				<xsl:if test="//*/europeana_aggregation_edm_country">
 				<xsl:element name="edm:country">
-					<xsl:attribute name="rdf:resource">
+					
 					<xsl:value-of select="europeana_aggregation_edm_country" />
-					</xsl:attribute>
+					
 				</xsl:element>
 				</xsl:if>
 				<xsl:if test="//*/europeana_aggregation_edm_hasView">
@@ -722,7 +722,7 @@
 				</xsl:if>
 				<xsl:if test="//*/europeana_aggregation_edm_landingPage">
 				<xsl:element name="edm:landingPage">
-					<xsl:attribute name="resource">
+					<xsl:attribute name="rdf:resource">
 					<xsl:value-of select="europeana_aggregation_edm_landingPage" />
 				</xsl:attribute>
 				</xsl:element>

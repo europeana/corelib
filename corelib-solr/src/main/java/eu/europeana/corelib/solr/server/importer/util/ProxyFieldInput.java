@@ -21,10 +21,10 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EdmType;
+import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -66,14 +66,6 @@ public final class ProxyFieldInput {
 				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(),
 				SolrUtils.exists(EdmType.class, (proxy.getType())).toString());
-		/*solrInputDocument.addField(
-				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LAT.toString(),
-				SolrUtils.exists(ResourceType.class,
-						(proxy.getCurrentLocation())).getResource());
-		solrInputDocument.addField(
-				EdmLabel.PROXY_EDM_CURRENT_LOCATION_LONG.toString(),
-				SolrUtils.exists(ResourceType.class,
-						(proxy.getCurrentLocation())).getResource());*/
 		solrInputDocument.addField(EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString(),
 		SolrUtils.exists(ResourceType.class,
 				(proxy.getCurrentLocation())).getResource());
@@ -218,7 +210,7 @@ public final class ProxyFieldInput {
 			MalformedURLException, IOException {
 
 		mongoProxy.setAbout(proxy.getAbout());
-		mongoProxy.setId(new ObjectId());
+		//mongoProxy.setId(new ObjectId());
 		if (proxy.getEuropeanaProxy() != null) {
 			mongoProxy.setEuropeanaProxy(proxy.getEuropeanaProxy()
 					.isEuropeanaProxy());
@@ -390,9 +382,18 @@ public final class ProxyFieldInput {
 			throws InstantiationException, IllegalAccessException {
 
 		proxy.setProxyIn(SolrUtils.exists(String.class, aggregation.getAbout()));
+		proxy.setEuropeanaProxy(false);
 		return proxy;
 	}
 
+	public static ProxyImpl addEuropeanaProxyForMongo(ProxyImpl proxy,
+			EuropeanaAggregationType aggregation, MongoServer mongoServer)
+			throws InstantiationException, IllegalAccessException {
+
+		proxy.setProxyIn(SolrUtils.exists(String.class, aggregation.getAbout()));
+		proxy.setEuropeanaProxy(true);
+		return proxy;
+	}
 	/**
 	 * Set the ProxyIn field for a SolrInputDocument
 	 * 
@@ -409,9 +410,18 @@ public final class ProxyFieldInput {
 			IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(),
 				SolrUtils.exists(String.class, aggregation.getAbout()));
+		solrInputDocument.addField(EdmLabel.EDM_ISEUROPEANA_PROXY.toString(),false);
 		return solrInputDocument;
 	}
-
+	
+	public static SolrInputDocument addProxyForSolr(EuropeanaAggregationType aggregation,
+			SolrInputDocument solrInputDocument) throws InstantiationException,
+			IllegalAccessException {
+		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(),
+				SolrUtils.exists(String.class, aggregation.getAbout()));
+		solrInputDocument.addField(EdmLabel.EDM_ISEUROPEANA_PROXY.toString(),true);
+		return solrInputDocument;
+	}
 	public static void deleteProxyFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(ProxyImpl.class, about, mongoServer);

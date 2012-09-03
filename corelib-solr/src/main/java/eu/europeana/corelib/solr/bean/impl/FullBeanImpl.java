@@ -81,7 +81,7 @@ public class FullBeanImpl implements FullBean {
 	private int europeanaCompleteness;
 
 	@Transient
-	private List<BriefBeanImpl> relatedItems;
+	private List<BriefBeanImpl> similarItems;
 
 	@Reference
 	private List<PlaceImpl> places;
@@ -104,13 +104,10 @@ public class FullBeanImpl implements FullBean {
 	@Reference
 	private EuropeanaAggregationImpl europeanaAggregation;
 
+
 	@Reference
 	private List<ProxyImpl> proxies;
 
-	private String[] who;
-	private String[] what;
-	private String[] where;
-	private String[] when;
 
 	private String[] country;
 	private String[] userTags;
@@ -325,52 +322,12 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public String[] getWho() {
-		return who;
+	public List<? extends BriefBean> getSimilarItems() {
+		return this.similarItems;
 	}
 
 	@Override
-	public void setWho(String[] who) {
-		this.who = who;
-	}
-
-	@Override
-	public String[] getWhat() {
-		return what;
-	}
-
-	@Override
-	public void setWhat(String[] what) {
-		this.what = what;
-	}
-
-	@Override
-	public String[] getWhere() {
-		return where;
-	}
-
-	@Override
-	public void setWhere(String[] where) {
-		this.where = where;
-	}
-
-	@Override
-	public String[] getWhen() {
-		return when;
-	}
-
-	@Override
-	public void setWhen(String[] when) {
-		this.when = when;
-	}
-
-	@Override
-	public List<? extends BriefBean> getRelatedItems() {
-		return this.relatedItems;
-	}
-
-	@Override
-	public void setRelatedItems(List<? extends BriefBean> relatedItems) {
-		this.relatedItems = (List<BriefBeanImpl>) relatedItems;
+	public void setSimilarItems(List<? extends BriefBean> similarItems) {
+		this.similarItems = (List<BriefBeanImpl>) similarItems;
 	}
 }

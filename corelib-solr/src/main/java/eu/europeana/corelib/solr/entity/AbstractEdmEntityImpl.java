@@ -32,10 +32,10 @@ import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
 public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
 	@Indexed(unique = true, dropDups=true)
-	private String about;
+	protected String about;
 
 	@Id
-	private ObjectId id;
+	protected ObjectId id = new ObjectId();
 
 	@Override
 	public ObjectId getId() {

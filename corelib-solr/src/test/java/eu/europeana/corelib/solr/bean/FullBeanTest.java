@@ -71,14 +71,14 @@ public class FullBeanTest {
 	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 	
-	
 	private Datastore ds;
 
 	@Test
 	public void testRetrieve() {
+		ProvidedCHO testCHO = mongoServer.searchByAbout(ProvidedCHOImpl.class, "/08901/EA38F4E269BA584E78B6C8E70A869BBC15BD3F9E");
+		System.out.println(testCHO.getId());
 		assertNotNull("Error getting server",mongoServer);
 		ds = mongoServer.getDatastore();
-		
 		assertNotNull("Error creating datastore", ds);
 		Agent agent = createAgent();
 		assertNotNull("Error creating agent", agent);
@@ -96,6 +96,7 @@ public class FullBeanTest {
 		assertNotNull("Error creating aggregation", aggregation);
 		ProvidedCHO providedCHO = createProvidedCHO();
 		assertNotNull("Error create providedCHO",providedCHO);
+		
 		FullBeanImpl fullBean = new FullBeanImpl();
 		ArrayList<Agent> agents = new ArrayList<Agent>();
 		agents.add(agent);
@@ -381,6 +382,7 @@ public class FullBeanTest {
 		
 		providedCHO.setOwlSameAs(new String[]{"test owlsameAs"});
 		Key<ProvidedCHO> providedCHOKey = ds.save(providedCHO);
+		
 		ProvidedCHO testProvidedCHO = ds.find(ProvidedCHOImpl.class).filter("about", providedCHO.getAbout()).get();
 		assertEquals(providedCHO,testProvidedCHO);
 		assertEquals(providedCHO.getAbout(), testProvidedCHO.getAbout());

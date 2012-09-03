@@ -42,6 +42,6 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	@Override
 	public int hashCode() {
-		return this.getAbout()!=null?this.getAbout().hashCode():this.getId().hashCode();
+		return this.getAbout()!=null?this.getAbout().hashCode():this.id.hashCode();
 	}
 }

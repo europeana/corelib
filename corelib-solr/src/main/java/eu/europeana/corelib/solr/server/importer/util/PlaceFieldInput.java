@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.HasPart;
@@ -316,7 +315,7 @@ public final class PlaceFieldInput {
 	 */
 	private static PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
-		place.setId(new ObjectId());
+		//place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());
 
 		if (placeType.getLat() != null) {
@@ -336,7 +335,7 @@ public final class PlaceFieldInput {
 					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
 							prefLabelJibx.getString());
 				} else {
-					prefLabelMongo.put("def", prefLabelJibx.getString());
+					prefLabelMongo.put( prefLabelJibx.getString(), prefLabelJibx.getString());
 				}
 			}
 			place.setPrefLabel(prefLabelMongo);
@@ -349,7 +348,7 @@ public final class PlaceFieldInput {
 					altLabelMongo.put(altLabelJibx.getLang().getLang(),
 							altLabelJibx.getString());
 				} else {
-					altLabelMongo.put("def", altLabelJibx.getString());
+					altLabelMongo.put( altLabelJibx.getString(), altLabelJibx.getString());
 				}
 			}
 			place.setAltLabel(altLabelMongo);

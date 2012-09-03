@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
@@ -49,10 +48,11 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
  * 
  */
 public final class AggregationFieldInput {
-	
-	private AggregationFieldInput(){
-		
+
+	private AggregationFieldInput() {
+
 	}
+
 	/**
 	 * Fill in a SolrInputDocument with Aggregation specific fields
 	 * 
@@ -68,31 +68,35 @@ public final class AggregationFieldInput {
 			Aggregation aggregation, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
 
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString(),
+		solrInputDocument.addField(
+				EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString(),
 				aggregation.getAbout());
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_AGGREGATION_EDM_AGGREGATED_CHO.toString(),
 				SolrUtils.exists(AggregatedCHO.class,
 						(aggregation.getAggregatedCHO())).getResource());
-		solrInputDocument
-				.addField(
-						EdmLabel.PROVIDER_AGGREGATION_EDM_OBJECT.toString(),
-						SolrUtils.exists(_Object.class,
-								(aggregation.getObject())).getResource());
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_OBJECT
+				.toString(),
+				SolrUtils.exists(_Object.class, (aggregation.getObject()))
+						.getResource());
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER.toString(),
 				SolrUtils.exists(DataProvider.class,
 						((aggregation.getDataProvider()))).getString());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER.toString(), SolrUtils
-				.exists(Provider.class, (aggregation.getProvider()))
-				.getString());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER
+				.toString(),
+				SolrUtils.exists(Provider.class, (aggregation.getProvider()))
+						.getString());
+		solrInputDocument.addField(
+				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT.toString(),
 				SolrUtils.exists(IsShownAt.class, (aggregation.getIsShownAt()))
 						.getResource());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
+		solrInputDocument.addField(
+				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS.toString(),
+		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS
+				.toString(),
 				SolrUtils.exists(Rights1.class, (aggregation.getRights()))
 						.getString());
 		if (aggregation.getUgc() != null) {
@@ -101,17 +105,19 @@ public final class AggregationFieldInput {
 		}
 		if (aggregation.getRightList() != null) {
 			for (Rights rights : aggregation.getRightList()) {
-				solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString(),
+				solrInputDocument.addField(
+						EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString(),
 						rights.getString());
 			}
 		}
 		if (aggregation.getHasViewList() != null) {
 			for (HasView hasView : aggregation.getHasViewList()) {
-				solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_HASVIEW.toString(),
+				solrInputDocument.addField(
+						EdmLabel.PROVIDER_AGGREGATION_EDM_HASVIEW.toString(),
 						hasView.getResource());
 			}
 		}
-		
+
 		return solrInputDocument;
 	}
 
@@ -139,10 +145,9 @@ public final class AggregationFieldInput {
 				webResources.get(0));
 
 		aggregation.setWebResources(webResources);
-		MongoUtils.update(AggregationImpl.class, aggregation.getAbout(), mongoServer,
-				"webResources", webResources);
+		MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
+				mongoServer, "webResources", webResources);
 
-	
 		return aggregation;
 	}
 
@@ -158,8 +163,28 @@ public final class AggregationFieldInput {
 	private static AggregationImpl findAggregation(
 			List<AggregationImpl> aggregations, WebResourceImpl webResource) {
 		for (AggregationImpl aggregation : aggregations) {
-			for (String hasView : aggregation.getHasView()) {
-				if (StringUtils.equals(hasView, webResource.getAbout())) {
+			if (aggregation.getHasView() != null) {
+				for (String hasView : aggregation.getHasView()) {
+					if (StringUtils.equals(hasView, webResource.getAbout())) {
+						return aggregation;
+					}
+				}
+			}
+			if (aggregation.getEdmIsShownAt() != null) {
+				if (StringUtils.equals(aggregation.getEdmIsShownAt(),
+						webResource.getAbout())) {
+					return aggregation;
+				}
+			}
+			if (aggregation.getEdmIsShownBy() != null) {
+				if (StringUtils.equals(aggregation.getEdmIsShownBy(),
+						webResource.getAbout())) {
+					return aggregation;
+				}
+			}
+			if (aggregation.getEdmObject() != null) {
+				if (StringUtils.equals(aggregation.getEdmObject(),
+						webResource.getAbout())) {
 					return aggregation;
 				}
 			}
@@ -186,11 +211,11 @@ public final class AggregationFieldInput {
 			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
-		mongoAggregation.setId(new ObjectId());
+	//	mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
-
-		mongoAggregation.setEdmDataProvider(SolrUtils.exists(DataProvider.class,
-				(aggregation.getDataProvider())).getString());
+		mongoAggregation.setEdmDataProvider(SolrUtils.exists(
+				DataProvider.class, (aggregation.getDataProvider()))
+				.getString());
 		mongoAggregation.setEdmIsShownAt(SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource());
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
@@ -201,7 +226,7 @@ public final class AggregationFieldInput {
 				(aggregation.getProvider())).getString());
 		mongoAggregation.setEdmRights(SolrUtils.exists(Rights1.class,
 				(aggregation.getRights())).getString());
-	
+
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString());
@@ -227,15 +252,17 @@ public final class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 
 		}
-		if (((EdmMongoServer)mongoServer).searchByAbout(AggregationImpl.class, mongoAggregation.getAbout())!=null){
-			//TODO:update Aggregation
+		if (((EdmMongoServer) mongoServer).searchByAbout(AggregationImpl.class,
+				mongoAggregation.getAbout()) != null) {
+			// TODO:update Aggregation
 		} else {
-		mongoServer.getDatastore().save(mongoAggregation);
+			mongoServer.getDatastore().save(mongoAggregation);
 		}
 		return mongoAggregation;
 	}
 
-	public static void deleteAggregationFromMongo(String about, EdmMongoServer mongoServer){
-		MongoUtils.delete(Aggregation.class,about,mongoServer);
+	public static void deleteAggregationFromMongo(String about,
+			EdmMongoServer mongoServer) {
+		MongoUtils.delete(Aggregation.class, about, mongoServer);
 	}
 }

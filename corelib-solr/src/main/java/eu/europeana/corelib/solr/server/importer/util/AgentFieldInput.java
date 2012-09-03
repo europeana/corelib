@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import com.google.code.morphia.mapping.MappingException;
 
@@ -229,7 +228,7 @@ public final class AgentFieldInput {
 			MongoServer mongoServer)
 			throws MalformedURLException, IOException {
 
-		AgentImpl agent = (AgentImpl) ((EdmMongoServer) mongoServer)
+		AgentImpl agent = ((EdmMongoServer) mongoServer)
 				.searchByAbout(AgentImpl.class, agentType.getAbout());
 
 		// if it does not exist
@@ -393,7 +392,7 @@ public final class AgentFieldInput {
 			}
 		}
 
-		return (AgentImpl) ((EdmMongoServer) mongoServer).searchByAbout(
+		return  ((EdmMongoServer) mongoServer).searchByAbout(
 				AgentImpl.class, agentType.getAbout());
 	}
 
@@ -408,7 +407,7 @@ public final class AgentFieldInput {
 	private static AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
-		agent.setId(new ObjectId());
+		//agent.setId(new ObjectId());
 		agent.setAbout(agentType.getAbout());
 
 		agent.setDcDate(SolrUtils.resourceOrLiteralListToArray(agentType
@@ -443,7 +442,7 @@ public final class AgentFieldInput {
 					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
 							prefLabelJibx.getString());
 				} else {
-					prefLabelMongo.put("def", prefLabelJibx.getString());
+					prefLabelMongo.put( prefLabelJibx.getString(), prefLabelJibx.getString());
 				}
 			}
 			agent.setPrefLabel(prefLabelMongo);
@@ -456,7 +455,7 @@ public final class AgentFieldInput {
 					altLabelMongo.put(altLabelJibx.getLang().getLang(),
 							altLabelJibx.getString());
 				} else {
-					altLabelMongo.put("def", altLabelJibx.getString());
+					altLabelMongo.put( altLabelJibx.getString(), altLabelJibx.getString());
 				}
 			}
 			agent.setAltLabel(altLabelMongo);

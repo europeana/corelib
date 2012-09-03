@@ -21,12 +21,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -90,14 +89,13 @@ public final class ProvidedCHOFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public static ProvidedCHOImpl createProvidedCHOMongoFields(
-			ProvidedCHOType providedCHO, MongoServer mongoServer)
+			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-		ProvidedCHOImpl mongoProvidedCHO = ((EdmMongoServer) mongoServer)
-				.searchByAbout(ProvidedCHOImpl.class, providedCHO.getAbout());
+		ProvidedCHO mongoProvidedCHO = mongoServer.searchByAbout(ProvidedCHOImpl.class, providedCHO.getAbout());
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
-			mongoProvidedCHO.setId(new ObjectId());
+			//mongoProvidedCHO.setId(new ObjectId());
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
 			
 				mongoProvidedCHO.setOwlSameAs(SolrUtils.resourceListToArray(providedCHO.getSameAList()));
@@ -105,7 +103,6 @@ public final class ProvidedCHOFieldInput {
 			mongoServer.getDatastore().save(mongoProvidedCHO);
 		} else {
 			// update the ProvidedCHO
-			// Start by the sameAs list
 			List<String> owlSameAsList = null;
 			if (providedCHO.getSameAList() != null) {
 				owlSameAsList = new ArrayList<String>();
@@ -118,7 +115,7 @@ public final class ProvidedCHOFieldInput {
 			}
 
 		}
-		return mongoProvidedCHO;
+		return (ProvidedCHOImpl) mongoProvidedCHO;
 	}
 
 	public static void deleteProvideCHOFromMongo(String about,

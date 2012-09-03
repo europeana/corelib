@@ -1,45 +1,20 @@
 package eu.europeana.corelib.solr.entity;
 
-import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.solr.entity.ConceptScheme;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 @Entity("ConceptScheme")
-public class ConceptSchemeImpl implements ConceptScheme {
+public class ConceptSchemeImpl extends AbstractEdmEntityImpl implements ConceptScheme {
 
-	@Id
-	private ObjectId id;
-	@Indexed(unique = true)
-	private String about;
+	
 	private String[] dcTitle;
 	private String[] dcCreator;
 	private String[] note;
 	private String[] hasTopConceptOf;
 
-	@Override
-	public ObjectId getId() {
-		return this.id;
-	}
 
-	@Override
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getAbout() {
-		return this.about;
-	}
-
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
 
 	@Override
 	public String[] getDcTitle() {

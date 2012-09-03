@@ -16,6 +16,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
+	
+	
+
 	@Embedded
 	private List<WebResourceImpl> webResources;
 
@@ -129,4 +132,6 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	public void setWebResources(List<? extends WebResource> webResources) {
 		this.webResources = (List<WebResourceImpl>) webResources;
 	}
+	
+	
 }

@@ -24,19 +24,22 @@ import java.util.List;
 
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.RDF.Choice;
-import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
+import eu.europeana.corelib.solr.server.importer.util.EuropeanaAggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
@@ -50,9 +53,9 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
  */
 public class MongoConstructor {
 
-	private MongoServer mongoServer;
+	private EdmMongoServerImpl mongoServer;
 	
-	public void setMongoServer(MongoServer mongoServer) {
+	public void setMongoServer(EdmMongoServerImpl mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 
@@ -78,6 +81,7 @@ public class MongoConstructor {
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
 		List<Choice> elements = record.getChoiceList();
+		EuropeanaAggregation europeanaAggregation = new EuropeanaAggregationImpl();
 		for (Choice element : elements) {
 
 			if (element.ifProvidedCHO()) {
@@ -130,6 +134,7 @@ public class MongoConstructor {
 					aggregations.set(0,
 							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
 				}
+				europeanaAggregation = EuropeanaAggregationFieldInput.appendWebResource(europeanaAggregation, webResources, mongoServer);
 
 			}
 			if (element.ifTimeSpan()) {
@@ -138,12 +143,23 @@ public class MongoConstructor {
 			if (element.ifAgent()) {
 				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer));
 			}
+			if(element.ifEuropeanaAggregation()){
+				
+				europeanaAggregation = EuropeanaAggregationFieldInput.createAggregationMongoFields(element.getEuropeanaAggregation(), mongoServer);
+				if (webResources.size() > 0) {
+					europeanaAggregation=
+							EuropeanaAggregationFieldInput.appendWebResource(europeanaAggregation, webResources, mongoServer);
+				}
+				
+					proxies.add(ProxyFieldInput.addEuropeanaProxyForMongo(new ProxyImpl(), element.getEuropeanaAggregation(), mongoServer));
+				
+			}
 		}
 
 		AggregationImpl aggregation = aggregations.get(0);
 		aggregation.setWebResources(webResources);
 		fullBean.setProvidedCHOs(providedCHOs);
-		
+		fullBean.setEuropeanaAggregation(europeanaAggregation);
 		
 		fullBean.setAggregations(aggregations);
 		try {

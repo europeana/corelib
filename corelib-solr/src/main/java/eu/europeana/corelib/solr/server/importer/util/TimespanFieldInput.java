@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.HasPart;
@@ -243,7 +242,7 @@ public final class TimespanFieldInput {
 
 	private static TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();
-		mongoTimespan.setId(new ObjectId());
+		//mongoTimespan.setId(new ObjectId());
         mongoTimespan.setAbout(timeSpan.getAbout());
         mongoTimespan.setNote(SolrUtils.literalListToArray(timeSpan.getNoteList()));
         if (timeSpan.getPrefLabelList() != null) {
@@ -253,7 +252,7 @@ public final class TimespanFieldInput {
                     prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
                             prefLabelJibx.getString());
                 } else {
-                    prefLabelMongo.put("def",
+                    prefLabelMongo.put( prefLabelJibx.getString(),
                             prefLabelJibx.getString());
                 }
             }
@@ -266,7 +265,7 @@ public final class TimespanFieldInput {
                     altLabelMongo.put(altLabelJibx.getLang().getLang(),
                             altLabelJibx.getString());
                 } else {
-                    altLabelMongo.put("def",
+                    altLabelMongo.put(altLabelJibx.getString(),
                             altLabelJibx.getString());
                 }
             }

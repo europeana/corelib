@@ -17,7 +17,6 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.bson.types.ObjectId;
 
 import eu.europeana.corelib.definitions.jibx.ConformsTo;
 import eu.europeana.corelib.definitions.jibx.Created;
@@ -226,32 +225,54 @@ public final class WebResourcesFieldInput {
 	public static WebResourceImpl createWebResourceMongoField(
 			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
-		mongoWebResource.setId(new ObjectId());
+		//mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
+		if(webResource.getRights()!=null){
 		mongoWebResource.setWebResourceEdmRights(webResource.getRights()
 				.getResource());
+		}
+		if(webResource.getRightList()!=null){
 		mongoWebResource.setWebResourceDcRights(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getRightList()));
+		}
+		if(webResource.getDescriptionList()!=null){
 		mongoWebResource
 				.setDcDescription(SolrUtils
 						.resourceOrLiteralListToArray(webResource
 								.getDescriptionList()));
+		}
+		if(webResource.getFormatList()!=null){
 		mongoWebResource.setDcFormat(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getFormatList()));
+		}
+		if(webResource.getSourceList()!=null){
 		mongoWebResource.setDcSource(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getSourceList()));
+		}
+		if(webResource.getConformsToList()!=null){
 		mongoWebResource.setDctermsConformsTo(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getConformsToList()));
+		}
+		if(webResource.getCreatedList()!=null){
 		mongoWebResource.setDctermsCreated(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getCreatedList()));
+		}
+		if(webResource.getExtentList()!=null){
 		mongoWebResource.setDctermsExtent(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getExtentList()));
+		}
+		if(webResource.getHasPartList()!=null){
 		mongoWebResource.setDctermsHasPart(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getHasPartList()));
+		}
+		if(webResource.getFormatList()!=null){
 		mongoWebResource.setDctermsIsFormatOf(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getIsFormatOfList()));
+		}
+		if(webResource.getIssuedList()!=null){
 		mongoWebResource.setDctermsIssued(SolrUtils
 				.resourceOrLiteralListToArray(webResource.getIssuedList()));
+		}
 		if(webResource.getIsNextInSequence()!=null){
 		mongoWebResource.setIsNextInSequence(webResource.getIsNextInSequence()
 				.getResource());
