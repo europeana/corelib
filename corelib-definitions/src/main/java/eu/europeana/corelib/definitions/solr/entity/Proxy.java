@@ -40,20 +40,16 @@ public interface Proxy extends BasicProxy {
 	 * 			String array containing the edmType of a Proxy
 	 */
 	void setEdmType(DocType edmType);
-	
-	/**
-	 * Get the edm:unstored field (not to be implemented!!!)
-	 * @return 
-	 */
-	String[] getEdmUnstored();
-	
-	/**
-	 * Set the edm:unstored field (not to be implemented!!!)
-	 * @param edmUnstored
-	 */
-	void setEdmUnstored(String[] edmUnstored);
 
 	boolean isEuropeanaProxy();
 
 	void setEuropeanaProxy(boolean europeanaProxy);
+
+	String[] getYear();
+
+	void setYear(String[] year);
+
+	String[] getUserTags();
+
+	void setUserTags(String[] userTags);
 }
