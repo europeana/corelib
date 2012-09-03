@@ -74,8 +74,6 @@ public interface BriefBean extends IdBean {
 
 	List<Map<String, String>> getEdmAgentLabel();
 
-	String getFullDocUrl();
-
 	String[] getDctermsHasPart();
 
 	String[] getDcCreator();

@@ -83,9 +83,9 @@ public interface FullBean extends IdBean {
 
 	List<? extends Aggregation> getAggregations();
 
-	List<? extends BriefBean> getRelatedItems();
+	List<? extends BriefBean> getSimilarItems();
 
-	void setRelatedItems(List<? extends BriefBean> relatedItems);
+	void setSimilarItems(List<? extends BriefBean> similarItems);
 
 	List<? extends ProvidedCHO> getProvidedCHOs();
 
@@ -94,22 +94,6 @@ public interface FullBean extends IdBean {
 	String getAbout();
 
 	void setAbout(String about);
-
-	void setWhen(String[] when);
-
-	String[] getWhen();
-
-	void setWhere(String[] where);
-
-	String[] getWhere();
-
-	void setWhat(String[] what);
-
-	String[] getWhat();
-
-	void setWho(String[] who);
-
-	String[] getWho();
 
 	EuropeanaAggregation getEuropeanaAggregation();
 

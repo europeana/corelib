@@ -32,14 +32,14 @@ public interface AbstractEdmEntity {
 	 * 
 	 * @return
 	 */
-	ObjectId getId();
-
-	/**
-	 * Set the MongoDB Object ID
-	 * 
-	 * @param id
-	 */
-	void setId(ObjectId id);
+//	ObjectId getId();
+//
+//	/**
+//	 * Set the MongoDB Object ID
+//	 * 
+//	 * @param id
+//	 */
+//	void setId(ObjectId id);
 
 	/**
 	 * Retrieves the rdf:about attribute from an EDM contextual class. This is
@@ -56,4 +56,8 @@ public interface AbstractEdmEntity {
 	 * @param about
 	 */
 	void setAbout(String about);
+
+	ObjectId getId();
+
+	void setId(ObjectId id);
 }

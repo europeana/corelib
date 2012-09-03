@@ -47,7 +47,7 @@ public enum EdmLabel {
 	PROVIDER_AGGREGATION_EDM_UNSTORED("provider_aggregation_edm_unstored", SolrType.NOT_STORED),
 
 	// EUROPEANA AGGREGATION
-	EDM_EUROPEANA_AGGREGATION("europeana_edm_aggregation", SolrType.INDEXED), 
+	EDM_EUROPEANA_AGGREGATION("edm_europeana_aggregation", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO("europeana_aggregation_ore_aggregatedCHO", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_ORE_AGGREGATES("europeana_aggregation_ore_aggregates", SolrType.NOT_STORED), 
 	EUROPEANA_AGGREGATION_DC_CREATOR("europeana_aggregation_dc_creator", SolrType.NOT_STORED), 
