@@ -49,7 +49,7 @@ public enum  EDMXMPValues {
 	cc_morePermissions("cc:morePermissions"),
 	// xmpMM:OriginalDocumentID from europeana:object
 	stref_OriginalDocumentID("stref:originalDocumentID"),
-	// xmpMM:OriginalDocumentID from europeana:object
+	// The actual uri of the object as displayed in the europeana portal
 	stref_DocumentID("stref:documentID"),
 	// cc:useGuidelines with http://www.europeana.eu/rights/pd-usage-guide/
 	// (as a value for the rdf:resource attribute) if europeana:rights is

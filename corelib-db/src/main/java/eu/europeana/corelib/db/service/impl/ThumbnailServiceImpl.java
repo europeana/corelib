@@ -80,10 +80,14 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			ByteArrayOutputStream mediumOutputStream = new ByteArrayOutputStream();
 			ByteArrayOutputStream largeOutputStream = new ByteArrayOutputStream();
 
-			String xmp = XMPUtils.fetchXMP(edmInfo);
-			xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmp);
-			xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmp);
-			xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmp);
+			String xmptiny = XMPUtils.fetchXMP(edmInfo,ThumbSize.TINY);
+			xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmptiny);
+			
+			String xmpmedium = XMPUtils.fetchXMP(edmInfo,ThumbSize.MEDIUM);
+			xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmpmedium);
+			
+			String xmplarge = XMPUtils.fetchXMP(edmInfo,ThumbSize.LARGE);
+			xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmplarge);
 
 			tinyOutputStream.flush();
 			byte[] tinyconverted = tinyOutputStream.toByteArray();
@@ -96,11 +100,8 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			largeOutputStream.flush();
 			byte[] largeconverted = largeOutputStream.toByteArray();
 			largeOutputStream.close();
-
 			String xmps = Sanselan.getXmpXml(tinyconverted);
-			//System.out.println("Writing");
 
-			//System.out.println(xmps);
 			cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(mediumconverted));
 			cache.getImages().put(ThumbSize.TINY.toString(), new Image(tinyconverted));
 			cache.getImages().put(ThumbSize.LARGE.toString(), new Image(largeconverted));
@@ -279,17 +280,15 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 	 * @see eu.europeana.corelib.db.service.ThumbnailService#extractXMPInfo(java.lang.String, java.lang.String, eu.europeana.corelib.definitions.model.ThumbSize)
 	 */
 	@Override
-	public String extractXMPInfo(String objectId, String imageId, ThumbSize size) {
+	public String extractXMPInfo(String objectId, String imageId, ThumbSize size) throws DatabaseException{
 		 byte[] imgbyte = retrieveThumbnail(objectId,size);
 		 String xmp = "";
 		 try {
 			xmp = Sanselan.getXmpXml(imgbyte);
 		} catch (ImageReadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DatabaseException(e,ProblemType.XMPMETADATARETRIEVAL);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DatabaseException(e,ProblemType.XMPMETADATARETRIEVAL);
 		}
 		 
 		return xmp;

@@ -153,5 +153,5 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @param size The ThumbSize of the requested image
 	 * @return the XMP info embedded in the thumbnail
 	 */
-	public String extractXMPInfo(String objectId, String imageId,ThumbSize size);
+	public String extractXMPInfo(String objectId, String imageId,ThumbSize size) throws DatabaseException;
 }

@@ -16,27 +16,34 @@
  */
 package eu.europeana.corelib.db.util;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.RDF.Choice;
+import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
  * Utility classes for XMP manipulation/generation
@@ -47,30 +54,37 @@ import eu.europeana.corelib.definitions.jibx.RDF.Choice;
  */
 public class XMPUtils {
 
-	
 	public static final String PORTALPREFIX = "http://www.europeana.eu/portal/record/";
-	
-	
+	public static final String IMAGEPREFIX = "http://europeanastatic.eu/api/image?type=TEXT&uri=";
+
 	/**
-	 * Public method for creating an appropriate XMP XML document from an EDM instance
-	 * @param edmRecord the JIBX EDM representation
+	 * Public method for creating an appropriate XMP XML document from an EDM
+	 * instance
+	 * 
+	 * @param edmRecord
+	 *            the JIBX EDM representation
 	 * @return the XMP string
+	 * @throws UnsupportedEncodingException 
+	 * @throws DatabaseException 
 	 */
-	public static String fetchXMP(RDF edmRecord){
+	public static String fetchXMP(RDF edmRecord, ThumbSize size) throws UnsupportedEncodingException, DatabaseException {
 		Map<EDMXMPValues, String> vals = populatevalues(edmRecord);
-		String xmp = produceXMPPXML(vals);
+		String xmp = produceXMPPXML(vals, size);
 		return xmp;
 	}
-	
-	
-	
+
 	/**
 	 * Creates the actual XMP XML given a Map of values
-	 * @param values the map of values
+	 * 
+	 * @param values
+	 *            the map of values
 	 * 
 	 * @return a String representing the XMP XML
+	 * @throws UnsupportedEncodingException 
+	 * @throws DatabaseException 
 	 */
-	private static String produceXMPPXML(Map<EDMXMPValues, String> values) {
+	private static String produceXMPPXML(Map<EDMXMPValues, String> values,
+			ThumbSize size) throws UnsupportedEncodingException, DatabaseException {
 
 		String cc_attributionName = values.get(EDMXMPValues.cc_attributionName);
 		String cc_morePermissions = values.get(EDMXMPValues.cc_morePermissions);
@@ -82,21 +96,19 @@ public class XMPUtils {
 		String edm_rights = values.get(EDMXMPValues.edm_rights);
 		String xmpMM_OriginalDocumentID = values
 				.get(EDMXMPValues.stref_OriginalDocumentID);
-		String xmpMM_DocumentID = values
-				.get(EDMXMPValues.stref_DocumentID);
+		String xmpMM_DocumentID = values.get(EDMXMPValues.stref_DocumentID);
 		String xmpRights_Marked = values.get(EDMXMPValues.xmpRights_Marked);
 		String xmpRights_WebStatement = values
 				.get(EDMXMPValues.xmpRights_WebStatement);
 
 		StringBuffer xml = new StringBuffer();
-		
+
 		xml.append(" <?xpacket begin='' id='W5M0MpCehiHzreSzNTczkc9d'?>");
-		
+
 		xml.append("<x:xmpmeta xmlns:x='adobe:ns:meta/'>");
-		
-		
+
 		xml.append(" <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>");
-		
+
 		// CC segment
 
 		if (cc_attributionName != null || cc_morePermissions != null
@@ -127,14 +139,14 @@ public class XMPUtils {
 				xml.append(dc_title);
 				xml.append("</rdf:li></rdf:Alt></dc:title>");
 			}
-			if (dc_rights != null ||  edm_rights != null) {
+			if (dc_rights != null || edm_rights != null) {
 				xml.append("<dc:rights><rdf:Alt>");
-				if(dc_rights != null){
+				if (dc_rights != null) {
 					xml.append("<rdf:li xml:lang='x-default'>");
 					xml.append(dc_rights);
 					xml.append("</rdf:li>");
 				}
-				if(edm_rights != null){
+				if (edm_rights != null) {
 					xml.append("<rdf:li xml:lang='x-default'>");
 					xml.append(edm_rights);
 					xml.append("</rdf:li>");
@@ -145,8 +157,7 @@ public class XMPUtils {
 			xml.append("</rdf:Description>");
 		}
 
-		if (edm_dataProvider != null || edm_provider != null) 
-		{
+		if (edm_dataProvider != null || edm_provider != null) {
 			xml.append("<rdf:Description rdf:about='' xmlns:edm='http://www.europeana.eu/schemas/edm/' xmlns:cc='http://creativecommons.org/ns#'>");
 			if (edm_provider != null) {
 				xml.append("<edm:dataProvider>");
@@ -160,34 +171,49 @@ public class XMPUtils {
 			}
 			xml.append("</rdf:Description>");
 		}
-		
-		if (xmpMM_OriginalDocumentID != null || edm_provider != null) 
-		{
+
+		if (xmpMM_OriginalDocumentID != null || edm_provider != null) {
 			xml.append("<rdf:Description rdf:about='' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'  ");
 			xml.append("xmlns:stRef= 'http://ns.adobe.com/xap/1.0/sType/ResourceRef#'>");
-			
+
 			xml.append("<xmpMM:DerivedFrom rdf:parseType=\"Resource\">");
-			
+
 			xml.append("<stRef:DocumentID>");
-			xml.append(PORTALPREFIX);
-			xml.append(xmpMM_DocumentID);
-			xml.append(".html");
+			
+			StringBuffer imageuiriInPortal = new StringBuffer();
+			
+			imageuiriInPortal.append(IMAGEPREFIX);
+			imageuiriInPortal.append(xmpMM_DocumentID);
+			imageuiriInPortal.append("&size=");
+			
+			switch (size) {
+			case TINY:
+				imageuiriInPortal.append("TINY");
+				break;
+			case MEDIUM:
+				imageuiriInPortal.append("BRIEF_DOC");
+				break;
+			case LARGE:
+				imageuiriInPortal.append("FULL_DOC");
+				break;
+			}
+			
+			xml.append(URLEncoder.encode(imageuiriInPortal.toString(),"UTF-8"));
+
 			xml.append("</stRef:DocumentID>");
-			
-			
+
 			if (xmpMM_OriginalDocumentID != null) {
 				xml.append("<stRef:OriginalDocumentID>");
 				xml.append(xmpMM_OriginalDocumentID);
 				xml.append("</stRef:OriginalDocumentID>");
 			}
-			
+
 			xml.append("</xmpMM:DerivedFrom>");
-			
+
 			xml.append("</rdf:Description>");
 		}
-		
-		if (xmpRights_Marked != null || xmpRights_WebStatement != null) 
-		{
+
+		if (xmpRights_Marked != null || xmpRights_WebStatement != null) {
 			xml.append("<rdf:Description rdf:about='' xmlns:xmpRights='http://ns.adobe.com/xap/1.0/rights/' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'>");
 			if (xmpRights_Marked != null) {
 				xml.append("<xmpRights:Marked>");
@@ -201,27 +227,29 @@ public class XMPUtils {
 			}
 			xml.append("</rdf:Description>");
 		}
-		
+
 		xml.append(" </rdf:RDF>");
 		xml.append("</x:xmpmeta>");
 		xml.append("<?xpacket end='w'?>");
-		
-		
+
 		try {
 			return formatXml(xml.toString());
 		} catch (Exception e) {
-			return null;
+			
+			throw new DatabaseException(e,ProblemType.XMPMETADATACREATION);
+
 		}
 
 	}
 
 	/**
-	 * Populates a hashmap containing the values that should be contained in the XMP
-	 * document  embedded in the europeana thumbnail. The values themselves are 
-	 * provided by the edmRecord which is a representation of the original EDM document 
-	 * which contains a reference to the annotated thumbnail.  
+	 * Populates a hashmap containing the values that should be contained in the
+	 * XMP document embedded in the europeana thumbnail. The values themselves
+	 * are provided by the edmRecord which is a representation of the original
+	 * EDM document which contains a reference to the annotated thumbnail.
 	 * 
-	 * @param edmRecord the EDM RDF representation
+	 * @param edmRecord
+	 *            the EDM RDF representation
 	 * @return a map containing values to be embedded in the XMP document
 	 */
 	private static Map<EDMXMPValues, String> populatevalues(RDF edmRecord) {
@@ -290,9 +318,10 @@ public class XMPUtils {
 			if (element.ifProxy()) {
 				ProxyType pcho = element.getProxy();
 
-				//Set the document ID from rdf:about attribute
-				EDMXMPValuesMap.put(EDMXMPValues.stref_DocumentID,pcho.getAbout());
-				
+				// Set the document ID from rdf:about attribute
+				EDMXMPValuesMap.put(EDMXMPValues.stref_DocumentID,
+						pcho.getAbout());
+
 				List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> dclist = pcho
 						.getChoiceList();
 
@@ -317,41 +346,47 @@ public class XMPUtils {
 
 		return EDMXMPValuesMap;
 	}
-	
-	
-	
-    /**
-     * Utility method for pretty printing the XML file created
-     * by String concatenation 
-     * 
-     * @param origxml the original string
-     * @return a formated XML string
-     * @throws Exception
-     */
-    private static String formatXml(String origxml) throws Exception {
-    	
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(origxml));
-        Document doc = db.parse(is);
-    	
-        String xml = "";
-        TransformerFactory transFactory = TransformerFactory.newInstance();
-        Transformer transformer = transFactory.newTransformer();
 
-        transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	/**
+	 * Utility method for pretty printing the XML file created by String
+	 * concatenation
+	 * 
+	 * @param origxml
+	 *            the original string
+	 * @return a formated XML string
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws TransformerException
+	 * @throws Exception
+	 */
+	private static String formatXml(String origxml)
+			throws ParserConfigurationException, SAXException, IOException,
+			TransformerException {
 
-        StringWriter writer = new StringWriter();
-        StreamResult result = new StreamResult(writer);
-        DOMSource source = new DOMSource(doc);
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		InputSource is = new InputSource(new StringReader(origxml));
+		Document doc = db.parse(is);
 
-        transformer.transform(source, result);
+		String xml = "";
+		TransformerFactory transFactory = TransformerFactory.newInstance();
+		Transformer transformer = transFactory.newTransformer();
 
-        xml = writer.toString();
-        return xml;
-    }
+		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(
+				"{http://xml.apache.org/xslt}indent-amount", "2");
+
+		StringWriter writer = new StringWriter();
+		StreamResult result = new StreamResult(writer);
+		DOMSource source = new DOMSource(doc);
+
+		transformer.transform(source, result);
+
+		xml = writer.toString();
+		return xml;
+	}
 
 }
