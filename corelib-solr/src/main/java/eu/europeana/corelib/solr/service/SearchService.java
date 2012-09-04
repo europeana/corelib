@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
@@ -103,7 +104,7 @@ public interface SearchService {
 	 */
 	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
 
-	QueryResponse findMoreLikeThis(String europeanaObjectId)
+	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 
 }

@@ -18,6 +18,7 @@ package eu.europeana.corelib.solr.service.impl;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -34,11 +36,14 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.definitions.solr.QueryType;
+import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
@@ -63,6 +68,11 @@ import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
  * 
  */
 public class SearchServiceImpl implements SearchService {
+
+	/**
+	 * Default number of documents retrieved by MoreLikeThis
+	 */
+	private static final int DEFAULT_MLT_COUNT = 10;
 
 	// provided by setter
 	private SolrServer solrServer;
@@ -95,8 +105,7 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		if (fullBean != null) {
 			try {
-				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId)
-						.getBeans(BriefBeanImpl.class));
+				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
 				// LOG HERE
 			}
@@ -118,8 +127,7 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
 		if (fullBean != null) {
 			try {
-				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId)
-						.getBeans(BriefBeanImpl.class));
+				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
 				// LOG
 			}
@@ -129,21 +137,35 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public QueryResponse findMoreLikeThis(String europeanaObjectId)
-			throws SolrServerException {
-		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
-				+ europeanaObjectId + "\"");
-		solrQuery.set("mlt", true);
-		String[] mlt = new String[MoreLikeThis.values().length];
-		int i = 0;
-		for (MoreLikeThis mltField : MoreLikeThis.values()) {
-			mlt[i] = mltField.toString();
-			i++;
-		}
-		solrQuery.set("mlt.fl", mlt);
-		solrQuery.setQueryType(QueryType.ADVANCED.toString());
-		return solrServer.query(solrQuery);
+	public List<BriefBean> findMoreLikeThis(String europeanaObjectId) throws SolrServerException {
+		return findMoreLikeThis(europeanaObjectId, DEFAULT_MLT_COUNT);
+	}
 
+	public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
+			throws SolrServerException {
+		String query = "europeana_id:\"" + europeanaObjectId + "\"";
+
+		SolrQuery solrQuery = new SolrQuery().setQuery(query);
+		solrQuery.setQueryType(QueryType.ADVANCED.toString());
+		solrQuery.set("mlt", true);
+		List<String> fields = new ArrayList<String>();
+		for (MoreLikeThis mltField : MoreLikeThis.values()) {
+			fields.add(mltField.toString());
+		}
+		solrQuery.set("mlt.fl", StringUtils.join(fields, ","));
+		solrQuery.set("mlt.mintf", 1);
+		solrQuery.set("mlt.match.include", "false");
+		solrQuery.set("mlt.count", count);
+
+		QueryResponse response = solrServer.query(solrQuery);
+
+		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
+		List<SolrDocument> docs = (List<SolrDocument>)moreLikeThisList.getVal(0);
+		List<BriefBean> beans = new ArrayList<BriefBean>();
+		for (SolrDocument doc : docs) {
+			beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class, doc));
+		}
+		return beans;
 	}
 
 	@SuppressWarnings("unchecked")
