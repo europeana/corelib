@@ -34,7 +34,9 @@ public enum ProblemType {
     MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
     NONE("An exception occurred", ProblemResponseAction.MAIL),
     INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
-    UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL)
+    UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL),
+    XMPMETADATACREATION("Unable to crate XMP metadata for thumbnail",ProblemResponseAction.IGNORE),
+    XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail",ProblemResponseAction.IGNORE)
     ; 
     
     private String message;
