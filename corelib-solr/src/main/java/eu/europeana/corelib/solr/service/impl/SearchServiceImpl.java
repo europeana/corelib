@@ -128,7 +128,8 @@ public class SearchServiceImpl implements SearchService {
 		return fullBean;
 	}
 
-	private QueryResponse findMoreLikeThis(String europeanaObjectId)
+	@Override
+	public QueryResponse findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException {
 		SolrQuery solrQuery = new SolrQuery().setQuery("europeana_id:\""
 				+ europeanaObjectId + "\"");
