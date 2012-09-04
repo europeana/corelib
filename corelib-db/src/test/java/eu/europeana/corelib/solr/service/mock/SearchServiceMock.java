@@ -24,6 +24,9 @@ import static org.easymock.EasyMock.replay;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -97,6 +100,13 @@ public class SearchServiceMock implements SearchService {
 	}
 	@Override
 	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QueryResponse findMoreLikeThis(String europeanaObjectId)
+			throws SolrServerException {
 		// TODO Auto-generated method stub
 		return null;
 	}
