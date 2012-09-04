@@ -26,4 +26,6 @@ public interface IdBean {
 	 */
 	String getId();
 
+	Boolean isOptedOut();
+
 }

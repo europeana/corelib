@@ -125,4 +125,6 @@ public interface FullBean extends IdBean {
 
 
 	void setEuropeanaCollectionName(String[] europeanaCollectionName);
+
+	void setOptOut(boolean optOut);
 }

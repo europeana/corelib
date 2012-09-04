@@ -80,6 +80,7 @@ public class FullBeanImpl implements FullBean {
 
 	private int europeanaCompleteness;
 
+	private boolean optOut;
 	@Transient
 	private List<BriefBeanImpl> similarItems;
 
@@ -329,5 +330,16 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setSimilarItems(List<? extends BriefBean> similarItems) {
 		this.similarItems = (List<BriefBeanImpl>) similarItems;
+	}
+
+	@Override
+	public Boolean isOptedOut() {
+		
+		return this.optOut;
+	}
+	
+	@Override
+	public void setOptOut(boolean optOut){
+		this.optOut = optOut;
 	}
 }
