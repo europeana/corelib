@@ -26,7 +26,7 @@
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
     xmlns:ore="http://www.openarchives.org/ore/terms/"
-    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2" xmlns:foaf="http://xmlns.com/foaf/0.1">
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
 
@@ -36,8 +36,8 @@
     <import namespace="http://www.europeana.eu/schemas/edm/enrichment/"
         schemaLocation="ENRICHMENT.xsd"/>
     <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
-    <import namespace="http://rdvocab.info/ElementsGr2" schemaLocation="RDAGR2.xsd"/>
-    <import namespace="http://xmlns.com/foaf/0.1" schemaLocation="FOAF.xsd"/>
+    <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
+    <import namespace="http://xmlns.com/foaf/0.1/" schemaLocation="FOAF.xsd"/>
     <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
 
