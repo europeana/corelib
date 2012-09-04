@@ -62,4 +62,18 @@
 
     <bean name="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
 
+   <!--Log4j Configuration-->  
+   <bean id="log4jInitialization"
+	class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
+		<property name="targetMethod" value="initLogging" />
+		<property name="arguments">
+			<list>
+				<value>classpath:testlog4j.properties</value>
+			</list>
+		</property>
+	</bean>
+
+
+
 </beans>
