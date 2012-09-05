@@ -1,6 +1,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -24,13 +25,13 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	private String aggregatedCHO;
 	private String[] aggregates;
-	private String dcCreator;
+	private Map<String,String> dcCreator;
 	private String edmLandingPage;
 	private String edmIsShownBy;
 	private String[] edmHasView;
-	private String edmCountry;
-	private String edmLanguage;
-	private String edmRights;
+	private Map<String,String> edmCountry;
+	private Map<String,String> edmLanguage;
+	private Map<String,String> edmRights;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -53,12 +54,12 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	}
 
 	@Override
-	public String getDcCreator() {
+	public Map<String,String> getDcCreator() {
 		return this.dcCreator;
 	}
 
 	@Override
-	public void setDcCreator(String dcCreator) {
+	public void setDcCreator(Map<String,String> dcCreator) {
 		this.dcCreator = dcCreator;
 	}
 
@@ -93,32 +94,32 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	}
 
 	@Override
-	public String getEdmCountry() {
+	public Map<String,String> getEdmCountry() {
 		return this.edmCountry;
 	}
 
 	@Override
-	public void setEdmCountry(String edmCountry) {
+	public void setEdmCountry(Map<String,String> edmCountry) {
 		this.edmCountry = edmCountry;
 	}
 
 	@Override
-	public String getEdmLanguage() {
+	public Map<String,String> getEdmLanguage() {
 		return this.edmLanguage;
 	}
 
 	@Override
-	public void setEdmLanguage(String edmLanguage) {
+	public void setEdmLanguage(Map<String,String> edmLanguage) {
 		this.edmLanguage = edmLanguage;
 	}
 
 	@Override
-	public String getEdmRights() {
+	public Map<String,String> getEdmRights() {
 		return this.edmRights;
 	}
 
 	@Override
-	public void setEdmRights(String edmRights) {
+	public void setEdmRights(Map<String,String> edmRights) {
 		this.edmRights = edmRights;
 	}
 

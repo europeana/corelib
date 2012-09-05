@@ -80,7 +80,7 @@ public class PlaceFieldInputTest {
 				mongoServer);
 		assertEquals(place.getAbout(), placeMongo.getAbout());
 		assertEquals(place.getNoteList().get(0).getString(),
-				placeMongo.getNote()[0]);
+				placeMongo.getNote().values().iterator().next());
 		assertTrue(placeMongo.getAltLabel().containsKey(
 				place.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(placeMongo.getPrefLabel().containsKey(
@@ -90,11 +90,11 @@ public class PlaceFieldInputTest {
 		assertTrue(placeMongo.getPrefLabel().containsValue(
 				place.getPrefLabelList().get(0).getString()));
 		assertEquals(place.getIsPartOfList().get(0).getString(),
-				placeMongo.getIsPartOf()[0]);
+				placeMongo.getIsPartOf().values().iterator().next());
 		assertEquals(place.getLat().getString(),
-				Float.toString(placeMongo.getLatitude()));
+				Float.toString(placeMongo.getLatitude().values().iterator().next()));
 		assertEquals(place.getLong().getString(),
-				Float.toString(placeMongo.getLongitude()));
+				Float.toString(placeMongo.getLongitude().values().iterator().next()));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		solrDocument = PlaceFieldInput.createPlaceSolrFields(place,

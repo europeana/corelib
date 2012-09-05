@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.utils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
+import eu.europeana.corelib.definitions.jibx.LiteralType;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 
@@ -79,7 +82,9 @@ public final class MongoUtils {
 								((List<String>) value)
 										.toArray(new String[((List<String>) value)
 												.size()]));
-			} else {
+			} 
+			
+			else {
 				ops = mongoServer.getDatastore().createUpdateOperations(clazz)
 						.set(field, value);
 
@@ -88,6 +93,71 @@ public final class MongoUtils {
 		}
 	}
 
+	
+	public static <T extends LiteralType> Map<String,String> createLiteralMapFromString(T obj){
+		Map<String, String> retMap = new HashMap<String,String>();
+		if(obj != null){
+			if(obj.getLang()!=null){
+				retMap.put(obj.getLang().getLang(), obj.getString());
+			}
+			else {
+				retMap.put("def", obj.getString());
+			}
+			return retMap;
+		}
+		
+		return null;
+	}
+	
+	public static <T extends ResourceOrLiteralType> Map<String,String> createResourceOrLiteralMapFromString(T obj){
+		Map<String, String> retMap = new HashMap<String,String>();
+		if(obj != null){
+			if(obj.getLang()!=null){
+				if(obj.getString()!=null){
+					retMap.put(obj.getLang().getLang(), obj.getString());
+				}
+				if(obj.getResource()!=null){
+					retMap.put(obj.getLang().getLang()+":res", obj.getResource());
+				}
+			}
+			else {
+				if(obj.getString()!=null){
+					retMap.put("def", obj.getString());
+				}
+				if(obj.getResource()!=null){
+					retMap.put("def:res", obj.getResource());
+				}
+			}
+			return retMap;
+		}
+		
+		return null;
+	}
+	
+	public static <T extends LiteralType> Map<String,String> createLiteralMapFromList(List<T> list){
+		if(list!=null){
+			Map<String,String> retMap = new HashMap<String,String>();
+			for(T obj:list){
+				retMap.putAll(createLiteralMapFromString(obj));
+			}
+			return retMap;
+		}
+		return null;
+	}
+	
+	public static <T extends ResourceOrLiteralType> Map<String,String> createResourceOrLiteralMapFromList(List<T> list){
+		if(list!=null){
+			Map<String,String> retMap = new HashMap<String,String>();
+			for(T obj:list){
+				retMap.putAll(createResourceOrLiteralMapFromString(obj));
+			}
+			return retMap;
+		}
+		return null;
+	}
+	
+	
+	
 	/*
 	
 		public static void updateAggregation(AggregationImpl mongoAggregation,

@@ -180,6 +180,7 @@ public final class SolrUtils {
 		}
 		return null;
 	}
+
 	public static Class<? extends IdBeanImpl> getImplementationClass(
 			Class<? extends IdBean> interfaze) {
 		if (interfaze != null) {
@@ -194,5 +195,41 @@ public final class SolrUtils {
 			}
 		}
 		return null;
+	}
+
+	public static <T extends LiteralType> SolrInputDocument addFieldFromLiteral(
+			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
+		if (obj != null) {
+			if (obj.getString() != null) {
+				if (obj.getLang() != null) {
+					solrInputDocument.addField(label.toString() + "."
+							+ obj.getLang().getLang(), obj.getString());
+				} else {
+					solrInputDocument.addField(label.toString(),
+							obj.getString());
+				}
+			}
+		}
+		return solrInputDocument;
+	}
+
+	public static <T extends ResourceOrLiteralType> SolrInputDocument addFieldFromResourceOrLiteral(
+			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
+		if (obj != null) {
+			if (obj.getResource() != null) {
+				solrInputDocument.addField(label.toString(), obj.getResource());
+			}
+			if (obj.getString() != null) {
+				if (obj.getLang() != null) {
+					solrInputDocument.addField(label.toString() + "."
+							+ obj.getLang().getLang(), obj.getString());
+				} else {
+					solrInputDocument.addField(label.toString(),
+							obj.getString());
+				}
+			}
+		}
+
+		return solrInputDocument;
 	}
 }

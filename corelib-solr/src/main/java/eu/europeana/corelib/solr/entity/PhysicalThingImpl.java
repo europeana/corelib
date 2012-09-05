@@ -1,5 +1,7 @@
 package eu.europeana.corelib.solr.entity;
 
+import java.util.Map;
+
 import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.PhysicalThing;
@@ -7,49 +9,49 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("PhysicalThing")
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
-	private String[] dcContributor;
-	private String[] dcCoverage;
-	private String[] dcCreator;
-	private String[] dcDate;
-	private String[] dcDescription;
-	private String[] dcFormat;
-	private String[] dcIdentifier;
-	private String[] dcLanguage;
-	private String[] dcPublisher;
-	private String[] dcRelation;
-	private String[] dcRights;
-	private String[] dcSource;
-	private String[] dcSubject;
-	private String[] dcTitle;
-	private String[] dcType;
-	private String[] dctermsAlternative;
-	private String[] dctermsConformsTo;
-	private String[] dctermsCreated;
-	private String[] dctermsExtent;
-	private String[] dctermsHasFormat;
-	private String[] dctermsHasPart;
-	private String[] dctermsHasVersion;
-	private String[] dctermsIsFormatOf;
-	private String[] dctermsIsPartOf;
-	private String[] dctermsIsReferencedBy;
-	private String[] dctermsIsReplacedBy;
-	private String[] dctermsIsRequiredBy;
-	private String[] dctermsIssued;
-	private String[] dctermsIsVersionOf;
-	private String[] dctermsMedium;
-	private String[] dctermsProvenance;
-	private String[] dctermsReferences;
-	private String[] dctermsReplaces;
-	private String[] dctermsRequires;
-	private String[] dctermsSpatial;
-	private String[] dctermsTOC;
-	private String[] dctermsTemporal;
+	private Map<String,String> dcContributor;
+	private Map<String,String> dcCoverage;
+	private Map<String,String> dcCreator;
+	private Map<String,String> dcDate;
+	private Map<String,String> dcDescription;
+	private Map<String,String> dcFormat;
+	private Map<String,String> dcIdentifier;
+	private Map<String,String> dcLanguage;
+	private Map<String,String> dcPublisher;
+	private Map<String,String> dcRelation;
+	private Map<String,String> dcRights;
+	private Map<String,String> dcSource;
+	private Map<String,String> dcSubject;
+	private Map<String,String> dcTitle;
+	private Map<String,String> dcType;
+	private Map<String,String> dctermsAlternative;
+	private Map<String,String> dctermsConformsTo;
+	private Map<String,String> dctermsCreated;
+	private Map<String,String> dctermsExtent;
+	private Map<String,String> dctermsHasFormat;
+	private Map<String,String> dctermsHasPart;
+	private Map<String,String> dctermsHasVersion;
+	private Map<String,String> dctermsIsFormatOf;
+	private Map<String,String> dctermsIsPartOf;
+	private Map<String,String> dctermsIsReferencedBy;
+	private Map<String,String> dctermsIsReplacedBy;
+	private Map<String,String> dctermsIsRequiredBy;
+	private Map<String,String> dctermsIssued;
+	private Map<String,String> dctermsIsVersionOf;
+	private Map<String,String> dctermsMedium;
+	private Map<String,String> dctermsProvenance;
+	private Map<String,String> dctermsReferences;
+	private Map<String,String> dctermsReplaces;
+	private Map<String,String> dctermsRequires;
+	private Map<String,String> dctermsSpatial;
+	private Map<String,String> dctermsTOC;
+	private Map<String,String> dctermsTemporal;
 	private String[] rdfType;
-	private String[] edmHasMet;
-	private String[] edmHasType;
+	private Map<String,String> edmHasMet;
+	private Map<String,String> edmHasType;
 	private String[] edmIncorporates;
 	private String[] edmIsDerivativeOf;
-	private String[] edmIsRelatedTo;
+	private Map<String,String> edmIsRelatedTo;
 	private String edmIsRepresentationOf;
 	private String[] edmIsSimilarTo;
 	private String[] edmIsSuccessorOf;
@@ -57,201 +59,201 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	private String[] edmWasPresentAt;
 	private String edmCurrentLocation;
 	private String edmIsNextInSequence;
-	private String edmRights;
+	private Map<String,String> edmRights;
 
 	@Override
-	public String getEdmRights() {
+	public Map<String,String> getEdmRights() {
 		return edmRights;
 	}
 
 	@Override
-	public void setEdmRights(String edmRights) {
+	public void setEdmRights(Map<String,String> edmRights) {
 		this.edmRights = edmRights;
 	}
 
 	@Override
-	public String[] getDcContributor() {
-		return (StringArrayUtils.isNotBlank(dcContributor) ? this.dcContributor.clone() : null);
+	public Map<String,String> getDcContributor() {
+		return this.dcContributor;
 	}
 
 	@Override
-	public String[] getDcCoverage() {
-		return (StringArrayUtils.isNotBlank(dcCoverage) ? this.dcCoverage.clone() : null);
+	public Map<String,String> getDcCoverage() {
+		return this.dcCoverage;
 	}
 
 	@Override
-	public String[] getDcCreator() {
-		return (StringArrayUtils.isNotBlank(dcCreator) ? this.dcCreator.clone() : null);
+	public Map<String,String> getDcCreator() {
+		return this.dcCreator;
 	}
 
 	@Override
-	public String[] getDcDate() {
-		return (StringArrayUtils.isNotBlank(dcDate) ? this.dcDate.clone() : null);
+	public Map<String,String> getDcDate() {
+		return this.dcDate;
 	}
 
 	@Override
-	public String[] getDcDescription() {
-		return (StringArrayUtils.isNotBlank(dcDescription) ? this.dcDescription.clone() : null);
+	public Map<String,String> getDcDescription() {
+		return this.dcDescription;
 	}
 
 	@Override
-	public String[] getDcFormat() {
-		return (StringArrayUtils.isNotBlank(dcFormat) ? this.dcFormat.clone() : null);
+	public Map<String,String> getDcFormat() {
+		return this.dcFormat;
 	}
 
 	@Override
-	public String[] getDcIdentifier() {
-		return (StringArrayUtils.isNotBlank(dcIdentifier) ? this.dcIdentifier.clone() : null);
+	public Map<String,String> getDcIdentifier() {
+		return this.dcIdentifier;
 	}
 
 	@Override
-	public String[] getDcLanguage() {
-		return (StringArrayUtils.isNotBlank(dcLanguage) ? this.dcLanguage.clone() : null);
+	public Map<String,String> getDcLanguage() {
+		return this.dcLanguage;
 	}
 
 	@Override
-	public String[] getDcPublisher() {
-		return (StringArrayUtils.isNotBlank(dcPublisher) ? this.dcPublisher.clone() : null);
+	public Map<String,String> getDcPublisher() {
+		return this.dcPublisher;
 	}
 
 	@Override
-	public String[] getDcRelation() {
-		return (StringArrayUtils.isNotBlank(dcRelation) ? this.dcRelation.clone() : null);
+	public Map<String,String> getDcRelation() {
+		return this.dcRelation;
 	}
 
 	@Override
-	public String[] getDcRights() {
-		return (StringArrayUtils.isNotBlank(dcRights) ? this.dcRights.clone() : null);
+	public Map<String,String> getDcRights() {
+		return this.dcRights;
 	}
 
 	@Override
-	public String[] getDcSource() {
-		return (StringArrayUtils.isNotBlank(dcSource) ? this.dcSource.clone() : null);
+	public Map<String,String> getDcSource() {
+		return this.dcSource;
 	}
 
 	@Override
-	public String[] getDcSubject() {
-		return (StringArrayUtils.isNotBlank(dcSubject) ? this.dcSubject.clone() : null);
+	public Map<String,String> getDcSubject() {
+		return this.dcSubject;
 	}
 
 	@Override
-	public String[] getDcTitle() {
-		return (StringArrayUtils.isNotBlank(dcTitle) ? this.dcTitle.clone() : null);
+	public Map<String,String> getDcTitle() {
+		return this.dcTitle;
 	}
 
 	@Override
-	public String[] getDcType() {
-		return (StringArrayUtils.isNotBlank(dcType) ? this.dcType.clone() : null);
+	public Map<String,String> getDcType() {
+		return this.dcType;
 	}
 
 	@Override
-	public String[] getDctermsAlternative() {
-		return (StringArrayUtils.isNotBlank(dctermsAlternative) ? this.dctermsAlternative.clone() : null);
+	public Map<String,String> getDctermsAlternative() {
+		return this.dctermsAlternative;
 	}
 
 	@Override
-	public String[] getDctermsConformsTo() {
-		return (StringArrayUtils.isNotBlank(dctermsConformsTo) ? this.dctermsConformsTo.clone() : null);
+	public Map<String,String> getDctermsConformsTo() {
+		return this.dctermsConformsTo;
 	}
 
 	@Override
-	public String[] getDctermsCreated() {
-		return (StringArrayUtils.isNotBlank(dctermsCreated) ? this.dctermsCreated.clone() : null);
+	public Map<String,String> getDctermsCreated() {
+		return this.dctermsCreated;
 	}
 
 	@Override
-	public String[] getDctermsExtent() {
-		return (StringArrayUtils.isNotBlank(dctermsExtent) ? this.dctermsExtent.clone() : null);
+	public Map<String,String> getDctermsExtent() {
+		return this.dctermsExtent;
 	}
 
 	@Override
-	public String[] getDctermsHasFormat() {
-		return (StringArrayUtils.isNotBlank(dctermsHasFormat) ? this.dctermsHasFormat.clone() : null);
+	public Map<String,String> getDctermsHasFormat() {
+		return this.dctermsHasFormat;
 	}
 
 	@Override
-	public String[] getDctermsHasPart() {
-		return (StringArrayUtils.isNotBlank(dctermsHasPart) ? this.dctermsHasPart.clone() : null);
+	public Map<String,String> getDctermsHasPart() {
+		return this.dctermsHasPart;
 	}
 
 	@Override
-	public String[] getDctermsHasVersion() {
-		return (StringArrayUtils.isNotBlank(dctermsHasVersion) ? this.dctermsHasVersion.clone() : null);
+	public Map<String,String> getDctermsHasVersion() {
+		return  this.dctermsHasVersion;
 	}
 
 	@Override
-	public String[] getDctermsIsFormatOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsFormatOf) ? this.dctermsIsFormatOf.clone() : null);
+	public Map<String,String> getDctermsIsFormatOf() {
+		return this.dctermsIsFormatOf;
 	}
 
 	@Override
-	public String[] getDctermsIsPartOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsPartOf) ? this.dctermsIsPartOf.clone() : null);
+	public Map<String,String> getDctermsIsPartOf() {
+		return this.dctermsIsPartOf;
 	}
 
 	@Override
-	public String[] getDctermsIsReferencedBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsReferencedBy) ? this.dctermsIsReferencedBy.clone() : null);
+	public Map<String,String> getDctermsIsReferencedBy() {
+		return this.dctermsIsReferencedBy;
 	}
 
 	@Override
-	public String[] getDctermsIsReplacedBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsReplacedBy) ? this.dctermsIsReplacedBy.clone() : null);
+	public Map<String,String> getDctermsIsReplacedBy() {
+		return this.dctermsIsReplacedBy;
 	}
 
 	@Override
-	public String[] getDctermsIsRequiredBy() {
-		return (StringArrayUtils.isNotBlank(dctermsIsRequiredBy) ? this.dctermsIsRequiredBy.clone() : null);
+	public Map<String,String> getDctermsIsRequiredBy() {
+		return this.dctermsIsRequiredBy;
 	}
 
 	@Override
-	public String[] getDctermsIssued() {
-		return (StringArrayUtils.isNotBlank(dctermsIssued) ? this.dctermsIssued.clone() : null);
+	public Map<String,String> getDctermsIssued() {
+		return this.dctermsIssued;
 	}
 
 	@Override
-	public String[] getDctermsIsVersionOf() {
-		return (StringArrayUtils.isNotBlank(dctermsIsVersionOf) ? this.dctermsIsVersionOf.clone() : null);
+	public Map<String,String> getDctermsIsVersionOf() {
+		return this.dctermsIsVersionOf;
 	}
 
 	@Override
-	public String[] getDctermsMedium() {
-		return (StringArrayUtils.isNotBlank(dctermsMedium) ? this.dctermsMedium.clone() : null);
+	public Map<String,String> getDctermsMedium() {
+		return this.dctermsMedium;
 	}
 
 	@Override
-	public String[] getDctermsProvenance() {
-		return (StringArrayUtils.isNotBlank(dctermsProvenance) ? this.dctermsProvenance.clone() : null);
+	public Map<String,String> getDctermsProvenance() {
+		return this.dctermsProvenance;
 	}
 
 	@Override
-	public String[] getDctermsReferences() {
-		return (StringArrayUtils.isNotBlank(dctermsReferences) ? this.dctermsReferences.clone() : null);
+	public Map<String,String> getDctermsReferences() {
+		return this.dctermsReferences;
 	}
 
 	@Override
-	public String[] getDctermsReplaces() {
-		return (StringArrayUtils.isNotBlank(dctermsReplaces) ? this.dctermsReplaces.clone() : null);
+	public Map<String,String> getDctermsReplaces() {
+		return this.dctermsReplaces;
 	}
 
 	@Override
-	public String[] getDctermsRequires() {
-		return (StringArrayUtils.isNotBlank(dctermsRequires) ? this.dctermsRequires.clone() : null);
+	public Map<String,String>getDctermsRequires() {
+		return this.dctermsRequires;
 	}
 
 	@Override
-	public String[] getDctermsSpatial() {
-		return (StringArrayUtils.isNotBlank(dctermsSpatial) ? this.dctermsSpatial.clone() : null);
+	public Map<String,String> getDctermsSpatial() {
+		return this.dctermsSpatial;
 	}
 
 	@Override
-	public String[] getDctermsTOC() {
-		return (StringArrayUtils.isNotBlank(dctermsTOC) ? this.dctermsTOC.clone() : null);
+	public Map<String,String> getDctermsTOC() {
+		return this.dctermsTOC;
 	}
 
 	@Override
-	public String[] getDctermsTemporal() {
-		return (StringArrayUtils.isNotBlank(dctermsTemporal) ? this.dctermsTemporal.clone() : null);
+	public Map<String,String> getDctermsTemporal() {
+		return this.dctermsTemporal;
 	}
 
 	@Override
@@ -260,188 +262,188 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public void setDcContributor(String[] dcContributor) {
-		this.dcContributor = dcContributor.clone();
+	public void setDcContributor(Map<String,String> dcContributor) {
+		this.dcContributor = dcContributor;
 	}
 
 	@Override
-	public void setDcCoverage(String[] dcCoverage) {
-		this.dcCoverage = dcCoverage.clone();
+	public void setDcCoverage(Map<String,String> dcCoverage) {
+		this.dcCoverage = dcCoverage;
 	}
 
 	@Override
-	public void setDcCreator(String[] dcCreator) {
-		this.dcCreator = dcCreator.clone();
+	public void setDcCreator(Map<String,String> dcCreator) {
+		this.dcCreator = dcCreator;
 	}
 
 	@Override
-	public void setDcDate(String[] dcDate) {
-		this.dcDate = dcDate.clone();
+	public void setDcDate(Map<String,String> dcDate) {
+		this.dcDate = dcDate;
 	}
 
 	@Override
-	public void setDcDescription(String[] dcDescription) {
-		this.dcDescription = dcDescription.clone();
+	public void setDcDescription(Map<String,String> dcDescription) {
+		this.dcDescription = dcDescription;
 	}
 
 	@Override
-	public void setDcFormat(String[] dcFormat) {
-		this.dcFormat = dcFormat.clone();
+	public void setDcFormat(Map<String,String> dcFormat) {
+		this.dcFormat = dcFormat;
 	}
 
 	@Override
-	public void setDcIdentifier(String[] dcIdentifier) {
-		this.dcIdentifier = dcIdentifier.clone();
+	public void setDcIdentifier(Map<String,String> dcIdentifier) {
+		this.dcIdentifier = dcIdentifier;
 	}
 
 	@Override
-	public void setDcLanguage(String[] dcLanguage) {
-		this.dcLanguage = dcLanguage.clone();
+	public void setDcLanguage(Map<String,String> dcLanguage) {
+		this.dcLanguage = dcLanguage;
 	}
 
 	@Override
-	public void setDcPublisher(String[] dcPublisher) {
-		this.dcPublisher = dcPublisher.clone();
+	public void setDcPublisher(Map<String,String> dcPublisher) {
+		this.dcPublisher = dcPublisher;
 	}
 
 	@Override
-	public void setDcRelation(String[] dcRelation) {
-		this.dcRelation = dcRelation.clone();
+	public void setDcRelation(Map<String,String> dcRelation) {
+		this.dcRelation = dcRelation;
 	}
 
 	@Override
-	public void setDcRights(String[] dcRights) {
-		this.dcRights = dcRights.clone();
+	public void setDcRights(Map<String,String> dcRights) {
+		this.dcRights = dcRights;
 	}
 
 	@Override
-	public void setDcSource(String[] dcSource) {
-		this.dcSource = dcSource.clone();
+	public void setDcSource(Map<String,String> dcSource) {
+		this.dcSource = dcSource;
 	}
 
 	@Override
-	public void setDcSubject(String[] dcSubject) {
-		this.dcSubject = dcSubject.clone();
+	public void setDcSubject(Map<String,String> dcSubject) {
+		this.dcSubject = dcSubject;
 	}
 
 	@Override
-	public void setDcTitle(String[] dcTitle) {
-		this.dcTitle = dcTitle.clone();
+	public void setDcTitle(Map<String,String> dcTitle) {
+		this.dcTitle = dcTitle;
 	}
 
 	@Override
-	public void setDcType(String[] dcType) {
-		this.dcType = dcType.clone();
+	public void setDcType(Map<String,String> dcType) {
+		this.dcType = dcType;
 	}
 
 	@Override
-	public void setDctermsAlternative(String[] dctermsAlternative) {
-		this.dctermsAlternative = dctermsAlternative.clone();
+	public void setDctermsAlternative(Map<String,String> dctermsAlternative) {
+		this.dctermsAlternative = dctermsAlternative;
 	}
 
 	@Override
-	public void setDctermsConformsTo(String[] dctermsConformsTo) {
-		this.dctermsConformsTo = dctermsConformsTo.clone();
+	public void setDctermsConformsTo(Map<String,String> dctermsConformsTo) {
+		this.dctermsConformsTo = dctermsConformsTo;
 	}
 
 	@Override
-	public void setDctermsCreated(String[] strings) {
-		this.dctermsCreated = strings.clone();
+	public void setDctermsCreated(Map<String,String> strings) {
+		this.dctermsCreated = strings;
 	}
 
 	@Override
-	public void setDctermsExtent(String[] dctermsExtent) {
-		this.dctermsExtent = dctermsExtent.clone();
+	public void setDctermsExtent(Map<String,String> dctermsExtent) {
+		this.dctermsExtent = dctermsExtent;
 	}
 
 	@Override
-	public void setDctermsHasFormat(String[] dctermsHasFormat) {
-		this.dctermsHasFormat = dctermsHasFormat.clone();
+	public void setDctermsHasFormat(Map<String,String> dctermsHasFormat) {
+		this.dctermsHasFormat = dctermsHasFormat;
 	}
 
 	@Override
-	public void setDctermsHasPart(String[] dctermsHasPart) {
-		this.dctermsHasPart = dctermsHasPart.clone();
+	public void setDctermsHasPart(Map<String,String> dctermsHasPart) {
+		this.dctermsHasPart = dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasVersion(String[] dctermsHasVersion) {
-		this.dctermsHasVersion = dctermsHasVersion.clone();
+	public void setDctermsHasVersion(Map<String,String> dctermsHasVersion) {
+		this.dctermsHasVersion = dctermsHasVersion;
 	}
 
 	@Override
-	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
-		this.dctermsIsFormatOf = dctermsIsFormatOf.clone();
+	public void setDctermsIsFormatOf(Map<String,String> dctermsIsFormatOf) {
+		this.dctermsIsFormatOf = dctermsIsFormatOf;
 	}
 
 	@Override
-	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
-		this.dctermsIsPartOf = dctermsIsPartOf.clone();
+	public void setDctermsIsPartOf(Map<String,String> dctermsIsPartOf) {
+		this.dctermsIsPartOf = dctermsIsPartOf;
 	}
 
 	@Override
-	public void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy) {
-		this.dctermsIsReferencedBy = dctermsIsReferencedBy.clone();
+	public void setDctermsIsReferencedBy(Map<String,String> dctermsIsReferencedBy) {
+		this.dctermsIsReferencedBy = dctermsIsReferencedBy;
 	}
 
 	@Override
-	public void setDctermsIsReplacedBy(String[] dctermsIsReplacedBy) {
-		this.dctermsIsReplacedBy = dctermsIsReplacedBy.clone();
+	public void setDctermsIsReplacedBy(Map<String,String> dctermsIsReplacedBy) {
+		this.dctermsIsReplacedBy = dctermsIsReplacedBy;
 	}
 
 	@Override
-	public void setDctermsIsRequiredBy(String[] dctermsIsRequiredBy) {
-		this.dctermsIsRequiredBy = dctermsIsRequiredBy.clone();
+	public void setDctermsIsRequiredBy(Map<String,String> dctermsIsRequiredBy) {
+		this.dctermsIsRequiredBy = dctermsIsRequiredBy;
 	}
 
 	@Override
-	public void setDctermsIssued(String[] dctermsIssued) {
-		this.dctermsIssued = dctermsIssued.clone();
+	public void setDctermsIssued(Map<String,String> dctermsIssued) {
+		this.dctermsIssued = dctermsIssued;
 	}
 
 	@Override
-	public void setDctermsIsVersionOf(String[] dctermsIsVersionOf) {
-		this.dctermsIsVersionOf = dctermsIsVersionOf.clone();
+	public void setDctermsIsVersionOf(Map<String,String> dctermsIsVersionOf) {
+		this.dctermsIsVersionOf = dctermsIsVersionOf;
 	}
 
 	@Override
-	public void setDctermsMedium(String[] dctermsMedium) {
-		this.dctermsMedium = dctermsMedium.clone();
+	public void setDctermsMedium(Map<String,String> dctermsMedium) {
+		this.dctermsMedium = dctermsMedium;
 	}
 
 	@Override
-	public void setDctermsProvenance(String[] dctermsProvenance) {
-		this.dctermsProvenance = dctermsProvenance.clone();
+	public void setDctermsProvenance(Map<String,String> dctermsProvenance) {
+		this.dctermsProvenance = dctermsProvenance;
 	}
 
 	@Override
-	public void setDctermsReferences(String[] dctermsReferences) {
-		this.dctermsReferences = dctermsReferences.clone();
+	public void setDctermsReferences(Map<String,String> dctermsReferences) {
+		this.dctermsReferences = dctermsReferences;
 	}
 
 	@Override
-	public void setDctermsReplaces(String[] dctermsReplaces) {
-		this.dctermsReplaces = dctermsReplaces.clone();
+	public void setDctermsReplaces(Map<String,String> dctermsReplaces) {
+		this.dctermsReplaces = dctermsReplaces;
 	}
 
 	@Override
-	public void setDctermsRequires(String[] dctermsRequires) {
-		this.dctermsRequires = dctermsRequires.clone();
+	public void setDctermsRequires(Map<String,String> dctermsRequires) {
+		this.dctermsRequires = dctermsRequires;
 	}
 
 	@Override
-	public void setDctermsSpatial(String[] dctermsSpatial) {
-		this.dctermsSpatial = dctermsSpatial.clone();
+	public void setDctermsSpatial(Map<String,String> dctermsSpatial) {
+		this.dctermsSpatial = dctermsSpatial;
 	}
 
 	@Override
-	public void setDctermsTOC(String[] dctermsTOC) {
-		this.dctermsTOC = dctermsTOC.clone();
+	public void setDctermsTOC(Map<String,String> dctermsTOC) {
+		this.dctermsTOC = dctermsTOC;
 	}
 
 	@Override
-	public void setDctermsTemporal(String[] dctermsTemporal) {
-		this.dctermsTemporal = dctermsTemporal.clone();
+	public void setDctermsTemporal(Map<String,String> dctermsTemporal) {
+		this.dctermsTemporal = dctermsTemporal;
 	}
 
 	@Override
@@ -460,22 +462,22 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public String[] getEdmHasMet() {
-		return (StringArrayUtils.isNotBlank(edmHasMet) ? this.edmHasMet.clone() : null);
+	public Map<String,String> getEdmHasMet() {
+		return this.edmHasMet;
 	}
 
 	@Override
-	public void setEdmHasMet(String[] edmHasMet) {
+	public void setEdmHasMet(Map<String,String> edmHasMet) {
 		this.edmHasMet = edmHasMet;
 	}
 
 	@Override
-	public String[] getEdmHasType() {
-		return (StringArrayUtils.isNotBlank(edmHasType) ? this.edmHasType.clone() : null);
+	public Map<String,String> getEdmHasType() {
+		return this.edmHasType;
 	}
 
 	@Override
-	public void setEdmHasType(String[] edmHasType) {
+	public void setEdmHasType(Map<String,String> edmHasType) {
 		this.edmHasType = edmHasType;
 	}
 
@@ -500,13 +502,13 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public void setEdmIsRelatedTo(String[] edmIsRelatedTo) {
+	public void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo) {
 		this.edmIsRelatedTo = edmIsRelatedTo;
 	}
 
 	@Override
-	public String[] getEdmIsRelatedTo() {
-		return (StringArrayUtils.isNotBlank(edmIsRelatedTo) ? this.edmIsRelatedTo.clone() : null);
+	public Map<String,String> getEdmIsRelatedTo() {
+		return this.edmIsRelatedTo;
 	}
 
 	@Override

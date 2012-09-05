@@ -57,6 +57,9 @@ public class StringArrayUtils {
 	}
     
     public static String[] addToArray(String[] items, String str){
+    	if(items==null){
+    		items = new String[1];
+    	}
     	List<String> itemList = new ArrayList<String>(Arrays.asList(items));
     	itemList.add(str);
     	return itemList.toArray(new String[itemList.size()]);

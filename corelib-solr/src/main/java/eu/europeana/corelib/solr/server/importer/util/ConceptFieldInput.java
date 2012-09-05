@@ -76,30 +76,16 @@ public final class ConceptFieldInput {
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifAltLabel()) {
 				AltLabel altLabel = choice.getAltLabel();
-				if (altLabel.getLang() != null) {
-					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_ALT_LABEL.toString() +(altLabel.getLang()!=null? "."
-									+ altLabel.getLang().getLang():""),
-							altLabel.getString());
-				} else {
-					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_ALT_LABEL.toString(),
-							altLabel.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromLiteral(solrInputDocument, altLabel,
+								EdmLabel.CC_SKOS_ALT_LABEL);
 			}
 			if (choice.ifPrefLabel()) {
 
 				PrefLabel prefLabel = choice.getPrefLabel();
-				if (prefLabel.getLang() != null) {
-					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null?"."
-									+ prefLabel.getLang().getLang() :""),
-							prefLabel.getString());
-				} else {
-					solrInputDocument.addField(
-							EdmLabel.CC_SKOS_PREF_LABEL.toString(),
-							prefLabel.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromLiteral(solrInputDocument, prefLabel,
+								EdmLabel.CC_SKOS_PREF_LABEL);
 			}
 
 			if (choice.ifBroader()) {
@@ -108,9 +94,9 @@ public final class ConceptFieldInput {
 						broader.getResource());
 			}
 			if (choice.ifNote()) {
-				Note note = choice.getNote();
-				solrInputDocument.addField(EdmLabel.CC_SKOS_NOTE.toString(),
-						note.getString());
+				solrInputDocument = SolrUtils
+						.addFieldFromLiteral(solrInputDocument, choice.getNote(),
+								EdmLabel.CC_SKOS_NOTE);
 			}
 			if (choice.ifBroadMatch()) {
 				BroadMatch broadMatch = choice.getBroadMatch();
@@ -156,9 +142,9 @@ public final class ConceptFieldInput {
 			}
 			if (choice.ifNotation()) {
 				Notation notation = choice.getNotation();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_NOTATIONS.toString(),
-						notation.getString());
+				solrInputDocument = SolrUtils
+						.addFieldFromLiteral(solrInputDocument, notation,
+								EdmLabel.CC_SKOS_NOTATIONS);
 			}
 		}
 		return solrInputDocument;
@@ -219,11 +205,23 @@ public final class ConceptFieldInput {
 			if (choice.ifNote()) {
 				if (conceptMongo.getNote() != null) {
 
-					List<String> newNoteList = createObjectList(
-							conceptMongo.getNote(), choice.getNote());
+					Map<String, String> newNoteMap = conceptMongo
+							.getNote();
+
+					Note note = choice.getNote();
+					if (note.getLang() != null) {
+						if (!MongoUtils.contains(newNoteMap, note
+								.getLang().getLang(), note.getString())) {
+							newNoteMap.put(note.getLang().getLang(),
+									note.getString());
+						}
+					} else {
+						newNoteMap.put("def", note.getString());
+					}
+
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "note",
-							newNoteList);
+							newNoteMap);
 				}
 			}
 			if (choice.ifAltLabel()) {
@@ -341,10 +339,24 @@ public final class ConceptFieldInput {
 			}
 			if (choice.ifNotation()) {
 				if (conceptMongo.getNotation() != null) {
-					List<String> notationList = createObjectList(conceptMongo.getNotation(),choice.getNotation());
+					Map<String, String> newNotationMap = conceptMongo
+							.getNotation();
+
+					Notation notation = choice.getNotation();
+					if (notation.getLang() != null) {
+						if (!MongoUtils.contains(newNotationMap, notation
+								.getLang().getLang(), notation.getString())) {
+							newNotationMap.put(notation.getLang().getLang(),
+									notation.getString());
+						}
+					} else {
+						newNotationMap.put("def", notation.getString());
+					}
+
 					MongoUtils.update(ConceptImpl.class,
-							conceptMongo.getAbout(), mongoServer, "notation",
-							notationList);
+							conceptMongo.getAbout(), mongoServer, "prefLabel",
+							newNotationMap);
+
 				}
 			}
 			if (choice.ifRelated()) {
@@ -375,9 +387,16 @@ public final class ConceptFieldInput {
 		conceptMongo.setAbout(concept.getAbout());
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
-				conceptMongo.setNote(StringArrayUtils.addToArray(
-						conceptMongo.getNote(),
-						SolrUtils.getLiteralString(choice.getNote())));
+				if(conceptMongo.getNote()==null){
+					conceptMongo.setNote(MongoUtils
+							.createLiteralMapFromString(choice.getNote()));
+					}
+					else{
+						Map<String,String> tempMap = conceptMongo.getNote();
+						tempMap.putAll(MongoUtils
+								.createLiteralMapFromString(choice.getNote()));
+						conceptMongo.setNote(tempMap);
+					}
 			}
 			if (choice.ifBroader()) {
 				conceptMongo.setBroader(StringArrayUtils.addToArray(
@@ -410,9 +429,16 @@ public final class ConceptFieldInput {
 						SolrUtils.getResourceString(choice.getNarrowMatch())));
 			}
 			if (choice.ifNotation()) {
-				conceptMongo.setNotation(StringArrayUtils.addToArray(
-						conceptMongo.getNotation(),
-						SolrUtils.getLiteralString(choice.getNotation())));
+				if(conceptMongo.getNotation()==null){
+					conceptMongo.setNotation(MongoUtils
+							.createLiteralMapFromString(choice.getNotation()));
+					}
+					else{
+						Map<String,String> tempMap = conceptMongo.getNotation();
+						tempMap.putAll(MongoUtils
+								.createLiteralMapFromString(choice.getNotation()));
+						conceptMongo.setNotation(tempMap);
+					}
 			}
 			if (choice.ifRelated()) {
 				conceptMongo.setRelated(StringArrayUtils.addToArray(
@@ -426,29 +452,29 @@ public final class ConceptFieldInput {
 			}
 
 			if (choice.ifPrefLabel()) {
-				Map<String, String> prefLabelMongo = new HashMap<String, String>();
-				PrefLabel prefLabelJibx = choice.getPrefLabel();
-				if (prefLabelJibx.getLang() != null) {
-					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-							prefLabelJibx.getString());
-				} else {
-					prefLabelMongo.put( prefLabelJibx.getString(), prefLabelJibx.getString());
-				}
-
-				conceptMongo.setPrefLabel(prefLabelMongo);
+				if(conceptMongo.getPrefLabel()==null){
+					conceptMongo.setPrefLabel(MongoUtils
+							.createLiteralMapFromString(choice.getPrefLabel()));
+					}
+					else{
+						Map<String,String> tempMap = conceptMongo.getPrefLabel();
+						tempMap.putAll(MongoUtils
+								.createLiteralMapFromString(choice.getPrefLabel()));
+						conceptMongo.setPrefLabel(tempMap);
+					}
 			}
 
 			if (choice.ifAltLabel()) {
-				Map<String, String> altLabelMongo = new HashMap<String, String>();
-				AltLabel altLabelJibx = choice.getAltLabel();
-				if (altLabelJibx.getLang() != null) {
-					altLabelMongo.put(altLabelJibx.getLang().getLang(),
-							altLabelJibx.getString());
-				} else {
-					altLabelMongo.put(altLabelJibx.getString(), altLabelJibx.getString());
-				}
-
-				conceptMongo.setAltLabel(altLabelMongo);
+				if(conceptMongo.getAltLabel()==null){
+					conceptMongo.setAltLabel(MongoUtils
+							.createLiteralMapFromString(choice.getAltLabel()));
+					}
+					else{
+						Map<String,String> tempMap = conceptMongo.getAltLabel();
+						tempMap.putAll(MongoUtils
+								.createLiteralMapFromString(choice.getAltLabel()));
+						conceptMongo.setAltLabel(tempMap);
+					}
 			}
 		}
 		return conceptMongo;

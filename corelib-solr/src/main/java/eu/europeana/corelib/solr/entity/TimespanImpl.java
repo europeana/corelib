@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import java.util.Map;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -33,41 +35,41 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	private String[] begin;
-	private String[] end;
-	private String[] isPartOf;
-	private String[] dctermsHasPart;
+	private Map<String,String> begin;
+	private Map<String,String> end;
+	private Map<String,String> isPartOf;
+	private Map<String,String> dctermsHasPart;
 
 	private String[] owlSameAs;
 
 	@Override
-	public String[] getBegin() {
+	public Map<String,String> getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public String[] getEnd() {
+	public Map<String,String> getEnd() {
 		return this.end;
 	}
 
 	@Override
-	public String[] getIsPartOf() {
-		return (StringArrayUtils.isNotBlank(isPartOf) ? this.isPartOf.clone() : null);
+	public Map<String,String> getIsPartOf() {
+		return this.isPartOf;
 	}
 
 	@Override
-	public void setBegin(String[] begin) {
+	public void setBegin(Map<String,String> begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(String[] end) {
+	public void setEnd(Map<String,String> end) {
 		this.end = end;
 	}
 
 	@Override
-	public void setIsPartOf(String[] isPartOf) {
-		this.isPartOf = isPartOf.clone();
+	public void setIsPartOf(Map<String,String> isPartOf) {
+		this.isPartOf = isPartOf;
 	}
 
 	@Override
@@ -87,12 +89,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String[] getDctermsHasPart() {
-		return (StringArrayUtils.isNotBlank(dctermsHasPart) ? this.dctermsHasPart.clone() : null);
+	public Map<String,String> getDctermsHasPart() {
+		return this.dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasPart(String[] dctermsHasPart) {
+	public void setDctermsHasPart(Map<String,String> dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
 
@@ -105,4 +107,6 @@ public class TimespanImpl extends ContextualClassImpl implements
 	public void setOwlSameAs(String[] owlSameAs) {
 		this.owlSameAs = owlSameAs;
 	}
+
+	
 }

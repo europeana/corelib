@@ -77,7 +77,7 @@ public class AggregationFieldInputTest {
 			assertEquals(aggregation.getAggregatedCHO().getResource(),
 					aggregationMongo.getAggregatedCHO());
 			assertEquals(aggregation.getDataProvider().getString(),
-					aggregationMongo.getEdmDataProvider());
+					aggregationMongo.getEdmDataProvider().values().iterator().next());
 			assertEquals(aggregation.getHasViewList().get(0).getResource(),
 					aggregationMongo.getHasView()[0]);
 			assertEquals(aggregation.getIsShownAt().getResource(),
@@ -87,13 +87,13 @@ public class AggregationFieldInputTest {
 			assertEquals(aggregation.getObject().getResource(),
 					aggregationMongo.getEdmObject());
 			assertEquals(aggregation.getProvider().getString(),
-					aggregationMongo.getEdmProvider());
+					aggregationMongo.getEdmProvider().values().iterator().next());
 			assertEquals(aggregation.getUgc().getUgc().toString(),
 					aggregationMongo.getEdmUgc());
 			assertEquals(aggregation.getRights().getString(),
-					aggregationMongo.getEdmRights());
+					aggregationMongo.getEdmRights().values().iterator().next());
 			assertEquals(aggregation.getRightList().get(0).getString(),
-					aggregationMongo.getDcRights()[0]);
+					aggregationMongo.getDcRights().values().iterator().next());
 
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

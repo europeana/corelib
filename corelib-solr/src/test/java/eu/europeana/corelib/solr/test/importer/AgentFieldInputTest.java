@@ -75,10 +75,10 @@ public class AgentFieldInputTest {
 		AgentImpl agent = AgentFieldInput.createAgentMongoEntity(agentType,
 				mongoServer);
 		assertEquals(agentType.getAbout(), agent.getAbout());
-		assertEquals(agentType.getBegin().getString(), agent.getBegin());
-		assertEquals(agentType.getEnd().getString(), agent.getEnd());
+		assertEquals(agentType.getBegin().getString(), agent.getBegin().values().iterator().next());
+		assertEquals(agentType.getEnd().getString(), agent.getEnd().values().iterator().next());
 		assertEquals(agentType.getNoteList().get(0).getString(),
-				agent.getNote()[0]);
+				agent.getNote().values().iterator().next());
 		assertTrue(agent.getAltLabel().containsKey(
 				agentType.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(agent.getPrefLabel().containsKey(

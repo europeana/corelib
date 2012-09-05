@@ -17,11 +17,8 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -63,38 +60,47 @@ public final class TimespanFieldInput {
                 timespan.getAbout());
         if (timespan.getAltLabelList() != null) {
             for (AltLabel altLabel : timespan.getAltLabelList()) {
-                solrInputDocument.addField(
-                        EdmLabel.TS_SKOS_ALT_LABEL.toString() + (altLabel.getLang()!=null? "."
-                        + altLabel.getLang().getLang():""),
-                        altLabel.getString());
+            	solrInputDocument = SolrUtils
+    					.addFieldFromLiteral(solrInputDocument, altLabel,
+    							EdmLabel.TS_SKOS_ALT_LABEL);
             }
         }
         if (timespan.getPrefLabelList() != null) {
             for (PrefLabel prefLabel : timespan.getPrefLabelList()) {
-                solrInputDocument.addField(
-                        EdmLabel.TS_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null?"."
-                        + prefLabel.getLang().getLang():""),
-                        prefLabel.getString());
+            	solrInputDocument = SolrUtils
+    					.addFieldFromLiteral(solrInputDocument, prefLabel,
+    							EdmLabel.TS_SKOS_PREF_LABEL);
             }
         }
         if (timespan.getNoteList() != null) {
             for (Note note : timespan.getNoteList()) {
-                solrInputDocument.addField(EdmLabel.TS_SKOS_NOTE.toString(),
-                        note.getString());
+            	solrInputDocument = SolrUtils
+    					.addFieldFromLiteral(solrInputDocument, note,
+    							EdmLabel.TS_SKOS_NOTE);
             }
         }
         if (timespan.getBegin() != null) {
-                solrInputDocument.addField(EdmLabel.TS_EDM_BEGIN.toString(),
-                		timespan.getBegin().getString());
+        	solrInputDocument = SolrUtils
+					.addFieldFromLiteral(solrInputDocument, timespan.getBegin(),
+							EdmLabel.TS_EDM_BEGIN);
         }
         if (timespan.getEnd() != null) {
-                solrInputDocument.addField(EdmLabel.TS_EDM_END.toString(), timespan.getEnd().getString());
+        	solrInputDocument = SolrUtils
+					.addFieldFromLiteral(solrInputDocument, timespan.getEnd(),
+							EdmLabel.TS_EDM_END);
         }
         if (timespan.getIsPartOfList() != null) {
             for (IsPartOf isPartOf : timespan.getIsPartOfList()) {
-                solrInputDocument.addField(
-                        EdmLabel.TS_DCTERMS_ISPART_OF.toString(),
-                        isPartOf.getResource());
+            	solrInputDocument = SolrUtils
+    					.addFieldFromResourceOrLiteral(solrInputDocument, isPartOf,
+    							EdmLabel.TS_DCTERMS_ISPART_OF);
+            }
+        }
+        if (timespan.getHasPartList() != null) {
+            for (HasPart hasPart : timespan.getHasPartList()) {
+            	solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, hasPart,
+								EdmLabel.PL_DCTERMS_HASPART);
             }
         }
         return solrInputDocument;
@@ -114,7 +120,6 @@ public final class TimespanFieldInput {
     public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
             MongoServer mongoServer) {
         TimespanImpl mongoTimespan = (TimespanImpl) ((EdmMongoServer)mongoServer).searchByAbout(TimespanImpl.class, timeSpan.getAbout());
-            
       if(mongoTimespan==null) {
            	mongoTimespan = createNewTimespan(timeSpan);
             mongoServer.getDatastore().save(mongoTimespan);
@@ -127,93 +132,45 @@ public final class TimespanFieldInput {
 
 	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
 			TimeSpanType timeSpan, MongoServer mongoServer)  {
-		if (mongoTimespan.getBegin() != null
-  				&& !StringUtils.equals(timeSpan.getBegin().getString(),
-  						mongoTimespan.getBegin()[0])) {
+		if (mongoTimespan.getBegin() != null) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"begin", timeSpan.getBegin().getString());
+					"begin", MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
   			
 
   		}
-  		if (mongoTimespan.getEnd() != null
-  				&& !StringUtils.equals(timeSpan.getEnd().getString(),
-  						mongoTimespan.getEnd()[0])) {
+  		if (mongoTimespan.getEnd() != null) {
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"end", timeSpan.getEnd().getString());
+					"end", MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
   			
   		}
 
   		if (mongoTimespan.getNote() != null) {
-  			List<String> newNoteList = new ArrayList<String>();
-  			for (Note noteJibx : timeSpan.getNoteList()) {
-  				if (!MongoUtils.contains(mongoTimespan.getNote(), noteJibx.getString())) {
-  					newNoteList.add(noteJibx.getString());
-  				}
-  			}
-  			for (String note : mongoTimespan.getNote()) {
-  				newNoteList.add(note);
-  			}
-
+  			
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"note", newNoteList);
+					"note", MongoUtils.createLiteralMapFromList(timeSpan.getNoteList()));
+
   			
   		}
 
   		if (mongoTimespan.getAltLabel() != null) {
-  			Map<String, String> newAltLabelMap = mongoTimespan.getAltLabel();
-  			if (timeSpan.getAltLabelList() != null) {
-  				for (AltLabel altLabel : timeSpan.getAltLabelList()) {
-  					if (altLabel.getLang() != null) {
-  						if (!MongoUtils.contains(newAltLabelMap, altLabel
-  								.getLang().getLang(), altLabel.getString())) {
-  							newAltLabelMap.put(altLabel.getLang().getLang(),
-  									altLabel.getString());
-  						}
-  					} else {
-  						newAltLabelMap.put("def", altLabel.getString());
-  					}
-  				}
-  			}
+  			
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"altLabel", newAltLabelMap);
+					"altLabel", MongoUtils.createLiteralMapFromList(timeSpan.getAltLabelList()));
 
   		}
 
   		if (mongoTimespan.getPrefLabel() != null) {
-  			Map<String, String> newPrefLabelMap = mongoTimespan.getPrefLabel();
-  			if (timeSpan.getPrefLabelList() != null) {
-  				for (PrefLabel prefLabel : timeSpan.getPrefLabelList()) {
-  					if (prefLabel.getLang() != null) {
-  						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
-  								.getLang().getLang(), prefLabel.getString())) {
-  							newPrefLabelMap.put(prefLabel.getLang().getLang(),
-  									prefLabel.getString());
-  						}
-  					} else {
-  						newPrefLabelMap.put("def", prefLabel.getString());
-  					}
-  				}
+  			
   				MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-  						"prefLabel", newPrefLabelMap);
+  						"prefLabel", MongoUtils.createLiteralMapFromList(timeSpan.getPrefLabelList()));
 
-  			}
+  			
   		}
   		
 		if (mongoTimespan.getDctermsHasPart() != null) {
-			List<String> dcTermsHasPart = new ArrayList<String>();
-			if (timeSpan.getHasPartList() != null) {
-				for (HasPart hasPartJibx : timeSpan.getHasPartList()) {
-					if (!MongoUtils.contains(mongoTimespan.getDctermsHasPart(),
-							hasPartJibx.getResource())) {
-						dcTermsHasPart.add(hasPartJibx.getResource());
-					}
-				}
-			}
-			for (String isPartOf : mongoTimespan.getIsPartOf()) {
-				dcTermsHasPart.add(isPartOf);
-			}
+			
 			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"dctermsHasPart", StringArrayUtils.toArray(dcTermsHasPart));
+					"dctermsHasPart",MongoUtils.createResourceOrLiteralMapFromList(timeSpan.getHasPartList()));
 		}
 		
 		if (mongoTimespan.getOwlSameAs() != null) {
@@ -226,8 +183,8 @@ public final class TimespanFieldInput {
 					}
 				}
 			}
-			for (String isPartOf : mongoTimespan.getIsPartOf()) {
-				owlSameAs.add(isPartOf);
+			for (String owlSameAsItem : mongoTimespan.getOwlSameAs()) {
+				owlSameAs.add(owlSameAsItem);
 			}
 			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(), mongoServer,
 					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
@@ -244,42 +201,14 @@ public final class TimespanFieldInput {
 		TimespanImpl mongoTimespan = new TimespanImpl();
 		//mongoTimespan.setId(new ObjectId());
         mongoTimespan.setAbout(timeSpan.getAbout());
-        mongoTimespan.setNote(SolrUtils.literalListToArray(timeSpan.getNoteList()));
-        if (timeSpan.getPrefLabelList() != null) {
-            Map<String, String> prefLabelMongo = new HashMap<String, String>();
-            for (PrefLabel prefLabelJibx : timeSpan.getPrefLabelList()) {
-                if(prefLabelJibx.getLang()!=null) {
-                    prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-                            prefLabelJibx.getString());
-                } else {
-                    prefLabelMongo.put( prefLabelJibx.getString(),
-                            prefLabelJibx.getString());
-                }
-            }
-            mongoTimespan.setPrefLabel(prefLabelMongo);
-        }
-        if (timeSpan.getAltLabelList() != null) {
-            Map<String, String> altLabelMongo = new HashMap<String, String>();
-            for (AltLabel altLabelJibx : timeSpan.getAltLabelList()) {
-                if(altLabelJibx.getLang()!=null) {
-                    altLabelMongo.put(altLabelJibx.getLang().getLang(),
-                            altLabelJibx.getString());
-                } else {
-                    altLabelMongo.put(altLabelJibx.getString(),
-                            altLabelJibx.getString());
-                }
-            }
-            mongoTimespan.setAltLabel(altLabelMongo);
-        }
-        mongoTimespan.setIsPartOf(SolrUtils.resourceOrLiteralListToArray(timeSpan.getIsPartOfList()));
-        mongoTimespan.setDctermsHasPart(SolrUtils.resourceOrLiteralListToArray(timeSpan.getHasPartList()));
+        mongoTimespan.setNote(MongoUtils.createLiteralMapFromList(timeSpan.getNoteList()));
+        mongoTimespan.setPrefLabel(MongoUtils.createLiteralMapFromList(timeSpan.getPrefLabelList()));
+        mongoTimespan.setAltLabel(MongoUtils.createLiteralMapFromList(timeSpan.getAltLabelList()));
+        mongoTimespan.setIsPartOf(MongoUtils.createResourceOrLiteralMapFromList(timeSpan.getIsPartOfList()));
+        mongoTimespan.setDctermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(timeSpan.getHasPartList()));
         mongoTimespan.setOwlSameAs(SolrUtils.resourceListToArray(timeSpan.getSameAList()));
-        if (timeSpan.getBegin() != null) {
-            mongoTimespan.setBegin(new String[]{timeSpan.getBegin().getString()});
-        }
-        if (timeSpan.getEnd() != null) {
-            mongoTimespan.setEnd(new String[]{timeSpan.getEnd().getString()});
-        }
+            mongoTimespan.setBegin(MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
+            mongoTimespan.setEnd(MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
 		return mongoTimespan;
 	}
 }

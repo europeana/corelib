@@ -70,6 +70,7 @@ public class SearchServiceTest {
 
 	@Before
 	public void loadTestData() {
+		mongoDBServer.getDatastore().getDB().dropDatabase();
 		for (Method method : this.getClass().getMethods()) {
 			for (Annotation annotation : method.getAnnotations()) {
 				if (annotation.annotationType().equals(org.junit.Test.class)) {
@@ -89,6 +90,7 @@ public class SearchServiceTest {
 				contentLoader.commit();
 				dataLoaded = true;
 			} catch (Exception e) {
+				
 				e.printStackTrace();
 			} finally {
 				if (contentLoader != null) {

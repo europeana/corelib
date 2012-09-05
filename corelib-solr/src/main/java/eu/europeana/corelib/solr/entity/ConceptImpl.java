@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.Map;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -42,7 +44,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	private String[] exactMatch;
 	private String[] relatedMatch;
 	private String[] closeMatch;
-	private String[] notation;
+	private Map<String,String> notation;
 	private String[] inScheme;
 
 	@Override
@@ -142,12 +144,12 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 	}
 
 	@Override
-	public String[] getNotation() {
-		return (StringArrayUtils.isNotBlank(notation) ? this.notation.clone() : null);
+	public Map<String,String> getNotation() {
+		return this.notation;
 	}
 
 	@Override
-	public void setNotation(String[] notation) {
+	public void setNotation(Map<String,String> notation) {
 		this.notation = notation;
 	}
 

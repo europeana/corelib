@@ -18,12 +18,7 @@ package eu.europeana.corelib.solr.server.importer.util;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.google.code.morphia.mapping.MappingException;
@@ -71,132 +66,109 @@ public final class AgentFieldInput {
 				agentType.getAbout());
 		if (agentType.getAltLabelList() != null) {
 			for (AltLabel altLabel : agentType.getAltLabelList()) {
-				if (altLabel.getLang() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_ALT_LABEL.toString() +(altLabel.getLang()!=null? "."
-									+ altLabel.getLang().getLang() :""),
-							altLabel.getString());
-				} else {
-					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_ALT_LABEL.toString(),
-							altLabel.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromLiteral(solrInputDocument, altLabel,
+								EdmLabel.AG_SKOS_ALT_LABEL);
 			}
 		}
 		if (agentType.getPrefLabelList() != null) {
 			for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
-				if (prefLabel.getLang() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_PREF_LABEL.toString() + (prefLabel.getLang()!=null? "."
-									+ prefLabel.getLang().getLang() :""),
-							prefLabel.getString());
-				} else {
-					solrInputDocument.addField(
-							EdmLabel.AG_SKOS_PREF_LABEL.toString(),
-							prefLabel.getString());
-				}
+				solrInputDocument = SolrUtils.addFieldFromLiteral(
+						solrInputDocument, prefLabel,
+						EdmLabel.AG_SKOS_PREF_LABEL);
 			}
 		}
 
 		if (agentType.getNoteList() != null) {
 			for (Note note : agentType.getNoteList()) {
-				solrInputDocument.addField(EdmLabel.AG_SKOS_NOTE.toString(),
-						note.getString());
+				solrInputDocument = SolrUtils.addFieldFromLiteral(
+						solrInputDocument, note, EdmLabel.AG_SKOS_NOTE);
 			}
 		}
 
 		if (agentType.getBegin() != null) {
-			solrInputDocument.addField(EdmLabel.AG_EDM_BEGIN.toString(),
-					agentType.getBegin().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getBegin(),
+					EdmLabel.AG_EDM_BEGIN);
 		}
 
 		if (agentType.getEnd() != null) {
-			solrInputDocument.addField(EdmLabel.AG_EDM_END.toString(),
-					agentType.getEnd().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getEnd(), EdmLabel.AG_EDM_END);
 		}
 
 		if (agentType.getDateList() != null) {
 			for (Date date : agentType.getDateList()) {
-				if (date.getString() != null) {
-					solrInputDocument.addField(EdmLabel.AG_DC_DATE.toString(),
-							date.getString());
-				}
-				if (date.getResource() != null) {
-					solrInputDocument.addField(EdmLabel.AG_DC_DATE.toString(),
-							date.getResource());
-				}
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, date, EdmLabel.AG_DC_DATE);
 			}
 		}
 
 		if (agentType.getIdentifierList() != null) {
 			for (Identifier identifier : agentType.getIdentifierList()) {
 				if (identifier.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_DC_IDENTIFIER.toString(),
-							identifier.getString());
+					solrInputDocument = SolrUtils.addFieldFromLiteral(
+							solrInputDocument, identifier,
+							EdmLabel.AG_DC_IDENTIFIER);
 				}
 			}
 		}
 
 		if (agentType.getHasMetList() != null) {
 			for (HasMet hasMet : agentType.getHasMetList()) {
-				if (hasMet.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_EDM_HASMET.toString(),
-							hasMet.getString());
-				}
+				solrInputDocument = SolrUtils.addFieldFromLiteral(
+						solrInputDocument, hasMet, EdmLabel.AG_EDM_HASMET);
 			}
 		}
 
 		if (agentType.getIsRelatedToList() != null) {
 			for (IsRelatedTo isRelatedTo : agentType.getIsRelatedToList()) {
-				if (isRelatedTo.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_EDM_ISRELATEDTO.toString(),
-							isRelatedTo.getResource());
-				}
-				if (isRelatedTo.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.AG_EDM_ISRELATEDTO.toString(),
-							isRelatedTo.getString());
-				}
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, isRelatedTo,
+						EdmLabel.AG_EDM_ISRELATEDTO);
 			}
 		}
 
 		if (agentType.getBiographicalInformation() != null) {
-			solrInputDocument.addField(
-					EdmLabel.AG_RDAGR2_BIOGRAPHICALINFORMATION.toString(),
-					agentType.getBiographicalInformation().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getBiographicalInformation(),
+					EdmLabel.AG_RDAGR2_BIOGRAPHICALINFORMATION);
 		}
 
 		if (agentType.getDateOfBirth() != null) {
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_DATEOFBIRTH
-					.toString(), agentType.getDateOfBirth().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getDateOfBirth(),
+					EdmLabel.AG_RDAGR2_DATEOFBIRTH);
 		}
 
 		if (agentType.getDateOfDeath() != null) {
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_DATEOFDEATH
-					.toString(), agentType.getDateOfDeath().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getDateOfDeath(),
+					EdmLabel.AG_RDAGR2_DATEOFDEATH);
 		}
 
 		if (agentType.getDateOfEstablishment() != null) {
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_DATEOFESTABLISHMENT
-					.toString(), agentType.getDateOfEstablishment().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getDateOfEstablishment(),
+					EdmLabel.AG_RDAGR2_DATEOFESTABLISHMENT);
 		}
 
 		if (agentType.getDateOfTermination() != null) {
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_DATEOFTERMINATION
-					.toString(), agentType.getDateOfTermination().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getDateOfTermination(),
+					EdmLabel.AG_RDAGR2_DATEOFTERMINATION);
 		}
 
 		if (agentType.getGender() != null) {
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_GENDER
-					.toString(), agentType.getGender().getString());
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, agentType.getGender(),
+					EdmLabel.AG_RDAGR2_GENDER);
 		}
 
-		if(agentType.getProfessionOrOccupation()!=null){
-			solrInputDocument.addField(EdmLabel.AG_RDAGR2_PROFESSIONOROCCUPATION
-					.toString(), agentType.getProfessionOrOccupation().getString());
+		if (agentType.getProfessionOrOccupation() != null) {
+			solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+					solrInputDocument, agentType.getProfessionOrOccupation(),
+					EdmLabel.AG_RDAGR2_PROFESSIONOROCCUPATION);
 		}
 
 		return solrInputDocument;
@@ -225,11 +197,10 @@ public final class AgentFieldInput {
 	 * @throws MappingException
 	 */
 	public static AgentImpl createAgentMongoEntity(AgentType agentType,
-			MongoServer mongoServer)
-			throws MalformedURLException, IOException {
+			MongoServer mongoServer) throws MalformedURLException, IOException {
 
-		AgentImpl agent = ((EdmMongoServer) mongoServer)
-				.searchByAbout(AgentImpl.class, agentType.getAbout());
+		AgentImpl agent = ((EdmMongoServer) mongoServer).searchByAbout(
+				AgentImpl.class, agentType.getAbout());
 
 		// if it does not exist
 
@@ -257,143 +228,133 @@ public final class AgentFieldInput {
 	 */
 	private static AgentImpl updateMongoAgent(AgentImpl agent,
 			AgentType agentType, MongoServer mongoServer) {
-		if (agent.getBegin() != null
-				&& !StringUtils.equals(agentType.getBegin().getString(),
-						agent.getBegin())) {
-			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"begin", agentType.getBegin().getString());
+		
+		if (agent.getBegin() != null) {
+			MongoUtils
+					.update(AgentImpl.class, agent.getAbout(), mongoServer,
+							"begin", MongoUtils
+									.createLiteralMapFromString(agentType
+											.getBegin()));
 		}
 
-		if(agentType.getDateList()!=null){
+		if (agentType.getDateList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dcDate", SolrUtils.resourceOrLiteralListToArray(agentType.getDateList()));
+					"dcDate", MongoUtils
+							.createResourceOrLiteralMapFromList(agentType
+									.getDateList()));
 		}
 
-		if(agentType.getIdentifierList()!=null){
+		if (agentType.getIdentifierList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dcIdentifier", SolrUtils.literalListToArray(agentType.getIdentifierList()));
+					"dcIdentifier", MongoUtils
+							.createLiteralMapFromList(agentType
+									.getIdentifierList()));
 		}
 
-		if(agentType.getBiographicalInformation()!=null){
+		if (agentType.getBiographicalInformation() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"biographicalInformation", SolrUtils.getLiteralString(agentType.getBiographicalInformation()));
+					"biographicalInformation", MongoUtils
+							.createLiteralMapFromString(agentType
+									.getBiographicalInformation()));
 		}
 
-		if(agentType.getDateOfBirth()!=null){
+		if (agentType.getDateOfBirth() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfBirth", SolrUtils.getLiteralString(agentType.getDateOfBirth()));
+					"dateOfBirth", MongoUtils
+							.createLiteralMapFromString(agentType
+									.getDateOfBirth()));
 		}
 
-		if(agentType.getDateOfDeath()!=null){
+		if (agentType.getDateOfDeath() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfDeath", SolrUtils.getLiteralString(agentType.getDateOfDeath()));
+					"dateOfDeath", MongoUtils
+							.createLiteralMapFromString(agentType
+									.getDateOfDeath()));
 		}
 
-		if(agentType.getDateOfEstablishment()!=null){
+		if (agentType.getDateOfEstablishment() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfEstablishment", SolrUtils.getLiteralString(agentType.getDateOfEstablishment()));
+					"dateOfEstablishment", MongoUtils
+							.createLiteralMapFromString(agentType
+									.getDateOfEstablishment()));
 		}
 
-		if(agentType.getDateOfTermination()!=null){
+		if (agentType.getDateOfTermination() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfTermination", SolrUtils.getLiteralString(agentType.getDateOfTermination()));
+					"dateOfTermination", MongoUtils
+							.createLiteralMapFromString(agentType
+									.getDateOfTermination()));
 		}
 
-		if(agentType.getGender()!=null){
+		if (agentType.getGender() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"gender", SolrUtils.getLiteralString(agentType.getGender()));
+					"gender", MongoUtils.createLiteralMapFromString(agentType
+							.getGender()));
 		}
 
-		if(agentType.getHasMetList()!=null){
+		if (agentType.getHasMetList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"hasMet", SolrUtils.literalListToArray(agentType.getHasMetList()));
+					"hasMet", MongoUtils.createLiteralMapFromList(agentType
+							.getHasMetList()));
 		}
 
-		if(agentType.getIsRelatedToList()!=null){
+		if (agentType.getIsRelatedToList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"isRelatedTo", SolrUtils.resourceOrLiteralListToArray(agentType.getIsRelatedToList()));
+					"isRelatedTo", MongoUtils
+							.createResourceOrLiteralMapFromList(agentType
+									.getIsRelatedToList()));
 		}
 
-		if(agentType.getNameList()!=null){
+		if (agentType.getNameList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"name", SolrUtils.literalListToArray(agentType.getNameList()));
+					"name", MongoUtils.createLiteralMapFromList(agentType
+							.getNameList()));
 		}
 
-		if(agentType.getSameAList()!=null){
+		if (agentType.getSameAList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"sameAs", SolrUtils.resourceListToArray(agentType.getSameAList()));
+					"sameAs",
+					SolrUtils.resourceListToArray(agentType.getSameAList()));
 		}
 
-		if(agentType.getProfessionOrOccupation()!=null){
-			if(agentType.getHasMetList()!=null){
-				MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-						"professionOrOccupation", SolrUtils.getResourceOrLiteralString(agentType.getProfessionOrOccupation()));
+		if (agentType.getProfessionOrOccupation() != null) {
+			if (agentType.getHasMetList() != null) {
+				MongoUtils.update(AgentImpl.class, agent.getAbout(),
+						mongoServer, "professionOrOccupation", MongoUtils
+								.createResourceOrLiteralMapFromString(agentType
+										.getProfessionOrOccupation()));
 			}
 		}
 
-		if (agent.getEnd() != null
-				&& !StringUtils.equals(agentType.getEnd().getString(),
-						agent.getEnd())) {
+		if (agent.getEnd() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"end", agentType.getEnd().getString());
+					"end",
+					MongoUtils.createLiteralMapFromString(agentType.getEnd()));
 
 		}
 
-		if (agent.getNote() != null&& agentType.getNoteList()!=null) {
-			List<String> newNoteList = new ArrayList<String>();
-			for (Note noteJibx : agentType.getNoteList()) {
-				if (!MongoUtils.contains(agent.getNote(), noteJibx.getString())) {
-					newNoteList.add(noteJibx.getString());
-				}
-			}
-			for (String note : agent.getNote()) {
-				newNoteList.add(note);
-			}
+		if (agent.getNote() != null) {
 
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"note", newNoteList);
+					"note", MongoUtils.createLiteralMapFromList(agentType
+							.getNoteList()));
 		}
 
 		if (agent.getAltLabel() != null) {
-			Map<String, String> newAltLabelMap = agent.getAltLabel();
-			if (agentType.getAltLabelList() != null) {
-				for (AltLabel altLabel : agentType.getAltLabelList()) {
-					if (altLabel.getLang() != null) {
-						if (!MongoUtils.contains(newAltLabelMap, altLabel
-								.getLang().getLang(), altLabel.getString())) {
-							newAltLabelMap.put(altLabel.getLang().getLang(),
-									altLabel.getString());
-						}
-					} else {
-						newAltLabelMap.put("def", altLabel.getString());
-					}
-				}
-			}
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"altLabel", newAltLabelMap);
+					"altLabel", MongoUtils.createLiteralMapFromList(agentType
+							.getAltLabelList()));
 		}
 
 		if (agent.getPrefLabel() != null) {
-			Map<String, String> newPrefLabelMap = agent.getPrefLabel();
-			if (agentType.getPrefLabelList() != null) {
-				for (PrefLabel prefLabel : agentType.getPrefLabelList()) {
-					if (prefLabel.getLang() != null) {
-						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
-								.getLang().getLang(), prefLabel.getString())) {
-							newPrefLabelMap.put(prefLabel.getLang().getLang(),
-									prefLabel.getString());
-						}
-					} else {
-						newPrefLabelMap.put("def", prefLabel.getString());
-					}
-				}
-				MongoUtils.update(AgentImpl.class, agent.getAbout(),
-						mongoServer, "prefLabel", newPrefLabelMap);
-			}
+			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
+					"prefLabel", MongoUtils.createLiteralMapFromList(agentType
+							.getPrefLabelList()));
+
 		}
 
-		return  ((EdmMongoServer) mongoServer).searchByAbout(
-				AgentImpl.class, agentType.getAbout());
+		return ((EdmMongoServer) mongoServer).searchByAbout(AgentImpl.class,
+				agentType.getAbout());
 	}
 
 	/**
@@ -407,63 +368,47 @@ public final class AgentFieldInput {
 	private static AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
-		//agent.setId(new ObjectId());
+		// agent.setId(new ObjectId());
 		agent.setAbout(agentType.getAbout());
 
-		agent.setDcDate(SolrUtils.resourceOrLiteralListToArray(agentType
+		agent.setDcDate(MongoUtils.createResourceOrLiteralMapFromList(agentType
 				.getDateList()));
-		agent.setDcIdentifier(SolrUtils.literalListToArray(agentType
+		agent.setDcIdentifier(MongoUtils.createLiteralMapFromList(agentType
 				.getIdentifierList()));
-		agent.setEdmHasMet(SolrUtils.literalListToArray(agentType
+		agent.setEdmHasMet(MongoUtils.createLiteralMapFromList(agentType
 				.getHasMetList()));
-		agent.setEdmIsRelatedTo(SolrUtils
-				.resourceOrLiteralListToArray(agentType.getIsRelatedToList()));
-		agent.setFoafName(SolrUtils.literalListToArray(agentType.getNameList()));
-		agent.setRdaGr2BiographicalInformation(SolrUtils
-				.getLiteralString(agentType.getBiographicalInformation()));
-		agent.setRdaGr2DateOfBirth(SolrUtils.getLiteralString(agentType
-				.getDateOfBirth()));
-		agent.setRdaGr2DateOfDeath(SolrUtils.getLiteralString(agentType
-				.getDateOfDeath()));
-		agent.setRdaGr2DateOfEstablishment(SolrUtils.getLiteralString(agentType
-				.getDateOfEstablishment()));
-		agent.setRdaGr2DateOfTermination(SolrUtils.getLiteralString(agentType
-				.getDateOfTermination()));
-		agent.setRdaGr2Gender(SolrUtils.getLiteralString(agentType.getGender()));
-		agent.setRdaGr2ProfessionOrOccupation(SolrUtils
-				.getResourceOrLiteralString(agentType
+		agent.setEdmIsRelatedTo(MongoUtils
+				.createResourceOrLiteralMapFromList(agentType
+						.getIsRelatedToList()));
+		agent.setFoafName(MongoUtils.createLiteralMapFromList(agentType
+				.getNameList()));
+		agent.setRdaGr2BiographicalInformation(MongoUtils
+				.createLiteralMapFromString(agentType
+						.getBiographicalInformation()));
+		agent.setRdaGr2DateOfBirth(MongoUtils
+				.createLiteralMapFromString(agentType.getDateOfBirth()));
+		agent.setRdaGr2DateOfDeath(MongoUtils
+				.createLiteralMapFromString(agentType.getDateOfDeath()));
+		agent.setRdaGr2DateOfEstablishment(MongoUtils
+				.createLiteralMapFromString(agentType.getDateOfEstablishment()));
+		agent.setRdaGr2DateOfTermination(MongoUtils
+				.createLiteralMapFromString(agentType.getDateOfTermination()));
+		agent.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(agentType
+				.getGender()));
+		agent.setRdaGr2ProfessionOrOccupation(MongoUtils
+				.createResourceOrLiteralMapFromString(agentType
 						.getProfessionOrOccupation()));
-		agent.setNote(SolrUtils.literalListToArray(agentType.getNoteList()));
-
-		if (agentType.getPrefLabelList() != null) {
-			Map<String, String> prefLabelMongo = new HashMap<String, String>();
-			for (PrefLabel prefLabelJibx : agentType.getPrefLabelList()) {
-				if (prefLabelJibx.getLang() != null) {
-					prefLabelMongo.put(prefLabelJibx.getLang().getLang(),
-							prefLabelJibx.getString());
-				} else {
-					prefLabelMongo.put( prefLabelJibx.getString(), prefLabelJibx.getString());
-				}
-			}
-			agent.setPrefLabel(prefLabelMongo);
-		}
-
-		if (agentType.getAltLabelList() != null) {
-			Map<String, String> altLabelMongo = new HashMap<String, String>();
-			for (AltLabel altLabelJibx : agentType.getAltLabelList()) {
-				if (altLabelJibx.getLang() != null) {
-					altLabelMongo.put(altLabelJibx.getLang().getLang(),
-							altLabelJibx.getString());
-				} else {
-					altLabelMongo.put( altLabelJibx.getString(), altLabelJibx.getString());
-				}
-			}
-			agent.setAltLabel(altLabelMongo);
-		}
-
-		agent.setBegin(SolrUtils.getLiteralString(agentType.getBegin()));
-		agent.setEnd(SolrUtils.getLiteralString(agentType.getEnd()));
-		agent.setOwlSameAs(SolrUtils.resourceListToArray(agentType.getSameAList()));
+		agent.setNote(MongoUtils.createLiteralMapFromList(agentType
+				.getNoteList()));
+		agent.setPrefLabel(MongoUtils.createLiteralMapFromList(agentType
+				.getPrefLabelList()));
+		agent.setAltLabel(MongoUtils.createLiteralMapFromList(agentType
+				.getAltLabelList()));
+		agent.setBegin(MongoUtils.createLiteralMapFromString(agentType
+				.getBegin()));
+		agent.setEnd(MongoUtils.createLiteralMapFromString(agentType.getEnd()));
+		agent.setOwlSameAs(SolrUtils.resourceListToArray(agentType
+				.getSameAList()));
 		return agent;
 	}
 }

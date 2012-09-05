@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -38,14 +39,14 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
-	private String edmDataProvider;
+	private Map<String,String> edmDataProvider;
 	private String edmIsShownBy;
 	private String edmIsShownAt;
 	private String edmObject;
-	private String edmProvider;
-	private String edmRights;
+	private Map<String,String> edmProvider;
+	private Map<String,String> edmRights;
 	private String edmUgc;
-	private String[] dcRights;
+	private Map<String,String> dcRights;
 	private String[] hasView;
 	private String aggregatedCHO;
 	private String[] aggregates;
@@ -88,7 +89,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	
 	@Override
-	public void setEdmDataProvider(String edmDataProvider) {
+	public void setEdmDataProvider(Map<String,String> edmDataProvider) {
 		this.edmDataProvider = edmDataProvider;
 	}
 
@@ -108,22 +109,22 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	}
 
 	@Override
-	public void setEdmProvider(String edmProvider) {
+	public void setEdmProvider(Map<String,String> edmProvider) {
 		this.edmProvider = edmProvider;
 	}
 
 	@Override
-	public void setEdmRights(String edmRights) {
+	public void setEdmRights(Map<String,String> edmRights) {
 		this.edmRights = edmRights;
 	}
 
 	@Override
-	public void setDcRights(String[] dcRights) {
-		this.dcRights = dcRights.clone();
+	public void setDcRights(Map<String,String> dcRights) {
+		this.dcRights = dcRights;
 	}
 
 	@Override
-	public String getEdmDataProvider() {
+	public Map<String,String> getEdmDataProvider() {
 		return this.edmDataProvider;
 	}
 
@@ -143,17 +144,17 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	}
 
 	@Override
-	public String getEdmProvider() {
+	public Map<String,String> getEdmProvider() {
 		return this.edmProvider;
 	}
 
 	@Override
-	public String[] getDcRights() {
-		return (StringArrayUtils.isNotBlank(this.dcRights) ? this.dcRights.clone() : null);
+	public Map<String,String> getDcRights() {
+		return this.dcRights;
 	}
 
 	@Override
-	public String getEdmRights() {
+	public Map<String,String> getEdmRights() {
 		return this.edmRights;
 	}
 

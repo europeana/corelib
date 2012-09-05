@@ -8,7 +8,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("ConceptScheme")
 public class ConceptSchemeImpl extends AbstractEdmEntityImpl implements ConceptScheme {
 
-	
+	//TODO: FIX LATER TO CONFORM TO OTHER ENTITIES
 	private String[] dcTitle;
 	private String[] dcCreator;
 	private String[] note;

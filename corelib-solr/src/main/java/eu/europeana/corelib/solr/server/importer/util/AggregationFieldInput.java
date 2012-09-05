@@ -25,13 +25,10 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.DataProvider;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
-import eu.europeana.corelib.definitions.jibx.Provider;
 import eu.europeana.corelib.definitions.jibx.Rights;
-import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
@@ -42,7 +39,7 @@ import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
 /**
- * Constructor for an Aggregation TODO:update/delete
+ * Constructor for an Aggregation 
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
@@ -79,14 +76,12 @@ public final class AggregationFieldInput {
 				.toString(),
 				SolrUtils.exists(_Object.class, (aggregation.getObject()))
 						.getResource());
-		solrInputDocument.addField(
-				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER.toString(),
-				SolrUtils.exists(DataProvider.class,
-						((aggregation.getDataProvider()))).getString());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER
-				.toString(),
-				SolrUtils.exists(Provider.class, (aggregation.getProvider()))
-						.getString());
+		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+				solrInputDocument, aggregation.getDataProvider(),
+				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER);
+		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+				solrInputDocument, aggregation.getProvider(),
+				EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER);
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT.toString(),
 				SolrUtils.exists(IsShownAt.class, (aggregation.getIsShownAt()))
@@ -95,19 +90,18 @@ public final class AggregationFieldInput {
 				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
-		solrInputDocument.addField(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS
-				.toString(),
-				SolrUtils.exists(Rights1.class, (aggregation.getRights()))
-						.getString());
+		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+				solrInputDocument, aggregation.getRights(),
+				EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS);
 		if (aggregation.getUgc() != null) {
 			solrInputDocument.addField(EdmLabel.EDM_UGC.toString(), aggregation
 					.getUgc().getUgc().toString());
 		}
 		if (aggregation.getRightList() != null) {
 			for (Rights rights : aggregation.getRightList()) {
-				solrInputDocument.addField(
-						EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString(),
-						rights.getString());
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, rights,
+						EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS);
 			}
 		}
 		if (aggregation.getHasViewList() != null) {
@@ -122,8 +116,7 @@ public final class AggregationFieldInput {
 	}
 
 	/**
-	 * Append a List of Webresources to an aggregation TODO: what happens when
-	 * there are more than one aggregations
+	 * Append a List of Webresources to an aggregation 
 	 * 
 	 * @param aggregations
 	 *            The List of aggregations in a record
@@ -213,19 +206,16 @@ public final class AggregationFieldInput {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 	//	mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
-		mongoAggregation.setEdmDataProvider(SolrUtils.exists(
-				DataProvider.class, (aggregation.getDataProvider()))
-				.getString());
+		mongoAggregation.setEdmDataProvider(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getDataProvider()));
 		mongoAggregation.setEdmIsShownAt(SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource());
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource());
 		mongoAggregation.setEdmObject(SolrUtils.exists(_Object.class,
 				(aggregation.getObject())).getResource());
-		mongoAggregation.setEdmProvider(SolrUtils.exists(Provider.class,
-				(aggregation.getProvider())).getString());
-		mongoAggregation.setEdmRights(SolrUtils.exists(Rights1.class,
-				(aggregation.getRights())).getString());
+		mongoAggregation.setEdmProvider(MongoUtils.createResourceOrLiteralMapFromString(
+				aggregation.getProvider()));
+		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights()));
 
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
@@ -233,15 +223,8 @@ public final class AggregationFieldInput {
 		}
 		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
 				(aggregation.getAggregatedCHO())).getResource());
-		if (aggregation.getRightList() != null) {
-			List<String> dcRightsList = new ArrayList<String>();
-			for (Rights rights : aggregation.getRightList()) {
-				dcRightsList.add(rights.getString());
-			}
+		mongoAggregation.setDcRights(MongoUtils.createResourceOrLiteralMapFromList(aggregation.getRightList()));
 
-			mongoAggregation.setDcRights(dcRightsList
-					.toArray(new String[dcRightsList.size()]));
-		}
 
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();

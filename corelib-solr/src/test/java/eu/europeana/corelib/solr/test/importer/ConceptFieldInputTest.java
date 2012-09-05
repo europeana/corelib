@@ -71,7 +71,7 @@ public class ConceptFieldInputTest {
 		for (Concept.Choice choice2 : concept.getChoiceList()) {
 			if (choice2.ifNote()) {
 				assertEquals(choice2.getNote().getString(),
-						conceptMongo.getNote()[0]);
+						conceptMongo.getNote().values().iterator().next());
 			}
 			if (choice2.ifAltLabel()) {
 				assertTrue(conceptMongo.getAltLabel().containsKey(

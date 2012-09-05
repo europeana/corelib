@@ -8,6 +8,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Event")
 public class EventImpl extends ContextualClassImpl implements Event {
 
+	//TODO: FIX LATER TO CONFORM TO OTHER ENTITIES
 	private String[] edmHappenedAt;
 	private String[] edmOccuredAt;
 	private String[] sameAs;
@@ -17,7 +18,7 @@ public class EventImpl extends ContextualClassImpl implements Event {
 	private String[] crmP120FOccursBefore;
 	private String[] edmHasType;
 	private String[] edmIsRelatedTo;
-
+	
 	@Override
 	public void setEdmHappenedAt(String[] edmHappenedAt) {
 		this.edmHappenedAt = edmHappenedAt;

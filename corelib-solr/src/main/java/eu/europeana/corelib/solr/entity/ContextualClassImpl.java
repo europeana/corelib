@@ -6,11 +6,11 @@ import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
-
+	
 	private Map<String,String> prefLabel;
 	private Map<String,String> altLabel;
 	private Map<String,String> hiddenLabel;
-	private String[] note;
+	private Map<String,String> note;
 
 	@Override
 	public Map<String, String> getPrefLabel() {
@@ -28,8 +28,8 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	}
 
 	@Override
-	public String[] getNote() {
-		return (this.note != null ? this.note.clone() : null);
+	public Map<String,String> getNote() {
+		return this.note;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	}
 
 	@Override
-	public void setNote(String[] note) {
-		this.note = note.clone();
+	public void setNote(Map<String,String>note) {
+		this.note = note;
 	}
 }

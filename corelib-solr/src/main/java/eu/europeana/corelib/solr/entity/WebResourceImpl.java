@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import java.util.Map;
+
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -35,20 +37,20 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 public class WebResourceImpl implements WebResource {
 
 	private ObjectId id = new ObjectId();
-	private String[] webResourceDcRights;
-	private String webResourceEdmRights;
+	private Map<String,String> webResourceDcRights;
+	private Map<String,String> webResourceEdmRights;
 
 	@Indexed(unique=false)
 	private String about;
-	private String[] dcDescription;
-	private String[] dcFormat;
-	private String[] dcSource;
-	private String[] dctermsExtent;
-	private String[] dctermsIssued;
-	private String[] dctermsConformsTo;
-	private String[] dctermsCreated;
-	private String[] dctermsIsFormatOf;
-	private String[] dctermsHasPart;
+	private Map<String,String> dcDescription;
+	private Map<String,String> dcFormat;
+	private Map<String,String> dcSource;
+	private Map<String,String> dctermsExtent;
+	private Map<String,String> dctermsIssued;
+	private Map<String,String> dctermsConformsTo;
+	private Map<String,String> dctermsCreated;
+	private Map<String,String> dctermsIsFormatOf;
+	private Map<String,String> dctermsHasPart;
 	private String isNextInSequence;
 
 	@Override
@@ -67,92 +69,92 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public String[] getDcDescription() {
+	public Map<String,String> getDcDescription() {
 		return dcDescription;
 	}
 
 	@Override
-	public void setDcDescription(String[] dcDescription) {
+	public void setDcDescription(Map<String,String> dcDescription) {
 		this.dcDescription = dcDescription;
 	}
 
 	@Override
-	public String[] getDcFormat() {
+	public Map<String,String> getDcFormat() {
 		return dcFormat;
 	}
 
 	@Override
-	public void setDcFormat(String[] dcFormat) {
+	public void setDcFormat(Map<String,String> dcFormat) {
 		this.dcFormat = dcFormat;
 	}
 
 	@Override
-	public String[] getDcSource() {
+	public Map<String,String> getDcSource() {
 		return dcSource;
 	}
 
 	@Override
-	public void setDcSource(String[] dcSource) {
+	public void setDcSource(Map<String,String> dcSource) {
 		this.dcSource = dcSource;
 	}
 
 	@Override
-	public String[] getDctermsExtent() {
+	public Map<String,String> getDctermsExtent() {
 		return dctermsExtent;
 	}
 
 	@Override
-	public void setDctermsExtent(String[] dctermsExtent) {
+	public void setDctermsExtent(Map<String,String> dctermsExtent) {
 		this.dctermsExtent = dctermsExtent;
 	}
 
 	@Override
-	public String[] getDctermsIssued() {
+	public Map<String,String> getDctermsIssued() {
 		return dctermsIssued;
 	}
 
 	@Override
-	public void setDctermsIssued(String[] dctermsIssued) {
+	public void setDctermsIssued(Map<String,String> dctermsIssued) {
 		this.dctermsIssued = dctermsIssued;
 	}
 
 	@Override
-	public String[] getDctermsConformsTo() {
+	public Map<String,String> getDctermsConformsTo() {
 		return dctermsConformsTo;
 	}
 
 	@Override
-	public void setDctermsConformsTo(String[] dctermsConformsTo) {
+	public void setDctermsConformsTo(Map<String,String> dctermsConformsTo) {
 		this.dctermsConformsTo = dctermsConformsTo;
 	}
 
 	@Override
-	public String[] getDctermsCreated() {
+	public Map<String,String> getDctermsCreated() {
 		return dctermsCreated;
 	}
 
 	@Override
-	public void setDctermsCreated(String[] dctermsCreated) {
+	public void setDctermsCreated(Map<String,String> dctermsCreated) {
 		this.dctermsCreated = dctermsCreated;
 	}
 
 	@Override
-	public String[] getDctermsIsFormatOf() {
+	public Map<String,String> getDctermsIsFormatOf() {
 		return dctermsIsFormatOf;
 	}
 
 	@Override
-	public void setDctermsIsFormatOf(String[] dctermsIsFormatOf) {
+	public void setDctermsIsFormatOf(Map<String,String> dctermsIsFormatOf) {
 		this.dctermsIsFormatOf = dctermsIsFormatOf;
 	}
 
 	@Override
-	public String[] getDctermsHasPart() {
+	public Map<String,String> getDctermsHasPart() {
 		return dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasPart(String[] dctermsHasPart) {
+	public void setDctermsHasPart(Map<String,String> dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
 
@@ -167,22 +169,22 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public void setWebResourceDcRights(String[] webResourceDcRights) {
-		this.webResourceDcRights = webResourceDcRights.clone();
+	public void setWebResourceDcRights(Map<String,String> webResourceDcRights) {
+		this.webResourceDcRights = webResourceDcRights;
 	}
 
 	@Override
-	public void setWebResourceEdmRights(String webResourceEdmRights) {
+	public void setWebResourceEdmRights(Map<String,String> webResourceEdmRights) {
 		this.webResourceEdmRights = webResourceEdmRights;
 	}
 
 	@Override
-	public String[] getWebResourceDcRights() {
-		return (this.webResourceDcRights != null ? this.webResourceDcRights.clone() : null);
+	public Map<String,String> getWebResourceDcRights() {
+		return this.webResourceDcRights;
 	}
 
 	@Override
-	public String getWebResourceEdmRights() {
+	public Map<String,String> getWebResourceEdmRights() {
 		return this.webResourceEdmRights;
 	}
 

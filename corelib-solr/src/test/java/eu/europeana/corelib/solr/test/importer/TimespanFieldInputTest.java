@@ -79,10 +79,10 @@ public class TimespanFieldInputTest {
 		TimespanImpl timespanMongo = TimespanFieldInput
 				.createTimespanMongoField(timespan, mongoServer);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
-		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin()[0]);
-		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd()[0]);
+		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next());
+		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd().values().iterator().next());
 		assertEquals(timespan.getNoteList().get(0).getString(),
-				timespanMongo.getNote()[0]);
+				timespanMongo.getNote().values().iterator().next());
 		assertTrue(timespanMongo.getAltLabel().containsKey(
 				timespan.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(timespanMongo.getPrefLabel().containsKey(
@@ -92,7 +92,7 @@ public class TimespanFieldInputTest {
 		assertTrue(timespanMongo.getPrefLabel().containsValue(
 				timespan.getPrefLabelList().get(0).getString()));
 		assertEquals(timespan.getIsPartOfList().get(0).getResource(),
-				timespanMongo.getIsPartOf()[0]);
+				timespanMongo.getIsPartOf().values().iterator().next());
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		solrDocument = TimespanFieldInput.createTimespanSolrFields(timespan,

@@ -265,80 +265,80 @@ public class ProxyFieldInputTest {
 					mongoProxy.getEdmIsNextInSequence());
 			List<EuropeanaType.Choice> dcterms = proxy.getChoiceList();
 			assertEquals(dcterms.get(0).getAlternative().getString(),
-					mongoProxy.getDctermsAlternative()[0]);
+					mongoProxy.getDctermsAlternative().values().iterator().next());
 			assertEquals(dcterms.get(0).getConformsTo().getResource(),
-					mongoProxy.getDctermsConformsTo()[0]);
+					mongoProxy.getDctermsConformsTo().values().iterator().next());
 			assertEquals(dcterms.get(0).getCreated().getResource(),
-					mongoProxy.getDctermsCreated()[0]);
+					mongoProxy.getDctermsCreated().values().iterator().next());
 			assertEquals(dcterms.get(0).getExtent().getResource(),
-					mongoProxy.getDctermsExtent()[0]);
+					mongoProxy.getDctermsExtent().values().iterator().next());
 			assertEquals(dcterms.get(0).getHasFormat().getResource(),
-					mongoProxy.getDctermsHasFormat()[0]);
+					mongoProxy.getDctermsHasFormat().values().iterator().next());
 			assertEquals(dcterms.get(0).getHasPart().getResource(),
-					mongoProxy.getDctermsHasPart()[0]);
+					mongoProxy.getDctermsHasPart().values().iterator().next());
 			assertEquals(dcterms.get(0).getHasVersion().getResource(),
-					mongoProxy.getDctermsHasVersion()[0]);
+					mongoProxy.getDctermsHasVersion().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsFormatOf().getResource(),
-					mongoProxy.getDctermsIsFormatOf()[0]);
+					mongoProxy.getDctermsIsFormatOf().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsPartOf().getResource(),
-					mongoProxy.getDctermsIsPartOf()[0]);
+					mongoProxy.getDctermsIsPartOf().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsReferencedBy().getResource(),
-					mongoProxy.getDctermsIsReferencedBy()[0]);
+					mongoProxy.getDctermsIsReferencedBy().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsReplacedBy().getResource(),
-					mongoProxy.getDctermsIsReplacedBy()[0]);
+					mongoProxy.getDctermsIsReplacedBy().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsRequiredBy().getResource(),
-					mongoProxy.getDctermsIsRequiredBy()[0]);
+					mongoProxy.getDctermsIsRequiredBy().values().iterator().next());
 			assertEquals(dcterms.get(0).getIssued().getResource(),
-					mongoProxy.getDctermsIssued()[0]);
+					mongoProxy.getDctermsIssued().values().iterator().next());
 			assertEquals(dcterms.get(0).getIsVersionOf().getResource(),
-					mongoProxy.getDctermsIsVersionOf()[0]);
+					mongoProxy.getDctermsIsVersionOf().values().iterator().next());
 			assertEquals(dcterms.get(0).getMedium().getResource(),
-					mongoProxy.getDctermsMedium()[0]);
+					mongoProxy.getDctermsMedium().values().iterator().next());
 			assertEquals(dcterms.get(0).getProvenance().getResource(),
-					mongoProxy.getDctermsProvenance()[0]);
+					mongoProxy.getDctermsProvenance().values().iterator().next());
 			assertEquals(dcterms.get(0).getReferences().getResource(),
-					mongoProxy.getDctermsReferences()[0]);
+					mongoProxy.getDctermsReferences().values().iterator().next());
 			assertEquals(dcterms.get(0).getReplaces().getResource(),
-					mongoProxy.getDctermsReplaces()[0]);
+					mongoProxy.getDctermsReplaces().values().iterator().next());
 			assertEquals(dcterms.get(0).getRequires().getResource(),
-					mongoProxy.getDctermsRequires()[0]);
+					mongoProxy.getDctermsRequires().values().iterator().next());
 			assertEquals(dcterms.get(0).getSpatial().getResource(),
-					mongoProxy.getDctermsSpatial()[0]);
+					mongoProxy.getDctermsSpatial().values().iterator().next());
 			assertEquals(dcterms.get(0).getTableOfContents().getResource(),
-					mongoProxy.getDctermsTOC()[0]);
+					mongoProxy.getDctermsTOC().values().iterator().next());
 			assertEquals(dcterms.get(0).getTemporal().getResource(),
-					mongoProxy.getDctermsTemporal()[0]);
+					mongoProxy.getDctermsTemporal().values().iterator().next());
 
 			assertEquals(dcterms.get(0).getContributor().getResource(),
-					mongoProxy.getDcContributor()[0]);
+					mongoProxy.getDcContributor().values().iterator().next());
 			assertEquals(dcterms.get(0).getCoverage().getResource(),
-					mongoProxy.getDcCoverage()[0]);
+					mongoProxy.getDcCoverage().values().iterator().next());
 			assertEquals(dcterms.get(0).getCreator().getResource(),
-					mongoProxy.getDcCreator()[0]);
+					mongoProxy.getDcCreator().values().iterator().next());
 			assertEquals(dcterms.get(0).getDate().getResource(),
-					mongoProxy.getDcDate()[0]);
+					mongoProxy.getDcDate().values().iterator().next());
 			assertEquals(dcterms.get(0).getDescription().getResource(),
-					mongoProxy.getDcDescription()[0]);
+					mongoProxy.getDcDescription().values().iterator().next());
 			assertEquals(dcterms.get(0).getFormat().getResource(),
-					mongoProxy.getDcFormat()[0]);
+					mongoProxy.getDcFormat().values().iterator().next());
 			assertEquals(dcterms.get(0).getIdentifier().getString(),
-					mongoProxy.getDcIdentifier()[0]);
+					mongoProxy.getDcIdentifier().values().iterator().next());
 			assertEquals(dcterms.get(0).getLanguage().getString(),
-					mongoProxy.getDcLanguage()[0]);
+					mongoProxy.getDcLanguage().values().iterator().next());
 			assertEquals(dcterms.get(0).getPublisher().getResource(),
-					mongoProxy.getDcPublisher()[0]);
+					mongoProxy.getDcPublisher().values().iterator().next());
 			assertEquals(dcterms.get(0).getRelation().getResource(),
-					mongoProxy.getDcRelation()[0]);
+					mongoProxy.getDcRelation().values().iterator().next());
 			assertEquals(dcterms.get(0).getRights().getResource(),
-					mongoProxy.getDcRights()[0]);
+					mongoProxy.getDcRights().values().iterator().next());
 			assertEquals(dcterms.get(0).getSource().getResource(),
-					mongoProxy.getDcSource()[0]);
+					mongoProxy.getDcSource().values().iterator().next());
 			assertEquals(dcterms.get(0).getSubject().getResource(),
-					mongoProxy.getDcSubject()[0]);
+					mongoProxy.getDcSubject().values().iterator().next());
 			assertEquals(dcterms.get(0).getTitle().getString(),
-					mongoProxy.getDcTitle()[0]);
+					mongoProxy.getDcTitle().values().iterator().next());
 			assertEquals(dcterms.get(0).getType().getResource(),
-					mongoProxy.getDcType()[0]);
+					mongoProxy.getDcType().values().iterator().next());
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

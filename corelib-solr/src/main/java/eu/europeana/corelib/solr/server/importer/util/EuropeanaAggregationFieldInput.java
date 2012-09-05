@@ -7,14 +7,10 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregates;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.Country;
-import eu.europeana.corelib.definitions.jibx.Creator;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LandingPage;
-import eu.europeana.corelib.definitions.jibx.Language1;
-import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.solr.MongoServer;
@@ -35,12 +31,12 @@ public final class EuropeanaAggregationFieldInput {
 			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException {
 
-		solrInputDocument.addField(
-				EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR.toString(),
-				aggregation.getCreator());
-		solrInputDocument.addField(
-				EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY.toString(),
-				aggregation.getCountry().getString());
+		solrInputDocument = SolrUtils
+				.addFieldFromResourceOrLiteral(solrInputDocument, aggregation.getCreator(),
+						EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR);
+		solrInputDocument = SolrUtils
+				.addFieldFromLiteral(solrInputDocument, aggregation.getCountry(),
+						EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY);
 		solrInputDocument.addField(
 				EdmLabel.EDM_EUROPEANA_AGGREGATION.toString(),
 				aggregation.getAbout());
@@ -57,12 +53,12 @@ public final class EuropeanaAggregationFieldInput {
 		solrInputDocument.addField(
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString(),
 				aggregation.getLandingPage().getResource());
-		solrInputDocument.addField(
-				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE.toString(),
-				aggregation.getLanguage().getString());
-		solrInputDocument.addField(
-				EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS.toString(),
-				aggregation.getRights().getResource());
+		solrInputDocument = SolrUtils
+				.addFieldFromLiteral(solrInputDocument, aggregation.getLanguage(),
+						EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE);
+		solrInputDocument = SolrUtils
+				.addFieldFromResourceOrLiteral(solrInputDocument, aggregation.getRights(),
+						EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS);
 		solrInputDocument.addField(
 				EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO.toString(),
 				aggregation.getAggregatedCHO().getResource());
@@ -98,20 +94,17 @@ public final class EuropeanaAggregationFieldInput {
 		EuropeanaAggregationImpl mongoAggregation = new EuropeanaAggregationImpl();
 		//mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
-		mongoAggregation.setDcCreator(SolrUtils.exists(Creator.class,
-				aggregation.getCreator()).getString());
-		mongoAggregation.setEdmCountry(SolrUtils.exists(Country.class,
-				aggregation.getCountry()).getString());
+		mongoAggregation.setDcCreator(MongoUtils.createResourceOrLiteralMapFromString(
+				aggregation.getCreator()));
+		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry()));
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
 				aggregation.getIsShownBy()).getResource());
 		mongoAggregation.setEdmLandingPage(SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource());
-		mongoAggregation.setEdmLanguage(SolrUtils.exists(Language1.class,
-				aggregation.getLanguage()).getString());
+		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage()));
 		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource());
-		mongoAggregation.setEdmRights(SolrUtils.exists(Rights1.class,
-				aggregation.getRights()).getResource());
+		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights()));
 
 		mongoAggregation.setAggregates(SolrUtils
 				.resourceListToArray(aggregation.getAggregateList()));

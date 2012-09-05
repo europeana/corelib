@@ -27,7 +27,6 @@ import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsFormatOf;
 import eu.europeana.corelib.definitions.jibx.Issued;
 import eu.europeana.corelib.definitions.jibx.Rights;
-import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.Source;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -65,149 +64,85 @@ public final class WebResourcesFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.EDM_WEB_RESOURCE.toString(),
 				webResource.getAbout());
-		solrInputDocument
-				.addField(
-						EdmLabel.WR_EDM_RIGHTS.toString(),
-						SolrUtils.exists(Rights1.class,
-								(webResource.getRights())).getResource());
+		solrInputDocument = SolrUtils
+				.addFieldFromResourceOrLiteral(solrInputDocument, webResource.getRights(),
+						EdmLabel.WR_EDM_RIGHTS);
 		if (webResource.getRightList() != null) {
 			for (Rights dcRights : webResource.getRightList()) {
-				solrInputDocument.addField(EdmLabel.WR_DC_RIGHTS.toString(),
-						dcRights.getResource());
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, dcRights,
+								EdmLabel.WR_DC_RIGHTS);
 			}
 		}
 
 		if (webResource.getIsNextInSequence() != null) {
 			solrInputDocument.addField(
-					EdmLabel.WR_DCTERMS_IS_NEXT_IN_SEQUENCE.toString(),
+					EdmLabel.WR_EDM_IS_NEXT_IN_SEQUENCE.toString(),
 					webResource.getIsNextInSequence().getResource());
 		}
 
 		if (webResource.getDescriptionList() != null) {
 			for (Description description : webResource.getDescriptionList()) {
-				if (description.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_DESCRIPTION.toString(),
-							description.getResource());
-				}
-				if (description.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_DESCRIPTION.toString(),
-							description.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, description,
+								EdmLabel.WR_DC_DESCRIPTION);
 			}
 		}
 
 		if (webResource.getFormatList() != null) {
 			for (Format format : webResource.getFormatList()) {
-				if (format.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_FORMAT.toString(),
-							format.getResource());
-				}
-				if (format.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_FORMAT.toString(),
-							format.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, format,
+								EdmLabel.WR_DC_FORMAT);
 			}
 		}
 		if (webResource.getSourceList() != null) {
 			for (Source source : webResource.getSourceList()) {
-				if (source.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_SOURCE.toString(),
-							source.getResource());
-				}
-				if (source.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DC_SOURCE.toString(),
-							source.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, source,
+								EdmLabel.WR_DC_SOURCE);
 			}
 		}
 		if (webResource.getConformsToList() != null) {
 			for (ConformsTo conformsTo : webResource.getConformsToList()) {
-				if (conformsTo.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_CONFORMSTO.toString(),
-							conformsTo.getResource());
-				}
-				if (conformsTo.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_CONFORMSTO.toString(),
-							conformsTo.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, conformsTo,
+								EdmLabel.WR_DCTERMS_CONFORMSTO);
 			}
 		}
 		if (webResource.getCreatedList() != null) {
 			for (Created created : webResource.getCreatedList()) {
-				if (created.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_CREATED.toString(),
-							created.getResource());
-				}
-				if (created.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_CREATED.toString(),
-							created.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, created,
+								EdmLabel.WR_DCTERMS_CREATED);
 			}
 		}
 		if (webResource.getExtentList() != null) {
 			for (Extent extent : webResource.getExtentList()) {
-				if (extent.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_EXTENT.toString(),
-							extent.getResource());
-				}
-				if (extent.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_EXTENT.toString(),
-							extent.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, extent,
+								EdmLabel.WR_DCTERMS_EXTENT);
 			}
 		}
 		if (webResource.getHasPartList() != null) {
 			for (HasPart hasPart : webResource.getHasPartList()) {
-				if (hasPart.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_HAS_PART.toString(),
-							hasPart.getResource());
-				}
-				if (hasPart.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_HAS_PART.toString(),
-							hasPart.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, hasPart,
+								EdmLabel.WR_DCTERMS_HAS_PART);
 			}
 		}
 		if (webResource.getIsFormatOfList() != null) {
 			for (IsFormatOf isFormatOf : webResource.getIsFormatOfList()) {
-				if (isFormatOf.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_ISFORMATOF.toString(),
-							isFormatOf.getResource());
-				}
-				if (isFormatOf.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_ISFORMATOF.toString(),
-							isFormatOf.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, isFormatOf,
+								EdmLabel.WR_DCTERMS_ISFORMATOF);
 			}
 		}
 		if (webResource.getIssuedList() != null) {
 			for (Issued issued : webResource.getIssuedList()) {
-				if (issued.getResource() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_ISSUED.toString(),
-							issued.getResource());
-				}
-				if (issued.getString() != null) {
-					solrInputDocument.addField(
-							EdmLabel.WR_DCTERMS_ISSUED.toString(),
-							issued.getString());
-				}
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, issued,
+								EdmLabel.WR_DCTERMS_ISSUED);
 			}
 		}
 		return solrInputDocument;
@@ -227,52 +162,18 @@ public final class WebResourcesFieldInput {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		//mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
-		if(webResource.getRights()!=null){
-		mongoWebResource.setWebResourceEdmRights(webResource.getRights()
-				.getResource());
-		}
-		if(webResource.getRightList()!=null){
-		mongoWebResource.setWebResourceDcRights(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getRightList()));
-		}
-		if(webResource.getDescriptionList()!=null){
-		mongoWebResource
-				.setDcDescription(SolrUtils
-						.resourceOrLiteralListToArray(webResource
+		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights()));
+		mongoWebResource.setWebResourceDcRights(MongoUtils.createResourceOrLiteralMapFromList(webResource.getRightList()));
+		mongoWebResource.setDcDescription(MongoUtils.createResourceOrLiteralMapFromList(webResource
 								.getDescriptionList()));
-		}
-		if(webResource.getFormatList()!=null){
-		mongoWebResource.setDcFormat(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getFormatList()));
-		}
-		if(webResource.getSourceList()!=null){
-		mongoWebResource.setDcSource(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getSourceList()));
-		}
-		if(webResource.getConformsToList()!=null){
-		mongoWebResource.setDctermsConformsTo(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getConformsToList()));
-		}
-		if(webResource.getCreatedList()!=null){
-		mongoWebResource.setDctermsCreated(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getCreatedList()));
-		}
-		if(webResource.getExtentList()!=null){
-		mongoWebResource.setDctermsExtent(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getExtentList()));
-		}
-		if(webResource.getHasPartList()!=null){
-		mongoWebResource.setDctermsHasPart(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getHasPartList()));
-		}
-		if(webResource.getFormatList()!=null){
-		mongoWebResource.setDctermsIsFormatOf(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getIsFormatOfList()));
-		}
-		if(webResource.getIssuedList()!=null){
-		mongoWebResource.setDctermsIssued(SolrUtils
-				.resourceOrLiteralListToArray(webResource.getIssuedList()));
-		}
+		mongoWebResource.setDcFormat(MongoUtils.createResourceOrLiteralMapFromList(webResource.getFormatList()));
+		mongoWebResource.setDcSource(MongoUtils.createResourceOrLiteralMapFromList(webResource.getSourceList()));
+		mongoWebResource.setDctermsConformsTo(MongoUtils.createResourceOrLiteralMapFromList(webResource.getConformsToList()));
+		mongoWebResource.setDctermsCreated(MongoUtils.createResourceOrLiteralMapFromList(webResource.getCreatedList()));
+		mongoWebResource.setDctermsExtent(MongoUtils.createResourceOrLiteralMapFromList(webResource.getExtentList()));
+		mongoWebResource.setDctermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(webResource.getHasPartList()));
+		mongoWebResource.setDctermsIsFormatOf(MongoUtils.createResourceOrLiteralMapFromList(webResource.getIsFormatOfList()));
+		mongoWebResource.setDctermsIssued(MongoUtils.createResourceOrLiteralMapFromList(webResource.getIssuedList()));
 		if(webResource.getIsNextInSequence()!=null){
 		mongoWebResource.setIsNextInSequence(webResource.getIsNextInSequence()
 				.getResource());

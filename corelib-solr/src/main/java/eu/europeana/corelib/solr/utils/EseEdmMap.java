@@ -25,7 +25,7 @@ public enum EseEdmMap {
 	DC_IDENTIFIER("dc_identifier") {
 		@Override
 		public	String getEdmValue(FullBean bean) {
-			return bean.getProxies().get(0).getDcIdentifier()[0];
+			return bean.getProxies().get(0).getDcIdentifier().values().iterator().next();
 		}
 	}
 	;

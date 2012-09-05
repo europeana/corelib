@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.Map;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -34,41 +36,41 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Place")
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
-	private String[] isPartOf;
-	private float latitude;
-	private float longitude;
-	private float altitude;
-	private float[] position;
-	private String[] dcTermsHasPart;
+	private Map<String,String> isPartOf;
+	private Map<String,Float> latitude;
+	private Map<String,Float> longitude;
+	private Map<String,Float> altitude;
+	private Map<String,Float> position;
+	private Map<String,String> dcTermsHasPart;
 	private String[] owlSameAs;
 
 	@Override
-	public String[] getIsPartOf() {
-		return (StringArrayUtils.isNotBlank(isPartOf) ? this.isPartOf.clone() : null);
+	public Map<String,String> getIsPartOf() {
+		return this.isPartOf;
 	}
 
 	@Override
-	public float getLatitude() {
+	public Map<String,Float> getLatitude() {
 		return this.latitude;
 	}
 
 	@Override
-	public float getLongitude() {
+	public Map<String,Float> getLongitude() {
 		return this.longitude;
 	}
 
 	@Override
-	public void setIsPartOf(String[] isPartOf) {
-		this.isPartOf = isPartOf.clone();
+	public void setIsPartOf(Map<String,String> isPartOf) {
+		this.isPartOf = isPartOf;
 	}
 
 	@Override
-	public void setLatitude(float latitude) {
+	public void setLatitude(Map<String,Float> latitude) {
 		this.latitude = latitude;
 	}
 
 	@Override
-	public void setLongitude(float longitude) {
+	public void setLongitude(Map<String,Float> longitude) {
 		this.longitude = longitude;
 	}
 
@@ -82,40 +84,40 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public int hashCode(){ 
-		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : this.latitude * 100 + this.longitude);
+		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : ((Float)this.latitude.values().toArray()[0]) * 100 + (Float)this.longitude.values().toArray()[0]);
 	}
 
 	@Override
-	public void setAltitude(float altitude) {
+	public void setAltitude(Map<String,Float> altitude) {
 		this.altitude = altitude;
 	}
 
 	@Override
-	public float getAltitude() {
+	public Map<String,Float> getAltitude() {
 		return this.altitude;
 	}
 
 	@Override
-	public void setPosition(float[] position) {
+	public void setPosition(Map<String, Float> position) {
 		this.position = position;
 	}
 
 	@Override
-	public float[] getPosition() {
-		return this.position != null ? this.position.clone() : null;
+	public Map<String,Float> getPosition() {
+		return this.position;
 	}
 
 	@Override
-	public void setDcTermsHasPart(String[] dcTermsHasPart) {
+	public void setDcTermsHasPart(Map<String,String> dcTermsHasPart) {
 		this.dcTermsHasPart = dcTermsHasPart;
 	}
 
 	@Override
-	public String[] getDcTermsHasPart() {
-		return (StringArrayUtils.isNotBlank(dcTermsHasPart) ? this.dcTermsHasPart.clone() : null);
+	public Map<String,String> getDcTermsHasPart() {
+		return this.dcTermsHasPart;
 	}
 
 	@Override
