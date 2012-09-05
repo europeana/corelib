@@ -353,9 +353,6 @@
 	<dynamicField name="pl_skos_note.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="pl_dcterms_isPartOf.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="pl_dcterms_isPartOf_label.*" type="string" indexed="true" stored="false" multiValued="true"/>
-	<dynamicField name="pl_wgs84_pos_lat.*" type="string" indexed="true" stored="false" multiValued="true" />
-	<dynamicField name="pl_wgs84_pos_long.*" type="string" indexed="true" stored="false" multiValued="true"/>
-	<dynamicField name="pl_wgs84_pos_alt.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	<dynamicField name="pl_dcterms_hasPart.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	
 	<!-- CONCEPT -->
@@ -664,9 +661,6 @@
    <copyField source="pl_skos_note.*" dest="pl_skos_note"/>
    <copyField source="pl_dcterms_isPartOf.*" dest="pl_dcterms_isPartOf"/>
    <copyField source="pl_dcterms_isPartOf_label.*" dest="pl_dcterms_isPartOf_label"/>
-   <copyField source="pl_wgs84_pos_lat.*" dest="pl_wgs84_pos_lat"/>
-   <copyField source="pl_wgs84_pos_long.*" dest="pl_wgs84_pos_long"/>
-   <copyField source="pl_wgs84_pos_alt.*" dest="pl_wgs84_pos_alt"/>
    <copyField source="pl_dcterms_hasPart.*" dest="pl_dcterms_hasPart"/>
    <copyField source="cc_skos_note.*" dest="cc_skos_note"/>
    <copyField source="cc_skos_notation.*" dest="cc_skos_notation"/>
