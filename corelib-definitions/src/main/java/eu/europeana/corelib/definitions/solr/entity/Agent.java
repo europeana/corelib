@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.Map;
+
 /**
  * EDM Agent fields representation
  * 
@@ -30,14 +32,14 @@ public interface Agent extends ContextualClass {
 	 * 
 	 * @return Date representing the birth of an agent
 	 */
-	String getBegin();
+	Map<String,String> getBegin();
 
 	/**
 	 * Retrieves the edm:end for an edm:Agent
 	 * 
 	 * @return Date representing the death of an agent
 	 */
-	String getEnd();
+	Map<String,String> getEnd();
 
 	/**
 	 * Set the edm:begin field for an edm:Agent
@@ -45,7 +47,7 @@ public interface Agent extends ContextualClass {
 	 * @param begin
 	 *            String representing a valid date
 	 */
-	void setBegin(String begin);
+	void setBegin(Map<String,String> begin);
 
 	/**
 	 * Set the edm:end field for an edm:Agent
@@ -53,63 +55,63 @@ public interface Agent extends ContextualClass {
 	 * @param end
 	 *            String representing a valid date
 	 */
-	void setEnd(String end);
+	void setEnd(Map<String,String> end);
 	
 	void setEdmWasPresentAt(String[] edmWasPresentAt);
 	
 	String[] getEdmWasPresentAt();
 	
-	void setEdmHasMet(String[] edmHasMet);
+	void setEdmHasMet(Map<String,String> edmHasMet);
 	
-	String[] getEdmHasMet();
+	Map<String,String> getEdmHasMet();
 	
-	void setEdmIsRelatedTo(String[] edmIsRelatedTo);
+	void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo);
 	
-	String[] getEdmIsRelatedTo();
+	Map<String,String> getEdmIsRelatedTo();
 	
 	
 	void setOwlSameAs(String[] owlSameAs);
 	
 	String[] getOwlSameAs();
 	
-	void setFoafName(String[] foafName);
+	void setFoafName(Map<String,String> foafName);
 	
-	String[] getFoafName();
+	Map<String,String> getFoafName();
 	
-	void setDcDate(String[] dcDate);
+	void setDcDate(Map<String,String> dcDate);
 	
-	String[] getDcDate();
+	Map<String,String> getDcDate();
 	
-	void setDcIdentifier(String[] dcIdentifier);
+	void setDcIdentifier(Map<String,String> dcIdentifier);
 	
-	String[] getDcIdentifier();
+	Map<String,String> getDcIdentifier();
 	
-	void setRdaGr2DateOfBirth(String rdaGr2DateOfBirth);
+	void setRdaGr2DateOfBirth(Map<String,String> rdaGr2DateOfBirth);
 	
-	String getRdaGr2DateOfBirth();
+	Map<String,String> getRdaGr2DateOfBirth();
 	
-	void setRdaGr2DateOfDeath(String rdaGr2DateOfDeath);
+	void setRdaGr2DateOfDeath(Map<String,String> rdaGr2DateOfDeath);
 	
-	String getRdaGr2DateOfDeath();
+	Map<String,String> getRdaGr2DateOfDeath();
 	
-	void setRdaGr2DateOfEstablishment(String rdaGr2DateOfEstablishment);
+	void setRdaGr2DateOfEstablishment(Map<String,String> rdaGr2DateOfEstablishment);
 	
-	String getRdaGr2DateOfEstablishment();
+	Map<String,String> getRdaGr2DateOfEstablishment();
 	
-	void setRdaGr2DateOfTermination(String rdaGr2DateOfTermination);
+	void setRdaGr2DateOfTermination(Map<String,String> rdaGr2DateOfTermination);
 	
-	String getRdaGr2DateOfTermination();
+	Map<String,String> getRdaGr2DateOfTermination();
 	
-	void setRdaGr2Gender(String rdaGr2Gender);
+	void setRdaGr2Gender(Map<String,String> rdaGr2Gender);
 	
-	String getRdaGr2Gender();
+	Map<String,String> getRdaGr2Gender();
 	
-	void setRdaGr2ProfessionOrOccupation(String rdaGr2ProfessionOrOccupation);
+	void setRdaGr2ProfessionOrOccupation(Map<String,String> rdaGr2ProfessionOrOccupation);
 	
-	String getRdaGr2ProfessionOrOccupation();
+	Map<String,String> getRdaGr2ProfessionOrOccupation();
 	
-	void setRdaGr2BiographicalInformation(String rdaGr2BiographicalInformation);
+	void setRdaGr2BiographicalInformation(Map<String,String> rdaGr2BiographicalInformation);
 	
-	String getRdaGr2BiographicalInformation();
+	Map<String,String> getRdaGr2BiographicalInformation();
 	
 }

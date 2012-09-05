@@ -17,6 +17,7 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Europeana specific aggregation
@@ -33,9 +34,9 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	
 	void setAggregates(String[] aggregates);
 	
-	String getDcCreator();
+	Map<String,String> getDcCreator();
 	
-	void setDcCreator(String dcCreator);
+	void setDcCreator(Map<String,String> dcCreator);
 	
 	String getEdmLandingPage();
 	
@@ -49,17 +50,17 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	
 	void setEdmHasView(String[] edmHasView);
 	
-	String getEdmCountry();
+	Map<String,String> getEdmCountry();
 	
-	void setEdmCountry(String edmCountry);
+	void setEdmCountry(Map<String,String> edmCountry);
 	
-	String getEdmLanguage();
+	Map<String,String> getEdmLanguage();
 	
-	void setEdmLanguage(String edmLanguage);
+	void setEdmLanguage(Map<String,String> edmLanguage);
 	
-	String getEdmRights();
+	Map<String,String> getEdmRights();
 	
-	void setEdmRights(String edmRights);
+	void setEdmRights(Map<String,String> edmRights);
 
 	List<? extends WebResource> getWebResources();
 

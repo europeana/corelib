@@ -37,9 +37,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	private Map<String,String> isPartOf;
-	private Map<String,Float> latitude;
-	private Map<String,Float> longitude;
-	private Map<String,Float> altitude;
+	private float latitude;
+	private float longitude;
+	private float altitude;
 	private Map<String,Float> position;
 	private Map<String,String> dcTermsHasPart;
 	private String[] owlSameAs;
@@ -50,12 +50,12 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public Map<String,Float> getLatitude() {
+	public float getLatitude() {
 		return this.latitude;
 	}
 
 	@Override
-	public Map<String,Float> getLongitude() {
+	public float getLongitude() {
 		return this.longitude;
 	}
 
@@ -65,12 +65,12 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public void setLatitude(Map<String,Float> latitude) {
+	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
 
 	@Override
-	public void setLongitude(Map<String,Float> longitude) {
+	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
 
@@ -87,16 +87,16 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	
 	@Override
 	public int hashCode(){ 
-		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : ((Float)this.latitude.values().toArray()[0]) * 100 + (Float)this.longitude.values().toArray()[0]);
+		return (int) (this.getAbout() != null ? this.getAbout().hashCode() : this.latitude * 100 + this.longitude);
 	}
 
 	@Override
-	public void setAltitude(Map<String,Float> altitude) {
+	public void setAltitude(float altitude) {
 		this.altitude = altitude;
 	}
 
 	@Override
-	public Map<String,Float> getAltitude() {
+	public float getAltitude() {
 		return this.altitude;
 	}
 

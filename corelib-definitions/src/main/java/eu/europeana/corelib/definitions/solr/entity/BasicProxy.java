@@ -30,7 +30,7 @@ public interface BasicProxy  extends PhysicalThing {
 	 * 
 	 * @return	String containing the proxyIn of a Proxy
 	 */
-	String getProxyIn();
+	String[] getProxyIn();
 
 	/**
 	 * Set the proxyIn field for a Proxy
@@ -38,7 +38,7 @@ public interface BasicProxy  extends PhysicalThing {
 	 * @param proxyIn
 	 * 			String containing the proxyIn of a Proxy
 	 */
-	void setProxyIn(String proxyIn);
+	void setProxyIn(String[] proxyIn);
 
 	/**
 	 * Retrieve the ore:ProxyFor field for a Proxy (It always points to the rdf:About of an ProvidedCHO)

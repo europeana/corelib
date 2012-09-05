@@ -73,9 +73,9 @@ public interface Concept extends ContextualClass {
 	
 	void setCloseMatch(String[] closeMatch);
 	
-	String[] getNotation();
+	Map<String,String> getNotation();
 	
-	void setNotation(String[] notation);
+	void setNotation(Map<String,String> notation);
 	
 	String[] getInScheme();
 	

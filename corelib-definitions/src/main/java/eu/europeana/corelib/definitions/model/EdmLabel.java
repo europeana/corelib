@@ -71,7 +71,7 @@ public enum EdmLabel {
 	WR_DCTERMS_CREATED("wr_dcterms_created", SolrType.NOT_STORED), 
 	WR_DCTERMS_ISFORMATOF("wr_dcterms_isFormatOf", SolrType.NOT_STORED), 
 	WR_DCTERMS_HAS_PART("wr_dcterms_hasPart", SolrType.NOT_STORED), 
-	WR_DCTERMS_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
+	WR_EDM_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
 
 	// PROVIDER PROXY
 	ORE_PROXY("proxy_ore_proxy", SolrType.INDEXED), 

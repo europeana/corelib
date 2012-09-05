@@ -246,10 +246,8 @@ public class FullBeanTest {
 		Map<String,String> isPartOf = new HashMap<String,String>();
 		isPartOf.put("en", "test isPartOf");
 		place.setIsPartOf(isPartOf);
-		Map<String,Float> lat = new HashMap<String, Float>();
-		lat.put("en", 0f);
-		place.setLatitude(lat);
-		place.setLongitude(lat);
+		place.setLatitude(0f);
+		place.setLongitude(0f);
 		Map<String,String> note = new HashMap<String,String>();
 		note.put("en", "test note");
 		place.setNote(note);

@@ -94,12 +94,10 @@ public final class PlaceFieldInput {
 		if (place.getLong() != null && place.getLat() != null) {
 			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT_LONG.toString(), place
 					.getLat().getString() + "," + place.getLong().getString());
-			solrInputDocument = SolrUtils
-					.addFieldFromLiteral(solrInputDocument, place.getLat(),
-							EdmLabel.PL_WGS84_POS_LAT);
-			solrInputDocument = SolrUtils
-					.addFieldFromLiteral(solrInputDocument, place.getLong(),
-							EdmLabel.PL_WGS84_POS_LONG);
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT.toString(), place
+					.getLat().getString());
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LONG.toString(), place
+					.getLong().getString());
 		}
 		
 		if(place.getAlt()!=null){
@@ -255,9 +253,9 @@ public final class PlaceFieldInput {
 		//place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());
 
-		place.setLatitude(convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLat())));
+		place.setLatitude(Float.parseFloat(placeType.getLat().getString()));
 
-		place.setLongitude(convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLong())));
+		place.setLongitude(Float.parseFloat(placeType.getLong().getString()));
 
 		place.setNote(MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
 		place.setPrefLabel(MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
@@ -266,7 +264,7 @@ public final class PlaceFieldInput {
 		place.setIsPartOf(MongoUtils.createResourceOrLiteralMapFromList(placeType
 				.getIsPartOfList()));
 		
-		place.setAltitude(convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getAlt())));
+		place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
 		place.setDcTermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
 		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType
 				.getSameAList()));

@@ -51,7 +51,7 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 * 
 	 * @return A string array with notes for the Contextual Class
 	 */
-	String[] getNote();
+	Map<String,String> getNote();
 
 	/**
 	 * Set the altLabel for a Contextual Class
@@ -68,7 +68,7 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 * @param note
 	 *            A String array with notes for the Contextual Class
 	 */
-	void setNote(String[] note);
+	void setNote(Map<String,String> note);
 
 	/**
 	 * Set the prefLabel for a Contextual Class

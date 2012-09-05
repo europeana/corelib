@@ -92,9 +92,9 @@ public class PlaceFieldInputTest {
 		assertEquals(place.getIsPartOfList().get(0).getString(),
 				placeMongo.getIsPartOf().values().iterator().next());
 		assertEquals(place.getLat().getString(),
-				Float.toString(placeMongo.getLatitude().values().iterator().next()));
+				Float.toString(placeMongo.getLatitude()));
 		assertEquals(place.getLong().getString(),
-				Float.toString(placeMongo.getLongitude().values().iterator().next()));
+				Float.toString(placeMongo.getLongitude()));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		solrDocument = PlaceFieldInput.createPlaceSolrFields(place,
