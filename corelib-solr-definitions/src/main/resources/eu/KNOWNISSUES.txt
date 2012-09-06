@@ -21,3 +21,18 @@ For provided CHO:
 For contextual resources:
 -- skos:prefLabel (currently maxOccurs="unbounded" minOccurs="0") should have a miximum occurrence of 1 *per language tag*. This might be just impossible to implement in XML schema in fact.
 
+======================= Documentation regarding usage in external tools 
+- Add specific information to the providers regarding the use of the EDM XSD schema in various tools or APIs
+
+- Validating a file in Oxygen XML editor
+Select the Document/Validate/Validation Options menu entry. There in the XML Parser Features sections check the 
+"http://apache.org/xml/features/honour-all-schemaLocations" option. This instructs the parser to include the elements declared in all other files that are imported by EDM.xsd. 
+Then select the EDM.xml file and "Document/Validate/Validate with" option and poit it to the localy stored or remote URI location of the EDM.xsd file. 
+
+- Validating an XML Document via the JAXP Java API
+If you are using JAXP to validate your EDM data in you application, you should set the same values.
+
+DocumentBuilderFactory factory= DocumentBuilderFactory.newInstance();
+
+factory.setFeature("http://apache.org/xml/features/validation/schema-full-checking", false);
+factory.setFeature("http://apache.org/xml/features/honour-all-schemaLocations", true);
