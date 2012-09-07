@@ -278,6 +278,8 @@ public class XMPUtils {
 				}
 
 				if (aggregation.getRights() != null) {
+					
+					if(aggregation.getRights().getResource() != null){
 					EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation
 							.getRights().getResource());
 
@@ -299,6 +301,13 @@ public class XMPUtils {
 						EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
 								"True");
 					}
+					}
+					
+					else if(aggregation.getRights().getString() != null){
+						EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation.getRights().getString());
+					}
+					
+					
 
 				}
 
