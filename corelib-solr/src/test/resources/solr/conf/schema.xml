@@ -189,8 +189,8 @@
    <dynamicField name="proxy_dc_relation.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dc_source.*" type="string" indexed="true" stored="false" multiValued="true" />
 		
-   <field name="proxy_dc_rights.*" type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="proxy_edm_rights.*" type="string" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="proxy_dc_rights.*" type="string" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="proxy_edm_rights.*" type="string" indexed="true" stored="false" multiValued="true" />
  
    <field name="proxy_dcterms_alternative" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="proxy_dcterms_conformsTo" type="string" indexed="true" stored="false" multiValued="true" />	
