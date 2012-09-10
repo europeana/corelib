@@ -183,7 +183,7 @@
    <dynamicField name="proxy_dc_language.*" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="proxy_dc_publisher.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dc_subject.*" type="string" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="proxy_dc_title.*" type="string" indexed="true" stored="true" multiValued="false" />
+   <dynamicField name="proxy_dc_title.*" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="proxy_dc_type.*" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="proxy_dc_identifier.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dc_relation.*" type="string" indexed="true" stored="false" multiValued="true" />
