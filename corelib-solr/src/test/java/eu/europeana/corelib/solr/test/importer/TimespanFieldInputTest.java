@@ -84,9 +84,9 @@ public class TimespanFieldInputTest {
 		assertEquals(timespan.getNoteList().get(0).getString(),
 				timespanMongo.getNote().values().iterator().next());
 		assertTrue(timespanMongo.getAltLabel().containsKey(
-				timespan.getAltLabelList().get(0).getLang().getLang()));
+				timespan.getAltLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(timespanMongo.getPrefLabel().containsKey(
-				timespan.getPrefLabelList().get(0).getLang().getLang()));
+				timespan.getPrefLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(timespanMongo.getAltLabel().containsValue(
 				timespan.getAltLabelList().get(0).getString()));
 		assertTrue(timespanMongo.getPrefLabel().containsValue(

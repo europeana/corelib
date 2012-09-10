@@ -82,9 +82,9 @@ public class PlaceFieldInputTest {
 		assertEquals(place.getNoteList().get(0).getString(),
 				placeMongo.getNote().values().iterator().next());
 		assertTrue(placeMongo.getAltLabel().containsKey(
-				place.getAltLabelList().get(0).getLang().getLang()));
+				place.getAltLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(placeMongo.getPrefLabel().containsKey(
-				place.getPrefLabelList().get(0).getLang().getLang()));
+				place.getPrefLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(placeMongo.getAltLabel().containsValue(
 				place.getAltLabelList().get(0).getString()));
 		assertTrue(placeMongo.getPrefLabel().containsValue(

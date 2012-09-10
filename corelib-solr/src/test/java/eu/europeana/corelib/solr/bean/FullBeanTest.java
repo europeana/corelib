@@ -75,8 +75,6 @@ public class FullBeanTest {
 
 	@Test
 	public void testRetrieve() {
-		ProvidedCHOImpl t= mongoServer.searchByAbout(ProvidedCHOImpl.class, "/08901/EA38F4E269BA584E78B6C8E70A869BBC15BD3F9E");
-		assertNotNull("Error getting server",mongoServer);
 		ds = mongoServer.getDatastore();
 		assertNotNull("Error creating datastore", ds);
 		Agent agent = createAgent();
@@ -262,8 +260,8 @@ public class FullBeanTest {
 		assertEquals(place, testPlace);
 		assertEquals(place.getIsPartOf(), testPlace.getIsPartOf());
 		assertEquals(place.getNote(), testPlace.getNote());
-		assertEquals(place.getLatitude(), testPlace.getLatitude());
-		assertEquals(place.getLongitude(), testPlace.getLongitude());
+		assertEquals(place.getLatitude(), testPlace.getLatitude(), 0.001);
+		assertEquals(place.getLongitude(), testPlace.getLongitude(),0.001);
 		assertEquals(place.getAltLabel(), testPlace.getAltLabel());
 		assertEquals(place.getPrefLabel(), testPlace.getPrefLabel());
 		return place;

@@ -80,9 +80,9 @@ public class AgentFieldInputTest {
 		assertEquals(agentType.getNoteList().get(0).getString(),
 				agent.getNote().values().iterator().next());
 		assertTrue(agent.getAltLabel().containsKey(
-				agentType.getAltLabelList().get(0).getLang().getLang()));
+				agentType.getAltLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(agent.getPrefLabel().containsKey(
-				agentType.getPrefLabelList().get(0).getLang().getLang()));
+				agentType.getPrefLabelList().get(0).getLang().getLang()+":0"));
 		assertTrue(agent.getAltLabel().containsValue(
 				agentType.getAltLabelList().get(0).getString()));
 		assertTrue(agent.getPrefLabel().containsValue(
