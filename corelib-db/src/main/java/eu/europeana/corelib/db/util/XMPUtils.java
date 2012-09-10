@@ -121,7 +121,7 @@ public class XMPUtils {
 			}
 			if (cc_morePermissions != null) {
 				xml.append("<cc:morePermissions>");
-				xml.append(cc_morePermissions);
+				xml.append(URLEncoder.encode(cc_morePermissions.toString(),"UTF-8"));
 				xml.append("</cc:morePermissions>");
 			}
 			if (cc_useGuidelines != null) {
@@ -204,7 +204,7 @@ public class XMPUtils {
 
 			if (xmpMM_OriginalDocumentID != null) {
 				xml.append("<stRef:OriginalDocumentID>");
-				xml.append(xmpMM_OriginalDocumentID);
+				xml.append(URLEncoder.encode(xmpMM_OriginalDocumentID,"UTF-8"));
 				xml.append("</stRef:OriginalDocumentID>");
 			}
 
@@ -266,8 +266,6 @@ public class XMPUtils {
 				Aggregation aggregation = element.getAggregation();
 
 				if (aggregation.getIsShownAt() != null) {
-					EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
-							aggregation.getIsShownAt().getResource());
 					EDMXMPValuesMap.put(EDMXMPValues.cc_morePermissions,
 							aggregation.getIsShownAt().getResource());
 				}
