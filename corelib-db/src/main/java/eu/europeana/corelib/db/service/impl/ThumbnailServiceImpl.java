@@ -19,16 +19,13 @@ package eu.europeana.corelib.db.service.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
-
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.ImageWriteException;
 import org.apache.sanselan.Sanselan;
 import org.apache.sanselan.formats.jpeg.xmp.JpegXmpRewriter;
-
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.exception.DatabaseException;
