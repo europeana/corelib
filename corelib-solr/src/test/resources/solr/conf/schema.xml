@@ -94,7 +94,7 @@
    <field name="provider_aggregation_ore_aggregation" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="provider_aggregation_ore_aggregates" type="string" indexed="true" stored = "false" multiValued="false"/>
    <field name="provider_aggregation_edm_aggregatedCHO" type="string" indexed="true" stored="false" multiValued="false"/>
-   <field name="provider_aggregation_edm_dataProvider" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="provider_aggregation_edm_dataProvider" type="string" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="provider_aggregation_edm_dataProvider.*" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="provider_aggregation_edm_hasView" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="false" />
