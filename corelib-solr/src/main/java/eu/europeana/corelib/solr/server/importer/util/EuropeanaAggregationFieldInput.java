@@ -1,18 +1,20 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregates;
-import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LandingPage;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
@@ -22,11 +24,12 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
 
 public final class EuropeanaAggregationFieldInput {
 
-	private EuropeanaAggregationFieldInput() {
+	private final static String EUROPEANA_URI="http://www.europeana.eu/portal/record";
+	public EuropeanaAggregationFieldInput() {
 
 	}
 
-	public static SolrInputDocument createAggregationSolrFields(
+	public SolrInputDocument createAggregationSolrFields(
 			EuropeanaAggregationType aggregation,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
 			IllegalAccessException {
@@ -52,7 +55,7 @@ public final class EuropeanaAggregationFieldInput {
 				aggregation.getIsShownBy().getResource());
 		solrInputDocument.addField(
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString(),
-				aggregation.getLandingPage().getResource());
+				aggregation.getLandingPage().getResource()!=null?aggregation.getLandingPage().getResource():EUROPEANA_URI+aggregation.getAggregatedCHO().getResource());
 		solrInputDocument = SolrUtils
 				.addFieldFromLiteral(solrInputDocument, aggregation.getLanguage(),
 						EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE);
@@ -72,22 +75,50 @@ public final class EuropeanaAggregationFieldInput {
 		return solrInputDocument;
 	}
 
-	public static EuropeanaAggregation appendWebResource(
+	public EuropeanaAggregation appendWebResource(
+			EuropeanaAggregation aggregation,
+			WebResourceImpl webResource, MongoServer mongoServer)
+			throws InstantiationException, IllegalAccessException {
+		
+		if(belongsTo(aggregation,webResource)){
+			List<WebResourceImpl> webResources = (List<WebResourceImpl>) (aggregation.getWebResources() != null ? aggregation
+					.getWebResources() : new ArrayList<WebResourceImpl>());
+			
+			aggregation.setWebResources(webResources);
+			if(aggregation.getAbout()!=null){
+				MongoUtils.update(EuropeanaAggregationImpl.class,
+				aggregation.getAbout(), mongoServer, "webResources",
+				webResources);
+			}
+			else{
+				mongoServer.getDatastore().save(aggregation);
+			}
+
+		
+		}
+		return aggregation;
+	}
+
+	public EuropeanaAggregation appendWebResource(
 			EuropeanaAggregation aggregation,
 			List<WebResourceImpl> webResources, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 		
-
-		aggregation.setWebResources(webResources);
-		MongoUtils.update(EuropeanaAggregationImpl.class,
+			
+			aggregation.setWebResources(webResources);
+			if(aggregation.getAbout()!=null){
+				MongoUtils.update(EuropeanaAggregationImpl.class,
 				aggregation.getAbout(), mongoServer, "webResources",
 				webResources);
+			}
+			else{
+				mongoServer.getDatastore().save(aggregation);
+			}
 
+		
 		return aggregation;
 	}
-
-	
-	public static EuropeanaAggregationImpl createAggregationMongoFields(
+	public EuropeanaAggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType aggregation,
 			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
@@ -95,67 +126,51 @@ public final class EuropeanaAggregationFieldInput {
 		//mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
 		mongoAggregation.setDcCreator(MongoUtils.createResourceOrLiteralMapFromString(
-				aggregation.getCreator()));
-		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry()));
+				aggregation.getCreator(),0));
+		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry(),0));
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
 				aggregation.getIsShownBy()).getResource());
 		mongoAggregation.setEdmLandingPage(SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource());
-		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage()));
+		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage(),0));
 		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource());
-		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights()));
+		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights(),0));
 
 		mongoAggregation.setAggregates(SolrUtils
 				.resourceListToArray(aggregation.getAggregateList()));
 		mongoAggregation.setEdmHasView(SolrUtils
 				.resourceListToArray(aggregation.getHasViewList()));
-
-		/*
-		 * mongoAggregation.setEdmDataProvider(SolrUtils.exists(DataProvider.class
-		 * , (aggregation.getDataProvider())).getString());
-		 * mongoAggregation.setEdmIsShownAt(SolrUtils.exists(IsShownAt.class,
-		 * (aggregation.getIsShownAt())).getResource());
-		 * mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
-		 * (aggregation.getIsShownBy())).getResource());
-		 * mongoAggregation.setEdmObject(SolrUtils.exists(_Object.class,
-		 * (aggregation.getObject())).getResource());
-		 * mongoAggregation.setEdmProvider(SolrUtils.exists(Provider.class,
-		 * (aggregation.getProvider())).getString());
-		 * mongoAggregation.setEdmRights(SolrUtils.exists(Rights1.class,
-		 * (aggregation.getRights())).getString());
-		 * 
-		 * if (aggregation.getUgc() != null) { mongoAggregation
-		 * .setEdmUgc(aggregation.getUgc().getUgc().toString()); }
-		 * mongoAggregation
-		 * .setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
-		 * (aggregation.getAggregatedCHO())).getResource()); if
-		 * (aggregation.getRightList() != null) { List<String> dcRightsList =
-		 * new ArrayList<String>(); for (Rights rights :
-		 * aggregation.getRightList()) { dcRightsList.add(rights.getString()); }
-		 * 
-		 * mongoAggregation.setDcRights(dcRightsList .toArray(new
-		 * String[dcRightsList.size()])); }
-		 * 
-		 * if (aggregation.getHasViewList() != null) { List<String> hasViewList
-		 * = new ArrayList<String>(); for (HasView hasView :
-		 * aggregation.getHasViewList()) {
-		 * hasViewList.add(hasView.getResource()); }
-		 * mongoAggregation.setHasView(hasViewList .toArray(new
-		 * String[hasViewList.size()]));
-		 * 
-		 * } if
-		 * (((EdmMongoServer)mongoServer).searchByAbout(AggregationImpl.class,
-		 * mongoAggregation.getAbout())!=null){
-		 * MongoUtils.updateAggregation(mongoAggregation,mongoServer); } else {
-		 * mongoServer.getDatastore().save(mongoAggregation); }
-		 */
+		if (((EdmMongoServer) mongoServer).searchByAbout(EuropeanaAggregationImpl.class,
+				mongoAggregation.getAbout()) != null) {
+			// TODO:update Aggregation
+		} else {
+			mongoServer.getDatastore().save(mongoAggregation);
+		}
 		return mongoAggregation;
 	}
 
-	public static void deleteAggregationFromMongo(String about,
+	public void deleteAggregationFromMongo(String about,
 			EdmMongoServer mongoServer) {
-		MongoUtils.delete(Aggregation.class, about, mongoServer);
+		MongoUtils.delete(EuropeanaAggregation.class, about, mongoServer);
+	}
+	
+	private boolean belongsTo(EuropeanaAggregation aggregation, WebResource webResource){
+		if (aggregation.getEdmHasView() != null) {
+			for (String hasView : aggregation.getEdmHasView()) {
+				if (StringUtils.equals(hasView, webResource.getAbout())) {
+					return true;
+				}
+			}
+		}
+		
+		if (aggregation.getEdmIsShownBy() != null) {
+			if (StringUtils.equals(aggregation.getEdmIsShownBy(),
+					webResource.getAbout())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

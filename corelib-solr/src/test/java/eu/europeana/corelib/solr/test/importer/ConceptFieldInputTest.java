@@ -65,7 +65,7 @@ public class ConceptFieldInputTest {
 		choiceList.add(choice);
 		concept.setChoiceList(choiceList);
 		// store in mongo
-		ConceptImpl conceptMongo = ConceptFieldInput.createConceptMongoFields(
+		ConceptImpl conceptMongo = new ConceptFieldInput().createConceptMongoFields(
 				concept, mongoServer, null);
 		assertEquals(concept.getAbout(), conceptMongo.getAbout());
 		for (Concept.Choice choice2 : concept.getChoiceList()) {
@@ -88,7 +88,7 @@ public class ConceptFieldInputTest {
 		}
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = ConceptFieldInput.createConceptSolrFields(concept,
+		solrDocument = new ConceptFieldInput().createConceptSolrFields(concept,
 				solrDocument);
 		assertEquals(concept.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.SKOS_CONCEPT.toString())

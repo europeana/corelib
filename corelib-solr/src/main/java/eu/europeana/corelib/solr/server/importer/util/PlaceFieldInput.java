@@ -46,7 +46,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public final class PlaceFieldInput {
 
-	private PlaceFieldInput() {
+	public PlaceFieldInput() {
 
 	}
 
@@ -59,7 +59,7 @@ public final class PlaceFieldInput {
 	 *            The SolrInputDocument to alter
 	 * @return The SolrInputDocument with the place fields filled in
 	 */
-	public static SolrInputDocument createPlaceSolrFields(PlaceType place,
+	public SolrInputDocument createPlaceSolrFields(PlaceType place,
 			SolrInputDocument solrInputDocument) {
 		solrInputDocument.addField(EdmLabel.EDM_PLACE.toString(),
 				place.getAbout());
@@ -133,7 +133,7 @@ public final class PlaceFieldInput {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static PlaceImpl createPlaceMongoFields(PlaceType placeType,
+	public PlaceImpl createPlaceMongoFields(PlaceType placeType,
 			MongoServer mongoServer) {
 
 		// If place exists in mongo
@@ -223,19 +223,19 @@ public final class PlaceFieldInput {
 		if (placeType.getLat() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"latitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLat())));
+					"latitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLat(),0)));
 		}
 
 		if (placeType.getLong() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"longitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLong())));
+					"longitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLong(),0)));
 		}
 		
 		if (placeType.getAlt() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"altitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getAlt())));
+					"altitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getAlt(),0)));
 		}
 		return (PlaceImpl) ((EdmMongoServer) mongoServer).searchByAbout(
 				PlaceImpl.class, placeType.getAbout());

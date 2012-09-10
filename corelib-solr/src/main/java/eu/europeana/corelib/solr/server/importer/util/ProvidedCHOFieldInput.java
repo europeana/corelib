@@ -25,7 +25,6 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -41,7 +40,7 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
  */
 public final class ProvidedCHOFieldInput {
 
-	private ProvidedCHOFieldInput() {
+	public ProvidedCHOFieldInput() {
 
 	}
 
@@ -56,7 +55,7 @@ public final class ProvidedCHOFieldInput {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static SolrInputDocument createProvidedCHOFields(
+	public SolrInputDocument createProvidedCHOFields(
 			ProvidedCHOType providedCHO, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.EUROPEANA_ID.toString(),
@@ -88,10 +87,10 @@ public final class ProvidedCHOFieldInput {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static ProvidedCHOImpl createProvidedCHOMongoFields(
+	public ProvidedCHOImpl createProvidedCHOMongoFields(
 			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-		ProvidedCHO mongoProvidedCHO = mongoServer.searchByAbout(ProvidedCHOImpl.class, providedCHO.getAbout());
+		ProvidedCHOImpl mongoProvidedCHO = mongoServer.searchByAbout(ProvidedCHOImpl.class, providedCHO.getAbout());
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
@@ -118,7 +117,7 @@ public final class ProvidedCHOFieldInput {
 		return (ProvidedCHOImpl) mongoProvidedCHO;
 	}
 
-	public static void deleteProvideCHOFromMongo(String about,
+	public void deleteProvideCHOFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(ProvidedCHOImpl.class, about, mongoServer);
 	}

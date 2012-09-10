@@ -57,6 +57,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private String username;
 	private String password;
 	private Datastore datastore;
+	private Morphia morphia;
 	private static final String EUROPEANA_ID_DB = "EuropeanaId";
 
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
@@ -69,8 +70,13 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		createDatastore();
 	}
 
-	private void createDatastore() {
-		Morphia morphia = new Morphia();
+	public EdmMongoServerImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+	private synchronized void createDatastore() {
+		morphia = new Morphia();
+
 		morphia.map(FullBeanImpl.class);
 		morphia.map(ProvidedCHOImpl.class);
 		morphia.map(AgentImpl.class);
@@ -86,6 +92,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(ConceptSchemeImpl.class);
 
 		datastore = morphia.createDatastore(mongoServer, databaseName);
+
 		if (StringUtils.isNotBlank(this.username)
 				&& StringUtils.isNotBlank(this.password)) {
 			datastore.getDB().authenticate(this.username,
@@ -102,7 +109,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean getFullBean(String id) {
 		if (datastore.find(FullBeanImpl.class).field("about").equal(id).get() != null) {
-			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
+			return datastore.find(FullBeanImpl.class).field("about").equal(id)
+					.get();
 		}
 		return null;
 	}
@@ -133,8 +141,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public <T> T searchByAbout(Class<T> clazz, String about) {
-			return datastore.find(clazz).field("about").equal(about).get();
+	public synchronized <T> T searchByAbout(Class<T> clazz, String about) {
+
+		return datastore.find(clazz).filter("about", about).get();
 	}
 
 	@Override

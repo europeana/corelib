@@ -72,7 +72,7 @@ public class AgentFieldInputTest {
 		agentType.setPrefLabelList(prefLabelList);
 
 		//store in mongo
-		AgentImpl agent = AgentFieldInput.createAgentMongoEntity(agentType,
+		AgentImpl agent = new AgentFieldInput().createAgentMongoEntity(agentType,
 				mongoServer);
 		assertEquals(agentType.getAbout(), agent.getAbout());
 		assertEquals(agentType.getBegin().getString(), agent.getBegin().values().iterator().next());
@@ -90,7 +90,7 @@ public class AgentFieldInputTest {
 
 		//create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = AgentFieldInput.createAgentSolrFields(agentType,
+		solrDocument = new AgentFieldInput().createAgentSolrFields(agentType,
 				solrDocument);
 		assertEquals(agentType.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.EDM_AGENT.toString())

@@ -44,7 +44,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public final class TimespanFieldInput {
 
-	private TimespanFieldInput(){
+	public TimespanFieldInput(){
 		
 	}
     /**
@@ -54,7 +54,7 @@ public final class TimespanFieldInput {
      * @param solrInputDocument The SolrInputDocument to alter
      * @return The altered SolrInputDocument with the Timespan fields filled in
      */
-    public static SolrInputDocument createTimespanSolrFields(
+    public SolrInputDocument createTimespanSolrFields(
             TimeSpanType timespan, SolrInputDocument solrInputDocument) {
         solrInputDocument.addField(EdmLabel.EDM_TIMESPAN.toString(),
                 timespan.getAbout());
@@ -117,7 +117,7 @@ public final class TimespanFieldInput {
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      */
-    public static TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
+    public TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
             MongoServer mongoServer) {
         TimespanImpl mongoTimespan = (TimespanImpl) ((EdmMongoServer)mongoServer).searchByAbout(TimespanImpl.class, timeSpan.getAbout());
       if(mongoTimespan==null) {
@@ -130,17 +130,17 @@ public final class TimespanFieldInput {
         return mongoTimespan;
     }
 
-	private static TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
+	private TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
 			TimeSpanType timeSpan, MongoServer mongoServer)  {
 		if (mongoTimespan.getBegin() != null) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"begin", MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
+					"begin", MongoUtils.createLiteralMapFromString(timeSpan.getBegin(),0));
   			
 
   		}
   		if (mongoTimespan.getEnd() != null) {
   			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(), mongoServer,
-					"end", MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
+					"end", MongoUtils.createLiteralMapFromString(timeSpan.getEnd(),0));
   			
   		}
 
@@ -197,7 +197,7 @@ public final class TimespanFieldInput {
 		
 	}
 
-	private static TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
+	private TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();
 		//mongoTimespan.setId(new ObjectId());
         mongoTimespan.setAbout(timeSpan.getAbout());
@@ -207,8 +207,8 @@ public final class TimespanFieldInput {
         mongoTimespan.setIsPartOf(MongoUtils.createResourceOrLiteralMapFromList(timeSpan.getIsPartOfList()));
         mongoTimespan.setDctermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(timeSpan.getHasPartList()));
         mongoTimespan.setOwlSameAs(SolrUtils.resourceListToArray(timeSpan.getSameAList()));
-            mongoTimespan.setBegin(MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
-            mongoTimespan.setEnd(MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
+            mongoTimespan.setBegin(MongoUtils.createLiteralMapFromString(timeSpan.getBegin(),0));
+            mongoTimespan.setEnd(MongoUtils.createLiteralMapFromString(timeSpan.getEnd(),0));
 		return mongoTimespan;
 	}
 }

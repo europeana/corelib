@@ -42,7 +42,7 @@ public class WebResourcesFieldInputTest {
 		rightsList.add(rights1);
 		webResource.setRightList(rightsList);
 		//create mongo
-		WebResourceImpl webResourceMongo = WebResourcesFieldInput.createWebResourceMongoField(webResource, mongoServer);
+		WebResourceImpl webResourceMongo = new WebResourcesFieldInput().createWebResourceMongoField(webResource, mongoServer);
 		assertEquals(webResource.getAbout(), webResourceMongo.getAbout());
 		assertEquals(webResource.getRights().getResource(), webResourceMongo.getWebResourceEdmRights().values().iterator().next());
 		assertEquals(webResource.getRightList().get(0).getResource(), webResourceMongo.getWebResourceDcRights().values().iterator().next());
@@ -50,7 +50,7 @@ public class WebResourcesFieldInputTest {
 		//create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
-			solrDocument = WebResourcesFieldInput.createWebResourceSolrFields(webResource, solrDocument);
+			solrDocument = new WebResourcesFieldInput().createWebResourceSolrFields(webResource, solrDocument);
 			assertEquals(webResource.getAbout(), solrDocument.getFieldValue(EdmLabel.EDM_WEB_RESOURCE.toString()));
 			assertEquals(webResource.getRights().getResource(), solrDocument.getFieldValue(EdmLabel.WR_EDM_RIGHTS.toString()));
 			assertEquals(webResource.getRightList().get(0).getResource(), solrDocument.getFieldValue(EdmLabel.WR_DC_RIGHTS.toString()));

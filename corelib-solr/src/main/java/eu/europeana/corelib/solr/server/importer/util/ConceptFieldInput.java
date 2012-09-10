@@ -18,7 +18,6 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public final class ConceptFieldInput {
 
-	private ConceptFieldInput() {
+	public ConceptFieldInput() {
 
 	}
 
@@ -69,7 +68,7 @@ public final class ConceptFieldInput {
 	 *            The SolrInputDocument to alter
 	 * @return The SolrInputDocument with the filled in values for a Concept
 	 */
-	public static SolrInputDocument createConceptSolrFields(Concept concept,
+	public SolrInputDocument createConceptSolrFields(Concept concept,
 			SolrInputDocument solrInputDocument) {
 		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(),
 				concept.getAbout());
@@ -163,7 +162,7 @@ public final class ConceptFieldInput {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	public static ConceptImpl createConceptMongoFields(Concept concept,
+	public ConceptImpl createConceptMongoFields(Concept concept,
 			MongoServer mongoServer, RDF rdf) {
 
 		ConceptImpl conceptMongo = (ConceptImpl) ((EdmMongoServer) mongoServer)
@@ -178,7 +177,7 @@ public final class ConceptFieldInput {
 		return conceptMongo;
 	}
 
-	private static List<String> createObjectList(String[] originalValues,
+	private List<String> createObjectList(String[] originalValues,
 			Object obj) {
 
 		List<String> newList = new ArrayList<String>();
@@ -199,7 +198,7 @@ public final class ConceptFieldInput {
 		return newList;
 	}
 
-	private static ConceptImpl updateConcept(ConceptImpl conceptMongo,
+	private ConceptImpl updateConcept(ConceptImpl conceptMongo,
 			Concept concept, MongoServer mongoServer) {
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
@@ -216,7 +215,7 @@ public final class ConceptFieldInput {
 									note.getString());
 						}
 					} else {
-						newNoteMap.put("def", note.getString());
+						newNoteMap.put("def"+conceptMongo.getNote().size(), note.getString());
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -237,11 +236,11 @@ public final class ConceptFieldInput {
 									altLabel.getString());
 						}
 					} else {
-						newAltLabelMap.put("def", altLabel.getString());
+						newAltLabelMap.put("def"+conceptMongo.getAltLabel().size(), altLabel.getString());
 					}
 
 					MongoUtils.update(ConceptImpl.class,
-							conceptMongo.getAbout(), mongoServer, "end",
+							conceptMongo.getAbout(), mongoServer, "altLabel",
 							newAltLabelMap);
 				}
 			}
@@ -259,7 +258,7 @@ public final class ConceptFieldInput {
 									prefLabel.getString());
 						}
 					} else {
-						newPrefLabelMap.put("def", prefLabel.getString());
+						newPrefLabelMap.put("def"+conceptMongo.getPrefLabel().size(), prefLabel.getString());
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -350,11 +349,11 @@ public final class ConceptFieldInput {
 									notation.getString());
 						}
 					} else {
-						newNotationMap.put("def", notation.getString());
+						newNotationMap.put("def"+conceptMongo.getNotation().size(), notation.getString());
 					}
 
 					MongoUtils.update(ConceptImpl.class,
-							conceptMongo.getAbout(), mongoServer, "prefLabel",
+							conceptMongo.getAbout(), mongoServer, "notation",
 							newNotationMap);
 
 				}
@@ -381,7 +380,7 @@ public final class ConceptFieldInput {
 				ConceptImpl.class, concept.getAbout());
 	}
 
-	private static ConceptImpl createNewConcept(Concept concept) {
+	private ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
 	//	conceptMongo.setId(new ObjectId());
 		conceptMongo.setAbout(concept.getAbout());
@@ -389,12 +388,12 @@ public final class ConceptFieldInput {
 			if (choice.ifNote()) {
 				if(conceptMongo.getNote()==null){
 					conceptMongo.setNote(MongoUtils
-							.createLiteralMapFromString(choice.getNote()));
+							.createLiteralMapFromString(choice.getNote(),0));
 					}
 					else{
 						Map<String,String> tempMap = conceptMongo.getNote();
 						tempMap.putAll(MongoUtils
-								.createLiteralMapFromString(choice.getNote()));
+								.createLiteralMapFromString(choice.getNote(),tempMap.size()));
 						conceptMongo.setNote(tempMap);
 					}
 			}
@@ -431,12 +430,12 @@ public final class ConceptFieldInput {
 			if (choice.ifNotation()) {
 				if(conceptMongo.getNotation()==null){
 					conceptMongo.setNotation(MongoUtils
-							.createLiteralMapFromString(choice.getNotation()));
+							.createLiteralMapFromString(choice.getNotation(),0));
 					}
 					else{
 						Map<String,String> tempMap = conceptMongo.getNotation();
 						tempMap.putAll(MongoUtils
-								.createLiteralMapFromString(choice.getNotation()));
+								.createLiteralMapFromString(choice.getNotation(),tempMap.size()));
 						conceptMongo.setNotation(tempMap);
 					}
 			}
@@ -454,12 +453,12 @@ public final class ConceptFieldInput {
 			if (choice.ifPrefLabel()) {
 				if(conceptMongo.getPrefLabel()==null){
 					conceptMongo.setPrefLabel(MongoUtils
-							.createLiteralMapFromString(choice.getPrefLabel()));
+							.createLiteralMapFromString(choice.getPrefLabel(),0));
 					}
 					else{
 						Map<String,String> tempMap = conceptMongo.getPrefLabel();
 						tempMap.putAll(MongoUtils
-								.createLiteralMapFromString(choice.getPrefLabel()));
+								.createLiteralMapFromString(choice.getPrefLabel(),tempMap.size()));
 						conceptMongo.setPrefLabel(tempMap);
 					}
 			}
@@ -467,12 +466,12 @@ public final class ConceptFieldInput {
 			if (choice.ifAltLabel()) {
 				if(conceptMongo.getAltLabel()==null){
 					conceptMongo.setAltLabel(MongoUtils
-							.createLiteralMapFromString(choice.getAltLabel()));
+							.createLiteralMapFromString(choice.getAltLabel(),0));
 					}
 					else{
 						Map<String,String> tempMap = conceptMongo.getAltLabel();
 						tempMap.putAll(MongoUtils
-								.createLiteralMapFromString(choice.getAltLabel()));
+								.createLiteralMapFromString(choice.getAltLabel(),tempMap.size()));
 						conceptMongo.setAltLabel(tempMap);
 					}
 			}

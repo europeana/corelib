@@ -47,7 +47,7 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
 
 public final class AgentFieldInput {
 
-	private AgentFieldInput() {
+	public AgentFieldInput() {
 
 	}
 
@@ -60,7 +60,7 @@ public final class AgentFieldInput {
 	 *            The SolrInputDocument to alter
 	 * @return The SolrInputDocument with Agent specific values
 	 */
-	public static SolrInputDocument createAgentSolrFields(AgentType agentType,
+	public SolrInputDocument createAgentSolrFields(AgentType agentType,
 			SolrInputDocument solrInputDocument) {
 		solrInputDocument.addField(EdmLabel.EDM_AGENT.toString(),
 				agentType.getAbout());
@@ -196,7 +196,7 @@ public final class AgentFieldInput {
 	 * @throws InstantiationException
 	 * @throws MappingException
 	 */
-	public static AgentImpl createAgentMongoEntity(AgentType agentType,
+	public AgentImpl createAgentMongoEntity(AgentType agentType,
 			MongoServer mongoServer) throws MalformedURLException, IOException {
 
 		AgentImpl agent = ((EdmMongoServer) mongoServer).searchByAbout(
@@ -226,7 +226,7 @@ public final class AgentFieldInput {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private static AgentImpl updateMongoAgent(AgentImpl agent,
+	private AgentImpl updateMongoAgent(AgentImpl agent,
 			AgentType agentType, MongoServer mongoServer) {
 		
 		if (agent.getBegin() != null) {
@@ -234,7 +234,7 @@ public final class AgentFieldInput {
 					.update(AgentImpl.class, agent.getAbout(), mongoServer,
 							"begin", MongoUtils
 									.createLiteralMapFromString(agentType
-											.getBegin()));
+											.getBegin(),0));
 		}
 
 		if (agentType.getDateList() != null) {
@@ -255,41 +255,41 @@ public final class AgentFieldInput {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"biographicalInformation", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getBiographicalInformation()));
+									.getBiographicalInformation(),0));
 		}
 
 		if (agentType.getDateOfBirth() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfBirth", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfBirth()));
+									.getDateOfBirth(),0));
 		}
 
 		if (agentType.getDateOfDeath() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfDeath", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfDeath()));
+									.getDateOfDeath(),0));
 		}
 
 		if (agentType.getDateOfEstablishment() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfEstablishment", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfEstablishment()));
+									.getDateOfEstablishment(),0));
 		}
 
 		if (agentType.getDateOfTermination() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfTermination", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfTermination()));
+									.getDateOfTermination(),0));
 		}
 
 		if (agentType.getGender() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"gender", MongoUtils.createLiteralMapFromString(agentType
-							.getGender()));
+							.getGender(),0));
 		}
 
 		if (agentType.getHasMetList() != null) {
@@ -322,14 +322,14 @@ public final class AgentFieldInput {
 				MongoUtils.update(AgentImpl.class, agent.getAbout(),
 						mongoServer, "professionOrOccupation", MongoUtils
 								.createResourceOrLiteralMapFromString(agentType
-										.getProfessionOrOccupation()));
+										.getProfessionOrOccupation(),0));
 			}
 		}
 
 		if (agent.getEnd() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"end",
-					MongoUtils.createLiteralMapFromString(agentType.getEnd()));
+					MongoUtils.createLiteralMapFromString(agentType.getEnd(),0));
 
 		}
 
@@ -365,7 +365,7 @@ public final class AgentFieldInput {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	private static AgentImpl createNewAgent(AgentType agentType)
+	private AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
 		// agent.setId(new ObjectId());
@@ -384,20 +384,20 @@ public final class AgentFieldInput {
 				.getNameList()));
 		agent.setRdaGr2BiographicalInformation(MongoUtils
 				.createLiteralMapFromString(agentType
-						.getBiographicalInformation()));
+						.getBiographicalInformation(),0));
 		agent.setRdaGr2DateOfBirth(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfBirth()));
+				.createLiteralMapFromString(agentType.getDateOfBirth(),0));
 		agent.setRdaGr2DateOfDeath(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfDeath()));
+				.createLiteralMapFromString(agentType.getDateOfDeath(),0));
 		agent.setRdaGr2DateOfEstablishment(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfEstablishment()));
+				.createLiteralMapFromString(agentType.getDateOfEstablishment(),0));
 		agent.setRdaGr2DateOfTermination(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfTermination()));
+				.createLiteralMapFromString(agentType.getDateOfTermination(),0));
 		agent.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(agentType
-				.getGender()));
+				.getGender(),0));
 		agent.setRdaGr2ProfessionOrOccupation(MongoUtils
 				.createResourceOrLiteralMapFromString(agentType
-						.getProfessionOrOccupation()));
+						.getProfessionOrOccupation(),0));
 		agent.setNote(MongoUtils.createLiteralMapFromList(agentType
 				.getNoteList()));
 		agent.setPrefLabel(MongoUtils.createLiteralMapFromList(agentType
@@ -405,8 +405,8 @@ public final class AgentFieldInput {
 		agent.setAltLabel(MongoUtils.createLiteralMapFromList(agentType
 				.getAltLabelList()));
 		agent.setBegin(MongoUtils.createLiteralMapFromString(agentType
-				.getBegin()));
-		agent.setEnd(MongoUtils.createLiteralMapFromString(agentType.getEnd()));
+				.getBegin(),0));
+		agent.setEnd(MongoUtils.createLiteralMapFromString(agentType.getEnd(),0));
 		agent.setOwlSameAs(SolrUtils.resourceListToArray(agentType
 				.getSameAList()));
 		return agent;

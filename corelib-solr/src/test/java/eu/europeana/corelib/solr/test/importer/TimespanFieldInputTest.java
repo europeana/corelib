@@ -76,7 +76,7 @@ public class TimespanFieldInputTest {
 
 		// create mongo
 
-		TimespanImpl timespanMongo = TimespanFieldInput
+		TimespanImpl timespanMongo = new TimespanFieldInput()
 				.createTimespanMongoField(timespan, mongoServer);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
 		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next());
@@ -95,7 +95,7 @@ public class TimespanFieldInputTest {
 				timespanMongo.getIsPartOf().values().iterator().next());
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = TimespanFieldInput.createTimespanSolrFields(timespan,
+		solrDocument = new TimespanFieldInput().createTimespanSolrFields(timespan,
 				solrDocument);
 		assertEquals(timespan.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.EDM_TIMESPAN.toString())

@@ -57,33 +57,33 @@ public class SolrConstructor {
 
 		for(Choice element: rdf.getChoiceList()){
 			if(element.ifAgent()){
-				solrInputDocument = AgentFieldInput.createAgentSolrFields(element.getAgent(), solrInputDocument);
+				solrInputDocument = new AgentFieldInput().createAgentSolrFields(element.getAgent(), solrInputDocument);
 			}
 			else if(element.ifAggregation()){
-				solrInputDocument = AggregationFieldInput.createAggregationSolrFields(element.getAggregation(), solrInputDocument);
-				solrInputDocument = ProxyFieldInput.addProxyForSolr(element.getAggregation(), solrInputDocument);
+				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(element.getAggregation(), solrInputDocument);
+				solrInputDocument = new ProxyFieldInput().addProxyForSolr(element.getAggregation(), solrInputDocument);
 			}
 			else if(element.ifConcept()){
-				solrInputDocument = ConceptFieldInput.createConceptSolrFields(element.getConcept(),solrInputDocument);
+				solrInputDocument = new ConceptFieldInput().createConceptSolrFields(element.getConcept(),solrInputDocument);
 			}
 			else if(element.ifPlace()){
-				solrInputDocument = PlaceFieldInput.createPlaceSolrFields(element.getPlace(),solrInputDocument) ;
+				solrInputDocument = new PlaceFieldInput().createPlaceSolrFields(element.getPlace(),solrInputDocument) ;
 			}
 			else if(element.ifProvidedCHO()){
-				solrInputDocument = ProvidedCHOFieldInput.createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
+				solrInputDocument = new ProvidedCHOFieldInput().createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
 			}
 			else if(element.ifProxy()){
-				solrInputDocument = ProxyFieldInput.createProxySolrFields(element.getProxy(), solrInputDocument);
+				solrInputDocument = new ProxyFieldInput().createProxySolrFields(element.getProxy(), solrInputDocument);
 			}
 			else if (element.ifTimeSpan()) {
-				solrInputDocument = TimespanFieldInput.createTimespanSolrFields(element.getTimeSpan(), solrInputDocument);
+				solrInputDocument = new TimespanFieldInput().createTimespanSolrFields(element.getTimeSpan(), solrInputDocument);
 			}
 			else if(element.ifEuropeanaAggregation()){
-				solrInputDocument = EuropeanaAggregationFieldInput.createAggregationSolrFields(element.getEuropeanaAggregation(), solrInputDocument);
-				solrInputDocument = ProxyFieldInput.addProxyForSolr(element.getEuropeanaAggregation(), solrInputDocument);
+				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(element.getEuropeanaAggregation(), solrInputDocument);
+				solrInputDocument = new ProxyFieldInput().addProxyForSolr(element.getEuropeanaAggregation(), solrInputDocument);
 			}
 			else{
-				solrInputDocument = WebResourcesFieldInput.createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
+				solrInputDocument = new WebResourcesFieldInput().createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
 			}
 		}
 		return solrInputDocument;

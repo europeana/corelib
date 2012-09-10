@@ -41,14 +41,14 @@ public class ProvidedCHOFieldInputTest {
 
 		// create mongo providedCHO
 		try {
-			ProvidedCHOImpl providedCHOMongo = ProvidedCHOFieldInput
+			ProvidedCHOImpl providedCHOMongo = new ProvidedCHOFieldInput()
 					.createProvidedCHOMongoFields(providedCHO, mongoServer);
 			assertEquals(providedCHO.getAbout(), providedCHOMongo.getAbout());
 			assertEquals(providedCHO.getSameAList().get(0).getResource(),
 					providedCHOMongo.getOwlSameAs()[0]);
 			
 			SolrInputDocument solrDocument = new SolrInputDocument();
-			solrDocument = ProvidedCHOFieldInput.createProvidedCHOFields(
+			solrDocument = new ProvidedCHOFieldInput().createProvidedCHOFields(
 					providedCHO, solrDocument);
 			assertEquals(
 					providedCHO.getAbout(),

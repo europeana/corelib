@@ -83,7 +83,7 @@ public class ProxyFieldInputTest {
 			IOException {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
-			solrDocument = ProxyFieldInput.createProxySolrFields(proxy,
+			solrDocument = new ProxyFieldInput().createProxySolrFields(proxy,
 					solrDocument);
 			assertEquals(proxy.getAbout(),
 					solrDocument.getFieldValue(EdmLabel.ORE_PROXY
@@ -256,7 +256,7 @@ public class ProxyFieldInputTest {
 	private void testMongo(ProxyType proxy) {
 		ProxyImpl mongoProxy = new ProxyImpl();
 		try {
-			mongoProxy = ProxyFieldInput.createProxyMongoFields(mongoProxy,
+			mongoProxy = new ProxyFieldInput().createProxyMongoFields(mongoProxy,
 					proxy, mongoServer);
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()

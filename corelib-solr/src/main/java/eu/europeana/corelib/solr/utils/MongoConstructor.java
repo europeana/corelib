@@ -54,11 +54,11 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 public class MongoConstructor {
 
 	private EdmMongoServerImpl mongoServer;
-	
+	private final static String EUROPEANA_URI="http:///www.europeana.eu/portal/record";
+
 	public void setMongoServer(EdmMongoServerImpl mongoServer) {
 		this.mongoServer = mongoServer;
 	}
-
 
 	/**
 	 * Construct a FullBean out of A JiBX RDF record
@@ -67,10 +67,12 @@ public class MongoConstructor {
 	 *            The JiBX RDF record
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
-	 * @throws IOException 
-	 * @throws MalformedURLException 
+	 * @throws IOException
+	 * @throws MalformedURLException
 	 */
-	public FullBeanImpl constructFullBean(RDF record) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException {
+	public FullBeanImpl constructFullBean(RDF record)
+			throws InstantiationException, IllegalAccessException,
+			MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
@@ -87,96 +89,130 @@ public class MongoConstructor {
 			if (element.ifProvidedCHO()) {
 				fullBean.setAbout(element.getProvidedCHO().getAbout());
 				try {
-					providedCHOs.add(ProvidedCHOFieldInput.createProvidedCHOMongoFields(element.getProvidedCHO(),
-							mongoServer));
-					
+					providedCHOs.add(new ProvidedCHOFieldInput()
+							.createProvidedCHOMongoFields(
+									element.getProvidedCHO(), mongoServer));
+
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
-			if(element.ifProxy()){
+			if (element.ifProxy()) {
 				if (proxies.size() > 0) {
-					proxies.set(0, ProxyFieldInput.createProxyMongoFields(new ProxyImpl(),
-							element.getProxy(), mongoServer));
+					proxies.set(0, new ProxyFieldInput()
+							.createProxyMongoFields(new ProxyImpl(),
+									element.getProxy(), mongoServer));
 				} else {
-					proxies.add(ProxyFieldInput.createProxyMongoFields(new ProxyImpl(), element.getProxy(),
-							mongoServer));
+					proxies.add(new ProxyFieldInput().createProxyMongoFields(
+							new ProxyImpl(), element.getProxy(), mongoServer));
 				}
 			}
 			if (element.ifAggregation()) {
-				aggregations.add(AggregationFieldInput.createAggregationMongoFields(element.getAggregation(),
-						mongoServer));
+				aggregations.add(new AggregationFieldInput()
+						.createAggregationMongoFields(element.getAggregation(),
+								mongoServer));
 				if (webResources.size() > 0) {
-					aggregations.set(0,
-							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
+					aggregations.set(0, new AggregationFieldInput()
+							.appendWebResource(aggregations, webResources,
+									mongoServer));
 				}
 				if (proxies.size() > 0) {
-					proxies.set(0,
-							ProxyFieldInput.addProxyForMongo(proxies.get(0), element.getAggregation(), mongoServer));
+					proxies.set(0, new ProxyFieldInput().addProxyForMongo(
+							proxies.get(0), element.getAggregation(),
+							mongoServer));
 				} else {
-					proxies.add(ProxyFieldInput.addProxyForMongo(new ProxyImpl(), element.getAggregation(), mongoServer));
+					proxies.add(new ProxyFieldInput().addProxyForMongo(
+							new ProxyImpl(), element.getAggregation(),
+							mongoServer));
 				}
 
 			}
 			if (element.ifConcept()) {
-				concepts.add(ConceptFieldInput.createConceptMongoFields(element.getConcept(), mongoServer, record));
+				concepts.add(new ConceptFieldInput().createConceptMongoFields(
+						element.getConcept(), mongoServer, record));
 			}
 			if (element.ifPlace()) {
-				places.add(PlaceFieldInput.createPlaceMongoFields(element.getPlace(), mongoServer));
+				places.add(new PlaceFieldInput().createPlaceMongoFields(
+						element.getPlace(), mongoServer));
 			}
 
 			if (element.ifWebResource()) {
-				webResources.add(WebResourcesFieldInput.createWebResourceMongoField(element.getWebResource(),
-						mongoServer));
+				WebResourceImpl webResource = new WebResourcesFieldInput()
+						.createWebResourceMongoField(element.getWebResource(),
+								mongoServer);
+				webResources.add(webResource);
 				if (aggregations.size() > 0) {
-					aggregations.set(0,
-							AggregationFieldInput.appendWebResource(aggregations, webResources, mongoServer));
+					aggregations.set(0, new AggregationFieldInput()
+							.appendWebResource(aggregations, webResource,
+									mongoServer));
 				}
-				europeanaAggregation = EuropeanaAggregationFieldInput.appendWebResource(europeanaAggregation, webResources, mongoServer);
+				europeanaAggregation = new EuropeanaAggregationFieldInput()
+						.appendWebResource(europeanaAggregation, webResource,
+								mongoServer);
 
 			}
 			if (element.ifTimeSpan()) {
-				timespans.add(TimespanFieldInput.createTimespanMongoField(element.getTimeSpan(), mongoServer));
+				timespans.add(new TimespanFieldInput()
+						.createTimespanMongoField(element.getTimeSpan(),
+								mongoServer));
 			}
 			if (element.ifAgent()) {
-				agents.add(AgentFieldInput.createAgentMongoEntity(element.getAgent(), mongoServer));
+				agents.add(new AgentFieldInput().createAgentMongoEntity(
+						element.getAgent(), mongoServer));
 			}
-			if(element.ifEuropeanaAggregation()){
-				
-				europeanaAggregation = EuropeanaAggregationFieldInput.createAggregationMongoFields(element.getEuropeanaAggregation(), mongoServer);
+			if (element.ifEuropeanaAggregation()) {
+
+				europeanaAggregation = new EuropeanaAggregationFieldInput()
+						.createAggregationMongoFields(
+								element.getEuropeanaAggregation(), mongoServer);
 				if (webResources.size() > 0) {
-					europeanaAggregation=
-							EuropeanaAggregationFieldInput.appendWebResource(europeanaAggregation, webResources, mongoServer);
+					europeanaAggregation = new EuropeanaAggregationFieldInput()
+							.appendWebResource(europeanaAggregation,
+									webResources, mongoServer);
 				}
-				
-					proxies.add(ProxyFieldInput.addEuropeanaProxyForMongo(new ProxyImpl(), element.getEuropeanaAggregation(), mongoServer));
-				
+
+				proxies.add(new ProxyFieldInput().addEuropeanaProxyForMongo(
+						new ProxyImpl(), element.getEuropeanaAggregation(),
+						mongoServer));
+
 			}
 		}
 
 		AggregationImpl aggregation = aggregations.get(0);
 		aggregation.setWebResources(webResources);
-		fullBean.setProvidedCHOs(providedCHOs);
-		fullBean.setEuropeanaAggregation(europeanaAggregation);
+		MongoUtils.updateAggregation(aggregation,mongoServer);
 		
+		fullBean.setProvidedCHOs(providedCHOs);
+		if (mongoServer.searchByAbout(EuropeanaAggregationImpl.class,fullBean.getAbout()
+				+ "#EuropeanaAggregation") == null) {
+			europeanaAggregation.setAbout(fullBean.getAbout()
+					+ "#EuropeanaAggregation");
+			europeanaAggregation.setEdmLandingPage(EUROPEANA_URI+fullBean.getAbout()+".html");
+			europeanaAggregation.setAggregatedCHO(fullBean.getAbout());
+			mongoServer.getDatastore().save(europeanaAggregation);
+		} else {
+			MongoUtils.updateEuropeanaAggregation(europeanaAggregation,mongoServer);
+		}
+		fullBean.setEuropeanaAggregation(europeanaAggregation);
+
 		fullBean.setAggregations(aggregations);
 		try {
-			if(agents.size()>0){
+			if (agents.size() > 0) {
 				fullBean.setAgents(agents);
 			}
-			if(concepts.size()>0){
-			fullBean.setConcepts(concepts);
+			if (concepts.size() > 0) {
+				fullBean.setConcepts(concepts);
 			}
-			if(places.size()>0){
-			fullBean.setPlaces(places);
+			if (places.size() > 0) {
+				fullBean.setPlaces(places);
 			}
-			if(timespans.size()>0){
-			fullBean.setTimespans(timespans);
+			if (timespans.size() > 0) {
+				fullBean.setTimespans(timespans);
 			}
-			if(proxies.size()>0){
-			fullBean.setProxies(proxies);
+			if (proxies.size() > 0) {
+				fullBean.setProxies(proxies);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -184,4 +220,5 @@ public class MongoConstructor {
 		return fullBean;
 	}
 
+	
 }

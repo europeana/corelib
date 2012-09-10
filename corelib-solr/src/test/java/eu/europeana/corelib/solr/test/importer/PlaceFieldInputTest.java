@@ -76,7 +76,7 @@ public class PlaceFieldInputTest {
 		posLong.setString("0.0");
 		place.setLong(posLong);
 		// create mongo place
-		PlaceImpl placeMongo = PlaceFieldInput.createPlaceMongoFields(place,
+		PlaceImpl placeMongo = new PlaceFieldInput().createPlaceMongoFields(place,
 				mongoServer);
 		assertEquals(place.getAbout(), placeMongo.getAbout());
 		assertEquals(place.getNoteList().get(0).getString(),
@@ -97,7 +97,7 @@ public class PlaceFieldInputTest {
 				Float.toString(placeMongo.getLongitude()));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = PlaceFieldInput.createPlaceSolrFields(place,
+		solrDocument = new PlaceFieldInput().createPlaceSolrFields(place,
 				solrDocument);
 		assertEquals(place.getAbout(),
 				solrDocument.getFieldValue(EdmLabel.EDM_PLACE.toString())

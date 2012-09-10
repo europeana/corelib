@@ -47,7 +47,7 @@ public class AggregationFieldInputTest {
 	private void testSolr(Aggregation aggregation) {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
-			solrDocument = AggregationFieldInput.createAggregationSolrFields(aggregation, solrDocument);
+			solrDocument = new AggregationFieldInput().createAggregationSolrFields(aggregation, solrDocument);
 			assertEquals(aggregation.getAbout(),solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString()));
 			assertEquals(aggregation.getAggregatedCHO().getResource(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_AGGREGATED_CHO.toString()));
 			assertEquals(aggregation.getDataProvider().getString(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER.toString()));
@@ -71,7 +71,7 @@ public class AggregationFieldInputTest {
 
 	private void testMongo(Aggregation aggregation) {
 		try {
-			AggregationImpl aggregationMongo = AggregationFieldInput
+			AggregationImpl aggregationMongo = new AggregationFieldInput()
 					.createAggregationMongoFields(aggregation, mongoServer);
 			assertEquals(aggregation.getAbout(), aggregationMongo.getAbout());
 			assertEquals(aggregation.getAggregatedCHO().getResource(),

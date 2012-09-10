@@ -43,7 +43,7 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
  */
 public final class WebResourcesFieldInput {
 
-	private WebResourcesFieldInput() {
+	public WebResourcesFieldInput() {
 
 	}
 
@@ -59,7 +59,7 @@ public final class WebResourcesFieldInput {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static SolrInputDocument createWebResourceSolrFields(
+	public SolrInputDocument createWebResourceSolrFields(
 			WebResourceType webResource, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.EDM_WEB_RESOURCE.toString(),
@@ -157,12 +157,12 @@ public final class WebResourcesFieldInput {
 	 *            The MongoDB Server to store the WebResource Entity
 	 * @return The WebResource MongoEntity
 	 */
-	public static WebResourceImpl createWebResourceMongoField(
+	public WebResourceImpl createWebResourceMongoField(
 			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		//mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
-		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights()));
+		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights(),0));
 		mongoWebResource.setWebResourceDcRights(MongoUtils.createResourceOrLiteralMapFromList(webResource.getRightList()));
 		mongoWebResource.setDcDescription(MongoUtils.createResourceOrLiteralMapFromList(webResource
 								.getDescriptionList()));
@@ -181,7 +181,7 @@ public final class WebResourcesFieldInput {
 		return mongoWebResource;
 	}
 
-	public static void deleteWebResourceFromMongo(String about,
+	public void deleteWebResourceFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(WebResourceImpl.class, about, mongoServer);
 	}
