@@ -70,10 +70,10 @@ public class PlaceFieldInputTest {
 		isPartOfList.add(isPartOf);
 		place.setIsPartOfList(isPartOfList);
 		Lat posLat = new Lat();
-		posLat.setString("0.0");
+		posLat.setLat(new Float("0.0"));
 		place.setLat(posLat);
 		_Long posLong = new _Long();
-		posLong.setString("0.0");
+		posLong.setLong(new Float("0.0"));
 		place.setLong(posLong);
 		// create mongo place
 		PlaceImpl placeMongo = new PlaceFieldInput().createPlaceMongoFields(place,
@@ -82,18 +82,18 @@ public class PlaceFieldInputTest {
 		assertEquals(place.getNoteList().get(0).getString(),
 				placeMongo.getNote().values().iterator().next());
 		assertTrue(placeMongo.getAltLabel().containsKey(
-				place.getAltLabelList().get(0).getLang().getLang()+":0"));
+				place.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(placeMongo.getPrefLabel().containsKey(
-				place.getPrefLabelList().get(0).getLang().getLang()+":0"));
+				place.getPrefLabelList().get(0).getLang().getLang()));
 		assertTrue(placeMongo.getAltLabel().containsValue(
 				place.getAltLabelList().get(0).getString()));
 		assertTrue(placeMongo.getPrefLabel().containsValue(
 				place.getPrefLabelList().get(0).getString()));
 		assertEquals(place.getIsPartOfList().get(0).getString(),
 				placeMongo.getIsPartOf().values().iterator().next());
-		assertEquals(place.getLat().getString(),
+		assertEquals(place.getLat().getLat(),
 				Float.toString(placeMongo.getLatitude()));
-		assertEquals(place.getLong().getString(),
+		assertEquals(place.getLong().getLong(),
 				Float.toString(placeMongo.getLongitude()));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
@@ -121,10 +121,10 @@ public class PlaceFieldInputTest {
 								+ place.getAltLabelList().get(0).getLang()
 										.getLang()).toArray()[0].toString());
 
-		assertEquals(place.getLat().getString(),
+		assertEquals(place.getLat().getLat(),
 				solrDocument
 						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
-		assertEquals(place.getLong().getString(),
+		assertEquals(place.getLong().getLong(),
 				solrDocument
 						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
 
