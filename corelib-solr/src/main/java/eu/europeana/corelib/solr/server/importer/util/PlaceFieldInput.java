@@ -72,44 +72,44 @@ public final class PlaceFieldInput {
 		}
 		if (place.getPrefLabelList() != null) {
 			for (PrefLabel prefLabel : place.getPrefLabelList()) {
-				solrInputDocument = SolrUtils
-						.addFieldFromLiteral(solrInputDocument, prefLabel,
-								EdmLabel.PL_SKOS_PREF_LABEL);
+				solrInputDocument = SolrUtils.addFieldFromLiteral(
+						solrInputDocument, prefLabel,
+						EdmLabel.PL_SKOS_PREF_LABEL);
 			}
 		}
 		if (place.getIsPartOfList() != null) {
 			for (IsPartOf isPartOf : place.getIsPartOfList()) {
-				solrInputDocument = SolrUtils
-						.addFieldFromResourceOrLiteral(solrInputDocument, isPartOf,
-								EdmLabel.PL_DCTERMS_ISPART_OF);
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, isPartOf,
+						EdmLabel.PL_DCTERMS_ISPART_OF);
 			}
 		}
 		if (place.getNoteList() != null) {
 			for (Note note : place.getNoteList()) {
-				solrInputDocument = SolrUtils
-						.addFieldFromLiteral(solrInputDocument, note,
-								EdmLabel.PL_SKOS_NOTE);
+				solrInputDocument = SolrUtils.addFieldFromLiteral(
+						solrInputDocument, note, EdmLabel.PL_SKOS_NOTE);
 			}
 		}
 		if (place.getLong() != null && place.getLat() != null) {
-			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT_LONG.toString(), place
-					.getLat().getString() + "," + place.getLong().getString());
-			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT.toString(), place
-					.getLat().getString());
-			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LONG.toString(), place
-					.getLong().getString());
+			solrInputDocument.addField(
+					EdmLabel.PL_WGS84_POS_LAT_LONG.toString(), place.getLat()
+							.getString() + "," + place.getLong().getString());
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LAT.toString(),
+					place.getLat().getString());
+			solrInputDocument.addField(EdmLabel.PL_WGS84_POS_LONG.toString(),
+					place.getLong().getString());
 		}
-		
-		if(place.getAlt()!=null){
-			solrInputDocument = SolrUtils
-					.addFieldFromLiteral(solrInputDocument, place.getAlt(),
-							EdmLabel.PL_WGS84_POS_ALT);
+
+		if (place.getAlt() != null) {
+			solrInputDocument = SolrUtils.addFieldFromLiteral(
+					solrInputDocument, place.getAlt(),
+					EdmLabel.PL_WGS84_POS_ALT);
 		}
 		if (place.getHasPartList() != null) {
 			for (HasPart hasPart : place.getHasPartList()) {
 				solrInputDocument = SolrUtils
-						.addFieldFromResourceOrLiteral(solrInputDocument, hasPart,
-								EdmLabel.PL_DCTERMS_HASPART);
+						.addFieldFromResourceOrLiteral(solrInputDocument,
+								hasPart, EdmLabel.PL_DCTERMS_HASPART);
 			}
 		}
 
@@ -170,38 +170,45 @@ public final class PlaceFieldInput {
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
 			MongoServer mongoServer) {
 		if (place.getNote() != null) {
-		
+
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"note", MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
+					"note", MongoUtils.createLiteralMapFromList(placeType
+							.getNoteList()));
 
 		}
 
 		if (place.getAltLabel() != null) {
-			
+
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"altLabel", MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
+					"altLabel", MongoUtils.createLiteralMapFromList(placeType
+							.getAltLabelList()));
 
 		}
 
 		if (place.getPrefLabel() != null) {
-			
-				MongoUtils.update(PlaceImpl.class, place.getAbout(),
-						mongoServer, "prefLabel", MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
-			
+
+			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+					"prefLabel", MongoUtils.createLiteralMapFromList(placeType
+							.getPrefLabelList()));
+
 		}
 
 		if (place.getIsPartOf() != null) {
-			
+
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"isPartOf", MongoUtils.createResourceOrLiteralMapFromList(placeType.getIsPartOfList()));
+					"isPartOf", MongoUtils
+							.createResourceOrLiteralMapFromList(placeType
+									.getIsPartOfList()));
 		}
-		
+
 		if (place.getDcTermsHasPart() != null) {
-			
+
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"dcTermsHasPart", MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
+					"dcTermsHasPart", MongoUtils
+							.createResourceOrLiteralMapFromList(placeType
+									.getHasPartList()));
 		}
-		
+
 		if (place.getOwlSameAs() != null) {
 			List<String> owlSameAs = new ArrayList<String>();
 			if (placeType.getSameAList() != null) {
@@ -218,24 +225,31 @@ public final class PlaceFieldInput {
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
 		}
-		
-		
+
 		if (placeType.getLat() != null) {
 
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"latitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLat(),0)));
+			MongoUtils
+					.update(PlaceImpl.class, place.getAbout(), mongoServer,
+							"latitude", convertToFloat(MongoUtils
+									.createLiteralMapFromString(
+											placeType.getLat(), 0)));
 		}
 
 		if (placeType.getLong() != null) {
 
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"longitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getLong(),0)));
+					"longitude",
+					convertToFloat(MongoUtils.createLiteralMapFromString(
+							placeType.getLong(), 0)));
 		}
-		
+
 		if (placeType.getAlt() != null) {
 
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"altitude", convertToFloat(MongoUtils.createLiteralMapFromString(placeType.getAlt(),0)));
+			MongoUtils
+					.update(PlaceImpl.class, place.getAbout(), mongoServer,
+							"altitude", convertToFloat(MongoUtils
+									.createLiteralMapFromString(
+											placeType.getAlt(), 0)));
 		}
 		return (PlaceImpl) ((EdmMongoServer) mongoServer).searchByAbout(
 				PlaceImpl.class, placeType.getAbout());
@@ -250,33 +264,39 @@ public final class PlaceFieldInput {
 	 */
 	private static PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
-		//place.setId(new ObjectId());
+		// place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());
-
+		if(placeType.getLat()!=null){
 		place.setLatitude(Float.parseFloat(placeType.getLat().getString()));
-
+		}
+		if(placeType.getLong()!=null){
 		place.setLongitude(Float.parseFloat(placeType.getLong().getString()));
+		}
+		place.setNote(MongoUtils.createLiteralMapFromList(placeType
+				.getNoteList()));
+		place.setPrefLabel(MongoUtils.createLiteralMapFromList(placeType
+				.getPrefLabelList()));
+		place.setAltLabel(MongoUtils.createLiteralMapFromList(placeType
+				.getAltLabelList()));
 
-		place.setNote(MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
-		place.setPrefLabel(MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
-		place.setAltLabel(MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
-
-		place.setIsPartOf(MongoUtils.createResourceOrLiteralMapFromList(placeType
-				.getIsPartOfList()));
-		
-		place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
-		place.setDcTermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
+		place.setIsPartOf(MongoUtils
+				.createResourceOrLiteralMapFromList(placeType.getIsPartOfList()));
+		if (placeType.getAlt() != null) {
+			place.setAltitude(Float.parseFloat(placeType.getAlt().getString()));
+		}
+		place.setDcTermsHasPart(MongoUtils
+				.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
 		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType
 				.getSameAList()));
 		return place;
 	}
-	
-	private static Map<String,Float> convertToFloat(Map<String,String> map){
-		Map<String,Float> repMap = new HashMap<String,Float>();
-		if(map!=null){
-		for (Entry<String, String> entry:map.entrySet()){
-			repMap.put(entry.getKey(), Float.parseFloat(entry.getValue()));
-		}
+
+	private static Map<String, Float> convertToFloat(Map<String, String> map) {
+		Map<String, Float> repMap = new HashMap<String, Float>();
+		if (map != null) {
+			for (Entry<String, String> entry : map.entrySet()) {
+				repMap.put(entry.getKey(), Float.parseFloat(entry.getValue()));
+			}
 		}
 		return repMap;
 	}

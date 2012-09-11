@@ -373,7 +373,7 @@ public final class ProxyFieldInput {
 					}
 				}
 
-				if (europeanaType.ifHasFormat()) {
+				if (europeanaType.ifIsFormatOf()) {
 					if (mongoProxy.getDctermsIsFormatOf() == null) {
 						mongoProxy
 								.setDctermsIsFormatOf(MongoUtils
