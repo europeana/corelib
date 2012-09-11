@@ -148,9 +148,15 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		FullBean bean = null;
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
-		List<? extends Proxy> proxies = bean.getProxies();
-		Proxy proxy = proxies.get(0);
-		savedItem.setAuthor(StringUtils.abbreviate(proxy.getDcPublisher().values().iterator().next(), RelationalDatabase.FIELDSIZE_AUTHOR));
+		if (bean != null) {
+			List<? extends Proxy> proxies = bean.getProxies();
+			Proxy proxy = proxies.get(0);
+			if (proxy != null && proxy.getDcPublisher() != null) {
+				savedItem.setAuthor(
+					StringUtils.abbreviate(proxy.getDcPublisher().values().iterator().next(), 
+											RelationalDatabase.FIELDSIZE_AUTHOR));
+			}
+		}
 		return user;
 	}
 
@@ -204,7 +210,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		if ((user == null) || (bean == null)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		instance.setEuropeanaUri(bean.getId());
+		instance.setEuropeanaUri(bean.getAbout());
 		instance.setEuropeanaObject(bean.getAggregations().get(0).getEdmObject());
 		instance.setDateSaved(new Date());
 		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0], RelationalDatabase.FIELDSIZE_TITLE));

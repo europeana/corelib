@@ -85,8 +85,7 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final Logger log = Logger.getLogger(SearchServiceImpl.class
-			.getName());
+	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -107,7 +106,7 @@ public class SearchServiceImpl implements SearchService {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
-				// LOG HERE
+				log.severe("SolrServerException: " + e.getMessage());
 			}
 		}
 
@@ -129,7 +128,7 @@ public class SearchServiceImpl implements SearchService {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
-				// LOG
+				log.severe("SolrServerException: " + e.getMessage());
 			}
 		}
 
@@ -156,10 +155,14 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.mintf", 1);
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
+		
+		System.out.println(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
 
+		@SuppressWarnings("unchecked")
 		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
+		@SuppressWarnings("unchecked")
 		List<SolrDocument> docs = (List<SolrDocument>)moreLikeThisList.getVal(0);
 		List<BriefBean> beans = new ArrayList<BriefBean>();
 		for (SolrDocument doc : docs) {
@@ -173,8 +176,7 @@ public class SearchServiceImpl implements SearchService {
 	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
 			Query query) throws SolrTypeException {
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SolrUtils
-				.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements();
@@ -285,6 +287,9 @@ public class SearchServiceImpl implements SearchService {
 	 * }
 	 */
 
+	/**
+	 * Adds suggestions regarding a given query string
+	 */
 	public List<Term> suggestions(String query, int pageSize)
 			throws SolrTypeException {
 		SolrQuery solrQuery = new SolrQuery();
@@ -294,8 +299,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setFacetLimit(pageSize);
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
-		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell",
-				"whenSpell", "titleSpell");
+		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell", "whenSpell", "titleSpell");
 		List<Term> results = new ArrayList<Term>();
 
 		QueryResponse response;
@@ -303,57 +307,50 @@ public class SearchServiceImpl implements SearchService {
 			response = solrServer.query(solrQuery);
 
 			FacetField who = response.getFacetField("whoSpell");
-
 			List<Count> whoSuggestions = who.getValues();
 			if (whoSuggestions != null) {
 				for (Count whoSuggestion : whoSuggestions) {
-					results.add(new Term(whoSuggestion.getName(), whoSuggestion
-							.getCount(), "Person"));
+					results.add(new Term(whoSuggestion.getName(), whoSuggestion.getCount(), "Person"));
 				}
 			}
 
 			FacetField what = response.getFacetField("whatSpell");
-
 			List<Count> whatSuggestions = what.getValues();
 			if (whatSuggestions != null) {
 				for (Count whatSuggestion : whatSuggestions) {
-					results.add(new Term(whatSuggestion.getName(),
-							whatSuggestion.getCount(), "Subject"));
+					results.add(new Term(whatSuggestion.getName(), whatSuggestion.getCount(), "Subject"));
 				}
-
 			}
-			FacetField when = response.getFacetField("whenSpell");
 
+			FacetField when = response.getFacetField("whenSpell");
 			List<Count> whenSuggestions = when.getValues();
 			if (whenSuggestions != null) {
 				for (Count whenSuggestion : whenSuggestions) {
-					results.add(new Term(whenSuggestion.getName(),
-							whenSuggestion.getCount(), "Period"));
+					results.add(new Term(whenSuggestion.getName(), whenSuggestion.getCount(), "Period"));
 				}
 			}
-			FacetField where = response.getFacetField("whereSpell");
 
+			FacetField where = response.getFacetField("whereSpell");
 			List<Count> whereSuggestions = where.getValues();
 			if (whereSuggestions != null) {
 				for (Count whereSuggestion : whereSuggestions) {
-					results.add(new Term(whereSuggestion.getName(),
-							whereSuggestion.getCount(), "Place"));
+					results.add(new Term(whereSuggestion.getName(), whereSuggestion.getCount(), "Place"));
 				}
 			}
-			FacetField title = response.getFacetField("titleSpell");
 
+			FacetField title = response.getFacetField("titleSpell");
 			List<Count> titleSuggestions = title.getValues();
 			if (titleSuggestions != null) {
 				for (Count titleSuggestion : titleSuggestions) {
-					results.add(new Term(titleSuggestion.getName(),
-							titleSuggestion.getCount(), "Title"));
+					results.add(new Term(titleSuggestion.getName(), titleSuggestion.getCount(), "Title"));
 				}
 			}
 		} catch (SolrServerException e) {
-			// LOG
+			log.severe("SolrServerException: " + e.getMessage());
 		}
 		Collections.sort(results);
-		return results.size() > pageSize ? results.subList(0, pageSize)
+		return results.size() > pageSize 
+				? results.subList(0, pageSize)
 				: results;
 	}
 
@@ -364,7 +361,7 @@ public class SearchServiceImpl implements SearchService {
 				//Create a new solrServer. HttpClient is final and provided upon construction
 				this.solrServer = new CommonsHttpSolrServer(((CommonsHttpSolrServer) solrServer).getBaseURL(), httpClient);
 			} catch (MalformedURLException e) {
-				//LOG HERE
+				log.severe("MalformedURLException: " + e.getMessage());
 			}
 		}
 		else{
