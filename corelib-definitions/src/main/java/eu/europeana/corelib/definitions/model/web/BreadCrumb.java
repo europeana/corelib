@@ -104,5 +104,4 @@ public class BreadCrumb {
 	public String toString() {
 		return String.format("%s / %s=%s full: %s (%b)", display, param, value, href, last);
 	}
-
 }

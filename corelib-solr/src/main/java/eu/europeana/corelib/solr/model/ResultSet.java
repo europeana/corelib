@@ -100,4 +100,12 @@ public class ResultSet<T> {
 		this.searchTime = l;
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return "ResultSet [query=" + query + ", results=" + results
+				+ ", facetFields=" + facetFields + ", spellcheck=" + spellcheck
+				+ ", resultSize=" + resultSize + ", searchTime=" + searchTime
+				+ "]";
+	}
 }
