@@ -44,8 +44,8 @@ public class WebResourcesFieldInputTest {
 		//create mongo
 		WebResourceImpl webResourceMongo = new WebResourcesFieldInput().createWebResourceMongoField(webResource, mongoServer);
 		assertEquals(webResource.getAbout(), webResourceMongo.getAbout());
-		assertEquals(webResource.getRights().getResource(), webResourceMongo.getWebResourceEdmRights().values().iterator().next());
-		assertEquals(webResource.getRightList().get(0).getResource(), webResourceMongo.getWebResourceDcRights().values().iterator().next());
+		assertEquals(webResource.getRights().getResource(), webResourceMongo.getWebResourceEdmRights().values().iterator().next().get(0));
+		assertEquals(webResource.getRightList().get(0).getResource(), webResourceMongo.getWebResourceDcRights().values().iterator().next().get(0));
 		
 		//create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();

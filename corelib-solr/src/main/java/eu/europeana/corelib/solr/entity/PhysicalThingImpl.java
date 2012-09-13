@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.code.morphia.annotations.Entity;
@@ -9,49 +10,49 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("PhysicalThing")
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
-	private Map<String,String> dcContributor;
-	private Map<String,String> dcCoverage;
-	private Map<String,String> dcCreator;
-	private Map<String,String> dcDate;
-	private Map<String,String> dcDescription;
-	private Map<String,String> dcFormat;
-	private Map<String,String> dcIdentifier;
-	private Map<String,String> dcLanguage;
-	private Map<String,String> dcPublisher;
-	private Map<String,String> dcRelation;
-	private Map<String,String> dcRights;
-	private Map<String,String> dcSource;
-	private Map<String,String> dcSubject;
-	private Map<String,String> dcTitle;
-	private Map<String,String> dcType;
-	private Map<String,String> dctermsAlternative;
-	private Map<String,String> dctermsConformsTo;
-	private Map<String,String> dctermsCreated;
-	private Map<String,String> dctermsExtent;
-	private Map<String,String> dctermsHasFormat;
-	private Map<String,String> dctermsHasPart;
-	private Map<String,String> dctermsHasVersion;
-	private Map<String,String> dctermsIsFormatOf;
-	private Map<String,String> dctermsIsPartOf;
-	private Map<String,String> dctermsIsReferencedBy;
-	private Map<String,String> dctermsIsReplacedBy;
-	private Map<String,String> dctermsIsRequiredBy;
-	private Map<String,String> dctermsIssued;
-	private Map<String,String> dctermsIsVersionOf;
-	private Map<String,String> dctermsMedium;
-	private Map<String,String> dctermsProvenance;
-	private Map<String,String> dctermsReferences;
-	private Map<String,String> dctermsReplaces;
-	private Map<String,String> dctermsRequires;
-	private Map<String,String> dctermsSpatial;
-	private Map<String,String> dctermsTOC;
-	private Map<String,String> dctermsTemporal;
+	private Map<String,List<String>> dcContributor;
+	private Map<String,List<String>> dcCoverage;
+	private Map<String,List<String>> dcCreator;
+	private Map<String,List<String>> dcDate;
+	private Map<String,List<String>> dcDescription;
+	private Map<String,List<String>> dcFormat;
+	private Map<String,List<String>> dcIdentifier;
+	private Map<String,List<String>> dcLanguage;
+	private Map<String,List<String>> dcPublisher;
+	private Map<String,List<String>> dcRelation;
+	private Map<String,List<String>> dcRights;
+	private Map<String,List<String>> dcSource;
+	private Map<String,List<String>> dcSubject;
+	private Map<String,List<String>> dcTitle;
+	private Map<String,List<String>> dcType;
+	private Map<String,List<String>> dctermsAlternative;
+	private Map<String,List<String>> dctermsConformsTo;
+	private Map<String,List<String>> dctermsCreated;
+	private Map<String,List<String>> dctermsExtent;
+	private Map<String,List<String>> dctermsHasFormat;
+	private Map<String,List<String>> dctermsHasPart;
+	private Map<String,List<String>> dctermsHasVersion;
+	private Map<String,List<String>> dctermsIsFormatOf;
+	private Map<String,List<String>> dctermsIsPartOf;
+	private Map<String,List<String>> dctermsIsReferencedBy;
+	private Map<String,List<String>> dctermsIsReplacedBy;
+	private Map<String,List<String>> dctermsIsRequiredBy;
+	private Map<String,List<String>> dctermsIssued;
+	private Map<String,List<String>> dctermsIsVersionOf;
+	private Map<String,List<String>> dctermsMedium;
+	private Map<String,List<String>> dctermsProvenance;
+	private Map<String,List<String>> dctermsReferences;
+	private Map<String,List<String>> dctermsReplaces;
+	private Map<String,List<String>> dctermsRequires;
+	private Map<String,List<String>> dctermsSpatial;
+	private Map<String,List<String>> dctermsTOC;
+	private Map<String,List<String>> dctermsTemporal;
 	private String[] rdfType;
-	private Map<String,String> edmHasMet;
-	private Map<String,String> edmHasType;
+	private Map<String,List<String>> edmHasMet;
+	private Map<String,List<String>> edmHasType;
 	private String[] edmIncorporates;
 	private String[] edmIsDerivativeOf;
-	private Map<String,String> edmIsRelatedTo;
+	private Map<String,List<String>> edmIsRelatedTo;
 	private String edmIsRepresentationOf;
 	private String[] edmIsSimilarTo;
 	private String[] edmIsSuccessorOf;
@@ -59,200 +60,200 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	private String[] edmWasPresentAt;
 	private String edmCurrentLocation;
 	private String edmIsNextInSequence;
-	private Map<String,String> edmRights;
+	private Map<String,List<String>> edmRights;
 
 	@Override
-	public Map<String,String> getEdmRights() {
+	public Map<String,List<String>> getEdmRights() {
 		return edmRights;
 	}
 
 	@Override
-	public void setEdmRights(Map<String,String> edmRights) {
+	public void setEdmRights(Map<String,List<String>> edmRights) {
 		this.edmRights = edmRights;
 	}
 
 	@Override
-	public Map<String,String> getDcContributor() {
+	public Map<String,List<String>> getDcContributor() {
 		return this.dcContributor;
 	}
 
 	@Override
-	public Map<String,String> getDcCoverage() {
+	public Map<String,List<String>> getDcCoverage() {
 		return this.dcCoverage;
 	}
 
 	@Override
-	public Map<String,String> getDcCreator() {
+	public Map<String,List<String>> getDcCreator() {
 		return this.dcCreator;
 	}
 
 	@Override
-	public Map<String,String> getDcDate() {
+	public Map<String,List<String>> getDcDate() {
 		return this.dcDate;
 	}
 
 	@Override
-	public Map<String,String> getDcDescription() {
+	public Map<String,List<String>> getDcDescription() {
 		return this.dcDescription;
 	}
 
 	@Override
-	public Map<String,String> getDcFormat() {
+	public Map<String,List<String>> getDcFormat() {
 		return this.dcFormat;
 	}
 
 	@Override
-	public Map<String,String> getDcIdentifier() {
+	public Map<String,List<String>> getDcIdentifier() {
 		return this.dcIdentifier;
 	}
 
 	@Override
-	public Map<String,String> getDcLanguage() {
+	public Map<String,List<String>> getDcLanguage() {
 		return this.dcLanguage;
 	}
 
 	@Override
-	public Map<String,String> getDcPublisher() {
+	public Map<String,List<String>> getDcPublisher() {
 		return this.dcPublisher;
 	}
 
 	@Override
-	public Map<String,String> getDcRelation() {
+	public Map<String,List<String>> getDcRelation() {
 		return this.dcRelation;
 	}
 
 	@Override
-	public Map<String,String> getDcRights() {
+	public Map<String,List<String>> getDcRights() {
 		return this.dcRights;
 	}
 
 	@Override
-	public Map<String,String> getDcSource() {
+	public Map<String,List<String>> getDcSource() {
 		return this.dcSource;
 	}
 
 	@Override
-	public Map<String,String> getDcSubject() {
+	public Map<String,List<String>> getDcSubject() {
 		return this.dcSubject;
 	}
 
 	@Override
-	public Map<String,String> getDcTitle() {
+	public Map<String,List<String>> getDcTitle() {
 		return this.dcTitle;
 	}
 
 	@Override
-	public Map<String,String> getDcType() {
+	public Map<String,List<String>> getDcType() {
 		return this.dcType;
 	}
 
 	@Override
-	public Map<String,String> getDctermsAlternative() {
+	public Map<String,List<String>> getDctermsAlternative() {
 		return this.dctermsAlternative;
 	}
 
 	@Override
-	public Map<String,String> getDctermsConformsTo() {
+	public Map<String,List<String>> getDctermsConformsTo() {
 		return this.dctermsConformsTo;
 	}
 
 	@Override
-	public Map<String,String> getDctermsCreated() {
+	public Map<String,List<String>> getDctermsCreated() {
 		return this.dctermsCreated;
 	}
 
 	@Override
-	public Map<String,String> getDctermsExtent() {
+	public Map<String,List<String>> getDctermsExtent() {
 		return this.dctermsExtent;
 	}
 
 	@Override
-	public Map<String,String> getDctermsHasFormat() {
+	public Map<String,List<String>> getDctermsHasFormat() {
 		return this.dctermsHasFormat;
 	}
 
 	@Override
-	public Map<String,String> getDctermsHasPart() {
+	public Map<String,List<String>> getDctermsHasPart() {
 		return this.dctermsHasPart;
 	}
 
 	@Override
-	public Map<String,String> getDctermsHasVersion() {
+	public Map<String,List<String>> getDctermsHasVersion() {
 		return  this.dctermsHasVersion;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsFormatOf() {
+	public Map<String,List<String>> getDctermsIsFormatOf() {
 		return this.dctermsIsFormatOf;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsPartOf() {
+	public Map<String,List<String>> getDctermsIsPartOf() {
 		return this.dctermsIsPartOf;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsReferencedBy() {
+	public Map<String,List<String>> getDctermsIsReferencedBy() {
 		return this.dctermsIsReferencedBy;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsReplacedBy() {
+	public Map<String,List<String>> getDctermsIsReplacedBy() {
 		return this.dctermsIsReplacedBy;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsRequiredBy() {
+	public Map<String,List<String>> getDctermsIsRequiredBy() {
 		return this.dctermsIsRequiredBy;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIssued() {
+	public Map<String,List<String>> getDctermsIssued() {
 		return this.dctermsIssued;
 	}
 
 	@Override
-	public Map<String,String> getDctermsIsVersionOf() {
+	public Map<String,List<String>> getDctermsIsVersionOf() {
 		return this.dctermsIsVersionOf;
 	}
 
 	@Override
-	public Map<String,String> getDctermsMedium() {
+	public Map<String,List<String>> getDctermsMedium() {
 		return this.dctermsMedium;
 	}
 
 	@Override
-	public Map<String,String> getDctermsProvenance() {
+	public Map<String,List<String>> getDctermsProvenance() {
 		return this.dctermsProvenance;
 	}
 
 	@Override
-	public Map<String,String> getDctermsReferences() {
+	public Map<String,List<String>> getDctermsReferences() {
 		return this.dctermsReferences;
 	}
 
 	@Override
-	public Map<String,String> getDctermsReplaces() {
+	public Map<String,List<String>> getDctermsReplaces() {
 		return this.dctermsReplaces;
 	}
 
 	@Override
-	public Map<String,String>getDctermsRequires() {
+	public Map<String,List<String>>getDctermsRequires() {
 		return this.dctermsRequires;
 	}
 
 	@Override
-	public Map<String,String> getDctermsSpatial() {
+	public Map<String,List<String>> getDctermsSpatial() {
 		return this.dctermsSpatial;
 	}
 
 	@Override
-	public Map<String,String> getDctermsTOC() {
+	public Map<String,List<String>> getDctermsTOC() {
 		return this.dctermsTOC;
 	}
 
 	@Override
-	public Map<String,String> getDctermsTemporal() {
+	public Map<String,List<String>> getDctermsTemporal() {
 		return this.dctermsTemporal;
 	}
 
@@ -262,187 +263,187 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public void setDcContributor(Map<String,String> dcContributor) {
+	public void setDcContributor(Map<String,List<String>> dcContributor) {
 		this.dcContributor = dcContributor;
 	}
 
 	@Override
-	public void setDcCoverage(Map<String,String> dcCoverage) {
+	public void setDcCoverage(Map<String,List<String>> dcCoverage) {
 		this.dcCoverage = dcCoverage;
 	}
 
 	@Override
-	public void setDcCreator(Map<String,String> dcCreator) {
+	public void setDcCreator(Map<String,List<String>> dcCreator) {
 		this.dcCreator = dcCreator;
 	}
 
 	@Override
-	public void setDcDate(Map<String,String> dcDate) {
+	public void setDcDate(Map<String,List<String>> dcDate) {
 		this.dcDate = dcDate;
 	}
 
 	@Override
-	public void setDcDescription(Map<String,String> dcDescription) {
+	public void setDcDescription(Map<String,List<String>> dcDescription) {
 		this.dcDescription = dcDescription;
 	}
 
 	@Override
-	public void setDcFormat(Map<String,String> dcFormat) {
+	public void setDcFormat(Map<String,List<String>> dcFormat) {
 		this.dcFormat = dcFormat;
 	}
 
 	@Override
-	public void setDcIdentifier(Map<String,String> dcIdentifier) {
+	public void setDcIdentifier(Map<String,List<String>> dcIdentifier) {
 		this.dcIdentifier = dcIdentifier;
 	}
 
 	@Override
-	public void setDcLanguage(Map<String,String> dcLanguage) {
+	public void setDcLanguage(Map<String,List<String>> dcLanguage) {
 		this.dcLanguage = dcLanguage;
 	}
 
 	@Override
-	public void setDcPublisher(Map<String,String> dcPublisher) {
+	public void setDcPublisher(Map<String,List<String>> dcPublisher) {
 		this.dcPublisher = dcPublisher;
 	}
 
 	@Override
-	public void setDcRelation(Map<String,String> dcRelation) {
+	public void setDcRelation(Map<String,List<String>> dcRelation) {
 		this.dcRelation = dcRelation;
 	}
 
 	@Override
-	public void setDcRights(Map<String,String> dcRights) {
+	public void setDcRights(Map<String,List<String>> dcRights) {
 		this.dcRights = dcRights;
 	}
 
 	@Override
-	public void setDcSource(Map<String,String> dcSource) {
+	public void setDcSource(Map<String,List<String>> dcSource) {
 		this.dcSource = dcSource;
 	}
 
 	@Override
-	public void setDcSubject(Map<String,String> dcSubject) {
+	public void setDcSubject(Map<String,List<String>> dcSubject) {
 		this.dcSubject = dcSubject;
 	}
 
 	@Override
-	public void setDcTitle(Map<String,String> dcTitle) {
+	public void setDcTitle(Map<String,List<String>> dcTitle) {
 		this.dcTitle = dcTitle;
 	}
 
 	@Override
-	public void setDcType(Map<String,String> dcType) {
+	public void setDcType(Map<String,List<String>> dcType) {
 		this.dcType = dcType;
 	}
 
 	@Override
-	public void setDctermsAlternative(Map<String,String> dctermsAlternative) {
+	public void setDctermsAlternative(Map<String,List<String>> dctermsAlternative) {
 		this.dctermsAlternative = dctermsAlternative;
 	}
 
 	@Override
-	public void setDctermsConformsTo(Map<String,String> dctermsConformsTo) {
+	public void setDctermsConformsTo(Map<String,List<String>> dctermsConformsTo) {
 		this.dctermsConformsTo = dctermsConformsTo;
 	}
 
 	@Override
-	public void setDctermsCreated(Map<String,String> strings) {
+	public void setDctermsCreated(Map<String,List<String>> strings) {
 		this.dctermsCreated = strings;
 	}
 
 	@Override
-	public void setDctermsExtent(Map<String,String> dctermsExtent) {
+	public void setDctermsExtent(Map<String,List<String>> dctermsExtent) {
 		this.dctermsExtent = dctermsExtent;
 	}
 
 	@Override
-	public void setDctermsHasFormat(Map<String,String> dctermsHasFormat) {
+	public void setDctermsHasFormat(Map<String,List<String>> dctermsHasFormat) {
 		this.dctermsHasFormat = dctermsHasFormat;
 	}
 
 	@Override
-	public void setDctermsHasPart(Map<String,String> dctermsHasPart) {
+	public void setDctermsHasPart(Map<String,List<String>> dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasVersion(Map<String,String> dctermsHasVersion) {
+	public void setDctermsHasVersion(Map<String,List<String>> dctermsHasVersion) {
 		this.dctermsHasVersion = dctermsHasVersion;
 	}
 
 	@Override
-	public void setDctermsIsFormatOf(Map<String,String> dctermsIsFormatOf) {
+	public void setDctermsIsFormatOf(Map<String,List<String>> dctermsIsFormatOf) {
 		this.dctermsIsFormatOf = dctermsIsFormatOf;
 	}
 
 	@Override
-	public void setDctermsIsPartOf(Map<String,String> dctermsIsPartOf) {
+	public void setDctermsIsPartOf(Map<String,List<String>> dctermsIsPartOf) {
 		this.dctermsIsPartOf = dctermsIsPartOf;
 	}
 
 	@Override
-	public void setDctermsIsReferencedBy(Map<String,String> dctermsIsReferencedBy) {
+	public void setDctermsIsReferencedBy(Map<String,List<String>> dctermsIsReferencedBy) {
 		this.dctermsIsReferencedBy = dctermsIsReferencedBy;
 	}
 
 	@Override
-	public void setDctermsIsReplacedBy(Map<String,String> dctermsIsReplacedBy) {
+	public void setDctermsIsReplacedBy(Map<String,List<String>> dctermsIsReplacedBy) {
 		this.dctermsIsReplacedBy = dctermsIsReplacedBy;
 	}
 
 	@Override
-	public void setDctermsIsRequiredBy(Map<String,String> dctermsIsRequiredBy) {
+	public void setDctermsIsRequiredBy(Map<String,List<String>> dctermsIsRequiredBy) {
 		this.dctermsIsRequiredBy = dctermsIsRequiredBy;
 	}
 
 	@Override
-	public void setDctermsIssued(Map<String,String> dctermsIssued) {
+	public void setDctermsIssued(Map<String,List<String>> dctermsIssued) {
 		this.dctermsIssued = dctermsIssued;
 	}
 
 	@Override
-	public void setDctermsIsVersionOf(Map<String,String> dctermsIsVersionOf) {
+	public void setDctermsIsVersionOf(Map<String,List<String>> dctermsIsVersionOf) {
 		this.dctermsIsVersionOf = dctermsIsVersionOf;
 	}
 
 	@Override
-	public void setDctermsMedium(Map<String,String> dctermsMedium) {
+	public void setDctermsMedium(Map<String,List<String>> dctermsMedium) {
 		this.dctermsMedium = dctermsMedium;
 	}
 
 	@Override
-	public void setDctermsProvenance(Map<String,String> dctermsProvenance) {
+	public void setDctermsProvenance(Map<String,List<String>> dctermsProvenance) {
 		this.dctermsProvenance = dctermsProvenance;
 	}
 
 	@Override
-	public void setDctermsReferences(Map<String,String> dctermsReferences) {
+	public void setDctermsReferences(Map<String,List<String>> dctermsReferences) {
 		this.dctermsReferences = dctermsReferences;
 	}
 
 	@Override
-	public void setDctermsReplaces(Map<String,String> dctermsReplaces) {
+	public void setDctermsReplaces(Map<String,List<String>> dctermsReplaces) {
 		this.dctermsReplaces = dctermsReplaces;
 	}
 
 	@Override
-	public void setDctermsRequires(Map<String,String> dctermsRequires) {
+	public void setDctermsRequires(Map<String,List<String>> dctermsRequires) {
 		this.dctermsRequires = dctermsRequires;
 	}
 
 	@Override
-	public void setDctermsSpatial(Map<String,String> dctermsSpatial) {
+	public void setDctermsSpatial(Map<String,List<String>> dctermsSpatial) {
 		this.dctermsSpatial = dctermsSpatial;
 	}
 
 	@Override
-	public void setDctermsTOC(Map<String,String> dctermsTOC) {
+	public void setDctermsTOC(Map<String,List<String>> dctermsTOC) {
 		this.dctermsTOC = dctermsTOC;
 	}
 
 	@Override
-	public void setDctermsTemporal(Map<String,String> dctermsTemporal) {
+	public void setDctermsTemporal(Map<String,List<String>> dctermsTemporal) {
 		this.dctermsTemporal = dctermsTemporal;
 	}
 
@@ -462,22 +463,22 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public Map<String,String> getEdmHasMet() {
+	public Map<String,List<String>> getEdmHasMet() {
 		return this.edmHasMet;
 	}
 
 	@Override
-	public void setEdmHasMet(Map<String,String> edmHasMet) {
+	public void setEdmHasMet(Map<String,List<String>> edmHasMet) {
 		this.edmHasMet = edmHasMet;
 	}
 
 	@Override
-	public Map<String,String> getEdmHasType() {
+	public Map<String,List<String>> getEdmHasType() {
 		return this.edmHasType;
 	}
 
 	@Override
-	public void setEdmHasType(Map<String,String> edmHasType) {
+	public void setEdmHasType(Map<String,List<String>> edmHasType) {
 		this.edmHasType = edmHasType;
 	}
 
@@ -502,12 +503,12 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo) {
+	public void setEdmIsRelatedTo(Map<String,List<String>> edmIsRelatedTo) {
 		this.edmIsRelatedTo = edmIsRelatedTo;
 	}
 
 	@Override
-	public Map<String,String> getEdmIsRelatedTo() {
+	public Map<String,List<String>> getEdmIsRelatedTo() {
 		return this.edmIsRelatedTo;
 	}
 

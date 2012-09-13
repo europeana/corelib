@@ -80,20 +80,19 @@ public class PlaceFieldInputTest {
 				mongoServer);
 		assertEquals(place.getAbout(), placeMongo.getAbout());
 		assertEquals(place.getNoteList().get(0).getString(),
-				placeMongo.getNote().values().iterator().next());
+				placeMongo.getNote().values().iterator().next().get(0));
 		assertTrue(placeMongo.getAltLabel().containsKey(
 				place.getAltLabelList().get(0).getLang().getLang()));
-		assertTrue(placeMongo.getPrefLabel().containsKey(
-				place.getPrefLabelList().get(0).getLang().getLang()));
-		assertTrue(placeMongo.getAltLabel().containsValue(
-				place.getAltLabelList().get(0).getString()));
-		assertTrue(placeMongo.getPrefLabel().containsValue(
-				place.getPrefLabelList().get(0).getString()));
+		assertEquals(place.getAltLabelList().get(0).getString(),
+				placeMongo.getAltLabel().values().iterator().next().get(0));
+		
+		assertEquals(place.getPrefLabelList().get(0).getString(),
+				placeMongo.getPrefLabel().values().iterator().next().get(0));
 		assertEquals(place.getIsPartOfList().get(0).getString(),
-				placeMongo.getIsPartOf().values().iterator().next());
-		assertEquals(place.getLat().getLat(),
+				placeMongo.getIsPartOf().values().iterator().next().get(0));
+		assertEquals(Float.toString(place.getLat().getLat()),
 				Float.toString(placeMongo.getLatitude()));
-		assertEquals(place.getLong().getLong(),
+		assertEquals(Float.toString(place.getLong().getLong()),
 				Float.toString(placeMongo.getLongitude()));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();

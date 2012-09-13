@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,14 +33,14 @@ public interface Agent extends ContextualClass {
 	 * 
 	 * @return Date representing the birth of an agent
 	 */
-	Map<String,String> getBegin();
+	Map<String, List<String>> getBegin();
 
 	/**
 	 * Retrieves the edm:end for an edm:Agent
 	 * 
 	 * @return Date representing the death of an agent
 	 */
-	Map<String,String> getEnd();
+	Map<String,List<String>> getEnd();
 
 	/**
 	 * Set the edm:begin field for an edm:Agent
@@ -47,7 +48,7 @@ public interface Agent extends ContextualClass {
 	 * @param begin
 	 *            String representing a valid date
 	 */
-	void setBegin(Map<String,String> begin);
+	void setBegin(Map<String,List<String>> begin);
 
 	/**
 	 * Set the edm:end field for an edm:Agent
@@ -55,63 +56,63 @@ public interface Agent extends ContextualClass {
 	 * @param end
 	 *            String representing a valid date
 	 */
-	void setEnd(Map<String,String> end);
+	void setEnd(Map<String,List<String>> end);
 	
 	void setEdmWasPresentAt(String[] edmWasPresentAt);
 	
 	String[] getEdmWasPresentAt();
 	
-	void setEdmHasMet(Map<String,String> edmHasMet);
+	void setEdmHasMet(Map<String,List<String>> edmHasMet);
 	
-	Map<String,String> getEdmHasMet();
+	Map<String,List<String>> getEdmHasMet();
 	
-	void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo);
+	void setEdmIsRelatedTo(Map<String,List<String>> edmIsRelatedTo);
 	
-	Map<String,String> getEdmIsRelatedTo();
+	Map<String,List<String>> getEdmIsRelatedTo();
 	
 	
 	void setOwlSameAs(String[] owlSameAs);
 	
 	String[] getOwlSameAs();
 	
-	void setFoafName(Map<String,String> foafName);
+	void setFoafName(Map<String,List<String>> foafName);
 	
-	Map<String,String> getFoafName();
+	Map<String,List<String>> getFoafName();
 	
-	void setDcDate(Map<String,String> dcDate);
+	void setDcDate(Map<String,List<String>> dcDate);
 	
-	Map<String,String> getDcDate();
+	Map<String,List<String>> getDcDate();
 	
-	void setDcIdentifier(Map<String,String> dcIdentifier);
+	void setDcIdentifier(Map<String,List<String>> dcIdentifier);
 	
-	Map<String,String> getDcIdentifier();
+	Map<String,List<String>> getDcIdentifier();
 	
-	void setRdaGr2DateOfBirth(Map<String,String> rdaGr2DateOfBirth);
+	void setRdaGr2DateOfBirth(Map<String,List<String>> rdaGr2DateOfBirth);
 	
-	Map<String,String> getRdaGr2DateOfBirth();
+	Map<String,List<String>> getRdaGr2DateOfBirth();
 	
-	void setRdaGr2DateOfDeath(Map<String,String> rdaGr2DateOfDeath);
+	void setRdaGr2DateOfDeath(Map<String,List<String>> rdaGr2DateOfDeath);
 	
-	Map<String,String> getRdaGr2DateOfDeath();
+	Map<String,List<String>> getRdaGr2DateOfDeath();
 	
-	void setRdaGr2DateOfEstablishment(Map<String,String> rdaGr2DateOfEstablishment);
+	void setRdaGr2DateOfEstablishment(Map<String,List<String>> rdaGr2DateOfEstablishment);
 	
-	Map<String,String> getRdaGr2DateOfEstablishment();
+	Map<String,List<String>> getRdaGr2DateOfEstablishment();
 	
-	void setRdaGr2DateOfTermination(Map<String,String> rdaGr2DateOfTermination);
+	void setRdaGr2DateOfTermination(Map<String,List<String>> rdaGr2DateOfTermination);
 	
-	Map<String,String> getRdaGr2DateOfTermination();
+	Map<String,List<String>> getRdaGr2DateOfTermination();
 	
-	void setRdaGr2Gender(Map<String,String> rdaGr2Gender);
+	void setRdaGr2Gender(Map<String,List<String>> rdaGr2Gender);
 	
-	Map<String,String> getRdaGr2Gender();
+	Map<String,List<String>> getRdaGr2Gender();
 	
-	void setRdaGr2ProfessionOrOccupation(Map<String,String> rdaGr2ProfessionOrOccupation);
+	void setRdaGr2ProfessionOrOccupation(Map<String,List<String>> rdaGr2ProfessionOrOccupation);
 	
-	Map<String,String> getRdaGr2ProfessionOrOccupation();
+	Map<String,List<String>> getRdaGr2ProfessionOrOccupation();
 	
-	void setRdaGr2BiographicalInformation(Map<String,String> rdaGr2BiographicalInformation);
+	void setRdaGr2BiographicalInformation(Map<String,List<String>> rdaGr2BiographicalInformation);
 	
-	Map<String,String> getRdaGr2BiographicalInformation();
+	Map<String,List<String>> getRdaGr2BiographicalInformation();
 	
 }

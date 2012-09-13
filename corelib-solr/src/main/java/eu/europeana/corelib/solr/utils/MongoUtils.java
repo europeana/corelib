@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public final class MongoUtils {
 		return false;
 	}
 
-	public static boolean contains(Map<String, String> map, String key,
+	public static boolean contains(Map<String, List<String>> map, String key,
 			String val) {
 		if (map.keySet().contains(key)) {
 			if (StringUtils.equals(map.get(key).toString(), val)) {
@@ -64,7 +65,7 @@ public final class MongoUtils {
 	 * @param value
 	 *            The value to update
 	 */
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> void update(Class<T> clazz, String about,
 			MongoServer mongoServer, String field, Object value) {
@@ -86,8 +87,8 @@ public final class MongoUtils {
 								((List<String>) value)
 										.toArray(new String[((List<String>) value)
 												.size()]));
-			} 
-			
+			}
+
 			else {
 				ops = mongoServer.getDatastore().createUpdateOperations(clazz)
 						.set(field, value);
@@ -97,77 +98,138 @@ public final class MongoUtils {
 		}
 	}
 
-	
-	public static <T extends LiteralType> Map<String,String> createLiteralMapFromString(T obj, int i){
-		Map<String, String> retMap = new HashMap<String,String>();
-		if(obj != null){
-			if(obj.getLang()!=null){
-				retMap.put(obj.getLang().getLang()+":"+i, obj.getString());
-			}
-			else {
-				retMap.put("def"+i, obj.getString());
-			}
-			return retMap;
-		}
-		
-		return null;
-	}
-	
-	public static <T extends ResourceOrLiteralType> Map<String,String> createResourceOrLiteralMapFromString(T obj, int i){
-		Map<String, String> retMap = new HashMap<String,String>();
-		if(obj != null){
-			if(obj.getLang()!=null){
-				if(obj.getString()!=null){
-					retMap.put(obj.getLang().getLang()+":"+i, obj.getString());
-				}
-				if(obj.getResource()!=null){
-					retMap.put(obj.getLang().getLang()+":res"+i, obj.getResource());
-				}
-			}
-			else {
-				if(obj.getString()!=null){
-					retMap.put("def"+i, obj.getString());
-				}
-				if(obj.getResource()!=null){
-					retMap.put("def:res"+i, obj.getResource());
-				}
+	public static <T extends LiteralType> Map<String, List<String>> createLiteralMapFromString(
+			T obj) {
+		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+		if (obj != null) {
+			if (obj.getLang() != null) {
+				List<String> val = new ArrayList<String>();
+				val.add(obj.getString());
+				retMap.put(obj.getLang().getLang(), val);
+			} else {
+				List<String> val = new ArrayList<String>();
+				val.add(obj.getString());
+				retMap.put("def", val);
 			}
 			return retMap;
 		}
-		
+
 		return null;
 	}
-	
-	public static <T extends LiteralType> Map<String,String> createLiteralMapFromList(List<T> list){
-		if(list!=null){
-			int i=0;
-			Map<String,String> retMap = new HashMap<String,String>();
-			for(T obj:list){
-				retMap.putAll(createLiteralMapFromString(obj,i));
+
+	public static <T extends ResourceOrLiteralType> Map<String, List<String>> createResourceOrLiteralMapFromString(
+			T obj) {
+		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+		if (obj != null) {
+			if (obj.getLang() != null) {
+				if (obj.getString() != null) {
+					List<String> val = new ArrayList<String>();
+					 val.add(obj.getString());
+					retMap.put(obj.getLang().getLang(),
+							val);
+				}
+				if (obj.getResource() != null) {
+					List<String> val = new ArrayList<String>();
+					 val.add(obj.getResource());
+					retMap.put(obj.getLang().getLang(),
+							val);
+				}
+			} else {
+				if (obj.getString() != null) {
+					List<String> val = new ArrayList<String>();
+					 val.add(obj.getString());
+					retMap.put("def", val);
+				}
+				if (obj.getResource() != null) {
+					List<String> val = new ArrayList<String>();
+					 val.add(obj.getResource());
+					retMap.put("def", val);
+				}
+			}
+			return retMap;
+		}
+
+		return null;
+	}
+
+	public static <T extends LiteralType> Map<String, List<String>> createLiteralMapFromList(
+			List<T> list) {
+		if (list != null) {
+			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+			for (T obj : list) {
+				if (obj.getLang() != null) {
+					String lang = obj.getLang().getLang();
+					if (retMap.containsKey(lang)) {
+						List<String> val = retMap.get(lang);
+						val.add(obj.getString());
+						retMap.put(lang, val);
+					} else {
+						List<String> val = new ArrayList<String>();
+						val.add(obj.getString());
+						retMap.put(lang, val);
+
+					}
+				} else {
+					List<String> val = new ArrayList<String>();
+					val.add(obj.getString());
+					retMap.put("def", val);
+				}
 			}
 			return retMap;
 		}
 		return null;
 	}
-	
-	public static <T extends ResourceOrLiteralType> Map<String,String> createResourceOrLiteralMapFromList(List<T> list){
-		if(list!=null){
-			int i=0;
-			Map<String,String> retMap = new HashMap<String,String>();
-			for(T obj:list){
-				retMap.putAll(createResourceOrLiteralMapFromString(obj, i));
-				i++;
+
+	public static <T extends ResourceOrLiteralType> Map<String, List<String>> createResourceOrLiteralMapFromList(
+			List<T> list) {
+		if (list != null) {
+			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+			for (T obj : list) {
+				if (obj.getString() != null) {
+					if (obj.getLang() != null) {
+						String lang = obj.getLang().getLang();
+						if (retMap.containsKey(lang)) {
+							List<String> val = retMap.get(lang);
+							val.add(obj.getString());
+							retMap.put(lang, val);
+						} else {
+							List<String> val = new ArrayList<String>();
+							val.add(obj.getString());
+							retMap.put(lang, val);
+
+						}
+					} else {
+						List<String> val = new ArrayList<String>();
+						val.add(obj.getString());
+						retMap.put("def", val);
+					}
+				}
+				if (obj.getResource() != null) {
+					if (obj.getLang() != null) {
+						String lang = obj.getLang().getLang();
+						if (retMap.containsKey(lang)) {
+							List<String> val = retMap.get(lang);
+							val.add(obj.getResource());
+							retMap.put(lang, val);
+						} else {
+							List<String> val = new ArrayList<String>();
+							val.add(obj.getResource());
+							retMap.put(lang, val);
+
+						}
+					} else {
+						List<String> val = new ArrayList<String>();
+						val.add(obj.getResource());
+						retMap.put("def", val);
+					}
+				}
 			}
 			return retMap;
 		}
 		return null;
 	}
-	
-	
-	
-	
-	
-		public static void updateAggregation(AggregationImpl mongoAggregation,
+
+	public static void updateAggregation(AggregationImpl mongoAggregation,
 			MongoServer mongoServer) {
 		update(AggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
 				"aggregatedCHO", mongoAggregation.getAggregatedCHO());
@@ -205,39 +267,39 @@ public final class MongoUtils {
 
 	}
 
-		public static void updateEuropeanaAggregation(EuropeanaAggregation mongoAggregation,
-				MongoServer mongoServer) {
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"aggregatedCHO", mongoAggregation.getAggregatedCHO());
+	public static void updateEuropeanaAggregation(
+			EuropeanaAggregation mongoAggregation, MongoServer mongoServer) {
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "aggregatedCHO",
+				mongoAggregation.getAggregatedCHO());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"aggregates", mongoAggregation.getAggregates());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "aggregates", mongoAggregation.getAggregates());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"dcCreator", mongoAggregation.getDcCreator());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "dcCreator", mongoAggregation.getDcCreator());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmHasView", mongoAggregation.getEdmHasView());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmHasView", mongoAggregation.getEdmHasView());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmCountry", mongoAggregation.getEdmCountry());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmCountry", mongoAggregation.getEdmCountry());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmIsShownBy", mongoAggregation.getEdmIsShownBy());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmIsShownBy", mongoAggregation.getEdmIsShownBy());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmLandingPage", mongoAggregation.getEdmLandingPage());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmLandingPage",
+				mongoAggregation.getEdmLandingPage());
 
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmLanguage", mongoAggregation.getEdmLanguage());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmLanguage", mongoAggregation.getEdmLanguage());
 
-		
-			update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
-					"edmRights", mongoAggregation.getEdmRights());
+		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
+				mongoServer, "edmRights", mongoAggregation.getEdmRights());
 
-			
-		}
-		
+	}
+
 	public static void updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
 
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "dcContributor",
@@ -328,21 +390,18 @@ public final class MongoUtils {
 	}
 
 	/*
-	public static void updateFullBean(FullBean fullBean,
-			EdmMongoServer mongoDBServer) {
-
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"aggregations", fullBean.getAggregations());
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"agents", fullBean.getAgents());
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"concepts", fullBean.getConcepts());
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"timespans", fullBean.getTimespans());
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"providedCHOs", fullBean.getProvidedCHOs());
-		updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-				"places", fullBean.getPlaces());
-	}
-*/
+	 * public static void updateFullBean(FullBean fullBean, EdmMongoServer
+	 * mongoDBServer) {
+	 * 
+	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
+	 * "aggregations", fullBean.getAggregations());
+	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
+	 * "agents", fullBean.getAgents()); updateEntity(FullBeanImpl.class,
+	 * fullBean.getAbout(), mongoDBServer, "concepts", fullBean.getConcepts());
+	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
+	 * "timespans", fullBean.getTimespans()); updateEntity(FullBeanImpl.class,
+	 * fullBean.getAbout(), mongoDBServer, "providedCHOs",
+	 * fullBean.getProvidedCHOs()); updateEntity(FullBeanImpl.class,
+	 * fullBean.getAbout(), mongoDBServer, "places", fullBean.getPlaces()); }
+	 */
 }

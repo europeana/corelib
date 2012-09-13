@@ -33,7 +33,7 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * 
 	 * @return String representing the edm:DataProvider field
 	 */
-	Map<String,String> getEdmDataProvider();
+	Map<String,List<String>> getEdmDataProvider();
 
 	/**
 	 * Retrieves the unique edm:isShownBy field from an Aggregation
@@ -61,21 +61,21 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * 
 	 * @return String representing the edm:provider field
 	 */
-	Map<String,String> getEdmProvider();
+	Map<String,List<String>> getEdmProvider();
 
 	/**
 	 * Retrieves the dc:rights fields from an Aggregation
 	 * 
 	 * @return String array representing the dc:rights fields
 	 */
-	Map<String,String> getDcRights();
+	Map<String,List<String>> getDcRights();
 
 	/**
 	 * Retrieves the unique edm:rights field from an Aggregation
 	 * 
 	 * @return String representing the edm:rights fields
 	 */
-	Map<String,String> getEdmRights();
+	Map<String,List<String>> getEdmRights();
 
 	/**
 	 * Set the dc:rights field for an Aggregation
@@ -83,7 +83,7 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * @param dcRights
 	 *            String array with the dc:rights
 	 */
-	void setDcRights(Map<String,String> dcRights);
+	void setDcRights(Map<String,List<String>> dcRights);
 
 	/**
 	 * Set the edm:provider field for an Aggregation
@@ -91,7 +91,7 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * @param edmProvider
 	 *            String with the edm:provider
 	 */
-	void setEdmProvider(Map<String,String> edmProvider);
+	void setEdmProvider(Map<String,List<String>> edmProvider);
 
 	/**
 	 * Set the edm:rights field for an Aggregation
@@ -99,7 +99,7 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * @param edmRights
 	 *            String with the edm:rights
 	 */
-	void setEdmRights(Map<String,String> edmRights);
+	void setEdmRights(Map<String,List<String>> edmRights);
 
 	/**
 	 * Set the edm:object for an Aggregation
@@ -131,7 +131,7 @@ public interface Aggregation extends AbstractEdmEntity {
 	 * @param edmDataProvider
 	 *            String with the edm:dataProvider
 	 */
-	void setEdmDataProvider(Map<String,String> edmDataProvider);
+	void setEdmDataProvider(Map<String,List<String>> edmDataProvider);
 
 	/**
 	 * Returns the list of WebResources for an Aggregation

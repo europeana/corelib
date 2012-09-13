@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,35 +33,35 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 * Retrieves the Preferable Label for a Contextual Class (language,value)
 	 * format
 	 * 
-	 * @return A Map<String,String> for the Preferable Labels of a contextual
+	 * @return A Map<String,List<List<String>>> for the Preferable Labels of a contextual
 	 *         class (one per language)
 	 */
-	Map<String, String> getPrefLabel();
+	Map<String, List<String>> getPrefLabel();
 
 	/**
 	 * Retrieves the Alternative Label for a Contextual Class (language,value)
 	 * format
 	 * 
-	 * @return A Map<String,String> for the Alternative Labels of a contextual
+	 * @return A Map<String,List<List<String>>> for the Alternative Labels of a contextual
 	 *         class (one per language)
 	 */
-	Map<String, String> getAltLabel();
+	Map<String, List<String>> getAltLabel();
 
 	/**
 	 * Retrieves the skos:note fields of a Contextual Class
 	 * 
 	 * @return A string array with notes for the Contextual Class
 	 */
-	Map<String,String> getNote();
+	Map<String,List<String>> getNote();
 
 	/**
 	 * Set the altLabel for a Contextual Class
 	 * 
 	 * @param altLabel
-	 *            A Map<String,String> for the Alternative Labels of a
+	 *            A Map<String,List<List<String>>> for the Alternative Labels of a
 	 *            contextual class (one per language)
 	 */
-	void setAltLabel(Map<String, String> altLabel);
+	void setAltLabel(Map<String, List<String>> altLabel);
 
 	/**
 	 * Set the notes for a Contextual Class
@@ -68,19 +69,19 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 * @param note
 	 *            A String array with notes for the Contextual Class
 	 */
-	void setNote(Map<String,String> note);
+	void setNote(Map<String,List<String>> note);
 
 	/**
 	 * Set the prefLabel for a Contextual Class
 	 * 
 	 * @param prefLabel
-	 *            A Map<String,String> for the Preferable Labels of a contextual
+	 *            A Map<String,List<List<String>>> for the Preferable Labels of a contextual
 	 *            class (one per language)
 	 */
-	void setPrefLabel(Map<String, String> prefLabel);
+	void setPrefLabel(Map<String, List<String>> prefLabel);
 
-	void setHiddenLabel(Map<String, String> hiddenLabel);
+	void setHiddenLabel(Map<String, List<String>> hiddenLabel);
 
-	Map<String, String> getHiddenLabel();
+	Map<String, List<String>> getHiddenLabel();
 
 }

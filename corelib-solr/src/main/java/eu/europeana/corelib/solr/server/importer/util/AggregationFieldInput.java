@@ -223,7 +223,7 @@ public final class AggregationFieldInput {
 		mongoAggregation.setAbout(aggregation.getAbout());
 		mongoAggregation.setEdmDataProvider(MongoUtils
 				.createResourceOrLiteralMapFromString(
-						aggregation.getDataProvider(), 0));
+						aggregation.getDataProvider()));
 		mongoAggregation.setEdmIsShownAt(SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource());
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
@@ -232,10 +232,9 @@ public final class AggregationFieldInput {
 				(aggregation.getObject())).getResource());
 		mongoAggregation.setEdmProvider(MongoUtils
 				.createResourceOrLiteralMapFromString(
-						aggregation.getProvider(), 0));
+						aggregation.getProvider()));
 		mongoAggregation.setEdmRights(MongoUtils
-				.createResourceOrLiteralMapFromString(aggregation.getRights(),
-						0));
+				.createResourceOrLiteralMapFromString(aggregation.getRights()));
 
 		if (aggregation.getUgc() != null) {
 			mongoAggregation

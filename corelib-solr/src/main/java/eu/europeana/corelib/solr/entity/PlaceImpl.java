@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -36,16 +37,16 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Place")
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
-	private Map<String,String> isPartOf;
+	private Map<String,List<String>> isPartOf;
 	private float latitude;
 	private float longitude;
 	private float altitude;
 	private Map<String,Float> position;
-	private Map<String,String> dcTermsHasPart;
+	private Map<String,List<String>> dcTermsHasPart;
 	private String[] owlSameAs;
 
 	@Override
-	public Map<String,String> getIsPartOf() {
+	public Map<String,List<String>> getIsPartOf() {
 		return this.isPartOf;
 	}
 
@@ -60,7 +61,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public void setIsPartOf(Map<String,String> isPartOf) {
+	public void setIsPartOf(Map<String,List<String>> isPartOf) {
 		this.isPartOf = isPartOf;
 	}
 
@@ -111,12 +112,12 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public void setDcTermsHasPart(Map<String,String> dcTermsHasPart) {
+	public void setDcTermsHasPart(Map<String,List<String>> dcTermsHasPart) {
 		this.dcTermsHasPart = dcTermsHasPart;
 	}
 
 	@Override
-	public Map<String,String> getDcTermsHasPart() {
+	public Map<String,List<String>> getDcTermsHasPart() {
 		return this.dcTermsHasPart;
 	}
 

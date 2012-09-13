@@ -493,24 +493,24 @@
    <copyField source="proxy_dc_title" dest="text" />
    <copyField source="proxy_dc_type" dest="text" />
    <copyField source="proxy_edm_type" dest="text" />
-    <copyField source="proxy_dc_type" dest="what" />
-   <copyField source="proxy_dc_subject" dest="what" />
-   <copyField source="proxy_dc_format" dest="what" />
-   <copyField source="proxy_dc_coverage" dest="when" />
-   <copyField source="proxy_dcterms_created" dest="when" />
-   <copyField source="proxy_dcterms_temporal" dest="when" />
-   <copyField source="proxy_dc_date" dest="when" />
-   <copyField source="proxy_dc_subject" dest="when" />
-   <copyField source="proxy_dc_contributor" dest="who" />
-   <copyField source="proxy_dc_creator" dest="who" />
-   <copyField source="proxy_dc_coverage" dest="where" />
-   <copyField source="proxy_dcterms_spatial" dest="where" />
-   <copyField source="proxy_dc_subject" dest="where" />
-   <copyField source="proxy_dc_contributor" dest="spell" />
-   <copyField source="proxy_dc_creator" dest="spell" />
-   <copyField source="proxy_dc_subject" dest="spell"/>
-   <copyField source="proxy_dc_title" dest="spell"/>
-   <copyField source="proxy_dc_description" dest="spell"/> 
+    <copyField source="proxy_dc_type.*" dest="what" />
+   <copyField source="proxy_dc_subject.*" dest="what" />
+   <copyField source="proxy_dc_format.*" dest="what" />
+   <copyField source="proxy_dc_coverage.*" dest="when" />
+   <copyField source="proxy_dcterms_created.*" dest="when" />
+   <copyField source="proxy_dcterms_temporal.*" dest="when" />
+   <copyField source="proxy_dc_date.*" dest="when" />
+   <copyField source="proxy_dc_subject.*" dest="when" />
+   <copyField source="proxy_dc_contributor.*" dest="who" />
+   <copyField source="proxy_dc_creator.*" dest="who" />
+   <copyField source="proxy_dc_coverage.*" dest="where" />
+   <copyField source="proxy_dcterms_spatial.*" dest="where" />
+   <copyField source="proxy_dc_subject.*" dest="where" />
+   <copyField source="proxy_dc_contributor.*" dest="spell" />
+   <copyField source="proxy_dc_creator.*" dest="spell" />
+   <copyField source="proxy_dc_subject.*" dest="spell"/>
+   <copyField source="proxy_dc_title.*" dest="spell"/>
+   <copyField source="proxy_dc_description.*" dest="spell"/> 
    <copyField source="proxy_dc_date" dest="date" />
    <copyField source="proxy_dcterms_created" dest="date" />
    <copyField source="proxy_dcterms_issued" dest="date" />
@@ -523,8 +523,8 @@
    <copyField source="proxy_dcterms_spatial" dest="subject" />
    <copyField source="proxy_dcterms_temporal" dest="subject" />
    <copyField source="proxy_dc_source" dest="source" />
-   <copyField source="proxy_dc_title" dest="title" />
-   <copyField source="proxy_dcterms_alternative" dest="title" />
+   <copyField source="proxy_dc_title.*" dest="title" />
+   <copyField source="proxy_dcterms_alternative.*" dest="title" />
    <copyField source="proxy_edm_type" dest="TYPE" />
    <copyField source="proxy_dc_language" dest="LANGUAGE" />
    <copyField source="country" dest="COUNTRY" />
@@ -568,21 +568,21 @@
    <copyField source="pl_skos_note" dest="text" />
    <copyField source="cc_skos_note" dest="text" />
    <copyField source="evt_skos_note" dest="text" />
-   <copyField source="proxy_dc_contributor" dest="whoSpell" />
-   <copyField source="proxy_dc_creator" dest="whoSpell" />
-     <copyField source="proxy_dc_coverage" dest="whereSpell" />
-   <copyField source="proxy_dcterms_spatial" dest="whereSpell" />
-   <copyField source="proxy_dc_subject" dest="whereSpell" />
-     <copyField source="proxy_dc_type" dest="whatSpell" />
-   <copyField source="proxy_dc_subject" dest="whatSpell" />
-   <copyField source="proxy_dc_format" dest="whatSpell" />
-   <copyField source="proxy_dc_coverage" dest="whenSpell" />
-   <copyField source="proxy_dcterms_created" dest="whenSpell" />
-   <copyField source="proxy_dcterms_temporal" dest="whenSpell" />
-   <copyField source="proxy_dc_date" dest="whenSpell" />
-   <copyField source="proxy_dc_subject" dest="whenSpell" />
-   <copyField source="proxy_dc_title" dest="titleSpell" />
-   <copyField source="proxy_dcterms_alternative" dest="titleSpell" />
+   <copyField source="proxy_dc_contributor.*" dest="whoSpell" />
+   <copyField source="proxy_dc_creator.*" dest="whoSpell" />
+     <copyField source="proxy_dc_coverage.*" dest="whereSpell" />
+   <copyField source="proxy_dcterms_spatial.*" dest="whereSpell" />
+   <copyField source="proxy_dc_subject.*" dest="whereSpell" />
+     <copyField source="proxy_dc_type.*" dest="whatSpell" />
+   <copyField source="proxy_dc_subject.*" dest="whatSpell" />
+   <copyField source="proxy_dc_format.*" dest="whatSpell" />
+   <copyField source="proxy_dc_coverage.*" dest="whenSpell" />
+   <copyField source="proxy_dcterms_created.*" dest="whenSpell" />
+   <copyField source="proxy_dcterms_temporal.*" dest="whenSpell" />
+   <copyField source="proxy_dc_date.*" dest="whenSpell" />
+   <copyField source="proxy_dc_subject.*" dest="whenSpell" />
+   <copyField source="proxy_dc_title.*" dest="titleSpell" />
+   <copyField source="proxy_dcterms_alternative.*" dest="titleSpell" />
    
    <copyField source="provider_aggregation_edm_dataProvider.*" dest = "provider_aggregation_edm_dataProvider" />
    <copyField source="provider_aggregation_edm_provider.*" dest = "provider_aggregation_edm_provider" />

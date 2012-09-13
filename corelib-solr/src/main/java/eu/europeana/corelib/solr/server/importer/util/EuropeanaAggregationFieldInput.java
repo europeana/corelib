@@ -126,16 +126,16 @@ public final class EuropeanaAggregationFieldInput {
 		//mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
 		mongoAggregation.setDcCreator(MongoUtils.createResourceOrLiteralMapFromString(
-				aggregation.getCreator(),0));
-		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry(),0));
+				aggregation.getCreator()));
+		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry()));
 		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
 				aggregation.getIsShownBy()).getResource());
 		mongoAggregation.setEdmLandingPage(SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource());
-		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage(),0));
+		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage()));
 		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource());
-		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights(),0));
+		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights()));
 
 		mongoAggregation.setAggregates(SolrUtils
 				.resourceListToArray(aggregation.getAggregateList()));

@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -40,11 +41,11 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	private DocType edmType;
 
 
-	private Map<String,String> year;
+	private Map<String,List<String>> year;
 	
 	
 
-	private Map<String,String> userTags;
+	private Map<String,List<String>> userTags;
 	
 	private boolean europeanaProxy;
 
@@ -70,19 +71,19 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
 	
 	@Override
-	public Map<String,String> getYear() {
+	public Map<String,List<String>> getYear() {
 		return year;
 	}
 	@Override
-	public void setYear(Map<String,String> year) {
+	public void setYear(Map<String,List<String>> year) {
 		this.year = year;
 	}
 	@Override
-	public Map<String,String> getUserTags() {
+	public Map<String,List<String>> getUserTags() {
 		return userTags;
 	}
 	@Override
-	public void setUserTags(Map<String,String> userTags) {
+	public void setUserTags(Map<String,List<String>> userTags) {
 		this.userTags = userTags;
 	}
 }

@@ -75,18 +75,18 @@ public class AgentFieldInputTest {
 		AgentImpl agent = new AgentFieldInput().createAgentMongoEntity(agentType,
 				mongoServer);
 		assertEquals(agentType.getAbout(), agent.getAbout());
-		assertEquals(agentType.getBegin().getString(), agent.getBegin().values().iterator().next());
-		assertEquals(agentType.getEnd().getString(), agent.getEnd().values().iterator().next());
+		assertEquals(agentType.getBegin().getString(), agent.getBegin().values().iterator().next().get(0));
+		assertEquals(agentType.getEnd().getString(), agent.getEnd().values().iterator().next().get(0));
 		assertEquals(agentType.getNoteList().get(0).getString(),
-				agent.getNote().values().iterator().next());
+				agent.getNote().values().iterator().next().get(0));
 		assertTrue(agent.getAltLabel().containsKey(
-				agentType.getAltLabelList().get(0).getLang().getLang()+":0"));
+				agentType.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(agent.getPrefLabel().containsKey(
-				agentType.getPrefLabelList().get(0).getLang().getLang()+":0"));
-		assertTrue(agent.getAltLabel().containsValue(
-				agentType.getAltLabelList().get(0).getString()));
-		assertTrue(agent.getPrefLabel().containsValue(
-				agentType.getPrefLabelList().get(0).getString()));
+				agentType.getPrefLabelList().get(0).getLang().getLang()));
+		assertEquals(agentType.getAltLabelList().get(0).getString(),
+				agent.getAltLabel().values().iterator().next().get(0));
+		assertEquals(agentType.getPrefLabelList().get(0).getString(),
+						agent.getPrefLabel().values().iterator().next().get(0));
 
 		//create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();

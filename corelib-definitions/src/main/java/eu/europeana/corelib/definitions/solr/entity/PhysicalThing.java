@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface PhysicalThing extends AbstractEdmEntity{
@@ -8,105 +9,105 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * 
 	 * @return String array representing the dc:contributor fields of a Proxy
 	 */
-	Map<String,String> getDcContributor();
+	Map<String,List<String>> getDcContributor();
 
 	/**
 	 * Retrieve the dc:coverage fields for a Proxy
 	 * 
 	 * @return String array representing the dc:coverage fields of a Proxy
 	 */
-	Map<String,String> getDcCoverage();
+	Map<String,List<String>> getDcCoverage();
 
 	/**
 	 * Retrieve the dc:creator fields for a Proxy
 	 * 
 	 * @return String array representing the dc:creator fields for a Proxy
 	 */
-	Map<String,String> getDcCreator();
+	Map<String,List<String>> getDcCreator();
 
 	/**
 	 * Retrieve the dc:date fields for a Proxy
 	 * 
 	 * @return Date array representing the dc:date fields for a Proxy
 	 */
-	Map<String,String> getDcDate();
+	Map<String,List<String>> getDcDate();
 
 	/**
 	 * Retrieve the dc:description fields for a Proxy
 	 * 
 	 * @return String array representing the dc:description fields for a Proxy
 	 */
-	Map<String,String> getDcDescription();
+	Map<String,List<String>> getDcDescription();
 
 	/**
 	 * Retrieve the dc:format fields for a Proxy
 	 * 
 	 * @return String array representing the dc:format fields for a Proxy
 	 */
-	Map<String,String> getDcFormat();
+	Map<String,List<String>> getDcFormat();
 
 	/**
 	 * Retrieve the dc:identifier fields for a Proxy
 	 * 
 	 * @return String array representing the dc:identifier fields for a Proxy
 	 */
-	Map<String,String> getDcIdentifier();
+	Map<String,List<String>> getDcIdentifier();
 
 	/**
 	 * Retrieve the dc:language fields for a Proxy
 	 * 
 	 * @return String array representing the dc:language fields for a Proxy
 	 */
-	Map<String,String> getDcLanguage();
+	Map<String,List<String>> getDcLanguage();
 
 	/**
 	 * Retrieve the dc:publisher fields for a Proxy
 	 * 
 	 * @return String array representing the dc:publisher fields for a Proxy
 	 */
-	Map<String,String> getDcPublisher();
+	Map<String,List<String>> getDcPublisher();
 
 	/**
 	 * Retrieve the dc:relation fields for a Proxy
 	 * 
 	 * @return String array representing the dc:relation fields for a Proxy
 	 */
-	Map<String,String> getDcRelation();
+	Map<String,List<String>> getDcRelation();
 
 	/**
 	 * Retrieve the dc:rights fields for a Proxy
 	 * 
 	 * @return String array representing the dc:rights fields for a Proxy
 	 */
-	Map<String,String> getDcRights();
+	Map<String,List<String>> getDcRights();
 
 	/**
 	 * Retrieve the dc:source fields for a Proxy
 	 * 
 	 * @return String array representing the dc:soure fields for a Proxy
 	 */
-	Map<String,String> getDcSource();
+	Map<String,List<String>> getDcSource();
 
 	/**
 	 * Retrieve the dc:subject fields for a Proxy
 	 * 
 	 * @return String array representing the dc:subject fields for a Proxy
 	 */
-	Map<String,String> getDcSubject();
+	Map<String,List<String>> getDcSubject();
 
 	/**
 	 * Retrieve the dc:title fields for a Proxy
 	 * 
 	 * @return String array representing the dc:title fields for a Proxy
 	 */
-	Map<String,String> getDcTitle();
+	Map<String,List<String>> getDcTitle();
 
 	/**
 	 * Retrieve the dc:type fields for a Proxy
 	 * 
 	 * @return String array representing the dc:type fields for a Proxy
 	 */
-	Map<String,String> getDcType();
+	Map<String,List<String>> getDcType();
 
 	/**
 	 * Retrieve the dcterms:alternative fields for a Proxy
@@ -114,28 +115,28 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:alternative fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsAlternative();
+	Map<String,List<String>> getDctermsAlternative();
 
 	/**
 	 * Retrieve the dc:conformsTo fields for a Proxy
 	 * 
 	 * @return String array representing the dc:conformsTo fields for a Proxy
 	 */
-	Map<String,String> getDctermsConformsTo();
+	Map<String,List<String>> getDctermsConformsTo();
 
 	/**
 	 * Retrieve the dcterms:created fields for a Proxy
 	 * 
 	 * @return Date array representing the dcterms:created fields for a Proxy
 	 */
-	Map<String,String> getDctermsCreated();
+	Map<String,List<String>> getDctermsCreated();
 
 	/**
 	 * Retrieve the dcterms:extent fields for a Proxy
 	 * 
 	 * @return String array representing the dc:extent fields for a Proxy
 	 */
-	Map<String,String> getDctermsExtent();
+	Map<String,List<String>> getDctermsExtent();
 
 	/**
 	 * Retrieve the dcterms:hasFormat fields for a Proxy
@@ -143,14 +144,14 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:hasFormat fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsHasFormat();
+	Map<String,List<String>> getDctermsHasFormat();
 
 	/**
 	 * Retrieve the dcterms:hasPart fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:hasPart fields for a Proxy
 	 */
-	Map<String,String> getDctermsHasPart();
+	Map<String,List<String>> getDctermsHasPart();
 
 	/**
 	 * Retrieve the dcterms:hasVersion fields for a Proxy
@@ -158,7 +159,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:hasVersion fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsHasVersion();
+	Map<String,List<String>> getDctermsHasVersion();
 
 	/**
 	 * Retrieve the dcterms:isVersionOf fields for a Proxy
@@ -166,7 +167,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isVersionOf fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsFormatOf();
+	Map<String,List<String>> getDctermsIsFormatOf();
 
 	/**
 	 * Retrieve the dcterms:isFormatOf fields for a Proxy
@@ -174,7 +175,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isFormatOf fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsPartOf();
+	Map<String,List<String>> getDctermsIsPartOf();
 
 	/**
 	 * Retrieve the dcterms:isReferencedBy fields for a Proxy
@@ -182,7 +183,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isReferencedBy fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsReferencedBy();
+	Map<String,List<String>> getDctermsIsReferencedBy();
 
 	/**
 	 * Retrieve the dcterms:isReplacedBy fields for a Proxy
@@ -190,7 +191,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isReplacedBy fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsReplacedBy();
+	Map<String,List<String>> getDctermsIsReplacedBy();
 
 	/**
 	 * Retrieve the dcterms:isRequiredBy fields for a Proxy
@@ -198,14 +199,14 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isRequiredBy fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsRequiredBy();
+	Map<String,List<String>> getDctermsIsRequiredBy();
 
 	/**
 	 * Retrieve the dcterms:issued fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:issued fields for a Proxy
 	 */
-	Map<String,String> getDctermsIssued();
+	Map<String,List<String>> getDctermsIssued();
 
 	/**
 	 * Retrieve the dcterms:isVersionOf fields for a Proxy
@@ -213,14 +214,14 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:isVersionOf fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsIsVersionOf();
+	Map<String,List<String>> getDctermsIsVersionOf();
 
 	/**
 	 * Retrieve the dcterms:medium fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:medium fields for a Proxy
 	 */
-	Map<String,String> getDctermsMedium();
+	Map<String,List<String>> getDctermsMedium();
 
 	/**
 	 * Retrieve the dcterms:provenance fields for a Proxy
@@ -228,7 +229,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:provenance fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsProvenance();
+	Map<String,List<String>> getDctermsProvenance();
 
 	/**
 	 * Retrieve the dcterms:references fields for a Proxy
@@ -236,28 +237,28 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:references fields for a
 	 *         Proxy
 	 */
-	Map<String,String> getDctermsReferences();
+	Map<String,List<String>> getDctermsReferences();
 
 	/**
 	 * Retrieve the dcterms:replaces fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:replaces fields for a Proxy
 	 */
-	Map<String,String> getDctermsReplaces();
+	Map<String,List<String>> getDctermsReplaces();
 
 	/**
 	 * Retrieve the dcterms:requires fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:requires fields for a Proxy
 	 */
-	Map<String,String> getDctermsRequires();
+	Map<String,List<String>> getDctermsRequires();
 
 	/**
 	 * Retrieve the dcterms:spatial fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:spatial fields for a Proxy
 	 */
-	Map<String,String> getDctermsSpatial();
+	Map<String,List<String>> getDctermsSpatial();
 
 	/**
 	 * Retrieve the dcterms:tableOfContents fields for a Proxy
@@ -265,14 +266,14 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @return String array representing the dcterms:tableOfContents fields for
 	 *         a Proxy
 	 */
-	Map<String,String> getDctermsTOC();
+	Map<String,List<String>> getDctermsTOC();
 
 	/**
 	 * Retrieve the dcterms:temporal fields for a Proxy
 	 * 
 	 * @return String array representing the dcterms:temporal fields for a Proxy
 	 */
-	Map<String,String> getDctermsTemporal();
+	Map<String,List<String>> getDctermsTemporal();
 
 	
 	/**
@@ -288,7 +289,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcContributor
 	 * 			String array containing the dcContributor of a Proxy
 	 */
-	void setDcContributor(Map<String,String> dcContributor);
+	void setDcContributor(Map<String,List<String>> dcContributor);
 
 	/**
 	 * Set the dcCoverage field for a Proxy
@@ -296,7 +297,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcCoverage
 	 *            String array containing the dcCoverage of a Proxy
 	 */
-	void setDcCoverage(Map<String,String> dcCoverage);
+	void setDcCoverage(Map<String,List<String>> dcCoverage);
 
 	/**
 	 * Set the dcCreator field for a Proxy
@@ -304,7 +305,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcCreator
 	 *            String array containing the dcCreator of a Proxy
 	 */
-	void setDcCreator(Map<String,String> dcCreator);
+	void setDcCreator(Map<String,List<String>> dcCreator);
 
 	/**
 	 * Set the dcDate field for a Proxy
@@ -312,7 +313,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcDate
 	 *            String array containing the dcDate of a Proxy
 	 */
-	void setDcDate(Map<String,String> dcDate);
+	void setDcDate(Map<String,List<String>> dcDate);
 
 	/**
 	 * Set the dcDescription field for a Proxy
@@ -320,7 +321,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcDescription
 	 *            String array containing the dcDescription of a Proxy
 	 */
-	void setDcDescription(Map<String,String> dcDescription);
+	void setDcDescription(Map<String,List<String>> dcDescription);
 
 	/**
 	 * Set the dcFormat field for a Proxy
@@ -328,7 +329,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcFormat
 	 *            String array containing the dcFormat of a Proxy
 	 */
-	void setDcFormat(Map<String,String> dcFormat);
+	void setDcFormat(Map<String,List<String>> dcFormat);
 
 	/**
 	 * Set the dcIdentifier field for a Proxy
@@ -336,7 +337,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcIdentifier
 	 *            String array containing the dcIdentifier of a Proxy
 	 */
-	void setDcIdentifier(Map<String,String> dcIdentifier);
+	void setDcIdentifier(Map<String,List<String>> dcIdentifier);
 
 	/**
 	 * Set the dcLanguage field for a Proxy
@@ -344,7 +345,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcLanguage
 	 *            String array containing the dcLanguage of a Proxy
 	 */
-	void setDcLanguage(Map<String,String> dcLanguage);
+	void setDcLanguage(Map<String,List<String>> dcLanguage);
 
 	/**
 	 * Set the dcPublisher field for a Proxy
@@ -352,7 +353,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcPublisher
 	 *            String array containing the dcPublisher of a Proxy
 	 */
-	void setDcPublisher(Map<String,String> dcPublisher);
+	void setDcPublisher(Map<String,List<String>> dcPublisher);
 
 	/**
 	 * Set the dcRelation field for a Proxy
@@ -360,7 +361,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcRelation
 	 *            String array containing the dcRelation of a Proxy
 	 */
-	void setDcRelation(Map<String,String> dcRelation);
+	void setDcRelation(Map<String,List<String>> dcRelation);
 
 	/**
 	 * Set the dcRights field for a Proxy
@@ -368,7 +369,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcRights
 	 *            String array containing the dcRights of a Proxy
 	 */
-	void setDcRights(Map<String,String> dcRights);
+	void setDcRights(Map<String,List<String>> dcRights);
 
 	/**
 	 * Set the dcSource field for a Proxy
@@ -376,7 +377,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcSource
 	 *            String array containing the dcSource of a Proxy
 	 */
-	void setDcSource(Map<String,String> dcSource);
+	void setDcSource(Map<String,List<String>> dcSource);
 
 	/**
 	 * Set the dcSubject field for a Proxy
@@ -384,7 +385,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcSubject
 	 *            String array containing the dcSubject of a Proxy
 	 */
-	void setDcSubject(Map<String,String> dcSubject);
+	void setDcSubject(Map<String,List<String>> dcSubject);
 
 	/**
 	 * Set the dcTitle field for a Proxy
@@ -392,7 +393,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcTitle
 	 *            String array containing the dcTitle of a Proxy
 	 */
-	void setDcTitle(Map<String,String> dcTitle);
+	void setDcTitle(Map<String,List<String>> dcTitle);
 
 	/**
 	 * Set the dcType field for a Proxy
@@ -400,7 +401,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dcType
 	 *            String array containing the dcType of a Proxy
 	 */
-	void setDcType(Map<String,String> dcType);
+	void setDcType(Map<String,List<String>> dcType);
 
 	/**
 	 * Set the dctermsAlternative field for a Proxy
@@ -408,7 +409,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsAlternative
 	 *            String array containing the dctermsAlternative of a Proxy
 	 */
-	void setDctermsAlternative(Map<String,String> dctermsAlternative);
+	void setDctermsAlternative(Map<String,List<String>> dctermsAlternative);
 
 	/**
 	 * Set the dctermsConformsTo field for a Proxy
@@ -416,7 +417,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsConformsTo
 	 *            String array containing the dctermsConformsTo of a Proxy
 	 */
-	void setDctermsConformsTo(Map<String,String> dctermsConformsTo);
+	void setDctermsConformsTo(Map<String,List<String>> dctermsConformsTo);
 
 	/**
 	 * Set the dctermsCreated field for a Proxy
@@ -424,7 +425,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsCreated
 	 *            String array containing the dctermsCreated of a Proxy
 	 */
-	void setDctermsCreated(Map<String,String> dctermsCreated);
+	void setDctermsCreated(Map<String,List<String>> dctermsCreated);
 
 	/**
 	 * Set the dctermsExtent field for a Proxy
@@ -432,7 +433,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsExtent
 	 *            String array containing the dctermsExtent of a Proxy
 	 */
-	void setDctermsExtent(Map<String,String> dctermsExtent);
+	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
 
 	/**
 	 * Set the dctermsHasFormat field for a Proxy
@@ -440,7 +441,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsHasFormat
 	 *            String array containing the dctermsHasFormat of a Proxy
 	 */
-	void setDctermsHasFormat(Map<String,String> dctermsHasFormat);
+	void setDctermsHasFormat(Map<String,List<String>> dctermsHasFormat);
 
 	/**
 	 * Set the dctermsHasPart field for a Proxy
@@ -448,7 +449,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsHasPart
 	 *            String array containing the dctermsHasPart of a Proxy
 	 */
-	void setDctermsHasPart(Map<String,String> dctermsHasPart);
+	void setDctermsHasPart(Map<String,List<String>> dctermsHasPart);
 
 	/**
 	 * Set the dctermsHasVersion field for a Proxy
@@ -456,7 +457,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsHasVersion
 	 *            String array containing the dctermsHasVersion of a Proxy
 	 */
-	void setDctermsHasVersion(Map<String,String> dctermsHasVersion);
+	void setDctermsHasVersion(Map<String,List<String>> dctermsHasVersion);
 
 	/**
 	 * Set the dctermsIsFormatOf field for a Proxy
@@ -464,7 +465,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsFormatOf
 	 *            String array containing the dctermsIsFormatOf of a Proxy
 	 */
-	void setDctermsIsFormatOf(Map<String,String> dctermsIsFormatOf);
+	void setDctermsIsFormatOf(Map<String,List<String>> dctermsIsFormatOf);
 
 	/**
 	 * Set the dctermsIsPartOf field for a Proxy
@@ -472,7 +473,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsPartOf
 	 *            String array containing the dctermsIsPartOf of a Proxy
 	 */
-	void setDctermsIsPartOf(Map<String,String> dctermsIsPartOf);
+	void setDctermsIsPartOf(Map<String,List<String>> dctermsIsPartOf);
 
 	/**
 	 * Set the dctermsIsReferencedBy field for a Proxy
@@ -480,7 +481,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsReferencedBy
 	 *            String array containing the dctermsIsReferencedBy of a Proxy
 	 */
-	void setDctermsIsReferencedBy(Map<String,String> dctermsIsReferencedBy);
+	void setDctermsIsReferencedBy(Map<String,List<String>> dctermsIsReferencedBy);
 
 	/**
 	 * Set the dctermsIsReplacedBy field for a Proxy
@@ -488,7 +489,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsReplacedBy
 	 *            String array containing the dctermsIsReplacedBy of a Proxy
 	 */
-	void setDctermsIsReplacedBy(Map<String,String> dctermsIsReplacedBy);
+	void setDctermsIsReplacedBy(Map<String,List<String>> dctermsIsReplacedBy);
 
 	/**
 	 * Set the dctermsIsRequiredBy field for a Proxy
@@ -496,7 +497,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsRequiredBy
 	 *            String array containing the dctermsIsRequiredBy of a Proxy
 	 */
-	void setDctermsIsRequiredBy(Map<String,String> dctermsIsRequiredBy);
+	void setDctermsIsRequiredBy(Map<String,List<String>> dctermsIsRequiredBy);
 
 	/**
 	 * Set the dctermsIssued field for a Proxy
@@ -504,7 +505,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIssued
 	 *            String array containing the dctermsIssued of a Proxy
 	 */
-	void setDctermsIssued(Map<String,String> dctermsIssued);
+	void setDctermsIssued(Map<String,List<String>> dctermsIssued);
 
 	/**
 	 * Set the dctermsIsVersionOf field for a Proxy
@@ -512,7 +513,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsIsVersionOf
 	 *            String array containing the dctermsIsVersionOf of a Proxy
 	 */
-	void setDctermsIsVersionOf(Map<String,String> dctermsIsVersionOf);
+	void setDctermsIsVersionOf(Map<String,List<String>> dctermsIsVersionOf);
 
 	/**
 	 * Set the dctermsMedium field for a Proxy
@@ -520,7 +521,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsMedium
 	 *            String array containing the dctermsMedium of a Proxy
 	 */
-	void setDctermsMedium(Map<String,String> dctermsMedium);
+	void setDctermsMedium(Map<String,List<String>> dctermsMedium);
 
 	/**
 	 * Set the dctermsProvenance field for a Proxy
@@ -528,7 +529,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsProvenance
 	 *            String array containing the dctermsProvenance of a Proxy
 	 */
-	void setDctermsProvenance(Map<String,String> dctermsProvenance);
+	void setDctermsProvenance(Map<String,List<String>> dctermsProvenance);
 
 	/**
 	 * Set the dctermsReferences field for a Proxy
@@ -536,7 +537,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsReferences
 	 *            String array containing the dctermsReference of a Proxy
 	 */
-	void setDctermsReferences(Map<String,String> dctermsReferences);
+	void setDctermsReferences(Map<String,List<String>> dctermsReferences);
 
 	/**
 	 * Set the dctermsReplaces field for a Proxy
@@ -544,7 +545,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsReplaces
 	 *            String array containing the dctermsReplaces of a Proxy
 	 */
-	void setDctermsReplaces(Map<String,String> dctermsReplaces);
+	void setDctermsReplaces(Map<String,List<String>> dctermsReplaces);
 
 	/**
 	 * Set the dctermsRequires field for a Proxy
@@ -552,7 +553,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsRequires
 	 *            String array containing the dctermsRequires of a Proxy
 	 */
-	void setDctermsRequires(Map<String,String> dctermsRequires);
+	void setDctermsRequires(Map<String,List<String>> dctermsRequires);
 
 	/**
 	 * Set the dctermsSpatial field for a Proxy
@@ -560,7 +561,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsSpatial
 	 *            String array containing the dctermsSpatial of a Proxy
 	 */
-	void setDctermsSpatial(Map<String,String> dctermsSpatial);
+	void setDctermsSpatial(Map<String,List<String>> dctermsSpatial);
 
 	/**
 	 * Set the dctermsTableOfContents field for a Proxy
@@ -568,7 +569,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsTableOfContents
 	 *            String array containing the dctermsTableOfContents of a Proxy
 	 */
-	void setDctermsTOC(Map<String,String> dctermsTOC);
+	void setDctermsTOC(Map<String,List<String>> dctermsTOC);
 
 	/**
 	 * Set the dctermsTemporal field for a Proxy
@@ -576,7 +577,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param dctermsTemporal
 	 *            String array containing the dctermsTemporal of a Proxy
 	 */
-	void setDctermsTemporal(Map<String,String> dctermsTemporal);
+	void setDctermsTemporal(Map<String,List<String>> dctermsTemporal);
 
 	/**
 	 * Set the edmCurrentLocation field for a Proxy
@@ -591,7 +592,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * 
 	 * @return String array containing the edmRights of a Proxy
 	 */
-	Map<String,String> getEdmRights();
+	Map<String,List<String>> getEdmRights();
 
 	/**
 	 * Set the edmRights field for a Proxy
@@ -599,7 +600,7 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	 * @param edmRights
 	 * 			String array containing the edmRights of a Proxy
 	 */
-	void setEdmRights(Map<String,String> edmRights);
+	void setEdmRights(Map<String,List<String>> edmRights);
 
 	
 	String getEdmIsNextInSequence();
@@ -618,13 +619,13 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	
 	String[] getRdfType();
 	
-	Map<String,String> getEdmHasMet();
+	Map<String,List<String>> getEdmHasMet();
 	
-	void setEdmHasMet(Map<String,String> edmHasMet);
+	void setEdmHasMet(Map<String,List<String>> edmHasMet);
 	
-	Map<String,String> getEdmHasType();
+	Map<String,List<String>> getEdmHasType();
 	
-	void setEdmHasType(Map<String,String> edmhasType);
+	void setEdmHasType(Map<String,List<String>> edmhasType);
 	
 	void setEdmIncorporates(String[] edmIncorporates);
 	
@@ -634,9 +635,9 @@ public interface PhysicalThing extends AbstractEdmEntity{
 	
 	String[] getEdmIsDerivativeOf();
 	
-	void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo);
+	void setEdmIsRelatedTo(Map<String,List<String>> edmIsRelatedTo);
 	
-	Map<String,String> getEdmIsRelatedTo();
+	Map<String,List<String>> getEdmIsRelatedTo();
 	
 	void setEdmIsRepresentationOf(String edmIsRepresentationOf);
 	

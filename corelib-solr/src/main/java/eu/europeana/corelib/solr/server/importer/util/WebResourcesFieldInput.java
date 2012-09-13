@@ -162,7 +162,7 @@ public final class WebResourcesFieldInput {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		//mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
-		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights(),0));
+		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights()));
 		mongoWebResource.setWebResourceDcRights(MongoUtils.createResourceOrLiteralMapFromList(webResource.getRightList()));
 		mongoWebResource.setDcDescription(MongoUtils.createResourceOrLiteralMapFromList(webResource
 								.getDescriptionList()));

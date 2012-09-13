@@ -234,7 +234,7 @@ public final class AgentFieldInput {
 					.update(AgentImpl.class, agent.getAbout(), mongoServer,
 							"begin", MongoUtils
 									.createLiteralMapFromString(agentType
-											.getBegin(),0));
+											.getBegin()));
 		}
 
 		if (agentType.getDateList() != null) {
@@ -255,41 +255,41 @@ public final class AgentFieldInput {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"biographicalInformation", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getBiographicalInformation(),0));
+									.getBiographicalInformation()));
 		}
 
 		if (agentType.getDateOfBirth() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfBirth", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfBirth(),0));
+									.getDateOfBirth()));
 		}
 
 		if (agentType.getDateOfDeath() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfDeath", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfDeath(),0));
+									.getDateOfDeath()));
 		}
 
 		if (agentType.getDateOfEstablishment() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfEstablishment", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfEstablishment(),0));
+									.getDateOfEstablishment()));
 		}
 
 		if (agentType.getDateOfTermination() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"dateOfTermination", MongoUtils
 							.createLiteralMapFromString(agentType
-									.getDateOfTermination(),0));
+									.getDateOfTermination()));
 		}
 
 		if (agentType.getGender() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"gender", MongoUtils.createLiteralMapFromString(agentType
-							.getGender(),0));
+							.getGender()));
 		}
 
 		if (agentType.getHasMetList() != null) {
@@ -322,14 +322,14 @@ public final class AgentFieldInput {
 				MongoUtils.update(AgentImpl.class, agent.getAbout(),
 						mongoServer, "professionOrOccupation", MongoUtils
 								.createResourceOrLiteralMapFromString(agentType
-										.getProfessionOrOccupation(),0));
+										.getProfessionOrOccupation()));
 			}
 		}
 
 		if (agent.getEnd() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"end",
-					MongoUtils.createLiteralMapFromString(agentType.getEnd(),0));
+					MongoUtils.createLiteralMapFromString(agentType.getEnd()));
 
 		}
 
@@ -384,20 +384,20 @@ public final class AgentFieldInput {
 				.getNameList()));
 		agent.setRdaGr2BiographicalInformation(MongoUtils
 				.createLiteralMapFromString(agentType
-						.getBiographicalInformation(),0));
+						.getBiographicalInformation()));
 		agent.setRdaGr2DateOfBirth(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfBirth(),0));
+				.createLiteralMapFromString(agentType.getDateOfBirth()));
 		agent.setRdaGr2DateOfDeath(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfDeath(),0));
+				.createLiteralMapFromString(agentType.getDateOfDeath()));
 		agent.setRdaGr2DateOfEstablishment(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfEstablishment(),0));
+				.createLiteralMapFromString(agentType.getDateOfEstablishment()));
 		agent.setRdaGr2DateOfTermination(MongoUtils
-				.createLiteralMapFromString(agentType.getDateOfTermination(),0));
+				.createLiteralMapFromString(agentType.getDateOfTermination()));
 		agent.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(agentType
-				.getGender(),0));
+				.getGender()));
 		agent.setRdaGr2ProfessionOrOccupation(MongoUtils
 				.createResourceOrLiteralMapFromString(agentType
-						.getProfessionOrOccupation(),0));
+						.getProfessionOrOccupation()));
 		agent.setNote(MongoUtils.createLiteralMapFromList(agentType
 				.getNoteList()));
 		agent.setPrefLabel(MongoUtils.createLiteralMapFromList(agentType
@@ -405,8 +405,8 @@ public final class AgentFieldInput {
 		agent.setAltLabel(MongoUtils.createLiteralMapFromList(agentType
 				.getAltLabelList()));
 		agent.setBegin(MongoUtils.createLiteralMapFromString(agentType
-				.getBegin(),0));
-		agent.setEnd(MongoUtils.createLiteralMapFromString(agentType.getEnd(),0));
+				.getBegin()));
+		agent.setEnd(MongoUtils.createLiteralMapFromString(agentType.getEnd()));
 		agent.setOwlSameAs(SolrUtils.resourceListToArray(agentType
 				.getSameAList()));
 		return agent;

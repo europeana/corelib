@@ -79,20 +79,20 @@ public class TimespanFieldInputTest {
 		TimespanImpl timespanMongo = new TimespanFieldInput()
 				.createTimespanMongoField(timespan, mongoServer);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
-		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next());
-		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd().values().iterator().next());
+		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next().get(0));
+		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd().values().iterator().next().get(0));
 		assertEquals(timespan.getNoteList().get(0).getString(),
-				timespanMongo.getNote().values().iterator().next());
+				timespanMongo.getNote().values().iterator().next().get(0));
 		assertTrue(timespanMongo.getAltLabel().containsKey(
-				timespan.getAltLabelList().get(0).getLang().getLang()+":0"));
+				timespan.getAltLabelList().get(0).getLang().getLang()));
 		assertTrue(timespanMongo.getPrefLabel().containsKey(
-				timespan.getPrefLabelList().get(0).getLang().getLang()+":0"));
-		assertTrue(timespanMongo.getAltLabel().containsValue(
-				timespan.getAltLabelList().get(0).getString()));
-		assertTrue(timespanMongo.getPrefLabel().containsValue(
-				timespan.getPrefLabelList().get(0).getString()));
+				timespan.getPrefLabelList().get(0).getLang().getLang()));
+		assertEquals(timespan.getAltLabelList().get(0).getString(),
+				timespanMongo.getAltLabel().values().iterator().next().get(0));
+		assertEquals(timespan.getPrefLabelList().get(0).getString(),
+				timespanMongo.getPrefLabel().values().iterator().next().get(0));
 		assertEquals(timespan.getIsPartOfList().get(0).getResource(),
-				timespanMongo.getIsPartOf().values().iterator().next());
+				timespanMongo.getIsPartOf().values().iterator().next().get(0));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		solrDocument = new TimespanFieldInput().createTimespanSolrFields(timespan,

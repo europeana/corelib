@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -35,40 +36,40 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	private Map<String,String> begin;
-	private Map<String,String> end;
-	private Map<String,String> isPartOf;
-	private Map<String,String> dctermsHasPart;
+	private Map<String,List<String>> begin;
+	private Map<String,List<String>> end;
+	private Map<String,List<String>> isPartOf;
+	private Map<String,List<String>> dctermsHasPart;
 
 	private String[] owlSameAs;
 
 	@Override
-	public Map<String,String> getBegin() {
+	public Map<String,List<String>> getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public Map<String,String> getEnd() {
+	public Map<String,List<String>> getEnd() {
 		return this.end;
 	}
 
 	@Override
-	public Map<String,String> getIsPartOf() {
+	public Map<String,List<String>> getIsPartOf() {
 		return this.isPartOf;
 	}
 
 	@Override
-	public void setBegin(Map<String,String> begin) {
+	public void setBegin(Map<String,List<String>> begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(Map<String,String> end) {
+	public void setEnd(Map<String,List<String>> end) {
 		this.end = end;
 	}
 
 	@Override
-	public void setIsPartOf(Map<String,String> isPartOf) {
+	public void setIsPartOf(Map<String,List<String>> isPartOf) {
 		this.isPartOf = isPartOf;
 	}
 
@@ -89,12 +90,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public Map<String,String> getDctermsHasPart() {
+	public Map<String,List<String>> getDctermsHasPart() {
 		return this.dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasPart(Map<String,String> dctermsHasPart) {
+	public void setDctermsHasPart(Map<String,List<String>> dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
 	}
 

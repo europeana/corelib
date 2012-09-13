@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +33,7 @@ public interface Place extends ContextualClass {
 	 * @return A String array representing the dcterms:isPartOf fields for a
 	 *         Place
 	 */
-	Map<String,String> getIsPartOf();
+	Map<String,List<String>> getIsPartOf();
 
 	/**
 	 * Retrieves the latitude of a Place
@@ -55,7 +56,7 @@ public interface Place extends ContextualClass {
 	 *            A String array representing the dcterms:isPartOf fields for a
 	 *            Place
 	 */
-	void setIsPartOf(Map<String,String> isPartOf);
+	void setIsPartOf(Map<String,List<String>> isPartOf);
 
 	/**
 	 * Set the latitude for a place
@@ -81,9 +82,9 @@ public interface Place extends ContextualClass {
 	
 	Map<String,Float> getPosition();
 	
-	void setDcTermsHasPart(Map<String,String> dcTermsHasPart);
+	void setDcTermsHasPart(Map<String,List<String>> dcTermsHasPart);
 	
-	Map<String,String> getDcTermsHasPart();
+	Map<String,List<String>> getDcTermsHasPart();
 	
 	void setOwlSameAs(String[] owlSameAs);
 	

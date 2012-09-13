@@ -304,6 +304,7 @@ public class SearchServiceImpl implements SearchService {
 
 		QueryResponse response;
 		try {
+			log.info("SolrQuery:" +solrQuery);
 			response = solrServer.query(solrQuery);
 
 			FacetField who = response.getFacetField("whoSpell");
@@ -346,6 +347,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 		} catch (SolrServerException e) {
+
 			log.severe("SolrServerException: " + e.getMessage());
 		}
 		Collections.sort(results);

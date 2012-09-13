@@ -71,19 +71,19 @@ public class ConceptFieldInputTest {
 		for (Concept.Choice choice2 : concept.getChoiceList()) {
 			if (choice2.ifNote()) {
 				assertEquals(choice2.getNote().getString(),
-						conceptMongo.getNote().values().iterator().next());
+						conceptMongo.getNote().values().iterator().next().get(0));
 			}
 			if (choice2.ifAltLabel()) {
 				assertTrue(conceptMongo.getAltLabel().containsKey(
 						choice2.getAltLabel().getLang().getLang()));
-				assertTrue(conceptMongo.getAltLabel().containsValue(
-						choice2.getAltLabel().getString()));
+				assertEquals(choice2.getAltLabel().getString(),
+						conceptMongo.getAltLabel().values().iterator().next().get(0));
 			}
 			if (choice2.ifPrefLabel()) {
 				assertTrue(conceptMongo.getPrefLabel().containsKey(
 						choice2.getPrefLabel().getLang().getLang()));
-				assertTrue(conceptMongo.getPrefLabel().containsValue(
-						choice2.getPrefLabel().getString()));
+				assertEquals(choice2.getPrefLabel().getString(),
+						conceptMongo.getPrefLabel().values().iterator().next().get(0));
 			}
 		}
 		// create solr document

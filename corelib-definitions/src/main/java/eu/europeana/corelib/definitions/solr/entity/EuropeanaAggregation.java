@@ -34,9 +34,9 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	
 	void setAggregates(String[] aggregates);
 	
-	Map<String,String> getDcCreator();
+	Map<String,List<String>> getDcCreator();
 	
-	void setDcCreator(Map<String,String> dcCreator);
+	void setDcCreator(Map<String,List<String>> dcCreator);
 	
 	String getEdmLandingPage();
 	
@@ -50,17 +50,17 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	
 	void setEdmHasView(String[] edmHasView);
 	
-	Map<String,String> getEdmCountry();
+	Map<String,List<String>> getEdmCountry();
 	
-	void setEdmCountry(Map<String,String> edmCountry);
+	void setEdmCountry(Map<String,List<String>> edmCountry);
 	
-	Map<String,String> getEdmLanguage();
+	Map<String,List<String>> getEdmLanguage();
 	
-	void setEdmLanguage(Map<String,String> edmLanguage);
+	void setEdmLanguage(Map<String,List<String>> edmLanguage);
 	
-	Map<String,String> getEdmRights();
+	Map<String,List<String>> getEdmRights();
 	
-	void setEdmRights(Map<String,String> edmRights);
+	void setEdmRights(Map<String,List<String>> edmRights);
 
 	List<? extends WebResource> getWebResources();
 

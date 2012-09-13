@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +32,14 @@ public interface Timespan extends ContextualClass {
 	 * 
 	 * @return Stringrepresenting the edm:begin field of a timespan
 	 */
-	Map<String,String> getBegin();
+	Map<String,List<String>> getBegin();
 
 	/**
 	 * Retrieve the edm:end field of a Timespan
 	 * 
 	 * @return String representing the edm:end field of a timespan
 	 */
-	Map<String,String> getEnd();
+	Map<String,List<String>> getEnd();
 
 	/**
 	 * Retrieve the dcterms:isPartOf field of a Timespan
@@ -46,7 +47,7 @@ public interface Timespan extends ContextualClass {
 	 * @return String array representing the dcterms:isPartOf fields of a
 	 *         timespan
 	 */
-	Map<String,String> getIsPartOf();
+	Map<String,List<String>> getIsPartOf();
 
 	/**
 	 * Set the edm:begin field for a Timespan. It expects to find a date.
@@ -54,7 +55,7 @@ public interface Timespan extends ContextualClass {
 	 * @param begin
 	 *            the edm:begin field for a Timespan
 	 */
-	void setBegin(Map<String,String> begin);
+	void setBegin(Map<String,List<String>> begin);
 
 	/**
 	 * Set the edm:end field for a Timespan. It expects to find a date.
@@ -62,7 +63,7 @@ public interface Timespan extends ContextualClass {
 	 * @param end
 	 *            the edm:end field for a Timespan
 	 */
-	void setEnd(Map<String,String> end);
+	void setEnd(Map<String,List<String>> end);
 
 	/**
 	 * Set the isPartOf fields for a Timespan.
@@ -70,11 +71,11 @@ public interface Timespan extends ContextualClass {
 	 * @param isPartOf
 	 *            A String array representing the isPartOf fields for a Timespan
 	 */
-	void setIsPartOf(Map<String,String> isPartOf);
+	void setIsPartOf(Map<String,List<String>> isPartOf);
 	
-	void setDctermsHasPart(Map<String,String> hasPart);
+	void setDctermsHasPart(Map<String,List<String>> hasPart);
 	
-	Map<String,String> getDctermsHasPart();
+	Map<String,List<String>> getDctermsHasPart();
 	
 	void setOwlSameAs(String[] owlSameAs);
 	

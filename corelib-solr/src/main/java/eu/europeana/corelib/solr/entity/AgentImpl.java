@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -36,42 +37,42 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity ("Agent")
 public class AgentImpl extends ContextualClassImpl implements Agent {
 
-	private Map<String,String> begin;
-	private Map<String,String> end;
+	private Map<String,List<String>> begin;
+	private Map<String,List<String>> end;
 
 	private String[] edmWasPresentAt;
-	private Map<String,String> edmHasMet;
-	private Map<String,String> edmIsRelatedTo;
+	private Map<String,List<String>> edmHasMet;
+	private Map<String,List<String>> edmIsRelatedTo;
 	private String[] owlSameAs;
-	private Map<String,String> foafName;
-	private Map<String,String> dcDate;
-	private Map<String,String> dcIdentifier;
+	private Map<String,List<String>> foafName;
+	private Map<String,List<String>> dcDate;
+	private Map<String,List<String>> dcIdentifier;
 
-	private Map<String,String> rdaGr2DateOfBirth;
-	private Map<String,String> rdaGr2DateOfDeath;
-	private Map<String,String> rdaGr2DateOfEstablishment;
-	private Map<String,String> rdaGr2DateOfTermination;
-	private Map<String,String> rdaGr2Gender;
-	private Map<String,String> rdaGr2ProfessionOrOccupation;
-	private Map<String,String> rdaGr2BiographicalInformation;
+	private Map<String,List<String>> rdaGr2DateOfBirth;
+	private Map<String,List<String>> rdaGr2DateOfDeath;
+	private Map<String,List<String>> rdaGr2DateOfEstablishment;
+	private Map<String,List<String>> rdaGr2DateOfTermination;
+	private Map<String,List<String>> rdaGr2Gender;
+	private Map<String,List<String>> rdaGr2ProfessionOrOccupation;
+	private Map<String,List<String>> rdaGr2BiographicalInformation;
 
 	@Override
-	public Map<String,String> getBegin() {
+	public Map<String,List<String>> getBegin() {
 		return this.begin;
 	}
 
 	@Override
-	public Map<String,String> getEnd() {
+	public Map<String,List<String>> getEnd() {
 		return this.end;
 	}
 
 	@Override
-	public void setBegin(Map<String,String> begin) {
+	public void setBegin(Map<String,List<String>> begin) {
 		this.begin = begin;
 	}
 
 	@Override
-	public void setEnd(Map<String,String> end) {
+	public void setEnd(Map<String,List<String>> end) {
 		this.end = end;
 	}
 
@@ -102,22 +103,22 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	}
 
 	@Override
-	public void setEdmHasMet(Map<String,String> edmHasMet) {
+	public void setEdmHasMet(Map<String,List<String>> edmHasMet) {
 		this.edmHasMet = edmHasMet;
 	}
 
 	@Override
-	public Map<String,String> getEdmHasMet() {
+	public Map<String,List<String>> getEdmHasMet() {
 		return this.edmHasMet;
 	}
 
 	@Override
-	public void setEdmIsRelatedTo(Map<String,String> edmIsRelatedTo) {
+	public void setEdmIsRelatedTo(Map<String,List<String>> edmIsRelatedTo) {
 		this.edmIsRelatedTo = edmIsRelatedTo;
 	}
 
 	@Override
-	public Map<String,String> getEdmIsRelatedTo() {
+	public Map<String,List<String>> getEdmIsRelatedTo() {
 		return this.edmIsRelatedTo;
 	}
 
@@ -132,102 +133,102 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	}
 
 	@Override
-	public void setFoafName(Map<String,String> foafName) {
+	public void setFoafName(Map<String,List<String>> foafName) {
 		this.foafName = foafName;
 	}
 
 	@Override
-	public Map<String,String> getFoafName() {
+	public Map<String,List<String>> getFoafName() {
 		return this.foafName;
 	}
 
 	@Override
-	public void setDcDate(Map<String,String> dcDate) {
+	public void setDcDate(Map<String,List<String>> dcDate) {
 		this.dcDate = dcDate;
 	}
 
 	@Override
-	public Map<String,String> getDcDate() {
+	public Map<String,List<String>> getDcDate() {
 		return this.dcDate;
 	}
 
 	@Override
-	public void setDcIdentifier(Map<String,String> dcIdentifier) {
+	public void setDcIdentifier(Map<String,List<String>> dcIdentifier) {
 		this.dcIdentifier = dcIdentifier;
 	}
 
 	@Override
-	public Map<String,String> getDcIdentifier() {
+	public Map<String,List<String>> getDcIdentifier() {
 		return this.dcIdentifier;
 	}
 
 	@Override
-	public void setRdaGr2DateOfBirth(Map<String,String> rdaGr2DateOfBirth) {
+	public void setRdaGr2DateOfBirth(Map<String,List<String>> rdaGr2DateOfBirth) {
 		this.rdaGr2DateOfBirth = rdaGr2DateOfBirth;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2DateOfBirth() {
+	public Map<String,List<String>> getRdaGr2DateOfBirth() {
 		return this.rdaGr2DateOfBirth;
 	}
 
 	@Override
-	public void setRdaGr2DateOfDeath(Map<String,String> rdaGr2DateOfDeath) {
+	public void setRdaGr2DateOfDeath(Map<String,List<String>> rdaGr2DateOfDeath) {
 		this.rdaGr2DateOfDeath = rdaGr2DateOfDeath;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2DateOfDeath() {
+	public Map<String,List<String>> getRdaGr2DateOfDeath() {
 		return this.rdaGr2DateOfDeath;
 	}
 
 	@Override
-	public void setRdaGr2DateOfEstablishment(Map<String,String> rdaGr2DateOfEstablishment) {
+	public void setRdaGr2DateOfEstablishment(Map<String,List<String>> rdaGr2DateOfEstablishment) {
 		this.rdaGr2DateOfEstablishment = rdaGr2DateOfEstablishment;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2DateOfEstablishment() {
+	public Map<String,List<String>> getRdaGr2DateOfEstablishment() {
 		return this.rdaGr2DateOfEstablishment;
 	}
 
 	@Override
-	public void setRdaGr2DateOfTermination(Map<String,String> rdaGr2DateOfTermination) {
+	public void setRdaGr2DateOfTermination(Map<String,List<String>> rdaGr2DateOfTermination) {
 		this.rdaGr2DateOfTermination = rdaGr2DateOfTermination;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2DateOfTermination() {
+	public Map<String,List<String>> getRdaGr2DateOfTermination() {
 		return this.rdaGr2DateOfTermination;
 	}
 
 	@Override
-	public void setRdaGr2Gender(Map<String,String> rdaGr2Gender) {
+	public void setRdaGr2Gender(Map<String,List<String>> rdaGr2Gender) {
 		this.rdaGr2Gender = rdaGr2Gender;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2Gender() {
+	public Map<String,List<String>> getRdaGr2Gender() {
 		return this.rdaGr2Gender;
 	}
 
 	@Override
-	public void setRdaGr2ProfessionOrOccupation(Map<String,String> rdaGr2ProfessionOrOccupation) {
+	public void setRdaGr2ProfessionOrOccupation(Map<String,List<String>> rdaGr2ProfessionOrOccupation) {
 		this.rdaGr2ProfessionOrOccupation = rdaGr2ProfessionOrOccupation;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2ProfessionOrOccupation() {
+	public Map<String,List<String>> getRdaGr2ProfessionOrOccupation() {
 		return this.rdaGr2ProfessionOrOccupation;
 	}
 
 	@Override
-	public void setRdaGr2BiographicalInformation(Map<String,String> rdaGr2BiographicalInformation) {
+	public void setRdaGr2BiographicalInformation(Map<String,List<String>> rdaGr2BiographicalInformation) {
 		this.rdaGr2BiographicalInformation = rdaGr2BiographicalInformation;
 	}
 
 	@Override
-	public Map<String,String> getRdaGr2BiographicalInformation() {
+	public Map<String,List<String>> getRdaGr2BiographicalInformation() {
 		return this.rdaGr2BiographicalInformation;
 	}
 }

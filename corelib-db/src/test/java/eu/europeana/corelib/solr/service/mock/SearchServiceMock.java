@@ -74,7 +74,7 @@ public class SearchServiceMock implements SearchService {
 		bean2.setAggregations(aggregations);
 		expect(mockBean.getTitle()).andStubReturn(TITLE);
 		
-		expect(bean2.getProxies().get(0).getDcPublisher().values().iterator().next()).andStubReturn(AUTHOR[0]);
+		expect(bean2.getProxies().get(0).getDcPublisher().values().iterator().next().get(0)).andStubReturn(AUTHOR[0]);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
 		expect(bean2.getAggregations().get(0).getEdmObject()).andStubReturn(THUMBNAIL[0]);
 		expect(mockBean.getType()).andStubReturn(DocType.TEXT);

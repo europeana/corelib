@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +32,14 @@ public interface WebResource extends AbstractEdmEntity {
 	 * 
 	 * @return String array representing the dc:rights fields of a WebResource
 	 */
-	Map<String,String> getWebResourceDcRights();
+	Map<String,List<String>> getWebResourceDcRights();
 
 	/**
 	 * Retrieve the edm:rights field of a WebResource
 	 * 
 	 * @return String representing the edm:rights fields of a WebResource
 	 */
-	Map<String,String> getWebResourceEdmRights();
+	Map<String,List<String>> getWebResourceEdmRights();
 
 	/**
 	 * Set the dc:rights fields of a WebResource
@@ -47,7 +48,7 @@ public interface WebResource extends AbstractEdmEntity {
 	 *            String array representing the dc:rights fields of a
 	 *            WebResource
 	 */
-	void setWebResourceDcRights(Map<String,String> webResourceDcRights);
+	void setWebResourceDcRights(Map<String,List<String>> webResourceDcRights);
 
 	/**
 	 * Set the edm:rights field of a WebResource
@@ -55,46 +56,46 @@ public interface WebResource extends AbstractEdmEntity {
 	 * @param webResourceEdmRights
 	 *            String representing the edm:rights fields of a WebResource
 	 */
-	void setWebResourceEdmRights(Map<String,String> webResourceEdmRights);
+	void setWebResourceEdmRights(Map<String,List<String>> webResourceEdmRights);
 
 	void setIsNextInSequence(String isNextInSequence);
 
 	String getIsNextInSequence();
 
-	void setDctermsHasPart(Map<String,String> dctermsHasPart);
+	void setDctermsHasPart(Map<String,List<String>> dctermsHasPart);
 
-	Map<String,String> getDctermsHasPart();
+	Map<String,List<String>> getDctermsHasPart();
 
-	void setDctermsIsFormatOf(Map<String,String> dctermsIsFormatOf);
+	void setDctermsIsFormatOf(Map<String,List<String>> dctermsIsFormatOf);
 
-	Map<String,String> getDctermsIsFormatOf();
+	Map<String,List<String>> getDctermsIsFormatOf();
 
-	void setDctermsCreated(Map<String,String> dctermsCreated);
+	void setDctermsCreated(Map<String,List<String>> dctermsCreated);
 
-	Map<String,String> getDctermsCreated();
+	Map<String,List<String>> getDctermsCreated();
 
-	Map<String,String> getDctermsConformsTo();
+	Map<String,List<String>> getDctermsConformsTo();
 
-	void setDctermsConformsTo(Map<String,String> dctermsConformsTo);
+	void setDctermsConformsTo(Map<String,List<String>> dctermsConformsTo);
 
-	void setDctermsIssued(Map<String,String> dctermsIssued);
+	void setDctermsIssued(Map<String,List<String>> dctermsIssued);
 
-	Map<String,String> getDctermsIssued();
+	Map<String,List<String>> getDctermsIssued();
 
-	Map<String,String> getDcDescription();
+	Map<String,List<String>> getDcDescription();
 
-	void setDcDescription(Map<String,String> dcDescription);
+	void setDcDescription(Map<String,List<String>> dcDescription);
 
-	Map<String,String> getDcFormat();
+	Map<String,List<String>> getDcFormat();
 
-	void setDcFormat(Map<String,String> dcFormat);
+	void setDcFormat(Map<String,List<String>> dcFormat);
 
-	Map<String,String> getDcSource();
+	Map<String,List<String>> getDcSource();
 
-	void setDcSource(Map<String,String> dcSource);
+	void setDcSource(Map<String,List<String>> dcSource);
 
-	Map<String,String> getDctermsExtent();
+	Map<String,List<String>> getDctermsExtent();
 
-	void setDctermsExtent(Map<String,String> dctermsExtent);
+	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
 
 }

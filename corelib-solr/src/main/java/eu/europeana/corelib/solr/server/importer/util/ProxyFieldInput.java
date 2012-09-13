@@ -272,13 +272,13 @@ public final class ProxyFieldInput {
 					if (mongoProxy.getDctermsAlternative() == null) {
 						mongoProxy.setDctermsAlternative(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getAlternative(),0));
+										.getAlternative()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsAlternative();
 						tempMap.putAll(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getAlternative(),tempMap.size()));
+										.getAlternative()));
 						mongoProxy.setDctermsAlternative(tempMap);
 					}
 				}
@@ -287,13 +287,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsConformsTo(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getConformsTo(),0));
+												.getConformsTo()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsConformsTo();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getConformsTo(),tempMap.size()));
+										.getConformsTo()));
 						mongoProxy.setDctermsConformsTo(tempMap);
 					}
 				}
@@ -302,13 +302,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsCreated(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getCreated(),0));
+												.getCreated()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsCreated();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCreated(),tempMap.size()));
+										.getCreated()));
 						mongoProxy.setDctermsCreated(tempMap);
 					}
 				}
@@ -317,13 +317,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsExtent(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getExtent(),0));
+												.getExtent()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsExtent();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getExtent(),tempMap.size()));
+										.getExtent()));
 						mongoProxy.setDctermsExtent(tempMap);
 					}
 				}
@@ -332,13 +332,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsHasFormat(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getHasFormat(),0));
+												.getHasFormat()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasFormat();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasFormat(),tempMap.size()));
+										.getHasFormat()));
 						mongoProxy.setDctermsHasFormat(tempMap);
 					}
 				}
@@ -347,13 +347,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsHasPart(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getHasPart(),0));
+												.getHasPart()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasPart();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasPart(),tempMap.size()));
+										.getHasPart()));
 						mongoProxy.setDctermsHasPart(tempMap);
 					}
 				}
@@ -362,13 +362,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsHasVersion(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getHasVersion(),0));
+												.getHasVersion()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasVersion();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasVersion(),tempMap.size()));
+										.getHasVersion()));
 						mongoProxy.setDctermsHasVersion(tempMap);
 					}
 				}
@@ -378,13 +378,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsFormatOf(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsFormatOf(),0));
+												.getIsFormatOf()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsFormatOf();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsFormatOf(),tempMap.size()));
+										.getIsFormatOf()));
 						mongoProxy.setDctermsIsFormatOf(tempMap);
 					}
 				}
@@ -394,13 +394,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsPartOf(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsPartOf(),0));
+												.getIsPartOf()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsPartOf();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsPartOf(),tempMap.size()));
+										.getIsPartOf()));
 						mongoProxy.setDctermsIsPartOf(tempMap);
 					}
 				}
@@ -409,13 +409,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsReferencedBy(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsReferencedBy(),0));
+												.getIsReferencedBy()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsReferencedBy();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsReferencedBy(),tempMap.size()));
+										.getIsReferencedBy()));
 						mongoProxy.setDctermsIsReferencedBy(tempMap);
 					}
 				}
@@ -424,13 +424,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsReplacedBy(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsReplacedBy(),0));
+												.getIsReplacedBy()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsReplacedBy();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsReplacedBy(),tempMap.size()));
+										.getIsReplacedBy()));
 						mongoProxy.setDctermsIsReplacedBy(tempMap);
 					}
 				}
@@ -440,13 +440,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsRequiredBy(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsRequiredBy(),0));
+												.getIsRequiredBy()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsRequiredBy();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsRequiredBy(),tempMap.size()));
+										.getIsRequiredBy()));
 						mongoProxy.setDctermsIsRequiredBy(tempMap);
 					}
 				}
@@ -455,13 +455,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIssued(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIssued(),0));
+												.getIssued()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIssued();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIssued(),tempMap.size()));
+										.getIssued()));
 						mongoProxy.setDctermsIssued(tempMap);
 					}
 				}
@@ -471,13 +471,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsIsVersionOf(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getIsVersionOf(),0));
+												.getIsVersionOf()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsVersionOf();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsVersionOf(),tempMap.size()));
+										.getIsVersionOf()));
 						mongoProxy.setDctermsIsVersionOf(tempMap);
 					}
 				}
@@ -487,13 +487,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsMedium(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getMedium(),0));
+												.getMedium()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsMedium();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getMedium(),tempMap.size()));
+										.getMedium()));
 						mongoProxy.setDctermsMedium(tempMap);
 					}
 				}
@@ -503,13 +503,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsProvenance(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getProvenance(),0));
+												.getProvenance()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsProvenance();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getProvenance(),tempMap.size()));
+										.getProvenance()));
 						mongoProxy.setDctermsProvenance(tempMap);
 					}
 				}
@@ -518,13 +518,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsReferences(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getReferences(),0));
+												.getReferences()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsReferences();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getReferences(),tempMap.size()));
+										.getReferences()));
 						mongoProxy.setDctermsReferences(tempMap);
 					}
 				}
@@ -534,13 +534,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsReplaces(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getReplaces(),0));
+												.getReplaces()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsReplaces();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getReplaces(),tempMap.size()));
+										.getReplaces()));
 						mongoProxy.setDctermsReplaces(tempMap);
 					}
 				}
@@ -550,13 +550,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsRequires(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getRequires(),0));
+												.getRequires()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsRequires();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRequires(),tempMap.size()));
+										.getRequires()));
 						mongoProxy.setDctermsRequires(tempMap);
 					}
 				}
@@ -565,13 +565,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsSpatial(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getSpatial(),0));
+												.getSpatial()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsSpatial();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSpatial(),tempMap.size()));
+										.getSpatial()));
 						mongoProxy.setDctermsSpatial(tempMap);
 					}
 				}
@@ -580,13 +580,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsTOC(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getTableOfContents(),0));
+												.getTableOfContents()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsTOC();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getTableOfContents(),tempMap.size()));
+										.getTableOfContents()));
 						mongoProxy.setDctermsTOC(tempMap);
 					}
 				}
@@ -595,13 +595,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDctermsTemporal(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getTemporal(),0));
+												.getTemporal()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsTemporal();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getTemporal(),tempMap.size()));
+										.getTemporal()));
 						mongoProxy.setDctermsTemporal(tempMap);
 					}
 				}
@@ -610,13 +610,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcContributor(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getContributor(),0));
+												.getContributor()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcContributor();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getContributor(),tempMap.size()));
+										.getContributor()));
 						mongoProxy.setDcContributor(tempMap);
 					}
 				}
@@ -625,14 +625,14 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcCoverage(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getCoverage(),0));
+												.getCoverage()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcCoverage();
 
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCoverage(),tempMap.size()));
+										.getCoverage()));
 						mongoProxy.setDcCoverage(tempMap);
 					}
 				}
@@ -642,12 +642,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcCreator(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getCreator(),0));
+												.getCreator()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcCreator();
+						Map<String, List<String>> tempMap = mongoProxy.getDcCreator();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCreator(),tempMap.size()));
+										.getCreator()));
 						mongoProxy.setDcCreator(tempMap);
 					}
 				}
@@ -656,12 +656,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcDate(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getDate(),0));
+												.getDate()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcDate();
+						Map<String, List<String>> tempMap = mongoProxy.getDcDate();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getDate(),tempMap.size()));
+										.getDate()));
 						mongoProxy.setDcDate(tempMap);
 					}
 				}
@@ -671,13 +671,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcDescription(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getDescription(),0));
+												.getDescription()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcDescription();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getDescription(),tempMap.size()));
+										.getDescription()));
 						mongoProxy.setDcDescription(tempMap);
 					}
 				}
@@ -686,12 +686,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcFormat(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getFormat(),0));
+												.getFormat()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcFormat();
+						Map<String, List<String>> tempMap = mongoProxy.getDcFormat();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getFormat(),tempMap.size()));
+										.getFormat()));
 						mongoProxy.setDcFormat(tempMap);
 					}
 				}
@@ -700,13 +700,13 @@ public final class ProxyFieldInput {
 					if (mongoProxy.getDcIdentifier() == null) {
 						mongoProxy.setDcIdentifier(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getIdentifier(),0));
+										.getIdentifier()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcIdentifier();
 						tempMap.putAll(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getIdentifier(),tempMap.size()));
+										.getIdentifier()));
 						mongoProxy.setDcIdentifier(tempMap);
 					}
 				}
@@ -714,13 +714,13 @@ public final class ProxyFieldInput {
 					if (mongoProxy.getDcLanguage() == null) {
 						mongoProxy.setDcLanguage(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getLanguage(),0));
+										.getLanguage()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcLanguage();
 						tempMap.putAll(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getLanguage(),tempMap.size()));
+										.getLanguage()));
 						mongoProxy.setDcLanguage(tempMap);
 					}
 				}
@@ -729,13 +729,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcPublisher(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getPublisher(),0));
+												.getPublisher()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcPublisher();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getPublisher(),tempMap.size()));
+										.getPublisher()));
 						mongoProxy.setDcPublisher(tempMap);
 					}
 				}
@@ -745,13 +745,13 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcRelation(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getRelation(),0));
+												.getRelation()));
 					} else {
-						Map<String, String> tempMap = mongoProxy
+						Map<String, List<String>> tempMap = mongoProxy
 								.getDcRelation();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRelation(),tempMap.size()));
+										.getRelation()));
 						mongoProxy.setDcRelation(tempMap);
 					}
 				}
@@ -760,12 +760,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcRights(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getRights(),0));
+												.getRights()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcRights();
+						Map<String, List<String>> tempMap = mongoProxy.getDcRights();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRights(),tempMap.size()));
+										.getRights()));
 						mongoProxy.setDcRights(tempMap);
 					}
 				}
@@ -775,12 +775,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcSource(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getSource(),0));
+												.getSource()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcSource();
+						Map<String, List<String>> tempMap = mongoProxy.getDcSource();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSource(),tempMap.size()));
+										.getSource()));
 						mongoProxy.setDcSource(tempMap);
 					}
 				}
@@ -790,12 +790,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcSubject(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getSubject(),0));
+												.getSubject()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcSubject();
+						Map<String, List<String>> tempMap = mongoProxy.getDcSubject();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSubject(),tempMap.size()));
+										.getSubject()));
 						mongoProxy.setDcSubject(tempMap);
 					}
 				}
@@ -804,12 +804,12 @@ public final class ProxyFieldInput {
 					if (mongoProxy.getDcTitle() == null) {
 						mongoProxy.setDcTitle(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getTitle(),0));
+										.getTitle()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcTitle();
+						Map<String, List<String>> tempMap = mongoProxy.getDcTitle();
 						tempMap.putAll(MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getTitle(),tempMap.size()));
+										.getTitle()));
 						mongoProxy.setDcTitle(tempMap);
 					}
 				}
@@ -818,12 +818,12 @@ public final class ProxyFieldInput {
 						mongoProxy
 								.setDcType(MongoUtils
 										.createResourceOrLiteralMapFromString(europeanaType
-												.getType(),0));
+												.getType()));
 					} else {
-						Map<String, String> tempMap = mongoProxy.getDcType();
+						Map<String, List<String>> tempMap = mongoProxy.getDcType();
 						tempMap.putAll(MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getType(),tempMap.size()));
+										.getType()));
 						mongoProxy.setDcType(tempMap);
 					}
 				}

@@ -251,19 +251,21 @@ public final class PlaceFieldInput {
 		PlaceImpl place = new PlaceImpl();
 		//place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());
-
+		if(placeType.getLat()!=null){
 		place.setLatitude(placeType.getLat().getLat());
-
+		}
+		if(placeType.getLong()!=null){
 		place.setLongitude(placeType.getLong().getLong());
-
+		}
 		place.setNote(MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
 		place.setPrefLabel(MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
 		place.setAltLabel(MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
 
 		place.setIsPartOf(MongoUtils.createResourceOrLiteralMapFromList(placeType
 				.getIsPartOfList()));
-		
+		if(placeType.getAlt()!=null){
 		place.setAltitude(placeType.getAlt().getAlt());
+		}
 		place.setDcTermsHasPart(MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
 		place.setOwlSameAs(SolrUtils.resourceListToArray(placeType
 				.getSameAList()));

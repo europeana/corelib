@@ -39,14 +39,14 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
-	private Map<String,String> edmDataProvider;
+	private Map<String,List<String>> edmDataProvider;
 	private String edmIsShownBy;
 	private String edmIsShownAt;
 	private String edmObject;
-	private Map<String,String> edmProvider;
-	private Map<String,String> edmRights;
+	private Map<String,List<String>> edmProvider;
+	private Map<String,List<String>> edmRights;
 	private String edmUgc;
-	private Map<String,String> dcRights;
+	private Map<String,List<String>> dcRights;
 	private String[] hasView;
 	private String aggregatedCHO;
 	private String[] aggregates;
@@ -89,7 +89,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	
 	@Override
-	public void setEdmDataProvider(Map<String,String> edmDataProvider) {
+	public void setEdmDataProvider(Map<String,List<String>> edmDataProvider) {
 		this.edmDataProvider = edmDataProvider;
 	}
 
@@ -109,22 +109,22 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	}
 
 	@Override
-	public void setEdmProvider(Map<String,String> edmProvider) {
+	public void setEdmProvider(Map<String,List<String>> edmProvider) {
 		this.edmProvider = edmProvider;
 	}
 
 	@Override
-	public void setEdmRights(Map<String,String> edmRights) {
+	public void setEdmRights(Map<String,List<String>> edmRights) {
 		this.edmRights = edmRights;
 	}
 
 	@Override
-	public void setDcRights(Map<String,String> dcRights) {
+	public void setDcRights(Map<String,List<String>> dcRights) {
 		this.dcRights = dcRights;
 	}
 
 	@Override
-	public Map<String,String> getEdmDataProvider() {
+	public Map<String,List<String>> getEdmDataProvider() {
 		return this.edmDataProvider;
 	}
 
@@ -144,17 +144,17 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	}
 
 	@Override
-	public Map<String,String> getEdmProvider() {
+	public Map<String,List<String>> getEdmProvider() {
 		return this.edmProvider;
 	}
 
 	@Override
-	public Map<String,String> getDcRights() {
+	public Map<String,List<String>> getDcRights() {
 		return this.dcRights;
 	}
 
 	@Override
-	public Map<String,String> getEdmRights() {
+	public Map<String,List<String>> getEdmRights() {
 		return this.edmRights;
 	}
 

@@ -148,12 +148,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		FullBean bean = null;
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
+
 		if (bean != null) {
 			List<? extends Proxy> proxies = bean.getProxies();
 			Proxy proxy = proxies.get(0);
 			if (proxy != null && proxy.getDcPublisher() != null) {
 				savedItem.setAuthor(
-					StringUtils.abbreviate(proxy.getDcPublisher().values().iterator().next(), 
+					StringUtils.abbreviate(proxy.getDcPublisher().values().iterator().next().get(0), 
 											RelationalDatabase.FIELDSIZE_AUTHOR));
 			}
 		}

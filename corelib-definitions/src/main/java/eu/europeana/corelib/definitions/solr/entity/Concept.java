@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,9 +42,9 @@ public interface Concept extends ContextualClass {
 	 */
 	void setBroader(String[] broader);
 	
-	Map<String,String> getHiddenLabel();
+	Map<String,List<String>> getHiddenLabel();
 	
-	void setHiddenLabel(Map<String,String> hiddenLabel);
+	void setHiddenLabel(Map<String,List<String>> hiddenLabel);
 	
 	String[] getNarrower();
 	
@@ -73,9 +74,9 @@ public interface Concept extends ContextualClass {
 	
 	void setCloseMatch(String[] closeMatch);
 	
-	Map<String,String> getNotation();
+	Map<String,List<String>> getNotation();
 	
-	void setNotation(Map<String,String> notation);
+	void setNotation(Map<String,List<String>> notation);
 	
 	String[] getInScheme();
 	

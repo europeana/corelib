@@ -312,164 +312,164 @@ public class ProxyFieldInputTest {
 				if (choice.ifAlternative()) {
 					assertEquals(choice.getAlternative().getString(),
 							mongoProxy.getDctermsAlternative().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifConformsTo()) {
 					assertEquals(choice.getConformsTo().getResource(),
 							mongoProxy.getDctermsConformsTo().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifCreated()) {
 					assertEquals(choice.getCreated().getResource(), mongoProxy
-							.getDctermsCreated().values().iterator().next());
+							.getDctermsCreated().values().iterator().next().get(0));
 				}
 				if (choice.ifExtent()) {
 					assertEquals(choice.getExtent().getResource(), mongoProxy
-							.getDctermsExtent().values().iterator().next());
+							.getDctermsExtent().values().iterator().next().get(0));
 				}
 				if (choice.ifHasFormat()) {
 					assertEquals(choice.getHasFormat().getResource(),
 							mongoProxy.getDctermsHasFormat().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifHasPart()) {
 					assertEquals(choice.getHasPart().getResource(), mongoProxy
-							.getDctermsHasPart().values().iterator().next());
+							.getDctermsHasPart().values().iterator().next().get(0));
 				}
 				if (choice.ifHasVersion()) {
 					assertEquals(choice.getHasVersion().getResource(),
 							mongoProxy.getDctermsHasVersion().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifIsFormatOf()) {
 					assertEquals(choice.getIsFormatOf().getResource(),
 							mongoProxy.getDctermsIsFormatOf().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifIsPartOf()) {
 					assertEquals(choice.getIsPartOf().getResource(), mongoProxy
-							.getDctermsIsPartOf().values().iterator().next());
+							.getDctermsIsPartOf().values().iterator().next().get(0));
 				}
 				if (choice.ifIsReferencedBy()) {
 					assertEquals(choice.getIsReferencedBy().getResource(),
 							mongoProxy.getDctermsIsReferencedBy().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifIsReplacedBy()) {
 					assertEquals(choice.getIsReplacedBy().getResource(),
 							mongoProxy.getDctermsIsReplacedBy().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifIsRequiredBy()) {
 					assertEquals(choice.getIsRequiredBy().getResource(),
 							mongoProxy.getDctermsIsRequiredBy().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifIssued()) {
 					assertEquals(choice.getIssued().getResource(), mongoProxy
-							.getDctermsIssued().values().iterator().next());
+							.getDctermsIssued().values().iterator().next().get(0));
 				}
 				if (choice.ifIsVersionOf()) {
 					assertEquals(choice.getIsVersionOf().getResource(),
 							mongoProxy.getDctermsIsVersionOf().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifMedium()) {
 					assertEquals(choice.getMedium().getResource(), mongoProxy
-							.getDctermsMedium().values().iterator().next());
+							.getDctermsMedium().values().iterator().next().get(0));
 				}
 				if (choice.ifProvenance()) {
 					assertEquals(choice.getProvenance().getResource(),
 							mongoProxy.getDctermsProvenance().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifReferences()) {
 					assertEquals(choice.getReferences().getResource(),
 							mongoProxy.getDctermsReferences().values()
-									.iterator().next());
+									.iterator().next().get(0));
 				}
 				if (choice.ifReplaces()) {
 					assertEquals(choice.getReplaces().getResource(), mongoProxy
-							.getDctermsReplaces().values().iterator().next());
+							.getDctermsReplaces().values().iterator().next().get(0));
 				}
 				if (choice.ifRequires()) {
 					assertEquals(choice.getRequires().getResource(), mongoProxy
-							.getDctermsRequires().values().iterator().next());
+							.getDctermsRequires().values().iterator().next().get(0));
 				}
 				if (choice.ifSpatial()) {
 					assertEquals(choice.getSpatial().getResource(), mongoProxy
-							.getDctermsSpatial().values().iterator().next());
+							.getDctermsSpatial().values().iterator().next().get(0));
 				}
 				if (choice.ifTableOfContents()) {
 					assertEquals(choice.getTableOfContents().getResource(),
 							mongoProxy.getDctermsTOC().values().iterator()
-									.next());
+									.next().get(0));
 				}
 				if (choice.ifTemporal()) {
 					assertEquals(choice.getTemporal().getResource(), mongoProxy
-							.getDctermsTemporal().values().iterator().next());
+							.getDctermsTemporal().values().iterator().next().get(0));
 				}
 				if (choice.ifContributor()) {
 					assertEquals(choice.getContributor().getResource(),
 							mongoProxy.getDcContributor().values().iterator()
-									.next());
+									.next().get(0));
 				}
 				if (choice.ifCoverage()) {
 					assertEquals(choice.getCoverage().getResource(), mongoProxy
-							.getDcCoverage().values().iterator().next());
+							.getDcCoverage().values().iterator().next().get(0));
 				}
 				if(choice.ifCreator()){
 				assertEquals(choice.getCreator().getResource(),
-						mongoProxy.getDcCreator().values().iterator().next());
+						mongoProxy.getDcCreator().values().iterator().next().get(0));
 				}
 				if(choice.ifDate()){
 				assertEquals(choice.getDate().getResource(), mongoProxy
-						.getDcDate().values().iterator().next());
+						.getDcDate().values().iterator().next().get(0));
 				}
 				if(choice.ifDescription()){
 				assertEquals(choice.getDescription().getResource(),
 						mongoProxy.getDcDescription().values().iterator()
-								.next());
+								.next().get(0));
 				}
 				if(choice.ifFormat()){
 				assertEquals(choice.getFormat().getResource(),
-						mongoProxy.getDcFormat().values().iterator().next());
+						mongoProxy.getDcFormat().values().iterator().next().get(0));
 				}
 				if(choice.ifIdentifier()){
 				assertEquals(choice.getIdentifier().getString(),
-						mongoProxy.getDcIdentifier().values().iterator().next());
+						mongoProxy.getDcIdentifier().values().iterator().next().get(0));
 				}
 				if(choice.ifLanguage()){
 				assertEquals(choice.getLanguage().getString(),
-						mongoProxy.getDcLanguage().values().iterator().next());
+						mongoProxy.getDcLanguage().values().iterator().next().get(0));
 				}
 				if(choice.ifPublisher()){
 				assertEquals(choice.getPublisher().getResource(),
-						mongoProxy.getDcPublisher().values().iterator().next());
+						mongoProxy.getDcPublisher().values().iterator().next().get(0));
 				}
 				if(choice.ifRelation()){
 				assertEquals(choice.getRelation().getResource(),
-						mongoProxy.getDcRelation().values().iterator().next());
+						mongoProxy.getDcRelation().values().iterator().next().get(0));
 				}
 				if(choice.ifRights()){
 				assertEquals(choice.getRights().getResource(),
-						mongoProxy.getDcRights().values().iterator().next());
+						mongoProxy.getDcRights().values().iterator().next().get(0));
 				}
 				if(choice.ifSource()){
 				assertEquals(choice.getSource().getResource(),
-						mongoProxy.getDcSource().values().iterator().next());
+						mongoProxy.getDcSource().values().iterator().next().get(0));
 				}
 				if(choice.ifSubject()){
 				assertEquals(choice.getSubject().getResource(),
-						mongoProxy.getDcSubject().values().iterator().next());
+						mongoProxy.getDcSubject().values().iterator().next().get(0));
 				}
 				if(choice.ifTitle()){
 				assertEquals(choice.getTitle().getString(), mongoProxy
-						.getDcTitle().values().iterator().next());
+						.getDcTitle().values().iterator().next().get(0));
 				}
 				if(choice.ifType()){
 				assertEquals(choice.getType().getResource(), mongoProxy
-						.getDcType().values().iterator().next());
+						.getDcType().values().iterator().next().get(0));
 				}
 			}
 		} catch (InstantiationException e) {

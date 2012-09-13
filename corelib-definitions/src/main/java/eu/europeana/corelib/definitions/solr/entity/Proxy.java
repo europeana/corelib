@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.definitions.solr.entity;
 
+import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -47,12 +48,12 @@ public interface Proxy extends BasicProxy {
 
 	void setEuropeanaProxy(boolean europeanaProxy);
 
-	Map<String,String> getYear();
+	Map<String,List<String>> getYear();
 
-	void setYear(Map<String,String> year);
+	void setYear(Map<String,List<String>> year);
 
 	
-	Map<String,String>getUserTags();
+	Map<String,List<String>>getUserTags();
 
-	void setUserTags(Map<String,String> userTags);
+	void setUserTags(Map<String,List<String>> userTags);
 }
