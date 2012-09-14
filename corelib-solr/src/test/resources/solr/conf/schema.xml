@@ -471,28 +471,28 @@
  <uniqueKey>europeana_id</uniqueKey> 
  <defaultSearchField>text</defaultSearchField>
  <solrQueryParser defaultOperator="AND"/>
-   <copyField source="proxy_dcterms_alternative" dest="text" />
-   <copyField source="proxy_dc_contributor" dest="text" />
-   <copyField source="proxy_dc_coverage" dest="text" />
-   <copyField source="proxy_dcterms_created" dest="text" />
-   <copyField source="proxy_dc_creator" dest="text" />
-   <copyField source="proxy_dc_date" dest="text" />
-   <copyField source="proxy_dc_description" dest="text" />
-   <copyField source="proxy_dcterms_issued" dest="text" />
-   <copyField source="proxy_dc_language" dest="text" />
-   <copyField source="proxy_dcterms_provenance" dest="text" />
-   <copyField source="proxy_dc_publisher" dest="text" />
-   <copyField source="proxy_dc_rights" dest="text" />
-   <copyField source="provider_aggregation_dc_rights" dest="text" />
-   <copyField source="proxy_edm_rights" dest="text" />
-   <copyField source="provider_aggregation_edm_rights" dest="text" />
-   <copyField source="proxy_dc_source" dest="text" />
-   <copyField source="proxy_dcterms_spatial" dest="text" />
-   <copyField source="proxy_dc_subject" dest="text" />
-   <copyField source="proxy_dcterms_temporal" dest="text" />
-   <copyField source="proxy_dc_title" dest="text" />
-   <copyField source="proxy_dc_type" dest="text" />
-   <copyField source="proxy_edm_type" dest="text" />
+   <copyField source="proxy_dcterms_alternative.*" dest="text" />
+   <copyField source="proxy_dc_contributor.*" dest="text" />
+   <copyField source="proxy_dc_coverage.*" dest="text" />
+   <copyField source="proxy_dcterms_created.*" dest="text" />
+   <copyField source="proxy_dc_creator.*" dest="text" />
+   <copyField source="proxy_dc_date.*" dest="text" />
+   <copyField source="proxy_dc_description.*" dest="text" />
+   <copyField source="proxy_dcterms_issued.*" dest="text" />
+   <copyField source="proxy_dc_language.*" dest="text" />
+   <copyField source="proxy_dcterms_provenance.*" dest="text" />
+   <copyField source="proxy_dc_publisher.*" dest="text" />
+   <copyField source="proxy_dc_rights.*" dest="text" />
+   <copyField source="provider_aggregation_dc_rights.*" dest="text" />
+   <copyField source="proxy_edm_rights.*" dest="text" />
+   <copyField source="provider_aggregation_edm_rights.*" dest="text" />
+   <copyField source="proxy_dc_source.*" dest="text" />
+   <copyField source="proxy_dcterms_spatial.*" dest="text" />
+   <copyField source="proxy_dc_subject.*" dest="text" />
+   <copyField source="proxy_dcterms_temporal.*" dest="text" />
+   <copyField source="proxy_dc_title.*" dest="text" />
+   <copyField source="proxy_dc_type.*" dest="text" />
+   <copyField source="proxy_edm_type.*" dest="text" />
     <copyField source="proxy_dc_type.*" dest="what" />
    <copyField source="proxy_dc_subject.*" dest="what" />
    <copyField source="proxy_dc_format.*" dest="what" />
@@ -526,11 +526,11 @@
    <copyField source="proxy_dc_title.*" dest="title" />
    <copyField source="proxy_dcterms_alternative.*" dest="title" />
    <copyField source="proxy_edm_type" dest="TYPE" />
-   <copyField source="proxy_dc_language" dest="LANGUAGE" />
-   <copyField source="country" dest="COUNTRY" />
-   <copyField source="proxy_dc_date" dest="YEAR" />
-   <copyField source="provider_aggregation_edm_dataProvider" dest="DATA_PROVIDER" />
-   <copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
+   <copyField source="proxy_dc_language.*" dest="LANGUAGE" />
+   <copyField source="europeana_aggregation_edm_country.*" dest="COUNTRY" />
+   <copyField source="proxy_edm_year.*" dest="YEAR" />
+   <copyField source="provider_aggregation_edm_dataProvider.*" dest="DATA_PROVIDER" />
+   <copyField source="provider_aggregation_edm_rights.*" dest="RIGHTS" />
    <copyField source="europeana_completeness" dest="COMPLETENESS" />
    <copyField source="edm_UGC" dest="UGC" />
    <copyField source="ag_skos_prefLabel.*" dest="text" />
