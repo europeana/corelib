@@ -31,7 +31,7 @@ import eu.europeana.corelib.definitions.solr.model.Query;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class NavigationUtils {
-	
+
 	private NavigationUtils() {
 		// Constructor must be private
 	}
@@ -47,5 +47,4 @@ public class NavigationUtils {
 		crumb.markAsLast();
 		return crumbs;
 	}
-	
 }

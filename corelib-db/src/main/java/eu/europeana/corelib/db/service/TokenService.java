@@ -48,5 +48,4 @@ public interface TokenService extends AbstractService<Token> {
 	 * @return The created token
 	 */
 	String createRandomToken();
-
 }

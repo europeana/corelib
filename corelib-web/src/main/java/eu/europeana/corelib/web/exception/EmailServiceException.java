@@ -29,9 +29,8 @@ public class EmailServiceException extends EuropeanaException {
 	public EmailServiceException(ProblemType problem) {
 		super(problem);
 	}
-	
+
 	public EmailServiceException(Throwable causedBy, ProblemType problem) {
 		super(causedBy, problem);
 	}
-
 }

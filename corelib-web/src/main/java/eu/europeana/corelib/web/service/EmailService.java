@@ -25,11 +25,10 @@ import eu.europeana.corelib.web.exception.EmailServiceException;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface EmailService {
-	
+
 	void sendToken(Token token, String url) throws EmailServiceException;
-	
+
 	void sendForgotPassword(User user, String url) throws EmailServiceException;
-	
+
 	void sendFeedback(String email, String feedback) throws EmailServiceException;
-	
 }

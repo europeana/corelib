@@ -71,7 +71,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		mailSender.send(builder);
 		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
 	}
-	
+
 	/**
 	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
 	 * 
@@ -94,7 +94,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		mailSender.send(builder);
 		log.info(String.format("Sent forgot password (URL=%s) to %s", url, user.getEmail()));
 	}
-	
+
 	/**
 	 * Sends the user's feedback to the site admin, and sends an thanking email to the user
 	 * 
@@ -124,7 +124,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		mailSender.send(builder);
 		log.info(String.format("Sent feedback of %s", email));
 	}
-	
+
 	/**
 	 * This method will be handled by Spring Framework.
 	 * No implementation needed
@@ -132,5 +132,4 @@ public abstract class EmailServiceImpl implements EmailService {
 	 * @return a instance of EmailBuilder
 	 */
 	protected abstract EmailBuilder createEmailBuilder();
-
 }

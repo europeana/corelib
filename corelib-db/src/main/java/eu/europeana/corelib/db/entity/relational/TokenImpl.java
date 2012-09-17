@@ -64,7 +64,7 @@ public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, 
 	 * The date the token created
 	 */
 	@Column(nullable = false)
-	private Date created;
+	private long created;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -96,12 +96,12 @@ public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, 
 	}
 
 	@Override
-	public Date getCreated() {
-		return DateUtils.clone(created);
+	public long getCreated() {
+		return created;
 	}
 
 	@Override
 	public void setCreated(Date created) {
-		this.created = DateUtils.clone(created);
+		this.created = created.getTime();
 	}
 }

@@ -43,9 +43,9 @@ public class EmailBuilderImpl implements EmailBuilder {
 	private static final String TEMPLATE_NAME_AFFIX_HTML = ".html.vm";
 
 	private String emailTo;
-	
+
 	private String emailFrom;
-	
+
 	private String subject;
 
 	private Map<String, Object> model;
@@ -62,43 +62,42 @@ public class EmailBuilderImpl implements EmailBuilder {
 	public void prepare(MimeMessage mimeMessage) throws MessagingException {
 
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-		
+
 		message.setTo(emailTo);
 		message.setFrom(emailFrom);
 		message.setSubject(subject);
 
 		String text = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
 				+ TEMPLATE_NAME_AFFIX_TEXT, model);
-		
+
 		String html = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
 				+ TEMPLATE_NAME_AFFIX_HTML, model);
-		
+
 		BodyPart textPart = new MimeBodyPart();
 		textPart.setText(text);
-		
+
 		BodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent(html, "text/html");
-		
+
 		message.getMimeMultipart().addBodyPart(textPart);
 		message.getMimeMultipart().addBodyPart(htmlPart);
-		
 	}
 
 	@Override
 	public void setModel(Map<String, Object> model) {
 		this.model = model;
 	}
-	
+
 	@Override
 	public void setEmailTo(String emailTo) {
 		this.emailTo = emailTo;
 	}
-	
+
 	@Override
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	
+
 	@Override
 	public void setEmailFrom(String emailFrom) {
 		this.emailFrom = emailFrom;
@@ -115,5 +114,4 @@ public class EmailBuilderImpl implements EmailBuilder {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 	}
-
 }

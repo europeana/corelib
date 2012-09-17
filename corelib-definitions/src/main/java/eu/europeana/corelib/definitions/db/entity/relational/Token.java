@@ -30,12 +30,11 @@ public interface Token extends IdentifiedEntity<String> {
 
 	String getEmail();
 
-	Date getCreated();
+	long getCreated();
 
 	void setCreated(Date created);
 
 	void setEmail(String email);
 
 	void setToken(String token);
-
 }

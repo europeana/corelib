@@ -42,9 +42,9 @@
 			</value>
 		</property>
 	</bean>
-	
+
 	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype" />
-	
+
 	<util:map id="corelib_web_emailConfigs">
 		<entry key="register">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
@@ -74,5 +74,4 @@
 			/>
 		</entry>
 	</util:map>
-
 </beans>

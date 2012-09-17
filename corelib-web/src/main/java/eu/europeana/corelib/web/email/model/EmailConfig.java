@@ -23,13 +23,13 @@ package eu.europeana.corelib.web.email.model;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class EmailConfig {
-	
+
 	private String template;
-	
+
 	private String emailFrom;
-	
+
 	private String emailTo;
-	
+
 	private String subject;
 
 	/**
@@ -67,5 +67,4 @@ public class EmailConfig {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
 }

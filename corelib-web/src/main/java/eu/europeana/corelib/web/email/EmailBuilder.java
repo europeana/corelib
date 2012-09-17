@@ -31,11 +31,10 @@ public interface EmailBuilder extends MimeMessagePreparator {
 	void setTemplate(String template) throws EmailServiceException;
 
 	void setModel(Map<String, Object> model);
-	
+
 	void setEmailTo(String emailTo);
 
 	void setSubject(String subject);
 
 	void setEmailFrom(String emailFrom);
-
 }

@@ -73,9 +73,9 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Index(name = "email_index")
 	private String email;
 
-    @Column(length = FIELDSIZE_USERNAME)
-    @Index(name = "username_index")
-    private String userName;
+	@Column(length = FIELDSIZE_USERNAME)
+	@Index(name = "username_index")
+	private String userName;
 
 	@Column(length = FIELDSIZE_PASSWORD)
 	private String password;
@@ -96,17 +96,17 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
-    @OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-    @JoinColumn(name = "userid", nullable = false)
-    private Set<SavedItem> savedItems = new HashSet<SavedItem>();
+	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name = "userid", nullable = false)
+	private Set<SavedItem> savedItems = new HashSet<SavedItem>();
 
-    @OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-    @JoinColumn(name = "userid", nullable = false)
-    private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
+	@OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name = "userid", nullable = false)
+	private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
 
-    @OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-    @JoinColumn(name = "userid", nullable = false)
-    private Set<SocialTag> socialTags = new HashSet<SocialTag>();
+	@OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name = "userid", nullable = false)
+	private Set<SocialTag> socialTags = new HashSet<SocialTag>();
 
 	/**
 	 * GETTERS & SETTTERS

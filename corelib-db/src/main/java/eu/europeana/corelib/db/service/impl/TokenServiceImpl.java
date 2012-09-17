@@ -20,6 +20,7 @@ package eu.europeana.corelib.db.service.impl;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,8 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenService {
 
+	private final Logger log = Logger.getLogger(getClass().getName());
+
 	/**
 	 * Overriding the findByID() method to handle expiration
 	 */
@@ -52,7 +55,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 			return null;
 		}
 		if (token != null) {
-			long age = System.currentTimeMillis() - token.getCreated().getTime();
+			long age = System.currentTimeMillis() - token.getCreated();
 			if (age <= MAX_TOKEN_AGE) {
 				return token;
 			}
@@ -64,6 +67,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	@Override
 	public Token create(String email) throws DatabaseException {
 		if (StringUtils.isBlank(email)) {
+			log.severe("DatabaseException: empty email for create token. " + ProblemType.INVALIDARGUMENTS);
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		TokenImpl token = new TokenImpl();
