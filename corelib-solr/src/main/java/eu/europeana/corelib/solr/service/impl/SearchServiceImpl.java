@@ -196,6 +196,8 @@ public class SearchServiceImpl implements SearchService {
 
 				// These are going to change when we import ASSETS as well
 				solrQuery.setQueryType(QueryType.ADVANCED.toString());
+				query.setQueryType(solrQuery.getQueryType());
+
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
 

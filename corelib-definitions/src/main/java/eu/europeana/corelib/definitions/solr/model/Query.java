@@ -38,35 +38,36 @@ public class Query implements Cloneable {
 	 * Default start parameter for Solr
 	 */
 	private static final int DEFAULT_START = 0;
-	
+
 	/**
 	 * Default number of items in the SERP
 	 */
 	private static final int DEFAULT_PAGE_SIZE = 12;
-	
-	
+
 	private String query;
-	
+
 	private String[] refinements;
-	
+
 	private int start;
-	
+
 	private int pageSize;
-	
+
 	private Facet[] facets = Facet.values();
-	
+
 	private Map<String, String> parameters = new HashMap<String, String>();
+
+	private String queryType;
 
 	/**
 	 * CONSTRUCTORS
 	 */
-	
+
 	public Query(String query) {
 		this.query = query;
 		start = DEFAULT_START;
 		pageSize = DEFAULT_PAGE_SIZE;
 	}
-	
+
 	/**
 	 * GETTERS & SETTTERS
 	 */
@@ -92,7 +93,7 @@ public class Query implements Cloneable {
 		}
 		return this;
 	}
-	
+
 	public Query addRefinement(String refinement) {
 		if (this.refinements == null) {
 			this.refinements = StringArrayUtils.EMPTY_ARRAY;
@@ -118,11 +119,11 @@ public class Query implements Cloneable {
 		this.pageSize = pageSize;
 		return this;
 	}
-	
+
 	public Facet[] getFacets() {
 		return facets;
 	}
-	
+
 	public Query setFacets(Facet[] facets) {
 		if (facets != null) {
 			this.facets = facets.clone();
@@ -131,11 +132,11 @@ public class Query implements Cloneable {
 		}
 		return this;
 	}
-	
+
 	public Map<String, String> getParameters() {
 		return parameters;
 	}
-	
+
 	/**
 	 * Adds Solr parameters to the Query object
 	 *
@@ -155,7 +156,7 @@ public class Query implements Cloneable {
 	public Query clone() throws CloneNotSupportedException {
 		return (Query) super.clone();
 	}
-	
+
 	public String toString() {
 		List<String> params = new ArrayList<String>();
 		params.add("q=" + query);
@@ -179,7 +180,15 @@ public class Query implements Cloneable {
 				params.add(parameter.getKey() + "=" + parameter.getValue());
 			}
 		}
-		
+
 		return StringUtils.join(params, "&");
+	}
+
+	public String getQueryType() {
+		return queryType;
+	}
+
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
 	}
 }
