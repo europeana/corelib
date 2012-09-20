@@ -97,8 +97,8 @@
    <field name="provider_aggregation_edm_dataProvider" type="string" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="provider_aggregation_edm_dataProvider.*" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="provider_aggregation_edm_hasView" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="provider_aggregation_edm_isShownAt" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="provider_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="provider_aggregation_edm_isShownAt" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_object" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_provider" type="string" indexed="true" stored="true" multiValued="false" />
    <dynamicField name="provider_aggregation_edm_provider.*" type="string" indexed="true" stored="true" multiValued="false"/>
@@ -219,11 +219,12 @@
    <dynamicField name="proxy_dcterms_created.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_extent.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_hasFormat.*" type="string" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="proxy_dcterms_isFormatOf.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_isPartOf.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_isReferencedBy.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_isReplacedBy.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_isRequiredBy.*" type="string" indexed="true" stored="false" multiValued="true" />
-   <dyamicField name="proxy_dcterms_isVersionOf.*" type="string" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="proxy_dcterms_isVersionOf.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_hasVersion.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_issued.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_medium.*" type="string" indexed="true" stored="false" multiValued="true" />   
@@ -624,6 +625,7 @@
    <copyField source="proxy_dcterms_isReplacedBy.*" dest = "proxy_dcterms_isReplacedBy" />
    <copyField source="proxy_dcterms_isRequiredby.*" dest = "proxy_dcterms_isRequiredBy" />
    <copyField source="proxy_dcterms_isVersionOf.*" dest = "proxy_dcterms_isVersionOf" />
+    <copyField source="proxy_dcterms_isFormatOf.*" dest = "proxy_dcterms_isVersionOf" />
    <copyField source="proxy_dcterms_hasVersion.*" dest = "proxy_dcterms_hasVersion" />
    <copyField source="proxy_dcterms_issued.*" dest = "proxy_dcterms_issued" />
    <copyField source="proxy_dcterms_medium.*" dest = "proxy_dcterms_medium" />
