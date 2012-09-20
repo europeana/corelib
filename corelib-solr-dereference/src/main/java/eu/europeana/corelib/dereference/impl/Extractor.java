@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.ctc.wstx.stax.WstxInputFactory;
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
@@ -44,6 +47,7 @@ public class Extractor {
 
 	private VocabularyMongoServer mongoServer;
 	private ControlledVocabulary vocabulary;
+	private final static long UPDATETIMESTAMP = 5184000000l;
 
 	/**
 	 * Constructor for use with object injection
@@ -56,6 +60,10 @@ public class Extractor {
 				.getBean("corelib_solr_vocabularyMongoServer");
 	}
 
+	public Extractor() {
+
+	}
+
 	/**
 	 * Constructor with the MongoDBServer for use without object Injection
 	 * 
@@ -65,32 +73,6 @@ public class Extractor {
 			VocabularyMongoServer server) {
 		vocabulary = controlledVocabulary;
 		mongoServer = server;
-	}
-
-	/**
-	 * Return the stored controlled vocabulary from a field. Valid values are
-	 * "name" and "URI" as they are the fields indexed in MongoDB
-	 * 
-	 * @param field
-	 *            The field to search on
-	 * @param value
-	 *            The value to search for
-	 * @return The stored ControlledVocabulary to be used
-	 */
-	public ControlledVocabulary getControlledVocabulary(String field,
-			String value) {
-		String vocabularyName;
-		if (StringUtils.endsWith(value, "/")) {
-			vocabularyName = StringUtils.substringBeforeLast(
-					StringUtils.substringBeforeLast(value, "/"), "/");
-		} else {
-			vocabularyName = StringUtils.substringBeforeLast(value, "/");
-		}
-		
-		vocabulary = mongoServer.getDatastore()
-				.find(ControlledVocabularyImpl.class)
-				.filter(field, vocabularyName).get();
-		return vocabulary != null ? vocabulary : null;
 	}
 
 	/**
@@ -117,74 +99,91 @@ public class Extractor {
 	 * @throws IOException
 	 */
 	public Map<String, List<String>> denormalize(String resource,
-			ControlledVocabulary controlledVocabulary) {
-		Map<String,List<String>> denormalizedValues = new HashMap<String, List<String>>();
-		String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
-				.getSuffix() : "";
-		String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
-				+ suffix
-				: "");
-		XMLInputFactory inFactory = new WstxInputFactory();
-		Source source;
-		if (xmlString.length() > 0) {
-			try {
-				source = new StreamSource(new ByteArrayInputStream(
-						xmlString.getBytes()), "UTF-8");
-				XMLStreamReader xml = inFactory.createXMLStreamReader(source);
-				String element = "";
-				while (xml.hasNext()) {
-					List<String> tempList = new ArrayList<String>();
-					switch (xml.getEventType()) {
-					case XMLStreamConstants.START_DOCUMENT:
-						
-						break;
-					case XMLStreamConstants.START_ELEMENT:
-						element = (xml.getPrefix() != null ? xml.getPrefix()
-								+ ":" : "")
-								+ xml.getLocalName();
+			ControlledVocabularyImpl controlledVocabulary) {
+		Map<String, List<String>> denormalizedValues = new HashMap<String, List<String>>();
+		if (controlledVocabulary != null) {
+			String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
+					.getSuffix() : "";
+			String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
+					+ suffix
+					: "");
+			XMLInputFactory inFactory = new WstxInputFactory();
+			Source source;
+			if (xmlString.length() > 0) {
+				vocabulary = controlledVocabulary;
+				try {
+					source = new StreamSource(new ByteArrayInputStream(
+							xmlString.getBytes()), "UTF-8");
+					XMLStreamReader xml = inFactory
+							.createXMLStreamReader(source);
+					String element = "";
+					while (xml.hasNext()) {
+						List<String> tempList = new ArrayList<String>();
+						switch (xml.getEventType()) {
+						case XMLStreamConstants.START_DOCUMENT:
 
-						if (isMapped(element)) {
-							if (xml.getAttributeCount() > 0) {
-								String attribute = xml.getAttributePrefix(0)
-										+ ":" + xml.getAttributeLocalName(0);
-								if (isMapped(element + "_" + attribute)) {
-									if(!denormalizedValues.containsKey(element+"_"+attribute)){
-										tempList.add(xml.getAttributeValue(0));
-										denormalizedValues.put(getEdmLabel(element + "_" + attribute),tempList);
-										tempList = new ArrayList<String>();
+							break;
+						case XMLStreamConstants.START_ELEMENT:
+							element = (xml.getPrefix() != null ? xml
+									.getPrefix() + ":" : "")
+									+ xml.getLocalName();
+
+							if (isMapped(element)) {
+								if (xml.getAttributeCount() > 0) {
+									String attribute = xml
+											.getAttributePrefix(0)
+											+ ":"
+											+ xml.getAttributeLocalName(0);
+									if (isMapped(element + "_" + attribute)) {
+										if (!denormalizedValues
+												.containsKey(element + "_"
+														+ attribute)) {
+											tempList.add(xml
+													.getAttributeValue(0));
+											denormalizedValues.put(
+													getEdmLabel(element + "_"
+															+ attribute),
+													tempList);
+										} else {
+											tempList = denormalizedValues
+													.get(getEdmLabel(element
+															+ "_" + attribute));
+											tempList.add(xml
+													.getAttributeValue(0));
+											denormalizedValues.put(
+													getEdmLabel(element + "_"
+															+ attribute),
+													tempList);
+										}
+
+									} else {
+										if (!denormalizedValues
+												.containsKey(element)) {
+											tempList.add(xml.getElementText());
+											denormalizedValues.put(
+													getEdmLabel(element),
+													tempList);
+											tempList = new ArrayList<String>();
+										} else {
+											tempList = denormalizedValues
+													.get(getEdmLabel(element));
+											denormalizedValues.put(
+													getEdmLabel(element),
+													tempList);
+										}
 									}
-									else{
-										tempList = denormalizedValues.get(getEdmLabel(element + "_" + attribute));
-										tempList.add(xml.getAttributeValue(0));
-										denormalizedValues.put(getEdmLabel(element + "_" + attribute),tempList);
-										tempList = new ArrayList<String>();
-									}
-									
-								}
-								xml.next();
-							} else {
-								if(!denormalizedValues.containsKey(element)){
-									tempList.add(xml.getAttributeValue(0));
-									denormalizedValues.put(getEdmLabel(element),tempList);
-									tempList = new ArrayList<String>();
-								}
-								else{
-									tempList = denormalizedValues.get(getEdmLabel(element));
-									tempList.add(xml.getAttributeValue(0));
-									denormalizedValues.put(getEdmLabel(element),tempList);
-									tempList = new ArrayList<String>();
 								}
 							}
-						}
-						break;
-					
-					default:
-						break;
-					}
-					xml.next();
-				}
-			} catch (XMLStreamException e) {
+							break;
 
+						default:
+							break;
+						}
+						xml.next();
+					}
+				} catch (XMLStreamException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return denormalizedValues;
@@ -201,8 +200,40 @@ public class Extractor {
 	 * @throws IOException
 	 */
 	private String retrieveValueFromResource(String resource) {
+
+		EntityImpl entity = mongoServer.getDatastore().find(EntityImpl.class)
+				.filter("uri", resource).get();
+		if (entity == null) {
+				String val = retrieveValue(resource);
+				if (val.length()>0){
+				EntityImpl newEntity = new EntityImpl();
+				newEntity.setUri(resource);
+				newEntity.setTimestamp(new Date().getTime());
+				newEntity.setContent(val);
+				mongoServer.getDatastore().save(newEntity);
+				}
+				return val;
+		}
+		else {
+			if(new Date().getTime()-entity.getTimestamp()<UPDATETIMESTAMP){
+				return entity.getContent();
+			}
+			else {
+				String val = retrieveValue(resource);
+				Query<EntityImpl> updateQuery = mongoServer.getDatastore()
+						.createQuery(EntityImpl.class).field("uri").equal(resource);
+				UpdateOperations<EntityImpl> ops =mongoServer.getDatastore().createUpdateOperations(EntityImpl.class)
+						.set("content", val);
+				mongoServer.getDatastore().update(updateQuery, ops);
+				return val;
+			}
+		}
+	}
+
+	private String retrieveValue(String resource) {
 		URLConnection urlConnection;
 		try {
+
 			urlConnection = new URL(resource).openConnection();
 
 			InputStream inputStream = urlConnection.getInputStream();
@@ -226,8 +257,8 @@ public class Extractor {
 	 */
 	public String getEdmLabel(String field) {
 
-		return vocabulary != null ? vocabulary.getElements().get(field).toString()
-				: EdmLabel.NULL.toString();
+		return vocabulary != null ? vocabulary.getElements().get(field)
+				.toString() : EdmLabel.NULL.toString();
 	}
 
 	/**
@@ -241,7 +272,7 @@ public class Extractor {
 	 * @param europeanaField
 	 */
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
-		Map<String, EdmLabel> elements = vocabulary.getElements() != null ? vocabulary
+		HashMap<String, EdmLabel> elements = vocabulary.getElements() != null ? vocabulary
 				.getElements() : new HashMap<String, EdmLabel>();
 		elements.put(fieldToMap, europeanaField);
 		vocabulary.setElements(elements);
@@ -259,9 +290,11 @@ public class Extractor {
 
 	public boolean isMapped(String field) {
 
-		if(vocabulary!=null){
-			for (Entry<String, EdmLabel> entry : vocabulary.getElements().entrySet()){
-				if (StringUtils.contains(entry.getKey(), field) && !entry.getValue().equals(EdmLabel.NULL)){
+		if (vocabulary != null) {
+			for (Entry<String, EdmLabel> entry : vocabulary.getElements()
+					.entrySet()) {
+				if (StringUtils.contains(entry.getKey(), field)
+						&& !entry.getValue().equals(EdmLabel.NULL)) {
 					return true;
 				}
 			}
@@ -269,7 +302,7 @@ public class Extractor {
 		return false;
 	}
 
-	public Map<String, EdmLabel> readSchema(String location) {
+	public HashMap<String, EdmLabel> readSchema(String location) {
 
 		vocabulary.setElements(readFromFile(location));
 		return vocabulary.getElements();
@@ -289,8 +322,8 @@ public class Extractor {
 		}
 	}
 
-	private Map<String, EdmLabel> readFromFile(String localLocation)  {
-		Map<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
+	private HashMap<String, EdmLabel> readFromFile(String localLocation) {
+		HashMap<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
 		try {

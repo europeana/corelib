@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.tools.AppContext;
+
+
 
 /**
  * Class for record normalization (retrieve data from a controlled vocabulary
@@ -38,12 +37,7 @@ public class Dereferencer {
 	 */
 	public static Map<String,List<String>> normalize(String uri)
 			throws MalformedURLException, IOException {
-		if (server == null) {
-			ApplicationContext applicationContext = AppContext
-					.getApplicationContext();
-			server = (VocabularyMongoServer) applicationContext
-					.getBean("corelib_solr_vocabularyMongoServer");
-		}
+		
 		Map<String,List<String>> values = new HashMap<String,List<String>>();
 		List<String> originalValue = new ArrayList<String>();
 		
@@ -52,9 +46,9 @@ public class Dereferencer {
 		if (isURI(uri)) {
 			Extractor extractor = new Extractor(new ControlledVocabularyImpl(),
 					server);
-			if (extractor.getControlledVocabulary("URI", uri) != null) {
+			if (server.getControlledVocabulary("URI", uri) != null) {
 				values.putAll(extractor.denormalize(uri,
-						extractor.getControlledVocabulary("URI", uri)));
+						server.getControlledVocabulary("URI", uri)));
 			}
 
 		}
@@ -70,7 +64,6 @@ public class Dereferencer {
 	 */
 
 	private static boolean isURI(String uri) {
-
 		try {
 			new URL(uri);
 			return true;

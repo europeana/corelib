@@ -121,7 +121,7 @@ public class ContentLoader {
 				if(mongoDBServer.getFullBean(about)==null){
 					mongoDBServer.getDatastore().save(fullBean);
 				}
-				SolrInputDocument document = SolrConstructor.constructSolrDocument(rdf);
+				SolrInputDocument document = new SolrConstructor().constructSolrDocument(rdf);
 				document.setField("europeana_id", fullBean.getAbout());
 				records.add(document);
 

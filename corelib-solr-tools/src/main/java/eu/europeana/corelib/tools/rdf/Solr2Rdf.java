@@ -38,13 +38,14 @@ public class Solr2Rdf {
 	ByteArrayOutputStream out;
 	StreamResult streamResult;
 	ContentHandler hd;
+
 	public void initialize() throws TransformerConfigurationException,
 			SAXException, IOException {
 		out = new ByteArrayOutputStream();
-		OutputFormat of = new OutputFormat("XML","UTF-8",true);
+		OutputFormat of = new OutputFormat("XML", "UTF-8", true);
 		of.setIndent(1);
 		of.setIndenting(true);
-		XMLSerializer serializer = new XMLSerializer(out,of);
+		XMLSerializer serializer = new XMLSerializer(out, of);
 		hd = serializer.asContentHandler();
 		hd.startDocument();
 		AttributesImpl atts = new AttributesImpl();
@@ -56,7 +57,8 @@ public class Solr2Rdf {
 			TransformerException, JiBXException {
 
 		createXMLFromSolr(solrDocument);
-		Map<String,List<String>> synchronizedMap = Collections.synchronizedMap(map);
+		Map<String, List<String>> synchronizedMap = Collections
+				.synchronizedMap(map);
 		for (Entry<String, List<String>> mapField : synchronizedMap.entrySet()) {
 			for (String str : mapField.getValue()) {
 				createXMLElement(mapField.getKey(), (String) str);
@@ -66,21 +68,25 @@ public class Solr2Rdf {
 		return transformDoc();
 	}
 
-	private String transformDoc() throws TransformerException, JiBXException, IOException {
+	private String transformDoc() throws TransformerException, JiBXException,
+			IOException {
 		String output = out.toString("UTF-8");
-		
+
 		ByteArrayOutputStream transformedOutput = new ByteArrayOutputStream();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		Transformer transform = tFactory.newTransformer(new StreamSource("src/main/resources/convertToEdm.xsl"));
+		Transformer transform = tFactory.newTransformer(new StreamSource(
+				"src/main/resources/convertToEdm.xsl"));
 		transform.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		transform.setOutputProperty(OutputKeys.INDENT, "yes");
-		transform.transform(new SAXSource(new InputSource(new ByteArrayInputStream(output.getBytes()))),new StreamResult(transformedOutput));
+		transform.transform(new SAXSource(new InputSource(
+				new ByteArrayInputStream(output.getBytes()))),
+				new StreamResult(transformedOutput));
 		transformedOutput.flush();
 		String edmString = transformedOutput.toString("UTF-8");
 		transformedOutput.close();
-		
+
 		out.close();
-		
+
 		System.out.println(edmString);
 		return edmString;
 	}
@@ -90,40 +96,42 @@ public class Solr2Rdf {
 	}
 
 	public String constructFromSolrDocument(SolrInputDocument solrDocument)
-			throws SAXException, IOException, TransformerException, JiBXException {
+			throws SAXException, IOException, TransformerException,
+			JiBXException {
 
 		createXMLFromSolr(solrDocument);
 		serializeDoc();
 		return transformDoc();
 	}
 
-
 	private void createXMLFromSolr(SolrInputDocument solrDocument)
 			throws SAXException {
 		for (Entry<String, SolrInputField> solrField : solrDocument.entrySet()) {
-			if(solrField.getValue()!=null && solrField.getValue().getValues()!=null){
-			for (Object str : solrField.getValue().getValues().toArray()) {
-				if(str instanceof String){
-					createXMLElement(solrField.getKey(), (String) str);
+			if (solrField.getValue() != null
+					&& solrField.getValue().getValues() != null) {
+				for (Object str : solrField.getValue().getValues().toArray()) {
+					if (str instanceof String) {
+						createXMLElement(solrField.getKey(), (String) str);
+					} else if (str instanceof Boolean) {
+						createXMLElement(solrField.getKey(),
+								Boolean.toString((Boolean) str));
+					}
 				}
-				else if (str instanceof Boolean){
-					createXMLElement(solrField.getKey(),Boolean.toString((Boolean)str));
-				}
-			}
 			}
 		}
 	}
 
 	private void createXMLElement(String name, String value)
 			throws SAXException {
-		AttributesImpl atts = new AttributesImpl();
-		String[] elems = StringUtils.split(name,".");
-		if(elems.length>1){
-			atts.addAttribute("", "", "xml:lang", "CDATA", elems[1]);
+		if (!StringUtils.equals(name, "original")) {
+			AttributesImpl atts = new AttributesImpl();
+			String[] elems = StringUtils.split(name, ".");
+			if (elems.length > 1) {
+				atts.addAttribute("", "", "xml:lang", "CDATA", elems[1]);
+			}
+			hd.startElement("", "", elems[0], atts);
+			hd.characters(value.toCharArray(), 0, value.length());
+			hd.endElement("", "", name);
 		}
-		hd.startElement("", "", elems[0], atts);
-		hd.characters(value.toCharArray(), 0, value.length());
-		hd.endElement("", "", name);
-		
 	}
 }

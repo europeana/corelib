@@ -39,7 +39,7 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class SolrConstructor {
-	static SolrInputDocument solrInputDocument;
+	
 	
 	/**
 	 * Construct a SolrInputDocument from a JiBX RDF Entity
@@ -52,8 +52,8 @@ public class SolrConstructor {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public static SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
-		solrInputDocument = new SolrInputDocument();
+	public SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
+		SolrInputDocument solrInputDocument = new SolrInputDocument();
 
 		for(Choice element: rdf.getChoiceList()){
 			if(element.ifAgent()){
