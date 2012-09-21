@@ -81,6 +81,7 @@ public class FullBeanImpl implements FullBean {
 	private int europeanaCompleteness;
 
 	private boolean optOut;
+
 	@Transient
 	private List<BriefBeanImpl> similarItems;
 
@@ -105,10 +106,8 @@ public class FullBeanImpl implements FullBean {
 	@Reference
 	private EuropeanaAggregationImpl europeanaAggregation;
 
-
 	@Reference
 	private List<ProxyImpl> proxies;
-
 
 	private String[] country;
 	private String[] userTags;
@@ -334,10 +333,9 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Boolean isOptedOut() {
-		
 		return this.optOut;
 	}
-	
+
 	@Override
 	public void setOptOut(boolean optOut){
 		this.optOut = optOut;

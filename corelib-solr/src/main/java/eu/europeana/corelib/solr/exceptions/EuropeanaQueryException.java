@@ -32,7 +32,7 @@ public class EuropeanaQueryException extends EuropeanaException {
 		super(problem);
 	}
 
-	public EuropeanaQueryException(Throwable causedBy,ProblemType problem) {
-		super(causedBy,problem);
+	public EuropeanaQueryException(Throwable causedBy, ProblemType problem) {
+		super(causedBy, problem);
 	}
 }

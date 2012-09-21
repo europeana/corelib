@@ -36,17 +36,12 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
-
-
 	private DocType edmType;
 
-
 	private Map<String,List<String>> year;
-	
-	
 
 	private Map<String,List<String>> userTags;
-	
+
 	private boolean europeanaProxy;
 
 	@Override
@@ -69,19 +64,21 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 		this.europeanaProxy = europeanaProxy;
 	}
 
-	
 	@Override
 	public Map<String,List<String>> getYear() {
 		return year;
 	}
+
 	@Override
 	public void setYear(Map<String,List<String>> year) {
 		this.year = year;
 	}
+
 	@Override
 	public Map<String,List<String>> getUserTags() {
 		return userTags;
 	}
+
 	@Override
 	public void setUserTags(Map<String,List<String>> userTags) {
 		this.userTags = userTags;
