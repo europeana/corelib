@@ -30,6 +30,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
  */
 public interface TokenService extends AbstractService<Token> {
 
+	// 6 hours
 	int MAX_TOKEN_AGE = 1000 * 60 * 60 * 6;
 
 	/**

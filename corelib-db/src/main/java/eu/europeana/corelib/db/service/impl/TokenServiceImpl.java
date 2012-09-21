@@ -45,13 +45,16 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 
 	/**
 	 * Overriding the findByID() method to handle expiration
+	 * @throws DatabaseException 
 	 */
 	@Override
-	public Token findByID(Serializable id) {
+	public Token findByID(Serializable id) throws DatabaseException {
 		Token token;
 		try {
+			log.info("super.findByID(" + id + ")");
 			token = super.findByID(id);
 		} catch (DatabaseException e) {
+			log.severe("DatabaseException: " + e.getLocalizedMessage());
 			return null;
 		}
 		if (token != null) {
@@ -60,6 +63,8 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 				return token;
 			}
 			getDao().delete(token);
+			log.severe("Token is outdated, so deleted: " + id);
+			throw new DatabaseException(ProblemType.TOKEN_OUTDATED);
 		}
 		return null;
 	}
