@@ -64,6 +64,15 @@ public interface UserService extends AbstractService<User> {
 	User findByApiKey(String apiKey);
 
 	/**
+	 * Returns a User if there is a valid user name provided.
+	 * 
+	 * @param username
+	 *            Name of user, case sensitive
+	 * @return A user with given user name, null if not found.
+	 */
+	User findByName(String userName);
+
+	/**
 	 * Returns a User if there is a valid email and password provided.
 	 * 
 	 * @param email

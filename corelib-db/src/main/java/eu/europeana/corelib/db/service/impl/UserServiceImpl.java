@@ -40,7 +40,6 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -91,6 +90,14 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	public User findByApiKey(String apiKey) {
 		if (StringUtils.isNotBlank(apiKey)) {
 			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY, apiKey);
+		}
+		return null;
+	}
+
+	@Override
+	public User findByName(String userName) {
+		if (StringUtils.isNotBlank(userName)) {
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_NAME, userName);
 		}
 		return null;
 	}
@@ -238,5 +245,4 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 		return null;
 	}
-
 }
