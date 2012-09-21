@@ -73,5 +73,13 @@
 				p:subject="User Feedback"
 			/>
 		</entry>
+		<entry key="registerNotify">
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/register-notify"
+				p:emailFrom="#{europeanaProperties['system.from']}"
+				p:emailTo="#{europeanaProperties['register.to']}"
+				p:subject="Someone registered just now"
+			/>
+		</entry>
 	</util:map>
 </beans>
