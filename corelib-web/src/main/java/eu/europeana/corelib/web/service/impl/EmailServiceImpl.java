@@ -73,6 +73,29 @@ public abstract class EmailServiceImpl implements EmailService {
 	}
 
 	/**
+	 * Sends a token to user as part of registration confirmation
+	 * 
+	 * @param token
+	 *   The token to send to the user
+	 * @param url
+	 *   The URL of registration confirm page
+	 */
+	@Override
+	public void sendRegisterNotify(final User user) throws EmailServiceException {
+		if (user == null) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("user", user);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("registerNotify"); // see corelib_web_emailConfigs
+		// builder.setEmailTo(token.getEmail());
+		mailSender.send(builder);
+		log.info(String.format("Sent user registratiom (%s)", user.getEmail()));
+	}
+
+	/**
 	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
 	 * 
 	 * @param user
