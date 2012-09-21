@@ -29,6 +29,7 @@ public enum ProblemType {
     UNABLE_TO_CHANGE_LANGUAGE("We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
     TOKEN_INVALID("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
     UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
+    TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
     SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),
     UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
     MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),

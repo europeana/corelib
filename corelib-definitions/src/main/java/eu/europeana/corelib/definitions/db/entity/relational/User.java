@@ -61,5 +61,4 @@ public interface User extends IdentifiedEntity<Long> {
 	Set<SavedSearch> getSavedSearches();
 
 	Set<SocialTag> getSocialTags();
-
 }
