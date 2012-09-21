@@ -56,7 +56,8 @@ import eu.europeana.corelib.utils.DateUtils;
 @Entity
 @NamedQueries({
 	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?"),
-	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="from UserImpl u where u.apiKey = ?")
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="from UserImpl u where u.apiKey = ?"),
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_NAME, query="from UserImpl u where u.userName = ?")
 })
 @Table(name = RelationalDatabase.TABLENAME_USER)
 public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
@@ -64,6 +65,7 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 
 	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
 	public static final String QUERY_FINDBY_APIKEY = "User.findByApiKey";
+	public static final String QUERY_FINDBY_NAME = "User.findByName";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
