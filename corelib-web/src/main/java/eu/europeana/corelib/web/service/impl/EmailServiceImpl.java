@@ -105,7 +105,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	 */
 	@Override
 	public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
-		if ( (user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
+		if ((user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -119,6 +119,29 @@ public abstract class EmailServiceImpl implements EmailService {
 	}
 
 	/**
+	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
+	 * 
+	 * @param user
+	 *   The user object
+	 * @param url
+	 *   The URL of the password reset page
+	 */
+	@Override
+	public void sendForgotPassword(final String email, final String url) throws EmailServiceException {
+		if (StringUtils.isBlank(email) || StringUtils.isBlank(url)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("url", url);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("forgotPassword");
+		builder.setEmailTo(email);
+		mailSender.send(builder);
+		log.info(String.format("Sent forgot password (URL=%s) to %s", url, email));
+	}
+
+	/**
 	 * Sends the user's feedback to the site admin, and sends an thanking email to the user
 	 * 
 	 * @param email
@@ -128,7 +151,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	 */
 	@Override
 	public void sendFeedback(String email, String feedback) throws EmailServiceException {
-		if ( StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
+		if (StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();

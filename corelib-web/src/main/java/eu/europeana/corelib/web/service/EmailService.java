@@ -32,5 +32,7 @@ public interface EmailService {
 
 	void sendForgotPassword(User user, String url) throws EmailServiceException;
 
+	void sendForgotPassword(String email, String url) throws EmailServiceException;
+
 	void sendFeedback(String email, String feedback) throws EmailServiceException;
 }
