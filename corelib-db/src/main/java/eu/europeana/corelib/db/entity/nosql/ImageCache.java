@@ -73,6 +73,10 @@ public class ImageCache implements NoSqlEntity {
 		this.imageId = imageId;
 	}
 
+	/**
+	 * String = LARGE, MEDIUM, TINY
+	 * @return
+	 */
 	public Map<String, Image> getImages() {
 		return images;
 	}
