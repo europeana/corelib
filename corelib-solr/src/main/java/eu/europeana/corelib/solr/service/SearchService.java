@@ -104,6 +104,18 @@ public interface SearchService {
 	 */
 	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
 
+	/**
+	 * returns a list of search suggestions and frequencies
+	 * 
+	 * @param query
+	 * 			The search term to find suggestions for
+	 * @param pageSize
+	 * 			Amount of requested suggestions
+	 * @return List of search suggestions
+	 * @throws SolrTypeException 
+	 */
+	List<Term> suggestions(String query, int pageSize, String field) throws SolrTypeException;
+
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 

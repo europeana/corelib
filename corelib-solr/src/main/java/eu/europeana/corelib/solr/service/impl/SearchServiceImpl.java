@@ -74,6 +74,11 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	private static final int DEFAULT_MLT_COUNT = 10;
 
+	/**
+	 * The list of possible field input for spelling suggestions
+	 */
+	private static final List<String> SPELL_FIELDS = Arrays.asList("who", "what", "where", "when", "title");
+
 	// provided by setter
 	private SolrServer solrServer;
 
@@ -289,11 +294,16 @@ public class SearchServiceImpl implements SearchService {
 	 * }
 	 */
 
+	public List<Term> suggestions(String query, int pageSize) throws SolrTypeException {
+		return suggestions(query, pageSize, null);
+	}
+
 	/**
 	 * Adds suggestions regarding a given query string
 	 */
-	public List<Term> suggestions(String query, int pageSize)
+	public List<Term> suggestions(String query, int pageSize, String field)
 			throws SolrTypeException {
+		log.info(String.format("%s, %d, %s", query, pageSize, field));
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setFacet(true);
 		solrQuery.setFacetMinCount(1);
@@ -301,55 +311,76 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setFacetLimit(pageSize);
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
-		solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell", "whenSpell", "titleSpell");
+		if (StringUtils.isBlank(field) || !SPELL_FIELDS.contains(field)) {
+			solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell", "whenSpell", "titleSpell");
+		} else if (field.equals("who")) {
+			solrQuery.addFacetField("whoSpell");
+		} else if (field.equals("what")) {
+			solrQuery.addFacetField("whatSpell");
+		} else if (field.equals("where")) {
+			solrQuery.addFacetField("whereSpell");
+		} else if (field.equals("when")) {
+			solrQuery.addFacetField("whenSpell");
+		} else if (field.equals("title")) {
+			solrQuery.addFacetField("titleSpell");
+		}
 		List<Term> results = new ArrayList<Term>();
 
 		QueryResponse response;
 		try {
-			log.info("SolrQuery:" +solrQuery);
+			log.info("SolrQuery: " +solrQuery);
 			response = solrServer.query(solrQuery);
 
 			FacetField who = response.getFacetField("whoSpell");
-			List<Count> whoSuggestions = who.getValues();
-			if (whoSuggestions != null) {
-				for (Count whoSuggestion : whoSuggestions) {
-					results.add(new Term(whoSuggestion.getName(), whoSuggestion.getCount(), "Person"));
+			if (who != null) {
+				List<Count> whoSuggestions = who.getValues();
+				if (whoSuggestions != null) {
+					for (Count whoSuggestion : whoSuggestions) {
+						results.add(new Term(whoSuggestion.getName(), whoSuggestion.getCount(), "Creator"));
+					}
 				}
 			}
 
 			FacetField what = response.getFacetField("whatSpell");
-			List<Count> whatSuggestions = what.getValues();
-			if (whatSuggestions != null) {
-				for (Count whatSuggestion : whatSuggestions) {
-					results.add(new Term(whatSuggestion.getName(), whatSuggestion.getCount(), "Subject"));
+			if (what != null) {
+				List<Count> whatSuggestions = what.getValues();
+				if (whatSuggestions != null) {
+					for (Count whatSuggestion : whatSuggestions) {
+						results.add(new Term(whatSuggestion.getName(), whatSuggestion.getCount(), "Subject"));
+					}
 				}
 			}
 
 			FacetField when = response.getFacetField("whenSpell");
-			List<Count> whenSuggestions = when.getValues();
-			if (whenSuggestions != null) {
-				for (Count whenSuggestion : whenSuggestions) {
-					results.add(new Term(whenSuggestion.getName(), whenSuggestion.getCount(), "Period"));
+			if (when != null) {
+				List<Count> whenSuggestions = when.getValues();
+				if (whenSuggestions != null) {
+					for (Count whenSuggestion : whenSuggestions) {
+						results.add(new Term(whenSuggestion.getName(), whenSuggestion.getCount(), "Time/Period"));
+					}
 				}
 			}
 
 			FacetField where = response.getFacetField("whereSpell");
-			List<Count> whereSuggestions = where.getValues();
-			if (whereSuggestions != null) {
-				for (Count whereSuggestion : whereSuggestions) {
-					results.add(new Term(whereSuggestion.getName(), whereSuggestion.getCount(), "Place"));
+			if (where != null) {
+				List<Count> whereSuggestions = where.getValues();
+				if (whereSuggestions != null) {
+					for (Count whereSuggestion : whereSuggestions) {
+						results.add(new Term(whereSuggestion.getName(), whereSuggestion.getCount(), "Place"));
+					}
 				}
 			}
 
 			FacetField title = response.getFacetField("titleSpell");
-			List<Count> titleSuggestions = title.getValues();
-			if (titleSuggestions != null) {
-				for (Count titleSuggestion : titleSuggestions) {
-					results.add(new Term(titleSuggestion.getName(), titleSuggestion.getCount(), "Title"));
+			if (title != null) {
+				List<Count> titleSuggestions = title.getValues();
+				if (titleSuggestions != null) {
+					for (Count titleSuggestion : titleSuggestions) {
+						results.add(new Term(titleSuggestion.getName(), titleSuggestion.getCount(), "Title"));
+					}
 				}
 			}
 		} catch (SolrServerException e) {
-
 			log.severe("SolrServerException: " + e.getMessage());
 		}
 		Collections.sort(results);
