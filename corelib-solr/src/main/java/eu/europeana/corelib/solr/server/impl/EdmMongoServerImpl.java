@@ -74,7 +74,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		// TODO Auto-generated constructor stub
 	}
 
-	private synchronized void createDatastore() {
+	private void createDatastore() {
 		morphia = new Morphia();
 
 		morphia.map(FullBeanImpl.class);
@@ -141,7 +141,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public synchronized <T> T searchByAbout(Class<T> clazz, String about) {
+	public <T> T searchByAbout(Class<T> clazz, String about) {
 
 		return datastore.find(clazz).filter("about", about).get();
 	}

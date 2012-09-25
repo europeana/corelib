@@ -14,7 +14,6 @@ import eu.europeana.corelib.dereference.ControlledVocabulary;
 
 @Entity("ControlledVocabulary")
 public class ControlledVocabularyImpl implements ControlledVocabulary {
-
 	@Id
 	private ObjectId id;
 	

@@ -107,7 +107,6 @@ public class ContentLoader {
 
 	public int parse() {
 		MongoConstructor mongoConstructor = new MongoConstructor();
-		mongoConstructor.setMongoServer((EdmMongoServerImpl) mongoDBServer);
 		for (File f : collectionXML) {
 			try {
 				IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
@@ -115,7 +114,7 @@ public class ContentLoader {
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
 				
-				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf,(EdmMongoServerImpl) mongoDBServer);
 				String about = EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout());
 				fullBean.setAbout(about);
 				if(mongoDBServer.getFullBean(about)==null){

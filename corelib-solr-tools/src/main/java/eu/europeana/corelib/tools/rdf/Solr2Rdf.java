@@ -71,7 +71,7 @@ public class Solr2Rdf {
 	private String transformDoc() throws TransformerException, JiBXException,
 			IOException {
 		String output = out.toString("UTF-8");
-
+		System.out.println(output);
 		ByteArrayOutputStream transformedOutput = new ByteArrayOutputStream();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		Transformer transform = tFactory.newTransformer(new StreamSource(

@@ -105,11 +105,11 @@ public class SearchServiceTest {
 	public void findSuggestions() throws SolrTypeException {
 		testCount++;
 		
-		List<Term> terms = searchService.suggestions("voit, j", 1);
+		List<Term> terms = searchService.suggestions("modell mod", 1);
 		Assert.assertEquals(terms.size(), 1);
-		Assert.assertEquals(terms.get(0).getField(), "Person");
-		Assert.assertEquals(terms.get(0).getFrequency(), 2);
-		Assert.assertEquals(terms.get(0).getTerm(), "voit, johann michael");
+		Assert.assertEquals(terms.get(0).getField(), "Title");
+		Assert.assertEquals(terms.get(0).getFrequency(), 3);
+		Assert.assertEquals(terms.get(0).getTerm(), "modell moderner pianinomechanik");
 	}
 
 	@Test

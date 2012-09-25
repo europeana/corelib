@@ -53,12 +53,12 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
  */
 public class MongoConstructor {
 
-	private EdmMongoServerImpl mongoServer;
+//	private EdmMongoServerImpl mongoServer;
 	private final static String EUROPEANA_URI="http:///www.europeana.eu/portal/record";
 
-	public void setMongoServer(EdmMongoServerImpl mongoServer) {
-		this.mongoServer = mongoServer;
-	}
+//	public void setMongoServer(EdmMongoServerImpl mongoServer) {
+//		this.mongoServer = mongoServer;
+//	}
 
 	/**
 	 * Construct a FullBean out of A JiBX RDF record
@@ -70,7 +70,7 @@ public class MongoConstructor {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	public FullBeanImpl constructFullBean(RDF record)
+	public FullBeanImpl constructFullBean(RDF record, EdmMongoServerImpl mongoServer)
 			throws InstantiationException, IllegalAccessException,
 			MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
@@ -185,10 +185,10 @@ public class MongoConstructor {
 		MongoUtils.updateAggregation(aggregation,mongoServer);
 		
 		fullBean.setProvidedCHOs(providedCHOs);
-		if (mongoServer.searchByAbout(EuropeanaAggregationImpl.class,fullBean.getAbout()
-				+ "#EuropeanaAggregation") == null) {
-			europeanaAggregation.setAbout(fullBean.getAbout()
-					+ "#EuropeanaAggregation");
+		if (mongoServer.searchByAbout(EuropeanaAggregationImpl.class,"/aggregation/europeana"+fullBean.getAbout()
+				) == null) {
+			europeanaAggregation.setAbout("/aggregation/europeana"+fullBean.getAbout()
+					);
 			europeanaAggregation.setEdmLandingPage(EUROPEANA_URI+fullBean.getAbout()+".html");
 			europeanaAggregation.setAggregatedCHO(fullBean.getAbout());
 			mongoServer.getDatastore().save(europeanaAggregation);
