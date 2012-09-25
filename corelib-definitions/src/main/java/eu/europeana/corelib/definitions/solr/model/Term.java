@@ -18,6 +18,14 @@
 package eu.europeana.corelib.definitions.solr.model;
 
 /**
+ * Container class for terms of suggestions. It has three properties:
+ * 
+ * <ul>
+ * <li>term (String): the word</li>
+ * <li>frequency (long): the number of occurances</li>
+ * <li>field (String): name of field the term takes place</li>
+ * </ul>
+ * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class Term implements Comparable<Term>{
