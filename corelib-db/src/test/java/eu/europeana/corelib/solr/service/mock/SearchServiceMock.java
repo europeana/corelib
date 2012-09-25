@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
@@ -37,7 +36,6 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -49,16 +47,17 @@ import eu.europeana.corelib.solr.service.SearchService;
  */
 public class SearchServiceMock implements SearchService {
 
-	public static final String[] TITLE=new String[]{"Mock Title"};
-	public static final String[] AUTHOR=new String[]{"Mock Author"};
-	public static final String[] THUMBNAIL=new String[]{"MockThumbnail.jpg"};
+	public static final String[] TITLE = new String[]{"Mock Title"};
+	public static final String[] AUTHOR = new String[]{"Mock Author"};
+	public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
 	public static final List<? extends Aggregation> aggregations2 = new ArrayList<AggregationImpl>();
+
 	@Override
 	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
 		// not needed in this mock...
 		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public FullBean findById(String europeanaObjectId) {
@@ -81,7 +80,7 @@ public class SearchServiceMock implements SearchService {
 		replay(mockBean);
 		return mockBean;
 	}
-	
+
 	@Override
 	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) {
 		// not needed in this mock...
@@ -93,12 +92,14 @@ public class SearchServiceMock implements SearchService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public FullBean resolve(String collectionId, String recordId)
 			throws SolrTypeException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
 		// TODO Auto-generated method stub
@@ -112,4 +113,10 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
+	@Override
+	public List<Term> suggestions(String query, int pageSize, String field)
+			throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
