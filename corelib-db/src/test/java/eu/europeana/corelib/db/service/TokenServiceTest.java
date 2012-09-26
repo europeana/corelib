@@ -84,7 +84,7 @@ public class TokenServiceTest {
 		fail("This line should never be reached!!!");
 	}
 	
-	@Test
+	@Test(expected=DatabaseException.class)
 	public void testExpiredToken() throws DatabaseException {
 		Calendar expired = Calendar.getInstance();
 		expired.add(Calendar.MILLISECOND, -TokenService.MAX_TOKEN_AGE);
@@ -94,7 +94,9 @@ public class TokenServiceTest {
 		// change date to expired date
 		token.setCreated(expired.getTime());
 		tokenService.store(token);
-		assertNull("Token not flagged as expired", tokenService.findByID(token.getToken()));
+		Token nullToken = tokenService.findByID(token.getToken());
+		fail("This line should never be reached!!!");
+		// assertNull("Token not flagged as expired", );
 	}
 
 }
