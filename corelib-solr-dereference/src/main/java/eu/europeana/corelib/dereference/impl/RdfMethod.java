@@ -1,5 +1,6 @@
 package eu.europeana.corelib.dereference.impl;
 
+import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.Alt;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Begin;
@@ -7,6 +8,7 @@ import eu.europeana.corelib.definitions.jibx.BiographicalInformation;
 import eu.europeana.corelib.definitions.jibx.BroadMatch;
 import eu.europeana.corelib.definitions.jibx.Broader;
 import eu.europeana.corelib.definitions.jibx.CloseMatch;
+import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.Date;
 import eu.europeana.corelib.definitions.jibx.DateOfBirth;
 import eu.europeana.corelib.definitions.jibx.DateOfDeath;
@@ -28,6 +30,7 @@ import eu.europeana.corelib.definitions.jibx.NarrowMatch;
 import eu.europeana.corelib.definitions.jibx.Narrower;
 import eu.europeana.corelib.definitions.jibx.Notation;
 import eu.europeana.corelib.definitions.jibx.Note;
+import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.ProfessionOrOccupation;
 import eu.europeana.corelib.definitions.jibx.Related;
@@ -35,10 +38,46 @@ import eu.europeana.corelib.definitions.jibx.RelatedMatch;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
+import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.jibx._Long;
 @SuppressWarnings("unchecked")
 public enum RdfMethod {
+	SKOS_CONCEPT("skos_concept","",Concept.class){
 
+		@Override
+		public <T, V> T returnObject(T clazz, V obj) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	},
+	EDM_AGENT("edm_agent","",AgentType.class){
+
+		@Override
+		public <T, V> T returnObject(T clazz, V obj) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	},
+	EDM_TIMESPAN("edm_timespan","",TimeSpanType.class){
+
+		@Override
+		public <T, V> T returnObject(T clazz, V obj) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	},
+	EDM_PLACE("edm_place","",PlaceType.class){
+
+		@Override
+		public <T, V> T returnObject(T clazz, V obj) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	},
 	CC_SKOS_PREF_LABEL("cc_skos_prefLabel", "getPrefLabel", PrefLabel.class) {
 		@Override
 		public <T, V> T returnObject(T clazz, V obj) {
