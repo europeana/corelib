@@ -36,9 +36,9 @@ public class ImageUtils {
 		// do not allow instances of this class
 	}
 
-	public static BufferedImage scale(BufferedImage org, int width, int height) throws IOException {
+	public static BufferedImage scale(BufferedImage org, int width) throws IOException {
 		if (org != null) {
-			return Scalr.resize(org, width, height);
+			return Scalr.resize(org, width);
 		}
 		return null;
 	}
