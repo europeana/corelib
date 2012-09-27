@@ -332,7 +332,20 @@ public enum RdfMethod {
 					}
 					return (T) pref;
 				}
-			}, TS_DCTERMS_HASPART(
+			}, 
+			TS_DCTERMS_ISPART_OF_LABEL(
+					"ts_dcterms_isPartOf_label", "getIsPartOfList", IsPartOf.class) {
+						@Override
+						public <T, V> T returnObject(T clazz, V obj) {
+							IsPartOf pref = new IsPartOf();
+							pref.setString(((ResourceOrLiteralType) obj).getString());
+							pref.setResource(((ResourceOrLiteralType) obj).getResource());
+							if (((ResourceOrLiteralType) obj).getLang() != null) {
+								pref.setLang(((ResourceOrLiteralType) obj).getLang());
+							}
+							return (T) pref;
+						}
+					},TS_DCTERMS_HASPART(
 			"ts_dcterms_hasPart", "getHasPartList", HasPart.class) {
 				@Override
 				public <T, V> T returnObject(T clazz, V obj) {
