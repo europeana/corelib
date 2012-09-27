@@ -109,13 +109,21 @@ public class ThumbnailServiceTest {
 
 		Image tinyImage = imageCache.getImages().get(ThumbSize.TINY.toString());
 
-		Assert.assertTrue(tinyImage.getHeight() > 0);
-		Assert.assertEquals(tinyImage.getWidth(), ThumbSize.TINY.getMaxWidth());
-
-		Image largeImage = imageCache.getImages().get(
-				ThumbSize.LARGE.toString());
-		InputStream in = new ByteArrayInputStream(largeImage.getImage());
-
+		Image mediumImage = imageCache.getImages().get(ThumbSize.MEDIUM.toString());
+		
+		Image largeImage = imageCache.getImages().get(ThumbSize.LARGE.toString());
+		
+		//Test and ensure that the proportions of the produced images do not violate the thumbnail
+		//specifications
+		
+		Assert.assertTrue(tinyImage.getHeight() <= ThumbSize.TINY.getMaxHeight());
+		Assert.assertTrue(tinyImage.getWidth() <= ThumbSize.TINY.getMaxWidth());
+		
+		Assert.assertTrue(mediumImage.getHeight() <= ThumbSize.MEDIUM.getMaxHeight());
+		Assert.assertTrue(mediumImage.getWidth() <= ThumbSize.MEDIUM.getMaxWidth());
+		
+		Assert.assertTrue(largeImage.getHeight() <= ThumbSize.LARGE.getMaxHeight());
+		Assert.assertTrue(largeImage.getWidth() <= ThumbSize.LARGE.getMaxWidth());
 	}
 
 	/**

@@ -13,11 +13,11 @@ public class ImageUtilsTest {
 	
 	@Test
 	public void scaleTest() throws IOException {
-		Assert.assertNull("Should return null on null as input",ImageUtils.scale(null,0));
+		Assert.assertNull("Should return null on null as input",ImageUtils.scale(null,0,0));
 		
 		BufferedImage bufImg = ImageIO.read( getClass().getResourceAsStream("/images/GREATWAR.jpg") );
 		
-		BufferedImage scaled = ImageUtils.scale(bufImg,100);
+		BufferedImage scaled = ImageUtils.scale(bufImg, 100, 100);
 		
 		Assert.assertNotNull("Should not return null",scaled);
 		Assert.assertEquals(scaled.getHeight(), 59);

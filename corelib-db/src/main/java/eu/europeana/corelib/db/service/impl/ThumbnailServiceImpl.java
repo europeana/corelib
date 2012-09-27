@@ -60,11 +60,14 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		ImageCache cache = new ImageCache(objectId, DEFAULT_IMAGEID, collectionId, url);
 
 		try {
-			BufferedImage tiny = ImageUtils.scale(image, ThumbSize.TINY.getMaxWidth());
+			BufferedImage tiny = ImageUtils.scale(image, ThumbSize.TINY.getMaxWidth(),
+					ThumbSize.TINY.getMaxHeight());
 
-			BufferedImage medium = ImageUtils.scale(image, ThumbSize.MEDIUM.getMaxWidth());
+			BufferedImage medium = ImageUtils.scale(image, ThumbSize.MEDIUM.getMaxWidth(),
+					ThumbSize.MEDIUM.getMaxHeight());
 
-			BufferedImage large = ImageUtils.scale(image, ThumbSize.LARGE.getMaxWidth());
+			BufferedImage large = ImageUtils.scale(image, ThumbSize.LARGE.getMaxWidth(),
+					ThumbSize.LARGE.getMaxHeight());
 
 			byte[] tinybyteorig = ImageUtils.toByteArray(tiny);
 			byte[] mediumbyteorig = ImageUtils.toByteArray(medium);
@@ -158,13 +161,16 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 		ImageCache cache = new ImageCache(objectId, imageId, collectionId, url);
 
 		try {
-			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth());
+			BufferedImage tiny = ImageUtils.scale(originalImage, ThumbSize.TINY.getMaxWidth(),
+					ThumbSize.TINY.getMaxHeight());
 			cache.getImages().put(ThumbSize.TINY.toString(), new Image(tiny));
 
-			BufferedImage medium = ImageUtils.scale(originalImage, ThumbSize.MEDIUM.getMaxWidth());
+			BufferedImage medium = ImageUtils.scale(originalImage, ThumbSize.MEDIUM.getMaxWidth(),
+					ThumbSize.MEDIUM.getMaxHeight());
 			cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(medium));
 
-			BufferedImage large = ImageUtils.scale(originalImage, ThumbSize.LARGE.getMaxWidth());
+			BufferedImage large = ImageUtils.scale(originalImage, ThumbSize.LARGE.getMaxWidth(),
+					ThumbSize.LARGE.getMaxHeight());
 			cache.getImages().put(ThumbSize.LARGE.toString(), new Image(large));
 		} catch (IOException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
