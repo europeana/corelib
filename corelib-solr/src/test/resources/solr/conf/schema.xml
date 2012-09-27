@@ -531,6 +531,7 @@
    <copyField source="europeana_aggregation_edm_country.*" dest="COUNTRY" />
    <copyField source="proxy_edm_year.*" dest="YEAR" />
    <copyField source="provider_aggregation_edm_dataProvider.*" dest="DATA_PROVIDER" />
+   <copyField source="provider_aggregation_edm_provider.*" dest="PROVIDER" />
    <copyField source="provider_aggregation_edm_rights.*" dest="RIGHTS" />
    <copyField source="europeana_completeness" dest="COMPLETENESS" />
    <copyField source="edm_UGC" dest="UGC" />
