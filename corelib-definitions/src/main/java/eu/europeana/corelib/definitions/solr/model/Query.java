@@ -231,6 +231,11 @@ public class Query implements Cloneable {
 	public void divideRefinements() {
 		searchRefinements = new ArrayList<String>();
 		facetRefinements = new ArrayList<String>();
+
+		if (refinements == null) {
+			return;
+		}
+
 		Map<String, FacetCollector> register = new LinkedHashMap<String, FacetCollector>();
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
