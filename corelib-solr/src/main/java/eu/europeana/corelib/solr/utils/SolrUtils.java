@@ -43,8 +43,7 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  * 
  */
 public final class SolrUtils {
-	private static final Logger log = Logger.getLogger(SolrUtils.class
-			.getName());
+	private static final Logger log = Logger.getLogger(SolrUtils.class.getName());
 
 	private SolrUtils() {
 
@@ -60,10 +59,9 @@ public final class SolrUtils {
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
-				if (StringUtils.contains(refinement, "TYPE:")) {
+				if (StringUtils.contains(refinement, "TYPE:") && !StringUtils.contains(refinement, " OR ")) {
 					try {
-						DocType.get(StringUtils.substringAfter(refinement,
-								"TYPE:"));
+						DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
 					} catch (IllegalArgumentException e) {
 						log.severe(e.getMessage());
 						return false;

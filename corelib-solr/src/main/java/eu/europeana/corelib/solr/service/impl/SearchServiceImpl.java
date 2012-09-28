@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.service.impl;
 
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,6 +75,8 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	private static final int DEFAULT_MLT_COUNT = 10;
 
+	private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
+
 	/**
 	 * The list of possible field input for spelling suggestions
 	 */
@@ -99,8 +102,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String collectionId, String recordId)
 			throws SolrTypeException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId,
-				recordId));
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
 	}
 
 	@Override
@@ -184,13 +186,16 @@ public class SearchServiceImpl implements SearchService {
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
-			String[] refinements = query.getRefinements();
+			String[] refinements = query.getRefinements(true);
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery()
-						.setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 				solrQuery.setFacet(true);
 				for (Facet facet : query.getFacets()) {
-					solrQuery.addFacetField(facet.toString());
+					String facetToAdd = facet.toString();
+					if (query.isProduceFacetUnion()) {
+						facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
+					}
+					solrQuery.addFacetField(facetToAdd);
 				}
 				if (refinements != null) {
 					solrQuery.addFilterQuery(refinements);
@@ -336,7 +341,7 @@ public class SearchServiceImpl implements SearchService {
 				List<Count> whoSuggestions = who.getValues();
 				if (whoSuggestions != null) {
 					for (Count whoSuggestion : whoSuggestions) {
-						results.add(new Term(whoSuggestion.getName(), whoSuggestion.getCount(), "Creator"));
+						results.add(new Term(whoSuggestion.getName(), whoSuggestion.getCount(), "Creator")); // Creator_t
 					}
 				}
 			}
@@ -346,7 +351,7 @@ public class SearchServiceImpl implements SearchService {
 				List<Count> whatSuggestions = what.getValues();
 				if (whatSuggestions != null) {
 					for (Count whatSuggestion : whatSuggestions) {
-						results.add(new Term(whatSuggestion.getName(), whatSuggestion.getCount(), "Subject"));
+						results.add(new Term(whatSuggestion.getName(), whatSuggestion.getCount(), "Subject")); // Subject_t
 					}
 				}
 			}
@@ -376,7 +381,7 @@ public class SearchServiceImpl implements SearchService {
 				List<Count> titleSuggestions = title.getValues();
 				if (titleSuggestions != null) {
 					for (Count titleSuggestion : titleSuggestions) {
-						results.add(new Term(titleSuggestion.getName(), titleSuggestion.getCount(), "Title"));
+						results.add(new Term(titleSuggestion.getName(), titleSuggestion.getCount(), "Title")); // Title_t
 					}
 				}
 			}
