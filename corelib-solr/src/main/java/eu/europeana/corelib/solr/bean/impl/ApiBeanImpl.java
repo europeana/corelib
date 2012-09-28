@@ -62,9 +62,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Field("UGC")
 	private String[] ugc;
 
-	@Field("edm_rights")
-	private String[] edmRights;
-
 	@Field("COMPLETENESS")
 	private String[] completeness;
 
@@ -129,11 +126,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	}
 
 	@Override
-	public String[] getAggregationEdmRights() {
-		return (edmRights != null ? this.edmRights.clone() : null);
-	}
-
-	@Override
 	public String[] getDctermsIsPartOf() {
 		return (dctermsIsPartOf != null ? this.dctermsIsPartOf.clone() : null);
 	}
@@ -146,16 +138,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Override
 	public void setUgc(String[] ugc) {
 		this.ugc = ugc.clone();
-	}
-
-	@Override
-	public String[] getEdmRights() {
-		return edmRights != null ? this.edmRights.clone() : null;
-	}
-
-	@Override
-	public void setEdmRights(String[] edmRights) {
-		this.edmRights = edmRights.clone();
 	}
 
 	@Override

@@ -42,7 +42,6 @@ import eu.europeana.corelib.definitions.solr.entity.Timespan;
  */
 public interface FullBean extends IdBean {
 
-
 	String[] getUserTags();
 
 	List<? extends Place> getPlaces();

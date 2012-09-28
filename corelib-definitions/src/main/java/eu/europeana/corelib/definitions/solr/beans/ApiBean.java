@@ -29,9 +29,7 @@ import java.util.Map;
 public interface ApiBean extends BriefBean {
 
 	String[] getDctermsIsPartOf();
-	
-	String[] getAggregationEdmRights();
-	
+
 	String[] getEdmConcept(); // skos:concept
 
 	List<Map<String, String>> getEdmConceptLabel(); // skos:concept prefLabel
@@ -51,10 +49,6 @@ public interface ApiBean extends BriefBean {
 	String[] getUgc();
 
 	void setUgc(String[] ugc);
-
-	String[] getEdmRights();
-
-	void setEdmRights(String[] edmRights);
 
 	String[] getCountry();
 

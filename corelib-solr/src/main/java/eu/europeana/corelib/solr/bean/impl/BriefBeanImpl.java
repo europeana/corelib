@@ -40,7 +40,6 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
-	
 	@Field("timestamp")
 	private Date timestamp;
 
@@ -154,6 +153,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 		return DocType.get(docType);
 	}
 
+	@Override
 	public String[] getRights() {
 		return (this.rights != null ? this.rights.clone() : null);
 	}

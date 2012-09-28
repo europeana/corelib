@@ -44,6 +44,8 @@ public interface BriefBean extends IdBean {
 
 	String[] getLanguage(); // LANGUAGE copyfield dc_language
 
+	String[] getRights(); // LANGUAGE copyfield dc_language
+
 	DocType getType(); // TYPE copyfield edm_type
 
 	// here the dcterms namespaces starts
