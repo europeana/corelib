@@ -37,16 +37,16 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Concept")
 public class ConceptImpl extends ContextualClassImpl implements Concept {
 
-	private String[] broader;
-	private String[] narrower;
-	private String[] related;
-	private String[] broadMatch;
-	private String[] narrowMatch;
-	private String[] exactMatch;
-	private String[] relatedMatch;
-	private String[] closeMatch;
-	private Map<String,List<String>> notation;
-	private String[] inScheme;
+	protected String[] broader;
+	protected String[] narrower;
+	protected String[] related;
+	protected String[] broadMatch;
+	protected String[] narrowMatch;
+	protected String[] exactMatch;
+	protected String[] relatedMatch;
+	protected String[] closeMatch;
+	protected Map<String,List<String>> notation;
+	protected String[] inScheme;
 
 	@Override
 	public String[] getBroader() {

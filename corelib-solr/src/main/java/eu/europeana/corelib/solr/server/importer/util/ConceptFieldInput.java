@@ -41,6 +41,7 @@ import eu.europeana.corelib.definitions.jibx.RelatedMatch;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -165,8 +166,10 @@ public final class ConceptFieldInput {
 	public ConceptImpl createConceptMongoFields(Concept concept,
 			MongoServer mongoServer, RDF rdf) {
 
-		ConceptImpl conceptMongo = (ConceptImpl) ((EdmMongoServer) mongoServer)
-				.searchByAbout(ConceptImpl.class, concept.getAbout());
+		ConceptImpl conceptMongo = ((EdmMongoServer) mongoServer)
+				.getDatastore()
+				.find(ConceptImpl.class)
+				.filter("about", concept.getAbout()).get();
 		if (conceptMongo == null) {
 			// If it does not exist
 			conceptMongo = createNewConcept(concept);
@@ -427,8 +430,9 @@ public final class ConceptFieldInput {
 			}
 		}
 
-		return (ConceptImpl) ((EdmMongoServer) mongoServer).searchByAbout(
-				ConceptImpl.class, concept.getAbout());
+		return (ConceptImpl) ((EdmMongoServer) mongoServer).getDatastore()
+				.find(ConceptImpl.class)
+				.filter("about", concept.getAbout()).get();
 	}
 
 	private ConceptImpl createNewConcept(Concept concept) {

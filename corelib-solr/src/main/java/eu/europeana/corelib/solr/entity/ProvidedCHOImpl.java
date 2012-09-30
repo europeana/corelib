@@ -36,7 +36,7 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 
-	private String[] owlSameAs;
+	protected String[] owlSameAs;
 
 	@Override
 	public String[] getOwlSameAs() {

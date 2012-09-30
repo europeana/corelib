@@ -54,7 +54,7 @@ public final class WebResourcesFieldInput {
 	 *            The JiBX object representing a WebResource
 	 * @param solrInputDocument
 	 *            The SolrInputDocument to alter
-	 * @return The altered SolrInputDocument withe the web resource fields
+	 * @return The altered SolrInputDocument with the web resource fields
 	 *         filled in
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException

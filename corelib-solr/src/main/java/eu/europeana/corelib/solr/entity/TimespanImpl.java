@@ -36,12 +36,12 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.solr.entity.Timespan {
 
-	private Map<String,List<String>> begin;
-	private Map<String,List<String>> end;
-	private Map<String,List<String>> isPartOf;
-	private Map<String,List<String>> dctermsHasPart;
+	protected Map<String,List<String>> begin;
+	protected Map<String,List<String>> end;
+	protected Map<String,List<String>> isPartOf;
+	protected Map<String,List<String>> dctermsHasPart;
 
-	private String[] owlSameAs;
+	protected String[] owlSameAs;
 
 	@Override
 	public Map<String,List<String>> getBegin() {

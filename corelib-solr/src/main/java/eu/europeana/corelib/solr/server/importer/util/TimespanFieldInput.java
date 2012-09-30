@@ -30,7 +30,6 @@ import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -120,8 +119,9 @@ public final class TimespanFieldInput {
 	 */
 	public TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
 			MongoServer mongoServer) {
-		TimespanImpl mongoTimespan = (TimespanImpl) ((EdmMongoServer) mongoServer)
-				.searchByAbout(TimespanImpl.class, timeSpan.getAbout());
+		TimespanImpl mongoTimespan = ((EdmMongoServer) mongoServer).getDatastore()
+				.find(TimespanImpl.class)
+				.filter("about", timeSpan.getAbout()).get();
 		if (mongoTimespan == null) {
 			mongoTimespan = createNewTimespan(timeSpan);
 			mongoServer.getDatastore().save(mongoTimespan);
@@ -176,7 +176,7 @@ public final class TimespanFieldInput {
 
 		if (mongoTimespan.getDctermsHasPart() != null) {
 
-			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(),
+			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "dctermsHasPart", MongoUtils
 							.createResourceOrLiteralMapFromList(timeSpan
 									.getHasPartList()));
@@ -195,13 +195,14 @@ public final class TimespanFieldInput {
 			for (String owlSameAsItem : mongoTimespan.getOwlSameAs()) {
 				owlSameAs.add(owlSameAsItem);
 			}
-			MongoUtils.update(PlaceImpl.class, mongoTimespan.getAbout(),
+			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "owlSameAs",
 					StringArrayUtils.toArray(owlSameAs));
 		}
 
-		return (TimespanImpl) ((EdmMongoServer) mongoServer).searchByAbout(
-				TimespanImpl.class, timeSpan.getAbout());
+		return ((EdmMongoServer) mongoServer).getDatastore()
+				.find(TimespanImpl.class)
+				.filter("about", timeSpan.getAbout()).get();
 
 	}
 

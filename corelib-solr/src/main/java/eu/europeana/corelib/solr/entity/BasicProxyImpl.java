@@ -4,8 +4,8 @@ import eu.europeana.corelib.definitions.solr.entity.BasicProxy;
 
 public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
-	private String[] proxyIn;
-	private String proxyFor;
+	protected String[] proxyIn;
+	protected String proxyFor;
 
 	@Override
 	public String[] getProxyIn() {

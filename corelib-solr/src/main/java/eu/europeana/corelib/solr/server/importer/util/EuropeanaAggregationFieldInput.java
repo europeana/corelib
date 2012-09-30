@@ -81,8 +81,8 @@ public final class EuropeanaAggregationFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		
 		if(belongsTo(aggregation,webResource)){
-			List<WebResourceImpl> webResources = (List<WebResourceImpl>) (aggregation.getWebResources() != null ? aggregation
-					.getWebResources() : new ArrayList<WebResourceImpl>());
+			List<WebResource> webResources = (List<WebResource>) (aggregation.getWebResources() != null ? aggregation
+					.getWebResources() : new ArrayList<WebResource>());
 			
 			aggregation.setWebResources(webResources);
 			if(aggregation.getAbout()!=null){
@@ -101,7 +101,7 @@ public final class EuropeanaAggregationFieldInput {
 
 	public EuropeanaAggregation appendWebResource(
 			EuropeanaAggregation aggregation,
-			List<WebResourceImpl> webResources, MongoServer mongoServer)
+			List<WebResource> webResources, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
 		
 			
@@ -141,7 +141,7 @@ public final class EuropeanaAggregationFieldInput {
 				.resourceListToArray(aggregation.getAggregateList()));
 		mongoAggregation.setEdmHasView(SolrUtils
 				.resourceListToArray(aggregation.getHasViewList()));
-		if (((EdmMongoServer) mongoServer).searchByAbout(EuropeanaAggregationImpl.class,
+		if (((EdmMongoServer) mongoServer).getDatastore().find(EuropeanaAggregationImpl.class).filter("about",
 				mongoAggregation.getAbout()) != null) {
 			// TODO:update Aggregation
 		} else {
@@ -172,5 +172,6 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		return false;
 	}
+
 
 }

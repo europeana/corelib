@@ -37,13 +37,13 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Place")
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
-	private Map<String,List<String>> isPartOf;
-	private float latitude;
-	private float longitude;
-	private float altitude;
-	private Map<String,Float> position;
-	private Map<String,List<String>> dcTermsHasPart;
-	private String[] owlSameAs;
+	protected Map<String,List<String>> isPartOf;
+	protected float latitude;
+	protected float longitude;
+	protected float altitude;
+	protected Map<String,Float> position;
+	protected Map<String,List<String>> dcTermsHasPart;
+	protected String[] owlSameAs;
 
 	@Override
 	public Map<String,List<String>> getIsPartOf() {

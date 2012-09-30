@@ -6,8 +6,8 @@ import java.util.Map;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -17,18 +17,18 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
-	@Embedded
-	private List<WebResourceImpl> webResources;
+	@Reference
+	protected List<WebResource> webResources;
 
-	private String aggregatedCHO;
-	private String[] aggregates;
-	private Map<String,List<String>> dcCreator;
-	private String edmLandingPage;
-	private String edmIsShownBy;
-	private String[] edmHasView;
-	private Map<String,List<String>> edmCountry;
-	private Map<String,List<String>> edmLanguage;
-	private Map<String,List<String>> edmRights;
+	protected String aggregatedCHO;
+	protected String[] aggregates;
+	protected Map<String,List<String>> dcCreator;
+	protected String edmLandingPage;
+	protected String edmIsShownBy;
+	protected String[] edmHasView;
+	protected Map<String,List<String>> edmCountry;
+	protected Map<String,List<String>> edmLanguage;
+	protected Map<String,List<String>> edmRights;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -128,7 +128,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setWebResources(List<? extends WebResource> webResources) {
-		this.webResources = (List<WebResourceImpl>) webResources;
+		this.webResources = (List<WebResource>) webResources;
 	}
 	
 	

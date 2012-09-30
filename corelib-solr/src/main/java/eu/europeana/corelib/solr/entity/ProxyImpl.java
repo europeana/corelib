@@ -36,13 +36,13 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
-	private DocType edmType;
+	protected DocType edmType;
 
-	private Map<String,List<String>> year;
+	protected Map<String,List<String>> year;
 
-	private Map<String,List<String>> userTags;
+	protected Map<String,List<String>> userTags;
 
-	private boolean europeanaProxy;
+	protected boolean europeanaProxy;
 
 	@Override
 	public void setEdmType(DocType edmType) {

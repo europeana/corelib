@@ -67,7 +67,6 @@ public final class ProvidedCHOFieldInput {
 						sameAs.getResource());
 			}
 		}
-		
 
 		solrInputDocument.addField(
 				EdmLabel.EUROPEANA_COLLECTIONNAME.toString(),
@@ -90,15 +89,18 @@ public final class ProvidedCHOFieldInput {
 	public ProvidedCHOImpl createProvidedCHOMongoFields(
 			ProvidedCHOType providedCHO, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-		ProvidedCHOImpl mongoProvidedCHO = mongoServer.searchByAbout(ProvidedCHOImpl.class, providedCHO.getAbout());
+		ProvidedCHOImpl mongoProvidedCHO = mongoServer.getDatastore()
+				.find(ProvidedCHOImpl.class)
+				.filter("about", providedCHO.getAbout()).get();
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
-			//mongoProvidedCHO.setId(new ObjectId());
+			// mongoProvidedCHO.setId(new ObjectId());
 			mongoProvidedCHO.setAbout(providedCHO.getAbout());
-			
-				mongoProvidedCHO.setOwlSameAs(SolrUtils.resourceListToArray(providedCHO.getSameAList()));
-			
+
+			mongoProvidedCHO.setOwlSameAs(SolrUtils
+					.resourceListToArray(providedCHO.getSameAList()));
+
 			mongoServer.getDatastore().save(mongoProvidedCHO);
 		} else {
 			// update the ProvidedCHO

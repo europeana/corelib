@@ -25,6 +25,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -39,23 +40,23 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
-	private Map<String,List<String>> edmDataProvider;
-	private String edmIsShownBy;
-	private String edmIsShownAt;
-	private String edmObject;
-	private Map<String,List<String>> edmProvider;
-	private Map<String,List<String>> edmRights;
-	private String edmUgc;
-	private Map<String,List<String>> dcRights;
-	private String[] hasView;
-	private String aggregatedCHO;
-	private String[] aggregates;
-	private String[] edmUnstored;
+	protected Map<String,List<String>> edmDataProvider;
+	protected String edmIsShownBy;
+	protected String edmIsShownAt;
+	protected String edmObject;
+	protected Map<String,List<String>> edmProvider;
+	protected Map<String,List<String>> edmRights;
+	protected String edmUgc;
+	protected Map<String,List<String>> dcRights;
+	protected String[] hasView;
+	protected String aggregatedCHO;
+	protected String[] aggregates;
+	protected String[] edmUnstored;
 
-	@Embedded
-	private List<WebResourceImpl> webResources;
+	@Reference
+	protected List<WebResource> webResources;
 
-	private Boolean edmPreviewNoDistribute;
+	protected Boolean edmPreviewNoDistribute;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -161,14 +162,14 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 
 	@Override
-	public List<WebResourceImpl> getWebResources() {
+	public List<? extends WebResource> getWebResources() {
 		return this.webResources;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setWebResources(List<? extends WebResource> webResources) {
-		this.webResources = (List<WebResourceImpl>) webResources;
+		this.webResources = (List<WebResource>) webResources;
 	}
 
 	@Override

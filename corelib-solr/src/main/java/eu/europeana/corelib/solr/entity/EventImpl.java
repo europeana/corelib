@@ -9,15 +9,15 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class EventImpl extends ContextualClassImpl implements Event {
 
 	//TODO: FIX LATER TO CONFORM TO OTHER ENTITIES
-	private String[] edmHappenedAt;
-	private String[] edmOccuredAt;
-	private String[] sameAs;
-	private String[] dcIdentifier;
-	private String[] dctermsHasPart;
-	private String[] dctermsIsPartOf;
-	private String[] crmP120FOccursBefore;
-	private String[] edmHasType;
-	private String[] edmIsRelatedTo;
+	protected String[] edmHappenedAt;
+	protected String[] edmOccuredAt;
+	protected String[] sameAs;
+	protected String[] dcIdentifier;
+	protected String[] dctermsHasPart;
+	protected String[] dctermsIsPartOf;
+	protected String[] crmP120FOccursBefore;
+	protected String[] edmHasType;
+	protected String[] edmIsRelatedTo;
 	
 	@Override
 	public void setEdmHappenedAt(String[] edmHappenedAt) {

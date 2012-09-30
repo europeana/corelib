@@ -34,6 +34,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
@@ -199,8 +200,9 @@ public final class AgentFieldInput {
 	public AgentImpl createAgentMongoEntity(AgentType agentType,
 			MongoServer mongoServer) throws MalformedURLException, IOException {
 
-		AgentImpl agent = ((EdmMongoServer) mongoServer).searchByAbout(
-				AgentImpl.class, agentType.getAbout());
+		AgentImpl agent = ((EdmMongoServer) mongoServer).getDatastore()
+				.find(AgentImpl.class)
+				.filter("about", agentType.getAbout()).get();
 
 		// if it does not exist
 
@@ -353,8 +355,9 @@ public final class AgentFieldInput {
 
 		}
 
-		return ((EdmMongoServer) mongoServer).searchByAbout(AgentImpl.class,
-				agentType.getAbout());
+		return ((EdmMongoServer) mongoServer).getDatastore()
+				.find(AgentImpl.class)
+				.filter("about", agentType.getAbout()).get();
 	}
 
 	/**

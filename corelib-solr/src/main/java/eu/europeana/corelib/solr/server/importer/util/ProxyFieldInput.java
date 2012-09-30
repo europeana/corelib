@@ -33,6 +33,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -829,8 +830,9 @@ public final class ProxyFieldInput {
 				}
 			}
 		}
-		 if (((EdmMongoServer) mongoServer).searchByAbout(ProxyImpl.class,
-			 mongoProxy.getAbout()) != null) {
+		 if (((EdmMongoServer) mongoServer).getDatastore()
+			.find(ProxyImpl.class)
+			.filter("about", proxy.getAbout()).get() != null) {
 		MongoUtils.updateProxy(mongoProxy, mongoServer);
 		 } else {
 		mongoServer.getDatastore().save(mongoProxy);
