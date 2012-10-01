@@ -197,6 +197,7 @@
    <field name="proxy_dcterms_created" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_extent" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_hasFormat" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="proxy_dcterms_hasPart" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_isReferencedBy" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_dcterms_isReplacedBy" type="string" indexed="true" stored="false" multiValued="true" />
@@ -234,8 +235,8 @@
    <dynamicField name="proxy_dcterms_requires.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_spatial.*" type="string" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="proxy_dcterms_tableOfContents.*" type="string" indexed="true" stored="false" multiValued="true" />
-   <dynamicField name="proxy_dcterms_temporal.*" type="string" indexed="true" stored="true" multiValued="true" />
-   
+   <dynamicField name="proxy_dcterms_temporal.*" type="string" indexed="true" stored="false" multiValued="true" />
+   <dynamicField name="proxy_dcterms_hasPart.*" type="string" indexed="true" stored="false" multiValued="true"/>
    
 	<field name="proxy_edm_type" type="string" indexed="true" stored="true" multiValued="true" />
 	<field name="proxy_edm_unstored" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -621,6 +622,7 @@
    <copyField source="proxy_dcterms_created.*" dest = "proxy_dcterms_created" />
    <copyField source="proxy_dcterms_extent.*" dest = "proxy_dcterms_extent" />
    <copyField source="proxy_dcterms_hasFormat.*" dest = "proxy_dcterms_hasFormat" />
+    <copyField source="proxy_dcterms_hasPart.*" dest = "proxy_dcterms_hasPart" />
    <copyField source="proxy_dcterms_isPartOf.*" dest = "proxy_dcterms_isPartOf" />
    <copyField source="proxy_dcterms_isReferencedBy.*" dest = "proxy_dcterms_isReferencedBy" />
    <copyField source="proxy_dcterms_isReplacedBy.*" dest = "proxy_dcterms_isReplacedBy" />
