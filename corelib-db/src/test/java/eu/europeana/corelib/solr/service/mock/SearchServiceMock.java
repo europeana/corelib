@@ -22,7 +22,9 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
@@ -62,21 +64,32 @@ public class SearchServiceMock implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId) {
 		FullBean mockBean = createMock(FullBean.class);
-		Proxy proxy = createMock(Proxy.class);
-		AggregationImpl aggregation =createMock(AggregationImpl.class);
+		Proxy proxy =createMock(Proxy.class);
+		Map<String,List<String>> dcPublisher = new HashMap<String,List<String>>();
+		List<String> vals = new ArrayList<String>();
+		vals.add(AUTHOR[0]);
+		dcPublisher.put("def",vals);
+		proxy.setDcPublisher(dcPublisher);
+		Aggregation aggregation =createMock(AggregationImpl.class);
 		FullBean bean2 = new FullBeanImpl();
-		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
+		List<Aggregation> aggregations = new ArrayList<Aggregation>();
+		aggregation.setEdmObject(THUMBNAIL[0]);
 		aggregations.add(aggregation);
 		List<Proxy> proxies = new ArrayList<Proxy>();
 		proxies.add(proxy);
 		bean2.setProxies(proxies);
-		bean2.setAggregations(aggregations);
+		mockBean.setAggregations(aggregations);
 		expect(mockBean.getTitle()).andStubReturn(TITLE);
-
-		expect(bean2.getProxies().get(0).getDcPublisher().values().iterator().next().get(0)).andStubReturn(AUTHOR[0]);
+		
+		expect(bean2.getProxies().get(0).getDcPublisher()).andStubReturn(dcPublisher);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
-		expect(bean2.getAggregations().get(0).getEdmObject()).andStubReturn(THUMBNAIL[0]);
+		expect((List<Aggregation>)mockBean.getAggregations()).andStubReturn(aggregations);
+		expect(aggregation.getEdmObject()).andStubReturn(THUMBNAIL[0]);
+		expect((List<Proxy>)mockBean.getProxies()).andStubReturn(proxies);
 		expect(mockBean.getType()).andStubReturn(DocType.TEXT);
+		expect(mockBean.getAbout()).andStubReturn(europeanaObjectId);
+		replay(aggregation);
+		replay(proxy);
 		replay(mockBean);
 		return mockBean;
 	}
