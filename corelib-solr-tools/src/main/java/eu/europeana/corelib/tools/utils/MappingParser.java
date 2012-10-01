@@ -15,7 +15,7 @@ public abstract class MappingParser {
 	public abstract String getHashField(String collectionId, String fileName);
 	
 	public String readFile(String mappingFile) {
-		String strFileContents = "";
+		StringBuffer strFileContents = new StringBuffer();
 		FileInputStream fin;
 		try {
 			fin = new FileInputStream(mappingFile);
@@ -23,15 +23,16 @@ public abstract class MappingParser {
 			byte[] contents = new byte[1024];
 			int bytesRead = 0;
 			while ((bytesRead = bin.read(contents)) != -1) {
-				strFileContents += new String(contents, 0, bytesRead);
+				strFileContents.append( new String(contents, 0, bytesRead));
 			}
 			fin.close();
+			bin.close();
 		} catch (FileNotFoundException e) {
 			return null;
 		} catch (IOException e) {
 			return null;
 		}
-		return strFileContents;
+		return strFileContents.toString();
 	}
 	
 	

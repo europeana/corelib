@@ -21,8 +21,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Property;
-import com.google.code.morphia.annotations.Serialized;
 
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 /**
@@ -36,7 +34,7 @@ import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 
-	protected String[] owlSameAs;
+	private String[] owlSameAs;
 
 	@Override
 	public String[] getOwlSameAs() {

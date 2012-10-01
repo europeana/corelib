@@ -17,8 +17,8 @@
 
 package eu.europeana.corelib.dereference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 
@@ -39,7 +39,7 @@ public interface ControlledVocabulary {
 	 * 
 	 * @return A list of the elements of the controlled vocabulary
 	 */
-	HashMap<String, EdmLabel> getElements();
+	Map<String, EdmLabel> getElements();
 
 
 	/**
@@ -92,14 +92,46 @@ public interface ControlledVocabulary {
 	 */
 	void setSuffix(String suffix);
 
-	void setElements(HashMap<String, EdmLabel> elements);
+	/**
+	 * Set the original elements of the controlled vocabulary 
+	 * @param elements
+	 */
+	void setElements(Map<String, EdmLabel> elements);
 
 
+	/**
+	 * MongoDB ID getter
+	 * @return
+	 */
 	ObjectId getId();
 
+	/**
+	 * MongoDB ID setter
+	 * @param id
+	 */
 	void setId(ObjectId id);
 	
+	/**
+	 * URI-Based rules getter for a specific controlled vocabulary. E.g. in the MIMO controlled vocabularies
+	 * there are people and objects mapped, however their mappings in EDM should be placed on a different 
+	 * contextual entities; namely edm:Agent and skos:Concept respectively. 
+	 * The URI-based rules considers the existence of a specific rule in the URI of the stored resource
+	 *  e.g. http://www.mimo-de.eu/<b>InstrumentsKeywords</b>/2308 the rule being InstrumentKeywords
+	 *  
+	 *  There might be more than one rules per mapping, while * wildcard is also allowed
+	 *  
+	 * @return
+	 */
 	String[] getRules();
-	
+	/**
+	 * URI-Based rules setter for a specific controlled vocabulary. E.g. in the MIMO controlled vocabularies
+	 * there are people and objects mapped, however their mappings in EDM should be placed on a different 
+	 * contextual entities; namely edm:Agent and skos:Concept respectively. 
+	 * The URI-based rules considers the existence of a specific rule in the URI of the stored resource
+	 *  e.g. http://www.mimo-de.eu/<b>InstrumentsKeywords</b>/2308 the rule being InstrumentKeywords
+	 *  
+	 *  There might be more than one rules per mapping, while * wildcard is also allowed
+	 *  
+	 */
 	void setRules(String[] rules);
 }

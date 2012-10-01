@@ -14,8 +14,6 @@ import org.apache.commons.lang.StringUtils;
 public class EuropeanaField {
 	/**
 	 * Enumeration holding the fields that should be checked for normalization
-	 * (plus the contextual entities... they are missing now, but should be
-	 * included) Also check the reference field prior to checking dereference
 	 * 
 	 * @author Yorgos.Mamakis@ kb.nl
 	 * 
@@ -63,14 +61,26 @@ public class EuropeanaField {
 		}
 	}
 
+	/**
+	 * Get the value of the enumeration
+	 * @return
+	 */
 	public String getFieldValue() {
 		return this.uriField.toString();
 	}
 
+	/**
+	 * Get all the fields of the enumeration
+	 * @return
+	 */
 	public UriField[] getFields() {
 		return UriField.values();
 	}
 
+	/**
+	 * Get the values of the enumerated fields
+	 * @return An array containing the field values
+	 */
 	public String[] getFieldValues() {
 		List<String> values = new ArrayList<String>();
 		for (UriField uriField : UriField.values()) {
@@ -83,10 +93,19 @@ public class EuropeanaField {
 		return this.uriField;
 	}
 
+	/**
+	 * Setter for internal string field
+	 * @param field
+	 */
 	public void setField(UriField field) {
 		this.uriField = field;
 	}
 
+	/**
+	 * Method to check if a field is contained in the enumeration
+	 * @param field - the field to check
+	 * @return true if exists, false otherwise
+	 */
 	public static boolean contains(String field) {
 		for (UriField uriField : UriField.values()) {
 			if (StringUtils.equals(uriField.toString(), field)) {

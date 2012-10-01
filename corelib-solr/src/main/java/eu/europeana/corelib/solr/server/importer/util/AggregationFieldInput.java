@@ -130,6 +130,7 @@ public final class AggregationFieldInput {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
+	@SuppressWarnings("unchecked")
 	public AggregationImpl appendWebResource(
 			List<AggregationImpl> aggregations, WebResourceImpl webResource,
 			EdmMongoServer mongoServer) throws InstantiationException,

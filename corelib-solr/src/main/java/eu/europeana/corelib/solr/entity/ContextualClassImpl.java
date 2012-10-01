@@ -8,10 +8,10 @@ import eu.europeana.corelib.definitions.solr.entity.ContextualClass;
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
 	
-	protected Map<String,List<String>> prefLabel;
-	protected Map<String,List<String>> altLabel;
-	protected Map<String,List<String>> hiddenLabel;
-	protected Map<String,List<String>> note;
+	private Map<String,List<String>> prefLabel;
+	private Map<String,List<String>> altLabel;
+	private Map<String,List<String>> hiddenLabel;
+	private Map<String,List<String>> note;
 
 	@Override
 	public Map<String, List<String>> getPrefLabel() {

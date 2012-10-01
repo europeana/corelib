@@ -37,16 +37,16 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Concept")
 public class ConceptImpl extends ContextualClassImpl implements Concept {
 
-	protected String[] broader;
-	protected String[] narrower;
-	protected String[] related;
-	protected String[] broadMatch;
-	protected String[] narrowMatch;
-	protected String[] exactMatch;
-	protected String[] relatedMatch;
-	protected String[] closeMatch;
-	protected Map<String,List<String>> notation;
-	protected String[] inScheme;
+	private String[] broader;
+	private String[] narrower;
+	private String[] related;
+	private String[] broadMatch;
+	private String[] narrowMatch;
+	private String[] exactMatch;
+	private String[] relatedMatch;
+	private String[] closeMatch;
+	private Map<String,List<String>> notation;
+	private String[] inScheme;
 
 	@Override
 	public String[] getBroader() {
@@ -55,7 +55,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setBroader(String[] broader) {
-		this.broader = broader.clone();
+		this.broader = broader!=null?broader.clone():null;
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setNarrower(String[] narrower) {
-		this.narrower=narrower;
+		this.narrower=narrower!=null?narrower.clone():null;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setRelated(String[] related) {
-		this.related = related;
+		this.related = related!=null?narrower.clone():null;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setBroadMatch(String[] broadMatch) {
-		this.broadMatch = broadMatch;
+		this.broadMatch = broadMatch!=null?broadMatch.clone():null;
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setNarrowMatch(String[] narrowMatch) {
-		this.narrowMatch = narrowMatch;
+		this.narrowMatch = narrowMatch!=null? narrowMatch.clone(): null;
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setRelatedMatch(String[] relatedMatch) {
-		this.relatedMatch = relatedMatch;
+		this.relatedMatch = relatedMatch!=null?relatedMatch.clone():null;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setExactMatch(String[] exactMatch) {
-		this.exactMatch = exactMatch;
+		this.exactMatch = exactMatch!=null?exactMatch.clone():null;
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setCloseMatch(String[] closeMatch) {
-		this.closeMatch = closeMatch;
+		this.closeMatch = closeMatch!=null?closeMatch.clone():null;
 	}
 
 	@Override
@@ -161,6 +161,6 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setInScheme(String[] inScheme) {
-		this.inScheme = inScheme;
+		this.inScheme = inScheme!=null?inScheme.clone():null;
 	}
 }

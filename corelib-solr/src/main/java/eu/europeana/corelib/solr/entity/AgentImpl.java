@@ -37,24 +37,24 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity ("Agent")
 public class AgentImpl extends ContextualClassImpl implements Agent {
 
-	protected Map<String,List<String>> begin;
-	protected Map<String,List<String>> end;
+	private Map<String,List<String>> begin;
+	private Map<String,List<String>> end;
 
-	protected String[] edmWasPresentAt;
-	protected Map<String,List<String>> edmHasMet;
-	protected Map<String,List<String>> edmIsRelatedTo;
-	protected String[] owlSameAs;
-	protected Map<String,List<String>> foafName;
-	protected Map<String,List<String>> dcDate;
-	protected Map<String,List<String>> dcIdentifier;
+	private String[] edmWasPresentAt;
+	private Map<String,List<String>> edmHasMet;
+	private Map<String,List<String>> edmIsRelatedTo;
+	private String[] owlSameAs;
+	private Map<String,List<String>> foafName;
+	private Map<String,List<String>> dcDate;
+	private Map<String,List<String>> dcIdentifier;
 
-	protected Map<String,List<String>> rdaGr2DateOfBirth;
-	protected Map<String,List<String>> rdaGr2DateOfDeath;
-	protected Map<String,List<String>> rdaGr2DateOfEstablishment;
-	protected Map<String,List<String>> rdaGr2DateOfTermination;
-	protected Map<String,List<String>> rdaGr2Gender;
-	protected Map<String,List<String>> rdaGr2ProfessionOrOccupation;
-	protected Map<String,List<String>> rdaGr2BiographicalInformation;
+	private Map<String,List<String>> rdaGr2DateOfBirth;
+	private Map<String,List<String>> rdaGr2DateOfDeath;
+	private Map<String,List<String>> rdaGr2DateOfEstablishment;
+	private Map<String,List<String>> rdaGr2DateOfTermination;
+	private Map<String,List<String>> rdaGr2Gender;
+	private Map<String,List<String>> rdaGr2ProfessionOrOccupation;
+	private Map<String,List<String>> rdaGr2BiographicalInformation;
 
 	@Override
 	public Map<String,List<String>> getBegin() {
@@ -94,7 +94,7 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 
 	@Override
 	public void setEdmWasPresentAt(String[] edmWasPresentAt) {
-		this.edmWasPresentAt = edmWasPresentAt;
+		this.edmWasPresentAt = edmWasPresentAt!=null? edmWasPresentAt.clone():null;
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 
 	@Override
 	public void setOwlSameAs(String[] owlSameAs) {
-		this.owlSameAs = owlSameAs;
+		this.owlSameAs = owlSameAs!=null?owlSameAs.clone():null;
 	}
 
 	@Override

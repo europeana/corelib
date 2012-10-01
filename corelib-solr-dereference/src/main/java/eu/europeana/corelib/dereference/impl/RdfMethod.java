@@ -41,6 +41,11 @@ import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.jibx._Long;
 @SuppressWarnings("unchecked")
+/**
+ * An enunmeration with the fields of the contextual entities that might be used in EDM
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public enum RdfMethod {
 	SKOS_CONCEPT("skos_concept","",Concept.class){
 
@@ -615,5 +620,14 @@ public enum RdfMethod {
 		return this.clazz;
 	}
 
+	/**
+	 * Create an object of subclass T filling its required value from object obj of superclass V.
+	 * The available ClassTypes for obj are LiteralType, ResourceOrLiteralType and ResourceType.
+	 * This enumeration provides an OSGi-safe cast method from a super type V to a sub type T
+	 * 
+	 * @param clazz - The Class to cast the object to
+	 * @param obj - the object from which to retrieve the subclass values
+	 * @return An appropriate instance of the object
+	 */
 	public abstract <T, V> T returnObject(T clazz, V obj);
 }

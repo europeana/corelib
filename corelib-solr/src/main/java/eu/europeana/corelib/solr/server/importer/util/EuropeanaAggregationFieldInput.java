@@ -75,6 +75,7 @@ public final class EuropeanaAggregationFieldInput {
 		return solrInputDocument;
 	}
 
+	@SuppressWarnings("unchecked")
 	public EuropeanaAggregation appendWebResource(
 			EuropeanaAggregation aggregation,
 			WebResourceImpl webResource, MongoServer mongoServer)

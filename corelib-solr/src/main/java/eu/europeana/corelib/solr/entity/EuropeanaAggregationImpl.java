@@ -18,17 +18,17 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
 	@Reference
-	protected List<WebResource> webResources;
+	private List<WebResource> webResources;
 
-	protected String aggregatedCHO;
-	protected String[] aggregates;
-	protected Map<String,List<String>> dcCreator;
-	protected String edmLandingPage;
-	protected String edmIsShownBy;
-	protected String[] edmHasView;
-	protected Map<String,List<String>> edmCountry;
-	protected Map<String,List<String>> edmLanguage;
-	protected Map<String,List<String>> edmRights;
+	private String aggregatedCHO;
+	private String[] aggregates;
+	private Map<String,List<String>> dcCreator;
+	private String edmLandingPage;
+	private String edmIsShownBy;
+	private String[] edmHasView;
+	private Map<String,List<String>> edmCountry;
+	private Map<String,List<String>> edmLanguage;
+	private Map<String,List<String>> edmRights;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -47,7 +47,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public void setAggregates(String[] aggregates) {
-		this.aggregates = aggregates;
+		this.aggregates = aggregates!=null?aggregates.clone():null;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public void setEdmHasView(String[] edmHasView) {
-		this.edmHasView = edmHasView;
+		this.edmHasView = edmHasView!=null?edmHasView.clone():null;
 	}
 
 	@Override

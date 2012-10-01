@@ -57,9 +57,17 @@ public class Extractor {
 	private VocabularyMongoServer mongoServer;
 	private ControlledVocabulary vocabulary;
 	private final static long UPDATETIMESTAMP = 5184000000l;
+	private final static String SKOS_CONCEPT = "skos_concept";
+	private final static String EDM_AGENT="edm_agent";
+	private final static String EDM_TIMESPAN="edm_timespan";
+	private final static String EDM_PLACE="ecm_place";
+	private final static String GET = "get";
+	private final static String SET = "set";
 
 	/**
 	 * Constructor for use with object injection
+	 * 
+	 * @param controlledVocabulary - The vocabulary to use
 	 */
 	public Extractor(ControlledVocabulary controlledVocabulary) {
 		vocabulary = controlledVocabulary;
@@ -76,7 +84,8 @@ public class Extractor {
 	/**
 	 * Constructor with the MongoDBServer for use without object Injection
 	 * 
-	 * @param server
+	 * @param controlledvocabulary - The vocabulary to use
+	 * @param server - The server to connect to
 	 */
 	public Extractor(ControlledVocabulary controlledVocabulary,
 			VocabularyMongoServer server) {
@@ -97,7 +106,8 @@ public class Extractor {
 
 	
 	/**
-	 * Denormalization method
+	 * 
+	 * Dereferencing method
 	 * 
 	 * @param resource
 	 *            The URI to retrieve the denormalized information from
@@ -105,15 +115,14 @@ public class Extractor {
 	 *            The controlled vocabulary holding the mappings
 	 * @return A List of pairs of strings representing the <Europeana Mapped
 	 *         Field , Denormalized values>
-	 * @throws InvocationTargetException 
-	 * @throws NoSuchMethodException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws IllegalArgumentException 
-	 * @throws SecurityException 
-	 * @throws MalformedURLException
-	 * @throws IOException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Map<String, List> denormalize(String resource,
 			ControlledVocabularyImpl controlledVocabulary)
 			throws SecurityException, IllegalArgumentException,
@@ -159,7 +168,7 @@ public class Extractor {
 							if (isMapped(element)) {
 								// does it have any attribute?
 								if (StringUtils.equals(getEdmLabel(element),
-										"skos_concept")) {
+										SKOS_CONCEPT)) {
 									if (xml.hasText()) {
 										if (lastConcept != null) {
 											concepts.add(lastConcept);
@@ -170,7 +179,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), "edm_agent")) {
+										getEdmLabel(element), EDM_AGENT)) {
 									if (xml.hasText()) {
 										if (lastAgent != null) {
 											agents.add(lastAgent);
@@ -181,7 +190,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), "edm_timespan")) {
+										getEdmLabel(element), EDM_TIMESPAN)) {
 									if (xml.hasText()) {
 										if (lastTimespan != null) {
 											timespans.add(lastTimespan);
@@ -192,7 +201,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), "edm_place")) {
+										getEdmLabel(element), EDM_PLACE)) {
 									if (xml.hasText()) {
 										if (lastPlace != null) {
 											places.add(lastPlace);
@@ -215,7 +224,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"skos_concept")) {
+												SKOS_CONCEPT)) {
 											if (lastConcept != null) {
 												concepts.add(lastConcept);
 											}
@@ -228,7 +237,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_agent")) {
+												EDM_AGENT)) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
 											}
@@ -241,7 +250,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_timespan")) {
+												EDM_TIMESPAN)) {
 											if (lastTimespan != null) {
 												timespans.add(lastTimespan);
 											}
@@ -254,7 +263,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_place")) {
+												EDM_PLACE)) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
 											}
@@ -312,7 +321,7 @@ public class Extractor {
 
 										if (StringUtils.equals(
 												getEdmLabel(element),
-												"skos_concept")) {
+												SKOS_CONCEPT)) {
 											if (xml.hasText()) {
 												if (lastConcept != null) {
 													concepts.add(lastConcept);
@@ -323,7 +332,7 @@ public class Extractor {
 
 											}
 										} else if (StringUtils.equals(
-												getEdmLabel(element), "edm_agent")) {
+												getEdmLabel(element), EDM_AGENT)) {
 											if (xml.hasText()) {
 												if (lastAgent != null) {
 													agents.add(lastAgent);
@@ -335,7 +344,7 @@ public class Extractor {
 											}
 										} else if (StringUtils.equals(
 												getEdmLabel(element),
-												"edm_timespan")) {
+												EDM_TIMESPAN)) {
 											if (xml.hasText()) {
 												if (lastTimespan != null) {
 													timespans.add(lastTimespan);
@@ -346,7 +355,7 @@ public class Extractor {
 
 											}
 										} else if (StringUtils.equals(
-												getEdmLabel(element), "edm_place")) {
+												getEdmLabel(element), EDM_PLACE)) {
 											if (xml.hasText()) {
 												if (lastPlace != null) {
 													places.add(lastPlace);
@@ -393,7 +402,7 @@ public class Extractor {
 								else {
 									if (StringUtils.equals(
 											getEdmLabel(element),
-											"skos_concept")) {
+											SKOS_CONCEPT)) {
 										if (xml.hasText()) {
 											if (lastConcept != null) {
 												concepts.add(lastConcept);
@@ -404,7 +413,7 @@ public class Extractor {
 
 										}
 									} else if (StringUtils.equals(
-											getEdmLabel(element), "edm_agent")) {
+											getEdmLabel(element), EDM_AGENT)) {
 										if (xml.hasText()) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
@@ -416,7 +425,7 @@ public class Extractor {
 										}
 									} else if (StringUtils.equals(
 											getEdmLabel(element),
-											"edm_timespan")) {
+											EDM_TIMESPAN)) {
 										if (xml.hasText()) {
 											if (lastTimespan != null) {
 												timespans.add(lastTimespan);
@@ -427,7 +436,7 @@ public class Extractor {
 
 										}
 									} else if (StringUtils.equals(
-											getEdmLabel(element), "edm_place")) {
+											getEdmLabel(element), EDM_PLACE)) {
 										if (xml.hasText()) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
@@ -489,7 +498,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"skos_concept")) {
+												SKOS_CONCEPT)) {
 											if (lastConcept != null) {
 												concepts.add(lastConcept);
 											}
@@ -502,7 +511,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_agent")) {
+												EDM_AGENT)) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
 											}
@@ -515,7 +524,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_timespan")) {
+												EDM_TIMESPAN)) {
 											if (lastTimespan != null) {
 												timespans.add(lastTimespan);
 											}
@@ -528,7 +537,7 @@ public class Extractor {
 										if (StringUtils.equals(
 												getEdmLabel(element + "_"
 														+ attribute),
-												"edm_place")) {
+												EDM_PLACE)) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
 											}
@@ -584,14 +593,18 @@ public class Extractor {
 							}
 							break;
 						case XMLStreamConstants.END_DOCUMENT:
-							if (lastConcept != null)
+							if (lastConcept != null){
 								concepts.add(lastConcept);
-							if (lastAgent != null)
+							}
+							if (lastAgent != null){
 								agents.add(lastAgent);
-							if (lastTimespan != null)
+							}
+							if (lastTimespan != null){
 								timespans.add(lastTimespan);
-							if (lastPlace != null)
+							}
+							if (lastPlace != null){
 								places.add(lastPlace);
+							}
 							break;
 						default:
 							break;
@@ -615,7 +628,7 @@ public class Extractor {
 	 * 
 	 * @param resource
 	 *            - The name of the resource to retrieve
-	 * @return An XML string representing the RDF/XML resource from an online
+	 * @return An XML string representing the rdf/XML resource from an online
 	 *         Controlled Vocabulary
 	 * @throws MalformedURLException
 	 * @throws IOException
@@ -653,6 +666,11 @@ public class Extractor {
 		}
 	}
 
+	/**
+	 * Retrieve value from a remote resource
+	 * @param resource - the URI of the resource
+	 * @return The string contained in the resource
+	 */
 	private String retrieveValue(String resource) {
 		URLConnection urlConnection;
 		try {
@@ -670,6 +688,18 @@ public class Extractor {
 		}
 	}
 
+	/**
+	 * Create a new Contextual Entity
+	 * @param clazz - Any rdf Contextual Entity Class (AgentType, Concept, PlaceType, TimeSpanType)
+	 * @param val - the rdf:about field for the class
+	 * @return the newly created instance of the contextual entity
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	private <T> T createNewEntity(Class<T> clazz, String val)
 			throws InstantiationException, IllegalAccessException,
 			SecurityException, NoSuchMethodException, IllegalArgumentException,
@@ -682,32 +712,49 @@ public class Extractor {
 		return obj;
 	}
 
+	/**
+	 * Append a value in a contextual entity. This method is not applicable to Concepts due to the
+	 * fact that Concept sub-elements create a Choice rather than a sequence in the EDM schema
+	 * @param val - the value to append
+	 * @param edmLabel - the field to store tha value in
+	 * @param clazz - the ClassType of the object to append the value to 
+	 * @param obj - the object to append the value to
+	 * @return the object
+	 * 
+	 * 
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private <T> T appendValue(String val, String edmLabel, Class<T> clazz, T obj)
 			throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		RdfMethod RDF = null;
+		RdfMethod rdf = null;
 		for (RdfMethod rdfMethod : RdfMethod.values()) {
 			if (StringUtils.equals(rdfMethod.getSolrField(), edmLabel)) {
-				RDF = rdfMethod;
+				rdf = rdfMethod;
 			}
 		}
 
 		//
-		if (RDF.getMethodName().endsWith("List")) {
+		if (rdf.getMethodName().endsWith("List")) {
 
-			Method mthd = clazz.getMethod(RDF.getMethodName());
+			Method mthd = clazz.getMethod(rdf.getMethodName());
 
 			List lst = mthd.invoke(obj) != null ? (ArrayList) mthd.invoke(obj)
 					: new ArrayList();
-			if (RDF.getClazz().getSuperclass()
+			if (rdf.getClazz().getSuperclass()
 					.isAssignableFrom(ResourceType.class)) {
 
 				ResourceType rs = new ResourceType();
 				rs.setResource(val);
 				lst.add(rs);
 
-			} else if (RDF.getClazz().getSuperclass()
+			} else if (rdf.getClazz().getSuperclass()
 					.isAssignableFrom(ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
 				if (isURI(val)) {
@@ -716,7 +763,7 @@ public class Extractor {
 					rs.setString(val);
 				}
 				lst.add(rs);
-			} else if (RDF.getClazz().getSuperclass()
+			} else if (rdf.getClazz().getSuperclass()
 					.isAssignableFrom(LiteralType.class)) {
 				LiteralType rs = new LiteralType();
 				rs.setString(val);
@@ -727,30 +774,30 @@ public class Extractor {
 			cls[0] = clazz;
 			Method method = obj.getClass()
 					.getMethod(
-							StringUtils.replace(RDF.getMethodName(), "get",
-									"set"), cls);
+							StringUtils.replace(rdf.getMethodName(), GET,
+									SET), cls);
 			method.invoke(obj, lst);
 		} else {
-			if (RDF.getClazz().isAssignableFrom(ResourceType.class)) {
+			if (rdf.getClazz().isAssignableFrom(ResourceType.class)) {
 				ResourceType rs = new ResourceType();
 				rs.setResource(val);
 				Class<?>[] cls = new Class<?>[1];
-				cls[0] = RDF.getClazz();
+				cls[0] = rdf.getClazz();
 				Method method = obj.getClass().getMethod(
-						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						StringUtils.replace(rdf.getMethodName(), GET, SET),
 						cls);
-				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
-			} else if (RDF.getClazz().isAssignableFrom(LiteralType.class)) {
+				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
+			} else if (rdf.getClazz().isAssignableFrom(LiteralType.class)) {
 				LiteralType rs = new LiteralType();
 				rs.setString(val);
 				Class<?>[] cls = new Class<?>[1];
-				cls[0] = RDF.getClazz();
+				cls[0] = rdf.getClazz();
 				Method method = obj.getClass().getMethod(
-						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						StringUtils.replace(rdf.getMethodName(), GET, SET),
 						cls);
-				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
+				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
 
-			} else if (RDF.getClazz().isAssignableFrom(
+			} else if (rdf.getClazz().isAssignableFrom(
 					ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
 				if (isURI(val)) {
@@ -761,9 +808,9 @@ public class Extractor {
 				Class<?>[] cls = new Class<?>[1];
 				cls[0] = clazz;
 				Method method = obj.getClass().getMethod(
-						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						StringUtils.replace(rdf.getMethodName(), GET, SET),
 						cls);
-				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
+				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
 			}
 		}
 
@@ -771,6 +818,12 @@ public class Extractor {
 		return obj;
 	}
 
+	/**
+	 * Method to check if a String is a URI
+	 * TODO: move it in some util class
+	 * @param uri - the uri to check
+	 * @return true, if the string represents a uri, false otherwise
+	 */
 	private static boolean isURI(String uri) {
 
 		try {
@@ -781,33 +834,47 @@ public class Extractor {
 		}
 
 	}
+	
+	/**
+	 * Append a value to a Concept field
+	 * @param val - the value to append
+	 * @param edmLabel - the Solr field to append the value to
+	 * @param concept - the Concept object
+	 * @return The concept
+	 * 
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
 	private Concept appendConceptValue(String val, String edmLabel,
 			Concept concept) throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		RdfMethod RDF = null;
+		RdfMethod rdf = null;
 		for (RdfMethod rdfMethod : RdfMethod.values()) {
 			if (StringUtils.equals(rdfMethod.getSolrField(), edmLabel)) {
-				RDF = rdfMethod;
+				rdf = rdfMethod;
 			}
 		}
 		List<Concept.Choice> lst = concept.getChoiceList() != null ? concept
 				.getChoiceList() : new ArrayList<Concept.Choice>();
-		if (RDF.getClazz().getSuperclass().isAssignableFrom(ResourceType.class)) {
+		if (rdf.getClazz().getSuperclass().isAssignableFrom(ResourceType.class)) {
 
 			ResourceType obj = new ResourceType();
 			obj.setResource(val);
 			Class<?>[] cls = new Class<?>[1];
-			cls[0] = RDF.getClazz();
+			cls[0] = rdf.getClazz();
 			Concept.Choice choice = new Concept.Choice();
 			Method method = choice.getClass()
 					.getMethod(
-							StringUtils.replace(RDF.getMethodName(), "get",
-									"set"), cls);
-			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+							StringUtils.replace(rdf.getMethodName(), GET,
+									SET), cls);
+			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
 			lst.add(choice);
 
-		} else if (RDF.getClazz().getSuperclass()
+		} else if (rdf.getClazz().getSuperclass()
 				.isAssignableFrom(ResourceOrLiteralType.class)) {
 
 			ResourceOrLiteralType obj = new ResourceOrLiteralType();
@@ -818,27 +885,27 @@ public class Extractor {
 				obj.setString(val);
 			}
 			Class<?>[] cls = new Class<?>[1];
-			cls[0] = RDF.getClazz();
+			cls[0] = rdf.getClazz();
 			Concept.Choice choice = new Concept.Choice();
 			Method method = choice.getClass()
 					.getMethod(
-							StringUtils.replace(RDF.getMethodName(), "get",
-									"set"), cls);
-			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+							StringUtils.replace(rdf.getMethodName(), GET,
+									SET), cls);
+			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
 			lst.add(choice);
 
-		} else if (RDF.getClazz().getSuperclass()
+		} else if (rdf.getClazz().getSuperclass()
 				.isAssignableFrom(LiteralType.class)) {
 			LiteralType obj = new LiteralType();
 			obj.setString(val);
 			Class<?>[] cls = new Class<?>[1];
-			cls[0] = RDF.getClazz();
+			cls[0] = rdf.getClazz();
 			Concept.Choice choice = new Concept.Choice();
 			Method method = choice.getClass()
 					.getMethod(
-							StringUtils.replace(RDF.getMethodName(), "get",
-									"set"), cls);
-			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+							StringUtils.replace(rdf.getMethodName(), GET,
+									SET), cls);
+			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
 			lst.add(choice);
 		}
 		concept.setChoiceList(lst);
@@ -871,13 +938,18 @@ public class Extractor {
 	 * @param europeanaField
 	 */
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
-		HashMap<String, EdmLabel> elements = vocabulary.getElements() != null ? vocabulary
+		HashMap<String, EdmLabel> elements = vocabulary.getElements() != null ? (HashMap<String, EdmLabel>)vocabulary
 				.getElements() : new HashMap<String, EdmLabel>();
 		elements.put(fieldToMap, europeanaField);
 		vocabulary.setElements(elements);
 
 	}
 
+	/**
+	 * Get the mapped field value from an EdmLabel
+	 * @param europeanaField - the EdmLabel field string representation
+	 * @return 
+	 */
 	public String getMappedField(EdmLabel europeanaField) {
 		for (String key : vocabulary.getElements().keySet()) {
 			if (europeanaField.equals(vocabulary.getElements().get(key))) {
@@ -887,6 +959,11 @@ public class Extractor {
 		return null;
 	}
 
+	/**
+	 * Method to check if a field is mapped or not
+	 * @param field - The string representation of the field
+	 * @return true if it is mapped, false otherwise
+	 */
 	public boolean isMapped(String field) {
 
 		if (vocabulary != null) {
@@ -901,12 +978,22 @@ public class Extractor {
 		return false;
 	}
 
+	
+	/**
+	 * Read an XML file from a location (locally)
+	 * @param location The file path of the XML file
+	 * @return an empty HashMap with keys being the Controlled Vocabulary fields and empty values
+	 */
 	public HashMap<String, EdmLabel> readSchema(String location) {
 
 		vocabulary.setElements(readFromFile(location));
-		return vocabulary.getElements();
+		return (HashMap<String, EdmLabel>)vocabulary.getElements();
 	}
 
+	/**
+	 * Remove a controlled vocabulary and its mappings
+	 * @param vocabularyName
+	 */
 	public void removeVocabulary(String vocabularyName) {
 
 		mongoServer.getDatastore().delete(
@@ -915,12 +1002,20 @@ public class Extractor {
 						.filter("name", vocabularyName).get().getId());
 	}
 
+	/**
+	 * Save the mapping of a controlled vocabulary
+	 */
 	public void saveMapping() {
 		if (vocabulary != null) {
 			mongoServer.getDatastore().save(vocabulary);
 		}
 	}
 
+	/**
+	 * Read an XML file representing the controlled vocabulary
+	 * @param localLocation - the file path of the XML file
+	 * @return an empty hashmap with its keys being the controlled vocabularies mappable fileds and the values null
+	 */
 	private HashMap<String, EdmLabel> readFromFile(String localLocation) {
 		HashMap<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
 		XMLInputFactory inFactory = new WstxInputFactory();
@@ -934,7 +1029,6 @@ public class Extractor {
 			while (xml.hasNext()) {
 				switch (xml.getEventType()) {
 				case XMLStreamConstants.START_DOCUMENT:
-					xml.next();
 					break;
 				case XMLStreamConstants.START_ELEMENT:
 					element = (xml.getName().getPrefix().length() > 0 ? xml
@@ -948,11 +1042,11 @@ public class Extractor {
 						elements.put(attribute, EdmLabel.NULL);
 						i++;
 					}
-					xml.next();
 					break;
 				default:
-					xml.next();
+					break;
 				}
+				xml.next();
 			}
 
 		} catch (FileNotFoundException e) {

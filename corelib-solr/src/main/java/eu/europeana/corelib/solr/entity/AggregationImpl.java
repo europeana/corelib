@@ -23,7 +23,6 @@ import java.util.Map;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
 
@@ -40,23 +39,23 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
-	protected Map<String,List<String>> edmDataProvider;
-	protected String edmIsShownBy;
-	protected String edmIsShownAt;
-	protected String edmObject;
-	protected Map<String,List<String>> edmProvider;
-	protected Map<String,List<String>> edmRights;
-	protected String edmUgc;
-	protected Map<String,List<String>> dcRights;
-	protected String[] hasView;
-	protected String aggregatedCHO;
-	protected String[] aggregates;
-	protected String[] edmUnstored;
+	private Map<String,List<String>> edmDataProvider;
+	private String edmIsShownBy;
+	private String edmIsShownAt;
+	private String edmObject;
+	private Map<String,List<String>> edmProvider;
+	private Map<String,List<String>> edmRights;
+	private String edmUgc;
+	private Map<String,List<String>> dcRights;
+	private String[] hasView;
+	private String aggregatedCHO;
+	private String[] aggregates;
+	private String[] edmUnstored;
 
 	@Reference
-	protected List<WebResource> webResources;
+	private List<WebResource> webResources;
 
-	protected Boolean edmPreviewNoDistribute;
+	private Boolean edmPreviewNoDistribute;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -205,7 +204,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public void setAggregates(String[] aggregates) {
-		this.aggregates = aggregates;
+		this.aggregates = aggregates.clone();
 	}
 
 	@Override
@@ -215,6 +214,6 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
-		this.edmUnstored = edmUnstored;
+		this.edmUnstored = edmUnstored.clone();
 	}
 }

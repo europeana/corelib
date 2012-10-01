@@ -1,6 +1,7 @@
 package eu.europeana.corelib.dereference.impl;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 
@@ -11,7 +12,12 @@ import com.google.code.morphia.annotations.Indexed;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
 
-
+/**
+ * 
+ * @see eu.europeana.corelib.dereference.ControlledVocabulary.java
+ *
+ * @author Yorgos.Mamakis@ kb.nl
+ */
 @Entity("ControlledVocabulary")
 public class ControlledVocabularyImpl implements ControlledVocabulary {
 	@Id
@@ -29,7 +35,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	// Geonames always point to URI/ResourceCode/about.rdf
 	// rather than URI/ResourceCode which redirects to the Geonames website.
 	private String suffix;
-	private HashMap<String, EdmLabel> elements;
+	private Map<String, EdmLabel> elements;
 
 	public ControlledVocabularyImpl(){
 		
@@ -79,13 +85,13 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	}
 
 	@Override
-	public HashMap<String, EdmLabel> getElements() {
+	public Map<String, EdmLabel> getElements() {
 		return this.elements;
 	}
 
 
 	@Override
-	public void setElements(HashMap<String,EdmLabel> elements){
+	public void setElements(Map<String,EdmLabel> elements){
 		this.elements = elements;
 	}
 	@Override
@@ -105,7 +111,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 
 	@Override
 	public void setRules(String[] rules) {
-		this.rules = rules;
+		this.rules = rules!=null?rules.clone():null;
 	}
 	
 }

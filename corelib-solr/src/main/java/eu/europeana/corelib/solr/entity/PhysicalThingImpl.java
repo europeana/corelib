@@ -10,57 +10,57 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 @Entity("PhysicalThing")
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
-	protected Map<String,List<String>> dcContributor;
-	protected Map<String,List<String>> dcCoverage;
-	protected Map<String,List<String>> dcCreator;
-	protected Map<String,List<String>> dcDate;
-	protected Map<String,List<String>> dcDescription;
-	protected Map<String,List<String>> dcFormat;
-	protected Map<String,List<String>> dcIdentifier;
-	protected Map<String,List<String>> dcLanguage;
-	protected Map<String,List<String>> dcPublisher;
-	protected Map<String,List<String>> dcRelation;
-	protected Map<String,List<String>> dcRights;
-	protected Map<String,List<String>> dcSource;
-	protected Map<String,List<String>> dcSubject;
-	protected Map<String,List<String>> dcTitle;
-	protected Map<String,List<String>> dcType;
-	protected Map<String,List<String>> dctermsAlternative;
-	protected Map<String,List<String>> dctermsConformsTo;
-	protected Map<String,List<String>> dctermsCreated;
-	protected Map<String,List<String>> dctermsExtent;
-	protected Map<String,List<String>> dctermsHasFormat;
-	protected Map<String,List<String>> dctermsHasPart;
-	protected Map<String,List<String>> dctermsHasVersion;
-	protected Map<String,List<String>> dctermsIsFormatOf;
-	protected Map<String,List<String>> dctermsIsPartOf;
-	protected Map<String,List<String>> dctermsIsReferencedBy;
-	protected Map<String,List<String>> dctermsIsReplacedBy;
-	protected Map<String,List<String>> dctermsIsRequiredBy;
-	protected Map<String,List<String>> dctermsIssued;
-	protected Map<String,List<String>> dctermsIsVersionOf;
-	protected Map<String,List<String>> dctermsMedium;
-	protected Map<String,List<String>> dctermsProvenance;
-	protected Map<String,List<String>> dctermsReferences;
-	protected Map<String,List<String>> dctermsReplaces;
-	protected Map<String,List<String>> dctermsRequires;
-	protected Map<String,List<String>> dctermsSpatial;
-	protected Map<String,List<String>> dctermsTOC;
-	protected Map<String,List<String>> dctermsTemporal;
-	protected String[] rdfType;
-	protected Map<String,List<String>> edmHasMet;
-	protected Map<String,List<String>> edmHasType;
-	protected String[] edmIncorporates;
-	protected String[] edmIsDerivativeOf;
-	protected Map<String,List<String>> edmIsRelatedTo;
-	protected String edmIsRepresentationOf;
-	protected String[] edmIsSimilarTo;
-	protected String[] edmIsSuccessorOf;
-	protected String[] edmRealizes;
-	protected String[] edmWasPresentAt;
-	protected String edmCurrentLocation;
-	protected String edmIsNextInSequence;
-	protected Map<String,List<String>> edmRights;
+	private Map<String,List<String>> dcContributor;
+	private Map<String,List<String>> dcCoverage;
+	private Map<String,List<String>> dcCreator;
+	private Map<String,List<String>> dcDate;
+	private Map<String,List<String>> dcDescription;
+	private Map<String,List<String>> dcFormat;
+	private Map<String,List<String>> dcIdentifier;
+	private Map<String,List<String>> dcLanguage;
+	private Map<String,List<String>> dcPublisher;
+	private Map<String,List<String>> dcRelation;
+	private Map<String,List<String>> dcRights;
+	private Map<String,List<String>> dcSource;
+	private Map<String,List<String>> dcSubject;
+	private Map<String,List<String>> dcTitle;
+	private Map<String,List<String>> dcType;
+	private Map<String,List<String>> dctermsAlternative;
+	private Map<String,List<String>> dctermsConformsTo;
+	private Map<String,List<String>> dctermsCreated;
+	private Map<String,List<String>> dctermsExtent;
+	private Map<String,List<String>> dctermsHasFormat;
+	private Map<String,List<String>> dctermsHasPart;
+	private Map<String,List<String>> dctermsHasVersion;
+	private Map<String,List<String>> dctermsIsFormatOf;
+	private Map<String,List<String>> dctermsIsPartOf;
+	private Map<String,List<String>> dctermsIsReferencedBy;
+	private Map<String,List<String>> dctermsIsReplacedBy;
+	private Map<String,List<String>> dctermsIsRequiredBy;
+	private Map<String,List<String>> dctermsIssued;
+	private Map<String,List<String>> dctermsIsVersionOf;
+	private Map<String,List<String>> dctermsMedium;
+	private Map<String,List<String>> dctermsProvenance;
+	private Map<String,List<String>> dctermsReferences;
+	private Map<String,List<String>> dctermsReplaces;
+	private Map<String,List<String>> dctermsRequires;
+	private Map<String,List<String>> dctermsSpatial;
+	private Map<String,List<String>> dctermsTOC;
+	private Map<String,List<String>> dctermsTemporal;
+	private String[] rdfType;
+	private Map<String,List<String>> edmHasMet;
+	private Map<String,List<String>> edmHasType;
+	private String[] edmIncorporates;
+	private String[] edmIsDerivativeOf;
+	private Map<String,List<String>> edmIsRelatedTo;
+	private String edmIsRepresentationOf;
+	private String[] edmIsSimilarTo;
+	private String[] edmIsSuccessorOf;
+	private String[] edmRealizes;
+	private String[] edmWasPresentAt;
+	private String edmCurrentLocation;
+	private String edmIsNextInSequence;
+	private Map<String,List<String>> edmRights;
 
 	@Override
 	public Map<String,List<String>> getEdmRights() {
@@ -454,7 +454,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setRdfType(String[] rdfType) {
-		this.rdfType = rdfType;
+		this.rdfType = rdfType!=null?rdfType.clone():null;
 	}
 
 	@Override
@@ -484,7 +484,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmIncorporates(String[] edmIncorporates) {
-		this.edmIncorporates = edmIncorporates;
+		this.edmIncorporates = edmIncorporates!=null?edmIncorporates.clone():null;
 	}
 
 	@Override
@@ -494,7 +494,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmIsDerivativeOf(String[] edmIsDerivativeOf) {
-		this.edmIsDerivativeOf= edmIsDerivativeOf;
+		this.edmIsDerivativeOf= edmIsDerivativeOf!=null?edmIsDerivativeOf.clone():null;
 	}
 
 	@Override
@@ -524,7 +524,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmIsSimilarTo(String[] edmIsSimilarTo) {
-		this.edmIsSimilarTo = edmIsSimilarTo;
+		this.edmIsSimilarTo = edmIsSimilarTo!=null?edmIsSimilarTo.clone():null;
 	}
 
 	@Override
@@ -534,7 +534,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmIsSuccessorOf(String[] edmIsSuccessorOf) {
-		this.edmIsSuccessorOf = edmIsSuccessorOf;
+		this.edmIsSuccessorOf = edmIsSuccessorOf!=null?edmIsSuccessorOf.clone():null;
 	}
 
 	@Override
@@ -544,7 +544,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmRealizes(String[] edmRealizes) {
-		this.edmRealizes = edmRealizes;
+		this.edmRealizes = edmRealizes!=null?edmRealizes.clone():null;
 	}
 
 	@Override
@@ -554,7 +554,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 
 	@Override
 	public void setEdmWasPresentAt(String[] edmWasPresentAt) {
-		this.edmWasPresentAt = edmWasPresentAt;
+		this.edmWasPresentAt = edmWasPresentAt!=null?edmWasPresentAt.clone():null;
 	}
 
 	@Override

@@ -21,6 +21,9 @@ public class EntityImpl implements Entity {
 		return this.id;
 	}
 
+	/**
+	 * @
+	 */
 	@Override
 	public void setId(ObjectId id) {
 		this.id = id;

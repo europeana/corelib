@@ -4,8 +4,8 @@ import eu.europeana.corelib.definitions.solr.entity.BasicProxy;
 
 public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
-	protected String[] proxyIn;
-	protected String proxyFor;
+	private String[] proxyIn;
+	private String proxyFor;
 
 	@Override
 	public String[] getProxyIn() {
@@ -14,7 +14,7 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	@Override
 	public void setProxyIn(String[] proxyIn) {
-		this.proxyIn = proxyIn;
+		this.proxyIn = proxyIn!=null?proxyIn.clone():null;
 	}
 
 	@Override

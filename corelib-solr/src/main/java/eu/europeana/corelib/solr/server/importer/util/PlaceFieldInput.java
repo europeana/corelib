@@ -33,7 +33,6 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
-import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -274,6 +273,7 @@ public final class PlaceFieldInput {
 		return place;
 	}
 	
+	@SuppressWarnings("unused")
 	private static Map<String,Float> convertToFloat(Map<String,String> map){
 		Map<String,Float> repMap = new HashMap<String,Float>();
 		if(map!=null){

@@ -274,11 +274,11 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getUserTags() {
-		return this.userTags;
+		return this.userTags!=null?this.userTags.clone():null;
 	}
 
 	public void setUserTags(String[] userTags){
-		this.userTags = userTags;
+		this.userTags = userTags.clone();
 	}
 
 	@Override
@@ -298,22 +298,22 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getCountry() {
-		return this.country;
+		return this.country!=null?country.clone():null;
 	}
 
 	@Override
 	public void setCountry(String[] country) {
-		this.country = country;
+		this.country = country.clone();
 	}
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		return this.europeanaCollectionName;
+		return this.europeanaCollectionName!=null?this.europeanaCollectionName.clone():null;
 	}
 
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
-		this.europeanaCollectionName = europeanaCollectionName;
+		this.europeanaCollectionName = europeanaCollectionName!=null?europeanaCollectionName.clone():null;
 	}
 
 	@Override

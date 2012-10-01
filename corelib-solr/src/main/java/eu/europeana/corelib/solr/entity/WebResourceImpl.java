@@ -38,22 +38,21 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @Entity("WebResource")
 public class WebResourceImpl implements WebResource {
 	@Id
-	protected ObjectId id = new ObjectId();
-	protected Map<String,List<String>> webResourceDcRights;
-	protected Map<String,List<String>> webResourceEdmRights;
-
+	private ObjectId id = new ObjectId();
+	private Map<String,List<String>> webResourceDcRights;
+	private Map<String,List<String>> webResourceEdmRights;
 	@Indexed(unique=false)
-	protected String about;
-	protected Map<String,List<String>> dcDescription;
-	protected Map<String,List<String>> dcFormat;
-	protected Map<String,List<String>> dcSource;
-	protected Map<String,List<String>> dctermsExtent;
-	protected Map<String,List<String>> dctermsIssued;
-	protected Map<String,List<String>> dctermsConformsTo;
-	protected Map<String,List<String>> dctermsCreated;
-	protected Map<String,List<String>> dctermsIsFormatOf;
-	protected Map<String,List<String>> dctermsHasPart;
-	protected String isNextInSequence;
+	private String about;
+	private Map<String,List<String>> dcDescription;
+	private Map<String,List<String>> dcFormat;
+	private Map<String,List<String>> dcSource;
+	private Map<String,List<String>> dctermsExtent;
+	private Map<String,List<String>> dctermsIssued;
+	private Map<String,List<String>> dctermsConformsTo;
+	private Map<String,List<String>> dctermsCreated;
+	private Map<String,List<String>> dctermsIsFormatOf;
+	private Map<String,List<String>> dctermsHasPart;
+	private String isNextInSequence;
 
 	@Override
 	public String getAbout() {
