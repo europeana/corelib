@@ -132,6 +132,7 @@ public enum EdmLabel {
 	PROXY_EDM_WASPRESENTAT("proxy_edm_wasPresentAt", SolrType.NOT_STORED),
 	PROXY_ORE_PROXY_IN("proxy_ore_proxyIn",SolrType.INDEXED), 
 	PROXY_ORE_PROXY_FOR("proxy_ore_proxyFor", SolrType.INDEXED),
+	PROXY_EDM_YEAR("proxy_edm_year",SolrType.INDEXED),
 	
 
 	//SKOS_CONCEPT

@@ -573,17 +573,19 @@
    <copyField source="evt_skos_note" dest="text" />
    <copyField source="proxy_dc_contributor.*" dest="whoSpell" />
    <copyField source="proxy_dc_creator.*" dest="whoSpell" />
+   <copyField source="ag_skos_prefLabel.*" dest="whoSpell"/>
      <copyField source="proxy_dc_coverage.*" dest="whereSpell" />
    <copyField source="proxy_dcterms_spatial.*" dest="whereSpell" />
-   <copyField source="proxy_dc_subject.*" dest="whereSpell" />
+   <copyField source="pl_skos_prefLabel.*" dest="whereSpell"/>
      <copyField source="proxy_dc_type.*" dest="whatSpell" />
    <copyField source="proxy_dc_subject.*" dest="whatSpell" />
-   <copyField source="proxy_dc_format.*" dest="whatSpell" />
+   <copyField source="cc_skos_prefLabel.*" dest="whatSpell"/>
+   <copyField source="cc_skos_broaderLabel.*" dest="whatSpell"/>
    <copyField source="proxy_dc_coverage.*" dest="whenSpell" />
    <copyField source="proxy_dcterms_created.*" dest="whenSpell" />
    <copyField source="proxy_dcterms_temporal.*" dest="whenSpell" />
    <copyField source="proxy_dc_date.*" dest="whenSpell" />
-   <copyField source="proxy_dc_subject.*" dest="whenSpell" />
+   <copyField source="ts_skos_prefLabel.*" dest="whenSpell"/>
    <copyField source="proxy_dc_title.*" dest="titleSpell" />
    <copyField source="proxy_dcterms_alternative.*" dest="titleSpell" />
    
