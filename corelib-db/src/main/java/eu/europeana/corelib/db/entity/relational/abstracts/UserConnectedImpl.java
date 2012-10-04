@@ -58,5 +58,4 @@ public abstract class UserConnectedImpl<I extends Serializable> implements Ident
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 }

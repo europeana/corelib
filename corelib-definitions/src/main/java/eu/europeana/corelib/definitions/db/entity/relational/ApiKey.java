@@ -33,5 +33,4 @@ public interface ApiKey extends UserConnected<String> {
 	long getUsageLimit();
 
 	void setUsageLimit(long usageLimit);
-
 }
