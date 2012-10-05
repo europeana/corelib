@@ -96,7 +96,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		constructedeuropeanaId.setXmlchecksum(xmlChecksum);
 		
 		//Retrieve by the EuropeanaID to check if the item is already registered
-		EuropeanaIdRegistry retrievedeuropeanaID = retrieveEuropeanaIdFromNew(europeanaIDString).get(0);
+		EuropeanaIdRegistry retrievedeuropeanaID = retrieveEuropeanaIdFromNew(europeanaIDString);
 
 		
 		UpdateOperations<EuropeanaIdRegistry> updateops =datastore.createUpdateOperations(EuropeanaIdRegistry.class);
@@ -201,8 +201,16 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	 *            The id to search for
 	 * @return
 	 */
-	public List<EuropeanaIdRegistry> retrieveEuropeanaIdFromNew(String newId) {
-		return datastore.find(EuropeanaIdRegistry.class).field(EID).equal(newId).asList();
+	public EuropeanaIdRegistry retrieveEuropeanaIdFromNew(String newId) {
+		
+		  List<EuropeanaIdRegistry> retrList = datastore.find(EuropeanaIdRegistry.class).field(EID).equal(newId).asList();
+		
+		  if(retrList.isEmpty()){
+			  return null;
+		  }
+		  else{
+			  return retrList.get(0);
+		  }
 	}
 
 	/**
