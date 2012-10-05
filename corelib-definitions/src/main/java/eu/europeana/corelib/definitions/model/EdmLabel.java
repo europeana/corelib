@@ -157,7 +157,7 @@ public enum EdmLabel {
 	PL_SKOS_PREF_LABEL("pl_skos_prefLabel",SolrType.NOT_STORED), 
 	PL_SKOS_ALT_LABEL("pl_skos_altLabel",SolrType.NOT_STORED), 
 	PL_SKOS_NOTE("pl_skos_note",SolrType.NOT_STORED), 
-	PL_DCTERMS_ISPART_OF("pl_dcterm_isPartOf",SolrType.NOT_STORED), 
+	PL_DCTERMS_ISPART_OF("pl_dcterms_isPartOf",SolrType.NOT_STORED), 
 	PL_WGS84_POS_LAT("pl_wgs84_pos_lat", SolrType.NOT_STORED),
 	PL_WGS84_POS_LONG("pl_wgs84_pos_long", SolrType.NOT_STORED),
 	PL_WGS84_POS_ALT("pl_wgs84_pos_alt", SolrType.NOT_STORED),
