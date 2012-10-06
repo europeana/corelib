@@ -105,8 +105,10 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		
 		//If it is not then save and return a new collectionID
 		if(retrievedeuropeanaID == null){
+			
 			datastore.save(constructedeuropeanaId);
 			lookupresult.setState(LookupState.ID_REGISTERED);
+			lookupresult.setEuropeanaID(europeanaIDString);
 			return lookupresult;
 		}
 		else{
