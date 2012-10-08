@@ -32,29 +32,23 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
-	@Field("edm_concept")
+	@Field("skos_concept")
 	private String[] edmConceptTerm;
 
-	@Field("edm_concept_label")
+	@Field("cc_skos_prefLabel")
 	private List<Map<String, String>> edmConceptPrefLabel;
 
-	@Field("edm_concept_broader")
+	@Field("cc_skos_broader")
 	private String[] edmConceptBroaderTerm;
 
-	@Field("edm_concept_broader_label")
+	@Field("cc_skos_broader")
 	private List<Map<String, String>> edmConceptBroaderLabel;
 
-	@Field("edm_timespan_broader_term")
+	@Field("ts_dcterms_isPartOf")
 	private String[] edmTimespanBroaderTerm;
 
-	@Field("edm_timespan_broader_label")
+	@Field("ts_dcterms_isPartOf")
 	private List<Map<String, String>> edmTimespanBroaderLabel;
-
-	@Field("pl_prefLabel.en")
-	private String[] prefLabelEn;
-
-	@Field("pl_prefLabel.ru")
-	private String[] prefLabelRu;
 
 	@Field("europeana_recordHashFirstSix")
 	private String[] recordHashFirstSix;
@@ -76,13 +70,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	private int index;
 
-	@Field("edm_place_broader_term")
+	@Field("pl_dcterms_isPartOf")
 	private String[] edmPlaceBroaderTerm;
 
-	@Field("edm_place_alt_label")
+	@Field("pl_skos_altLabel")
 	private List<Map<String, String>> edmPlaceAltLabel;
 
-	@Field("dcterms_isPartOf")
+	@Field("pl_dcterms_isPartOf")
 	private String[] dctermsIsPartOf;
 
 	@Override

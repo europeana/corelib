@@ -94,10 +94,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("ts_skos_prefLabel")
 	private List<Map<String, String>> edmTimespanLabel;
 
-	@Field("ts_crm_P79F_beginning_is_qualified_by")
+	@Field("ts_edm_begin")
 	private String[] edmTimespanBegin;
 
-	@Field("ts_crm_P80F_end_is_qualified_by")
+	@Field("ts_edm_end")
 	private String[] edmTimespanEnd;
 
 	@Field("edm_agent")
