@@ -113,7 +113,7 @@
 	<field name="europeana_aggregation_ore_aggregates" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="europeana_aggregation_dc_creator" type="string" indexed="true" stored="false" multiValued="false" default="Europeana"/>
 	<dynamicField name="europeana_aggregation_dc_creator.*" type="string" indexed="true" stored="false" multiValued="false"/>
-	<field name="europeana_aggregation_edm_landingPage" type="string" indexed="true" stored="false" multiValued="false"/>
+	<field name="europeana_aggregation_edm_landingPage" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_hasView" type="string" indexed="true" stored="true" multiValued="true"/>
 	<field name="europeana_aggregation_edm_country" type="string" indexed="true" stored="true" multiValued="false"/>
