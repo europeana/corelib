@@ -109,8 +109,8 @@
 		<field name="dataProvider" type="string" indexed="true" stored="true" multiValued="true" />
 		<field name="identifier" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="relation" type="string" indexed="true" stored="true" multiValued="true"/>
-		<field name="usertags" type="text" indexed="true" stored="true" multiValued="true />"
+		<field name="relation" type="string" indexed="true" stored="true" multiValued="true" />
+		<field name="usertags" type="text" indexed="true" stored="true" multiValued="true" />
 		<field name="title" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="false" />
 		<field name="who" type="text" indexed="true" stored="true"
@@ -122,8 +122,8 @@
 		<field name="where" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="false" />
 	
-		<field name="UGC" type="string" indexed="true" stored="true"
-			multiValued="false" />
+		<field name="UGC" type="boolean" indexed="true" stored="true"
+			multiValued="true" />
 		<field name="LANGUAGE" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="TYPE" type="string" indexed="true" stored="true"
@@ -250,7 +250,7 @@
 			stored="false" multiValued="true" />
 
 		<field name="edm_UGC" type="boolean" indexed="true" stored="true"
-			multiValued="false" default="false" />
+			multiValued="true" default="false" />
 		<field name="edm_type" type="string" indexed="true" stored="false"
 			multiValued="false" />
 		<field name="edm_currentLocation_latLon" type="latlon" indexed="true"
