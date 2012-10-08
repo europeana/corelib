@@ -31,15 +31,17 @@ public class IdBeanImpl implements IdBean {
 
 	@Field("europeana_id")
 	private String id;
+
 	@Field("edm_previewNoDistribute")
 	private boolean optOut;
+
 	@Override
 	public String getId() {
 		return this.id;
 	}
-	
+
 	@Override
-	public Boolean isOptedOut(){
+	public Boolean isOptedOut() {
 		return this.optOut;
 	}
 }

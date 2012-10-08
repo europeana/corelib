@@ -56,11 +56,11 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Field("pl_prefLabel.ru")
 	private String[] prefLabelRu;
 
-	@Field("europeana_recordHashFirst")
+	@Field("europeana_recordHashFirstSix")
 	private String[] recordHashFirstSix;
 
 	@Field("UGC")
-	private String[] ugc;
+	private boolean[] ugc;
 
 	@Field("COMPLETENESS")
 	private String[] completeness;
@@ -77,7 +77,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	private int index;
 
 	@Field("edm_place_broader_term")
-	private String[] enrichmentPlaceBroaderTerm;
+	private String[] edmPlaceBroaderTerm;
 
 	@Field("edm_place_alt_label")
 	private List<Map<String, String>> edmPlaceAltLabel;
@@ -87,7 +87,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
-		return (enrichmentPlaceBroaderTerm != null ? enrichmentPlaceBroaderTerm.clone() : null);
+		return (edmPlaceBroaderTerm != null ? edmPlaceBroaderTerm.clone() : null);
 	}
 
 	@Override
@@ -131,12 +131,12 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	}
 
 	@Override
-	public String[] getUgc() {
+	public boolean[] getUgc() {
 		return ugc != null ? this.ugc.clone() : null;
 	}
 
 	@Override
-	public void setUgc(String[] ugc) {
+	public void setUgc(boolean[] ugc) {
 		this.ugc = ugc.clone();
 	}
 

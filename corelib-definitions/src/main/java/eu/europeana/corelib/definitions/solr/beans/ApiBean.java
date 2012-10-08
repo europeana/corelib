@@ -46,9 +46,9 @@ public interface ApiBean extends BriefBean {
 
 	String[] getEdmPlaceBroaderTerm();
 
-	String[] getUgc();
+	boolean[] getUgc();
 
-	void setUgc(String[] ugc);
+	void setUgc(boolean[] ugc);
 
 	String[] getCountry();
 

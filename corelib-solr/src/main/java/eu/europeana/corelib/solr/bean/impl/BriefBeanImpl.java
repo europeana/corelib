@@ -112,7 +112,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("proxy_dcterms_spatial")
 	private String[] dctermsSpatial;
 
-
 	@Override
 	public String[] getTitle() {
 		return (this.title != null ? this.title.clone() : null);
