@@ -328,7 +328,4 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 
 	}
 	
-	public List<FailedRecord> getFailedRecords(String collectionId){
-		return datastore.find(FailedRecord.class).filter("collectionId",collectionId).asList();
-	}
 }
