@@ -28,18 +28,16 @@ public class ExtractorTest {
 		ControlledVocabularyImpl vocabulary = new ControlledVocabularyImpl("testVocabulary");
 		assertNotNull(vocabulary);
 		vocabulary.setLocation("testLocation");
-		vocabulary.setURI("http://testuri");
+		vocabulary.setURI("http://testuri/");
 		vocabulary.setSuffix(".suffix");
-		
+		vocabulary.setRules(new String[]{"record"});
 		Extractor extractor = new Extractor(vocabulary, mongoServer);
 		assertNotNull(extractor);
 		extractor.setMappedField("test_contributor", EdmLabel.PROXY_DC_CONTRIBUTOR);
 		extractor.saveMapping();
 		assertEquals(1, extractor.getControlledVocabularies().size());
-		assertNotNull(mongoServer.getControlledVocabulary("name", "testVocabulary"));
-		ControlledVocabularyImpl retrieveVocabulary = (ControlledVocabularyImpl) mongoServer.getControlledVocabulary("name","testVocabulary");
-		ControlledVocabularyImpl retrieveVocabularyUri = (ControlledVocabularyImpl) mongoServer.getControlledVocabulary("URI","http://testuri/record");
-		assertEquals(retrieveVocabulary.getId(),retrieveVocabularyUri.getId());
+		assertNotNull(mongoServer.getControlledVocabulary("URI", "http://testuri/record"));
+		ControlledVocabularyImpl retrieveVocabulary = (ControlledVocabularyImpl) mongoServer.getControlledVocabulary("URI","http://testuri/record");
 		assertEquals(vocabulary.getName(),retrieveVocabulary.getName());
 		assertEquals(1, retrieveVocabulary.getElements().size());
 		assertEquals(vocabulary.getLocation(), retrieveVocabulary.getLocation());
