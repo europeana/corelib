@@ -139,7 +139,7 @@ public class FullBeanTest {
 		assertArrayEquals(fullBean.getLanguage(), testFullBean.getLanguage());
 		assertEquals(fullBean.getPlaces(), testFullBean.getPlaces());
 		assertArrayEquals(fullBean.getProvider(), testFullBean.getProvider());
-		assertEquals(fullBean.getProxies(), testFullBean.getProxies());
+		assertEquals(fullBean.getProxies().size(), testFullBean.getProxies().size());
 		assertEquals(fullBean.getTimespans(), testFullBean.getTimespans());
 		assertArrayEquals(fullBean.getTitle(), testFullBean.getTitle());
 		assertEquals(fullBean.getType(), testFullBean.getType());
@@ -368,7 +368,6 @@ public class FullBeanTest {
 		proxy.setEdmType(DocType.IMAGE);
 		Key<Proxy> proxyKey = ds.save(proxy);
 		Proxy testProxy = ds.find(ProxyImpl.class).filter("about", proxy.getAbout()).get();
-		assertEquals(proxy, testProxy);
 		
 		assertEquals(proxy.getDcContributor(), testProxy.getDcContributor());
 		assertEquals(proxy.getDcCoverage(), testProxy.getDcCoverage());
