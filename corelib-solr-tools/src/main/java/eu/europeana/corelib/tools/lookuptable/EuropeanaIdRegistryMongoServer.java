@@ -178,9 +178,21 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
-			lookupresult.setState(LookupState.DUPLICATE_ACROSS_COLLECTIONS);
+			lookupresult.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
-					LookupState.DUPLICATE_ACROSS_COLLECTIONS);
+					LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
+		}
+		else if (!constructedeuropeanaId.getCid().equals(
+				retrievedeuropeanaID.getCid())
+				&& constructedeuropeanaId.getEid().equals(
+						retrievedeuropeanaID.getEid())
+				&& constructedeuropeanaId.getOrid().equals(
+						retrievedeuropeanaID.getOrid())
+				&& !constructedeuropeanaId.getXmlchecksum().equals(
+						retrievedeuropeanaID.getXmlchecksum())) {
+			lookupresult.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+			generateFailedRecord(constructedeuropeanaId, xml,
+					LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 		}
 
 		// Update Session ID
