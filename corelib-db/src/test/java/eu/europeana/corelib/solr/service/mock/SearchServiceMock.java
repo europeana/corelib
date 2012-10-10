@@ -132,4 +132,10 @@ public class SearchServiceMock implements SearchService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Map<String, Map<String, Integer>> seeAlso(Map<String, List<String>> fields) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
