@@ -1,7 +1,10 @@
 package eu.europeana.corelib.solr.entity;
 
+import com.google.code.morphia.annotations.Entity;
+
 import eu.europeana.corelib.definitions.solr.entity.BasicProxy;
 
+@Entity("BasicProxy")
 public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	private String[] proxyIn;
@@ -27,21 +30,21 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 		this.proxyFor = proxyFor;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-		if (o.getClass() == this.getClass()) {
-			return (this.getProxyIn() != null && ((ProxyImpl) o).getProxyIn() != null) 
-				? this.getProxyIn().equals(((ProxyImpl) o).getProxyIn()) 
-				: this.getAbout().equals(((ProxyImpl) o).getAbout());
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return this.getAbout()!=null?this.getAbout().hashCode():this.id.hashCode();
-	}
+//	@Override
+//	public boolean equals(Object o) {
+//		if (o == null) {
+//			return false;
+//		}
+//		if (o.getClass() == this.getClass()) {
+//			return (this.getProxyIn() != null && ((ProxyImpl) o).getProxyIn() != null) 
+//				? this.getProxyIn().equals(((ProxyImpl) o).getProxyIn()) 
+//				: this.getAbout().equals(((ProxyImpl) o).getAbout());
+//		}
+//		return false;
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		return this.getAbout()!=null?this.getAbout().hashCode():this.id.hashCode();
+//	}
 }

@@ -1,6 +1,9 @@
 package eu.europeana.corelib.tools.lookuptable;
 
+import org.bson.types.ObjectId;
+
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 
 /**
@@ -14,6 +17,9 @@ import com.google.code.morphia.annotations.Indexed;
 @Entity("FailedRecord")
 public class FailedRecord {
 
+	@Id
+	private ObjectId id;
+	
 	@Indexed(unique = false)
 	private String originalId;
 	
@@ -87,6 +93,14 @@ public class FailedRecord {
 
 	public void setCollectionId(String collectionId) {
 		this.collectionId = collectionId;
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 }

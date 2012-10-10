@@ -30,6 +30,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.BasicProxyImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.ConceptSchemeImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
@@ -90,6 +91,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(EventImpl.class);
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
+		morphia.map(BasicProxyImpl.class);
 
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 

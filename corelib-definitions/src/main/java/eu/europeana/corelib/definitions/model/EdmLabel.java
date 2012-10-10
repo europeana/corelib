@@ -149,7 +149,7 @@ public enum EdmLabel {
 	CC_SKOS_RELATEDMATCH("cc_skos_relatedMatch", SolrType.NOT_STORED),
 	CC_SKOS_EXACTMATCH("cc_skos_exactMatch", SolrType.NOT_STORED),
 	CC_SKOS_CLOSEMATCH("cc_skos_closeMatch", SolrType.NOT_STORED),
-	CC_SKOS_NOTATIONS("cc_skos_notations", SolrType.NOT_STORED),
+	CC_SKOS_NOTATIONS("cc_skos_notation", SolrType.NOT_STORED),
 	CC_SKOS_INSCHEME("cc_skos_inScheme", SolrType.NOT_STORED),
 	
 	//PLACE

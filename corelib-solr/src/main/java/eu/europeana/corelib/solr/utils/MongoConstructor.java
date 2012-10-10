@@ -22,6 +22,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
@@ -91,11 +93,8 @@ public class MongoConstructor {
 				}
 			}
 			if (element.ifProxy()) {
-				if (proxies.size() > 0) {
-					proxies.set(0, new ProxyFieldInput()
-							.createProxyMongoFields(new ProxyImpl(),
-									element.getProxy(), mongoServer));
-				} else {
+				ProxyImpl proxy = getAggregationProxy(proxies, element.getProxy().getAbout());
+				if(proxy==null &&(element.getProxy().getEuropeanaProxy()==null||!element.getProxy().getEuropeanaProxy().isEuropeanaProxy())){
 					proxies.add(new ProxyFieldInput().createProxyMongoFields(
 							new ProxyImpl(), element.getProxy(), mongoServer));
 				}
@@ -110,13 +109,14 @@ public class MongoConstructor {
 									mongoServer));
 				}
 				if (proxies.size() > 0) {
-					proxies.set(0, new ProxyFieldInput().addProxyForMongo(
-							proxies.get(0), element.getAggregation(),
-							mongoServer));
-				} else {
-					proxies.add(new ProxyFieldInput().addProxyForMongo(
+					ProxyImpl proxy= getAggregationProxy(proxies, element.getAggregation().getAggregatedCHO().getResource());
+					if(proxy!=null){
+						proxy.setProxyIn(new String[]{element.getAggregation().getAbout()});
+					} else {
+						proxies.add(new ProxyFieldInput().addProxyForMongo(
 							new ProxyImpl(), element.getAggregation(),
 							mongoServer));
+					}
 				}
 
 			}
@@ -153,22 +153,6 @@ public class MongoConstructor {
 				agents.add(new AgentFieldInput().createAgentMongoEntity(
 						element.getAgent(), mongoServer));
 			}
-			if (element.ifEuropeanaAggregation()) {
-
-				europeanaAggregation = new EuropeanaAggregationFieldInput()
-						.createAggregationMongoFields(
-								element.getEuropeanaAggregation(), mongoServer);
-				if (webResources.size() > 0) {
-					europeanaAggregation = new EuropeanaAggregationFieldInput()
-							.appendWebResource(europeanaAggregation,
-									webResources, mongoServer);
-				}
-
-				proxies.add(new ProxyFieldInput().addEuropeanaProxyForMongo(
-						new ProxyImpl(), element.getEuropeanaAggregation(),
-						mongoServer));
-
-			}
 		}
 
 		AggregationImpl aggregation = aggregations.get(0);
@@ -177,7 +161,19 @@ public class MongoConstructor {
 
 		fullBean.setProvidedCHOs(providedCHOs);
 		if(europeanaAggregation.getAbout()==null){
-			europeanaAggregation.setAbout("/aggregation/europeana" + fullBean.getAbout());
+			
+			
+			ProxyImpl europeanaProxy = new ProxyImpl();
+			europeanaProxy.setAbout("/proxy/europeana/"+fullBean.getAbout());
+			europeanaProxy.setEuropeanaProxy(true);
+			europeanaProxy.setProxyFor(fullBean.getAbout());
+			europeanaProxy.setProxyIn(new String[]{"/aggregation/europeana" + fullBean.getAbout()});
+			if(mongoServer.searchByAbout(ProxyImpl.class,"/proxy/europeana/"+fullBean.getAbout())!=null){
+				MongoUtils.updateProxy(europeanaProxy, mongoServer);
+			}else {
+			mongoServer.getDatastore().save(europeanaProxy);
+			}
+			proxies.add(europeanaProxy);
 			europeanaAggregation.setAbout("/aggregation/europeana"
 					+ fullBean.getAbout());
 			europeanaAggregation.setEdmLandingPage(EUROPEANA_URI
@@ -206,14 +202,25 @@ public class MongoConstructor {
 				MongoUtils.updateEuropeanaAggregation(europeanaAggregation,
 						mongoServer);
 			} else {
-				
+				ProxyImpl europeanaProxy = new ProxyImpl();
+				europeanaProxy.setAbout("/proxy/europeana/"+fullBean.getAbout());
+				europeanaProxy.setEuropeanaProxy(true);
+				europeanaProxy.setProxyFor(fullBean.getAbout());
+				europeanaProxy.setProxyIn(new String[]{"/aggregation/europeana" + fullBean.getAbout()});
+				if(mongoServer.searchByAbout(ProxyImpl.class,"/proxy/europeana/"+fullBean.getAbout())!=null){
+					MongoUtils.updateProxy(europeanaProxy, mongoServer);
+				}else {
+					mongoServer.getDatastore().save(europeanaProxy);
+				}
+				proxies.add(europeanaProxy);
 				mongoServer.getDatastore().save(europeanaAggregation);
 
 			}
 		}
-			
 		
-
+		
+		
+		
 		fullBean.setEuropeanaAggregation(europeanaAggregation);
 
 		fullBean.setAggregations(aggregations);
@@ -237,6 +244,15 @@ public class MongoConstructor {
 			e.printStackTrace();
 		}
 		return fullBean;
+	}
+
+	private ProxyImpl getAggregationProxy(List<ProxyImpl> proxies,String about) {
+		for (ProxyImpl proxy:proxies){
+			if (StringUtils.equals(proxy.getAbout(), about)){
+				return proxy;
+			}
+		}
+		return null;
 	}
 
 }

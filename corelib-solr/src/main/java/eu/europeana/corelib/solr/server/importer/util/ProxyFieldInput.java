@@ -874,10 +874,12 @@ public final class ProxyFieldInput {
 	public  ProxyImpl addEuropeanaProxyForMongo(ProxyImpl proxy,
 			EuropeanaAggregationType aggregation, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-
+		proxy.setProxyFor(aggregation.getAggregatedCHO().getResource());
 		proxy.setProxyIn(new String[] { SolrUtils.exists(String.class,
 				aggregation.getAbout()) });
 		proxy.setEuropeanaProxy(true);
+		proxy.setAbout("/proxy/europeana/"+aggregation.getAbout());
+		mongoServer.getDatastore().save(proxy);
 		return proxy;
 	}
 
