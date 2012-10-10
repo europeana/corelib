@@ -53,5 +53,4 @@ public interface EdmMongoServer extends MongoServer{
     <T> T searchByAbout(Class<T> clazz, String about);
 
 	FullBean resolve(String id);
-
 }

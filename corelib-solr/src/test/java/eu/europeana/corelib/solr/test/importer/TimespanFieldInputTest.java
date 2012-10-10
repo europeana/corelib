@@ -37,7 +37,7 @@ public class TimespanFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testTimespan()  {
+	public void testTimespan() {
 		TimeSpanType timespan = new TimeSpanType();
 		timespan.setAbout("test about");
 		List<AltLabel> altLabelList = new ArrayList<AltLabel>();

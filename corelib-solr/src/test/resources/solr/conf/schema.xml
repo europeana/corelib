@@ -495,7 +495,7 @@
    <copyField source="proxy_dc_title.*" dest="text" />
    <copyField source="proxy_dc_type.*" dest="text" />
    <copyField source="proxy_edm_type.*" dest="text" />
-    <copyField source="proxy_dc_type.*" dest="what" />
+   <copyField source="proxy_dc_type.*" dest="what" />
    <copyField source="proxy_dc_subject.*" dest="what" />
    <copyField source="proxy_dc_format.*" dest="what" />
    <copyField source="proxy_dc_coverage.*" dest="when" />
