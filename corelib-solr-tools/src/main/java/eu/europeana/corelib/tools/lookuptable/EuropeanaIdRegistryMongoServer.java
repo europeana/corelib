@@ -176,7 +176,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getEid())
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
-				&& !constructedeuropeanaId.getXmlchecksum().equals(
+				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
 			lookupresult.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
