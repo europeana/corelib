@@ -1,6 +1,5 @@
 package eu.europeana.corelib.dereference.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
