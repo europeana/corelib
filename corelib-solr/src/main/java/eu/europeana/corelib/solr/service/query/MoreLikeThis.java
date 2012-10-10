@@ -23,7 +23,7 @@ package eu.europeana.corelib.solr.service.query;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public enum MoreLikeThis {
-	
+
 	CREATOR("creator"),
 	DESCRIPTION("description"),
 	SUBJECT("subject"),

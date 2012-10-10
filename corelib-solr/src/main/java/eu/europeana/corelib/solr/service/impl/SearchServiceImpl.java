@@ -21,8 +21,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -163,9 +165,10 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
 		
-		System.out.println(solrQuery.toString());
+		log.info(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
+		log.info("elapsed time (MoreLikeThis): " + response.getElapsedTime());
 
 		@SuppressWarnings("unchecked")
 		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
@@ -180,8 +183,9 @@ public class SearchServiceImpl implements SearchService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
-			Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) 
+			throws SolrTypeException {
+
 		ResultSet<T> resultSet = new ResultSet<T>();
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
@@ -232,15 +236,13 @@ public class SearchServiceImpl implements SearchService {
 				try {
 					log.info("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
+					log.info("elapsed time (search): " + queryResponse.getElapsedTime());
 
-					resultSet.setResults((List<T>) queryResponse
-							.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults()
-							.getNumFound());
+					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse
-							.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
 					log.severe("SolrServerException: " + e.getMessage());
 					resultSet = null;
@@ -303,6 +305,46 @@ public class SearchServiceImpl implements SearchService {
 		return suggestions(query, pageSize, null);
 	}
 
+	public Map<String, Map<String,Integer>> seeAlso(Map<String, List<String>> fields) {
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("*:*");
+		solrQuery.setRows(0);
+		solrQuery.setFacet(true);
+		for (Entry<String,List<String>> entry : fields.entrySet()) {
+			for (String value : entry.getValue()) {
+				solrQuery.addFacetQuery(String.format("%s:\"%s\"", entry.getKey(), value));
+			}
+		}
+		// log.info("solrQuery for seeAlso: " + solrQuery);
+		QueryResponse response;
+		Map<String, Map<String,Integer>> seeAlso = new HashMap<String, Map<String,Integer>>();
+		try {
+			response = solrServer.query(solrQuery);
+			log.info("elapsed time (seeAlso): " + response.getElapsedTime());
+			Map<String, Integer> queries = response.getFacetQuery();
+			for (Entry<String,Integer> entry : queries.entrySet()) {
+				String query = entry.getKey();
+				Integer count = entry.getValue();
+				String[] parts = query.split(":", 2);
+				String fieldName = parts[0];
+				String valueValue = parts[1].replaceAll("^\"", "").replaceAll("\"$", "");
+				Map<String,Integer> fieldSuggestions;
+				if (seeAlso.containsKey(fieldName)) {
+					fieldSuggestions = seeAlso.get(fieldName);
+				} else {
+					fieldSuggestions = new HashMap<String,Integer>();
+					seeAlso.put(fieldName, fieldSuggestions);
+				}
+				fieldSuggestions.put(valueValue, count);
+			}
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+
+		return seeAlso;
+	}
+	
+	
 	/**
 	 * Adds suggestions regarding a given query string
 	 */
@@ -312,7 +354,7 @@ public class SearchServiceImpl implements SearchService {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setFacet(true);
 		solrQuery.setFacetMinCount(1);
-		solrQuery.setFacetPrefix(query);
+		solrQuery.setFacetPrefix(query.toLowerCase());
 		solrQuery.setFacetLimit(pageSize);
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);

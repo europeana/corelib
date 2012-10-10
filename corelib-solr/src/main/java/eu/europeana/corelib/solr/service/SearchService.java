@@ -18,9 +18,9 @@
 package eu.europeana.corelib.solr.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
 
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -119,4 +119,16 @@ public interface SearchService {
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 
+	/**
+	 * Returns a list of "see also" suggestions.
+	 * The suggestions are organized by fields (who, what, where, when, and title). Each suggestion contains a
+	 * field value and the number of documents it matches.
+	 *
+	 * @param fields
+	 *   Map of field names, and corresponding field values.
+	 *   
+	 * @return
+	 *   The see also suggestions
+	 */
+	Map<String, Map<String,Integer>> seeAlso(Map<String, List<String>> fields);
 }
