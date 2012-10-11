@@ -1,7 +1,10 @@
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -340,5 +343,18 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	public void deleteEuropeanaIdFromNew(String newId) {
 
 	}
-	
+
+	public List<Map<String,String>> getFailedRecords(String collectionId){
+		List<Map<String,String>> failedRecords = new ArrayList<Map<String,String>>();
+		for (FailedRecord failedRecord: datastore.find(FailedRecord.class).filter("collectionId",collectionId).asList()){
+			Map<String,String> record = new HashMap<String,String>();
+			record.put("collectionId", failedRecord.getCollectionId());
+			record.put("originalId", failedRecord.getOriginalId());
+			record.put("europeanaId", failedRecord.getEuropeanaId());
+			record.put("edm", failedRecord.getXml());
+			record.put("lookupState", failedRecord.getLookupState().toString());
+			failedRecords.add(record);
+		}
+		return failedRecords;
+	}
 }
