@@ -376,6 +376,7 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			log.info("SolrQuery: " +solrQuery);
 			response = solrServer.query(solrQuery);
+			log.info("elapsed time (suggestions): " + response.getElapsedTime());
 
 			FacetField who = response.getFacetField("whoSpell");
 			if (who != null) {
