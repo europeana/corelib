@@ -125,8 +125,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean resolve(String collectionId, String recordId)
 			throws SolrTypeException {
-		return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId,
-				recordId));
+		return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
 	}
 
 	@Override
