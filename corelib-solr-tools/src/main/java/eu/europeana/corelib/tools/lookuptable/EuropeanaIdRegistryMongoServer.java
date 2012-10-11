@@ -219,6 +219,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		FailedRecord failedRecord = datastore.find(FailedRecord.class)
 				.filter("originalId", eurId.getOrid())
 				.filter("collectionId", eurId.getCid()).get();
+		System.out.println("Generating failed Record "+ eurId +", Reason: "+lookupState.toString());
 		//If it has not been found then create
 		if(failedRecord == null){
 			failedRecord = new FailedRecord();
