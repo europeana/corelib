@@ -156,7 +156,7 @@ public final class AggregationFieldInput {
 		AggregationImpl aggregation = findAggregation(aggregations,
 				webResource.get(0));
 		for(WebResource wr : webResource){
-		mongoServer.getDatastore().save(wr);
+			mongoServer.getDatastore().save(wr);
 		}
 		aggregation.setWebResources(webResource);
 		MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
@@ -203,7 +203,7 @@ public final class AggregationFieldInput {
 				}
 			}
 		}
-		return null;
+		return new AggregationImpl();
 	}
 
 	/**
