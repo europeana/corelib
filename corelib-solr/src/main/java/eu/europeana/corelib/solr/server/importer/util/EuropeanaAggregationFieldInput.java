@@ -2,9 +2,12 @@ package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
+
+import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregates;
@@ -124,27 +127,54 @@ public final class EuropeanaAggregationFieldInput {
 			MongoServer mongoServer) throws InstantiationException,
 			IllegalAccessException {
 		EuropeanaAggregationImpl mongoAggregation = new EuropeanaAggregationImpl();
-		//mongoAggregation.setId(new ObjectId());
+		UpdateOperations<EuropeanaAggregationImpl> ops = mongoServer.getDatastore().createUpdateOperations(EuropeanaAggregationImpl.class);
 		mongoAggregation.setAbout(aggregation.getAbout());
-		mongoAggregation.setDcCreator(MongoUtils.createResourceOrLiteralMapFromString(
-				aggregation.getCreator()));
-		mongoAggregation.setEdmCountry(MongoUtils.createLiteralMapFromString(aggregation.getCountry()));
-		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
-				aggregation.getIsShownBy()).getResource());
-		mongoAggregation.setEdmLandingPage(SolrUtils.exists(LandingPage.class,
-				aggregation.getLandingPage()).getResource());
-		mongoAggregation.setEdmLanguage(MongoUtils.createLiteralMapFromString(aggregation.getLanguage()));
-		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
-				aggregation.getAggregatedCHO()).getResource());
-		mongoAggregation.setEdmRights(MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights()));
-
-		mongoAggregation.setAggregates(SolrUtils
-				.resourceListToArray(aggregation.getAggregateList()));
-		mongoAggregation.setEdmHasView(SolrUtils
-				.resourceListToArray(aggregation.getHasViewList()));
-		if (((EdmMongoServer) mongoServer).getDatastore().find(EuropeanaAggregationImpl.class).filter("about",
-				mongoAggregation.getAbout()) != null) {
-			// TODO:update Aggregation
+		
+		Map<String,List<String>> creator = MongoUtils.createResourceOrLiteralMapFromString(
+				aggregation.getCreator());
+		ops.set("dcCreator", creator);
+		mongoAggregation.setDcCreator(creator);
+		
+		Map<String,List<String>> country = MongoUtils.createLiteralMapFromString(aggregation.getCountry());
+		mongoAggregation.setEdmCountry(country);
+		ops.set("edmCountry", country);
+		
+		String isShownBy = SolrUtils.exists(IsShownBy.class,
+				aggregation.getIsShownBy()).getResource();
+		mongoAggregation.setEdmIsShownBy(isShownBy);
+		ops.set("edmIsShownBy", isShownBy);
+		
+		String landingPage = SolrUtils.exists(LandingPage.class,
+				aggregation.getLandingPage()).getResource();
+		mongoAggregation.setEdmLandingPage(landingPage);
+		ops.set("edmLandingPage", landingPage);
+		
+		Map<String,List<String>> language = MongoUtils.createLiteralMapFromString(aggregation.getLanguage());
+		mongoAggregation.setEdmLanguage(language);
+		ops.set("edmLanguage",language);
+		
+		String agCHO = SolrUtils.exists(AggregatedCHO.class,
+				aggregation.getAggregatedCHO()).getResource();
+		mongoAggregation.setAggregatedCHO(agCHO);
+		ops.set("aggregatedCHO", agCHO);
+		
+		Map<String,List<String>> edmRights = MongoUtils.createResourceOrLiteralMapFromString(aggregation.getRights());
+		mongoAggregation.setEdmRights(edmRights);
+		ops.set("edmRights", edmRights);
+		
+		String[] aggregates = SolrUtils
+				.resourceListToArray(aggregation.getAggregateList());
+		mongoAggregation.setAggregates(aggregates);
+		ops.set("aggregates", aggregates);
+		
+		String[] hasViewList = SolrUtils
+				.resourceListToArray(aggregation.getHasViewList());
+		mongoAggregation.setEdmHasView(hasViewList);
+		ops.set("edmHasView",hasViewList);
+		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer).getDatastore().find(EuropeanaAggregationImpl.class).filter("about",
+				mongoAggregation.getAbout()).get();
+		if (retrievedAggregation != null) {
+			mongoServer.getDatastore().update(retrievedAggregation, ops);
 		} else {
 			mongoServer.getDatastore().save(mongoAggregation);
 		}

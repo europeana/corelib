@@ -19,9 +19,12 @@ package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
+
+import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
@@ -227,32 +230,54 @@ public final class AggregationFieldInput {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		// mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
-		mongoAggregation.setEdmDataProvider(MongoUtils
+		Map<String,List<String>> dp = MongoUtils
 				.createResourceOrLiteralMapFromString(
-						aggregation.getDataProvider()));
-		mongoAggregation.setEdmIsShownAt(SolrUtils.exists(IsShownAt.class,
-				(aggregation.getIsShownAt())).getResource());
-		mongoAggregation.setEdmIsShownBy(SolrUtils.exists(IsShownBy.class,
-				(aggregation.getIsShownBy())).getResource());
-		mongoAggregation.setEdmObject(SolrUtils.exists(_Object.class,
-				(aggregation.getObject())).getResource());
-		mongoAggregation.setEdmProvider(MongoUtils
+						aggregation.getDataProvider());
+		mongoAggregation.setEdmDataProvider(dp);
+		UpdateOperations<AggregationImpl> ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
+		ups.set("edmDataProvider", dp);
+		String isShownAt = SolrUtils.exists(IsShownAt.class,
+				(aggregation.getIsShownAt())).getResource();
+		mongoAggregation.setEdmIsShownAt(isShownAt);
+		ups.set("edmIsShownAt",isShownAt);
+		String isShownBy = SolrUtils.exists(IsShownBy.class,
+				(aggregation.getIsShownBy())).getResource();
+		mongoAggregation.setEdmIsShownBy(isShownBy);
+		ups.set("edmIsShownBy",isShownBy);
+		String object = SolrUtils.exists(_Object.class,
+				(aggregation.getObject())).getResource();
+		mongoAggregation.setEdmObject(object);
+		ups.set("edmObject",object);
+		
+		Map<String,List<String>> prov = MongoUtils
 				.createResourceOrLiteralMapFromString(
-						aggregation.getProvider()));
-		mongoAggregation.setEdmRights(MongoUtils
-				.createResourceOrLiteralMapFromString(aggregation.getRights()));
-
+						aggregation.getProvider());
+		mongoAggregation.setEdmProvider(prov);
+		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
+		ups.set("edmProvider", prov);
+		Map<String,List<String>> rights = MongoUtils
+				.createResourceOrLiteralMapFromString(
+						aggregation.getRights());
+		mongoAggregation.setEdmRights(rights);
+		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
+		ups.set("edmRights", rights);
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString());
 		}
-		mongoAggregation.setAggregatedCHO(SolrUtils.exists(AggregatedCHO.class,
-				(aggregation.getAggregatedCHO())).getResource());
-		mongoAggregation
-				.setDcRights(MongoUtils
-						.createResourceOrLiteralMapFromList(aggregation
-								.getRightList()));
-
+		
+		String agCHO = SolrUtils.exists(AggregatedCHO.class,
+				(aggregation.getAggregatedCHO())).getResource();
+		mongoAggregation.setAggregatedCHO(agCHO);
+		ups.set("aggregatedCHO",agCHO);
+		
+		
+		Map<String,List<String>> rights1 = MongoUtils
+				.createResourceOrLiteralMapFromList(
+						aggregation.getRightList());
+		mongoAggregation.setDcRights(rights1);
+		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
+		ups.set("dcRights", rights);
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();
 			for (HasView hasView : aggregation.getHasViewList()) {
@@ -260,12 +285,13 @@ public final class AggregationFieldInput {
 			}
 			mongoAggregation.setHasView(hasViewList
 					.toArray(new String[hasViewList.size()]));
-
+			ups.set("hasView", hasViewList.toArray(new String[hasViewList.size()]));
 		}
-		if (mongoServer.getDatastore()
+		AggregationImpl retAggr = mongoServer.getDatastore()
 				.find(AggregationImpl.class)
-				.filter("about", aggregation.getAbout()).get() != null) {
-			// TODO:update Aggregation
+				.filter("about", aggregation.getAbout()).get();
+		if (retAggr != null) {
+			mongoServer.getDatastore().update(retAggr, ups);
 		} else {
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
