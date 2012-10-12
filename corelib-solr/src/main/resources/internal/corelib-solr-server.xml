@@ -40,7 +40,11 @@
 		<constructor-arg value="#{europeanaProperties['solr.password']}" />
 		<constructor-arg value="#{europeanaProperties['solr.url']}"/> 
 	</bean>
-	
+	<bean id="corelib_solr_suggestionClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
+		<constructor-arg value="#{europeanaProperties['solr.username']}" />
+		<constructor-arg value="#{europeanaProperties['solr.password']}" />
+		<constructor-arg value="#{europeanaProperties['solr.suggestions.url']}"/> 
+	</bean>
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
 		<constructor-arg>
 			<bean class="org.apache.solr.core.CoreContainer">
