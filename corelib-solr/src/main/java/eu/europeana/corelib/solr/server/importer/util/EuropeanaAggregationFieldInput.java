@@ -1,5 +1,7 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -180,11 +182,8 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		return mongoAggregation;
 	}
-
-	public void deleteAggregationFromMongo(String about,
-			EdmMongoServer mongoServer) {
-		MongoUtils.delete(EuropeanaAggregation.class, about, mongoServer);
-	}
+ 
+	
 	
 	private boolean belongsTo(EuropeanaAggregation aggregation, WebResource webResource){
 		if (aggregation.getEdmHasView() != null) {
