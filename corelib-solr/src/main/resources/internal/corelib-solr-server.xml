@@ -34,6 +34,14 @@
 		<property name="defaultMaxConnectionsPerHost" value="64"/>
 		<property name="maxTotalConnections" value="125"/>
 	</bean>
+
+	<bean id="corelib_solr_suggestionsServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
+		<constructor-arg value="#{europeanaProperties['solr.suggestions.url']}"/>
+		<property name="followRedirects" value="false"/>
+		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
+		<property name="defaultMaxConnectionsPerHost" value="64"/>
+		<property name="maxTotalConnections" value="125"/>
+	</bean>
 	
 	<bean id="corelib_solr_httpClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
 		<constructor-arg value="#{europeanaProperties['solr.username']}" />

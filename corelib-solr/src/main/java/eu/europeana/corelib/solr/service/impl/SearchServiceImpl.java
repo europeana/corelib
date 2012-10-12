@@ -87,7 +87,7 @@ public class SearchServiceImpl implements SearchService {
 
 	// provided by setter
 	private SolrServer solrServer;
-	
+
 	private SolrServer suggestionSolrServer;
 
 	@Resource(name = "corelib_solr_mongoServer")
@@ -95,14 +95,14 @@ public class SearchServiceImpl implements SearchService {
 
 	@Resource(name = "corelib_solr_httpClient")
 	private EuropeanaHttpClient httpClient;
+
 	@Resource(name = "corelib_solr_suggestionClient")
 	private EuropeanaHttpClient suggestionClient;
 	
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final Logger log = Logger.getLogger(SearchServiceImpl.class
-			.getName());
+	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -342,20 +342,20 @@ public class SearchServiceImpl implements SearchService {
 						entry.getKey(), value));
 			}
 		}
-		// log.info("solrQuery for seeAlso: " + solrQuery);
 		QueryResponse response;
 		Map<String, Map<String, Integer>> seeAlso = new HashMap<String, Map<String, Integer>>();
 		try {
 			response = solrServer.query(solrQuery);
-			log.info("elapsed time (seeAlso): " + response.getElapsedTime());
+			log.info(String.format("elapsed time (seeAlso/%d): %d", response.getFacetQuery().size(), response.getElapsedTime()));
 			Map<String, Integer> queries = response.getFacetQuery();
 			for (Entry<String, Integer> entry : queries.entrySet()) {
 				String query = entry.getKey();
 				Integer count = entry.getValue();
 				String[] parts = query.split(":", 2);
 				String fieldName = parts[0];
-				String valueValue = parts[1].replaceAll("^\"", "").replaceAll(
-						"\"$", "");
+				String valueValue = parts[1]
+						.replaceAll("^\"", "")
+						.replaceAll("\"$", "");
 				Map<String, Integer> fieldSuggestions;
 				if (seeAlso.containsKey(fieldName)) {
 					fieldSuggestions = seeAlso.get(fieldName);
