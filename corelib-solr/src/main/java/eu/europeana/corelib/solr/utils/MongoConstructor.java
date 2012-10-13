@@ -32,7 +32,6 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -57,7 +56,6 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 public class MongoConstructor {
 
 	// private EdmMongoServerImpl mongoServer;
-	private final static String EUROPEANA_URI = "http:///www.europeana.eu/portal/record";
 
 	// public void setMongoServer(EdmMongoServerImpl mongoServer) {
 	// this.mongoServer = mongoServer;
@@ -76,7 +74,6 @@ public class MongoConstructor {
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
 		List<Choice> elements = record.getChoiceList();
-		EuropeanaAggregation europeanaAggregation = new EuropeanaAggregationImpl();
 		for (Choice element : elements) {
 
 			if (element.ifProvidedCHO()) {
@@ -85,7 +82,10 @@ public class MongoConstructor {
 					providedCHOs.add(new ProvidedCHOFieldInput()
 							.createProvidedCHOMongoFields(
 									element.getProvidedCHO(), mongoServer));
-
+					ProxyImpl proxy= getProxy(proxies, element.getProvidedCHO().getAbout());
+					if(proxy!=null){
+						proxy.setProxyFor(element.getProvidedCHO().getAbout());
+					} 
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -93,8 +93,8 @@ public class MongoConstructor {
 				}
 			}
 			if (element.ifProxy()) {
-				ProxyImpl proxy = getAggregationProxy(proxies, element.getProxy().getAbout());
-				if(proxy==null &&(element.getProxy().getEuropeanaProxy()==null||!element.getProxy().getEuropeanaProxy().isEuropeanaProxy())){
+				ProxyImpl proxy = getProxy(proxies, element.getProxy().getAbout());
+				if(proxy==null){
 					proxies.add(new ProxyFieldInput().createProxyMongoFields(
 							new ProxyImpl(), element.getProxy(), mongoServer));
 				}
@@ -109,7 +109,7 @@ public class MongoConstructor {
 									mongoServer));
 				}
 				if (proxies.size() > 0) {
-					ProxyImpl proxy= getAggregationProxy(proxies, element.getAggregation().getAggregatedCHO().getResource());
+					ProxyImpl proxy= getProxy(proxies, element.getAggregation().getAggregatedCHO().getResource());
 					if(proxy!=null){
 						proxy.setProxyIn(new String[]{element.getAggregation().getAbout()});
 					} else {
@@ -139,9 +139,7 @@ public class MongoConstructor {
 							.appendWebResource(aggregations, webResource,
 									mongoServer));
 				}
-				europeanaAggregation = new EuropeanaAggregationFieldInput()
-						.appendWebResource(europeanaAggregation, webResource,
-								mongoServer);
+				
 
 			}
 			if (element.ifTimeSpan()) {
@@ -153,6 +151,9 @@ public class MongoConstructor {
 				agents.add(new AgentFieldInput().createAgentMongoEntity(
 						element.getAgent(), mongoServer));
 			}
+			if(element.ifEuropeanaAggregation()){
+				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput().createAggregationMongoFields(element.getEuropeanaAggregation(), mongoServer));
+			}
 		}
 
 		AggregationImpl aggregation = aggregations.get(0);
@@ -160,69 +161,7 @@ public class MongoConstructor {
 		MongoUtils.updateAggregation(aggregation, mongoServer);
 
 		fullBean.setProvidedCHOs(providedCHOs);
-		if(europeanaAggregation.getAbout()==null){
-			
-			
-			ProxyImpl europeanaProxy = new ProxyImpl();
-			europeanaProxy.setAbout("/proxy/europeana/"+fullBean.getAbout());
-			europeanaProxy.setEuropeanaProxy(true);
-			europeanaProxy.setProxyFor(fullBean.getAbout());
-			europeanaProxy.setProxyIn(new String[]{"/aggregation/europeana" + fullBean.getAbout()});
-			if(mongoServer.searchByAbout(ProxyImpl.class,"/proxy/europeana/"+fullBean.getAbout())!=null){
-				MongoUtils.updateProxy(europeanaProxy, mongoServer);
-			}else {
-			mongoServer.getDatastore().save(europeanaProxy);
-			}
-			proxies.add(europeanaProxy);
-			europeanaAggregation.setAbout("/aggregation/europeana"
-					+ fullBean.getAbout());
-			europeanaAggregation.setEdmLandingPage(EUROPEANA_URI
-					+ fullBean.getAbout() + ".html");
-			europeanaAggregation.setAggregatedCHO(fullBean.getAbout());
-			if (mongoServer
-					.getDatastore()
-					.find(EuropeanaAggregationImpl.class)
-					.filter("about",
-							"/aggregation/europeana" + fullBean.getAbout())
-					.get() != null) {
-				MongoUtils.updateEuropeanaAggregation(europeanaAggregation,
-						mongoServer);
-			} else {
-				
-				mongoServer.getDatastore().save(europeanaAggregation);
-
-			}
-		} else {
-			if (mongoServer
-					.getDatastore()
-					.find(EuropeanaAggregationImpl.class)
-					.filter("about",
-							"/aggregation/europeana" + fullBean.getAbout())
-					.get() != null) {
-				MongoUtils.updateEuropeanaAggregation(europeanaAggregation,
-						mongoServer);
-			} else {
-				ProxyImpl europeanaProxy = new ProxyImpl();
-				europeanaProxy.setAbout("/proxy/europeana/"+fullBean.getAbout());
-				europeanaProxy.setEuropeanaProxy(true);
-				europeanaProxy.setProxyFor(fullBean.getAbout());
-				europeanaProxy.setProxyIn(new String[]{"/aggregation/europeana" + fullBean.getAbout()});
-				if(mongoServer.searchByAbout(ProxyImpl.class,"/proxy/europeana/"+fullBean.getAbout())!=null){
-					MongoUtils.updateProxy(europeanaProxy, mongoServer);
-				}else {
-					mongoServer.getDatastore().save(europeanaProxy);
-				}
-				proxies.add(europeanaProxy);
-				mongoServer.getDatastore().save(europeanaAggregation);
-
-			}
-		}
 		
-		
-		
-		
-		fullBean.setEuropeanaAggregation(europeanaAggregation);
-
 		fullBean.setAggregations(aggregations);
 		try {
 			if (agents.size() > 0) {
@@ -246,7 +185,7 @@ public class MongoConstructor {
 		return fullBean;
 	}
 
-	private ProxyImpl getAggregationProxy(List<ProxyImpl> proxies,String about) {
+	private ProxyImpl getProxy(List<ProxyImpl> proxies,String about) {
 		for (ProxyImpl proxy:proxies){
 			if (StringUtils.equals(proxy.getAbout(), about)){
 				return proxy;

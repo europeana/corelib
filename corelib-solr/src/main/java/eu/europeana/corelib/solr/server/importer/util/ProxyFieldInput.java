@@ -866,6 +866,7 @@ public final class ProxyFieldInput {
 					Arrays.asList(tempProxy));
 			tempList.add(SolrUtils.exists(String.class, aggregation.getAbout()));
 			proxy.setProxyIn(tempList.toArray(new String[tempList.size()]));
+			proxy.setProxyFor(aggregation.getAggregatedCHO().getResource());
 		}
 		proxy.setEuropeanaProxy(false);
 		return proxy;

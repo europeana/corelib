@@ -32,7 +32,9 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	private final static String ORID = "orid";
 	private final static String DATE = "last_checked";
 	private final static String SESSION = "sessionID";
+	private final static String CID = "cid";
 	private final static String XMLCHECKSUM = "xmlchecksum";
+	private EuropeanaIdMongoServer europeanaIdMongoServer;
 
 	/**
 	 * Constructor of the EuropeanaIDMongoServer
@@ -45,6 +47,8 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	public EuropeanaIdRegistryMongoServer(Mongo mongoServer, String databaseName) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
+		europeanaIdMongoServer = new EuropeanaIdMongoServer(mongoServer,
+				"EuropeanaId");
 		createDatastore();
 	}
 
@@ -53,6 +57,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		morphia.map(EuropeanaIdRegistry.class);
 		morphia.map(FailedRecord.class);
 		datastore = morphia.createDatastore(mongoServer, databaseName);
+
 		datastore.ensureIndexes();
 	}
 
@@ -107,12 +112,18 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 
 		// If it is not then save and return a new collectionID
 		if (retrievedeuropeanaID == null) {
-
-			datastore.save(constructedeuropeanaId);
-			lookupresult.setState(LookupState.ID_REGISTERED);
-			lookupresult.setEuropeanaID(europeanaIDString);
-			return lookupresult;
+			if (!checkForChangedCollection(constructedeuropeanaId)) {
+				datastore.save(constructedeuropeanaId);
+				lookupresult.setState(LookupState.ID_REGISTERED);
+				lookupresult.setEuropeanaID(europeanaIDString);
+				return lookupresult;
+			} else {
+				lookupresult.setState(LookupState.COLLECTION_CHANGED);
+				updateops.set(EID, constructedeuropeanaId.getEid());
+				updateops.set(CID, collectionID);
+			}
 		} else {
+			
 			constructedeuropeanaId.setId(retrievedeuropeanaID.getId());
 		}
 
@@ -143,7 +154,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getEid())
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
-				&& !constructedeuropeanaId.getXmlchecksum().equals(
+				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
 			lookupresult.setState(LookupState.IDENTICAL);
 
@@ -181,11 +192,11 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getOrid())
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
-			lookupresult.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
+			lookupresult
+					.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
-		}
-		else if (!constructedeuropeanaId.getCid().equals(
+		} else if (!constructedeuropeanaId.getCid().equals(
 				retrievedeuropeanaID.getCid())
 				&& constructedeuropeanaId.getEid().equals(
 						retrievedeuropeanaID.getEid())
@@ -193,7 +204,8 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
-			lookupresult.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+			lookupresult
+					.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 		}
@@ -209,22 +221,42 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		return lookupresult;
 	}
 
+	private boolean checkForChangedCollection(
+			EuropeanaIdRegistry constructedeuropeanaId) {
+		EuropeanaIdRegistry retrievedId = retrieveFromOriginalXML(
+				constructedeuropeanaId.getOrid(),
+				constructedeuropeanaId.getXmlchecksum());
+		if (retrievedId != null) {
+			EuropeanaId eurId = new EuropeanaId();
+			eurId.setNewId(constructedeuropeanaId.getEid());
+			eurId.setOldId(retrievedId.getEid());
+			eurId.setTimestamp(new Date().getTime());
+			europeanaIdMongoServer.saveEuropeanaId(eurId);
+			return true;
+
+		}
+		return false;
+	}
+
 	/**
 	 * Creates and stores/updates a new failed record
+	 * 
 	 * @param eurId
-	 * 							 The record that failed
-	 * @param xml  The original EDM of the record
-	 * @param lookupState The reason it failed
+	 *            The record that failed
+	 * @param xml
+	 *            The original EDM of the record
+	 * @param lookupState
+	 *            The reason it failed
 	 */
-	private void generateFailedRecord(
-			EuropeanaIdRegistry eurId, String xml,
+	private void generateFailedRecord(EuropeanaIdRegistry eurId, String xml,
 			LookupState lookupState) {
 		FailedRecord failedRecord = datastore.find(FailedRecord.class)
 				.filter("originalId", eurId.getOrid())
 				.filter("collectionId", eurId.getCid()).get();
-		System.out.println("Generating failed Record "+ eurId +", Reason: "+lookupState.toString());
-		//If it has not been found then create
-		if(failedRecord == null){
+		System.out.println("Generating failed Record " + eurId + ", Reason: "
+				+ lookupState.toString());
+		// If it has not been found then create
+		if (failedRecord == null) {
 			failedRecord = new FailedRecord();
 			failedRecord.setCollectionId(eurId.getCid());
 			failedRecord.setEuropeanaId(eurId.getEid());
@@ -233,7 +265,8 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			failedRecord.setLookupState(lookupState);
 			datastore.save(failedRecord);
 		}
-		//or else update the fields that might have changed (xml representation and the lookupState)
+		// or else update the fields that might have changed (xml representation
+		// and the lookupState)
 		else {
 			UpdateOperations<FailedRecord> updateops = datastore
 					.createUpdateOperations(FailedRecord.class);
@@ -241,8 +274,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			updateops.set("lookupState", lookupState);
 			datastore.update(failedRecord, updateops);
 		}
-		
-		
+
 	}
 
 	/**
@@ -300,6 +332,12 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				.equal(newId).get() != null ? true : false;
 	}
 
+	public EuropeanaIdRegistry retrieveFromOriginalXML(String orId, String xml) {
+		return datastore.find(EuropeanaIdRegistry.class)
+				.filter(XMLCHECKSUM, xml).filter(ORID, orId).get();
+
+	}
+
 	/**
 	 * Check if the record has newID based on the oldID
 	 * 
@@ -344,10 +382,11 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 
 	}
 
-	public List<Map<String,String>> getFailedRecords(String collectionId){
-		List<Map<String,String>> failedRecords = new ArrayList<Map<String,String>>();
-		for (FailedRecord failedRecord: datastore.find(FailedRecord.class).filter("collectionId",collectionId).asList()){
-			Map<String,String> record = new HashMap<String,String>();
+	public List<Map<String, String>> getFailedRecords(String collectionId) {
+		List<Map<String, String>> failedRecords = new ArrayList<Map<String, String>>();
+		for (FailedRecord failedRecord : datastore.find(FailedRecord.class)
+				.filter("collectionId", collectionId).asList()) {
+			Map<String, String> record = new HashMap<String, String>();
 			record.put("collectionId", failedRecord.getCollectionId());
 			record.put("originalId", failedRecord.getOriginalId());
 			record.put("europeanaId", failedRecord.getEuropeanaId());

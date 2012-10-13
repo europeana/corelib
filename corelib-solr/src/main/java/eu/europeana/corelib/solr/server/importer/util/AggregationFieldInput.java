@@ -236,31 +236,43 @@ public final class AggregationFieldInput {
 		mongoAggregation.setEdmDataProvider(dp);
 		UpdateOperations<AggregationImpl> ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
 		ups.set("edmDataProvider", dp);
+		
 		String isShownAt = SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource();
+		if(isShownAt!=null){
 		mongoAggregation.setEdmIsShownAt(isShownAt);
 		ups.set("edmIsShownAt",isShownAt);
+		}
+		
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource();
+		if(isShownBy!=null){
 		mongoAggregation.setEdmIsShownBy(isShownBy);
+		
 		ups.set("edmIsShownBy",isShownBy);
+		}
+		
 		String object = SolrUtils.exists(_Object.class,
 				(aggregation.getObject())).getResource();
+		if(object!=null){
 		mongoAggregation.setEdmObject(object);
-		ups.set("edmObject",object);
 		
+		ups.set("edmObject",object);
+		}
 		Map<String,List<String>> prov = MongoUtils
 				.createResourceOrLiteralMapFromString(
 						aggregation.getProvider());
+		if(prov!=null){
 		mongoAggregation.setEdmProvider(prov);
-		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
 		ups.set("edmProvider", prov);
+		}
 		Map<String,List<String>> rights = MongoUtils
 				.createResourceOrLiteralMapFromString(
 						aggregation.getRights());
+		if(rights!=null){
 		mongoAggregation.setEdmRights(rights);
-		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
 		ups.set("edmRights", rights);
+		}
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString());
@@ -275,9 +287,10 @@ public final class AggregationFieldInput {
 		Map<String,List<String>> rights1 = MongoUtils
 				.createResourceOrLiteralMapFromList(
 						aggregation.getRightList());
+		if(rights1!=null){
 		mongoAggregation.setDcRights(rights1);
-		ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
 		ups.set("dcRights", rights);
+		}
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();
 			for (HasView hasView : aggregation.getHasViewList()) {
