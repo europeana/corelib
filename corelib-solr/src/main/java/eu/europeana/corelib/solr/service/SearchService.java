@@ -130,5 +130,5 @@ public interface SearchService {
 	 * @return
 	 *   The see also suggestions
 	 */
-	Map<String, Map<String,Integer>> seeAlso(Map<String, List<String>> fields);
+	Map<String, Integer> seeAlso(Map<String, List<String>> fields);
 }

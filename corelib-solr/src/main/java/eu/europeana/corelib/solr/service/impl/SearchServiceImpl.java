@@ -330,8 +330,7 @@ public class SearchServiceImpl implements SearchService {
 		return suggestions(query, pageSize, null);
 	}
 
-	public Map<String, Map<String, Integer>> seeAlso(
-			Map<String, List<String>> fields) {
+	public Map<String, Integer> seeAlso(Map<String, List<String>> fields) {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
@@ -343,28 +342,11 @@ public class SearchServiceImpl implements SearchService {
 			}
 		}
 		QueryResponse response;
-		Map<String, Map<String, Integer>> seeAlso = new HashMap<String, Map<String, Integer>>();
+		Map<String, Integer> seeAlso = null;
 		try {
 			response = solrServer.query(solrQuery);
 			log.info(String.format("elapsed time (seeAlso/%d): %d", response.getFacetQuery().size(), response.getElapsedTime()));
-			Map<String, Integer> queries = response.getFacetQuery();
-			for (Entry<String, Integer> entry : queries.entrySet()) {
-				String query = entry.getKey();
-				Integer count = entry.getValue();
-				String[] parts = query.split(":", 2);
-				String fieldName = parts[0];
-				String valueValue = parts[1]
-						.replaceAll("^\"", "")
-						.replaceAll("\"$", "");
-				Map<String, Integer> fieldSuggestions;
-				if (seeAlso.containsKey(fieldName)) {
-					fieldSuggestions = seeAlso.get(fieldName);
-				} else {
-					fieldSuggestions = new HashMap<String, Integer>();
-					seeAlso.put(fieldName, fieldSuggestions);
-				}
-				fieldSuggestions.put(valueValue, count);
-			}
+			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}
