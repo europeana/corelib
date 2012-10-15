@@ -26,6 +26,10 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:voaf="http://purl.org/vocommons/voaf#"
+     xmlns:vann="http://purl.org/vocab/vann/"
+     xmlns:adms="http://www.w3.org/ns/adms#"
+     xmlns:radion="http://www.w3.org/ns/radion#"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:dcterms="http://purl.org/dc/terms/"
      xmlns:ore="http://www.openarchives.org/ore/terms/"
@@ -38,40 +42,49 @@
      xmlns:DOLCE-Lite="http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#">
 
     <owl:Ontology rdf:about="">
-      <dc:title xml:lang="en">Europeana Data Model (EDM) vocabulary</dc:title>
-      <owl:versionInfo>5.2.3</owl:versionInfo>
-      <dc:contributor>Participants of Europeana Version 1.0 Work Package on Further Specification of Functionality and Interoperability aspects of Europeana (WP3)</dc:contributor>
-      <dc:description xml:lang="en">The Europeana Data Model (EDM) is aimed at being an integration medium for collecting, connecting and enriching the descriptions provided by Europeana data providers. The RDF vocabulary for http://www.europeana.eu/schemas/edm/ defines the elements introduced by EDM (as opposed to the ones EDM re-uses from other namespaces).</dc:description>
-      <rdfs:comment xml:lang="en">The present specification is based on the document "Definition of the Europeana Data Model elements", originally edited by Carlo Meghini. It is aligned with the version 5.2.3 of these EDM Definitions.</rdfs:comment>
-      <dc:creator>Antoine Isaac</dc:creator>
-      <dc:contributor>Nasos Drosopoulos</dc:contributor>
-      <dc:contributor>Vassilis Tzouvaras</dc:contributor>
-      <dc:contributor>Julia Iwanowa</dc:contributor>
-      <dc:contributor>Hugo Borbinhas</dc:contributor>
-      <dc:contributor>Martin Doerr</dc:contributor>
-      <rdfs:seeAlso rdf:resource="http://pro.europeana.eu/edm-documentation"/>
-      <rdfs:seeAlso rdf:resource="http://europeanalabs.eu/wiki/EDMPrototypingTask11"/>
-      <rdfs:comment xml:lang="en">
+      <rdf:type rdf:resource="http://purl.org/vocommons/voaf#Vocabulary"/>
+      <vann:preferredNamespacePrefix>edm</vann:preferredNamespacePrefix>
+      <vann:preferredNamespaceUri>http://www.europeana.eu/schemas/edm/</vann:preferredNamespaceUri>
+      <dcterms:title xml:lang="en">Europeana Data Model (EDM) vocabulary</dcterms:title>
+      <dcterms:description xml:lang="en">The Europeana Data Model (EDM) is aimed at being an integration medium for collecting, connecting and enriching the descriptions provided by Europeana data providers. The RDF vocabulary for http://www.europeana.eu/schemas/edm/ defines the elements introduced by EDM (as opposed to the ones EDM re-uses from other namespaces).</dcterms:description>
+      <dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-03-25</dcterms:issued>
+      <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2012-08-20</dcterms:modified>
+      <owl:versionInfo>5.2.4</owl:versionInfo>
+      <radion:versionNotes xml:lang="en">The present specification is based on the document "Definition of the Europeana Data Model elements", originally edited by Carlo Meghini. It is aligned with the version 5.2.4 of these EDM Definitions.</radion:versionNotes>
+      <dcterms:creator><foaf:Person rdf:about="http://data.semanticweb.org/person/antoine-isaac" foaf:name="Antoine Isaac"/></dcterms:creator>
+      <dcterms:contributor><foaf:Organization foaf:name="Participants of Europeana Version 1.0 Work Package on Further Specification of Functionality and Interoperability aspects of Europeana (WP3)"/></dcterms:contributor>
+      <dcterms:contributor><foaf:Person rdf:about="http://www.image.ece.ntua.gr/~ndroso/" foaf:name="Nasos Drosopoulos"/></dcterms:contributor>
+      <dcterms:contributor><foaf:Person rdf:about="http://www.image.ntua.gr/~tzouvaras/" foaf:name="Vassilis Tzouvaras"/></dcterms:contributor>
+      <dcterms:contributor><foaf:Person rdf:about="http://www.ibi.hu-berlin.de/institut/personen/iwanowa" foaf:name="Julia Iwanowa"/></dcterms:contributor>
+      <dcterms:contributor><foaf:Person foaf:name="Hugo Manguinhas"/></dcterms:contributor>
+      <dcterms:contributor><foaf:Person rdf:about="http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2" foaf:name="Martin Doerr"/></dcterms:contributor>
+      <dcterms:publisher><foaf:Organization rdf:about="http://europeana.eu" foaf:name="Europeana"/></dcterms:publisher>
+      <foaf:homePage rdf:resource="http://pro.europeana.eu/edm-documentation"/>
+      <adms:relatedWebPage rdf:resource="http://europeanalabs.eu/wiki/EDMPrototypingTask11"/>
+      <vann:example rdf:resource="http://data.europeana.eu"/>
+      <vann:example rdf:resource="http://pro.europeana.eu/case-studies-edm"/>
+      <vann:changes xml:lang="en">
 =======
-Changes between EDM-v53-120123.owl
-and EDM-v52-100730.owl
+Changes between EDM-v524-120820.owl
+and EDM-v523-120123.owl
 =======
-1. Update of formal specification to v5.2.3
-2. Changed CRM namespace 
-3. Added or changed formal axioms for Event, aggregatedCHO, currentLocation, hasMet, hasType, isAnnotationOf
-4. Property labels upper-cased
-5. Added language tags
-6. Checked Martin's latest mappings to CRM
-7. Added metadata on the owl:Ontology instance
+1. edm:isShownAt made a sub-property of edm:hasView
+2. added edm:begin and edm:end and their mappings to CRM
+3. added owl:Class declarations added for compatibility with some OWL-DL reasoners (feedback from Pedro Szekely, ISI)
+4. added "of" at the end of the label for edm:isNextInSequence
+5. added vocabulary metadata to follow Linked Open Vocabularies (http://lov.okfn.org/) and ADMS (https://joinup.ec.europa.eu/asset/adms/release/100) guidelines
+6. removed a domain axiom on edm:hasMet
+      </vann:changes>
+      <voaf:toDoList xml:lang="en">
 =======
-Remaining TODOs for EDM-v53-120123.owl
+Remaining TODOs for EDM-v524-120820.owl
 =======
-- change FRBR namespace and mappings using http://metadataregistry.org/schema/show/id/5.html or FRBRoo
+- change FRBR namespace and mappings using FRBRoo namespace or http://metadataregistry.org/schema/show/id/5.html
 - add Martin's mapping to FRBR(oo) for edm:incorporates (equivalent to crm:R14F.incorporates) and edm:WebResource (subclass of F24 Publication Expression)
 - try to capture formal cardinality constraints resulting from "Obligation and Occurrence" documentation, which should be attached to non-EDM constructs (esp. ore:Aggregation)
 - continue adding documentation values (skos:scopeNote, skos:example, etc, according to 1.), starting from edm:InformationResource. Add all Europeana examples and rationale notes for non-EDM constructs
-- keep specific EDM-doc properties for "rationale" and "obligation and occurrence". Use skos:definition for "Europeana definition", skos:example for "Example", skos:note for "Europeana note"
-      </rdfs:comment>
+- use specific EDM-doc properties for "rationale" and "obligation and occurrence". Use skos:definition for "Europeana definition", skos:example for "Example", skos:note for "Europeana note"
+      </voaf:toDoList>
     </owl:Ontology>
 
     <!-- 
@@ -266,6 +279,21 @@ Object(s) (CHO for short) it is about.</skos:definition>
         <rdfs:range rdf:resource="&edm;ProvidedCHO"/>
     </owl:ObjectProperty>
 
+    <!-- http://www.europeana.eu/schemas/edm/begin -->
+
+    <owl:DatatypeProperty rdf:about="&edm;begin">
+        <rdfs:label xml:lang="en">Begin</rdfs:label>
+        <skos:definition xml:lang="en">This property denotes the start date of a period of time.</skos:definition>
+         <rdfs:domain>
+	    <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&edm;Agent"/>
+		    <rdf:Description rdf:about="&edm;TimeSpan"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+
     <!-- http://www.europeana.eu/schemas/edm/currentLocation -->
 
     <owl:ObjectProperty rdf:about="&edm;currentLocation">
@@ -293,6 +321,21 @@ Object(s) (CHO for short) it is about.</skos:definition>
         <rdfs:range rdf:resource="&edm;Place"/>
     </owl:ObjectProperty>
 
+    <!-- http://www.europeana.eu/schemas/edm/end -->
+
+    <owl:DatatypeProperty rdf:about="&edm;end">
+        <rdfs:label xml:lang="en">End</rdfs:label>
+        <skos:definition xml:lang="en">This property denotes the end date of a period of time.</skos:definition>
+         <rdfs:domain>
+	    <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&edm;Agent"/>
+		    <rdf:Description rdf:about="&edm;TimeSpan"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+
     <!-- http://www.europeana.eu/schemas/edm/happenedAt -->
 
     <owl:ObjectProperty rdf:about="&edm;happenedAt">
@@ -310,23 +353,7 @@ happened.</skos:definition>
     <rdf:Property rdf:about="&edm;hasMet">
         <rdfs:label xml:lang="en">Has Met</rdfs:label>
         <skos:definition xml:lang="en">edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of “meetings” between people and other things in space-time. Therefore we name this relationship as the things the object “has met” in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role.</skos:definition>
-        <rdfs:subPropertyOf rdf:resource="&dc;relation"/>      
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="&edm;ProvidedCHO"/>
-		    <owl:Class>
-		      <owl:intersectionOf rdf:parseType="Collection">
-			<rdf:Description rdf:about="&ore;Proxy"/>
-			<owl:Restriction>
-			  <owl:onProperty rdf:resource="&ore;proxyFor"/>
-			  <owl:someValuesFrom rdf:resource="&edm;ProvidedCHO"/>
-			</owl:Restriction>
-		      </owl:intersectionOf>
-		    </owl:Class>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
+        <rdfs:subPropertyOf rdf:resource="&dc;relation"/>
     </rdf:Property>
     
     <!-- http://www.europeana.eu/schemas/edm/hasType -->
@@ -416,7 +443,7 @@ that it annotates.</skos:definition>
     <!-- http://www.europeana.eu/schemas/edm/isNextInSequence -->
 
     <owl:ObjectProperty rdf:about="&edm;isNextInSequence">
-        <rdfs:label xml:lang="en">Is Next In Sequence</rdfs:label>
+        <rdfs:label xml:lang="en">Is Next In Sequence Of</rdfs:label>
         <skos:definition xml:lang="en">edm:isNextInSequence relates two resources S and R that are ordered parts of the same resource A, and such that R comes immediately after R in the order created by their being parts of S.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&dc;relation"/>
     </owl:ObjectProperty>
@@ -556,7 +583,7 @@ overlaps with the occurrence of that event</skos:definition>
     <owl:ObjectProperty rdf:about="&edm;isShownAt">
         <rdfs:label xml:lang="en">Is Shown At</rdfs:label>
         <skos:definition xml:lang="en">An unambiguous URL reference to the digital object on the provider’s web site in its full information context.</skos:definition>
-        <rdfs:subPropertyOf rdf:resource="&edm;landingPage"/>
+        <rdfs:subPropertyOf rdf:resource="&edm;hasView"/>
         <rdfs:range rdf:resource="&edm;WebResource"/>
     </owl:ObjectProperty>
     
@@ -589,6 +616,15 @@ web site of the data provider from which a thumbnail could be generated. This wi
         <rdfs:subPropertyOf rdf:resource="&edm;hasView"/>
         <rdfs:range rdf:resource="&edm;WebResource"/>
     </owl:ObjectProperty>
+
+    <!-- http://www.europeana.eu/schemas/edm/preview -->
+
+    <owl:ObjectProperty rdf:about="&edm;preview">
+        <rdfs:label xml:lang="en">Preview</rdfs:label>
+        <skos:definition xml:lang="en">The URL of a thumbnail representing the digital object, generated by Europeana.</skos:definition>
+        <rdfs:subPropertyOf rdf:resource="&edm;hasView"/>
+        <rdfs:range rdf:resource="&edm;WebResource"/>
+    </owl:ObjectProperty>   
 
     <!-- http://www.europeana.eu/schemas/edm/provider -->
 
@@ -695,7 +731,13 @@ born digital object.</skos:definition>
     <!-- Property mappings: properties newly re-used by EDM -->
     <!--****************************************************************************************************************************** -->
 
+    <rdf:Description rdf:about="&crm;P79F.beginning_is_qualified_by">
+        <rdfs:subPropertyOf rdf:resource="&edm;begin"/>
+    </rdf:Description>
 
+    <rdf:Description rdf:about="&crm;P80F.end_is_qualified_by">
+        <rdfs:subPropertyOf rdf:resource="&edm;end"/>
+    </rdf:Description>
 
     <!--****************************************************************************************************************************** -->
     <!-- Property mappings: properties already re-used by ESE -->
@@ -821,4 +863,14 @@ born digital object.</skos:definition>
         <rdfs:subPropertyOf rdf:resource="&edm;hasType"/>
     </rdf:Description>
 
+    <!--****************************************************************************************************************************** -->
+    <!-- Class declarations added for compatibility with some OWL-DL reasoners -->
+    <!--****************************************************************************************************************************** -->
+
+    <owl:Class rdf:about="&skos;Concept"/>
+    <owl:Class rdf:about="&ore;Aggregation"/>
+    <owl:Class rdf:about="&ore;Proxy"/>
+
    </rdf:RDF>
+
+
