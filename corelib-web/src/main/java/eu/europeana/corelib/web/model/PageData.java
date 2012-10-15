@@ -55,6 +55,8 @@ public abstract class PageData {
 	private String bingTranslateId;
 
 	private String addThisId;
+	
+	private String shareThisId;
 
 	private String facebookId;
 
@@ -236,6 +238,14 @@ public abstract class PageData {
 
 	public String getAddThisId() {
 		return addThisId;
+	}
+	
+	public void setShareThisId(String shareThisId) {
+		this.shareThisId = shareThisId;
+	}
+
+	public String getShareThisId() {
+		return shareThisId;
 	}
 
 	public boolean isShowDidYouMean() {

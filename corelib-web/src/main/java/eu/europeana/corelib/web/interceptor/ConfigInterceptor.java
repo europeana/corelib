@@ -61,6 +61,9 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	@Value("#{europeanaProperties['portal.addthis.pubid']}")
 	private String portalAddthisId;
 
+	@Value("#{europeanaProperties['portal.sharethis.pubid']}")
+	private String portalSharethisId;
+	
 	@Value("#{europeanaProperties['portal.facebook.appid']}")
 	private String portalFacebookId;
 
@@ -97,8 +100,10 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			model.setGoogleAnalyticsId(StringUtils.trimToEmpty(portalGoogleAnalyticsId));
 			model.setGoogleMapsId(StringUtils.trimToEmpty(portalGoogleMapsId));
 			model.setAddThisId(StringUtils.trimToEmpty(portalAddthisId));
+			model.setShareThisId(StringUtils.trimToEmpty(portalSharethisId));
 			model.setFacebookId(StringUtils.trimToEmpty(portalFacebookId));
 			model.setBingTranslateId(StringUtils.trimToEmpty(portalBingTranslateId));
+			
 		}
 	}
 
