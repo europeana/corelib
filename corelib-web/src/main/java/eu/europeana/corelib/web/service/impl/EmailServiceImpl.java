@@ -102,6 +102,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendRegisterApiNotifyAdmin(final User user) throws EmailServiceException {
 		if (user == null) {
+			log.severe("Problem with sendRegisterApiNotifyAdmin: user is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -119,6 +120,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendRegisterApiNotifyUser(final ApiKey apiKey) throws EmailServiceException {
 		if (apiKey == null) {
+			log.severe("Problem with sendRegisterApiNotifyUser: apiKey is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
