@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.solr.common.SolrInputDocument;
 
@@ -276,9 +277,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsAlternative();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getAlternative()));
+										.getAlternative());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsAlternative(tempMap);
 					}
 				}
@@ -291,9 +300,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsConformsTo();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getConformsTo()));
+										.getConformsTo());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsConformsTo(tempMap);
 					}
 				}
@@ -306,9 +323,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsCreated();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCreated()));
+										.getCreated());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsCreated(tempMap);
 					}
 				}
@@ -321,9 +346,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsExtent();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getExtent()));
+										.getExtent());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsExtent(tempMap);
 					}
 				}
@@ -336,9 +369,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasFormat();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasFormat()));
+										.getHasFormat());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsHasFormat(tempMap);
 					}
 				}
@@ -351,9 +392,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasPart();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasPart()));
+										.getHasPart());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsHasPart(tempMap);
 					}
 				}
@@ -366,9 +415,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsHasVersion();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getHasVersion()));
+										.getHasVersion());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsHasVersion(tempMap);
 					}
 				}
@@ -382,9 +439,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsFormatOf();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsFormatOf()));
+										.getIsFormatOf());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsFormatOf(tempMap);
 					}
 				}
@@ -398,9 +463,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsPartOf();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsPartOf()));
+										.getIsPartOf());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsPartOf(tempMap);
 					}
 				}
@@ -413,9 +486,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsReferencedBy();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsReferencedBy()));
+										.getIsReferencedBy());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsReferencedBy(tempMap);
 					}
 				}
@@ -428,9 +509,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsReplacedBy();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsReplacedBy()));
+										.getIsReplacedBy());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsReplacedBy(tempMap);
 					}
 				}
@@ -444,9 +533,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsRequiredBy();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsRequiredBy()));
+										.getIsRequiredBy());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsRequiredBy(tempMap);
 					}
 				}
@@ -459,9 +556,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIssued();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIssued()));
+										.getIssued());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIssued(tempMap);
 					}
 				}
@@ -475,9 +580,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsIsVersionOf();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getIsVersionOf()));
+										.getIsVersionOf());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsIsVersionOf(tempMap);
 					}
 				}
@@ -491,9 +604,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsMedium();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getMedium()));
+										.getMedium());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsMedium(tempMap);
 					}
 				}
@@ -507,9 +628,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsProvenance();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getProvenance()));
+										.getProvenance());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsProvenance(tempMap);
 					}
 				}
@@ -522,9 +651,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsReferences();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getReferences()));
+										.getReferences());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsReferences(tempMap);
 					}
 				}
@@ -538,9 +675,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsReplaces();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getReplaces()));
+										.getReplaces());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsReplaces(tempMap);
 					}
 				}
@@ -554,9 +699,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsRequires();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRequires()));
+										.getRequires());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsRequires(tempMap);
 					}
 				}
@@ -569,9 +722,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsSpatial();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSpatial()));
+										.getSpatial());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsSpatial(tempMap);
 					}
 				}
@@ -584,9 +745,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsTOC();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getTableOfContents()));
+										.getTableOfContents());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsTOC(tempMap);
 					}
 				}
@@ -599,9 +768,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDctermsTemporal();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getTemporal()));
+										.getTemporal());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDctermsTemporal(tempMap);
 					}
 				}
@@ -614,9 +791,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcContributor();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getContributor()));
+										.getContributor());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcContributor(tempMap);
 					}
 				}
@@ -629,10 +814,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcCoverage();
-
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCoverage()));
+										.getCoverage());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcCoverage(tempMap);
 					}
 				}
@@ -645,9 +837,17 @@ public final class ProxyFieldInput {
 												.getCreator()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcCreator();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getCreator()));
+										.getCreator());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcCreator(tempMap);
 					}
 				}
@@ -659,9 +859,17 @@ public final class ProxyFieldInput {
 												.getDate()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcDate();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getDate()));
+										.getDate());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcDate(tempMap);
 					}
 				}
@@ -675,9 +883,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcDescription();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getDescription()));
+										.getDescription());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcDescription(tempMap);
 					}
 				}
@@ -689,9 +905,17 @@ public final class ProxyFieldInput {
 												.getFormat()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcFormat();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getFormat()));
+										.getFormat());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcFormat(tempMap);
 					}
 				}
@@ -704,9 +928,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcIdentifier();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getIdentifier()));
+										.getIdentifier());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcIdentifier(tempMap);
 					}
 				}
@@ -718,9 +950,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcLanguage();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getLanguage()));
+										.getLanguage());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcLanguage(tempMap);
 					}
 				}
@@ -733,9 +973,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcPublisher();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getPublisher()));
+										.getPublisher());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcPublisher(tempMap);
 					}
 				}
@@ -749,9 +997,17 @@ public final class ProxyFieldInput {
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy
 								.getDcRelation();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRelation()));
+										.getRelation());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcRelation(tempMap);
 					}
 				}
@@ -763,9 +1019,17 @@ public final class ProxyFieldInput {
 												.getRights()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcRights();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getRights()));
+										.getRights());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcRights(tempMap);
 					}
 				}
@@ -778,9 +1042,17 @@ public final class ProxyFieldInput {
 												.getSource()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcSource();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSource()));
+										.getSource());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcSource(tempMap);
 					}
 				}
@@ -793,9 +1065,17 @@ public final class ProxyFieldInput {
 												.getSubject()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcSubject();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getSubject()));
+										.getSubject());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcSubject(tempMap);
 					}
 				}
@@ -807,9 +1087,17 @@ public final class ProxyFieldInput {
 										.getTitle()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcTitle();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>>retMap = MongoUtils
 								.createLiteralMapFromString(europeanaType
-										.getTitle()));
+										.getTitle());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcTitle(tempMap);
 					}
 				}
@@ -821,9 +1109,17 @@ public final class ProxyFieldInput {
 												.getType()));
 					} else {
 						Map<String, List<String>> tempMap = mongoProxy.getDcType();
-						tempMap.putAll(MongoUtils
+						Map<String,List<String>> retMap = MongoUtils
 								.createResourceOrLiteralMapFromString(europeanaType
-										.getType()));
+										.getType());
+						for (Entry<String,List<String>> entry: retMap.entrySet()){
+							if(tempMap.containsKey(entry.getKey())){
+								List<String> values = tempMap.get(entry.getKey());
+								values.addAll(retMap.get(entry.getKey()));
+							} else {
+								tempMap.put(entry.getKey(), entry.getValue());
+							}
+						}
 						mongoProxy.setDcType(tempMap);
 					}
 				}
