@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.entity.relational.SavedItemImpl;
 import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
@@ -35,6 +36,7 @@ import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
@@ -61,7 +63,15 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 	@Override
 	public User create(String tokenString, String username, String password) throws DatabaseException {
-		if (StringUtils.isBlank(tokenString) || StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+		return create(tokenString, username, password, false);
+	}
+
+	public User create(String tokenString, String username, String password, boolean isApiRegistration)
+			throws DatabaseException {
+
+		if (StringUtils.isBlank(tokenString) 
+				|| StringUtils.isBlank(username) 
+				|| (!isApiRegistration && StringUtils.isBlank(password))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		Token token = tokenService.findByID(tokenString);
@@ -75,6 +85,21 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		user.setRegistrationDate(new Date());
 		user = getDao().insert(user);
 		tokenService.remove((Token) token);
+		return user;
+	}
+
+	public User createMinimal(String email)
+			throws DatabaseException {
+
+		if (StringUtils.isBlank(email) || findByEmail(email) != null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+
+		User user = new UserImpl();
+		user.setEmail(email);
+		user.setRegistrationDate(new Date());
+		user = getDao().insert(user);
+
 		return user;
 	}
 
@@ -125,28 +150,36 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException {
+	public User createSavedSearch(Long userId, String query, String queryString) 
+			throws DatabaseException {
+
 		if ((userId == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		SavedSearchImpl savedSearch = new SavedSearchImpl();
 		savedSearch.setUser(user);
 		savedSearch.setDateSaved(new Date());
 		savedSearch.setQuery(query);
 		savedSearch.setQueryString(queryString);
+
 		user.getSavedSearches().add(savedSearch);
 		return user;
 	}
 
 	@Override
-	public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
+	public User createSavedItem(Long userId, String europeanaObjectId) 
+			throws DatabaseException {
+
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
@@ -169,17 +202,39 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException {
+	public User createSocialTag(Long userId, String europeanaObjectId, String tag) 
+			throws DatabaseException {
+
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		User user = getDao().findByPK(userId);
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag, RelationalDatabase.FIELDSIZE_TAG));
+		return user;
+	}
+
+	public User createApiKey(String email, String apiKey, String privateKey, Long limit)
+			throws DatabaseException {
+
+		User user = findByEmail(email);
+		if (user == null) {
+			user = createMinimal(email);
+		}
+
+		ApiKey api = new ApiKeyImpl();
+		api.setApiKey(apiKey);
+		api.setPrivateKey(privateKey);
+		api.setUsageLimit(limit);
+		api.setUser(user);
+		user.getApiKeys().add(api);
+
 		return user;
 	}
 

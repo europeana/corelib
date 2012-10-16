@@ -45,6 +45,8 @@ public interface UserService extends AbstractService<User> {
 	 */
 	User create(String token, String username, String password) throws DatabaseException;
 
+	User createMinimal(String email) throws DatabaseException;
+
 	/**
 	 * Returns a User if there is a valid email provided.
 	 * 
@@ -139,6 +141,8 @@ public interface UserService extends AbstractService<User> {
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
 	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
+
+	User createApiKey(String email, String apiKey, String privateKey, Long limit) throws DatabaseException;
 
 	/**
 	 * Removes a SavedSearch from database and User.

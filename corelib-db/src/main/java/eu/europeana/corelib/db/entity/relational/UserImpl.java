@@ -42,6 +42,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Index;
 
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
@@ -109,6 +110,10 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
 	private Set<SocialTag> socialTags = new HashSet<SocialTag>();
+
+	@OneToMany(targetEntity=ApiKeyImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name = "userid", nullable = false)
+	private Set<ApiKey> apiKeys = new HashSet<ApiKey>();
 
 	/**
 	 * GETTERS & SETTTERS
@@ -202,5 +207,10 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Override
 	public Set<SocialTag> getSocialTags() {
 		return socialTags;
+	}
+
+	@Override
+	public Set<ApiKey> getApiKeys() {
+		return apiKeys;
 	}
 }

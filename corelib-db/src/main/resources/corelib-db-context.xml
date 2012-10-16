@@ -30,10 +30,10 @@
 	">
 
     <!-- USING OTHER MODULES -->    
-	<import resource="corelib-definitions-context.xml"/>    
+    <import resource="corelib-definitions-context.xml"/>
     <import resource="corelib-solr-context.xml"/>
 
-    <!-- INTERNAL DEFINITIONS -->    
+    <!-- INTERNAL DEFINITIONS -->
     <import resource="internal/corelib-db-datasource.xml"/>
     <import resource="internal/corelib-db-dao.xml"/>
 
