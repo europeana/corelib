@@ -1,0 +1,16 @@
+<html>
+<body>
+
+<p>Dear Europeana API user,</p>
+
+<p>You successfully registered for Europeana API key:</p>
+
+<p style="font-family:Courier,Courier New">==========<br/>
+API key      : ${apiKey.id}<br/>
+Private key  : ${apiKey.privateKey}<br/>
+==========</p>
+
+<p>- Europeana Registration Machine</p>
+
+</body>
+</html>

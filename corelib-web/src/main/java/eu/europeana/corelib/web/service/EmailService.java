@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.web.service;
 
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.web.exception.EmailServiceException;
@@ -35,4 +36,8 @@ public interface EmailService {
 	void sendForgotPassword(String email, String url) throws EmailServiceException;
 
 	void sendFeedback(String email, String feedback) throws EmailServiceException;
+	
+	void sendRegisterApiNotifyAdmin(User user) throws EmailServiceException;
+
+	void sendRegisterApiNotifyUser(ApiKey apiKey) throws EmailServiceException;
 }

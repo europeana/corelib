@@ -1,0 +1,11 @@
+
+Hello Human Gatekeeper,
+
+This email is to inform you that someone has registered for Europeana API:
+
+==========
+email        : ${user.email}
+==========
+
+- Europeana Registration Machine
+

@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
@@ -96,6 +97,41 @@ public abstract class EmailServiceImpl implements EmailService {
 	}
 
 	/**
+	 * Sends email to the site administrator about an API registration
+	 */
+	@Override
+	public void sendRegisterApiNotifyAdmin(final User user) throws EmailServiceException {
+		if (user == null) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("user", user);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("registerApiNotifyAdmin"); // see corelib_web_emailConfigs
+		mailSender.send(builder);
+		log.info(String.format("Sent notification of API registratiom (%s)", user.getEmail()));
+	}
+
+	/**
+	 * Sends email to the user about the details of API registration
+	 */
+	@Override
+	public void sendRegisterApiNotifyUser(final ApiKey apiKey) throws EmailServiceException {
+		if (apiKey == null) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("apiKey", apiKey);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("registerApiNotifyUser"); // see corelib_web_emailConfigs
+		builder.setEmailTo(apiKey.getUser().getEmail());
+		mailSender.send(builder);
+		log.info(String.format("Sent API details to %s", apiKey.getUser().getEmail()));
+	}
+
+	/**
 	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
 	 * 
 	 * @param user
@@ -108,14 +144,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		if ((user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("url", url);
-		EmailBuilder builder = createEmailBuilder();
-		builder.setModel(model);
-		builder.setTemplate("forgotPassword");
-		builder.setEmailTo(user.getEmail());
-		mailSender.send(builder);
-		log.info(String.format("Sent forgot password (URL=%s) to %s", url, user.getEmail()));
+		sendForgotPassword(user.getEmail(), url);
 	}
 
 	/**

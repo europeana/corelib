@@ -1,0 +1,12 @@
+
+Dear Europeana API user,
+
+You successfully registered for Europeana API key:
+
+==========
+API key      : ${apiKey.id}
+Private key  : ${apiKey.privateKey}
+==========
+
+- Europeana Registration Machine
+

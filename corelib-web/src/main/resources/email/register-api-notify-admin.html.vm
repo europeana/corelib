@@ -1,0 +1,15 @@
+<html>
+<body>
+
+<p>Hello Human Gatekeeper,</p>
+
+<p>This email is to inform you that someone has registered for Europeana API:</p>
+
+<p style="font-family:Courier,Courier New">==========<br/>
+email        : ${user.email}<br/>
+==========</p>
+
+<p>- Europeana Registration Machine</p>
+
+</body>
+</html>

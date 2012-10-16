@@ -38,6 +38,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.subethamail.wiser.Wiser;
 
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
@@ -242,6 +243,11 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 
 			@Override
 			public String getApiKey() {
+				return null;
+			}
+
+			@Override
+			public Set<ApiKey> getApiKeys() {
 				return null;
 			}
 		};
