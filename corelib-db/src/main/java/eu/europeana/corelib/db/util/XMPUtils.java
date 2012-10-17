@@ -42,7 +42,6 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
@@ -256,75 +255,79 @@ public class XMPUtils {
 
 		HashMap<EDMXMPValues, String> EDMXMPValuesMap = new HashMap<EDMXMPValues, String>();
 
-		List<Choice> elements = edmRecord.getChoiceList();
+		List<Aggregation> aggregationList = edmRecord.getAggregationList();
+		
+		List<ProxyType> proxyList = edmRecord.getProxyList();
 
-		for (Choice element : elements) {
 
 			// Deal with Aggregation elements
-			if (element.ifAggregation()) {
+			if (!aggregationList.isEmpty() && aggregationList !=null) {
 
-				Aggregation aggregation = element.getAggregation();
+				for(Aggregation aggregation : aggregationList){
 
-				if (aggregation.getIsShownAt() != null) {
-					EDMXMPValuesMap.put(EDMXMPValues.cc_morePermissions,
-							aggregation.getIsShownAt().getResource());
-				}
-
-				if (aggregation.getObject() != null) {
-					EDMXMPValuesMap.put(EDMXMPValues.stref_OriginalDocumentID,
-							aggregation.getObject().getResource());
-				}
-
-				if (aggregation.getRights() != null) {
-					
-					if(aggregation.getRights().getResource() != null){
-					EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation
-							.getRights().getResource());
-
-					if (aggregation
-							.getRights()
-							.getResource()
-							.equals("http://creativecommons.org/publicdomain/mark/1.0/")
-							|| aggregation
-									.getRights()
-									.getResource()
-									.equals("http://creativecommons.org/publicdomain/zero/1.0/")) {
-
-						EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
-								"False");
-						EDMXMPValuesMap
-								.put(EDMXMPValues.cc_useGuidelines,
-										"http://www.europeana.eu/rights/pd-usage-guide/");
-					} else {
-						EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
-								"True");
+					if (aggregation.getIsShownAt() != null) {
+						EDMXMPValuesMap.put(EDMXMPValues.cc_morePermissions,
+								aggregation.getIsShownAt().getResource());
 					}
+
+					if (aggregation.getObject() != null) {
+						EDMXMPValuesMap.put(EDMXMPValues.stref_OriginalDocumentID,
+								aggregation.getObject().getResource());
 					}
-					
-					else if(aggregation.getRights().getString() != null){
-						EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation.getRights().getString());
+
+					if (aggregation.getRights() != null) {
+						
+						if(aggregation.getRights().getResource() != null){
+						EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation
+								.getRights().getResource());
+
+						if (aggregation
+								.getRights()
+								.getResource()
+								.equals("http://creativecommons.org/publicdomain/mark/1.0/")
+								|| aggregation
+										.getRights()
+										.getResource()
+										.equals("http://creativecommons.org/publicdomain/zero/1.0/")) {
+
+							EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
+									"False");
+							EDMXMPValuesMap
+									.put(EDMXMPValues.cc_useGuidelines,
+											"http://www.europeana.eu/rights/pd-usage-guide/");
+						} else {
+							EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
+									"True");
+						}
+						}
+						
+						else if(aggregation.getRights().getString() != null){
+							EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation.getRights().getString());
+						}
+						
+						
+
 					}
-					
-					
 
-				}
+					if (aggregation.getDataProvider() != null) {
+						EDMXMPValuesMap.put(EDMXMPValues.edm_dataProvider,
+								aggregation.getDataProvider().getString());
+					}
 
-				if (aggregation.getDataProvider() != null) {
-					EDMXMPValuesMap.put(EDMXMPValues.edm_dataProvider,
-							aggregation.getDataProvider().getString());
+					if (aggregation.getProvider() != null) {
+						EDMXMPValuesMap.put(EDMXMPValues.edm_provider, aggregation
+								.getProvider().getString());
+					}
 				}
-
-				if (aggregation.getProvider() != null) {
-					EDMXMPValuesMap.put(EDMXMPValues.edm_provider, aggregation
-							.getProvider().getString());
-				}
+	
 
 			}
 
 			// Deal with Proxy elements
-			if (element.ifProxy()) {
-				ProxyType pcho = element.getProxy();
-
+			if (!proxyList.isEmpty() && proxyList !=null) {
+				
+				for(ProxyType pcho: proxyList){
+					
 				// Set the document ID from rdf:about attribute
 				EDMXMPValuesMap.put(EDMXMPValues.stref_DocumentID,
 						pcho.getAbout());
@@ -346,10 +349,11 @@ public class XMPUtils {
 								.getRights().getString());
 					}
 				}
+		
 
 			}
+			}
 
-		}
 
 		return EDMXMPValuesMap;
 	}

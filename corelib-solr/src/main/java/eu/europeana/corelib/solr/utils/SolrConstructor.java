@@ -21,8 +21,17 @@ import java.net.MalformedURLException;
 
 import org.apache.solr.common.SolrInputDocument;
 
+import eu.europeana.corelib.definitions.jibx.AgentType;
+import eu.europeana.corelib.definitions.jibx.Aggregation;
+import eu.europeana.corelib.definitions.jibx.Concept;
+import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.PlaceType;
+import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.definitions.jibx.RDF.Choice;
+import eu.europeana.corelib.definitions.jibx.TimeSpanType;
+import eu.europeana.corelib.definitions.jibx.WebResourceType;
+//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
@@ -55,37 +64,39 @@ public class SolrConstructor {
 	public SolrInputDocument constructSolrDocument(RDF rdf) throws InstantiationException, IllegalAccessException, MalformedURLException, IOException{
 		SolrInputDocument solrInputDocument = new SolrInputDocument();
 
-		for(Choice element: rdf.getChoiceList()){
-			if(element.ifAgent()){
-				solrInputDocument = new AgentFieldInput().createAgentSolrFields(element.getAgent(), solrInputDocument);
+
+
+			for(AgentType agent :rdf.getAgentList()){
+				solrInputDocument = new AgentFieldInput().createAgentSolrFields(agent, solrInputDocument);
 			}
-			else if(element.ifAggregation()){
-				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(element.getAggregation(), solrInputDocument);
-				solrInputDocument = new ProxyFieldInput().addProxyForSolr(element.getAggregation(), solrInputDocument);
+			for(Aggregation aggregation : rdf.getAggregationList()){
+				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(aggregation, solrInputDocument);
+				solrInputDocument = new ProxyFieldInput().addProxyForSolr(aggregation, solrInputDocument);
 			}
-			else if(element.ifConcept()){
-				solrInputDocument = new ConceptFieldInput().createConceptSolrFields(element.getConcept(),solrInputDocument);
+			for(Concept concept: rdf.getConceptList()){
+				solrInputDocument = new ConceptFieldInput().createConceptSolrFields(concept,solrInputDocument);
 			}
-			else if(element.ifPlace()){
-				solrInputDocument = new PlaceFieldInput().createPlaceSolrFields(element.getPlace(),solrInputDocument) ;
+			for(PlaceType place: rdf.getPlaceList()){
+				solrInputDocument = new PlaceFieldInput().createPlaceSolrFields(place,solrInputDocument) ;
 			}
-			else if(element.ifProvidedCHO()){
-				solrInputDocument = new ProvidedCHOFieldInput().createProvidedCHOFields(element.getProvidedCHO(),solrInputDocument);
+			for(ProvidedCHOType cho : rdf.getProvidedCHOList() ){
+				solrInputDocument = new ProvidedCHOFieldInput().createProvidedCHOFields(cho,solrInputDocument);
 			}
-			else if(element.ifProxy()){
-				solrInputDocument = new ProxyFieldInput().createProxySolrFields(element.getProxy(), solrInputDocument);
+			for(ProxyType proxy: rdf.getProxyList()){
+				solrInputDocument = new ProxyFieldInput().createProxySolrFields(proxy, solrInputDocument);
 			}
-			else if (element.ifTimeSpan()) {
-				solrInputDocument = new TimespanFieldInput().createTimespanSolrFields(element.getTimeSpan(), solrInputDocument);
+			for(TimeSpanType time: rdf.getTimeSpanList()) {
+				solrInputDocument = new TimespanFieldInput().createTimespanSolrFields(time, solrInputDocument);
 			}
-			else if(element.ifEuropeanaAggregation()){
-				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(element.getEuropeanaAggregation(), solrInputDocument);
-				solrInputDocument = new ProxyFieldInput().addProxyForSolr(element.getEuropeanaAggregation(), solrInputDocument);
+			for(EuropeanaAggregationType euaggregation : rdf.getEuropeanaAggregationList()){
+				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(euaggregation, solrInputDocument);
+				solrInputDocument = new ProxyFieldInput().addProxyForSolr(euaggregation, solrInputDocument);
 			}
-			else{
-				solrInputDocument = new WebResourcesFieldInput().createWebResourceSolrFields(element.getWebResource(), solrInputDocument);
+			for(WebResourceType wresource:rdf.getWebResourceList()){
+				solrInputDocument = new WebResourcesFieldInput().createWebResourceSolrFields(wresource, solrInputDocument);
 			}
-		}
+
+
 		return solrInputDocument;
 	}
 }
