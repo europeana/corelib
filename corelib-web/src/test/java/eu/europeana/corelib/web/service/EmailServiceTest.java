@@ -170,6 +170,7 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 	@SuppressWarnings("serial")
 	private User createFakeUser(final String username, final String email) {
 		return new User() {
+
 			@Override
 			public Long getId() {
 				return NumberUtils.LONG_ONE;

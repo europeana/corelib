@@ -19,6 +19,7 @@ package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 /**
@@ -170,4 +171,13 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException 
 	 */
 	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
+
+	/**
+	 * Removes an ApiKey from database and User.
+	 * 
+	 * @param apiKeyId
+	 *            The primary key of the API key to remove
+	 * @throws DatabaseException
+	 */
+	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
 }

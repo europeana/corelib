@@ -19,6 +19,7 @@ package eu.europeana.corelib.db.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -32,6 +33,7 @@ import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.db.service.ApiKeyService;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
@@ -55,11 +57,13 @@ import eu.europeana.corelib.solr.service.SearchService;
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
 
-	@Resource(type = TokenService.class)
-	private TokenService tokenService;
+	@Resource(type = TokenService.class) private TokenService tokenService;
 
-	@Resource(type = SearchService.class)
-	private SearchService searchService;
+	@Resource(type = SearchService.class) private SearchService searchService;
+
+	@Resource private ApiKeyService apiKeyService;
+
+	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Override
 	public User create(String tokenString, String username, String password) throws DatabaseException {
@@ -259,6 +263,18 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class, socialTagId);
 		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
+		}
+	}
+
+	@Override
+	public void removeApiKey(Long userId, String apiKeyId) throws DatabaseException {
+		ApiKey apiKey = getDao().findByPK(ApiKeyImpl.class, apiKeyId);
+		// ApiKey apiKey = apiKeyService.findByID(apiKeyId);
+		if ((apiKey != null) && apiKey.getUser().getId().equals(userId)) {
+			log.info("removing API key: " + apiKey);
+			apiKey.getUser().getApiKeys().remove(apiKey);
+		} else {
+			log.info("Unable to delete api key");
 		}
 	}
 

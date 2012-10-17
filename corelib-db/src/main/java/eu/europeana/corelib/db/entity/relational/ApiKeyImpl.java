@@ -77,4 +77,11 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	public void setUsageLimit(long usageLimit) {
 		this.usageLimit = usageLimit;
 	}
+
+	@Override
+	public String toString() {
+		return "ApiKeyImpl [apiKey=" + apiKey + ", privateKey=" + privateKey
+				+ ", usageLimit=" + usageLimit + ", user=" + getUser()
+				+ "]";
+	}
 }
