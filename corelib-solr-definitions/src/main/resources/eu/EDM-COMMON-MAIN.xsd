@@ -408,6 +408,15 @@
         </annotation>
     </element>
 
+    <element name="preview" type="rdf:ResourceType">
+        <annotation>
+            <documentation>
+                A reference to the Europeana cached thumbnail.
+            </documentation>
+        </annotation>
+    </element>
+
+
     <element name="provider" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation> Name of the organization that delivers data to Europeana. The

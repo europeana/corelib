@@ -45,18 +45,16 @@
     <include schemaLocation="CONTEXTS.xsd"/>
 
     <complexType name="RDF">
-        <sequence minOccurs="0" maxOccurs="unbounded">
-            <choice>
-                <element name="ProvidedCHO" type="edm:ProvidedCHOType"/>
-                <element name="WebResource" type="edm:WebResourceType"/>
-                <element name="Agent" type="edm:AgentType"/>
-                <element name="Place" type="edm:PlaceType"/>
-                <element name="TimeSpan" type="edm:TimeSpanType"/>
-                <element ref="skos:Concept"/>
-                <element ref="ore:Aggregation"/>
-                <element name="Proxy" type="ore:ProxyType"/>
-                <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType"/>
-            </choice>
+        <sequence minOccurs="1" maxOccurs="1">
+            <element name="ProvidedCHO" type="edm:ProvidedCHOType" minOccurs="1" maxOccurs="unbounded"/>
+            <element name="WebResource" type="edm:WebResourceType"  minOccurs="0" maxOccurs="unbounded"/>
+            <element name="Agent" type="edm:AgentType" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="Place" type="edm:PlaceType" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="TimeSpan" type="edm:TimeSpanType" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="skos:Concept" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="ore:Aggregation" minOccurs="1" maxOccurs="unbounded"/>
+            <element name="Proxy" type="ore:ProxyType" minOccurs="1" maxOccurs="unbounded"/>
+            <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType" minOccurs="1" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
 
@@ -75,7 +73,8 @@
                     <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    
+                    <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:landingPage" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:language" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
