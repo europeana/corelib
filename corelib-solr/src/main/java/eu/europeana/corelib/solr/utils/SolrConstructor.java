@@ -66,36 +66,53 @@ public class SolrConstructor {
 
 
 
+		if(rdf.getAgentList()!=null){
 			for(AgentType agent :rdf.getAgentList()){
 				solrInputDocument = new AgentFieldInput().createAgentSolrFields(agent, solrInputDocument);
 			}
+		}
+		if(rdf.getAggregationList()!=null){
 			for(Aggregation aggregation : rdf.getAggregationList()){
 				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(aggregation, solrInputDocument);
 				solrInputDocument = new ProxyFieldInput().addProxyForSolr(aggregation, solrInputDocument);
 			}
+		}
+		if(rdf.getConceptList()!=null){
 			for(Concept concept: rdf.getConceptList()){
 				solrInputDocument = new ConceptFieldInput().createConceptSolrFields(concept,solrInputDocument);
 			}
+		}
+		if(rdf.getPlaceList()!=null){
 			for(PlaceType place: rdf.getPlaceList()){
 				solrInputDocument = new PlaceFieldInput().createPlaceSolrFields(place,solrInputDocument) ;
 			}
+		}
+		if(rdf.getProvidedCHOList()!=null){
 			for(ProvidedCHOType cho : rdf.getProvidedCHOList() ){
 				solrInputDocument = new ProvidedCHOFieldInput().createProvidedCHOFields(cho,solrInputDocument);
 			}
+		}
+		if(rdf.getProxyList()!=null){
 			for(ProxyType proxy: rdf.getProxyList()){
 				solrInputDocument = new ProxyFieldInput().createProxySolrFields(proxy, solrInputDocument);
 			}
+		}
+		if(rdf.getTimeSpanList()!=null){
 			for(TimeSpanType time: rdf.getTimeSpanList()) {
 				solrInputDocument = new TimespanFieldInput().createTimespanSolrFields(time, solrInputDocument);
 			}
+		}
+		if(rdf.getEuropeanaAggregationList()!=null){
 			for(EuropeanaAggregationType euaggregation : rdf.getEuropeanaAggregationList()){
 				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(euaggregation, solrInputDocument);
 				solrInputDocument = new ProxyFieldInput().addProxyForSolr(euaggregation, solrInputDocument);
 			}
+		}
+		if(rdf.getWebResourceList()!=null){
 			for(WebResourceType wresource:rdf.getWebResourceList()){
 				solrInputDocument = new WebResourcesFieldInput().createWebResourceSolrFields(wresource, solrInputDocument);
 			}
-
+		}
 
 		return solrInputDocument;
 	}
