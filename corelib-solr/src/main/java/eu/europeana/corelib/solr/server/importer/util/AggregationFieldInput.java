@@ -206,7 +206,7 @@ public final class AggregationFieldInput {
 				}
 			}
 		}
-		return new AggregationImpl();
+		return null;
 	}
 
 	/**
