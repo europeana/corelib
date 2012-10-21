@@ -29,6 +29,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	private Map<String,List<String>> edmCountry;
 	private Map<String,List<String>> edmLanguage;
 	private Map<String,List<String>> edmRights;
+	private String edmPreview;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -131,5 +132,13 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 		this.webResources = (List<WebResource>) webResources;
 	}
 	
+	@Override
+	public String getEdmPreview(){
+		return edmPreview;
+	}
 	
+	@Override
+	public void setEdmPreview(String edmPreview){
+		this.edmPreview = edmPreview;
+	}
 }

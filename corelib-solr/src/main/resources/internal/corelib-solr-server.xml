@@ -27,7 +27,7 @@
 	
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used... -->
 	
-	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
+	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
 		<constructor-arg value="#{europeanaProperties['solr.url']}"/>
 		<property name="followRedirects" value="false"/>
 		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
@@ -35,24 +35,7 @@
 		<property name="maxTotalConnections" value="125"/>
 	</bean>
 
-	<bean id="corelib_solr_suggestionsServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['solr.suggestions.url']}"/>
-		<property name="followRedirects" value="false"/>
-		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-		<property name="defaultMaxConnectionsPerHost" value="64"/>
-		<property name="maxTotalConnections" value="125"/>
-	</bean>
 	
-	<bean id="corelib_solr_httpClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['solr.username']}" />
-		<constructor-arg value="#{europeanaProperties['solr.password']}" />
-		<constructor-arg value="#{europeanaProperties['solr.url']}"/> 
-	</bean>
-	<bean id="corelib_solr_suggestionClient" class = "eu.europeana.corelib.solr.server.impl.EuropeanaHttpClient" lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['solr.username']}" />
-		<constructor-arg value="#{europeanaProperties['solr.password']}" />
-		<constructor-arg value="#{europeanaProperties['solr.suggestions.url']}"/> 
-	</bean>
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
 		<constructor-arg>
 			<bean class="org.apache.solr.core.CoreContainer">
@@ -60,7 +43,7 @@
 				<constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
 			</bean>
 		</constructor-arg>
-		<constructor-arg value="collection1"/>
+		<constructor-arg value="search"/>
 		
 	</bean>
 

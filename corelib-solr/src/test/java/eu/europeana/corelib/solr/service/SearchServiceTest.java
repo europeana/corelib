@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -105,11 +105,11 @@ public class SearchServiceTest {
 	public void findSuggestions() throws SolrTypeException {
 		testCount++;
 		
-		List<Term> terms = searchService.suggestions("modell mod", 1);
-		Assert.assertEquals(terms.size(), 1);
+		List<Term> terms = searchService.suggestions("model mod", 10,"title");
+		Assert.assertEquals(terms.size(), 4);
 		Assert.assertEquals(terms.get(0).getField(), "Title");
-		Assert.assertEquals(terms.get(0).getFrequency(), 3);
-		Assert.assertEquals(terms.get(0).getTerm(), "modell moderner pianinomechanik");
+		Assert.assertEquals(terms.get(0).getFrequency(), 18);
+		Assert.assertEquals(terms.get(0).getTerm(), "model model");
 	}
 
 	@Test
