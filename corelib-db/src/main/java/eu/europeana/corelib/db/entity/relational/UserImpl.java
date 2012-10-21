@@ -94,7 +94,31 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
-
+	
+	@Column (nullable=false)
+	private Boolean disclaimer;
+	
+	@Column(length= FIELDSIZE_NAME, nullable=false)
+	private String firstName;
+	
+	@Column(length= FIELDSIZE_SURNAME, nullable=false)
+	private String lastName;
+	
+	@Column(length=FIELDSIZE_COMPANY)
+	private String company;
+	
+	@Column(length=FIELDSIZE_COUNTRY)
+	private String country;
+	
+	@Column(length=FIELDSIZE_PHONE)
+	private String phone;
+	
+	@Column(length=FIELDSIZE_ADDRESS)
+	private String address;
+	
+	@Column(length=FIELDSIZE_WEBSITE)
+	private String website;
+	
 	@Column(length = FIELDSIZE_ROLE)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
@@ -212,5 +236,69 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Override
 	public Set<ApiKey> getApiKeys() {
 		return apiKeys;
+	}
+	@Override
+	public Boolean getDisclaimer() {
+		return disclaimer;
+	}
+	@Override
+	public void setDisclaimer(Boolean disclaimer) {
+		this.disclaimer = disclaimer;
+	}
+	@Override
+	public String getFirstName() {
+		return firstName;
+	}
+	@Override
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	@Override
+	public String getLastName() {
+		return lastName;
+	}
+	@Override
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	@Override
+	public String getCompany() {
+		return company;
+	}
+	@Override
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	@Override
+	public String getCountry() {
+		return country;
+	}
+	@Override
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	@Override
+	public String getPhone() {
+		return phone;
+	}
+	@Override
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	@Override
+	public String getAddress() {
+		return address;
+	}
+	@Override
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	@Override
+	public String getWebsite() {
+		return website;
+	}
+	@Override
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 }

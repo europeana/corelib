@@ -78,12 +78,15 @@ public class UserServiceTest {
 		final String EMAIL = "testCreate@europeana.eu";
 		final String USERNAME = "testCreate";
 		final String PASSWORD = "test";
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
+		final boolean DISCLAIMER=true;
 		final String HASH = hashPassword(PASSWORD);
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 
 		user = userService.findByID(user.getId());
@@ -101,13 +104,13 @@ public class UserServiceTest {
 
 	@Test(expected = DatabaseException.class)
 	public void testCreateWithoutToken() throws DatabaseException {
-		userService.create(null, "ignore", "ignore");
+		userService.create(null, "ignore", "ignore","ignore","ignore");
 		fail("This line should never be reached!!!");
 	}
 
 	@Test(expected = DatabaseException.class)
 	public void testCreateWithInvalidToken() throws DatabaseException {
-		userService.create("invalidToken", "ignore", "ignore");
+		userService.create("invalidToken", "ignore", "ignore","ignore","ignore");
 		fail("This line should never be reached!!!");
 	}
 
@@ -116,12 +119,14 @@ public class UserServiceTest {
 		final String EMAIL = "testFindByEmail@europeana.eu";
 		final String USERNAME = "testFindByEmail";
 		final String PASSWORD = "test";
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 		final String HASH = hashPassword(PASSWORD);
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 
 		user = userService.findByEmail(EMAIL);
@@ -137,13 +142,15 @@ public class UserServiceTest {
 		final String USERNAME = "testChangePassword";
 		final String PASSWORD1 = "test";
 		final String PASSWORD2 = "changed";
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 		final String HASH1 = hashPassword(PASSWORD1);
 		final String HASH2 = hashPassword(PASSWORD2);
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD1);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD1,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 		assertEquals("Password not correctly encoded.", user.getPassword(), HASH1);
 
@@ -184,11 +191,13 @@ public class UserServiceTest {
 		final String EMAIL = "testAuthenticateUser@europeana.eu";
 		final String USERNAME = "testAuthenticateUser";
 		final String PASSWORD = "test";
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 
 		user = userService.authenticateUser(EMAIL, "invalidPassword");
@@ -206,11 +215,12 @@ public class UserServiceTest {
 		final String EMAIL = "testCreateSavedSearch@europeana.eu";
 		final String USERNAME = "testCreateSavedSearch";
 		final String PASSWORD = "test";
-
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
 
@@ -263,13 +273,14 @@ public class UserServiceTest {
 		final String EMAIL = "testCreateSavedItem@europeana.eu";
 		final String USERNAME = "testCreateSavedItem";
 		final String PASSWORD = "test";
-
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 		final String EUROPEANA_ID = "testCreateSavedItem";
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 		assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 
@@ -302,14 +313,15 @@ public class UserServiceTest {
 		final String EMAIL = "testCreateSocialTag@europeana.eu";
 		final String USERNAME = "testCreateSocialTag";
 		final String PASSWORD = "test";
-
+		final String FIRSTNAME= "testFirstName";
+		final String LASTNAME="testLastName";
 		final String EUROPEANA_ID = "testCreateSocialTag";
 		final String TAG = "testCreateSocialTag";
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
 
-		User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+		User user = userService.create(token.getToken(), USERNAME, PASSWORD,FIRSTNAME,LASTNAME);
 		assertNotNull("Unable to create user", user);
 		assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 

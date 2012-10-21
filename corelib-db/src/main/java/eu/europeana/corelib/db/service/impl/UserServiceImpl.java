@@ -55,27 +55,38 @@ import eu.europeana.corelib.solr.service.SearchService;
  * @see eu.europeana.corelib.db.entity.relational.UserImpl
  */
 @Transactional
-public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
+public class UserServiceImpl extends AbstractServiceImpl<User> implements
+		UserService {
 
-	@Resource(type = TokenService.class) private TokenService tokenService;
+	@Resource(type = TokenService.class)
+	private TokenService tokenService;
 
-	@Resource(type = SearchService.class) private SearchService searchService;
+	@Resource(type = SearchService.class)
+	private SearchService searchService;
 
-	@Resource private ApiKeyService apiKeyService;
+	@Resource
+	private ApiKeyService apiKeyService;
 
 	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Override
-	public User create(String tokenString, String username, String password) throws DatabaseException {
-		return create(tokenString, username, password, false);
+	public User create(String tokenString, String username, String password,
+			String firstName, String lastName) throws DatabaseException {
+		return create(tokenString, username, password, false, "", "",
+				firstName, lastName, false, "", "");
 	}
 
-	public User create(String tokenString, String username, String password, boolean isApiRegistration)
-			throws DatabaseException {
+	@Override
+	public User create(String tokenString, String username, String password,
+			boolean isApiRegistration, String company, String country,
+			String firstName, String lastName, Boolean disclaimer,
+			String website, String address) throws DatabaseException {
 
-		if (StringUtils.isBlank(tokenString) 
-				|| StringUtils.isBlank(username) 
-				|| (!isApiRegistration && StringUtils.isBlank(password))) {
+		if (StringUtils.isBlank(tokenString)
+				|| StringUtils.isBlank(username)
+				|| (!isApiRegistration && StringUtils.isBlank(password)
+						&& !disclaimer && StringUtils.isBlank(firstName) && StringUtils
+							.isBlank(lastName))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		Token token = tokenService.findByID(tokenString);
@@ -87,13 +98,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		user.setUserName(username);
 		user.setPassword(hashPassword(password));
 		user.setRegistrationDate(new Date());
+		user.setCompany(company);
+		user.setCountry(country);
+		user.setDisclaimer(disclaimer);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setWebsite(website);
+		user.setAddress(address);
 		user = getDao().insert(user);
 		tokenService.remove((Token) token);
 		return user;
 	}
 
-	public User createMinimal(String email)
-			throws DatabaseException {
+	public User createMinimal(String email) throws DatabaseException {
 
 		if (StringUtils.isBlank(email) || findByEmail(email) != null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
@@ -102,6 +119,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		User user = new UserImpl();
 		user.setEmail(email);
 		user.setRegistrationDate(new Date());
+		user.setFirstName("");
+		user.setLastName("");
+		user.setDisclaimer(false);
 		user = getDao().insert(user);
 
 		return user;
@@ -110,7 +130,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByEmail(String email) {
 		if (StringUtils.isNotBlank(email)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL, StringUtils.lowerCase(email));
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL,
+					StringUtils.lowerCase(email));
 		}
 		return null;
 	}
@@ -118,7 +139,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByApiKey(String apiKey) {
 		if (StringUtils.isNotBlank(apiKey)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY, apiKey);
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY,
+					apiKey);
 		}
 		return null;
 	}
@@ -126,7 +148,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User findByName(String userName) {
 		if (StringUtils.isNotBlank(userName)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_NAME, userName);
+			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_NAME,
+					userName);
 		}
 		return null;
 	}
@@ -134,19 +157,25 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	@Override
 	public User authenticateUser(String email, String password) {
 		User user = findByEmail(email);
-		if ((user != null) && StringUtils.equals(user.getPassword(), hashPassword(password))) {
+		if ((user != null)
+				&& StringUtils.equals(user.getPassword(),
+						hashPassword(password))) {
 			return user;
 		}
 		return null;
 	}
 
 	@Override
-	public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
-		if ((userId == null) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
+	public User changePassword(Long userId, String oldPassword,
+			String newPassword) throws DatabaseException {
+		if ((userId == null) || StringUtils.isBlank(oldPassword)
+				|| StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = getDao().findByPK(userId);
-		if ((user == null) || !StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
+		if ((user == null)
+				|| !StringUtils.equals(user.getPassword(),
+						hashPassword(oldPassword))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		user.setPassword(hashPassword(newPassword));
@@ -154,10 +183,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSavedSearch(Long userId, String query, String queryString) 
+	public User createSavedSearch(Long userId, String query, String queryString)
 			throws DatabaseException {
 
-		if ((userId == null) || StringUtils.isBlank(query) || StringUtils.isBlank(queryString)) {
+		if ((userId == null) || StringUtils.isBlank(query)
+				|| StringUtils.isBlank(queryString)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 
@@ -177,7 +207,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public User createSavedItem(Long userId, String europeanaObjectId) 
+	public User createSavedItem(Long userId, String europeanaObjectId)
 			throws DatabaseException {
 
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
@@ -197,19 +227,20 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			List<? extends Proxy> proxies = bean.getProxies();
 			Proxy proxy = proxies.get(0);
 			if (proxy != null && proxy.getDcPublisher() != null) {
-				savedItem.setAuthor(
-					StringUtils.abbreviate(proxy.getDcPublisher().values().iterator().next().get(0), 
-											RelationalDatabase.FIELDSIZE_AUTHOR));
+				savedItem.setAuthor(StringUtils.abbreviate(proxy
+						.getDcPublisher().values().iterator().next().get(0),
+						RelationalDatabase.FIELDSIZE_AUTHOR));
 			}
 		}
 		return user;
 	}
 
 	@Override
-	public User createSocialTag(Long userId, String europeanaObjectId, String tag) 
-			throws DatabaseException {
+	public User createSocialTag(Long userId, String europeanaObjectId,
+			String tag) throws DatabaseException {
 
-		if ((userId == null) || StringUtils.isBlank(europeanaObjectId) || StringUtils.isBlank(tag)) {
+		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
+				|| StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 
@@ -220,12 +251,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 
 		SocialTagImpl socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
-		socialTag.setTag(StringUtils.abbreviate(tag, RelationalDatabase.FIELDSIZE_TAG));
+		socialTag.setTag(StringUtils.abbreviate(tag,
+				RelationalDatabase.FIELDSIZE_TAG));
 		return user;
 	}
 
-	public User createApiKey(String email, String apiKey, String privateKey, Long limit)
-			throws DatabaseException {
+	public User createApiKey(String email, String apiKey, String privateKey,
+			Long limit) throws DatabaseException {
 
 		User user = findByEmail(email);
 		if (user == null) {
@@ -243,31 +275,39 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 	}
 
 	@Override
-	public void removeSavedSearch(Long userId, Long savedSearchId) throws DatabaseException {
-		SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class, savedSearchId);
-		if ((savedSearch != null) && savedSearch.getUser().getId().equals(userId)) {
+	public void removeSavedSearch(Long userId, Long savedSearchId)
+			throws DatabaseException {
+		SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class,
+				savedSearchId);
+		if ((savedSearch != null)
+				&& savedSearch.getUser().getId().equals(userId)) {
 			savedSearch.getUser().getSavedSearches().remove(savedSearch);
 		}
 	}
 
 	@Override
-	public void removeSavedItem(Long userId, Long savedItemId) throws DatabaseException {
-		SavedItemImpl savedItem = getDao().findByPK(SavedItemImpl.class, savedItemId);
+	public void removeSavedItem(Long userId, Long savedItemId)
+			throws DatabaseException {
+		SavedItemImpl savedItem = getDao().findByPK(SavedItemImpl.class,
+				savedItemId);
 		if ((savedItem != null) && savedItem.getUser().getId().equals(userId)) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
 	}
 
 	@Override
-	public void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException {
-		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class, socialTagId);
+	public void removeSocialTag(Long userId, Long socialTagId)
+			throws DatabaseException {
+		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class,
+				socialTagId);
 		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
 	}
 
 	@Override
-	public void removeApiKey(Long userId, String apiKeyId) throws DatabaseException {
+	public void removeApiKey(Long userId, String apiKeyId)
+			throws DatabaseException {
 		ApiKey apiKey = getDao().findByPK(ApiKeyImpl.class, apiKeyId);
 		// ApiKey apiKey = apiKeyService.findByID(apiKeyId);
 		if ((apiKey != null) && apiKey.getUser().getId().equals(userId)) {
@@ -278,7 +318,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		}
 	}
 
-	private FullBean populateEuropeanaUserObject(User user, String europeanaObjectId, EuropeanaUserObject instance)
+	private FullBean populateEuropeanaUserObject(User user,
+			String europeanaObjectId, EuropeanaUserObject instance)
 			throws DatabaseException {
 		FullBean bean;
 		try {
@@ -290,9 +331,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		instance.setEuropeanaUri(bean.getAbout());
-		instance.setEuropeanaObject(bean.getAggregations().get(0).getEdmObject());
+		instance.setEuropeanaObject(bean.getAggregations().get(0)
+				.getEdmObject());
 		instance.setDateSaved(new Date());
-		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0], RelationalDatabase.FIELDSIZE_TITLE));
+		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0],
+				RelationalDatabase.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {

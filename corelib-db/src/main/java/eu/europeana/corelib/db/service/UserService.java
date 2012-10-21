@@ -44,7 +44,7 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 *             When the Token is invalid
 	 */
-	User create(String token, String username, String password) throws DatabaseException;
+	User create(String tokenString, String username, String password,String firstName,String lastName) throws DatabaseException;
 
 	User createMinimal(String email) throws DatabaseException;
 
@@ -180,4 +180,9 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 */
 	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
+
+	User create(String tokenString, String username, String password,
+			boolean isApiRegistration, String company, String country,
+			String firstName, String lastName, Boolean disclaimer,
+			String website, String address) throws DatabaseException;
 }
