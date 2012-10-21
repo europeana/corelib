@@ -251,6 +251,102 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 			public Set<ApiKey> getApiKeys() {
 				return null;
 			}
+
+			@Override
+			public Boolean getDisclaimer() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setDisclaimer(Boolean disclaimer) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getFirstName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setFirstName(String firstName) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getLastName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setLastName(String lastName) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getCompany() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String getCountry() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setCompany(String company) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void setCountry(String country) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getPhone() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setPhone(String phone) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getAddress() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setAddress(String address) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getWebsite() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setWebsite(String website) {
+				// TODO Auto-generated method stub
+				
+			}
 		};
 	}
 
