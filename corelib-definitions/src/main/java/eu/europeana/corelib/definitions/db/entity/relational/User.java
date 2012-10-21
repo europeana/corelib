@@ -63,4 +63,36 @@ public interface User extends IdentifiedEntity<Long> {
 	Set<SocialTag> getSocialTags();
 
 	Set<ApiKey> getApiKeys();
+
+	Boolean getDisclaimer();
+
+	void setDisclaimer(Boolean disclaimer);
+
+	String getFirstName();
+
+	void setFirstName(String firstName);
+
+	String getLastName();
+
+	void setLastName(String lastName);
+
+	String getCompany();
+
+	String getCountry();
+
+	void setCompany(String company);
+
+	void setCountry(String country);
+
+	String getPhone();
+
+	void setPhone(String phone);
+
+	String getAddress();
+
+	void setAddress(String address);
+
+	String getWebsite();
+
+	void setWebsite(String website);
 }

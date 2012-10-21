@@ -65,4 +65,8 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	List<? extends WebResource> getWebResources();
 
 	void setWebResources(List<? extends WebResource> webResources);
+
+	String getEdmPreview();
+
+	void setEdmPreview(String edmPreview);
 }

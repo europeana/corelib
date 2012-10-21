@@ -83,4 +83,6 @@ public interface BriefBean extends IdBean {
 	String[] getDcContributor();
 
 	Date getTimestamp();
+
+	String[] getEdmPreview();
 }
