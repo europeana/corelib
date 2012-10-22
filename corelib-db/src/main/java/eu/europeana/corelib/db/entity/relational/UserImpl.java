@@ -95,13 +95,13 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
-	@Column (nullable=false)
+	@Column 
 	private Boolean disclaimer;
 	
-	@Column(length= FIELDSIZE_NAME, nullable=false)
+	@Column(length= FIELDSIZE_NAME)
 	private String firstName;
 	
-	@Column(length= FIELDSIZE_SURNAME, nullable=false)
+	@Column(length= FIELDSIZE_SURNAME)
 	private String lastName;
 	
 	@Column(length=FIELDSIZE_COMPANY)
