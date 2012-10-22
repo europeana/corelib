@@ -1180,14 +1180,14 @@
     <lst name="spellchecker">
       <str name="name">suggestTitle</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
      
  <!-- Alternatives to lookupImpl: 
            org.apache.solr.spelling.suggest.fst.FSTLookup   [finite state automaton]
            org.apache.solr.spelling.suggest.jaspell.JaspellLookup [default, jaspell-based]
            org.apache.solr.spelling.suggest.tst.TSTLookup   [ternary trees]
       -->
-	<str name="field">title</str><!--
+	<str name="field">titleSpell</str><!--
       <str name="field">proxy_dc_title.*</str>   the indexed field to derive suggestions from 
       <str name="field">proxy_dcterms_alternative.*</str>-->
 	<float name="threshold">0</float>
@@ -1203,7 +1203,7 @@
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">suggestTitle</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.alternativeTermCount">10</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>
       <str name="spellcheck.extendedResults">true</str>
@@ -1223,7 +1223,7 @@
     <lst name="spellchecker">
       <str name="name">suggestWho</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
       <!-- Alternatives to lookupImpl: 
            org.apache.solr.spelling.suggest.fst.FSTLookup   [finite state automaton]
            org.apache.solr.spelling.suggest.fst.WFSTLookupFactory [weighted finite state automaton]
@@ -1235,7 +1235,7 @@
        <str name="field">proxy_dc_creator.*</str>
 	<str name="field">ag_skos_prefLabel.*</str>
  -->
-<str name="field">who</str>
+<str name="field">whoSpell</str>
  <!-- the indexed field to derive suggestions from -->
       <float name="threshold">0</float>
       <str name="buildOnCommit">true</str>
@@ -1249,7 +1249,7 @@
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">suggestWho</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.alternativeTermCount">10</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>
 <str name="spellcheck.extendedResults">true</str>
@@ -1267,7 +1267,7 @@
     <lst name="spellchecker">
       <str name="name">suggestWhat</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
       <!-- Alternatives to lookupImpl: 
            org.apache.solr.spelling.suggest.fst.FSTLookup   [finite state automaton]
            org.apache.solr.spelling.suggest.fst.WFSTLookupFactory [weighted finite state automaton]
@@ -1280,7 +1280,7 @@
       <str name="field">cc_skos_prefLabel.*"</str>
 	<str name="field">cc_skos_broaderLabel.*</str>
 -->
-<str name="field">what</str>
+<str name="field">whatSpell</str>
 	<float name="threshold">0</float>
       <str name="buildOnCommit">true</str>
       <str name="storeDir">suggestWhat</str>
@@ -1293,7 +1293,7 @@
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">suggestWhat</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.alternativeTermCount">10</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>
 <str name="spellcheck.extendedResults">true</str>
@@ -1311,7 +1311,7 @@
     <lst name="spellchecker">
       <str name="name">suggestWhen</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
       <!-- Alternatives to lookupImpl: 
            org.apache.solr.spelling.suggest.fst.FSTLookup   [finite state automaton]
            org.apache.solr.spelling.suggest.fst.WFSTLookupFactory [weighted finite state automaton]
@@ -1324,7 +1324,7 @@
 	<str name="field">proxy_dc_date.*</str>
 	<str name="field">ts_skos_prefLabel.*</str>
 -->
-<str name="field">when</str>  
+<str name="field">whenSpell</str>  
 <!-- the indexed field to derive suggestions from -->
       <float name="threshold">0</float>
       <str name="buildOnCommit">true</str>
@@ -1338,7 +1338,7 @@
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">suggestWhen</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.alternativeTermCount">true</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>
 <str name="spellcheck.extendedResults">true</str>
@@ -1356,7 +1356,7 @@
     <lst name="spellchecker">
       <str name="name">suggestWhere</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
       <!-- Alternatives to lookupImpl: 
            org.apache.solr.spelling.suggest.fst.FSTLookup   [finite state automaton]
            org.apache.solr.spelling.suggest.fst.WFSTLookupFactory [weighted finite state automaton]
@@ -1367,7 +1367,7 @@
 	<str name="field">proxy_dcterms_spatial.*</str>
 	<str name="field">pl_skos_prefLabel.*</str>
 -->
-<str name="field">where</str>  
+<str name="field">whereSpell</str>  
 <!-- the indexed field to derive suggestions from -->
       <float name="threshold">0</float>
       <str name="buildOnCommit">true</str>
@@ -1381,7 +1381,7 @@
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">suggestWhere</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.alternativeTermCount">10</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>
 <str name="spellcheck.extendedResults">true</str>

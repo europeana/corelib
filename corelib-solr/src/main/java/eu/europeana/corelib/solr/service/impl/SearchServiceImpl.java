@@ -364,7 +364,7 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			ModifiableSolrParams params = new ModifiableSolrParams();
 		    params.set("qt", "/"+rHandler);
-		    params.set("q", field + ":" + query);
+		    params.set("q", query);
 		    params.set("rows", 0);
 			
 			QueryResponse qResp = solrServer.query(params);
@@ -398,15 +398,15 @@ public class SearchServiceImpl implements SearchService {
 			results.addAll(getSuggestions(query, "what", "suggestWhere"));
 			results.addAll(getSuggestions(query, "where", "suggestWhat"));
 			results.addAll(getSuggestions(query, "when", "suggestWhen"));
-		} else if(StringUtils.equals(field,"title")){
+		} else if(StringUtils.equals(field,SuggestionTitle.TITLE.title)){
 			results.addAll(getSuggestions(query, field, "suggestTitle"));
-		} else if(StringUtils.equals(field,"who")){
+		} else if(StringUtils.equals(field,SuggestionTitle.PERSON.title)){
 			results.addAll(getSuggestions(query, field, "suggestWho"));
-		} else if(StringUtils.equals(field,"what")){
+		} else if(StringUtils.equals(field,SuggestionTitle.SUBJECT.title)){
 			results.addAll(getSuggestions(query, field, "suggestWhat"));
-		} else if(StringUtils.equals(field,"where")){
+		} else if(StringUtils.equals(field,SuggestionTitle.PLACE.title)){
 			results.addAll(getSuggestions(query, field, "suggestWhere"));
-		} else if(StringUtils.equals(field,"when")){
+		} else if(StringUtils.equals(field,SuggestionTitle.DATE.title)){
 			results.addAll(getSuggestions(query, field, "suggestWhen"));
 		} 
 
