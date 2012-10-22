@@ -364,7 +364,8 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			ModifiableSolrParams params = new ModifiableSolrParams();
 		    params.set("qt", "/"+rHandler);
-		    params.set("q", query);
+		    params.set("q", field+":"+query);
+		   
 		    params.set("rows", 0);
 			
 			QueryResponse qResp = solrServer.query(params);
