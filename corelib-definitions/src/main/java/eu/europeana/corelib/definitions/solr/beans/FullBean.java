@@ -110,18 +110,13 @@ public interface FullBean extends IdBean {
 
 	int getEuropeanaCompleteness();
 
-
 	String[] getEuropeanaCollectionName();
-
 
 	String[] getCountry();
 
-
 	void setCountry(String[] country);
 
-
 	Date getTimestamp();
-
 
 	void setEuropeanaCollectionName(String[] europeanaCollectionName);
 
