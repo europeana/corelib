@@ -20,6 +20,8 @@ package eu.europeana.corelib.db.entity.relational;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;

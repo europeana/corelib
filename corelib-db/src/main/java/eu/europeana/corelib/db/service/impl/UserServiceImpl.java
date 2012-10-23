@@ -70,23 +70,20 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Override
-	public User create(String tokenString, String username, String password,
-			String firstName, String lastName) throws DatabaseException {
-		return create(tokenString, username, password, false, "", "",
-				firstName, lastName, false, "", "");
+	public User create(String tokenString, String username, String password)
+			throws DatabaseException {
+		return create(tokenString, username, password, false, "", "", "", "",
+				"", "");
 	}
 
-	@Override
-	public User create(String tokenString, String username, String password,
+	private User create(String tokenString, String username, String password,
 			boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, Boolean disclaimer,
-			String website, String address) throws DatabaseException {
+			String firstName, String lastName, String website, String address)
+			throws DatabaseException {
 
 		if (StringUtils.isBlank(tokenString)
 				|| StringUtils.isBlank(username)
-				|| (!isApiRegistration && StringUtils.isBlank(password)
-						&& !disclaimer && StringUtils.isBlank(firstName) && StringUtils
-							.isBlank(lastName))) {
+				|| (!isApiRegistration && StringUtils.isBlank(password))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		Token token = tokenService.findByID(tokenString);
@@ -96,36 +93,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		User user = new UserImpl();
 		user.setEmail(token.getEmail());
 		user.setUserName(username);
-		user.setPassword(hashPassword(password));
+		user.setPassword(StringUtils.isEmpty(password)?null:hashPassword(password));
 		user.setRegistrationDate(new Date());
 		user.setCompany(company);
 		user.setCountry(country);
-		user.setDisclaimer(disclaimer);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setWebsite(website);
 		user.setAddress(address);
 		user = getDao().insert(user);
-		tokenService.remove((Token) token);
+		
 		return user;
 	}
 
-	public User createMinimal(String email) throws DatabaseException {
-
-		if (StringUtils.isBlank(email) || findByEmail(email) != null) {
-			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
-		}
-
-		User user = new UserImpl();
-		user.setEmail(email);
-		user.setRegistrationDate(new Date());
-		user.setFirstName("");
-		user.setLastName("");
-		user.setDisclaimer(false);
-		user = getDao().insert(user);
-
-		return user;
-	}
 
 	@Override
 	public User findByEmail(String email) {
@@ -255,13 +235,16 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 				RelationalDatabase.FIELDSIZE_TAG));
 		return user;
 	}
-
-	public User createApiKey(String email, String apiKey, String privateKey,
-			Long limit) throws DatabaseException {
+	@Override
+	public User createApiKey(String token, String email, String apiKey,
+			String privateKey, Long limit, String username,
+			String company, String country, String firstName, String lastName, String website, String address)
+			throws DatabaseException {
 
 		User user = findByEmail(email);
 		if (user == null) {
-			user = createMinimal(email);
+			user = create(token, username, null,true,
+					company, country, firstName, lastName, website, address);
 		}
 
 		ApiKey api = new ApiKeyImpl();
@@ -270,7 +253,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		api.setUsageLimit(limit);
 		api.setUser(user);
 		user.getApiKeys().add(api);
-
 		return user;
 	}
 

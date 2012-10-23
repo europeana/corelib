@@ -95,9 +95,6 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
 	
-	@Column 
-	private Boolean disclaimer;
-	
 	@Column(length= FIELDSIZE_NAME)
 	private String firstName;
 	
@@ -237,14 +234,7 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public Set<ApiKey> getApiKeys() {
 		return apiKeys;
 	}
-	@Override
-	public Boolean getDisclaimer() {
-		return disclaimer;
-	}
-	@Override
-	public void setDisclaimer(Boolean disclaimer) {
-		this.disclaimer = disclaimer;
-	}
+	
 	@Override
 	public String getFirstName() {
 		return firstName;

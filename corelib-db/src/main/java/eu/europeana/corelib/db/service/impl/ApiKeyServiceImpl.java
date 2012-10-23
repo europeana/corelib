@@ -6,5 +6,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey>  implements ApiKeyService {
 
-
+	public long getLimit(String apiKey){
+		return 0l;
+	}
 }

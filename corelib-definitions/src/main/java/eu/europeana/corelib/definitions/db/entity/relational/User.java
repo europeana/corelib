@@ -64,10 +64,6 @@ public interface User extends IdentifiedEntity<Long> {
 
 	Set<ApiKey> getApiKeys();
 
-	Boolean getDisclaimer();
-
-	void setDisclaimer(Boolean disclaimer);
-
 	String getFirstName();
 
 	void setFirstName(String firstName);

@@ -252,18 +252,7 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 				return null;
 			}
 
-			@Override
-			public Boolean getDisclaimer() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void setDisclaimer(Boolean disclaimer) {
-				// TODO Auto-generated method stub
-				
-			}
-
+		
 			@Override
 			public String getFirstName() {
 				// TODO Auto-generated method stub

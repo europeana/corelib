@@ -117,6 +117,17 @@
 			<artifactId>sanselan</artifactId>
 			<version>0.97-incubator</version>
 		</dependency>
+		<dependency>
+			<groupId>net.vz.mongodb.jackson</groupId>
+			<artifactId>mongo-jackson-mapper</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		<dependency>
+        	<groupId>org.mongodb</groupId>
+        	<artifactId>mongo-java-driver</artifactId>
+        	<version>2.7.3</version>
+        	<scope>compile</scope>
+        </dependency>
 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

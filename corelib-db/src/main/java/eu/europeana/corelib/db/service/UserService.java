@@ -44,9 +44,8 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 *             When the Token is invalid
 	 */
-	User create(String tokenString, String username, String password,String firstName,String lastName) throws DatabaseException;
-
-	User createMinimal(String email) throws DatabaseException;
+	User create(String tokenString, String username, String password)
+			throws DatabaseException;
 
 	/**
 	 * Returns a User if there is a valid email provided.
@@ -99,7 +98,8 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or passwords are provided
 	 */
-	User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException;
+	User changePassword(Long userId, String oldPassword, String newPassword)
+			throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedSearch to an existing User
@@ -114,7 +114,8 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or query(string) is provided
 	 */
-	User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException;
+	User createSavedSearch(Long userId, String query, String queryString)
+			throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedItem to an existing User
@@ -127,7 +128,8 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or object id is provided
 	 */
-	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
+	User createSavedItem(Long userId, String europeanaObjectId)
+			throws DatabaseException;
 
 	/**
 	 * Creates and add a SocialTag to an existing user
@@ -141,36 +143,38 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
-	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
-
-	User createApiKey(String email, String apiKey, String privateKey, Long limit) throws DatabaseException;
+	User createSocialTag(Long userId, String europeanaObjectId, String tag)
+			throws DatabaseException;
 
 	/**
 	 * Removes a SavedSearch from database and User.
 	 * 
 	 * @param savedSearchId
 	 *            The primary key of the saved search to remove
-	 * @throws DatabaseException 
+	 * @throws DatabaseException
 	 */
-	void removeSavedSearch(Long userId, Long savedSearchId) throws DatabaseException;
+	void removeSavedSearch(Long userId, Long savedSearchId)
+			throws DatabaseException;
 
 	/**
 	 * Removes a SavedItem from database and User.
 	 * 
 	 * @param savedItemId
 	 *            The primary key of the saved item to remove
-	 * @throws DatabaseException 
+	 * @throws DatabaseException
 	 */
-	void removeSavedItem(Long userId, Long savedItemId) throws DatabaseException;
+	void removeSavedItem(Long userId, Long savedItemId)
+			throws DatabaseException;
 
 	/**
 	 * Removes a SocialTag from database and User.
 	 * 
 	 * @param socialTagId
 	 *            The primary key of the social tag to remove
-	 * @throws DatabaseException 
+	 * @throws DatabaseException
 	 */
-	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
+	void removeSocialTag(Long userId, Long socialTagId)
+			throws DatabaseException;
 
 	/**
 	 * Removes an ApiKey from database and User.
@@ -181,8 +185,8 @@ public interface UserService extends AbstractService<User> {
 	 */
 	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
 
-	User create(String tokenString, String username, String password,
-			boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, Boolean disclaimer,
-			String website, String address) throws DatabaseException;
+	User createApiKey(String token, String email, String apiKey,
+			String privateKey, Long limit, String username, String company,
+			String country, String firstName, String lastName, String website,
+			String address) throws DatabaseException;
 }

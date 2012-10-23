@@ -369,10 +369,8 @@ public class SearchServiceImpl implements SearchService {
 		    params.set("rows", 0);
 			
 			QueryResponse qResp = solrServer.query(params);
-			System.out.println(qResp.getRequestUrl());
 			SpellCheckResponse spResponse = qResp
 					.getSpellCheckResponse();
-			System.out.println(spResponse.getCollatedResults());
 			for (Collation collation : spResponse.getCollatedResults()) {
 				StringBuilder termResult = new StringBuilder();
 				for (Correction cor : collation.getMisspellingsAndCorrections()) {
@@ -387,6 +385,7 @@ public class SearchServiceImpl implements SearchService {
 		} catch (SolrServerException e) {
 			log.log(Level.SEVERE, e.getMessage());
 		}
+		
 		return results;
 	}
 
@@ -412,6 +411,7 @@ public class SearchServiceImpl implements SearchService {
 		} 
 
 		Collections.sort(results);
+		log.info(String.format("Returned %d results", results.size()>pageSize?pageSize:results.size()));
 		return results.size() > pageSize ? results.subList(0, pageSize)
 				: results;
 	}
