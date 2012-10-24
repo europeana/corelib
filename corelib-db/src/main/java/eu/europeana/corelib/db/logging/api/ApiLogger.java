@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.db.logging.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,21 +36,25 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 public class ApiLogger {
 
 	static ApiLogger instance;
-	static JacksonDBCollection<LogType, String> logTypeCollection;
+	static JacksonDBCollection<LogTypeImpl, String> logTypeCollection;
 	final static long DAY = 24 * 60 * 60 * 1000;
 	@Resource(name = "corelib_db_mongo")
-	Mongo mongo;
+	static Mongo mongo;
+
+	public ApiLogger(Mongo mongo) throws DatabaseException {
+		ApiLogger.mongo = mongo;
+		instance = new ApiLogger();
+	}
 
 	private ApiLogger() throws DatabaseException {
 
 		try {
 
 			DB db = mongo.getDB("api_log");
-			if (db.collectionExists("logs")) {
 
-				logTypeCollection = JacksonDBCollection.wrap(
-						db.getCollection("logs"), LogType.class, String.class);
-			}
+			logTypeCollection = JacksonDBCollection.wrap(
+					db.getCollection("logs"), LogTypeImpl.class, String.class);
+
 		} catch (MongoException e) {
 			throw new DatabaseException(ProblemType.UNKNOWN);
 		}
@@ -85,7 +90,7 @@ public class ApiLogger {
 	 */
 	public void saveApiRequest(String apiKey, String requestedUri,
 			RecordType rType, String profile) {
-		LogType apiEntry = new LogTypeImpl();
+		LogTypeImpl apiEntry = new LogTypeImpl();
 		apiEntry.setProfile(profile);
 		apiEntry.setRecordType(rType);
 		apiEntry.setRequestedUri(requestedUri);
@@ -100,20 +105,17 @@ public class ApiLogger {
 	 * @param apiKey
 	 * @return
 	 */
-	public List<LogType> getRequests(String apiKey) {
+	public List<LogTypeImpl> getRequests(String apiKey) {
 		return getLogTypeList(apiKey);
 	}
 
 	public int getRequestNumber(String apiKey) {
 		Date now = new Date();
 		Date yesterday = new Date(now.getTime() - DAY);
-		DBCursor<LogType> lType = logTypeCollection.find().is("apiKey", apiKey)
-				.greaterThanEquals("timestamp", yesterday)
+		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
+				.is("apiKey", apiKey).greaterThanEquals("timestamp", yesterday)
 				.lessThan("timestamp", now);
-		if (lType.hasNext()) {
-			return lType.toArray().size();
-		}
-		return 0;
+		return lType.size();
 
 	}
 
@@ -124,11 +126,18 @@ public class ApiLogger {
 	 * @return
 	 */
 
-	private List<LogType> getLogTypeList(String apiKey) {
-		DBCursor<LogType> cur = logTypeCollection.find().is("apiKey", apiKey);
-		if (cur.hasNext()) {
-			return cur.toArray();
+	private List<LogTypeImpl> getLogTypeList(String apiKey) {
+		DBCursor<LogTypeImpl> cur = logTypeCollection.find().is("apiKey",
+				apiKey);
+		List<LogTypeImpl> list =new ArrayList<LogTypeImpl>();
+		while (cur.hasNext()) {
+			LogTypeImpl one = cur.next();
+			list.add(one);
 		}
-		return null;
+		return list;
+	}
+
+	public void clearLogs() {
+		logTypeCollection.drop();
 	}
 }

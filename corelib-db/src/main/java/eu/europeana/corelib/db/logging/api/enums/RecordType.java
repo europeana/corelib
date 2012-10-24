@@ -24,7 +24,7 @@ package eu.europeana.corelib.db.logging.api.enums;
  * 
  */
 public enum RecordType {
-	OBJECT("object"), SEARCH("search");
+	OBJECT("object"), SEARCH("search"),LIMIT("limit");
 
 	String type;
 
