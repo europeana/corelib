@@ -17,7 +17,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-db-context.xml" }) // "/corelib-db-test.xml"
+@ContextConfiguration({ "/corelib-db-context.xml" })
+// "/corelib-db-test.xml"
 public class ApiKeyServiceTest {
 
 	private static final long DEFAULT_USAGE_LIMIT = 10000;
@@ -35,9 +36,18 @@ public class ApiKeyServiceTest {
 		String email = "test@kb.nl";
 		String apiKey = generatePassPhrase(9);
 		String privateKey = generatePassPhrase(9);
+		String token = "test_token";
+		String username = "test";
+		String company = "test_company";
+		String country = "europe";
+		String firstName = "testName";
+		String lastName= "testLastName";
+		String website = "test_website";
+		String address = "test_address";
 		log.info(String.format("%s, %s", apiKey, privateKey));
-
-		User user = userService.createApiKey(email, apiKey, privateKey, DEFAULT_USAGE_LIMIT);
+		User user = userService.createApiKey(token, email, apiKey, privateKey,
+				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
+				lastName, website, address);
 		log.info("user: " + user.getId());
 
 		log.info("api keys: " + user.getApiKeys().iterator().next().getId());
@@ -54,11 +64,12 @@ public class ApiKeyServiceTest {
 		// pass phrase. Note that the number 0 and the letter 'O' have been
 		// removed to avoid confusion between the two. The same is true
 		// of 'I', 1, and 'l'.
-		final char[] allowableCharacters = new char[]{
-			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
-			'2', '3', '4', '5', '6', '7', '8', '9'
-		};
+		final char[] allowableCharacters = new char[] { 'a', 'b', 'c', 'd',
+				'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q',
+				'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C',
+				'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q',
+				'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4',
+				'5', '6', '7', '8', '9' };
 
 		final int max = allowableCharacters.length - 1;
 
