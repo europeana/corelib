@@ -30,6 +30,8 @@
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([.^:()\\[\\],])" replacement="" replace="all" />
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([-+])" replacement=" " replace="all" />
       </analyzer>
     </fieldType>
 
