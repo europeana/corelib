@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 
@@ -36,10 +34,20 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 public class ApiLogger {
 
 	static ApiLogger instance;
+
 	static JacksonDBCollection<LogTypeImpl, String> logTypeCollection;
+
 	final static long DAY = 24 * 60 * 60 * 1000;
-	@Resource(name = "corelib_db_mongo")
+
 	static Mongo mongo;
+
+	public static Mongo getMongo() {
+		return mongo;
+	}
+
+	public static void setMongo(Mongo mongo) {
+		ApiLogger.mongo = mongo;
+	}
 
 	public ApiLogger(Mongo mongo) throws DatabaseException {
 		ApiLogger.mongo = mongo;
@@ -47,14 +55,9 @@ public class ApiLogger {
 	}
 
 	private ApiLogger() throws DatabaseException {
-
 		try {
-
 			DB db = mongo.getDB("api_log");
-
-			logTypeCollection = JacksonDBCollection.wrap(
-					db.getCollection("logs"), LogTypeImpl.class, String.class);
-
+			logTypeCollection = JacksonDBCollection.wrap(db.getCollection("logs"), LogTypeImpl.class, String.class);
 		} catch (MongoException e) {
 			throw new DatabaseException(ProblemType.UNKNOWN);
 		}
