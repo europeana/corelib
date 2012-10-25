@@ -52,7 +52,7 @@
    <field name="manu_exact" type="string" indexed="true" stored="false"/>
    <!--<field name="payloads" type="payloads" indexed="true" stored="true"/>-->
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-   <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true"/> 
+   <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/> 
    <field name="titleSpell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="whoSpell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
    <field name="whereSpell" type="textSpell" indexed="true" stored="true" multiValued="true" termVectors="true"/>
