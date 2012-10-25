@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -108,6 +110,22 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public List<Map<String, String>> getEdmConceptLabel() {
+
+		if (edmConceptPrefLabel != null && 
+				edmConceptPrefLabel.size() > 0) {
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			for (int i = 0, max = edmConceptPrefLabel.size(); i < max; i++) {
+				Object label = edmConceptPrefLabel.get(i);
+				if (label.getClass().getName() == "java.lang.String") {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("def", (String)label);
+					list.add(map);
+				} else {
+					list.add((Map<String, String>)label);
+				}
+			}
+			return list;
+		}
 		return edmConceptPrefLabel;
 	}
 
