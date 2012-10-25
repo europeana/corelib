@@ -380,7 +380,7 @@ public class SearchServiceImpl implements SearchService {
 					for (Correction cor : collation
 							.getMisspellingsAndCorrections()) {
 //						String corStr = cor.getCorrection().replaceAll(
-//								"[-+.^:,]", "");
+//								"[-+.^:(),]", "");
 						String[] terms = cor.getCorrection().split(" ");
 						for (String term : terms) {
 							if (!StringUtils.contains(termResult.toString(),
