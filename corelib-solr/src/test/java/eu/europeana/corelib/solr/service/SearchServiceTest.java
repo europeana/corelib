@@ -106,7 +106,7 @@ public class SearchServiceTest {
 		testCount++;
 		
 		List<Term> terms = searchService.suggestions("model mod", 10,"title");
-		Assert.assertEquals(terms.size(), 4);
+		Assert.assertEquals(terms.size(), 10);
 		Assert.assertEquals(terms.get(0).getField(), "Title");
 		Assert.assertEquals(terms.get(0).getFrequency(), 18);
 		Assert.assertEquals(terms.get(0).getTerm(), "model model");

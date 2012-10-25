@@ -20,10 +20,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -363,55 +363,72 @@ public class SearchServiceImpl implements SearchService {
 		List<Term> results = new ArrayList<Term>();
 		try {
 			ModifiableSolrParams params = new ModifiableSolrParams();
-		    params.set("qt", "/"+rHandler);
-		    params.set("q", field+":"+query);
-		   
-		    params.set("rows", 0);
-			
-			QueryResponse qResp = solrServer.query(params);
-			SpellCheckResponse spResponse = qResp
-					.getSpellCheckResponse();
-			for (Collation collation : spResponse.getCollatedResults()) {
-				StringBuilder termResult = new StringBuilder();
-				for (Correction cor : collation.getMisspellingsAndCorrections()) {
-					termResult.append(cor.getCorrection() + " ");
-					
-				}
-				Term term = new Term(termResult.toString().trim(),
-						collation.getNumberOfHits(), SuggestionTitle.getMappedTitle(field));
-				results.add(term);
-			}
+			params.set("qt", "/" + rHandler);
+			params.set("q", field + ":" + query);
 
+			params.set("rows", 0);
+
+			QueryResponse qResp = solrServer.query(params);
+			SpellCheckResponse spResponse = qResp.getSpellCheckResponse();
+
+			if (!spResponse.getSuggestions().isEmpty()
+					&& spResponse.getCollatedResults() != null) {
+				log.info("Number of collated results received "
+						+ spResponse.getCollatedResults().size());
+				for (Collation collation : spResponse.getCollatedResults()) {
+					StringBuilder termResult = new StringBuilder();
+					for (Correction cor : collation
+							.getMisspellingsAndCorrections()) {
+						String corStr = cor.getCorrection().replaceAll(
+								"[-+.^:,]", "");
+						String[] terms = corStr.split(" ");
+						for (String term : terms) {
+							if (!StringUtils.contains(termResult.toString(),
+									term)) {
+								termResult.append(term + " ");
+							}
+						}
+					}
+					Term term = new Term(termResult.toString().trim(),
+							collation.getNumberOfHits(),
+							SuggestionTitle.getMappedTitle(field));
+					results.add(term);
+				}
+			}
 		} catch (SolrServerException e) {
-			log.log(Level.SEVERE, e.getMessage());
+			log.info("Exception :" + e.getMessage());
 		}
-		
+
+		log.info(String.format("Returned %d number of results", results.size()));
 		return results;
 	}
 
 	public List<Term> suggestions(String query, int pageSize, String field) {
 		log.info(String.format("%s, %d, %s", query, pageSize, field));
 		List<Term> results = new ArrayList<Term>();
+		long start = new Date().getTime();
 		if (StringUtils.isBlank(field) || !SPELL_FIELDS.contains(field)) {
 			results.addAll(getSuggestions(query, "title", "suggestTitle"));
 			results.addAll(getSuggestions(query, "who", "suggestWho"));
-			results.addAll(getSuggestions(query, "what", "suggestWhere"));
-			results.addAll(getSuggestions(query, "where", "suggestWhat"));
+			results.addAll(getSuggestions(query, "what", "suggestWhat"));
+			results.addAll(getSuggestions(query, "where", "suggestWhere"));
 			results.addAll(getSuggestions(query, "when", "suggestWhen"));
-		} else if(StringUtils.equals(field,SuggestionTitle.TITLE.title)){
+		} else if (StringUtils.equals(field, SuggestionTitle.TITLE.title)) {
 			results.addAll(getSuggestions(query, field, "suggestTitle"));
-		} else if(StringUtils.equals(field,SuggestionTitle.PERSON.title)){
+		} else if (StringUtils.equals(field, SuggestionTitle.PERSON.title)) {
 			results.addAll(getSuggestions(query, field, "suggestWho"));
-		} else if(StringUtils.equals(field,SuggestionTitle.SUBJECT.title)){
+		} else if (StringUtils.equals(field, SuggestionTitle.SUBJECT.title)) {
 			results.addAll(getSuggestions(query, field, "suggestWhat"));
-		} else if(StringUtils.equals(field,SuggestionTitle.PLACE.title)){
+		} else if (StringUtils.equals(field, SuggestionTitle.PLACE.title)) {
 			results.addAll(getSuggestions(query, field, "suggestWhere"));
-		} else if(StringUtils.equals(field,SuggestionTitle.DATE.title)){
+		} else if (StringUtils.equals(field, SuggestionTitle.DATE.title)) {
 			results.addAll(getSuggestions(query, field, "suggestWhen"));
-		} 
+		}
 
 		Collections.sort(results);
-		log.info(String.format("Returned %d results", results.size()>pageSize?pageSize:results.size()));
+		log.info(String.format("Returned %d results in %d ms",
+				results.size() > pageSize ? pageSize : results.size(),
+				new Date().getTime() - start));
 		return results.size() > pageSize ? results.subList(0, pageSize)
 				: results;
 	}
@@ -526,30 +543,27 @@ public class SearchServiceImpl implements SearchService {
 			return solrServer;
 		}
 	}
-	
+
 	private enum SuggestionTitle {
-		TITLE("title","Title"),
-		DATE("when","Date"),
-		PLACE("where","Place"),
-		PERSON("who","Person"),
-		SUBJECT("what","Subject");
-		
+		TITLE("title", "Title"), DATE("when", "Time/Period"), PLACE("where",
+				"Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
+
 		String title;
 		String mappedTitle;
-		
-		private SuggestionTitle(String title, String mappedTitle){
+
+		private SuggestionTitle(String title, String mappedTitle) {
 			this.title = title;
 			this.mappedTitle = mappedTitle;
 		}
-		
-		public static String getMappedTitle(String title){
-			for(SuggestionTitle st:SuggestionTitle.values()){
-				if (StringUtils.equals(title, st.title)){
+
+		public static String getMappedTitle(String title) {
+			for (SuggestionTitle st : SuggestionTitle.values()) {
+				if (StringUtils.equals(title, st.title)) {
 					return st.mappedTitle;
 				}
 			}
 			return null;
-			
+
 		}
 	}
 }
