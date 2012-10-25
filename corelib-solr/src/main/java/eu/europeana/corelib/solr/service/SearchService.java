@@ -91,7 +91,7 @@ public interface SearchService {
 	 * @throws SolrTypeException
 	 */
 	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
-	
+
 	/**
 	 * returns a list of search suggestions and frequencies
 	 * 
