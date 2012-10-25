@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.solr.client.solrj.beans.Field;
 
@@ -28,9 +29,10 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
  * @see eu.europeana.corelib.definitions.solr.beans.ApiBean
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
+
+	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Field("skos_concept")
 	private String[] edmConceptTerm;
@@ -157,5 +159,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Override
 	public void setDctermsIsPartOf(String[] dctermsIsPartOf) {
 		this.dctermsIsPartOf = dctermsIsPartOf.clone();
+	}
+
+	public String[] getCompleteness() {
+		return completeness;
+	}
+
+	public void setCompleteness(String[] completeness) {
+		this.completeness = completeness;
 	}
 }
