@@ -72,24 +72,37 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public User create(String tokenString, String username, String password)
 			throws DatabaseException {
-		return create(tokenString, username, password, false, "", "", "", "",
-				"", "");
+		return create(tokenString, username, password, false, "", "", "", "", "", "", "");
 	}
 
 	private User create(String tokenString, String username, String password,
 			boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, String website, String address)
+			String firstName, String lastName, String website, String address, String phone)
 			throws DatabaseException {
+
+		if (StringUtils.isBlank(tokenString)) {
+			throw new DatabaseException(ProblemType.UNKNOWN_TOKEN);
+		}
+
+		if (StringUtils.isBlank(username)) {
+			throw new DatabaseException(ProblemType.NO_USERNAME);
+		}
+
+		if (!isApiRegistration && StringUtils.isBlank(password)) {
+			throw new DatabaseException(ProblemType.NO_PASSWORD);
+		}
 
 		if (StringUtils.isBlank(tokenString)
 				|| StringUtils.isBlank(username)
 				|| (!isApiRegistration && StringUtils.isBlank(password))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		Token token = tokenService.findByID(tokenString);
 		if (token == null) {
 			throw new DatabaseException(ProblemType.TOKEN_INVALID);
 		}
+
 		User user = new UserImpl();
 		user.setEmail(token.getEmail());
 		user.setUserName(username);
@@ -101,8 +114,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		user.setLastName(lastName);
 		user.setWebsite(website);
 		user.setAddress(address);
+		user.setPhone(phone);
 		user = getDao().insert(user);
-		
+
 		return user;
 	}
 
@@ -235,16 +249,18 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 				RelationalDatabase.FIELDSIZE_TAG));
 		return user;
 	}
+
 	@Override
 	public User createApiKey(String token, String email, String apiKey,
 			String privateKey, Long limit, String username,
-			String company, String country, String firstName, String lastName, String website, String address)
+			String company, String country, String firstName, String lastName, 
+			String website, String address, String phone)
 			throws DatabaseException {
 
 		User user = findByEmail(email);
 		if (user == null) {
-			user = create(token, username, null,true,
-					company, country, firstName, lastName, website, address);
+			user = create(token, username, null, true,
+					company, country, firstName, lastName, website, address, phone);
 		}
 
 		ApiKey api = new ApiKeyImpl();

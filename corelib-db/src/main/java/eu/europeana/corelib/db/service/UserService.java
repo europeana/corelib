@@ -188,5 +188,5 @@ public interface UserService extends AbstractService<User> {
 	User createApiKey(String token, String email, String apiKey,
 			String privateKey, Long limit, String username, String company,
 			String country, String firstName, String lastName, String website,
-			String address) throws DatabaseException;
+			String address, String phone) throws DatabaseException;
 }
