@@ -21,11 +21,10 @@ package eu.europeana.corelib.web.model;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface PageInfo {
-    
-    String getPageName();
-    
-    String getPageTitle();
-    
-    String getTemplate();
 
+	String getPageName();
+
+	String getPageTitle();
+
+	String getTemplate();
 }
