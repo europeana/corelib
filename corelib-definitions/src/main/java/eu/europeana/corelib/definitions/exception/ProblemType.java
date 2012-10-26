@@ -37,9 +37,11 @@ public enum ProblemType {
     INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
     UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL),
     XMPMETADATACREATION("Unable to crate XMP metadata for thumbnail",ProblemResponseAction.IGNORE),
-    XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail",ProblemResponseAction.IGNORE)
-    ; 
-    
+    XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail",ProblemResponseAction.IGNORE),
+    NO_USERNAME("User name does not exist.", ProblemResponseAction.IGNORE),
+    NO_PASSWORD("Password does not exist.", ProblemResponseAction.IGNORE),
+    ;
+
     private String message;
 
     private ProblemResponseAction action;
