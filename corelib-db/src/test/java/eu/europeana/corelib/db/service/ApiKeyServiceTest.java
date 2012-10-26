@@ -44,10 +44,11 @@ public class ApiKeyServiceTest {
 		String lastName= "testLastName";
 		String website = "test_website";
 		String address = "test_address";
+		String phone = "test_phone";
 		log.info(String.format("%s, %s", apiKey, privateKey));
 		User user = userService.createApiKey(token, email, apiKey, privateKey,
 				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
-				lastName, website, address);
+				lastName, website, address, phone);
 		log.info("user: " + user.getId());
 
 		log.info("api keys: " + user.getApiKeys().iterator().next().getId());
