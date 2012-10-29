@@ -221,14 +221,14 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setSortField("score", ORDER.desc);
 
 				// enable spellcheck
-				if (solrQuery.getStart() == null
-						|| solrQuery.getStart().intValue() <= 1) {
-					solrQuery.setParam("spellcheck", "on");
-					solrQuery.setParam("spellcheck.collate", "true");
-					solrQuery.setParam("spellcheck.extendedResults", "true");
-					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-					solrQuery.setParam("spellcheck.q", query.getQuery());
-				}
+//				if (solrQuery.getStart() == null
+//						|| solrQuery.getStart().intValue() <= 1) {
+//					solrQuery.setParam("spellcheck", "on");
+//					solrQuery.setParam("spellcheck.collate", "true");
+//					solrQuery.setParam("spellcheck.extendedResults", "true");
+//					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+//					solrQuery.setParam("spellcheck.q", query.getQuery());
+//				}
 
 				// add extra parameters if any
 				if (query.getParameters() != null) {
@@ -270,53 +270,7 @@ public class SearchServiceImpl implements SearchService {
 		return resultSet;
 	}
 
-	// @Override
-	// public List<Term> suggestions(String query,
-	// int pageSize, String what) throws SolrTypeException {
-	// SolrQuery solrQuery = new SolrQuery();
-	// solrQuery.setQueryType(TERMS_QUERY_TYPE);
-	// solrQuery.setTerms(true);
-	// solrQuery.setTermsLimit(pageSize);
-	// solrQuery.setTermsPrefix(query);
-	// solrQuery.setTermsRegexFlag(TERMS_REGEX_FLAG);
-	// solrQuery.addTermsField("titleSpell");
-	// solrQuery.addTermsField("whoSpell");
-	// solrQuery.addTermsField("whatSpell");
-	// solrQuery.addTermsField("whenSpell");
-	// solrQuery.addTermsField("whereSpell");
-	// try {
-	// QueryResponse queryResponse = solrServer.query(solrQuery);
-	// TermsResponse response = queryResponse.getTermsResponse();
-	// List<Term> results = new ArrayList<Term>();
-	// for (TermsResponse.Term term : response.getTerms("titleSpell")) {
-	// results.add(new Term(term
-	// .getTerm(), term.getFrequency(), "Title"));
-	// }
-	// for (TermsResponse.Term term : response.getTerms("whoSpell")) {
-	// results.add(new Term(term
-	// .getTerm(), term.getFrequency(), "Person"));
-	// }
-	// for (TermsResponse.Term term : response.getTerms("whenSpell")) {
-	// results.add(new Term(term
-	// .getTerm(), term.getFrequency(), "Date"));
-	// }
-	// for (TermsResponse.Term term : response.getTerms("whatSpell")) {
-	// results.add(new Term(term
-	// .getTerm(), term.getFrequency(), "Subject"));
-	// }
-	// for (TermsResponse.Term term : response.getTerms("whereSpell")) {
-	// results.add(new Term(term
-	// .getTerm(), term.getFrequency(), "Place"));
-	// }
-	// return results;
-	// } catch (SolrServerException e) {
-	//
-	// throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-	//
-	// }
-	//
-	// }
-
+	
 	public List<Term> suggestions(String query, int pageSize)
 			throws SolrTypeException {
 		return suggestions(query, pageSize, null);
@@ -367,10 +321,10 @@ public class SearchServiceImpl implements SearchService {
 			params.set("q", field + ":" + query);
 
 			params.set("rows", 0);
-
+			//get the query response
 			QueryResponse qResp = solrServer.query(params);
 			SpellCheckResponse spResponse = qResp.getSpellCheckResponse();
-
+			//if the suggestions are not empty and there are collated results
 			if (!spResponse.getSuggestions().isEmpty()
 					&& spResponse.getCollatedResults() != null) {
 				log.info("Number of collated results received "
@@ -381,6 +335,7 @@ public class SearchServiceImpl implements SearchService {
 							.getMisspellingsAndCorrections()) {
 //						String corStr = cor.getCorrection().replaceAll(
 //								"[-+.^:(),]", "");
+						//pickup the corrections, remove duplicates
 						String[] terms = cor.getCorrection().split(" ");
 						for (String term : terms) {
 							if (!StringUtils.contains(termResult.toString(),
@@ -389,6 +344,7 @@ public class SearchServiceImpl implements SearchService {
 							}
 						}
 					}
+					//return the term, the number of hits for each collation and the field that it should be mapped to
 					Term term = new Term(termResult.toString().trim(),
 							collation.getNumberOfHits(),
 							SuggestionTitle.getMappedTitle(field));
@@ -403,10 +359,14 @@ public class SearchServiceImpl implements SearchService {
 		return results;
 	}
 
+	/**
+	 * Get the suggestions 
+	 */
 	public List<Term> suggestions(String query, int pageSize, String field) {
 		log.info(String.format("%s, %d, %s", query, pageSize, field));
 		List<Term> results = new ArrayList<Term>();
 		long start = new Date().getTime();
+		// if the fiels is null check on all fields else on the requested field
 		if (StringUtils.isBlank(field) || !SPELL_FIELDS.contains(field)) {
 			results.addAll(getSuggestions(query, "title", "suggestTitle"));
 			results.addAll(getSuggestions(query, "who", "suggestWho"));
@@ -425,110 +385,15 @@ public class SearchServiceImpl implements SearchService {
 			results.addAll(getSuggestions(query, field, "suggestWhen"));
 		}
 
+		// Sort the results by number of hits
 		Collections.sort(results);
+		
 		log.info(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
 		return results.size() > pageSize ? results.subList(0, pageSize)
 				: results;
 	}
-
-	// /**
-	// * Adds suggestions regarding a given query string
-	// */
-	// public List<Term> suggestions(String query, int pageSize, String field)
-	// throws SolrTypeException {
-	// log.info(String.format("%s, %d, %s", query, pageSize, field));
-	// SolrQuery solrQuery = new SolrQuery();
-	// solrQuery.setFacet(true);
-	// solrQuery.setFacetMinCount(1);
-	// solrQuery.setFacetPrefix(query.toLowerCase());
-	// solrQuery.setFacetLimit(pageSize);
-	// solrQuery.setQuery("*:*");
-	// solrQuery.setRows(0);
-	// if (StringUtils.isBlank(field) || !SPELL_FIELDS.contains(field)) {
-	// solrQuery.addFacetField("whoSpell", "whatSpell", "whereSpell",
-	// "whenSpell", "titleSpell");
-	// } else if (field.equals("who")) {
-	// solrQuery.addFacetField("whoSpell");
-	// } else if (field.equals("what")) {
-	// solrQuery.addFacetField("whatSpell");
-	// } else if (field.equals("where")) {
-	// solrQuery.addFacetField("whereSpell");
-	// } else if (field.equals("when")) {
-	// solrQuery.addFacetField("whenSpell");
-	// } else if (field.equals("title")) {
-	// solrQuery.addFacetField("titleSpell");
-	// }
-	// List<Term> results = new ArrayList<Term>();
-	//
-	// QueryResponse response;
-	// try {
-	// log.info("SolrQuery: " + solrQuery);
-	// response = suggestionSolrServer.query(solrQuery);
-	// log.info("elapsed time (suggestions): " + response.getElapsedTime());
-	//
-	// FacetField who = response.getFacetField("whoSpell");
-	// if (who != null) {
-	// List<Count> whoSuggestions = who.getValues();
-	// if (whoSuggestions != null) {
-	// for (Count whoSuggestion : whoSuggestions) {
-	// results.add(new Term(whoSuggestion.getName(),
-	// whoSuggestion.getCount(), "Creator")); // Creator_t
-	// }
-	// }
-	// }
-	//
-	// FacetField what = response.getFacetField("whatSpell");
-	// if (what != null) {
-	// List<Count> whatSuggestions = what.getValues();
-	// if (whatSuggestions != null) {
-	// for (Count whatSuggestion : whatSuggestions) {
-	// results.add(new Term(whatSuggestion.getName(),
-	// whatSuggestion.getCount(), "Subject")); // Subject_t
-	// }
-	// }
-	// }
-	//
-	// FacetField when = response.getFacetField("whenSpell");
-	// if (when != null) {
-	// List<Count> whenSuggestions = when.getValues();
-	// if (whenSuggestions != null) {
-	// for (Count whenSuggestion : whenSuggestions) {
-	// results.add(new Term(whenSuggestion.getName(),
-	// whenSuggestion.getCount(), "Time/Period"));
-	// }
-	// }
-	// }
-	//
-	// FacetField where = response.getFacetField("whereSpell");
-	// if (where != null) {
-	// List<Count> whereSuggestions = where.getValues();
-	// if (whereSuggestions != null) {
-	// for (Count whereSuggestion : whereSuggestions) {
-	// results.add(new Term(whereSuggestion.getName(),
-	// whereSuggestion.getCount(), "Place"));
-	// }
-	// }
-	// }
-	//
-	// FacetField title = response.getFacetField("titleSpell");
-	// if (title != null) {
-	// List<Count> titleSuggestions = title.getValues();
-	// if (titleSuggestions != null) {
-	// for (Count titleSuggestion : titleSuggestions) {
-	// results.add(new Term(titleSuggestion.getName(),
-	// titleSuggestion.getCount(), "Title")); // Title_t
-	// }
-	// }
-	// }
-	// } catch (SolrServerException e) {
-	// log.severe("SolrServerException: " + e.getMessage());
-	// }
-	// Collections.sort(results);
-	// return results.size() > pageSize ? results.subList(0, pageSize)
-	// : results;
-	// }
 
 	public void setSolrServer(SolrServer solrServer) {
 		// If it is instance of CommonsHTTPSolrServer
