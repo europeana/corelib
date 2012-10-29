@@ -160,18 +160,37 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 
 	@Override
-	public User changePassword(Long userId, String oldPassword,
-			String newPassword) throws DatabaseException {
+	public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
+
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.NO_USER_ID);
+		}
+
+		if (StringUtils.isBlank(oldPassword)) {
+			throw new DatabaseException(ProblemType.NO_OLD_PASSWORD);
+		}
+
+		if (StringUtils.isBlank(newPassword)) {
+			throw new DatabaseException(ProblemType.NO_PASSWORD);
+		}
+
 		if ((userId == null) || StringUtils.isBlank(oldPassword)
 				|| StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		User user = getDao().findByPK(userId);
-		if ((user == null)
-				|| !StringUtils.equals(user.getPassword(),
-						hashPassword(oldPassword))) {
+
+		if (user == null) {
+			throw new DatabaseException(ProblemType.NO_USER);
+		}
+
+		// TODO: rethink this!
+		/*
+		if (!StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+		*/
+
 		user.setPassword(hashPassword(newPassword));
 		return user;
 	}
