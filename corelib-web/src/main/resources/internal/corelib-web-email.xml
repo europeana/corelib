@@ -50,13 +50,15 @@
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/confirmation" 
 				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="My Europeana email confirmation"/>
+				p:subject="My Europeana email confirmation"
+			/>
 		</entry>
 		<entry key="forgotPassword">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/forgot-password" 
 				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="My Europeana reset password"/>
+				p:subject="My Europeana reset password"
+			/>
 		</entry>
 		<entry key="userFeedback">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
@@ -85,7 +87,7 @@
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/register-api-notify-admin"
 				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['register.to']}"
+				p:emailTo="#{europeanaProperties['register-api.to']}"
 				p:subject="Someone registered for the API just now"
 			/>
 		</entry>
