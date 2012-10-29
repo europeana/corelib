@@ -40,6 +40,9 @@ public enum ProblemType {
     XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail",ProblemResponseAction.IGNORE),
     NO_USERNAME("User name does not exist.", ProblemResponseAction.IGNORE),
     NO_PASSWORD("Password does not exist.", ProblemResponseAction.IGNORE),
+    NO_OLD_PASSWORD("Old password does not exist.", ProblemResponseAction.IGNORE),
+    NO_USER_ID("User id does not exist.", ProblemResponseAction.IGNORE),
+    NO_USER("User does not exist.", ProblemResponseAction.IGNORE),
     ;
 
     private String message;
