@@ -111,10 +111,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Field("proxy_dcterms_spatial")
 	private String[] dctermsSpatial;
-	
+
 	@Field("europeana_aggregation_edm_preview")
 	private String[] edmPreview;
-	
+
 	@Override
 	public String[] getEdmPreview(){
 		return this.edmPreview;
