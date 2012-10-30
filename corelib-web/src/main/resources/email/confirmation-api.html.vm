@@ -1,0 +1,15 @@
+<html>
+<body>
+
+<p>Welcome to the new Europeana API</p>
+
+<p>Please click on the following link to confirm your registration:<br />
+
+<a href="${url}?token=${token}">${url}?token=${token}</a></p>
+
+<p>Best regards,<br />
+<br/>
+The Europeana API Team</p>
+
+</body>
+</html>

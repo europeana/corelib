@@ -29,6 +29,8 @@ public interface EmailService {
 
 	void sendToken(Token token, String url) throws EmailServiceException;
 
+	void sendApiToken(Token token, String url) throws EmailServiceException;
+
 	void sendRegisterNotify(User user) throws EmailServiceException;
 
 	void sendForgotPassword(User user, String url) throws EmailServiceException;

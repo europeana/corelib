@@ -1,12 +1,23 @@
 
 Dear Europeana API user,
 
-You successfully registered for Europeana API key:
+Thank you for registering for the new Europeana API. These are your Europeana API keys:
 
 ==========
 API key      : ${apiKey.id}
 Private key  : ${apiKey.privateKey}
 ==========
 
-- Europeana Registration Machine
+Use the API key in your API calls. Keep your private key confidential.
+
+The new Europeana API is currently in testing. We expect the testing period to last until late November 2012. During the testing period the API call base domain is preview.europeana.eu. When the new API enters production the base domain will change to europeana.eu. Please note that all keys registered during the testing period will carry over to the production version.
+
+The API documentation will be updated to reflect any changes made to the API as a result of the testing.  Please join us at the Europeana API Forum to ask questions or give us your feedback on our new API. You can also contact us directly by mailing api@europeana.eu
+
+Best regards,
+The Europeana API Team
+
+Europeana API Technical Documentation - http://preview.europeana.eu/portal2/api-documentation.html
+Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi 
+More about the Europeana API services - http://pro.europeana.eu/api
 

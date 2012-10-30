@@ -82,6 +82,33 @@ public abstract class EmailServiceImpl implements EmailService {
 	 *   The URL of registration confirm page
 	 */
 	@Override
+	public void sendApiToken(final Token token, final String url) throws EmailServiceException {
+		if ( (token == null)
+			|| StringUtils.isBlank(token.getToken())
+			|| StringUtils.isBlank(token.getEmail())
+			|| StringUtils.isBlank(url)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("token", token.getToken());
+		model.put("url", url);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("registerApi"); // see corelib_web_emailConfigs
+		builder.setEmailTo(token.getEmail());
+		mailSender.send(builder);
+		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
+	}
+
+	/**
+	 * Sends a token to user as part of registration confirmation
+	 * 
+	 * @param token
+	 *   The token to send to the user
+	 * @param url
+	 *   The URL of registration confirm page
+	 */
+	@Override
 	public void sendRegisterNotify(final User user) throws EmailServiceException {
 		if (user == null) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);

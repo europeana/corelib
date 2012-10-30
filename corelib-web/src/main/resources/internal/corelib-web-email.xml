@@ -53,6 +53,13 @@
 				p:subject="My Europeana email confirmation"
 			/>
 		</entry>
+		<entry key="registerApi">
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/confirmation-api" 
+				p:emailFrom="#{europeanaProperties['system.from']}"
+				p:subject="Europeana API email confirmation"
+			/>
+		</entry>
 		<entry key="forgotPassword">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/forgot-password" 
@@ -95,7 +102,7 @@
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
 				p:template="/email/register-api-notify-user"
 				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="Thank you for your registration to Europeana API!"
+				p:subject="Thank you for registering for the new Europeana API"
 			/>
 		</entry>
 	</util:map>
