@@ -197,25 +197,27 @@ public class SearchServiceImpl implements SearchService {
 			if (SolrUtils.checkTypeFacet(refinements)) {
 				SolrQuery solrQuery = new SolrQuery()
 						.setQuery(query.getQuery());
+
+				if (refinements != null) {
+					solrQuery.addFilterQuery(refinements);
+				}
+
 				solrQuery.setFacet(true);
 				for (Facet facet : query.getFacets()) {
 					String facetToAdd = facet.toString();
 					if (query.isProduceFacetUnion()) {
-						facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT,
-								facetToAdd);
+						facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
 					}
 					solrQuery.addFacetField(facetToAdd);
 				}
-				if (refinements != null) {
-					solrQuery.addFilterQuery(refinements);
-				}
 				solrQuery.setFacetLimit(facetLimit);
+
 				solrQuery.setRows(query.getPageSize());
 				solrQuery.setStart(query.getStart());
 
 				// These are going to change when we import ASSETS as well
-				solrQuery.setQueryType(QueryType.ADVANCED.toString());
-				query.setQueryType(solrQuery.getQueryType());
+				// solrQuery.setQueryType(QueryType.ADVANCED.toString());
+				// query.setQueryType(solrQuery.getQueryType());
 
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
@@ -244,15 +246,13 @@ public class SearchServiceImpl implements SearchService {
 					log.info("elapsed time (search): "
 							+ queryResponse.getElapsedTime());
 
-					resultSet.setResults((List<T>) queryResponse
-							.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults()
-							.getNumFound());
+					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse
-							.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
+					e.printStackTrace();
 					log.severe("SolrServerException: " + e.getMessage());
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
