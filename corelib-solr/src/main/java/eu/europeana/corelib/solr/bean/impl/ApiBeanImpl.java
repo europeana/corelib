@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.solr.client.solrj.beans.Field;
 
@@ -33,8 +32,6 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
-
-	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Field("skos_concept")
 	private String[] edmConceptTerm;
@@ -58,7 +55,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	private String[] recordHashFirstSix;
 
 	@Field("UGC")
-	private boolean[] ugc;
+	private String[] ugc;
 
 	@Field("COMPLETENESS")
 	private String[] completeness;
@@ -67,6 +64,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	private String[] country;
 
 	private int score;
+
 	private String debugQuery;
 
 	@Field("europeana_collectionName")
@@ -146,12 +144,27 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Override
 	public boolean[] getUgc() {
-		return ugc != null ? this.ugc.clone() : null;
+		if (ugc == null) {
+			return null;
+		}
+		String[] _ugc = this.ugc.clone();
+		boolean[] retVal = new boolean[_ugc.length];
+		for (int i = 0, len = _ugc.length; i < len; i++) {
+			retVal[i] = Boolean.getBoolean(_ugc[i]);
+		}
+		return retVal;
 	}
 
 	@Override
 	public void setUgc(boolean[] ugc) {
-		this.ugc = ugc.clone();
+		if (ugc == null) {
+			this.ugc = null;
+		}
+		String[] retVal = new String[ugc.length];
+		for (int i = 0, len = ugc.length; i < len; i++) {
+			retVal[i] = Boolean.toString(ugc[i]);
+		}
+		this.ugc = retVal;
 	}
 
 	@Override
