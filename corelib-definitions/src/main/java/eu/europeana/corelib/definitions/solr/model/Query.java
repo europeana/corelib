@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +35,8 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class Query implements Cloneable {
+
+	private final Logger log = Logger.getLogger(getClass().getName());
 
 	/**
 	 * Default start parameter for Solr
@@ -307,9 +310,12 @@ public class Query implements Cloneable {
 		}
 
 		public void addValue(String value) {
+			if (name.equals(Facet.RIGHTS.name()) && value.endsWith("*")) {
+				value = value.replace(":", "\\:").replace("/", "\\/");
+			}
 			values.add(value);
 		}
-		
+
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			if (isTagged) {
