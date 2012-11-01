@@ -13,7 +13,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 public class LocaleInterceptor extends HandlerInterceptorAdapter {
 
-	private static Logger log = Logger.getLogger(LocaleInterceptor.class.getName());
+	private static Logger log = Logger.getLogger("LocaleInterceptor");
+
 	public static final String DEFAULT_PARAM_NAME = "locale";
 	private String paramName = DEFAULT_PARAM_NAME;
 
@@ -28,14 +29,15 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler)
-			throws IllegalStateException {
+					throws IllegalStateException {
 
 		String newLocale = request.getParameter(this.paramName);
 
 		log.info("LocaleInterceptor.preHandle gets parameter '" + this.paramName + "' with value " + newLocale);
 
-		if (newLocale != null && !newLocale.equals("")
-				&& !(newLocale.contains("*"))) {
+		if (newLocale != null
+			&& !newLocale.equals("")
+			&& !(newLocale.contains("*"))) {
 
 			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 			if (localeResolver == null) {
@@ -45,6 +47,7 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 			localeEditor.setAsText(newLocale);
 			localeResolver.setLocale(request, response, (Locale) localeEditor.getValue());
 		}
+
 		return true;
 	}
 }
