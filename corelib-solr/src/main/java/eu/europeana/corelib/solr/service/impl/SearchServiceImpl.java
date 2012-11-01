@@ -295,6 +295,7 @@ public class SearchServiceImpl implements SearchService {
 					.getFacetQuery().size(), response.getElapsedTime()));
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
+			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
 			e.printStackTrace();
 		}
 
