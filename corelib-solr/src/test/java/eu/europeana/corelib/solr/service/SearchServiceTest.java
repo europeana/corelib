@@ -108,7 +108,7 @@ public class SearchServiceTest {
 		List<Term> terms = searchService.suggestions("model mod", 10,"title");
 		Assert.assertEquals(terms.size(), 10);
 		Assert.assertEquals(terms.get(0).getField(), "Title");
-		Assert.assertEquals(terms.get(0).getFrequency(), 18);
+		Assert.assertEquals(terms.get(0).getFrequency(), 3);
 		Assert.assertEquals(terms.get(0).getTerm(), "model model");
 	}
 
@@ -146,7 +146,8 @@ public class SearchServiceTest {
 		Query query = new Query("musi");
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
 				query);
-		Assert.assertNotNull(results.getSpellcheck());
+		//TODO: Temporarily disable spellcheck tests as it has been disabled in corelib
+		//Assert.assertNotNull(results.getSpellcheck());
 
 	}
 
