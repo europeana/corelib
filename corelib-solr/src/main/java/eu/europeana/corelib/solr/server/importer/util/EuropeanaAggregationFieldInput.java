@@ -185,6 +185,7 @@ public final class EuropeanaAggregationFieldInput {
 				.getHasViewList());
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
+		
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
