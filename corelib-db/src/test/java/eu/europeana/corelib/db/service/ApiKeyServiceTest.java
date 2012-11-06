@@ -2,6 +2,7 @@ package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -13,11 +14,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.db.service.impl.TokenServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-db-context.xml" })
+@ContextConfiguration({ "/corelib-db-context.xml" , "/corelib-db-test.xml"})
 // "/corelib-db-test.xml"
 public class ApiKeyServiceTest {
 
@@ -29,6 +32,9 @@ public class ApiKeyServiceTest {
 	@Resource
 	private ApiKeyService apiKeyService;
 
+	@Resource
+	private TokenService tokenService;
+	
 	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Test
@@ -36,7 +42,7 @@ public class ApiKeyServiceTest {
 		String email = "test@kb.nl";
 		String apiKey = generatePassPhrase(9);
 		String privateKey = generatePassPhrase(9);
-		String token = "test_token";
+		String tokenString = "test_token_new";
 		String username = "test";
 		String company = "test_company";
 		String country = "europe";
@@ -46,7 +52,11 @@ public class ApiKeyServiceTest {
 		String address = "test_address";
 		String phone = "test_phone";
 		log.info(String.format("%s, %s", apiKey, privateKey));
-		User user = userService.createApiKey(token, email, apiKey, privateKey,
+		
+		Token token = tokenService.create(email);
+		token.setToken(tokenString);
+		tokenService.store(token);
+		User user = userService.createApiKey(tokenString, email, apiKey, privateKey,
 				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
 				lastName, website, address, phone);
 		log.info("user: " + user.getId());

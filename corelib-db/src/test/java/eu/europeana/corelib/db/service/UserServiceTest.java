@@ -96,7 +96,9 @@ public class UserServiceTest {
 		assertNotNull("User registration date should have value", user.getRegistrationDate());
 		assertNull("User last login should by null for new user", user.getLastLogin());
 		assertEquals("User should have USER role by default", user.getRole(), Role.ROLE_USER);
-		assertNull("Token not removed from database", tokenService.findByID(token.getToken()));
+		//create does not delete the token anymore
+		//assertNull("Token not removed from database", tokenService.findByID(token.getToken()));
+		tokenService.remove(token);
 	}
 
 	@Test(expected = DatabaseException.class)
