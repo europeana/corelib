@@ -26,7 +26,6 @@ import javax.annotation.Resource;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -109,7 +108,7 @@ public class SearchServiceTest {
 		Assert.assertEquals(terms.size(), 10);
 		Assert.assertEquals(terms.get(0).getField(), "Title");
 		Assert.assertEquals(terms.get(0).getFrequency(), 3);
-		Assert.assertEquals(terms.get(0).getTerm(), "model model");
+		Assert.assertEquals(terms.get(0).getTerm(), "modell moderner pianinomechanik");
 	}
 
 	@Test
