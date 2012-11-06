@@ -22,6 +22,12 @@ public class HashUtilsTest {
 
 	// PRE-SIPCREATOR
 
+	@Test 
+	public void testHashSHA256(){
+		assertEquals("9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08", HashUtils.createHashSHA256("test"));
+	}
+	
+	
 	@Test
 	public void testHashCreation() {
 		// Using real life data

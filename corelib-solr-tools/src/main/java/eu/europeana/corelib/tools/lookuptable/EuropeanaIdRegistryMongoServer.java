@@ -37,7 +37,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	private EuropeanaIdMongoServer europeanaIdMongoServer;
 
 	/**
-	 * Constructor of the EuropeanaIDMongoServer
+	 * Constructor of the EuropeanaIDRegistryMongoServer
 	 * 
 	 * @param mongoServer
 	 *            The server to connect to
@@ -48,7 +48,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		europeanaIdMongoServer = new EuropeanaIdMongoServer(mongoServer,
-				"EuropeanaId");
+				databaseName);
 		createDatastore();
 	}
 
@@ -121,6 +121,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				lookupresult.setState(LookupState.COLLECTION_CHANGED);
 				updateops.set(EID, constructedeuropeanaId.getEid());
 				updateops.set(CID, collectionID);
+				return lookupresult;
 			}
 		} else {
 			
@@ -283,6 +284,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	 * @param xml
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private String generatechecksum(String xml) {
 		return DigestUtils.shaHex(xml);
 	}
@@ -359,7 +361,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	 *            The newId to search for
 	 */
 	public void deleteEuropeanaId(String oldId, String newId) {
-
+		
 	}
 
 	/**
