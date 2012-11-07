@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.tools.utils;
 
 import java.io.BufferedInputStream;
@@ -5,7 +21,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Abstract class that reads a SIPCreator mapping
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public abstract class MappingParser {
+	protected String repository;
 	/**
 	 * Retrieve the field responsible for hash generation in SIPCreator
 	 * @param collectionId The collectionID (each collection has a different mapping)
@@ -14,6 +36,11 @@ public abstract class MappingParser {
 	 */
 	public abstract String getHashField(String collectionId, String fileName);
 	
+	/**
+	 * Read a SIPCreator mapping file
+	 * @param mappingFile
+	 * @return
+	 */
 	public String readFile(String mappingFile) {
 		StringBuffer strFileContents = new StringBuffer();
 		FileInputStream fin;
@@ -34,6 +61,12 @@ public abstract class MappingParser {
 		}
 		return strFileContents.toString();
 	}
-	
+	/**
+	 * Specify the place the mappings are held
+	 * @param repository
+	 */
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
 	
 }

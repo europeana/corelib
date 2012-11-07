@@ -30,7 +30,11 @@ import com.mongodb.MongoException;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.logging.api.enums.RecordType;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-
+/**
+ * Logger class for the API
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public class ApiLogger {
 
 	static ApiLogger instance;
@@ -41,19 +45,29 @@ public class ApiLogger {
 
 	static Mongo mongo;
 
+	/**
+	 * 
+	 * @return the mongo instance used
+	 */
 	public static Mongo getMongo() {
 		return mongo;
 	}
 
+	/**
+	 * Sets the mongo instance
+	 * @param mongo
+	 */
 	public static void setMongo(Mongo mongo) {
 		ApiLogger.mongo = mongo;
 	}
 
+	
 	public ApiLogger(Mongo mongo) throws DatabaseException {
 		ApiLogger.mongo = mongo;
 		instance = new ApiLogger();
 	}
 
+	
 	private ApiLogger() throws DatabaseException {
 		try {
 			DB db = mongo.getDB("api_log");
@@ -112,6 +126,11 @@ public class ApiLogger {
 		return getLogTypeList(apiKey);
 	}
 
+	/**
+	 * Request the numbers of requests of an API key
+	 * @param apiKey
+	 * @return
+	 */
 	public int getRequestNumber(String apiKey) {
 		Date now = new Date();
 		Date yesterday = new Date(now.getTime() - DAY);
@@ -140,6 +159,9 @@ public class ApiLogger {
 		return list;
 	}
 
+	/**
+	 * Deletes the logs
+	 */
 	public void clearLogs() {
 		logTypeCollection.drop();
 	}

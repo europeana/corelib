@@ -17,7 +17,6 @@
 
 package eu.europeana.corelib.dereference;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -134,4 +133,18 @@ public interface ControlledVocabulary {
 	 *  
 	 */
 	void setRules(String[] rules);
+	
+	/**
+	 * Specify the depth of resources to retrieve from a given resource. If for example a dbpedia entry 
+	 * refers to another dbpedia entry, and iterations>0 then the referred dbpedia entry, will also be fetched
+	 * 
+	 * @param iterations The number of iterations
+	 */
+	void setIterations(int iterations);
+	
+	/**
+	 * 
+	 * @return The number of iterations to get
+	 */
+	int getIterations();
 }

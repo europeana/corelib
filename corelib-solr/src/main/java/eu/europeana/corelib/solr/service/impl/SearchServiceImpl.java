@@ -149,6 +149,7 @@ public class SearchServiceImpl implements SearchService {
 		return findMoreLikeThis(europeanaObjectId, DEFAULT_MLT_COUNT);
 	}
 
+	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException {
 		String query = "europeana_id:\"" + europeanaObjectId + "\"";
@@ -270,12 +271,13 @@ public class SearchServiceImpl implements SearchService {
 		return resultSet;
 	}
 
-	
+	@Override
 	public List<Term> suggestions(String query, int pageSize)
 			throws SolrTypeException {
 		return suggestions(query, pageSize, null);
 	}
 
+	@Override
 	public Map<String, Integer> seeAlso(Map<String, List<String>> fields) {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery("*:*");

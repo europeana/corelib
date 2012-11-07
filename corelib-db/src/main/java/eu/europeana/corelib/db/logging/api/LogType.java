@@ -36,11 +36,21 @@ public interface LogType {
 	 * @return
 	 */
 	String getId();
-
+	
+	/**
+	 * The record id
+	 * 
+	 */
 	void setId(String id);
 
+	/**
+	 * The APIKey for a log entry
+	 * @return
+	 */
 	String getApiKey();
-	
+	/**
+	 * The APIKey for a log entry
+	 */
 	void setApiKey(String apiKey);
 	
 	/**
@@ -50,6 +60,10 @@ public interface LogType {
 	 */
 	RecordType getRecordType();
 
+	/**
+	 * The type of API call (search or object retrieval)
+	 * 
+	 */
 	void setRecordType(RecordType recordType);
 
 	/**
@@ -58,7 +72,10 @@ public interface LogType {
 	 * @return
 	 */
 	String getRequestedUri();
-
+	/**
+	 * The requested uri of the call
+	 * 
+	 */
 	void setRequestedUri(String requestedUri);
 
 	/**
@@ -68,6 +85,11 @@ public interface LogType {
 	 */
 	Date getTimestamp();
 
+
+	/**
+	 * When the call was made
+	 * 
+	 */
 	void setTimestamp(Date date);
 
 	/**
@@ -78,5 +100,10 @@ public interface LogType {
 	 */
 	String getProfile();
 
+	/**
+	 * What profile was used in retrieving the record (minimal, standard, rich,
+	 * portal, facets, breadcrumb spelling)
+	 * 
+	 */
 	void setProfile(String profile);
 }

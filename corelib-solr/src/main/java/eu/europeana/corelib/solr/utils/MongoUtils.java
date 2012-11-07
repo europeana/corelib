@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
@@ -19,12 +35,27 @@ import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 
+/**
+ * Class with util methods for Mongo objects
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
+ */
 public final class MongoUtils {
 
 	private MongoUtils() {
 		// Constructor must be private
 	}
 
+	/**
+	 * Checks if a string is contained in a string array
+	 * 
+	 * @param str1
+	 *            A string array
+	 * @param str2
+	 *            The string to be checked
+	 * @return true if it is contained false otherwise
+	 */
 	public static boolean contains(String[] str1, String str2) {
 		for (String str : str1) {
 			if (StringUtils.equals(str, str2)) {
@@ -34,6 +65,18 @@ public final class MongoUtils {
 		return false;
 	}
 
+	/**
+	 * Method that checks whether a specific key contains a specific value in a
+	 * Map
+	 * 
+	 * @param map
+	 *            The map to search on
+	 * @param key
+	 *            The key field
+	 * @param val
+	 *            The value
+	 * @return true if the specified key has the value, false otherwise
+	 */
 	public static boolean contains(Map<String, List<String>> map, String key,
 			String val) {
 		if (map.keySet().contains(key)) {
@@ -44,6 +87,16 @@ public final class MongoUtils {
 		return false;
 	}
 
+	/**
+	 * Method that delets a class from the Mongo storage
+	 * 
+	 * @param clazz
+	 *            The class to delete
+	 * @param about
+	 *            The about field
+	 * @param mongoServer
+	 *            The mongo server to use
+	 */
 	public synchronized static void delete(Class<?> clazz, String about,
 			EdmMongoServer mongoServer) {
 		mongoServer.getDatastore().delete(
@@ -52,20 +105,19 @@ public final class MongoUtils {
 	}
 
 	/**
-	 * Delete a generic Mongo Entity from the MongoDB Server
+	 * Method that updates an entity in MongoDB storage
 	 * 
 	 * @param clazz
-	 *            The class type of the Mongo Entity
+	 *            The class type of the object
 	 * @param about
-	 *            The rdf:about field of the Mongo entity
+	 *            The search field
 	 * @param mongoServer
-	 *            The MongoDBServer to connect to
+	 *            The server to be used
 	 * @param field
 	 *            The field to update
 	 * @param value
-	 *            The value to update
+	 *            The value
 	 */
-
 	@SuppressWarnings("unchecked")
 	public static <T> void update(Class<T> clazz, String about,
 			MongoServer mongoServer, String field, Object value) {
@@ -98,6 +150,17 @@ public final class MongoUtils {
 		}
 	}
 
+	/**
+	 * Method that converts a LiteralType.class object to a multilingual map of
+	 * strings
+	 * 
+	 * @param obj
+	 *            The LiteralType object
+	 * @return A Map of strings. The keys are the languages and the values are
+	 *         lists of strings for the corresponding language. If the object is
+	 *         null, the method returns null. In case a language is missing the
+	 *         def notation is used as key
+	 */
 	public static <T extends LiteralType> Map<String, List<String>> createLiteralMapFromString(
 			T obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
@@ -117,6 +180,17 @@ public final class MongoUtils {
 		return null;
 	}
 
+	/**
+	 * Method that converts a ResourceOrLiteralType.class object to a
+	 * multilingual map of strings
+	 * 
+	 * @param obj
+	 *            The ResourceOrLiteralType object
+	 * @return A Map of strings. The keys are the languages and the values are
+	 *         lists of strings for the corresponding language. If the object is
+	 *         null, the method returns null. In case a language is missing the
+	 *         def notation is used as key
+	 */
 	public static <T extends ResourceOrLiteralType> Map<String, List<String>> createResourceOrLiteralMapFromString(
 			T obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
@@ -124,25 +198,23 @@ public final class MongoUtils {
 			if (obj.getLang() != null) {
 				if (obj.getString() != null) {
 					List<String> val = new ArrayList<String>();
-					 val.add(obj.getString());
-					retMap.put(obj.getLang().getLang(),
-							val);
+					val.add(obj.getString());
+					retMap.put(obj.getLang().getLang(), val);
 				}
 				if (obj.getResource() != null) {
 					List<String> val = new ArrayList<String>();
-					 val.add(obj.getResource());
-					retMap.put(obj.getLang().getLang(),
-							val);
+					val.add(obj.getResource());
+					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
 				if (obj.getString() != null) {
 					List<String> val = new ArrayList<String>();
-					 val.add(obj.getString());
+					val.add(obj.getString());
 					retMap.put("def", val);
 				}
 				if (obj.getResource() != null) {
 					List<String> val = new ArrayList<String>();
-					 val.add(obj.getResource());
+					val.add(obj.getResource());
 					retMap.put("def", val);
 				}
 			}
@@ -152,6 +224,17 @@ public final class MongoUtils {
 		return null;
 	}
 
+	/**
+	 * Method that converts a LiteralType.class list to a
+	 * multilingual map of strings
+	 * 
+	 * @param list
+	 *            The LiteralType list
+	 * @return A Map of strings. The keys are the languages and the values are
+	 *         lists of strings for the corresponding language. If the object is
+	 *         null, the method returns null. In case a language is missing the
+	 *         def notation is used as key
+	 */
 	public static <T extends LiteralType> Map<String, List<String>> createLiteralMapFromList(
 			List<T> list) {
 		if (list != null) {
@@ -180,6 +263,17 @@ public final class MongoUtils {
 		return null;
 	}
 
+	/**
+	 * Method that converts a ResourceOrLiteralType.class list to a
+	 * multilingual map of strings
+	 * 
+	 * @param list
+	 *            The ResourceOrLiteralType list
+	 * @return A Map of strings. The keys are the languages and the values are
+	 *         lists of strings for the corresponding language. If the object is
+	 *         null, the method returns null. In case a language is missing the
+	 *         def notation is used as key
+	 */
 	public static <T extends ResourceOrLiteralType> Map<String, List<String>> createResourceOrLiteralMapFromList(
 			List<T> list) {
 		if (list != null) {
@@ -229,6 +323,11 @@ public final class MongoUtils {
 		return null;
 	}
 
+	/**
+	 * Method that updates an Aggregation in Mongo
+	 * @param mongoAggregation The Aggregation to update
+	 * @param mongoServer The server to be used
+	 */
 	public static void updateAggregation(AggregationImpl mongoAggregation,
 			MongoServer mongoServer) {
 		update(AggregationImpl.class, mongoAggregation.getAbout(), mongoServer,
@@ -267,6 +366,11 @@ public final class MongoUtils {
 
 	}
 
+	/**
+	 * Method that updates a Europeana Aggregation in Mongo
+	 * @param mongoAggregation The Europeana aggregation to update
+	 * @param mongoServer The server to be used
+	 */
 	public static void updateEuropeanaAggregation(
 			EuropeanaAggregation mongoAggregation, MongoServer mongoServer) {
 		update(EuropeanaAggregationImpl.class, mongoAggregation.getAbout(),
@@ -300,6 +404,11 @@ public final class MongoUtils {
 
 	}
 
+	/**
+	 * Method that updates a Proxy in Mongo
+	 * @param proxy The proxy to update
+	 * @param mongoServer The server to be used
+	 */
 	public static void updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
 
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "dcContributor",

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.dereference.impl;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
@@ -42,7 +58,7 @@ import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.jibx._Long;
 @SuppressWarnings("unchecked")
 /**
- * An enunmeration with the fields of the contextual entities that might be used in EDM
+ * An enumeration with the fields of the contextual entities that might be used in EDM
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
@@ -608,14 +624,27 @@ public enum RdfMethod {
 		this.clazz = clazz;
 	}
 
+	/**
+	 * 
+	 * @return the solr field of this enumerated value
+	 */
 	public String getSolrField() {
 		return this.solrField;
 	}
 
+
+	/**
+	 * 
+	 * @return The method nae of this enumerated value
+	 */
 	public String getMethodName() {
 		return this.methodName;
 	}
 
+	/**
+	 * 
+	 * @return The class of this value
+	 */
 	public Class<?> getClazz() {
 		return this.clazz;
 	}

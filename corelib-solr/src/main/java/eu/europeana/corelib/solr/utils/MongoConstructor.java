@@ -33,9 +33,7 @@ import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
-import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -56,6 +54,7 @@ import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
+//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 
 /**
  * A FullBean Constructor from an EDM XML
@@ -69,7 +68,19 @@ public class MongoConstructor {
 	// public void setMongoServer(EdmMongoServerImpl mongoServer) {
 	// this.mongoServer = mongoServer;
 	// }
-
+	/**
+	 * Constructs a FullBean from an RDF
+	 * 
+	 * @param record
+	 *            The RDF record to use for the Fullbean contruction
+	 * @param mongoServer
+	 *            The mongo server used to save the FullBean
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public FullBeanImpl constructFullBean(RDF record, EdmMongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException,
 			MalformedURLException, IOException {
@@ -183,9 +194,9 @@ public class MongoConstructor {
 			}
 		}
 
-//		AggregationImpl aggregation = aggregations.get(0);
-//		aggregation.setWebResources(webResources);
-//		MongoUtils.updateAggregation(aggregation, mongoServer);
+		// AggregationImpl aggregation = aggregations.get(0);
+		// aggregation.setWebResources(webResources);
+		// MongoUtils.updateAggregation(aggregation, mongoServer);
 
 		fullBean.setProvidedCHOs(providedCHOs);
 

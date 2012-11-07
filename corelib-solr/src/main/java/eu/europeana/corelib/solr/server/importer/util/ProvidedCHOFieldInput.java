@@ -119,6 +119,11 @@ public final class ProvidedCHOFieldInput {
 		return (ProvidedCHOImpl) mongoProvidedCHO;
 	}
 
+	/**
+	 * Delete a providedCHO from mongoDB storage based on its about field
+	 * @param about the about field to search
+	 * @param mongoServer the mongoserver to use
+	 */
 	public void deleteProvideCHOFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(ProvidedCHOImpl.class, about, mongoServer);

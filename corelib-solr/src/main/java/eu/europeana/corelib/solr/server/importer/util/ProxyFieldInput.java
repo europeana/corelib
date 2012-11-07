@@ -1168,6 +1168,15 @@ public final class ProxyFieldInput {
 		return proxy;
 	}
 
+	/**
+	 * Adds the EuropeanaProxy fields in a Proxy
+	 * @param proxy The proxy to alter
+	 * @param aggregation The EuropeanaAggregation to link the proxy to
+	 * @param mongoServer The mongoServer to use to save the proxy
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public  ProxyImpl addEuropeanaProxyForMongo(ProxyImpl proxy,
 			EuropeanaAggregationType aggregation, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
@@ -1201,6 +1210,14 @@ public final class ProxyFieldInput {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Create the EuropeanaProxy fields in a solr document
+	 * @param aggregation The EuropeanaAggregation linked to this proxy
+	 * @param solrInputDocument The solrdocument to append the fields to 
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public  SolrInputDocument addProxyForSolr(
 			EuropeanaAggregationType aggregation,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
@@ -1212,6 +1229,11 @@ public final class ProxyFieldInput {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Delete a proxy from mongo based on its about field
+	 * @param about The about field value used to delete the proxy
+	 * @param mongoServer The server used to delete the proxy
+	 */
 	public void deleteProxyFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(ProxyImpl.class, about, mongoServer);

@@ -152,6 +152,15 @@ public final class AggregationFieldInput {
 		return aggregation;
 	}
 
+	/**
+	 * Method that appends a web resource to an aggregation
+	 * @param aggregations The list of aggregations
+	 * @param webResource The web resource to append
+	 * @param mongoServer The mongo server to use
+	 * @return The aggregation that holds the web resource
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public AggregationImpl appendWebResource(
 			List<AggregationImpl> aggregations,
 			List<WebResource> webResource, EdmMongoServer mongoServer)
@@ -311,6 +320,11 @@ public final class AggregationFieldInput {
 		return mongoAggregation;
 	}
 
+	/**
+	 * Deletes an aggregation from MongoDB storage based on the indexed field about
+	 * @param about The aggregation to delete
+	 * @param mongoServer The server to use
+	 */
 	public void deleteAggregationFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(Aggregation.class, about, mongoServer);

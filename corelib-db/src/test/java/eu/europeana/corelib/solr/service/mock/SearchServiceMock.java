@@ -138,4 +138,11 @@ public class SearchServiceMock implements SearchService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
+			throws SolrServerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

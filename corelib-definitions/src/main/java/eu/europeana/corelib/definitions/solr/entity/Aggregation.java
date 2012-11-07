@@ -217,12 +217,28 @@ public interface Aggregation extends AbstractEdmEntity {
 	 */
 	void setAggregatedCHO(String aggregatedCHO);
 
+	/**
+	 * 
+	 * @return the edm:aggregaties for an Aggregation
+	 */
 	String[] getAggregates();
 
+	/**
+	 * sets the edm:aggregates for an Aggregation
+	 * @param aggregates
+	 */
 	void setAggregates(String[] aggregates);
 
+	/**
+	 * TODO: check if required
+	 * @return the edm:unstored for an Aggregation
+	 */
 	String[] getEdmUnstored();
 
+	/**
+	 * Sets the edm:unstored for an Aggregation
+	 * @param edmUnstored
+	 */
 	void setEdmUnstored(String[] edmUnstored);
 
 }

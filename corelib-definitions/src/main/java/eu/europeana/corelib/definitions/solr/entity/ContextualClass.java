@@ -80,8 +80,16 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 */
 	void setPrefLabel(Map<String, List<String>> prefLabel);
 
+	/**
+	 * sets the skos:hiddenLabel for a contextual class
+	 * @param hiddenLabel
+	 */
 	void setHiddenLabel(Map<String, List<String>> hiddenLabel);
 
+	/**
+	 * 
+	 * @return the skos:hiddenLabel for the contextual class
+	 */
 	Map<String, List<String>> getHiddenLabel();
 
 }

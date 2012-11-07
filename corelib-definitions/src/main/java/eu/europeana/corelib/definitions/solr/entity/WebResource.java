@@ -58,44 +58,124 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	void setWebResourceEdmRights(Map<String,List<String>> webResourceEdmRights);
 
+	/**
+	 * sets the edm:isNextInSequence for the edm:WebResource
+	 * @param isNextInSequence
+	 */
 	void setIsNextInSequence(String isNextInSequence);
 
+	/**
+	 * 
+	 * @return the edm:isNextInSequence for the edm:WebResource
+	 */
 	String getIsNextInSequence();
 
+	/**
+	 * sets the dcterms:hasPart for the edm:WebResource
+	 * @param dctermsHasPart
+	 */
 	void setDctermsHasPart(Map<String,List<String>> dctermsHasPart);
 
+	/**
+	 * 
+	 * @return the dcterms:hasPart for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsHasPart();
 
+	/**
+	 * sets the dcterms:isFormatOf for the edm:WebResource
+	 * @param dctermsIsFormatOf
+	 */
 	void setDctermsIsFormatOf(Map<String,List<String>> dctermsIsFormatOf);
 
+	/**
+	 *  
+	 * @return the dcterms:isFormatOf for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsIsFormatOf();
 
+	/**
+	 * sets the dcterms:created for the edm:WebResource
+	 * @param dctermsCreated
+	 */
 	void setDctermsCreated(Map<String,List<String>> dctermsCreated);
 
+	/**
+	 * 
+	 * @return the dcterms:created for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsCreated();
 
+	/**
+	 * 
+	 * @return the dcterms:conformsTo for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsConformsTo();
 
+	/**
+	 * sets the dcterms:conformsTo for the edm:WebResource
+	 * @param dctermsConformsTo
+	 */
 	void setDctermsConformsTo(Map<String,List<String>> dctermsConformsTo);
 
+	/**
+	 * sets the dcterms:issued for the edm:WebResource
+	 * @param dctermsIssued
+	 */
 	void setDctermsIssued(Map<String,List<String>> dctermsIssued);
 
+	/**
+	 * 
+	 * @return the dcterms:issued for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsIssued();
 
+	/**
+	 * 
+	 * @return the dc:description for the edm:WebResource
+	 */
 	Map<String,List<String>> getDcDescription();
 
+	/**
+	 * sets the dc:description for the edm:WebResource
+	 * @param dcDescription
+	 */
 	void setDcDescription(Map<String,List<String>> dcDescription);
 
+	/**
+	 * 
+	 * @return the dc:format for the edm:WebResource
+	 */
 	Map<String,List<String>> getDcFormat();
 
+	/**
+	 * sets the dc:format for the edm:WebResource
+	 * @param dcFormat
+	 */
 	void setDcFormat(Map<String,List<String>> dcFormat);
 
+	/**
+	 * 
+	 * @return the dc:source for the edm:WebResource
+	 */ 
 	Map<String,List<String>> getDcSource();
 
+	/**
+	 * sets the dc:source for the edm:WebResource
+	 * @param dcSource
+	 */
 	void setDcSource(Map<String,List<String>> dcSource);
 
+	/**
+	 * 
+	 * @return the dcterms:extent for the edm:WebResource
+	 */
 	Map<String,List<String>> getDctermsExtent();
 
+	/**
+	 * sets the dcterms:extent for the edm:WebResource
+	 * @param dctermsExtent
+	 */
 	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
 
 }

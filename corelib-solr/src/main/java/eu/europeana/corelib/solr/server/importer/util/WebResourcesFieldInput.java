@@ -181,6 +181,11 @@ public final class WebResourcesFieldInput {
 		return mongoWebResource;
 	}
 
+	/**
+	 * Delete a WebResource from MongoDB storage based on its about field
+	 * @param about The about field to specify the WebResource
+	 * @param mongoServer The server to be used
+	 */
 	public void deleteWebResourceFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(WebResourceImpl.class, about, mongoServer);

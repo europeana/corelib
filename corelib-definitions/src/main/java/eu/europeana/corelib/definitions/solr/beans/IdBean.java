@@ -26,6 +26,10 @@ public interface IdBean {
 	 */
 	String getId();
 
+	/**
+	 * 
+	 * @return if the provider has opted out for this record
+	 */
 	Boolean isOptedOut();
 
 }

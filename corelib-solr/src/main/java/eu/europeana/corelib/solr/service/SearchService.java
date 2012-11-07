@@ -116,6 +116,12 @@ public interface SearchService {
 	 */
 	List<Term> suggestions(String query, int pageSize, String field) throws SolrTypeException;
 
+	/**
+	 * Retrieves the moreLikeThis List of BriefBeans
+	 * @param europeanaObjectId
+	 * @return
+	 * @throws SolrServerException
+	 */
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 
@@ -131,4 +137,14 @@ public interface SearchService {
 	 *   The see also suggestions
 	 */
 	Map<String, Integer> seeAlso(Map<String, List<String>> fields);
+
+	/**
+	 * Returns a specified number of moreLikeThis objects
+	 * @param europeanaObjectId
+	 * @param count
+	 * @return
+	 * @throws SolrServerException
+	 */
+	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
+			throws SolrServerException;
 }

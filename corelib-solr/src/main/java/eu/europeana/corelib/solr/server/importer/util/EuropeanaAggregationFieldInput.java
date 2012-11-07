@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
@@ -26,14 +42,34 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
+/**
+ * Constructor of a Europeana Aggregation
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
+ */
 public final class EuropeanaAggregationFieldInput {
 
+	/**
+	 * The prefix of a valid europeana record in the portal
+	 */
 	private final static String EUROPEANA_URI = "http://www.europeana.eu/portal/record";
 
 	public EuropeanaAggregationFieldInput() {
 
 	}
 
+	/**
+	 * Create the corresponding EuropeanaAggregation fields in a solr document
+	 * 
+	 * @param aggregation
+	 *            The EuropeanaAggregation to store
+	 * @param solrInputDocument
+	 *            The solr doocument to save the EuropeanaAggregation in
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public SolrInputDocument createAggregationSolrFields(
 			EuropeanaAggregationType aggregation,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
@@ -88,6 +124,20 @@ public final class EuropeanaAggregationFieldInput {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Append a web resource to a Europeana Aggregation
+	 * 
+	 * @param aggregation
+	 *            The EuropeanaAggregation
+	 * @param webResource
+	 *            The webResource to append
+	 * @param mongoServer
+	 *            The mongo Server to save both the Aggregation and the
+	 *            WebResource
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	@SuppressWarnings("unchecked")
 	public EuropeanaAggregation appendWebResource(
 			EuropeanaAggregation aggregation, WebResourceImpl webResource,
@@ -112,6 +162,20 @@ public final class EuropeanaAggregationFieldInput {
 		return aggregation;
 	}
 
+	/**
+	 * Append a list of web resource to a Europeana Aggregation
+	 * 
+	 * @param aggregation
+	 *            The EuropeanaAggregation
+	 * @param webResources
+	 *            The list of webResources to append
+	 * @param mongoServer
+	 *            The mongo Server to save both the Aggregation and the
+	 *            WebResource
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public EuropeanaAggregation appendWebResource(
 			EuropeanaAggregation aggregation, List<WebResource> webResources,
 			MongoServer mongoServer) throws InstantiationException,
@@ -129,6 +193,17 @@ public final class EuropeanaAggregationFieldInput {
 		return aggregation;
 	}
 
+	/**
+	 * Create a EuropeanaAggregation to save in MongoDB storage
+	 * 
+	 * @param aggregation
+	 *            The RDF EuropeanaAggregation representation
+	 * @param mongoServer
+	 *            The MongoServer to use to save the EuropeanaAggregation
+	 * @return the EuropeanaAggregation created
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public EuropeanaAggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType aggregation,
 			MongoServer mongoServer) throws InstantiationException,
@@ -189,8 +264,9 @@ public final class EuropeanaAggregationFieldInput {
 				.getHasViewList());
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
-		
-		String preview = SolrUtils.exists(Preview.class, aggregation.getPreview()).getResource();
+
+		String preview = SolrUtils.exists(Preview.class,
+				aggregation.getPreview()).getResource();
 		mongoAggregation.setEdmPreview(preview);
 		ops.set("edmPreview", preview);
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
@@ -204,6 +280,12 @@ public final class EuropeanaAggregationFieldInput {
 		return mongoAggregation;
 	}
 
+	/**
+	 * Check if a webResource belongs to a EuropeanaAggregation
+	 * @param aggregation The EuropeanaAggregation to check against
+	 * @param webResource The WebResource to check
+	 * @return true if it belongs to the EuropeanaAggregation, false otherwise
+	 */
 	private boolean belongsTo(EuropeanaAggregation aggregation,
 			WebResource webResource) {
 		if (aggregation.getEdmHasView() != null) {

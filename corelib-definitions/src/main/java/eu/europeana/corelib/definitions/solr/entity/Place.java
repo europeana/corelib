@@ -74,19 +74,51 @@ public interface Place extends ContextualClass {
 	 */
 	void setLongitude(float longitude);
 
+	/**
+	 * set the altitude for a place
+	 * @param altitude
+	 */
 	void setAltitude(float altitude);
 	
+	/**
+	 * 
+	 * @return the altitude for a place
+	 */
 	float getAltitude();
 	
+	/**
+	 * sets the position for a place
+	 * @param position
+	 */
 	void setPosition(Map<String,Float> position);
 	
+	/**
+	 * 
+	 * @return the position for a place
+	 */
 	Map<String,Float> getPosition();
 	
+	/**
+	 * sets the dcterms:hasPart for a Place
+	 * @param dcTermsHasPart 
+	 */
 	void setDcTermsHasPart(Map<String,List<String>> dcTermsHasPart);
 	
+	/**
+	 * 
+	 * @return the dcterms:hasPart for a place
+	 */
 	Map<String,List<String>> getDcTermsHasPart();
 	
+	/**
+	 * sets the owl:sameAs for a place
+	 * @param owlSameAs
+	 */
 	void setOwlSameAs(String[] owlSameAs);
 	
+	/**
+	 * 
+	 * @return the owl:sameAs for a place
+	 */
 	String[] getOwlSameAs();
 }

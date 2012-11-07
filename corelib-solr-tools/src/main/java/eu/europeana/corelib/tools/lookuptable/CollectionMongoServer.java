@@ -114,6 +114,10 @@ public class CollectionMongoServer implements MongoServer {
 			datastore.save(collection);
 	}
 	
+	/**
+	 * Retrieve all stored collections
+	 * @return
+	 */
 	public List<Collection> retrieveAllCollections(){
 		return datastore.find(Collection.class).asList();
 	}

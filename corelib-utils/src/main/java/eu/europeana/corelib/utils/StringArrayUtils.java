@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.utils;
 
 import java.util.ArrayList;
@@ -6,20 +22,40 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * String array util classes
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public class StringArrayUtils {
     
 	public static final String[] EMPTY_ARRAY = new String[0];
 	
+	/**
+	 * Check if an array is not empty
+	 * @param array
+	 * @return
+	 */
     public static boolean isNotBlank(String[] array) {
         return ((array != null) && 
                 (array.length > 0) && 
                 (StringUtils.isNotBlank(array[0])));
     }
     
+    /**
+     * Check if an array is empty
+     * @param array
+     * @return
+     */
     public static boolean isBlank(String[] array) {
         return !isNotBlank(array);
     }
     
+    /**
+     * Convert a list to array
+     * @param list
+     * @return
+     */
     public static String[] toArray(List<String> list) {
     	if (list != null) {
     		return list.toArray(new String[list.size()]);
@@ -27,6 +63,11 @@ public class StringArrayUtils {
     	return new String[]{};
     }
     
+    /**
+     * Adds a string array to alist of strings
+     * @param list
+     * @param toAdd
+     */
     public static void addToList(List<String> list, String[] toAdd) {
     	if ( (list != null) && (isNotBlank(toAdd)) ) {
     		for (String string : toAdd) {
@@ -35,6 +76,11 @@ public class StringArrayUtils {
     	}
     }
 
+    /**
+     * Create a string representation of a string array
+     * @param items
+     * @return
+     */
     public static String formatList(String[] items) {
 		if (isNotBlank(items)) {
 			if (items.length == 1) {
@@ -56,6 +102,12 @@ public class StringArrayUtils {
 		return "";
 	}
     
+    /**
+     * Adds a string to a string array. If the array is null it creates it
+     * @param items
+     * @param str
+     * @return
+     */
     public static String[] addToArray(String[] items, String str){
     	if(items==null){
     		items = new String[1];

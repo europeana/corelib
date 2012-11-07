@@ -73,12 +73,28 @@ public interface Timespan extends ContextualClass {
 	 */
 	void setIsPartOf(Map<String,List<String>> isPartOf);
 	
+	/**
+	 * sets the dcterms:hasPart for the edm:Timespan
+	 * @param hasPart
+	 */
 	void setDctermsHasPart(Map<String,List<String>> hasPart);
 	
+	/**
+	 * 
+	 * @return the dcterms:hasPart for the edm:Timespan
+	 */
 	Map<String,List<String>> getDctermsHasPart();
 	
+	/**
+	 * sets the owl:sameAs for the edm:Timespan
+	 * @param owlSameAs
+	 */
 	void setOwlSameAs(String[] owlSameAs);
 	
+	/**
+	 * 
+	 * @return the owl:sameAs for the edm:Timespan
+	 */
 	String[] getOwlSameAs();
 	
 

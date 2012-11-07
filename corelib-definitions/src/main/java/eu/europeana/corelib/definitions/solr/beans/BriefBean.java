@@ -32,57 +32,157 @@ import eu.europeana.corelib.definitions.solr.DocType;
  */
 public interface BriefBean extends IdBean {
 
+	/**
+	 * 
+	 * @return TITLE field
+	 */
 	String[] getTitle();
 
+	/**
+	 * 
+	 * @return edm:object
+	 */
 	String[] getEdmObject();
 
+	/**
+	 * 
+	 * @return YEAR field
+	 */
 	String[] getYear(); // YEAR copyfield dc_date
 
+	/**
+	 * 
+	 * @return PROVIDER field
+	 */
 	String[] getProvider(); // PROVIDER copyfield edm_provider
 
+	/**
+	 * 
+	 * @return DATAPROVIDER field
+	 */
 	String[] getDataProvider(); // DATA_PROVIDER copyfield edm_dataProvider
 
-	String[] getLanguage(); // LANGUAGE copyfield dc_language
+	/**
+	 * 
+	 * @return LANGUAGE field
+	 */
+	String[] getLanguage(); // LANGUAGE copyfield edm_language
 
+	/**
+	 * 
+	 * @return RIGHTS field
+	 */
 	String[] getRights(); // LANGUAGE copyfield dc_language
 
+	/**
+	 * 
+	 * @return TYPE field
+	 */
 	DocType getType(); // TYPE copyfield edm_type
 
 	// here the dcterms namespaces starts
 
+	/**
+	 * 
+	 * @return dcterms:spatial
+	 */
 	String[] getDctermsSpatial();
 
 	// Ranking and Enrichment terms
 
+	/**
+	 * 
+	 * @return europeana_completeness field
+	 */
 	int getEuropeanaCompleteness();
 
+	/**
+	 * 
+	 * @return edm:place
+	 */
 	String[] getEdmPlace();
 
+	/**
+	 * 
+	 * @return edm:place skos:prefLabel multilingual field
+	 */
 	List<Map<String, String>> getEdmPlaceLabel();
 
+	/**
+	 * 
+	 * @return edm:place wgs84:posLat
+	 */
 	Float getEdmPlaceLatitude();
 
+	/**
+	 * 
+	 * @return edm:place wgs84:posLong
+	 */
 	Float getEdmPlaceLongitude();
 
+	/**
+	 * 
+	 * @return edm:timespan
+	 */
 	String[] getEdmTimespan();
 
+	/**
+	 * 
+	 * @return edm:timespan skos:prefLabel multilingual field
+	 */
 	List<Map<String, String>> getEdmTimespanLabel();
 
+	/**
+	 * 
+	 * @return edm:timespan edm:begin
+	 */
 	String[] getEdmTimespanBegin();
 
+	/**
+	 * 
+	 * @return edm:timespan edm:end
+	 */
 	String[] getEdmTimespanEnd();
 
+	/**
+	 * 
+	 * @return edm:agent
+	 */
 	String[] getEdmAgent();
 
+	/**
+	 * 
+	 * @return edm:agent skos:prefLabel multilingual field
+	 */
 	List<Map<String, String>> getEdmAgentLabel();
 
+	/**
+	 * 
+	 * @return dcterms:hasPart
+	 */
 	String[] getDctermsHasPart();
 
+	/**
+	 * 
+	 * @return dc:creator
+	 */
 	String[] getDcCreator();
 
+	/**
+	 * 
+	 * @return dc:contributor
+	 */
 	String[] getDcContributor();
 
+	/**
+	 * 
+	 * @return Time of indexing of the record
+	 */
 	Date getTimestamp();
 
+	/**
+	 * 
+	 * @return edm:preview field
+	 */
 	String[] getEdmPreview();
 }

@@ -238,14 +238,28 @@ public enum EdmLabel {
 		this.solrType = solrType;
 	}
 
+	/**
+	 * Return the field value
+	 */
 	public String toString() {
 		return value;
 	}
-
+	
+	
+	/**
+	 * Return if a field is a facet, an indexed or a not stored field
+	 * @return
+	 */
 	public SolrType getSolrType() {
 		return solrType;
 	}
 
+	
+	/**
+	 * Get the EdmLabel for a specific value
+	 * @param value The value to check
+	 * @return The corresponding EdmLabel, or null
+	 */
 	public static EdmLabel getEdmLabel(String value) {
 		for (EdmLabel edmLabel : EdmLabel.values()) {
 			if (StringUtils.equals(edmLabel.toString(), value)) {
