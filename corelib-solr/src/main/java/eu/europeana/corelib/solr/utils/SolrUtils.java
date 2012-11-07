@@ -43,7 +43,8 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  * 
  */
 public final class SolrUtils {
-	private static final Logger log = Logger.getLogger(SolrUtils.class.getName());
+	private static final Logger log = Logger.getLogger(SolrUtils.class
+			.getName());
 
 	private SolrUtils() {
 
@@ -59,9 +60,11 @@ public final class SolrUtils {
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
-				if (StringUtils.contains(refinement, "TYPE:") && !StringUtils.contains(refinement, " OR ")) {
+				if (StringUtils.contains(refinement, "TYPE:")
+						&& !StringUtils.contains(refinement, " OR ")) {
 					try {
-						DocType.get(StringUtils.substringAfter(refinement, "TYPE:"));
+						DocType.get(StringUtils.substringAfter(refinement,
+								"TYPE:"));
 					} catch (IllegalArgumentException e) {
 						log.severe(e.getMessage());
 						return false;
@@ -88,6 +91,16 @@ public final class SolrUtils {
 		return (object == null ? clazz.newInstance() : object);
 	}
 
+	/**
+	 * Method that adds a ResourceOrLiteralType object in a solr field
+	 * 
+	 * @param solrInputDocument
+	 *            The solr document to add the field to
+	 * @param label
+	 *            The label of the field
+	 * @param type
+	 *            The ResourceOrLiteralType object
+	 */
 	public static void addResourceOrLiteralType(
 			SolrInputDocument solrInputDocument, EdmLabel label,
 			ResourceOrLiteralType type) {
@@ -102,6 +115,15 @@ public final class SolrUtils {
 		}
 	}
 
+	/**
+	 * Returns an array of strings based on values from a ResourceOrLiteralType
+	 * object. Since it is perfectly valid to have both an rdf:resource and a
+	 * value on a field This method will return both in a String array
+	 * 
+	 * @param type
+	 *            The ResourceOrLiteralType object
+	 * @return An array of strings with the values of the object
+	 */
 	public static String[] resourceOrLiteralToArray(ResourceOrLiteralType type) {
 		if (type != null) {
 			List<String> lst = new ArrayList<String>();
@@ -116,6 +138,15 @@ public final class SolrUtils {
 		return new String[] {};
 	}
 
+	/**
+	 * Returns an array of strings based on values from a ResourceOrLiteralType
+	 * list. Since it is perfectly valid to have both an rdf:resource and a
+	 * value on a field This method will return both in a String array
+	 * 
+	 * @param list
+	 *            The ResourceOrLiteralType list
+	 * @return An array of strings with the values of the list
+	 */
 	public static String[] resourceOrLiteralListToArray(
 			List<? extends ResourceOrLiteralType> list) {
 		if (list != null) {
@@ -131,6 +162,14 @@ public final class SolrUtils {
 		return new String[] {};
 	}
 
+	/**
+	 * Returns an array of strings based on values from a LiteralType
+	 * list. 
+	 * 
+	 * @param list
+	 *            The LiteralType list
+	 * @return An array of strings with the values of the list
+	 */
 	public static String[] literalListToArray(List<? extends LiteralType> list) {
 		if (list != null) {
 			String[] arr = new String[list.size()];
@@ -144,6 +183,14 @@ public final class SolrUtils {
 		return new String[] {};
 	}
 
+	/**
+	 * Returns an array of strings based on values from a ResourceType
+	 * list. 
+	 * 
+	 * @param list
+	 *            The ResourceType list
+	 * @return An array of strings with the values of the list
+	 */
 	public static String[] resourceListToArray(List<? extends ResourceType> list) {
 		if (list != null) {
 			String[] arr = new String[list.size()];
@@ -157,6 +204,11 @@ public final class SolrUtils {
 		return new String[] {};
 	}
 
+	/**
+	 * 
+	 * @param obj The LiteralType object
+	 * @return a string from a LiteralType object
+	 */
 	public static String getLiteralString(LiteralType obj) {
 		if (obj != null) {
 			return obj.getString() != null ? obj.getString() : null;
@@ -164,6 +216,11 @@ public final class SolrUtils {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param obj The ResourceOrLiteralType object
+	 * @return a string from a ResourceOrLiteralType object
+	 */
 	public static String getResourceOrLiteralString(ResourceOrLiteralType obj) {
 		if (obj != null) {
 			return obj.getResource() != null ? obj.getResource() : obj
@@ -172,6 +229,11 @@ public final class SolrUtils {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param obj The ResourceType object
+	 * @return a string from a ResourceType object
+	 */
 	public static String getResourceString(ResourceType obj) {
 		if (obj != null) {
 			return obj.getResource() != null ? obj.getResource() : null;
@@ -179,6 +241,11 @@ public final class SolrUtils {
 		return null;
 	}
 
+	/**
+	 * Get the implementation class of one of the Solr Beans
+	 * @param interfaze The interfaze to check
+	 * @return The corresponding implementation class
+	 */
 	public static Class<? extends IdBeanImpl> getImplementationClass(
 			Class<? extends IdBean> interfaze) {
 		if (interfaze != null) {
@@ -195,6 +262,13 @@ public final class SolrUtils {
 		return null;
 	}
 
+	/**
+	 * Adds a field to a document from a LiteralType object
+	 * @param solrInputDocument The document to add a document to
+	 * @param obj The object to add
+	 * @param label The label of the field to add the object to
+	 * @return
+	 */
 	public static <T extends LiteralType> SolrInputDocument addFieldFromLiteral(
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
@@ -211,6 +285,13 @@ public final class SolrUtils {
 		return solrInputDocument;
 	}
 
+	/**
+	 * Adds a field to a document from a ResourceOrLiteralType object
+	 * @param solrInputDocument The document to add a document to
+	 * @param obj The object to add
+	 * @param label The label of the field to add the object to
+	 * @return
+	 */
 	public static <T extends ResourceOrLiteralType> SolrInputDocument addFieldFromResourceOrLiteral(
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
