@@ -57,7 +57,7 @@ public enum EdmLabel {
 	EUROPEANA_AGGREGATION_EDM_COUNTRY("europeana_aggregation_edm_country", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_EDM_LANGUAGE("europeana_aggregation_edm_language", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_EDM_RIGHTS("europeana_aggregation_edm_rights", SolrType.NOT_STORED),
-
+	EUROPEANA_AGGREGATION_EDM_PREVIEW("europeana_aggregation_edm_preview", SolrType.NOT_STORED),
 	// WEB RESOURCE FIELDS
 	EDM_WEB_RESOURCE("edm_webResource", SolrType.NOT_STORED), 
 	WR_DC_RIGHTS("wr_dc_rights", SolrType.FACET), 
