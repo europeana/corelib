@@ -30,7 +30,7 @@
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="([.^:()\\[\\],])" replacement="" replace="all" />
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([.^:;()\\[\\],])" replacement="" replace="all" />
         <filter class="solr.PatternReplaceFilterFactory" pattern="([-+])" replacement=" " replace="all" />
       </analyzer>
     </fieldType>
@@ -97,13 +97,13 @@
    <field name="provider_aggregation_ore_aggregates" type="string" indexed="true" stored = "false" multiValued="false"/>
    <field name="provider_aggregation_edm_aggregatedCHO" type="string" indexed="true" stored="false" multiValued="false"/>
    <field name="provider_aggregation_edm_dataProvider" type="string" indexed="true" stored="true" multiValued="true"/>
-   <dynamicField name="provider_aggregation_edm_dataProvider.*" type="string" indexed="true" stored="true" multiValued="false"/>
+   <dynamicField name="provider_aggregation_edm_dataProvider.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_edm_hasView" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_isShownAt" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_object" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_provider" type="string" indexed="true" stored="true" multiValued="false" />
-   <dynamicField name="provider_aggregation_edm_provider.*" type="string" indexed="true" stored="true" multiValued="false"/>
+   <dynamicField name="provider_aggregation_edm_provider.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicfield name="provider_aggregation_dc_rights.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_edm_rights" type="string" indexed="true" stored="true" multiValued="true" />
