@@ -45,7 +45,13 @@ public class SipCreatorUtils extends MappingParser{
 								END_HASH_FUNCTION)));
 	}
 
-	
+	/**
+	 * Specify the place the mappings are held
+	 * @param repository
+	 */
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
 	
 	
 

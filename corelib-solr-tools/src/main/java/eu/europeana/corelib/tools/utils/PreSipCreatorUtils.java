@@ -50,6 +50,12 @@ public class PreSipCreatorUtils extends MappingParser {
 		return null;
 	}
 
-	
+	/**
+	 * Specify the place the mappings are held
+	 * @param repository
+	 */
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
 	
 }
