@@ -57,7 +57,7 @@ public class EuropeanaAggregationFieldInputTest {
 			assertEquals(aggregation.getLandingPage().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString()));
 			assertEquals(aggregation.getLanguage().getString(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE.toString()));
 			assertEquals(aggregation.getPreview().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW.toString()));
-			assertEquals(aggregation.getRights().getString(), solrDocument.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS.toString()));
+			assertEquals(aggregation.getRights().getString(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS.toString()));
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
