@@ -15,6 +15,7 @@ import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LandingPage;
+import eu.europeana.corelib.definitions.jibx.Preview;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -74,6 +75,9 @@ public final class EuropeanaAggregationFieldInput {
 				EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO.toString(),
 				aggregation.getAggregatedCHO() != null ? aggregation
 						.getAggregatedCHO().getResource() : null);
+		solrInputDocument.addField(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
+				.toString(), aggregation.getPreview() != null ? aggregation
+				.getPreview().getResource() : null);
 		if (aggregation.getAggregateList() != null) {
 			for (Aggregates aggregates : aggregation.getAggregateList()) {
 				solrInputDocument.addField(
@@ -186,6 +190,9 @@ public final class EuropeanaAggregationFieldInput {
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
 		
+		String preview = SolrUtils.exists(Preview.class, aggregation.getPreview()).getResource();
+		mongoAggregation.setEdmPreview(preview);
+		ops.set("edmPreview", preview);
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
