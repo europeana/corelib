@@ -41,4 +41,7 @@ public abstract class EuropeanaException extends Exception {
 		return problem.getMessage();
 	}
 
+	public ProblemType getProblem() {
+		return problem;
+	}
 }
