@@ -38,7 +38,9 @@ public interface EmailService {
 	void sendForgotPassword(String email, String url) throws EmailServiceException;
 
 	void sendFeedback(String email, String feedback) throws EmailServiceException;
-	
+
+	void sendException(String subject, String body) throws EmailServiceException;
+
 	void sendRegisterApiNotifyAdmin(User user) throws EmailServiceException;
 
 	void sendRegisterApiNotifyUser(ApiKey apiKey) throws EmailServiceException;

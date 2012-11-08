@@ -230,6 +230,28 @@ public abstract class EmailServiceImpl implements EmailService {
 	}
 
 	/**
+	 * Sends exception to the site admin
+	 */
+	@Override
+	public void sendException(String subject, String body)
+			throws EmailServiceException {
+		if (StringUtils.isBlank(subject) || StringUtils.isBlank(body)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("subject", subject);
+		model.put("body", body);
+
+		// one email to organisation
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("exception");
+		builder.setSubject(subject);
+		mailSender.send(builder);
+	}
+
+	/**
 	 * This method will be handled by Spring Framework.
 	 * No implementation needed
 	 * 

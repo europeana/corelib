@@ -105,5 +105,13 @@
 				p:subject="Thank you for registering for the new Europeana API"
 			/>
 		</entry>
+		<entry key="exception">
+			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+				p:template="/email/exception"
+				p:emailFrom="#{europeanaProperties['system.from']}"
+				p:emailTo="#{europeanaProperties['exception.to']}"
+				p:subject="Exception in portal"
+			/>
+		</entry>
 	</util:map>
 </beans>
