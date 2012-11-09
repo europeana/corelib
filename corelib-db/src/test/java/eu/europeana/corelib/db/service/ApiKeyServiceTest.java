@@ -2,7 +2,6 @@ package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -14,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.service.impl.TokenServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
@@ -51,6 +49,7 @@ public class ApiKeyServiceTest {
 		String website = "test_website";
 		String address = "test_address";
 		String phone = "test_phone";
+		String fieldOfWork = "test_fieldOfWork";
 		log.info(String.format("%s, %s", apiKey, privateKey));
 		
 		Token token = tokenService.create(email);
@@ -58,7 +57,7 @@ public class ApiKeyServiceTest {
 		tokenService.store(token);
 		User user = userService.createApiKey(tokenString, email, apiKey, privateKey,
 				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
-				lastName, website, address, phone);
+				lastName, website, address, phone, fieldOfWork);
 		log.info("user: " + user.getId());
 
 		log.info("api keys: " + user.getApiKeys().iterator().next().getId());

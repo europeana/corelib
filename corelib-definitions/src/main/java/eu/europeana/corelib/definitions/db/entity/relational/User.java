@@ -91,4 +91,8 @@ public interface User extends IdentifiedEntity<Long> {
 	String getWebsite();
 
 	void setWebsite(String website);
+
+	String getFieldOfWork();
+
+	void setFieldOfWork(String fieldOfWork);
 }

@@ -303,39 +303,35 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 
 			@Override
 			public String getPhone() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public void setPhone(String phone) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void setPhone(String phone) {}
 
 			@Override
 			public String getAddress() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public void setAddress(String address) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void setAddress(String address) {}
 
 			@Override
 			public String getWebsite() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public void setWebsite(String website) {
-				// TODO Auto-generated method stub
-				
+			public void setWebsite(String website) {}
+
+			@Override
+			public String getFieldOfWork() {
+				return null;
 			}
+
+			@Override
+			public void setFieldOfWork(String fieldOfWork) {}
 		};
 	}
 

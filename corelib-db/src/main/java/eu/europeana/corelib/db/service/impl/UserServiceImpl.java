@@ -72,12 +72,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public User create(String tokenString, String username, String password)
 			throws DatabaseException {
-		return create(tokenString, username, password, false, "", "", "", "", "", "", "");
+		return create(tokenString, username, password, false, "", "", "", "", "", "", "", "");
 	}
 
 	private User create(String tokenString, String username, String password,
 			boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, String website, String address, String phone)
+			String firstName, String lastName, String website, String address, 
+			String phone, String fieldOfWork)
 			throws DatabaseException {
 
 		if (StringUtils.isBlank(tokenString)) {
@@ -115,6 +116,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		user.setWebsite(website);
 		user.setAddress(address);
 		user.setPhone(phone);
+		user.setFieldOfWork(fieldOfWork);
+
 		user = getDao().insert(user);
 
 		return user;
@@ -271,13 +274,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	public User createApiKey(String token, String email, String apiKey,
 			String privateKey, Long limit, String username,
 			String company, String country, String firstName, String lastName, 
-			String website, String address, String phone)
+			String website, String address, String phone, String fieldOfWork)
 			throws DatabaseException {
 
 		User user = findByEmail(email);
 		if (user == null) {
 			user = create(token, username, null, true,
-					company, country, firstName, lastName, website, address, phone);
+					company, country, firstName, lastName, website, address, phone, fieldOfWork);
 		}
 
 		ApiKey api = new ApiKeyImpl();

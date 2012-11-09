@@ -94,31 +94,34 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLogin;
-	
-	@Column(length= FIELDSIZE_NAME)
+
+	@Column(length = FIELDSIZE_NAME)
 	private String firstName;
-	
-	@Column(length= FIELDSIZE_SURNAME)
+
+	@Column(length = FIELDSIZE_SURNAME)
 	private String lastName;
-	
-	@Column(length=FIELDSIZE_COMPANY)
+
+	@Column(length = FIELDSIZE_COMPANY)
 	private String company;
-	
-	@Column(length=FIELDSIZE_COUNTRY)
+
+	@Column(length = FIELDSIZE_COUNTRY)
 	private String country;
-	
-	@Column(length=FIELDSIZE_PHONE)
+
+	@Column(length = FIELDSIZE_PHONE)
 	private String phone;
-	
-	@Column(length=FIELDSIZE_ADDRESS)
+
+	@Column(length = FIELDSIZE_ADDRESS)
 	private String address;
-	
-	@Column(length=FIELDSIZE_WEBSITE)
+
+	@Column(length = FIELDSIZE_WEBSITE)
 	private String website;
-	
+
 	@Column(length = FIELDSIZE_ROLE)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
+
+	@Column(length=FIELDSIZE_FIELDOFWORK)
+	private String fieldOfWork;
 
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
@@ -234,61 +237,82 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public Set<ApiKey> getApiKeys() {
 		return apiKeys;
 	}
-	
+
 	@Override
 	public String getFirstName() {
 		return firstName;
 	}
+
 	@Override
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	@Override
 	public String getLastName() {
 		return lastName;
 	}
+
 	@Override
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	@Override
 	public String getCompany() {
 		return company;
 	}
+
 	@Override
 	public void setCompany(String company) {
 		this.company = company;
 	}
+
 	@Override
 	public String getCountry() {
 		return country;
 	}
+
 	@Override
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
 	@Override
 	public String getPhone() {
 		return phone;
 	}
+
 	@Override
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	@Override
 	public String getAddress() {
 		return address;
 	}
+
 	@Override
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	@Override
 	public String getWebsite() {
 		return website;
 	}
+
 	@Override
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+
+	public String getFieldOfWork() {
+		return fieldOfWork;
+	}
+
+	public void setFieldOfWork(String fieldOfWork) {
+		this.fieldOfWork = fieldOfWork;
 	}
 }
