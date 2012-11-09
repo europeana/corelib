@@ -108,8 +108,9 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-
+		long t0 = new Date().getTime();
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
@@ -130,8 +131,9 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
-
+		long t0 = new Date().getTime();
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
+		logTime("mongo resolve", (new Date().getTime() - t0));
 		if (fullBean != null) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
@@ -169,7 +171,7 @@ public class SearchServiceImpl implements SearchService {
 		log.info(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
-		log.info("elapsed time (MoreLikeThis): " + response.getElapsedTime());
+		logTime("MoreLikeThis", response.getElapsedTime());
 
 		@SuppressWarnings("unchecked")
 		NamedList<Object> moreLikeThisList = (NamedList<Object>) response
@@ -244,8 +246,7 @@ public class SearchServiceImpl implements SearchService {
 				try {
 					log.info("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
-					log.info("elapsed time (search): "
-							+ queryResponse.getElapsedTime());
+					logTime("search", queryResponse.getElapsedTime());
 
 					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
@@ -293,8 +294,7 @@ public class SearchServiceImpl implements SearchService {
 		Map<String, Integer> seeAlso = null;
 		try {
 			response = solrServer.query(solrQuery);
-			log.info(String.format("elapsed time (seeAlso/%d): %d", response
-					.getFacetQuery().size(), response.getElapsedTime()));
+			logTime("seeAlso", response.getElapsedTime());
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
 			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
@@ -390,7 +390,7 @@ public class SearchServiceImpl implements SearchService {
 
 		// Sort the results by number of hits
 		Collections.sort(results);
-		
+		logTime("suggestions", (new Date().getTime() - start));
 		log.info(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
@@ -431,7 +431,10 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 			return null;
-
 		}
+	}
+
+	public void logTime(String type, long time) {
+		log.info(String.format("elapsed time (%s): %d", type, time));
 	}
 }
