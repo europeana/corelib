@@ -39,6 +39,7 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
@@ -254,8 +255,11 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
 					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
 				} catch (SolrServerException e) {
-					e.printStackTrace();
 					log.severe("SolrServerException: " + e.getMessage());
+					resultSet = null;
+					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+				} catch (SolrException e) {
+					log.severe("SolrException: " + e.getMessage());
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
