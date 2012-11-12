@@ -34,6 +34,6 @@ public class SolrTypeException extends EuropeanaException {
 	}
 
 	public SolrTypeException(Throwable causedBy, ProblemType problemType){
-		super(causedBy,problemType);
+		super(causedBy, problemType);
 	}
 }
