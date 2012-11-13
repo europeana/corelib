@@ -20,15 +20,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
+import com.mongodb.GroupCommand;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.logging.api.enums.RecordType;
+import eu.europeana.corelib.db.util.DateInterval;
+import eu.europeana.corelib.db.util.DateUtils;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
@@ -72,6 +79,7 @@ public class ApiLogger {
 		try {
 			DB db = mongo.getDB("api_log");
 			logTypeCollection = JacksonDBCollection.wrap(db.getCollection("logs"), LogTypeImpl.class, String.class);
+			
 		} catch (MongoException e) {
 			throw new DatabaseException(ProblemType.UNKNOWN);
 		}
@@ -149,6 +157,58 @@ public class ApiLogger {
 		return lType.size();
 	}
 
+	public int getDaily(String apiKey, int dayDifference) {
+		DateInterval interval = DateUtils.getDay(dayDifference);
+
+		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
+				.is("apiKey", apiKey)
+				.greaterThanEquals("timestamp", interval.getBegin())
+				.lessThanEquals("timestamp", interval.getEnd());
+		return lType.size();
+	}
+
+	// by dates
+	public int getDaily(int dayDifference) {
+		DateInterval interval = DateUtils.getDay(dayDifference);
+
+		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
+				.greaterThanEquals("timestamp", interval.getBegin())
+				.lessThanEquals("timestamp", interval.getEnd());
+		return lType.size();
+	}
+
+	// by users
+	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
+	public DBObject getByUser() {
+		DBObject result = logTypeCollection.group(
+			new GroupCommand(
+				logTypeCollection.getDbCollection(), // collection
+				new BasicDBObject("apiKey", true), //keys,
+				null, // cond
+				new BasicDBObject("count", 0), // initial, 
+				"function(obj, out){out.count++}", // $reduce
+				null // reduce
+			)
+		);
+		return result;
+	}
+
+	// by types
+	// db.logs.group({key: {recordType: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
+	public DBObject getByType() {
+		DBObject result = logTypeCollection.group(
+			new GroupCommand(
+				logTypeCollection.getDbCollection(), // collection
+				new BasicDBObject("recordType", true), //keys,
+				null, // cond
+				new BasicDBObject("count", 0), // initial, 
+				"function(obj, out){out.count++}", // $reduce
+				null // reduce
+			)
+		);
+		return result;
+	}
+
 	/**
 	 * Retrieve the logs for a specific apiKey
 	 * 
@@ -157,9 +217,8 @@ public class ApiLogger {
 	 */
 
 	private List<LogTypeImpl> getLogTypeList(String apiKey) {
-		DBCursor<LogTypeImpl> cur = logTypeCollection.find().is("apiKey",
-				apiKey);
-		List<LogTypeImpl> list =new ArrayList<LogTypeImpl>();
+		DBCursor<LogTypeImpl> cur = logTypeCollection.find().is("apiKey", apiKey);
+		List<LogTypeImpl> list = new ArrayList<LogTypeImpl>();
 		while (cur.hasNext()) {
 			LogTypeImpl one = cur.next();
 			list.add(one);
