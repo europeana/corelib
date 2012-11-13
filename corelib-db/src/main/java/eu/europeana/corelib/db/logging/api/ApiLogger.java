@@ -30,10 +30,10 @@ import com.mongodb.MongoException;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.logging.api.enums.RecordType;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+
 /**
  * Logger class for the API
  * @author Yorgos.Mamakis@ kb.nl
- *
  */
 public class ApiLogger {
 
@@ -135,10 +135,18 @@ public class ApiLogger {
 		Date now = new Date();
 		Date yesterday = new Date(now.getTime() - DAY);
 		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
-				.is("apiKey", apiKey).greaterThanEquals("timestamp", yesterday)
+				.is("apiKey", apiKey)
+				.greaterThanEquals("timestamp", yesterday)
 				.lessThan("timestamp", now);
 		return lType.size();
+	}
 
+	/**
+	 * Returns the all-time request number by an API key
+	 */
+	public int getTotalRequestNumber(String apiKey) {
+		DBCursor<LogTypeImpl> lType = logTypeCollection.find().is("apiKey", apiKey);
+		return lType.size();
 	}
 
 	/**
