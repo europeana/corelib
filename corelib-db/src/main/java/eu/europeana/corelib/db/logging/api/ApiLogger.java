@@ -196,12 +196,14 @@ public class ApiLogger {
 	// by types
 	// db.logs.group({key: {recordType: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
 	public DBObject getByType() {
+		DBObject keys = new BasicDBObject("recordType", true);
+		keys.put("profile", true);
 		DBObject result = logTypeCollection.group(
 			new GroupCommand(
 				logTypeCollection.getDbCollection(), // collection
-				new BasicDBObject("recordType", true), //keys,
+				keys, // keys
 				null, // cond
-				new BasicDBObject("count", 0), // initial, 
+				new BasicDBObject("count", 0), // initial
 				"function(obj, out){out.count++}", // $reduce
 				null // reduce
 			)
