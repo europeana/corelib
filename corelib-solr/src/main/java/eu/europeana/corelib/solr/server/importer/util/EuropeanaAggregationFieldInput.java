@@ -98,7 +98,7 @@ public final class EuropeanaAggregationFieldInput {
 				.addField(
 						EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE
 								.toString(),
-						aggregation.getLandingPage().getResource() != null ? aggregation
+						aggregation.getLandingPage() != null ? aggregation
 								.getLandingPage().getResource() : EUROPEANA_URI
 								+ aggregation.getAggregatedCHO().getResource());
 		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
@@ -264,11 +264,15 @@ public final class EuropeanaAggregationFieldInput {
 				.getHasViewList());
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
-
+		
 		String preview = SolrUtils.exists(Preview.class,
 				aggregation.getPreview()).getResource();
-		mongoAggregation.setEdmPreview(preview);
-		ops.set("edmPreview", preview);
+		if(preview!=null){
+			mongoAggregation.setEdmPreview(preview);
+			ops.set("edmPreview", preview);
+		} else {
+			mongoAggregation.setEdmPreview(EUROPEANA_URI+agCHO+"&size=BRIEF_DOC");
+		}
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
