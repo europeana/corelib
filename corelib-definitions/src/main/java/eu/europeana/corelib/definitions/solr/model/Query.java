@@ -310,8 +310,12 @@ public class Query implements Cloneable {
 		}
 
 		public void addValue(String value) {
-			if (name.equals(Facet.RIGHTS.name()) && value.endsWith("*")) {
-				value = value.replace(":", "\\:").replace("/", "\\/");
+			if (name.equals(Facet.RIGHTS.name())) {
+				if (value.endsWith("*")) {
+					value = value.replace(":", "\\:").replace("/", "\\/");
+				} else if (!value.endsWith("*") && !value.startsWith("\"") && !value.endsWith("\"")) {
+					value = '"' + value + '"';
+				}
 			}
 			values.add(value);
 		}
