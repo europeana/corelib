@@ -1,7 +1,6 @@
 package eu.europeana.corelib.web.interceptor;
 
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +11,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 public class LocaleInterceptor extends HandlerInterceptorAdapter {
-
-	private static Logger log = Logger.getLogger("LocaleInterceptor");
 
 	public static final String DEFAULT_PARAM_NAME = "locale";
 	private String paramName = DEFAULT_PARAM_NAME;
@@ -32,8 +29,6 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 					throws IllegalStateException {
 
 		String newLocale = request.getParameter(this.paramName);
-
-		log.info("LocaleInterceptor.preHandle gets parameter '" + this.paramName + "' with value " + newLocale);
 
 		if (newLocale != null
 			&& !newLocale.equals("")
