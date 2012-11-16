@@ -147,4 +147,18 @@ public interface ControlledVocabulary {
 	 * @return The number of iterations to get
 	 */
 	int getIterations();
+	
+	/**
+	 * Specify the replaceURL if applicable e.g. Geonames use as their name space www.geonames.org but their
+	 * RDF is accessible using sws.geonames.org
+	 * 
+	 * @param replaceUrl - The url that will replace the given uri in the search
+	 */
+	void setReplaceUrl(String replaceUrl);
+	
+	/**
+	 * Getter for the replaceURL
+	 * @return The String to be used to retrieve the stored record
+	 */
+	String getReplaceUrl();
 }

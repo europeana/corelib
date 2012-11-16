@@ -45,14 +45,15 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	private String location;
 	private String[] rules;
 	private int iterations;
-
+	
 
 	// Used to denote special characteristics of the Resource. For example the
 	// Geonames always point to URI/ResourceCode/about.rdf
 	// rather than URI/ResourceCode which redirects to the Geonames website.
 	private String suffix;
 	private Map<String, EdmLabel> elements;
-
+	private String replaceUrl;
+	
 	public ControlledVocabularyImpl(){
 		
 	}
@@ -138,6 +139,16 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	@Override
 	public int getIterations() {
 		return this.iterations;
+	}
+
+	@Override
+	public void setReplaceUrl(String replaceUrl) {
+		this.replaceUrl=replaceUrl;
+	}
+
+	@Override
+	public String getReplaceUrl() {
+		return this.replaceUrl;
 	}
 	
 	
