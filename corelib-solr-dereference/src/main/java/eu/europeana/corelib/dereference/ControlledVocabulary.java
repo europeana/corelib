@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.dereference;
 
+import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -38,7 +39,7 @@ public interface ControlledVocabulary {
 	 * 
 	 * @return A list of the elements of the controlled vocabulary
 	 */
-	Map<String, EdmLabel> getElements();
+	Map<String, List<EdmLabel>> getElements();
 
 
 	/**
@@ -95,7 +96,7 @@ public interface ControlledVocabulary {
 	 * Set the original elements of the controlled vocabulary 
 	 * @param elements
 	 */
-	void setElements(Map<String, EdmLabel> elements);
+	void setElements(Map<String, List<EdmLabel>> elements);
 
 
 	/**

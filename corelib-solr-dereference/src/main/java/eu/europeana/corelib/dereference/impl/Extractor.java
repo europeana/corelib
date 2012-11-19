@@ -183,7 +183,8 @@ public class Extractor {
 							// If it is mapped then
 							if (isMapped(element)) {
 								// does it have any attribute?
-								if (StringUtils.equals(getEdmLabel(element),
+								for(EdmLabel label : getEdmLabel(element)){
+								if (StringUtils.equals(label.toString(),
 										SKOS_CONCEPT)) {
 									if (xml.hasText()) {
 										if (lastConcept != null) {
@@ -195,7 +196,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), EDM_AGENT)) {
+										label.toString(), EDM_AGENT)) {
 									if (xml.hasText()) {
 										if (lastAgent != null) {
 											agents.add(lastAgent);
@@ -206,7 +207,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), EDM_TIMESPAN)) {
+										label.toString(), EDM_TIMESPAN)) {
 									if (xml.hasText()) {
 										if (lastTimespan != null) {
 											timespans.add(lastTimespan);
@@ -217,7 +218,7 @@ public class Extractor {
 
 									}
 								} else if (StringUtils.equals(
-										getEdmLabel(element), EDM_PLACE)) {
+										label.toString(), EDM_PLACE)) {
 									if (xml.hasText()) {
 										if (lastPlace != null) {
 											places.add(lastPlace);
@@ -229,6 +230,8 @@ public class Extractor {
 									}
 								}
 
+								}
+								
 								if (xml.getAttributeCount() > 0) {
 									String attribute = xml
 											.getAttributePrefix(0)
@@ -236,10 +239,9 @@ public class Extractor {
 											+ xml.getAttributeLocalName(0);
 									// Is the attribute mapped?
 									if (isMapped(element + "_" + attribute)) {
-
+										for(EdmLabel label: getEdmLabel(element + "_" + attribute)){
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												SKOS_CONCEPT)) {
 											if (lastConcept != null) {
 												concepts.add(lastConcept);
@@ -251,8 +253,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_AGENT)) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
@@ -264,8 +265,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_TIMESPAN)) {
 											if (lastTimespan != null) {
 												timespans.add(lastTimespan);
@@ -277,8 +277,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_PLACE)) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
@@ -288,55 +287,43 @@ public class Extractor {
 													xml.getAttributeValue(0));
 										} else {
 											if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "cc")) {
+													label.toString(), "cc")) {
 												appendConceptValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														lastConcept);
 											}
 
 											else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "ts")) {
+													label.toString(), "ts")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														TimeSpanType.class,
 														lastTimespan);
 											} else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "ag")) {
+													label.toString(), "ag")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														AgentType.class,
 														lastAgent);
 											} else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "pl")) {
+													label.toString(), "pl")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														PlaceType.class,
 														lastPlace);
 											}
 										}
-
+										}
 									}
 									// Since the attribute is not mapped
 									else {
-
+										for(EdmLabel label:getEdmLabel(element)){
 										if (StringUtils.equals(
-												getEdmLabel(element),
+												label.toString(),
 												SKOS_CONCEPT)) {
 											if (xml.hasText()) {
 												if (lastConcept != null) {
@@ -348,7 +335,7 @@ public class Extractor {
 
 											}
 										} else if (StringUtils.equals(
-												getEdmLabel(element), EDM_AGENT)) {
+												label.toString(), EDM_AGENT)) {
 											if (xml.hasText()) {
 												if (lastAgent != null) {
 													agents.add(lastAgent);
@@ -359,7 +346,7 @@ public class Extractor {
 
 											}
 										} else if (StringUtils.equals(
-												getEdmLabel(element),
+												label.toString(),
 												EDM_TIMESPAN)) {
 											if (xml.hasText()) {
 												if (lastTimespan != null) {
@@ -371,7 +358,7 @@ public class Extractor {
 
 											}
 										} else if (StringUtils.equals(
-												getEdmLabel(element), EDM_PLACE)) {
+												label.toString(), EDM_PLACE)) {
 											if (xml.hasText()) {
 												if (lastPlace != null) {
 													places.add(lastPlace);
@@ -383,41 +370,42 @@ public class Extractor {
 											}
 										}
 										if (StringUtils.startsWith(
-												getEdmLabel(element), "cc")) {
+												label.toString(), "cc")) {
 											appendConceptValue(
 													xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													lastConcept);
 										}
 
 										else if (StringUtils.startsWith(
-												getEdmLabel(element), "ts")) {
+												label.toString(), "ts")) {
 											appendValue(
 													xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													TimeSpanType.class,
 													lastTimespan);
 										} else if (StringUtils.startsWith(
-												getEdmLabel(element), "ag")) {
+												label.toString(), "ag")) {
 											appendValue(
 													xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													AgentType.class, lastAgent);
 										} else if (StringUtils.startsWith(
-												getEdmLabel(element), "pl")) {
+												label.toString(), "pl")) {
 											appendValue(
 													xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													PlaceType.class, lastPlace);
 
 										}
 									}
-
+									}
 								}
 								// Since it does not have attributes
 								else {
+									for(EdmLabel label:getEdmLabel(element)){
 									if (StringUtils.equals(
-											getEdmLabel(element),
+											label.toString(),
 											SKOS_CONCEPT)) {
 										if (xml.hasText()) {
 											if (lastConcept != null) {
@@ -429,7 +417,7 @@ public class Extractor {
 
 										}
 									} else if (StringUtils.equals(
-											getEdmLabel(element), EDM_AGENT)) {
+											label.toString(), EDM_AGENT)) {
 										if (xml.hasText()) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
@@ -440,7 +428,7 @@ public class Extractor {
 
 										}
 									} else if (StringUtils.equals(
-											getEdmLabel(element),
+											label.toString(),
 											EDM_TIMESPAN)) {
 										if (xml.hasText()) {
 											if (lastTimespan != null) {
@@ -452,7 +440,7 @@ public class Extractor {
 
 										}
 									} else if (StringUtils.equals(
-											getEdmLabel(element), EDM_PLACE)) {
+											label.toString(), EDM_PLACE)) {
 										if (xml.hasText()) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
@@ -465,40 +453,41 @@ public class Extractor {
 									}
 
 									if (StringUtils.startsWith(
-											getEdmLabel(element), "cc")) {
+											label.toString(), "cc")) {
 										if (xml.hasText()) {
 											appendConceptValue(
 													xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													lastConcept);
 										}
 									}
 
 									else if (StringUtils.startsWith(
-											getEdmLabel(element), "ts")) {
+											label.toString(), "ts")) {
 										if (xml.hasText()) {
 											appendValue(xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													TimeSpanType.class,
 													lastTimespan);
 										}
 									} else if (StringUtils.startsWith(
-											getEdmLabel(element), "ag")) {
+											label.toString(), "ag")) {
 										if (xml.hasText()) {
 											appendValue(xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													AgentType.class, lastAgent);
 										}
 									} else if (StringUtils.startsWith(
-											getEdmLabel(element), "pl")) {
+											label.toString(), "pl")) {
 										if (xml.hasText()) {
 											appendValue(xml.getElementText(),
-													getEdmLabel(element),
+													label.toString(),
 													PlaceType.class, lastPlace);
 										}
 									}
 								}
 
+								}
 							}
 							// The element is not mapped, but does it have any
 							// mapped attributes?
@@ -510,10 +499,9 @@ public class Extractor {
 											+ xml.getAttributeLocalName(0);
 									// Is the attribute mapped?
 									if (isMapped(element + "_" + attribute)) {
-
+										for(EdmLabel label: getEdmLabel(element + "_" + attribute)){
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												SKOS_CONCEPT)) {
 											if (lastConcept != null) {
 												concepts.add(lastConcept);
@@ -525,8 +513,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_AGENT)) {
 											if (lastAgent != null) {
 												agents.add(lastAgent);
@@ -538,8 +525,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_TIMESPAN)) {
 											if (lastTimespan != null) {
 												timespans.add(lastTimespan);
@@ -551,8 +537,7 @@ public class Extractor {
 										} else
 
 										if (StringUtils.equals(
-												getEdmLabel(element + "_"
-														+ attribute),
+												label.toString(),
 												EDM_PLACE)) {
 											if (lastPlace != null) {
 												places.add(lastPlace);
@@ -562,48 +547,37 @@ public class Extractor {
 													xml.getAttributeValue(0));
 										} else {
 											if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "cc")) {
+													label.toString(), "cc")) {
 												appendConceptValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														lastConcept);
 											}
 
 											else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "ts")) {
+													label.toString(), "ts")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														TimeSpanType.class,
 														lastTimespan);
 											} else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "ag")) {
+													label.toString(), "ag")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														AgentType.class,
 														lastAgent);
 											} else if (StringUtils.startsWith(
-													getEdmLabel(element + "_"
-															+ attribute), "pl")) {
+													label.toString(), "pl")) {
 												appendValue(
 														xml.getAttributeValue(0),
-														getEdmLabel(element
-																+ "_"
-																+ attribute),
+														label.toString(),
 														PlaceType.class,
 														lastPlace);
 											}
 										}
+									}
 									}
 								}
 							}
@@ -937,10 +911,10 @@ public class Extractor {
 	 *            The field to check
 	 * @return The EdmLabel the field has been mapped to
 	 */
-	public String getEdmLabel(String field) {
+	public List<EdmLabel> getEdmLabel(String field) {
 
 		return vocabulary != null ? vocabulary.getElements().get(field)
-				.toString() : EdmLabel.NULL.toString();
+				 : new ArrayList<EdmLabel>();
 	}
 
 	/**
@@ -954,10 +928,14 @@ public class Extractor {
 	 * @param europeanaField
 	 */
 	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
-		HashMap<String, EdmLabel> elements = vocabulary.getElements() != null ? (HashMap<String, EdmLabel>)vocabulary
-				.getElements() : new HashMap<String, EdmLabel>();
-		elements.put(fieldToMap, europeanaField);
+		HashMap<String, List<EdmLabel>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmLabel>>)vocabulary
+				.getElements() : new HashMap<String, List<EdmLabel>>();
+		List<EdmLabel> field = elements.get(fieldToMap);
+		if(!field.contains(europeanaField)){
+			field.add(europeanaField);
+		elements.put(fieldToMap, field);
 		vocabulary.setElements(elements);
+		}
 
 	}
 
@@ -983,10 +961,10 @@ public class Extractor {
 	public boolean isMapped(String field) {
 
 		if (vocabulary != null) {
-			for (Entry<String, EdmLabel> entry : vocabulary.getElements()
+			for (Entry<String, List<EdmLabel>> entry : vocabulary.getElements()
 					.entrySet()) {
 				if (StringUtils.contains(entry.getKey(), field)
-						&& !entry.getValue().equals(EdmLabel.NULL)) {
+						&& entry.getValue().size()>0) {
 					return true;
 				}
 			}
@@ -1000,10 +978,10 @@ public class Extractor {
 	 * @param location The file path of the XML file
 	 * @return an empty HashMap with keys being the Controlled Vocabulary fields and empty values
 	 */
-	public HashMap<String, EdmLabel> readSchema(String location) {
+	public HashMap<String, List<EdmLabel>> readSchema(String location) {
 
 		vocabulary.setElements(readFromFile(location));
-		return (HashMap<String, EdmLabel>)vocabulary.getElements();
+		return (HashMap<String, List<EdmLabel>>)vocabulary.getElements();
 	}
 
 	/**
@@ -1032,8 +1010,8 @@ public class Extractor {
 	 * @param localLocation - the file path of the XML file
 	 * @return an empty hashmap with its keys being the controlled vocabularies mappable fileds and the values null
 	 */
-	private HashMap<String, EdmLabel> readFromFile(String localLocation) {
-		HashMap<String, EdmLabel> elements = new HashMap<String, EdmLabel>();
+	private HashMap<String, List<EdmLabel>> readFromFile(String localLocation) {
+		HashMap<String, List<EdmLabel>> elements = new HashMap<String, List<EdmLabel>>();
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
 		try {
@@ -1050,12 +1028,12 @@ public class Extractor {
 					element = (xml.getName().getPrefix().length() > 0 ? xml
 							.getName().getPrefix() + ":" : "")
 							+ xml.getName().getLocalPart();
-					elements.put(element, EdmLabel.NULL);
+					elements.put(element, new ArrayList<EdmLabel>());
 					int i = 0;
 					while (i < xml.getAttributeCount()) {
 						attribute = element + "_" + xml.getAttributePrefix(i)
 								+ ":" + xml.getAttributeLocalName(i);
-						elements.put(attribute, EdmLabel.NULL);
+						elements.put(attribute, new ArrayList<EdmLabel>());
 						i++;
 					}
 					break;

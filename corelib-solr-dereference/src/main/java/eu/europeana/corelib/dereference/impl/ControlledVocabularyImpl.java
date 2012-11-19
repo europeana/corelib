@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.dereference.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -51,7 +52,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	// Geonames always point to URI/ResourceCode/about.rdf
 	// rather than URI/ResourceCode which redirects to the Geonames website.
 	private String suffix;
-	private Map<String, EdmLabel> elements;
+	private Map<String, List<EdmLabel>> elements;
 	private String replaceUrl;
 	
 	public ControlledVocabularyImpl(){
@@ -102,13 +103,13 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	}
 
 	@Override
-	public Map<String, EdmLabel> getElements() {
+	public Map<String, List<EdmLabel>> getElements() {
 		return this.elements;
 	}
 
 
 	@Override
-	public void setElements(Map<String,EdmLabel> elements){
+	public void setElements(Map<String,List<EdmLabel>> elements){
 		this.elements = elements;
 	}
 	@Override

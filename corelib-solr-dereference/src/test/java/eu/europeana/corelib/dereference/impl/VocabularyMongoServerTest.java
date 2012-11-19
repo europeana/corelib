@@ -4,7 +4,9 @@
 package eu.europeana.corelib.dereference.impl;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -31,8 +33,10 @@ public class VocabularyMongoServerTest {
 			voc.setLocation("location");
 			voc.setSuffix("rdf");
 			voc.setURI("http://test_uri/");
-			Map<String,EdmLabel> elements = new HashMap<String, EdmLabel>();
-			elements.put("test",EdmLabel.AG_DC_DATE);
+			Map<String,List<EdmLabel>> elements = new HashMap<String, List<EdmLabel>>();
+			List<EdmLabel> lst = new ArrayList<EdmLabel>();
+			lst.add(EdmLabel.AG_DC_DATE);
+			elements.put("test",lst);
 			voc.setElements(elements);
 			voc.setRules(new String[]{"*"});
 			server.getDatastore().save(voc);
