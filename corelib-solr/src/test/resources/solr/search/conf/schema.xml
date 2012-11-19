@@ -2,6 +2,12 @@
 <!--DRAFT -->
 <schema name="europeana" version="1.4">
   <types>
+  <!-- ASSETS TRAINING FIELDTYPES -->
+  <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+	<fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+	<fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+  
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="tint" class="solr.TrieIntField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
@@ -34,7 +40,32 @@
         <filter class="solr.PatternReplaceFilterFactory" pattern="([-+])" replacement=" " replace="all" />
       </analyzer>
     </fieldType>
+  <!-- Two letters ID -->
+    <fieldType name="text_2gram" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^/[^/]+/" replacement=""/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="2" side="front"/>
+      </analyzer>
+    </fieldType>
 
+    <!-- Three letters ID -->
+    <fieldType name="text_3gram" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^/[^/]+/" replacement=""/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="3" maxGramSize="3" side="front"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- Four-six letters IDs -->
+    <fieldType name="text_6gram" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^/[^/]+/" replacement=""/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="4" maxGramSize="6" side="front"/>
+      </analyzer>
+    </fieldType>
     
     
     
@@ -91,7 +122,11 @@
    <field name="USERTAGS" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="RIGHTS" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="COMPLETENESS" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="edm_previewNoDistribute" type="boolean" indexed="true" stored="false" multiValued="false"/>S
+   <field name="edm_previewNoDistribute" type="boolean" indexed="true" stored="false" multiValued="false"/>
+   <!-- SITEMAP fields -->
+    <field name="id2hash" type="text_2gram" indexed="true" stored="true" multiValued="false" />
+   <field name="id3hash" type="text_3gram" indexed="true" stored="true" multiValued="false" />
+   <field name="id6hash" type="text_6gram" indexed="true" stored="true" multiValued="false" />
    <!-- PROVIDER AGGREGATION RELATED -->
    <field name="provider_aggregation_ore_aggregation" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="provider_aggregation_ore_aggregates" type="string" indexed="true" stored = "false" multiValued="false"/>
@@ -102,7 +137,7 @@
    <field name="provider_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_isShownAt" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="provider_aggregation_edm_object" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="provider_aggregation_edm_provider" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="provider_aggregation_edm_provider" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="provider_aggregation_edm_provider.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicfield name="provider_aggregation_dc_rights.*" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -467,7 +502,10 @@
    <field name="europeana_pt_edm_realizes" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="europeana_pt_edm_wasPresentAt" type="string" indexed="true" stored="false" multiValued="true" />
    
-  
+  <!-- Diego Ceccarelli <diego.ceccarelli@isti.cnr.it> 17-11-2012 -->
+	<!-- SEVERE: Unable to use updateLog: _version_ field must exist in schema -->
+	<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/> 
+    <!-- / - -->
    
    
             
@@ -531,7 +569,7 @@
    <copyField source="proxy_dc_title.*" dest="title" />
    <copyField source="proxy_dcterms_alternative.*" dest="title" />
    <copyField source="proxy_edm_type" dest="TYPE" />
-   <copyField source="proxy_dc_language.*" dest="LANGUAGE" />
+   <copyField source="europeana_aggregation_edm_language.*" dest="LANGUAGE" />
    <copyField source="europeana_aggregation_edm_country.*" dest="COUNTRY" />
    <copyField source="proxy_edm_year.*" dest="YEAR" />
    <copyField source="provider_aggregation_edm_dataProvider.*" dest="DATA_PROVIDER" />
@@ -681,4 +719,7 @@
    <copyField source="cc_skos_note.*" dest="cc_skos_note"/>
    <copyField source="cc_skos_notation.*" dest="cc_skos_notation"/>
    <copyField source="cc_skos_broaderLabel.*" dest="cc_skos_broaderLabel"/>
+   <copyField source="europeana_id" dest="id2hash" />
+   <copyField source="europeana_id" dest="id3hash" />
+   <copyField source="europeana_id" dest="id6hash" />
 </schema>
