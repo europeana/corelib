@@ -227,14 +227,14 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setSortField("score", ORDER.desc);
 
 				// enable spellcheck
-//				if (solrQuery.getStart() == null
-//						|| solrQuery.getStart().intValue() <= 1) {
-//					solrQuery.setParam("spellcheck", "on");
-//					solrQuery.setParam("spellcheck.collate", "true");
-//					solrQuery.setParam("spellcheck.extendedResults", "true");
-//					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-//					solrQuery.setParam("spellcheck.q", query.getQuery());
-//				}
+				if (solrQuery.getStart() == null
+						|| solrQuery.getStart().intValue() <= 1) {
+					solrQuery.setParam("spellcheck", "on");
+					solrQuery.setParam("spellcheck.collate", "true");
+					solrQuery.setParam("spellcheck.extendedResults", "true");
+					solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+					solrQuery.setParam("spellcheck.q", query.getQuery());
+				}
 
 				// add extra parameters if any
 				if (query.getParameters() != null) {
