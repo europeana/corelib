@@ -19,8 +19,7 @@ package eu.europeana.corelib.db.logging.api;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
+import java.util.logging.Logger;
 
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
@@ -43,6 +42,8 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class ApiLogger {
+
+	private final Logger log = Logger.getLogger(getClass().getName());
 
 	static ApiLogger instance;
 
@@ -171,10 +172,18 @@ public class ApiLogger {
 	public int getDaily(int dayDifference) {
 		DateInterval interval = DateUtils.getDay(dayDifference);
 
-		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
+		int count = logTypeCollection.find()
 				.greaterThanEquals("timestamp", interval.getBegin())
-				.lessThanEquals("timestamp", interval.getEnd());
-		return lType.size();
+				.lessThanEquals("timestamp", interval.getEnd()).count();
+		return count;
+	}
+
+	// by dates
+	public int getCountByInterval(DateInterval interval) {
+		int count = logTypeCollection.find()
+				.greaterThanEquals("timestamp", interval.getBegin())
+				.lessThanEquals("timestamp", interval.getEnd()).count();
+		return count;
 	}
 
 	// by users
@@ -194,7 +203,7 @@ public class ApiLogger {
 	}
 
 	// by types
-	// db.logs.group({key: {recordType: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
+	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
 	public DBObject getByType() {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
