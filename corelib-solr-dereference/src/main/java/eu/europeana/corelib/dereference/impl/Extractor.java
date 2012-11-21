@@ -931,7 +931,9 @@ public class Extractor {
 		HashMap<String, List<EdmLabel>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmLabel>>)vocabulary
 				.getElements() : new HashMap<String, List<EdmLabel>>();
 		List<EdmLabel> field = elements.get(fieldToMap);
-		if(!field.contains(europeanaField)){
+		if (europeanaField==null){
+			elements.put(fieldToMap, new ArrayList<EdmLabel>());
+		} else if(!field.contains(europeanaField)){
 			field.add(europeanaField);
 		elements.put(fieldToMap, field);
 		vocabulary.setElements(elements);
