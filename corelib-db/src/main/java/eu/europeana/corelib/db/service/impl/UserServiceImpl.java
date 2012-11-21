@@ -188,6 +188,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		}
 
 		if (!StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
+			log.info(user.getPassword() + " " + hashPassword(oldPassword) + " (" + oldPassword + ")");
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 
