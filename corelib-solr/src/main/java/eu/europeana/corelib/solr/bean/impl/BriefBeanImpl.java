@@ -157,7 +157,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public DocType getType() {
-		return DocType.get(docType);
+		return (docType != null ? DocType.get(docType) : null);
 	}
 
 	@Override
