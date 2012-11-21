@@ -187,7 +187,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.NO_USER);
 		}
 
-		
 		if (!StringUtils.equals(user.getPassword(), hashPassword(oldPassword))) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}

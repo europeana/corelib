@@ -19,7 +19,6 @@ package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
-import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 /**
@@ -185,6 +184,26 @@ public interface UserService extends AbstractService<User> {
 	 */
 	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
 
+	/**
+	 * Creates an API Key
+	 *
+	 * @param token
+	 * @param email
+	 * @param apiKey
+	 * @param privateKey
+	 * @param limit
+	 * @param username
+	 * @param company
+	 * @param country
+	 * @param firstName
+	 * @param lastName
+	 * @param website
+	 * @param address
+	 * @param phone
+	 * @param fieldOfWork
+	 * @return
+	 * @throws DatabaseException
+	 */
 	User createApiKey(String token, String email, String apiKey,
 			String privateKey, Long limit, String username, String company,
 			String country, String firstName, String lastName, String website,
