@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
+import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
@@ -54,6 +55,7 @@ import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
+import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 //import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 
 /**
@@ -93,10 +95,11 @@ public class MongoConstructor {
 		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-
+		String aggregatedCHO = "";
 		if (record.getProvidedCHOList() != null) {
 			for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
 				fullBean.setAbout(pcho.getAbout());
+				aggregatedCHO = pcho.getAbout();
 				try {
 					providedCHOs.add(new ProvidedCHOFieldInput()
 							.createProvidedCHOMongoFields(pcho, mongoServer));
@@ -122,6 +125,9 @@ public class MongoConstructor {
 		}
 		if (record.getAggregationList() != null) {
 			for (Aggregation aggregation : record.getAggregationList()) {
+				AggregatedCHO ag = new AggregatedCHO();
+				ag.setResource(aggregatedCHO);
+				aggregation.setAggregatedCHO(ag);
 				aggregations
 						.add(new AggregationFieldInput()
 								.createAggregationMongoFields(aggregation,
