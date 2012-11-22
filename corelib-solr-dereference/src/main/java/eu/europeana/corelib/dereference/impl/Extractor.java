@@ -1001,10 +1001,45 @@ public class Extractor {
 	/**
 	 * Save the mapping of a controlled vocabulary
 	 */
-	public void saveMapping() {
-		if (vocabulary != null) {
+	public boolean saveMapping() {
+		if (vocabulary != null && validate(vocabulary)) {
+			validate(vocabulary);
 			mongoServer.getDatastore().save(vocabulary);
+			return true;
 		}
+		return false;
+	}
+
+	
+	
+	private boolean validate(ControlledVocabulary voc) {
+		
+		Map<String,List<EdmLabel>> elems = voc.getElements();
+		List<EdmLabel> validateList = new ArrayList<EdmLabel>();
+		for(Entry<String,List<EdmLabel>> entry:elems.entrySet()){
+			validateList.addAll(entry.getValue());
+		}
+		
+		for(EdmLabel label:validateList){
+			if (label.toString().startsWith("ag")){
+				if(validateList.indexOf(EdmLabel.EDM_AGENT)==-1){
+					return false;
+				}
+			} else if(label.toString().startsWith("cc")){
+				if(validateList.indexOf(EdmLabel.SKOS_CONCEPT)==-1){
+					return false;
+				}
+			} else if(label.toString().startsWith("ts")){
+				if(validateList.indexOf(EdmLabel.EDM_TIMESPAN)==-1){
+					return false;
+				}
+			} else if(label.toString().startsWith("pl")){
+				if(validateList.indexOf(EdmLabel.EDM_PLACE)==-1){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
