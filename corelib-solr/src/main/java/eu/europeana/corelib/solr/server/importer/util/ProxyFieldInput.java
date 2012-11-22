@@ -240,7 +240,6 @@ public final class ProxyFieldInput {
 				(proxy.getIsNextInSequence())).getResource());
 		mongoProxy.setEdmType(DocType.get(SolrUtils.exists(EdmType.class,
 				(proxy.getType())).toString()));
-
 		mongoProxy
 				.setProxyFor(SolrUtils.exists(String.class, proxy.getAbout()));
 		mongoProxy.setEdmHasMet(MongoUtils.createLiteralMapFromList(proxy
