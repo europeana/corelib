@@ -936,11 +936,15 @@ public class Extractor {
 		} else if(!field.contains(europeanaField)){
 			field.add(europeanaField);
 		elements.put(fieldToMap, field);
-		vocabulary.setElements(elements);
+		
 		}
-
+		Query<ControlledVocabulary> updateQuery = mongoServer.getDatastore()
+				.createQuery(ControlledVocabulary.class).field("name").equal(vocabulary.getName());
+		UpdateOperations<ControlledVocabulary> ops = mongoServer.getDatastore().createUpdateOperations(ControlledVocabulary.class).set("elements", elements);
+		mongoServer.getDatastore().update(updateQuery, ops);
+		vocabulary.setElements(elements);
 	}
-
+	
 	/**
 	 * Get the mapped field value from an EdmLabel
 	 * @param europeanaField - the EdmLabel field string representation
@@ -1087,5 +1091,12 @@ public class Extractor {
 			e.printStackTrace();
 		}
 		return elements;
+	}
+	
+
+	
+	public ControlledVocabulary findVocabularyByName(String name){
+		this.vocabulary = mongoServer.getControlledVocabulary("name", name);
+		return this.vocabulary;
 	}
 }
