@@ -127,8 +127,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			List<EuropeanaId> newIDList = europeanaIdMongoServer
 					.retrieveEuropeanaIdFromOld(id);
 			EuropeanaId newId = newIDList.get(0);
-			newId.setLastAccess(new Date().getTime());
-			europeanaIdMongoServer.saveEuropeanaId(newId);
+			//newId.setLastAccess(new Date().getTime());
+			europeanaIdMongoServer.updateTime(newId.getNewId(),id);
+			//europeanaIdMongoServer.saveEuropeanaId(newId);
 			return datastore.find(FullBeanImpl.class).field("about")
 					.equal(newIDList.get(0).getNewId()).get();
 		}

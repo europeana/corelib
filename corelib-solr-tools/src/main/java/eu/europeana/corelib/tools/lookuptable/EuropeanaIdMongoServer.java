@@ -148,7 +148,7 @@ public class EuropeanaIdMongoServer implements MongoServer {
 			newId.setNewId(europeanaId.getNewId());
 			newId.setTimestamp(new Date().getTime());
 			newId.setLastAccess(0);
-			datastore.save(newId);
+			//datastore.save(newId);
 			oldId.setNewId(europeanaId.getNewId());
 			Query<EuropeanaId> updateQuery = datastore
 					.createQuery(EuropeanaId.class).field("oldId").equal(oldId.getOldId());
@@ -184,5 +184,13 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 */
 	public void deleteEuropeanaIdFromNew(String newId){
 		
+	}
+	
+	public void updateTime(String newId, String oldId){
+		Query<EuropeanaId> updateQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId).field("newId").equal(newId);
+		UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
+				.set("timestamp",new Date().getTime());
+		datastore.update(updateQuery, ops);
 	}
 }
