@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.web.interceptor;
 
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +38,8 @@ import eu.europeana.corelib.web.model.PageData;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class ConfigInterceptor extends HandlerInterceptorAdapter {
+
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	@Value("#{europeanaProperties['debug']}")
 	private boolean debug;
@@ -92,9 +96,9 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			}
 
 			// MANDATORY VALUES
-			model.setPortalServer(checkMandatoryValue(portalServer));
-			model.setPortalName(checkMandatoryValue(portalName));
-			model.setCacheUrl(checkMandatoryValue(imageCacheUrl));
+			model.setPortalServer(checkMandatoryValue(portalServer, "portal.server"));
+			model.setPortalName(checkMandatoryValue(portalName, "portal.name"));
+			model.setCacheUrl(checkMandatoryValue(imageCacheUrl, "imageCacheUrl"));
 
 			// OPTIONALS, TRIMMED TO EMPTY STRING (preventing nullpointers)
 			model.setGoogleAnalyticsId(StringUtils.trimToEmpty(portalGoogleAnalyticsId));
@@ -107,6 +111,10 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 		}
 	}
 
+	private String checkMandatoryValue(String value) throws WebConfigurationException {
+		return checkMandatoryValue(value, null);
+	}
+
 	/**
 	 * Checks if the property has a value, empty string is nog allowed
 	 * 
@@ -116,9 +124,16 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	 * @throws WebConfigurationException
 	 *             Exception is thrown if the given value does not contain a value.
 	 */
-	private String checkMandatoryValue(String value) throws WebConfigurationException {
+	private String checkMandatoryValue(String value, String name) throws WebConfigurationException {
 		if (StringUtils.isBlank(value)) {
-			throw new WebConfigurationException(ProblemType.INVALIDARGUMENTS);
+			ProblemType problem = ProblemType.INVALIDARGUMENTS;
+			String message;
+			if (name != null) {
+				message = "Inexisting property: " + name;
+				log.severe(message);
+				problem.appendMessage(message);
+			}
+			throw new WebConfigurationException(problem);
 		}
 		return StringUtils.trim(value);
 	}
