@@ -64,6 +64,10 @@ public enum ProblemType {
 		return UNKNOWN;
 	}
 
+	public void appendMessage(String message) {
+		this.message += " " + message;
+	}
+
 	public String getMessage() {
 		return message;
 	}
