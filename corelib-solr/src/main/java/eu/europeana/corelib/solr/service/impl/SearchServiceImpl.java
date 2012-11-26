@@ -137,7 +137,7 @@ public class SearchServiceImpl implements SearchService {
 		logTime("mongo resolve", (new Date().getTime() - t0));
 		if (fullBean != null) {
 			try {
-				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+				fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
 			} catch (SolrServerException e) {
 				log.severe("SolrServerException: " + e.getMessage());
 			}
