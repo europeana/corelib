@@ -96,10 +96,16 @@ public class MongoConstructor {
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
 		String aggregatedCHO = "";
+		String aggregationAbout ="/provider/aggregation/";
+		String europeanaAggregationAbout = "/europeana/aggregation/";
+		String proxyAbout = "/provider/proxy/";
 		if (record.getProvidedCHOList() != null) {
 			for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
 				fullBean.setAbout(pcho.getAbout());
 				aggregatedCHO = pcho.getAbout();
+				aggregationAbout = aggregationAbout+pcho.getAbout();
+				europeanaAggregationAbout = europeanaAggregationAbout+pcho.getAbout();
+				proxyAbout=proxyAbout+pcho.getAbout();
 				try {
 					providedCHOs.add(new ProvidedCHOFieldInput()
 							.createProvidedCHOMongoFields(pcho, mongoServer));
@@ -116,8 +122,15 @@ public class MongoConstructor {
 		}
 		if (record.getProxyList() != null) {
 			for (ProxyType proxytype : record.getProxyList()) {
+				
 				ProxyImpl proxy = getProxy(proxies, proxytype.getAbout());
+				
 				if (proxy == null) {
+					if(proxytype.getEuropeanaProxy()!=null){
+					if(!proxytype.getEuropeanaProxy().isEuropeanaProxy()){
+						proxytype.setAbout(proxyAbout);
+					}
+					}
 					proxies.add(new ProxyFieldInput().createProxyMongoFields(
 							new ProxyImpl(), proxytype, mongoServer));
 				}
@@ -128,6 +141,7 @@ public class MongoConstructor {
 				AggregatedCHO ag = new AggregatedCHO();
 				ag.setResource(aggregatedCHO);
 				aggregation.setAggregatedCHO(ag);
+				aggregation.setAbout(aggregationAbout);
 				aggregations
 						.add(new AggregationFieldInput()
 								.createAggregationMongoFields(aggregation,
@@ -150,6 +164,7 @@ public class MongoConstructor {
 
 			}
 		}
+		
 		if (record.getConceptList() != null) {
 			for (Concept concept : record.getConceptList()) {
 				concepts.add(new ConceptFieldInput().createConceptMongoFields(
@@ -195,6 +210,7 @@ public class MongoConstructor {
 		if (record.getEuropeanaAggregationList() != null) {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
+				eaggregation.setAbout(europeanaAggregationAbout);
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
 						.createAggregationMongoFields(eaggregation, mongoServer));
 			}
