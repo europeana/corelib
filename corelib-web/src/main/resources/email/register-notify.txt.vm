@@ -5,7 +5,7 @@ This email is to inform you that someone has registered:
 
 ==========
 email        : ${user.email}
-registration : ${user.registrationDate?date}
+registration : ${user.registrationDate}
 ==========
 
 - Europeana Registration Machine
