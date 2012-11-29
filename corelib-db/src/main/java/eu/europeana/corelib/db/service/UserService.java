@@ -208,4 +208,6 @@ public interface UserService extends AbstractService<User> {
 			String privateKey, Long limit, String username, String company,
 			String country, String firstName, String lastName, String website,
 			String address, String phone, String fieldOfWork) throws DatabaseException;
+	
+	User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException;
 }

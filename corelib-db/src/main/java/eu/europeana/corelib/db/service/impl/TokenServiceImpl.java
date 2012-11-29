@@ -51,7 +51,6 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	public Token findByID(Serializable id) throws DatabaseException {
 		Token token;
 		try {
-			log.info("super.findByID(" + id + ")");
 			token = super.findByID(id);
 		} catch (DatabaseException e) {
 			log.severe("DatabaseException: " + e.getLocalizedMessage());

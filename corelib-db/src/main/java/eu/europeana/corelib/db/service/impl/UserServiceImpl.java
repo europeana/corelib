@@ -107,7 +107,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		User user = new UserImpl();
 		user.setEmail(token.getEmail());
 		user.setUserName(username);
-		user.setPassword(StringUtils.isEmpty(password)?null:hashPassword(password));
+		user.setPassword(StringUtils.isEmpty(password) ? null : hashPassword(password));
 		user.setRegistrationDate(new Date());
 		user.setCompany(company);
 		user.setCountry(country);
@@ -163,15 +163,42 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 
 	@Override
+	public User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.NO_USER_ID);
+		}
+
+		User user = getDao().findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.NO_USER);
+		}
+
+		if (StringUtils.isBlank(userName)) {
+			throw new DatabaseException(ProblemType.NO_USERNAME);
+		}
+
+		if (StringUtils.isBlank(password)) {
+			throw new DatabaseException(ProblemType.NO_PASSWORD);
+		}
+
+		user.setUserName(userName);
+		user.setPassword(hashPassword(password));
+
+		return user;
+	}
+
+	@Override
 	public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
 
 		if (userId == null) {
 			throw new DatabaseException(ProblemType.NO_USER_ID);
 		}
 
+		/*
 		if (StringUtils.isBlank(oldPassword)) {
 			throw new DatabaseException(ProblemType.NO_OLD_PASSWORD);
 		}
+		*/
 
 		if (StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.NO_PASSWORD);
@@ -278,8 +305,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 		User user = findByEmail(email);
 		if (user == null) {
+			log.info("create new user");
 			user = create(token, username, null, true,
 					company, country, firstName, lastName, website, address, phone, fieldOfWork);
+		} else {
+			log.info("update existing user");
+			user.setCompany(company);
+			user.setCountry(country);
+			user.setFirstName(firstName);
+			user.setLastName(lastName);
+			user.setWebsite(website);
+			user.setAddress(address);
+			user.setPhone(phone);
+			user.setFieldOfWork(fieldOfWork);
 		}
 
 		ApiKey api = new ApiKeyImpl();
