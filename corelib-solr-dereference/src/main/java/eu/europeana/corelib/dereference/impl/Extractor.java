@@ -118,6 +118,7 @@ public class Extractor {
 	 * @return A list with all the stored controlled vocabularies
 	 */
 	public List<ControlledVocabularyImpl> getControlledVocabularies() {
+				
 		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class) != null ? mongoServer
 				.getDatastore().find(ControlledVocabularyImpl.class).asList()
 				: null;
