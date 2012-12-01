@@ -110,6 +110,6 @@ public class VocabularyMongoServer implements MongoServer {
 				return vocabulary;
 			}
 		}
-		throw new VocabularyNotFoundException(uri,name);
+		return null;
 	}
 }
