@@ -59,6 +59,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
+import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
 import eu.europeana.corelib.tools.AppContext;
 
 /**
@@ -118,7 +119,7 @@ public class Extractor {
 	 * @return A list with all the stored controlled vocabularies
 	 */
 	public List<ControlledVocabularyImpl> getControlledVocabularies() {
-				
+
 		return mongoServer.getDatastore().find(ControlledVocabularyImpl.class) != null ? mongoServer
 				.getDatastore().find(ControlledVocabularyImpl.class).asList()
 				: null;
@@ -1046,7 +1047,7 @@ public class Extractor {
 	 */
 	public boolean saveMapping() {
 		if (vocabulary != null && validate(vocabulary)) {
-			if (mongoServer.getControlledVocabulary("URI", vocabulary.getURI()) != null) {
+			if (mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName()) != null) {
 				Query<ControlledVocabularyImpl> updateQuery = mongoServer
 						.getDatastore()
 						.createQuery(ControlledVocabularyImpl.class)
@@ -1069,7 +1070,13 @@ public class Extractor {
 		Map<String, List<EdmLabel>> elems = voc.getElements();
 		List<EdmLabel> validateList = new ArrayList<EdmLabel>();
 		for (Entry<String, List<EdmLabel>> entry : elems.entrySet()) {
+			if (entry.getValue()!=null){
 			validateList.addAll(entry.getValue());
+			} else {
+				//if it is null ignore for validation and normalize
+				
+				elems.put(entry.getKey(), new ArrayList<EdmLabel>());
+			}
 		}
 
 		for (EdmLabel label : validateList) {
@@ -1091,6 +1098,7 @@ public class Extractor {
 				}
 			}
 		}
+		
 		return true;
 	}
 
@@ -1144,8 +1152,14 @@ public class Extractor {
 		return elements;
 	}
 
-	public ControlledVocabularyImpl findVocabularyByName(String name) {
-		this.vocabulary = mongoServer.getControlledVocabulary("name", name);
-		return this.vocabulary;
+	public ControlledVocabularyImpl findVocabularyByName(String name, String uri) {
+		try {
+			this.vocabulary = mongoServer.getControlledVocabularyByUri(uri,
+					name);
+			return this.vocabulary;
+		} catch (VocabularyNotFoundException e) {
+			throw e;
+		}
+
 	}
 }

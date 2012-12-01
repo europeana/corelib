@@ -24,6 +24,7 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 
+import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
 import eu.europeana.corelib.solr.MongoServer;
 /**
  * A mongo server instance for use with the controlled vocabularies
@@ -100,4 +101,15 @@ public class VocabularyMongoServer implements MongoServer {
 		return null;
 	}
 
+	public ControlledVocabularyImpl getControlledVocabularyByUri(String uri, String name){
+		List<ControlledVocabularyImpl>vocabularies = getDatastore()
+				.find(ControlledVocabularyImpl.class)
+				.filter("URI", uri).asList();
+		for(ControlledVocabularyImpl vocabulary:vocabularies){
+			if(StringUtils.equals(name, vocabulary.getName())){
+				return vocabulary;
+			}
+		}
+		throw new VocabularyNotFoundException(uri,name);
+	}
 }
