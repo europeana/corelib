@@ -193,8 +193,7 @@ public class SearchServiceImpl implements SearchService {
 			Query query) throws SolrTypeException {
 
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SolrUtils
-				.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements(true);
@@ -306,6 +305,60 @@ public class SearchServiceImpl implements SearchService {
 		}
 
 		return seeAlso;
+	}
+
+	@Override
+	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException {
+		
+		ResultSet<T> resultSet = new ResultSet<T>();
+		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
+		log.info(beanClazz.getName());
+
+		String[] refinements = query.getRefinements(true);
+		if (SolrUtils.checkTypeFacet(refinements)) {
+			SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
+
+			if (refinements != null) {
+				solrQuery.addFilterQuery(refinements);
+			}
+
+			solrQuery.setFacet(false);
+			solrQuery.setRows(query.getPageSize());
+			solrQuery.setStart(query.getStart());
+
+			solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+			solrQuery.setSortField("score", ORDER.desc);
+
+			// add extra parameters if any
+			if (query.getParameters() != null) {
+				Map<String, String> parameters = query.getParameters();
+				for (String key : parameters.keySet()) {
+					solrQuery.setParam(key, parameters.get(key));
+				}
+			}
+
+			try {
+				log.info("Solr query is: " + solrQuery);
+				QueryResponse queryResponse = solrServer.query(solrQuery);
+				logTime("search", queryResponse.getElapsedTime());
+
+				resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+				resultSet.setResultSize(queryResponse.getResults().getNumFound());
+				resultSet.setSearchTime(queryResponse.getElapsedTime());
+			} catch (SolrServerException e) {
+				log.severe("SolrServerException: " + e.getMessage());
+				resultSet = null;
+				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+			} catch (SolrException e) {
+				log.severe("SolrException: " + e.getMessage());
+				resultSet = null;
+				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+			}
+		}
+
+
+
+		return resultSet;
 	}
 
 	/**
