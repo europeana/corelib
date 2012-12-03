@@ -18,7 +18,7 @@
 package eu.europeana.corelib.definitions.solr.beans;
 
 public interface IdBean {
-	
+
 	/**
 	 * Retrieve the Europeana object unique Id
 	 * 
@@ -31,5 +31,4 @@ public interface IdBean {
 	 * @return if the provider has opted out for this record
 	 */
 	Boolean isOptedOut();
-
 }
