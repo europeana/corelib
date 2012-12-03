@@ -72,7 +72,7 @@ public class MongoConstructor {
 	// }
 	/**
 	 * Constructs a FullBean from an RDF
-	 * 
+	 * TODO: check for sanity
 	 * @param record
 	 *            The RDF record to use for the Fullbean contruction
 	 * @param mongoServer
@@ -99,6 +99,7 @@ public class MongoConstructor {
 		String aggregationAbout ="/provider/aggregation/";
 		String europeanaAggregationAbout = "/europeana/aggregation/";
 		String proxyAbout = "/provider/proxy/";
+		//Revisit this part
 		if (record.getProvidedCHOList() != null) {
 			for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
 				fullBean.setAbout(pcho.getAbout());
@@ -215,7 +216,9 @@ public class MongoConstructor {
 						.createAggregationMongoFields(eaggregation, mongoServer));
 			}
 		}
-
+		//To this part
+		
+		
 		// AggregationImpl aggregation = aggregations.get(0);
 		// aggregation.setWebResources(webResources);
 		// MongoUtils.updateAggregation(aggregation, mongoServer);
