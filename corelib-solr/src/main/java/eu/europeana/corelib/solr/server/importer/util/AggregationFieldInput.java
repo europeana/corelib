@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
@@ -32,6 +33,7 @@ import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.Rights;
+import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
@@ -51,6 +53,109 @@ public final class AggregationFieldInput {
 
 	public AggregationFieldInput() {
 
+	}
+
+	/**
+	 * Create a web resource
+	 * @param wResources
+	 * @param mongoServer
+	 * @return
+	 */
+	public List<WebResourceImpl> createWebResources(
+			List<WebResourceType> wResources, EdmMongoServer mongoServer) {
+		List<WebResourceImpl> webResources = new ArrayList<WebResourceImpl>();
+		for (WebResourceType wResourceType : wResources) {
+			WebResourceImpl webResource = new WebResourceImpl();
+			webResource.setAbout(wResourceType.getAbout());
+			Query<WebResourceImpl> updateQuery = mongoServer.getDatastore()
+					.createQuery(WebResourceImpl.class).field("about").equal(webResource.getAbout());
+			UpdateOperations<WebResourceImpl> ups = mongoServer.getDatastore()
+					.createUpdateOperations(WebResourceImpl.class);
+			Map<String, List<String>> desMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getDescriptionList());
+			if (desMap != null) {
+				ups.set("dcDescription", desMap);
+				webResource.setDcDescription(desMap);
+			}
+			
+			Map<String, List<String>> forMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getFormatList());
+			if(forMap!=null){
+			ups.set("dcFormat", forMap);
+			webResource.setDcFormat(forMap);
+			}
+			Map<String, List<String>> sourceMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getSourceList());
+			if(sourceMap!=null){
+			ups.set("dcSource", sourceMap);
+			webResource.setDcSource(sourceMap);
+			}
+			Map<String, List<String>> conformsToMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getConformsToList());
+			if(conformsToMap!=null){
+			ups.set("dctermsConformsTo", conformsToMap);
+			webResource.setDctermsConformsTo(conformsToMap);
+			}
+			Map<String, List<String>> createdMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getCreatedList());
+			if(createdMap!=null){
+			ups.set("dctermsCreated", createdMap);
+			webResource.setDctermsCreated(createdMap);
+			}
+			Map<String, List<String>> extentMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getExtentList());
+			if(extentMap!=null){
+			ups.set("dctermsExtent", extentMap);
+			webResource.setDctermsExtent(extentMap);
+			}
+			
+			Map<String, List<String>> hasPartMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getHasPartList());
+			if(hasPartMap!=null){
+			ups.set("dctermsHasPart", hasPartMap);
+			webResource.setDctermsHasPart(hasPartMap);
+			}
+			Map<String, List<String>> issuedMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getIssuedList());
+			if(issuedMap!=null){
+			ups.set("dctermsIssued", issuedMap);
+			webResource.setDctermsIssued(issuedMap);
+			}
+			Map<String, List<String>> rightMap = MongoUtils
+					.createResourceOrLiteralMapFromList(wResourceType
+							.getRightList());
+			if(rightMap!=null){
+			ups.set("webResourceDcRights", rightMap);
+			webResource.setWebResourceDcRights(rightMap);
+			}
+			Map<String, List<String>> edmRightsMap = MongoUtils
+					.createResourceOrLiteralMapFromString(wResourceType
+							.getRights());
+			if(edmRightsMap!=null){
+			ups.set("WebResourceEdmRights", edmRightsMap);
+			webResource.setWebResourceEdmRights(edmRightsMap);
+			}
+			if(wResourceType.getIsNextInSequence()!=null){
+			webResource.setIsNextInSequence(wResourceType.getIsNextInSequence().getResource());
+			ups.set("isNextInSequence", wResourceType.getIsNextInSequence().getResource());
+			}
+			if(mongoServer.searchByAbout(WebResourceImpl.class, webResource.getAbout())!=null){
+				mongoServer.getDatastore().update(updateQuery, ups);
+			} else {
+				mongoServer.getDatastore().save(webResource);
+			}
+			webResources.add(webResource);
+			
+		}
+		return webResources;
 	}
 
 	/**
@@ -140,12 +245,13 @@ public final class AggregationFieldInput {
 			IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations, webResource);
 		if (aggregation != null) {
-			List<WebResourceImpl> webResources = (List<WebResourceImpl>) (aggregation.getWebResources() != null ? aggregation
-					.getWebResources() : new ArrayList<WebResourceImpl>());
+			List<WebResourceImpl> webResources = (List<WebResourceImpl>) (aggregation
+					.getWebResources() != null ? aggregation.getWebResources()
+					: new ArrayList<WebResourceImpl>());
 			mongoServer.getDatastore().save(webResource);
 			webResources.add(webResource);
 			aggregation.setWebResources(webResources);
-			
+
 			MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
 					mongoServer, "webResources", webResources);
 		}
@@ -154,26 +260,30 @@ public final class AggregationFieldInput {
 
 	/**
 	 * Method that appends a web resource to an aggregation
-	 * @param aggregations The list of aggregations
-	 * @param webResource The web resource to append
-	 * @param mongoServer The mongo server to use
+	 * 
+	 * @param aggregations
+	 *            The list of aggregations
+	 * @param webResource
+	 *            The web resource to append
+	 * @param mongoServer
+	 *            The mongo server to use
 	 * @return The aggregation that holds the web resource
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
 	public AggregationImpl appendWebResource(
-			List<AggregationImpl> aggregations,
-			List<WebResource> webResource, EdmMongoServer mongoServer)
-			throws InstantiationException, IllegalAccessException {
+			List<AggregationImpl> aggregations, List<WebResource> webResource,
+			EdmMongoServer mongoServer) throws InstantiationException,
+			IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations,
 				webResource.get(0));
-		for(WebResource wr : webResource){
+		for (WebResource wr : webResource) {
 			mongoServer.getDatastore().save(wr);
 		}
 		aggregation.setWebResources(webResource);
 		MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
 				mongoServer, "webResources", webResource);
-		
+
 		return aggregation;
 	}
 
@@ -234,71 +344,68 @@ public final class AggregationFieldInput {
 	 */
 	public AggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.Aggregation aggregation,
-			EdmMongoServer mongoServer) throws InstantiationException,
+			EdmMongoServer mongoServer, List<WebResourceImpl> webResources) throws InstantiationException,
 			IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
 		// mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
-		Map<String,List<String>> dp = MongoUtils
-				.createResourceOrLiteralMapFromString(
-						aggregation.getDataProvider());
+		Map<String, List<String>> dp = MongoUtils
+				.createResourceOrLiteralMapFromString(aggregation
+						.getDataProvider());
 		mongoAggregation.setEdmDataProvider(dp);
-		UpdateOperations<AggregationImpl> ups =  mongoServer.getDatastore().createUpdateOperations(AggregationImpl.class);
+		UpdateOperations<AggregationImpl> ups = mongoServer.getDatastore()
+				.createUpdateOperations(AggregationImpl.class);
 		ups.set("edmDataProvider", dp);
-		
+
 		String isShownAt = SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource();
-		if(isShownAt!=null){
-		mongoAggregation.setEdmIsShownAt(isShownAt);
-		ups.set("edmIsShownAt",isShownAt);
+		if (isShownAt != null) {
+			mongoAggregation.setEdmIsShownAt(isShownAt);
+			ups.set("edmIsShownAt", isShownAt);
 		}
-		
+
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource();
-		if(isShownBy!=null){
-		mongoAggregation.setEdmIsShownBy(isShownBy);
-		
-		ups.set("edmIsShownBy",isShownBy);
+		if (isShownBy != null) {
+			mongoAggregation.setEdmIsShownBy(isShownBy);
+
+			ups.set("edmIsShownBy", isShownBy);
 		}
-		
+
 		String object = SolrUtils.exists(_Object.class,
 				(aggregation.getObject())).getResource();
-		if(object!=null){
-		mongoAggregation.setEdmObject(object);
-		
-		ups.set("edmObject",object);
+		if (object != null) {
+			mongoAggregation.setEdmObject(object);
+
+			ups.set("edmObject", object);
 		}
-		Map<String,List<String>> prov = MongoUtils
-				.createResourceOrLiteralMapFromString(
-						aggregation.getProvider());
-		if(prov!=null){
-		mongoAggregation.setEdmProvider(prov);
-		ups.set("edmProvider", prov);
+		Map<String, List<String>> prov = MongoUtils
+				.createResourceOrLiteralMapFromString(aggregation.getProvider());
+		if (prov != null) {
+			mongoAggregation.setEdmProvider(prov);
+			ups.set("edmProvider", prov);
 		}
-		Map<String,List<String>> rights = MongoUtils
-				.createResourceOrLiteralMapFromString(
-						aggregation.getRights());
-		if(rights!=null){
-		mongoAggregation.setEdmRights(rights);
-		ups.set("edmRights", rights);
+		Map<String, List<String>> rights = MongoUtils
+				.createResourceOrLiteralMapFromString(aggregation.getRights());
+		if (rights != null) {
+			mongoAggregation.setEdmRights(rights);
+			ups.set("edmRights", rights);
 		}
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString());
 		}
-		
+
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
 				(aggregation.getAggregatedCHO())).getResource();
 		mongoAggregation.setAggregatedCHO(agCHO);
-		ups.set("aggregatedCHO",agCHO);
-		
-		
-		Map<String,List<String>> rights1 = MongoUtils
-				.createResourceOrLiteralMapFromList(
-						aggregation.getRightList());
-		if(rights1!=null){
-		mongoAggregation.setDcRights(rights1);
-		ups.set("dcRights", rights);
+		ups.set("aggregatedCHO", agCHO);
+
+		Map<String, List<String>> rights1 = MongoUtils
+				.createResourceOrLiteralMapFromList(aggregation.getRightList());
+		if (rights1 != null) {
+			mongoAggregation.setDcRights(rights1);
+			ups.set("dcRights", rights);
 		}
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();
@@ -307,23 +414,37 @@ public final class AggregationFieldInput {
 			}
 			mongoAggregation.setHasView(hasViewList
 					.toArray(new String[hasViewList.size()]));
-			ups.set("hasView", hasViewList.toArray(new String[hasViewList.size()]));
+			ups.set("hasView",
+					hasViewList.toArray(new String[hasViewList.size()]));
 		}
+		
 		AggregationImpl retAggr = mongoServer.getDatastore()
 				.find(AggregationImpl.class)
 				.filter("about", aggregation.getAbout()).get();
+		
 		if (retAggr != null) {
+			if(webResources!=null){
+				retAggr.setWebResources(webResources);
+			}
 			mongoServer.getDatastore().update(retAggr, ups);
+			return retAggr;
 		} else {
+			if(webResources!=null){
+				mongoAggregation.setWebResources(webResources);
+			}
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
 		return mongoAggregation;
 	}
 
 	/**
-	 * Deletes an aggregation from MongoDB storage based on the indexed field about
-	 * @param about The aggregation to delete
-	 * @param mongoServer The server to use
+	 * Deletes an aggregation from MongoDB storage based on the indexed field
+	 * about
+	 * 
+	 * @param about
+	 *            The aggregation to delete
+	 * @param mongoServer
+	 *            The server to use
 	 */
 	public void deleteAggregationFromMongo(String about,
 			EdmMongoServer mongoServer) {
