@@ -52,8 +52,8 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("provider_aggregation_edm_object")
 	private String[] edmObject;
 
-	@Field("europeana_completeness")
-	private int europeanaCompleteness;
+	@Field("COMPLETENESS")
+	private String europeanaCompleteness;
 
 	@Field("TYPE")
 	private String[] docType;
@@ -172,7 +172,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public int getEuropeanaCompleteness() {
-		return europeanaCompleteness;
+		return Integer.parseInt(europeanaCompleteness);
 	}
 
 	@Override
