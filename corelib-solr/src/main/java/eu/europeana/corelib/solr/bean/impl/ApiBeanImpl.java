@@ -58,7 +58,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	private String[] ugc;
 
 	@Field("COMPLETENESS")
-	private String[] completeness;
+	private String completeness;
 
 	@Field("COUNTRY")
 	private String[] country;
@@ -192,11 +192,11 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 		this.dctermsIsPartOf = dctermsIsPartOf.clone();
 	}
 
-	public String[] getCompleteness() {
-		return completeness;
+	public int getCompleteness() {
+		return Integer.parseInt(completeness);
 	}
 
-	public void setCompleteness(String[] completeness) {
+	public void setCompleteness(String completeness) {
 		this.completeness = completeness;
 	}
 }
