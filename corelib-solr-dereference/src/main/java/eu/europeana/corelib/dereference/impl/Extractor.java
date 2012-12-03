@@ -1065,6 +1065,7 @@ public class Extractor {
 		return false;
 	}
 
+	
 	private boolean validate(ControlledVocabulary voc) {
 
 		Map<String, List<EdmLabel>> elems = voc.getElements();
@@ -1098,7 +1099,7 @@ public class Extractor {
 				}
 			}
 		}
-		
+		voc.setElements(elems);
 		return true;
 	}
 
