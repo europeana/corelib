@@ -69,6 +69,8 @@ public class Query implements Cloneable {
 
 	private boolean produceFacetUnion = true;
 
+	private boolean allowSpellcheck = true;
+
 	/**
 	 * CONSTRUCTORS
 	 */
@@ -220,6 +222,15 @@ public class Query implements Cloneable {
 		return produceFacetUnion;
 	}
 
+	public boolean isAllowSpellcheck() {
+		return allowSpellcheck;
+	}
+
+	public Query setAllowSpellcheck(boolean allowSpellcheck) {
+		this.allowSpellcheck = allowSpellcheck;
+		return this;
+	}
+
 	public Query setProduceFacetUnion(boolean produceFacetUnion) {
 		this.produceFacetUnion = produceFacetUnion;
 		return this;
@@ -231,6 +242,7 @@ public class Query implements Cloneable {
 			allFacetList.add(facet.toString());
 		}
 	}
+
 	public void divideRefinements() {
 		searchRefinements = new ArrayList<String>();
 		facetRefinements = new ArrayList<String>();
@@ -275,7 +287,7 @@ public class Query implements Cloneable {
 			facetRefinements.add(collector.toString());
 		}
 	}
-	
+
 	private class FacetCollector {
 		private boolean isTagged = true;
 		private String name;
