@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.db.entity.relational.abstracts;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -94,7 +96,11 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 
 	@Override
 	public String getEuropeanaObject() {
-		return europeanaObject;
+		try {
+			return URLEncoder.encode(europeanaObject, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return europeanaObject;
+		}
 	}
 
 	@Override
