@@ -44,7 +44,6 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
-import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
@@ -56,7 +55,7 @@ import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 public class ContentLoader {
 
 	private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test-update.zip";
-	
+
 	private static String TEMP_DIR = "/tmp/europeana/records";
 
 	private static EdmMongoServer mongoDBServer;
