@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.jibx.Ugc;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 
@@ -72,7 +73,7 @@ public class AggregationFieldInputTest {
 	private void testMongo(Aggregation aggregation) {
 		try {
 			AggregationImpl aggregationMongo = new AggregationFieldInput()
-					.createAggregationMongoFields(aggregation, mongoServer);
+					.createAggregationMongoFields(aggregation, mongoServer,new ArrayList<WebResourceImpl>());
 			assertEquals(aggregation.getAbout(), aggregationMongo.getAbout());
 			assertEquals(aggregation.getAggregatedCHO().getResource(),
 					aggregationMongo.getAggregatedCHO());
