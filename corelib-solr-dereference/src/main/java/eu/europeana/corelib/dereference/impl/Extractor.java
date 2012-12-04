@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.ResourceBundle.Control;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -974,8 +975,23 @@ public class Extractor {
 			elements.put(fieldToMap, field);
 
 		}
-
 		vocabulary.setElements(elements);
+		ControlledVocabularyImpl vocRet = mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName());
+		if(vocRet==null){
+			mongoServer.getDatastore().save(vocabulary);
+		} else {
+			UpdateOperations<ControlledVocabularyImpl> ops = mongoServer.getDatastore().createUpdateOperations(ControlledVocabularyImpl.class);
+			Query<ControlledVocabularyImpl> updateQuery = mongoServer
+					.getDatastore()
+					.createQuery(ControlledVocabularyImpl.class)
+					.field("name").equal(vocabulary.getName());
+			
+			vocRet.setElements(elements);
+			validate(vocRet);
+			ops.set("elements", vocRet.getElements());
+			mongoServer.getDatastore().update(updateQuery,ops);
+			vocabulary = mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName());
+		}
 	}
 
 	/**
