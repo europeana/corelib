@@ -145,4 +145,11 @@ public class SearchServiceMock implements SearchService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
+			Query query) throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
