@@ -27,5 +27,4 @@ public interface SocialTag extends EuropeanaUserObject {
 	String getTag();
 
 	void setTag(String tag);
-
 }
