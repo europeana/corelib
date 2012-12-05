@@ -166,8 +166,7 @@ public final class ConceptFieldInput {
 			MongoServer mongoServer, RDF rdf) {
 
 		ConceptImpl conceptMongo = ((EdmMongoServer) mongoServer)
-				.getDatastore()
-				.find(ConceptImpl.class)
+				.getDatastore().find(ConceptImpl.class)
 				.filter("about", concept.getAbout()).get();
 		if (conceptMongo == null) {
 			// If it does not exist
@@ -205,27 +204,29 @@ public final class ConceptFieldInput {
 			if (choice.ifNote()) {
 				if (conceptMongo.getNote() != null) {
 
-					Map<String, List<String>> newNoteMap = conceptMongo.getNote();
+					Map<String, List<String>> newNoteMap = conceptMongo
+							.getNote();
 
 					Note note = choice.getNote();
 					if (note.getLang() != null) {
 						if (!MongoUtils.contains(newNoteMap, note.getLang()
 								.getLang(), note.getString())) {
-							List<String> val = newNoteMap.get(note
-									.getLang().getLang()) != null ? newNoteMap
-									.get(note.getLang().getLang())
+							List<String> val = newNoteMap.get(note.getLang()
+									.getLang()) != null ? newNoteMap.get(note
+									.getLang().getLang())
 									: new ArrayList<String>();
-							val.add(note.getString());
-							newNoteMap.put(note.getLang().getLang(),
-									val);
+							if (!val.contains(note.getString())) {
+								val.add(note.getString());
+							}
+							newNoteMap.put(note.getLang().getLang(), val);
 						}
 					} else {
 						List<String> val = newNoteMap.get("def") != null ? newNoteMap
-								.get("def")
-								: new ArrayList<String>();
-						val.add(note.getString());
-						newNoteMap.put("def",
-								val);
+								.get("def") : new ArrayList<String>();
+								if (!val.contains(note.getString())) {
+									val.add(note.getString());
+								}
+						newNoteMap.put("def", val);
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -246,17 +247,19 @@ public final class ConceptFieldInput {
 									.getLang().getLang()) != null ? newAltLabelMap
 									.get(altLabel.getLang().getLang())
 									: new ArrayList<String>();
-							val.add(altLabel.getString());
+									if (!val.contains(altLabel.getString())) {
+										val.add(altLabel.getString());
+									}
 							newAltLabelMap.put(altLabel.getLang().getLang(),
 									val);
 						}
 					} else {
 						List<String> val = newAltLabelMap.get("def") != null ? newAltLabelMap
-								.get("def")
-								: new ArrayList<String>();
-						val.add(altLabel.getString());
-						newAltLabelMap.put("def",
-								val);
+								.get("def") : new ArrayList<String>();
+								if (!val.contains(altLabel.getString())) {
+									val.add(altLabel.getString());
+								}
+						newAltLabelMap.put("def", val);
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -278,17 +281,20 @@ public final class ConceptFieldInput {
 									.getLang().getLang()) != null ? newPrefLabelMap
 									.get(prefLabel.getLang().getLang())
 									: new ArrayList<String>();
-							val.add(prefLabel.getString());
+
+									if (!val.contains(prefLabel.getString())) {
+										val.add(prefLabel.getString());
+									}
 							newPrefLabelMap.put(prefLabel.getLang().getLang(),
 									val);
 						}
 					} else {
 						List<String> val = newPrefLabelMap.get("def") != null ? newPrefLabelMap
-								.get("def")
-								: new ArrayList<String>();
-						val.add(prefLabel.getString());
-						newPrefLabelMap.put("def",
-								val);
+								.get("def") : new ArrayList<String>();
+								if (!val.contains(prefLabel.getString())) {
+									val.add(prefLabel.getString());
+								}
+						newPrefLabelMap.put("def", val);
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -390,16 +396,19 @@ public final class ConceptFieldInput {
 									.getLang().getLang()) != null ? newNotationMap
 									.get(notation.getLang().getLang())
 									: new ArrayList<String>();
-							val.add(notation.getString());
+									if (!val.contains(notation.getString())) {
+										val.add(notation.getString());
+									}
 							newNotationMap.put(notation.getLang().getLang(),
 									val);
 						}
 					} else {
 						List<String> val = newNotationMap.get("def") != null ? newNotationMap
-								.get("def")
-								: new ArrayList<String>();
-						val.add(notation.getString());
-						newNotationMap.put("def",val);
+								.get("def") : new ArrayList<String>();
+								if (!val.contains(notation.getString())) {
+									val.add(notation.getString());
+								}
+						newNotationMap.put("def", val);
 					}
 
 					MongoUtils.update(ConceptImpl.class,
@@ -430,8 +439,8 @@ public final class ConceptFieldInput {
 		}
 
 		return (ConceptImpl) ((EdmMongoServer) mongoServer).getDatastore()
-				.find(ConceptImpl.class)
-				.filter("about", concept.getAbout()).get();
+				.find(ConceptImpl.class).filter("about", concept.getAbout())
+				.get();
 	}
 
 	private ConceptImpl createNewConcept(Concept concept) {
