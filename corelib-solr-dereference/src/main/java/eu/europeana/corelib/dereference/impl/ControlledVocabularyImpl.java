@@ -52,7 +52,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	// Geonames always point to URI/ResourceCode/about.rdf
 	// rather than URI/ResourceCode which redirects to the Geonames website.
 	private String suffix;
-	private Map<String, List<EdmLabel>> elements;
+	private Map<String, List<EdmMappedField>> elements;
 	private String replaceUrl;
 	
 	public ControlledVocabularyImpl(){
@@ -103,13 +103,13 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	}
 
 	@Override
-	public Map<String, List<EdmLabel>> getElements() {
+	public Map<String, List<EdmMappedField>> getElements() {
 		return this.elements;
 	}
 
 
 	@Override
-	public void setElements(Map<String,List<EdmLabel>> elements){
+	public void setElements(Map<String,List<EdmMappedField>> elements){
 		this.elements = elements;
 	}
 	@Override

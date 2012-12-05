@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.dereference.impl.EdmMappedField;
 
 /**
  * Generic ControlledVocabulary interfaces. It exposes the necessary methods to
@@ -39,7 +39,7 @@ public interface ControlledVocabulary {
 	 * 
 	 * @return A list of the elements of the controlled vocabulary
 	 */
-	Map<String, List<EdmLabel>> getElements();
+	Map<String, List<EdmMappedField>> getElements();
 
 
 	/**
@@ -96,7 +96,7 @@ public interface ControlledVocabulary {
 	 * Set the original elements of the controlled vocabulary 
 	 * @param elements
 	 */
-	void setElements(Map<String, List<EdmLabel>> elements);
+	void setElements(Map<String, List<EdmMappedField>> elements);
 
 
 	/**

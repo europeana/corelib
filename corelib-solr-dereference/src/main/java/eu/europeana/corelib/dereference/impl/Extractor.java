@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,10 +37,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle.Control;
 
+import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
@@ -50,6 +55,7 @@ import org.springframework.context.ApplicationContext;
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
+import com.mongodb.MongoException;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.Concept;
@@ -58,6 +64,7 @@ import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Lang;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
 import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
@@ -144,499 +151,618 @@ public class Extractor {
 	 * @throws InvocationTargetException
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map<String, List> denormalize(String resource,
-			ControlledVocabularyImpl controlledVocabulary)
-			throws SecurityException, IllegalArgumentException,
+	private Map<String, List> createDereferencingMap(String xmlString,
+			int iterations) throws SecurityException, IllegalArgumentException,
 			InstantiationException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
-
+		XMLInputFactory inFactory = new WstxInputFactory();
 		Map<String, List> denormalizedValues = new HashMap<String, List>();
 		List<Concept> concepts = new ArrayList<Concept>();
 		List<AgentType> agents = new ArrayList<AgentType>();
 		List<TimeSpanType> timespans = new ArrayList<TimeSpanType>();
 		List<PlaceType> places = new ArrayList<PlaceType>();
+
 		Concept lastConcept = null;
 		AgentType lastAgent = null;
 		TimeSpanType lastTimespan = null;
 		PlaceType lastPlace = null;
-		if (controlledVocabulary != null) {
-			String suffix = controlledVocabulary.getSuffix() != null ? controlledVocabulary
-					.getSuffix() : "";
-			String xmlString = retrieveValueFromResource(resource + suffix != null ? resource
-					+ suffix
-					: "");
-			XMLInputFactory inFactory = new WstxInputFactory();
-			Source source;
-			if (xmlString.length() > 0) {
-				vocabulary = controlledVocabulary;
+		try {
+			Source source = new StreamSource(new ByteArrayInputStream(
+					xmlString.getBytes()), "UTF-8");
+			XMLEventReader xml = inFactory.createXMLEventReader(source);
 
-				try {
-					source = new StreamSource(new ByteArrayInputStream(
-							xmlString.getBytes()), "UTF-8");
-					XMLStreamReader xml = inFactory
-							.createXMLStreamReader(source);
-					String element = "";
-					while (xml.hasNext()) {
-						switch (xml.getEventType()) {
-						case XMLStreamConstants.START_DOCUMENT:
+			String element = "";
+			while (xml.hasNext()) {
+				XMLEvent evt = xml.nextEvent();
+				if (evt.isStartElement()) {
+					StartElement sElem = evt.asStartElement();
+					element = (sElem.getName().getPrefix() != null ? sElem
+							.getName().getPrefix() + ":" : "")
+							+ sElem.getName().getLocalPart();
+					// If it is mapped then
+					if (isMapped(element)) {
 
-							break;
-						case XMLStreamConstants.START_ELEMENT:
-							element = (xml.getPrefix() != null ? xml
-									.getPrefix() + ":" : "")
-									+ xml.getLocalName();
-							// If it is mapped then
-							if (isMapped(element)) {
-								// does it have any attribute?
-								for (EdmLabel label : getEdmLabel(element)) {
-									if (StringUtils.equals(label.toString(),
-											SKOS_CONCEPT)) {
-										if (xml.hasText()) {
+						for (EdmMappedField edmLabel : getEdmLabel(element)) {
+
+							if (sElem.getAttributes().hasNext()) {
+								Attribute attr = (Attribute) sElem
+										.getAttributes().next();
+								String attribute = attr.getName().getPrefix()
+
+								+ ":" + attr.getName().getLocalPart();
+								// Is the attribute mapped?
+								if (isMapped(element + "_" + attribute)) {
+									for (EdmMappedField label : getEdmLabel(element
+											+ "_" + attribute)) {
+										String attrVal = attr.getValue();
+										String elem = null;
+										if (xml.peek().isCharacters()) {
+											elem = xml.nextEvent()
+													.asCharacters().getData();
+										}
+
+										if (StringUtils.equals(label.getLabel()
+												.toString(), "skos_concept")) {
 											if (lastConcept != null) {
-												concepts.add(lastConcept);
-											}
-											lastConcept = createNewEntity(
-													Concept.class,
-													xml.getElementText());
-
-										}
-									} else if (StringUtils.equals(
-											label.toString(), EDM_AGENT)) {
-										if (xml.hasText()) {
-											if (lastAgent != null) {
-												agents.add(lastAgent);
-											}
-											lastAgent = createNewEntity(
-													AgentType.class,
-													xml.getElementText());
-
-										}
-									} else if (StringUtils.equals(
-											label.toString(), EDM_TIMESPAN)) {
-										if (xml.hasText()) {
-											if (lastTimespan != null) {
-												timespans.add(lastTimespan);
-											}
-											lastTimespan = createNewEntity(
-													TimeSpanType.class,
-													xml.getElementText());
-
-										}
-									} else if (StringUtils.equals(
-											label.toString(), EDM_PLACE)) {
-										if (xml.hasText()) {
-											if (lastPlace != null) {
-												places.add(lastPlace);
-											}
-											lastPlace = createNewEntity(
-													PlaceType.class,
-													xml.getElementText());
-
-										}
-									}
-
-								}
-
-								if (xml.getAttributeCount() > 0) {
-									String attribute = xml
-											.getAttributePrefix(0)
-											+ ":"
-											+ xml.getAttributeLocalName(0);
-									// Is the attribute mapped?
-									if (isMapped(element + "_" + attribute)) {
-										for (EdmLabel label : getEdmLabel(element
-												+ "_" + attribute)) {
-											if (StringUtils.equals(
-													label.toString(),
-													SKOS_CONCEPT)) {
-												if (lastConcept != null) {
+												if (lastConcept.getAbout() != null) {
 													concepts.add(lastConcept);
-												}
-
-												lastConcept = createNewEntity(
-														Concept.class,
-														xml.getAttributeValue(0));
-											} else
-
-											if (StringUtils
-													.equals(label.toString(),
-															EDM_AGENT)) {
-												if (lastAgent != null) {
-													agents.add(lastAgent);
-												}
-
-												lastAgent = createNewEntity(
-														AgentType.class,
-														xml.getAttributeValue(0));
-											} else
-
-											if (StringUtils.equals(
-													label.toString(),
-													EDM_TIMESPAN)) {
-												if (lastTimespan != null) {
-													timespans.add(lastTimespan);
-												}
-
-												lastTimespan = createNewEntity(
-														TimeSpanType.class,
-														xml.getAttributeValue(0));
-											} else
-
-											if (StringUtils
-													.equals(label.toString(),
-															EDM_PLACE)) {
-												if (lastPlace != null) {
-													places.add(lastPlace);
-												}
-												lastPlace = createNewEntity(
-														PlaceType.class,
-														xml.getAttributeValue(0));
-											} else {
-												if (StringUtils.startsWith(
-														label.toString(), "cc")) {
-													appendConceptValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															lastConcept);
-												}
-
-												else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"ts")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															TimeSpanType.class,
-															lastTimespan);
-												} else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"ag")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															AgentType.class,
-															lastAgent);
-												} else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"pl")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															PlaceType.class,
-															lastPlace);
-												}
-											}
-										}
-									}
-									// Since the attribute is not mapped
-									else {
-										for (EdmLabel label : getEdmLabel(element)) {
-											if (StringUtils.equals(
-													label.toString(),
-													SKOS_CONCEPT)) {
-												if (xml.hasText()) {
-													if (lastConcept != null) {
-														concepts.add(lastConcept);
-													}
 													lastConcept = createNewEntity(
 															Concept.class,
-															xml.getElementText());
-
+															attrVal);
+												} else {
+													lastConcept
+															.setAbout(attrVal);
 												}
-											} else if (StringUtils
-													.equals(label.toString(),
-															EDM_AGENT)) {
-												if (xml.hasText()) {
-													if (lastAgent != null) {
-														agents.add(lastAgent);
-													}
+											} else {
+												lastConcept = createNewEntity(
+														Concept.class, attrVal);
+											}
+
+										} else if (StringUtils.equals(label
+												.getLabel().toString(),
+												"edm_agent")) {
+											if (lastAgent != null) {
+												if (lastAgent.getAbout() != null) {
+													agents.add(lastAgent);
+
 													lastAgent = createNewEntity(
 															AgentType.class,
-															xml.getElementText());
-
+															attrVal);
+												} else {
+													lastAgent.setAbout(attrVal);
 												}
-											} else if (StringUtils.equals(
-													label.toString(),
-													EDM_TIMESPAN)) {
-												if (xml.hasText()) {
-													if (lastTimespan != null) {
-														timespans
-																.add(lastTimespan);
-													}
+											} else {
+												lastAgent = createNewEntity(
+														AgentType.class,
+														attrVal);
+											}
+
+										} else if (StringUtils.equals(label
+												.getLabel().toString(),
+												"edm_timespan")) {
+											if (lastTimespan != null) {
+												if (lastTimespan.getAbout() != null) {
+													timespans.add(lastTimespan);
 													lastTimespan = createNewEntity(
 															TimeSpanType.class,
-															xml.getElementText());
-
+															attrVal);
+												} else {
+													lastTimespan
+															.setAbout(attrVal);
 												}
-											} else if (StringUtils
-													.equals(label.toString(),
-															EDM_PLACE)) {
-												if (xml.hasText()) {
-													if (lastPlace != null) {
-														places.add(lastPlace);
-													}
+
+											} else {
+												lastTimespan = createNewEntity(
+														TimeSpanType.class,
+														attrVal);
+											}
+
+										} else if (StringUtils.equals(label
+												.getLabel().toString(),
+												"edm_place")) {
+											if (lastPlace != null) {
+												if (lastPlace.getAbout() != null) {
+													places.add(lastPlace);
 													lastPlace = createNewEntity(
 															PlaceType.class,
-															xml.getElementText());
-
+															attrVal);
+												} else {
+													lastPlace.setAbout(attrVal);
 												}
+											} else {
+												lastPlace = createNewEntity(
+														PlaceType.class,
+														attrVal);
 											}
+
+										} else {
 											if (StringUtils.startsWith(
 													label.toString(), "cc")) {
+
 												appendConceptValue(
-														xml.getElementText(),
-														label.toString(),
-														lastConcept);
+														lastConcept == null ? new Concept()
+																: lastConcept,
+														label.getLabel()
+																.toString(),
+														elem,
+														label.getAttribute(),
+														attrVal, iterations);
 											}
 
 											else if (StringUtils.startsWith(
 													label.toString(), "ts")) {
+
 												appendValue(
-														xml.getElementText(),
-														label.toString(),
 														TimeSpanType.class,
-														lastTimespan);
+														lastTimespan == null ? new TimeSpanType()
+																: lastTimespan,
+														label.getLabel().toString(), elem,
+														label.getAttribute(), attrVal,
+														iterations);
 											} else if (StringUtils.startsWith(
 													label.toString(), "ag")) {
+
 												appendValue(
-														xml.getElementText(),
-														label.toString(),
 														AgentType.class,
-														lastAgent);
+														lastAgent == null ? new AgentType()
+																: lastAgent,
+														label.getLabel().toString(), elem,
+														label.getAttribute(), attrVal,
+														iterations);
 											} else if (StringUtils.startsWith(
 													label.toString(), "pl")) {
-												appendValue(
-														xml.getElementText(),
-														label.toString(),
-														PlaceType.class,
-														lastPlace);
 
+												appendValue(
+														PlaceType.class,
+														lastPlace == null ? new PlaceType()
+																: lastPlace,
+														label.getLabel().toString(), elem,
+														label.getAttribute(), attrVal,
+														iterations);
 											}
 										}
 									}
 								}
-								// Since it does not have attributes
+								// Since the attribute is not mapped
 								else {
-									for (EdmLabel label : getEdmLabel(element)) {
-										if (StringUtils.equals(
-												label.toString(), SKOS_CONCEPT)) {
-											if (xml.hasText()) {
-												if (lastConcept != null) {
-													concepts.add(lastConcept);
-												}
+
+									if (StringUtils.equals(edmLabel.toString(),
+											"skos_concept")) {
+										if (lastConcept != null) {
+											if (lastConcept.getAbout() != null) {
+												concepts.add(lastConcept);
 												lastConcept = createNewEntity(
 														Concept.class,
 														xml.getElementText());
-
+											} else {
+												lastConcept.setAbout(xml
+														.getElementText());
 											}
-										} else if (StringUtils.equals(
-												label.toString(), EDM_AGENT)) {
-											if (xml.hasText()) {
-												if (lastAgent != null) {
-													agents.add(lastAgent);
-												}
+
+										} else {
+											lastConcept = createNewEntity(
+													Concept.class,
+													xml.getElementText());
+										}
+
+									} else if (StringUtils.equals(
+											edmLabel.toString(), "edm_agent")) {
+										if (lastAgent != null) {
+											if (lastAgent.getAbout() != null) {
+												agents.add(lastAgent);
 												lastAgent = createNewEntity(
 														AgentType.class,
 														xml.getElementText());
-
+											} else {
+												lastAgent.setAbout(xml
+														.getElementText());
 											}
-										} else if (StringUtils.equals(
-												label.toString(), EDM_TIMESPAN)) {
-											if (xml.hasText()) {
-												if (lastTimespan != null) {
-													timespans.add(lastTimespan);
-												}
+
+										} else {
+											lastAgent = createNewEntity(
+													AgentType.class,
+													xml.getElementText());
+										}
+
+									} else if (StringUtils
+											.equals(edmLabel.toString(),
+													"edm_timespan")) {
+										if (lastTimespan != null) {
+											if (lastTimespan.getAbout() != null) {
+												timespans.add(lastTimespan);
 												lastTimespan = createNewEntity(
 														TimeSpanType.class,
 														xml.getElementText());
-
+											} else {
+												lastTimespan.setAbout(xml
+														.getElementText());
 											}
-										} else if (StringUtils.equals(
-												label.toString(), EDM_PLACE)) {
-											if (xml.hasText()) {
-												if (lastPlace != null) {
-													places.add(lastPlace);
-												}
+										} else {
+											lastTimespan = createNewEntity(
+													TimeSpanType.class,
+													xml.getElementText());
+										}
+
+									} else if (StringUtils.equals(
+											edmLabel.toString(), "edm_place")) {
+										if (lastPlace != null) {
+											if (lastPlace.getAbout() != null) {
+												places.add(lastPlace);
 												lastPlace = createNewEntity(
 														PlaceType.class,
 														xml.getElementText());
-
+											} else {
+												lastPlace.setAbout(xml
+														.getElementText());
 											}
+										} else {
+											lastPlace = createNewEntity(
+													PlaceType.class,
+													xml.getElementText());
 										}
 
+									} else {
 										if (StringUtils.startsWith(
-												label.toString(), "cc")) {
-											if (xml.hasText()) {
-												appendConceptValue(
-														xml.getElementText(),
-														label.toString(),
-														lastConcept);
-											}
+												edmLabel.toString(), "cc")) {
+											appendConceptValue(
+													lastConcept == null ? new Concept()
+															: lastConcept,
+													edmLabel.toString(),
+													xml.getElementText(), "",
+													null, iterations);
 										}
 
 										else if (StringUtils.startsWith(
-												label.toString(), "ts")) {
-											if (xml.hasText()) {
-												appendValue(
-														xml.getElementText(),
-														label.toString(),
-														TimeSpanType.class,
-														lastTimespan);
-											}
+												edmLabel.toString(), "ts")) {
+											appendValue(
+													TimeSpanType.class,
+													lastTimespan == null ? new TimeSpanType()
+															: lastTimespan,
+													edmLabel.toString(),
+													xml.getElementText(), "",
+													null, iterations);
 										} else if (StringUtils.startsWith(
-												label.toString(), "ag")) {
-											if (xml.hasText()) {
-												appendValue(
-														xml.getElementText(),
-														label.toString(),
-														AgentType.class,
-														lastAgent);
-											}
+												edmLabel.toString(), "ag")) {
+											appendValue(
+													AgentType.class,
+													lastAgent == null ? new AgentType()
+															: lastAgent,
+													edmLabel.toString(),
+													xml.getElementText(), "",
+													null, iterations);
 										} else if (StringUtils.startsWith(
-												label.toString(), "pl")) {
-											if (xml.hasText()) {
-												appendValue(
-														xml.getElementText(),
-														label.toString(),
-														PlaceType.class,
-														lastPlace);
-											}
+												edmLabel.toString(), "pl")) {
+											appendValue(
+													PlaceType.class,
+													lastPlace == null ? new PlaceType()
+															: lastPlace,
+													edmLabel.toString(),
+													xml.getElementText(), "",
+													null, iterations);
+
 										}
 									}
-
 								}
+
 							}
-							// The element is not mapped, but does it have any
-							// mapped attributes?
+							// Since it does not have attributes
 							else {
-								if (xml.getAttributeCount() > 0) {
-									String attribute = xml
-											.getAttributePrefix(0)
-											+ ":"
-											+ xml.getAttributeLocalName(0);
-									// Is the attribute mapped?
-									if (isMapped(element + "_" + attribute)) {
-										for (EdmLabel label : getEdmLabel(element
-												+ "_" + attribute)) {
-											if (StringUtils.equals(
-													label.toString(),
-													SKOS_CONCEPT)) {
-												if (lastConcept != null) {
-													concepts.add(lastConcept);
-												}
+								XMLEvent evt2 = xml.nextEvent();
+								if (evt2.isCharacters()) {
+									if (StringUtils.equals(edmLabel.toString(),
+											"skos_concept")) {
+										if (lastConcept != null) {
+											concepts.add(lastConcept);
+										}
+										lastConcept = createNewEntity(
+												Concept.class, evt2
+														.asCharacters()
+														.getData());
 
-												lastConcept = createNewEntity(
-														Concept.class,
-														xml.getAttributeValue(0));
-											} else
-
-											if (StringUtils
-													.equals(label.toString(),
-															EDM_AGENT)) {
-												if (lastAgent != null) {
-													agents.add(lastAgent);
-												}
-
+									} else if (StringUtils.equals(
+											edmLabel.toString(), "edm_agent")) {
+										if (lastAgent != null) {
+											if (lastAgent.getAbout() != null) {
+												agents.add(lastAgent);
 												lastAgent = createNewEntity(
-														AgentType.class,
-														xml.getAttributeValue(0));
-											} else
+														AgentType.class, evt2
+																.asCharacters()
+																.getData());
+											} else {
+												lastAgent.setAbout(evt2
+														.asCharacters()
+														.getData());
+											}
+										}
 
-											if (StringUtils.equals(
-													label.toString(),
-													EDM_TIMESPAN)) {
-												if (lastTimespan != null) {
-													timespans.add(lastTimespan);
-												}
-
+										else {
+											lastAgent = createNewEntity(
+													AgentType.class, evt2
+															.asCharacters()
+															.getData());
+										}
+									} else if (StringUtils
+											.equals(edmLabel.toString(),
+													"edm_timespan")) {
+										if (lastTimespan != null) {
+											if (lastTimespan.getAbout() != null) {
+												timespans.add(lastTimespan);
 												lastTimespan = createNewEntity(
 														TimeSpanType.class,
-														xml.getAttributeValue(0));
-											} else
-
-											if (StringUtils
-													.equals(label.toString(),
-															EDM_PLACE)) {
-												if (lastPlace != null) {
-													places.add(lastPlace);
-												}
-												lastPlace = createNewEntity(
-														PlaceType.class,
-														xml.getAttributeValue(0));
+														evt2.asCharacters()
+																.getData());
 											} else {
-												if (StringUtils.startsWith(
-														label.toString(), "cc")) {
-													appendConceptValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															lastConcept);
-												}
-
-												else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"ts")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															TimeSpanType.class,
-															lastTimespan);
-												} else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"ag")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															AgentType.class,
-															lastAgent);
-												} else if (StringUtils
-														.startsWith(label
-																.toString(),
-																"pl")) {
-													appendValue(
-															xml.getAttributeValue(0),
-															label.toString(),
-															PlaceType.class,
-															lastPlace);
-												}
+												lastTimespan.setAbout(evt2
+														.asCharacters()
+														.getData());
 											}
+
+										} else {
+											lastTimespan = createNewEntity(
+													TimeSpanType.class, evt2
+															.asCharacters()
+															.getData());
+										}
+
+									} else if (StringUtils.equals(
+											edmLabel.toString(), "edm_place")) {
+										if (lastPlace != null) {
+											if (lastPlace.getAbout() != null) {
+												places.add(lastPlace);
+												lastPlace = createNewEntity(
+														PlaceType.class, evt2
+																.asCharacters()
+																.getData());
+											} else {
+												lastPlace.setAbout(evt2
+														.asCharacters()
+														.getData());
+											}
+										} else {
+											lastPlace = createNewEntity(
+													PlaceType.class, evt2
+															.asCharacters()
+															.getData());
+										}
+
+									} else {
+
+										if (StringUtils.startsWith(
+												edmLabel.toString(), "cc")) {
+											appendConceptValue(
+													lastConcept == null ? new Concept()
+															: lastConcept,
+													edmLabel.toString(), evt2
+															.asCharacters()
+															.getData(), "",
+													null, iterations);
+										}
+
+										else if (StringUtils.startsWith(
+												edmLabel.toString(), "ts")) {
+											appendValue(
+													TimeSpanType.class,
+													lastTimespan == null ? new TimeSpanType()
+															: lastTimespan,
+
+													edmLabel.toString(), evt2
+															.asCharacters()
+															.getData(), "",
+													null, iterations);
+										} else if (StringUtils.startsWith(
+												edmLabel.toString(), "ag")) {
+											appendValue(
+													AgentType.class,
+													lastAgent == null ? new AgentType()
+															: lastAgent,
+													edmLabel.toString(), evt2
+															.asCharacters()
+															.getData(), "",
+													null, iterations);
+										} else if (StringUtils.startsWith(
+												edmLabel.toString(), "pl")) {
+											appendValue(
+													PlaceType.class,
+													lastPlace == null ? new PlaceType()
+															: lastPlace,
+													edmLabel.toString(), evt2
+															.asCharacters()
+															.getData(), "",
+													null, iterations);
 										}
 									}
 								}
 							}
-							break;
-						case XMLStreamConstants.END_DOCUMENT:
-							if (lastConcept != null) {
-								concepts.add(lastConcept);
-							}
-							if (lastAgent != null) {
-								agents.add(lastAgent);
-							}
-							if (lastTimespan != null) {
-								timespans.add(lastTimespan);
-							}
-							if (lastPlace != null) {
-								places.add(lastPlace);
-							}
-							break;
-						default:
-							break;
 						}
-						xml.next();
 					}
-				} catch (XMLStreamException e) {
-					e.printStackTrace();
+					// The element is not mapped, but does it have any
+					// mapped attributes?
+					else {
+						if (sElem.getAttributes().hasNext()) {
+							Attribute attr = (Attribute) sElem.getAttributes()
+									.next();
+							String attribute = attr.getName().getPrefix()
+
+							+ ":" + attr.getName().getLocalPart();
+							// Is the attribute mapped?
+							xml.next();
+
+							// Is the attribute mapped?
+							if (isMapped(element + "_" + attribute)) {
+								for (EdmMappedField label : getEdmLabel(element + "_"
+										+ attribute)) {
+									if (StringUtils.equals(label.getLabel().toString(),
+											"skos_concept")) {
+										if (lastConcept != null) {
+											if (lastConcept.getAbout() != null) {
+												concepts.add(lastConcept);
+												lastConcept = createNewEntity(
+														Concept.class,
+														attr.getValue());
+											} else {
+												lastConcept.setAbout(attr
+														.getValue());
+											}
+										} else {
+											lastConcept = createNewEntity(
+													Concept.class,
+													attr.getValue());
+										}
+									}
+
+									else
+
+									if (StringUtils.equals(label.getLabel().toString(),
+											"edm_agent")) {
+										if (lastAgent != null) {
+											if (lastAgent.getAbout() != null) {
+												agents.add(lastAgent);
+												lastAgent = createNewEntity(
+														AgentType.class,
+														attr.getValue());
+											} else {
+												lastAgent.setAbout(attr
+														.getValue());
+											}
+										} else {
+											lastAgent = createNewEntity(
+													AgentType.class,
+													attr.getValue());
+										}
+
+									} else
+
+									if (StringUtils.equals(label.getLabel().toString(),
+											"edm_timespan")) {
+										if (lastTimespan != null) {
+											if (lastTimespan.getAbout() != null) {
+												timespans.add(lastTimespan);
+												lastTimespan = createNewEntity(
+														TimeSpanType.class,
+														attr.getValue());
+											} else {
+												lastTimespan.setAbout(attr
+														.getValue());
+											}
+										} else {
+											lastTimespan = createNewEntity(
+													TimeSpanType.class,
+													attr.getValue());
+										}
+
+									} else
+
+									if (StringUtils.equals(label.getLabel().toString(),
+											"edm_place")) {
+										if (lastPlace != null) {
+											if (lastPlace.getAbout() != null) {
+												places.add(lastPlace);
+												lastPlace = createNewEntity(
+														PlaceType.class,
+														attr.getValue());
+											} else {
+												lastPlace.setAbout(attr
+														.getValue());
+											}
+
+										} else {
+											lastPlace = createNewEntity(
+													PlaceType.class,
+													attr.getValue());
+										}
+
+									} else {
+										if (StringUtils.startsWith(
+												label.getLabel().toString(), "cc")) {
+											String elem = null;
+											if (xml.peek().isCharacters()) {
+												elem = xml.nextEvent()
+														.asCharacters()
+														.getData();
+											}
+											String attrVal = attr.getValue();
+
+											appendConceptValue(
+													lastConcept == null ? new Concept()
+															: lastConcept,
+													null, elem, label.getAttribute(),
+													attrVal, iterations);
+										}
+
+										else if (StringUtils.startsWith(
+												label.getLabel().toString(), "ts")) {
+											String elem = null;
+											if (xml.peek().isCharacters()) {
+												elem = xml.nextEvent()
+														.asCharacters()
+														.getData();
+											}
+											String attrVal = attr.getValue();
+
+											appendValue(
+													TimeSpanType.class,
+													lastTimespan == null ? new TimeSpanType()
+															: lastTimespan,
+													null, elem, label.getAttribute(),
+													attrVal, iterations);
+										} else if (StringUtils.startsWith(
+												label.getLabel().toString(), "ag")) {
+											String elem = null;
+											if (xml.peek().isCharacters()) {
+												elem = xml.nextEvent()
+														.asCharacters()
+														.getData();
+											}
+											String attrVal = attr.getValue();
+
+											appendValue(
+													AgentType.class,
+													lastAgent == null ? new AgentType()
+															: lastAgent, null,
+													elem, label.getAttribute(), attrVal,
+													iterations);
+										} else if (StringUtils.startsWith(
+												label.toString(), "pl")) {
+											String elem = null;
+											if (xml.peek().isCharacters()) {
+												elem = xml.nextEvent()
+														.asCharacters()
+														.getData();
+											}
+											String attrVal = attr.getValue();
+
+											appendValue(
+													PlaceType.class,
+													lastPlace == null ? new PlaceType()
+															: lastPlace, null,
+													elem, label.getAttribute(), attrVal,
+													iterations);
+										}
+									}
+								}
+							}
+						}
+					}
 				}
+
 			}
+			if (lastConcept != null)
+				concepts.add(lastConcept);
+			if (lastAgent != null)
+				agents.add(lastAgent);
+			if (lastTimespan != null)
+				timespans.add(lastTimespan);
+			if (lastPlace != null)
+				places.add(lastPlace);
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
 		}
+
 		denormalizedValues.put("concepts", concepts);
 		denormalizedValues.put("agents", agents);
 		denormalizedValues.put("timespans", timespans);
 		denormalizedValues.put("places", places);
+
 		return denormalizedValues;
 	}
 
@@ -722,17 +848,7 @@ public class Extractor {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	private <T> T createNewEntity(Class<T> clazz, String val)
-			throws InstantiationException, IllegalAccessException,
-			SecurityException, NoSuchMethodException, IllegalArgumentException,
-			InvocationTargetException {
-		T obj = clazz.newInstance();
-		Class<?>[] cls = new Class<?>[1];
-		cls[0] = (String.class);
-		Method method = clazz.getMethod("setAbout", cls);
-		method.invoke(obj, val);
-		return obj;
-	}
+
 
 	/**
 	 * Append a value in a contextual entity. This method is not applicable to
@@ -757,96 +873,262 @@ public class Extractor {
 	 * @throws InvocationTargetException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <T> T appendValue(String val, String edmLabel, Class<T> clazz, T obj)
+	private <T> T createNewEntity(Class<T> clazz, String val)
+			throws InstantiationException, IllegalAccessException,
+			SecurityException, NoSuchMethodException, IllegalArgumentException,
+			InvocationTargetException {
+		T obj = clazz.newInstance();
+		Class<?>[] cls = new Class<?>[1];
+		cls[0] = (String.class);
+		Method method = clazz.getMethod("setAbout", cls);
+		method.invoke(obj, val);
+		return obj;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T appendValue(Class<T> clazz, T obj, String edmLabel,
+			String val, String edmAttr, String valAttr, int iterations)
 			throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		RdfMethod rdf = null;
+
+		RdfMethod RDF = null;
 		for (RdfMethod rdfMethod : RdfMethod.values()) {
 			if (StringUtils.equals(rdfMethod.getSolrField(), edmLabel)) {
-				rdf = rdfMethod;
+				RDF = rdfMethod;
 			}
 		}
 
 		//
-		if (rdf.getMethodName().endsWith("List")) {
+		if (RDF.getMethodName().endsWith("List")) {
 
-			Method mthd = clazz.getMethod(rdf.getMethodName());
+			Method mthd = clazz.getMethod(RDF.getMethodName());
 
+			@SuppressWarnings("rawtypes")
 			List lst = mthd.invoke(obj) != null ? (ArrayList) mthd.invoke(obj)
 					: new ArrayList();
-			if (rdf.getClazz().getSuperclass()
+			if (RDF.getClazz().getSuperclass()
 					.isAssignableFrom(ResourceType.class)) {
 
 				ResourceType rs = new ResourceType();
-				rs.setResource(val);
-				lst.add(rs);
+				rs.setResource(val != null ? val : valAttr);
+				if (isURI(rs.getResource())) {
+					denormalize(rs.getResource(), iterations - 1);
+				}
+				lst.add(RDF.returnObject(RDF.getClazz(), rs));
 
-			} else if (rdf.getClazz().getSuperclass()
+			} else if (RDF.getClazz().getSuperclass()
 					.isAssignableFrom(ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
 				if (isURI(val)) {
 					rs.setResource(val);
+					denormalize(val, iterations - 1);
 				} else {
 					rs.setString(val);
 				}
-				lst.add(rs);
-			} else if (rdf.getClazz().getSuperclass()
+				if (edmAttr != null) {
+					
+						if (StringUtils.equals(
+								edmAttr, "xml:lang")) {
+							Lang lang = new Lang();
+							lang.setLang(valAttr);
+							rs.setLang(lang);
+						}
+					
+				}
+				lst.add(RDF.returnObject(RDF.getClazz(), rs));
+			} else if (RDF.getClazz().getSuperclass()
 					.isAssignableFrom(LiteralType.class)) {
 				LiteralType rs = new LiteralType();
 				rs.setString(val);
-				lst.add(rs);
+				if (edmAttr != null) {
+					
+						if (StringUtils.equals(
+								edmAttr, "xml:lang")) {
+							LiteralType.Lang lang = new LiteralType.Lang();
+							lang.setLang(valAttr);
+							rs.setLang(lang);
+					}
+				}
+				lst.add(RDF.returnObject(RDF.getClazz(), rs));
 			}
 
 			Class<?>[] cls = new Class<?>[1];
-			cls[0] = clazz;
-			Method method = obj.getClass().getMethod(
-					StringUtils.replace(rdf.getMethodName(), GET, SET), cls);
+			cls[0] = List.class;
+			Method method = obj.getClass()
+					.getMethod(
+							StringUtils.replace(RDF.getMethodName(), "get",
+									"set"), cls);
 			method.invoke(obj, lst);
 		} else {
-			if (rdf.getClazz().isAssignableFrom(ResourceType.class)) {
+			if (RDF.getClazz().isAssignableFrom(ResourceType.class)) {
 				ResourceType rs = new ResourceType();
-				rs.setResource(val);
+				rs.setResource(val != null ? val : valAttr);
+				if (isURI(rs.getResource())) {
+					denormalize(rs.getResource(), iterations - 1);
+				}
 				Class<?>[] cls = new Class<?>[1];
-				cls[0] = rdf.getClazz();
-				Method method = obj.getClass()
-						.getMethod(
-								StringUtils.replace(rdf.getMethodName(), GET,
-										SET), cls);
-				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
-			} else if (rdf.getClazz().isAssignableFrom(LiteralType.class)) {
+				cls[0] = RDF.getClazz();
+				Method method = obj.getClass().getMethod(
+						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						cls);
+				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
+			} else if (RDF.getClazz().isAssignableFrom(LiteralType.class)) {
 				LiteralType rs = new LiteralType();
 				rs.setString(val);
+				if (isURI(val)) {
+					denormalize(val, iterations - 1);
+				}
+				if (edmAttr != null) {
+					
+						if (StringUtils.equals(
+								edmAttr, "xml:lang")) {
+							LiteralType.Lang lang = new LiteralType.Lang();
+							lang.setLang(valAttr);
+							rs.setLang(lang);
+						
+					}
+				}
 				Class<?>[] cls = new Class<?>[1];
-				cls[0] = rdf.getClazz();
-				Method method = obj.getClass()
-						.getMethod(
-								StringUtils.replace(rdf.getMethodName(), GET,
-										SET), cls);
-				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
+				cls[0] = RDF.getClazz();
+				Method method = obj.getClass().getMethod(
+						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						cls);
+				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
 
-			} else if (rdf.getClazz().isAssignableFrom(
+			} else if (RDF.getClazz().isAssignableFrom(
 					ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
 				if (isURI(val)) {
 					rs.setResource(val);
+					denormalize(val, iterations - 1);
 				} else {
 					rs.setString(val);
 				}
+				if (edmAttr != null) {
+				
+						if (StringUtils.equals(
+								edmAttr, "xml:lang")) {
+							Lang lang = new Lang();
+							lang.setLang(valAttr);
+							rs.setLang(lang);
+					}
+				}
 				Class<?>[] cls = new Class<?>[1];
 				cls[0] = clazz;
-				Method method = obj.getClass()
-						.getMethod(
-								StringUtils.replace(rdf.getMethodName(), GET,
-										SET), cls);
-				method.invoke(obj, rdf.returnObject(rdf.getClazz(), rs));
+				Method method = obj.getClass().getMethod(
+						StringUtils.replace(RDF.getMethodName(), "get", "set"),
+						cls);
+				method.invoke(obj, RDF.returnObject(RDF.getClazz(), rs));
 			}
 		}
-
-		//
 		return obj;
 	}
 
+	private Concept appendConceptValue(Concept concept, String edmLabel,
+			String val, String edmAttr, String valAttr, int iterations)
+			throws SecurityException, NoSuchMethodException,
+			IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		RdfMethod RDF = null;
+		for (RdfMethod rdfMethod : RdfMethod.values()) {
+			if (StringUtils.equals(rdfMethod.getSolrField(), edmLabel)) {
+				RDF = rdfMethod;
+				break;
+			}
+		}
+		List<Concept.Choice> lst = concept.getChoiceList() != null ? concept
+				.getChoiceList() : new ArrayList<Concept.Choice>();
+		if (RDF.getClazz().getSuperclass().isAssignableFrom(ResourceType.class)) {
+
+			ResourceType obj = new ResourceType();
+			obj.setResource(val != null ? val : valAttr);
+			if (isURI(obj.getResource())) {
+				denormalize(obj.getResource(), iterations - 1);
+			}
+			Class<?>[] cls = new Class<?>[1];
+			cls[0] = RDF.getClazz();
+			Concept.Choice choice = new Concept.Choice();
+			Method method = choice.getClass()
+					.getMethod(
+							StringUtils.replace(RDF.getMethodName(), "get",
+									"set"), cls);
+			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+			lst.add(choice);
+
+		} else if (RDF.getClazz().getSuperclass()
+				.isAssignableFrom(ResourceOrLiteralType.class)) {
+
+			ResourceOrLiteralType obj = new ResourceOrLiteralType();
+
+			if (isURI(val)) {
+				obj.setResource(val);
+				denormalize(val, iterations - 1);
+			} else {
+				obj.setString(val);
+			}
+			if (edmAttr != null) {
+
+				if (StringUtils.equals(edmAttr, "xml:lang")) {
+					Lang lang = new Lang();
+					lang.setLang(valAttr);
+					obj.setLang(lang);
+				}
+			}
+			Class<?>[] cls = new Class<?>[1];
+			cls[0] = RDF.getClazz();
+			Concept.Choice choice = new Concept.Choice();
+			Method method = choice.getClass()
+					.getMethod(
+							StringUtils.replace(RDF.getMethodName(), "get",
+									"set"), cls);
+			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+			lst.add(choice);
+
+		} else if (RDF.getClazz().getSuperclass()
+				.isAssignableFrom(LiteralType.class)) {
+			LiteralType obj = new LiteralType();
+			obj.setString(val);
+			if (isURI(val)) {
+				denormalize(val, iterations - 1);
+			}
+			if (edmAttr != null) {
+
+				if (StringUtils.equals(edmAttr, "xml:lang")) {
+					LiteralType.Lang lang = new LiteralType.Lang();
+					lang.setLang(valAttr);
+					obj.setLang(lang);
+				}
+			}
+			Class<?>[] cls = new Class<?>[1];
+			cls[0] = RDF.getClazz();
+			Concept.Choice choice = new Concept.Choice();
+			Method method = choice.getClass()
+					.getMethod(
+							StringUtils.replace(RDF.getMethodName(), "get",
+									"set"), cls);
+			method.invoke(choice, RDF.returnObject(RDF.getClazz(), obj));
+			lst.add(choice);
+		}
+		concept.setChoiceList(lst);
+		return concept;
+	}
+	private Map<String, List> denormalize(String val, int iterations) {
+		try {
+			//Dummy method..to clean up
+			return new HashMap<String, List>();
+		} catch (MongoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return null;
+	}
 	/**
 	 * Method to check if a String is a URI TODO: move it in some util class
 	 * 
@@ -882,63 +1164,7 @@ public class Extractor {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private Concept appendConceptValue(String val, String edmLabel,
-			Concept concept) throws SecurityException, NoSuchMethodException,
-			IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
-		RdfMethod rdf = null;
-		for (RdfMethod rdfMethod : RdfMethod.values()) {
-			if (StringUtils.equals(rdfMethod.getSolrField(), edmLabel)) {
-				rdf = rdfMethod;
-			}
-		}
-		List<Concept.Choice> lst = concept.getChoiceList() != null ? concept
-				.getChoiceList() : new ArrayList<Concept.Choice>();
-		if (rdf.getClazz().getSuperclass().isAssignableFrom(ResourceType.class)) {
-
-			ResourceType obj = new ResourceType();
-			obj.setResource(val);
-			Class<?>[] cls = new Class<?>[1];
-			cls[0] = rdf.getClazz();
-			Concept.Choice choice = new Concept.Choice();
-			Method method = choice.getClass().getMethod(
-					StringUtils.replace(rdf.getMethodName(), GET, SET), cls);
-			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
-			lst.add(choice);
-
-		} else if (rdf.getClazz().getSuperclass()
-				.isAssignableFrom(ResourceOrLiteralType.class)) {
-
-			ResourceOrLiteralType obj = new ResourceOrLiteralType();
-
-			if (isURI(val)) {
-				obj.setResource(val);
-			} else {
-				obj.setString(val);
-			}
-			Class<?>[] cls = new Class<?>[1];
-			cls[0] = rdf.getClazz();
-			Concept.Choice choice = new Concept.Choice();
-			Method method = choice.getClass().getMethod(
-					StringUtils.replace(rdf.getMethodName(), GET, SET), cls);
-			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
-			lst.add(choice);
-
-		} else if (rdf.getClazz().getSuperclass()
-				.isAssignableFrom(LiteralType.class)) {
-			LiteralType obj = new LiteralType();
-			obj.setString(val);
-			Class<?>[] cls = new Class<?>[1];
-			cls[0] = rdf.getClazz();
-			Concept.Choice choice = new Concept.Choice();
-			Method method = choice.getClass().getMethod(
-					StringUtils.replace(rdf.getMethodName(), GET, SET), cls);
-			method.invoke(choice, rdf.returnObject(rdf.getClazz(), obj));
-			lst.add(choice);
-		}
-		concept.setChoiceList(lst);
-		return concept;
-	}
+	
 
 	/**
 	 * Retrieve the value of a field. The value retrieved is part of the
@@ -948,10 +1174,10 @@ public class Extractor {
 	 *            The field to check
 	 * @return The EdmLabel the field has been mapped to
 	 */
-	public List<EdmLabel> getEdmLabel(String field) {
+	public List<EdmMappedField> getEdmLabel(String field) {
 
 		return vocabulary != null ? vocabulary.getElements().get(field)
-				: new ArrayList<EdmLabel>();
+				: new ArrayList<EdmMappedField>();
 	}
 
 	/**
@@ -964,14 +1190,19 @@ public class Extractor {
 	 * @param fieldToMap
 	 * @param europeanaField
 	 */
-	public void setMappedField(String fieldToMap, EdmLabel europeanaField) {
-		HashMap<String, List<EdmLabel>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmLabel>>) vocabulary
-				.getElements() : new HashMap<String, List<EdmLabel>>();
-		List<EdmLabel> field = elements.get(fieldToMap);
+	public void setMappedField(String fieldToMap, EdmLabel europeanaField, String attribute) {
+		HashMap<String, List<EdmMappedField>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmMappedField>>) vocabulary
+				.getElements() : new HashMap<String, List<EdmMappedField>>();
+		List<EdmMappedField> field = elements.get(fieldToMap);
 		if (europeanaField == null) {
-			elements.put(fieldToMap, new ArrayList<EdmLabel>());
+			elements.put(fieldToMap, new ArrayList<EdmMappedField>());
 		} else if (!field.contains(europeanaField)) {
-			field.add(europeanaField);
+			EdmMappedField edmMappedField = new EdmMappedField();
+			edmMappedField.setLabel(europeanaField);
+			edmMappedField.setAttribute(StringUtils.isNotBlank(attribute)?attribute:null);
+				
+			
+			field.add(edmMappedField);
 			elements.put(fieldToMap, field);
 
 		}
@@ -1020,7 +1251,7 @@ public class Extractor {
 	public boolean isMapped(String field) {
 
 		if (vocabulary != null) {
-			for (Entry<String, List<EdmLabel>> entry : vocabulary.getElements()
+			for (Entry<String, List<EdmMappedField>> entry : vocabulary.getElements()
 					.entrySet()) {
 				if (StringUtils.contains(entry.getKey(), field)
 						&& entry.getValue().size() > 0) {
@@ -1039,10 +1270,10 @@ public class Extractor {
 	 * @return an empty HashMap with keys being the Controlled Vocabulary fields
 	 *         and empty values
 	 */
-	public HashMap<String, List<EdmLabel>> readSchema(String location) {
+	public HashMap<String, List<EdmMappedField>> readSchema(String location) {
 
 		vocabulary.setElements(readFromFile(location));
-		return (HashMap<String, List<EdmLabel>>) vocabulary.getElements();
+		return (HashMap<String, List<EdmMappedField>>) vocabulary.getElements();
 	}
 
 	/**
@@ -1084,32 +1315,32 @@ public class Extractor {
 	
 	private boolean validate(ControlledVocabulary voc) {
 
-		Map<String, List<EdmLabel>> elems = voc.getElements();
-		List<EdmLabel> validateList = new ArrayList<EdmLabel>();
-		for (Entry<String, List<EdmLabel>> entry : elems.entrySet()) {
+		Map<String, List<EdmMappedField>> elems = voc.getElements();
+		List<EdmMappedField> validateList = new ArrayList<EdmMappedField>();
+		for (Entry<String, List<EdmMappedField>> entry : elems.entrySet()) {
 			if (entry.getValue()!=null){
 			validateList.addAll(entry.getValue());
 			} else {
 				//if it is null ignore for validation and normalize
 				
-				elems.put(entry.getKey(), new ArrayList<EdmLabel>());
+				elems.put(entry.getKey(), new ArrayList<EdmMappedField>());
 			}
 		}
 
-		for (EdmLabel label : validateList) {
-			if (label.toString().startsWith("ag")) {
+		for (EdmMappedField label : validateList) {
+			if (label.getLabel().toString().startsWith("ag")) {
 				if (validateList.indexOf(EdmLabel.EDM_AGENT) == -1) {
 					return false;
 				}
-			} else if (label.toString().startsWith("cc")) {
+			} else if (label.getLabel().toString().startsWith("cc")) {
 				if (validateList.indexOf(EdmLabel.SKOS_CONCEPT) == -1) {
 					return false;
 				}
-			} else if (label.toString().startsWith("ts")) {
+			} else if (label.getLabel().toString().startsWith("ts")) {
 				if (validateList.indexOf(EdmLabel.EDM_TIMESPAN) == -1) {
 					return false;
 				}
-			} else if (label.toString().startsWith("pl")) {
+			} else if (label.getLabel().toString().startsWith("pl")) {
 				if (validateList.indexOf(EdmLabel.EDM_PLACE) == -1) {
 					return false;
 				}
@@ -1127,8 +1358,8 @@ public class Extractor {
 	 * @return an empty hashmap with its keys being the controlled vocabularies
 	 *         mappable fileds and the values null
 	 */
-	private HashMap<String, List<EdmLabel>> readFromFile(String localLocation) {
-		HashMap<String, List<EdmLabel>> elements = new HashMap<String, List<EdmLabel>>();
+	private HashMap<String, List<EdmMappedField>> readFromFile(String localLocation) {
+		HashMap<String, List<EdmMappedField>> elements = new HashMap<String, List<EdmMappedField>>();
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
 		try {
@@ -1145,12 +1376,12 @@ public class Extractor {
 					element = (xml.getName().getPrefix().length() > 0 ? xml
 							.getName().getPrefix() + ":" : "")
 							+ xml.getName().getLocalPart();
-					elements.put(element, new ArrayList<EdmLabel>());
+					elements.put(element, new ArrayList<EdmMappedField>());
 					int i = 0;
 					while (i < xml.getAttributeCount()) {
 						attribute = element + "_" + xml.getAttributePrefix(i)
 								+ ":" + xml.getAttributeLocalName(i);
-						elements.put(attribute, new ArrayList<EdmLabel>());
+						elements.put(attribute, new ArrayList<EdmMappedField>());
 						i++;
 					}
 					break;
