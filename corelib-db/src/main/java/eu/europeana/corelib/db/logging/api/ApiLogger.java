@@ -80,7 +80,6 @@ public class ApiLogger {
 		try {
 			DB db = mongo.getDB("api_log");
 			logTypeCollection = JacksonDBCollection.wrap(db.getCollection("logs"), LogTypeImpl.class, String.class);
-			
 		} catch (MongoException e) {
 			throw new DatabaseException(ProblemType.UNKNOWN);
 		}
