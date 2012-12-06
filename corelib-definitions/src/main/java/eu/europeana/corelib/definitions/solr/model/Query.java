@@ -70,6 +70,7 @@ public class Query implements Cloneable {
 	private boolean produceFacetUnion = true;
 
 	private boolean allowSpellcheck = true;
+	private boolean allowFacets = true;
 
 	/**
 	 * CONSTRUCTORS
@@ -231,6 +232,15 @@ public class Query implements Cloneable {
 		return this;
 	}
 
+	public boolean isAllowFacets() {
+		return allowFacets;
+	}
+
+	public Query setAllowFacets(boolean allowFacets) {
+		this.allowFacets = allowFacets;
+		return this;
+	}
+
 	public Query setProduceFacetUnion(boolean produceFacetUnion) {
 		this.produceFacetUnion = produceFacetUnion;
 		return this;
@@ -327,6 +337,17 @@ public class Query implements Cloneable {
 					value = value.replace(":", "\\:").replace("/", "\\/");
 				} else if (!value.endsWith("*") && !value.startsWith("\"") && !value.endsWith("\"")) {
 					value = '"' + value + '"';
+				}
+			} else if (name.equals(Facet.TYPE.name())) {
+				value = value.toUpperCase().replace("\"", "");
+			} else {
+				if (value.indexOf(" ") > -1) {
+					if (!value.startsWith("\"")) {
+						value = '"' + value;
+					}
+					if (!value.endsWith("\"")) {
+						value += '"';
+					}
 				}
 			}
 			values.add(value);
