@@ -40,7 +40,8 @@ public class NavigationUtils {
 		List<BreadCrumb> crumbs = new ArrayList<BreadCrumb>();
 		BreadCrumb crumb = new BreadCrumb(q.getQuery(), "query", q.getQuery(), null);
 		crumbs.add(crumb);
-		for (String refinement : q.getRefinements()) {
+		String[] refinements = q.getRefinements();
+		for (String refinement : refinements) {
 			crumb = new BreadCrumb(refinement, "qf", refinement, crumb.getHref());
 			crumbs.add(crumb);
 		}
