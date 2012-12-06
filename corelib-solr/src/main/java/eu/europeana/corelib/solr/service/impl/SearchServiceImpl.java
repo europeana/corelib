@@ -198,22 +198,11 @@ public class SearchServiceImpl implements SearchService {
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements(true);
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery()
-						.setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 
 				if (refinements != null) {
 					solrQuery.addFilterQuery(refinements);
 				}
-
-				solrQuery.setFacet(true);
-				for (Facet facet : query.getFacets()) {
-					String facetToAdd = facet.toString();
-					if (query.isProduceFacetUnion()) {
-						facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
-					}
-					solrQuery.addFacetField(facetToAdd);
-				}
-				solrQuery.setFacetLimit(facetLimit);
 
 				solrQuery.setRows(query.getPageSize());
 				solrQuery.setStart(query.getStart());
@@ -225,7 +214,28 @@ public class SearchServiceImpl implements SearchService {
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
 
-				// enable spellcheck
+				// add extra parameters if any
+				if (query.getParameters() != null) {
+					Map<String, String> parameters = query.getParameters();
+					for (String key : parameters.keySet()) {
+						solrQuery.setParam(key, parameters.get(key));
+					}
+				}
+
+				// facets are optional
+				if (query.isAllowFacets()) {
+					solrQuery.setFacet(true);
+					for (Facet facet : query.getFacets()) {
+						String facetToAdd = facet.toString();
+						if (query.isProduceFacetUnion()) {
+							facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
+						}
+						solrQuery.addFacetField(facetToAdd);
+					}
+					solrQuery.setFacetLimit(facetLimit);
+				}
+
+				// spellcheck is optional
 				if (query.isAllowSpellcheck()) {
 					if (solrQuery.getStart() == null
 							|| solrQuery.getStart().intValue() <= 1) {
@@ -234,14 +244,6 @@ public class SearchServiceImpl implements SearchService {
 						solrQuery.setParam("spellcheck.extendedResults", "true");
 						solrQuery.setParam("spellcheck.onlyMorePopular", "true");
 						solrQuery.setParam("spellcheck.q", query.getQuery());
-					}
-				}
-
-				// add extra parameters if any
-				if (query.getParameters() != null) {
-					Map<String, String> parameters = query.getParameters();
-					for (String key : parameters.keySet()) {
-						solrQuery.setParam(key, parameters.get(key));
 					}
 				}
 
