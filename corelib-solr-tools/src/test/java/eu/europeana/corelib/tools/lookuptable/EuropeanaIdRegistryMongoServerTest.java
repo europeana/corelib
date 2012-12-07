@@ -6,6 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mongodb.Mongo;
@@ -78,6 +79,7 @@ public class EuropeanaIdRegistryMongoServerTest {
 		server.getDatastore().getDB().dropDatabase();
 	}
 	
+	@Ignore
 	@Test
 	public void testFailedrecords(){
 		saverecord();
