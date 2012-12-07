@@ -174,13 +174,11 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
 			lookupresult.setState(LookupState.IDENTICAL);
-
-			generateFailedRecord(constructedeuropeanaId, xml,
-					LookupState.IDENTICAL);
 		}
 
 		// Then check if it is a duplicate in the same collection (eid cid
 		// origid xml and session) are the same
+		/*
 		else if (constructedeuropeanaId.getCid().equals(
 				retrievedeuropeanaID.getCid())
 				&& constructedeuropeanaId.getEid().equals(
@@ -195,6 +193,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_INCOLLECTION);
 		}
+		*/
 
 		// There is a duplicate ID in a split collection containing different
 		// information:
