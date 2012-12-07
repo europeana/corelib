@@ -140,7 +140,7 @@ public final class AggregationFieldInput {
 					.createResourceOrLiteralMapFromString(wResourceType
 							.getRights());
 			if(edmRightsMap!=null){
-			ups.set("WebResourceEdmRights", edmRightsMap);
+			ups.set("webResourceEdmRights", edmRightsMap);
 			webResource.setWebResourceEdmRights(edmRightsMap);
 			}
 			if(wResourceType.getIsNextInSequence()!=null){
