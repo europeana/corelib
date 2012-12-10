@@ -93,8 +93,7 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final Logger log = Logger.getLogger(SearchServiceImpl.class
-			.getName());
+	private static final Logger log = Logger.getLogger("SearchServiceImpl");
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -293,8 +292,8 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setFacet(true);
 		for (Entry<String, List<String>> entry : fields.entrySet()) {
 			for (String value : entry.getValue()) {
-				solrQuery.addFacetQuery(String.format("%s:\"%s\"",
-						entry.getKey(), value));
+				String query = String.format("%s:\"%s\"", entry.getKey(), value.replace("\"", "\\\""));
+				solrQuery.addFacetQuery(query);
 			}
 		}
 		QueryResponse response;
