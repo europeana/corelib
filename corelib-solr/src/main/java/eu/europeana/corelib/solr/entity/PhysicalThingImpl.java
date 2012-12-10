@@ -7,6 +7,7 @@ import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.solr.entity.PhysicalThing;
 import eu.europeana.corelib.utils.StringArrayUtils;
+
 @Entity("PhysicalThing")
 public class PhysicalThingImpl extends AbstractEdmEntityImpl implements PhysicalThing {
 
