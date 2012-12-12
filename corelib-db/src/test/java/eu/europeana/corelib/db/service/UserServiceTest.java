@@ -149,7 +149,7 @@ public class UserServiceTest {
 		assertNotNull("Unable to create user", user);
 		assertEquals("Password not correctly encoded.", user.getPassword(), HASH1);
 
-		user = userService.changePassword(user.getId(), PASSWORD1, PASSWORD2);
+		user = userService.changePassword(user.getId(), HASH1, PASSWORD2);
 		assertEquals("Password not correctly changed/encoded.", user.getPassword(), HASH2);
 
 		try {
