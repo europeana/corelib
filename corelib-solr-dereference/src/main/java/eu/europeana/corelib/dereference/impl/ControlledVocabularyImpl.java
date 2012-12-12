@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
@@ -52,6 +53,7 @@ public class ControlledVocabularyImpl implements ControlledVocabulary {
 	// Geonames always point to URI/ResourceCode/about.rdf
 	// rather than URI/ResourceCode which redirects to the Geonames website.
 	private String suffix;
+	@Embedded
 	private Map<String, List<EdmMappedField>> elements;
 	private String replaceUrl;
 	

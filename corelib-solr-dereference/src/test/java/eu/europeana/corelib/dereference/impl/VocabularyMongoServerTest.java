@@ -37,7 +37,7 @@ public class VocabularyMongoServerTest {
 			Map<String,List<EdmMappedField>> elements = new HashMap<String, List<EdmMappedField>>();
 			List<EdmMappedField> lst = new ArrayList<EdmMappedField>();
 			EdmMappedField dateField = new EdmMappedField();
-			dateField.setLabel(EdmLabel.AG_DC_DATE);
+			dateField.setLabel(EdmLabel.AG_DC_DATE.toString());
 			lst.add(dateField);
 			elements.put("test",lst);
 			voc.setElements(elements);

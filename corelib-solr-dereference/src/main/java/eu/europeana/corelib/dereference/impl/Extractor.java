@@ -1198,7 +1198,7 @@ public class Extractor {
 			elements.put(fieldToMap, new ArrayList<EdmMappedField>());
 		} else if (!field.contains(europeanaField)) {
 			EdmMappedField edmMappedField = new EdmMappedField();
-			edmMappedField.setLabel(europeanaField);
+			edmMappedField.setLabel(europeanaField.toString());
 			edmMappedField.setAttribute(StringUtils.isNotBlank(attribute)?attribute:null);
 				
 			

@@ -1,18 +1,19 @@
 package eu.europeana.corelib.dereference.impl;
 
-import eu.europeana.corelib.definitions.model.EdmLabel;
+import com.google.code.morphia.annotations.Entity;
 
+@Entity
 public class EdmMappedField {
 
-	private EdmLabel label;
+	private String label;
 	
 	private String attribute;
 
-	public EdmLabel getLabel() {
+	public String getLabel() {
 		return label;
 	}
 
-	public void setLabel(EdmLabel label) {
+	public void setLabel(String label) {
 		this.label = label;
 	}
 
