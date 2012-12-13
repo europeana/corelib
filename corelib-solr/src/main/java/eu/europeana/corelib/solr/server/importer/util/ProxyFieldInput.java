@@ -1124,14 +1124,15 @@ public final class ProxyFieldInput {
 				}
 			}
 		}
-		 if (((EdmMongoServer) mongoServer).getDatastore()
-			.find(ProxyImpl.class)
-			.filter("about", proxy.getAbout()).get() != null) {
+		ProxyImpl retProxy = ((EdmMongoServer) mongoServer).getDatastore()
+				.find(ProxyImpl.class)
+				.filter("about", proxy.getAbout()).get();
+		 if (retProxy != null) {
 		MongoUtils.updateProxy(mongoProxy, mongoServer);
 		 } else {
 		mongoServer.getDatastore().save(mongoProxy);
 		 }
-		return mongoProxy;
+		return retProxy!=null? retProxy : mongoProxy;
 	}
 
 	/**

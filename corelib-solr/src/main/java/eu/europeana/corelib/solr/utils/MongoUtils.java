@@ -409,7 +409,7 @@ public final class MongoUtils {
 	 * @param proxy The proxy to update
 	 * @param mongoServer The server to be used
 	 */
-	public static void updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
+	public static ProxyImpl updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
 
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "dcContributor",
 				proxy.getDcContributor());
@@ -496,6 +496,7 @@ public final class MongoUtils {
 				proxy.getProxyIn());
 		update(ProxyImpl.class, proxy.getAbout(), mongoServer, "proxyFor",
 				proxy.getProxyFor());
+		return proxy;
 	}
 
 	/*

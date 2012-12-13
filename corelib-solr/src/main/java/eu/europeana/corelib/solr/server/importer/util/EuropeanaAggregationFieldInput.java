@@ -286,10 +286,11 @@ public final class EuropeanaAggregationFieldInput {
 				.filter("about", mongoAggregation.getAbout()).get();
 		if (retrievedAggregation != null) {
 			mongoServer.getDatastore().update(retrievedAggregation, ops);
+			
 		} else {
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
-		return mongoAggregation;
+		return retrievedAggregation!=null?retrievedAggregation:mongoAggregation;
 	}
 
 	/**
