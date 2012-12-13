@@ -89,7 +89,10 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 
 	@Override
 	public int hashCode(){ 
-		return this.getAbout().hashCode();
+		int hash = 7;
+		
+		hash = 31 * hash + (null == this.getAbout()? 0 : this.getAbout().hashCode());
+		return hash;
 	}
 
 	@Override

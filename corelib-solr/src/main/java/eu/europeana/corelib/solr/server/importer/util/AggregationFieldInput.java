@@ -147,12 +147,13 @@ public final class AggregationFieldInput {
 			webResource.setIsNextInSequence(wResourceType.getIsNextInSequence().getResource());
 			ups.set("isNextInSequence", wResourceType.getIsNextInSequence().getResource());
 			}
-			if(mongoServer.searchByAbout(WebResourceImpl.class, webResource.getAbout())!=null){
+			WebResourceImpl retWebResource = mongoServer.searchByAbout(WebResourceImpl.class, webResource.getAbout());
+			if(retWebResource!=null){
 				mongoServer.getDatastore().update(updateQuery, ups);
 			} else {
 				mongoServer.getDatastore().save(webResource);
 			}
-			webResources.add(webResource);
+			webResources.add(retWebResource!=null?retWebResource:webResource);
 			
 		}
 		return webResources;
@@ -254,7 +255,7 @@ public final class AggregationFieldInput {
 
 			MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
 					mongoServer, "webResources", webResources);
-		}
+		} 
 		return aggregation;
 	}
 
