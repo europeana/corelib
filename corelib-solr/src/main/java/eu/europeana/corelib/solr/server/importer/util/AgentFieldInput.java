@@ -230,7 +230,7 @@ public final class AgentFieldInput {
 	private AgentImpl updateMongoAgent(AgentImpl agent,
 			AgentType agentType, MongoServer mongoServer) {
 		
-		if (agent.getBegin() != null) {
+		if (agentType.getBegin() != null) {
 			MongoUtils
 					.update(AgentImpl.class, agent.getAbout(), mongoServer,
 							"begin", MongoUtils
@@ -327,27 +327,27 @@ public final class AgentFieldInput {
 			}
 		}
 
-		if (agent.getEnd() != null) {
+		if (agentType.getEnd() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"end",
 					MongoUtils.createLiteralMapFromString(agentType.getEnd()));
 
 		}
 
-		if (agent.getNote() != null) {
+		if (agentType.getNoteList() != null) {
 
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"note", MongoUtils.createLiteralMapFromList(agentType
 							.getNoteList()));
 		}
 
-		if (agent.getAltLabel() != null) {
+		if (agentType.getAltLabelList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"altLabel", MongoUtils.createLiteralMapFromList(agentType
 							.getAltLabelList()));
 		}
 
-		if (agent.getPrefLabel() != null) {
+		if (agentType.getPrefLabelList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
 					"prefLabel", MongoUtils.createLiteralMapFromList(agentType
 							.getPrefLabelList()));

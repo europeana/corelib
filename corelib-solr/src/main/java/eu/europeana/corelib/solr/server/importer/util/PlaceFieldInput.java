@@ -169,40 +169,40 @@ public final class PlaceFieldInput {
 	 */
 	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
 			MongoServer mongoServer) {
-		if (place.getNote() != null) {
+		if (placeType.getNoteList() != null) {
 		
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"note", MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
 
 		}
 
-		if (place.getAltLabel() != null) {
+		if (placeType.getAltLabelList() != null) {
 			
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"altLabel", MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
 
 		}
 
-		if (place.getPrefLabel() != null) {
+		if (placeType.getPrefLabelList() != null) {
 			
 				MongoUtils.update(PlaceImpl.class, place.getAbout(),
 						mongoServer, "prefLabel", MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
 			
 		}
 
-		if (place.getIsPartOf() != null) {
+		if (placeType.getIsPartOfList() != null) {
 			
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"isPartOf", MongoUtils.createResourceOrLiteralMapFromList(placeType.getIsPartOfList()));
 		}
 		
-		if (place.getDcTermsHasPart() != null) {
+		if (placeType.getHasPartList() != null) {
 			
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"dcTermsHasPart", MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
 		}
 		
-		if (place.getOwlSameAs() != null) {
+		if (placeType.getSameAList() != null) {
 			List<String> owlSameAs = new ArrayList<String>();
 			if (placeType.getSameAList() != null) {
 				for (SameAs sameAsJibx : placeType.getSameAList()) {

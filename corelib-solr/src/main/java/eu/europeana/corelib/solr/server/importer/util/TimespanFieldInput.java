@@ -133,20 +133,20 @@ public final class TimespanFieldInput {
 
 	private TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
 			TimeSpanType timeSpan, MongoServer mongoServer) {
-		if (mongoTimespan.getBegin() != null) {
+		if (timeSpan.getBegin() != null) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "begin",
 					MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
 
 		}
-		if (mongoTimespan.getEnd() != null) {
+		if (timeSpan.getEnd() != null) {
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "end",
 					MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
 
 		}
 
-		if (mongoTimespan.getNote() != null) {
+		if (timeSpan.getNoteList() != null) {
 
 			MongoUtils
 					.update(TimespanImpl.class, mongoTimespan.getAbout(),
@@ -156,7 +156,7 @@ public final class TimespanFieldInput {
 
 		}
 
-		if (mongoTimespan.getAltLabel() != null) {
+		if (timeSpan.getAltLabelList() != null) {
 
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "altLabel", MongoUtils
@@ -165,7 +165,7 @@ public final class TimespanFieldInput {
 
 		}
 
-		if (mongoTimespan.getPrefLabel() != null) {
+		if (timeSpan.getPrefLabelList() != null) {
 
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "prefLabel", MongoUtils
@@ -174,7 +174,7 @@ public final class TimespanFieldInput {
 
 		}
 
-		if (mongoTimespan.getDctermsHasPart() != null) {
+		if (timeSpan.getHasPartList() != null) {
 
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "dctermsHasPart", MongoUtils
@@ -182,7 +182,7 @@ public final class TimespanFieldInput {
 									.getHasPartList()));
 		}
 
-		if (mongoTimespan.getOwlSameAs() != null) {
+		if (timeSpan.getSameAList() != null) {
 			List<String> owlSameAs = new ArrayList<String>();
 			if (timeSpan.getSameAList() != null) {
 				for (SameAs sameAsJibx : timeSpan.getSameAList()) {
