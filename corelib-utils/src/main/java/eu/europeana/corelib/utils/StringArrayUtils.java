@@ -24,64 +24,68 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * String array util classes
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public class StringArrayUtils {
-    
+
 	public static final String[] EMPTY_ARRAY = new String[0];
-	
+
 	/**
 	 * Check if an array is not empty
+	 * 
 	 * @param array
 	 * @return
 	 */
-    public static boolean isNotBlank(String[] array) {
-        return ((array != null) && 
-                (array.length > 0) && 
-                (StringUtils.isNotBlank(array[0])));
-    }
-    
-    /**
-     * Check if an array is empty
-     * @param array
-     * @return
-     */
-    public static boolean isBlank(String[] array) {
-        return !isNotBlank(array);
-    }
-    
-    /**
-     * Convert a list to array
-     * @param list
-     * @return
-     */
-    public static String[] toArray(List<String> list) {
-    	if (list != null) {
-    		return list.toArray(new String[list.size()]);
-    	}
-    	return new String[]{};
-    }
-    
-    /**
-     * Adds a string array to alist of strings
-     * @param list
-     * @param toAdd
-     */
-    public static void addToList(List<String> list, String[] toAdd) {
-    	if ( (list != null) && (isNotBlank(toAdd)) ) {
-    		for (String string : toAdd) {
+	public static boolean isNotBlank(String[] array) {
+		return ((array != null) && (array.length > 0));
+	}
+
+	/**
+	 * Check if an array is empty
+	 * 
+	 * @param array
+	 * @return
+	 */
+	public static boolean isBlank(String[] array) {
+		return !isNotBlank(array);
+	}
+
+	/**
+	 * Convert a list to array
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static String[] toArray(List<String> list) {
+		if (list != null) {
+			return list.toArray(new String[list.size()]);
+		}
+		return new String[] {};
+	}
+
+	/**
+	 * Adds a string array to alist of strings
+	 * 
+	 * @param list
+	 * @param toAdd
+	 */
+	public static void addToList(List<String> list, String[] toAdd) {
+		if ((list != null) && (isNotBlank(toAdd))) {
+			for (String string : toAdd) {
 				list.add(string);
 			}
-    	}
-    }
+		}
+	}
 
-    /**
-     * Create a string representation of a string array
-     * @param items
-     * @return
-     */
-    public static String formatList(String[] items) {
+	/**
+	 * Create a string representation of a string array
+	 * 
+	 * @param items
+	 * @return
+	 */
+	public static String formatList(String[] items) {
 		if (isNotBlank(items)) {
 			if (items.length == 1) {
 				return StringUtils.trim(items[0]);
@@ -101,21 +105,26 @@ public class StringArrayUtils {
 		}
 		return "";
 	}
-    
-    /**
-     * Adds a string to a string array. If the array is null it creates it
-     * @param items
-     * @param str
-     * @return
-     */
-    public static String[] addToArray(String[] items, String str){
-    	if(items==null){
-    		items = new String[1];
-    	}
-    	List<String> itemList = new ArrayList<String>(Arrays.asList(items));
-    	itemList.add(str);
-    	return itemList.toArray(new String[itemList.size()]);
-    	
-    }
+
+	/**
+	 * Adds a string to a string array. If the array is null it creates it
+	 * 
+	 * @param items
+	 * @param str
+	 * @return
+	 */
+	public static String[] addToArray(String[] items, String str) {
+		List<String> itemList;
+		if (items == null) {
+			itemList = new ArrayList<String>();
+		} else {
+			itemList = new ArrayList<String>(Arrays.asList(items));
+		}
+		if (str != null) {
+			itemList.add(str);
+		}
+		return itemList.toArray(new String[itemList.size()]);
+
+	}
 
 }

@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -202,11 +203,14 @@ public final class ConceptFieldInput {
 			Concept concept, MongoServer mongoServer) {
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
+				Map<String, List<String>> newNoteMap;
 				if (conceptMongo.getNote() != null) {
 
-					Map<String, List<String>> newNoteMap = conceptMongo
+					newNoteMap= conceptMongo
 							.getNote();
-
+				} else {
+					newNoteMap=new HashMap<String, List<String>>();
+				}
 					Note note = choice.getNote();
 					if (note.getLang() != null) {
 						if (!MongoUtils.contains(newNoteMap, note.getLang()
@@ -232,13 +236,16 @@ public final class ConceptFieldInput {
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "note",
 							newNoteMap);
-				}
+				
 			}
 			if (choice.ifAltLabel()) {
+				Map<String, List<String>> newAltLabelMap;
 				if (conceptMongo.getAltLabel() != null) {
-					Map<String, List<String>> newAltLabelMap = conceptMongo
+					newAltLabelMap = conceptMongo
 							.getAltLabel();
-
+				} else {
+					newAltLabelMap = new HashMap<String, List<String>>();
+				}
 					AltLabel altLabel = choice.getAltLabel();
 					if (altLabel.getLang() != null) {
 						if (!MongoUtils.contains(newAltLabelMap, altLabel
@@ -265,14 +272,17 @@ public final class ConceptFieldInput {
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "altLabel",
 							newAltLabelMap);
-				}
+				
 			}
 
 			if (choice.ifPrefLabel()) {
+				Map<String, List<String>> newPrefLabelMap;
 				if (conceptMongo.getPrefLabel() != null) {
-					Map<String, List<String>> newPrefLabelMap = conceptMongo
+					 newPrefLabelMap= conceptMongo
 							.getPrefLabel();
-
+				} else {
+					newPrefLabelMap = new HashMap<String, List<String>>();
+				}
 					PrefLabel prefLabel = choice.getPrefLabel();
 					if (prefLabel.getLang() != null) {
 						if (!MongoUtils.contains(newPrefLabelMap, prefLabel
@@ -301,7 +311,7 @@ public final class ConceptFieldInput {
 							conceptMongo.getAbout(), mongoServer, "prefLabel",
 							newPrefLabelMap);
 
-				}
+				
 
 			}
 			if (choice.ifBroader()) {
@@ -311,7 +321,7 @@ public final class ConceptFieldInput {
 					MongoUtils.update(ConceptImpl.class,
 							conceptMongo.getAbout(), mongoServer, "broader",
 							broaderList);
-				}
+				} 
 			}
 			if (choice.ifBroadMatch()) {
 				if (conceptMongo.getBroadMatch() != null) {
@@ -374,19 +384,15 @@ public final class ConceptFieldInput {
 							narrowerList);
 				}
 			}
-			if (choice.ifInScheme()) {
-				if (conceptMongo.getInScheme() != null) {
-					List<String> inSchemeList = createObjectList(
-							conceptMongo.getInScheme(), choice.getInScheme());
-					MongoUtils.update(ConceptImpl.class,
-							conceptMongo.getAbout(), mongoServer, "inScheme",
-							inSchemeList);
-				}
-			}
+			
 			if (choice.ifNotation()) {
+				Map<String, List<String>> newNotationMap;
 				if (conceptMongo.getNotation() != null) {
-					Map<String, List<String>> newNotationMap = conceptMongo
+					 newNotationMap= conceptMongo
 							.getNotation();
+				} else {
+					newNotationMap = new HashMap<String, List<String>>();
+				}
 
 					Notation notation = choice.getNotation();
 					if (notation.getLang() != null) {
@@ -415,7 +421,7 @@ public final class ConceptFieldInput {
 							conceptMongo.getAbout(), mongoServer, "notation",
 							newNotationMap);
 
-				}
+				
 			}
 			if (choice.ifRelated()) {
 				if (conceptMongo.getRelated() != null) {
