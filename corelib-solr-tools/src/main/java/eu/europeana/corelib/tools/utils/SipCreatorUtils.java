@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.tools.utils;
 
+import java.io.File;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -36,13 +38,32 @@ public class SipCreatorUtils extends MappingParser{
 	
 	@Override
 	public String getHashField(String collectionId, String fileName) {
-		String inputString = this.readFile(repository + collectionId + INPUT_FOLDER
-				+ fileName + SUFFIX);
+		
+		String file = findFile(collectionId,fileName);
+		
+		String inputString = this.readFile(file);
 		
 		return inputString == null?null:(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
 				END_HASH_FUNCTION)==null?StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_NO_RECORD,
 						END_HASH_FUNCTION):(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
 								END_HASH_FUNCTION)));
+	}
+
+	private String findFile(String collectionId, String fileName) {
+		String file = repository + collectionId + INPUT_FOLDER
+		+ fileName + SUFFIX;
+		if(new File(file).exists()){
+			return file;
+		}
+		if (new File(repository + collectionId + INPUT_FOLDER).exists()){
+		for(File fFile:new File(repository + collectionId + INPUT_FOLDER).listFiles()){
+			if (StringUtils.contains(fFile.getName(),fileName+"_")){
+				return fFile.getName();
+			}
+			
+		}
+		}
+		return null;
 	}
 
 	/**
@@ -52,6 +73,8 @@ public class SipCreatorUtils extends MappingParser{
 	public void setRepository(String repository) {
 		this.repository = repository;
 	}
+	
+	
 	
 	
 

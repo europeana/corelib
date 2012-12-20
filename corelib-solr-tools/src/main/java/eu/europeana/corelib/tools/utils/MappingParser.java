@@ -42,6 +42,7 @@ public abstract class MappingParser {
 	 * @return
 	 */
 	public String readFile(String mappingFile) {
+		if(mappingFile!=null){
 		StringBuffer strFileContents = new StringBuffer();
 		FileInputStream fin;
 		try {
@@ -60,6 +61,8 @@ public abstract class MappingParser {
 			return null;
 		}
 		return strFileContents.toString();
+		}
+		return null;
 	}
 	
 	
