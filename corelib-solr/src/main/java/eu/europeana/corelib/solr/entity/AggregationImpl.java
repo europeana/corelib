@@ -53,7 +53,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	private String[] edmUnstored;
 
 	@Reference
-	private List<WebResource> webResources;
+	private List<WebResourceImpl> webResources;
 
 	private Boolean edmPreviewNoDistribute;
 
@@ -168,7 +168,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setWebResources(List<? extends WebResource> webResources) {
-		this.webResources = (List<WebResource>) webResources;
+		this.webResources = (List<WebResourceImpl>) webResources;
 	}
 
 	@Override
