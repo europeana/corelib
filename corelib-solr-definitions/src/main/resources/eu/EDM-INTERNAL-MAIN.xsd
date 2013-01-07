@@ -18,23 +18,22 @@
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     targetNamespace="http://www.europeana.eu/schemas/edm/"
-    xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
     xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-    xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
     xmlns:ore="http://www.openarchives.org/ore/terms/"
-    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
-
     <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
     <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd"/>
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
-    <import namespace="http://www.europeana.eu/schemas/edm/enrichment/"
-        schemaLocation="ENRICHMENT.xsd"/>
+    <import namespace="http://www.europeana.eu/schemas/edm/enrichment/" schemaLocation="ENRICHMENT.xsd"/>
     <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
     <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
     <import namespace="http://xmlns.com/foaf/0.1/" schemaLocation="FOAF.xsd"/>
@@ -43,7 +42,7 @@
 
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
-
+ 
     <complexType name="RDF">
         <sequence minOccurs="1" maxOccurs="1">
             <element name="ProvidedCHO" type="edm:ProvidedCHOType" minOccurs="1" maxOccurs="unbounded"/>
@@ -71,6 +70,7 @@
                 <sequence>
                     <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:collectionName" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    
@@ -83,7 +83,6 @@
             </extension>
         </complexContent>
     </complexType>
-
 
     <complexType name="ProvidedCHOType">
         <complexContent>
@@ -98,6 +97,5 @@
             </extension>
         </complexContent>
     </complexType>
-
 
 </schema>

@@ -22,48 +22,48 @@
 <http://www.europeana.eu/schemas/edm/> a owl:Ontology , voaf:Vocabulary ;
 	vann:preferredNamespacePrefix "edm" ;
 	vann:preferredNamespaceUri "http://www.europeana.eu/schemas/edm/" ;
-	dcterms:title "Europeana Data Model (EDM) vocabulary"@en ;
-	dcterms:description "The Europeana Data Model (EDM) is aimed at being an integration medium for collecting, connecting and enriching the descriptions provided by Europeana data providers. The RDF vocabulary for http://www.europeana.eu/schemas/edm/ defines the elements introduced by EDM (as opposed to the ones EDM re-uses from other namespaces)."@en ;
-	dcterms:issued "2010-03-25"^^xsd:date ;
-	dcterms:modified "2012-08-20"^^xsd:date ;
+	dc:title "Europeana Data Model (EDM) vocabulary"@en ;
+	dc:description "The Europeana Data Model (EDM) is aimed at being an integration medium for collecting, connecting and enriching the descriptions provided by Europeana data providers. The RDF vocabulary for http://www.europeana.eu/schemas/edm/ defines the elements introduced by EDM (as opposed to the ones EDM re-uses from other namespaces)."@en ;
+	dc:issued "2010-03-25"^^xsd:date ;
+	dc:modified "2012-08-20"^^xsd:date ;
 	owl:versionInfo "5.2.4" ;
 	radion:versionNotes "The present specification is based on the document \"Definition of the Europeana Data Model elements\", originally edited by Carlo Meghini. It is aligned with the version 5.2.4 of these EDM Definitions."@en ;
-	dcterms:creator <http://data.semanticweb.org/person/antoine-isaac> .
+	dc:creator <http://data.semanticweb.org/person/antoine-isaac> .
 
 <http://data.semanticweb.org/person/antoine-isaac> a foaf:Person ;
 	foaf:name "Antoine Isaac" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor _:node1792v6figx12897 .
+<http://www.europeana.eu/schemas/edm/> dc:contributor _:node17eprgndbx130456 .
 
-_:node1792v6figx12897 a foaf:Organization ;
+_:node17eprgndbx130456 a foaf:Organization ;
 	foaf:name "Participants of Europeana Version 1.0 Work Package on Further Specification of Functionality and Interoperability aspects of Europeana (WP3)" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor <http://www.image.ece.ntua.gr/~ndroso/> .
+<http://www.europeana.eu/schemas/edm/> dc:contributor <http://www.image.ece.ntua.gr/~ndroso/> .
 
 <http://www.image.ece.ntua.gr/~ndroso/> a foaf:Person ;
 	foaf:name "Nasos Drosopoulos" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor <http://www.image.ntua.gr/~tzouvaras/> .
+<http://www.europeana.eu/schemas/edm/> dc:contributor <http://www.image.ntua.gr/~tzouvaras/> .
 
 <http://www.image.ntua.gr/~tzouvaras/> a foaf:Person ;
 	foaf:name "Vassilis Tzouvaras" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor <http://www.ibi.hu-berlin.de/institut/personen/iwanowa> .
+<http://www.europeana.eu/schemas/edm/> dc:contributor <http://www.ibi.hu-berlin.de/institut/personen/iwanowa> .
 
 <http://www.ibi.hu-berlin.de/institut/personen/iwanowa> a foaf:Person ;
 	foaf:name "Julia Iwanowa" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor _:node1792v6figx12898 .
+<http://www.europeana.eu/schemas/edm/> dc:contributor _:node17eprgndbx130457 .
 
-_:node1792v6figx12898 a foaf:Person ;
+_:node17eprgndbx130457 a foaf:Person ;
 	foaf:name "Hugo Manguinhas" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:contributor <http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2> .
+<http://www.europeana.eu/schemas/edm/> dc:contributor <http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2> .
 
 <http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2> a foaf:Person ;
 	foaf:name "Martin Doerr" .
 
-<http://www.europeana.eu/schemas/edm/> dcterms:publisher <http://europeana.eu> .
+<http://www.europeana.eu/schemas/edm/> dc:publisher <http://europeana.eu> .
 
 <http://europeana.eu> a foaf:Organization ;
 	foaf:name "Europeana" .
@@ -80,7 +80,8 @@ and EDM-v523-120123.owl
 3. added owl:Class declarations added for compatibility with some OWL-DL reasoners (feedback from Pedro Szekely, ISI)
 4. added \"of\" at the end of the label for edm:isNextInSequence
 5. added vocabulary metadata to follow Linked Open Vocabularies (http://lov.okfn.org/) and ADMS (https://joinup.ec.europa.eu/asset/adms/release/100) guidelines
-6. removed a domain axiom on edm:hasMet"""@en ;
+6. removed a domain axiom on edm:hasMet
+7. added edm:collectionName and edm:europeanaProxy"""@en ;
 	voaf:toDoList """=======
 Remaining TODOs for EDM-v524-120820.owl
 =======
@@ -105,9 +106,9 @@ potential to perform intentional actions for which they can be held responsible.
 collectively represent that object in Europeana. Such set consists of: all
 descriptions about the object that Europeana collects from (possibly different) content providers, including thumbnails and other forms of abstractions, as well as of the description of the object Europeana builds.""" ;
 	rdfs:subClassOf :EuropeanaObject , ore:Aggregation ;
-	owl:equivalentClass _:node1792v6figx12899 .
+	owl:equivalentClass _:node17eprgndbx130458 .
 
-_:node1792v6figx12899 a owl:Restriction ;
+_:node17eprgndbx130458 a owl:Restriction ;
 	owl:cardinality "1"^^xsd:nonNegativeInteger ;
 	owl:onProperty :aggregatedCHO .
 
@@ -130,9 +131,9 @@ _:node1792v6figx12899 a owl:Restriction ;
 cultural, technological or legal phenomena\" (E5 Event in CIDOC CRM) or a \"set of coherent phenomena or cultural manifestations bounded in time and  space\" (E4 Period in CIDOC CRM)"""@en ;
 	rdfs:subClassOf :NonInformationResource ;
 	owl:equivalentClass <http://www.cidoc-crm.org/rdfs/cidoc-crm#E4.Period> , abc:Temporality , frbr_core:Event ;
-	rdfs:subClassOf _:node1792v6figx12900 .
+	rdfs:subClassOf _:node17eprgndbx130459 .
 
-_:node1792v6figx12900 a owl:Restriction ;
+_:node17eprgndbx130459 a owl:Restriction ;
 	owl:cardinality "1"^^xsd:nonNegativeInteger ;
 	owl:onProperty :happenedAt .
 
@@ -143,18 +144,18 @@ _:node1792v6figx12900 a owl:Restriction ;
 :InformationResource a owl:Class ;
 	rdfs:label "Information Resource"@en ;
 	skos:definition "An information resource is a resource whose essential characteristics can be conveyed in a single message. It can be associated with a URI, it can have a representation, for example: a text is an InformationResource."@en ;
-	owl:equivalentClass <http://www.cidoc-crm.org/rdfs/cidoc-crm#E89.Propositional_Object> , _:node1792v6figx12901 .
+	owl:equivalentClass <http://www.cidoc-crm.org/rdfs/cidoc-crm#E89.Propositional_Object> , _:node17eprgndbx130460 .
 
-_:node1792v6figx12901 a owl:Class ;
-	owl:unionOf _:node1792v6figx12902 .
+_:node17eprgndbx130460 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130461 .
 
-_:node1792v6figx12902 rdf:first frbr_core:Work ;
-	rdf:rest _:node1792v6figx12903 .
+_:node17eprgndbx130461 rdf:first frbr_core:Work ;
+	rdf:rest _:node17eprgndbx130462 .
 
-_:node1792v6figx12903 rdf:first frbr_core:Expression ;
-	rdf:rest _:node1792v6figx12904 .
+_:node17eprgndbx130462 rdf:first frbr_core:Expression ;
+	rdf:rest _:node17eprgndbx130463 .
 
-_:node1792v6figx12904 rdf:first frbr_core:Manifestation ;
+_:node17eprgndbx130463 rdf:first frbr_core:Manifestation ;
 	rdf:rest rdf:nil .
 
 :NonInformationResource a owl:Class ;
@@ -178,13 +179,13 @@ Persons are not items. This class represents Cultural Heritage Objects known to 
 :ProvidedCHO a owl:Class ;
 	rdfs:label "Provided CHO"@en ;
 	skos:definition "This class comprises the Cultural Heritage objects that Europeana collects descriptions about."@en ;
-	rdfs:subClassOf _:node1792v6figx12905 .
+	rdfs:subClassOf _:node17eprgndbx130464 .
 
-_:node1792v6figx12905 a owl:Restriction ;
+_:node17eprgndbx130464 a owl:Restriction ;
 	owl:cardinality "1"^^xsd:nonNegativeInteger ;
-	owl:onProperty _:node1792v6figx12906 .
+	owl:onProperty _:node17eprgndbx130465 .
 
-_:node1792v6figx12906 a rdf:Property ;
+_:node17eprgndbx130465 a rdf:Property ;
 	owl:inverseOf :aggregatedCHO .
 
 :ProvidedCHO skos:note "This class has been mostly motivated by the need to assign a type to the Â“central nodeÂ” in the EDM pattern, during the ingestion process, related to the XML expression of EDM at that stage. It was especially intended to fit the cases where edm:PhysicalThing  cannot be used as the type of the resource standing for the real-world object (independently of any specific data contributor perspective)."@en ;
@@ -215,63 +216,75 @@ Object(s) (CHO for short) it is about."""@en ;
 :begin a owl:DatatypeProperty ;
 	rdfs:label "Begin"@en ;
 	skos:definition "This property denotes the start date of a period of time."@en ;
-	rdfs:domain _:node1792v6figx12907 .
+	rdfs:subPropertyOf :isRelatedTo ;
+	rdfs:domain _:node17eprgndbx130466 .
 
-_:node1792v6figx12907 a owl:Class ;
-	owl:unionOf _:node1792v6figx12908 .
+_:node17eprgndbx130466 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130467 .
 
-_:node1792v6figx12908 rdf:first :Agent ;
-	rdf:rest _:node1792v6figx12909 .
+_:node17eprgndbx130467 rdf:first :Agent ;
+	rdf:rest _:node17eprgndbx130468 .
 
-_:node1792v6figx12909 rdf:first :TimeSpan ;
+_:node17eprgndbx130468 rdf:first :TimeSpan ;
 	rdf:rest rdf:nil .
+
+:collectionName a owl:ObjectProperty ;
+	rdfs:label "Collection Name"@en ;
+	skos:definition "This property holds the collection identifier given to the dataset in Europeana."@en ;
+	skos:note "The value of this property is provided by Europeana as part of the ingestion process."@en .
 
 :currentLocation a owl:ObjectProperty ;
 	rdfs:label "Current Location"@en ;
 	skos:definition "The geographic location and/or name of the repository, building, site, or other entity whose boundaries presently include the resource."@en ;
 	rdfs:subPropertyOf dcterms:spatial ;
 	owl:equivalentProperty wgs84_pos:location , <http://www.cidoc-crm.org/rdfs/cidoc-crm#P55F.has_current_location> ;
-	rdfs:domain _:node1792v6figx12910 .
+	rdfs:domain _:node17eprgndbx130469 .
 
-_:node1792v6figx12910 a owl:Class ;
-	owl:unionOf _:node1792v6figx12911 .
+_:node17eprgndbx130469 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130470 .
 
-_:node1792v6figx12911 rdf:first :ProvidedCHO ;
-	rdf:rest _:node1792v6figx12913 .
+_:node17eprgndbx130470 rdf:first :ProvidedCHO ;
+	rdf:rest _:node17eprgndbx130472 .
 
-_:node1792v6figx12913 rdf:first _:node1792v6figx12912 .
+_:node17eprgndbx130472 rdf:first _:node17eprgndbx130471 .
 
-_:node1792v6figx12912 a owl:Class ;
-	owl:intersectionOf _:node1792v6figx12914 .
+_:node17eprgndbx130471 a owl:Class ;
+	owl:intersectionOf _:node17eprgndbx130473 .
 
-_:node1792v6figx12914 rdf:first ore:Proxy ;
-	rdf:rest _:node1792v6figx12916 .
+_:node17eprgndbx130473 rdf:first ore:Proxy ;
+	rdf:rest _:node17eprgndbx130475 .
 
-_:node1792v6figx12916 rdf:first _:node1792v6figx12915 .
+_:node17eprgndbx130475 rdf:first _:node17eprgndbx130474 .
 
-_:node1792v6figx12915 a owl:Restriction ;
+_:node17eprgndbx130474 a owl:Restriction ;
 	owl:onProperty ore:proxyFor ;
 	owl:someValuesFrom :ProvidedCHO .
 
-_:node1792v6figx12916 rdf:rest rdf:nil .
+_:node17eprgndbx130475 rdf:rest rdf:nil .
 
-_:node1792v6figx12913 rdf:rest rdf:nil .
+_:node17eprgndbx130472 rdf:rest rdf:nil .
 
 :currentLocation rdfs:range :Place .
 
 :end a owl:DatatypeProperty ;
 	rdfs:label "End"@en ;
 	skos:definition "This property denotes the end date of a period of time."@en ;
-	rdfs:domain _:node1792v6figx12917 .
+	rdfs:subPropertyOf :isRelatedTo ;
+	rdfs:domain _:node17eprgndbx130476 .
 
-_:node1792v6figx12917 a owl:Class ;
-	owl:unionOf _:node1792v6figx12918 .
+_:node17eprgndbx130476 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130477 .
 
-_:node1792v6figx12918 rdf:first :Agent ;
-	rdf:rest _:node1792v6figx12919 .
+_:node17eprgndbx130477 rdf:first :Agent ;
+	rdf:rest _:node17eprgndbx130478 .
 
-_:node1792v6figx12919 rdf:first :TimeSpan ;
+_:node17eprgndbx130478 rdf:first :TimeSpan ;
 	rdf:rest rdf:nil .
+
+:europeanaProxy a owl:ObjectProperty ;
+	rdfs:label "Europeana Proxy"@en ;
+	skos:definition "This property serves only as a flag to indicate that a proxy is a Europeana proxy (as opposed to a provider proxy).  It is for internal use only."@en ;
+	skos:note "By default, any proxy without this flag can be interpreted as having the value false and  is a provider proxy."@en .
 
 :happenedAt a owl:ObjectProperty ;
 	rdfs:label "Happened At"@en ;
@@ -293,31 +306,31 @@ happened."""@en ;
 type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the Â“ObjectsÂ” facet in GettyÂ’s Art and Architecture Thesaurus). It does not capture aboutness."""@en ;
 	rdfs:subPropertyOf :isRelatedTo ;
 	owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P2F.has_type> ;
-	rdfs:domain _:node1792v6figx12920 .
+	rdfs:domain _:node17eprgndbx130479 .
 
-_:node1792v6figx12920 a owl:Class ;
-	owl:unionOf _:node1792v6figx12921 .
+_:node17eprgndbx130479 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130480 .
 
-_:node1792v6figx12921 rdf:first :ProvidedCHO ;
-	rdf:rest _:node1792v6figx12923 .
+_:node17eprgndbx130480 rdf:first :ProvidedCHO ;
+	rdf:rest _:node17eprgndbx130482 .
 
-_:node1792v6figx12923 rdf:first _:node1792v6figx12922 .
+_:node17eprgndbx130482 rdf:first _:node17eprgndbx130481 .
 
-_:node1792v6figx12922 a owl:Class ;
-	owl:intersectionOf _:node1792v6figx12924 .
+_:node17eprgndbx130481 a owl:Class ;
+	owl:intersectionOf _:node17eprgndbx130483 .
 
-_:node1792v6figx12924 rdf:first ore:Proxy ;
-	rdf:rest _:node1792v6figx12926 .
+_:node17eprgndbx130483 rdf:first ore:Proxy ;
+	rdf:rest _:node17eprgndbx130485 .
 
-_:node1792v6figx12926 rdf:first _:node1792v6figx12925 .
+_:node17eprgndbx130485 rdf:first _:node17eprgndbx130484 .
 
-_:node1792v6figx12925 a owl:Restriction ;
+_:node17eprgndbx130484 a owl:Restriction ;
 	owl:onProperty ore:proxyFor ;
 	owl:someValuesFrom :ProvidedCHO .
 
-_:node1792v6figx12926 rdf:rest rdf:nil .
+_:node17eprgndbx130485 rdf:rest rdf:nil .
 
-_:node1792v6figx12923 rdf:rest rdf:nil .
+_:node17eprgndbx130482 rdf:rest rdf:nil .
 
 :hasType rdfs:range :NonInformationResource .
 
@@ -343,31 +356,31 @@ resource. Such resources may be nested, such as performing a theater play text, 
 that it annotates."""@en ;
 	rdfs:subPropertyOf dc:subject , <http://www.cidoc-crm.org/rdfs/cidoc-crm#P67F.refers_to> ;
 	rdfs:domain :EuropeanaObject ;
-	rdfs:range _:node1792v6figx12927 .
+	rdfs:range _:node17eprgndbx130486 .
 
-_:node1792v6figx12927 a owl:Class ;
-	owl:unionOf _:node1792v6figx12928 .
+_:node17eprgndbx130486 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130487 .
 
-_:node1792v6figx12928 rdf:first :ProvidedCHO ;
-	rdf:rest _:node1792v6figx12930 .
+_:node17eprgndbx130487 rdf:first :ProvidedCHO ;
+	rdf:rest _:node17eprgndbx130489 .
 
-_:node1792v6figx12930 rdf:first _:node1792v6figx12929 .
+_:node17eprgndbx130489 rdf:first _:node17eprgndbx130488 .
 
-_:node1792v6figx12929 a owl:Class ;
-	owl:intersectionOf _:node1792v6figx12931 .
+_:node17eprgndbx130488 a owl:Class ;
+	owl:intersectionOf _:node17eprgndbx130490 .
 
-_:node1792v6figx12931 rdf:first ore:Proxy ;
-	rdf:rest _:node1792v6figx12933 .
+_:node17eprgndbx130490 rdf:first ore:Proxy ;
+	rdf:rest _:node17eprgndbx130492 .
 
-_:node1792v6figx12933 rdf:first _:node1792v6figx12932 .
+_:node17eprgndbx130492 rdf:first _:node17eprgndbx130491 .
 
-_:node1792v6figx12932 a owl:Restriction ;
+_:node17eprgndbx130491 a owl:Restriction ;
 	owl:onProperty ore:proxyFor ;
 	owl:someValuesFrom :ProvidedCHO .
 
-_:node1792v6figx12933 rdf:rest rdf:nil .
+_:node17eprgndbx130492 rdf:rest rdf:nil .
 
-_:node1792v6figx12930 rdf:rest rdf:nil .
+_:node17eprgndbx130489 rdf:rest rdf:nil .
 
 :isDerivativeOf a rdf:Property ;
 	rdfs:label "Is Derivative Of"@en ;
@@ -383,31 +396,31 @@ _:node1792v6figx12930 rdf:rest rdf:nil .
 	rdfs:label "Is Related To"@en ;
 	skos:definition """edm:isRelatedTo is the most general contextual property in EDM. Contextual
 properties have typically to do either with the things that have happened to or together with the object under consideration, or what the object refers to by its shape, form or features in a figural or encoded form. For sake of simplicity, we include in the contextual relationships also the scholarly classification, which may have either to do with the role and cultural connections of the object in the past, or its kind of structure, substance or contents as it can be verified at present."""@en ;
-	rdfs:domain _:node1792v6figx12934 .
+	rdfs:domain _:node17eprgndbx130493 .
 
-_:node1792v6figx12934 a owl:Class ;
-	owl:unionOf _:node1792v6figx12935 .
+_:node17eprgndbx130493 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130494 .
 
-_:node1792v6figx12935 rdf:first :ProvidedCHO ;
-	rdf:rest _:node1792v6figx12937 .
+_:node17eprgndbx130494 rdf:first :ProvidedCHO ;
+	rdf:rest _:node17eprgndbx130496 .
 
-_:node1792v6figx12937 rdf:first _:node1792v6figx12936 .
+_:node17eprgndbx130496 rdf:first _:node17eprgndbx130495 .
 
-_:node1792v6figx12936 a owl:Class ;
-	owl:intersectionOf _:node1792v6figx12938 .
+_:node17eprgndbx130495 a owl:Class ;
+	owl:intersectionOf _:node17eprgndbx130497 .
 
-_:node1792v6figx12938 rdf:first ore:Proxy ;
-	rdf:rest _:node1792v6figx12940 .
+_:node17eprgndbx130497 rdf:first ore:Proxy ;
+	rdf:rest _:node17eprgndbx130499 .
 
-_:node1792v6figx12940 rdf:first _:node1792v6figx12939 .
+_:node17eprgndbx130499 rdf:first _:node17eprgndbx130498 .
 
-_:node1792v6figx12939 a owl:Restriction ;
+_:node17eprgndbx130498 a owl:Restriction ;
 	owl:onProperty ore:proxyFor ;
 	owl:someValuesFrom :ProvidedCHO .
 
-_:node1792v6figx12940 rdf:rest rdf:nil .
+_:node17eprgndbx130499 rdf:rest rdf:nil .
 
-_:node1792v6figx12937 rdf:rest rdf:nil .
+_:node17eprgndbx130496 rdf:rest rdf:nil .
 
 :isRepresentationOf a owl:ObjectProperty ;
 	rdfs:label "Is Representation Of"@en ;
@@ -444,6 +457,12 @@ overlaps with the occurrence of that event"""@en ;
 	rdfs:domain :Event ;
 	rdfs:range :TimeSpan .
 
+:preview a owl:ObjectProperty ;
+	rdfs:label "Preview"@en ;
+	skos:definition "The URL of a thumbnail representing the digital object, generated by Europeana."@en ;
+	rdfs:subPropertyOf :hasView ;
+	rdfs:range :WebResource .
+
 :realizes a owl:ObjectProperty ;
 	rdfs:label "Realizes"@en ;
 	skos:definition "This property describes a relation between a physical thing and the information resource that is contained in it, visible at it or otherwise carried by it, if applicable."@en ;
@@ -457,18 +476,18 @@ overlaps with the occurrence of that event"""@en ;
 	skos:definition "This property associates the people, things or information resources with an event at which they were present"@en ;
 	rdfs:subPropertyOf dc:relation ;
 	owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P12B.was_present_at> ;
-	rdfs:domain _:node1792v6figx12941 .
+	rdfs:domain _:node17eprgndbx130500 .
 
-_:node1792v6figx12941 a owl:Class ;
-	owl:unionOf _:node1792v6figx12942 .
+_:node17eprgndbx130500 a owl:Class ;
+	owl:unionOf _:node17eprgndbx130501 .
 
-_:node1792v6figx12942 rdf:first :Agent ;
-	rdf:rest _:node1792v6figx12943 .
+_:node17eprgndbx130501 rdf:first :Agent ;
+	rdf:rest _:node17eprgndbx130502 .
 
-_:node1792v6figx12943 rdf:first :InformationResource ;
-	rdf:rest _:node1792v6figx12944 .
+_:node17eprgndbx130502 rdf:first :InformationResource ;
+	rdf:rest _:node17eprgndbx130503 .
 
-_:node1792v6figx12944 rdf:first :PhysicalThing ;
+_:node17eprgndbx130503 rdf:first :PhysicalThing ;
 	rdf:rest rdf:nil .
 
 :wasPresentAt rdfs:range :Event .
@@ -511,12 +530,6 @@ web site of the data provider from which a thumbnail could be generated. This wi
 	rdfs:subPropertyOf :hasView ;
 	rdfs:range :WebResource .
 
-:preview a owl:ObjectProperty ;
-	rdfs:label "Preview"@en ;
-	skos:definition "The URL of a thumbnail representing the digital object, generated by Europeana."@en ;
-	rdfs:subPropertyOf :hasView ;
-	rdfs:range :WebResource .
-
 :provider a rdf:Property ;
 	rdfs:label "Europeana Provider"@en ;
 	skos:definition "Name of the organization that delivers data to Europeana"@en ;
@@ -532,35 +545,35 @@ and isShownAt"""@en .
 	rdfs:label "Europeana Type"@en ;
 	skos:definition "The Europeana material type of the resource"@en ;
 	rdfs:subPropertyOf dc:type ;
-	rdfs:range _:node1792v6figx12945 .
+	rdfs:range _:node17eprgndbx130504 .
 
-_:node1792v6figx12945 a rdfs:Datatype ;
-	owl:oneOf _:node1792v6figx12946 .
+_:node17eprgndbx130504 a rdfs:Datatype ;
+	owl:oneOf _:node17eprgndbx130505 .
 
-_:node1792v6figx12946 rdf:first "TEXT" ;
-	rdf:rest _:node1792v6figx12947 .
+_:node17eprgndbx130505 rdf:first "TEXT" ;
+	rdf:rest _:node17eprgndbx130506 .
 
-_:node1792v6figx12947 rdf:first "IMAGE" ;
-	rdf:rest _:node1792v6figx12948 .
+_:node17eprgndbx130506 rdf:first "IMAGE" ;
+	rdf:rest _:node17eprgndbx130507 .
 
-_:node1792v6figx12948 rdf:first "SOUND" ;
-	rdf:rest _:node1792v6figx12949 .
+_:node17eprgndbx130507 rdf:first "SOUND" ;
+	rdf:rest _:node17eprgndbx130508 .
 
-_:node1792v6figx12949 rdf:first "VIDEO" ;
-	rdf:rest _:node1792v6figx12950 .
+_:node17eprgndbx130508 rdf:first "VIDEO" ;
+	rdf:rest _:node17eprgndbx130509 .
 
-_:node1792v6figx12950 rdf:first "3D" ;
+_:node17eprgndbx130509 rdf:first "3D" ;
 	rdf:rest rdf:nil .
 
 :ugc a owl:DatatypeProperty ;
 	rdfs:label "UGC"@en ;
 	skos:definition "This element is used to identify user generated content (also called user created content).  It should be applied to all digitised or born digital content contributed by the general public and collected by Europeana through a crowdsourcing initiative or project."@en ;
-	rdfs:range _:node1792v6figx12951 .
+	rdfs:range _:node17eprgndbx130510 .
 
-_:node1792v6figx12951 a rdfs:Datatype ;
-	owl:oneOf _:node1792v6figx12952 .
+_:node17eprgndbx130510 a rdfs:Datatype ;
+	owl:oneOf _:node17eprgndbx130511 .
 
-_:node1792v6figx12952 rdf:first "TRUE" ;
+_:node17eprgndbx130511 rdf:first "TRUE" ;
 	rdf:rest rdf:nil .
 
 :unstored a rdf:Property ;
@@ -599,21 +612,21 @@ dc:date rdfs:subPropertyOf :hasMet .
 
 dc:format rdfs:subPropertyOf :hasType .
 
-dcterms:hasFormat rdfs:subPropertyOf _:node1792v6figx12953 .
+dcterms:hasFormat rdfs:subPropertyOf _:node17eprgndbx130512 .
 
-_:node1792v6figx12953 a rdf:Property ;
+_:node17eprgndbx130512 a rdf:Property ;
 	owl:inverseOf :isDerivativeOf .
 
-dcterms:hasVersion rdfs:subPropertyOf _:node1792v6figx12954 .
+dcterms:hasVersion rdfs:subPropertyOf _:node17eprgndbx130513 .
 
-_:node1792v6figx12954 a rdf:Property ;
+_:node17eprgndbx130513 a rdf:Property ;
 	owl:inverseOf :isDerivativeOf .
 
 dcterms:isFormatOf rdfs:subPropertyOf :isDerivativeOf .
 
-dcterms:isReplacedBy rdfs:subPropertyOf _:node1792v6figx12955 .
+dcterms:isReplacedBy rdfs:subPropertyOf _:node17eprgndbx130514 .
 
-_:node1792v6figx12955 a rdf:Property ;
+_:node17eprgndbx130514 a rdf:Property ;
 	owl:inverseOf :isDerivativeOf .
 
 dcterms:isVersionOf rdfs:subPropertyOf :isDerivativeOf .

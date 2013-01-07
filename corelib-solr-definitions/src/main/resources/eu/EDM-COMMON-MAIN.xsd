@@ -14,34 +14,52 @@
    any kind, either express or implied.
    See the Licence for the specific language governing permissions and limitations under
    the Licence.
--->
+-->  
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     targetNamespace="http://www.europeana.eu/schemas/edm/"
-    xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:dcterms="http://purl.org/dc/terms/" 
+    xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
-    xmlns:ore="http://www.openarchives.org/ore/terms/" elementFormDefault="qualified">
-    <annotation>
-        <documentation> EDM First Implementation Schema: Main schema in the EDM namespace, to be
-            wrapped up in RDF </documentation>
-    </annotation>
-
+    xmlns:ore="http://www.openarchives.org/ore/terms/" 
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+    elementFormDefault="qualified">
+    
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
     <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
     <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd"/>
+    <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd" />
+    <import namespace="http://xmlns.com/foaf/0.1/" schemaLocation="FOAF.xsd" />
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
-    <import namespace="http://www.europeana.eu/schemas/edm/enrichment/"
-        schemaLocation="ENRICHMENT.xsd"/>
     <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
-    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
-    <include schemaLocation="CONTEXTS.xsd"/>
+
+    <annotation>
+        <documentation> EDM First Implementation Schema: Main schema in the EDM namespace, to be
+            wrapped up in RDF </documentation>
+        <appinfo>
+            <sch:title>Schematron validation</sch:title>
+            <sch:ns prefix="edm" uri="http://www.europeana.eu/schemas/edm/" />
+            <sch:ns prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+            <sch:ns prefix="dct" uri="http://purl.org/dc/terms/" />
+            <sch:ns prefix="ore" uri="http://www.openarchives.org/ore/terms/" />
+            <sch:ns prefix="owl" uri="http://www.w3.org/2002/07/owl#" />
+            <sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+            <sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
+            <sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
+        </appinfo>
+    </annotation>
 
 
+    <!--  Base EDM Entities Declaration-->
 
     <complexType name="BaseProvidedCHOType">
         <annotation>
@@ -67,32 +85,6 @@
             </extension>
         </complexContent>
     </complexType>
-
-
-    <complexType name="WebResourceType">
-        <annotation>
-            <documentation>Base class for WebResource implementations</documentation>
-        </annotation>
-        <complexContent>
-            <extension base="rdf:AboutType">
-                <sequence>
-                    <element ref="dc:description" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dc:source" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:conformsTo" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:created" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:isFormatOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="dcterms:issued" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
 
     <complexType name="EuropeanaType">
         <annotation>
@@ -185,12 +177,17 @@
         </annotation>
     </element>
 
-
     <element name="country" type="rdf:LiteralType">
         <annotation>
             <documentation>This is the name of the country in which the Provider is based or
                 "Europe" in the case of Europe-wide projects. Example:
                 &lt;edm:country&gt;AL&lt;/edm:country&gt; </documentation>
+        </annotation>
+    </element>
+
+    <element name="collectionName" type="rdf:LiteralType">
+        <annotation>
+            <documentation>A literal indicating the name of the collection</documentation>
         </annotation>
     </element>
     
@@ -277,7 +274,7 @@
                 presentation. Therefore, incorporated resources do in general not form proper parts.
                 Incorporated resources are not part of the same resource, but are taken from other
                 resources, and have an independent history. Therefore edm:incorporates is not a
-                sub-property of dcterm:hasPart. Example:The movie "A Clockwork Orange"" incorporates
+                sub-property of dcterm:hasPart. Example:The movie "A Clockwork Orange" incorporates
                 Rossini's symphony from "La Gazza Ladra" in its original soundtrack. "E.A.Poe, The
                 Raven (poem)" is incorporated in "Emerson Lake &amp; Palmers Tales of Mystery
                 (music)" which is incorporated in "Concert Recording 1973 (vinyl)". </documentation>
@@ -327,6 +324,7 @@
                 Lab by digitizing Mona Lisa is a representation of Mona Lisa </documentation>
         </annotation>
     </element>
+    
     <element name="isShownAt" type="rdf:ResourceType">
         <annotation>
             <documentation>An unambiguous URL reference to the digital object on the provider's web
@@ -416,7 +414,6 @@
         </annotation>
     </element>
 
-
     <element name="provider" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation> Name of the organization that delivers data to Europeana. The
@@ -493,4 +490,5 @@
             </documentation>
         </annotation>
     </element>
+       
 </schema>

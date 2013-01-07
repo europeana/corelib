@@ -18,14 +18,19 @@
 <!--
   Sample EDM First Implementation data file.
 -->
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-  xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
-  xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
-  xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:oai="http://www.openarchives.org/OAI/2.0/"
-  xmlns:ore="http://www.openarchives.org/ore/terms/"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd">
+<?xml-model href="EDM.xsd" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<rdf:RDF xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM-INTERNAL.xsd"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:edm="http://www.europeana.eu/schemas/edm/"
+ xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
+ xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
+ xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+ xmlns:owl="http://www.w3.org/2002/07/owl#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:ore="http://www.openarchives.org/ore/terms/"
+ xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+ xmlns:dcterms="http://purl.org/dc/terms/">
   <edm:ProvidedCHO rdf:about="#ULEI:M0003309">
     <dc:identifier>#ULEI:M0003309</dc:identifier>
     <dc:coverage rdf:resource="http://sws.geonames.org/6255147/"/>
