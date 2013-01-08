@@ -27,7 +27,8 @@
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:ore="http://www.openarchives.org/ore/terms/"
     xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
-    xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
     <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
@@ -44,6 +45,21 @@
     <include schemaLocation="CONTEXTS.xsd"/>
  
     <complexType name="RDF">
+        <annotation>
+            <documentation> The RDF root element declaration </documentation>
+            <!-- Declared namespaces for schematron validation -->
+            <appinfo>
+                <sch:title>Schematron validation</sch:title>
+                <sch:ns prefix="edm" uri="http://www.europeana.eu/schemas/edm/" />
+                <sch:ns prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+                <sch:ns prefix="dct" uri="http://purl.org/dc/terms/" />
+                <sch:ns prefix="ore" uri="http://www.openarchives.org/ore/terms/" />
+                <sch:ns prefix="owl" uri="http://www.w3.org/2002/07/owl#" />
+                <sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+                <sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
+                <sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
+            </appinfo>
+        </annotation>
         <sequence minOccurs="1" maxOccurs="1">
             <element name="ProvidedCHO" type="edm:ProvidedCHOType" minOccurs="1" maxOccurs="unbounded"/>
             <element name="WebResource" type="edm:WebResourceType"  minOccurs="0" maxOccurs="unbounded"/>
@@ -86,11 +102,11 @@
 
     <complexType name="ProvidedCHOType">
         <complexContent>
+            <annotation>
+                <documentation> This class comprises the Cultural Heritage objects that
+                    Europeana collects descriptions about. </documentation>
+            </annotation>
             <extension base="rdf:AboutType">
-                <annotation>
-                    <documentation> This class comprises the Cultural Heritage objects that
-                        Europeana collects descriptions about. </documentation>
-                </annotation>
                 <sequence>
                     <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>

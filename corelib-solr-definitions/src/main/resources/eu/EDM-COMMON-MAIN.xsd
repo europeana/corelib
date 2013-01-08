@@ -30,7 +30,6 @@
     xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
-    xmlns:sch="http://purl.oclc.org/dsdl/schematron"
     elementFormDefault="qualified">
     
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
@@ -45,17 +44,6 @@
     <annotation>
         <documentation> EDM First Implementation Schema: Main schema in the EDM namespace, to be
             wrapped up in RDF </documentation>
-        <appinfo>
-            <sch:title>Schematron validation</sch:title>
-            <sch:ns prefix="edm" uri="http://www.europeana.eu/schemas/edm/" />
-            <sch:ns prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
-            <sch:ns prefix="dct" uri="http://purl.org/dc/terms/" />
-            <sch:ns prefix="ore" uri="http://www.openarchives.org/ore/terms/" />
-            <sch:ns prefix="owl" uri="http://www.w3.org/2002/07/owl#" />
-            <sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
-            <sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
-            <sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
-        </appinfo>
     </annotation>
 
 

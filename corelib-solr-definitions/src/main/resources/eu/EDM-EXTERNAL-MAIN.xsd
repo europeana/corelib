@@ -30,6 +30,21 @@
 	<include schemaLocation="CONTEXTS.xsd"/>	
 	
 	<complexType name="RDF">
+		<annotation>
+			<documentation> The RDF root element declaration </documentation>
+			<!-- Declared namespaces for schematron validation -->
+			<appinfo>
+				<sch:title>Schematron validation</sch:title>
+				<sch:ns prefix="edm" uri="http://www.europeana.eu/schemas/edm/" />
+				<sch:ns prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+				<sch:ns prefix="dct" uri="http://purl.org/dc/terms/" />
+				<sch:ns prefix="ore" uri="http://www.openarchives.org/ore/terms/" />
+				<sch:ns prefix="owl" uri="http://www.w3.org/2002/07/owl#" />
+				<sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+				<sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
+				<sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
+			</appinfo>
+		</annotation>
 		<sequence minOccurs="0" maxOccurs="unbounded">
 			<choice>
 				<element name="ProvidedCHO" type="edm:ProvidedCHOType" />
@@ -44,29 +59,29 @@
 	</complexType>
 
 	<complexType name="ProvidedCHOType">
-		<annotation>
-			<documentation>
-				This class comprises the Cultural Heritage objects that Europeana
-				collects descriptions about.
-			</documentation>
-			<appinfo>
-				<sch:pattern>
-					<sch:rule context="edm:ProvidedCHO">
-						<sch:assert	test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial">
-							id: <sch:value-of select="@rdf:about" />
-							- A ProvidedCHO must have a dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial.
-						</sch:assert>
-						<sch:assert test="dc:title or dc:description">
-							id: <sch:value-of select="@rdf:about" /> - A ProvidedCHO must have a dc:title or dc:description.
-						</sch:assert>
-						<sch:assert test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">
-							id:	<sch:value-of select="@rdf:about" /> - dc:language is mandatory for TEXT objects.
-						</sch:assert>
-					</sch:rule>
-				</sch:pattern>
-			</appinfo>
-		</annotation>
 		<complexContent>
+			<annotation>
+				<documentation>
+					This class comprises the Cultural Heritage objects that Europeana
+					collects descriptions about.
+				</documentation>
+				<appinfo>
+					<sch:pattern>
+						<sch:rule context="edm:ProvidedCHO">
+							<sch:assert	test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial">
+								id: <sch:value-of select="@rdf:about" />
+								- A ProvidedCHO must have a dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial.
+							</sch:assert>
+							<sch:assert test="dc:title or dc:description">
+								id: <sch:value-of select="@rdf:about" /> - A ProvidedCHO must have a dc:title or dc:description.
+							</sch:assert>
+							<sch:assert test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">
+								id:	<sch:value-of select="@rdf:about" /> - dc:language is mandatory for TEXT objects.
+							</sch:assert>
+						</sch:rule>
+					</sch:pattern>
+				</appinfo>
+			</annotation>
 			<extension base="edm:BaseProvidedCHOType">
 				<sequence>
 					<element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0" />

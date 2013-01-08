@@ -75,32 +75,32 @@
 
     <complexType name="ProxyType">
         <complexContent>
+            <annotation>
+                <documentation>A proxy is a resource that stands for an aggregated resource A in
+                    the context of a specific aggregation. The URI of a proxy then can be used
+                    in assertions specific to the aggregated resource A in the context of that
+                    aggregation (http://www.openarchives.org/ore/1.0/primer.html). </documentation>
+                <appinfo>
+                    <sch:pattern>
+                        <sch:rule context="edm:Proxy">
+                            <sch:assert
+                                test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial"
+                                > id: <sch:value-of select="@rdf:about"/> - A Proxy must have a
+                                dc:subject or dc:type or dc:coverage or dct:temporal or
+                                dct:spatial. </sch:assert>
+                            <sch:assert test="dc:title or dc:description"> id: <sch:value-of
+                                select="@rdf:about"/> - A Proxy must have a dc:title or
+                                dc:description. </sch:assert>
+                            <sch:assert
+                                test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))"
+                                > id: <sch:value-of select="@rdf:about"/> - Within a Proxy
+                                context, dc:language is mandatory when dc:language has the value
+                                'TEXT'. </sch:assert>
+                        </sch:rule>
+                    </sch:pattern>
+                </appinfo>
+            </annotation>
             <extension base="edm:BaseProvidedCHOType">
-                <annotation>
-                    <documentation>A proxy is a resource that stands for an aggregated resource A in
-                        the context of a specific aggregation. The URI of a proxy then can be used
-                        in assertions specific to the aggregated resource A in the context of that
-                        aggregation (http://www.openarchives.org/ore/1.0/primer.html). </documentation>
-                    <appinfo>
-                        <sch:pattern>
-                            <sch:rule context="edm:Proxy">
-                                <sch:assert
-                                    test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial"
-                                    > id: <sch:value-of select="@rdf:about"/> - A Proxy must have a
-                                    dc:subject or dc:type or dc:coverage or dct:temporal or
-                                    dct:spatial. </sch:assert>
-                                <sch:assert test="dc:title or dc:description"> id: <sch:value-of
-                                        select="@rdf:about"/> - A Proxy must have a dc:title or
-                                    dc:description. </sch:assert>
-                                <sch:assert
-                                    test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))"
-                                    > id: <sch:value-of select="@rdf:about"/> - Within a Proxy
-                                    context, dc:language is mandatory when dc:language has the value
-                                    'TEXT'. </sch:assert>
-                            </sch:rule>
-                        </sch:pattern>
-                    </appinfo>
-                </annotation>
                 <sequence>
                     <element ref="edm:europeanaProxy" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:userTag" maxOccurs="unbounded" minOccurs="0"/>
