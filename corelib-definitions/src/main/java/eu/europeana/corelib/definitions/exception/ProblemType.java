@@ -22,6 +22,7 @@ public enum ProblemType {
 	UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),
 	RECORD_NOT_INDEXED("Requested Europeana record not indexed.", ProblemResponseAction.IGNORE),
 	RECORD_NOT_FOUND("Requested Europeana record not found.", ProblemResponseAction.IGNORE),
+	PAGE_NOT_FOUND("Requested Europeana page not found.", ProblemResponseAction.IGNORE),
 	RECORD_REVOKED("Europeana record is revoked by the content provider.", ProblemResponseAction.IGNORE),
 	MALFORMED_URL("Required parameters are missing from the request.", ProblemResponseAction.LOG),
 	MALFORMED_QUERY("Query to Search Engine is malformed.", ProblemResponseAction.LOG),
