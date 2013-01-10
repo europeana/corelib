@@ -77,13 +77,13 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			ByteArrayOutputStream mediumOutputStream = new ByteArrayOutputStream();
 			ByteArrayOutputStream largeOutputStream = new ByteArrayOutputStream();
 
-			String xmptiny = XMPUtils.fetchXMP(edmInfo,ThumbSize.TINY);
+			String xmptiny = XMPUtils.fetchXMP(url,edmInfo,ThumbSize.TINY);
 			xmpWriter.updateXmpXml(tinybyteorig, tinyOutputStream, xmptiny);
 			
-			String xmpmedium = XMPUtils.fetchXMP(edmInfo,ThumbSize.MEDIUM);
+			String xmpmedium = XMPUtils.fetchXMP(url,edmInfo,ThumbSize.MEDIUM);
 			xmpWriter.updateXmpXml(mediumbyteorig, mediumOutputStream, xmpmedium);
 			
-			String xmplarge = XMPUtils.fetchXMP(edmInfo,ThumbSize.LARGE);
+			String xmplarge = XMPUtils.fetchXMP(url,edmInfo,ThumbSize.LARGE);
 			xmpWriter.updateXmpXml(largebyteorig, largeOutputStream, xmplarge);
 
 			tinyOutputStream.flush();
@@ -97,7 +97,6 @@ public class ThumbnailServiceImpl extends AbstractNoSqlServiceImpl<ImageCache, S
 			largeOutputStream.flush();
 			byte[] largeconverted = largeOutputStream.toByteArray();
 			largeOutputStream.close();
-			String xmps = Sanselan.getXmpXml(tinyconverted);
 
 			cache.getImages().put(ThumbSize.MEDIUM.toString(), new Image(mediumconverted));
 			cache.getImages().put(ThumbSize.TINY.toString(), new Image(tinyconverted));

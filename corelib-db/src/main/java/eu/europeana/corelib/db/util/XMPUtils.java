@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +66,14 @@ public class XMPUtils {
 	 * @param edmRecord
 	 *            the JIBX EDM representation
 	 * @return the XMP string
-	 * @throws UnsupportedEncodingException 
-	 * @throws DatabaseException 
+	 * @throws UnsupportedEncodingException
+	 * @throws DatabaseException
 	 */
-	public static String fetchXMP(RDF edmRecord, ThumbSize size) throws UnsupportedEncodingException, DatabaseException {
-		Map<EDMXMPValues, String> vals = populatevalues(edmRecord);
-		String xmp = produceXMPPXML(vals, size);
+	public static String fetchXMP(String thumbnailURL, RDF edmRecord,
+			ThumbSize size) throws UnsupportedEncodingException,
+			DatabaseException {
+		Map<EDMXMPValues, List<LanguageValueBean>> vals = populatevalues(edmRecord);
+		String xmp = produceXMPPXML(thumbnailURL, vals, size);
 		return xmp;
 	}
 
@@ -79,26 +84,30 @@ public class XMPUtils {
 	 *            the map of values
 	 * 
 	 * @return a String representing the XMP XML
-	 * @throws UnsupportedEncodingException 
-	 * @throws DatabaseException 
+	 * @throws UnsupportedEncodingException
+	 * @throws DatabaseException
 	 */
-	private static String produceXMPPXML(Map<EDMXMPValues, String> values,
-			ThumbSize size) throws UnsupportedEncodingException, DatabaseException {
+	private static String produceXMPPXML(String thumbnailURL,
+			Map<EDMXMPValues, List<LanguageValueBean>> values, ThumbSize size)
+			throws UnsupportedEncodingException, DatabaseException {
 
-		String cc_attributionName = values.get(EDMXMPValues.cc_attributionName);
-		String cc_morePermissions = values.get(EDMXMPValues.cc_morePermissions);
-		String cc_useGuidelines = values.get(EDMXMPValues.cc_useGuidelines);
-		String dc_rights = values.get(EDMXMPValues.dc_rights);
-		String dc_title = values.get(EDMXMPValues.dc_title);
-		String edm_dataProvider = values.get(EDMXMPValues.edm_dataProvider);
-		String edm_provider = values.get(EDMXMPValues.edm_provider);
-		String edm_rights = values.get(EDMXMPValues.edm_rights);
-		String xmpMM_OriginalDocumentID = values
-				.get(EDMXMPValues.stref_OriginalDocumentID);
-		String xmpMM_DocumentID = values.get(EDMXMPValues.stref_DocumentID);
-		String xmpRights_Marked = values.get(EDMXMPValues.xmpRights_Marked);
-		String xmpRights_WebStatement = values
-				.get(EDMXMPValues.xmpRights_WebStatement);
+		List<LanguageValueBean> cc_attributionName = values.get(EDMXMPValues.cc_attributionName);
+		List<LanguageValueBean> cc_morePermissions = values.get(EDMXMPValues.cc_morePermissions);
+		List<LanguageValueBean> cc_useGuidelines = values.get(EDMXMPValues.cc_useGuidelines);
+		List<LanguageValueBean> dc_rights = values.get(EDMXMPValues.dc_rights);
+		List<LanguageValueBean> dc_title = values.get(EDMXMPValues.dc_title);
+		List<LanguageValueBean> dc_description = values.get(EDMXMPValues.dc_description);
+		List<LanguageValueBean> dc_subject = values.get(EDMXMPValues.dc_subject);
+		List<LanguageValueBean> dc_coverage = values.get(EDMXMPValues.dc_coverage);
+		List<LanguageValueBean> dcterms_spatial = values.get(EDMXMPValues.dcterms_spatial);
+		List<LanguageValueBean> dcterms_temporal = values.get(EDMXMPValues.dcterms_temporal);
+		List<LanguageValueBean> edm_dataProvider = values.get(EDMXMPValues.edm_dataProvider);
+		List<LanguageValueBean> edm_provider = values.get(EDMXMPValues.edm_provider);
+		List<LanguageValueBean> edm_rights = values.get(EDMXMPValues.edm_rights);
+		String xmpMM_OriginalDocumentID = thumbnailURL;
+		List<LanguageValueBean> xmpMM_DocumentID = values.get(EDMXMPValues.stref_DocumentID);
+		List<LanguageValueBean> xmpRights_Marked = values.get(EDMXMPValues.xmpRights_Marked);
+		List<LanguageValueBean> xmpRights_WebStatement = values.get(EDMXMPValues.xmpRights_WebStatement);
 
 		StringBuffer xml = new StringBuffer();
 
@@ -113,45 +122,234 @@ public class XMPUtils {
 		if (cc_attributionName != null || cc_morePermissions != null
 				|| cc_useGuidelines != null) {
 			xml.append("<rdf:Description rdf:about='' xmlns:cc='http://creativecommons.org/ns#'>");
-			if (cc_attributionName != null) {
-				xml.append("<cc:attributionName>");
-				xml.append(cc_attributionName);
-				xml.append("</cc:attributionName>");
+			if (cc_attributionName != null ) {
+				if(cc_attributionName.size() == 1 ){
+					xml.append("<cc:attributionName>");
+					xml.append(cc_attributionName.get(0).getValue());
+					xml.append("</cc:attributionName>");
+				}
+				else if(cc_attributionName.size() > 1){
+					xml.append("<cc:attributionName>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : cc_attributionName){
+						xml.append("<rdf:li>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</cc:attributionName>");
+				}
 			}
 			if (cc_morePermissions != null) {
-				xml.append("<cc:morePermissions>");
-				xml.append(URLEncoder.encode(cc_morePermissions.toString(),"UTF-8"));
-				xml.append("</cc:morePermissions>");
+				if(cc_morePermissions.size() == 1){
+				xml.append("<cc:morePermissions rdf:about='");
+				xml.append(cc_morePermissions.get(0).getValue());
+				xml.append("'/>");
+				}
+				else if(cc_morePermissions.size() > 1){
+					xml.append("<cc:morePermissions>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : cc_morePermissions){
+						xml.append("<rdf:li rdf:about='");
+						xml.append(val.getValue());
+						xml.append("'/>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</cc:morePermissions>");
+				}
 			}
 			if (cc_useGuidelines != null) {
-				xml.append("<cc:useGuidelines>");
-				xml.append(cc_useGuidelines);
-				xml.append("</cc:useGuidelines>");
+				if(cc_useGuidelines.size() == 1){
+				xml.append("<cc:useGuidelines rdf:about='");
+				xml.append(cc_useGuidelines.get(0).getValue());
+				xml.append("'/>");
+				}
+				else if(cc_useGuidelines.size() > 1){
+					xml.append("<cc:useGuidelines>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : cc_useGuidelines){
+						xml.append("<rdf:li rdf:about='");
+						xml.append(val.getValue());
+						xml.append("'/>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</cc:useGuidelines>");
+				}
+				
 			}
 			xml.append("</rdf:Description>");
 		}
 
 		if (dc_title != null || dc_rights != null || edm_rights != null) {
-			xml.append("<rdf:Description rdf:about='' xmlns:dc='http://purl.org/dc/elements/1.1/'>");
-			if (dc_title != null) {
-				xml.append("<dc:title><rdf:Alt><rdf:li xml:lang='x-default'>");
-				xml.append(dc_title);
-				xml.append("</rdf:li></rdf:Alt></dc:title>");
+			xml.append("<rdf:Description rdf:about='' xmlns:dcterms='http://purl.org/dc/terms/'");
+			xml.append(" xmlns:dc='http://purl.org/dc/elements/1.1/'>");
+			
+			if (dc_description != null) {
+				if(dc_description.size() == 1){
+				xml.append("<dc:description xml:lang='");
+				xml.append(dc_description.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dc_description.get(0).getValue());
+				xml.append("</dc:description>");
+				}
+				if(dc_description.size() > 1){
+					xml.append("<dc:description>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dc_description){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dc:description>");
+				}
+				
 			}
+			
+			
+			if (dc_title != null) {
+				if(dc_title.size() == 1){
+				xml.append("<dc_title xml:lang='");
+				xml.append(dc_title.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dc_title.get(0).getValue());
+				xml.append("</dc_title>");
+				}
+				if(dc_title.size() > 1){
+					xml.append("<dc_title>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dc_title){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dc_title>");
+				}
+				
+			}
+			
+			if (dc_subject != null) {
+				if(dc_subject.size() == 1){
+				xml.append("<dc_subject xml:lang='");
+				xml.append(dc_subject.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dc_subject.get(0).getValue());
+				xml.append("</dc_subject>");
+				}
+				if(dc_title.size() > 1){
+					xml.append("<dc_subject>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dc_subject){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dc_subject>");
+				}
+				
+			}
+			
+			if (dc_coverage != null) {
+				if(dc_coverage.size() == 1){
+				xml.append("<dc_coverage xml:lang='");
+				xml.append(dc_coverage.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dc_coverage.get(0).getValue());
+				xml.append("</dc_coverage>");
+				}
+				if(dc_title.size() > 1){
+					xml.append("<dc_coverage>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dc_coverage){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dc_coverage>");
+				}
+				
+			}
+			
+			if (dcterms_spatial != null) {
+				if(dcterms_spatial.size() == 1){
+				xml.append("<dcterms_spatial xml:lang='");
+				xml.append(dcterms_spatial.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dcterms_spatial.get(0).getValue());
+				xml.append("</dcterms_spatial>");
+				}
+				if(dc_title.size() > 1){
+					xml.append("<dcterms_spatial>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dcterms_spatial){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dcterms_spatial>");
+				}
+				
+			}
+			
+			
+			if (dcterms_temporal != null) {
+				if(dcterms_temporal.size() == 1){
+				xml.append("<dcterms_temporal xml:lang='");
+				xml.append(dcterms_temporal.get(0).getLanguage());
+				xml.append("'>");
+				xml.append(dcterms_temporal.get(0).getValue());
+				xml.append("</dcterms_temporal>");
+				}
+				if(dc_title.size() > 1){
+					xml.append("<dcterms_temporal>");
+					xml.append("<rdf:Bag>");
+					for(LanguageValueBean val : dcterms_temporal){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+					xml.append("</rdf:Bag>");
+					xml.append("</dcterms_temporal>");
+				}
+				
+			}
+			
+			
 			if (dc_rights != null || edm_rights != null) {
-				xml.append("<dc:rights><rdf:Alt>");
+				xml.append("<dc:rights><rdf:Bag>");
 				if (dc_rights != null) {
-					xml.append("<rdf:li xml:lang='x-default'>");
-					xml.append(dc_rights);
+					for(LanguageValueBean val : dc_rights){
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
 					xml.append("</rdf:li>");
+					}
 				}
 				if (edm_rights != null) {
-					xml.append("<rdf:li xml:lang='x-default'>");
-					xml.append(edm_rights);
+					for(LanguageValueBean val : edm_rights){
+					xml.append("<rdf:li>");
+					xml.append(val.getValue());
 					xml.append("</rdf:li>");
+					}
 				}
-				xml.append(dc_rights);
-				xml.append("</rdf:Alt></dc:rights>");
+				xml.append("</rdf:Bag></dc:rights>");
 			}
 			xml.append("</rdf:Description>");
 		}
@@ -160,12 +358,12 @@ public class XMPUtils {
 			xml.append("<rdf:Description rdf:about='' xmlns:edm='http://www.europeana.eu/schemas/edm/' xmlns:cc='http://creativecommons.org/ns#'>");
 			if (edm_provider != null) {
 				xml.append("<edm:dataProvider>");
-				xml.append(edm_dataProvider);
+				xml.append(edm_dataProvider.get(0).getValue());
 				xml.append("</edm:dataProvider>");
 			}
 			if (edm_dataProvider != null) {
 				xml.append("<edm:provider>");
-				xml.append(edm_provider);
+				xml.append(edm_provider.get(0).getValue());
 				xml.append("</edm:provider>");
 			}
 			xml.append("</rdf:Description>");
@@ -177,14 +375,14 @@ public class XMPUtils {
 
 			xml.append("<xmpMM:DerivedFrom rdf:parseType=\"Resource\">");
 
-			xml.append("<stRef:DocumentID>");
-			
+			xml.append("<stRef:documentID >");
+
 			StringBuffer imageuiriInPortal = new StringBuffer();
-			
+
 			imageuiriInPortal.append(IMAGEPREFIX);
-			imageuiriInPortal.append(xmpMM_DocumentID);
+			imageuiriInPortal.append(xmpMM_DocumentID.get(0).getValue());
 			imageuiriInPortal.append("&size=");
-			
+
 			switch (size) {
 			case TINY:
 				imageuiriInPortal.append("TINY");
@@ -196,15 +394,15 @@ public class XMPUtils {
 				imageuiriInPortal.append("FULL_DOC");
 				break;
 			}
-			
-			xml.append(URLEncoder.encode(imageuiriInPortal.toString(),"UTF-8"));
 
-			xml.append("</stRef:DocumentID>");
+			xml.append(URLEncoder.encode(imageuiriInPortal.toString(), "UTF-8"));
+
+			xml.append("</stRef:documentID >");
 
 			if (xmpMM_OriginalDocumentID != null) {
-				xml.append("<stRef:OriginalDocumentID>");
-				xml.append(URLEncoder.encode(xmpMM_OriginalDocumentID,"UTF-8"));
-				xml.append("</stRef:OriginalDocumentID>");
+				xml.append("<stRef:originalDocumentID>");
+				xml.append(URLEncoder.encode(xmpMM_OriginalDocumentID, "UTF-8"));
+				xml.append("</stRef:originalDocumentID>");
 			}
 
 			xml.append("</xmpMM:DerivedFrom>");
@@ -216,12 +414,12 @@ public class XMPUtils {
 			xml.append("<rdf:Description rdf:about='' xmlns:xmpRights='http://ns.adobe.com/xap/1.0/rights/' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'>");
 			if (xmpRights_Marked != null) {
 				xml.append("<xmpRights:Marked>");
-				xml.append(xmpRights_Marked);
+				xml.append(xmpRights_Marked.get(0).getValue());
 				xml.append("</xmpRights:Marked>");
 			}
 			if (xmpRights_WebStatement != null) {
 				xml.append("<xmpRights:WebStatement>");
-				xml.append(xmpRights_WebStatement);
+				xml.append(xmpRights_WebStatement.get(0).getValue());
 				xml.append("</xmpRights:WebStatement>");
 			}
 			xml.append("</rdf:Description>");
@@ -234,8 +432,8 @@ public class XMPUtils {
 		try {
 			return formatXml(xml.toString());
 		} catch (Exception e) {
-			
-			throw new DatabaseException(e,ProblemType.XMPMETADATACREATION);
+
+			throw new DatabaseException(e, ProblemType.XMPMETADATACREATION);
 
 		}
 
@@ -251,113 +449,213 @@ public class XMPUtils {
 	 *            the EDM RDF representation
 	 * @return a map containing values to be embedded in the XMP document
 	 */
-	private static Map<EDMXMPValues, String> populatevalues(RDF edmRecord) {
+	private static Map<EDMXMPValues, List<LanguageValueBean>> populatevalues(RDF edmRecord) {
 
-		HashMap<EDMXMPValues, String> EDMXMPValuesMap = new HashMap<EDMXMPValues, String>();
+		HashMap<EDMXMPValues, List<LanguageValueBean>> EDMXMPValuesMap = new HashMap<EDMXMPValues, List<LanguageValueBean>>();
 
 		List<Aggregation> aggregationList = edmRecord.getAggregationList();
-		
+
 		List<ProxyType> proxyList = edmRecord.getProxyList();
 
+		// Deal with Aggregation elements
+		if (!aggregationList.isEmpty() && aggregationList != null) {
 
-			// Deal with Aggregation elements
-			if (!aggregationList.isEmpty() && aggregationList !=null) {
+			for (Aggregation aggregation : aggregationList) {
 
-				for(Aggregation aggregation : aggregationList){
+				//Check isShownAt resource	
+				putInValuesMap(aggregation.getIsShownAt(),EDMXMPValues.cc_morePermissions,EDMXMPValuesMap);
 
-					if (aggregation.getIsShownAt() != null) {
-						EDMXMPValuesMap.put(EDMXMPValues.cc_morePermissions,
-								aggregation.getIsShownAt().getResource());
-					}
 
-					if (aggregation.getObject() != null) {
-						EDMXMPValuesMap.put(EDMXMPValues.stref_OriginalDocumentID,
-								aggregation.getObject().getResource());
-					}
+				//Check the object resource or literal
+				putInValuesMap(aggregation.getObject(),EDMXMPValues.stref_OriginalDocumentID,EDMXMPValuesMap);
 
-					if (aggregation.getRights() != null) {
+				//Check the rights resource or literal
+				 LanguageValueBean rights = putInValuesMap(aggregation.getRights(),EDMXMPValues.edm_rights,EDMXMPValuesMap);
+
+					
+					// Determine the values of xmpRights_Marked & cc_useGuidelines 
+					// according to the contents of the rights field
+					
+					if ("http://creativecommons.org/publicdomain/mark/1.0/".equals(rights.getValue())
+							|| "http://creativecommons.org/publicdomain/zero/1.0/".equals(rights.getValue())) {
+
+						putInValuesMap("False",EDMXMPValues.xmpRights_Marked,EDMXMPValuesMap);
 						
-						if(aggregation.getRights().getResource() != null){
-						EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation
-								.getRights().getResource());
+						putInValuesMap("http://www.europeana.eu/rights/pd-usage-guide/",EDMXMPValues.cc_useGuidelines,EDMXMPValuesMap);
 
-						if (aggregation
-								.getRights()
-								.getResource()
-								.equals("http://creativecommons.org/publicdomain/mark/1.0/")
-								|| aggregation
-										.getRights()
-										.getResource()
-										.equals("http://creativecommons.org/publicdomain/zero/1.0/")) {
-
-							EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
-									"False");
-							EDMXMPValuesMap
-									.put(EDMXMPValues.cc_useGuidelines,
-											"http://www.europeana.eu/rights/pd-usage-guide/");
-						} else {
-							EDMXMPValuesMap.put(EDMXMPValues.xmpRights_Marked,
-									"True");
-						}
-						}
-						
-						else if(aggregation.getRights().getString() != null){
-							EDMXMPValuesMap.put(EDMXMPValues.edm_rights, aggregation.getRights().getString());
-						}
-						
-						
-
+					} else {
+						putInValuesMap("True",EDMXMPValues.xmpRights_Marked,EDMXMPValuesMap);	
 					}
 
-					if (aggregation.getDataProvider() != null) {
-						EDMXMPValuesMap.put(EDMXMPValues.edm_dataProvider,
-								aggregation.getDataProvider().getString());
-					}
-
-					if (aggregation.getProvider() != null) {
-						EDMXMPValuesMap.put(EDMXMPValues.edm_provider, aggregation
-								.getProvider().getString());
-					}
-				}
-	
-
+				//Check the DataProvider resource or literal
+				putInValuesMap(aggregation.getDataProvider(),EDMXMPValues.edm_dataProvider,EDMXMPValuesMap);
+				
+				//Check the Provider resource or literal
+				putInValuesMap(aggregation.getProvider(),EDMXMPValues.edm_provider,EDMXMPValuesMap);
 			}
 
-			// Deal with Proxy elements
-			if (!proxyList.isEmpty() && proxyList !=null) {
-				
-				for(ProxyType pcho: proxyList){
-					
-				// Set the document ID from rdf:about attribute
-				EDMXMPValuesMap.put(EDMXMPValues.stref_DocumentID,
-						pcho.getAbout());
+		}
 
+		// Deal with Proxy elements
+		if (!proxyList.isEmpty() && proxyList != null) {
+
+			for (ProxyType pcho : proxyList) {
+
+				// Set the document ID from rdf:about attribute
+				putInValuesMap(pcho.getAbout(),EDMXMPValues.stref_DocumentID,EDMXMPValuesMap);
+				
 				List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> dclist = pcho
 						.getChoiceList();
 
 				for (eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice dcchoice : dclist) {
+					// Check the dc:creator resource or literal
 					if (dcchoice.ifCreator()) {
-						EDMXMPValuesMap.put(EDMXMPValues.cc_attributionName,
-								dcchoice.getCreator().getString());
+						putInValuesMap(dcchoice.getCreator(),EDMXMPValues.cc_attributionName,EDMXMPValuesMap);
 					}
+					
+					// Check the dc:title  literal
 					if (dcchoice.ifTitle()) {
-						EDMXMPValuesMap.put(EDMXMPValues.dc_title, dcchoice
-								.getTitle().getString());
+						putInValuesMap(dcchoice.getTitle(),EDMXMPValues.dc_title,EDMXMPValuesMap);
 					}
+					
+					
+					// Check the dc:description  literal
+					if (dcchoice.ifDescription()) {
+						if (dcchoice.getDescription() != null
+								&& dcchoice.getDescription().getString() != null) {
+							
+							String desc = dcchoice.getDescription().getString();
+							
+							if(desc.length() < 100){
+								
+								putInValuesMap(desc,EDMXMPValues.dc_description,EDMXMPValuesMap);
+							}
+							else{
+								putInValuesMap("[Item description exceeds the 100 characters maximum limit." +
+										"Follow the 'Derived From Document ID' link for full description.]",
+										EDMXMPValues.dc_description,EDMXMPValuesMap);
+							}
+						}
+					}
+					
+					
+					// Check the dc:rights resource or literal
 					if (dcchoice.ifRights()) {
-						EDMXMPValuesMap.put(EDMXMPValues.dc_rights, dcchoice
-								.getRights().getString());
+						putInValuesMap(dcchoice.getRights(),EDMXMPValues.dc_rights,EDMXMPValuesMap);
+					}
+
+					// Check the dc:subject resource or literal
+					if (dcchoice.ifSubject()) {
+						putInValuesMap(dcchoice.getSubject(),EDMXMPValues.dc_subject,EDMXMPValuesMap);
+					}
+					
+					// Check the dc:coverage resource or literal
+					if (dcchoice.ifCoverage()) {
+						putInValuesMap(dcchoice.getCoverage(),EDMXMPValues.dc_coverage,EDMXMPValuesMap);						
+					}
+					
+					// Check the dc:spatial resource or literal
+					if (dcchoice.ifSpatial()) {
+						putInValuesMap(dcchoice.getSpatial(),EDMXMPValues.dcterms_spatial,EDMXMPValuesMap);	
+					}
+					
+					// Check the dc:temporal resource or literal
+					if (dcchoice.ifTemporal()) {
+						putInValuesMap(dcchoice.getTemporal(),EDMXMPValues.dcterms_temporal,EDMXMPValuesMap);	
 					}
 				}
+
+			}
 		
-
-			}
-			}
-
-
+		}
 		return EDMXMPValuesMap;
 	}
 
+	
+	/**
+	 * @param object
+	 * @param valuekey
+	 * @param valuesMap
+	 */
+	private static <T> LanguageValueBean putInValuesMap(T object, EDMXMPValues valuekey,HashMap<EDMXMPValues, List<LanguageValueBean>> valuesMap){
+		if(object != null){
+		List<LanguageValueBean> lvmlist = valuesMap.get(valuekey);
+		
+		if(lvmlist == null){
+			lvmlist = new ArrayList<LanguageValueBean>();
+			valuesMap.put(valuekey, lvmlist);
+		}
+
+		LanguageValueBean lvm = null;
+		
+		 if(object instanceof String){
+			 lvm = LanguageValueBean.getInstance();
+			 lvm.setValue((String)object);
+			 lvmlist.add(lvm);
+		 }
+		 else{
+			lvm = returnVLBFromJibx(object);
+			lvmlist.add(lvm);
+		 }
+		 return lvm;
+		}
+		else{
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * Invokes the getResource method on an object via reflection
+	 * @param object
+	 * @return
+	 */
+	private static <T> LanguageValueBean returnVLBFromJibx(T object) {
+
+		if (object == null)
+			return null;
+
+		LanguageValueBean vlb = LanguageValueBean.getInstance();
+		
+		
+		Method[] methods = object.getClass().getMethods();
+
+		for (int i = 0; i < methods.length; i++) {
+
+			try {
+			if (methods[i].getName().equals("getResource")) {
+				if(vlb.getValue()== null){
+					String resource = (String) methods[i].invoke(object);
+					vlb.setValue(resource);
+				}
+
+			}
+			if (methods[i].getName().equals("getString")) {
+				if(vlb.getValue()== null){
+				String resource = (String) methods[i].invoke(object);
+				vlb.setValue(resource);
+				}
+		    }
+			if (methods[i].getName().equals("getLang()")) {
+				String resource = (String) methods[i].invoke(object);
+				vlb.setValue(resource);
+		    }
+			
+			} catch (IllegalArgumentException e) {
+
+			} catch (IllegalAccessException e) {
+
+			} catch (InvocationTargetException e) {
+
+			}
+
+		}
+
+		return vlb;
+	}
+	
+
+	
 	/**
 	 * Utility method for pretty printing the XML file created by String
 	 * concatenation

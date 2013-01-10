@@ -26,8 +26,18 @@ package eu.europeana.corelib.db.util;
  * @since 11 Jul 2012
  */
 public enum  EDMXMPValues {
-	
-	dc_title("dc:title"),// dc:title (with xml:lang attribute set to "x-default") from dc:title
+	// dc:title (with xml:lang attribute set to "x-default") from dc:title
+	dc_title("dc:title"),
+	// dc:description (with xml:lang attribute set to "x-default") from dc:description
+	dc_description("dc:description"),
+	// dc:subject (with xml:lang attribute set to "x-default") from dc:subject
+	dc_subject("dc:subject"), 
+	// dc:coverage (with xml:lang attribute set to "x-default") from dc:coverage
+	dc_coverage("dc:coverage"), 
+	// dcterms:spatial (with xml:lang attribute set to "x-default") from dcterms:spatial
+	dcterms_spatial("dcterms:spatial"),  
+	// dcterms:temporal (with xml:lang attribute set to "x-default") from dcterms:temporal
+	dcterms_temporal("dcterms:temporal"),
 	// dc:rights from edm:rights
 	dc_rights("dc:rights"),
 	// cc:attributionName from dc:creator
@@ -56,6 +66,8 @@ public enum  EDMXMPValues {
 	// http://creativecommons.org/publicdomain/mark/1.0/ or
 	// http://creativecommons.org/publicdomain/zero/
 	cc_useGuidelines("cc:useGuidelines");
+
+	
 	
 	
 	private String fieldId;
