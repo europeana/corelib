@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDITEM)
-public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
+public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem, Comparable<SavedItem> {
 	private static final long serialVersionUID = -7059004310525816113L;
 
 	@Column(length = FIELDSIZE_AUTHOR)
@@ -48,5 +48,19 @@ public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem 
 	@Override
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	@Override
+	public int compareTo(SavedItem o) {
+		if (this.getDateSaved().before(o.getDateSaved())) {
+			return 1;
+		}
+		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return "SavedItemImpl [author=" + author + ", getId()=" + getId()
+				+ ", getDateSaved()=" + getDateSaved() + ", getTitle()=" + getTitle() + "]";
 	}
 }

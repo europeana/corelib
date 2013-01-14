@@ -32,7 +32,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
-public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
+public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag, Comparable<SocialTag> {
 	private static final long serialVersionUID = -3635227115883742004L;
 
 	@Column(length = FIELDSIZE_TAG)
@@ -50,5 +50,13 @@ public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag 
 	@Override
 	public void setTag(String tag) {
 		this.tag = StringUtils.lowerCase(tag);
+	}
+
+	@Override
+	public int compareTo(SocialTag o) {
+		if (this.getDateSaved().before(o.getDateSaved())) {
+			return 1;
+		}
+		return 0;
 	}
 }

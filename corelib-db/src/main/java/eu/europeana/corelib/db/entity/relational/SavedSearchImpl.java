@@ -38,65 +38,74 @@ import eu.europeana.corelib.utils.DateUtils;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDSEARCH)
-public class SavedSearchImpl extends UserConnectedImpl<Long> implements RelationalDatabase, SavedSearch {
-    private static final long serialVersionUID = 667805541628354454L;
+public class SavedSearchImpl extends UserConnectedImpl<Long> implements
+		RelationalDatabase, SavedSearch, Comparable<SavedSearch> {
+	private static final long serialVersionUID = 667805541628354454L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-    /*
-     * query is the just the input from the search box.
-     */
-    @Column(length = FIELDSIZE_QUERY)
-    private String query;
+	/*
+	 * query is the just the input from the search box.
+	 */
+	@Column(length = FIELDSIZE_QUERY)
+	private String query;
 
-    /*
-     * QuerySring is the full path of query parameters.
-     */
-    @Column(length = FIELDSIZE_QUERY_STRING)
-    private String queryString;
+	/*
+	 * QuerySring is the full path of query parameters.
+	 */
+	@Column(length = FIELDSIZE_QUERY_STRING)
+	private String queryString;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateSaved;
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateSaved;
 
 	/**
 	 * GETTERS & SETTTERS
 	 */
 
 	@Override
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    @Override
+	@Override
 	public String getQuery() {
-        return query;
-    }
+		return query;
+	}
 
-    @Override
+	@Override
 	public void setQuery(String query) {
-        this.query = query;
-    }
+		this.query = query;
+	}
 
-    @Override
+	@Override
 	public String getQueryString() {
-        return queryString;
-    }
+		return queryString;
+	}
 
-    @Override
+	@Override
 	public void setQueryString(String queryString) {
-        this.queryString = queryString;
-    }
+		this.queryString = queryString;
+	}
 
-    @Override
+	@Override
 	public Date getDateSaved() {
-        return DateUtils.clone(dateSaved);
-    }
+		return DateUtils.clone(dateSaved);
+	}
 
-    @Override
+	@Override
 	public void setDateSaved(Date dateSaved) {
-        this.dateSaved = DateUtils.clone(dateSaved);
-    }
+		this.dateSaved = DateUtils.clone(dateSaved);
+	}
+
+	@Override
+	public int compareTo(SavedSearch o) {
+		if (this.getDateSaved().before(o.getDateSaved())) {
+			return 1;
+		}
+		return 0;
+	}
 }
