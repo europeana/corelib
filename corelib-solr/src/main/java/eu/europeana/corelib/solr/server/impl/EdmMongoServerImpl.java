@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.server.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -53,6 +54,8 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
  */
 public class EdmMongoServerImpl implements EdmMongoServer {
 
+	private final Logger log = Logger.getLogger(getClass().getName());
+
 	private Mongo mongoServer;
 	private String databaseName;
 	private String username;
@@ -63,6 +66,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
+		log.info("EDMMongoServer is instantiated");
 		this.mongoServer = mongoServer;
 		this.mongoServer.getMongoOptions().socketKeepAlive = true;
 		this.mongoServer.getMongoOptions().autoConnectRetry = true;
@@ -105,6 +109,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					this.password.toCharArray());
 		}
 		datastore.ensureIndexes();
+		log.info("EDMMongoServer datastore is created");
 	}
 
 	@Override
@@ -155,6 +160,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public void close() {
+		log.info("EDMMongoServer is closed");
 		mongoServer.close();
 	}
 }
