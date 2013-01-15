@@ -72,7 +72,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.mongoServer.getMongoOptions().autoConnectRetry = true;
 		this.mongoServer.getMongoOptions().connectionsPerHost = 10;
 		this.mongoServer.getMongoOptions().connectTimeout = 5000;
-		this.mongoServer.getMongoOptions().socketTimeout = 60;
+		this.mongoServer.getMongoOptions().socketTimeout = 6000;
 		this.databaseName = databaseName;
 		this.username = username;
 		this.password = password;
