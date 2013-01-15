@@ -24,9 +24,9 @@
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-	
+
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used... -->
-	
+
 	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
 		<constructor-arg value="#{europeanaProperties['solr.url']}"/>
 		<property name="followRedirects" value="false"/>
@@ -44,7 +44,6 @@
 			</bean>
 		</constructor-arg>
 		<constructor-arg value="search"/>
-		
 	</bean>
 
 	<bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">

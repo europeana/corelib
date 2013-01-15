@@ -30,5 +30,5 @@
 		<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
 		<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
 	</bean>
-	
+
 </beans>
