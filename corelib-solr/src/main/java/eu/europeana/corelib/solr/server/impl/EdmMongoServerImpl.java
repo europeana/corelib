@@ -65,6 +65,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			String username, String password) throws MongoDBException {
 		this.mongoServer = mongoServer;
 		this.mongoServer.getMongoOptions().socketKeepAlive = true;
+		this.mongoServer.getMongoOptions().autoConnectRetry = true;
 		this.databaseName = databaseName;
 		this.username = username;
 		this.password = password;
