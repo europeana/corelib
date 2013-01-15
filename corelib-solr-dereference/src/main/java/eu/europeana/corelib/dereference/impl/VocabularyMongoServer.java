@@ -17,6 +17,7 @@
 package eu.europeana.corelib.dereference.impl;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -33,9 +34,12 @@ import eu.europeana.corelib.solr.MongoServer;
  */
 public class VocabularyMongoServer implements MongoServer {
 
+	private final Logger log = Logger.getLogger(getClass().getName());
+
 	private Mongo mongoServer;
 	private String databaseName;
 	private Datastore datastore;
+
 	@Override
 	/**
 	 * Retrieve the created datastore
@@ -53,7 +57,7 @@ public class VocabularyMongoServer implements MongoServer {
 	}
 
 	public VocabularyMongoServer(Mongo mongoServer, String databaseName) {
-		
+		log.info("VocabularyMongoServer is instantiated");
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		createDatastore();
@@ -66,7 +70,6 @@ public class VocabularyMongoServer implements MongoServer {
 	 * Create a datastore and map the required morphia entities
 	 */
 	private void createDatastore() {
-
 		Morphia morphia = new Morphia();
 		morphia.map(ControlledVocabularyImpl.class)
 				.map(EntityImpl.class);
@@ -74,6 +77,7 @@ public class VocabularyMongoServer implements MongoServer {
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		
 		datastore.ensureIndexes();
+		log.info("VocabularyMongoServer datastore is created");
 	}
 	
 	/**
