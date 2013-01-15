@@ -26,12 +26,12 @@
 		<edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
 		<edm:object rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
 		<edm:provider>MIMO - Musical Instrument Museums Online</edm:provider>
-		<edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+		<edm:rights rdf:resource="http://creativecommons.org/publicdomain/mark/1.0/" />
 	</ore:Aggregation>
 	<edm:Proxy rdf:about="#ULEI:M0003707">
-		<dc:coverage />
 		<dc:description>in Sopranlage</dc:description>
 		<dc:identifier>#ULEI:M0003707</dc:identifier>
+		<dc:subject>Philomele</dc:subject>
 		<dc:title>Philomele</dc:title>
 		<dc:type rdf:resource="http://www.mimo-db.eu/InstrumentsKeywords/3570" />
 		<edm:type>IMAGE</edm:type>
