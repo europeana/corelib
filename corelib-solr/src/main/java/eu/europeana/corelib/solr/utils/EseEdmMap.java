@@ -51,7 +51,6 @@ public enum EseEdmMap {
 	;
 	
 	private EseEdmMap(String field) {
-		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * Return the field value from a bean

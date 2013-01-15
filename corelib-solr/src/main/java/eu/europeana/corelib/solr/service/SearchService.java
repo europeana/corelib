@@ -92,6 +92,13 @@ public interface SearchService {
 	 */
 	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
 
+	/**
+	 * Create a sitemap
+	 * @param beanInterface
+	 * @param query
+	 * @return
+	 * @throws SolrTypeException
+	 */
 	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException;
 
 	/**

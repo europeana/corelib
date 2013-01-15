@@ -110,8 +110,10 @@ public class StringArrayUtils {
 	 * Adds a string to a string array. If the array is null it creates it
 	 * 
 	 * @param items
+	 * 			The array to append data in
 	 * @param str
-	 * @return
+	 * 			The string to append
+	 * @return The modified array
 	 */
 	public static String[] addToArray(String[] items, String str) {
 		List<String> itemList;

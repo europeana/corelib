@@ -208,7 +208,6 @@ public final class TimespanFieldInput {
 
 	private TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();
-		// mongoTimespan.setId(new ObjectId());
 		mongoTimespan.setAbout(timeSpan.getAbout());
 		mongoTimespan.setNote(MongoUtils.createLiteralMapFromList(timeSpan
 				.getNoteList()));

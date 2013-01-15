@@ -160,7 +160,6 @@ public final class WebResourcesFieldInput {
 	public WebResourceImpl createWebResourceMongoField(
 			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
-		//mongoWebResource.setId(new ObjectId());
 		mongoWebResource.setAbout(webResource.getAbout());
 		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights()));
 		mongoWebResource.setWebResourceDcRights(MongoUtils.createResourceOrLiteralMapFromList(webResource.getRightList()));

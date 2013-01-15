@@ -52,4 +52,10 @@ public class StringArrayUtilsTest {
 		Assert.assertEquals("1, 2 & 3", StringArrayUtils.formatList(new String[]{"1","2 "," 3"}));
 	}
 	
+	@Test
+	public void addToArrayTest(){
+		String[] items = new String[]{"1","2"};
+		String str= "3";
+		Assert.assertEquals(3,StringArrayUtils.addToArray(items, str).length);
+	}
 }

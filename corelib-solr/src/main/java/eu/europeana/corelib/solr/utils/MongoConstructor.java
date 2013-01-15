@@ -59,7 +59,6 @@ import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
-//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 
 /**
  * A FullBean Constructor from an EDM XML
@@ -68,11 +67,7 @@ import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
  */
 public class MongoConstructor {
 
-	// private EdmMongoServerImpl mongoServer;
 
-	// public void setMongoServer(EdmMongoServerImpl mongoServer) {
-	// this.mongoServer = mongoServer;
-	// }
 	/**
 	 * Constructs a FullBean from an RDF TODO: check for sanity
 	 * 
@@ -103,7 +98,6 @@ public class MongoConstructor {
 		String europeanaAggregationAbout = "/europeana/aggregation";
 		String proxyAbout = "/provider/proxy";
 		String europeanaProxy = "/europeana/proxy";
-		// Revisit this part
 		for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
 			fullBean.setAbout(pcho.getAbout());
 			aggregatedCHO = pcho.getAbout();
@@ -205,11 +199,6 @@ public class MongoConstructor {
 						.createAggregationMongoFields(eaggregation, mongoServer));
 			}
 		}
-		// To this part
-
-		// AggregationImpl aggregation = aggregations.get(0);
-		// aggregation.setWebResources(webResources);
-		// MongoUtils.updateAggregation(aggregation, mongoServer);
 
 		fullBean.setProvidedCHOs(providedCHOs);
 

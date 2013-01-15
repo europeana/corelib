@@ -88,7 +88,7 @@ public final class MongoUtils {
 	}
 
 	/**
-	 * Method that delets a class from the Mongo storage
+	 * Method that deletes a class from the Mongo storage
 	 * 
 	 * @param clazz
 	 *            The class to delete
@@ -97,7 +97,7 @@ public final class MongoUtils {
 	 * @param mongoServer
 	 *            The mongo server to use
 	 */
-	public synchronized static void delete(Class<?> clazz, String about,
+	public static void delete(Class<?> clazz, String about,
 			EdmMongoServer mongoServer) {
 		mongoServer.getDatastore().delete(
 				mongoServer.getDatastore().createQuery(clazz)
@@ -499,19 +499,4 @@ public final class MongoUtils {
 		return proxy;
 	}
 
-	/*
-	 * public static void updateFullBean(FullBean fullBean, EdmMongoServer
-	 * mongoDBServer) {
-	 * 
-	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-	 * "aggregations", fullBean.getAggregations());
-	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-	 * "agents", fullBean.getAgents()); updateEntity(FullBeanImpl.class,
-	 * fullBean.getAbout(), mongoDBServer, "concepts", fullBean.getConcepts());
-	 * updateEntity(FullBeanImpl.class, fullBean.getAbout(), mongoDBServer,
-	 * "timespans", fullBean.getTimespans()); updateEntity(FullBeanImpl.class,
-	 * fullBean.getAbout(), mongoDBServer, "providedCHOs",
-	 * fullBean.getProvidedCHOs()); updateEntity(FullBeanImpl.class,
-	 * fullBean.getAbout(), mongoDBServer, "places", fullBean.getPlaces()); }
-	 */
 }
