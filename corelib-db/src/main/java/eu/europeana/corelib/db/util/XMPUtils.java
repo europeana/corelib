@@ -46,6 +46,7 @@ import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.ThumbSize;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Utility classes for XMP manipulation/generation
@@ -159,13 +160,13 @@ public class XMPUtils {
 				break;
 			}
 
-			xml.append(URLEncoder.encode(imageuiriInPortal.toString(), "UTF-8"));
+			xml.append(escapeXML(imageuiriInPortal.toString()));
 
 			xml.append("</stRef:documentID >");
 
 			if (xmpMM_OriginalDocumentID != null) {
 				xml.append("<stRef:originalDocumentID>");
-				xml.append(URLEncoder.encode(xmpMM_OriginalDocumentID, "UTF-8"));
+				xml.append(escapeXML(xmpMM_OriginalDocumentID));
 				xml.append("</stRef:originalDocumentID>");
 			}
 
@@ -181,14 +182,14 @@ public class XMPUtils {
 
 			if (dc_title != null) {
 				if (dc_title.size() == 1) {
-					xml.append("<dc_title xml:lang='");
+					xml.append("<dc:title xml:lang='");
 					xml.append(dc_title.get(0).getLanguage());
 					xml.append("'>");
 					xml.append(dc_title.get(0).getValue());
-					xml.append("</dc_title>");
+					xml.append("</dc:title>");
 				}
 				if (dc_title.size() > 1) {
-					xml.append("<dc_title>");
+					xml.append("<dc:title>");
 					xml.append("<rdf:Alt>");
 					for (LanguageValueBean val : dc_title) {
 						xml.append("<rdf:li xml:lang='");
@@ -198,12 +199,35 @@ public class XMPUtils {
 						xml.append("</rdf:li>");
 					}
 					xml.append("</rdf:Alt>");
-					xml.append("</dc_title>");
+					xml.append("</dc:title>");
 				}
 
 				if (size == ThumbSize.TINY) {
 					xml.append("</rdf:Description>");
 				}
+			}
+			
+			if (dc_rights != null || edm_rights != null) {
+				xml.append("<dc:rights><rdf:Bag>");
+				
+				if (edm_rights != null) {
+					for (LanguageValueBean val : edm_rights) {
+						xml.append("<rdf:li>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+				}
+				
+				if (dc_rights != null) {
+					for (LanguageValueBean val : dc_rights) {
+						xml.append("<rdf:li xml:lang='");
+						xml.append(val.getLanguage());
+						xml.append("'>");
+						xml.append(val.getValue());
+						xml.append("</rdf:li>");
+					}
+				}
+				xml.append("</rdf:Bag></dc:rights>");
 			}
 
 			if (size != ThumbSize.TINY) {
@@ -234,14 +258,14 @@ public class XMPUtils {
 
 				if (dc_subject != null) {
 					if (dc_subject.size() == 1) {
-						xml.append("<dc_subject xml:lang='");
+						xml.append("<dc:subject xml:lang='");
 						xml.append(dc_subject.get(0).getLanguage());
 						xml.append("'>");
 						xml.append(dc_subject.get(0).getValue());
-						xml.append("</dc_subject>");
+						xml.append("</dc:subject>");
 					}
 					if (dc_title.size() > 1) {
-						xml.append("<dc_subject>");
+						xml.append("<dc:subject>");
 						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dc_subject) {
 							xml.append("<rdf:li xml:lang='");
@@ -251,21 +275,21 @@ public class XMPUtils {
 							xml.append("</rdf:li>");
 						}
 						xml.append("</rdf:Bag>");
-						xml.append("</dc_subject>");
+						xml.append("</dc:subject>");
 					}
 
 				}
 
 				if (dc_coverage != null) {
 					if (dc_coverage.size() == 1) {
-						xml.append("<dc_coverage xml:lang='");
+						xml.append("<dc:coverage xml:lang='");
 						xml.append(dc_coverage.get(0).getLanguage());
 						xml.append("'>");
 						xml.append(dc_coverage.get(0).getValue());
-						xml.append("</dc_coverage>");
+						xml.append("</dc:coverage>");
 					}
 					if (dc_title.size() > 1) {
-						xml.append("<dc_coverage>");
+						xml.append("<dc:coverage>");
 						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dc_coverage) {
 							xml.append("<rdf:li xml:lang='");
@@ -275,21 +299,21 @@ public class XMPUtils {
 							xml.append("</rdf:li>");
 						}
 						xml.append("</rdf:Bag>");
-						xml.append("</dc_coverage>");
+						xml.append("</dc:coverage>");
 					}
 
 				}
 
 				if (dcterms_spatial != null) {
 					if (dcterms_spatial.size() == 1) {
-						xml.append("<dcterms_spatial xml:lang='");
+						xml.append("<dcterms:spatial xml:lang='");
 						xml.append(dcterms_spatial.get(0).getLanguage());
 						xml.append("'>");
 						xml.append(dcterms_spatial.get(0).getValue());
-						xml.append("</dcterms_spatial>");
+						xml.append("</dcterms:spatial>");
 					}
 					if (dc_title.size() > 1) {
-						xml.append("<dcterms_spatial>");
+						xml.append("<dcterms:spatial>");
 						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dcterms_spatial) {
 							xml.append("<rdf:li xml:lang='");
@@ -299,21 +323,21 @@ public class XMPUtils {
 							xml.append("</rdf:li>");
 						}
 						xml.append("</rdf:Bag>");
-						xml.append("</dcterms_spatial>");
+						xml.append("</dcterms:spatial>");
 					}
 
 				}
 
 				if (dcterms_temporal != null) {
 					if (dcterms_temporal.size() == 1) {
-						xml.append("<dcterms_temporal xml:lang='");
+						xml.append("<dcterms:temporal xml:lang='");
 						xml.append(dcterms_temporal.get(0).getLanguage());
 						xml.append("'>");
 						xml.append(dcterms_temporal.get(0).getValue());
-						xml.append("</dcterms_temporal>");
+						xml.append("</dcterms:temporal>");
 					}
 					if (dc_title.size() > 1) {
-						xml.append("<dcterms_temporal>");
+						xml.append("<dcterms:temporal>");
 						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dcterms_temporal) {
 							xml.append("<rdf:li xml:lang='");
@@ -323,31 +347,12 @@ public class XMPUtils {
 							xml.append("</rdf:li>");
 						}
 						xml.append("</rdf:Bag>");
-						xml.append("</dcterms_temporal>");
+						xml.append("</dcterms:temporal>");
 					}
 
 				}
 
-				if (dc_rights != null || edm_rights != null) {
-					xml.append("<dc:rights><rdf:Bag>");
-					if (dc_rights != null) {
-						for (LanguageValueBean val : dc_rights) {
-							xml.append("<rdf:li xml:lang='");
-							xml.append(val.getLanguage());
-							xml.append("'>");
-							xml.append(val.getValue());
-							xml.append("</rdf:li>");
-						}
-					}
-					if (edm_rights != null) {
-						for (LanguageValueBean val : edm_rights) {
-							xml.append("<rdf:li>");
-							xml.append(val.getValue());
-							xml.append("</rdf:li>");
-						}
-					}
-					xml.append("</rdf:Bag></dc:rights>");
-				}
+
 				xml.append("</rdf:Description>");
 
 				if (edm_dataProvider != null || edm_provider != null) {
@@ -374,7 +379,7 @@ public class XMPUtils {
 					}
 					if (xmpRights_WebStatement != null) {
 						xml.append("<xmpRights:WebStatement>");
-						xml.append(xmpRights_WebStatement.get(0).getValue());
+						xml.append(escapeXML(xmpRights_WebStatement.get(0).getValue()));
 						xml.append("</xmpRights:WebStatement>");
 					}
 					xml.append("</rdf:Description>");
@@ -520,6 +525,10 @@ public class XMPUtils {
 				// Check the Provider resource or literal
 				putInValuesMap(aggregation.getProvider(),
 						EDMXMPValues.edm_provider, EDMXMPValuesMap);
+				
+				// Check the isShownAt resource or literal
+				putInValuesMap(aggregation.getIsShownAt(),
+						EDMXMPValues.xmpRights_WebStatement, EDMXMPValuesMap);
 			}
 
 		}
@@ -584,6 +593,7 @@ public class XMPUtils {
 								EDMXMPValues.dc_subject, EDMXMPValuesMap);
 					}
 
+					/*
 					// Check the dc:coverage resource or literal
 					if (dcchoice.ifCoverage()) {
 						putInValuesMap(dcchoice.getCoverage(),
@@ -595,6 +605,7 @@ public class XMPUtils {
 						putInValuesMap(dcchoice.getSpatial(),
 								EDMXMPValues.dcterms_spatial, EDMXMPValuesMap);
 					}
+					*/
 
 					// Check the dc:temporal resource or literal
 					if (dcchoice.ifTemporal()) {
@@ -642,7 +653,7 @@ public class XMPUtils {
 	}
 
 	/**
-	 * Invokes the getResource method on an object via reflection
+	 * Invokes the getResource,getString,getLang methods on an object via reflection
 	 * 
 	 * @param object
 	 * @return
@@ -730,6 +741,20 @@ public class XMPUtils {
 
 		xml = writer.toString();
 		return xml;
+	}
+	
+	
+	/**
+	 * Escapes an XML String
+	 * @param tobeEscaped
+	 * @return
+	 */
+	private static String escapeXML(String tobeEscaped){
+		
+		String escaped = StringEscapeUtils.escapeXml(tobeEscaped);
+		
+		return escaped;
+		
 	}
 
 }
