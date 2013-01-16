@@ -119,8 +119,8 @@ public final class TimespanFieldInput {
 	 */
 	public TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
 			MongoServer mongoServer) {
-		TimespanImpl mongoTimespan = ((EdmMongoServer) mongoServer).getDatastore()
-				.find(TimespanImpl.class)
+		TimespanImpl mongoTimespan = ((EdmMongoServer) mongoServer)
+				.getDatastore().find(TimespanImpl.class)
 				.filter("about", timeSpan.getAbout()).get();
 		if (mongoTimespan == null) {
 			mongoTimespan = createNewTimespan(timeSpan);
@@ -192,8 +192,10 @@ public final class TimespanFieldInput {
 					}
 				}
 			}
-			for (String owlSameAsItem : mongoTimespan.getOwlSameAs()) {
-				owlSameAs.add(owlSameAsItem);
+			if (mongoTimespan.getOwlSameAs() != null) {
+				for (String owlSameAsItem : mongoTimespan.getOwlSameAs()) {
+					owlSameAs.add(owlSameAsItem);
+				}
 			}
 			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
 					mongoServer, "owlSameAs",
@@ -201,8 +203,8 @@ public final class TimespanFieldInput {
 		}
 
 		return ((EdmMongoServer) mongoServer).getDatastore()
-				.find(TimespanImpl.class)
-				.filter("about", timeSpan.getAbout()).get();
+				.find(TimespanImpl.class).filter("about", timeSpan.getAbout())
+				.get();
 
 	}
 
