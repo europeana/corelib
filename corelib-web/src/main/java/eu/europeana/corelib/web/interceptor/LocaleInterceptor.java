@@ -25,22 +25,24 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler)
+			HttpServletResponse response, 
+			Object handler)
 					throws IllegalStateException {
 
-		String newLocale = request.getParameter(this.paramName);
+		String localeName = request.getParameter(this.paramName);
 
-		if (newLocale != null
-			&& !newLocale.equals("")
-			&& !(newLocale.contains("*"))) {
+		if (localeName != null
+			&& !localeName.equals("")
+			&& !(localeName.contains("*"))) {
 
 			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 			if (localeResolver == null) {
 				throw new IllegalStateException("No LocaleResolver found: not in a DispatcherServlet request?");
 			}
 			LocaleEditor localeEditor = new LocaleEditor();
-			localeEditor.setAsText(newLocale);
-			localeResolver.setLocale(request, response, (Locale) localeEditor.getValue());
+			localeEditor.setAsText(localeName);
+			Locale locale = (Locale) localeEditor.getValue();
+			localeResolver.setLocale(request, response, locale);
 		}
 
 		return true;
