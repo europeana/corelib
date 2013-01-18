@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -172,7 +173,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public int getEuropeanaCompleteness() {
-		return Integer.parseInt(europeanaCompleteness);
+		return (!StringUtils.isBlank(europeanaCompleteness) ? Integer.parseInt(europeanaCompleteness) : 0);
 	}
 
 	@Override
