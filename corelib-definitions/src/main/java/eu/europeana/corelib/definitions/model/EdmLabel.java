@@ -227,6 +227,8 @@ public enum EdmLabel {
 	RELATION("relation", SolrType.INDEXED),  
 	PL_POSITION("pl_position_latLon", SolrType.INDEXED), 
 	PREVIEW_NO_DISTRIBUTE("edm_previewNoDistribute", SolrType.INDEXED), 
+	COMPLETENESS("COMPLETENESS",SolrType.INDEXED),
+	EUROPEANA_COMPLETENESS("europeana_completeness",SolrType.INDEXED),
 	NULL("null",null),
 	ORIGINAL("original",null);
 

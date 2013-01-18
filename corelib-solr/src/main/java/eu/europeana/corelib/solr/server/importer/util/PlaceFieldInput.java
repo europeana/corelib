@@ -212,8 +212,10 @@ public final class PlaceFieldInput {
 					}
 				}
 			}
+			if(place.getOwlSameAs()!=null){
 			for (String owlSameAsItem : place.getOwlSameAs()) {
 				owlSameAs.add(owlSameAsItem);
+			}
 			}
 			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
 					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
