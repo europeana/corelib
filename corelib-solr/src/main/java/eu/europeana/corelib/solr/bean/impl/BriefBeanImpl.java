@@ -83,10 +83,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	private List<Map<String, String>> edmPlacePrefLabel;
 
 	@Field("pl_wgs84_pos_lat")
-	private Float edmPlaceLatitude;
+	private List<String> edmPlaceLatitude;
 
 	@Field("pl_wgs84_pos_long")
-	private Float edmPlaceLongitude;
+	private List<String> edmPlaceLongitude;
 
 	@Field("edm_timespan")
 	private String[] edmTimespan;
@@ -202,12 +202,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	}
 
 	@Override
-	public Float getEdmPlaceLatitude() {
+	public List<String> getEdmPlaceLatitude() {
 		return (this.edmPlaceLatitude != null ? this.edmPlaceLatitude : null);
 	}
 
 	@Override
-	public Float getEdmPlaceLongitude() {
+	public List<String> getEdmPlaceLongitude() {
 		return (this.edmPlaceLongitude != null ? this.edmPlaceLongitude : null);
 	}
 

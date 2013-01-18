@@ -112,13 +112,13 @@ public interface BriefBean extends IdBean {
 	 * 
 	 * @return edm:place wgs84:posLat
 	 */
-	Float getEdmPlaceLatitude();
+	List<String> getEdmPlaceLatitude();
 
 	/**
 	 * 
 	 * @return edm:place wgs84:posLong
 	 */
-	Float getEdmPlaceLongitude();
+	List<String> getEdmPlaceLongitude();
 
 	/**
 	 * 
