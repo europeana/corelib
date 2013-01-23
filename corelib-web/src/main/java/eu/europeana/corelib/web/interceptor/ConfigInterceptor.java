@@ -56,6 +56,9 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	@Value("#{europeanaProperties['portal.server']}")
 	private String portalServer;
 
+	@Value("#{europeanaProperties['portal.server.canonical']}")
+	private String cannonicalPortalServer;
+
 	@Value("#{europeanaProperties['portal.google.analytics.id']}")
 	private String portalGoogleAnalyticsId;
 
@@ -97,6 +100,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 
 			// MANDATORY VALUES
 			model.setPortalServer(checkMandatoryValue(portalServer, "portal.server"));
+			model.setMetaCanonicalUrl(cannonicalPortalServer);
 			model.setPortalName(checkMandatoryValue(portalName, "portal.name"));
 			model.setCacheUrl(checkMandatoryValue(imageCacheUrl, "imageCacheUrl"));
 
