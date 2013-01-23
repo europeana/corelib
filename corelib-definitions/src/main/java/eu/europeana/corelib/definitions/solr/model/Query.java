@@ -72,6 +72,8 @@ public class Query implements Cloneable {
 	private boolean allowSpellcheck = true;
 	private boolean allowFacets = true;
 
+	private boolean apiQuery = false;
+
 	/**
 	 * CONSTRUCTORS
 	 */
@@ -157,6 +159,15 @@ public class Query implements Cloneable {
 		} else {
 			this.facets = Facet.values();
 		}
+		return this;
+	}
+
+	public boolean isApiQuery() {
+		return apiQuery;
+	}
+
+	public Query setApiQuery(boolean apiQuery) {
+		this.apiQuery = apiQuery;
 		return this;
 	}
 
@@ -280,7 +291,7 @@ public class Query implements Cloneable {
 					if (register.containsKey(facetName)) {
 						collector = register.get(facetName);
 					} else {
-						collector = new FacetCollector(facetName);
+						collector = new FacetCollector(facetName, isApiQuery());
 						register.put(facetName, collector);
 					}
 					if (isTagged && !collector.isTagged()) {
@@ -302,9 +313,15 @@ public class Query implements Cloneable {
 		private boolean isTagged = true;
 		private String name;
 		private List<String> values = new ArrayList<String>();
-		
+		private boolean isApiQuery = false;
+
 		public FacetCollector(String name) {
 			this.name = name;
+		}
+
+		public FacetCollector(String name, boolean isApiQuery) {
+			this.name = name;
+			this.isApiQuery = isApiQuery;
 		}
 
 		public boolean isTagged() {
@@ -332,6 +349,7 @@ public class Query implements Cloneable {
 		}
 
 		public void addValue(String value) {
+			
 			if (name.equals(Facet.RIGHTS.name())) {
 				if (value.endsWith("*")) {
 					value = value.replace(":", "\\:").replace("/", "\\/");
@@ -341,7 +359,7 @@ public class Query implements Cloneable {
 			} else if (name.equals(Facet.TYPE.name())) {
 				value = value.toUpperCase().replace("\"", "");
 			} else {
-				if (value.indexOf(" ") > -1) {
+				if (value.indexOf(" ") > -1 && !isApiQuery) {
 					if (!value.startsWith("\"")) {
 						value = '"' + value;
 					}
