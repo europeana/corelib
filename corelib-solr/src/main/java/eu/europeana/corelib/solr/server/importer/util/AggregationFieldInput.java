@@ -64,7 +64,9 @@ public final class AggregationFieldInput {
 	public List<WebResourceImpl> createWebResources(
 			List<WebResourceType> wResources, EdmMongoServer mongoServer) {
 		List<WebResourceImpl> webResources = new ArrayList<WebResourceImpl>();
+	
 		for (WebResourceType wResourceType : wResources) {
+			if(!containsWebResource(webResources,wResourceType.getAbout())){
 			WebResourceImpl webResource = new WebResourceImpl();
 			webResource.setAbout(wResourceType.getAbout());
 			Query<WebResourceImpl> updateQuery = mongoServer.getDatastore()
@@ -147,6 +149,7 @@ public final class AggregationFieldInput {
 			webResource.setIsNextInSequence(wResourceType.getIsNextInSequence().getResource());
 			ups.set("isNextInSequence", wResourceType.getIsNextInSequence().getResource());
 			}
+			
 			WebResourceImpl retWebResource = mongoServer.searchByAbout(WebResourceImpl.class, webResource.getAbout());
 			if(retWebResource!=null){
 				mongoServer.getDatastore().update(updateQuery, ups);
@@ -154,9 +157,19 @@ public final class AggregationFieldInput {
 				mongoServer.getDatastore().save(webResource);
 			}
 			webResources.add(retWebResource!=null?retWebResource:webResource);
-			
+			}
 		}
 		return webResources;
+	}
+
+	private boolean containsWebResource(List<WebResourceImpl> webResources,
+			String about) {
+		for(WebResourceImpl wr: webResources){
+			if (StringUtils.equals(wr.getAbout(),about)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -246,15 +259,17 @@ public final class AggregationFieldInput {
 			IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations, webResource);
 		if (aggregation != null) {
-			List<WebResourceImpl> webResources = (List<WebResourceImpl>) (aggregation
+			List<WebResource> webResources = (List<WebResource>) (aggregation
 					.getWebResources() != null ? aggregation.getWebResources()
-					: new ArrayList<WebResourceImpl>());
+					: new ArrayList<WebResource>());
+			if(!webResourceExists(webResources,webResource)){
 			mongoServer.getDatastore().save(webResource);
 			webResources.add(webResource);
 			aggregation.setWebResources(webResources);
 
 			MongoUtils.update(AggregationImpl.class, aggregation.getAbout(),
 					mongoServer, "webResources", webResources);
+			}
 		} 
 		return aggregation;
 	}
@@ -278,7 +293,7 @@ public final class AggregationFieldInput {
 			IllegalAccessException {
 		AggregationImpl aggregation = findAggregation(aggregations,
 				webResource.get(0));
-		for (WebResource wr : webResource) {
+		for (WebResource wr : cleanWebResources(webResource)) {
 			mongoServer.getDatastore().save(wr);
 		}
 		aggregation.setWebResources(webResource);
@@ -286,6 +301,16 @@ public final class AggregationFieldInput {
 				mongoServer, "webResources", webResource);
 
 		return aggregation;
+	}
+
+	private List<WebResource> cleanWebResources(List<WebResource> webResource) {
+		List<WebResource> webResources = new ArrayList<WebResource>();
+		for(WebResource wr:webResources){
+			if(!webResourceExists(webResources, wr)){
+				webResources.add(wr);
+			}
+		}
+		return webResources;
 	}
 
 	/**
@@ -450,5 +475,15 @@ public final class AggregationFieldInput {
 	public void deleteAggregationFromMongo(String about,
 			EdmMongoServer mongoServer) {
 		MongoUtils.delete(Aggregation.class, about, mongoServer);
+	}
+	
+	private boolean webResourceExists(List<WebResource> webResources,
+			WebResource webResource) {
+		for(WebResource wr: webResources){
+			if (StringUtils.equals(wr.getAbout(), webResource.getAbout())){
+				return true;
+			}
+		}
+		return false;
 	}
 }

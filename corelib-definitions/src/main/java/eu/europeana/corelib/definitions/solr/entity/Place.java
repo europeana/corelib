@@ -40,14 +40,14 @@ public interface Place extends ContextualClass {
 	 * 
 	 * @return A float representing the latitude of a Place
 	 */
-	float getLatitude();
+	Float getLatitude();
 
 	/**
 	 * Retrieves the longitude of a Place
 	 * 
 	 * @return A float representing the longitude of a Place
 	 */
-	float getLongitude();
+	Float getLongitude();
 
 	/**
 	 * Set the dcterms:isPartOf fields for a Place
@@ -64,7 +64,7 @@ public interface Place extends ContextualClass {
 	 * @param latitude
 	 *            A float representing the latitude of a Place
 	 */
-	void setLatitude(float latitude);
+	void setLatitude(Float latitude);
 
 	/**
 	 * Set the longitude for a place
@@ -72,19 +72,19 @@ public interface Place extends ContextualClass {
 	 * @param longitude
 	 *            A float representing the longitude of a Place
 	 */
-	void setLongitude(float longitude);
+	void setLongitude(Float longitude);
 
 	/**
 	 * set the altitude for a place
 	 * @param altitude
 	 */
-	void setAltitude(float altitude);
+	void setAltitude(Float altitude);
 	
 	/**
 	 * 
 	 * @return the altitude for a place
 	 */
-	float getAltitude();
+	Float getAltitude();
 	
 	/**
 	 * sets the position for a place

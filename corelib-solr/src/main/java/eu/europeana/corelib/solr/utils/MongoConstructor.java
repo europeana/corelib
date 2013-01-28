@@ -93,14 +93,14 @@ public class MongoConstructor {
 		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-		String aggregatedCHO = "";
+		
 		String aggregationAbout = "/provider/aggregation";
 		String europeanaAggregationAbout = "/europeana/aggregation";
 		String proxyAbout = "/provider/proxy";
 		String europeanaProxy = "/europeana/proxy";
+		String providedCHO = "/item";
 		for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
-			fullBean.setAbout(pcho.getAbout());
-			aggregatedCHO = pcho.getAbout();
+			fullBean.setAbout(providedCHO+pcho.getAbout());
 			aggregationAbout = aggregationAbout + pcho.getAbout();
 			europeanaAggregationAbout = europeanaAggregationAbout
 					+ pcho.getAbout();
@@ -146,7 +146,7 @@ public class MongoConstructor {
 		}
 			for (Aggregation aggregation : record.getAggregationList()) {
 				AggregatedCHO ag = new AggregatedCHO();
-				ag.setResource(aggregatedCHO);
+				ag.setResource(providedCHO+fullBean.getAbout());
 				aggregation.setAggregatedCHO(ag);
 				aggregation.setAbout(aggregationAbout);
 				List<WebResourceImpl> webResourcesMongo=null;

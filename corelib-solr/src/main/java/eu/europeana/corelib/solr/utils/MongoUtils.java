@@ -165,7 +165,8 @@ public final class MongoUtils {
 			T obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 		if (obj != null) {
-			if (obj.getLang() != null) {
+			if (obj.getLang() != null
+					&& StringUtils.isNotBlank(obj.getLang().getLang())) {
 				List<String> val = new ArrayList<String>();
 				val.add(obj.getString());
 				retMap.put(obj.getLang().getLang(), val);
@@ -195,25 +196,32 @@ public final class MongoUtils {
 			T obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 		if (obj != null) {
-			if (obj.getLang() != null) {
+			if (obj.getLang() != null
+					&& StringUtils.isNotEmpty(obj.getLang().getLang())) {
 				if (obj.getString() != null) {
 					List<String> val = new ArrayList<String>();
 					val.add(obj.getString());
 					retMap.put(obj.getLang().getLang(), val);
 				}
 				if (obj.getResource() != null) {
-					List<String> val = new ArrayList<String>();
+					List<String> val = retMap.get(obj.getLang().getLang()) != null ? retMap
+							.get(obj.getLang().getLang())
+							: new ArrayList<String>();
 					val.add(obj.getResource());
 					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
 				if (obj.getString() != null) {
-					List<String> val = new ArrayList<String>();
+					List<String> val = retMap.get("def") != null ? retMap
+							.get("def")
+							: new ArrayList<String>();
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
 				if (obj.getResource() != null) {
-					List<String> val = new ArrayList<String>();
+					List<String> val = retMap.get("def") != null ? retMap
+							.get("def")
+							: new ArrayList<String>();
 					val.add(obj.getResource());
 					retMap.put("def", val);
 				}
@@ -225,8 +233,8 @@ public final class MongoUtils {
 	}
 
 	/**
-	 * Method that converts a LiteralType.class list to a
-	 * multilingual map of strings
+	 * Method that converts a LiteralType.class list to a multilingual map of
+	 * strings
 	 * 
 	 * @param list
 	 *            The LiteralType list
@@ -240,20 +248,20 @@ public final class MongoUtils {
 		if (list != null) {
 			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 			for (T obj : list) {
-				if (obj.getLang() != null) {
+				if (obj.getLang() != null
+						&& StringUtils.isNotBlank(obj.getLang().getLang())) {
 					String lang = obj.getLang().getLang();
-					if (retMap.containsKey(lang)) {
-						List<String> val = retMap.get(lang);
-						val.add(obj.getString());
-						retMap.put(lang, val);
-					} else {
-						List<String> val = new ArrayList<String>();
-						val.add(obj.getString());
-						retMap.put(lang, val);
-
+					List<String> val = retMap.get(lang);
+					if (val == null) {
+						val = new ArrayList<String>();
 					}
+					val.add(obj.getString());
+					retMap.put(lang, val);
 				} else {
-					List<String> val = new ArrayList<String>();
+					List<String> val = retMap.get("def");
+					if (val == null) {
+						val = new ArrayList<String>();
+					}
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
@@ -264,8 +272,8 @@ public final class MongoUtils {
 	}
 
 	/**
-	 * Method that converts a ResourceOrLiteralType.class list to a
-	 * multilingual map of strings
+	 * Method that converts a ResourceOrLiteralType.class list to a multilingual
+	 * map of strings
 	 * 
 	 * @param list
 	 *            The ResourceOrLiteralType list
@@ -280,18 +288,15 @@ public final class MongoUtils {
 			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 			for (T obj : list) {
 				if (obj.getString() != null) {
-					if (obj.getLang() != null) {
-						String lang = obj.getLang().getLang();
-						if (retMap.containsKey(lang)) {
-							List<String> val = retMap.get(lang);
-							val.add(obj.getString());
-							retMap.put(lang, val);
-						} else {
-							List<String> val = new ArrayList<String>();
-							val.add(obj.getString());
-							retMap.put(lang, val);
+					if (obj.getLang() != null
+							&& StringUtils.isNotBlank(obj.getLang().getLang())) {
+						List<String> val = retMap.get((obj.getLang().getLang()));
+						if (val==null){
+							 val = new ArrayList<String>();
 
 						}
+						val.add(obj.getString());
+						retMap.put(obj.getLang().getLang(), val);
 					} else {
 						List<String> val = new ArrayList<String>();
 						val.add(obj.getString());
@@ -325,8 +330,11 @@ public final class MongoUtils {
 
 	/**
 	 * Method that updates an Aggregation in Mongo
-	 * @param mongoAggregation The Aggregation to update
-	 * @param mongoServer The server to be used
+	 * 
+	 * @param mongoAggregation
+	 *            The Aggregation to update
+	 * @param mongoServer
+	 *            The server to be used
 	 */
 	public static void updateAggregation(AggregationImpl mongoAggregation,
 			MongoServer mongoServer) {
@@ -368,8 +376,11 @@ public final class MongoUtils {
 
 	/**
 	 * Method that updates a Europeana Aggregation in Mongo
-	 * @param mongoAggregation The Europeana aggregation to update
-	 * @param mongoServer The server to be used
+	 * 
+	 * @param mongoAggregation
+	 *            The Europeana aggregation to update
+	 * @param mongoServer
+	 *            The server to be used
 	 */
 	public static void updateEuropeanaAggregation(
 			EuropeanaAggregation mongoAggregation, MongoServer mongoServer) {
@@ -406,8 +417,11 @@ public final class MongoUtils {
 
 	/**
 	 * Method that updates a Proxy in Mongo
-	 * @param proxy The proxy to update
-	 * @param mongoServer The server to be used
+	 * 
+	 * @param proxy
+	 *            The proxy to update
+	 * @param mongoServer
+	 *            The server to be used
 	 */
 	public static ProxyImpl updateProxy(ProxyImpl proxy, MongoServer mongoServer) {
 

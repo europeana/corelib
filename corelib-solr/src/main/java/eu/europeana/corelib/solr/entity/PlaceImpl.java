@@ -38,9 +38,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	private Map<String,List<String>> isPartOf;
-	private float latitude;
-	private float longitude;
-	private float altitude;
+	private Float latitude;
+	private Float longitude;
+	private Float altitude;
 	private Map<String,Float> position;
 	private Map<String,List<String>> dcTermsHasPart;
 	private String[] owlSameAs;
@@ -51,12 +51,18 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public float getLatitude() {
+	public Float getLatitude() {
+		if(this.latitude==null|| this.longitude==null||(this.latitude==0&& this.longitude==0)){
+			return null;
+		}
 		return this.latitude;
 	}
 
 	@Override
-	public float getLongitude() {
+	public Float getLongitude() {
+		if(this.latitude==null|| this.longitude==null||(this.latitude==0&& this.longitude==0)){
+			return null;
+		}
 		return this.longitude;
 	}
 
@@ -66,12 +72,12 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public void setLatitude(float latitude) {
+	public void setLatitude(Float latitude) {
 		this.latitude = latitude;
 	}
 
 	@Override
-	public void setLongitude(float longitude) {
+	public void setLongitude(Float longitude) {
 		this.longitude = longitude;
 	}
 
@@ -92,12 +98,15 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 	}
 
 	@Override
-	public void setAltitude(float altitude) {
+	public void setAltitude(Float altitude) {
 		this.altitude = altitude;
 	}
 
 	@Override
-	public float getAltitude() {
+	public Float getAltitude() {
+		if(this.latitude==null|| this.longitude==null||(this.latitude==0&& this.longitude==0)){
+			return null;
+		}
 		return this.altitude;
 	}
 

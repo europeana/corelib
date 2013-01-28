@@ -1162,7 +1162,7 @@ public final class ProxyFieldInput {
 					Arrays.asList(tempProxy));
 			tempList.add(SolrUtils.exists(String.class, aggregation.getAbout()));
 			proxy.setProxyIn(tempList.toArray(new String[tempList.size()]));
-			proxy.setProxyFor(aggregation.getAggregatedCHO().getResource());
+			proxy.setProxyFor("/item"+aggregation.getAggregatedCHO().getResource());
 		}
 		proxy.setEuropeanaProxy(false);
 		return proxy;
@@ -1180,7 +1180,7 @@ public final class ProxyFieldInput {
 	public  ProxyImpl addEuropeanaProxyForMongo(ProxyImpl proxy,
 			EuropeanaAggregationType aggregation, MongoServer mongoServer)
 			throws InstantiationException, IllegalAccessException {
-		proxy.setProxyFor(aggregation.getAggregatedCHO().getResource());
+		proxy.setProxyFor("/item"+aggregation.getAggregatedCHO().getResource());
 		proxy.setProxyIn(new String[] { SolrUtils.exists(String.class,
 				aggregation.getAbout()) });
 		proxy.setEuropeanaProxy(true);

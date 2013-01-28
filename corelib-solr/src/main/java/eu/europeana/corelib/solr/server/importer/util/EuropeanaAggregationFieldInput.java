@@ -94,13 +94,11 @@ public final class EuropeanaAggregationFieldInput {
 		solrInputDocument.addField(EdmLabel.EUROPEANA_AGGREGATION_EDM_ISSHOWNBY
 				.toString(), aggregation.getIsShownBy() != null ? aggregation
 				.getIsShownBy().getResource() : null);
-		solrInputDocument
-				.addField(
-						EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE
-								.toString(),
-						aggregation.getLandingPage() != null ? aggregation
-								.getLandingPage().getResource() : EUROPEANA_URI
-								+ aggregation.getAggregatedCHO().getResource());
+		solrInputDocument.addField(
+				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString(),
+				aggregation.getLandingPage() != null ? aggregation
+						.getLandingPage().getResource() : EUROPEANA_URI
+						+ aggregation.getAggregatedCHO().getResource());
 		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
 				aggregation.getLanguage(),
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE);
@@ -149,17 +147,29 @@ public final class EuropeanaAggregationFieldInput {
 					.getWebResources() != null ? aggregation.getWebResources()
 					: new ArrayList<WebResource>());
 
-			aggregation.setWebResources(webResources);
-			if (aggregation.getAbout() != null) {
-				MongoUtils.update(EuropeanaAggregationImpl.class,
-						aggregation.getAbout(), mongoServer, "webResources",
-						webResources);
-			} else {
-				mongoServer.getDatastore().save(aggregation);
-			}
+			if (!webResourceExists(webResources, webResource)) {
+				aggregation.setWebResources(webResources);
+				if (aggregation.getAbout() != null) {
+					MongoUtils.update(EuropeanaAggregationImpl.class,
+							aggregation.getAbout(), mongoServer,
+							"webResources", webResources);
+				} else {
 
+					mongoServer.getDatastore().save(aggregation);
+				}
+			}
 		}
 		return aggregation;
+	}
+
+	private boolean webResourceExists(List<WebResource> webResources,
+			WebResourceImpl webResource) {
+		for(WebResource wr: webResources){
+			if (StringUtils.equals(wr.getAbout(), webResource.getAbout())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -235,9 +245,9 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		String landingPage = SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource();
-		if(landingPage!=null){
-		mongoAggregation.setEdmLandingPage(landingPage);
-		ops.set("edmLandingPage", landingPage);
+		if (landingPage != null) {
+			mongoAggregation.setEdmLandingPage(landingPage);
+			ops.set("edmLandingPage", landingPage);
 		} else {
 			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
 					+ aggregation.getAggregatedCHO().getResource());
@@ -271,32 +281,37 @@ public final class EuropeanaAggregationFieldInput {
 				.getHasViewList());
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
-		
+
 		String preview = SolrUtils.exists(Preview.class,
 				aggregation.getPreview()).getResource();
-		if(preview!=null){
+		if (preview != null) {
 			mongoAggregation.setEdmPreview(preview);
 			ops.set("edmPreview", preview);
 		} else {
-			mongoAggregation.setEdmPreview(EUROPEANA_URI+agCHO+"&size=BRIEF_DOC");
-			ops.set("edmPreview", EUROPEANA_URI+agCHO+"&size=BRIEF_DOC");
+			mongoAggregation.setEdmPreview(EUROPEANA_URI + agCHO
+					+ "&size=BRIEF_DOC");
+			ops.set("edmPreview", EUROPEANA_URI + agCHO + "&size=BRIEF_DOC");
 		}
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
 		if (retrievedAggregation != null) {
 			mongoServer.getDatastore().update(retrievedAggregation, ops);
-			
+
 		} else {
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
-		return retrievedAggregation!=null?retrievedAggregation:mongoAggregation;
+		return retrievedAggregation != null ? retrievedAggregation
+				: mongoAggregation;
 	}
 
 	/**
 	 * Check if a webResource belongs to a EuropeanaAggregation
-	 * @param aggregation The EuropeanaAggregation to check against
-	 * @param webResource The WebResource to check
+	 * 
+	 * @param aggregation
+	 *            The EuropeanaAggregation to check against
+	 * @param webResource
+	 *            The WebResource to check
 	 * @return true if it belongs to the EuropeanaAggregation, false otherwise
 	 */
 	private boolean belongsTo(EuropeanaAggregation aggregation,
