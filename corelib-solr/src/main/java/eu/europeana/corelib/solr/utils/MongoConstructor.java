@@ -59,14 +59,12 @@ import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
-
 /**
  * A FullBean Constructor from an EDM XML
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class MongoConstructor {
-
 
 	/**
 	 * Constructs a FullBean from an RDF TODO: check for sanity
@@ -195,8 +193,9 @@ public class MongoConstructor {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
 				eaggregation.setAbout(europeanaAggregationAbout);
+				
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
-						.createAggregationMongoFields(eaggregation, mongoServer));
+						.createAggregationMongoFields(eaggregation, mongoServer,SolrUtils.getPreviewUrl(record)));
 			}
 		}
 
@@ -225,5 +224,4 @@ public class MongoConstructor {
 		return fullBean;
 	}
 
-	
 }

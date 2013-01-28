@@ -104,7 +104,7 @@ public class SolrConstructor {
 		}
 		if(rdf.getEuropeanaAggregationList()!=null){
 			for(EuropeanaAggregationType euaggregation : rdf.getEuropeanaAggregationList()){
-				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(euaggregation, solrInputDocument);
+				solrInputDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(euaggregation, solrInputDocument, SolrUtils.getPreviewUrl(rdf));
 				solrInputDocument = new ProxyFieldInput().addProxyForSolr(euaggregation, solrInputDocument);
 			}
 		}

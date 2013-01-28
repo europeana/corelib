@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.LiteralType;
+import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -310,5 +311,16 @@ public final class SolrUtils {
 		}
 
 		return solrInputDocument;
+	}
+	
+	public static String getPreviewUrl(RDF rdf){
+		String previewUrl = null;
+		if(rdf.getAggregationList().get(0).getIsShownBy()!=null&&StringUtils.isNotEmpty(rdf.getAggregationList().get(0).getIsShownBy().getResource())){
+			previewUrl = rdf.getAggregationList().get(0).getIsShownBy().getResource();
+		}
+		if(rdf.getAggregationList().get(0).getObject()!=null&& StringUtils.isNotEmpty(rdf.getAggregationList().get(0).getObject().getResource())){
+			previewUrl = rdf.getAggregationList().get(0).getObject().getResource();
+		}
+		return previewUrl;
 	}
 }

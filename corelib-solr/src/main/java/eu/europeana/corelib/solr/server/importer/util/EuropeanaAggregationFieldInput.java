@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.server.importer.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,8 @@ public final class EuropeanaAggregationFieldInput {
 	 * The prefix of a valid europeana record in the portal
 	 */
 	private final static String EUROPEANA_URI = "http://www.europeana.eu/portal/record";
+	private final static String EDM_PREVIEW_PREFIX = "http://europeanastatic.eu/api/image?uri=";
+	private final static String EDM_PREVIEW_SUFFIX = "&size=LARGE&type=TEXT";
 
 	public EuropeanaAggregationFieldInput() {
 
@@ -72,7 +76,7 @@ public final class EuropeanaAggregationFieldInput {
 	 */
 	public SolrInputDocument createAggregationSolrFields(
 			EuropeanaAggregationType aggregation,
-			SolrInputDocument solrInputDocument) throws InstantiationException,
+			SolrInputDocument solrInputDocument, String previewUrl) throws InstantiationException,
 			IllegalAccessException {
 
 		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
@@ -109,9 +113,9 @@ public final class EuropeanaAggregationFieldInput {
 				EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO.toString(),
 				aggregation.getAggregatedCHO() != null ? aggregation
 						.getAggregatedCHO().getResource() : null);
+		
 		solrInputDocument.addField(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
-				.toString(), aggregation.getPreview() != null ? aggregation
-				.getPreview().getResource() : null);
+				.toString(), previewUrl != null ? generateEdmPreview(previewUrl) : null);
 		if (aggregation.getAggregateList() != null) {
 			for (Aggregates aggregates : aggregation.getAggregateList()) {
 				solrInputDocument.addField(
@@ -164,8 +168,8 @@ public final class EuropeanaAggregationFieldInput {
 
 	private boolean webResourceExists(List<WebResource> webResources,
 			WebResourceImpl webResource) {
-		for(WebResource wr: webResources){
-			if (StringUtils.equals(wr.getAbout(), webResource.getAbout())){
+		for (WebResource wr : webResources) {
+			if (StringUtils.equals(wr.getAbout(), webResource.getAbout())) {
 				return true;
 			}
 		}
@@ -216,7 +220,7 @@ public final class EuropeanaAggregationFieldInput {
 	 */
 	public EuropeanaAggregationImpl createAggregationMongoFields(
 			eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType aggregation,
-			MongoServer mongoServer) throws InstantiationException,
+			MongoServer mongoServer, String previewUrl) throws InstantiationException,
 			IllegalAccessException {
 		EuropeanaAggregationImpl mongoAggregation = new EuropeanaAggregationImpl();
 		UpdateOperations<EuropeanaAggregationImpl> ops = mongoServer
@@ -281,17 +285,23 @@ public final class EuropeanaAggregationFieldInput {
 				.getHasViewList());
 		mongoAggregation.setEdmHasView(hasViewList);
 		ops.set("edmHasView", hasViewList);
-
-		String preview = SolrUtils.exists(Preview.class,
-				aggregation.getPreview()).getResource();
-		if (preview != null) {
+//TODO: This is the future scenario
+//		String preview = SolrUtils.exists(Preview.class,
+//				aggregation.getPreview()).getResource();
+//		if (preview != null) {
+//			mongoAggregation.setEdmPreview(preview);
+//			ops.set("edmPreview", preview);
+//		} else {
+//			mongoAggregation.setEdmPreview(EUROPEANA_URI + agCHO
+//					+ "&size=BRIEF_DOC");
+//			ops.set("edmPreview", EUROPEANA_URI + agCHO + "&size=BRIEF_DOC");
+//		}
+		if (previewUrl!=null){
+			String preview = generateEdmPreview(previewUrl);
 			mongoAggregation.setEdmPreview(preview);
-			ops.set("edmPreview", preview);
-		} else {
-			mongoAggregation.setEdmPreview(EUROPEANA_URI + agCHO
-					+ "&size=BRIEF_DOC");
-			ops.set("edmPreview", EUROPEANA_URI + agCHO + "&size=BRIEF_DOC");
+			ops.set("edmPreview",preview);
 		}
+		
 		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
@@ -333,4 +343,16 @@ public final class EuropeanaAggregationFieldInput {
 		return false;
 	}
 
+	private String generateEdmPreview(String url) {
+		try {
+			return URLEncoder.encode(url, "UTF-8").replaceAll("\\%28", "(")
+					.replaceAll("\\%29", ")").replaceAll("\\+", "%20")
+					.replaceAll("\\%27", "'").replaceAll("\\%21", "!")
+					.replaceAll("\\%7E", "~");
+		} catch (UnsupportedEncodingException e) {
+			
+
+		}
+		return null;
+	}
 }
