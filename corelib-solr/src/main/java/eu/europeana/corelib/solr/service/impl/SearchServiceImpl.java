@@ -77,6 +77,11 @@ public class SearchServiceImpl implements SearchService {
 	private static final int DEFAULT_MLT_COUNT = 10;
 
 	private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
+	
+	/**
+	 * Number of milliseconds before the query is aborted by SOLR
+	 */
+	private static final int TIME_ALLOWED = 30000;
 
 	/**
 	 * The list of possible field input for spelling suggestions
@@ -209,10 +214,10 @@ public class SearchServiceImpl implements SearchService {
 				// These are going to change when we import ASSETS as well
 				// solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				// query.setQueryType(solrQuery.getQueryType());
-
+				
 				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
-
+				solrQuery.setTimeAllowed(TIME_ALLOWED);
 				// add extra parameters if any
 				if (query.getParameters() != null) {
 					Map<String, String> parameters = query.getParameters();
@@ -331,7 +336,7 @@ public class SearchServiceImpl implements SearchService {
 
 			solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 			solrQuery.setSortField("score", ORDER.desc);
-
+			solrQuery.setTimeAllowed(TIME_ALLOWED);
 			// add extra parameters if any
 			if (query.getParameters() != null) {
 				Map<String, String> parameters = query.getParameters();
