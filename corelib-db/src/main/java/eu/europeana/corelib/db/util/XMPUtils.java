@@ -573,8 +573,7 @@ public class XMPUtils {
 										EDMXMPValuesMap);
 							} else {
 								putInValuesMap(
-										"[Item description exceeds the 100 characters maximum limit."
-												+ "Follow the 'Derived From Document ID' link for full description.]",
+										"http://www.europeana.eu/portal/record"+pcho.getAbout()+".html",
 										EDMXMPValues.dc_description,
 										EDMXMPValuesMap);
 							}
