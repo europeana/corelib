@@ -175,7 +175,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.mintf", 1);
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
-		solrQuery.set("rows", 0);
+		solrQuery.set("rows", 1);
 		log.fine(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
