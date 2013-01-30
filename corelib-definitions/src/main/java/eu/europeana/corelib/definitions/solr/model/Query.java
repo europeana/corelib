@@ -66,6 +66,7 @@ public class Query implements Cloneable {
 
 	private List<String> searchRefinements;
 	private List<String> facetRefinements;
+	private List<String> filteredFacets;
 
 	private boolean produceFacetUnion = true;
 
@@ -83,6 +84,7 @@ public class Query implements Cloneable {
 		start = DEFAULT_START;
 		pageSize = DEFAULT_PAGE_SIZE;
 		createAllFacetList();
+		// facets.type.method = enum
 	}
 
 	/**
@@ -112,6 +114,10 @@ public class Query implements Cloneable {
 				facetRefinements.toArray(new String[facetRefinements.size()])
 			);
 		}
+	}
+
+	public List<String> getFilteredFacets() {
+		return filteredFacets;
 	}
 
 	public Query setRefinements(String... refinements) {
@@ -304,6 +310,7 @@ public class Query implements Cloneable {
 			}
 		}
 
+		filteredFacets = new ArrayList(register.keySet());
 		for (FacetCollector collector : register.values()) {
 			facetRefinements.add(collector.toString());
 		}
