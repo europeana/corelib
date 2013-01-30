@@ -353,7 +353,7 @@ public class SearchServiceImpl implements SearchService {
 			}
 
 			try {
-				log.info("Solr query is: " + solrQuery);
+				log.fine("Solr query is: " + solrQuery);
 				QueryResponse queryResponse = solrServer.query(solrQuery);
 				logTime("search", queryResponse.getElapsedTime());
 
@@ -403,7 +403,7 @@ public class SearchServiceImpl implements SearchService {
 			//if the suggestions are not empty and there are collated results
 			if (!spResponse.getSuggestions().isEmpty()
 					&& spResponse.getCollatedResults() != null) {
-				// log.info("Number of collated results received " + spResponse.getCollatedResults().size());
+				// log.fine("Number of collated results received " + spResponse.getCollatedResults().size());
 				for (Collation collation : spResponse.getCollatedResults()) {
 					StringBuilder termResult = new StringBuilder();
 					// NOTE: should we concatenate and change corrections?
