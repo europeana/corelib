@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -77,11 +78,13 @@ public class SearchServiceImpl implements SearchService {
 	private static final int DEFAULT_MLT_COUNT = 10;
 
 	private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
-	
+
 	/**
 	 * Number of milliseconds before the query is aborted by SOLR
 	 */
 	private static final int TIME_ALLOWED = 30000;
+
+	private Map<String, Long> total = new HashMap<String, Long>();
 
 	/**
 	 * The list of possible field input for spelling suggestions
@@ -98,7 +101,7 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
-	private static final Logger log = Logger.getLogger("SearchServiceImpl");
+	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -173,7 +176,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
 		solrQuery.set("rows", 0);
-		log.info(solrQuery.toString());
+		log.fine(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
 		logTime("MoreLikeThis", response.getElapsedTime());
@@ -229,10 +232,14 @@ public class SearchServiceImpl implements SearchService {
 				// facets are optional
 				if (query.isAllowFacets()) {
 					solrQuery.setFacet(true);
+					List<String> filteredFacets = query.getFilteredFacets();
+					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets.size() > 0);
 					for (Facet facet : query.getFacets()) {
 						String facetToAdd = facet.toString();
 						if (query.isProduceFacetUnion()) {
-							facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
+							if (hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
+								facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
+							}
 						}
 						solrQuery.addFacetField(facetToAdd);
 					}
@@ -252,7 +259,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 
 				try {
-					log.info("Solr query is: " + solrQuery);
+					log.fine("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
 
@@ -305,6 +312,7 @@ public class SearchServiceImpl implements SearchService {
 		Map<String, Integer> seeAlso = null;
 		try {
 			response = solrServer.query(solrQuery);
+			log.fine(solrQuery.toString());
 			logTime("seeAlso", response.getElapsedTime());
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
@@ -320,7 +328,6 @@ public class SearchServiceImpl implements SearchService {
 		
 		ResultSet<T> resultSet = new ResultSet<T>();
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
-		log.info(beanClazz.getName());
 
 		String[] refinements = query.getRefinements(true);
 		if (SolrUtils.checkTypeFacet(refinements)) {
@@ -380,8 +387,7 @@ public class SearchServiceImpl implements SearchService {
 	 *            The ReqestHandler to use
 	 * @return A list of Terms for the specific term from the SolrSuggester
 	 */
-	private List<Term> getSuggestions(String query, String field,
-			String rHandler) {
+	private List<Term> getSuggestions(String query, String field, String rHandler) {
 		List<Term> results = new ArrayList<Term>();
 		try {
 			ModifiableSolrParams params = new ModifiableSolrParams();
@@ -391,23 +397,27 @@ public class SearchServiceImpl implements SearchService {
 			params.set("rows", 0);
 			//get the query response
 			QueryResponse qResp = solrServer.query(params);
+			// total.put(query, total.get(query) + qResp.getElapsedTime());
+			// qResp.getResponseHeader().
 			SpellCheckResponse spResponse = qResp.getSpellCheckResponse();
 			//if the suggestions are not empty and there are collated results
 			if (!spResponse.getSuggestions().isEmpty()
 					&& spResponse.getCollatedResults() != null) {
-				log.info("Number of collated results received "
-						+ spResponse.getCollatedResults().size());
+				// log.info("Number of collated results received " + spResponse.getCollatedResults().size());
 				for (Collation collation : spResponse.getCollatedResults()) {
 					StringBuilder termResult = new StringBuilder();
-					for (Correction cor : collation
-							.getMisspellingsAndCorrections()) {
+					// NOTE: should we concatenate and change corrections?
+					for (Correction cor : collation.getMisspellingsAndCorrections()) {
 //						String corStr = cor.getCorrection().replaceAll(
 //								"[-+.^:(),]", "");
 						//pickup the corrections, remove duplicates
-						String[] terms = cor.getCorrection().split(" ");
+						String[] terms = cor.getCorrection().trim().replaceAll("  ", " ").split(" ");
 						for (String term : terms) {
-							if (!StringUtils.contains(termResult.toString(),
-									term)) {
+							if (StringUtils.isBlank(term)) {
+								continue;
+							}
+							// termResult.
+							if (!StringUtils.contains(termResult.toString(), term)) {
 								termResult.append(term + " ");
 							}
 						}
@@ -420,10 +430,10 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 		} catch (SolrServerException e) {
-			log.info("Exception :" + e.getMessage());
+			log.severe("Exception :" + e.getMessage());
 		}
 
-		log.info(String.format("Returned %d number of results", results.size()));
+		log.fine(String.format("Returned %d number of results", results.size()));
 		return results;
 	}
 
@@ -431,9 +441,10 @@ public class SearchServiceImpl implements SearchService {
 	 * Get the suggestions 
 	 */
 	public List<Term> suggestions(String query, int pageSize, String field) {
-		log.info(String.format("%s, %d, %s", query, pageSize, field));
+		log.fine(String.format("%s, %d, %s", query, pageSize, field));
 		List<Term> results = new ArrayList<Term>();
 		long start = new Date().getTime();
+		total.put(query, 0l);
 		// if the fiels is null check on all fields else on the requested field
 		if (StringUtils.isBlank(field) || !SPELL_FIELDS.contains(field)) {
 			results.addAll(getSuggestions(query, "title", "suggestTitle"));
@@ -456,7 +467,10 @@ public class SearchServiceImpl implements SearchService {
 		// Sort the results by number of hits
 		Collections.sort(results);
 		logTime("suggestions", (new Date().getTime() - start));
-		log.info(String.format("Returned %d results in %d ms",
+		// System.out.println("suggestions: " + (total.get(query) * 100 / (new Date().getTime() - start)) + "%");
+		total.remove(query);
+		
+		log.fine(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
 		return results.size() > pageSize ? results.subList(0, pageSize)
@@ -500,6 +514,6 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	public void logTime(String type, long time) {
-		log.info(String.format("elapsed time (%s): %d", type, time));
+		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
 }
