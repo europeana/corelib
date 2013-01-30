@@ -20,7 +20,8 @@
 	<ore:Aggregation rdf:about="http://www.mimo-db.eu/ULEI/M0003707">
 		<edm:aggregatedCHO rdf:resource="#ULEI:M0003707" />
 		<edm:dataProvider>Museum fÃ¼r Musikinstrumente der UniversitÃ¤t
-			Leipzig</edm:dataProvider>
+			Leipzig
+		</edm:dataProvider>
 		<edm:hasView rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
 		<edm:isShownAt rdf:resource="http://www.mimo-db.eu/ULEI/M0003707" />
 		<edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/ULEI/IMAGE/4115.jpg" />
@@ -30,6 +31,15 @@
 	</ore:Aggregation>
 	<edm:Proxy rdf:about="#ULEI:M0003707">
 		<dc:description>in Sopranlage</dc:description>
+		<dc:description>Robert Lee Frost (March 26, 1874 – January 29, 1963)
+			was an American poet. He is highly regarded for his realistic
+			depictions of rural life and his command of American colloquial
+			speech.[1] His work frequently employed settings from rural life in
+			New England in the early twentieth century, using them to examine
+			complex social and philosophical themes. One of the most popular and
+			critically respected American poets of his generation, Frost was
+			honored frequently during his lifetime, receiving four Pulitzer
+			Prizes for Poetry.</dc:description>
 		<dc:identifier>#ULEI:M0003707</dc:identifier>
 		<dc:subject>Philomele</dc:subject>
 		<dc:title>Philomele</dc:title>
