@@ -190,7 +190,7 @@ public class XMPUtils {
 				}
 				if (dc_title.size() > 1) {
 					xml.append("<dc:title>");
-					xml.append("<rdf:Alt>");
+					xml.append("<rdf:Bag>");
 					for (LanguageValueBean val : dc_title) {
 						xml.append("<rdf:li xml:lang='");
 						xml.append(val.getLanguage());
@@ -198,7 +198,7 @@ public class XMPUtils {
 						xml.append(val.getValue());
 						xml.append("</rdf:li>");
 					}
-					xml.append("</rdf:Alt>");
+					xml.append("</rdf:Bag>");
 					xml.append("</dc:title>");
 				}
 
@@ -243,7 +243,7 @@ public class XMPUtils {
 					}
 					if (dc_description.size() > 1) {
 						xml.append("<dc:description>");
-						xml.append("<rdf:Alt>");
+						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dc_description) {
 							xml.append("<rdf:li xml:lang='");
 							xml.append(val.getLanguage());
@@ -251,7 +251,7 @@ public class XMPUtils {
 							xml.append(val.getValue());
 							xml.append("</rdf:li>");
 						}
-						xml.append("</rdf:Alt>");
+						xml.append("</rdf:Bag>");
 						xml.append("</dc:description>");
 					}
 
