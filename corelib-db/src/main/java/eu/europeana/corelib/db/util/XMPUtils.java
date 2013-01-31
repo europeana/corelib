@@ -150,7 +150,7 @@ public class XMPUtils {
 
 			switch (size) {
 			case TINY:
-				imageuiriInPortal.append("TINY");
+				imageuiriInPortal.append("BRIEF_DOC");
 				break;
 			case MEDIUM:
 				imageuiriInPortal.append("BRIEF_DOC");
@@ -202,9 +202,7 @@ public class XMPUtils {
 					xml.append("</dc:title>");
 				}
 
-				if (size == ThumbSize.TINY) {
-					xml.append("</rdf:Description>");
-				}
+
 			}
 			
 			if (dc_rights != null || edm_rights != null) {
@@ -230,7 +228,10 @@ public class XMPUtils {
 				xml.append("</rdf:Bag></dc:rights>");
 			}
 
-			if (size != ThumbSize.TINY) {
+			if (size == ThumbSize.TINY) {
+				xml.append("</rdf:Description>");
+			}
+			else{
 
 				if (dc_description != null) {
 					if (dc_description.size() == 1) {
@@ -264,7 +265,7 @@ public class XMPUtils {
 						xml.append(dc_subject.get(0).getValue());
 						xml.append("</dc:subject>");
 					}
-					if (dc_title.size() > 1) {
+					if (dc_subject.size() > 1) {
 						xml.append("<dc:subject>");
 						xml.append("<rdf:Bag>");
 						for (LanguageValueBean val : dc_subject) {
@@ -573,7 +574,7 @@ public class XMPUtils {
 										EDMXMPValuesMap);
 							} else {
 								putInValuesMap(
-										"http://www.europeana.eu/portal/record"+pcho.getAbout()+".html",
+										"See: http://www.europeana.eu/portal/record"+pcho.getAbout()+".html",
 										EDMXMPValues.dc_description,
 										EDMXMPValuesMap);
 							}
