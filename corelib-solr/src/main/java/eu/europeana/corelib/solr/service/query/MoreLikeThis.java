@@ -24,15 +24,16 @@ package eu.europeana.corelib.solr.service.query;
  */
 public enum MoreLikeThis {
 
-	CREATOR("creator"),
-	DESCRIPTION("description"),
+	// CREATOR("creator"),
+	// DESCRIPTION("description"),
 	SUBJECT("subject"),
-	CONTRIBUTOR("contributor"),
+	// CONTRIBUTOR("contributor"),
 	TITLE("title"),
 	WHO("who"),
 	WHAT("what"),
 	WHERE("where"),
-	WHEN("when");
+	// WHEN("when")
+	;
 
 	private String mlt;
 

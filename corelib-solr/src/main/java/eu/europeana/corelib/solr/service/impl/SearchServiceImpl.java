@@ -101,6 +101,8 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
+	private String mltFields;
+
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
@@ -110,8 +112,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String collectionId, String recordId)
 			throws SolrTypeException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId,
-				recordId));
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
 	}
 
 	@Override
@@ -120,6 +121,22 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null) {
+			try {
+				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+			} catch (SolrServerException e) {
+				log.severe("SolrServerException: " + e.getMessage());
+			}
+		}
+
+		return fullBean;
+	}
+
+	@Override
+	public FullBean findById(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
+		long t0 = new Date().getTime();
+		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+		logTime("mongo findById", (new Date().getTime() - t0));
+		if (fullBean != null && similarItems) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
@@ -165,13 +182,17 @@ public class SearchServiceImpl implements SearchService {
 		String query = "europeana_id:\"" + europeanaObjectId + "\"";
 
 		SolrQuery solrQuery = new SolrQuery().setQuery(query);
-		solrQuery.setQueryType(QueryType.ADVANCED.toString());
+		// solrQuery.setQueryType(QueryType.ADVANCED.toString());
 		solrQuery.set("mlt", true);
-		List<String> fields = new ArrayList<String>();
-		for (MoreLikeThis mltField : MoreLikeThis.values()) {
-			fields.add(mltField.toString());
+
+		if (mltFields == null) {
+			List<String> fields = new ArrayList<String>();
+			for (MoreLikeThis mltField : MoreLikeThis.values()) {
+				fields.add(mltField.toString());
+			}
+			mltFields = StringUtils.join(fields, ",");
 		}
-		solrQuery.set("mlt.fl", StringUtils.join(fields, ","));
+		solrQuery.set("mlt.fl", mltFields);
 		solrQuery.set("mlt.mintf", 1);
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
@@ -182,11 +203,9 @@ public class SearchServiceImpl implements SearchService {
 		logTime("MoreLikeThis", response.getElapsedTime());
 
 		@SuppressWarnings("unchecked")
-		NamedList<Object> moreLikeThisList = (NamedList<Object>) response
-				.getResponse().get("moreLikeThis");
+		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
 		@SuppressWarnings("unchecked")
-		List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList
-				.getVal(0);
+		List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList.getVal(0);
 		List<BriefBean> beans = new ArrayList<BriefBean>();
 		for (SolrDocument doc : docs) {
 			beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class, doc));
