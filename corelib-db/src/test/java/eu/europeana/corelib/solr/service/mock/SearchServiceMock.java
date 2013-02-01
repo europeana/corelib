@@ -54,12 +54,6 @@ public class SearchServiceMock implements SearchService {
 	public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
 	public static final List<? extends Aggregation> aggregations2 = new ArrayList<AggregationImpl>();
 
-	@Override
-	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
-		// not needed in this mock...
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public FullBean findById(String europeanaObjectId) {
@@ -92,6 +86,12 @@ public class SearchServiceMock implements SearchService {
 		replay(proxy);
 		replay(mockBean);
 		return mockBean;
+	}
+
+	@Override
+	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
+		// not needed in this mock...
+		return null;
 	}
 
 	@Override
@@ -149,6 +149,13 @@ public class SearchServiceMock implements SearchService {
 	@Override
 	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
 			Query query) throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FullBean findById(String europeanaObjectId, boolean similarItems)
+			throws SolrTypeException {
 		// TODO Auto-generated method stub
 		return null;
 	}
