@@ -43,6 +43,7 @@ import org.xml.sax.SAXException;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
+import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.model.ThumbSize;
@@ -116,7 +117,7 @@ public class XMPUtils {
 				.get(EDMXMPValues.edm_provider);
 		List<LanguageValueBean> edm_rights = values
 				.get(EDMXMPValues.edm_rights);
-		String xmpMM_OriginalDocumentID = thumbnailURL;
+		List<LanguageValueBean> xmpMM_OriginalDocumentID = values.get(EDMXMPValues.xmpMM_OriginalDocumentID);
 		List<LanguageValueBean> xmpMM_DocumentID = values
 				.get(EDMXMPValues.stref_DocumentID);
 		List<LanguageValueBean> xmpRights_Marked = values
@@ -132,48 +133,6 @@ public class XMPUtils {
 
 		xml.append(" <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>");
 
-		// DerivedFrom Element
-
-		if (xmpMM_OriginalDocumentID != null || edm_provider != null) {
-			xml.append("<rdf:Description rdf:about='' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'  ");
-			xml.append("xmlns:stRef= 'http://ns.adobe.com/xap/1.0/sType/ResourceRef#'>");
-
-			xml.append("<xmpMM:DerivedFrom rdf:parseType=\"Resource\">");
-
-			xml.append("<stRef:documentID >");
-
-			StringBuffer imageuiriInPortal = new StringBuffer();
-
-			imageuiriInPortal.append(IMAGEPREFIX);
-			imageuiriInPortal.append(xmpMM_DocumentID.get(0).getValue());
-			imageuiriInPortal.append("&size=");
-
-			switch (size) {
-			case TINY:
-				imageuiriInPortal.append("BRIEF_DOC");
-				break;
-			case MEDIUM:
-				imageuiriInPortal.append("BRIEF_DOC");
-				break;
-			case LARGE:
-				imageuiriInPortal.append("FULL_DOC");
-				break;
-			}
-
-			xml.append(escapeXML(imageuiriInPortal.toString()));
-
-			xml.append("</stRef:documentID >");
-
-			if (xmpMM_OriginalDocumentID != null) {
-				xml.append("<stRef:originalDocumentID>");
-				xml.append(escapeXML(xmpMM_OriginalDocumentID));
-				xml.append("</stRef:originalDocumentID>");
-			}
-
-			xml.append("</xmpMM:DerivedFrom>");
-
-			xml.append("</rdf:Description>");
-		}
 
 		if (dc_title != null || dc_rights != null || edm_rights != null) {
 
@@ -371,8 +330,8 @@ public class XMPUtils {
 					xml.append("</rdf:Description>");
 				}
 
-				if (xmpRights_Marked != null || xmpRights_WebStatement != null) {
-					xml.append("<rdf:Description rdf:about='' xmlns:xmpRights='http://ns.adobe.com/xap/1.0/rights/' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'>");
+				
+				xml.append("<rdf:Description rdf:about='' xmlns:xmpRights='http://ns.adobe.com/xap/1.0/rights/' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'>");
 					if (xmpRights_Marked != null) {
 						xml.append("<xmpRights:Marked>");
 						xml.append(xmpRights_Marked.get(0).getValue());
@@ -383,9 +342,17 @@ public class XMPUtils {
 						xml.append(escapeXML(xmpRights_WebStatement.get(0).getValue()));
 						xml.append("</xmpRights:WebStatement>");
 					}
-					xml.append("</rdf:Description>");
+				
+				if (xmpMM_OriginalDocumentID != null) {
+					xml.append("<xmpMM:OriginalDocumentID>");
+					xml.append(escapeXML(xmpMM_OriginalDocumentID.get(0).getValue()));
+					xml.append("</xmpMM:OriginalDocumentID>");
 				}
-
+				xml.append("</rdf:Description>");
+				
+				//xmpMM:OriginalDocumentID from edm:object
+				
+				
 				// CC segment
 
 				if (cc_attributionName != null || cc_morePermissions != null
@@ -410,7 +377,7 @@ public class XMPUtils {
 					}
 					if (cc_morePermissions != null) {
 						if (cc_morePermissions.size() == 1) {
-							xml.append("<cc:morePermissions rdf:about='");
+							xml.append("<cc:morePermissions rdf:resource='");
 							xml.append(cc_morePermissions.get(0).getValue());
 							xml.append("'/>");
 						} else if (cc_morePermissions.size() > 1) {
@@ -427,7 +394,7 @@ public class XMPUtils {
 					}
 					if (cc_useGuidelines != null) {
 						if (cc_useGuidelines.size() == 1) {
-							xml.append("<cc:useGuidelines rdf:about='");
+							xml.append("<cc:useGuidelines rdf:resource='");
 							xml.append(cc_useGuidelines.get(0).getValue());
 							xml.append("'/>");
 						} else if (cc_useGuidelines.size() > 1) {
@@ -448,6 +415,53 @@ public class XMPUtils {
 			}
 		}
 
+		
+		if (size == ThumbSize.TINY) {
+			// DerivedFrom Element
+
+			if (xmpMM_OriginalDocumentID != null || edm_provider != null) {
+				xml.append("<rdf:Description rdf:about='' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'  ");
+				xml.append("xmlns:stRef= 'http://ns.adobe.com/xap/1.0/sType/ResourceRef#'>");
+
+				xml.append("<xmpMM:DerivedFrom rdf:parseType=\"Resource\">");
+
+				xml.append("<stRef:documentID >");
+
+				StringBuffer imageuiriInPortal = new StringBuffer();
+
+				imageuiriInPortal.append(IMAGEPREFIX);
+				imageuiriInPortal.append(xmpMM_DocumentID.get(0).getValue());
+				imageuiriInPortal.append("&size=");
+
+				switch (size) {
+				case TINY:
+					imageuiriInPortal.append("BRIEF_DOC");
+					break;
+				case MEDIUM:
+					imageuiriInPortal.append("BRIEF_DOC");
+					break;
+				case LARGE:
+					imageuiriInPortal.append("FULL_DOC");
+					break;
+				}
+
+				xml.append(escapeXML(imageuiriInPortal.toString()));
+
+				xml.append("</stRef:documentID >");
+
+				if (xmpMM_OriginalDocumentID != null) {
+					xml.append("<stRef:OriginalDocumentID>");
+					xml.append(escapeXML(thumbnailURL));
+					xml.append("</stRef:OriginalDocumentID>");
+				}
+
+				xml.append("</xmpMM:DerivedFrom>");
+
+				xml.append("</rdf:Description>");
+			}
+		}
+		
+		
 		xml.append(" </rdf:RDF>");
 		xml.append("</x:xmpmeta>");
 		xml.append("<?xpacket end='w'?>");
@@ -492,8 +506,20 @@ public class XMPUtils {
 
 				// Check the object resource or literal
 				putInValuesMap(aggregation.getObject(),
-						EDMXMPValues.stref_OriginalDocumentID, EDMXMPValuesMap);
+						EDMXMPValues.xmpMM_OriginalDocumentID, EDMXMPValuesMap);
 
+				putInValuesMap(aggregation.getIsShownBy(),
+						EDMXMPValues.xmpMM_OriginalDocumentID, EDMXMPValuesMap);
+				
+				List<HasView> hasviewl = aggregation.getHasViewList();
+				
+				if(hasviewl != null){
+					for(HasView hasview : hasviewl){
+						putInValuesMap(hasview.getResource(),
+								EDMXMPValues.xmpMM_OriginalDocumentID, EDMXMPValuesMap);
+					}
+				}
+				
 				// Check the rights resource or literal
 				LanguageValueBean rights = putInValuesMap(
 						aggregation.getRights(), EDMXMPValues.edm_rights,

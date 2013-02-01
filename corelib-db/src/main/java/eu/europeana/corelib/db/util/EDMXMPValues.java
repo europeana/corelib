@@ -54,6 +54,8 @@ public enum  EDMXMPValues {
 	xmpRights_Marked("xmpRights:Marked"),
 	// xmpRights:WebStatement from europeana:isShownAt
 	xmpRights_WebStatement("xmpRights:WebStatement"),
+	// xmpMM_OriginalDocumentID from europeana:object
+	xmpMM_OriginalDocumentID ("xmpMM:OriginalDocumentID"),
 	// cc:morePermissions from europeana:isShownAt (as a value for the
 	// rdf:resource attribute)
 	cc_morePermissions("cc:morePermissions"),
