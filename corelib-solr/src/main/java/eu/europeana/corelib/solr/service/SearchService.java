@@ -59,7 +59,16 @@ public interface SearchService {
 	 */
 	FullBean findById(String collectionId, String recordId) throws SolrTypeException;
 
-	
+	/**
+	 * Retrieve a record by id.
+	 * 
+	 * @param europeanaObjectId - The unique europeana id
+	 * @param similarItems - Whether to retrieve similar items
+	 * @return A full europeana record
+	 * @throws SolrTypeException
+	 */
+	FullBean findById(String europeanaObjectId, boolean similarItems) throws SolrTypeException;
+
 	/**
 	 * Retrieve a record by id.
 	 * 
@@ -156,4 +165,5 @@ public interface SearchService {
 	 */
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException;
+
 }
