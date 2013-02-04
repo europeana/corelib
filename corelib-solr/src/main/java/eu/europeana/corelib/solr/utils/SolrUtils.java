@@ -323,4 +323,23 @@ public final class SolrUtils {
 		}
 		return previewUrl;
 	}
+
+	/**
+	 * Translates ESE fielded queries to EDM fielded queries
+	 * @param query
+	 * @return
+	 */
+	public static String translateQuery(String query) {
+		if (!query.contains(":")) {
+			return query;
+		}
+
+		for (FieldMapping field : FieldMapping.values()) {
+			if (query.contains(field.getEseField() + ":")) {
+				query = query.replace(field.getEseField() + ":", field.getEdmField() + ":");
+			}
+		}
+		return query;
+	}
+
 }
