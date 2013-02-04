@@ -449,11 +449,13 @@ public class XMPUtils {
 
 				xml.append("</stRef:documentID >");
 
+				/*
 				if (xmpMM_OriginalDocumentID != null) {
 					xml.append("<stRef:OriginalDocumentID>");
 					xml.append(escapeXML(thumbnailURL));
 					xml.append("</stRef:OriginalDocumentID>");
 				}
+				*/
 
 				xml.append("</xmpMM:DerivedFrom>");
 
