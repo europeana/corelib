@@ -26,12 +26,12 @@ public enum MoreLikeThis {
 
 	// CREATOR("creator"),
 	// DESCRIPTION("description"),
-	SUBJECT("subject"),
+	// SUBJECT("subject"),
 	// CONTRIBUTOR("contributor"),
 	TITLE("title"),
 	WHO("who"),
 	WHAT("what"),
-	WHERE("where"),
+	// WHERE("where"),
 	// WHEN("when")
 	;
 
