@@ -414,7 +414,7 @@ public class SearchServiceImpl implements SearchService {
 			params.set("q", field + ":" + query);
 
 			params.set("rows", 0);
-			//get the query response
+			// get the query response
 			QueryResponse qResp = solrServer.query(params);
 			// total.put(query, total.get(query) + qResp.getElapsedTime());
 			// qResp.getResponseHeader().
@@ -452,7 +452,7 @@ public class SearchServiceImpl implements SearchService {
 			log.severe("Exception :" + e.getMessage());
 		}
 
-		log.fine(String.format("Returned %d number of results", results.size()));
+		// log.fine(String.format("Returned %d number of results", results.size()));
 		return results;
 	}
 
