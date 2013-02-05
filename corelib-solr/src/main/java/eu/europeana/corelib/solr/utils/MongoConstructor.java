@@ -147,11 +147,13 @@ public class MongoConstructor {
 				ag.setResource(providedCHO+fullBean.getAbout());
 				aggregation.setAggregatedCHO(ag);
 				aggregation.setAbout(aggregationAbout);
-				List<WebResourceImpl> webResourcesMongo=null;
-				if (record.getWebResourceList().size() > 0) {
+				List<WebResourceImpl> webResourcesMongo=new ArrayList<WebResourceImpl>();
+				if (record.getWebResourceList()!=null||record.getWebResourceList().size() > 0) {
 					webResourcesMongo = new AggregationFieldInput().createWebResources(record.getWebResourceList(),mongoServer);
 					
 				}
+				
+					
 				
 				
 				aggregations
