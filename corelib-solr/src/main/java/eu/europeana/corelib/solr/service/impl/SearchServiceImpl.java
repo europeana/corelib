@@ -47,7 +47,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.Facet;
-import eu.europeana.corelib.definitions.solr.QueryType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -236,8 +235,8 @@ public class SearchServiceImpl implements SearchService {
 				// These are going to change when we import ASSETS as well
 				// solrQuery.setQueryType(QueryType.ADVANCED.toString());
 				// query.setQueryType(solrQuery.getQueryType());
-				
-				solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+
+				// solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 				solrQuery.setSortField("score", ORDER.desc);
 				solrQuery.setTimeAllowed(TIME_ALLOWED);
 				// add extra parameters if any
@@ -412,8 +411,8 @@ public class SearchServiceImpl implements SearchService {
 			ModifiableSolrParams params = new ModifiableSolrParams();
 			params.set("qt", "/" + rHandler);
 			params.set("q", field + ":" + query);
-
 			params.set("rows", 0);
+
 			// get the query response
 			QueryResponse qResp = solrServer.query(params);
 			// total.put(query, total.get(query) + qResp.getElapsedTime());
