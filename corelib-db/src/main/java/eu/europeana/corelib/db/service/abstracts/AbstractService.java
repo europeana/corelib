@@ -48,12 +48,20 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * FINDERS
 	 */
 
+	long countAll();
+
 	/**
 	 * Find all elements for this service.
 	 * 
 	 * @return All entities for the defined entity type
 	 */
 	List<E> findAll();
+
+	List<E> findAll(int offset, int limit);
+
+	List<E> findAll(String ordering);
+
+	List<E> findAll(String sorted, int offset, int limit);
 
 	/**
 	 * 
@@ -63,5 +71,6 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * @throws DatabaseException 
 	 */
 	E findByID(final Serializable id) throws DatabaseException;
+
 
 }

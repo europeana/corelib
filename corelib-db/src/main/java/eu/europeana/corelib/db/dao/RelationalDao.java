@@ -57,12 +57,30 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 */
 	<T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, final Serializable id) throws DatabaseException;
 
+	long countAll();
+
 	/**
 	 * Retrieve all entities from a table.
 	 * 
 	 * @return a List with all entities
 	 */
 	List<E> findAll();
+
+	/**
+	 * Retrieve all entities from a table
+	 *
+	 * @param offset
+	 *   The first result to retrieve
+	 * @param limit
+	 *   The number of results to retrieve
+	 *
+	 * @return
+	 */
+	List<E> findAll(int offset, int limit);
+
+	List<E> findAll(String query);
+
+	List<E> findAll(String sorted, int offset, int limit);
 
 	/**
 	 * Find entities by named query. Given params will be inserted into query in order of params.
@@ -124,5 +142,4 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 * Only for internal (test) usage, clears a table...
 	 */
 	void deleteAll();
-
 }

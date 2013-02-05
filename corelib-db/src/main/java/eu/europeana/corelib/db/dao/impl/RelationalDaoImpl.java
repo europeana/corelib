@@ -67,10 +67,40 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 	}
 
 	@Override
+	public long countAll() {
+		StringBuilder sb = new StringBuilder("SELECT count(*) FROM ");
+		sb.append(domainClazz.getSimpleName()).append(" e");
+		return entityManager.createQuery(sb.toString(), Long.class).getSingleResult();
+	}
+
+	@Override
 	public List<E> findAll() {
 		StringBuilder sb = new StringBuilder("SELECT e FROM ");
 		sb.append(domainClazz.getSimpleName()).append(" e");
 		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
+	}
+
+	@Override
+	public List<E> findAll(String order) {
+		StringBuilder sb = new StringBuilder("SELECT e FROM ");
+		sb.append(domainClazz.getSimpleName()).append(" e");
+		sb.append(" ORDER BY " + order);
+		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
+	}
+
+	@Override
+	public List<E> findAll(int offset, int limit) {
+		StringBuilder sb = new StringBuilder("SELECT e FROM ");
+		sb.append(domainClazz.getSimpleName()).append(" e");
+		return entityManager.createQuery(sb.toString(), domainClazz).setFirstResult(offset).setMaxResults(limit).getResultList();
+	}
+
+	@Override
+	public List<E> findAll(String order, int offset, int limit) {
+		StringBuilder sb = new StringBuilder("SELECT e FROM ");
+		sb.append(domainClazz.getSimpleName()).append(" e");
+		sb.append(" ORDER BY " + order);
+		return entityManager.createQuery(sb.toString(), domainClazz).setFirstResult(offset).setMaxResults(limit).getResultList();
 	}
 
 	private TypedQuery<E> createNamedQuery(String qName, Object... params) {

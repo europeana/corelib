@@ -56,8 +56,28 @@ public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> impleme
 	}
 
 	@Override
+	public long countAll() {
+		return dao.countAll();
+	}
+
+	@Override
 	public List<E> findAll() {
 		return dao.findAll();
+	}
+
+	@Override
+	public List<E> findAll(String sorted) {
+		return dao.findAll(sorted);
+	}
+
+	@Override
+	public List<E> findAll(int offset, int limit) {
+		return dao.findAll(offset, limit);
+	}
+
+	@Override
+	public List<E> findAll(String sorted, int offset, int limit) {
+		return dao.findAll(sorted, offset, limit);
 	}
 
 	/**
