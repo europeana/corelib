@@ -196,6 +196,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.match.include", "false");
 		solrQuery.set("mlt.count", count);
 		solrQuery.set("rows", 1);
+		solrQuery.setTimeAllowed(TIME_ALLOWED);
 		log.fine(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
@@ -320,6 +321,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
 		solrQuery.setFacet(true);
+		solrQuery.setTimeAllowed(TIME_ALLOWED);
 		for (Entry<String, List<String>> entry : fields.entrySet()) {
 			for (String value : entry.getValue()) {
 				String query = String.format("%s:\"%s\"", entry.getKey(), value.replace("\"", "\\\""));
@@ -412,6 +414,7 @@ public class SearchServiceImpl implements SearchService {
 			params.set("qt", "/" + rHandler);
 			params.set("q", field + ":" + query);
 			params.set("rows", 0);
+			params.set("timeAllowed", TIME_ALLOWED);
 
 			// get the query response
 			QueryResponse qResp = solrServer.query(params);
