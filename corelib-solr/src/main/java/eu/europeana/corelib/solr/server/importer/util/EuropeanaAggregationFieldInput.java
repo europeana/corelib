@@ -33,14 +33,12 @@ import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LandingPage;
-import eu.europeana.corelib.definitions.jibx.Preview;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
@@ -301,8 +299,7 @@ public final class EuropeanaAggregationFieldInput {
 			mongoAggregation.setEdmPreview(preview);
 			ops.set("edmPreview",preview);
 		}
-		
-		EuropeanaAggregationImpl retrievedAggregation = ((EdmMongoServer) mongoServer)
+		EuropeanaAggregationImpl retrievedAggregation = mongoServer
 				.getDatastore().find(EuropeanaAggregationImpl.class)
 				.filter("about", mongoAggregation.getAbout()).get();
 		if (retrievedAggregation != null) {
@@ -345,10 +342,10 @@ public final class EuropeanaAggregationFieldInput {
 
 	private String generateEdmPreview(String url) {
 		try {
-			return URLEncoder.encode(url, "UTF-8").replaceAll("\\%28", "(")
+			return EDM_PREVIEW_PREFIX+URLEncoder.encode(url, "UTF-8").replaceAll("\\%28", "(")
 					.replaceAll("\\%29", ")").replaceAll("\\+", "%20")
 					.replaceAll("\\%27", "'").replaceAll("\\%21", "!")
-					.replaceAll("\\%7E", "~");
+					.replaceAll("\\%7E", "~")+EDM_PREVIEW_SUFFIX;
 		} catch (UnsupportedEncodingException e) {
 			
 

@@ -17,10 +17,7 @@
 package eu.europeana.corelib.solr.server.importer.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.solr.common.SolrInputDocument;
 
@@ -275,14 +272,5 @@ public final class PlaceFieldInput {
 		return place;
 	}
 	
-	@SuppressWarnings("unused")
-	private static Map<String,Float> convertToFloat(Map<String,String> map){
-		Map<String,Float> repMap = new HashMap<String,Float>();
-		if(map!=null){
-		for (Entry<String, String> entry:map.entrySet()){
-			repMap.put(entry.getKey(), Float.parseFloat(entry.getValue()));
-		}
-		}
-		return repMap;
-	}
+	
 }

@@ -343,6 +343,7 @@ public class SearchServiceImpl implements SearchService {
 		return seeAlso;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException {
 		
@@ -382,11 +383,9 @@ public class SearchServiceImpl implements SearchService {
 				resultSet.setSearchTime(queryResponse.getElapsedTime());
 			} catch (SolrServerException e) {
 				log.severe("SolrServerException: " + e.getMessage());
-				resultSet = null;
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 			} catch (SolrException e) {
 				log.severe("SolrException: " + e.getMessage());
-				resultSet = null;
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 			}
 		}
