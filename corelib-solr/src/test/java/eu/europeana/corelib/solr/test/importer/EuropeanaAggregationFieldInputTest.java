@@ -53,6 +53,7 @@ public class EuropeanaAggregationFieldInputTest {
 		aggregations.add(aggr);
 		rdf.setAggregationList(aggregations);
 		List<EuropeanaAggregationType> eAggregations = new ArrayList<EuropeanaAggregationType>();
+		eAggregations.add(eAggregation);
 		rdf.setEuropeanaAggregationList(eAggregations);
 		
 		testMongo(rdf);
@@ -155,7 +156,9 @@ public class EuropeanaAggregationFieldInputTest {
 		aggregates.setResource("test aggregates");
 		aggregatesList.add(aggregates);
 		aggregation.setAggregateList(aggregatesList);
-		
+		Preview preview = new Preview();
+		preview.setResource("test_preview");
+		aggregation.setPreview(preview);
 		return aggregation;
 	}
 

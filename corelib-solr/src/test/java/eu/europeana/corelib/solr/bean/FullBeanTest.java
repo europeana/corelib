@@ -253,8 +253,8 @@ public class FullBeanTest {
 		val.add("test prefLabel");
 		isPartOf.put("en", val);
 		place.setIsPartOf(isPartOf);
-		place.setLatitude(0f);
-		place.setLongitude(0f);
+		place.setLatitude(1f);
+		place.setLongitude(1f);
 		Map<String,List<String>> note = new HashMap<String,List<String>>();
 		note.put("en", val);
 		place.setNote(note);
