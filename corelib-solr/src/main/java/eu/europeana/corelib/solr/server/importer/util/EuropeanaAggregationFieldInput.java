@@ -308,6 +308,7 @@ public final class EuropeanaAggregationFieldInput {
 		} else {
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
+		//TODO: Currently the europeana aggregation does not generate any WebResource, do we want it?
 		return retrievedAggregation != null ? retrievedAggregation
 				: mongoAggregation;
 	}
