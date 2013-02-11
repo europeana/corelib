@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.jibx.Language1;
 import eu.europeana.corelib.definitions.jibx.Preview;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights1;
+import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
@@ -159,6 +160,7 @@ public class EuropeanaAggregationFieldInputTest {
 		Preview preview = new Preview();
 		preview.setResource("test_preview");
 		aggregation.setPreview(preview);
+		
 		return aggregation;
 	}
 
