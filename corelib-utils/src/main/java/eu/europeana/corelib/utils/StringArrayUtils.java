@@ -39,7 +39,8 @@ public class StringArrayUtils {
 	 * @return
 	 */
 	public static boolean isNotBlank(String[] array) {
-		return ((array != null) && (array.length > 0));
+		return ((array != null) && (array.length > 0)) && StringUtils.join(array).trim().length()>0;
+		
 	}
 
 	/**
