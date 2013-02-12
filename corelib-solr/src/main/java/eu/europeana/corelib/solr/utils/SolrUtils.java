@@ -334,12 +334,20 @@ public final class SolrUtils {
 			return query;
 		}
 
+		// handling field + "*:*"
+		if (query.equals("title:*:*")) {return "title:*";}
+		if (query.equals("who:*:*")) {return "who:*";}
+		if (query.equals("what:*:*")) {return "what:*";}
+		if (query.equals("where:*:*")) {return "where:*";}
+		if (query.equals("when:*:*")) {return "when:*";}
+
+		// handling API1 fields
 		for (FieldMapping field : FieldMapping.values()) {
 			if (query.contains(field.getEseField() + ":")) {
 				query = query.replace(field.getEseField() + ":", field.getEdmField() + ":");
 			}
 		}
+
 		return query;
 	}
-
 }
