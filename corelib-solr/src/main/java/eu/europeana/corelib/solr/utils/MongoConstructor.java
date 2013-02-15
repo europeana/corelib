@@ -37,6 +37,7 @@ import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
+import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -91,19 +92,21 @@ public class MongoConstructor {
 		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-		
-		String aggregationAbout = "/provider/aggregation";
-		String europeanaAggregationAbout = "/europeana/aggregation";
-		String proxyAbout = "/provider/proxy";
-		String europeanaProxy = "/europeana/proxy";
+
+		String aggregationAbout = "/aggregation/provider";
+		String europeanaAggregationAbout = "/aggregation/europeana";
+		String proxyAbout = "/proxy/provider";
+		String europeanaProxy = "/proxy/europeana";
 		String providedCHO = "/item";
+
 		for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
-			fullBean.setAbout(providedCHO+pcho.getAbout());
+			fullBean.setAbout(pcho.getAbout());
 			aggregationAbout = aggregationAbout + pcho.getAbout();
 			europeanaAggregationAbout = europeanaAggregationAbout
 					+ pcho.getAbout();
 			proxyAbout = proxyAbout + pcho.getAbout();
-			europeanaProxy = europeanaProxy+pcho.getAbout();
+			europeanaProxy = europeanaProxy + pcho.getAbout();
+
 			try {
 				providedCHOs.add(new ProvidedCHOFieldInput()
 						.createProvidedCHOMongoFields(pcho, mongoServer));
@@ -115,55 +118,67 @@ public class MongoConstructor {
 		}
 		for (ProxyType proxytype : record.getProxyList()) {
 
+			boolean isEuropeanaProxy = false;
 			if (proxytype.getEuropeanaProxy() != null) {
 				if (!proxytype.getEuropeanaProxy().isEuropeanaProxy()) {
 					proxytype.setAbout(proxyAbout);
+					isEuropeanaProxy = false;
 				} else {
 					proxytype.setAbout(europeanaProxy);
+					isEuropeanaProxy = true;
+
 				}
 			}
-			for(Aggregation aggr:record.getAggregationList()){
-				if(StringUtils.equals(aggr.getAggregatedCHO().getResource(),proxytype.getAbout())){
+			if (!isEuropeanaProxy) {
+				for (Aggregation aggr : record.getAggregationList()) {
 					List<ProxyIn> proxyInList = new ArrayList<ProxyIn>();
 					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(aggr.getAggregatedCHO().getResource());
+					proxyIn.setResource(aggregationAbout);
+					proxyInList.add(proxyIn);
+					proxytype.setProxyInList(proxyInList);
+
+				}
+			} else {
+				for (EuropeanaAggregationType aggr: record.getEuropeanaAggregationList()){
+					List<ProxyIn> proxyInList =  new ArrayList<ProxyIn>();
+					ProxyIn proxyIn = new ProxyIn();
+					proxyIn.setResource(europeanaAggregationAbout);
 					proxyInList.add(proxyIn);
 					proxytype.setProxyInList(proxyInList);
 				}
 			}
-			for(ProvidedCHOType pCho : record.getProvidedCHOList()){
-				if(StringUtils.equals(pCho.getAbout(), proxytype.getAbout())){
-					ProxyFor pFor = new ProxyFor();
-					pFor.setResource(pCho.getAbout());
-					proxytype.setProxyFor(pFor);
-				}
+			
+			for (ProvidedCHOType pCho : record.getProvidedCHOList()) {
 				
+					ProxyFor pFor = new ProxyFor();
+					pFor.setResource(providedCHO + pCho.getAbout());
+					proxytype.setProxyFor(pFor);
+				
+
 			}
+
 			proxies.add(new ProxyFieldInput().createProxyMongoFields(
 					new ProxyImpl(), proxytype, mongoServer));
 		}
-			for (Aggregation aggregation : record.getAggregationList()) {
-				AggregatedCHO ag = new AggregatedCHO();
-				ag.setResource(providedCHO+fullBean.getAbout());
-				aggregation.setAggregatedCHO(ag);
-				aggregation.setAbout(aggregationAbout);
-				List<WebResourceImpl> webResourcesMongo=new ArrayList<WebResourceImpl>();
-				if (record.getWebResourceList()!=null&&record.getWebResourceList().size() > 0) {
-					webResourcesMongo = new AggregationFieldInput().createWebResources(record.getWebResourceList(),mongoServer);
-					
-				}
-				
-					
-				
-				
-				aggregations
-						.add(new AggregationFieldInput()
-								.createAggregationMongoFields(aggregation,
-										mongoServer, webResourcesMongo));
-				
-			
+		for (Aggregation aggregation : record.getAggregationList()) {
+			AggregatedCHO ag = new AggregatedCHO();
+			ag.setResource(providedCHO + fullBean.getAbout());
+			aggregation.setAggregatedCHO(ag);
+			aggregation.setAbout(aggregationAbout);
+			List<WebResourceImpl> webResourcesMongo = new ArrayList<WebResourceImpl>();
+			if (record.getWebResourceList() != null
+					&& record.getWebResourceList().size() > 0) {
+				webResourcesMongo = new AggregationFieldInput()
+						.createWebResources(record.getWebResourceList(),
+								mongoServer);
 
 			}
+
+			aggregations.add(new AggregationFieldInput()
+					.createAggregationMongoFields(aggregation, mongoServer,
+							webResourcesMongo));
+
+		}
 
 		if (record.getConceptList() != null) {
 			for (Concept concept : record.getConceptList()) {
@@ -178,7 +193,7 @@ public class MongoConstructor {
 						mongoServer));
 			}
 		}
-		
+
 		if (record.getTimeSpanList() != null) {
 			for (TimeSpanType tspan : record.getTimeSpanList()) {
 				timespans.add(new TimespanFieldInput()
@@ -195,9 +210,9 @@ public class MongoConstructor {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
 				eaggregation.setAbout(europeanaAggregationAbout);
-				
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
-						.createAggregationMongoFields(eaggregation, mongoServer,SolrUtils.getPreviewUrl(record)));
+						.createAggregationMongoFields(eaggregation,
+								mongoServer, SolrUtils.getPreviewUrl(record)));
 			}
 		}
 

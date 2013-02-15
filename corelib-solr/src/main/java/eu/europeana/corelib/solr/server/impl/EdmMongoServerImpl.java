@@ -147,6 +147,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public String toString() {
+		System.out.println(databaseName);
 		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
 				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
 				+ "[DB: " + databaseName + "]\n";

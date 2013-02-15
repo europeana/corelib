@@ -79,7 +79,8 @@ public final class ProxyFieldInput {
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getIsNextInSequence())).getResource());
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_FOR.toString(),
-				SolrUtils.exists(String.class, proxy.getAbout()));
+				SolrUtils.exists(ResourceType.class, proxy.getProxyFor()).getResource());
+		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(), SolrUtils.resourceListToArray(proxy.getProxyInList()));
 		if (proxy.getEuropeanaProxy() != null) {
 			solrInputDocument.addField(EdmLabel.EDM_ISEUROPEANA_PROXY
 					.toString(), proxy.getEuropeanaProxy().isEuropeanaProxy());
@@ -241,7 +242,8 @@ public final class ProxyFieldInput {
 		mongoProxy.setEdmType(DocType.get(SolrUtils.exists(EdmType.class,
 				(proxy.getType())).toString()));
 		mongoProxy
-				.setProxyFor(SolrUtils.exists(String.class, proxy.getAbout()));
+				.setProxyFor(SolrUtils.exists(String.class, proxy.getProxyFor().getResource()));
+		mongoProxy.setProxyIn(SolrUtils.resourceListToArray(proxy.getProxyInList()));
 		mongoProxy.setEdmHasMet(MongoUtils.createLiteralMapFromList(proxy
 				.getHasMetList()));
 		mongoProxy.setEdmHasType(MongoUtils
