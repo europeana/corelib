@@ -19,7 +19,6 @@ package eu.europeana.corelib.db.logging.api;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
@@ -39,13 +38,12 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * Logger class for the API
+ * 
  * @author Yorgos.Mamakis@ kb.nl
  */
 public class ApiLogger {
 
-	private final Logger log = Logger.getLogger(getClass().getName());
-
-	static ApiLogger instance;
+	volatile static ApiLogger instance;
 
 	static JacksonDBCollection<LogTypeImpl, String> logTypeCollection;
 
@@ -63,23 +61,23 @@ public class ApiLogger {
 
 	/**
 	 * Sets the mongo instance
+	 * 
 	 * @param mongo
 	 */
 	public static void setMongo(Mongo mongo) {
 		ApiLogger.mongo = mongo;
 	}
 
-	
 	public ApiLogger(Mongo mongo) throws DatabaseException {
 		ApiLogger.mongo = mongo;
 		instance = new ApiLogger();
 	}
 
-	
 	private ApiLogger() throws DatabaseException {
 		try {
 			DB db = mongo.getDB("api_log");
-			logTypeCollection = JacksonDBCollection.wrap(db.getCollection("logs"), LogTypeImpl.class, String.class);
+			logTypeCollection = JacksonDBCollection.wrap(
+					db.getCollection("logs"), LogTypeImpl.class, String.class);
 		} catch (MongoException e) {
 			throw new DatabaseException(ProblemType.UNKNOWN);
 		}
@@ -136,6 +134,7 @@ public class ApiLogger {
 
 	/**
 	 * Request the numbers of requests of an API key
+	 * 
 	 * @param apiKey
 	 * @return
 	 */
@@ -143,8 +142,7 @@ public class ApiLogger {
 		Date now = new Date();
 		Date yesterday = new Date(now.getTime() - DAY);
 		DBCursor<LogTypeImpl> lType = logTypeCollection.find()
-				.is("apiKey", apiKey)
-				.greaterThanEquals("timestamp", yesterday)
+				.is("apiKey", apiKey).greaterThanEquals("timestamp", yesterday)
 				.lessThan("timestamp", now);
 		return lType.size();
 	}
@@ -153,7 +151,8 @@ public class ApiLogger {
 	 * Returns the all-time request number by an API key
 	 */
 	public int getTotalRequestNumber(String apiKey) {
-		DBCursor<LogTypeImpl> lType = logTypeCollection.find().is("apiKey", apiKey);
+		DBCursor<LogTypeImpl> lType = logTypeCollection.find().is("apiKey",
+				apiKey);
 		return lType.size();
 	}
 
@@ -186,36 +185,34 @@ public class ApiLogger {
 	}
 
 	// by users
-	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
+	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0},
+	// $reduce: function(obj, out){out.count++}});
 	public DBObject getByUser() {
-		DBObject result = logTypeCollection.group(
-			new GroupCommand(
+		DBObject result = logTypeCollection.group(new GroupCommand(
 				logTypeCollection.getDbCollection(), // collection
-				new BasicDBObject("apiKey", true), //keys,
+				new BasicDBObject("apiKey", true), // keys,
 				null, // cond
-				new BasicDBObject("count", 0), // initial, 
+				new BasicDBObject("count", 0), // initial,
 				"function(obj, out){out.count++}", // $reduce
 				null // reduce
-			)
-		);
+				));
 		return result;
 	}
 
 	// by types
-	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial: {count:0}, $reduce: function(obj, out){out.count++}});
+	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial:
+	// {count:0}, $reduce: function(obj, out){out.count++}});
 	public DBObject getByType() {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
-		DBObject result = logTypeCollection.group(
-			new GroupCommand(
+		DBObject result = logTypeCollection.group(new GroupCommand(
 				logTypeCollection.getDbCollection(), // collection
 				keys, // keys
 				null, // cond
 				new BasicDBObject("count", 0), // initial
 				"function(obj, out){out.count++}", // $reduce
 				null // reduce
-			)
-		);
+				));
 		return result;
 	}
 
@@ -227,7 +224,8 @@ public class ApiLogger {
 	 */
 
 	private List<LogTypeImpl> getLogTypeList(String apiKey) {
-		DBCursor<LogTypeImpl> cur = logTypeCollection.find().is("apiKey", apiKey);
+		DBCursor<LogTypeImpl> cur = logTypeCollection.find().is("apiKey",
+				apiKey);
 		List<LogTypeImpl> list = new ArrayList<LogTypeImpl>();
 		while (cur.hasNext()) {
 			LogTypeImpl one = cur.next();
