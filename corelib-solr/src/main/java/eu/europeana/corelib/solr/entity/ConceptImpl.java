@@ -91,7 +91,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setRelated(String[] related) {
-		this.related = related!=null?narrower.clone():null;
+		this.related = related!=null?related.clone():null;
 	}
 
 	@Override
