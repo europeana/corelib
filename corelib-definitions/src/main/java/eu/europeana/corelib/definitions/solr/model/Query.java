@@ -366,7 +366,7 @@ public class Query implements Cloneable {
 			} else if (name.equals(Facet.TYPE.name())) {
 				value = value.toUpperCase().replace("\"", "");
 			} else {
-				if (value.indexOf(" ") > -1 && !isApiQuery) {
+				if (!isApiQuery && (value.indexOf(" ") > -1 || value.indexOf("!") > -1)) {
 					if (!value.startsWith("\"")) {
 						value = '"' + value;
 					}
