@@ -29,7 +29,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-utils</artifactId>
-	<name>corelib-utils</name>
+	<name>Europeana Core Library General tools</name>
 	<url>http://www.europeanalabs.eu</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -10,7 +10,6 @@
   </parent>
   <groupId>eu.europeana.corelib</groupId>
   <artifactId>corelib-solr-dereference</artifactId>
-  <name>corelib-solr-dereference</name>
   <url>http://maven.apache.org</url>
   <dependencies>
   <dependency>
@@ -85,4 +84,5 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  <name>Europeana Core Library Dereferencing Toolkit</name>
 </project>

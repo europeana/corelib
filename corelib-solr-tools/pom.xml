@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-solr-tools</artifactId>
-	<name>corelib-solr-tools</name>
+	<name>Europeana Core Library Solr and Mongo tools</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 

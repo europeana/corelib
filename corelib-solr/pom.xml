@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-solr</artifactId>
-	<name>corelib-solr</name>
+	<name>Europeana Core Library Solr and Mongo functionality</name>
 	<url>http://www.europeanalabs.eu</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

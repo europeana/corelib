@@ -28,14 +28,14 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ResourceBundle.Control;
+import java.util.Set;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -62,9 +62,9 @@ import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Lang;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
 import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
@@ -1292,7 +1292,7 @@ public class Extractor {
 	/**
 	 * Save the mapping of a controlled vocabulary
 	 */
-	public boolean saveMapping() {
+	public boolean saveMapping(int iterations) {
 		if (vocabulary != null && validate(vocabulary)) {
 			if (mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName()) != null) {
 				Query<ControlledVocabularyImpl> updateQuery = mongoServer
@@ -1303,6 +1303,7 @@ public class Extractor {
 						.getDatastore()
 						.createUpdateOperations(ControlledVocabularyImpl.class)
 						.set("elements", vocabulary.getElements());
+						ops.set("iterations",iterations);
 				mongoServer.getDatastore().update(updateQuery, ops);
 			} else {
 				mongoServer.getDatastore().save(vocabulary);
@@ -1312,6 +1313,8 @@ public class Extractor {
 		return false;
 	}
 
+	
+	
 	
 	private boolean validate(ControlledVocabulary voc) {
 
@@ -1326,25 +1329,38 @@ public class Extractor {
 				elems.put(entry.getKey(), new ArrayList<EdmMappedField>());
 			}
 		}
-
+		Set<EdmLabel> edmLabelSet = new HashSet<EdmLabel>();
 		for (EdmMappedField label : validateList) {
-			if (label.getLabel().toString().startsWith("ag")) {
-				if (validateList.indexOf(EdmLabel.EDM_AGENT) == -1) {
+			if(StringUtils.equals(EdmLabel.EDM_AGENT.toString(), label.getLabel())){
+				edmLabelSet.add(EdmLabel.EDM_AGENT);
+			} else if (StringUtils.equals(EdmLabel.SKOS_CONCEPT.toString(), label.getLabel())){
+				edmLabelSet.add(EdmLabel.SKOS_CONCEPT);
+			} else if (StringUtils.equals(EdmLabel.EDM_TIMESPAN.toString(), label.getLabel())){
+				edmLabelSet.add(EdmLabel.EDM_TIMESPAN);
+			} else if (StringUtils.equals(EdmLabel.EDM_PLACE.toString(), label.getLabel())){
+				edmLabelSet.add(EdmLabel.EDM_PLACE);
+			} 
+			
+		}
+		for (EdmMappedField label : validateList) {
+			if(label.getLabel().startsWith("ag")){
+				if(!edmLabelSet.contains(EdmLabel.EDM_AGENT)){
 					return false;
-				}
-			} else if (label.getLabel().toString().startsWith("cc")) {
-				if (validateList.indexOf(EdmLabel.SKOS_CONCEPT) == -1) {
+				} 
+			} else if(label.getLabel().startsWith("ts")){
+				if(!edmLabelSet.contains(EdmLabel.EDM_TIMESPAN)){
 					return false;
-				}
-			} else if (label.getLabel().toString().startsWith("ts")) {
-				if (validateList.indexOf(EdmLabel.EDM_TIMESPAN) == -1) {
+				} 
+			} else if(label.getLabel().startsWith("pl")){
+				if(!edmLabelSet.contains(EdmLabel.EDM_PLACE)){
 					return false;
-				}
-			} else if (label.getLabel().toString().startsWith("pl")) {
-				if (validateList.indexOf(EdmLabel.EDM_PLACE) == -1) {
+				} 
+			} else if(label.getLabel().startsWith("cc")){
+				if(!edmLabelSet.contains(EdmLabel.SKOS_CONCEPT)){
 					return false;
-				}
+				} 
 			}
+			
 		}
 		voc.setElements(elems);
 		return true;
