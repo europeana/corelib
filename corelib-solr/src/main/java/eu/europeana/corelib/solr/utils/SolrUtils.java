@@ -344,7 +344,7 @@ public final class SolrUtils {
 		// handling API1 fields
 		for (FieldMapping field : FieldMapping.values()) {
 			if (query.contains(field.getEseField() + ":")) {
-				query = query.replace(field.getEseField() + ":", field.getEdmField() + ":");
+				query = query.replaceAll("\\b" + field.getEseField() + ":", field.getEdmField() + ":");
 			}
 		}
 
