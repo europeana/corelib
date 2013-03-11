@@ -533,6 +533,12 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
+	/*
+	public Date getLastSolrUpdate() throws SolrServerException, IOException {
+		NamedList<Object> namedList = solrServer.request(new LukeRequest());
+	}
+	*/
+
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
