@@ -206,7 +206,9 @@ public abstract class PageData {
 	public String getPageTitle() {
 		String pageTitle = "";
 		if (StringUtils.isBlank(this.pageTitle)) {
-			pageTitle = pageInfo.getPageTitle();
+			if (pageInfo != null && !StringUtils.isBlank(pageInfo.getPageTitle())) {
+				pageTitle = pageInfo.getPageTitle();
+			}
 		} else {
 			pageTitle = this.pageTitle;
 		}
