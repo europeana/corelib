@@ -21,7 +21,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,6 +158,12 @@ public class SearchServiceMock implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems)
 			throws SolrTypeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Date getLastSolrUpdate() throws SolrServerException, IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
