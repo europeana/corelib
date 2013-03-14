@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.solr.service.impl;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
@@ -533,11 +535,13 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
-	/*
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
+		long t0 = new Date().getTime();
 		NamedList<Object> namedList = solrServer.request(new LukeRequest());
+		NamedList<Object> index = (NamedList<Object>) namedList.get("index");
+		log.info("spent: " + (new Date().getTime() - t0));
+		return (Date) index.get("lastModified");
 	}
-	*/
 
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));

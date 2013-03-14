@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.service;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -166,4 +168,11 @@ public interface SearchService {
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException;
 
+	/**
+	 * Return last modification time of Solr index
+	 * @return
+	 * @throws SolrServerException
+	 * @throws IOException
+	 */
+	Date getLastSolrUpdate() throws SolrServerException, IOException;
 }
