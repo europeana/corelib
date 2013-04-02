@@ -50,10 +50,10 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	public EuropeanaIdMongoServer(Mongo mongoServer, String databaseName) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
-		createDatastore();
+		//createDatastore();
 	}
 
-	private void createDatastore() {
+	public void createDatastore() {
 		Morphia morphia = new Morphia();
 		morphia.map(EuropeanaId.class);
 		datastore = morphia.createDatastore(mongoServer, databaseName);
@@ -192,5 +192,10 @@ public class EuropeanaIdMongoServer implements MongoServer {
 		UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
 				.set("timestamp",new Date().getTime());
 		datastore.update(updateQuery, ops);
+	}
+
+	public void setDatastore(Datastore datastore) {
+		this.datastore = datastore;
+		
 	}
 }
