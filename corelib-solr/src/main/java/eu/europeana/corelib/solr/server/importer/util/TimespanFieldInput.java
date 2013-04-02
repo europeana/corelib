@@ -124,7 +124,15 @@ public final class TimespanFieldInput {
 				.filter("about", timeSpan.getAbout()).get();
 		if (mongoTimespan == null) {
 			mongoTimespan = createNewTimespan(timeSpan);
+			try{
 			mongoServer.getDatastore().save(mongoTimespan);
+			}
+			catch(Exception e){
+				mongoTimespan = ((EdmMongoServer) mongoServer)
+						.getDatastore().find(TimespanImpl.class)
+						.filter("about", timeSpan.getAbout()).get();
+				mongoTimespan = updateTimespan(mongoTimespan, timeSpan, mongoServer);
+			}
 		} else {
 			mongoTimespan = updateTimespan(mongoTimespan, timeSpan, mongoServer);
 		}

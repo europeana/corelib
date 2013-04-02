@@ -207,7 +207,14 @@ public final class AgentFieldInput {
 
 		if (agent == null) {
 			agent = createNewAgent(agentType);
+			try {
 			mongoServer.getDatastore().save(agent);
+			} catch (Exception e ){
+				AgentImpl agentSec = ((EdmMongoServer) mongoServer).getDatastore()
+						.find(AgentImpl.class)
+						.filter("about", agentType.getAbout()).get();
+				agent = updateMongoAgent(agentSec, agentType, mongoServer);
+			}
 		} else {
 			agent = updateMongoAgent(agent, agentType, mongoServer);
 		}

@@ -174,7 +174,15 @@ public final class ConceptFieldInput {
 		if (conceptMongo == null) {
 			// If it does not exist
 			conceptMongo = createNewConcept(concept);
+			try{
 			mongoServer.getDatastore().save(conceptMongo);
+			}
+			catch (Exception e){
+				conceptMongo = ((EdmMongoServer) mongoServer)
+						.getDatastore().find(ConceptImpl.class)
+						.filter("about", concept.getAbout()).get();
+				conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
+			}
 		} else {
 			conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
 		}

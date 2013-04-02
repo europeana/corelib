@@ -141,7 +141,15 @@ public final class PlaceFieldInput {
 		// if it does not exist
 		if (place == null) {
 			place = createNewPlace(placeType);
+			try{
 			mongoServer.getDatastore().save(place);
+			}
+			catch (Exception e){
+				place =  ((EdmMongoServer) mongoServer).getDatastore()
+						.find(PlaceImpl.class)
+						.filter("about", placeType.getAbout()).get();
+				place = updatePlace(place, placeType, mongoServer);
+			}
 		} else {
 			place = updatePlace(place, placeType, mongoServer);
 		}
@@ -164,7 +172,7 @@ public final class PlaceFieldInput {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private static PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
+	private PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
 			MongoServer mongoServer) {
 		if (placeType.getNoteList() != null) {
 		
@@ -247,7 +255,7 @@ public final class PlaceFieldInput {
 	 *            The JiBX Place Entity
 	 * @return A new Mongo Place Entity
 	 */
-	private static PlaceImpl createNewPlace(PlaceType placeType) {
+	private PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
 		//place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());

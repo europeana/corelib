@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.solr.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 /**
  * Enumeration mapping information from ESE to EDM
@@ -49,14 +51,27 @@ public enum EseEdmMap {
 		}
 	}
 	;
-	
+	private String field;
 	private EseEdmMap(String field) {
+		this.field = field;
 	}
 	/**
 	 * Return the field value from a bean
 	 * @param bean
 	 * @return
 	 */
+	
+	public String getField (){
+		return this.field;
+	}
+	
+	public static EseEdmMap getEseEdmMap(String field){
+		for(EseEdmMap map: EseEdmMap.values())
+		if(StringUtils.equals(map.field, field)){
+			return map;
+		}
+		throw new RuntimeException("Field not found");
+	}
 	public abstract String getEdmValue(FullBean bean);
 
 }
