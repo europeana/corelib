@@ -26,6 +26,7 @@ public class EuropeanaIdRegistryMongoServerTest {
 	public void prepare(){
 		try{
 			server = new EuropeanaIdRegistryMongoServer(new Mongo("localhost",27017), "europeana_registry_test");
+			server.getEuropeanaIdMongoServer().createDatastore();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

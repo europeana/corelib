@@ -1,6 +1,7 @@
 package eu.europeana.corelib.tools.lookuptable;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import junit.framework.Assert;
 
@@ -16,9 +17,12 @@ public class EuropeanaIdMongoServerTest {
 	public void test(){
 		try {
 			server = new EuropeanaIdMongoServer(new Mongo("localhost",27017), "europeanaId_test");
+			server.createDatastore();
 			EuropeanaId eid = new EuropeanaId();
 			eid.setNewId("newId");
 			eid.setOldId("oldId");
+			eid.setLastAccess(new Date().getTime());
+			
 			server.saveEuropeanaId(eid);
 			
 			Assert.assertTrue(server.newIdExists("oldId"));
