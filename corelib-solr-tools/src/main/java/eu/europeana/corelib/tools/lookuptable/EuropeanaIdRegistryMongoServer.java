@@ -68,6 +68,9 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		createDatastore();
 	}
 
+	public EuropeanaIdMongoServer getEuropeanaIdMongoServer(){
+		return this.europeanaIdMongoServer;
+	}
 	private void createDatastore() {
 		Morphia morphia = new Morphia();
 		morphia.map(EuropeanaIdRegistry.class);
