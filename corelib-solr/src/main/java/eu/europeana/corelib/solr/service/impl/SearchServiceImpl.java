@@ -41,6 +41,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -122,11 +123,13 @@ public class SearchServiceImpl implements SearchService {
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null) {
+			/*
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
 				log.severe("SolrServerException: " + e.getMessage());
 			}
+			*/
 		}
 
 		return fullBean;
@@ -326,10 +329,14 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
 		for (Entry<String, List<String>> entry : fields.entrySet()) {
 			for (String value : entry.getValue()) {
-				String query = String.format("%s:\"%s\"", entry.getKey(), value.replace("\"", "\\\""));
+				String query = String.format("%s:\"%s\"", entry.getKey(),
+						ClientUtils.escapeQueryChars(value).replace("\\ ", " ").replace("\\-", "-")
+				);
+				log.info(query);
 				solrQuery.addFacetQuery(query);
 			}
 		}
+		log.info(solrQuery.toString());
 		QueryResponse response;
 		Map<String, Integer> seeAlso = null;
 		try {
@@ -339,6 +346,10 @@ public class SearchServiceImpl implements SearchService {
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
 			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
+			e.printStackTrace();
+		} catch (Exception e) {
+			log.severe("Exception: " + e.getClass().getCanonicalName() + " " + e.getMessage() + " for query " 
+					+ solrQuery.toString());
 			e.printStackTrace();
 		}
 
