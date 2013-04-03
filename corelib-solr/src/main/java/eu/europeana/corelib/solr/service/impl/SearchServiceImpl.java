@@ -332,11 +332,9 @@ public class SearchServiceImpl implements SearchService {
 				String query = String.format("%s:\"%s\"", entry.getKey(),
 						ClientUtils.escapeQueryChars(value).replace("\\ ", " ").replace("\\-", "-")
 				);
-				log.info(query);
 				solrQuery.addFacetQuery(query);
 			}
 		}
-		log.info(solrQuery.toString());
 		QueryResponse response;
 		Map<String, Integer> seeAlso = null;
 		try {
