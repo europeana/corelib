@@ -29,23 +29,23 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 	">
 
-    <!-- USING OTHER MODULES -->    
-    <import resource="corelib-definitions-context.xml"/>
-    <import resource="corelib-solr-context.xml"/>
+	<!-- USING OTHER MODULES -->
+	<import resource="corelib-definitions-context.xml"/>
+	<import resource="corelib-solr-context.xml"/>
 
-    <!-- INTERNAL DEFINITIONS -->
-    <import resource="internal/corelib-db-datasource.xml"/>
-    <import resource="internal/corelib-db-dao.xml"/>
+	<!-- INTERNAL DEFINITIONS -->
+	<import resource="internal/corelib-db-datasource.xml"/>
+	<import resource="internal/corelib-db-dao.xml"/>
 
-    <context:annotation-config/>
-    
-    <bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
-    	p:dao-ref="corelib_db_tokenDao"/>
-    <bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
-    	p:dao-ref="corelib_db_userDao"/>
-    <bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"
-    	p:dao-ref="corelib_db_imageDao"/>
-    <bean name="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
-    	p:dao-ref="corelib_db_apiKeyDao"/>
+	<context:annotation-config/>
+
+	<bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
+		p:dao-ref="corelib_db_tokenDao"/>
+	<bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
+		p:dao-ref="corelib_db_userDao"/>
+	<bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"
+		p:dao-ref="corelib_db_imageDao"/>
+	<bean name="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
+		p:dao-ref="corelib_db_apiKeyDao"/>
 
 </beans>
