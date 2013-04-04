@@ -119,6 +119,10 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		return createNamedQuery(qName, params).getResultList();
 	}
 
+	public List<E> findByNamedQueryLimited(String qName, int offset, int limit, Object... params) {
+		return createNamedQuery(qName, params).setFirstResult(offset).setMaxResults(limit).getResultList();
+	}
+
 	@Override
 	public E findOneByNamedQuery(String qName, Object... params) {
 		try {

@@ -123,7 +123,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		return user;
 	}
 
-
 	@Override
 	public User findByEmail(String email) {
 		if (StringUtils.isNotBlank(email)) {

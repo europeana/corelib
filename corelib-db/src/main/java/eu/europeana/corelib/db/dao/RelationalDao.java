@@ -93,6 +93,8 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 */
 	List<E> findByNamedQuery(String query, Object... params);
 
+	List<E> findByNamedQueryLimited(String query, int offset, int limit, Object... params);
+
 	/**
 	 * Find entity by named query. Given params will be inserted into query in order of params.
 	 * 
