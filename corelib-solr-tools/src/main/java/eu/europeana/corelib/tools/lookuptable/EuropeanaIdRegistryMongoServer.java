@@ -26,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
+import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
 
@@ -377,37 +378,69 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	}
 
 	/**
-	 * Delete a specific EuropeanaID record
-	 * 
-	 * @param oldId
-	 *            The oldId to search for
-	 * @param newId
-	 *            The newId to search for
-	 */
-	public void deleteEuropeanaId(String oldId, String newId) {
-		
-	}
-
-	/**
 	 * Delete all the records based on the oldID
-	 * 
-	 * @param oldId
-	 *            The id to search for
+	 * @param oldId The id to search for
 	 */
-	public void deleteEuropeanaIdFromOld(String oldId) {
-
+	public void deleteEuropeanaIdFromOld(String oldId){
+		Query<EuropeanaId> deleteQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId);
+			
+		datastore.findAndDelete(deleteQuery);
 	}
-
+	
 	/**
 	 * Delete all the records based on the newID
-	 * 
-	 * @param newId
-	 *            The id to search for
+	 * @param newId The id to search for
 	 */
-	public void deleteEuropeanaIdFromNew(String newId) {
-
+	public void deleteEuropeanaIdFromNew(String newId){
+		Query<EuropeanaId> deleteQuery = datastore
+				.createQuery(EuropeanaId.class).field("newId").equal(newId);
+			
+		datastore.findAndDelete(deleteQuery);
+	}
+	
+	/**
+	 * @param newId
+	 * @param oldId
+	 */
+	public void updateTime(String newId, String oldId){
+		Query<EuropeanaId> updateQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId).field("newId").equal(newId);
+		UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
+				.set("timestamp",new Date().getTime());
+		datastore.update(updateQuery, ops);
 	}
 
+	
+	/**
+	 * Sets a value for a failed record
+	 * @param state
+	 * @param newID
+	 */
+	public void setFailedRecordFailReasonFromNewID(LookupState state,String newID){
+		List<FailedRecord> frecords = datastore.find(FailedRecord.class).filter("europeanaId", newID).asList();
+		
+		for(FailedRecord frecord : frecords){
+			frecord.setLookupState(state);
+			datastore.merge(frecord);
+		}
+	}
+		
+	/**
+	 * Sets a value for a failed record
+	 * @param state
+	 * @param oldID
+	 */
+	public void setFailedRecordFailReasonFromOldID(LookupState state,String oldID,String collectionID){
+		List<FailedRecord> frecords = datastore.find(FailedRecord.class).filter("originalId", oldID).filter("collectionId",collectionID).asList();
+		
+		for(FailedRecord frecord : frecords){
+			frecord.setLookupState(state);
+			datastore.merge(frecord);
+		}
+	}
+	
+	
 	/**
 	 * Retrieve the failed records for a collection ID
 	 * @param collectionId The collection ID to use

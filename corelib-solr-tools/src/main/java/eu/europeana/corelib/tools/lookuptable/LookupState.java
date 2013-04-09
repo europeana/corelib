@@ -58,5 +58,16 @@ public enum LookupState {
 	/**
 	 * Indicates that the collection for this record has changed
 	 */
-	COLLECTION_CHANGED
+	COLLECTION_CHANGED,
+	
+	//System Specific
+	
+	/**
+	 * Indicates that the record has been discarded because its XML structure does
+	 * not conform to the structural rules supported 
+	 */
+	INCOMPATIBLE_XML_CONTENT
+	
+	
+	
 }

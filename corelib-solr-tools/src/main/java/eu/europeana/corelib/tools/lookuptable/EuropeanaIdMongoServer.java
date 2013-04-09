@@ -168,6 +168,10 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 */
 	public void deleteEuropeanaId(String oldId, String newId) {
 
+		Query<EuropeanaId> deleteQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId).field("newId").equal(newId);
+			
+		datastore.findAndDelete(deleteQuery);
 	}
 
 	/**
@@ -175,7 +179,10 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param oldId The id to search for
 	 */
 	public void deleteEuropeanaIdFromOld(String oldId){
-		
+		Query<EuropeanaId> deleteQuery = datastore
+				.createQuery(EuropeanaId.class).field("oldId").equal(oldId);
+			
+		datastore.findAndDelete(deleteQuery);
 	}
 	
 	/**
@@ -183,7 +190,10 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param newId The id to search for
 	 */
 	public void deleteEuropeanaIdFromNew(String newId){
-		
+		Query<EuropeanaId> deleteQuery = datastore
+				.createQuery(EuropeanaId.class).field("newId").equal(newId);
+			
+		datastore.findAndDelete(deleteQuery);
 	}
 	
 	public void updateTime(String newId, String oldId){
