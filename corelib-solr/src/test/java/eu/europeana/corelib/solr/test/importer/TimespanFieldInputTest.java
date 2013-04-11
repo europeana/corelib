@@ -70,7 +70,10 @@ public class TimespanFieldInputTest {
 		timespan.setPrefLabelList(prefLabelList);
 		List<IsPartOf> isPartOfList = new ArrayList<IsPartOf>();
 		IsPartOf isPartOf = new IsPartOf();
-		isPartOf.setResource("test resource");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isPartOfResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isPartOfResource.setResource("test resource");
+		isPartOf.setResource(isPartOfResource);
 		isPartOfList.add(isPartOf);
 		timespan.setIsPartOfList(isPartOfList);
 

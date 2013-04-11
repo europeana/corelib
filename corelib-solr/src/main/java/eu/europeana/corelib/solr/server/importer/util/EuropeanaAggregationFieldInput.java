@@ -80,9 +80,11 @@ public final class EuropeanaAggregationFieldInput {
 		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
 				solrInputDocument, aggregation.getCreator(),
 				EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR);
-		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
-				aggregation.getCountry(),
+		solrInputDocument = SolrUtils.addFieldFromEnum(solrInputDocument,
+				aggregation.getCountry().getCountry(),
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY);
+		
+		
 		solrInputDocument.addField(
 				EdmLabel.EDM_EUROPEANA_AGGREGATION.toString(),
 				aggregation.getAbout());
@@ -101,8 +103,12 @@ public final class EuropeanaAggregationFieldInput {
 				aggregation.getLandingPage() != null ? aggregation
 						.getLandingPage().getResource() : EUROPEANA_URI
 						+ aggregation.getAggregatedCHO().getResource());
-		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
-				aggregation.getLanguage(),
+		
+		solrInputDocument = SolrUtils.addFieldFromEnum(solrInputDocument,
+				aggregation.getLanguage().getLanguage(),
+				
+				
+				
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE);
 		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
 				solrInputDocument, aggregation.getRights(),
@@ -232,8 +238,10 @@ public final class EuropeanaAggregationFieldInput {
 			ops.set("dcCreator", creator);
 			mongoAggregation.setDcCreator(creator);
 		}
+		
 		Map<String, List<String>> country = MongoUtils
-				.createLiteralMapFromString(aggregation.getCountry());
+				.createLiteralMapFromString(aggregation.getCountry().getCountry());
+		
 		if (country != null) {
 			mongoAggregation.setEdmCountry(country);
 			ops.set("edmCountry", country);
@@ -258,7 +266,8 @@ public final class EuropeanaAggregationFieldInput {
 		}
 
 		Map<String, List<String>> language = MongoUtils
-				.createLiteralMapFromString(aggregation.getLanguage());
+				.createLiteralMapFromString(aggregation.getLanguage().getLanguage());
+		
 		mongoAggregation.setEdmLanguage(language);
 		ops.set("edmLanguage", language);
 

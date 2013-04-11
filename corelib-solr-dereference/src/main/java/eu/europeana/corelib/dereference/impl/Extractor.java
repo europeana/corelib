@@ -63,6 +63,7 @@ import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Lang;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -920,8 +921,10 @@ public class Extractor {
 			} else if (RDF.getClazz().getSuperclass()
 					.isAssignableFrom(ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
-				if (isURI(val)) {
-					rs.setResource(val);
+				if (isURI(val)) {					
+					Resource res = new Resource();
+					res.setResource(val);
+					rs.setResource(res);
 					denormalize(val, iterations - 1);
 				} else {
 					rs.setString(val);
@@ -986,7 +989,6 @@ public class Extractor {
 							LiteralType.Lang lang = new LiteralType.Lang();
 							lang.setLang(valAttr);
 							rs.setLang(lang);
-						
 					}
 				}
 				Class<?>[] cls = new Class<?>[1];
@@ -1000,7 +1002,9 @@ public class Extractor {
 					ResourceOrLiteralType.class)) {
 				ResourceOrLiteralType rs = new ResourceOrLiteralType();
 				if (isURI(val)) {
-					rs.setResource(val);
+					Resource res =  new Resource();
+					res.setResource(val);
+					rs.setResource(res);
 					denormalize(val, iterations - 1);
 				} else {
 					rs.setString(val);
@@ -1062,7 +1066,9 @@ public class Extractor {
 			ResourceOrLiteralType obj = new ResourceOrLiteralType();
 
 			if (isURI(val)) {
-				obj.setResource(val);
+				Resource res =  new Resource();
+				res.setResource(val);
+				obj.setResource(res);
 				denormalize(val, iterations - 1);
 			} else {
 				obj.setString(val);

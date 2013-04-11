@@ -629,7 +629,7 @@ public interface PhysicalThing extends AbstractEdmEntity {
 	 * 
 	 * @return the edm:isNextInSequence for the edm:Proxy
 	 */
-	String getEdmIsNextInSequence();
+	String[] getEdmIsNextInSequence();
 
 	/**
 	 * Set the edm:isNextInSequence fields for a ProvidedCHO
@@ -638,7 +638,7 @@ public interface PhysicalThing extends AbstractEdmEntity {
 	 *            String representing the edm:isNextInSequence fields for a
 	 *            ProvidedCHO
 	 */
-	void setEdmIsNextInSequence(String edmIsNextInSequence);
+	void setEdmIsNextInSequence(String[] edmIsNextInSequence);
 
 	/**
 	 * TODO: Yorgos Mamakis: is it used?

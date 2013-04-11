@@ -29,6 +29,7 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -69,15 +70,20 @@ public final class ProxyFieldInput {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(),
-				SolrUtils.exists(EdmType.class, (proxy.getType())).toString());
+				SolrUtils.exists(EdmType.class, (proxy.getType().getType())).toString());
 		solrInputDocument.addField(
 				EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString(),
 				SolrUtils.exists(ResourceType.class,
 						(proxy.getCurrentLocation())).getResource());
-		solrInputDocument.addField(
-				EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString(),
-				SolrUtils.exists(ResourceType.class,
-						(proxy.getIsNextInSequence())).getResource());
+		
+		List<IsNextInSequence> seqList = proxy.getIsNextInSequenceList();
+		
+		for(IsNextInSequence val: seqList){
+			solrInputDocument.addField(
+					EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString(),
+					val.toString());
+		}
+		
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_FOR.toString(),
 				SolrUtils.exists(ResourceType.class, proxy.getProxyFor()).getResource());
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(), SolrUtils.resourceListToArray(proxy.getProxyInList()));
@@ -237,10 +243,19 @@ public final class ProxyFieldInput {
 		}
 		mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
 				(proxy.getCurrentLocation())).getResource());
-		mongoProxy.setEdmIsNextInSequence(SolrUtils.exists(ResourceType.class,
-				(proxy.getIsNextInSequence())).getResource());
+		
+	
+		List<IsNextInSequence> seqList = proxy.getIsNextInSequenceList();
+		
+		
+		if(seqList != null){
+			String[] seqarray =  seqList.toArray(new String[seqList.size()]);
+			mongoProxy.setEdmIsNextInSequence(seqarray);
+		}
+
 		mongoProxy.setEdmType(DocType.get(SolrUtils.exists(EdmType.class,
-				(proxy.getType())).toString()));
+				(proxy.getType().getType())).toString()));
+		
 		mongoProxy
 				.setProxyFor(SolrUtils.exists(String.class, proxy.getProxyFor().getResource()));
 		mongoProxy.setProxyIn(SolrUtils.resourceListToArray(proxy.getProxyInList()));

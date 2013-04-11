@@ -129,7 +129,7 @@ public final class SolrUtils {
 		if (type != null) {
 			List<String> lst = new ArrayList<String>();
 			if (type.getResource() != null) {
-				lst.add(type.getResource());
+				lst.add(type.getResource().getResource());
 			}
 			if (type.getString() != null) {
 				lst.add(type.getString());
@@ -154,7 +154,7 @@ public final class SolrUtils {
 			String[] arr = new String[list.size()];
 			int i = 0;
 			for (ResourceOrLiteralType obj : list) {
-				arr[i] = obj.getResource() != null ? obj.getResource() : obj
+				arr[i] = obj.getResource() != null ? obj.getResource().getResource() : obj
 						.getString();
 				i++;
 			}
@@ -224,7 +224,7 @@ public final class SolrUtils {
 	 */
 	public static String getResourceOrLiteralString(ResourceOrLiteralType obj) {
 		if (obj != null) {
-			return obj.getResource() != null ? obj.getResource() : obj
+			return obj.getResource() != null ? obj.getResource().getResource() : obj
 					.getString();
 		}
 		return null;
@@ -286,6 +286,24 @@ public final class SolrUtils {
 		return solrInputDocument;
 	}
 
+	
+	/**
+	 * Adds a field from an enumeration.
+	 * @param solrInputDocument
+	 * @param obj
+	 * @param label
+	 * @return
+	 */
+	public static  SolrInputDocument addFieldFromEnum(
+			SolrInputDocument solrInputDocument, Enum<?> obj, EdmLabel label) {
+		if (obj != null) {
+		   solrInputDocument.addField(label.toString(),obj.toString());
+		}
+		return solrInputDocument;
+	}
+	
+	
+	
 	/**
 	 * Adds a field to a document from a ResourceOrLiteralType object
 	 * @param solrInputDocument The document to add a document to

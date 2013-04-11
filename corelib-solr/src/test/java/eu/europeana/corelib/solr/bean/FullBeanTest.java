@@ -363,7 +363,8 @@ public class FullBeanTest {
 		proxy.setDctermsTOC(map);
 		proxy.setDcTitle(map);
 		proxy.setDcType(map);
-		proxy.setEdmIsNextInSequence("test isnextinsequence");
+		String[] sequences = {"test isnextinsequence"}; 
+		proxy.setEdmIsNextInSequence(sequences);
 		proxy.setEdmCurrentLocation("test edm:currentLocation");
 		proxy.setEdmType(DocType.IMAGE);
 		Key<Proxy> proxyKey = ds.save(proxy);

@@ -34,11 +34,17 @@ public class WebResourcesFieldInputTest {
 		WebResourceType webResource = new WebResourceType();
 		webResource.setAbout("test about");
 		Rights1 rights = new Rights1();
-		rights.setResource("test resource");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rightsResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		rightsResource.setResource("test resource");
+		rights.setResource(rightsResource);
 		webResource.setRights(rights);
 		List<Rights> rightsList = new ArrayList<Rights>();
 		Rights rights1 = new Rights();
-		rights1.setResource("test rights");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rights1Resource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		rights1Resource.setResource("test rights");
+		rights1.setResource(rights1Resource);
 		rightsList.add(rights1);
 		webResource.setRightList(rightsList);
 		//create mongo

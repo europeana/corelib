@@ -181,6 +181,27 @@ public final class MongoUtils {
 		return null;
 	}
 
+	
+	/**
+	 * Method that converts a Enum object to a multilingual map of
+	 * strings
+	 * @param obj
+	 * @return
+	 */
+	public static <T extends Enum> Map<String, List<String>> createLiteralMapFromString(T obj){
+		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+		
+		if (obj != null) {
+			List<String> val = new ArrayList<String>();
+			val.add(obj.toString());
+			retMap.put("def", val);
+			return retMap;
+		}
+		
+		return null;
+	}
+	
+	
 	/**
 	 * Method that converts a ResourceOrLiteralType.class object to a
 	 * multilingual map of strings
@@ -207,7 +228,9 @@ public final class MongoUtils {
 					List<String> val = retMap.get(obj.getLang().getLang()) != null ? retMap
 							.get(obj.getLang().getLang())
 							: new ArrayList<String>();
-					val.add(obj.getResource());
+							
+					val.add(obj.getResource().getResource());
+					
 					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
@@ -222,7 +245,7 @@ public final class MongoUtils {
 					List<String> val = retMap.get("def") != null ? retMap
 							.get("def")
 							: new ArrayList<String>();
-					val.add(obj.getResource());
+					val.add(obj.getResource().getResource());
 					retMap.put("def", val);
 				}
 			}
@@ -308,17 +331,17 @@ public final class MongoUtils {
 						String lang = obj.getLang().getLang();
 						if (retMap.containsKey(lang)) {
 							List<String> val = retMap.get(lang);
-							val.add(obj.getResource());
+							val.add(obj.getResource().getResource());
 							retMap.put(lang, val);
 						} else {
 							List<String> val = new ArrayList<String>();
-							val.add(obj.getResource());
+							val.add(obj.getResource().getResource());
 							retMap.put(lang, val);
 
 						}
 					} else {
 						List<String> val = new ArrayList<String>();
-						val.add(obj.getResource());
+						val.add(obj.getResource().getResource());
 						retMap.put("def", val);
 					}
 				}

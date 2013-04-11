@@ -30,6 +30,7 @@ import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
 
 import eu.europeana.corelib.definitions.jibx.*;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.Timespan;
@@ -558,7 +559,9 @@ public class EDMUtils {
 			lang.setLang("");
 			rights1.setLang(lang);
 			rights1.setString("");
-			rights1.setResource("http://testrights/");
+			Resource res = new Resource();
+			res.setResource("http://testrights/");
+			rights1.setResource(res );
 			aggregation.setRights(rights1);
 		}
 		List<EuropeanaAggregationType> lst = new ArrayList<EuropeanaAggregationType>();
@@ -599,11 +602,27 @@ public class EDMUtils {
 			if (derivativeList != null) {
 				proxy.setIsDerivativeOfList(derivativeList);
 			}
-			IsNextInSequence nis = convertStringToObj(IsNextInSequence.class,
-					prx.getEdmIsNextInSequence());
-			if (nis != null) {
-				proxy.setIsNextInSequence(nis);
+			
+	
+			List<IsNextInSequence> nis = null;
+			
+			String[] seqArray = prx.getEdmIsNextInSequence();
+			
+			if(seqArray != null){
+				nis = new ArrayList<IsNextInSequence>();
+				
+				for(int i=0; i < seqArray.length; i ++ ){
+					IsNextInSequence item = new IsNextInSequence();
+					item.setResource(seqArray[i]);
+					nis.add(item);
+				}
 			}
+
+			
+			if (nis != null) {
+				proxy.setIsNextInSequenceList(nis);
+			}
+			
 			List<IsRelatedTo> isRelatedToList = convertListFromMap(
 					IsRelatedTo.class, prx.getEdmIsRelatedTo());
 			if (isRelatedToList != null) {
@@ -635,9 +654,17 @@ public class EDMUtils {
 				proxy.setProxyInList(proxyIn);
 			}
 			if (!prx.isEuropeanaProxy()) {
-				proxy.setType(EdmType.valueOf(prx.getEdmType().toString().replace("3D", "_3_D")));
+								
+			Type1 type = new Type1();
+			
+			type.setType(EdmType.valueOf(prx.getEdmType().toString().replace("3D", "_3_D")));
+	
+			proxy.setType(type);
+
 			} else {
-				proxy.setType(EdmType.IMAGE);
+				Type1 type = new Type1();
+				type.setType(EdmType.IMAGE);
+				proxy.setType(type);
 			}
 			List<Year> years = convertListFromMap(Year.class, prx.getYear());
 			if (years != null) {
@@ -1365,7 +1392,9 @@ public class EDMUtils {
 				ResourceOrLiteralType.Lang lang= new ResourceOrLiteralType.Lang();
 				lang.setLang("");
 				rights1.setString("");
-				rights1.setResource("http://testedmrights/");
+				Resource testResource = new Resource();
+				testResource.setResource("http://testedmrights/");
+				rights1.setResource(testResource );
 			} 
 			aggregation.setRights(rights1);
 			if (aggr.getEdmUgc() != null) {
@@ -1552,10 +1581,13 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
 									.newInstance();
-							t.setResource("");
+							Resource resource = new Resource();
+							resource.setResource("");
+							t.setResource(resource);
+							
 							t.setString("");
 							if (isUri(str)) {
-								t.setResource(str);
+								t.setResource(resource);
 							} else {
 								t.setString(str);
 							}
@@ -1603,11 +1635,14 @@ public class EDMUtils {
 						}
 
 						ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
-						obj.setResource("");
+						Resource resource = new Resource();
+						resource.setResource("");
+						
+						obj.setResource(resource );
 						obj.setString("");
 						for (String str : entry.getValue()) {
 							if (isUri(str)) {
-								obj.setResource(str);
+								obj.setResource(resource);
 							} else {
 								obj.setString(str);
 							}
@@ -1651,10 +1686,13 @@ public class EDMUtils {
 	}
 
 	private static void createResourceOrLiteralFromString(ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang, String value){
-		obj.setResource("");
+		Resource resource = new Resource();
+		resource.setResource("");
+		
+		obj.setResource(resource );
 		obj.setString("");
 		if (isUri(value)) {
-			obj.setResource(value);
+			obj.setResource(resource);
 		} else {
 			obj.setString(value);
 		}

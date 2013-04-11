@@ -59,6 +59,7 @@ import eu.europeana.corelib.definitions.jibx.TableOfContents;
 import eu.europeana.corelib.definitions.jibx.Temporal;
 import eu.europeana.corelib.definitions.jibx.Title;
 import eu.europeana.corelib.definitions.jibx.Type;
+import eu.europeana.corelib.definitions.jibx.Type1;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
@@ -92,7 +93,7 @@ public class ProxyFieldInputTest {
 							.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION
 									.toString()));
 			assertEquals(
-					proxy.getIsNextInSequence().getResource(),
+					proxy.getIsNextInSequenceList().get(0).getResource(),
 					solrDocument
 							.getFieldValue(EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE
 									.toString()));
@@ -305,8 +306,9 @@ public class ProxyFieldInputTest {
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()
 					.toString());
-			assertEquals(proxy.getIsNextInSequence().getResource(),
-					mongoProxy.getEdmIsNextInSequence());
+			assertEquals(proxy.getIsNextInSequenceList().size(),
+					mongoProxy.getEdmIsNextInSequence().length);
+			//@TODO: Add actual content checking here
 			List<EuropeanaType.Choice> dcterms = proxy.getChoiceList();
 			for (EuropeanaType.Choice choice : dcterms) {
 				if (choice.ifAlternative()) {
@@ -495,14 +497,17 @@ public class ProxyFieldInputTest {
 		currentLocation.setResource("test current location");
 		IsNextInSequence isNextInSequence = new IsNextInSequence();
 		isNextInSequence.setResource("test is next in sequence");
-		proxy.setIsNextInSequence(isNextInSequence);
+		List<IsNextInSequence> isNextInSequenceList = new ArrayList<IsNextInSequence>();
+		isNextInSequenceList.add(isNextInSequence);
+		proxy.setIsNextInSequenceList(isNextInSequenceList);
 		EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 		europeanaProxy.setEuropeanaProxy(true);
 		proxy.setEuropeanaProxy(europeanaProxy);
 		proxy.setCurrentLocation(currentLocation);
-		proxy.setType(EdmType.IMAGE);
+		Type1 type = new Type1();
+		type.setType(EdmType.IMAGE);
+		proxy.setType(type);
 		proxy.setChoiceList(createEuropeanaTermsList());
-
 		return proxy;
 	}
 
@@ -516,137 +521,250 @@ public class ProxyFieldInputTest {
 		dctermsList.add(choiceAlternative);
 		EuropeanaType.Choice choiceConformsTo = new EuropeanaType.Choice();
 		ConformsTo conformsTo = new ConformsTo();
-		conformsTo.setResource("test conforms to");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource conformsResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		conformsResource.setResource("test conforms to");
+		conformsTo.setResource(conformsResource);
 		choiceConformsTo.setConformsTo(conformsTo);
 		dctermsList.add(choiceConformsTo);
 		EuropeanaType.Choice choiceCreated = new EuropeanaType.Choice();
+		
 		Created created = new Created();
-		created.setResource("test created");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource createdResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		createdResource.setResource("test created");
+		created.setResource(createdResource);
 		choiceCreated.setCreated(created);
 		dctermsList.add(choiceCreated);
 		EuropeanaType.Choice choiceExtent = new EuropeanaType.Choice();
+		
 		Extent extent = new Extent();
-		extent.setResource("test extent");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource extentResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		extentResource.setResource("test extent");
+		extent.setResource(extentResource);
+		
 		choiceExtent.setExtent(extent);
 		dctermsList.add(choiceExtent);
+		
 		EuropeanaType.Choice choiceHasFormat = new EuropeanaType.Choice();
 		HasFormat hasFormat = new HasFormat();
-		hasFormat.setResource("test hasFormat");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource choiceHasFormatResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		choiceHasFormatResource.setResource("test hasFormat");
+		hasFormat.setResource(choiceHasFormatResource);
+		
 		choiceHasFormat.setHasFormat(hasFormat);
 		dctermsList.add(choiceHasFormat);
 		EuropeanaType.Choice choiceHasPart = new EuropeanaType.Choice();
 		HasPart hasPart = new HasPart();
-		hasPart.setResource("test hasPart");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource hasPartResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		hasPartResource.setResource("test hasPart");
+		hasPart.setResource(hasPartResource);
 		choiceHasPart.setHasPart(hasPart);
 		dctermsList.add(choiceHasPart);
 		EuropeanaType.Choice choiceHasVersion = new EuropeanaType.Choice();
+		
 		HasVersion hasVersion = new HasVersion();
-		hasVersion.setResource("test hasVersion");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource hasVersionResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		hasVersionResource.setResource("test hasVersion");
+		hasVersion.setResource(hasVersionResource);
+		
 		choiceHasVersion.setHasVersion(hasVersion);
 		dctermsList.add(choiceHasVersion);
 		EuropeanaType.Choice choiceIsFormatOf = new EuropeanaType.Choice();
 		IsFormatOf isFormatOf = new IsFormatOf();
-		isFormatOf.setResource("test isFormatOf");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isFormatOfResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isFormatOfResource.setResource("test isFormatOf");
+		isFormatOf.setResource(isFormatOfResource);
+		
 		choiceIsFormatOf.setIsFormatOf(isFormatOf);
 		dctermsList.add(choiceIsFormatOf);
 		EuropeanaType.Choice choiceIsPartOf = new EuropeanaType.Choice();
 		IsPartOf isPartOf = new IsPartOf();
-		isPartOf.setResource("test isPartOf");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isPartOfResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isPartOfResource.setResource("test isPartOf");
+		isPartOf.setResource(isPartOfResource);
+		
 		choiceIsPartOf.setIsPartOf(isPartOf);
 		dctermsList.add(choiceIsPartOf);
 		EuropeanaType.Choice choiceIsReferencedBy = new EuropeanaType.Choice();
 		IsReferencedBy isReferencedBy = new IsReferencedBy();
-		isReferencedBy.setResource("test isReferencedBy");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isReferencedByResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isReferencedByResource.setResource("test isReferencedBy");
+		isReferencedBy.setResource(isReferencedByResource);
+		
+		
 		choiceIsReferencedBy.setIsReferencedBy(isReferencedBy);
 		dctermsList.add(choiceIsReferencedBy);
 		EuropeanaType.Choice choiceIsReplacedBy = new EuropeanaType.Choice();
 		IsReplacedBy isReplacedBy = new IsReplacedBy();
-		isReplacedBy.setResource("test isReplacedBy");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isReplacedByResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isReplacedByResource.setResource("test isReplacedBy");
+		isReplacedBy.setResource(isReplacedByResource);
+		
 		choiceIsReplacedBy.setIsReplacedBy(isReplacedBy);
 		dctermsList.add(choiceIsReplacedBy);
 		EuropeanaType.Choice choiceIsRequiredBy = new EuropeanaType.Choice();
 		IsRequiredBy isRequiredBy = new IsRequiredBy();
-		isRequiredBy.setResource("test isRequiredBy");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isRequiredByResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isRequiredByResource.setResource("test isRequiredBy");
+		isRequiredBy.setResource(isRequiredByResource);
+		
 		choiceIsRequiredBy.setIsRequiredBy(isRequiredBy);
 		dctermsList.add(choiceIsRequiredBy);
 		EuropeanaType.Choice choiceIssued = new EuropeanaType.Choice();
 		Issued issued = new Issued();
-		issued.setResource("test issued");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource issuedResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		issuedResource.setResource("test issued");
+		issued.setResource(issuedResource);
+		
 		choiceIssued.setIssued(issued);
 		dctermsList.add(choiceIssued);
 		EuropeanaType.Choice choiceIsVersionOf = new EuropeanaType.Choice();
 		IsVersionOf isVersionOf = new IsVersionOf();
-		isVersionOf.setResource("test isVersionOf");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isVersionOfResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		isVersionOfResource.setResource("test isVersionOf");
+		isVersionOf.setResource(isVersionOfResource);
+		
 		choiceIsVersionOf.setIsVersionOf(isVersionOf);
 		dctermsList.add(choiceIsVersionOf);
 		EuropeanaType.Choice choiceMedium = new EuropeanaType.Choice();
 		Medium medium = new Medium();
-		medium.setResource("test medium");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource mediumResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		mediumResource.setResource("test medium");
+		medium.setResource(mediumResource);
+		
+
 		choiceMedium.setMedium(medium);
 		dctermsList.add(choiceMedium);
 		EuropeanaType.Choice choiceProvenance = new EuropeanaType.Choice();
 		Provenance provenance = new Provenance();
-		provenance.setResource("test provenance");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource provenanceResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		provenanceResource.setResource("test provenance");
+		provenance.setResource(provenanceResource);
 		choiceProvenance.setProvenance(provenance);
 		dctermsList.add(choiceProvenance);
 		EuropeanaType.Choice choiceReferences = new EuropeanaType.Choice();
+		
 		References references = new References();
-		references.setResource("test references");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource referencesResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		referencesResource.setResource("test references");
+		references.setResource(referencesResource);
+		
 		choiceReferences.setReferences(references);
 		dctermsList.add(choiceReferences);
 		EuropeanaType.Choice choiceReplaces = new EuropeanaType.Choice();
+		
 		Replaces replaces = new Replaces();
-		replaces.setResource("test replaces");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource replacesResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		replacesResource.setResource("test replaces");
+		replaces.setResource(replacesResource);
 		choiceReplaces.setReplaces(replaces);
 		dctermsList.add(choiceReplaces);
 		EuropeanaType.Choice choiceRequires = new EuropeanaType.Choice();
+		
 		Requires requires = new Requires();
-		requires.setResource("test requires");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource requiresResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		requiresResource.setResource("test requires");
+		requires.setResource(requiresResource);
 		choiceRequires.setRequires(requires);
 		dctermsList.add(choiceRequires);
 		EuropeanaType.Choice choiceSpatial = new EuropeanaType.Choice();
+		
 		Spatial spatial = new Spatial();
-		spatial.setResource("test spatial");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource spatialResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		spatialResource.setResource("test spatial");
+		spatial.setResource(spatialResource);
 		choiceSpatial.setSpatial(spatial);
 		dctermsList.add(choiceSpatial);
 		EuropeanaType.Choice choiceTableOfContents = new EuropeanaType.Choice();
+		
 		TableOfContents tableOfContents = new TableOfContents();
-		tableOfContents.setResource("test TOC");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource tableOfContentsResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		tableOfContentsResource.setResource("test TOC");
+		tableOfContents.setResource(tableOfContentsResource);
+		
 		choiceTableOfContents.setTableOfContents(tableOfContents);
 		dctermsList.add(choiceTableOfContents);
 		EuropeanaType.Choice choiceTemporal = new EuropeanaType.Choice();
+		
 		Temporal temporal = new Temporal();
-		temporal.setResource("temporal");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource temporalResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		temporalResource.setResource("temporal");
+		temporal.setResource(temporalResource);
 		choiceTemporal.setTemporal(temporal);
 		dctermsList.add(choiceTemporal);
 		EuropeanaType.Choice choiceContributor = new EuropeanaType.Choice();
+		
 		Contributor contributor = new Contributor();
-		contributor.setResource("test contributor");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource contributorResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		contributorResource.setResource("test contributor");
+		contributor.setResource(contributorResource);
 		choiceContributor.setContributor(contributor);
 		dctermsList.add(choiceContributor);
 		EuropeanaType.Choice choiceCoverage = new EuropeanaType.Choice();
+		
 		Coverage coverage = new Coverage();
-		coverage.setResource("test coverage");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource coverageResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		coverageResource.setResource("test coverage");
+		coverage.setResource(coverageResource);
 		choiceCoverage.setCoverage(coverage);
 		dctermsList.add(choiceCoverage);
 		EuropeanaType.Choice choiceCreator = new EuropeanaType.Choice();
+		
 		Creator creator = new Creator();
-		creator.setResource("test creator");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource creatorResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		creatorResource.setResource("test creator");
+		creator.setResource(creatorResource);
 		choiceCreator.setCreator(creator);
 		dctermsList.add(choiceCreator);
 		EuropeanaType.Choice choiceDate = new EuropeanaType.Choice();
+		
 		Date date = new Date();
-		date.setResource("test date");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource dateResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		dateResource.setResource("test date");
+		date.setResource(dateResource);
 		choiceDate.setDate(date);
 		dctermsList.add(choiceDate);
 		EuropeanaType.Choice choiceDescription = new EuropeanaType.Choice();
+		
 		Description description = new Description();
-		description.setResource("test description");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource descriptionResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		descriptionResource.setResource("test description");
+		description.setResource(descriptionResource);
 		choiceDescription.setDescription(description);
 		dctermsList.add(choiceDescription);
 		EuropeanaType.Choice choiceFormat = new EuropeanaType.Choice();
+		
 		Format format = new Format();
-		format.setResource("test format");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource formatResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		formatResource.setResource("test format");
+		format.setResource(formatResource);
+		
 		choiceFormat.setFormat(format);
 		dctermsList.add(choiceFormat);
 		EuropeanaType.Choice choiceIdentifier = new EuropeanaType.Choice();
@@ -660,28 +778,51 @@ public class ProxyFieldInputTest {
 		choiceLanguage.setLanguage(language);
 		dctermsList.add(choiceLanguage);
 		EuropeanaType.Choice choicePublisher = new EuropeanaType.Choice();
+		
 		Publisher publisher = new Publisher();
-		publisher.setResource("test publisher");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource publisherResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		publisherResource.setResource("test publisher");
+		publisher.setResource(publisherResource);
 		choicePublisher.setPublisher(publisher);
 		dctermsList.add(choicePublisher);
 		EuropeanaType.Choice choiceRelation = new EuropeanaType.Choice();
+		
 		Relation relation = new Relation();
-		relation.setResource("test relation");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource relationResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		relationResource.setResource("test relation");
+		relation.setResource(relationResource);
+		
 		choiceRelation.setRelation(relation);
 		dctermsList.add(choiceRelation);
 		EuropeanaType.Choice choiceRights = new EuropeanaType.Choice();
+		
 		Rights rights = new Rights();
-		rights.setResource("test rights");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rightsResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		rightsResource.setResource("test rights");
+		rights.setResource(rightsResource);
 		choiceRights.setRights(rights);
 		dctermsList.add(choiceRights);
 		EuropeanaType.Choice choiceSource = new EuropeanaType.Choice();
+		
 		Source source = new Source();
-		source.setResource("test source");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource sourceResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		sourceResource.setResource("test source");
+		source.setResource(sourceResource);
+		
 		choiceSource.setSource(source);
 		dctermsList.add(choiceSource);
 		EuropeanaType.Choice choiceSubject = new EuropeanaType.Choice();
+		
 		Subject subject = new Subject();
-		subject.setResource("test subject");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource subjectResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		subjectResource.setResource("test subject");
+		subject.setResource(subjectResource);
+		
 		choiceSubject.setSubject(subject);
 		dctermsList.add(choiceSubject);
 		EuropeanaType.Choice choiceTitle = new EuropeanaType.Choice();
@@ -690,8 +831,12 @@ public class ProxyFieldInputTest {
 		choiceTitle.setTitle(title);
 		dctermsList.add(choiceTitle);
 		EuropeanaType.Choice choiceType = new EuropeanaType.Choice();
+		
 		Type type = new Type();
-		type.setResource("test type");
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource typeResource = 
+				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+		typeResource.setResource("test type");
+		type.setResource(typeResource);
 		choiceType.setType(type);
 
 		dctermsList.add(choiceType);
