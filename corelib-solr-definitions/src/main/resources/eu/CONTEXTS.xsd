@@ -27,6 +27,7 @@
   xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   elementFormDefault="qualified">
 
   <annotation>
@@ -60,6 +61,8 @@
           <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element ref="dc:date" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="edm:begin" maxOccurs="1" minOccurs="0" />
           <element ref="edm:end" maxOccurs="1" minOccurs="0" />
           <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
@@ -97,6 +100,7 @@
           <element ref="skos:note" maxOccurs="unbounded" minOccurs="0" />
           <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
+          <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
@@ -120,6 +124,7 @@
           <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0" />
           <element ref="edm:begin" maxOccurs="1" minOccurs="0" />
           <element ref="edm:end" maxOccurs="1" minOccurs="0" />
+          <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
@@ -128,7 +133,16 @@
 
   <complexType name="WebResourceType">
     <annotation>
-      <documentation>Base class for WebResource implementations</documentation>
+      <documentation>Base class for WebResource implementations</documentation>      <appinfo>
+        <sch:pattern>
+          <sch:rule context="edm:WebResource">
+            <sch:assert test="not(dct:hasPart[text()])"> 
+              The element dcterms:isPartOf should not have a literal value in the edm:WebResource context
+              with id: <sch:value-of select="@rdf:about"/>. Use an rdf:resource instead. 
+            </sch:assert>
+          </sch:rule>
+        </sch:pattern>
+      </appinfo>
     </annotation>
     <complexContent>
       <extension base="rdf:AboutType">
@@ -142,6 +156,7 @@
           <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:hasPart" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:isFormatOf" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dcterms:isPartOf" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:issued" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>

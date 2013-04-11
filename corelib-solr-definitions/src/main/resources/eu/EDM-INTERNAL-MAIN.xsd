@@ -68,7 +68,7 @@
             <element name="TimeSpan" type="edm:TimeSpanType" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="skos:Concept" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="ore:Aggregation" minOccurs="1" maxOccurs="unbounded"/>
-            <element name="Proxy" type="ore:ProxyType" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="ore:Proxy"  minOccurs="1" maxOccurs="unbounded"/>
             <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType" minOccurs="1" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
@@ -80,7 +80,18 @@
                 descriptions about the object that Europeana collects from (possibly different)
                 content providers, including thumbnails and other forms of abstractions, as well as
                 of the description of the object Europeana builds. </documentation>
+            <appinfo>
+                <sch:pattern>
+                    <sch:rule context="edm:EuropeanaAggregation">
+                        <sch:assert test="not(@rdf:about = '')"> 
+                            Empty rdf:about values are not allowed
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </appinfo>
         </annotation>
+
+        
         <complexContent>
             <extension base="rdf:AboutType">
                 <sequence>
@@ -92,7 +103,7 @@
                     <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    
                     <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:landingPage" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:language" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:language" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
                     <element ref="ore:aggregates" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
@@ -113,5 +124,4 @@
             </extension>
         </complexContent>
     </complexType>
-
 </schema>

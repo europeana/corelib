@@ -62,13 +62,12 @@
                     <element ref="edm:hasType" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:incorporates" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isDerivativeOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:isNextInSequence" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isRepresentationOf" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
-                    <element name="type" maxOccurs="1" minOccurs="1" type="edm:EdmType"/>
                 </sequence>
             </extension>
         </complexContent>
@@ -145,6 +144,96 @@
         </restriction>
     </simpleType>
 
+    <simpleType name="CountryCodes">
+        <restriction base="string">
+            <enumeration value="Albania"/>
+            <enumeration value="Andorra"/>
+            <enumeration value="Armenia"/>
+            <enumeration value="Austria"/>
+            <enumeration value="Belarus"/>
+            <enumeration value="Belgium"/>
+            <enumeration value="Bosnia and Herzegovina"/>
+            <enumeration value="Bulgaria"/>
+            <enumeration value="Croatia"/>
+            <enumeration value="Cyprus"/>
+            <enumeration value="Czech Republic"/>
+            <enumeration value="Denmark"/>
+            <enumeration value="Estonia"/>
+            <enumeration value="Europe"/>
+            <enumeration value="Finland"/>
+            <enumeration value="France"/>
+            <enumeration value="Georgia"/>
+            <enumeration value="Germany"/>
+            <enumeration value="Greece"/>
+            <enumeration value="Hungary"/>
+            <enumeration value="Iceland"/>
+            <enumeration value="Ireland"/>
+            <enumeration value="Italy"/>
+            <enumeration value="Latvia"/>
+            <enumeration value="Liechtenstein"/>
+            <enumeration value="Lithuania"/>
+            <enumeration value="Luxembourg"/>
+            <enumeration value="Macedonia"/>
+            <enumeration value="Malta"/>
+            <enumeration value="Moldova"/>
+            <enumeration value="Monaco"/>
+            <enumeration value="Montenegro"/>
+            <enumeration value="Netherlands"/>
+            <enumeration value="Norway"/>
+            <enumeration value="Poland"/>
+            <enumeration value="Portugal"/>
+            <enumeration value="Romania"/>
+            <enumeration value="Russia"/>
+            <enumeration value="San Marino"/>
+            <enumeration value="Serbia"/>
+            <enumeration value="Slovakia"/>
+            <enumeration value="Slovenia"/>
+            <enumeration value="Spain"/>
+            <enumeration value="Sweden"/>
+            <enumeration value="Switzerland"/>
+            <enumeration value="Turkey"/>
+            <enumeration value="Ukraine"/>
+            <enumeration value="United Kingdom"/>
+        </restriction>
+    </simpleType>
+    
+    <simpleType name="LanguageCodes">
+        <restriction base="string">
+            <enumeration value="bg"/>
+            <enumeration value="ca"/>
+            <enumeration value="cs"/>
+            <enumeration value="da"/>
+            <enumeration value="de"/>
+            <enumeration value="el"/>
+            <enumeration value="en"/>
+            <enumeration value="es"/>
+            <enumeration value="et"/>
+            <enumeration value="fi"/>
+            <enumeration value="fr"/>
+            <enumeration value="hu"/>
+            <enumeration value="ie"/>
+            <enumeration value="is"/>
+            <enumeration value="it"/>
+            <enumeration value="lt"/>
+            <enumeration value="lv"/>
+            <enumeration value="mt"/>
+            <enumeration value="mul"/>
+            <enumeration value="nl"/>
+            <enumeration value="no"/>
+            <enumeration value="pl"/>
+            <enumeration value="ro"/>
+            <enumeration value="ru"/>
+            <enumeration value="sk"/>
+            <enumeration value="sl"/>
+            <enumeration value="sr"/>
+            <enumeration value="sv"/>
+            <enumeration value="tr"/>
+            <enumeration value="yi"/>
+            <enumeration value="cy"/>
+        </restriction>
+    </simpleType>
+
+
 
     <element name="aggregatedCHO" type="rdf:ResourceType">
         <annotation>
@@ -165,7 +254,7 @@
         </annotation>
     </element>
 
-    <element name="country" type="rdf:LiteralType">
+    <element name="country" type="edm:CountryCodes">
         <annotation>
             <documentation>This is the name of the country in which the Provider is based or
                 "Europe" in the case of Europe-wide projects. Example:
@@ -211,6 +300,12 @@
     <element name="end" type="rdf:LiteralType">
         <annotation>
             <documentation>The ending of a temporal period</documentation>
+        </annotation>
+    </element>
+    
+    <element name="type" type="edm:EdmType">
+        <annotation>
+            <documentation>The EDM Content Type</documentation>
         </annotation>
     </element>
     
@@ -376,7 +471,7 @@
         </annotation>
     </element>
     
-    <element name="language" type="rdf:LiteralType">
+    <element name="language" type="edm:LanguageCodes">
         <annotation>
             <documentation>A language assigned to the resource with reference to the Provider.
                 Example:&lt;edm:language&gt;ro&lt;/edm:language&gt; </documentation>

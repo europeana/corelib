@@ -62,7 +62,6 @@
                         <element ref="edm:isShownAt" maxOccurs="1" minOccurs="0"/>
                         <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>
                         <element ref="edm:object" maxOccurs="1" minOccurs="0"/>
-                        <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
                         <element ref="edm:provider" maxOccurs="1" minOccurs="1"/>
                         <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
                         <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
@@ -73,6 +72,9 @@
         </complexType>
     </element>
 
+
+    <element name="Proxy" type="ore:ProxyType"/>
+
     <complexType name="ProxyType">
         <complexContent>
             <annotation>
@@ -82,7 +84,7 @@
                     aggregation (http://www.openarchives.org/ore/1.0/primer.html). </documentation>
                 <appinfo>
                     <sch:pattern>
-                        <sch:rule context="edm:Proxy">
+                        <sch:rule context="ore:Proxy">
                             <sch:assert
                                 test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial"
                                 > id: <sch:value-of select="@rdf:about"/> - A Proxy must have a
@@ -96,6 +98,17 @@
                                 > id: <sch:value-of select="@rdf:about"/> - Within a Proxy
                                 context, dc:language is mandatory when dc:language has the value
                                 'TEXT'. </sch:assert>
+                            <sch:assert
+                                test="edm:type or (not(edm:type) and edm:europeanaProxy)"
+                                > id: <sch:value-of select="@rdf:about"/> 
+                                edm:type should be present in an ore:Proxy context.
+                            </sch:assert>
+                            <sch:assert
+                                test="not(edm:type and edm:europeanaProxy)"
+                                > id: <sch:value-of select="@rdf:about"/> 
+                                edm:type should not be present in an  Europeana Proxy context
+                                (when the edm:europeanaProxy value is present).
+                            </sch:assert>
                         </sch:rule>
                     </sch:pattern>
                 </appinfo>
@@ -107,6 +120,7 @@
                     <element ref="edm:year" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="ore:proxyFor" maxOccurs="1" minOccurs="0"/>
                     <element ref="ore:proxyIn" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:type" maxOccurs="1" minOccurs="0"/>
                     <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
                     <!-- 
                         The fields below are meant to be used for enrichment purposes but they 

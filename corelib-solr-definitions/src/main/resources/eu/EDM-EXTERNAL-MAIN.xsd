@@ -84,6 +84,7 @@
 			</annotation>
 			<extension base="edm:BaseProvidedCHOType">
 				<sequence>
+					<element ref="edm:type" maxOccurs="1" minOccurs="1"/>
 					<element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0" />
 				</sequence>
 			</extension>
