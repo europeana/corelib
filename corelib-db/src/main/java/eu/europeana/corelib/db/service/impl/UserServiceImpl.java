@@ -44,6 +44,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -375,21 +376,70 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	private FullBean populateEuropeanaUserObject(User user,
 			String europeanaObjectId, EuropeanaUserObject instance)
 			throws DatabaseException {
+
 		FullBean bean;
 		try {
 			bean = searchService.findById(europeanaObjectId);
 		} catch (SolrTypeException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}
+
 		if ((user == null) || (bean == null)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+
 		instance.setEuropeanaUri(bean.getAbout());
-		instance.setEuropeanaObject(bean.getAggregations().get(0)
-				.getEdmObject());
+		String edmObject = null;
+		for (Aggregation aggregation : bean.getAggregations()) {
+			if (!StringUtils.isBlank(aggregation.getEdmObject())) {
+				edmObject = aggregation.getEdmObject();
+			}
+		}
+		instance.setEuropeanaObject(edmObject);
+
 		instance.setDateSaved(new Date());
-		instance.setTitle(StringUtils.abbreviate(bean.getTitle()[0],
-				RelationalDatabase.FIELDSIZE_TITLE));
+
+		String title = null;
+		if (bean.getTitle() != null && bean.getTitle().length > 0) {
+			for (String _title : bean.getTitle()) {
+				if (!StringUtils.isBlank(_title)) {
+					title = _title;
+					break;
+				}
+			}
+		}
+		if (title == null) {
+			for (Proxy proxy : bean.getProxies()) {
+				if (proxy == null) {
+					continue;
+				}
+				if (proxy.getDcTitle() != null) {
+					for (List<String> items : proxy.getDcTitle().values()) {
+						for (String item : items) {
+							if (!StringUtils.isBlank(item)) {
+								title = item;
+								break;
+							}
+						}
+					}
+				}
+				if (title == null && proxy.getDcDescription() != null) {
+					for (List<String> items : proxy.getDcDescription().values()) {
+						for (String item : items) {
+							if (!StringUtils.isBlank(item)) {
+								title = item;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (title == null) {
+			title = europeanaObjectId;
+		}
+
+		instance.setTitle(StringUtils.abbreviate(title, RelationalDatabase.FIELDSIZE_TITLE));
 		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {
