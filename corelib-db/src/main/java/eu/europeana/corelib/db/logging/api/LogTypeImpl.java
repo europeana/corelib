@@ -20,7 +20,6 @@ import java.util.Date;
 
 import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.MongoCollection;
-
 import eu.europeana.corelib.db.logging.api.enums.RecordType;
 
 /**

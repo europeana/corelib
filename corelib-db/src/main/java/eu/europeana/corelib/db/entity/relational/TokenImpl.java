@@ -29,7 +29,6 @@ import org.apache.commons.lang.StringUtils;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.utils.DateUtils;
 
 /**
  * Token table contains three columns:
