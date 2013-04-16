@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/" xmlns:oai="http://www.openarchives.org/OAI/2.0/" xmlns:ore="http://www.openarchives.org/ore/terms/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM.xsd">
 <edm:ProvidedCHO rdf:about="#GNM:7116411"> </edm:ProvidedCHO>
-<edm:Proxy rdf:about="#GNM:7116411">
+<ore:Proxy rdf:about="#GNM:7116411">
      <dcterms:isReferencedBy rdf:resource="file:///home/gmamakis/workspace3/corelib/corelib-solr/src/test/resources/test_files/sample"/>
       <dc:identifier>#GNM:7116411</dc:identifier>
       <dc:coverage rdf:resource="http://sws.geonames.org/2844588/"/>
@@ -17,7 +17,7 @@
       <edm:type>IMAGE</edm:type>
         <ore:proxyFor rdf:resource="#GNM:7116411"></ore:proxyFor>
 	  <ore:proxyIn rdf:resource="http://www.mimo-db.eu/GNM/7116411"></ore:proxyIn>
-  </edm:Proxy>
+  </ore:Proxy>
    <edm:WebResource rdf:about="http://www.mimo-db.eu/media/GNM/IMAGE/MI952_1278054389450_2.jpg">
       <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
    </edm:WebResource>
