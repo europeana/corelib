@@ -283,6 +283,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			failedRecord.setOriginalId(eurId.getOrid());
 			failedRecord.setXml(xml);
 			failedRecord.setLookupState(lookupState);
+			failedRecord.setDate(new Date());
 			datastore.save(failedRecord);
 		}
 		// or else update the fields that might have changed (xml representation
@@ -292,11 +293,47 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 					.createUpdateOperations(FailedRecord.class);
 			updateops.set("xml", xml);
 			updateops.set("lookupState", lookupState);
+			updateops.set("date", new Date());
 			datastore.update(failedRecord, updateops);
 		}
 
 	}
 
+	
+	/**
+	 * Sets a value for a failed record
+	 * @param state
+	 * @param oldID
+	 */
+	public void createFailedRecord(LookupState state,String collectionID,String oldID,String newId,String xml){
+		
+		FailedRecord failedRecord = datastore.find(FailedRecord.class)
+				.filter("originalId", oldID)
+				.filter("collectionId", collectionID).get();
+		
+		
+		if (failedRecord == null) {
+		    failedRecord = new FailedRecord();
+			failedRecord.setCollectionId(collectionID);
+			failedRecord.setEuropeanaId(newId);
+			failedRecord.setOriginalId(oldID);
+			failedRecord.setXml(xml);
+			failedRecord.setLookupState(state);
+			failedRecord.setDate(new Date());
+			datastore.save(failedRecord);
+		}
+		else {
+			UpdateOperations<FailedRecord> updateops = datastore
+					.createUpdateOperations(FailedRecord.class);
+			updateops.set("xml", xml);
+			updateops.set("lookupState", state);
+			updateops.set("date", new Date());
+			datastore.update(failedRecord, updateops);
+		}
+
+	}
+	
+	
 	/**
 	 * Generates the checksum for the given string
 	 * 
@@ -412,33 +449,8 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	}
 
 	
-	/**
-	 * Sets a value for a failed record
-	 * @param state
-	 * @param newID
-	 */
-	public void setFailedRecordFailReasonFromNewID(LookupState state,String newID){
-		List<FailedRecord> frecords = datastore.find(FailedRecord.class).filter("europeanaId", newID).asList();
 		
-		for(FailedRecord frecord : frecords){
-			frecord.setLookupState(state);
-			datastore.merge(frecord);
-		}
-	}
-		
-	/**
-	 * Sets a value for a failed record
-	 * @param state
-	 * @param oldID
-	 */
-	public void setFailedRecordFailReasonFromOldID(LookupState state,String oldID,String collectionID){
-		List<FailedRecord> frecords = datastore.find(FailedRecord.class).filter("originalId", oldID).filter("collectionId",collectionID).asList();
-		
-		for(FailedRecord frecord : frecords){
-			frecord.setLookupState(state);
-			datastore.merge(frecord);
-		}
-	}
+
 	
 	
 	/**
@@ -456,6 +468,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			record.put("europeanaId", failedRecord.getEuropeanaId());
 			record.put("edm", failedRecord.getXml());
 			record.put("lookupState", failedRecord.getLookupState().toString());
+			record.put("date", failedRecord.getDate().toString());
 			failedRecords.add(record);
 		}
 		return failedRecords;

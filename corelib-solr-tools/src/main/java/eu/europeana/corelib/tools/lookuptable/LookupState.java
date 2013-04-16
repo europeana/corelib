@@ -66,7 +66,12 @@ public enum LookupState {
 	 * Indicates that the record has been discarded because its XML structure does
 	 * not conform to the structural rules supported 
 	 */
-	INCOMPATIBLE_XML_CONTENT
+	INCOMPATIBLE_XML_CONTENT,
+	
+	/**
+	 * Indicates a generic system error has occured
+	 */
+	SYSTEM_ERROR
 	
 	
 	

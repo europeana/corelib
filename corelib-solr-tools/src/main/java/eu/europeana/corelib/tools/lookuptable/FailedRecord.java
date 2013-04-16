@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 
 import com.google.code.morphia.annotations.Entity;
@@ -48,6 +50,9 @@ public class FailedRecord {
 
 	private LookupState lookupState;
 
+	private Date date;
+	
+	
 	/**
 	 * The record Identifier
 	 * 
@@ -107,16 +112,42 @@ public class FailedRecord {
 		return collectionId;
 	}
 
+	/**
+	 * @param collectionId
+	 */
 	public void setCollectionId(String collectionId) {
 		this.collectionId = collectionId;
 	}
 
+	/**
+	 * @return
+	 */
 	public ObjectId getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(ObjectId id) {
 		this.id = id;
+	}
+
+	/**
+	 * Get the ingestion failure date
+	 * 
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * Set the ingestion failure date
+	 * @param date
+	 */
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 }
