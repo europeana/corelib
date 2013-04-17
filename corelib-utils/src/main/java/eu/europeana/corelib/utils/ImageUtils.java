@@ -50,8 +50,7 @@ public class ImageUtils {
 	 */
 	public static BufferedImage scale(BufferedImage org, int width, int height) throws IOException {
 		if (org != null) {
-
-				BufferedImage resized = Scalr.resize(org, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC,
+				BufferedImage resized = Scalr.resize(org, Scalr.Method.QUALITY, Scalr.Mode.AUTOMATIC,
 						width, height, Scalr.OP_ANTIALIAS);
 				
 				if(resized.getHeight() > height || resized.getWidth() > width ){
