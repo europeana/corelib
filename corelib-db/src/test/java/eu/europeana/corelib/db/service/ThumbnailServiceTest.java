@@ -18,15 +18,17 @@
 package eu.europeana.corelib.db.service;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+
 import junit.framework.Assert;
+
 import org.apache.log4j.Logger;
 import org.apache.sanselan.ImageReadException;
 import org.jibx.runtime.BindingDirectory;
@@ -38,6 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
@@ -151,7 +154,7 @@ public class ThumbnailServiceTest {
 		//Store the image by passing the EDM object as a parameter. All
 		//relevant information contained in the EDM object will be embedded
 		//in the file in the form of XMP (RDF) data
-		ImageCache cache = thumbnailService.storeThumbnail(OBJ_ID, COL_ID,
+		thumbnailService.storeThumbnail(OBJ_ID, COL_ID,
 				image, "/images/GREATWAR.jpg", edm);
 
 		ImageCache imageCache = thumbnailService.findByID(OBJ_ID);

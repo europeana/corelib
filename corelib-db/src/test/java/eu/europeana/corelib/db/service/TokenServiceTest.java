@@ -19,7 +19,6 @@ package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.Calendar;
@@ -94,7 +93,7 @@ public class TokenServiceTest {
 		// change date to expired date
 		token.setCreated(expired.getTime());
 		tokenService.store(token);
-		Token nullToken = tokenService.findByID(token.getToken());
+		tokenService.findByID(token.getToken());
 		fail("This line should never be reached!!!");
 		// assertNull("Token not flagged as expired", );
 	}
