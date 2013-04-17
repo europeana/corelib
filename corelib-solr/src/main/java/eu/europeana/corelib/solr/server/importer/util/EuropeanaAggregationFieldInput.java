@@ -270,7 +270,8 @@ public final class EuropeanaAggregationFieldInput {
 		
 		mongoAggregation.setEdmLanguage(language);
 		ops.set("edmLanguage", language);
-
+		
+		
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource();
 		mongoAggregation.setAggregatedCHO(agCHO);

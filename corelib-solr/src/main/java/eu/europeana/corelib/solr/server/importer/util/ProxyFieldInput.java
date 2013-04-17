@@ -77,13 +77,13 @@ public final class ProxyFieldInput {
 						(proxy.getCurrentLocation())).getResource());
 		
 		List<IsNextInSequence> seqList = proxy.getIsNextInSequenceList();
-		
+		if(seqList!=null){
 		for(IsNextInSequence val: seqList){
 			solrInputDocument.addField(
 					EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString(),
 					val.toString());
 		}
-		
+		}
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_FOR.toString(),
 				SolrUtils.exists(ResourceType.class, proxy.getProxyFor()).getResource());
 		solrInputDocument.addField(EdmLabel.PROXY_ORE_PROXY_IN.toString(), SolrUtils.resourceListToArray(proxy.getProxyInList()));
