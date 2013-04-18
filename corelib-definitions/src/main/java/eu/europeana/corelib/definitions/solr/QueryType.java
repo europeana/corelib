@@ -33,6 +33,7 @@ public enum QueryType {
 		this.queryType = queryType;
 	}
 
+	@Override
 	public String toString() {
 		return this.queryType;
 	}

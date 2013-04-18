@@ -38,6 +38,7 @@ public enum Facet {
 		this.facet = facets;
 	}
 
+	@Override
 	public String toString(){
 		return facet;
 	}

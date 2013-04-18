@@ -45,11 +45,13 @@ public interface Concept extends ContextualClass {
 	/**
 	 * Gets the skos:hiddenLabel for a skos:concept
 	 */
+	@Override
 	Map<String,List<String>> getHiddenLabel();
 	
 	/**
 	 * Sets the skos:hiddenLabel for a skos:concept
 	 */
+	@Override
 	void setHiddenLabel(Map<String,List<String>> hiddenLabel);
 	
 	/**

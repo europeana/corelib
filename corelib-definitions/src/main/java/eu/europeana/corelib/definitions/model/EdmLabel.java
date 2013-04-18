@@ -243,6 +243,7 @@ public enum EdmLabel {
 	/**
 	 * Return the field value
 	 */
+	@Override
 	public String toString() {
 		return value;
 	}
@@ -288,6 +289,7 @@ public enum EdmLabel {
 			this.solrTypeString = solrTypeString;
 		}
 
+		@Override
 		public String toString() {
 			return solrTypeString;
 		}
