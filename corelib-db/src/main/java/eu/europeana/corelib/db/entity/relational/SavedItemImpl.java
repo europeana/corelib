@@ -30,7 +30,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDITEM)
-public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem, Comparable<SavedItem> {
+public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
 	private static final long serialVersionUID = -7059004310525816113L;
 
 	@Column(length = FIELDSIZE_AUTHOR)

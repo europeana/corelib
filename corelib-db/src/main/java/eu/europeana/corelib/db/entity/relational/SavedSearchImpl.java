@@ -39,7 +39,7 @@ import eu.europeana.corelib.utils.DateUtils;
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDSEARCH)
 public class SavedSearchImpl extends UserConnectedImpl<Long> implements
-		RelationalDatabase, SavedSearch, Comparable<SavedSearch> {
+		RelationalDatabase, SavedSearch {
 	private static final long serialVersionUID = 667805541628354454L;
 
 	@Id

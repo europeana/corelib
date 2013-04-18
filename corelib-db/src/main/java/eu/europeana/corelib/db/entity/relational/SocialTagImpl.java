@@ -32,7 +32,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
-public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag, Comparable<SocialTag> {
+public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
 
 	@Column(length = FIELDSIZE_TAG)

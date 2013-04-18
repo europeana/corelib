@@ -22,7 +22,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface SocialTag extends EuropeanaUserObject {
+public interface SocialTag extends EuropeanaUserObject, Comparable<SocialTag> {
 
 	String getTag();
 

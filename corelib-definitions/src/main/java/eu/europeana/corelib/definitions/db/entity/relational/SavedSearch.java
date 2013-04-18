@@ -24,7 +24,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConne
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface SavedSearch extends UserConnected<Long> {
+public interface SavedSearch extends UserConnected<Long>, Comparable<SavedSearch> {
 
 	String getQuery();
 
