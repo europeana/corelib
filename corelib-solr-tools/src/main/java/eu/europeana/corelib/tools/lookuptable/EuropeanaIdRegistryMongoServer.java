@@ -106,6 +106,8 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 	public LookupResult lookupUiniqueId(String origID, String collectionID,
 			String xml, String sessionID) {
 
+		boolean checkflag = true;
+		
 		String xmlChecksum = generatechecksum(xml);
 		LookupResult lookupresult = new LookupResult();
 
@@ -160,29 +162,17 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
+						retrievedeuropeanaID.getXmlchecksum())
+				&& checkflag) {
 
 			lookupresult.setState(LookupState.UPDATE);
-
 			updateops.set(XMLCHECKSUM, xmlChecksum);
-
+			checkflag = false;
 		}
 
-		// Check if it is exactly the same (eid cid origid and xml are the same)
-		else if (constructedeuropeanaId.getCid().equals(
-				retrievedeuropeanaID.getCid())
-				&& constructedeuropeanaId.getEid().equals(
-						retrievedeuropeanaID.getEid())
-				&& constructedeuropeanaId.getOrid().equals(
-						retrievedeuropeanaID.getOrid())
-				&& constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
-			lookupresult.setState(LookupState.IDENTICAL);
-		}
-
-		// Then check if it is a duplicate in the same collection (eid cid
+		// Check if it is a duplicate in the same collection (eid cid
 		// origid xml and session) are the same
-		/*
+
 		else if (constructedeuropeanaId.getCid().equals(
 				retrievedeuropeanaID.getCid())
 				&& constructedeuropeanaId.getEid().equals(
@@ -192,12 +182,29 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())
 				&& constructedeuropeanaId.getSessionID().equals(
-						retrievedeuropeanaID.getSessionID())) {
+						retrievedeuropeanaID.getSessionID())
+				&& checkflag) {
 			lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_INCOLLECTION);
+			checkflag = false;
 		}
-		*/
+		
+		
+		// Check if it is exactly the same (eid cid origid and xml are the same)
+		else if (constructedeuropeanaId.getCid().equals(
+				retrievedeuropeanaID.getCid())
+				&& constructedeuropeanaId.getEid().equals(
+						retrievedeuropeanaID.getEid())
+				&& constructedeuropeanaId.getOrid().equals(
+						retrievedeuropeanaID.getOrid())
+				&& constructedeuropeanaId.getXmlchecksum().equals(
+						retrievedeuropeanaID.getXmlchecksum())
+				&& checkflag) {
+			lookupresult.setState(LookupState.IDENTICAL);
+			checkflag = false;
+		}
+
 
 		// There is a duplicate ID in a split collection containing different
 		// information:
@@ -211,11 +218,14 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
+						retrievedeuropeanaID.getXmlchecksum())
+				&& checkflag) {
 			lookupresult
 					.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
+			checkflag = false;
+			
 		} else if (!constructedeuropeanaId.getCid().equals(
 				retrievedeuropeanaID.getCid())
 				&& constructedeuropeanaId.getEid().equals(
@@ -223,11 +233,13 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
+						retrievedeuropeanaID.getXmlchecksum())
+				&& checkflag) {
 			lookupresult
 					.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+			checkflag = false;
 		}
 
 		// Update Session ID
@@ -331,6 +343,21 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 			datastore.update(failedRecord, updateops);
 		}
 
+	}
+	
+	
+	
+	/**
+	 * Deletes a failed record
+	 * @param state
+	 * @param oldID
+	 */
+	public void deleteFailedRecord(String europeanaId,String collectionID){
+		Query<FailedRecord> deleteQuery = datastore
+				.createQuery(FailedRecord.class).field("europeanaId").equal(europeanaId).
+				field("collectionId").equal(collectionID);
+		
+		datastore.findAndDelete(deleteQuery);
 	}
 	
 	
