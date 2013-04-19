@@ -315,7 +315,7 @@ public final class SolrUtils {
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
 			if (obj.getResource() != null) {
-				solrInputDocument.addField(label.toString(), obj.getResource());
+				solrInputDocument.addField(label.toString(), obj.getResource().getResource());
 			}
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
