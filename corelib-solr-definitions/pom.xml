@@ -9,8 +9,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-solr-definitions</artifactId>
-	<name>corelib-solr-definitions</name>
-	<description>corelib-solr-definitions</description>
+	<name>Europeana CoreLibrary Solr Definitions</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jibx.version>1.2.3</jibx.version>
@@ -124,4 +123,5 @@
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>
+	<url>http://www.europeanalabs.eu</url>
 </project>
