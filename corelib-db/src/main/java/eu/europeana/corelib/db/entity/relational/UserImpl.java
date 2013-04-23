@@ -56,9 +56,9 @@ import eu.europeana.corelib.utils.DateUtils;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="from UserImpl u where u.email = ?"),
-	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="from UserImpl u where u.apiKey = ?"),
-	@NamedQuery(name=UserImpl.QUERY_FINDBY_NAME, query="from UserImpl u where u.userName = ?")
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_EMAIL, query="select u from UserImpl u where u.email = ?"),
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_APIKEY, query="select u from UserImpl u where u.apiKey = ?"),
+	@NamedQuery(name=UserImpl.QUERY_FINDBY_NAME, query="select u from UserImpl u where u.userName = ?")
 })
 @Table(name = RelationalDatabase.TABLENAME_USER)
 public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
@@ -308,10 +308,12 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 		this.website = website;
 	}
 
+	@Override
 	public String getFieldOfWork() {
 		return fieldOfWork;
 	}
 
+	@Override
 	public void setFieldOfWork(String fieldOfWork) {
 		this.fieldOfWork = fieldOfWork;
 	}
