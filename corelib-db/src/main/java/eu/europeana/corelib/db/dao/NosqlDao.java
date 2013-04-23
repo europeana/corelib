@@ -30,6 +30,7 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface NosqlDao<E extends NoSqlEntity, T extends Serializable> extends DAO<E, T> {
-
+	
+	void deleteAll();
 
 }

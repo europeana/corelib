@@ -54,10 +54,12 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		domainClazz = clazz;
 	}
 
+	@Override
 	public E findByPK(Serializable id) throws DatabaseException {
 		return findByPK(domainClazz, id);
 	}
 
+	@Override
 	public <T extends IdentifiedEntity<?>> T findByPK(Class<T> clazz, Serializable id) throws DatabaseException {
 		try {
 			return entityManager.find(clazz, id);
@@ -67,7 +69,7 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 	}
 
 	@Override
-	public long countAll() {
+	public long count() {
 		StringBuilder sb = new StringBuilder("SELECT count(*) FROM ");
 		sb.append(domainClazz.getSimpleName()).append(" e");
 		return entityManager.createQuery(sb.toString(), Long.class).getSingleResult();
@@ -78,29 +80,6 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		StringBuilder sb = new StringBuilder("SELECT e FROM ");
 		sb.append(domainClazz.getSimpleName()).append(" e");
 		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
-	}
-
-	@Override
-	public List<E> findAll(String order) {
-		StringBuilder sb = new StringBuilder("SELECT e FROM ");
-		sb.append(domainClazz.getSimpleName()).append(" e");
-		sb.append(" ORDER BY " + order);
-		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
-	}
-
-	@Override
-	public List<E> findAll(int offset, int limit) {
-		StringBuilder sb = new StringBuilder("SELECT e FROM ");
-		sb.append(domainClazz.getSimpleName()).append(" e");
-		return entityManager.createQuery(sb.toString(), domainClazz).setFirstResult(offset).setMaxResults(limit).getResultList();
-	}
-
-	@Override
-	public List<E> findAll(String order, int offset, int limit) {
-		StringBuilder sb = new StringBuilder("SELECT e FROM ");
-		sb.append(domainClazz.getSimpleName()).append(" e");
-		sb.append(" ORDER BY " + order);
-		return entityManager.createQuery(sb.toString(), domainClazz).setFirstResult(offset).setMaxResults(limit).getResultList();
 	}
 
 	private TypedQuery<E> createNamedQuery(String qName, Object... params) {
@@ -119,6 +98,7 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		return createNamedQuery(qName, params).getResultList();
 	}
 
+	@Override
 	public List<E> findByNamedQueryLimited(String qName, int offset, int limit, Object... params) {
 		return createNamedQuery(qName, params).setFirstResult(offset).setMaxResults(limit).getResultList();
 	}
@@ -132,15 +112,18 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		}
 	}
 
+	@Override
 	public <T extends IdentifiedEntity<?>> T insert(T entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
 
+	@Override
 	public <T extends IdentifiedEntity<?>> T update(T entity) {
 		return entityManager.merge(entity);
 	}
 
+	@Override
 	public void delete(IdentifiedEntity<?> entity) {
 		entityManager.remove(entity);
 	}

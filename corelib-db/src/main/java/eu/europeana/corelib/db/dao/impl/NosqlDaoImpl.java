@@ -10,8 +10,19 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 public class NosqlDaoImpl<E extends NoSqlEntity, T extends Serializable> extends BasicDAO<E, T> implements NosqlDao<E, T> {
 
+	private Class<E> clazz;
+	
 	public NosqlDaoImpl(Class<E> clazz, Datastore datastore) {
 		super(clazz, datastore);
+		this.clazz = clazz;
+	}
+	
+	@Override
+	public void deleteAll() {
+		try {
+			delete(clazz.newInstance());
+		} catch (Exception e) {
+		}
 	}
 
 }
