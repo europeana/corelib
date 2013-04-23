@@ -26,8 +26,6 @@ import eu.europeana.corelib.definitions.solr.DocType;
  */
 public interface EuropeanaUserObject extends UserConnected<Long> {
 
-	Long getId();
-
 	Date getDateSaved();
 
 	void setDateSaved(Date dateSaved);

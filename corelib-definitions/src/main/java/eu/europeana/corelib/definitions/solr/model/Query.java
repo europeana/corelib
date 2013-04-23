@@ -201,6 +201,7 @@ public class Query implements Cloneable {
 		return (Query) super.clone();
 	}
 
+	@Override
 	public String toString() {
 		List<String> params = new ArrayList<String>();
 		params.add("q=" + query);
@@ -310,7 +311,7 @@ public class Query implements Cloneable {
 			}
 		}
 
-		filteredFacets = new ArrayList(register.keySet());
+		filteredFacets = new ArrayList<String>(register.keySet());
 		for (FacetCollector collector : register.values()) {
 			facetRefinements.add(collector.toString());
 		}
@@ -378,6 +379,7 @@ public class Query implements Cloneable {
 			values.add(value);
 		}
 
+		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			if (isTagged) {
