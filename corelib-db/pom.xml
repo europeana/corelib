@@ -93,6 +93,12 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901.jdbc3</version>
 		</dependency>
+		<dependency>
+        	<groupId>org.mongodb</groupId>
+        	<artifactId>mongo-java-driver</artifactId>
+        	<version>2.7.3</version>
+        	<scope>compile</scope>
+        </dependency>
 		<!-- TESTING PURPOSES -->
 		<dependency>
 			<scope>test</scope>
@@ -112,23 +118,17 @@
 			<version>3.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>org.apache.sanselan</groupId>
 			<artifactId>sanselan</artifactId>
 			<version>0.97-incubator</version>
 		</dependency>
-		<dependency>
+<!--		<dependency>
 			<groupId>net.vz.mongodb.jackson</groupId>
 			<artifactId>mongo-jackson-mapper</artifactId>
 			<version>1.4.2</version>
-		</dependency>
-		<dependency>
-        	<groupId>org.mongodb</groupId>
-        	<artifactId>mongo-java-driver</artifactId>
-        	<version>2.7.3</version>
-        	<scope>compile</scope>
-        </dependency>
-	</dependencies>
+		</dependency>-->
+ 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>
