@@ -156,7 +156,7 @@ public interface SearchService {
 	 * @return
 	 *   The see also suggestions
 	 */
-	Map<String, Integer> seeAlso(Map<String, List<String>> fields);
+	Map<String, Integer> seeAlso(List<String> queries);
 
 	/**
 	 * Returns a specified number of moreLikeThis objects
@@ -175,4 +175,6 @@ public interface SearchService {
 	 * @throws IOException
 	 */
 	Date getLastSolrUpdate() throws SolrServerException, IOException;
+
+	String escapeQuery(String query);
 }

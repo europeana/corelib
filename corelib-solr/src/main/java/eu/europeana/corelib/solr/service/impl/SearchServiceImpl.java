@@ -321,19 +321,14 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public Map<String, Integer> seeAlso(Map<String, List<String>> fields) {
+	public Map<String, Integer> seeAlso(List<String> queries) {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery("*:*");
 		solrQuery.setRows(0);
 		solrQuery.setFacet(true);
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
-		for (Entry<String, List<String>> entry : fields.entrySet()) {
-			for (String value : entry.getValue()) {
-				String query = String.format("%s:\"%s\"", entry.getKey(),
-						ClientUtils.escapeQueryChars(value).replace("\\ ", " ").replace("\\-", "-")
-				);
-				solrQuery.addFacetQuery(query);
-			}
+		for (String query : queries) {
+			solrQuery.addFacetQuery(query);
 		}
 		QueryResponse response;
 		Map<String, Integer> seeAlso = null;
@@ -554,5 +549,9 @@ public class SearchServiceImpl implements SearchService {
 
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
+	}
+	
+	public String escapeQuery(String query) {
+		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ").replace("\\-", "-");
 	}
 }
