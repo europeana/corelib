@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 public class LocaleInterceptor extends HandlerInterceptorAdapter {
 
 	public static final String DEFAULT_PARAM_NAME = "locale";
+	
 	private String paramName = DEFAULT_PARAM_NAME;
 
 	public void setParamName(String paramName) {
