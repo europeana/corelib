@@ -79,6 +79,7 @@
 		<version.springCore>3.1.2.RELEASE</version.springCore>
 		<version.springSecurity>3.1.0.RELEASE</version.springSecurity>
 		<version.commonsLang>2.6</version.commonsLang>
+		<version.commonsIO>2.4</version.commonsIO>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
 		<version.jibx>1.2.3</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
