@@ -136,7 +136,7 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
-	public Map<String, Integer> seeAlso(Map<String, List<String>> fields) {
+	public Map<String, Integer> seeAlso(List<String> params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -164,6 +164,12 @@ public class SearchServiceMock implements SearchService {
 
 	@Override
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String escapeQuery(String query) {
 		// TODO Auto-generated method stub
 		return null;
 	}
