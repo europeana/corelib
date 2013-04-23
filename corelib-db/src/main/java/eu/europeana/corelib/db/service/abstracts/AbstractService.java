@@ -48,7 +48,12 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * FINDERS
 	 */
 
-	long countAll();
+	/**
+	 * Returns a count of all records
+	 * 
+	 * @return the number of total records
+	 */
+	long count();
 
 	/**
 	 * Find all elements for this service.
@@ -56,12 +61,6 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 * @return All entities for the defined entity type
 	 */
 	List<E> findAll();
-
-	List<E> findAll(int offset, int limit);
-
-	List<E> findAll(String ordering);
-
-	List<E> findAll(String sorted, int offset, int limit);
 
 	/**
 	 * 

@@ -37,6 +37,11 @@ public abstract class AbstractNoSqlServiceImpl<E extends NoSqlEntity, T extends 
 	public boolean exists(T id) {
 		return dao.exists("_id", id);
 	}
+	
+	@Override
+	public long count() {
+		return dao.count();
+	}
 
 	/**
 	 * Used by Bean configuration to inject Entity based DAO.

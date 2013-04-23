@@ -45,6 +45,13 @@ public interface AbstractNoSqlService<E extends NoSqlEntity, T extends Serializa
 	 */
 
 	/**
+	 * Returns a count of all records
+	 * 
+	 * @return the number of total records
+	 */
+	long count();
+
+	/**
 	 * Find all elements for this service.
 	 * 
 	 * @return All entities for the defined entity type
