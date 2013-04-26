@@ -25,6 +25,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -63,7 +64,11 @@ public class EmailBuilderImpl implements EmailBuilder {
 
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
 
-		message.setTo(emailTo);
+		if (StringUtils.contains(emailTo, ",")) {
+			message.setTo(StringUtils.split(emailTo, ","));
+		} else {
+			message.setTo(emailTo);
+		}
 		message.setFrom(emailFrom);
 		message.setSubject(subject);
 
