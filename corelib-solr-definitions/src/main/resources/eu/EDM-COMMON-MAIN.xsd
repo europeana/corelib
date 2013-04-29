@@ -210,6 +210,8 @@
             <enumeration value="et"/>
             <enumeration value="fi"/>
             <enumeration value="fr"/>
+            <enumeration value="ga"/>
+            <enumeration value="gd"/>
             <enumeration value="hu"/>
             <enumeration value="ie"/>
             <enumeration value="is"/>
@@ -227,6 +229,7 @@
             <enumeration value="sl"/>
             <enumeration value="sr"/>
             <enumeration value="sv"/>
+            <enumeration value="pt"/>
             <enumeration value="tr"/>
             <enumeration value="yi"/>
             <enumeration value="cy"/>
