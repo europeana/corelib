@@ -124,12 +124,15 @@ public class EuropeanaIdRegistryMongoServerTest {
 		Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid).getOrid(),registry.getOrid());
 		Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)).getEid(), registry.getEid());
 		Assert.assertEquals(LookupState.DUPLICATE_INCOLLECTION,server.lookupUiniqueId(oid, cid, xml_checksum, sid).getState());
-		
-		//edm=tst_checksum, collectionId=12345, originalId=test_oid, date=Mon Apr 29 18:50:07 CEST 2013, lookupState=DUPLICATE_INCOLLECTION, europeanaId=/12345/test_oid
-		
 		List<Map<String, String>> frecords = server.getFailedRecords(cid);
-		
 		Assert.assertEquals(1,  frecords.size());
+		Map<String, String> valuemap = frecords.get(0);
+		Assert.assertEquals(valuemap.get("edm"), "tst_checksum");
+		Assert.assertEquals(valuemap.get("collectionId"), "12345");
+		Assert.assertEquals(valuemap.get("originalId"), "test_oid");
+		Assert.assertEquals(valuemap.get("lookupState"), "DUPLICATE_INCOLLECTION");
+		Assert.assertEquals(valuemap.get("europeanaId"), "/12345/test_oid");
+		
 		server.getDatastore().getDB().dropDatabase();
 	}
 	/**
