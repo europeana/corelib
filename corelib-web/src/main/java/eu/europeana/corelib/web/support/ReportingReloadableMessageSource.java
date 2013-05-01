@@ -6,7 +6,9 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import eu.europeana.corelib.web.exception.EmailServiceException;
@@ -30,7 +32,17 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 	@Override
 	protected String getDefaultMessage(String code) {
 		log.info("MISSING LOCALE TAG:"+code);
-		reportMissingTag(code);
+		
+		if(	!StringUtils.contains(code, "notranslate_carousel-item")
+			&&
+			!StringUtils.contains(code, "notranslate_featured-partner")	
+			&&
+			!StringUtils.contains(code, "notranslate_featured-item")	
+			
+			) {
+			reportMissingTag(code);
+		}
+		
 		return super.getDefaultMessage(code);
 	}
 	
