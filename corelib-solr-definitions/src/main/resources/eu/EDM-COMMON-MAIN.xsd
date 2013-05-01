@@ -223,13 +223,13 @@
             <enumeration value="nl"/>
             <enumeration value="no"/>
             <enumeration value="pl"/>
+            <enumeration value="pt"/>
             <enumeration value="ro"/>
             <enumeration value="ru"/>
             <enumeration value="sk"/>
             <enumeration value="sl"/>
             <enumeration value="sr"/>
             <enumeration value="sv"/>
-            <enumeration value="pt"/>
             <enumeration value="tr"/>
             <enumeration value="yi"/>
             <enumeration value="cy"/>
@@ -477,7 +477,41 @@
     <element name="language" type="edm:LanguageCodes">
         <annotation>
             <documentation>A language assigned to the resource with reference to the Provider.
-                Example:&lt;edm:language&gt;ro&lt;/edm:language&gt; </documentation>
+                Language Codes:
+                bg:Bulgarian
+                ca:Catalan
+                cs:Czech
+                da:Danish
+                de:German
+                el:Greek
+                en:English
+                es:Spanish
+                et:Estonian
+                fi:Finnish
+                fr:French
+                ga:Galician
+                gd:Gaelic (Scottish)
+                hu:Hungarian
+                ie:Interlingue
+                is:Icelandic
+                it:Italian
+                lt:Lithuanian
+                lv:Latvian (Lettish)
+                mt:Maltese
+                mul:Multilingual Content
+                nl:Netherlands
+                no:Norway
+                pl:Polish
+                pt:Portugese
+                ro:Romanian
+                ru:Russian
+                sk:Slovak
+                sl:Slovenian
+                sr:Serbian
+                sv:Swedish
+                tr:Turkish
+                yi:Yiddish
+                cy:Welsh</documentation>
         </annotation>
     </element>
     
