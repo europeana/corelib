@@ -18,7 +18,9 @@ package eu.europeana.corelib.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -64,6 +66,30 @@ public class StringArrayUtils {
 			return list.toArray(new String[list.size()]);
 		}
 		return new String[] {};
+	}
+	
+	public static List<String> toList(String... items) {
+		List<String> list = new ArrayList<String>();
+		if ( isNotBlank(items) ) {
+			for (String s : items) {
+				if (StringUtils.isNotBlank(s)) {
+					list.add(s);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static Set<String> toSet(String... items) {
+		Set<String> list = new HashSet<String>();
+		if ( isNotBlank(items) ) {
+			for (String s : items) {
+				if (StringUtils.isNotBlank(s)) {
+					list.add(s);
+				}
+			}
+		}
+		return list;
 	}
 
 	/**
