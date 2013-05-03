@@ -114,8 +114,7 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @return true if newIDs are present false otherwise
 	 */
 	public boolean newIdExists(String oldId) {
-		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId)
-				.get() != null ? true : false;
+		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId) != null ? true : false;
 	}
 	
 
@@ -207,5 +206,13 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	public void setDatastore(Datastore datastore) {
 		this.datastore = datastore;
 		
+	}
+	
+	public EuropeanaId find(){
+		return datastore.find(EuropeanaId.class).get();
+	}
+	
+	public EuropeanaId findOne(String oldId){
+		return datastore.find(EuropeanaId.class,"oldId",oldId).get();
 	}
 }
