@@ -28,9 +28,6 @@ public interface RelationalDatabase {
 	String TABLENAME_APIKEY = "apikey";
 	int FIELDSIZE_APIKEY = 30;
 	
-	// authentication
-	String TABLENAME_AUTHENTICATION = "authentication";
-
 	// user
 	String TABLENAME_USER = "users";
 	int FIELDSIZE_PERSONAL = 100;
