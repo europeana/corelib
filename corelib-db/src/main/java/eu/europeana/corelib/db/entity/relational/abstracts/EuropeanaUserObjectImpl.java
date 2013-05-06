@@ -31,6 +31,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -96,11 +98,14 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 
 	@Override
 	public String getEuropeanaObject() {
-		try {
-			return URLEncoder.encode(europeanaObject, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return europeanaObject;
+		if (StringUtils.isNotBlank(europeanaObject)) {
+			try {
+				return URLEncoder.encode(europeanaObject, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return europeanaObject;
+			}
 		}
+		return null;
 	}
 
 	@Override

@@ -26,16 +26,31 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 	
-	<bean id="corelib_db_imageDao" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
+	<!-- MONGO DB -->
+	
+	<bean id="corelib_db_nosql_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
+		<constructor-arg ref="corelib_db_morphia_datastore"/>
+	</bean>
+	
+	<bean id="corelib_db_imageDao" parent="corelib_db_nosql_dao">
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.ImageCache" />
-		<constructor-arg ref="corelib_db_morphia_datastore"/>
 	</bean>
 
-	<bean id="corelib_db_apiLogDao" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
+	<bean id="corelib_db_apiLogDao" parent="corelib_db_nosql_dao">
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.ApiLog" />
-		<constructor-arg ref="corelib_db_morphia_datastore"/>
+	</bean>
+	
+	<bean id="corelib_db_oAuth2AccessTokenDao" parent="corelib_db_nosql_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.AccessToken" />
 	</bean>
 
+	<bean id="corelib_db_oAuth2RefreshTokenDao" parent="corelib_db_nosql_dao">
+		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.RefreshToken" />
+	</bean>
+
+
+	<!-- SQL -->
+	
 	<bean id="corelib_db_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.RelationalDaoImpl"/>
 
 	<bean id="corelib_db_userDao" parent="corelib_db_dao">

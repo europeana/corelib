@@ -104,73 +104,62 @@ public class SearchServiceMock implements SearchService {
 
 	@Override
 	public List<Term> suggestions(String query, int pageSize) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public FullBean resolve(String collectionId, String recordId)
 			throws SolrTypeException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Term> suggestions(String query, int pageSize, String field)
 			throws SolrTypeException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<String, Integer> seeAlso(List<String> params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
 			Query query) throws SolrTypeException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems)
 			throws SolrTypeException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String escapeQuery(String query) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -12,7 +12,7 @@ public class NosqlDaoImpl<E extends NoSqlEntity, T extends Serializable> extends
 
 	private Class<E> clazz;
 	
-	public NosqlDaoImpl(Class<E> clazz, Datastore datastore) {
+	public NosqlDaoImpl(Datastore datastore, Class<E> clazz) {
 		super(clazz, datastore);
 		this.clazz = clazz;
 	}

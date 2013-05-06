@@ -36,6 +36,7 @@
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-db-datasource.xml"/>
 	<import resource="internal/corelib-db-dao.xml"/>
+	<import resource="internal/corelib-db-internal.xml"/>
 
 	<context:annotation-config/>
 
@@ -49,5 +50,7 @@
 		p:dao-ref="corelib_db_imageDao"/>
 	<bean name="corelib_db_apiLogService" class="eu.europeana.corelib.db.service.impl.ApiLogServiceImpl"
 		p:dao-ref="corelib_db_apiLogDao"/>
+	<bean name="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
+		/>
 
 </beans>
