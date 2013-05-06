@@ -35,9 +35,9 @@ import eu.europeana.corelib.solr.MongoServer;
  */
 public class EuropeanaIdMongoServer implements MongoServer {
 
-	private Mongo mongoServer;
-	private String databaseName;
-	private Datastore datastore;
+	protected Mongo mongoServer;
+	protected String databaseName;
+	protected Datastore datastore;
 
 	/**
 	 * Constructor of the EuropeanaIDMongoServer
@@ -139,25 +139,9 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param europeanaId The europeanaId to save
 	 */
 	public void saveEuropeanaId(EuropeanaId europeanaId) {
-		List<EuropeanaId> oldIdList = retrieveEuropeanaIdFromOld(europeanaId.getOldId());
-		if(oldIdList.size()>0){
-			EuropeanaId oldId = oldIdList.get(0);
-			EuropeanaId newId = new EuropeanaId();
-			newId.setOldId(oldId.getNewId());
-			newId.setNewId(europeanaId.getNewId());
-			newId.setTimestamp(new Date().getTime());
-			newId.setLastAccess(0);
-			//datastore.save(newId);
-			oldId.setNewId(europeanaId.getNewId());
-			Query<EuropeanaId> updateQuery = datastore
-					.createQuery(EuropeanaId.class).field("oldId").equal(oldId.getOldId());
-			UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
-					.set("newId", oldId.getNewId());
-			datastore.update(updateQuery, ops);
-		}
-		else{
+		
 			datastore.save(europeanaId);
-		}
+		
 	}
 
 	/**
