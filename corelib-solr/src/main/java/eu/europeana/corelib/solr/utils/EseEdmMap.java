@@ -49,6 +49,12 @@ public enum EseEdmMap {
 		public	String getEdmValue(FullBean bean) {
 			return bean.getProxies().get(0).getDcIdentifier().values().iterator().next().get(0);
 		}
+	}, 
+	EUROPEANA_FAKE("europeana_fake"){
+		@Override
+		public	String getEdmValue(FullBean bean) {
+			return bean.getAggregations().get(0).getAbout();
+		}
 	}
 	;
 	private String field;
