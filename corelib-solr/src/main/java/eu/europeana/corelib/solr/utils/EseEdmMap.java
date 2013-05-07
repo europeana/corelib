@@ -70,7 +70,7 @@ public enum EseEdmMap {
 		if(StringUtils.equals(map.field, field)){
 			return map;
 		}
-		throw new RuntimeException("Field not found");
+		throw new RuntimeException("Field not found :" + field);
 	}
 	public abstract String getEdmValue(FullBean bean);
 
