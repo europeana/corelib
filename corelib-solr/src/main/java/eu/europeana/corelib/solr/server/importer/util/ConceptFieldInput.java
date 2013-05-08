@@ -200,11 +200,15 @@ public final class ConceptFieldInput {
 		}
 
 		if (!MongoUtils.contains(originalValues, str)) {
+			if(!newList.contains(str)){
 			newList.add(str);
+			}
 		}
 
 		for (String arrStr : originalValues) {
-			newList.add(arrStr);
+			if(!newList.contains(arrStr)){
+				newList.add(arrStr);
+			}
 		}
 		return newList;
 	}
