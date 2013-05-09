@@ -41,8 +41,8 @@ public class StringArrayUtils {
 	 * @return
 	 */
 	public static boolean isNotBlank(String[] array) {
-		return ((array != null) && (array.length > 0)) && StringUtils.join(array).trim().length()>0;
-		
+		return ((array != null) && (array.length > 0)) && StringUtils.join(array).trim().length() > 0;
+
 	}
 
 	/**
@@ -67,10 +67,10 @@ public class StringArrayUtils {
 		}
 		return new String[] {};
 	}
-	
+
 	public static List<String> toList(String... items) {
 		List<String> list = new ArrayList<String>();
-		if ( isNotBlank(items) ) {
+		if (isNotBlank(items)) {
 			for (String s : items) {
 				if (StringUtils.isNotBlank(s)) {
 					list.add(s);
@@ -79,10 +79,10 @@ public class StringArrayUtils {
 		}
 		return list;
 	}
-	
+
 	public static Set<String> toSet(String... items) {
 		Set<String> list = new HashSet<String>();
-		if ( isNotBlank(items) ) {
+		if (isNotBlank(items)) {
 			for (String s : items) {
 				if (StringUtils.isNotBlank(s)) {
 					list.add(s);
@@ -137,9 +137,9 @@ public class StringArrayUtils {
 	 * Adds a string to a string array. If the array is null it creates it
 	 * 
 	 * @param items
-	 * 			The array to append data in
+	 *            The array to append data in
 	 * @param str
-	 * 			The string to append
+	 *            The string to append
 	 * @return The modified array
 	 */
 	public static String[] addToArray(String[] items, String str) {
@@ -153,7 +153,17 @@ public class StringArrayUtils {
 			itemList.add(str);
 		}
 		return itemList.toArray(new String[itemList.size()]);
-
+	}
+	
+	public static String concat(String... strings) {
+		if (isNotBlank(strings)) {
+			StringBuilder sb = new StringBuilder();
+			for (String string : strings) {
+				sb.append(string);
+			}
+			return sb.toString();
+		}
+		return null;
 	}
 
 }

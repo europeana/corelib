@@ -23,6 +23,7 @@ package eu.europeana.corelib.definitions.solr;
 
 import org.apache.commons.lang.StringUtils;
 
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * DocType defines the different type Object types Europeana supports.
@@ -31,7 +32,17 @@ import org.apache.commons.lang.StringUtils;
  * @author Borys Omelayenko
  */
 public enum DocType {
-	TEXT, IMAGE, SOUND, VIDEO, _3D;
+	TEXT("doc", "pdf"), 
+	IMAGE("jpeg", "jpg", "png", "tif"), 
+	SOUND("mp3"), 
+	VIDEO("avi", "mpg"), 
+	_3D;
+
+	String[] extentions;
+
+	private DocType(String... extentions) {
+		this.extentions = extentions;
+	}
 
 	public static DocType get(String[] strings) {
 		return get(strings[0]);
@@ -44,6 +55,22 @@ public enum DocType {
 			}
 		}
 		throw new IllegalArgumentException("Did not recognize DocType: [" + string + "]");
+	}
+
+	public static DocType getByExtention(String ext) {
+		if (StringUtils.isNotBlank(ext)) {
+			for (DocType t : values()) {
+				if (StringArrayUtils.isNotBlank(t.extentions)) {
+					for (String e : t.extentions) {
+						e = StringArrayUtils.concat(".", e);
+						if (StringUtils.endsWithIgnoreCase(ext, e)) {
+							return t;
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
