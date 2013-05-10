@@ -135,7 +135,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		if (europeanaIdMongoServer.newIdExists(id)) {
 			List<EuropeanaId> newIDList = europeanaIdMongoServer
 					.retrieveEuropeanaIdFromOld(id);
-			EuropeanaId newId = newIDList.get(0);
+			EuropeanaId newId = newIDList.get(newIDList.size()-1);
 			//newId.setLastAccess(new Date().getTime());
 			europeanaIdMongoServer.updateTime(newId.getNewId(),id);
 			//europeanaIdMongoServer.saveEuropeanaId(newId);
