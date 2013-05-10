@@ -51,7 +51,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	@Override
 	public List<ApiLog> findByApiKey(String apiKey) {
 		Query<ApiLog> query = getDao().createQuery();
-		query.field("apiKey").equals(apiKey);
+		query.field("apiKey").equal(apiKey);
 		return query.asList();
 	}
 
@@ -63,7 +63,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	@Override
 	public long countByApiKeyByInterval(String apiKey, DateInterval interval) {
 		Query<ApiLog> query = getDao().createQuery();
-		query.field("apiKey").equals(apiKey);
+		query.field("apiKey").equal(apiKey);
 		query.field("timestamp").greaterThanOrEq(interval.getBegin());
 		query.field("timestamp").lessThan(interval.getEnd());
 		return query.countAll();
