@@ -29,8 +29,8 @@ public class StringArrayUtilsTest {
 	
 	@Test
 	public void toArrayTest() {
-		Assert.assertNotNull(StringArrayUtils.toArray(null));
-		Assert.assertEquals(0, StringArrayUtils.toArray(null).length);
+		Assert.assertNotNull(StringArrayUtils.toArray((List<String>)null));
+		Assert.assertEquals(0, StringArrayUtils.toArray((List<String>)null).length);
 		
 		List<String> list = new ArrayList<String>();
 		Assert.assertEquals(0, StringArrayUtils.toArray(list).length);
