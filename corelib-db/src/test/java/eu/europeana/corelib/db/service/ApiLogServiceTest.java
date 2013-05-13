@@ -3,9 +3,10 @@ package eu.europeana.corelib.db.service;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
+import eu.europeana.corelib.db.entity.nosql.ApiLog;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.db.service.ApiLogService;
 import eu.europeana.corelib.utils.DateIntervalUtils;
@@ -23,6 +25,8 @@ import eu.europeana.corelib.utils.model.DateInterval;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiLogServiceTest {
+
+	String apiKey = "testKey";
 
 	@Resource private ApiLogService apiLogService;
 
@@ -40,14 +44,65 @@ public class ApiLogServiceTest {
 	}
 
 	@Test
-	public void testCountByApiKeyByInterval() {
-		String apiKey = "api2demo";
+	public void testCountByApiKeyByInterval() throws CloneNotSupportedException {
+		DateInterval interval = DateIntervalUtils.getToday();
+
+		long count = apiLogService.countByApiKeyByInterval(apiKey, interval);
+		assertNotNull(count);
+		assertEquals(0, count);
+
 		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
 		apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
 
-		DateInterval interval = DateIntervalUtils.getToday();
-		long count = apiLogService.countByApiKeyByInterval(apiKey, interval);
+		// the interval contains the end date, which was before insertions, so we have to refresh it.
+		interval.setEnd(new Date());
+		long count2 = apiLogService.countByApiKeyByInterval(apiKey, interval);
+		assertNotNull(count2);
+		assertEquals(2, count2);
+	}
+
+	@Test
+	public void testCountByApiKey() {
+		long count = apiLogService.countByApiKey(apiKey);
+		assertNotNull(count);
+		assertEquals(0, count);
+
+		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
+		apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
+
+		count = apiLogService.countByApiKey(apiKey);
 		assertNotNull(count);
 		assertEquals(2, count);
+	}
+
+	@Test
+	public void testFindByApiKey() {
+		List<ApiLog> logs = apiLogService.findByApiKey(apiKey);
+		assertNotNull(logs);
+		assertEquals(0, logs.size());
+
+		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
+		apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
+
+		logs = apiLogService.findByApiKey(apiKey);
+		assertNotNull(logs);
+		assertEquals(2, logs.size());
+	}
+
+	@Test
+	public void testCountByInterval() {
+		DateInterval interval = DateIntervalUtils.getToday();
+
+		long count = apiLogService.countByInterval(interval);
+		assertNotNull(count);
+		assertEquals(0, count);
+
+		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
+		apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
+
+		interval.setEnd(new Date());
+		long count2 = apiLogService.countByInterval(interval);
+		assertNotNull(count2);
+		assertEquals(2, count2);
 	}
 }
