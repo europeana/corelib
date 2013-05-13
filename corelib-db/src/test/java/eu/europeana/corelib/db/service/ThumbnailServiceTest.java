@@ -59,7 +59,7 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
 public class ThumbnailServiceTest {
 
 	private static Logger LOGGER = Logger.getLogger(ThumbnailServiceTest.class);
-	
+
 	@Resource(name = "corelib_db_imageDao")
 	NosqlDao<ImageCache, String> imageDao;
 
