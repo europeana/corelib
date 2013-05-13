@@ -54,11 +54,6 @@
 		</dependency>
 		<!-- Other -->
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${version.commonsLang}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
 			<version>${version.apacheVelocity}</version>
