@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.db.service.ApiKeyService;
+import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.service.ApiLogService;
 import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.utils.model.DateInterval;
@@ -23,9 +23,11 @@ public class ApiLogServiceImplTest {
 	@Test
 	public void testCountByApiKeyByInterval() {
 		String apiKey = "api2demo";
+		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
+
 		DateInterval interval = DateIntervalUtils.getToday();
 		long count = apiLogService.countByApiKeyByInterval(apiKey, interval);
 		assertNotNull(count);
-		assertEquals(0, count);
+		assertEquals(1, count);
 	}
 }
