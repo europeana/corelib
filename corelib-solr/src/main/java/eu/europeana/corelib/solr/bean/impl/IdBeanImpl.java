@@ -30,10 +30,10 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 public class IdBeanImpl implements IdBean {
 
 	@Field("europeana_id")
-	private String id;
+	protected String id;
 
 	@Field("edm_previewNoDistribute")
-	private boolean optOut;
+	protected boolean optOut;
 
 	@Override
 	public String getId() {

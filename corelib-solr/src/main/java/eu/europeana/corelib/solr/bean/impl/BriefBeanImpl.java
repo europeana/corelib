@@ -42,79 +42,79 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Field("timestamp")
-	private Date timestamp;
+	protected Date timestamp;
 
 	@Field("PROVIDER")
-	private String[] provider;
+	protected String[] provider;
 
 	@Field("provider_aggregation_edm_dataProvider")
-	private String[] edmDataProvider;
+	protected String[] edmDataProvider;
 
 	@Field("provider_aggregation_edm_object")
-	private String[] edmObject;
+	protected String[] edmObject;
 
 	@Field("COMPLETENESS")
-	private String europeanaCompleteness;
+	protected String europeanaCompleteness;
 
 	@Field("TYPE")
-	private String[] docType;
+	protected String[] docType;
 
 	@Field("LANGUAGE")
-	private String[] language;
+	protected String[] language;
 
 	@Field("YEAR")
-	private String[] year;
+	protected String[] year;
 
 	@Field("RIGHTS")
-	private String[] rights;
+	protected String[] rights;
 
 	@Field("title")
-	private String[] title;
+	protected String[] title;
 
 	@Field("proxy_dc_creator")
-	private String[] dcCreator;
+	protected String[] dcCreator;
 	
 	@Field("proxy_dc_contributor")
-	private String[] dcContributor;
+	protected String[] dcContributor;
 
 	@Field("edm_place")
-	private String[] edmPlace;
+	protected String[] edmPlace;
 
 	@Field("pl_skos_prefLabel")
-	private List<Map<String, String>> edmPlacePrefLabel;
+	protected List<Map<String, String>> edmPlacePrefLabel;
 
 	@Field("pl_wgs84_pos_lat")
-	private List<String> edmPlaceLatitude;
+	protected List<String> edmPlaceLatitude;
 
 	@Field("pl_wgs84_pos_long")
-	private List<String> edmPlaceLongitude;
+	protected List<String> edmPlaceLongitude;
 
 	@Field("edm_timespan")
-	private String[] edmTimespan;
+	protected String[] edmTimespan;
 
 	@Field("ts_skos_prefLabel")
-	private List<Map<String, String>> edmTimespanLabel;
+	protected List<Map<String, String>> edmTimespanLabel;
 
 	@Field("ts_edm_begin")
-	private String[] edmTimespanBegin;
+	protected String[] edmTimespanBegin;
 
 	@Field("ts_edm_end")
-	private String[] edmTimespanEnd;
+	protected String[] edmTimespanEnd;
 
 	@Field("edm_agent")
-	private String[] edmAgentTerm;
+	protected String[] edmAgentTerm;
 
 	@Field("ag_skos_prefLabel")
-	private List<Map<String, String>> edmAgentLabel;
+	protected List<Map<String, String>> edmAgentLabel;
 
 	@Field("proxy_dcterms_hasPart")
-	private String[] dctermsHasPart;
+	protected String[] dctermsHasPart;
 
 	@Field("proxy_dcterms_spatial")
-	private String[] dctermsSpatial;
+	protected String[] dctermsSpatial;
 
 	@Field("europeana_aggregation_edm_preview")
-	private String[] edmPreview;
+	protected String[] edmPreview;
 
 	@Override
 	public String[] getEdmPreview(){

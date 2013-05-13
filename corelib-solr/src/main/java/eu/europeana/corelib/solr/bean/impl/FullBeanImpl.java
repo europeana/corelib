@@ -61,58 +61,58 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 public class FullBeanImpl implements FullBean {
 
 	@Id
-	private ObjectId europeanaId;
+	protected ObjectId europeanaId;
 
 	@Indexed(unique = true)
-	private String about;
+	protected String about;
 
-	private String[] title;
+	protected String[] title;
 
-	private String[] year;
+	protected String[] year;
 
-	private String[] provider;
+	protected String[] provider;
 
-	private String[] language;
+	protected String[] language;
 
-	private Date timestamp;
+	protected Date timestamp;
 
-	private DocType type;
+	protected DocType type;
 
-	private int europeanaCompleteness;
+	protected int europeanaCompleteness;
 
-	private boolean optOut;
+	protected boolean optOut;
 
 	@Transient
-	private List<BriefBeanImpl> similarItems;
+	protected List<BriefBeanImpl> similarItems;
 
 	@Reference
-	private List<PlaceImpl> places;
+	protected List<PlaceImpl> places;
 
 	@Reference
-	private List<AgentImpl> agents;
+	protected List<AgentImpl> agents;
 
 	@Reference
-	private List<TimespanImpl> timespans;
+	protected List<TimespanImpl> timespans;
 
 	@Reference
-	private List<ConceptImpl> concepts;
+	protected List<ConceptImpl> concepts;
 
 	@Reference
-	private List<AggregationImpl> aggregations;
+	protected List<AggregationImpl> aggregations;
 
 	@Reference
-	private List<ProvidedCHOImpl> providedCHOs;
+	protected List<ProvidedCHOImpl> providedCHOs;
 
 	@Reference
-	private EuropeanaAggregationImpl europeanaAggregation;
+	protected EuropeanaAggregationImpl europeanaAggregation;
 
 	@Reference
-	private List<ProxyImpl> proxies;
+	protected List<ProxyImpl> proxies;
 
-	private String[] country;
-	private String[] userTags;
+	protected String[] country;
+	protected String[] userTags;
 
-	private String[] europeanaCollectionName;
+	protected String[] europeanaCollectionName;
 
 	/**
 	 * GETTERS & SETTTERS
