@@ -23,6 +23,7 @@
 	<modules>
 		<module>corelib-db</module>
 		<module>corelib-definitions</module>
+		<module>corelib-logging</module>
 		<module>corelib-solr</module>
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
