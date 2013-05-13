@@ -47,7 +47,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		apiLog.setApiKey(apiKey);
 		store(apiLog);
 	}
-	
+
 	@Override
 	public List<ApiLog> findByApiKey(String apiKey) {
 		Query<ApiLog> query = getDao().createQuery();
@@ -68,7 +68,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		query.field("timestamp").lessThan(interval.getEnd());
 		return query.countAll();
 	}
-	
+
 	@Override
 	public long countByInterval(DateInterval interval) {
 		Query<ApiLog> query = getDao().createQuery();
@@ -76,7 +76,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		query.field("timestamp").lessThan(interval.getEnd());
 		return query.countAll();
 	}
-	
+
 	// by users
 	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0},
 	// $reduce: function(obj, out){out.count++}});
@@ -93,7 +93,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 				));
 		return result;
 	}
-	
+
 	// by types
 	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial:
 	// {count:0}, $reduce: function(obj, out){out.count++}});

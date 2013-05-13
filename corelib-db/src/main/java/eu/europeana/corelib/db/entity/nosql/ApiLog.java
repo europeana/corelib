@@ -94,5 +94,4 @@ public class ApiLog implements NoSqlEntity {
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
-	
 }

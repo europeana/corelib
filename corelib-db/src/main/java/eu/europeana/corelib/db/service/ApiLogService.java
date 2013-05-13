@@ -39,9 +39,9 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	/*
 	 *  FINDERS / COUNTERS
 	 */
-	
+
 	List<ApiLog> findByApiKey(String apiKey);
-	
+
 	long countByApiKey(String apiKey);
 
 	long countByApiKeyByInterval(String apiKey, DateInterval interval);
@@ -51,9 +51,9 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	/*
 	 *  STATISTICS
 	 */
-	
+
 	DBObject getStatisticsByType();
 
 	DBObject getStatisticsByUser();
-	
+
 }
