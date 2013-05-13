@@ -91,6 +91,10 @@ public class StringArrayUtils {
 		}
 		return list;
 	}
+	
+	public static String[] toArray(String... items) {
+		return items;
+	}
 
 	/**
 	 * Adds a string array to alist of strings
