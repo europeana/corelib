@@ -20,10 +20,7 @@ package eu.europeana.corelib.web.model;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface PageInfo extends FragmentInfo {
+public interface FragmentInfo {
 
-	String getPageName();
-
-	String getPageTitle();
-
+	String getTemplate();
 }
