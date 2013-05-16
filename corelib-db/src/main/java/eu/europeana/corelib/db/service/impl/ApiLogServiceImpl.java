@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.db.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.morphia.query.Query;
@@ -28,6 +29,8 @@ import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.ApiLog;
 import eu.europeana.corelib.db.service.ApiLogService;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
+import eu.europeana.corelib.definitions.model.statistics.TypeStatistics;
+import eu.europeana.corelib.definitions.model.statistics.UserStatistics;
 import eu.europeana.corelib.utils.model.DateInterval;
 
 /**
@@ -81,35 +84,56 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0},
 	// $reduce: function(obj, out){out.count++}});
 	@Override
-	public DBObject getStatisticsByUser() {
-		DBObject result = getDao().getCollection()
-				.group(new GroupCommand(
+	public List<UserStatistics> getStatisticsByUser() {
+		DBObject result = getDao().getCollection().group(
+			new GroupCommand(
 				getDao().getCollection(), // collection
 				new BasicDBObject("apiKey", true), // keys,
 				null, // cond
 				new BasicDBObject("count", 0), // initial,
 				"function(obj, out){out.count++}", // $reduce
 				null // reduce
-				));
-		return result;
+			)
+		);
+
+		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
+		for (String key : result.keySet()) {
+			BasicDBObject item = (BasicDBObject) result.get(key);
+			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
+		}
+
+		return statistics;
 	}
 
 	// by types
 	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial:
 	// {count:0}, $reduce: function(obj, out){out.count++}});
 	@Override
-	public DBObject getStatisticsByType() {
+	public List<TypeStatistics> getStatisticsByType() {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
-		DBObject result = getDao().getCollection().group(new GroupCommand(
+		DBObject result = getDao().getCollection().group(
+			new GroupCommand(
 				getDao().getCollection(), // collection
 				keys, // keys
 				null, // cond
 				new BasicDBObject("count", 0), // initial
 				"function(obj, out){out.count++}", // $reduce
 				null // reduce
-				));
-		return result;
+			)
+		);
+		
+		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
+		for (String key : result.keySet()) {
+			BasicDBObject item = (BasicDBObject) result.get(key);
+			statistics.add(new TypeStatistics(
+					item.getString("recordType"), 
+					item.getString("profile"), 
+					item.getLong("count"))
+			);
+		}
+
+		return statistics;
 	}
 
 	/**

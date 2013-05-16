@@ -32,7 +32,7 @@ public class ApiKeyServiceTest {
 
 	@Resource
 	private TokenService tokenService;
-	
+
 	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Test

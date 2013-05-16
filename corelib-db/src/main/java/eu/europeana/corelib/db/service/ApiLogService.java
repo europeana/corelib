@@ -19,11 +19,11 @@ package eu.europeana.corelib.db.service;
 
 import java.util.List;
 
-import com.mongodb.DBObject;
-
 import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.ApiLog;
 import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlService;
+import eu.europeana.corelib.definitions.model.statistics.TypeStatistics;
+import eu.europeana.corelib.definitions.model.statistics.UserStatistics;
 import eu.europeana.corelib.utils.model.DateInterval;
 
 /**
@@ -52,8 +52,16 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 *  STATISTICS
 	 */
 
-	DBObject getStatisticsByType();
+	/**
+	 * Get statistics by type
+	 * @return
+	 */
+	List<TypeStatistics> getStatisticsByType();
 
-	DBObject getStatisticsByUser();
+	/**
+	 * Get statistics by user
+	 * @return
+	 */
+	List<UserStatistics> getStatisticsByUser();
 
 }
