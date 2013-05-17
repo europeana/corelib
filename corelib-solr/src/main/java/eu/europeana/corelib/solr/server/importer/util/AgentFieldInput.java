@@ -261,74 +261,74 @@ public final class AgentFieldInput {
 
 		if (agentType.getBiographicalInformation() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"biographicalInformation", MongoUtils
+					"rdaGr2BiographicalInformation", MongoUtils
 							.createLiteralMapFromString(agentType
 									.getBiographicalInformation()));
 		}
 
 		if (agentType.getDateOfBirth() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfBirth", MongoUtils
+					"rdaGr2DateOfBirth", MongoUtils
 							.createLiteralMapFromString(agentType
 									.getDateOfBirth()));
 		}
 
 		if (agentType.getDateOfDeath() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfDeath", MongoUtils
+					"rdaGr2DateOfDeath", MongoUtils
 							.createLiteralMapFromString(agentType
 									.getDateOfDeath()));
 		}
 
 		if (agentType.getDateOfEstablishment() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfEstablishment", MongoUtils
+					"rdaGr2DateOfEstablishment", MongoUtils
 							.createLiteralMapFromString(agentType
 									.getDateOfEstablishment()));
 		}
 
 		if (agentType.getDateOfTermination() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"dateOfTermination", MongoUtils
+					"rdaGr2DateOfTermination", MongoUtils
 							.createLiteralMapFromString(agentType
 									.getDateOfTermination()));
 		}
 
 		if (agentType.getGender() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"gender", MongoUtils.createLiteralMapFromString(agentType
+					"rdaGr2Gender", MongoUtils.createLiteralMapFromString(agentType
 							.getGender()));
 		}
 
 		if (agentType.getHasMetList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"hasMet", MongoUtils.createLiteralMapFromList(agentType
+					"edmHasMet", MongoUtils.createLiteralMapFromList(agentType
 							.getHasMetList()));
 		}
 
 		if (agentType.getIsRelatedToList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"isRelatedTo", MongoUtils
+					"edmIsRelatedTo", MongoUtils
 							.createResourceOrLiteralMapFromList(agentType
 									.getIsRelatedToList()));
 		}
 
 		if (agentType.getNameList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"name", MongoUtils.createLiteralMapFromList(agentType
+					"foafName", MongoUtils.createLiteralMapFromList(agentType
 							.getNameList()));
 		}
 
 		if (agentType.getSameAList() != null) {
 			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-					"sameAs",
+					"owlSameAs",
 					SolrUtils.resourceListToArray(agentType.getSameAList()));
 		}
 
 		if (agentType.getProfessionOrOccupation() != null) {
 			if (agentType.getHasMetList() != null) {
 				MongoUtils.update(AgentImpl.class, agent.getAbout(),
-						mongoServer, "professionOrOccupation", MongoUtils
+						mongoServer, "rdaGr2ProfessionOrOccupation", MongoUtils
 								.createResourceOrLiteralMapFromString(agentType
 										.getProfessionOrOccupation()));
 			}
