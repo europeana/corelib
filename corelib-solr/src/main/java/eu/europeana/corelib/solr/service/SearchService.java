@@ -176,5 +176,4 @@ public interface SearchService {
 	 */
 	Date getLastSolrUpdate() throws SolrServerException, IOException;
 
-	String escapeQuery(String query);
 }

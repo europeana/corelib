@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.LiteralType;
@@ -367,5 +368,9 @@ public final class SolrUtils {
 		}
 
 		return query;
+	}
+	
+	public static String escapeQuery(String query) {
+		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ").replace("\\-", "-");
 	}
 }

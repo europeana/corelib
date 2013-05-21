@@ -65,6 +65,7 @@ import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
@@ -451,7 +452,7 @@ public class SearchServiceImpl implements SearchService {
 					//return the term, the number of hits for each collation and the field that it should be mapped to
 					Term term = new Term(termResult.toString().trim(),
 							collation.getNumberOfHits(),
-							SuggestionTitle.getMappedTitle(field));
+							SuggestionTitle.getMappedTitle(field), SolrUtils.escapeQuery(StringArrayUtils.concat(field,":",query)));
 					results.add(term);
 				}
 			}
@@ -551,7 +552,5 @@ public class SearchServiceImpl implements SearchService {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
 	
-	public String escapeQuery(String query) {
-		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ").replace("\\-", "-");
-	}
+	
 }
