@@ -452,7 +452,7 @@ public class SearchServiceImpl implements SearchService {
 					//return the term, the number of hits for each collation and the field that it should be mapped to
 					Term term = new Term(termResult.toString().trim(),
 							collation.getNumberOfHits(),
-							SuggestionTitle.getMappedTitle(field), SolrUtils.escapeQuery(StringArrayUtils.concat(field,":",query)));
+							SuggestionTitle.getMappedTitle(field),StringArrayUtils.concat(field,":",SolrUtils.escapeQuery(termResult.toString().trim())));
 					results.add(term);
 				}
 			}
