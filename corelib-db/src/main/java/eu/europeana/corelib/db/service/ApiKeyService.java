@@ -2,6 +2,7 @@ package eu.europeana.corelib.db.service;
 
 import java.util.List;
 
+import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 
@@ -34,5 +35,22 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
 	 * @return true if limit is reached
 	 */
 	boolean checkReachedLimit(ApiKey apiKey);
-	
+
+	/**
+	 * Removes an ApiKey from database and User.
+	 * 
+	 * @param apiKeyId
+	 *            The primary key of the API key to remove
+	 * @throws DatabaseException
+	 */
+	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
+
+
+	/**
+	 * Creates an API Key
+	 */
+	ApiKey createApiKey(String token, String email, String apiKey,
+			String privateKey, Long limit, String username, String company,
+			String country, String firstName, String lastName, String website,
+			String address, String phone, String fieldOfWork) throws DatabaseException;	
 }

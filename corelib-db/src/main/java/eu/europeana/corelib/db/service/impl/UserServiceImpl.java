@@ -19,7 +19,6 @@ package eu.europeana.corelib.db.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -27,7 +26,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.entity.relational.SavedItemImpl;
 import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
@@ -38,7 +36,6 @@ import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
-import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
@@ -68,15 +65,14 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Resource
 	private ApiKeyService apiKeyService;
 
-	private final Logger log = Logger.getLogger(getClass().getName());
-
 	@Override
 	public User create(String tokenString, String username, String password)
 			throws DatabaseException {
-		return create(tokenString, username, password, false, "", "", "", "", "", "", "", "");
+		return create(tokenString, username, password, false, null, null, null, null, null, null, null, null);
 	}
 
-	private User create(String tokenString, String username, String password,
+	@Override
+	public User create(String tokenString, String username, String password,
 			boolean isApiRegistration, String company, String country,
 			String firstName, String lastName, String website, String address, 
 			String phone, String fieldOfWork)
@@ -296,38 +292,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		return user;
 	}
 
-	@Override
-	public User createApiKey(String token, String email, String apiKey,
-			String privateKey, Long limit, String username,
-			String company, String country, String firstName, String lastName, 
-			String website, String address, String phone, String fieldOfWork)
-			throws DatabaseException {
-
-		User user = findByEmail(email);
-		if (user == null) {
-			log.info("create new user");
-			user = create(token, username, null, true,
-					company, country, firstName, lastName, website, address, phone, fieldOfWork);
-		} else {
-			log.info("update existing user");
-			user.setCompany(company);
-			user.setCountry(country);
-			user.setFirstName(firstName);
-			user.setLastName(lastName);
-			user.setWebsite(website);
-			user.setAddress(address);
-			user.setPhone(phone);
-			user.setFieldOfWork(fieldOfWork);
-		}
-
-		ApiKey api = new ApiKeyImpl();
-		api.setApiKey(apiKey);
-		api.setPrivateKey(privateKey);
-		api.setUsageLimit(limit);
-		api.setUser(user);
-		user.getApiKeys().add(api);
-		return user;
-	}
 
 	@Override
 	public void removeSavedSearch(Long userId, Long savedSearchId)
@@ -357,19 +321,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 				socialTagId);
 		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
-		}
-	}
-
-	@Override
-	public void removeApiKey(Long userId, String apiKeyId)
-			throws DatabaseException {
-		ApiKey apiKey = getDao().findByPK(ApiKeyImpl.class, apiKeyId);
-		// ApiKey apiKey = apiKeyService.findByID(apiKeyId);
-		if ((apiKey != null) && apiKey.getUser().getId().equals(userId)) {
-			log.info("removing API key: " + apiKey);
-			apiKey.getUser().getApiKeys().remove(apiKey);
-		} else {
-			log.info("Unable to delete api key");
 		}
 	}
 

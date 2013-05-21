@@ -46,6 +46,14 @@ public interface UserService extends AbstractService<User> {
 	User create(String tokenString, String username, String password)
 			throws DatabaseException;
 
+
+	/**
+	 * Creates a new User, based on a existing token, and given params
+	 * 
+	 */
+	User create(String tokenString, String username, String password, boolean isApiRegistration, String company, String country,
+			String firstName, String lastName, String website, String address, String phone, String fieldOfWork) throws DatabaseException;
+	
 	/**
 	 * Returns a User if there is a valid email provided.
 	 * 
@@ -175,39 +183,6 @@ public interface UserService extends AbstractService<User> {
 	void removeSocialTag(Long userId, Long socialTagId)
 			throws DatabaseException;
 
-	/**
-	 * Removes an ApiKey from database and User.
-	 * 
-	 * @param apiKeyId
-	 *            The primary key of the API key to remove
-	 * @throws DatabaseException
-	 */
-	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
-
-	/**
-	 * Creates an API Key
-	 *
-	 * @param token
-	 * @param email
-	 * @param apiKey
-	 * @param privateKey
-	 * @param limit
-	 * @param username
-	 * @param company
-	 * @param country
-	 * @param firstName
-	 * @param lastName
-	 * @param website
-	 * @param address
-	 * @param phone
-	 * @param fieldOfWork
-	 * @return
-	 * @throws DatabaseException
-	 */
-	User createApiKey(String token, String email, String apiKey,
-			String privateKey, Long limit, String username, String company,
-			String country, String firstName, String lastName, String website,
-			String address, String phone, String fieldOfWork) throws DatabaseException;
 	
 	User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException;
 }

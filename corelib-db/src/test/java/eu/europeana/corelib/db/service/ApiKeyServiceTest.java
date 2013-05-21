@@ -2,8 +2,6 @@ package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.logging.Logger;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -33,8 +31,6 @@ public class ApiKeyServiceTest {
 	@Resource
 	private TokenService tokenService;
 
-	private final Logger log = Logger.getLogger(getClass().getName());
-
 	@Test
 	public void test() throws DatabaseException {
 		String email = "test@kb.nl";
@@ -50,19 +46,14 @@ public class ApiKeyServiceTest {
 		String address = "test_address";
 		String phone = "test_phone";
 		String fieldOfWork = "test_fieldOfWork";
-		log.info(String.format("%s, %s", apiKey, privateKey));
 		
 		Token token = tokenService.create(email);
 		token.setToken(tokenString);
 		tokenService.store(token);
-		User user = userService.createApiKey(tokenString, email, apiKey, privateKey,
+		ApiKey createdApiKey = apiKeyService.createApiKey(tokenString, email, apiKey, privateKey,
 				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
 				lastName, website, address, phone, fieldOfWork);
-		log.info("user: " + user.getId());
-
-		log.info("api keys: " + user.getApiKeys().iterator().next().getId());
-
-		ApiKey createdApiKey = user.getApiKeys().iterator().next();
+		User user = createdApiKey.getUser();
 		assertEquals(apiKey, createdApiKey.getId());
 		assertEquals(user.getId(), createdApiKey.getUser().getId());
 
