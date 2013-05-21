@@ -36,10 +36,21 @@ public class Term implements Comparable<Term>{
 	
 	private String field;
 	
-	public Term(String term, long frequency, String field) {
+	private String query;
+	
+	public Term(String term, long frequency, String field, String query) {
 		this.term = term;
 		this.frequency = frequency;
 		this.field = field;
+		this.query = query;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 	public String getTerm() {
