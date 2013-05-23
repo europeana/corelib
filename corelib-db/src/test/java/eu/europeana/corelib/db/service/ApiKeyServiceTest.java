@@ -84,19 +84,16 @@ public class ApiKeyServiceTest {
 
 		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
-		int branch = -1;
 		try {
 			long requested = apiKeyService.checkReachedLimit(apiKey);
 			assertEquals(1, requested);
-			branch = 1;
 		} catch (DatabaseException e) {
 			fail("This line should not be reached");
-			branch = 2;
 		} catch (LimitReachedException e) {
 			fail("This line should not be reached");
-			branch = 3;
+		} catch (Exception e) {
+			fail("This line should not be reached");
 		}
-		assertEquals(1, branch);
 	}
 
 	@Test
@@ -110,19 +107,16 @@ public class ApiKeyServiceTest {
 
 		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
-		int branch = -1;
 		try {
 			long requested = apiKeyService.checkReachedLimit(null);
 			fail("This line should not be reached");
-			branch = 1;
 		} catch (DatabaseException e) {
 			assertEquals(ProblemType.INVALIDARGUMENTS, e.getProblem());
-			branch = 2;
 		} catch (LimitReachedException e) {
 			fail("This line should not be reached");
-			branch = 3;
+		} catch (Exception e) {
+			fail("This line should not be reached");
 		}
-		assertEquals(2, branch);
 	}
 
 	@Test
@@ -137,20 +131,17 @@ public class ApiKeyServiceTest {
 		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 		apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
 
-		int branch = -1;
 		try {
 			long requested = apiKeyService.checkReachedLimit(apiKey);
-			fail("This line should never be reached");
-			branch = 1;
+			fail("This line should not be reached");
 		} catch (DatabaseException e) {
-			fail("This line should never be reached");
-			branch = 2;
+			fail("This line should not be reached");
 		} catch (LimitReachedException e) {
 			assertEquals(2, e.getRequested());
 			assertEquals(2, e.getLimit());
-			branch = 3;
+		} catch (Exception e) {
+			fail("This line should not be reached");
 		}
-		assertEquals(3, branch);
 	}
 
 	private String generatePassPhrase(int length) {
