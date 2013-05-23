@@ -1,7 +1,6 @@
 package eu.europeana.corelib.db.service.impl;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -15,8 +14,6 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements ApiKeyService {
-	
-	private final Logger log = Logger.getLogger(getClass().getName());
 	
 	@Resource
 	private ApiLogService apiLogService;
@@ -54,11 +51,9 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 
 		User user = userService.findByEmail(email);
 		if (user == null) {
-			log.info("create new user");
 			user = userService.create(token, username, null, true,
 					company, country, firstName, lastName, website, address, phone, fieldOfWork);
 		} else {
-			log.info("update existing user");
 			user.setCompany(company);
 			user.setCountry(country);
 			user.setFirstName(firstName);
@@ -83,12 +78,8 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 	public void removeApiKey(Long userId, String apiKeyId)
 			throws DatabaseException {
 		ApiKey apiKey = getDao().findByPK(apiKeyId);
-		// ApiKey apiKey = apiKeyService.findByID(apiKeyId);
 		if ((apiKey != null) && apiKey.getUser().getId().equals(userId)) {
-			log.info("removing API key: " + apiKey);
 			apiKey.getUser().getApiKeys().remove(apiKey);
-		} else {
-			log.info("Unable to delete api key");
 		}
 	}
 	
