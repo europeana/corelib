@@ -79,16 +79,15 @@ public class Term implements Comparable<Term>{
 
 	@Override
 	public int compareTo(Term o) {
-		final int SMALLER=1;
-		final int EQUALS=0;
-		final int GREATER=-1;
-		if(frequency<o.getFrequency()){
+		final int SMALLER = 1;
+		final int EQUALS  = 0;
+		final int GREATER = -1;
+		if (frequency < o.getFrequency()) {
 			return SMALLER;
 		}
-		if(frequency>o.getFrequency()){
+		if (frequency > o.getFrequency()) {
 			return GREATER;
 		}
-			return EQUALS;
-		
+		return EQUALS;
 	}
 }
