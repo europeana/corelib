@@ -29,11 +29,16 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
 	List<ApiKey> findAllSortByDate(boolean asc, int offset, int limit);
 	
 	/**
-	 * checks if user does not reached API limit yet. 
+	 * Checks if user does not reached API limit yet. 
 	 * 
-	 * @param apiKey The existing apikey.
+	 * @param apiKey
+	 *   The existing apikey.
 	 * 
-	 * @return true if limit is reached
+	 * @return long
+	 *   Return the number of requests so far if limit is not reached
+	 * 
+	 * @throws DatabaseException if the API key is null
+	 * @throws LimitReachedException if the limit is reached
 	 */
 	long checkReachedLimit(ApiKey apiKey) throws DatabaseException, LimitReachedException;
 

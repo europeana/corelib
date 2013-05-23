@@ -1,7 +1,11 @@
 package eu.europeana.corelib.db.exception;
 
 /**
- * Exception about that user reached his/her API usage limit
+ * Exception thrown when user reached his/her API usage limit. The exception 
+ * contains a string indicating the reasons of the exceptions including the
+ * current limit, and the number of already requested API calls. With
+ * getLimit() and getRequested() methods client can read these values 
+ * independently.
  */
 public class LimitReachedException extends Exception {
 
