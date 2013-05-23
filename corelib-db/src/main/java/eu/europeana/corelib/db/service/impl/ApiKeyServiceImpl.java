@@ -6,12 +6,14 @@ import javax.annotation.Resource;
 
 import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.db.service.ApiKeyService;
 import eu.europeana.corelib.db.service.ApiLogService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements ApiKeyService {
 	
@@ -32,15 +34,19 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 		String namedQuery = asc ? ApiKeyImpl.QUERY_SORT_BY_DATE_ASC : ApiKeyImpl.QUERY_SORT_BY_DATE_DESC;
 		return getDao().findByNamedQueryLimited(namedQuery, offset, limit);
 	}
-	
-	@Override
-	public boolean checkReachedLimit(ApiKey apiKey) {
-		if (apiKey != null) {
-			return apiKey.getUsageLimit() <= apiLogService.countByApiKey(apiKey.getId());
-		}
-		return false;
-	}
 
+	@Override
+	public long checkReachedLimit(ApiKey apiKey) throws DatabaseException, LimitReachedException {
+		if (apiKey == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+
+		long requestNumber = apiLogService.countByApiKey(apiKey.getId());
+		if (apiKey.getUsageLimit() <= requestNumber) {
+			throw new LimitReachedException(apiKey.getUsageLimit(), requestNumber);
+		}
+		return requestNumber;
+	}
 
 	@Override
 	public ApiKey createApiKey(String token, String email, String apiKey,
