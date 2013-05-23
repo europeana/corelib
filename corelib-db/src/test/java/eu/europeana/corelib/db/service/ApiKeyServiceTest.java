@@ -1,6 +1,7 @@
 package eu.europeana.corelib.db.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import javax.annotation.Resource;
 
@@ -10,10 +11,16 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.db.dao.NosqlDao;
+import eu.europeana.corelib.db.entity.enums.RecordType;
+import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
+import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.definitions.exception.ProblemType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml" , "/corelib-db-test.xml"})
@@ -31,8 +38,14 @@ public class ApiKeyServiceTest {
 	@Resource
 	private TokenService tokenService;
 
+	@Resource
+	private ApiLogService apiLogService;
+
+	@Resource(name = "corelib_db_apiLogDao")
+	NosqlDao<ImageCache, String> apiLogDao;
+
 	@Test
-	public void test() throws DatabaseException {
+	public void createApiKeyTest() throws DatabaseException {
 		String email = "test@kb.nl";
 		String apiKey = generatePassPhrase(9);
 		String privateKey = generatePassPhrase(9);
@@ -58,6 +71,86 @@ public class ApiKeyServiceTest {
 		assertEquals(user.getId(), createdApiKey.getUser().getId());
 
 		userService.remove(user);
+	}
+
+	@Test
+	public void checkReachedLimitSuccessTest() {
+		apiLogDao.getCollection().drop();
+
+		ApiKey apiKey = new ApiKeyImpl();
+		apiKey.setApiKey("testKey");
+		apiKey.setPrivateKey("testKey");
+		apiKey.setUsageLimit(2);
+
+		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
+
+		int branch = -1;
+		try {
+			long requested = apiKeyService.checkReachedLimit(apiKey);
+			assertEquals(1, requested);
+			branch = 1;
+		} catch (DatabaseException e) {
+			fail("This line should not be reached");
+			branch = 2;
+		} catch (LimitReachedException e) {
+			fail("This line should not be reached");
+			branch = 3;
+		}
+		assertEquals(1, branch);
+	}
+
+	@Test
+	public void checkReachedLimitWithDatabaseExceptionTest() {
+		apiLogDao.getCollection().drop();
+
+		ApiKey apiKey = new ApiKeyImpl();
+		apiKey.setApiKey("testKey");
+		apiKey.setPrivateKey("testKey");
+		apiKey.setUsageLimit(2);
+
+		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
+
+		int branch = -1;
+		try {
+			long requested = apiKeyService.checkReachedLimit(null);
+			fail("This line should not be reached");
+			branch = 1;
+		} catch (DatabaseException e) {
+			assertEquals(ProblemType.INVALIDARGUMENTS, e.getProblem());
+			branch = 2;
+		} catch (LimitReachedException e) {
+			fail("This line should not be reached");
+			branch = 3;
+		}
+		assertEquals(2, branch);
+	}
+
+	@Test
+	public void checkReachedLimitWithLimitReachedExceptionTest() {
+		apiLogDao.getCollection().drop();
+
+		ApiKey apiKey = new ApiKeyImpl();
+		apiKey.setApiKey("testKey");
+		apiKey.setPrivateKey("testKey");
+		apiKey.setUsageLimit(2);
+
+		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
+		apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
+
+		int branch = -1;
+		try {
+			long requested = apiKeyService.checkReachedLimit(apiKey);
+			fail("This line should never be reached");
+			branch = 1;
+		} catch (DatabaseException e) {
+			fail("This line should never be reached");
+			branch = 2;
+		} catch (LimitReachedException e) {
+			assertEquals(2, e.getRequested());
+			assertEquals(2, e.getLimit());
+			branch = 3;
+		}
+		assertEquals(3, branch);
 	}
 
 	private String generatePassPhrase(int length) {
