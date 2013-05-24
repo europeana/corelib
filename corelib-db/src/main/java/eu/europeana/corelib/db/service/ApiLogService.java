@@ -64,4 +64,9 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 */
 	List<UserStatistics> getStatisticsByUser();
 
+	/**
+	 * Get statistics by user
+	 * @return
+	 */
+	List<UserStatistics> getStatisticsByUsersByInterval(DateInterval interval);
 }

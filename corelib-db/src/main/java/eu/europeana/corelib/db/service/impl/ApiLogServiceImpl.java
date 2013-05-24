@@ -18,6 +18,7 @@
 package eu.europeana.corelib.db.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.code.morphia.query.Query;
@@ -62,7 +63,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	public long countByApiKey(String apiKey) {
 		return getDao().count("apiKey", apiKey);
 	}
-	
+
 	@Override
 	public long countByApiKeyByInterval(String apiKey, DateInterval interval) {
 		Query<ApiLog> query = getDao().createQuery();
@@ -141,6 +142,41 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	 */
 	public void clearLogs() {
 		getDao().deleteAll();
+	}
+
+	// db.logs.group({
+	//   key: {apiKey: true}, 
+	//   cond: {"timestamp": {$gte: ISODate("2013-04-30T22:00:00.000Z"), $lt: ISODate("2013-05-31T21:59:59.000Z")}}, 
+	//   initial: {count:0}, 
+	//   $reduce: function(obj, out){out.count++}
+	// });
+	@Override
+	public List<UserStatistics> getStatisticsByUsersByInterval(DateInterval interval) {
+		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(
+			Arrays.asList(
+				new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
+				new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
+			)
+		);
+		DBObject condition = new BasicDBObject("$and", timestampConditions);
+
+		GroupCommand groupCommand = new GroupCommand(
+			getDao().getCollection(), // collection
+			new BasicDBObject("apiKey", true), // keys,
+			condition, // cond
+			new BasicDBObject("count", 0), // initial,
+			"function(obj, out){out.count++}", // $reduce
+			null // reduce
+		);
+
+		DBObject result = getDao().getCollection().group(groupCommand);
+		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
+		for (String key : result.keySet()) {
+			BasicDBObject item = (BasicDBObject) result.get(key);
+			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
+		}
+
+		return statistics;
 	}
 
 }
