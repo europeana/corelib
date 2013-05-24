@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.definitions.solr.model;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 /**
  * Container class for terms of suggestions. It has three properties:
  * 
@@ -81,7 +83,7 @@ public class Term implements Comparable<Term>{
 	public int compareTo(Term o) {
 		if (o != null) {
 			// Note this compare function is reversed on purpose!!!
-			return Long.compare(o.frequency, frequency);
+			return NumberUtils.compare(o.frequency, frequency);
 		}
 		return 1;
 	}
