@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,16 @@ public class ApiLogServiceTest {
 	 */
 	@Before
 	public void setup() throws IOException {
+		apiLogDao.getCollection().drop();
+	}
+
+	/**
+	 * Cleaning the testing session's data
+	 * 
+	 * @throws IOException
+	 */
+	@After
+	public void tearDown() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
 
