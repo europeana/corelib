@@ -32,10 +32,10 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Borys Omelayenko
  */
 public enum DocType {
-	TEXT("doc", "pdf"), 
-	IMAGE("jpeg", "jpg", "png", "tif"), 
-	SOUND("mp3"), 
-	VIDEO("avi", "mpg"), 
+	TEXT("doc", "pdf"),
+	IMAGE("jpeg", "jpg", "png", "tif"),
+	SOUND("mp3"),
+	VIDEO("avi", "mpg"),
 	_3D;
 
 	String[] extentions;

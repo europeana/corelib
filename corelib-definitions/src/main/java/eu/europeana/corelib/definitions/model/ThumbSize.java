@@ -2,7 +2,9 @@ package eu.europeana.corelib.definitions.model;
 
 public enum ThumbSize {
 
-	TINY(27,40), MEDIUM(110,160), LARGE(380,200);
+	TINY(27,40),
+	MEDIUM(110,160),
+	LARGE(380,200);
 
 	private int maxWidth;
 
