@@ -21,7 +21,7 @@ package eu.europeana.corelib.definitions.solr;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public enum QueryType {
-	
+
 	ADVANCED("advanced"), 
 	MORE_LIKE_THIS("moreLikeThis"),
 	SIMPLE("search"),
