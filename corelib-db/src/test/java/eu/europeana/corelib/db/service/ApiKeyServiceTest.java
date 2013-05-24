@@ -24,7 +24,6 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml" , "/corelib-db-test.xml"})
-// "/corelib-db-test.xml"
 public class ApiKeyServiceTest {
 
 	private static final long DEFAULT_USAGE_LIMIT = 10000;
@@ -74,9 +73,7 @@ public class ApiKeyServiceTest {
 	}
 
 	@Test
-	public void checkReachedLimitSuccessTest() {
-		apiLogDao.getCollection().drop();
-
+	public void checkReachedLimitSuccessTest() throws DatabaseException, LimitReachedException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");
 		apiKey.setPrivateKey("testKey");
@@ -84,22 +81,14 @@ public class ApiKeyServiceTest {
 
 		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
-		try {
-			long requested = apiKeyService.checkReachedLimit(apiKey);
-			assertEquals(1, requested);
-		} catch (DatabaseException e) {
-			fail("This line should not be reached");
-		} catch (LimitReachedException e) {
-			fail("This line should not be reached");
-		} catch (Exception e) {
-			fail("This line should not be reached");
-		}
+		long requested = apiKeyService.checkReachedLimit(apiKey);
+		assertEquals(1, requested);
+
+		apiLogDao.getCollection().drop();
 	}
 
 	@Test
-	public void checkReachedLimitWithDatabaseExceptionTest() {
-		apiLogDao.getCollection().drop();
-
+	public void checkReachedLimitWithDatabaseExceptionTest() throws LimitReachedException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");
 		apiKey.setPrivateKey("testKey");
@@ -108,21 +97,17 @@ public class ApiKeyServiceTest {
 		apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
 		try {
-			long requested = apiKeyService.checkReachedLimit(null);
+			apiKeyService.checkReachedLimit(null);
 			fail("This line should not be reached");
 		} catch (DatabaseException e) {
 			assertEquals(ProblemType.INVALIDARGUMENTS, e.getProblem());
-		} catch (LimitReachedException e) {
-			fail("This line should not be reached");
-		} catch (Exception e) {
-			fail("This line should not be reached");
+		} finally {
+			apiLogDao.getCollection().drop();
 		}
 	}
 
 	@Test
-	public void checkReachedLimitWithLimitReachedExceptionTest() {
-		apiLogDao.getCollection().drop();
-
+	public void checkReachedLimitWithLimitReachedExceptionTest() throws DatabaseException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");
 		apiKey.setPrivateKey("testKey");
@@ -132,15 +117,13 @@ public class ApiKeyServiceTest {
 		apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
 
 		try {
-			long requested = apiKeyService.checkReachedLimit(apiKey);
-			fail("This line should not be reached");
-		} catch (DatabaseException e) {
+			apiKeyService.checkReachedLimit(apiKey);
 			fail("This line should not be reached");
 		} catch (LimitReachedException e) {
 			assertEquals(2, e.getRequested());
 			assertEquals(2, e.getLimit());
-		} catch (Exception e) {
-			fail("This line should not be reached");
+		} finally {
+			apiLogDao.getCollection().drop();
 		}
 	}
 
