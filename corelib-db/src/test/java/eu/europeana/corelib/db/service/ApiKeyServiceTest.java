@@ -3,9 +3,13 @@ package eu.europeana.corelib.db.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -42,6 +46,26 @@ public class ApiKeyServiceTest {
 
 	@Resource(name = "corelib_db_apiLogDao")
 	NosqlDao<ImageCache, String> apiLogDao;
+
+	/**
+	 * Initialise the testing session
+	 * 
+	 * @throws IOException
+	 */
+	@Before
+	public void setup() throws IOException {
+		apiLogDao.getCollection().drop();
+	}
+
+	/**
+	 * Initialise the testing session
+	 * 
+	 * @throws IOException
+	 */
+	@After
+	public void tearDown() throws IOException {
+		apiLogDao.getCollection().drop();
+	}
 
 	@Test
 	public void createApiKeyTest() throws DatabaseException {
@@ -83,8 +107,6 @@ public class ApiKeyServiceTest {
 
 		long requested = apiKeyService.checkReachedLimit(apiKey);
 		assertEquals(1, requested);
-
-		apiLogDao.getCollection().drop();
 	}
 
 	@Test
@@ -101,8 +123,6 @@ public class ApiKeyServiceTest {
 			fail("This line should not be reached");
 		} catch (DatabaseException e) {
 			assertEquals(ProblemType.INVALIDARGUMENTS, e.getProblem());
-		} finally {
-			apiLogDao.getCollection().drop();
 		}
 	}
 
@@ -122,8 +142,6 @@ public class ApiKeyServiceTest {
 		} catch (LimitReachedException e) {
 			assertEquals(2, e.getRequested());
 			assertEquals(2, e.getLimit());
-		} finally {
-			apiLogDao.getCollection().drop();
 		}
 	}
 
