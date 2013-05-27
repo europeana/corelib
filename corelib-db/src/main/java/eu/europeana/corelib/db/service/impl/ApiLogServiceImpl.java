@@ -86,22 +86,9 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	// $reduce: function(obj, out){out.count++}});
 	@Override
 	public List<UserStatistics> getStatisticsByUser() {
-		DBObject result = getDao().getCollection().group(
-			new GroupCommand(
-				getDao().getCollection(), // collection
-				new BasicDBObject("apiKey", true), // keys,
-				null, // cond
-				new BasicDBObject("count", 0), // initial,
-				"function(obj, out){out.count++}", // $reduce
-				null // reduce
-			)
-		);
+		DBObject result = groupByApiKey(null);
 
-		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
-		for (String key : result.keySet()) {
-			BasicDBObject item = (BasicDBObject) result.get(key);
-			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
-		}
+		List<UserStatistics> statistics = createUserStatisticsList(result);
 
 		return statistics;
 	}
@@ -113,17 +100,9 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	public List<TypeStatistics> getStatisticsByType() {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
-		DBObject result = getDao().getCollection().group(
-			new GroupCommand(
-				getDao().getCollection(), // collection
-				keys, // keys
-				null, // cond
-				new BasicDBObject("count", 0), // initial
-				"function(obj, out){out.count++}", // $reduce
-				null // reduce
-			)
-		);
-		
+
+		DBObject result = groupBy(keys, null);
+
 		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
 		for (String key : result.keySet()) {
 			BasicDBObject item = (BasicDBObject) result.get(key);
@@ -160,9 +139,50 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		);
 		DBObject condition = new BasicDBObject("$and", timestampConditions);
 
+		DBObject result = groupByApiKey(condition);
+		List<UserStatistics> statistics = createUserStatisticsList(result);
+
+		return statistics;
+	}
+
+	@Override
+	public List<UserStatistics> getStatisticsByUsersByRecordType(String recordType) {
+		DBObject condition = new BasicDBObject("recordType", recordType);
+
+		DBObject result = groupByApiKey(condition);
+		List<UserStatistics> statistics = createUserStatisticsList(result);
+
+		return statistics;
+	}
+
+	private List<UserStatistics> createUserStatisticsList(DBObject result) {
+		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
+		for (String key : result.keySet()) {
+			BasicDBObject item = (BasicDBObject) result.get(key);
+			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
+		}
+		return statistics;
+	}
+
+	private DBObject groupByApiKey(DBObject condition) {
+		DBObject keys = new BasicDBObject("apiKey", true);
+
+		return groupBy(keys, condition);
+	}
+
+	/**
+	 * Issues a MongoDB group command, and return the result set
+	 * 
+	 * @param keys
+	 *   The keys to group by
+	 * @param condition
+	 *   Search conditions
+	 * @return
+	 */
+	private DBObject groupBy(DBObject keys, DBObject condition) {
 		GroupCommand groupCommand = new GroupCommand(
 			getDao().getCollection(), // collection
-			new BasicDBObject("apiKey", true), // keys,
+			keys, // keys,
 			condition, // cond
 			new BasicDBObject("count", 0), // initial,
 			"function(obj, out){out.count++}", // $reduce
@@ -170,13 +190,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		);
 
 		DBObject result = getDao().getCollection().group(groupCommand);
-		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
-		for (String key : result.keySet()) {
-			BasicDBObject item = (BasicDBObject) result.get(key);
-			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
-		}
-
-		return statistics;
+		return result;
 	}
 
 }
