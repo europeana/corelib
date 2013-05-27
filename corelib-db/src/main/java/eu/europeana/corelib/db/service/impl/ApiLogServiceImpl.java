@@ -155,6 +155,29 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		return statistics;
 	}
 
+	@Override
+	public List<TypeStatistics> getStatisticsByRecordTypesByUser(String apiKey) {
+		DBObject keys = new BasicDBObject("recordType", true);
+		keys.put("profile", true);
+
+		DBObject condition = new BasicDBObject("apiKey", apiKey);
+
+		DBObject result = groupBy(keys, condition);
+
+		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
+		for (String key : result.keySet()) {
+			BasicDBObject item = (BasicDBObject) result.get(key);
+			statistics.add(new TypeStatistics(
+					item.getString("recordType"), 
+					item.getString("profile"), 
+					item.getLong("count"))
+			);
+		}
+
+		return statistics;
+
+	}
+
 	private List<UserStatistics> createUserStatisticsList(DBObject result) {
 		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
 		for (String key : result.keySet()) {

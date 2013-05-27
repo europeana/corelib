@@ -79,4 +79,12 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 * @return
 	 */
 	List<UserStatistics> getStatisticsByUsersByRecordType(String recordType);
+
+	/**
+	 * Get user statistics by API request type
+	 * @param recordType
+	 *   The API request type (LIMIT, SEARCH, OBJECT)
+	 * @return
+	 */
+	List<TypeStatistics> getStatisticsByRecordTypesByUser(String apiKey);
 }
