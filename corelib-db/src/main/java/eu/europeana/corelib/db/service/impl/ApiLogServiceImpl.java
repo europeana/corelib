@@ -65,27 +65,38 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	@Override
-	public long countByApiKeyByInterval(String apiKey, DateInterval interval) {
+	public long countByIntervalAndApiKey(DateInterval interval, String apiKey) {
 		Query<ApiLog> query = getDao().createQuery();
 		query.field("apiKey").equal(apiKey);
-		query.field("timestamp").greaterThanOrEq(interval.getBegin());
-		query.field("timestamp").lessThan(interval.getEnd());
+		addDateRangeQuery(query, interval);
+		return query.countAll();
+	}
+
+	@Override
+	public long countByIntervalAndRecordType(DateInterval interval, String recordType) {
+		Query<ApiLog> query = getDao().createQuery();
+		query.field("recordType").equal(recordType);
+		addDateRangeQuery(query, interval);
 		return query.countAll();
 	}
 
 	@Override
 	public long countByInterval(DateInterval interval) {
 		Query<ApiLog> query = getDao().createQuery();
+		addDateRangeQuery(query, interval);
+		return query.countAll();
+	}
+
+	private void addDateRangeQuery(Query<ApiLog> query, DateInterval interval) {
 		query.field("timestamp").greaterThanOrEq(interval.getBegin());
 		query.field("timestamp").lessThan(interval.getEnd());
-		return query.countAll();
 	}
 
 	// by users
 	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0},
 	// $reduce: function(obj, out){out.count++}});
 	@Override
-	public List<UserStatistics> getStatisticsByUser() {
+	public List<UserStatistics> getStatisticsForUser() {
 		DBObject result = groupByApiKey(null);
 
 		List<UserStatistics> statistics = createUserStatisticsList(result);
@@ -97,21 +108,13 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial:
 	// {count:0}, $reduce: function(obj, out){out.count++}});
 	@Override
-	public List<TypeStatistics> getStatisticsByType() {
+	public List<TypeStatistics> getStatisticsForType() {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
 
 		DBObject result = groupBy(keys, null);
 
-		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
-		for (String key : result.keySet()) {
-			BasicDBObject item = (BasicDBObject) result.get(key);
-			statistics.add(new TypeStatistics(
-					item.getString("recordType"), 
-					item.getString("profile"), 
-					item.getLong("count"))
-			);
-		}
+		List<TypeStatistics> statistics = createTypeStatistics(result);
 
 		return statistics;
 	}
@@ -130,7 +133,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	//   $reduce: function(obj, out){out.count++}
 	// });
 	@Override
-	public List<UserStatistics> getStatisticsByUsersByInterval(DateInterval interval) {
+	public List<UserStatistics> getStatisticsForUsersByInterval(DateInterval interval) {
 		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(
 			Arrays.asList(
 				new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
@@ -146,7 +149,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	@Override
-	public List<UserStatistics> getStatisticsByUsersByRecordType(String recordType) {
+	public List<UserStatistics> getStatisticsForUsersByRecordType(String recordType) {
 		DBObject condition = new BasicDBObject("recordType", recordType);
 
 		DBObject result = groupByApiKey(condition);
@@ -156,14 +159,32 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	@Override
-	public List<TypeStatistics> getStatisticsByRecordTypesByUser(String apiKey) {
+	public List<TypeStatistics> getStatisticsForRecordTypesByUser(String apiKey) {
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
 
 		DBObject condition = new BasicDBObject("apiKey", apiKey);
 
-		DBObject result = groupBy(keys, condition);
+		return createTypeStatistics(groupBy(keys, condition));
+	}
 
+	@Override
+	public List<TypeStatistics> getStatisticsForRecordTypesByInterval(DateInterval interval) {
+		DBObject keys = new BasicDBObject("recordType", true);
+		keys.put("profile", true);
+
+		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(
+			Arrays.asList(
+				new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
+				new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
+			)
+		);
+		DBObject condition = new BasicDBObject("$and", timestampConditions);
+
+		return createTypeStatistics(groupBy(keys, condition));
+	}
+
+	private List<TypeStatistics> createTypeStatistics(DBObject result) {
 		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
 		for (String key : result.keySet()) {
 			BasicDBObject item = (BasicDBObject) result.get(key);
@@ -173,9 +194,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 					item.getLong("count"))
 			);
 		}
-
 		return statistics;
-
 	}
 
 	private List<UserStatistics> createUserStatisticsList(DBObject result) {

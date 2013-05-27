@@ -58,7 +58,7 @@ public class ApiLogServiceTest {
 	public void testCountByApiKeyByInterval() throws CloneNotSupportedException {
 		DateInterval interval = DateIntervalUtils.getToday();
 
-		long count = apiLogService.countByApiKeyByInterval(apiKey, interval);
+		long count = apiLogService.countByIntervalAndApiKey(interval, apiKey);
 		assertNotNull(count);
 		assertEquals(0, count);
 
@@ -67,7 +67,7 @@ public class ApiLogServiceTest {
 
 		// the interval contains the end date, which was before insertions, so we have to refresh it.
 		interval.setEnd(new Date());
-		long count2 = apiLogService.countByApiKeyByInterval(apiKey, interval);
+		long count2 = apiLogService.countByIntervalAndApiKey(interval, apiKey);
 		assertNotNull(count2);
 		assertEquals(2, count2);
 	}

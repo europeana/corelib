@@ -44,9 +44,12 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 
 	long countByApiKey(String apiKey);
 
-	long countByApiKeyByInterval(String apiKey, DateInterval interval);
-
 	long countByInterval(DateInterval interval);
+
+	long countByIntervalAndApiKey(DateInterval interval, String apiKey);
+
+	long countByIntervalAndRecordType(DateInterval interval, String recordType);
+
 
 	/*
 	 *  STATISTICS
@@ -56,13 +59,13 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 * Get statistics by type
 	 * @return
 	 */
-	List<TypeStatistics> getStatisticsByType();
+	List<TypeStatistics> getStatisticsForType();
 
 	/**
 	 * Get statistics by user
 	 * @return
 	 */
-	List<UserStatistics> getStatisticsByUser();
+	List<UserStatistics> getStatisticsForUser();
 
 	/**
 	 * Get statistics by user in a given date interval
@@ -70,7 +73,7 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 *   A date interval, in which the statistics should be calculated
 	 * @return
 	 */
-	List<UserStatistics> getStatisticsByUsersByInterval(DateInterval interval);
+	List<UserStatistics> getStatisticsForUsersByInterval(DateInterval interval);
 
 	/**
 	 * Get user statistics by API request type
@@ -78,7 +81,7 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 *   The API request type (LIMIT, SEARCH, OBJECT)
 	 * @return
 	 */
-	List<UserStatistics> getStatisticsByUsersByRecordType(String recordType);
+	List<UserStatistics> getStatisticsForUsersByRecordType(String recordType);
 
 	/**
 	 * Get user statistics by API request type
@@ -86,5 +89,14 @@ public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 	 *   The API request type (LIMIT, SEARCH, OBJECT)
 	 * @return
 	 */
-	List<TypeStatistics> getStatisticsByRecordTypesByUser(String apiKey);
+	List<TypeStatistics> getStatisticsForRecordTypesByUser(String apiKey);
+
+	/**
+	 * Get user statistics by interval
+	 * @param interval
+	 *   A date interval, in which the statistics should be calculated
+	 * @return
+	 */
+	List<TypeStatistics> getStatisticsForRecordTypesByInterval(DateInterval interval);
+
 }
