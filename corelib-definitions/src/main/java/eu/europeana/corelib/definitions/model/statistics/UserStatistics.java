@@ -1,5 +1,10 @@
 package eu.europeana.corelib.definitions.model.statistics;
 
+/**
+ * User statistics contains user name (name) API key (apiKey) and count (count).
+ *
+ * @author peter.kiraly@kb.nl
+ */
 public class UserStatistics {
 
 	private String name;
