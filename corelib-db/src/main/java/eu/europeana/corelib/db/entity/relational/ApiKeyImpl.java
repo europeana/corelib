@@ -33,12 +33,12 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=ApiKeyImpl.QUERY_SORT_BY_DATE_DESC, 
-		query="select a from ApiKeyImpl as a, UserImpl as u WHERE a.user = u.id "
+	@NamedQuery(name=ApiKeyImpl.QUERY_SORT_BY_DATE_DESC,
+		query="SELECT a FROM ApiKeyImpl AS a, UserImpl AS u WHERE a.user = u.id "
 				+ "ORDER BY (CASE WHEN u.registrationDate IS NULL THEN 1 ELSE 0 END), u.registrationDate DESC, u.id DESC"
 	),
-	@NamedQuery(name=ApiKeyImpl.QUERY_SORT_BY_DATE_ASC, 
-		query="select a from ApiKeyImpl as a, UserImpl as u WHERE a.user = u.id "
+	@NamedQuery(name=ApiKeyImpl.QUERY_SORT_BY_DATE_ASC,
+		query="SELECT a FROM ApiKeyImpl AS a, UserImpl AS u WHERE a.user = u.id "
 				+ "ORDER BY (CASE WHEN u.registrationDate IS NULL THEN 0 ELSE 1 END), u.registrationDate ASC, u.id ASC"
 	)
 })
@@ -50,7 +50,7 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	public static final String QUERY_SORT_BY_DATE_ASC = "ApiKey.sortByDateAsc";
 
 	@Id
-	@Column(length = FIELDSIZE_APIKEY, nullable=false)
+	@Column(length = FIELDSIZE_APIKEY, nullable=false, unique=true)
 	private String apiKey;
 
 	@Column(length = FIELDSIZE_APIKEY, nullable=false)
