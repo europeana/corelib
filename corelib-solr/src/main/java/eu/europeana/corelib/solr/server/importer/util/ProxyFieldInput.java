@@ -249,7 +249,12 @@ public final class ProxyFieldInput {
 		
 		
 		if(seqList != null){
-			String[] seqarray =  seqList.toArray(new String[seqList.size()]);
+			
+			String[] seqarray =  new String[seqList.size()];
+			for (int i=0;i<seqarray.length;i++){
+				seqarray[i] = seqList.get(i).getResource();
+			}
+			
 			mongoProxy.setEdmIsNextInSequence(seqarray);
 		}
 		String docType = SolrUtils.exists(EdmType.class,

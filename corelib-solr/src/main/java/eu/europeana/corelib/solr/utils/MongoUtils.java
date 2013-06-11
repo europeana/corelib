@@ -57,10 +57,12 @@ public final class MongoUtils {
 	 * @return true if it is contained false otherwise
 	 */
 	public static boolean contains(String[] str1, String str2) {
+		if(str1!=null){
 		for (String str : str1) {
 			if (StringUtils.equals(str, str2)) {
 				return true;
 			}
+		}
 		}
 		return false;
 	}

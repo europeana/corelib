@@ -192,7 +192,7 @@ public enum EdmLabel {
 	AG_EDM_END("ag_edm_end", SolrType.NOT_STORED), 
 	AG_EDM_WASPRESENTAT("ag_edm_wasPresentAt", SolrType.NOT_STORED),
 	AG_EDM_HASMET("ag_edm_hasMet", SolrType.NOT_STORED),
-	AG_EDM_ISRELATEDTO("ag_edm_isRelatedto", SolrType.NOT_STORED),
+	AG_EDM_ISRELATEDTO("ag_edm_isRelatedTo", SolrType.NOT_STORED),
 	AG_OWL_SAMEAS("ag_owl_sameAs", SolrType.NOT_STORED),
 	AG_FOAF_NAME("ag_foaf_name", SolrType.NOT_STORED),
 	AG_RDAGR2_DATEOFBIRTH("ag_rdagr2_dateOfBirth", SolrType.NOT_STORED),
