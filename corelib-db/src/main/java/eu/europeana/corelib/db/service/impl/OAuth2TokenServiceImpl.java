@@ -72,5 +72,15 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	public void cleanExpiredTokens() {
 		accessTokenService.cleanExpiredTokens();
 	}
+	
+	@Override
+	public void removeAll() {
+		for (AccessToken token: accessTokenService.findAll()) {
+			accessTokenService.remove(token.getId());
+		}
+		for (RefreshToken token: refreshTokenService.findAll()) {
+			refreshTokenService.remove(token.getId());
+		}
+	}
 
 }

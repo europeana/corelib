@@ -1,28 +1,48 @@
-<binding xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
   <namespace uri="http://purl.org/dc/elements/1.1/" default="elements" prefix="dc"/>
-  <mapping abstract="true" type-name="dc:DCType" class="eu.europeana.corelib.definitions.jibx.DCType">
-    <structure map-as="dcterms:DCTermsType"/>
-    <collection get-method="getChoiceList1s" set-method="setChoiceList1s" usage="optional" create-type="java.util.ArrayList">
-      <structure type="eu.europeana.corelib.definitions.jibx.DCType$Choice" ordered="false" choice="true">
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifContributor" get-method="getContributor" set-method="setContributor" usage="optional" name="contributor"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifCoverage" get-method="getCoverage" set-method="setCoverage" usage="optional" name="coverage"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifCreator" get-method="getCreator" set-method="setCreator" usage="optional" name="creator"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifDate" get-method="getDate" set-method="setDate" usage="optional" name="date"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifDescription" get-method="getDescription" set-method="setDescription" usage="optional" name="description"/>
-        <structure map-as="rdf:LiteralType" test-method="ifIdentifier" get-method="getIdentifier" set-method="setIdentifier" usage="optional" name="identifier"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifFormat" get-method="getFormat" set-method="setFormat" usage="optional" name="format"/>
-        <structure map-as="rdf:LiteralType" test-method="ifLanguage" get-method="getLanguage" set-method="setLanguage" usage="optional" name="language"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifPublisher" get-method="getPublisher" set-method="setPublisher" usage="optional" name="publisher"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifRelation" get-method="getRelation" set-method="setRelation" usage="optional" name="relation"/>
-        <structure type="eu.europeana.corelib.definitions.jibx.Rights1" test-method="ifRights" get-method="getRights" set-method="setRights" usage="optional"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifSource" get-method="getSource" set-method="setSource" usage="optional" name="source"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifSubject" get-method="getSubject" set-method="setSubject" usage="optional" name="subject"/>
-        <structure map-as="rdf:LiteralType" test-method="ifTitle" get-method="getTitle" set-method="setTitle" usage="optional" name="title"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifType" get-method="getType" set-method="setType" usage="optional" name="type"/>
-      </structure>
-    </collection>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Rights" name="rights">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.Rights1" name="rights">
+  <mapping class="eu.europeana.corelib.definitions.jibx.Contributor" name="contributor">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Coverage" name="coverage">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Creator" name="creator">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Date" name="date">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Description" name="description">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Identifier" name="identifier">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Format" name="format">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Language" name="language">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Publisher" name="publisher">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Relation" name="relation">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Source" name="source">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Subject" name="subject">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Title" name="title">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Type" name="type">
     <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
 </binding>

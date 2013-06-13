@@ -13,14 +13,14 @@ import java.util.List;
  *       &lt;xs:extension base="ns:AboutType">
  *         &lt;xs:sequence>
  *           &lt;xs:element ref="ns1:aggregatedCHO" minOccurs="1" maxOccurs="1"/>
- *           &lt;xs:element ref="ns1:hasView" minOccurs="0" maxOccurs="unbounded"/>
  *           &lt;xs:element ref="ns1:dataProvider" minOccurs="1" maxOccurs="1"/>
+ *           &lt;xs:element ref="ns1:hasView" minOccurs="0" maxOccurs="unbounded"/>
+ *           &lt;xs:element ref="ns1:isShownAt" minOccurs="0" maxOccurs="1"/>
+ *           &lt;xs:element ref="ns1:isShownBy" minOccurs="0" maxOccurs="1"/>
+ *           &lt;xs:element ref="ns1:object" minOccurs="0" maxOccurs="1"/>
  *           &lt;xs:element ref="ns1:provider" minOccurs="1" maxOccurs="1"/>
  *           &lt;xs:element ref="ns2:rights" minOccurs="0" maxOccurs="unbounded"/>
  *           &lt;xs:element ref="ns1:rights" minOccurs="1" maxOccurs="1"/>
- *           &lt;xs:element ref="ns1:isShownBy" minOccurs="0" maxOccurs="1"/>
- *           &lt;xs:element ref="ns1:isShownAt" minOccurs="0" maxOccurs="1"/>
- *           &lt;xs:element ref="ns1:object" minOccurs="0" maxOccurs="1"/>
  *           &lt;xs:element ref="ns1:ugc" minOccurs="0" maxOccurs="1"/>
  *         &lt;/xs:sequence>
  *       &lt;/xs:extension>
@@ -32,14 +32,14 @@ import java.util.List;
 public class Aggregation extends AboutType
 {
     private AggregatedCHO aggregatedCHO;
-    private List<HasView> hasViewList = new ArrayList<HasView>();
     private DataProvider dataProvider;
-    private Provider provider;
-    private List<Rights1> rightList = new ArrayList<Rights1>();
-    private Rights rights;
-    private IsShownBy isShownBy;
+    private List<HasView> hasViewList = new ArrayList<HasView>();
     private IsShownAt isShownAt;
+    private IsShownBy isShownBy;
     private _Object object;
+    private Provider provider;
+    private List<Rights> rightList = new ArrayList<Rights>();
+    private Rights1 rights;
     private Ugc ugc;
 
     /** 
@@ -61,6 +61,24 @@ public class Aggregation extends AboutType
     }
 
     /** 
+     * Get the 'dataProvider' element value.
+     * 
+     * @return value
+     */
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /** 
+     * Set the 'dataProvider' element value.
+     * 
+     * @param dataProvider
+     */
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+    }
+
+    /** 
      * Get the list of 'hasView' element items.
      * 
      * @return list
@@ -79,21 +97,57 @@ public class Aggregation extends AboutType
     }
 
     /** 
-     * Get the 'dataProvider' element value.
+     * Get the 'isShownAt' element value.
      * 
      * @return value
      */
-    public DataProvider getDataProvider() {
-        return dataProvider;
+    public IsShownAt getIsShownAt() {
+        return isShownAt;
     }
 
     /** 
-     * Set the 'dataProvider' element value.
+     * Set the 'isShownAt' element value.
      * 
-     * @param dataProvider
+     * @param isShownAt
      */
-    public void setDataProvider(DataProvider dataProvider) {
-        this.dataProvider = dataProvider;
+    public void setIsShownAt(IsShownAt isShownAt) {
+        this.isShownAt = isShownAt;
+    }
+
+    /** 
+     * Get the 'isShownBy' element value.
+     * 
+     * @return value
+     */
+    public IsShownBy getIsShownBy() {
+        return isShownBy;
+    }
+
+    /** 
+     * Set the 'isShownBy' element value.
+     * 
+     * @param isShownBy
+     */
+    public void setIsShownBy(IsShownBy isShownBy) {
+        this.isShownBy = isShownBy;
+    }
+
+    /** 
+     * Get the 'object' element value.
+     * 
+     * @return value
+     */
+    public _Object getObject() {
+        return object;
+    }
+
+    /** 
+     * Set the 'object' element value.
+     * 
+     * @param object
+     */
+    public void setObject(_Object object) {
+        this.object = object;
     }
 
     /** 
@@ -119,7 +173,7 @@ public class Aggregation extends AboutType
      * 
      * @return list
      */
-    public List<Rights1> getRightList() {
+    public List<Rights> getRightList() {
         return rightList;
     }
 
@@ -128,7 +182,7 @@ public class Aggregation extends AboutType
      * 
      * @param list
      */
-    public void setRightList(List<Rights1> list) {
+    public void setRightList(List<Rights> list) {
         rightList = list;
     }
 
@@ -137,7 +191,7 @@ public class Aggregation extends AboutType
      * 
      * @return value
      */
-    public Rights getRights() {
+    public Rights1 getRights() {
         return rights;
     }
 
@@ -146,62 +200,8 @@ public class Aggregation extends AboutType
      * 
      * @param rights
      */
-    public void setRights(Rights rights) {
+    public void setRights(Rights1 rights) {
         this.rights = rights;
-    }
-
-    /** 
-     * Get the 'isShownBy' element value.
-     * 
-     * @return value
-     */
-    public IsShownBy getIsShownBy() {
-        return isShownBy;
-    }
-
-    /** 
-     * Set the 'isShownBy' element value.
-     * 
-     * @param isShownBy
-     */
-    public void setIsShownBy(IsShownBy isShownBy) {
-        this.isShownBy = isShownBy;
-    }
-
-    /** 
-     * Get the 'isShownAt' element value.
-     * 
-     * @return value
-     */
-    public IsShownAt getIsShownAt() {
-        return isShownAt;
-    }
-
-    /** 
-     * Set the 'isShownAt' element value.
-     * 
-     * @param isShownAt
-     */
-    public void setIsShownAt(IsShownAt isShownAt) {
-        this.isShownAt = isShownAt;
-    }
-
-    /** 
-     * Get the 'object' element value.
-     * 
-     * @return value
-     */
-    public _Object getObject() {
-        return object;
-    }
-
-    /** 
-     * Set the 'object' element value.
-     * 
-     * @param object
-     */
-    public void setObject(_Object object) {
-        this.object = object;
     }
 
     /** 

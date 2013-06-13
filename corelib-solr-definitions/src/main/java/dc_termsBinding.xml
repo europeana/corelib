@@ -1,35 +1,69 @@
-<binding xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
   <namespace uri="http://purl.org/dc/terms/" default="elements" prefix="dcterms"/>
-  <mapping abstract="true" type-name="dcterms:DCTermsType" class="eu.europeana.corelib.definitions.jibx.DCTermsType">
-    <structure map-as="rdf:AboutType"/>
-    <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
-      <structure type="eu.europeana.corelib.definitions.jibx.DCTermsType$Choice" ordered="false" choice="true">
-        <structure map-as="rdf:LiteralType" test-method="ifAlternative" get-method="getAlternative" set-method="setAlternative" usage="optional" name="alternative"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifConformsTo" get-method="getConformsTo" set-method="setConformsTo" usage="optional" name="conformsTo"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifCreated" get-method="getCreated" set-method="setCreated" usage="optional" name="created"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifExtent" get-method="getExtent" set-method="setExtent" usage="optional" name="extent"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifHasFormat" get-method="getHasFormat" set-method="setHasFormat" usage="optional" name="hasFormat"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifHasPart" get-method="getHasPart" set-method="setHasPart" usage="optional" name="hasPart"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifHasVersion" get-method="getHasVersion" set-method="setHasVersion" usage="optional" name="hasVersion"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIsFormatOf" get-method="getIsFormatOf" set-method="setIsFormatOf" usage="optional" name="isFormatOf"/>
-        <structure type="eu.europeana.corelib.definitions.jibx.IsPartOf" test-method="ifIsPartOf" get-method="getIsPartOf" set-method="setIsPartOf" usage="optional"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIsReferencedBy" get-method="getIsReferencedBy" set-method="setIsReferencedBy" usage="optional" name="isReferencedBy"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIsReplacedBy" get-method="getIsReplacedBy" set-method="setIsReplacedBy" usage="optional" name="isReplacedBy"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIsRequiredBy" get-method="getIsRequiredBy" set-method="setIsRequiredBy" usage="optional" name="isRequiredBy"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIssued" get-method="getIssued" set-method="setIssued" usage="optional" name="issued"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifIsVersionOf" get-method="getIsVersionOf" set-method="setIsVersionOf" usage="optional" name="isVersionOf"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifMedium" get-method="getMedium" set-method="setMedium" usage="optional" name="medium"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifProvenance" get-method="getProvenance" set-method="setProvenance" usage="optional" name="provenance"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifReferences" get-method="getReferences" set-method="setReferences" usage="optional" name="references"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifReplaces" get-method="getReplaces" set-method="setReplaces" usage="optional" name="replaces"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifRequires" get-method="getRequires" set-method="setRequires" usage="optional" name="requires"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifSpatial" get-method="getSpatial" set-method="setSpatial" usage="optional" name="spatial"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifTableOfContents" get-method="getTableOfContents" set-method="setTableOfContents" usage="optional" name="tableOfContents"/>
-        <structure map-as="rdf:ResourceOrLiteralType" test-method="ifTemporal" get-method="getTemporal" set-method="setTemporal" usage="optional" name="temporal"/>
-      </structure>
-    </collection>
-  </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.IsPartOf" name="isPartOf">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsReferencedBy" name="isReferencedBy">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Temporal" name="temporal">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.TableOfContents" name="tableOfContents">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Spatial" name="spatial">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Requires" name="requires">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Replaces" name="replaces">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.References" name="references">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Provenance" name="provenance">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Medium" name="medium">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsVersionOf" name="isVersionOf">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Issued" name="issued">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsRequiredBy" name="isRequiredBy">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsReplacedBy" name="isReplacedBy">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsFormatOf" name="isFormatOf">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasVersion" name="hasVersion">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasFormat" name="hasFormat">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Extent" name="extent">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Created" name="created">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.ConformsTo" name="conformsTo">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Alternative" name="alternative">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasPart" name="hasPart">
     <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
 </binding>

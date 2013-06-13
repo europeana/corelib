@@ -28,5 +28,7 @@ public interface OAuth2TokenService {
 	AccessToken findAccessTokenByAuthenticationId(String authId);
 	
 	void cleanExpiredTokens();
+
+	void removeAll();
 	
 }

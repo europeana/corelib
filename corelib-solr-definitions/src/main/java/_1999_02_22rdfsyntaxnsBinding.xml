@@ -21,6 +21,8 @@
     <structure get-method="getLang" set-method="setLang" usage="optional">
       <value style="attribute" name="lang" ns="http://www.w3.org/XML/1998/namespace" get-method="getLang" set-method="setLang" usage="optional"/>
     </structure>
-    <value style="attribute" name="resource" ns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" get-method="getResource" set-method="setResource" usage="optional"/>
+    <structure get-method="getResource" set-method="setResource" usage="optional">
+      <value style="attribute" name="resource" ns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" get-method="getResource" set-method="setResource" usage="optional"/>
+    </structure>
   </mapping>
 </binding>

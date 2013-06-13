@@ -4,13 +4,15 @@ package eu.europeana.corelib.definitions.jibx;
 /** 
  * Schema fragment(s) for this class:
  * <pre>
- * &lt;xs:complexType xmlns:ns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ResourceOrLiteralType">
+ * &lt;xs:complexType xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ResourceOrLiteralType">
  *   &lt;xs:simpleContent>
  *     &lt;xs:extension base="xs:string">
  *       &lt;xs:attribute use="optional" ref="xml:lang">
  *         &lt;!-- Reference to inner class Lang -->
  *       &lt;/xs:attribute>
- *       &lt;xs:attribute type="xs:string" use="optional" name="resource"/>
+ *       &lt;xs:attribute use="optional" ref="rdf:resource">
+ *         &lt;!-- Reference to inner class Resource -->
+ *       &lt;/xs:attribute>
  *     &lt;/xs:extension>
  *   &lt;/xs:simpleContent>
  * &lt;/xs:complexType>
@@ -20,7 +22,7 @@ public class ResourceOrLiteralType
 {
     private String string;
     private Lang lang;
-    private String resource;
+    private Resource resource;
 
     /** 
      * Get the extension value.
@@ -63,7 +65,7 @@ public class ResourceOrLiteralType
      * 
      * @return value
      */
-    public String getResource() {
+    public Resource getResource() {
         return resource;
     }
 
@@ -72,7 +74,7 @@ public class ResourceOrLiteralType
      * 
      * @param resource
      */
-    public void setResource(String resource) {
+    public void setResource(Resource resource) {
         this.resource = resource;
     }
     /** 
@@ -165,6 +167,36 @@ public class ResourceOrLiteralType
          */
         public void setLang(String lang) {
             this.lang = lang;
+        }
+    }
+    /** 
+     * Schema fragment(s) for this class:
+     * <pre>
+     * &lt;xs:attribute xmlns:ns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xs="http://www.w3.org/2001/XMLSchema" use="optional" ref="ns:resource"/>
+     * 
+     * &lt;xs:attribute xmlns:ns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xs="http://www.w3.org/2001/XMLSchema" type="xs:string" name="resource"/>
+     * </pre>
+     */
+    public static class Resource
+    {
+        private String resource;
+
+        /** 
+         * Get the 'resource' attribute value.
+         * 
+         * @return value
+         */
+        public String getResource() {
+            return resource;
+        }
+
+        /** 
+         * Set the 'resource' attribute value.
+         * 
+         * @param resource
+         */
+        public void setResource(String resource) {
+            this.resource = resource;
         }
     }
 }

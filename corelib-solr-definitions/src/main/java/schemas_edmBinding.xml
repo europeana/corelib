@@ -1,86 +1,259 @@
-<binding xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+<binding xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
   <namespace uri="http://www.europeana.eu/schemas/edm/" default="elements" prefix="edm"/>
   <mapping abstract="true" type-name="edm:RDF" class="eu.europeana.corelib.definitions.jibx.RDF">
-    <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
-      <structure type="eu.europeana.corelib.definitions.jibx.RDF$Choice" ordered="false" choice="true">
-        <structure map-as="edm:ProvidedCHOType" test-method="ifProvidedCHO" get-method="getProvidedCHO" set-method="setProvidedCHO" usage="optional" name="ProvidedCHO"/>
-        <structure map-as="edm:WebResourceType" test-method="ifWebResource" get-method="getWebResource" set-method="setWebResource" usage="optional" name="WebResource"/>
-        <structure map-as="edm:AgentType" test-method="ifAgent" get-method="getAgent" set-method="setAgent" usage="optional" name="Agent"/>
-        <structure map-as="edm:PlaceType" test-method="ifPlace" get-method="getPlace" set-method="setPlace" usage="optional" name="Place"/>
-        <structure map-as="edm:TimeSpanType" test-method="ifTimeSpan" get-method="getTimeSpan" set-method="setTimeSpan" usage="optional" name="TimeSpan"/>
-        <structure type="eu.europeana.corelib.definitions.jibx.Concept" test-method="ifConcept" get-method="getConcept" set-method="setConcept" usage="optional"/>
-        <structure type="eu.europeana.corelib.definitions.jibx.Aggregation" test-method="ifAggregation" get-method="getAggregation" set-method="setAggregation" usage="optional"/>
-      </structure>
+    <collection get-method="getProvidedCHOList" set-method="setProvidedCHOList" create-type="java.util.ArrayList">
+      <structure map-as="edm:ProvidedCHOType" name="ProvidedCHO"/>
+    </collection>
+    <collection get-method="getWebResourceList" set-method="setWebResourceList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="edm:WebResourceType" name="WebResource"/>
+    </collection>
+    <collection get-method="getAgentList" set-method="setAgentList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="edm:AgentType" name="Agent"/>
+    </collection>
+    <collection get-method="getPlaceList" set-method="setPlaceList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="edm:PlaceType" name="Place"/>
+    </collection>
+    <collection get-method="getTimeSpanList" set-method="setTimeSpanList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="edm:TimeSpanType" name="TimeSpan"/>
+    </collection>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Concept" get-method="getConceptList" set-method="setConceptList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Aggregation" get-method="getAggregationList" set-method="setAggregationList" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.ProxyType" get-method="getProxyList" set-method="setProxyList" create-type="java.util.ArrayList"/>
+    <collection get-method="getEuropeanaAggregationList" set-method="setEuropeanaAggregationList" create-type="java.util.ArrayList">
+      <structure map-as="edm:EuropeanaAggregationType" name="EuropeanaAggregation"/>
     </collection>
   </mapping>
-  <mapping abstract="true" type-name="edm:ProvidedCHOType" class="eu.europeana.corelib.definitions.jibx.ProvidedCHOType">
-    <structure map-as="edm:EuropeanaType"/>
-    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
-    <structure map-as="rdf:ResourceType" get-method="getIsNextInSequence" set-method="setIsNextInSequence" usage="optional" name="isNextInSequence"/>
-  </mapping>
-  <mapping abstract="true" type-name="edm:WebResourceType" class="eu.europeana.corelib.definitions.jibx.WebResourceType">
+  <mapping abstract="true" type-name="edm:EuropeanaAggregationType" class="eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType">
     <structure map-as="rdf:AboutType"/>
-    <collection item-type="eu.europeana.corelib.definitions.jibx.Rights1" get-method="getRightList" set-method="setRightList" usage="optional" create-type="java.util.ArrayList"/>
-    <structure type="eu.europeana.corelib.definitions.jibx.Rights" get-method="getRights" set-method="setRights"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Creator" get-method="getCreator" set-method="setCreator" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.AggregatedCHO" get-method="getAggregatedCHO" set-method="setAggregatedCHO"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.CollectionName" get-method="getCollectionName" set-method="setCollectionName" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Country" get-method="getCountry" set-method="setCountry"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasView" get-method="getHasViewList" set-method="setHasViewList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsShownBy" get-method="getIsShownBy" set-method="setIsShownBy" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Preview" get-method="getPreview" set-method="setPreview" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.LandingPage" get-method="getLandingPage" set-method="setLandingPage" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Language1" get-method="getLanguage" set-method="setLanguage"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Rights1" get-method="getRights" set-method="setRights"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Aggregates" get-method="getAggregateList" set-method="setAggregateList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:ProvidedCHOType" class="eu.europeana.corelib.definitions.jibx.ProvidedCHOType">
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:BaseProvidedCHOType" class="eu.europeana.corelib.definitions.jibx.BaseProvidedCHOType">
+    <structure map-as="edm:EuropeanaType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.CurrentLocation" get-method="getCurrentLocation" set-method="setCurrentLocation" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasMet" get-method="getHasMetList" set-method="setHasMetList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasType" get-method="getHasTypeList" set-method="setHasTypeList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Incorporates" get-method="getIncorporateList" set-method="setIncorporateList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsDerivativeOf" get-method="getIsDerivativeOfList" set-method="setIsDerivativeOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsNextInSequence" get-method="getIsNextInSequenceList" set-method="setIsNextInSequenceList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsRelatedTo" get-method="getIsRelatedToList" set-method="setIsRelatedToList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsRepresentationOf" get-method="getIsRepresentationOf" set-method="setIsRepresentationOf" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsSimilarTo" get-method="getIsSimilarToList" set-method="setIsSimilarToList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsSuccessorOf" get-method="getIsSuccessorOfList" set-method="setIsSuccessorOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Realizes" get-method="getRealizeList" set-method="setRealizeList" usage="optional" create-type="java.util.ArrayList"/>
   </mapping>
   <mapping abstract="true" type-name="edm:EuropeanaType" class="eu.europeana.corelib.definitions.jibx.EuropeanaType">
-    <structure map-as="dc:DCType"/>
-    <value style="element" name="type" get-method="getType" set-method="setType" format="edm:EdmType"/>
-    <structure map-as="rdf:ResourceType" get-method="getCurrentLocation" set-method="setCurrentLocation" usage="optional" name="currentLocation"/>
-  </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.Rights" name="rights">
-    <structure map-as="rdf:ResourceOrLiteralType"/>
+    <structure map-as="rdf:AboutType"/>
+    <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
+      <structure type="eu.europeana.corelib.definitions.jibx.EuropeanaType$Choice" ordered="false" choice="true">
+        <structure type="eu.europeana.corelib.definitions.jibx.Contributor" test-method="ifContributor" get-method="getContributor" set-method="setContributor" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Coverage" test-method="ifCoverage" get-method="getCoverage" set-method="setCoverage" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Creator" test-method="ifCreator" get-method="getCreator" set-method="setCreator" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Date" test-method="ifDate" get-method="getDate" set-method="setDate" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Description" test-method="ifDescription" get-method="getDescription" set-method="setDescription" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Format" test-method="ifFormat" get-method="getFormat" set-method="setFormat" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Identifier" test-method="ifIdentifier" get-method="getIdentifier" set-method="setIdentifier" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Language" test-method="ifLanguage" get-method="getLanguage" set-method="setLanguage" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Publisher" test-method="ifPublisher" get-method="getPublisher" set-method="setPublisher" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Relation" test-method="ifRelation" get-method="getRelation" set-method="setRelation" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Rights" test-method="ifRights" get-method="getRights" set-method="setRights" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Source" test-method="ifSource" get-method="getSource" set-method="setSource" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Subject" test-method="ifSubject" get-method="getSubject" set-method="setSubject" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Title" test-method="ifTitle" get-method="getTitle" set-method="setTitle" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Type" test-method="ifType" get-method="getType" set-method="setType" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Alternative" test-method="ifAlternative" get-method="getAlternative" set-method="setAlternative" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.ConformsTo" test-method="ifConformsTo" get-method="getConformsTo" set-method="setConformsTo" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Created" test-method="ifCreated" get-method="getCreated" set-method="setCreated" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Extent" test-method="ifExtent" get-method="getExtent" set-method="setExtent" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.HasFormat" test-method="ifHasFormat" get-method="getHasFormat" set-method="setHasFormat" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.HasPart" test-method="ifHasPart" get-method="getHasPart" set-method="setHasPart" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.HasVersion" test-method="ifHasVersion" get-method="getHasVersion" set-method="setHasVersion" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsFormatOf" test-method="ifIsFormatOf" get-method="getIsFormatOf" set-method="setIsFormatOf" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsPartOf" test-method="ifIsPartOf" get-method="getIsPartOf" set-method="setIsPartOf" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsReferencedBy" test-method="ifIsReferencedBy" get-method="getIsReferencedBy" set-method="setIsReferencedBy" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsReplacedBy" test-method="ifIsReplacedBy" get-method="getIsReplacedBy" set-method="setIsReplacedBy" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsRequiredBy" test-method="ifIsRequiredBy" get-method="getIsRequiredBy" set-method="setIsRequiredBy" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Issued" test-method="ifIssued" get-method="getIssued" set-method="setIssued" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.IsVersionOf" test-method="ifIsVersionOf" get-method="getIsVersionOf" set-method="setIsVersionOf" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Medium" test-method="ifMedium" get-method="getMedium" set-method="setMedium" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Provenance" test-method="ifProvenance" get-method="getProvenance" set-method="setProvenance" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.References" test-method="ifReferences" get-method="getReferences" set-method="setReferences" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Replaces" test-method="ifReplaces" get-method="getReplaces" set-method="setReplaces" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Requires" test-method="ifRequires" get-method="getRequires" set-method="setRequires" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Spatial" test-method="ifSpatial" get-method="getSpatial" set-method="setSpatial" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.TableOfContents" test-method="ifTableOfContents" get-method="getTableOfContents" set-method="setTableOfContents" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Temporal" test-method="ifTemporal" get-method="getTemporal" set-method="setTemporal" usage="optional"/>
+      </structure>
+    </collection>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.AggregatedCHO" name="aggregatedCHO">
     <structure map-as="rdf:ResourceType"/>
   </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.HasView" name="hasView">
+  <mapping class="eu.europeana.corelib.definitions.jibx.Begin" name="begin">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Country" name="country">
+    <value style="text" get-method="getCountry" set-method="setCountry" format="edm:CountryCodes"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.CollectionName" name="collectionName">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.CurrentLocation" name="currentLocation">
     <structure map-as="rdf:ResourceType"/>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.DataProvider" name="dataProvider">
     <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.Provider" name="provider">
+  <mapping class="eu.europeana.corelib.definitions.jibx.End" name="end">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Type1" name="type">
+    <value style="text" get-method="getType" set-method="setType" format="edm:EdmType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasMet" name="hasMet">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasType" name="hasType">
     <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
-  <mapping class="eu.europeana.corelib.definitions.jibx.IsShownBy" name="isShownBy">
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasView" name="hasView">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Incorporates" name="incorporates">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsDerivativeOf" name="isDerivativeOf">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsNextInSequence" name="isNextInSequence">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsRelatedTo" name="isRelatedTo">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsRepresentationOf" name="isRepresentationOf">
     <structure map-as="rdf:ResourceType"/>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.IsShownAt" name="isShownAt">
     <structure map-as="rdf:ResourceType"/>
   </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsShownBy" name="isShownBy">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsSimilarTo" name="isSimilarTo">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.IsSuccessorOf" name="isSuccessorOf">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.LandingPage" name="landingPage">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Language1" name="language">
+    <value style="text" get-method="getLanguage" set-method="setLanguage" format="edm:LanguageCodes"/>
+  </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx._Object" name="object">
     <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Preview" name="preview">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Provider" name="provider">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Realizes" name="realizes">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Rights1" name="rights">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
   </mapping>
   <mapping class="eu.europeana.corelib.definitions.jibx.Ugc" name="ugc">
     <value style="text" get-method="getUgc" set-method="setUgc" format="edm:UGCType"/>
   </mapping>
-  <mapping abstract="true" type-name="edm:ContextualResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualResourceType">
+  <mapping class="eu.europeana.corelib.definitions.jibx.UserTag" name="userTag">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Year" name="year">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.EuropeanaProxy" name="europeanaProxy">
+    <value style="text" get-method="isEuropeanaProxy" set-method="setEuropeanaProxy"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:AgentType" class="eu.europeana.corelib.definitions.jibx.AgentType">
     <structure map-as="rdf:AboutType"/>
     <collection item-type="eu.europeana.corelib.definitions.jibx.PrefLabel" get-method="getPrefLabelList" set-method="setPrefLabelList" usage="optional" create-type="java.util.ArrayList"/>
     <collection item-type="eu.europeana.corelib.definitions.jibx.AltLabel" get-method="getAltLabelList" set-method="setAltLabelList" usage="optional" create-type="java.util.ArrayList"/>
     <collection item-type="eu.europeana.corelib.definitions.jibx.Note" get-method="getNoteList" set-method="setNoteList" usage="optional" create-type="java.util.ArrayList"/>
-  </mapping>
-  <mapping abstract="true" type-name="edm:ContextualHierarchicalResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualHierarchicalResourceType">
-    <structure map-as="edm:ContextualResourceType"/>
-  </mapping>
-  <mapping abstract="true" type-name="edm:ContextualTemporalResourceType" class="eu.europeana.corelib.definitions.jibx.ContextualTemporalResourceType">
-    <structure map-as="edm:ContextualHierarchicalResourceType"/>
-    <structure usage="optional" name="begin"/>
-    <structure usage="optional" name="end"/>
-  </mapping>
-  <mapping abstract="true" type-name="edm:AgentType" class="eu.europeana.corelib.definitions.jibx.AgentType">
-    <structure map-as="edm:ContextualTemporalResourceType"/>
-    <structure map-as="rdf:ResourceType" get-method="getTimeSpan" set-method="setTimeSpan" usage="optional" name="timeSpan"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Date" get-method="getDateList" set-method="setDateList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Identifier" get-method="getIdentifierList" set-method="setIdentifierList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasPart" get-method="getHasPartList" set-method="setHasPartList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Begin" get-method="getBegin" set-method="setBegin" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.End" get-method="getEnd" set-method="setEnd" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasMet" get-method="getHasMetList" set-method="setHasMetList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsRelatedTo" get-method="getIsRelatedToList" set-method="setIsRelatedToList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Name" get-method="getNameList" set-method="setNameList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.BiographicalInformation" get-method="getBiographicalInformation" set-method="setBiographicalInformation" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DateOfBirth" get-method="getDateOfBirth" set-method="setDateOfBirth" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DateOfDeath" get-method="getDateOfDeath" set-method="setDateOfDeath" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DateOfEstablishment" get-method="getDateOfEstablishment" set-method="setDateOfEstablishment" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DateOfTermination" get-method="getDateOfTermination" set-method="setDateOfTermination" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Gender" get-method="getGender" set-method="setGender" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.ProfessionOrOccupation" get-method="getProfessionOrOccupation" set-method="setProfessionOrOccupation" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
   </mapping>
   <mapping abstract="true" type-name="edm:PlaceType" class="eu.europeana.corelib.definitions.jibx.PlaceType">
-    <structure map-as="edm:ContextualHierarchicalResourceType"/>
-    <structure type="eu.europeana.corelib.definitions.jibx.PosLat" get-method="getPosLat" set-method="setPosLat" usage="optional"/>
-    <structure type="eu.europeana.corelib.definitions.jibx.PosLong" get-method="getPosLong" set-method="setPosLong" usage="optional"/>
+    <structure map-as="rdf:AboutType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Lat" get-method="getLat" set-method="setLat" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx._Long" get-method="getLong" set-method="setLong" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Alt" get-method="getAlt" set-method="setAlt" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.PrefLabel" get-method="getPrefLabelList" set-method="setPrefLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.AltLabel" get-method="getAltLabelList" set-method="setAltLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Note" get-method="getNoteList" set-method="setNoteList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasPart" get-method="getHasPartList" set-method="setHasPartList" usage="optional" create-type="java.util.ArrayList"/>
     <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsNextInSequence" get-method="getIsNextInSequence" set-method="setIsNextInSequence" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
   </mapping>
   <mapping abstract="true" type-name="edm:TimeSpanType" class="eu.europeana.corelib.definitions.jibx.TimeSpanType">
-    <structure map-as="edm:ContextualTemporalResourceType"/>
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.PrefLabel" get-method="getPrefLabelList" set-method="setPrefLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.AltLabel" get-method="getAltLabelList" set-method="setAltLabelList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Note" get-method="getNoteList" set-method="setNoteList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasPart" get-method="getHasPartList" set-method="setHasPartList" usage="optional" create-type="java.util.ArrayList"/>
     <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Begin" get-method="getBegin" set-method="setBegin" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.End" get-method="getEnd" set-method="setEnd" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsNextInSequence" get-method="getIsNextInSequence" set-method="setIsNextInSequence" usage="optional"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.SameAs" get-method="getSameAList" set-method="setSameAList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+  <mapping abstract="true" type-name="edm:WebResourceType" class="eu.europeana.corelib.definitions.jibx.WebResourceType">
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Description" get-method="getDescriptionList" set-method="setDescriptionList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Format" get-method="getFormatList" set-method="setFormatList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Rights" get-method="getRightList" set-method="setRightList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Source" get-method="getSourceList" set-method="setSourceList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.ConformsTo" get-method="getConformsToList" set-method="setConformsToList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Created" get-method="getCreatedList" set-method="setCreatedList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Extent" get-method="getExtentList" set-method="setExtentList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.HasPart" get-method="getHasPartList" set-method="setHasPartList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsFormatOf" get-method="getIsFormatOfList" set-method="setIsFormatOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IsPartOf" get-method="getIsPartOfList" set-method="setIsPartOfList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Issued" get-method="getIssuedList" set-method="setIssuedList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.IsNextInSequence" get-method="getIsNextInSequence" set-method="setIsNextInSequence" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Rights1" get-method="getRights" set-method="setRights" usage="optional"/>
   </mapping>
 </binding>
