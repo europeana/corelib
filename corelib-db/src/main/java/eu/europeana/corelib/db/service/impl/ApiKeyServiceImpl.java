@@ -16,10 +16,10 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements ApiKeyService {
-	
+
 	@Resource
 	private ApiLogService apiLogService;
-	
+
 	@Resource
 	private UserService userService;
 
@@ -79,7 +79,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 		user.getApiKeys().add(api);
 		return api;
 	}
-	
+
 	@Override
 	public void removeApiKey(Long userId, String apiKeyId)
 			throws DatabaseException {
@@ -88,5 +88,5 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 			apiKey.getUser().getApiKeys().remove(apiKey);
 		}
 	}
-	
+
 }
