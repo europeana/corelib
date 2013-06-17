@@ -14,6 +14,7 @@ import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.utils.DateIntervalUtils;
 
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements ApiKeyService {
 
@@ -41,7 +42,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 
-		long requestNumber = apiLogService.countByApiKey(apiKey.getId());
+		long requestNumber = apiLogService.countByIntervalAndApiKey(DateIntervalUtils.getLast24Hours(), apiKey.getId());
 		if (apiKey.getUsageLimit() <= requestNumber) {
 			throw new LimitReachedException(apiKey.getUsageLimit(), requestNumber);
 		}

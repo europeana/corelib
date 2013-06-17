@@ -14,6 +14,11 @@ public class DateIntervalUtils {
 		return new DateInterval(start, now);
 	}
 
+	public static DateInterval getLast24Hours() {
+		DateTime now = new DateTime();
+		return new DateInterval(now.minusDays(1).toDate(), now.toDate());
+	}
+
 	public static DateInterval getDay(int i) {
 		Date start = new DateTime().minusDays(i).toDateMidnight().toDate();
 		Date end =  new DateTime(start).plusDays(1).toDate();
