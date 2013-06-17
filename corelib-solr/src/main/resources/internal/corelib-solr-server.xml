@@ -53,6 +53,13 @@
 		<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
 	</bean>
 
+	<bean id="corelib_solr_apilogMongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
+		<constructor-arg ref="corelib_solr_mongo_apilog"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.username']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.password']}"/>
+	</bean>
+
 	<bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServer">
 		<constructor-arg ref="corelib_solr_mongo"/>
 		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
