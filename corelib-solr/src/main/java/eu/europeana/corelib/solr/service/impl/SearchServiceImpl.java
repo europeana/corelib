@@ -519,8 +519,11 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private enum SuggestionTitle {
-		TITLE("title", "Title"), DATE("when", "Time/Period"), PLACE("where",
-				"Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
+		TITLE("title", "Title"),
+		DATE("when", "Time/Period"),
+		PLACE("where", "Place"),
+		PERSON("who", "Creator"),
+		SUBJECT("what", "Subject");
 
 		String title;
 		String mappedTitle;
@@ -551,6 +554,4 @@ public class SearchServiceImpl implements SearchService {
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
-	
-	
 }
