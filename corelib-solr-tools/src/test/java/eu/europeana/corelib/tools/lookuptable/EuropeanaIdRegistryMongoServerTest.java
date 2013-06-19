@@ -109,7 +109,7 @@ public class EuropeanaIdRegistryMongoServerTest {
 	@Test
 	public void testUpdate(){
 		saverecord(sid);
-		Assert.assertEquals(server.lookupUiniqueId(oid, "12345", xml_checksum+"new", sid).getState(),LookupState.UPDATE);
+		Assert.assertEquals(server.lookupUiniqueId(oid, "12345", xml_checksum+"new", sid2).getState(),LookupState.UPDATE);
 		server.getDatastore().getDB().dropDatabase();
 	}
 	
