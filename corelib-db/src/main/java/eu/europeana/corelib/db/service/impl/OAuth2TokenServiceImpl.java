@@ -19,12 +19,12 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	private OAuth2RefreshTokenService refreshTokenService;
 
 	@Override
-	public AccessToken store(AccessToken token) {
+	public synchronized AccessToken store(AccessToken token) {
 		return accessTokenService.store(token);
 	}
 
 	@Override
-	public RefreshToken store(RefreshToken token) {
+	public synchronized RefreshToken store(RefreshToken token) {
 		return refreshTokenService.store(token);
 	}
 
@@ -49,17 +49,17 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	}
 	
 	@Override
-	public void removeAccessToken(String id) {
+	public synchronized void removeAccessToken(String id) {
 		accessTokenService.remove(id);
 	}
 	
 	@Override
-	public void removeRefreshToken(String id) {
+	public synchronized void removeRefreshToken(String id) {
 		refreshTokenService.remove(id);
 	}
 	
 	@Override
-	public void removeAccessTokenByRefreshTokenId(String refreshTokenId) {
+	public synchronized void removeAccessTokenByRefreshTokenId(String refreshTokenId) {
 		accessTokenService.removeByRefreshTokenId(refreshTokenId);
 	}
 	
@@ -69,12 +69,12 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	}
 	
 	@Override
-	public void cleanExpiredTokens() {
+	public synchronized void cleanExpiredTokens() {
 		accessTokenService.cleanExpiredTokens();
 	}
 	
 	@Override
-	public void removeAll() {
+	public synchronized void removeAll() {
 		for (AccessToken token: accessTokenService.findAll()) {
 			accessTokenService.remove(token.getId());
 		}

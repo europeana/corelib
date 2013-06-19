@@ -17,8 +17,12 @@
 
 package eu.europeana.corelib.db.service;
 
+import java.util.List;
+
+import eu.europeana.corelib.db.entity.relational.custom.TagCloudItem;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
 /**
@@ -183,6 +187,41 @@ public interface UserService extends AbstractService<User> {
 	void removeSocialTag(Long userId, Long socialTagId)
 			throws DatabaseException;
 
-	
+	/**
+	 * Upgrades an Api Key only account to a full MyEuropeana account
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @param userName
+	 * 			Requested username for MyEuropeana
+	 * @param password
+	 * 			New password for upgraded account
+	 * @return
+	 * 			The upgraded user account
+	 * @throws DatabaseException
+	 */
 	User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException;
+	
+	/**
+	 * Returns a distinct list of tags (combination of tag as a string and a count)
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @return
+	 */
+	List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException;
+	
+	/**
+	 * Returns a list of SocialTag objects filtered by User and Tag
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @param tag
+	 * 			Tag string to filter on (case-insensitive)
+	 * @return
+	 * 
+	 * @throws DatabaseException
+	 */
+	List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException;
+	
 }

@@ -19,6 +19,8 @@ package eu.europeana.corelib.db.entity.relational;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,9 +34,17 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
+@NamedQueries ({
+	@NamedQuery(name=SocialTagImpl.QUERY_CREATECLOUD_BYUSER, 
+			query="SELECT NEW eu.europeana.corelib.db.entity.relational.custom.TagCloudItem(e.tag, count(*) ) FROM SocialTagImpl e WHERE e.user.id = ? GROUP BY e.tag"),
+	@NamedQuery(name=SocialTagImpl.QUERY_FINDBY_TAG, query="select e from SocialTagImpl e where e.user.id = ? and lower(e.tag) = ?"),
+})
 public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
 
+	public static final String QUERY_CREATECLOUD_BYUSER = "SocialTag.createCloudByUser";
+	public static final String QUERY_FINDBY_TAG = "SocialTag.FindByTag";
+	
 	@Column(length = FIELDSIZE_TAG)
 	private String tag;
 

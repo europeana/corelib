@@ -81,9 +81,38 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 * @return Search results, list is empty when no results match
 	 */
 	List<E> findByNamedQuery(String query, Object... params);
-
+	
 	List<E> findByNamedQueryLimited(String query, int offset, int limit, Object... params);
+	
+	/**
+	 * 
+	 * 
+	 * @param clazz
+	 *            The class of the Entity type to retrieve
+	 * @param qName
+	 *            Name of the Named Query
+	 * @param params
+	 *            Parameters in order as marked in Named Query
+	 * @return
+	 */
+	<T> List<T> findByNamedQuery(Class<T> clazz, String qName, Object... params);
 
+	/**
+	 * Workaround version for a bug in hibernate to use custom output objects in named queries
+	 * 
+	 * bug report:
+	 * https://hibernate.atlassian.net/browse/HHH-6304
+	 * 
+	 * @param clazz
+	 *            The class of the Entity type to retrieve
+	 * @param qName
+	 *            Name of the Named Query
+	 * @param params
+	 *            Parameters in order as marked in Named Query
+	 * @return
+	 */
+	<T> List<T> findByNamedQueryCustom(Class<T> clazz, String qName, Object... params);
+	
 	/**
 	 * Find entity by named query. Given params will be inserted into query in order of params.
 	 * 
@@ -94,6 +123,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 * @return First matching entity, null if no matches are found
 	 */
 	E findOneByNamedQuery(String query, Object... params);
+
 
 	/*
 	 * MODIFIERS

@@ -82,9 +82,9 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		return entityManager.createQuery(sb.toString(), domainClazz).getResultList();
 	}
 
-	private TypedQuery<E> createNamedQuery(String qName, Object... params) {
+	private <T> TypedQuery<T> createNamedQuery(Class<T> clazz, String qName, Object... params) {
 		int parnr = 1;
-		TypedQuery<E> query = entityManager.createNamedQuery(qName, domainClazz);
+		TypedQuery<T> query = entityManager.createNamedQuery(qName, clazz);
 		if ((params != null) && (params.length > 0)) {
 			for (Object object : params) {
 				query.setParameter(parnr++, object);
@@ -95,23 +95,43 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 
 	@Override
 	public List<E> findByNamedQuery(String qName, Object... params) {
-		return createNamedQuery(qName, params).getResultList();
+		return createNamedQuery(domainClazz, qName, params).getResultList();
 	}
 
 	@Override
 	public List<E> findByNamedQueryLimited(String qName, int offset, int limit, Object... params) {
-		return createNamedQuery(qName, params).setFirstResult(offset).setMaxResults(limit).getResultList();
+		return createNamedQuery(domainClazz, qName, params).setFirstResult(offset).setMaxResults(limit).getResultList();
+	}
+	
+	@Override
+	public <T> List<T> findByNamedQuery(Class<T> clazz, String qName, Object... params) {
+		return createNamedQuery(clazz, qName, params).getResultList();
+	}
+	
+	@Override
+	public <T> List<T> findByNamedQueryCustom(Class<T> clazz, String qName, Object... params) {
+		String jpql = entityManager.createNamedQuery(qName)
+			    .unwrap(org.hibernate.Query.class)
+			    .getQueryString();
+		int parnr = 1;
+		TypedQuery<T> query = entityManager.createQuery(jpql, clazz);
+		if ((params != null) && (params.length > 0)) {
+			for (Object object : params) {
+				query.setParameter(parnr++, object);
+			}
+		}
+		return query.getResultList();
 	}
 
 	@Override
 	public E findOneByNamedQuery(String qName, Object... params) {
 		try {
-			return createNamedQuery(qName, params).getSingleResult();
+			return createNamedQuery(domainClazz, qName, params).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-
+	
 	@Override
 	public <T extends IdentifiedEntity<?>> T insert(T entity) {
 		entityManager.persist(entity);

@@ -30,12 +30,14 @@ import eu.europeana.corelib.db.entity.relational.SavedItemImpl;
 import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
+import eu.europeana.corelib.db.entity.relational.custom.TagCloudItem;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.ApiKeyService;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
@@ -322,6 +324,22 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
+	}
+	
+	@Override
+	public List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		return getDao().findByNamedQueryCustom(TagCloudItem.class, SocialTagImpl.QUERY_CREATECLOUD_BYUSER, userId);
+	}
+	
+	@Override
+	public List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException {
+		if ( (userId == null) || StringUtils.isBlank(tag)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		return getDao().findByNamedQuery(SocialTag.class, SocialTagImpl.QUERY_FINDBY_TAG, userId, StringUtils.lowerCase(tag));
 	}
 
 	private FullBean populateEuropeanaUserObject(User user,
