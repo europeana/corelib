@@ -161,28 +161,26 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
+						retrievedeuropeanaID.getXmlchecksum()))		
+				 {
+			
+			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())){
+				
+				generateFailedRecord(constructedeuropeanaId, xml,
+						LookupState.DUPLICATE_INCOLLECTION);
+				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
+				updateops.set(XMLCHECKSUM, xmlChecksum);
+				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
+			}
+			else{
+				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
+				lookupresult.setState(LookupState.UPDATE);
+				updateops.set(XMLCHECKSUM, xmlChecksum);
+			}
 
-			lookupresult.setState(LookupState.UPDATE);
-			updateops.set(XMLCHECKSUM, xmlChecksum);
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
 		}
-
 		
-		// Check if it is exactly the same (eid cid origid and xml are the same)
-		else if (constructedeuropeanaId.getCid().equals(
-				retrievedeuropeanaID.getCid())
-				&& constructedeuropeanaId.getEid().equals(
-						retrievedeuropeanaID.getEid())
-				&& constructedeuropeanaId.getOrid().equals(
-						retrievedeuropeanaID.getOrid())
-				&& constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())
-				&& !constructedeuropeanaId.getSessionID().equals(
-						retrievedeuropeanaID.getSessionID())) {
-			lookupresult.setState(LookupState.IDENTICAL);
-			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
-		}
 		
 		
 		
@@ -196,15 +194,25 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 				&& constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())
-				&& constructedeuropeanaId.getSessionID().equals(
-						retrievedeuropeanaID.getSessionID())) {
-			lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
-			generateFailedRecord(constructedeuropeanaId, xml,
-					LookupState.DUPLICATE_INCOLLECTION);
+						retrievedeuropeanaID.getXmlchecksum())) {
+			
+			if(constructedeuropeanaId.getSessionID().equals(
+					retrievedeuropeanaID.getSessionID())){
+				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
+				generateFailedRecord(constructedeuropeanaId, xml,
+						LookupState.DUPLICATE_INCOLLECTION);
+				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
+				
+			}
+			else if(!constructedeuropeanaId.getSessionID().equals(
+					retrievedeuropeanaID.getSessionID())){
+				lookupresult.setState(LookupState.IDENTICAL);
+				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
+			}
+			
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
 		}
-
+		
 		// There is a duplicate ID in a split collection containing different
 		// information:
 		// This implies that the eid and rid is the same even though the cid and
@@ -220,6 +228,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getXmlchecksum())) {
 			lookupresult
 					.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
+
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
@@ -234,6 +243,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 						retrievedeuropeanaID.getXmlchecksum())) {
 			lookupresult
 					.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+			
 			generateFailedRecord(constructedeuropeanaId, xml,
 					LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
