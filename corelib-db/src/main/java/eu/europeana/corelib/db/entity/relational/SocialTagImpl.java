@@ -37,7 +37,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 @NamedQueries ({
 	@NamedQuery(name=SocialTagImpl.QUERY_CREATECLOUD_BYUSER, 
 			query="SELECT NEW eu.europeana.corelib.db.entity.relational.custom.TagCloudItem(e.tag, count(*) ) FROM SocialTagImpl e WHERE e.user.id = ? GROUP BY e.tag"),
-	@NamedQuery(name=SocialTagImpl.QUERY_FINDBY_TAG, query="select e from SocialTagImpl e where e.user.id = ? and lower(e.tag) = ?"),
+	@NamedQuery(name=SocialTagImpl.QUERY_FINDBY_TAG, query="select e from SocialTagImpl e where e.user.id = ? and lower(e.tag) = ?")
 })
 public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
