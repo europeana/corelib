@@ -63,7 +63,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private Datastore datastore;
 	private Morphia morphia;
 	private static final String EUROPEANA_ID_DB = "EuropeanaId";
-
+	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
 		log.info("EDMMongoServer is instantiated");
@@ -132,9 +132,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				mongoServer, EUROPEANA_ID_DB);
 		// If it does not check whether it has been set in the past,
 		// if it exists retrieve the newID and update the lastAccess field
-		if (europeanaIdMongoServer.newIdExists(id)) {
-			List<EuropeanaId> newIDList = europeanaIdMongoServer
-					.retrieveEuropeanaIdFromOld(id);
+		List<EuropeanaId> newIDList = europeanaIdMongoServer
+				.retrieveEuropeanaIdFromOld(id);
+		if (newIDList!=null) {
 			EuropeanaId newId = newIDList.get(newIDList.size()-1);
 			//newId.setLastAccess(new Date().getTime());
 			europeanaIdMongoServer.updateTime(newId.getNewId(),id);
@@ -142,6 +142,18 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			return datastore.find(FullBeanImpl.class).field("about")
 					.equal(newIDList.get(0).getNewId()).get();
 		}
+		
+		List<EuropeanaId> v1IdList = europeanaIdMongoServer
+				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX+id);
+		if (v1IdList!=null) {
+			EuropeanaId newId = v1IdList.get(v1IdList.size()-1);
+			//newId.setLastAccess(new Date().getTime());
+			europeanaIdMongoServer.updateTime(newId.getNewId(),RESOLVE_PREFIX+id);
+			//europeanaIdMongoServer.saveEuropeanaId(newId);
+			return datastore.find(FullBeanImpl.class).field("about")
+					.equal(v1IdList.get(0).getNewId()).get();
+		}
+		
 		return null;
 	}
 
