@@ -50,18 +50,25 @@ public class SipCreatorUtils extends MappingParser{
 	}
 
 	private String findFile(String collectionId, String fileName) {
-		String file = repository + collectionId + INPUT_FOLDER
-		+ fileName + SUFFIX;
-		if(new File(file).exists()){
-			return file;
-		}
-		if (new File(repository + collectionId + INPUT_FOLDER).exists()){
-		for(File fFile:new File(repository + collectionId + INPUT_FOLDER).listFiles()){
-			if (StringUtils.contains(fFile.getName(),fileName+"_")){
-				return fFile.getName();
+//		String file = repository + collectionId + INPUT_FOLDER
+//		+ fileName + SUFFIX;
+//		if(new File(file).exists()){
+//			return file;
+//		}
+//		if (new File(repository + collectionId + INPUT_FOLDER).exists()){
+//		for(File fFile:new File(repository + collectionId + INPUT_FOLDER).listFiles()){
+//			if (StringUtils.contains(fFile.getName(),fileName+"_")){
+//				return fFile.getName();
+//			}
+//			
+//		}
+//		}
+//		return null;
+		String[] folders = new File(repository).list();
+		for(String folder:folders){
+			if (StringUtils.contains(folder, StringUtils.substringBefore(collectionId, "_")+"_")){
+				return new File(repository+folder+INPUT_FOLDER).listFiles()[0].getAbsolutePath();
 			}
-			
-		}
 		}
 		return null;
 	}

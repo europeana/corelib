@@ -139,8 +139,18 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param europeanaId The europeanaId to save
 	 */
 	public void saveEuropeanaId(EuropeanaId europeanaId) {
-		
+		List<EuropeanaId> oldIdList = retrieveEuropeanaIdFromOld(europeanaId.getOldId());
+		if(oldIdList.size()>0){
+			EuropeanaId oldEuropeanaId = oldIdList.get(0);
+			oldEuropeanaId.setNewId(europeanaId.getNewId());
+			Query<EuropeanaId> updateQuery = datastore
+					.createQuery(EuropeanaId.class).field("oldId").equal(europeanaId.getOldId());
+			UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
+					.set("lastAccess", oldEuropeanaId.getNewId());
+			datastore.update(updateQuery, ops);
+		} else{
 			datastore.save(europeanaId);
+		}
 		
 	}
 
