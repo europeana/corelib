@@ -116,6 +116,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("europeana_aggregation_edm_preview")
 	protected String[] edmPreview;
 
+	@Field("proxy_dc_title")
+	protected String[] proxyDcTitle;
+
 	@Override
 	public String[] getEdmPreview(){
 		return this.edmPreview;
@@ -123,7 +126,13 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getTitle() {
-		return (this.title != null ? this.title.clone() : null);
+		if (this.title != null) {
+			return this.title.clone();
+		} else if (this.proxyDcTitle != null) {
+			return this.proxyDcTitle.clone();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
