@@ -146,7 +146,7 @@ public class EuropeanaIdMongoServer implements MongoServer {
 			Query<EuropeanaId> updateQuery = datastore
 					.createQuery(EuropeanaId.class).field("oldId").equal(europeanaId.getOldId());
 			UpdateOperations<EuropeanaId> ops =datastore.createUpdateOperations(EuropeanaId.class)
-					.set("lastAccess", oldEuropeanaId.getNewId());
+					.set("newId", oldEuropeanaId.getNewId());
 			datastore.update(updateQuery, ops);
 		} else{
 			datastore.save(europeanaId);
