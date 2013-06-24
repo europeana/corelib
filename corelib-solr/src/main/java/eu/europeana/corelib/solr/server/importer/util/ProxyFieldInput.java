@@ -70,7 +70,7 @@ public final class ProxyFieldInput {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				proxy.getAbout());
 		solrInputDocument.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(),
-				SolrUtils.exists(EdmType.class, (proxy.getType().getType())).toString());
+				SolrUtils.exists(String.class, (proxy.getType().getType().xmlValue())).toString());
 		solrInputDocument.addField(
 				EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString(),
 				SolrUtils.exists(ResourceType.class,
@@ -257,11 +257,9 @@ public final class ProxyFieldInput {
 			
 			mongoProxy.setEdmIsNextInSequence(seqarray);
 		}
-		String docType = SolrUtils.exists(EdmType.class,
-				(proxy.getType().getType())).toString();
-		if(docType.toString().equals("_3_D")){
-			docType = DocType._3D.toString();
-		}
+		String docType = SolrUtils.exists(String.class,
+				(proxy.getType().getType().xmlValue())).toString();
+		
 		mongoProxy.setEdmType(DocType.get(docType));
 		
 		mongoProxy
