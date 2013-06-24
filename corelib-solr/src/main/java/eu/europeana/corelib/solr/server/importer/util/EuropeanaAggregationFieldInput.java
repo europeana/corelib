@@ -240,7 +240,7 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		
 		Map<String, List<String>> country = MongoUtils
-				.createLiteralMapFromString(aggregation.getCountry().getCountry());
+				.createLiteralMapFromString(aggregation.getCountry().getCountry().xmlValue().toLowerCase());
 		
 		if (country != null) {
 			mongoAggregation.setEdmCountry(country);
@@ -266,7 +266,7 @@ public final class EuropeanaAggregationFieldInput {
 		}
 
 		Map<String, List<String>> language = MongoUtils
-				.createLiteralMapFromString(aggregation.getLanguage().getLanguage());
+				.createLiteralMapFromString(aggregation.getLanguage().getLanguage().xmlValue().toLowerCase());
 		
 		mongoAggregation.setEdmLanguage(language);
 		ops.set("edmLanguage", language);

@@ -190,12 +190,12 @@ public final class MongoUtils {
 	 * @param obj
 	 * @return
 	 */
-	public static <T extends Enum> Map<String, List<String>> createLiteralMapFromString(T obj){
+	public static Map<String, List<String>> createLiteralMapFromString(String obj){
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 		
 		if (obj != null) {
 			List<String> val = new ArrayList<String>();
-			val.add(obj.toString());
+			val.add(obj);
 			retMap.put("def", val);
 			return retMap;
 		}
