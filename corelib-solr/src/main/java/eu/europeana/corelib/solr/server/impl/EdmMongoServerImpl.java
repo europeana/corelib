@@ -65,6 +65,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	EuropeanaIdMongoServer europeanaIdMongoServer;
 	private static final String EUROPEANA_ID_DB = "EuropeanaId";
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
 		log.info("EDMMongoServer is instantiated");
@@ -78,8 +79,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.username = username;
 		this.password = password;
 		createDatastore();
-		europeanaIdMongoServer = new EuropeanaIdMongoServer(
-				mongoServer, EUROPEANA_ID_DB, this.username,this.password);
+		europeanaIdMongoServer = new EuropeanaIdMongoServer(mongoServer,
+				EUROPEANA_ID_DB, this.username, this.password);
 		europeanaIdMongoServer.createDatastore();
 	}
 
@@ -132,32 +133,26 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public FullBean resolve(String id) {
-		
-		
-		// If it does not check whether it has been set in the past,
-		// if it exists retrieve the newID and update the lastAccess field
-		List<EuropeanaId> newIDList = europeanaIdMongoServer
+
+
+		EuropeanaId newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(id);
-		if (newIDList!=null) {
-			EuropeanaId newId = newIDList.get(newIDList.size()-1);
-			//newId.setLastAccess(new Date().getTime());
-			europeanaIdMongoServer.updateTime(newId.getNewId(),id);
-			//europeanaIdMongoServer.saveEuropeanaId(newId);
-			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(newIDList.get(0).getNewId()).get();
+		if (newId != null) {
+			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+			FullBeanImpl fBean = datastore.find(FullBeanImpl.class).field("about")
+					.equal(newId.getNewId()).get();
+			return fBean;
 		}
-		
-		List<EuropeanaId> v1IdList = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX+id);
-		if (v1IdList!=null) {
-			EuropeanaId newId = v1IdList.get(v1IdList.size()-1);
-			//newId.setLastAccess(new Date().getTime());
-			europeanaIdMongoServer.updateTime(newId.getNewId(),RESOLVE_PREFIX+id);
-			//europeanaIdMongoServer.saveEuropeanaId(newId);
+
+		newId = europeanaIdMongoServer
+				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+
+		if (newId != null) {
+			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
 			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(v1IdList.get(0).getNewId()).get();
+					.equal(newId.getNewId()).get();
 		}
-		
+
 		return null;
 	}
 
