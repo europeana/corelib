@@ -62,6 +62,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private String password;
 	private Datastore datastore;
 	private Morphia morphia;
+	EuropeanaIdMongoServer europeanaIdMongoServer;
 	private static final String EUROPEANA_ID_DB = "EuropeanaId";
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
@@ -77,6 +78,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.username = username;
 		this.password = password;
 		createDatastore();
+		europeanaIdMongoServer = new EuropeanaIdMongoServer(
+				mongoServer, EUROPEANA_ID_DB);
+		europeanaIdMongoServer.createDatastore();
 	}
 
 	public EdmMongoServerImpl() {
@@ -128,8 +132,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public FullBean resolve(String id) {
-		EuropeanaIdMongoServer europeanaIdMongoServer = new EuropeanaIdMongoServer(
-				mongoServer, EUROPEANA_ID_DB);
+		
+		
 		// If it does not check whether it has been set in the past,
 		// if it exists retrieve the newID and update the lastAccess field
 		List<EuropeanaId> newIDList = europeanaIdMongoServer
