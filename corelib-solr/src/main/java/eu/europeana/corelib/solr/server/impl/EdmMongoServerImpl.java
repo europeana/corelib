@@ -79,7 +79,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.password = password;
 		createDatastore();
 		europeanaIdMongoServer = new EuropeanaIdMongoServer(
-				mongoServer, EUROPEANA_ID_DB);
+				mongoServer, EUROPEANA_ID_DB, this.username,this.password);
 		europeanaIdMongoServer.createDatastore();
 	}
 

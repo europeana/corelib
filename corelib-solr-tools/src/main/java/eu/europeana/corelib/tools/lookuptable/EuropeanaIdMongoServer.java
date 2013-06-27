@@ -19,6 +19,8 @@ package eu.europeana.corelib.tools.lookuptable;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
@@ -38,6 +40,8 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	protected Mongo mongoServer;
 	protected String databaseName;
 	protected Datastore datastore;
+	protected String username;
+	protected String password;
 
 	/**
 	 * Constructor of the EuropeanaIDMongoServer
@@ -47,9 +51,11 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @param databaseName
 	 *            The database to connect to
 	 */
-	public EuropeanaIdMongoServer(Mongo mongoServer, String databaseName) {
+	public EuropeanaIdMongoServer(Mongo mongoServer, String databaseName, String... loginInfo) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
+		this.username = loginInfo[0];
+		this.password = loginInfo[1];
 		//createDatastore();
 	}
 
@@ -58,6 +64,11 @@ public class EuropeanaIdMongoServer implements MongoServer {
 		morphia.map(EuropeanaId.class);
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
+		if (StringUtils.isNotBlank(this.username)
+				&& StringUtils.isNotBlank(this.password)) {
+			datastore.getDB().authenticate(this.username,
+					this.password.toCharArray());
+		}
 	}
 
 	/**
@@ -84,17 +95,7 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @return
 	 */
 	public List<EuropeanaId> retrieveEuropeanaIdFromOld(String oldId) {
-		List<EuropeanaId> europeanaIdList = null;
-		
-		
-		try{
-			Query<EuropeanaId> query = datastore.find(EuropeanaId.class).field("oldId").equal(oldId);
-			europeanaIdList = query.asList();
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		//return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).asList();
-		return europeanaIdList;
+		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).asList();
 	}
 	
 	/**
