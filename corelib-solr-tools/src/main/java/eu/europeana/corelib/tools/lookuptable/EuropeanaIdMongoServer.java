@@ -84,7 +84,15 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 * @return
 	 */
 	public List<EuropeanaId> retrieveEuropeanaIdFromOld(String oldId) {
-		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).asList();
+		System.out.println(oldId);
+		List<EuropeanaId> europeanaIdList = null;
+		try{
+			europeanaIdList = datastore.find(EuropeanaId.class).field("oldId").equal(oldId).asList();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		//return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).asList();
+		return europeanaIdList;
 	}
 	
 	/**
