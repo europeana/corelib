@@ -116,7 +116,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	/**
-	 * Checks if the property has a value, empty string is nog allowed
+	 * Checks if the property has a value, empty string is not allowed
 	 * 
 	 * @param value
 	 *            The value to check
