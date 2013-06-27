@@ -17,17 +17,17 @@
 
 package eu.europeana.corelib.web.interceptor;
 
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.web.exception.WebConfigurationException;
 import eu.europeana.corelib.web.model.PageData;
 
@@ -39,7 +39,8 @@ import eu.europeana.corelib.web.model.PageData;
  */
 public class ConfigInterceptor extends HandlerInterceptorAdapter {
 
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	@Log
+	private Logger log;
 
 	@Value("#{europeanaProperties['debug']}")
 	private boolean debug;
@@ -129,7 +130,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			ProblemType problem = ProblemType.INVALIDARGUMENTS;
 			if (StringUtils.isNotBlank(name)) {
 				String message = "Inexisting property: " + name;
-				log.severe(message);
+				log.error(message);
 				problem.appendMessage(message);
 			}
 			throw new WebConfigurationException(problem);

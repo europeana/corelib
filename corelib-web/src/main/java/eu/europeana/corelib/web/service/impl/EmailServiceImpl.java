@@ -19,17 +19,18 @@ package eu.europeana.corelib.web.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
@@ -40,8 +41,10 @@ import eu.europeana.corelib.web.service.EmailService;
  * @see eu.europeana.corelib.web.service.EmailService
  */
 public abstract class EmailServiceImpl implements EmailService {
+	
+	@Log
+	private Logger log;
 
-	private final Logger log = Logger.getLogger(getClass().getName());
 
 	@Resource
 	private JavaMailSender mailSender;
@@ -129,7 +132,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendRegisterApiNotifyAdmin(final User user) throws EmailServiceException {
 		if (user == null) {
-			log.severe("Problem with sendRegisterApiNotifyAdmin: user is null");
+			log.error("Problem with sendRegisterApiNotifyAdmin: user is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -147,7 +150,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendRegisterApiNotifyUser(final ApiKey apiKey) throws EmailServiceException {
 		if (apiKey == null) {
-			log.severe("Problem with sendRegisterApiNotifyUser: apiKey is null");
+			log.error("Problem with sendRegisterApiNotifyUser: apiKey is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();

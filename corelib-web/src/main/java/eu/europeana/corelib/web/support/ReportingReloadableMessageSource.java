@@ -2,21 +2,22 @@ package eu.europeana.corelib.web.support;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 
 public class ReportingReloadableMessageSource extends ReloadableResourceBundleMessageSource {
 	
-	private final Logger log = Logger.getLogger(ReportingReloadableMessageSource.class.getName());
+	@Log
+	private Logger log;
 	
 	@Resource
 	private EmailService emailService;
