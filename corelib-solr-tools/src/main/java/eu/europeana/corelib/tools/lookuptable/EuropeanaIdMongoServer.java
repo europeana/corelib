@@ -55,8 +55,15 @@ public class EuropeanaIdMongoServer implements MongoServer {
 			String... loginInfo) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
-		this.username = loginInfo[0];
-		this.password = loginInfo[1];
+		if (loginInfo.length == 2){
+			this.username = loginInfo[0];
+			this.password = loginInfo[1];
+		}
+		else{
+			this.username = "";
+			this.password = "";
+		}
+
 		// createDatastore();
 	}
 
