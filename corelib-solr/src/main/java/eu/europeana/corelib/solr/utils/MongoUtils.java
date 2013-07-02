@@ -17,6 +17,8 @@
 package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
  */
 public final class MongoUtils {
 
-	private MongoUtils() {
+	public MongoUtils() {
 		// Constructor must be private
 	}
 
@@ -57,12 +59,12 @@ public final class MongoUtils {
 	 * @return true if it is contained false otherwise
 	 */
 	public static boolean contains(String[] str1, String str2) {
-		if(str1!=null){
-		for (String str : str1) {
-			if (StringUtils.equals(str, str2)) {
-				return true;
+		if (str1 != null) {
+			for (String str : str1) {
+				if (StringUtils.equals(str, str2)) {
+					return true;
+				}
 			}
-		}
 		}
 		return false;
 	}
@@ -183,27 +185,55 @@ public final class MongoUtils {
 		return null;
 	}
 
-	
 	/**
-	 * Method that converts a Enum object to a multilingual map of
-	 * strings
+	 * Method that converts a Enum object to a multilingual map of strings
+	 * 
 	 * @param obj
 	 * @return
 	 */
-	public static Map<String, List<String>> createLiteralMapFromString(String obj){
+	public static Map<String, List<String>> createLiteralMapFromString(
+			String obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
-		
+
 		if (obj != null) {
 			List<String> val = new ArrayList<String>();
 			val.add(obj);
 			retMap.put("def", val);
 			return retMap;
 		}
-		
+
 		return null;
 	}
-	
-	
+
+	public static boolean mapEquals(Map<String, List<String>> mapA,
+			Map<String, List<String>> mapB) {
+		if (mapA != null && mapB != null) {
+			if (mapA.keySet().equals(mapB.keySet())) {
+				boolean equals = true;
+				for (String keyA : mapA.keySet()) {
+					List<String> listA = mapA.get(keyA);
+					List<String> listB = mapB.get(keyA);
+					Collections.sort(listA);
+					Collections.sort(listB);
+					equals = equals & listA.equals(listB);
+				}
+				return equals;
+			}
+		}
+		return false;
+	}
+
+	public static boolean arrayEquals(String[] arrA, String[] arrB) {
+		if (arrA.length == arrB.length) {
+			List<String> listA = new ArrayList<String>(Arrays.asList(arrA));
+			List<String> listB = new ArrayList<String>(Arrays.asList(arrB));
+			Collections.sort(listA);
+			Collections.sort(listB);
+			return listA.equals(listB);
+		}
+		return false;
+	}
+
 	/**
 	 * Method that converts a ResourceOrLiteralType.class object to a
 	 * multilingual map of strings
@@ -230,23 +260,21 @@ public final class MongoUtils {
 					List<String> val = retMap.get(obj.getLang().getLang()) != null ? retMap
 							.get(obj.getLang().getLang())
 							: new ArrayList<String>();
-							
+
 					val.add(obj.getResource().getResource());
-					
+
 					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
 				if (obj.getString() != null) {
 					List<String> val = retMap.get("def") != null ? retMap
-							.get("def")
-							: new ArrayList<String>();
+							.get("def") : new ArrayList<String>();
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
 				if (obj.getResource() != null) {
 					List<String> val = retMap.get("def") != null ? retMap
-							.get("def")
-							: new ArrayList<String>();
+							.get("def") : new ArrayList<String>();
 					val.add(obj.getResource().getResource());
 					retMap.put("def", val);
 				}
@@ -270,7 +298,7 @@ public final class MongoUtils {
 	 */
 	public static <T extends LiteralType> Map<String, List<String>> createLiteralMapFromList(
 			List<T> list) {
-		if (list != null) {
+		if (list != null&&list.size()>0) {
 			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 			for (T obj : list) {
 				if (obj.getLang() != null
@@ -309,15 +337,16 @@ public final class MongoUtils {
 	 */
 	public static <T extends ResourceOrLiteralType> Map<String, List<String>> createResourceOrLiteralMapFromList(
 			List<T> list) {
-		if (list != null) {
+		if (list != null && list.size()>0) {
 			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 			for (T obj : list) {
 				if (obj.getString() != null) {
 					if (obj.getLang() != null
 							&& StringUtils.isNotBlank(obj.getLang().getLang())) {
-						List<String> val = retMap.get((obj.getLang().getLang()));
-						if (val==null){
-							 val = new ArrayList<String>();
+						List<String> val = retMap
+								.get((obj.getLang().getLang()));
+						if (val == null) {
+							val = new ArrayList<String>();
 
 						}
 						val.add(obj.getString());

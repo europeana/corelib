@@ -34,6 +34,7 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.solr.utils.updaters.PlaceUpdater;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
@@ -141,15 +142,9 @@ public final class PlaceFieldInput {
 		// if it does not exist
 		if (place == null) {
 			place = createNewPlace(placeType);
-			try{
+			
 			mongoServer.getDatastore().save(place);
-			}
-			catch (Exception e){
-				place =  ((EdmMongoServer) mongoServer).getDatastore()
-						.find(PlaceImpl.class)
-						.filter("about", placeType.getAbout()).get();
-				place = updatePlace(place, placeType, mongoServer);
-			}
+			
 		} else {
 			place = updatePlace(place, placeType, mongoServer);
 		}
@@ -174,76 +169,77 @@ public final class PlaceFieldInput {
 	 */
 	private PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
 			MongoServer mongoServer) {
-		if (placeType.getNoteList() != null) {
-		
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"note", MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
-
-		}
-
-		if (placeType.getAltLabelList() != null) {
-			
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"altLabel", MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
-
-		}
-
-		if (placeType.getPrefLabelList() != null) {
-			
-				MongoUtils.update(PlaceImpl.class, place.getAbout(),
-						mongoServer, "prefLabel", MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
-			
-		}
-
-		if (placeType.getIsPartOfList() != null) {
-			
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"isPartOf", MongoUtils.createResourceOrLiteralMapFromList(placeType.getIsPartOfList()));
-		}
-		
-		if (placeType.getHasPartList() != null) {
-			
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"dcTermsHasPart", MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
-		}
-		
-		if (placeType.getSameAList() != null) {
-			List<String> owlSameAs = new ArrayList<String>();
-			if (placeType.getSameAList() != null) {
-				for (SameAs sameAsJibx : placeType.getSameAList()) {
-					if (!MongoUtils.contains(place.getOwlSameAs(),
-							sameAsJibx.getResource())) {
-						owlSameAs.add(sameAsJibx.getResource());
-					}
-				}
-			}
-			if(place.getOwlSameAs()!=null){
-			for (String owlSameAsItem : place.getOwlSameAs()) {
-				owlSameAs.add(owlSameAsItem);
-			}
-			}
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
-		}
-		
-		
-		if (placeType.getLat() != null) {
-
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"latitude", placeType.getLat().getLat());
-		}
-
-		if (placeType.getLong() != null) {
-
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"longitude", placeType.getLong().getLong());
-		}
-		
-		if (placeType.getAlt() != null) {
-
-			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
-					"altitude",placeType.getAlt().getAlt());
-		}
+//		if (placeType.getNoteList() != null) {
+//		
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"note", MongoUtils.createLiteralMapFromList(placeType.getNoteList()));
+//
+//		}
+//
+//		if (placeType.getAltLabelList() != null) {
+//			
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"altLabel", MongoUtils.createLiteralMapFromList(placeType.getAltLabelList()));
+//
+//		}
+//
+//		if (placeType.getPrefLabelList() != null) {
+//			
+//				MongoUtils.update(PlaceImpl.class, place.getAbout(),
+//						mongoServer, "prefLabel", MongoUtils.createLiteralMapFromList(placeType.getPrefLabelList()));
+//			
+//		}
+//
+//		if (placeType.getIsPartOfList() != null) {
+//			
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"isPartOf", MongoUtils.createResourceOrLiteralMapFromList(placeType.getIsPartOfList()));
+//		}
+//		
+//		if (placeType.getHasPartList() != null) {
+//			
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"dcTermsHasPart", MongoUtils.createResourceOrLiteralMapFromList(placeType.getHasPartList()));
+//		}
+//		
+//		if (placeType.getSameAList() != null) {
+//			List<String> owlSameAs = new ArrayList<String>();
+//			if (placeType.getSameAList() != null) {
+//				for (SameAs sameAsJibx : placeType.getSameAList()) {
+//					if (!MongoUtils.contains(place.getOwlSameAs(),
+//							sameAsJibx.getResource())) {
+//						owlSameAs.add(sameAsJibx.getResource());
+//					}
+//				}
+//			}
+//			if(place.getOwlSameAs()!=null){
+//			for (String owlSameAsItem : place.getOwlSameAs()) {
+//				owlSameAs.add(owlSameAsItem);
+//			}
+//			}
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"owlSameAs", StringArrayUtils.toArray(owlSameAs));
+//		}
+//		
+//		
+//		if (placeType.getLat() != null) {
+//
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"latitude", placeType.getLat().getLat());
+//		}
+//
+//		if (placeType.getLong() != null) {
+//
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"longitude", placeType.getLong().getLong());
+//		}
+//		
+//		if (placeType.getAlt() != null) {
+//
+//			MongoUtils.update(PlaceImpl.class, place.getAbout(), mongoServer,
+//					"altitude",placeType.getAlt().getAlt());
+//		}
+		PlaceUpdater.update(place, placeType, mongoServer);
 		return ((EdmMongoServer) mongoServer).getDatastore().find(
 				PlaceImpl.class).filter("about", placeType.getAbout()).get();
 	}

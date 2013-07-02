@@ -39,6 +39,7 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.solr.utils.updaters.ProxyUpdater;
 
 /**
  * Constructor for the Proxy Entity
@@ -1151,7 +1152,8 @@ public final class ProxyFieldInput {
 				.find(ProxyImpl.class)
 				.filter("about", proxy.getAbout()).get();
 		 if (retProxy != null) {
-		MongoUtils.updateProxy(mongoProxy, mongoServer);
+		//MongoUtils.updateProxy(mongoProxy, mongoServer);
+			 ProxyUpdater.update(retProxy,mongoProxy,mongoServer);
 		 } else {
 		mongoServer.getDatastore().save(mongoProxy);
 		 }

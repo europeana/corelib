@@ -22,6 +22,9 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
+
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -91,12 +94,12 @@ public final class ProvidedCHOFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		ProvidedCHOImpl mongoProvidedCHO = mongoServer.getDatastore()
 				.find(ProvidedCHOImpl.class)
-				.filter("about", "/item"+providedCHO.getAbout()).get();
+				.filter("about", "/item" + providedCHO.getAbout()).get();
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
 			// mongoProvidedCHO.setId(new ObjectId());
-			mongoProvidedCHO.setAbout("/item"+providedCHO.getAbout());
+			mongoProvidedCHO.setAbout("/item" + providedCHO.getAbout());
 
 			mongoProvidedCHO.setOwlSameAs(SolrUtils
 					.resourceListToArray(providedCHO.getSameAList()));
@@ -110,9 +113,13 @@ public final class ProvidedCHOFieldInput {
 				for (SameAs sameAs : providedCHO.getSameAList()) {
 					owlSameAsList.add(sameAs.getResource());
 				}
-				MongoUtils.update(ProvidedCHOImpl.class,
-						mongoProvidedCHO.getAbout(), mongoServer, "owlSameAs",
+				Query<ProvidedCHOImpl> query = mongoServer.getDatastore()
+						.createQuery(ProvidedCHOImpl.class)
+						.filter("about", providedCHO.getAbout());
+				UpdateOperations<ProvidedCHOImpl> ops = mongoServer.getDatastore().createUpdateOperations(ProvidedCHOImpl.class);
+				ops.set("owlSameAs",
 						owlSameAsList);
+				mongoServer.getDatastore().update(query, ops);
 			}
 
 		}
@@ -121,8 +128,11 @@ public final class ProvidedCHOFieldInput {
 
 	/**
 	 * Delete a providedCHO from mongoDB storage based on its about field
-	 * @param about the about field to search
-	 * @param mongoServer the mongoserver to use
+	 * 
+	 * @param about
+	 *            the about field to search
+	 * @param mongoServer
+	 *            the mongoserver to use
 	 */
 	public void deleteProvideCHOFromMongo(String about,
 			EdmMongoServer mongoServer) {
