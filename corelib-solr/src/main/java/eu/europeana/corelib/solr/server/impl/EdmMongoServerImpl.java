@@ -143,7 +143,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.equal(newId.getNewId()).get();
 			return fBean;
 		}
-
+		System.out.println(id);
+		System.out.println(RESOLVE_PREFIX + id);
 		newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
 

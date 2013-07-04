@@ -107,7 +107,7 @@ public class EuropeanaIdMongoServer implements MongoServer {
 			
 			EuropeanaId id = datastore.find(EuropeanaId.class)
 					.field("oldId").equal(oldId).get();
-			System.out.println(id == null);
+			System.out.println(oldId);
 			return id;
 		} catch (Exception e) {
 			System.out.println(e);

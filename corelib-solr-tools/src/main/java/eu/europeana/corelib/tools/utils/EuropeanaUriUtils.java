@@ -51,6 +51,10 @@ public class EuropeanaUriUtils {
 		return "/" + sanitizeCollectionId(collectionId) + "/" + sanitizeRecordId(recordId);
 	}
 
+	public static String createResolveEuropeanaId(String collectionId, String recordId){
+		return "/" + collectionId + "/" + recordId;
+	}
+	
 	private static String sanitizeRecordId(String recordId) {
 
 		recordId = StringUtils.startsWith(recordId, "http://") ? StringUtils
