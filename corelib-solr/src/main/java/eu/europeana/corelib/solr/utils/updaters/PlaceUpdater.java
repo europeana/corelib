@@ -24,23 +24,27 @@ public class PlaceUpdater {
 		UpdateOperations<PlaceImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(PlaceImpl.class);
 		boolean update = false;
-		if (jibxPlace.getNoteList() != null) {
+		if (jibxPlace.getNoteList() == null) {
 			Map<String, List<String>> note = MongoUtils
 					.createLiteralMapFromList(jibxPlace.getNoteList());
+			if(note!=null){
 			if (place.getNote() == null
 					|| !MongoUtils.mapEquals(note, place.getNote())) {
 				ops.set("note", note);
 				update = true;
+			}
 			}
 		}
 
 		if (jibxPlace.getAltLabelList() != null) {
 			Map<String, List<String>> altLabel = MongoUtils
 					.createLiteralMapFromList(jibxPlace.getAltLabelList());
-			if (place.getAltLabel() == null
+			if(altLabel!=null){
+			if (place.getAltLabel()== null
 					|| !MongoUtils.mapEquals(altLabel, place.getAltLabel())) {
 				ops.set("altLabel", altLabel);
 				update = true;
+			}
 			}
 
 		}
@@ -48,10 +52,12 @@ public class PlaceUpdater {
 		if (jibxPlace.getPrefLabelList() != null) {
 			Map<String, List<String>> prefLabel = MongoUtils
 					.createLiteralMapFromList(jibxPlace.getPrefLabelList());
-			if (place.getPrefLabel() != null
+			if(prefLabel!=null){
+			if (place.getPrefLabel() == null
 					|| !MongoUtils.mapEquals(prefLabel, place.getPrefLabel())) {
 				ops.set("prefLabel", prefLabel);
 				update = true;
+			}
 			}
 
 		}
@@ -60,10 +66,12 @@ public class PlaceUpdater {
 			Map<String, List<String>> isPartOf = MongoUtils
 					.createResourceOrLiteralMapFromList(jibxPlace
 							.getIsPartOfList());
-			if (place.getIsPartOf() != null
+			if(isPartOf!=null){
+			if (place.getIsPartOf() == null
 					|| !MongoUtils.mapEquals(isPartOf, place.getIsPartOf())) {
 				ops.set("isPartOf", isPartOf);
 				update = true;
+			}
 			}
 		}
 
@@ -71,16 +79,19 @@ public class PlaceUpdater {
 			Map<String, List<String>> hasPart = MongoUtils
 					.createResourceOrLiteralMapFromList(jibxPlace
 							.getHasPartList());
+			if(hasPart!=null){
 			if (place.getDcTermsHasPart() == null
 					|| !MongoUtils
 							.mapEquals(hasPart, place.getDcTermsHasPart())) {
 				ops.set("dcTermsHasPart", hasPart);
 				update = true;
 			}
+			
 		}
-
+		}
 		if (jibxPlace.getSameAList() != null) {
 			List<String> owlSameAs = new ArrayList<String>();
+			
 			if (jibxPlace.getSameAList() != null) {
 				for (SameAs sameAsJibx : jibxPlace.getSameAList()) {
 					if (!MongoUtils.contains(place.getOwlSameAs(),
@@ -89,6 +100,7 @@ public class PlaceUpdater {
 					}
 				}
 			}
+			
 			if (place.getOwlSameAs() != null) {
 				for (String owlSameAsItem : place.getOwlSameAs()) {
 					owlSameAs.add(owlSameAsItem);
@@ -96,6 +108,7 @@ public class PlaceUpdater {
 			}
 			ops.set("owlSameAs", StringArrayUtils.toArray(owlSameAs));
 			update = true;
+		
 		}
 
 		if (jibxPlace.getLat() != null) {
