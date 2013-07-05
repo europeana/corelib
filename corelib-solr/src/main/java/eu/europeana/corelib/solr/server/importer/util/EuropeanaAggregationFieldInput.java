@@ -81,7 +81,7 @@ public final class EuropeanaAggregationFieldInput {
 				solrInputDocument, aggregation.getCreator(),
 				EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR);
 		solrInputDocument = SolrUtils.addFieldFromEnum(solrInputDocument,
-				aggregation.getCountry().getCountry(),
+				aggregation.getCountry().getCountry().xmlValue(),
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY);
 		
 		
@@ -105,7 +105,7 @@ public final class EuropeanaAggregationFieldInput {
 						+ aggregation.getAggregatedCHO().getResource());
 		
 		solrInputDocument = SolrUtils.addFieldFromEnum(solrInputDocument,
-				aggregation.getLanguage().getLanguage(),
+				aggregation.getLanguage().getLanguage().xmlValue(),
 				
 				
 				
