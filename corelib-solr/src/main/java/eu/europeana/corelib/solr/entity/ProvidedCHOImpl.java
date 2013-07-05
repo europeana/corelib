@@ -49,19 +49,17 @@ public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCH
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o==null){
+		if (o==null) {
 			return false;
 		}
-		if(o.getClass() == this.getClass()){
+		if (o.getClass() == this.getClass()) {
 			return this.getAbout().equals(((ProvidedCHOImpl) o).getAbout());
 		}
 		return false;
 	}
 
 	@Override
-	public int hashCode(){ 
+	public int hashCode() { 
 		return this.about.hashCode();
 	}
-
-	
 }

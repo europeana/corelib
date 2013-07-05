@@ -37,12 +37,15 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("WebResource")
 public class WebResourceImpl implements WebResource {
+
 	@Id
 	private ObjectId id = new ObjectId();
 	private Map<String,List<String>> webResourceDcRights;
 	private Map<String,List<String>> webResourceEdmRights;
+
 	@Indexed(unique=false)
 	private String about;
+
 	private Map<String,List<String>> dcDescription;
 	private Map<String,List<String>> dcFormat;
 	private Map<String,List<String>> dcSource;
