@@ -30,6 +30,7 @@ import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
@@ -142,8 +143,15 @@ public final class PlaceFieldInput {
 		// if it does not exist
 		if (place == null) {
 			place = createNewPlace(placeType);
-			
+			try{
 			mongoServer.getDatastore().save(place);
+			}
+			catch(Exception e){
+				PlaceImpl placeSec = ((EdmMongoServer) mongoServer).getDatastore()
+						.find(PlaceImpl.class)
+						.filter("about", placeType.getAbout()).get();
+				place = updatePlace(placeSec, placeType, mongoServer);
+			}
 			
 		} else {
 			place = updatePlace(place, placeType, mongoServer);
