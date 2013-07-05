@@ -298,7 +298,7 @@ public final class SolrUtils {
 	public static  SolrInputDocument addFieldFromEnum(
 			SolrInputDocument solrInputDocument, String obj, EdmLabel label) {
 		if (obj != null) {
-		   solrInputDocument.addField(label.toString(),obj);
+		   solrInputDocument.addField(label.toString(),StringUtils.lowerCase(obj));
 		}
 		return solrInputDocument;
 	}
