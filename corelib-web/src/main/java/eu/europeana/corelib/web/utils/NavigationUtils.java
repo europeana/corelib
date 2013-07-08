@@ -37,9 +37,11 @@ public class NavigationUtils {
 		BreadCrumb crumb = new BreadCrumb(q.getQuery(), "query", q.getQuery(), null);
 		crumbs.add(crumb);
 		String[] refinements = q.getRefinements();
-		for (String refinement : refinements) {
-			crumb = new BreadCrumb(refinement, "qf", refinement, crumb.getHref());
-			crumbs.add(crumb);
+		if (refinements != null && refinements.length > 0) {
+			for (String refinement : refinements) {
+				crumb = new BreadCrumb(refinement, "qf", refinement, crumb.getHref());
+				crumbs.add(crumb);
+			}
 		}
 		crumb.markAsLast();
 		return crumbs;
