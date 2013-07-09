@@ -67,6 +67,8 @@ public class SipCreatorUtils extends MappingParser{
 		String[] folders = new File(repository).list();
 		for(String folder:folders){
 			if (StringUtils.contains(folder, StringUtils.substringBefore(collectionId, "_")+"_")){
+				System.out.println(repository+folder+INPUT_FOLDER);
+				System.out.println(new File(repository+folder+INPUT_FOLDER).listFiles().length);
 				return new File(repository+folder+INPUT_FOLDER).listFiles()[0].getAbsolutePath();
 			}
 		}
