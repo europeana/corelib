@@ -53,6 +53,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 public class EDMUtils {
 
 	private static IBindingFactory bfact;
+	private final static String SPACE=" ";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -585,10 +586,24 @@ public class EDMUtils {
 
 	private static Country convertMapToCountry(
 			Map<String, List<String>> edmCountry) {
+		
 		if (edmCountry != null && edmCountry.size() > 0) {
 			Country country = new Country();
-			country.setCountry(CountryCodes.convert(edmCountry.entrySet()
-					.iterator().next().getValue().get(0)));
+			StringBuilder sb = new StringBuilder();
+			String[] splitCountry = edmCountry.entrySet()
+					.iterator().next().getValue().get(0).split(SPACE);
+			for(String countryWord:splitCountry){
+				if(StringUtils.equals("and", countryWord)){
+					sb.append(countryWord);
+				} else {
+					sb.append(StringUtils.capitalize(countryWord));
+				}
+				sb.append(SPACE);
+			}
+			
+			country.setCountry(CountryCodes.convert(sb.toString().trim()));
+			
+			return country;
 		}
 		return null;
 	}
