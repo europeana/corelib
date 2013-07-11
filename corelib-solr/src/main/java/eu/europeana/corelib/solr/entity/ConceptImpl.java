@@ -81,7 +81,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setNarrower(String[] narrower) {
-		this.narrower=narrower!=null?narrower.clone():null;
+		this.narrower = narrower != null ? narrower.clone() : null;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setRelated(String[] related) {
-		this.related = related!=null?related.clone():null;
+		this.related = related != null ? related.clone() : null;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setBroadMatch(String[] broadMatch) {
-		this.broadMatch = broadMatch!=null?broadMatch.clone():null;
+		this.broadMatch = broadMatch != null ? broadMatch.clone() : null;
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setNarrowMatch(String[] narrowMatch) {
-		this.narrowMatch = narrowMatch!=null? narrowMatch.clone(): null;
+		this.narrowMatch = narrowMatch != null ? narrowMatch.clone() : null;
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setRelatedMatch(String[] relatedMatch) {
-		this.relatedMatch = relatedMatch!=null?relatedMatch.clone():null;
+		this.relatedMatch = relatedMatch != null ? relatedMatch.clone() : null;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setExactMatch(String[] exactMatch) {
-		this.exactMatch = exactMatch!=null?exactMatch.clone():null;
+		this.exactMatch = exactMatch != null?exactMatch.clone() : null;
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setCloseMatch(String[] closeMatch) {
-		this.closeMatch = closeMatch!=null?closeMatch.clone():null;
+		this.closeMatch = closeMatch != null ? closeMatch.clone() : null;
 	}
 
 	@Override
@@ -161,6 +161,6 @@ public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	@Override
 	public void setInScheme(String[] inScheme) {
-		this.inScheme = inScheme!=null?inScheme.clone():null;
+		this.inScheme = inScheme != null ? inScheme.clone() : null;
 	}
 }

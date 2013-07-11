@@ -46,7 +46,6 @@ public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCH
 		this.owlSameAs = owlSameAs.clone();
 	}
 
-	
 	@Override
 	public boolean equals(Object o) {
 		if (o==null) {
@@ -59,7 +58,7 @@ public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCH
 	}
 
 	@Override
-	public int hashCode() { 
+	public int hashCode() {
 		return this.about.hashCode();
 	}
 }
