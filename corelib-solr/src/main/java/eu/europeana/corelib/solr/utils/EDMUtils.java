@@ -78,7 +78,7 @@ public class EDMUtils {
 			}
 			marshallingContext = bfact.createMarshallingContext();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			marshallingContext.setOutput(out,null);
+			marshallingContext.setOutput(out, null);
 			marshallingContext.marshalDocument(rdf);
 			return out.toString("UTF-8");
 		} catch (JiBXException e) {
@@ -93,296 +93,299 @@ public class EDMUtils {
 	}
 
 	private static void appendTimespans(RDF rdf, List<TimespanImpl> timespans) {
-		if(timespans!=null){
-		List<TimeSpanType> timespanList = new ArrayList<TimeSpanType>();
-		for (Timespan ts : timespans) {
-			TimeSpanType timeSpan = new TimeSpanType();
-			timeSpan.setAbout(ts.getAbout());
-			List<AltLabel> altLabelList = convertListFromMap(AltLabel.class,
-					ts.getAltLabel());
-			if (altLabelList != null) {
-				timeSpan.setAltLabelList(altLabelList);
-			} 
-			Begin begin = convertMapToObj(Begin.class, ts.getBegin());
-			if (begin != null) {
-				timeSpan.setBegin(begin);
+		if (timespans != null) {
+			List<TimeSpanType> timespanList = new ArrayList<TimeSpanType>();
+			for (Timespan ts : timespans) {
+				TimeSpanType timeSpan = new TimeSpanType();
+				timeSpan.setAbout(ts.getAbout());
+				List<AltLabel> altLabelList = convertListFromMap(
+						AltLabel.class, ts.getAltLabel());
+				if (altLabelList != null) {
+					timeSpan.setAltLabelList(altLabelList);
+				}
+				Begin begin = convertMapToObj(Begin.class, ts.getBegin());
+				if (begin != null) {
+					timeSpan.setBegin(begin);
+				}
+				End end = convertMapToObj(End.class, ts.getEnd());
+				if (end != null) {
+					timeSpan.setEnd(end);
+				}
+				List<HasPart> hasPartList = convertListFromMap(HasPart.class,
+						ts.getDctermsHasPart());
+				if (hasPartList != null) {
+					timeSpan.setHasPartList(hasPartList);
+				}
+				List<IsPartOf> isPartOfList = convertListFromMap(
+						IsPartOf.class, ts.getIsPartOf());
+				if (isPartOfList != null) {
+					timeSpan.setIsPartOfList(isPartOfList);
+				}
+				List<Note> noteList = convertListFromMap(Note.class,
+						ts.getNote());
+				if (noteList != null) {
+					timeSpan.setNoteList(noteList);
+				}
+				List<SameAs> sameAsList = convertListFromArray(SameAs.class,
+						ts.getOwlSameAs());
+				if (sameAsList != null) {
+					timeSpan.setSameAList(sameAsList);
+				}
+				List<PrefLabel> prefLabelList = convertListFromMap(
+						PrefLabel.class, ts.getPrefLabel());
+				if (prefLabelList != null) {
+					timeSpan.setPrefLabelList(prefLabelList);
+				}
+				timespanList.add(timeSpan);
 			}
-			End end = convertMapToObj(End.class, ts.getEnd());
-			if (end != null) {
-				timeSpan.setEnd(end);
-			}
-			List<HasPart> hasPartList = convertListFromMap(HasPart.class,
-					ts.getDctermsHasPart());
-			if (hasPartList != null) {
-				timeSpan.setHasPartList(hasPartList);
-			}
-			List<IsPartOf> isPartOfList = convertListFromMap(IsPartOf.class,
-					ts.getIsPartOf());
-			if (isPartOfList != null) {
-				timeSpan.setIsPartOfList(isPartOfList);
-			}
-			List<Note> noteList = convertListFromMap(Note.class, ts.getNote());
-			if (noteList != null) {
-				timeSpan.setNoteList(noteList);
-			}
-			List<SameAs> sameAsList = convertListFromArray(SameAs.class,
-					ts.getOwlSameAs());
-			if (sameAsList != null) {
-				timeSpan.setSameAList(sameAsList);
-			}
-			List<PrefLabel> prefLabelList = convertListFromMap(PrefLabel.class,
-					ts.getPrefLabel());
-			if (prefLabelList != null) {
-				timeSpan.setPrefLabelList(prefLabelList);
-			}
-			timespanList.add(timeSpan);
-		}
-		rdf.setTimeSpanList(timespanList);
+			rdf.setTimeSpanList(timespanList);
 		}
 	}
 
 	private static void appendPlaces(RDF rdf, List<PlaceImpl> places) {
-		if(places!=null){
-		List<PlaceType> placeList = new ArrayList<PlaceType>();
-		for (Place place : places) {
-			PlaceType pType = new PlaceType();
-			pType.setAbout(place.getAbout());
+		if (places != null) {
+			List<PlaceType> placeList = new ArrayList<PlaceType>();
+			for (Place place : places) {
+				PlaceType pType = new PlaceType();
+				pType.setAbout(place.getAbout());
 
-			if (place.getAltitude()!=null&&place.getAltitude()!=0) {
-				Alt alt = new Alt();
-				alt.setAlt(place.getAltitude());
-				pType.setAlt(alt);
+				if (place.getAltitude() != null && place.getAltitude() != 0) {
+					Alt alt = new Alt();
+					alt.setAlt(place.getAltitude());
+					pType.setAlt(alt);
+				}
+
+				if (place.getLatitude() != null
+						&& place.getLongitude() != null
+						&& (place.getLatitude() != 0 && place.getLongitude() != 0)) {
+					Lat lat = new Lat();
+					lat.setLat(place.getLatitude());
+					pType.setLat(lat);
+
+					_Long _long = new _Long();
+					_long.setLong(place.getLongitude());
+					pType.setLong(_long);
+				}
+				List<AltLabel> altLabelList = convertListFromMap(
+						AltLabel.class, place.getAltLabel());
+				if (altLabelList != null) {
+					pType.setAltLabelList(altLabelList);
+				}
+				List<HasPart> hasPartList = convertListFromMap(HasPart.class,
+						place.getDcTermsHasPart());
+				if (hasPartList != null) {
+					pType.setHasPartList(hasPartList);
+				}
+				List<IsPartOf> isPartOfList = convertListFromMap(
+						IsPartOf.class, place.getIsPartOf());
+				if (isPartOfList != null) {
+					pType.setIsPartOfList(isPartOfList);
+				}
+				List<Note> noteList = convertListFromMap(Note.class,
+						place.getNote());
+				if (noteList != null) {
+					pType.setNoteList(noteList);
+				}
+				List<PrefLabel> prefLabelList = convertListFromMap(
+						PrefLabel.class, place.getPrefLabel());
+				if (prefLabelList != null) {
+					pType.setPrefLabelList(prefLabelList);
+				}
+				List<SameAs> sameAsList = convertListFromArray(SameAs.class,
+						place.getOwlSameAs());
+				if (sameAsList != null) {
+					pType.setSameAList(sameAsList);
+				}
+				placeList.add(pType);
 			}
-			
-			if (place.getLatitude()!=null&&place.getLongitude()!=null&&(place.getLatitude()!=0&&place.getLongitude()!=0)) {
-				Lat lat = new Lat();
-				lat.setLat(place.getLatitude());
-				pType.setLat(lat);
-			
-				_Long _long = new _Long();
-				_long.setLong(place.getLongitude());
-				pType.setLong(_long);
-			}
-			List<AltLabel> altLabelList = convertListFromMap(AltLabel.class,
-					place.getAltLabel());
-			if (altLabelList != null) {
-				pType.setAltLabelList(altLabelList);
-			}
-			List<HasPart> hasPartList = convertListFromMap(HasPart.class,
-					place.getDcTermsHasPart());
-			if (hasPartList != null) {
-				pType.setHasPartList(hasPartList);
-			}
-			List<IsPartOf> isPartOfList = convertListFromMap(IsPartOf.class,
-					place.getIsPartOf());
-			if (isPartOfList != null) {
-				pType.setIsPartOfList(isPartOfList);
-			}
-			List<Note> noteList = convertListFromMap(Note.class,
-					place.getNote());
-			if (noteList != null) {
-				pType.setNoteList(noteList);
-			}
-			List<PrefLabel> prefLabelList = convertListFromMap(PrefLabel.class,
-					place.getPrefLabel());
-			if (prefLabelList != null) {
-				pType.setPrefLabelList(prefLabelList);
-			}
-			List<SameAs> sameAsList = convertListFromArray(SameAs.class,
-					place.getOwlSameAs());
-			if (sameAsList != null) {
-				pType.setSameAList(sameAsList);
-			}
-			placeList.add(pType);
-		}
-		rdf.setPlaceList(placeList);
+			rdf.setPlaceList(placeList);
 		}
 	}
 
 	private static void appendConcepts(RDF rdf, List<ConceptImpl> concepts) {
-		if(concepts!=null){
-		List<Concept> conceptList = new ArrayList<Concept>();
-		for (ConceptImpl concept : concepts) {
-			Concept con = new Concept();
-			con.setAbout(concept.getAbout());
-			List<Concept.Choice> choices = new ArrayList<Concept.Choice>();
-			if (concept.getAltLabel() != null) {
-				for (Entry<String, List<String>> entry : concept.getAltLabel()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						AltLabel altLabel = new AltLabel();
-						altLabel.setString(str);
-						if (lang == null) {
+		if (concepts != null) {
+			List<Concept> conceptList = new ArrayList<Concept>();
+			for (ConceptImpl concept : concepts) {
+				Concept con = new Concept();
+				con.setAbout(concept.getAbout());
+				List<Concept.Choice> choices = new ArrayList<Concept.Choice>();
+				if (concept.getAltLabel() != null) {
+					for (Entry<String, List<String>> entry : concept
+							.getAltLabel().entrySet()) {
+						LiteralType.Lang lang = null;
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals("def", entry.getKey())) {
 							lang = new LiteralType.Lang();
-							lang.setLang("");
+							lang.setLang(entry.getKey());
 						}
-						altLabel.setLang(lang);
+						for (String str : entry.getValue()) {
+							AltLabel altLabel = new AltLabel();
+							altLabel.setString(str);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+							}
+							altLabel.setLang(lang);
+							Concept.Choice ch = new Concept.Choice();
+							ch.setAltLabel(altLabel);
+							choices.add(ch);
+						}
+					}
+				}
+				if (concept.getPrefLabel() != null) {
+					for (Entry<String, List<String>> entry : concept
+							.getPrefLabel().entrySet()) {
+						LiteralType.Lang lang = null;
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals("def", entry.getKey())) {
+							lang = new LiteralType.Lang();
+							lang.setLang(entry.getKey());
+						}
+						for (String str : entry.getValue()) {
+							PrefLabel prefLabel = new PrefLabel();
+							prefLabel.setString(str);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+							}
+							prefLabel.setLang(lang);
+							Concept.Choice ch = new Concept.Choice();
+							ch.setPrefLabel(prefLabel);
+							choices.add(ch);
+						}
+					}
+				}
+				if (concept.getNotation() != null) {
+					for (Entry<String, List<String>> entry : concept
+							.getNotation().entrySet()) {
+						LiteralType.Lang lang = null;
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals("def", entry.getKey())) {
+							lang = new LiteralType.Lang();
+							lang.setLang(entry.getKey());
+						}
+						for (String str : entry.getValue()) {
+							Notation notation = new Notation();
+							notation.setString(str);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+							}
+							notation.setLang(lang);
+							Concept.Choice ch = new Concept.Choice();
+							ch.setNotation(notation);
+							choices.add(ch);
+						}
+					}
+				}
+				if (concept.getNote() != null) {
+					for (Entry<String, List<String>> entry : concept.getNote()
+							.entrySet()) {
+						LiteralType.Lang lang = null;
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals("def", entry.getKey())) {
+							lang = new LiteralType.Lang();
+							lang.setLang(entry.getKey());
+						}
+						for (String str : entry.getValue()) {
+							Note note = new Note();
+							note.setString(str);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+							}
+							note.setLang(lang);
+							Concept.Choice ch = new Concept.Choice();
+							ch.setNote(note);
+							choices.add(ch);
+						}
+					}
+				}
+				if (concept.getBroader() != null) {
+					for (String broaderString : concept.getBroader()) {
+						Broader broader = new Broader();
+						broader.setResource(broaderString);
 						Concept.Choice ch = new Concept.Choice();
-						ch.setAltLabel(altLabel);
+						ch.setBroader(broader);
 						choices.add(ch);
 					}
 				}
-			}
-			if (concept.getPrefLabel() != null) {
-				for (Entry<String, List<String>> entry : concept.getPrefLabel()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						PrefLabel prefLabel = new PrefLabel();
-						prefLabel.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						prefLabel.setLang(lang);
+				if (concept.getBroadMatch() != null) {
+					for (String str : concept.getBroadMatch()) {
+						BroadMatch broadMatch = new BroadMatch();
+						broadMatch.setResource(str);
 						Concept.Choice ch = new Concept.Choice();
-						ch.setPrefLabel(prefLabel);
+						ch.setBroadMatch(broadMatch);
 						choices.add(ch);
 					}
 				}
-			}
-			if (concept.getNotation() != null) {
-				for (Entry<String, List<String>> entry : concept.getNotation()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Notation notation = new Notation();
-						notation.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						notation.setLang(lang);
+				if (concept.getCloseMatch() != null) {
+					for (String str : concept.getCloseMatch()) {
+						CloseMatch closeMatch = new CloseMatch();
+						closeMatch.setResource(str);
 						Concept.Choice ch = new Concept.Choice();
-						ch.setNotation(notation);
+						ch.setCloseMatch(closeMatch);
 						choices.add(ch);
 					}
 				}
-			}
-			if (concept.getNote() != null) {
-				for (Entry<String, List<String>> entry : concept.getNote()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Note note = new Note();
-						note.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						note.setLang(lang);
+				if (concept.getExactMatch() != null) {
+					for (String str : concept.getExactMatch()) {
+						ExactMatch exactMatch = new ExactMatch();
+						exactMatch.setResource(str);
 						Concept.Choice ch = new Concept.Choice();
-						ch.setNote(note);
+						ch.setExactMatch(exactMatch);
 						choices.add(ch);
 					}
 				}
-			}
-			if (concept.getBroader() != null) {
-				for (String broaderString : concept.getBroader()) {
-					Broader broader = new Broader();
-					broader.setResource(broaderString);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setBroader(broader);
-					choices.add(ch);
+				if (concept.getInScheme() != null) {
+					for (String str : concept.getInScheme()) {
+						InScheme inScheme = new InScheme();
+						inScheme.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						ch.setInScheme(inScheme);
+						choices.add(ch);
+					}
 				}
-			}
-			if (concept.getBroadMatch() != null) {
-				for (String str : concept.getBroadMatch()) {
-					BroadMatch broadMatch = new BroadMatch();
-					broadMatch.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setBroadMatch(broadMatch);
-					choices.add(ch);
+				if (concept.getNarrower() != null) {
+					for (String str : concept.getNarrower()) {
+						Narrower narrower = new Narrower();
+						narrower.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						ch.setNarrower(narrower);
+						choices.add(ch);
+					}
 				}
-			}
-			if (concept.getCloseMatch() != null) {
-				for (String str : concept.getCloseMatch()) {
-					CloseMatch closeMatch = new CloseMatch();
-					closeMatch.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setCloseMatch(closeMatch);
-					choices.add(ch);
+				if (concept.getNarrowMatch() != null) {
+					for (String str : concept.getNarrowMatch()) {
+						NarrowMatch narrowMatch = new NarrowMatch();
+						narrowMatch.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						ch.setNarrowMatch(narrowMatch);
+						choices.add(ch);
+					}
 				}
-			}
-			if (concept.getExactMatch() != null) {
-				for (String str : concept.getExactMatch()) {
-					ExactMatch exactMatch = new ExactMatch();
-					exactMatch.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setExactMatch(exactMatch);
-					choices.add(ch);
+				if (concept.getRelatedMatch() != null) {
+					for (String str : concept.getRelatedMatch()) {
+						RelatedMatch relatedMatch = new RelatedMatch();
+						relatedMatch.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						ch.setRelatedMatch(relatedMatch);
+						choices.add(ch);
+					}
 				}
-			}
-			if (concept.getInScheme() != null) {
-				for (String str : concept.getInScheme()) {
-					InScheme inScheme = new InScheme();
-					inScheme.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setInScheme(inScheme);
-					choices.add(ch);
+				if (concept.getRelated() != null) {
+					for (String str : concept.getRelated()) {
+						Related related = new Related();
+						related.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						ch.setRelated(related);
+						choices.add(ch);
+					}
 				}
+				con.setChoiceList(choices);
+				conceptList.add(con);
 			}
-			if (concept.getNarrower() != null) {
-				for (String str : concept.getNarrower()) {
-					Narrower narrower = new Narrower();
-					narrower.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setNarrower(narrower);
-					choices.add(ch);
-				}
-			}
-			if (concept.getNarrowMatch() != null) {
-				for (String str : concept.getNarrowMatch()) {
-					NarrowMatch narrowMatch = new NarrowMatch();
-					narrowMatch.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setNarrowMatch(narrowMatch);
-					choices.add(ch);
-				}
-			}
-			if (concept.getRelatedMatch() != null) {
-				for (String str : concept.getRelatedMatch()) {
-					RelatedMatch relatedMatch = new RelatedMatch();
-					relatedMatch.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setRelatedMatch(relatedMatch);
-					choices.add(ch);
-				}
-			}
-			if (concept.getRelated() != null) {
-				for (String str : concept.getRelated()) {
-					Related related = new Related();
-					related.setResource(str);
-					Concept.Choice ch = new Concept.Choice();
-					ch.setRelated(related);
-					choices.add(ch);
-				}
-			}
-			con.setChoiceList(choices);
-			conceptList.add(con);
-		}
-		rdf.setConceptList(conceptList);
+			rdf.setConceptList(conceptList);
 		}
 	}
 
@@ -514,8 +517,8 @@ public class EDMUtils {
 		CollectionName collectionName = new CollectionName();
 		collectionName.setString(fBean.getEuropeanaCollectionName()[0]);
 		aggregation.setCollectionName(collectionName);
-		Country country = convertMapToObj(Country.class,
-				europeanaAggregation.getEdmCountry());
+		Country country = convertMapToCountry(europeanaAggregation
+				.getEdmCountry());
 		if (country != null) {
 			aggregation.setCountry(country);
 		}
@@ -539,8 +542,8 @@ public class EDMUtils {
 		if (lp != null) {
 			aggregation.setLandingPage(lp);
 		}
-		Language1 language = convertMapToObj(Language1.class,
-				europeanaAggregation.getEdmLanguage());
+		Language1 language = convertMapToLanguage(europeanaAggregation
+				.getEdmLanguage());
 		if (language != null) {
 			aggregation.setLanguage(language);
 		}
@@ -561,12 +564,33 @@ public class EDMUtils {
 			rights1.setString("");
 			Resource res = new Resource();
 			res.setResource("http://testrights/");
-			rights1.setResource(res );
+			rights1.setResource(res);
 			aggregation.setRights(rights1);
 		}
 		List<EuropeanaAggregationType> lst = new ArrayList<EuropeanaAggregationType>();
 		lst.add(aggregation);
 		rdf.setEuropeanaAggregationList(lst);
+	}
+
+	private static Language1 convertMapToLanguage(
+			Map<String, List<String>> edmLanguage) {
+		if (edmLanguage != null && edmLanguage.size() > 0) {
+			Language1 lang = new Language1();
+			lang.setLanguage(LanguageCodes.convert(edmLanguage.entrySet()
+					.iterator().next().getValue().get(0)));
+			return lang;
+		}
+		return null;
+	}
+
+	private static Country convertMapToCountry(
+			Map<String, List<String>> edmCountry) {
+		if (edmCountry != null && edmCountry.size() > 0) {
+			Country country = new Country();
+			country.setCountry(CountryCodes.convert(edmCountry.entrySet()
+					.iterator().next().getValue().get(0)));
+		}
+		return null;
 	}
 
 	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies) {
@@ -602,27 +626,25 @@ public class EDMUtils {
 			if (derivativeList != null) {
 				proxy.setIsDerivativeOfList(derivativeList);
 			}
-			
-	
+
 			List<IsNextInSequence> nis = null;
-			
+
 			String[] seqArray = prx.getEdmIsNextInSequence();
-			
-			if(seqArray != null){
+
+			if (seqArray != null) {
 				nis = new ArrayList<IsNextInSequence>();
-				
-				for(int i=0; i < seqArray.length; i ++ ){
+
+				for (int i = 0; i < seqArray.length; i++) {
 					IsNextInSequence item = new IsNextInSequence();
 					item.setResource(seqArray[i]);
 					nis.add(item);
 				}
 			}
 
-			
 			if (nis != null) {
 				proxy.setIsNextInSequenceList(nis);
 			}
-			
+
 			List<IsRelatedTo> isRelatedToList = convertListFromMap(
 					IsRelatedTo.class, prx.getEdmIsRelatedTo());
 			if (isRelatedToList != null) {
@@ -654,12 +676,13 @@ public class EDMUtils {
 				proxy.setProxyInList(proxyIn);
 			}
 			if (!prx.isEuropeanaProxy()) {
-								
-			Type1 type = new Type1();
-			
-			type.setType(EdmType.valueOf(prx.getEdmType().toString().replace("3D", "_3_D")));
-	
-			proxy.setType(type);
+
+				Type1 type = new Type1();
+
+				type.setType(EdmType.valueOf(prx.getEdmType().toString()
+						.replace("3D", "_3_D")));
+
+				proxy.setType(type);
 
 			} else {
 				Type1 type = new Type1();
@@ -1361,9 +1384,9 @@ public class EDMUtils {
 			if (dProvider == null) {
 				dProvider = convertMapToObj(DataProvider.class,
 						aggr.getEdmProvider());
-			} 
-			if(dProvider!=null){
-			aggregation.setDataProvider(dProvider);
+			}
+			if (dProvider != null) {
+				aggregation.setDataProvider(dProvider);
 			}
 			IsShownAt isShownAt = convertStringToObj(IsShownAt.class,
 					aggr.getEdmIsShownAt());
@@ -1389,18 +1412,19 @@ public class EDMUtils {
 					aggr.getEdmRights());
 			if (rights1 == null) {
 				rights1 = new Rights1();
-				ResourceOrLiteralType.Lang lang= new ResourceOrLiteralType.Lang();
+				ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
 				lang.setLang("");
 				rights1.setString("");
 				Resource testResource = new Resource();
 				testResource.setResource("http://testedmrights/");
-				rights1.setResource(testResource );
-			} 
+				rights1.setResource(testResource);
+			}
 			aggregation.setRights(rights1);
 			if (aggr.getEdmUgc() != null) {
 				Ugc ugc = new Ugc();
-				
-				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr.getEdmUgc())));
+
+				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr
+						.getEdmUgc())));
 				aggregation.setUgc(ugc);
 			}
 			List<Rights> rightsList = convertListFromMap(Rights.class,
@@ -1419,67 +1443,76 @@ public class EDMUtils {
 		rdf.setAggregationList(aggregationList);
 	}
 
-	private static void createWebResources(RDF rdf,
-			AggregationImpl aggr) {
+	private static void createWebResources(RDF rdf, AggregationImpl aggr) {
 		List<WebResourceType> webResources = new ArrayList<WebResourceType>();
-		for(WebResource wr: aggr.getWebResources()){
+		for (WebResource wr : aggr.getWebResources()) {
 			WebResourceType wResource = new WebResourceType();
 			wResource.setAbout(wr.getAbout());
-			List<ConformsTo> conformsToList = convertListFromMap(ConformsTo.class, wr.getDctermsConformsTo());
-			if(conformsToList!=null){
+			List<ConformsTo> conformsToList = convertListFromMap(
+					ConformsTo.class, wr.getDctermsConformsTo());
+			if (conformsToList != null) {
 				wResource.setConformsToList(conformsToList);
 			}
-			List<Created> createdList = convertListFromMap(Created.class,wr.getDctermsCreated());
-			if(createdList!=null){
+			List<Created> createdList = convertListFromMap(Created.class,
+					wr.getDctermsCreated());
+			if (createdList != null) {
 				wResource.setCreatedList(createdList);
 			}
-			List<Description> descriptionList = convertListFromMap(Description.class,wr.getDcDescription());
-			if(descriptionList!=null){
+			List<Description> descriptionList = convertListFromMap(
+					Description.class, wr.getDcDescription());
+			if (descriptionList != null) {
 				wResource.setDescriptionList(descriptionList);
 			}
-			List<Extent> extentList = convertListFromMap(Extent.class,wr.getDctermsExtent());
-			if(extentList!=null){
+			List<Extent> extentList = convertListFromMap(Extent.class,
+					wr.getDctermsExtent());
+			if (extentList != null) {
 				wResource.setExtentList(extentList);
 			}
-			List<Format> formatList = convertListFromMap(Format.class,wr.getDcFormat());
-			if(formatList!=null){
+			List<Format> formatList = convertListFromMap(Format.class,
+					wr.getDcFormat());
+			if (formatList != null) {
 				wResource.setFormatList(formatList);
 			}
-			List<HasPart> hasPartList = convertListFromMap(HasPart.class, wr.getDctermsHasPart());
-			if(hasPartList!=null){
+			List<HasPart> hasPartList = convertListFromMap(HasPart.class,
+					wr.getDctermsHasPart());
+			if (hasPartList != null) {
 				wResource.setHasPartList(hasPartList);
 			}
-			List<IsFormatOf> isFormatOfList = convertListFromMap(IsFormatOf.class, wr.getDctermsIsFormatOf());
-			if(isFormatOfList!=null){
+			List<IsFormatOf> isFormatOfList = convertListFromMap(
+					IsFormatOf.class, wr.getDctermsIsFormatOf());
+			if (isFormatOfList != null) {
 				wResource.setIsFormatOfList(isFormatOfList);
 			}
-			IsNextInSequence isNextInSequence = convertStringToObj(IsNextInSequence.class, wr.getIsNextInSequence());
-			if(isNextInSequence!=null){
+			IsNextInSequence isNextInSequence = convertStringToObj(
+					IsNextInSequence.class, wr.getIsNextInSequence());
+			if (isNextInSequence != null) {
 				wResource.setIsNextInSequence(isNextInSequence);
 			}
-			List<Issued> issuedList = convertListFromMap(Issued.class, wr.getDctermsIssued());
-			if(issuedList!=null){
+			List<Issued> issuedList = convertListFromMap(Issued.class,
+					wr.getDctermsIssued());
+			if (issuedList != null) {
 				wResource.setIssuedList(issuedList);
 			}
-			List<Rights> rightsList = convertListFromMap(Rights.class, wr.getWebResourceDcRights());
-			if(rightsList!=null){
+			List<Rights> rightsList = convertListFromMap(Rights.class,
+					wr.getWebResourceDcRights());
+			if (rightsList != null) {
 				wResource.setRightList(rightsList);
 			}
-			Rights1 rights = convertMapToObj(Rights1.class, wr.getWebResourceEdmRights());
-			if(rights!=null){
+			Rights1 rights = convertMapToObj(Rights1.class,
+					wr.getWebResourceEdmRights());
+			if (rights != null) {
 				wResource.setRights(rights);
 			}
-			List<Source> sourceList = convertListFromMap(Source.class, wr.getDcSource());
-			if(sourceList!=null){
+			List<Source> sourceList = convertListFromMap(Source.class,
+					wr.getDcSource());
+			if (sourceList != null) {
 				wResource.setSourceList(sourceList);
 			}
 			webResources.add(wResource);
 		}
-		
+
 		rdf.setWebResourceList(webResources);
 	}
-
-
 
 	private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos) {
 		List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
@@ -1543,7 +1576,8 @@ public class EDMUtils {
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 
-					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(
+							ResourceType.class)) {
 						for (String str : entry.getValue()) {
 							ResourceType t = (ResourceType) clazz.newInstance();
 
@@ -1551,7 +1585,8 @@ public class EDMUtils {
 							list.add((T) t);
 						}
 
-					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							LiteralType.class)) {
 						LiteralType.Lang lang = null;
 						if (StringUtils.isNotEmpty(entry.getKey())
 								&& !StringUtils.equals(entry.getKey(), "def")) {
@@ -1560,18 +1595,18 @@ public class EDMUtils {
 						}
 						for (String str : entry.getValue()) {
 							LiteralType t = (LiteralType) clazz.newInstance();
-							
+
 							t.setString(str);
 							if (lang == null) {
 								lang = new LiteralType.Lang();
 								lang.setLang("");
-								
+
 							}
 							t.setLang(lang);
 							list.add((T) t);
 						}
-					} else if (clazz.getSuperclass()
-							.isAssignableFrom(ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
 						if (StringUtils.isNotEmpty(entry.getKey())
 								&& !StringUtils.equals(entry.getKey(), "def")) {
@@ -1584,7 +1619,7 @@ public class EDMUtils {
 							Resource resource = new Resource();
 							resource.setResource("");
 							t.setResource(resource);
-							
+
 							t.setString("");
 							if (isUri(str)) {
 								t.setResource(resource);
@@ -1592,10 +1627,10 @@ public class EDMUtils {
 								t.setString(str);
 							}
 							if (lang == null) {
-							
+
 								lang = new ResourceOrLiteralType.Lang();
 								lang.setLang("");
-								
+
 							}
 							t.setLang(lang);
 							list.add((T) t);
@@ -1621,12 +1656,13 @@ public class EDMUtils {
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 					T t = clazz.newInstance();
-					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(
+							ResourceType.class)) {
 						((ResourceType) t).setResource(entry.getValue().get(0));
 						return t;
 
-					} else if (clazz
-							.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
 						if (StringUtils.isNotEmpty(entry.getKey())
 								&& !StringUtils.equals(entry.getKey(), "def")) {
@@ -1637,8 +1673,8 @@ public class EDMUtils {
 						ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
 						Resource resource = new Resource();
 						resource.setResource("");
-						
-						obj.setResource(resource );
+
+						obj.setResource(resource);
 						obj.setString("");
 						for (String str : entry.getValue()) {
 							if (isUri(str)) {
@@ -1653,7 +1689,8 @@ public class EDMUtils {
 						}
 						obj.setLang(lang);
 						return (T) obj;
-					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							LiteralType.class)) {
 						LiteralType.Lang lang = null;
 						if (StringUtils.isNotEmpty(entry.getKey())
 								&& !StringUtils.equals(entry.getKey(), "def")) {
@@ -1665,7 +1702,7 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							obj.setString(str);
 						}
-						if(lang==null){
+						if (lang == null) {
 							lang = new LiteralType.Lang();
 							lang.setLang("");
 						}
@@ -1685,11 +1722,13 @@ public class EDMUtils {
 		return null;
 	}
 
-	private static void createResourceOrLiteralFromString(ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang, String value){
+	private static void createResourceOrLiteralFromString(
+			ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang,
+			String value) {
 		Resource resource = new Resource();
 		resource.setResource("");
-		
-		obj.setResource(resource );
+
+		obj.setResource(resource);
 		obj.setString("");
 		if (isUri(value)) {
 			obj.setResource(resource);
@@ -1700,10 +1739,10 @@ public class EDMUtils {
 			lang = new ResourceOrLiteralType.Lang();
 			lang.setLang("");
 		}
-		
+
 		obj.setLang(lang);
 	}
-	
+
 	private static boolean isUri(String str) {
 		if (StringUtils.startsWith(str, "http://")) {
 			return true;
