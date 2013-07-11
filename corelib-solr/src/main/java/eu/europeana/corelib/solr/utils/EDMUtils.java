@@ -80,7 +80,7 @@ public class EDMUtils {
 			marshallingContext = bfact.createMarshallingContext();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			marshallingContext.setOutput(out, null);
-			marshallingContext.marshalDocument(rdf);
+			marshallingContext.marshalDocument(rdf, "UTF-8", true);
 			return out.toString("UTF-8");
 		} catch (JiBXException e) {
 			// TODO Auto-generated catch block
