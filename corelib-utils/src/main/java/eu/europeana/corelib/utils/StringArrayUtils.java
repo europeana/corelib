@@ -14,6 +14,7 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
+
 package eu.europeana.corelib.utils;
 
 import java.util.ArrayList;
@@ -27,12 +28,13 @@ import org.apache.commons.lang.StringUtils;
 /**
  * String array util classes
  * 
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 public class StringArrayUtils {
 
-	public static final String[] EMPTY_ARRAY = new String[0];
+	public static final String[] EMPTY_ARRAY = new String[] {};
 
 	/**
 	 * Check if an array is not empty
@@ -42,7 +44,6 @@ public class StringArrayUtils {
 	 */
 	public static boolean isNotBlank(String[] array) {
 		return ((array != null) && (array.length > 0)) && StringUtils.join(array).trim().length() > 0;
-
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class StringArrayUtils {
 		if (list != null) {
 			return list.toArray(new String[list.size()]);
 		}
-		return new String[] {};
+		return EMPTY_ARRAY;
 	}
 
 	public static List<String> toList(String... items) {
