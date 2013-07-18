@@ -19,7 +19,6 @@ package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -45,8 +44,6 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  * 
  */
 public final class SolrUtils {
-	private static final Logger log = Logger.getLogger(SolrUtils.class
-			.getName());
 
 	private SolrUtils() {
 
@@ -64,11 +61,8 @@ public final class SolrUtils {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")
 						&& !StringUtils.contains(refinement, " OR ")) {
-					try {
-						DocType.get(StringUtils.substringAfter(refinement,
-								"TYPE:"));
-					} catch (IllegalArgumentException e) {
-						log.severe(e.getMessage());
+					if (DocType.safeValueOf(StringUtils.substringAfter(refinement,
+							"TYPE:")) == null) {
 						return false;
 					}
 				}

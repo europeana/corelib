@@ -1,22 +1,18 @@
 /*
- * Copyright 2007 EDL FOUNDATION
+ * Copyright 2007-2012 The Europeana Foundation
  *
- * Licensed under the EUPL, Version 1.0 or - as soon they
- * will be approved by the European Commission - subsequent
- * versions of the EUPL (the "Licence");
- * you may not use this work except in compliance with the
- * Licence.
- * You may obtain a copy of the Licence at:
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ *  
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
  *
- * http://ec.europa.eu/idabc/eupl
- *
- * Unless required by applicable law or agreed to in
- * writing, software distributed under the Licence is
- * distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied.
- * See the Licence for the specific language governing
- * permissions and limitations under the Licence.
+ *  Unless required by applicable law or agreed to in writing, software distributed under 
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under 
+ *  the Licence.
  */
 
 package eu.europeana.corelib.definitions.solr;
@@ -29,7 +25,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * DocType defines the different type Object types Europeana supports.
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * @author Borys Omelayenko
  */
 public enum DocType {
 	TEXT("doc", "pdf"),
@@ -38,23 +33,28 @@ public enum DocType {
 	VIDEO("avi", "mpg"),
 	_3D;
 
-	String[] extentions;
+	private String[] extentions;
 
 	private DocType(String... extentions) {
 		this.extentions = extentions;
 	}
 
-	public static DocType get(String[] strings) {
-		return get(strings[0]);
+	public static DocType safeValueOf(String[] strings) {
+		if (StringArrayUtils.isNotBlank(strings)) {
+			return safeValueOf(strings[0]);
+		}
+		return null;
 	}
 
-	public static DocType get(String string) {
-		for (DocType t : values()) {
-			if (t.toString().equalsIgnoreCase(string)) {
-				return t;
+	public static DocType safeValueOf(String string) {
+		if (StringUtils.isNotBlank(string)) {
+			for (DocType t : values()) {
+				if (t.toString().equalsIgnoreCase(string)) {
+					return t;
+				}
 			}
 		}
-		throw new IllegalArgumentException("Did not recognize DocType: [" + string + "]");
+		return null;
 	}
 
 	public static DocType getByExtention(String ext) {

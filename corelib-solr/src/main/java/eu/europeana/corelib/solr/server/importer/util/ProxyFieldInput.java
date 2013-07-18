@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
@@ -261,7 +260,7 @@ public final class ProxyFieldInput {
 		String docType = SolrUtils.exists(String.class,
 				(proxy.getType().getType().xmlValue())).toString();
 		
-		mongoProxy.setEdmType(DocType.get(docType));
+		mongoProxy.setEdmType(DocType.safeValueOf(docType));
 		
 		mongoProxy
 				.setProxyFor(SolrUtils.exists(String.class, proxy.getProxyFor().getResource()));

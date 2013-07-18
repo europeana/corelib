@@ -167,7 +167,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public DocType getType() {
-		return (docType != null ? DocType.get(docType) : null);
+		return (docType != null ? DocType.safeValueOf(docType) : null);
 	}
 
 	@Override
@@ -190,6 +190,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 		return (this.edmPlace != null ? this.edmPlace.clone() : null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, String>> getEdmPlaceLabel() {
 		if (edmPlacePrefLabel != null && 
@@ -226,6 +227,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 		return (this.edmTimespan != null ? this.edmTimespan.clone() : null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, String>> getEdmTimespanLabel() {
 		if (edmTimespanLabel != null 
