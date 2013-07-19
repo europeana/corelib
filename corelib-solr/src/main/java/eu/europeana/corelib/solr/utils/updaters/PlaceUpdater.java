@@ -14,9 +14,9 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
-public class PlaceUpdater {
+public class PlaceUpdater implements Updater<PlaceImpl,PlaceType> {
 
-	public static void update(PlaceImpl place, PlaceType jibxPlace,
+	public  void update(PlaceImpl place, PlaceType jibxPlace,
 			MongoServer mongoServer) {
 		Query<PlaceImpl> query = mongoServer.getDatastore()
 				.createQuery(PlaceImpl.class).field("about")

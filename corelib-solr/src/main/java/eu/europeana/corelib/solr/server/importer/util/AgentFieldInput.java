@@ -21,7 +21,9 @@ import java.net.MalformedURLException;
 
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.code.morphia.Datastore;
 import com.google.code.morphia.mapping.MappingException;
+import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -38,6 +40,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.solr.utils.updaters.AgentUpdater;
+import eu.europeana.corelib.solr.utils.updaters.Updater;
 
 /**
  * Constructor of Agent Fields.
@@ -199,22 +202,25 @@ public final class AgentFieldInput {
 	 */
 	public AgentImpl createAgentMongoEntity(AgentType agentType,
 			MongoServer mongoServer) throws MalformedURLException, IOException {
-
-		AgentImpl agent = ((EdmMongoServer) mongoServer).getDatastore()
-				.find(AgentImpl.class)
-				.filter("about", agentType.getAbout()).get();
+		Datastore ds = ((EdmMongoServer) mongoServer).getDatastore();
+		Query<AgentImpl> query = ds.find(AgentImpl.class);
+		AgentImpl agent = 
+				query.filter("about", agentType.getAbout())
+				.get();
 
 		// if it does not exist
 
 		if (agent == null) {
 			agent = createNewAgent(agentType);
 			try {
-			mongoServer.getDatastore().save(agent);
-			} catch (Exception e ){
-				AgentImpl agentSec = ((EdmMongoServer) mongoServer).getDatastore()
-						.find(AgentImpl.class)
+				mongoServer.getDatastore().save(agent);
+			} catch (Exception e) {
+				e.printStackTrace();
+				AgentImpl agentSec = ((EdmMongoServer) mongoServer)
+						.getDatastore().find(AgentImpl.class)
 						.filter("about", agentType.getAbout()).get();
 				agent = updateMongoAgent(agentSec, agentType, mongoServer);
+				
 			}
 		} else {
 			agent = updateMongoAgent(agent, agentType, mongoServer);
@@ -235,136 +241,13 @@ public final class AgentFieldInput {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private AgentImpl updateMongoAgent(AgentImpl agent,
-			AgentType agentType, MongoServer mongoServer) {
-//		
-//		if (agentType.getBegin() != null) {
-//			MongoUtils
-//					.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//							"begin", MongoUtils
-//									.createLiteralMapFromString(agentType
-//											.getBegin()));
-//		}
-//
-//		if (agentType.getDateList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"dcDate", MongoUtils
-//							.createResourceOrLiteralMapFromList(agentType
-//									.getDateList()));
-//		}
-//
-//		if (agentType.getIdentifierList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"dcIdentifier", MongoUtils
-//							.createLiteralMapFromList(agentType
-//									.getIdentifierList()));
-//		}
-//
-//		if (agentType.getBiographicalInformation() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2BiographicalInformation", MongoUtils
-//							.createLiteralMapFromString(agentType
-//									.getBiographicalInformation()));
-//		}
-//
-//		if (agentType.getDateOfBirth() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2DateOfBirth", MongoUtils
-//							.createLiteralMapFromString(agentType
-//									.getDateOfBirth()));
-//		}
-//
-//		if (agentType.getDateOfDeath() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2DateOfDeath", MongoUtils
-//							.createLiteralMapFromString(agentType
-//									.getDateOfDeath()));
-//		}
-//
-//		if (agentType.getDateOfEstablishment() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2DateOfEstablishment", MongoUtils
-//							.createLiteralMapFromString(agentType
-//									.getDateOfEstablishment()));
-//		}
-//
-//		if (agentType.getDateOfTermination() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2DateOfTermination", MongoUtils
-//							.createLiteralMapFromString(agentType
-//									.getDateOfTermination()));
-//		}
-//
-//		if (agentType.getGender() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"rdaGr2Gender", MongoUtils.createLiteralMapFromString(agentType
-//							.getGender()));
-//		}
-//
-//		if (agentType.getHasMetList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"edmHasMet", MongoUtils.createLiteralMapFromList(agentType
-//							.getHasMetList()));
-//		}
-//
-//		if (agentType.getIsRelatedToList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"edmIsRelatedTo", MongoUtils
-//							.createResourceOrLiteralMapFromList(agentType
-//									.getIsRelatedToList()));
-//		}
-//
-//		if (agentType.getNameList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"foafName", MongoUtils.createLiteralMapFromList(agentType
-//							.getNameList()));
-//		}
-//
-//		if (agentType.getSameAList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"owlSameAs",
-//					SolrUtils.resourceListToArray(agentType.getSameAList()));
-//		}
-//
-//		if (agentType.getProfessionOrOccupation() != null) {
-//			if (agentType.getHasMetList() != null) {
-//				MongoUtils.update(AgentImpl.class, agent.getAbout(),
-//						mongoServer, "rdaGr2ProfessionOrOccupation", MongoUtils
-//								.createResourceOrLiteralMapFromString(agentType
-//										.getProfessionOrOccupation()));
-//			}
-//		}
-//
-//		if (agentType.getEnd() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"end",
-//					MongoUtils.createLiteralMapFromString(agentType.getEnd()));
-//
-//		}
-//
-//		if (agentType.getNoteList() != null) {
-//
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"note", MongoUtils.createLiteralMapFromList(agentType
-//							.getNoteList()));
-//		}
-//
-//		if (agentType.getAltLabelList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"altLabel", MongoUtils.createLiteralMapFromList(agentType
-//							.getAltLabelList()));
-//		}
-//
-//		if (agentType.getPrefLabelList() != null) {
-//			MongoUtils.update(AgentImpl.class, agent.getAbout(), mongoServer,
-//					"prefLabel", MongoUtils.createLiteralMapFromList(agentType
-//							.getPrefLabelList()));
-//
-//		}
- AgentUpdater.update(agent, agentType, mongoServer);
+	private AgentImpl updateMongoAgent(AgentImpl agent, AgentType agentType,
+			MongoServer mongoServer) {
+		Updater<AgentImpl,AgentType> updater = new AgentUpdater();
+		updater.update(agent, agentType, mongoServer);
 		return ((EdmMongoServer) mongoServer).getDatastore()
-				.find(AgentImpl.class)
-				.filter("about", agentType.getAbout()).get();
+				.find(AgentImpl.class).filter("about", agentType.getAbout())
+				.get();
 	}
 
 	/**
@@ -378,7 +261,6 @@ public final class AgentFieldInput {
 	private AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
-		// agent.setId(new ObjectId());
 		agent.setAbout(agentType.getAbout());
 
 		agent.setDcDate(MongoUtils.createResourceOrLiteralMapFromList(agentType

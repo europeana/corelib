@@ -54,9 +54,10 @@ public class CollectionMongoServer implements MongoServer {
 		createDatastore();
 	}
 
-	public CollectionMongoServer(){
-		
+	public CollectionMongoServer() {
+
 	}
+
 	private void createDatastore() {
 		Morphia morphia = new Morphia();
 		morphia.map(Collection.class);
@@ -111,21 +112,24 @@ public class CollectionMongoServer implements MongoServer {
 
 	/**
 	 * Save a Collection
-	 * @param collection The collection to save
+	 * 
+	 * @param collection
+	 *            The collection to save
 	 */
 	public void saveCollection(Collection collection) {
-			datastore.save(collection);
+		datastore.save(collection);
 	}
-	
+
 	/**
 	 * Retrieve all stored collections
+	 * 
 	 * @return
 	 */
-	public List<Collection> retrieveAllCollections(){
+	public List<Collection> retrieveAllCollections() {
 		return datastore.find(Collection.class).asList();
 	}
-	
-	public void setDatastore(Datastore datastore){
+
+	public void setDatastore(Datastore datastore) {
 		this.datastore = datastore;
 	}
 }

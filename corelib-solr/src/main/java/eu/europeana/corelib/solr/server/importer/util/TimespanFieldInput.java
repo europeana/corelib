@@ -16,9 +16,6 @@
  */
 package eu.europeana.corelib.solr.server.importer.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -26,7 +23,6 @@ import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
@@ -35,7 +31,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.solr.utils.updaters.TimespanUpdater;
-import eu.europeana.corelib.utils.StringArrayUtils;
+import eu.europeana.corelib.solr.utils.updaters.Updater;
 
 /**
  * Constructor for a Timespan
@@ -125,9 +121,9 @@ public final class TimespanFieldInput {
 				.filter("about", timeSpan.getAbout()).get();
 		if (mongoTimespan == null) {
 			mongoTimespan = createNewTimespan(timeSpan);
-			
+
 			mongoServer.getDatastore().save(mongoTimespan);
-		
+
 		} else {
 			mongoTimespan = updateTimespan(mongoTimespan, timeSpan, mongoServer);
 		}
@@ -136,76 +132,8 @@ public final class TimespanFieldInput {
 
 	private TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
 			TimeSpanType timeSpan, MongoServer mongoServer) {
-//		if (timeSpan.getBegin() != null) {
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "begin",
-//					MongoUtils.createLiteralMapFromString(timeSpan.getBegin()));
-//
-//		}
-//		if (timeSpan.getEnd() != null) {
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "end",
-//					MongoUtils.createLiteralMapFromString(timeSpan.getEnd()));
-//
-//		}
-//
-//		if (timeSpan.getNoteList() != null) {
-//
-//			MongoUtils
-//					.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//							mongoServer, "note", MongoUtils
-//									.createLiteralMapFromList(timeSpan
-//											.getNoteList()));
-//
-//		}
-//
-//		if (timeSpan.getAltLabelList() != null) {
-//
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "altLabel", MongoUtils
-//							.createLiteralMapFromList(timeSpan
-//									.getAltLabelList()));
-//
-//		}
-//
-//		if (timeSpan.getPrefLabelList() != null) {
-//
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "prefLabel", MongoUtils
-//							.createLiteralMapFromList(timeSpan
-//									.getPrefLabelList()));
-//
-//		}
-//
-//		if (timeSpan.getHasPartList() != null) {
-//
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "dctermsHasPart", MongoUtils
-//							.createResourceOrLiteralMapFromList(timeSpan
-//									.getHasPartList()));
-//		}
-//
-//		if (timeSpan.getSameAList() != null) {
-//			List<String> owlSameAs = new ArrayList<String>();
-//			if (timeSpan.getSameAList() != null) {
-//				for (SameAs sameAsJibx : timeSpan.getSameAList()) {
-//					if (!MongoUtils.contains(mongoTimespan.getOwlSameAs(),
-//							sameAsJibx.getResource())) {
-//						owlSameAs.add(sameAsJibx.getResource());
-//					}
-//				}
-//			}
-//			if (mongoTimespan.getOwlSameAs() != null) {
-//				for (String owlSameAsItem : mongoTimespan.getOwlSameAs()) {
-//					owlSameAs.add(owlSameAsItem);
-//				}
-//			}
-//			MongoUtils.update(TimespanImpl.class, mongoTimespan.getAbout(),
-//					mongoServer, "owlSameAs",
-//					StringArrayUtils.toArray(owlSameAs));
-//		}
-
-		TimespanUpdater.update(mongoTimespan, timeSpan, mongoServer);
+		Updater<TimespanImpl, TimeSpanType> timespanUpdater = new TimespanUpdater();
+		timespanUpdater.update(mongoTimespan, timeSpan, mongoServer);
 		return ((EdmMongoServer) mongoServer).getDatastore()
 				.find(TimespanImpl.class).filter("about", timeSpan.getAbout())
 				.get();

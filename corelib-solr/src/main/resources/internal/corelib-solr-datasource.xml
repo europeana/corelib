@@ -31,9 +31,9 @@
 		<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
 	</bean>
 
-	<bean id="corelib_solr_mongo_apilog" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}"/>
-	</bean>
+<!-- 	<bean id="corelib_solr_mongo_apilog" class="com.mongodb.Mongo"> -->
+<!-- 		<constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}"/> -->
+<!-- 		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}"/> -->
+<!-- 	</bean> -->
 
 </beans>

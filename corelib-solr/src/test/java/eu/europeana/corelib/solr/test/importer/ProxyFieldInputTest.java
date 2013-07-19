@@ -7,14 +7,13 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.After;
+import org.easymock.EasyMock;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.jibx.Alternative;
 import eu.europeana.corelib.definitions.jibx.ConformsTo;
@@ -45,6 +44,8 @@ import eu.europeana.corelib.definitions.jibx.Issued;
 import eu.europeana.corelib.definitions.jibx.Language;
 import eu.europeana.corelib.definitions.jibx.Medium;
 import eu.europeana.corelib.definitions.jibx.Provenance;
+import eu.europeana.corelib.definitions.jibx.ProxyFor;
+import eu.europeana.corelib.definitions.jibx.ProxyIn;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.Publisher;
 import eu.europeana.corelib.definitions.jibx.References;
@@ -65,11 +66,8 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
 public class ProxyFieldInputTest {
 
-	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 
 	@Test
@@ -97,7 +95,7 @@ public class ProxyFieldInputTest {
 					solrDocument
 							.getFieldValue(EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE
 									.toString()));
-			assertEquals(proxy.getType().toString(),
+			assertEquals(proxy.getType().getType().toString(),
 					solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_TYPE
 							.toString()));
 			List<EuropeanaType.Choice> dcterms = proxy.getChoiceList();
@@ -110,145 +108,145 @@ public class ProxyFieldInputTest {
 										.toString()));
 				if(choice.ifConformsTo())
 				assertEquals(
-						choice.getConformsTo().getResource(),
+						choice.getConformsTo().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_CONFORMS_TO
 										.toString()));
 				if(choice.ifCreated())
-				assertEquals(choice.getCreated().getResource(),
+				assertEquals(choice.getCreated().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_CREATED
 										.toString()));
 				if(choice.ifExtent())
-				assertEquals(choice.getExtent().getResource(),
+				assertEquals(choice.getExtent().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_EXTENT
 										.toString()));
 				if(choice.ifHasFormat())
 				assertEquals(
-						choice.getHasFormat().getResource(),
+						choice.getHasFormat().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_FORMAT
 										.toString()));
 				if(choice.ifHasPart())
-				assertEquals(choice.getHasPart().getResource(),
+				assertEquals(choice.getHasPart().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_PART
 										.toString()));
 				if(choice.ifHasVersion())
 				assertEquals(
-						choice.getHasVersion().getResource(),
+						choice.getHasVersion().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_VERSION
 										.toString()));
 				if(choice.ifIsFormatOf())
 				assertEquals(
-						choice.getIsFormatOf().getResource(),
+						choice.getIsFormatOf().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_FORMAT_OF
 										.toString()));
 				if(choice.ifIsPartOf())
 				assertEquals(
-						choice.getIsPartOf().getResource(),
+						choice.getIsPartOf().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_PART_OF
 										.toString()));
 				if(choice.ifIsReferencedBy())
 				assertEquals(
-						choice.getIsReferencedBy().getResource(),
+						choice.getIsReferencedBy().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REFERENCED_BY
 										.toString()));
 				if(choice.ifIsReplacedBy())
 				assertEquals(
-						choice.getIsReplacedBy().getResource(),
+						choice.getIsReplacedBy().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REPLACED_BY
 										.toString()));
 				if(choice.ifIsRequiredBy())
 				assertEquals(
-						choice.getIsRequiredBy().getResource(),
+						choice.getIsRequiredBy().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REQUIRED_BY
 										.toString()));
 				if(choice.ifIssued())
-				assertEquals(choice.getIssued().getResource(),
+				assertEquals(choice.getIssued().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_ISSUED
 										.toString()));
 				if(choice.ifIsVersionOf())
 				assertEquals(
-						choice.getIsVersionOf().getResource(),
+						choice.getIsVersionOf().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_VERSION_OF
 										.toString()));
 				if(choice.ifMedium())
-				assertEquals(choice.getMedium().getResource(),
+				assertEquals(choice.getMedium().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_MEDIUM
 										.toString()));
 				if(choice.ifProvenance())
 				assertEquals(
-						choice.getProvenance().getResource(),
+						choice.getProvenance().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_PROVENANCE
 										.toString()));
 				if(choice.ifReferences())
 				assertEquals(
-						choice.getReferences().getResource(),
+						choice.getReferences().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_REFERENCES
 										.toString()));
 				if(choice.ifReplaces())
-				assertEquals(choice.getReplaces().getResource(),
+				assertEquals(choice.getReplaces().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_REPLACES
 										.toString()));
 				if(choice.ifRequires())
-				assertEquals(choice.getRequires().getResource(),
+				assertEquals(choice.getRequires().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_REQUIRES
 										.toString()));
 				if(choice.ifSpatial())
-				assertEquals(choice.getSpatial().getResource(),
+				assertEquals(choice.getSpatial().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_SPATIAL
 										.toString()));
 				if(choice.ifTableOfContents())
 				assertEquals(
-						choice.getTableOfContents().getResource(),
+						choice.getTableOfContents().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_TABLE_OF_CONTENTS
 										.toString()));
 				if(choice.ifTemporal())
-				assertEquals(choice.getTemporal().getResource(),
+				assertEquals(choice.getTemporal().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DCTERMS_TEMPORAL
 										.toString()));
 				if(choice.ifContributor())
-				assertEquals(choice.getContributor().getResource(),
+				assertEquals(choice.getContributor().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DC_CONTRIBUTOR
 										.toString()));
 				if(choice.ifCoverage())
-				assertEquals(choice.getCoverage().getResource(),
+				assertEquals(choice.getCoverage().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_COVERAGE
 								.toString()));
 				if(choice.ifCreator())
-				assertEquals(choice.getCreator().getResource(),
+				assertEquals(choice.getCreator().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_CREATOR
 								.toString()));
 				if(choice.ifDate())
-				assertEquals(choice.getDate().getResource(),
+				assertEquals(choice.getDate().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_DATE
 								.toString()));
 				if(choice.ifDescription())
-				assertEquals(choice.getDescription().getResource(),
+				assertEquals(choice.getDescription().getResource().getResource(),
 						solrDocument
 								.getFieldValue(EdmLabel.PROXY_DC_DESCRIPTION
 										.toString()));
 				if(choice.ifFormat())
-				assertEquals(choice.getFormat().getResource(),
+				assertEquals(choice.getFormat().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_FORMAT
 								.toString()));
 				if(choice.ifIdentifier())
@@ -260,23 +258,23 @@ public class ProxyFieldInputTest {
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_LANGUAGE
 								.toString()));
 				if(choice.ifPublisher())
-				assertEquals(choice.getPublisher().getResource(),
+				assertEquals(choice.getPublisher().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_PUBLISHER
 								.toString()));
 				if(choice.ifRelation())
-				assertEquals(choice.getRelation().getResource(),
+				assertEquals(choice.getRelation().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_RELATION
 								.toString()));
 				if(choice.ifRights())
-				assertEquals(choice.getRights().getResource(),
+				assertEquals(choice.getRights().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_RIGHTS
 								.toString()));
 				if(choice.ifSource())
-				assertEquals(choice.getSource().getResource(),
+				assertEquals(choice.getSource().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_SOURCE
 								.toString()));
 				if(choice.ifSubject())
-				assertEquals(choice.getSubject().getResource(),
+				assertEquals(choice.getSubject().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_SUBJECT
 								.toString()));
 				if(choice.ifTitle())
@@ -284,7 +282,7 @@ public class ProxyFieldInputTest {
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_TITLE
 								.toString()));
 				if(choice.ifType())
-				assertEquals(choice.getType().getResource(),
+				assertEquals(choice.getType().getResource().getResource(),
 						solrDocument.getFieldValue(EdmLabel.PROXY_DC_TYPE
 								.toString()));
 
@@ -299,12 +297,28 @@ public class ProxyFieldInputTest {
 	}
 
 	private void testMongo(ProxyType proxy) {
+		
+		mongoServer = EasyMock.createMock(EdmMongoServer.class);
+		Datastore ds = EasyMock.createMock(Datastore.class);
+		Query query = EasyMock.createMock(Query.class);
+		Key<ProxyImpl> key = EasyMock.createMock(Key.class);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+		EasyMock.expect(ds.find(ProxyImpl.class)).andReturn(query);
+		EasyMock.expect(query.filter("about", proxy.getAbout())).andReturn(
+				query);
+		EasyMock.expect(query.get()).andReturn(null);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
 		ProxyImpl mongoProxy = new ProxyImpl();
+		mongoProxy.setAbout(proxy.getAbout());
+		EasyMock.expect(ds.save(mongoProxy)).andReturn(null);
+
+		EasyMock.replay(query, ds, mongoServer);
+		
 		try {
 			mongoProxy = new ProxyFieldInput().createProxyMongoFields(
 					mongoProxy, proxy, mongoServer);
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
-			assertEquals(proxy.getType().toString(), mongoProxy.getEdmType()
+			assertEquals(proxy.getType().getType().toString(), mongoProxy.getEdmType()
 					.toString());
 			assertEquals(proxy.getIsNextInSequenceList().size(),
 					mongoProxy.getEdmIsNextInSequence().length);
@@ -317,124 +331,124 @@ public class ProxyFieldInputTest {
 									.iterator().next().get(0));
 				}
 				if (choice.ifConformsTo()) {
-					assertEquals(choice.getConformsTo().getResource(),
+					assertEquals(choice.getConformsTo().getResource().getResource(),
 							mongoProxy.getDctermsConformsTo().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifCreated()) {
-					assertEquals(choice.getCreated().getResource(), mongoProxy
+					assertEquals(choice.getCreated().getResource().getResource(), mongoProxy
 							.getDctermsCreated().values().iterator().next().get(0));
 				}
 				if (choice.ifExtent()) {
-					assertEquals(choice.getExtent().getResource(), mongoProxy
+					assertEquals(choice.getExtent().getResource().getResource(), mongoProxy
 							.getDctermsExtent().values().iterator().next().get(0));
 				}
 				if (choice.ifHasFormat()) {
-					assertEquals(choice.getHasFormat().getResource(),
+					assertEquals(choice.getHasFormat().getResource().getResource(),
 							mongoProxy.getDctermsHasFormat().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifHasPart()) {
-					assertEquals(choice.getHasPart().getResource(), mongoProxy
+					assertEquals(choice.getHasPart().getResource().getResource(), mongoProxy
 							.getDctermsHasPart().values().iterator().next().get(0));
 				}
 				if (choice.ifHasVersion()) {
-					assertEquals(choice.getHasVersion().getResource(),
+					assertEquals(choice.getHasVersion().getResource().getResource(),
 							mongoProxy.getDctermsHasVersion().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifIsFormatOf()) {
-					assertEquals(choice.getIsFormatOf().getResource(),
+					assertEquals(choice.getIsFormatOf().getResource().getResource(),
 							mongoProxy.getDctermsIsFormatOf().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifIsPartOf()) {
-					assertEquals(choice.getIsPartOf().getResource(), mongoProxy
+					assertEquals(choice.getIsPartOf().getResource().getResource(), mongoProxy
 							.getDctermsIsPartOf().values().iterator().next().get(0));
 				}
 				if (choice.ifIsReferencedBy()) {
-					assertEquals(choice.getIsReferencedBy().getResource(),
+					assertEquals(choice.getIsReferencedBy().getResource().getResource(),
 							mongoProxy.getDctermsIsReferencedBy().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifIsReplacedBy()) {
-					assertEquals(choice.getIsReplacedBy().getResource(),
+					assertEquals(choice.getIsReplacedBy().getResource().getResource(),
 							mongoProxy.getDctermsIsReplacedBy().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifIsRequiredBy()) {
-					assertEquals(choice.getIsRequiredBy().getResource(),
+					assertEquals(choice.getIsRequiredBy().getResource().getResource(),
 							mongoProxy.getDctermsIsRequiredBy().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifIssued()) {
-					assertEquals(choice.getIssued().getResource(), mongoProxy
+					assertEquals(choice.getIssued().getResource().getResource(), mongoProxy
 							.getDctermsIssued().values().iterator().next().get(0));
 				}
 				if (choice.ifIsVersionOf()) {
-					assertEquals(choice.getIsVersionOf().getResource(),
+					assertEquals(choice.getIsVersionOf().getResource().getResource(),
 							mongoProxy.getDctermsIsVersionOf().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifMedium()) {
-					assertEquals(choice.getMedium().getResource(), mongoProxy
+					assertEquals(choice.getMedium().getResource().getResource(), mongoProxy
 							.getDctermsMedium().values().iterator().next().get(0));
 				}
 				if (choice.ifProvenance()) {
-					assertEquals(choice.getProvenance().getResource(),
+					assertEquals(choice.getProvenance().getResource().getResource(),
 							mongoProxy.getDctermsProvenance().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifReferences()) {
-					assertEquals(choice.getReferences().getResource(),
+					assertEquals(choice.getReferences().getResource().getResource(),
 							mongoProxy.getDctermsReferences().values()
 									.iterator().next().get(0));
 				}
 				if (choice.ifReplaces()) {
-					assertEquals(choice.getReplaces().getResource(), mongoProxy
+					assertEquals(choice.getReplaces().getResource().getResource(), mongoProxy
 							.getDctermsReplaces().values().iterator().next().get(0));
 				}
 				if (choice.ifRequires()) {
-					assertEquals(choice.getRequires().getResource(), mongoProxy
+					assertEquals(choice.getRequires().getResource().getResource(), mongoProxy
 							.getDctermsRequires().values().iterator().next().get(0));
 				}
 				if (choice.ifSpatial()) {
-					assertEquals(choice.getSpatial().getResource(), mongoProxy
+					assertEquals(choice.getSpatial().getResource().getResource(), mongoProxy
 							.getDctermsSpatial().values().iterator().next().get(0));
 				}
 				if (choice.ifTableOfContents()) {
-					assertEquals(choice.getTableOfContents().getResource(),
+					assertEquals(choice.getTableOfContents().getResource().getResource(),
 							mongoProxy.getDctermsTOC().values().iterator()
 									.next().get(0));
 				}
 				if (choice.ifTemporal()) {
-					assertEquals(choice.getTemporal().getResource(), mongoProxy
+					assertEquals(choice.getTemporal().getResource().getResource(), mongoProxy
 							.getDctermsTemporal().values().iterator().next().get(0));
 				}
 				if (choice.ifContributor()) {
-					assertEquals(choice.getContributor().getResource(),
+					assertEquals(choice.getContributor().getResource().getResource(),
 							mongoProxy.getDcContributor().values().iterator()
 									.next().get(0));
 				}
 				if (choice.ifCoverage()) {
-					assertEquals(choice.getCoverage().getResource(), mongoProxy
+					assertEquals(choice.getCoverage().getResource().getResource(), mongoProxy
 							.getDcCoverage().values().iterator().next().get(0));
 				}
 				if(choice.ifCreator()){
-				assertEquals(choice.getCreator().getResource(),
+				assertEquals(choice.getCreator().getResource().getResource(),
 						mongoProxy.getDcCreator().values().iterator().next().get(0));
 				}
 				if(choice.ifDate()){
-				assertEquals(choice.getDate().getResource(), mongoProxy
+				assertEquals(choice.getDate().getResource().getResource(), mongoProxy
 						.getDcDate().values().iterator().next().get(0));
 				}
 				if(choice.ifDescription()){
-				assertEquals(choice.getDescription().getResource(),
+				assertEquals(choice.getDescription().getResource().getResource(),
 						mongoProxy.getDcDescription().values().iterator()
 								.next().get(0));
 				}
 				if(choice.ifFormat()){
-				assertEquals(choice.getFormat().getResource(),
+				assertEquals(choice.getFormat().getResource().getResource(),
 						mongoProxy.getDcFormat().values().iterator().next().get(0));
 				}
 				if(choice.ifIdentifier()){
@@ -446,23 +460,23 @@ public class ProxyFieldInputTest {
 						mongoProxy.getDcLanguage().values().iterator().next().get(0));
 				}
 				if(choice.ifPublisher()){
-				assertEquals(choice.getPublisher().getResource(),
+				assertEquals(choice.getPublisher().getResource().getResource(),
 						mongoProxy.getDcPublisher().values().iterator().next().get(0));
 				}
 				if(choice.ifRelation()){
-				assertEquals(choice.getRelation().getResource(),
+				assertEquals(choice.getRelation().getResource().getResource(),
 						mongoProxy.getDcRelation().values().iterator().next().get(0));
 				}
 				if(choice.ifRights()){
-				assertEquals(choice.getRights().getResource(),
+				assertEquals(choice.getRights().getResource().getResource(),
 						mongoProxy.getDcRights().values().iterator().next().get(0));
 				}
 				if(choice.ifSource()){
-				assertEquals(choice.getSource().getResource(),
+				assertEquals(choice.getSource().getResource().getResource(),
 						mongoProxy.getDcSource().values().iterator().next().get(0));
 				}
 				if(choice.ifSubject()){
-				assertEquals(choice.getSubject().getResource(),
+				assertEquals(choice.getSubject().getResource().getResource(),
 						mongoProxy.getDcSubject().values().iterator().next().get(0));
 				}
 				if(choice.ifTitle()){
@@ -470,7 +484,7 @@ public class ProxyFieldInputTest {
 						.getDcTitle().values().iterator().next().get(0));
 				}
 				if(choice.ifType()){
-				assertEquals(choice.getType().getResource(), mongoProxy
+				assertEquals(choice.getType().getResource().getResource(), mongoProxy
 						.getDcType().values().iterator().next().get(0));
 				}
 			}
@@ -508,6 +522,14 @@ public class ProxyFieldInputTest {
 		type.setType(EdmType.IMAGE);
 		proxy.setType(type);
 		proxy.setChoiceList(createEuropeanaTermsList());
+		ProxyFor pFor = new ProxyFor();
+		pFor.setResource("test proxy for");
+		
+		proxy.setProxyFor(pFor);
+		List<ProxyIn> pinList = new ArrayList<ProxyIn>();
+		ProxyIn pin = new ProxyIn();
+		pin.setResource("test proxy in");
+		proxy.setProxyInList(pinList);
 		return proxy;
 	}
 
@@ -843,8 +865,4 @@ public class ProxyFieldInputTest {
 		return dctermsList;
 	}
 
-	@After
-	public void cleanup() {
-		mongoServer.getDatastore().getDB().dropDatabase();
-	}
 }

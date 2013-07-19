@@ -311,12 +311,13 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		EuropeanaAggregationImpl retrievedAggregation = mongoServer
 				.getDatastore().find(EuropeanaAggregationImpl.class)
-				.filter("about", mongoAggregation.getAbout()).get();
-		if (retrievedAggregation != null) {
-			mongoServer.getDatastore().update(retrievedAggregation, ops);
+				.filter("about", aggregation.getAbout()).get();
+		if (retrievedAggregation == null) {
+			mongoServer.getDatastore().save(mongoAggregation);
 
 		} else {
-			mongoServer.getDatastore().save(mongoAggregation);
+			mongoServer.getDatastore().update(retrievedAggregation, ops);
+			
 		}
 		//TODO: Currently the europeana aggregation does not generate any WebResource, do we want it?
 		return retrievedAggregation != null ? retrievedAggregation

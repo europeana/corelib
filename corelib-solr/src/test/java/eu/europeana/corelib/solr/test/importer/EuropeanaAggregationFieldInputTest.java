@@ -1,18 +1,37 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.test.importer;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.solr.common.SolrInputDocument;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregates;
@@ -29,20 +48,27 @@ import eu.europeana.corelib.definitions.jibx.LanguageCodes;
 import eu.europeana.corelib.definitions.jibx.Preview;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights1;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.EuropeanaAggregationFieldInput;
+import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
+/**
+ * EuropeanaAggregation Field Input Creator
+ * 
+ * @author Yorgos.Mamakis@ kb.nl
+ * 
+ */
 public class EuropeanaAggregationFieldInputTest {
 
-	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
+	private final static String EUROPEANA_URI = "http://www.europeana.eu/portal/record";
+	private final static String EDM_PREVIEW_PREFIX = "http://europeanastatic.eu/api/image?uri=";
+	private final static String EDM_PREVIEW_SUFFIX = "&size=LARGE&type=TEXT";
 
 	@Test
 	public void testAggregation() {
@@ -58,7 +84,7 @@ public class EuropeanaAggregationFieldInputTest {
 		List<EuropeanaAggregationType> eAggregations = new ArrayList<EuropeanaAggregationType>();
 		eAggregations.add(eAggregation);
 		rdf.setEuropeanaAggregationList(eAggregations);
-		
+
 		testMongo(rdf);
 		testSolr(rdf);
 	}
@@ -66,18 +92,60 @@ public class EuropeanaAggregationFieldInputTest {
 	private void testSolr(RDF rdf) {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
-			EuropeanaAggregationType eAggregation = rdf.getEuropeanaAggregationList().get(0);
-			solrDocument = new EuropeanaAggregationFieldInput().createAggregationSolrFields(eAggregation, solrDocument, SolrUtils.getPreviewUrl(rdf));
-			assertEquals(eAggregation.getAbout(),solrDocument.getFieldValue(EdmLabel.EDM_EUROPEANA_AGGREGATION.toString()));
-			assertEquals(eAggregation.getAggregatedCHO().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO.toString()));
-			assertEquals(eAggregation.getCountry().getCountry().toString(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY.toString()));
-			assertEquals(eAggregation.getHasViewList().get(0).getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_HASVIEW.toString()));
-			assertEquals(eAggregation.getCreator().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR.toString()));
-			assertEquals(eAggregation.getIsShownBy().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_ISSHOWNBY.toString()));
-			assertEquals(eAggregation.getLandingPage().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString()));
-			assertEquals(eAggregation.getLanguage().getLanguage().toString(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE.toString()));
-			assertEquals(eAggregation.getPreview().getResource(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW.toString()));
-			assertEquals(eAggregation.getRights().getString(), solrDocument.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS.toString()));
+			EuropeanaAggregationType eAggregation = rdf
+					.getEuropeanaAggregationList().get(0);
+			solrDocument = new EuropeanaAggregationFieldInput()
+					.createAggregationSolrFields(eAggregation, solrDocument,
+							SolrUtils.getPreviewUrl(rdf));
+			assertEquals(eAggregation.getAbout(),
+					solrDocument
+							.getFieldValue(EdmLabel.EDM_EUROPEANA_AGGREGATION
+									.toString()));
+			assertEquals(
+					eAggregation.getAggregatedCHO().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO
+									.toString()));
+			assertEquals(
+					eAggregation.getCountry().getCountry().xmlValue().toLowerCase(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY
+									.toString()));
+			assertEquals(
+					eAggregation.getHasViewList().get(0).getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_HASVIEW
+									.toString()));
+			assertEquals(
+					eAggregation.getCreator().getResource().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR
+									.toString()));
+			assertEquals(
+					eAggregation.getIsShownBy().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_ISSHOWNBY
+									.toString()));
+			assertEquals(
+					eAggregation.getLandingPage().getResource(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE
+									.toString()));
+			assertEquals(
+					eAggregation.getLanguage().getLanguage().xmlValue(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE
+									.toString()));
+			assertEquals(
+					generateEdmPreview(eAggregation.getPreview().getResource()),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
+									.toString()));
+			assertEquals(
+					eAggregation.getRights().getString(),
+					solrDocument
+							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS
+									.toString()));
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,33 +153,63 @@ public class EuropeanaAggregationFieldInputTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void testMongo(RDF rdf) {
 		try {
-			EuropeanaAggregationType aggregation = rdf.getEuropeanaAggregationList().get(0);
-			EuropeanaAggregationImpl aggregationMongo = new EuropeanaAggregationFieldInput()
-					.createAggregationMongoFields(aggregation, mongoServer, SolrUtils.getPreviewUrl(rdf));
+			EuropeanaAggregationImpl aggregationMongo = new EuropeanaAggregationImpl();
+			EuropeanaAggregationType aggregation = rdf
+					.getEuropeanaAggregationList().get(0);
+			aggregationMongo.setAbout(aggregation.getAbout());
+			aggregationMongo.setEdmPreview(SolrUtils.getPreviewUrl(rdf));
+			mongoServer = EasyMock.createMock(EdmMongoServer.class);
+			Datastore ds = EasyMock.createMock(Datastore.class);
+			Query query = EasyMock.createMock(Query.class);
+			Key<EuropeanaAggregationImpl> key = EasyMock.createMock(Key.class);
+			UpdateOperations<EuropeanaAggregationImpl> ups = EasyMock
+					.createNiceMock(UpdateOperations.class);
+			EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+			EasyMock.expect(
+					ds.createUpdateOperations(EuropeanaAggregationImpl.class))
+					.andReturn(ups);
+			EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+			EasyMock.expect(ds.find(EuropeanaAggregationImpl.class)).andReturn(
+					query);
+			EasyMock.expect(query.filter("about", aggregation.getAbout()))
+					.andReturn(query);
+			EasyMock.expect(query.get()).andReturn(null);
+			
+			EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+			
+			
+			EasyMock.expect(ds.save(EasyMock.anyObject(EuropeanaAggregationImpl.class))).andReturn(key);			
+			EasyMock.replay(ups,query, ds, mongoServer);
+			aggregationMongo = new EuropeanaAggregationFieldInput()
+					.createAggregationMongoFields(aggregation, mongoServer,
+							SolrUtils.getPreviewUrl(rdf));
 			assertEquals(aggregation.getAbout(), aggregationMongo.getAbout());
 			assertEquals(aggregation.getAggregatedCHO().getResource(),
 					aggregationMongo.getAggregatedCHO());
-			assertEquals(aggregation.getCountry().getCountry().toString(),
-					aggregationMongo.getEdmCountry().values().iterator().next().get(0));
+			assertEquals(aggregation.getCountry().getCountry().xmlValue().toLowerCase(),
+					aggregationMongo.getEdmCountry().values().iterator().next()
+							.get(0));
 			assertEquals(aggregation.getHasViewList().get(0).getResource(),
 					aggregationMongo.getEdmHasView()[0]);
-			assertEquals(aggregation.getCreator().getResource(),
-					aggregationMongo.getDcCreator().values().iterator().next().get(0));
+			assertEquals(aggregation.getCreator().getResource().getResource(),
+					aggregationMongo.getDcCreator().values().iterator().next()
+							.get(0));
 			assertEquals(aggregation.getIsShownBy().getResource(),
 					aggregationMongo.getEdmIsShownBy());
 			assertEquals(aggregation.getLandingPage().getResource(),
 					aggregationMongo.getEdmLandingPage());
-			assertEquals(aggregation.getLanguage().getLanguage().toString(),
-					aggregationMongo.getEdmLanguage().values().iterator().next().get(0));
-			assertEquals(rdf.getAggregationList().get(0).getObject().getResource(),
-					aggregationMongo.getEdmPreview());
-			assertEquals(aggregation.getRights().getString(),
-					aggregationMongo.getEdmRights().values().iterator().next().get(0));
+			assertEquals(aggregation.getLanguage().getLanguage().xmlValue(),
+					aggregationMongo.getEdmLanguage().values().iterator()
+							.next().get(0));
+			assertEquals(generateEdmPreview(rdf.getAggregationList().get(0).getObject()
+					.getResource()), aggregationMongo.getEdmPreview());
+			assertEquals(aggregation.getRights().getString(), aggregationMongo
+					.getEdmRights().values().iterator().next().get(0));
 			assertEquals(aggregation.getAggregateList().get(0).getResource(),
 					aggregationMongo.getAggregates()[0]);
 
@@ -140,12 +238,11 @@ public class EuropeanaAggregationFieldInputTest {
 		hasViewList.add(hasView);
 		aggregation.setHasViewList(hasViewList);
 		Creator creator = new Creator();
-		
-		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource crResource = 
-				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+
+		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource crResource = new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
 		crResource.setResource("test creator");
-		creator.setResource(crResource );
-		
+		creator.setResource(crResource);
+
 		aggregation.setCreator(creator);
 		IsShownBy isShownBy = new IsShownBy();
 		isShownBy.setResource("test isShownBy");
@@ -154,7 +251,7 @@ public class EuropeanaAggregationFieldInputTest {
 		lp.setResource("test landing page");
 		aggregation.setLandingPage(lp);
 		Language1 language = new Language1();
-		language.setLanguage(LanguageCodes.EN);  
+		language.setLanguage(LanguageCodes.EN);
 		aggregation.setLanguage(language);
 		Rights1 rights = new Rights1();
 		rights.setString("test rights");
@@ -167,12 +264,19 @@ public class EuropeanaAggregationFieldInputTest {
 		Preview preview = new Preview();
 		preview.setResource("test_preview");
 		aggregation.setPreview(preview);
-		
+
 		return aggregation;
 	}
+	private String generateEdmPreview(String url) {
+		try {
+			return EDM_PREVIEW_PREFIX+URLEncoder.encode(url, "UTF-8").replaceAll("\\%28", "(")
+					.replaceAll("\\%29", ")").replaceAll("\\+", "%20")
+					.replaceAll("\\%27", "'").replaceAll("\\%21", "!")
+					.replaceAll("\\%7E", "~")+EDM_PREVIEW_SUFFIX;
+		} catch (UnsupportedEncodingException e) {
+			
 
-	@After
-	public void cleanup() {
-		mongoServer.getDatastore().getDB().dropDatabase();
+		}
+		return null;
 	}
 }

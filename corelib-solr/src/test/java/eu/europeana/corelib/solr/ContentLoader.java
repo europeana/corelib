@@ -36,6 +36,7 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
+import org.junit.Assert;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -118,6 +119,7 @@ public class ContentLoader {
 				fullBean.setAbout(about);
 				if(mongoDBServer.getFullBean(about)==null){
 					mongoDBServer.getDatastore().save(fullBean);
+					Assert.assertNotNull("Is null",mongoDBServer.getFullBean(fullBean.getAbout()));
 				}
 				SolrInputDocument document = new SolrConstructor().constructSolrDocument(rdf);
 				document.setField("europeana_id", fullBean.getAbout());

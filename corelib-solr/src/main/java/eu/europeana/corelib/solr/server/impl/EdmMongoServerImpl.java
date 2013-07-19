@@ -17,8 +17,6 @@
 
 package eu.europeana.corelib.solr.server.impl;
 
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
@@ -63,7 +61,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private Datastore datastore;
 	private Morphia morphia;
 	EuropeanaIdMongoServer europeanaIdMongoServer;
-	private static final String EUROPEANA_ID_DB = "EuropeanaId";
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
@@ -79,9 +76,14 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.username = username;
 		this.password = password;
 		createDatastore();
-		europeanaIdMongoServer = new EuropeanaIdMongoServer(mongoServer,
-				EUROPEANA_ID_DB, this.username, this.password);
-		europeanaIdMongoServer.createDatastore();
+
+	}
+
+	
+	@Override
+	public void setEuropeanaIdMongoServer(
+			EuropeanaIdMongoServer europeanaIdMongoServer) {
+		this.europeanaIdMongoServer = europeanaIdMongoServer;
 	}
 
 	public EdmMongoServerImpl() {
@@ -134,13 +136,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean resolve(String id) {
 
-
 		EuropeanaId newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
 			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			FullBeanImpl fBean = datastore.find(FullBeanImpl.class).field("about")
-					.equal(newId.getNewId()).get();
+			FullBeanImpl fBean = datastore.find(FullBeanImpl.class)
+					.field("about").equal(newId.getNewId()).get();
 			return fBean;
 		}
 		System.out.println(id);

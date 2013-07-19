@@ -65,7 +65,7 @@ public class EuropeanaIdRegistryMongoServer implements MongoServer {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		europeanaIdMongoServer = new EuropeanaIdMongoServer(mongoServer,
-				databaseName);
+				databaseName,"","");
 		createDatastore();
 	}
 

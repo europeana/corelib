@@ -33,8 +33,10 @@ import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 
 /**
- * Search service that retrieves BriefBeans or APIBeans in the case of a query search or a FullBean in the case of a
- * user selection. Currently the implementation uses SOLR for Brief/APIBeans and MongoDB for FullBean retrieval.
+ * Search service that retrieves BriefBeans or APIBeans in the case of a query
+ * search or a FullBean in the case of a user selection. Currently the
+ * implementation uses SOLR for Brief/APIBeans and MongoDB for FullBean
+ * retrieval.
  * 
  * @author Yorgos.Mamakis@ kb.nl
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -42,85 +44,91 @@ import eu.europeana.corelib.solr.model.ResultSet;
 public interface SearchService {
 
 	/**
+	 * Retrieve a record by splitted collectionId and recordId
+	 * 
+	 * @param europeanaObjectId
+	 *            - The unique europeana id * @param similarItems - Whether to
+	 *            retrieve similar items
+	 * @return A full europeana record
+	 * @throws SolrTypeException
+	 */
+	FullBean findById(String collectionId, String recordId, boolean similarItems)
+			throws SolrTypeException;
+
+	/**
 	 * Retrieve a record by id.
 	 * 
 	 * @param europeanaObjectId
 	 *            - The unique europeana id
+	 * @param similarItems
+	 *            - Whether to retrieve similar items
 	 * @return A full europeana record
 	 * @throws SolrTypeException
 	 */
-	FullBean findById(String europeanaObjectId) throws SolrTypeException;
-	
+	FullBean findById(String europeanaObjectId, boolean similarItems)
+			throws SolrTypeException;
+
+	/**
+	 * Retrieve a record by id.
+	 * 
+	 * @param europeanaObjectId
+	 *            - The unique europeana id
+	 * @param similarItems
+	 *            - Whether to retrieve similar items
+	 * @return A full europeana record
+	 * @throws SolrTypeException
+	 */
+	FullBean resolve(String europeanaObjectId, boolean similarItems)
+			throws SolrTypeException;
+
 	/**
 	 * Retrieve a record by splitted collectionId and recordId
 	 * 
 	 * @param europeanaObjectId
 	 *            - The unique europeana id
+	 * @param similarItems
+	 *            - Whether to retrieve similar items
 	 * @return A full europeana record
 	 * @throws SolrTypeException
 	 */
-	FullBean findById(String collectionId, String recordId) throws SolrTypeException;
+	FullBean resolve(String collectionId, String recordId, boolean similarItems)
+			throws SolrTypeException;
 
 	/**
-	 * Retrieve a record by id.
-	 * 
-	 * @param europeanaObjectId - The unique europeana id
-	 * @param similarItems - Whether to retrieve similar items
-	 * @return A full europeana record
-	 * @throws SolrTypeException
-	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems) throws SolrTypeException;
-
-	/**
-	 * Retrieve a record by id.
-	 * 
-	 * @param europeanaObjectId
-	 *            - The unique europeana id
-	 * @return A full europeana record
-	 * @throws SolrTypeException
-	 */
-	FullBean resolve(String europeanaObjectId) throws SolrTypeException;
-	
-	/**
-	 * Retrieve a record by splitted collectionId and recordId
-	 * 
-	 * @param europeanaObjectId
-	 *            - The unique europeana id
-	 * @return A full europeana record
-	 * @throws SolrTypeException
-	 */
-	FullBean resolve(String collectionId, String recordId) throws SolrTypeException;
-
-	/**
-	 * Perform a search in SOLR based on the given query and return the results in the format of the given class.
+	 * Perform a search in SOLR based on the given query and return the results
+	 * in the format of the given class.
 	 * 
 	 * @param beanInterface
 	 *            The required bean type, should be ApiBean or BriefBean
 	 * @param query
 	 *            Model class containing the search specification.
-	 * @return The search results, including facets, breadcrumb and original query.
+	 * @return The search results, including facets, breadcrumb and original
+	 *         query.
 	 * @throws SolrTypeException
 	 */
-	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException;
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query)
+			throws SolrTypeException;
 
 	/**
 	 * Create a sitemap
+	 * 
 	 * @param beanInterface
 	 * @param query
 	 * @return
 	 * @throws SolrTypeException
 	 */
-	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException;
+	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query)
+			throws SolrTypeException;
 
 	/**
 	 * returns a list of search suggestions and frequencies
 	 * 
 	 * @param query
-	 * 			The search term to find suggestions for
+	 *            The search term to find suggestions for
 	 * @param pageSize
-	 * 			Amount of requested suggestions
+	 *            Amount of requested suggestions
 	 * @return List of search suggestions
-	 * @throws SolrTypeException 
+	 * @throws SolrTypeException
 	 */
 	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
 
@@ -128,16 +136,18 @@ public interface SearchService {
 	 * returns a list of search suggestions and frequencies
 	 * 
 	 * @param query
-	 * 			The search term to find suggestions for
+	 *            The search term to find suggestions for
 	 * @param pageSize
-	 * 			Amount of requested suggestions
+	 *            Amount of requested suggestions
 	 * @return List of search suggestions
-	 * @throws SolrTypeException 
+	 * @throws SolrTypeException
 	 */
-	List<Term> suggestions(String query, int pageSize, String field) throws SolrTypeException;
+	List<Term> suggestions(String query, int pageSize, String field)
+			throws SolrTypeException;
 
 	/**
 	 * Retrieves the moreLikeThis List of BriefBeans
+	 * 
 	 * @param europeanaObjectId
 	 * @return
 	 * @throws SolrServerException
@@ -146,20 +156,20 @@ public interface SearchService {
 			throws SolrServerException;
 
 	/**
-	 * Returns a list of "see also" suggestions.
-	 * The suggestions are organized by fields (who, what, where, when, and title). Each suggestion contains a
+	 * Returns a list of "see also" suggestions. The suggestions are organized
+	 * by fields (who, what, where, when, and title). Each suggestion contains a
 	 * field value and the number of documents it matches.
-	 *
+	 * 
 	 * @param fields
-	 *   Map of field names, and corresponding field values.
-	 *   
-	 * @return
-	 *   The see also suggestions
+	 *            Map of field names, and corresponding field values.
+	 * 
+	 * @return The see also suggestions
 	 */
 	Map<String, Integer> seeAlso(List<String> queries);
 
 	/**
 	 * Returns a specified number of moreLikeThis objects
+	 * 
 	 * @param europeanaObjectId
 	 * @param count
 	 * @return
@@ -170,6 +180,7 @@ public interface SearchService {
 
 	/**
 	 * Return last modification time of Solr index
+	 * 
 	 * @return
 	 * @throws SolrServerException
 	 * @throws IOException

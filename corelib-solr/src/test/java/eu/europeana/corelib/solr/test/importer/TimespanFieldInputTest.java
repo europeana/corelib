@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.test.importer;
 
 import static org.junit.Assert.assertEquals;
@@ -10,11 +26,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Begin;
@@ -25,15 +43,18 @@ import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
+/**
+ * Timespan Field Input Creator
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public class TimespanFieldInputTest {
 
-	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 
 	@Test
@@ -78,7 +99,20 @@ public class TimespanFieldInputTest {
 		timespan.setIsPartOfList(isPartOfList);
 
 		// create mongo
-
+		mongoServer = EasyMock.createMock(EdmMongoServer.class);
+		Datastore ds = EasyMock.createMock(Datastore.class);
+		Query query = EasyMock.createMock(Query.class);
+		Key<TimespanImpl> key = EasyMock.createMock(Key.class);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+		EasyMock.expect(ds.find(TimespanImpl.class)).andReturn(query);
+		EasyMock.expect(query.filter("about", timespan.getAbout())).andReturn(query);
+		EasyMock.expect(query.get()).andReturn(null);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+		TimespanImpl timespanImpl = new TimespanImpl();
+		timespanImpl.setAbout(timespan.getAbout());
+		EasyMock.expect(ds.save(timespanImpl)).andReturn(key);
+		
+		EasyMock.replay(query,ds,mongoServer);
 		TimespanImpl timespanMongo = new TimespanFieldInput()
 				.createTimespanMongoField(timespan, mongoServer);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
@@ -94,7 +128,7 @@ public class TimespanFieldInputTest {
 				timespanMongo.getAltLabel().values().iterator().next().get(0));
 		assertEquals(timespan.getPrefLabelList().get(0).getString(),
 				timespanMongo.getPrefLabel().values().iterator().next().get(0));
-		assertEquals(timespan.getIsPartOfList().get(0).getResource(),
+		assertEquals(timespan.getIsPartOfList().get(0).getResource().getResource(),
 				timespanMongo.getIsPartOf().values().iterator().next().get(0));
 		// create solr document
 		SolrInputDocument solrDocument = new SolrInputDocument();
@@ -128,13 +162,10 @@ public class TimespanFieldInputTest {
 								+ timespan.getAltLabelList().get(0).getLang()
 										.getLang()).toArray()[0].toString());
 
-		assertEquals(timespan.getIsPartOfList().get(0).getResource(), solrDocument
+		assertEquals(timespan.getIsPartOfList().get(0).getResource().getResource(), solrDocument
 				.getFieldValue(EdmLabel.TS_DCTERMS_ISPART_OF.toString())
 				.toString());
 	}
 
-	@After
-	public void cleanup() {
-		mongoServer.getDatastore().getDB().dropDatabase();
-	}
+
 }

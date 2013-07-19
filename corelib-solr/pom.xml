@@ -123,6 +123,18 @@
 			<artifactId>jackson-xc</artifactId>
 			<version>${version.codehausJackson}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>${version.easymock}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>1.33</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

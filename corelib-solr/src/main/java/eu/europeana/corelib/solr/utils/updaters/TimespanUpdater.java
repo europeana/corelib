@@ -14,9 +14,9 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
-public class TimespanUpdater {
-	public static void update(TimespanImpl mongoTimespan,
-			TimeSpanType timeSpan, MongoServer mongoServer) {
+public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
+	public void update(TimespanImpl mongoTimespan, TimeSpanType timeSpan,
+			MongoServer mongoServer) {
 		Query<TimespanImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(TimespanImpl.class).field("about")
 				.equal(mongoTimespan.getAbout());
@@ -92,13 +92,13 @@ public class TimespanUpdater {
 			Map<String, List<String>> hasPart = MongoUtils
 					.createResourceOrLiteralMapFromList(timeSpan
 							.getHasPartList());
-			if(hasPart!=null){
-			if (mongoTimespan.getDctermsHasPart() == null
-					|| MongoUtils.mapEquals(hasPart,
-							mongoTimespan.getDctermsHasPart())) {
-				ops.set("dctermsHasPart", hasPart);
-				update = true;
-			}
+			if (hasPart != null) {
+				if (mongoTimespan.getDctermsHasPart() == null
+						|| MongoUtils.mapEquals(hasPart,
+								mongoTimespan.getDctermsHasPart())) {
+					ops.set("dctermsHasPart", hasPart);
+					update = true;
+				}
 			}
 		}
 

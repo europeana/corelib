@@ -140,7 +140,7 @@
    <field name="provider_aggregation_edm_provider" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="provider_aggregation_edm_provider.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
-   <dynamicfield name="provider_aggregation_dc_rights.*" type="string" indexed="true" stored="true" multiValued="true"/>
+   <dynamicField name="provider_aggregation_dc_rights.*" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="provider_aggregation_edm_rights" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="provider_aggregation_edm_rights.*" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="provider_aggregation_edm_unstored" type="string" indexed="true" stored="false" multiValued="true" />
@@ -153,12 +153,13 @@
 	<field name="europeana_aggregation_edm_landingPage" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_isShownBy" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_hasView" type="string" indexed="true" stored="true" multiValued="true"/>
-	<field name="europeana_aggregation_edm_country" type="string" indexed="true" stored="true" multiValued="false"/>
+	<field name="europeana_aggregation_edm_country" type="string" indexed="true" stored="true" multiValued="true"/>
 	<dynamicField name="europeana_aggregation_edm_country.*" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_language" type="string" indexed="true" stored="true" multiValued="true"/>
 	<dynamicField name="europeana_aggregation_edm_language.*" type="string" indexed="true" stored="true" multiValued="true"/>
-	<field name="europeana_aggregation_edm_rights" type="string" indexed="true" stored="false" multiValued="false"/>
+	<field name="europeana_aggregation_edm_rights" type="string" indexed="true" stored="false" multiValued="true"/>
 	<dynamicField name="europeana_aggregation_edm_rights.*" type="string" indexed="true" stored="false" multiValued="false"/>
+<field name="europeana_aggregation_edm_preview" type="string" indexed="true" stored="true" multiValued="true"/>
 	<!-- WEB RESOURCE -->
    <field name="edm_webResource" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="wr_dc_rights" type="string" indexed="true" stored="true" multiValued="true" />
@@ -299,7 +300,7 @@
      <dynamicField name="proxy_edm_year.*" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="proxy_edm_userTags" type="string" indexed="false" stored="false" multiValued="true"/>
    <field name="europeana_previewNoDistribute" type="boolean" indexed="true" stored="true" multiValued="true" />
-    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="true" />
+    <field name="edm_UGC" type="boolean" indexed="true" stored="true" multiValued="false" default="false" />
    
   
   
@@ -351,7 +352,7 @@
 	<dynamicField name="ag_edm_begin.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	<dynamicField name="ag_edm_end.*" type="string" indexed="true" stored="false" multiValued="true"/>
 	<!-- TIMESPAN -->
-   <field name="edm_timespan" type="text" indexed="true" stored="false" multiValued="true"/>
+   <field name="edm_timespan" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="ts_skos_prefLabel" type="text" indexed="true" stored="true" multiValued="true" />
    <field name="ts_skos_altLabel" type="text" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="ts_skos_prefLabel.*" type="text" indexed="true" stored="true" multiValued="true" />
@@ -380,8 +381,8 @@
    <field name="pl_skos_note" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="pl_dcterms_isPartOf" type="string" indexed="true" stored="false" multiValued="true" />
    <field name="pl_dcterms_isPartOf_label" type="string" indexed="true" stored="false" multiValued="true"/>
-	<field name="pl_wgs84_pos_lat" type="string" indexed="true" stored="false" multiValued="true" />
-	<field name="pl_wgs84_pos_long" type="string" indexed="true" stored="false" multiValued="true"/>
+	<field name="pl_wgs84_pos_lat" type="string" indexed="true" stored="true" multiValued="true" />
+	<field name="pl_wgs84_pos_long" type="string" indexed="true" stored="true" multiValued="true"/>
 	<field name="pl_wgs84_pos_alt" type="string" indexed="true" stored="false" multiValued="true"/>
 	<field name="pl_wgs84_pos_lat_long" type="string" indexed="true" stored="false" multiValued="true"/> <!-- copyfield -->
 	<field name="pl_skos_hiddenLabel" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -553,7 +554,8 @@
    <copyField source="proxy_dc_creator.*" dest="spell" />
    <copyField source="proxy_dc_subject.*" dest="spell"/>
    <copyField source="proxy_dc_title.*" dest="spell"/>
-   <copyField source="proxy_dc_description.*" dest="spell"/> 
+   <copyField source="proxy_dc_title" dest="spell"/>	   
+<copyField source="proxy_dc_description.*" dest="spell"/> 
    <copyField source="proxy_dc_date" dest="date" />
    <copyField source="proxy_dcterms_created" dest="date" />
    <copyField source="proxy_dcterms_issued" dest="date" />
@@ -567,7 +569,8 @@
    <copyField source="proxy_dcterms_temporal" dest="subject" />
    <copyField source="proxy_dc_source" dest="source" />
    <copyField source="proxy_dc_title.*" dest="title" />
-   <copyField source="proxy_dcterms_alternative.*" dest="title" />
+   <copyField source="proxy_dc_title" dest="title" />   
+<copyField source="proxy_dcterms_alternative.*" dest="title" />
    <copyField source="proxy_edm_type" dest="TYPE" />
    <copyField source="europeana_aggregation_edm_language.*" dest="LANGUAGE" />
    <copyField source="europeana_aggregation_edm_country.*" dest="COUNTRY" />
@@ -577,6 +580,12 @@
    <copyField source="provider_aggregation_edm_rights.*" dest="RIGHTS" />
    <copyField source="europeana_completeness" dest="COMPLETENESS" />
    <copyField source="edm_UGC" dest="UGC" />
+      <copyField source="europeana_aggregation_edm_language" dest="LANGUAGE" />
+   <copyField source="europeana_aggregation_edm_country" dest="COUNTRY" />
+   <copyField source="proxy_edm_year" dest="YEAR" />
+   <copyField source="provider_aggregation_edm_dataProvider" dest="DATA_PROVIDER" />
+   <copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
+   <copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
    <copyField source="ag_skos_prefLabel.*" dest="text" />
    <copyField source="ag_skos_altLabel.*" dest="text" />
    <copyField source="ag_skos_hiddenLabel.*" dest="text"/>
@@ -632,6 +641,7 @@
    <copyField source="proxy_dc_date.*" dest="whenSpell" />
    <copyField source="ts_skos_prefLabel.*" dest="whenSpell"/>
    <copyField source="ts_skos_prefLabel.*" dest="when"/>
+<copyField source="proxy_dc_title" dest="titleSpell"/>
    <copyField source="proxy_dc_title.*" dest="titleSpell" />
    <copyField source="proxy_dcterms_alternative.*" dest="titleSpell" />
    

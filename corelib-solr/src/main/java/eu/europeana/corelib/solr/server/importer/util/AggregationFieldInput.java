@@ -447,7 +447,6 @@ public final class AggregationFieldInput {
 			EdmMongoServer mongoServer, List<WebResourceImpl> webResources)
 			throws InstantiationException, IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
-		// mongoAggregation.setId(new ObjectId());
 		mongoAggregation.setAbout(aggregation.getAbout());
 		Map<String, List<String>> dp = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation
@@ -505,7 +504,7 @@ public final class AggregationFieldInput {
 				.createResourceOrLiteralMapFromList(aggregation.getRightList());
 		if (rights1 != null) {
 			mongoAggregation.setDcRights(rights1);
-			ups.set("dcRights", rights);
+			ups.set("dcRights", rights1);
 		}
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();

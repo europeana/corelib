@@ -12,9 +12,9 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 
-public class AgentUpdater {
+public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 
-	public static void update(AgentImpl agent, AgentType jibxAgent,
+	public  void update(AgentImpl agent, AgentType jibxAgent,
 			MongoServer mongoServer) {
 		Query<AgentImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(AgentImpl.class).field("about")

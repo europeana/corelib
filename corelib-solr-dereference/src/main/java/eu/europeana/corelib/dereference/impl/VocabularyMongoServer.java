@@ -25,12 +25,13 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 
-import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
 import eu.europeana.corelib.solr.MongoServer;
+
 /**
  * A mongo server instance for use with the controlled vocabularies
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public class VocabularyMongoServer implements MongoServer {
 
@@ -63,54 +64,63 @@ public class VocabularyMongoServer implements MongoServer {
 		createDatastore();
 	}
 
-	public VocabularyMongoServer(){
+	public VocabularyMongoServer() {
 		
 	}
+
 	/**
 	 * Create a datastore and map the required morphia entities
 	 */
 	private void createDatastore() {
 		Morphia morphia = new Morphia();
-		morphia.map(ControlledVocabularyImpl.class)
-				.map(EntityImpl.class);
-		
+		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
+
 		datastore = morphia.createDatastore(mongoServer, databaseName);
-		
+
 		datastore.ensureIndexes();
 		log.info("VocabularyMongoServer datastore is created");
 	}
-	
+
 	/**
-	 * Retrieve the mappings for a specific resource. Rules are also taken into account
+	 * Retrieve the mappings for a specific resource. Rules are also taken into
+	 * account
 	 * 
-	 * @param field - the field of the controlled vocabulary to search for (the uri of the vocabulary is currently only supported)
-	 * @param filter - the value to match the field
+	 * @param field
+	 *            - the field of the controlled vocabulary to search for (the
+	 *            uri of the vocabulary is currently only supported)
+	 * @param filter
+	 *            - the value to match the field
 	 * @return
 	 */
-	public ControlledVocabularyImpl getControlledVocabulary(String field, String filter){
+	public ControlledVocabularyImpl getControlledVocabulary(String field,
+			String filter) {
 		String[] splitName = filter.split("/");
-		String vocabularyName = splitName[0]+"/"+splitName[1]+"/"+splitName[2]+"/";
-		List<ControlledVocabularyImpl>vocabularies = getDatastore()
+		String vocabularyName = splitName[0] + "/" + splitName[1] + "/"
+				+ splitName[2] + "/";
+		List<ControlledVocabularyImpl> vocabularies = getDatastore()
 				.find(ControlledVocabularyImpl.class)
 				.filter(field, vocabularyName).asList();
-		for (ControlledVocabularyImpl vocabulary: vocabularies){
+		for (ControlledVocabularyImpl vocabulary : vocabularies) {
 			boolean ruleController = true;
-			for(String rule :vocabulary.getRules()){
-				ruleController = ruleController && (filter.contains(rule)||StringUtils.equals(rule, "*"));
+			for (String rule : vocabulary.getRules()) {
+				ruleController = ruleController
+						&& (filter.contains(rule) || StringUtils.equals(rule,
+								"*"));
 			}
-			if(ruleController){
+			if (ruleController) {
 				return vocabulary;
 			}
 		}
 		return null;
 	}
 
-	public ControlledVocabularyImpl getControlledVocabularyByUri(String uri, String name){
-		List<ControlledVocabularyImpl>vocabularies = getDatastore()
-				.find(ControlledVocabularyImpl.class)
-				.filter("URI", uri).asList();
-		for(ControlledVocabularyImpl vocabulary:vocabularies){
-			if(StringUtils.equals(name, vocabulary.getName())){
+	public ControlledVocabularyImpl getControlledVocabularyByUri(String uri,
+			String name) {
+		List<ControlledVocabularyImpl> vocabularies = getDatastore()
+				.find(ControlledVocabularyImpl.class).filter("URI", uri)
+				.asList();
+		for (ControlledVocabularyImpl vocabulary : vocabularies) {
+			if (StringUtils.equals(name, vocabulary.getName())) {
 				return vocabulary;
 			}
 		}

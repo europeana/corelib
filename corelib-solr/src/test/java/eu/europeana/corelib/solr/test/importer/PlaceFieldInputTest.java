@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.solr.test.importer;
 
 import static org.junit.Assert.assertEquals;
@@ -7,14 +23,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.After;
+import org.easymock.EasyMock;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
@@ -29,15 +44,34 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-solr-context.xml", "/corelib-solr-test.xml" })
+/**
+ * Place Field Input Field creator
+ * @author Yorgos.Mamakis@ kb.nl
+ *
+ */
 public class PlaceFieldInputTest {
 
-	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 
 	@Test
 	public void testPlace() {
+		PlaceImpl placeImpl = new PlaceImpl();
+		placeImpl.setAbout("test about");
+		mongoServer = EasyMock.createMock(EdmMongoServer.class);
+		Datastore ds = EasyMock.createMock(Datastore.class);
+		Query query = EasyMock.createMock(Query.class);
+		Key<PlaceImpl> key = EasyMock.createMock(Key.class);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+		EasyMock.expect(ds.find(PlaceImpl.class)).andReturn(query);
+		EasyMock.expect(query.filter("about", placeImpl.getAbout())).andReturn(
+				query);
+		EasyMock.expect(query.get()).andReturn(null);
+		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+		
+		EasyMock.expect(ds.save(placeImpl)).andReturn(key);
+
+		EasyMock.replay(query, ds, mongoServer);
+
 		assertNotNull(mongoServer);
 
 		PlaceType place = new PlaceType();
@@ -76,20 +110,20 @@ public class PlaceFieldInputTest {
 		posLong.setLong(new Float("1.0"));
 		place.setLong(posLong);
 		// create mongo place
-		PlaceImpl placeMongo = new PlaceFieldInput().createPlaceMongoFields(place,
-				mongoServer);
+		PlaceImpl placeMongo = new PlaceFieldInput().createPlaceMongoFields(
+				place, mongoServer);
 		assertEquals(place.getAbout(), placeMongo.getAbout());
-		assertEquals(place.getNoteList().get(0).getString(),
-				placeMongo.getNote().values().iterator().next().get(0));
+		assertEquals(place.getNoteList().get(0).getString(), placeMongo
+				.getNote().values().iterator().next().get(0));
 		assertTrue(placeMongo.getAltLabel().containsKey(
 				place.getAltLabelList().get(0).getLang().getLang()));
-		assertEquals(place.getAltLabelList().get(0).getString(),
-				placeMongo.getAltLabel().values().iterator().next().get(0));
-		
-		assertEquals(place.getPrefLabelList().get(0).getString(),
-				placeMongo.getPrefLabel().values().iterator().next().get(0));
-		assertEquals(place.getIsPartOfList().get(0).getString(),
-				placeMongo.getIsPartOf().values().iterator().next().get(0));
+		assertEquals(place.getAltLabelList().get(0).getString(), placeMongo
+				.getAltLabel().values().iterator().next().get(0));
+
+		assertEquals(place.getPrefLabelList().get(0).getString(), placeMongo
+				.getPrefLabel().values().iterator().next().get(0));
+		assertEquals(place.getIsPartOfList().get(0).getString(), placeMongo
+				.getIsPartOf().values().iterator().next().get(0));
 		assertEquals(Float.toString(place.getLat().getLat()),
 				Float.toString(placeMongo.getLatitude()));
 		assertEquals(Float.toString(place.getLong().getLong()),
@@ -120,20 +154,16 @@ public class PlaceFieldInputTest {
 								+ place.getAltLabelList().get(0).getLang()
 										.getLang()).toArray()[0].toString());
 
-		assertEquals(place.getLat().getLat(),
-				solrDocument
-						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
-		assertEquals(place.getLong().getLong(),
-				solrDocument
-						.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
+		assertEquals(
+				place.getLat().getLat(),
+				solrDocument.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
+		assertEquals(
+				place.getLong().getLong(),
+				solrDocument.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
 
 		assertEquals(place.getIsPartOfList().get(0).getString(), solrDocument
 				.getFieldValue(EdmLabel.PL_DCTERMS_ISPART_OF.toString())
 				.toString());
 	}
 
-	@After
-	public void cleanup() {
-		mongoServer.getDatastore().getDB().dropDatabase();
-	}
 }

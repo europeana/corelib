@@ -58,7 +58,7 @@ public class SearchServiceMock implements SearchService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public FullBean findById(String europeanaObjectId) {
+	public FullBean findById(String europeanaObjectId,boolean similarItems) {
 		FullBean mockBean = createMock(FullBean.class);
 		Proxy proxy =createMock(Proxy.class);
 		Map<String,List<String>> dcPublisher = new HashMap<String,List<String>>();
@@ -91,7 +91,7 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
-	public FullBean findById(String collectionId, String recordId) throws SolrTypeException {
+	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws SolrTypeException {
 		// not needed in this mock...
 		return null;
 	}
@@ -107,16 +107,6 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
-	@Override
-	public FullBean resolve(String collectionId, String recordId)
-			throws SolrTypeException {
-		return null;
-	}
-
-	@Override
-	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
-		return null;
-	}
 
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
@@ -147,14 +137,22 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
+	
+
 	@Override
-	public FullBean findById(String europeanaObjectId, boolean similarItems)
+	public Date getLastSolrUpdate() throws SolrServerException, IOException {
+		return null;
+	}
+
+	@Override
+	public FullBean resolve(String europeanaObjectId, boolean similarItems)
 			throws SolrTypeException {
 		return null;
 	}
 
 	@Override
-	public Date getLastSolrUpdate() throws SolrServerException, IOException {
+	public FullBean resolve(String collectionId, String recordId,
+			boolean similarItems) throws SolrTypeException {
 		return null;
 	}
 }

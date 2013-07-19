@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -41,7 +40,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -64,6 +62,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
@@ -101,6 +100,9 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	private EdmMongoServer mongoServer;
 
+	@Resource(name = "corelib_solr_idServer")
+	private EuropeanaIdMongoServer idServer;
+	
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
@@ -113,28 +115,11 @@ public class SearchServiceImpl implements SearchService {
 	// private static final String TERMS_REGEX_FLAG = "case_insensitive";
 
 	@Override
-	public FullBean findById(String collectionId, String recordId)
+	public FullBean findById(String collectionId, String recordId, boolean similarItems)
 			throws SolrTypeException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),similarItems);
 	}
 
-	@Override
-	public FullBean findById(String europeanaObjectId) throws SolrTypeException {
-		long t0 = new Date().getTime();
-		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		logTime("mongo findById", (new Date().getTime() - t0));
-		if (fullBean != null) {
-			/*
-			try {
-				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-			} catch (SolrServerException e) {
-				log.severe("SolrServerException: " + e.getMessage());
-			}
-			*/
-		}
-
-		return fullBean;
-	}
 
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
@@ -153,15 +138,16 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public FullBean resolve(String collectionId, String recordId)
+	public FullBean resolve(String collectionId, String recordId, boolean similarItems)
 			throws SolrTypeException {
 		return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
-				recordId));
+				recordId),similarItems);
 	}
 
 	@Override
-	public FullBean resolve(String europeanaObjectId) throws SolrTypeException {
+	public FullBean resolve(String europeanaObjectId,boolean similarItems) throws SolrTypeException {
 		long t0 = new Date().getTime();
+		mongoServer.setEuropeanaIdMongoServer(idServer);
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
 		logTime("mongo resolve", (new Date().getTime() - t0));
 		if (fullBean != null) {
@@ -424,19 +410,13 @@ public class SearchServiceImpl implements SearchService {
 
 			// get the query response
 			QueryResponse qResp = solrServer.query(params);
-			// total.put(query, total.get(query) + qResp.getElapsedTime());
-			// qResp.getResponseHeader().
 			SpellCheckResponse spResponse = qResp.getSpellCheckResponse();
 			//if the suggestions are not empty and there are collated results
 			if (!spResponse.getSuggestions().isEmpty()
 					&& spResponse.getCollatedResults() != null) {
-				// log.fine("Number of collated results received " + spResponse.getCollatedResults().size());
 				for (Collation collation : spResponse.getCollatedResults()) {
 					StringBuilder termResult = new StringBuilder();
-					// NOTE: should we concatenate and change corrections?
 					for (Correction cor : collation.getMisspellingsAndCorrections()) {
-//						String corStr = cor.getCorrection().replaceAll(
-//								"[-+.^:(),]", "");
 						//pickup the corrections, remove duplicates
 						String[] terms = cor.getCorrection().trim().replaceAll("  ", " ").split(" ");
 						for (String term : terms) {
@@ -460,7 +440,6 @@ public class SearchServiceImpl implements SearchService {
 			log.severe("Exception :" + e.getMessage());
 		}
 
-		// log.fine(String.format("Returned %d number of results", results.size()));
 		return results;
 	}
 
@@ -494,7 +473,6 @@ public class SearchServiceImpl implements SearchService {
 		// Sort the results by number of hits
 		Collections.sort(results);
 		logTime("suggestions", (new Date().getTime() - start));
-		// System.out.println("suggestions: " + (total.get(query) * 100 / (new Date().getTime() - start)) + "%");
 		total.remove(query);
 		
 		log.fine(String.format("Returned %d results in %d ms",
@@ -543,6 +521,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
 		long t0 = new Date().getTime();
 		NamedList<Object> namedList = solrServer.request(new LukeRequest());

@@ -18,6 +18,7 @@ package eu.europeana.corelib.solr.server;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 /**
  * Basic MongoDB server implementation
@@ -53,11 +54,18 @@ public interface EdmMongoServer extends MongoServer {
 	<T> T searchByAbout(Class<T> clazz, String about);
 
 	/**
-	 * Resolve a fullbean based on its id. This method should be caleed if the
+	 * Resolve a fullbean based on its id. This method should be called if the
 	 * getFullBean method has failed
 	 * 
 	 * @param id
 	 * @return
 	 */
 	FullBean resolve(String id);
+
+	/**
+	 * Set the EuropeanaId redirect server
+	 * 
+	 * @param europeanaIdMongoServer
+	 */
+	void setEuropeanaIdMongoServer(EuropeanaIdMongoServer europeanaIdMongoServer);
 }

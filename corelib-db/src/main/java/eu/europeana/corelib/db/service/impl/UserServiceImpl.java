@@ -348,7 +348,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 		FullBean bean;
 		try {
-			bean = searchService.findById(europeanaObjectId);
+			bean = searchService.findById(europeanaObjectId,false);
 		} catch (SolrTypeException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}

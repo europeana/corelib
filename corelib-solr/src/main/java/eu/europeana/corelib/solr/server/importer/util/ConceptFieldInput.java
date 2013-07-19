@@ -17,13 +17,9 @@
 
 package eu.europeana.corelib.solr.server.importer.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.AltLabel;
@@ -32,16 +28,13 @@ import eu.europeana.corelib.definitions.jibx.Broader;
 import eu.europeana.corelib.definitions.jibx.CloseMatch;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.ExactMatch;
-import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.NarrowMatch;
 import eu.europeana.corelib.definitions.jibx.Narrower;
 import eu.europeana.corelib.definitions.jibx.Notation;
-import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Related;
 import eu.europeana.corelib.definitions.jibx.RelatedMatch;
-import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -49,6 +42,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.solr.utils.updaters.ConceptUpdater;
+import eu.europeana.corelib.solr.utils.updaters.Updater;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
@@ -184,278 +178,12 @@ public final class ConceptFieldInput {
 		return conceptMongo;
 	}
 
-	private List<String> createObjectList(String[] originalValues, Object obj) {
 
-		List<String> newList = new ArrayList<String>();
-		String str = "";
-		if (obj instanceof ResourceType) {
-			str = ((ResourceType) obj).getResource();
-		} else {
-			str = ((LiteralType) obj).getString();
-		}
-
-		if (!MongoUtils.contains(originalValues, str)) {
-			if(!newList.contains(str)){
-			newList.add(str);
-			}
-		}
-
-		for (String arrStr : originalValues) {
-			if(!newList.contains(arrStr)){
-				newList.add(arrStr);
-			}
-		}
-		return newList;
-	}
 
 	private ConceptImpl updateConcept(ConceptImpl conceptMongo,
 			Concept concept, MongoServer mongoServer) {
-//		for (Concept.Choice choice : concept.getChoiceList()) {
-//			if (choice.ifNote()) {
-//				Map<String, List<String>> newNoteMap;
-//				if (conceptMongo.getNote() != null) {
-//
-//					newNoteMap = conceptMongo.getNote();
-//				} else {
-//					newNoteMap = new HashMap<String, List<String>>();
-//				}
-//				Note note = choice.getNote();
-//				if (note.getLang() != null
-//						&& StringUtils.isNotBlank(note.getLang().getLang())) {
-//
-//					if (!MongoUtils.contains(newNoteMap, note.getLang()
-//							.getLang(), note.getString())) {
-//						List<String> val = newNoteMap.get(note.getLang()
-//								.getLang()) != null ? newNoteMap.get(note
-//								.getLang().getLang()) : new ArrayList<String>();
-//						if (!val.contains(note.getString())) {
-//							val.add(note.getString());
-//						}
-//						newNoteMap.put(note.getLang().getLang(), val);
-//					}
-//				} else {
-//					List<String> val = newNoteMap.get("def") != null ? newNoteMap
-//							.get("def") : new ArrayList<String>();
-//					if (!val.contains(note.getString())) {
-//						val.add(note.getString());
-//					}
-//					newNoteMap.put("def", val);
-//				}
-//
-//				MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
-//						mongoServer, "note", newNoteMap);
-//
-//			}
-//			if (choice.ifAltLabel()) {
-//				Map<String, List<String>> newAltLabelMap;
-//				if (conceptMongo.getAltLabel() != null) {
-//					newAltLabelMap = conceptMongo.getAltLabel();
-//				} else {
-//					newAltLabelMap = new HashMap<String, List<String>>();
-//				}
-//				AltLabel altLabel = choice.getAltLabel();
-//				if (altLabel.getLang() != null
-//						&& StringUtils.isNotBlank(altLabel.getLang().getLang())) {
-//					if (!MongoUtils.contains(newAltLabelMap, altLabel.getLang()
-//							.getLang(), altLabel.getString())) {
-//						List<String> val = newAltLabelMap.get(altLabel
-//								.getLang().getLang()) != null ? newAltLabelMap
-//								.get(altLabel.getLang().getLang())
-//								: new ArrayList<String>();
-//						if (!val.contains(altLabel.getString())) {
-//							val.add(altLabel.getString());
-//						}
-//						newAltLabelMap.put(altLabel.getLang().getLang(), val);
-//					}
-//				} else {
-//					List<String> val = newAltLabelMap.get("def") != null ? newAltLabelMap
-//							.get("def") : new ArrayList<String>();
-//					if (!val.contains(altLabel.getString())) {
-//						val.add(altLabel.getString());
-//					}
-//					newAltLabelMap.put("def", val);
-//				}
-//
-//				MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
-//						mongoServer, "altLabel", newAltLabelMap);
-//
-//			}
-//
-//			if (choice.ifPrefLabel()) {
-//				Map<String, List<String>> newPrefLabelMap;
-//				if (conceptMongo.getPrefLabel() != null) {
-//					newPrefLabelMap = conceptMongo.getPrefLabel();
-////					for (Entry<String, List<String>> entry : newPrefLabelMap
-////							.entrySet()) {
-////						if (StringUtils.isBlank(entry.getKey())) {
-////							for (String str : entry.getValue()) {
-////								if (!newPrefLabelMap.get("def").contains(str)) {
-////									newPrefLabelMap.get("def").add(str);
-////								}
-////							}
-////						}
-////					}
-////					newPrefLabelMap.remove("");
-//				} else {
-//					newPrefLabelMap = new HashMap<String, List<String>>();
-//				}
-//				PrefLabel prefLabel = choice.getPrefLabel();
-//				if (prefLabel.getLang() != null
-//						&& StringUtils
-//								.isNotBlank(prefLabel.getLang().getLang())) {
-//					if (!MongoUtils.contains(newPrefLabelMap, prefLabel
-//							.getLang().getLang(), prefLabel.getString())) {
-//						List<String> val = newPrefLabelMap.get(prefLabel
-//								.getLang().getLang()) != null ? newPrefLabelMap
-//								.get(prefLabel.getLang().getLang())
-//								: new ArrayList<String>();
-//
-//						if (!val.contains(prefLabel.getString())) {
-//							val.add(prefLabel.getString());
-//						}
-//						newPrefLabelMap.put(prefLabel.getLang().getLang(), val);
-//					}
-//				} else {
-//					List<String> val = newPrefLabelMap.get("def") != null ? newPrefLabelMap
-//							.get("def") : new ArrayList<String>();
-//					if (!val.contains(prefLabel.getString())) {
-//						val.add(prefLabel.getString());
-//					}
-//					newPrefLabelMap.put("def", val);
-//				}
-//
-//				MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
-//						mongoServer, "prefLabel", newPrefLabelMap);
-//
-//			}
-//			if (choice.ifBroader()) {
-//				if (conceptMongo.getBroader() != null) {
-//					List<String> broaderList = createObjectList(
-//							conceptMongo.getBroader(), choice.getBroader());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "broader",
-//							broaderList);
-//				}
-//			}
-//			if (choice.ifBroadMatch()) {
-//				if (conceptMongo.getBroadMatch() != null) {
-//					List<String> broadMatchList = createObjectList(
-//							conceptMongo.getBroadMatch(),
-//							choice.getBroadMatch());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "broadMatch",
-//							broadMatchList);
-//				}
-//			}
-//			if (choice.ifCloseMatch()) {
-//				if (conceptMongo.getCloseMatch() != null) {
-//					List<String> closeMatchList = createObjectList(
-//							conceptMongo.getCloseMatch(),
-//							choice.getCloseMatch());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "closeMatch",
-//							closeMatchList);
-//				}
-//			}
-//			if (choice.ifExactMatch()) {
-//				if (conceptMongo.getExactMatch() != null) {
-//					List<String> exactMatchList = createObjectList(
-//							conceptMongo.getExactMatch(),
-//							choice.getExactMatch());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "exactMatch",
-//							exactMatchList);
-//				}
-//			}
-//
-//			if (choice.ifNarrowMatch()) {
-//				if (conceptMongo.getNarrowMatch() != null) {
-//					List<String> narrowMatchList = createObjectList(
-//							conceptMongo.getNarrowMatch(),
-//							choice.getNarrowMatch());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer,
-//							"narrowMatch", narrowMatchList);
-//				}
-//			}
-//
-//			if (choice.ifInScheme()) {
-//				if (conceptMongo.getInScheme() != null) {
-//					List<String> inSchemeList = createObjectList(
-//							conceptMongo.getInScheme(), choice.getInScheme());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "inScheme",
-//							inSchemeList);
-//				}
-//			}
-//
-//			if (choice.ifNarrower()) {
-//				if (conceptMongo.getNarrower() != null) {
-//					List<String> narrowerList = createObjectList(
-//							conceptMongo.getNarrower(), choice.getNarrower());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "narrower",
-//							narrowerList);
-//				}
-//			}
-//
-//			if (choice.ifNotation()) {
-//				Map<String, List<String>> newNotationMap;
-//				if (conceptMongo.getNotation() != null) {
-//					newNotationMap = conceptMongo.getNotation();
-//				} else {
-//					newNotationMap = new HashMap<String, List<String>>();
-//				}
-//
-//				Notation notation = choice.getNotation();
-//				if (notation.getLang() != null
-//						&& StringUtils.isNotBlank(notation.getLang().getLang())) {
-//					if (!MongoUtils.contains(newNotationMap, notation.getLang()
-//							.getLang(), notation.getString())) {
-//						List<String> val = newNotationMap.get(notation
-//								.getLang().getLang()) != null ? newNotationMap
-//								.get(notation.getLang().getLang())
-//								: new ArrayList<String>();
-//						if (!val.contains(notation.getString())) {
-//							val.add(notation.getString());
-//						}
-//						newNotationMap.put(notation.getLang().getLang(), val);
-//					}
-//				} else {
-//					List<String> val = newNotationMap.get("def") != null ? newNotationMap
-//							.get("def") : new ArrayList<String>();
-//					if (!val.contains(notation.getString())) {
-//						val.add(notation.getString());
-//					}
-//					newNotationMap.put("def", val);
-//				}
-//
-//				MongoUtils.update(ConceptImpl.class, conceptMongo.getAbout(),
-//						mongoServer, "notation", newNotationMap);
-//
-//			}
-//			if (choice.ifRelated()) {
-//				if (conceptMongo.getRelated() != null) {
-//					List<String> relatedList = createObjectList(
-//							conceptMongo.getRelated(), choice.getRelated());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer, "related",
-//							relatedList);
-//				}
-//			}
-//			if (choice.ifRelatedMatch()) {
-//				if (conceptMongo.getRelated() != null) {
-//					List<String> relatedMatchList = createObjectList(
-//							conceptMongo.getRelatedMatch(),
-//							choice.getRelatedMatch());
-//					MongoUtils.update(ConceptImpl.class,
-//							conceptMongo.getAbout(), mongoServer,
-//							"relatedMatch", relatedMatchList);
-//				}
-//			}
-//		}
-//
-		ConceptUpdater.update(conceptMongo, concept, mongoServer);
+		Updater<ConceptImpl,Concept> conceptUpdater= new ConceptUpdater();
+		conceptUpdater.update(conceptMongo, concept, mongoServer);
 		return (ConceptImpl) ((EdmMongoServer) mongoServer).getDatastore()
 				.find(ConceptImpl.class).filter("about", concept.getAbout())
 				.get();
@@ -463,7 +191,6 @@ public final class ConceptFieldInput {
 
 	private ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
-		// conceptMongo.setId(new ObjectId());
 		conceptMongo.setAbout(concept.getAbout());
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {

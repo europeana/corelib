@@ -7,8 +7,8 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
-public class ProxyUpdater {
-	public static void update(ProxyImpl retProxy, ProxyImpl proxy,
+public class ProxyUpdater implements Updater<ProxyImpl,ProxyImpl> {
+	public void update(ProxyImpl retProxy, ProxyImpl proxy,
 			MongoServer mongoServer) {
 		Query<ProxyImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ProxyImpl.class).field("about")

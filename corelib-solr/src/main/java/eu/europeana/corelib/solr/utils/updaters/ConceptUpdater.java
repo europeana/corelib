@@ -21,9 +21,9 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
-public class ConceptUpdater {
+public class ConceptUpdater implements Updater<ConceptImpl,Concept>{
 
-	public static void update(ConceptImpl conceptMongo, Concept concept,
+	public void update(ConceptImpl conceptMongo, Concept concept,
 			MongoServer mongoServer) {
 		Query<ConceptImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ConceptImpl.class).field("about")

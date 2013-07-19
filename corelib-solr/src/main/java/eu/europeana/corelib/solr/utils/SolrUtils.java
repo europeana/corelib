@@ -149,8 +149,8 @@ public final class SolrUtils {
 			String[] arr = new String[list.size()];
 			int i = 0;
 			for (ResourceOrLiteralType obj : list) {
-				arr[i] = obj.getResource() != null ? obj.getResource().getResource() : obj
-						.getString();
+				arr[i] = obj.getResource() != null ? obj.getResource()
+						.getResource() : obj.getString();
 				i++;
 			}
 			return arr;
@@ -159,8 +159,7 @@ public final class SolrUtils {
 	}
 
 	/**
-	 * Returns an array of strings based on values from a LiteralType
-	 * list. 
+	 * Returns an array of strings based on values from a LiteralType list.
 	 * 
 	 * @param list
 	 *            The LiteralType list
@@ -180,8 +179,7 @@ public final class SolrUtils {
 	}
 
 	/**
-	 * Returns an array of strings based on values from a ResourceType
-	 * list. 
+	 * Returns an array of strings based on values from a ResourceType list.
 	 * 
 	 * @param list
 	 *            The ResourceType list
@@ -202,7 +200,8 @@ public final class SolrUtils {
 
 	/**
 	 * 
-	 * @param obj The LiteralType object
+	 * @param obj
+	 *            The LiteralType object
 	 * @return a string from a LiteralType object
 	 */
 	public static String getLiteralString(LiteralType obj) {
@@ -214,20 +213,22 @@ public final class SolrUtils {
 
 	/**
 	 * 
-	 * @param obj The ResourceOrLiteralType object
+	 * @param obj
+	 *            The ResourceOrLiteralType object
 	 * @return a string from a ResourceOrLiteralType object
 	 */
 	public static String getResourceOrLiteralString(ResourceOrLiteralType obj) {
 		if (obj != null) {
-			return obj.getResource() != null ? obj.getResource().getResource() : obj
-					.getString();
+			return obj.getResource() != null ? obj.getResource().getResource()
+					: obj.getString();
 		}
 		return null;
 	}
 
 	/**
 	 * 
-	 * @param obj The ResourceType object
+	 * @param obj
+	 *            The ResourceType object
 	 * @return a string from a ResourceType object
 	 */
 	public static String getResourceString(ResourceType obj) {
@@ -239,7 +240,9 @@ public final class SolrUtils {
 
 	/**
 	 * Get the implementation class of one of the Solr Beans
-	 * @param interfaze The interfaze to check
+	 * 
+	 * @param interfaze
+	 *            The interfaze to check
 	 * @return The corresponding implementation class
 	 */
 	public static Class<? extends IdBeanImpl> getImplementationClass(
@@ -260,9 +263,13 @@ public final class SolrUtils {
 
 	/**
 	 * Adds a field to a document from a LiteralType object
-	 * @param solrInputDocument The document to add a document to
-	 * @param obj The object to add
-	 * @param label The label of the field to add the object to
+	 * 
+	 * @param solrInputDocument
+	 *            The document to add a document to
+	 * @param obj
+	 *            The object to add
+	 * @param label
+	 *            The label of the field to add the object to
 	 * @return
 	 */
 	public static <T extends LiteralType> SolrInputDocument addFieldFromLiteral(
@@ -281,36 +288,40 @@ public final class SolrUtils {
 		return solrInputDocument;
 	}
 
-	
 	/**
 	 * Adds a field from an enumeration.
+	 * 
 	 * @param solrInputDocument
 	 * @param obj
 	 * @param label
 	 * @return
 	 */
-	public static  SolrInputDocument addFieldFromEnum(
+	public static SolrInputDocument addFieldFromEnum(
 			SolrInputDocument solrInputDocument, String obj, EdmLabel label) {
 		if (obj != null) {
-		   solrInputDocument.addField(label.toString(),StringUtils.lowerCase(obj));
+			solrInputDocument.addField(label.toString(),
+					StringUtils.lowerCase(obj));
 		}
 		return solrInputDocument;
 	}
-	
-	
-	
+
 	/**
 	 * Adds a field to a document from a ResourceOrLiteralType object
-	 * @param solrInputDocument The document to add a document to
-	 * @param obj The object to add
-	 * @param label The label of the field to add the object to
+	 * 
+	 * @param solrInputDocument
+	 *            The document to add a document to
+	 * @param obj
+	 *            The object to add
+	 * @param label
+	 *            The label of the field to add the object to
 	 * @return
 	 */
 	public static <T extends ResourceOrLiteralType> SolrInputDocument addFieldFromResourceOrLiteral(
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
 			if (obj.getResource() != null) {
-				solrInputDocument.addField(label.toString(), obj.getResource().getResource());
+				solrInputDocument.addField(label.toString(), obj.getResource()
+						.getResource());
 			}
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
@@ -325,20 +336,31 @@ public final class SolrUtils {
 
 		return solrInputDocument;
 	}
-	
-	public static String getPreviewUrl(RDF rdf){
-		String previewUrl = null;
-		if(rdf.getAggregationList().get(0).getIsShownBy()!=null&&StringUtils.isNotEmpty(rdf.getAggregationList().get(0).getIsShownBy().getResource())){
-			previewUrl = rdf.getAggregationList().get(0).getIsShownBy().getResource();
+
+	/**
+	 * Get the edm:preview url from an EDM object
+	 * 
+	 * @param rdf
+	 * @return
+	 */
+	public static String getPreviewUrl(RDF rdf) {
+		if (rdf.getAggregationList().get(0).getObject() != null
+				&& StringUtils.isNotEmpty(rdf.getAggregationList().get(0)
+						.getObject().getResource())) {
+			return rdf.getAggregationList().get(0).getObject().getResource();
 		}
-		if(rdf.getAggregationList().get(0).getObject()!=null&& StringUtils.isNotEmpty(rdf.getAggregationList().get(0).getObject().getResource())){
-			previewUrl = rdf.getAggregationList().get(0).getObject().getResource();
+		if (rdf.getAggregationList().get(0).getIsShownBy() != null
+				&& StringUtils.isNotEmpty(rdf.getAggregationList().get(0)
+						.getIsShownBy().getResource())) {
+			return rdf.getAggregationList().get(0).getIsShownBy().getResource();
 		}
-		return previewUrl;
+
+		return null;
 	}
 
 	/**
 	 * Translates ESE fielded queries to EDM fielded queries
+	 * 
 	 * @param query
 	 * @return
 	 */
@@ -348,23 +370,35 @@ public final class SolrUtils {
 		}
 
 		// handling field + "*:*"
-		if (query.equals("title:*:*")) {return "title:*";}
-		if (query.equals("who:*:*")) {return "who:*";}
-		if (query.equals("what:*:*")) {return "what:*";}
-		if (query.equals("where:*:*")) {return "where:*";}
-		if (query.equals("when:*:*")) {return "when:*";}
+		if (query.equals("title:*:*")) {
+			return "title:*";
+		}
+		if (query.equals("who:*:*")) {
+			return "who:*";
+		}
+		if (query.equals("what:*:*")) {
+			return "what:*";
+		}
+		if (query.equals("where:*:*")) {
+			return "where:*";
+		}
+		if (query.equals("when:*:*")) {
+			return "when:*";
+		}
 
 		// handling API1 fields
 		for (FieldMapping field : FieldMapping.values()) {
 			if (query.contains(field.getEseField() + ":")) {
-				query = query.replaceAll("\\b" + field.getEseField() + ":", field.getEdmField() + ":");
+				query = query.replaceAll("\\b" + field.getEseField() + ":",
+						field.getEdmField() + ":");
 			}
 		}
 
 		return query;
 	}
-	
+
 	public static String escapeQuery(String query) {
-		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ").replace("\\-", "-");
+		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ")
+				.replace("\\-", "-");
 	}
 }

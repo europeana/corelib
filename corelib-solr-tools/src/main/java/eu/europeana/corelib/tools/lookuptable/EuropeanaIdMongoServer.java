@@ -52,17 +52,11 @@ public class EuropeanaIdMongoServer implements MongoServer {
 	 *            The database to connect to
 	 */
 	public EuropeanaIdMongoServer(Mongo mongoServer, String databaseName,
-			String... loginInfo) {
+			String username,String password) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
-		if (loginInfo.length == 2){
-			this.username = loginInfo[0];
-			this.password = loginInfo[1];
-		}
-		else{
-			this.username = "";
-			this.password = "";
-		}
+			this.username = username;
+			this.password = password;
 
 		// createDatastore();
 	}
