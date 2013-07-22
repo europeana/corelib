@@ -68,6 +68,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
+import eu.europeana.corelib.dereference.VocabularyMongoServer;
 import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
 import eu.europeana.corelib.tools.AppContext;
 
@@ -1200,9 +1201,11 @@ public class Extractor {
 		HashMap<String, List<EdmMappedField>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmMappedField>>) vocabulary
 				.getElements() : new HashMap<String, List<EdmMappedField>>();
 		List<EdmMappedField> field = elements.get(fieldToMap);
-		if (europeanaField == null) {
+		if (field == null) {
 			elements.put(fieldToMap, new ArrayList<EdmMappedField>());
-		} else if (!field.contains(europeanaField)) {
+			field = elements.get(fieldToMap);
+		} 
+		if (!field.contains(europeanaField)) {
 			EdmMappedField edmMappedField = new EdmMappedField();
 			edmMappedField.setLabel(europeanaField.toString());
 			edmMappedField.setAttribute(StringUtils.isNotBlank(attribute)?attribute:null);
@@ -1240,7 +1243,7 @@ public class Extractor {
 	 */
 	public String getMappedField(EdmLabel europeanaField) {
 		for (String key : vocabulary.getElements().keySet()) {
-			if (europeanaField.equals(vocabulary.getElements().get(key))) {
+			if (europeanaField.toString().equals(vocabulary.getElements().get(key).get(0).getLabel().toString())) {
 				return key;
 			}
 		}
