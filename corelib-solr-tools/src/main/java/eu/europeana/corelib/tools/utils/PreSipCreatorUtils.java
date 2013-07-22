@@ -36,7 +36,7 @@ public class PreSipCreatorUtils extends MappingParser {
 
 	@Override
 	public String getHashField(String collectionId, String fileName) {
-		String file = findFile(collectionId,fileName);
+		String file = findFile(collectionId+"_",fileName);
 		String inputString = this.readFile(file);
 		if (inputString != null) {
 			String[] lines = StringUtils.split(inputString, LINE_SPLITTER);

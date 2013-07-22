@@ -1,5 +1,6 @@
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
@@ -11,12 +12,27 @@ import org.junit.Test;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.distribution.Version;
+
+import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
+
 public class EuropeanaIdMongoServerTest {
-	EuropeanaIdMongoServer server;
-//	@Test
+	EuropeanaIdMongoServerImpl server;
+	@Test
 	public void test(){
 		try {
-			server = new EuropeanaIdMongoServer(new Mongo("localhost",27017), "europeanaId_test","","");
+			int port = 10000;
+			MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
+					false);
+
+			MongodStarter runtime = MongodStarter.getDefaultInstance();
+
+			MongodExecutable mongodExecutable = runtime.prepare(conf);
+			mongodExecutable.start();
+			server = new EuropeanaIdMongoServerImpl(new Mongo("localhost",27017), "europeanaId_test","","");
 			server.createDatastore();
 			EuropeanaId eid = new EuropeanaId();
 			eid.setNewId("newId");
@@ -37,12 +53,12 @@ public class EuropeanaIdMongoServerTest {
 		} catch (MongoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
 	
-	//@After
-	public void cleanup(){
-		server.getDatastore().getDB().dropDatabase();
-	}
+	
 }

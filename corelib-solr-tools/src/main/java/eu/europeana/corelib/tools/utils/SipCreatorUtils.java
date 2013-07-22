@@ -42,11 +42,20 @@ public class SipCreatorUtils extends MappingParser{
 		String file = findFile(collectionId,fileName);
 		
 		String inputString = this.readFile(file);
-		
-		return inputString == null?null:(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
-				END_HASH_FUNCTION)==null?StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_NO_RECORD,
-						END_HASH_FUNCTION):(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
-								END_HASH_FUNCTION)));
+		if (inputString!=null){
+			if(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
+				END_HASH_FUNCTION)==null){
+				return StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_NO_RECORD,
+						END_HASH_FUNCTION);
+			}
+			return StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
+					END_HASH_FUNCTION);
+		}
+		return null;
+//		return inputString == null?null:(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
+//				END_HASH_FUNCTION)==null?StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_NO_RECORD,
+//						END_HASH_FUNCTION):(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_RECORD,
+//								END_HASH_FUNCTION)));
 	}
 
 	private String findFile(String collectionId, String fileName) {

@@ -61,7 +61,7 @@ public class HashUtilsTest {
 						+ preSipCreatorHashField+"\n\n");
 		List<String> info = readFromFile(
 				workingDir
-						+ "/src/test/resources/9200103/input_source/9200103_Ag_EU_TEL_Gallica_a0142_1.xml",
+						+ "/src/test/resources/9200103_/9200103_Ag_EU_TEL_Gallica_a0142_1.xml",
 				sipCreatorHashField);
 		String identifier = info.get(0);
 		String hash = info.get(1);
@@ -71,7 +71,7 @@ public class HashUtilsTest {
 				+ HashUtils.createHash(identifier));
 		List<String> info2 = readFromFile(
 				workingDir
-						+ "/src/test/resources/00735/mappings/00735_A_DE_Landesarchiv_ese_5_0000013080_1.xml",
+						+ "/src/test/resources/00735_/00735_A_DE_Landesarchiv_ese_5_0000013080_1.xml",
 				preSipCreatorHashField);
 		String identifier2 = info2.get(0);
 		String hash2 = info2.get(1);

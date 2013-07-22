@@ -1,5 +1,6 @@
 package eu.europeana.corelib.tools.lookuptable;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,16 @@ import org.junit.Test;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.distribution.Version;
+
+import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdRegistryMongoServerImpl;
+
 public class EuropeanaIdRegistryMongoServerTest {
 
-	EuropeanaIdRegistryMongoServer server;
+	EuropeanaIdRegistryMongoServerImpl server;
 	EuropeanaIdRegistry registry;
 	String cid="12345";
 	String oid="test_oid";
@@ -24,16 +32,27 @@ public class EuropeanaIdRegistryMongoServerTest {
 	String sid="test_sid";
 	String sid2="test_sid2";
 	String xml_checksum="tst_checksum";
-
+	MongodExecutable mongodExecutable;
 	@Before
 	public void prepare(){
 		try{
-			server = new EuropeanaIdRegistryMongoServer(new Mongo("localhost",27017), "europeana_registry_test");
+			int port = 10000;
+			MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
+					false);
+
+			MongodStarter runtime = MongodStarter.getDefaultInstance();
+
+			 mongodExecutable = runtime.prepare(conf);
+			mongodExecutable.start();
+			server = new EuropeanaIdRegistryMongoServerImpl(new Mongo("localhost",port), "europeana_registry_test");
 			server.getEuropeanaIdMongoServer().createDatastore();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MongoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -161,6 +180,6 @@ public class EuropeanaIdRegistryMongoServerTest {
 	
 	@After
 	public void cleanup(){
-		server.getDatastore().getDB().dropDatabase();
+		mongodExecutable.stop();
 	}
 }
