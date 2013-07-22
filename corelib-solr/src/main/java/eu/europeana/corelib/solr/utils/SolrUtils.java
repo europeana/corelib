@@ -50,8 +50,7 @@ public final class SolrUtils {
 	}
 
 	/**
-	 * Checks if the Facet is TYPE that everything is uppercase and known
-	 * DocType according to EDM
+	 * Checks if the Facet is a TYPE known DocType according to EDM
 	 * 
 	 * @param refinements
 	 * @return
@@ -61,8 +60,8 @@ public final class SolrUtils {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")
 						&& !StringUtils.contains(refinement, " OR ")) {
-					if (DocType.safeValueOf(StringUtils.substringAfter(refinement,
-							"TYPE:")) == null) {
+					if (DocType.safeValueOf(StringUtils.substringAfter(
+							refinement, "TYPE:")) == null) {
 						return false;
 					}
 				}
@@ -87,29 +86,7 @@ public final class SolrUtils {
 		return (object == null ? clazz.newInstance() : object);
 	}
 
-	/**
-	 * Method that adds a ResourceOrLiteralType object in a solr field
-	 * 
-	 * @param solrInputDocument
-	 *            The solr document to add the field to
-	 * @param label
-	 *            The label of the field
-	 * @param type
-	 *            The ResourceOrLiteralType object
-	 */
-	public static void addResourceOrLiteralType(
-			SolrInputDocument solrInputDocument, EdmLabel label,
-			ResourceOrLiteralType type) {
-		if (type != null) {
-			if (type.getString() != null) {
-				solrInputDocument.addField(label.toString(), type.getString());
-			}
-			if (type.getResource() != null) {
-				solrInputDocument
-						.addField(label.toString(), type.getResource());
-			}
-		}
-	}
+	
 
 	/**
 	 * Returns an array of strings based on values from a ResourceOrLiteralType
@@ -146,13 +123,17 @@ public final class SolrUtils {
 	public static String[] resourceOrLiteralListToArray(
 			List<? extends ResourceOrLiteralType> list) {
 		if (list != null) {
-			String[] arr = new String[list.size()];
-			int i = 0;
+			List<String> lst = new ArrayList<String>();
+			
 			for (ResourceOrLiteralType obj : list) {
-				arr[i] = obj.getResource() != null ? obj.getResource()
-						.getResource() : obj.getString();
-				i++;
+				if(obj.getResource()!=null){
+					lst.add(obj.getResource().getResource());
+				}
+				if(obj.getString()!=null){
+					lst.add(obj.getString());
+				}
 			}
+			String[] arr = lst.toArray(new String[lst.size()]);
 			return arr;
 		}
 		return new String[] {};
