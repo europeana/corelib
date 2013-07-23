@@ -80,7 +80,7 @@ public class SearchServiceTest {
 	public void loadTestData() {
 		if (!dataLoaded) {
 			try {
-				int port = 10000;
+				int port = 27017;
 				MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
 						false);
 
