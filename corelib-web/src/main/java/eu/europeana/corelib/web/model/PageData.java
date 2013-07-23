@@ -78,22 +78,6 @@ public abstract class PageData {
 
 	private String announceMsg = null;
 
-	// public List<PortalLanguage> getPortalLanguages() {
-	// return PortalLanguage.getSupported();
-	// }
-	//
-	// public int getRandomImageNr() {
-	// return RandomUtils.nextInt(6)+1;
-	// }
-	//
-	// public String getImageLocale() {
-	// PortalLanguage current = PortalLanguage.safeValueOf(getLocale());
-	// if (!current.hasImageSupport()) {
-	// current = PortalLanguage.EN;
-	// }
-	// return current.getLanguageCode();
-	// }
-
 	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
