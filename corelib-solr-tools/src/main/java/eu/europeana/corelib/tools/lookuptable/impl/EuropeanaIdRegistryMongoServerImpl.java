@@ -33,6 +33,7 @@ import com.mongodb.Mongo;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistry;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistryMongoServer;
 import eu.europeana.corelib.tools.lookuptable.FailedRecord;
@@ -68,7 +69,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 * @param databaseName
 	 *            The database to connect to
 	 */
-	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName) {
+	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName){
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer,

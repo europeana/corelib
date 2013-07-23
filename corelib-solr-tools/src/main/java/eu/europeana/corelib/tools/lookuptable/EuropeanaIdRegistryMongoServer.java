@@ -1,5 +1,5 @@
 package eu.europeana.corelib.tools.lookuptable;
-
+import com.google.code.morphia.Datastore;
 import java.util.List;
 import java.util.Map;
 
@@ -104,5 +104,6 @@ public interface EuropeanaIdRegistryMongoServer {
 	 */
 	public abstract List<Map<String, String>> getFailedRecords(
 			String collectionId);
-
+	
+	public Datastore getDatastore();
 }
