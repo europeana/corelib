@@ -60,7 +60,7 @@ public class MongoConstructorTest {
 			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 			RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(
 					FileUtils.readFileToString(new File(
-							"src/test/resources/edm_new.xml"))));
+							"src/test/resources/test_files/edm_new.xml"))));
 			int port = 10000;
 			MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
 

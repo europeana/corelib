@@ -48,7 +48,7 @@ public class SolrConstructorTest {
 			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
 			RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(
 					FileUtils.readFileToString(new File(
-							"src/test/resources/edm_new.xml"))));
+							"src/test/resources/test_files/edm_new.xml"))));
 			SolrInputDocument doc = new SolrConstructor().constructSolrDocument(rdf);
 			assertNotNull(doc);
 			assertTrue(doc.containsKey("europeana_id"));
