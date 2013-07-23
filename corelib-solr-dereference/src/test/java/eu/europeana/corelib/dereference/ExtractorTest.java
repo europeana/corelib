@@ -96,5 +96,10 @@ public class ExtractorTest {
 		}
 		
 	}
+	
+	@Test
+	public void testReadFromFile(){
+		assertNotNull(new Extractor().readSchema("src/test/resources/rdf.xml").keySet());
+	}
 
 }

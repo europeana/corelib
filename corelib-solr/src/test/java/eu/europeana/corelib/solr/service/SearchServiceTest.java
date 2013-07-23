@@ -20,6 +20,7 @@ package eu.europeana.corelib.solr.service;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -49,6 +50,9 @@ import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -62,12 +66,12 @@ public class SearchServiceTest {
 	private static String COLLECTION = "src/test/resources/records.zip";
 	private MongodExecutable mongodExecutable = null;
 	private int port = 10000;
-	
-	@Resource
-	private SearchService searchService;
 
-	
+	@Resource
+	private TestSearchService searchService;
+
 	private EdmMongoServer mongoDBServer;
+	private EuropeanaIdMongoServer idServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
 	private SolrServer solrServer;
@@ -77,15 +81,12 @@ public class SearchServiceTest {
 	private static int testCount = 0;
 
 	private static int no_of_tests = 0;
-	
-	
-	
-	
+
 	@Before
 	public void loadTestData() {
 		if (!dataLoaded) {
 			try {
-				
+
 				MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
 						false);
 
@@ -96,8 +97,11 @@ public class SearchServiceTest {
 				Mongo mongo = new Mongo("localhost", port);
 				mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test",
 						"", "");
-
+				idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
 				mongoDBServer.getDatastore().getDB().dropDatabase();
+				idServer.createDatastore();
+				searchService.setEdmMongoServer(mongoDBServer);
+				searchService.setEuropeanaIdMongoServer(idServer);
 				for (Method method : this.getClass().getMethods()) {
 					for (Annotation annotation : method.getAnnotations()) {
 						if (annotation.annotationType().equals(
@@ -144,9 +148,9 @@ public class SearchServiceTest {
 				"modell moderner pianinomechanik");
 	}
 
-	 @Test
+	@Test
 	public void findAllTest() throws SolrTypeException {
-		 testCount++;
+		testCount++;
 		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
 				new Query("*:*"));
@@ -158,7 +162,7 @@ public class SearchServiceTest {
 				.size() == 8);
 	}
 
-	 @Test
+	@Test
 	public void findAllWithTextFilterTest() throws SolrTypeException {
 		testCount++;
 		Query query = new Query("*:*");
@@ -178,17 +182,87 @@ public class SearchServiceTest {
 		Query query = new Query("musi");
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
 				query);
-		
+
 		Assert.assertNotNull(results.getSpellcheck());
 
 	}
-	
 
+	@Test
+	public void testFindById() throws SolrTypeException {
+		testCount++;
+		Query query = new Query("*:*");
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+				query);
+		FullBean fBean = searchService.findById(results.getResults().get(0)
+				.getId(), true);
+		Assert.assertNotNull(fBean);
+
+	}
+
+	@Test
+	public void testFindMoreLikeThis() throws SolrTypeException,
+			SolrServerException {
+		testCount++;
+		Query query = new Query("*:*");
+		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+				query);
+		List<BriefBean> mlt = searchService.findMoreLikeThis(results
+				.getResults().get(0).getId());
+		Assert.assertNotNull(mlt);
+		Assert.assertEquals(10, mlt.size());
+	}
+
+	@Test
+	public void testGestLastSolrUpdate() throws SolrServerException,
+			IOException {
+		testCount++;
+		Assert.assertNotNull(searchService.getLastSolrUpdate());
+	}
+
+	@Test
+	public void testSitemap() throws SolrTypeException {
+		testCount++;
+		Assert.assertNotNull(searchService.sitemap(BriefBean.class, new Query(
+				"*:*")));
+	}
+
+	@Test
+	public void testSeeAlso() {
+		testCount++;
+		List<String> queries = new ArrayList<String>();
+		queries.add("DATA_PROVIDER:*");
+		Assert.assertNotNull(searchService.seeAlso(queries));
+	}
+
+	@Test
+	public void testResolve(){
+		testCount++;
+		Query query = new Query("*:*");
+		ResultSet<BriefBean> results;
+		try {
+			results = searchService.search(BriefBean.class,
+					query);
+			String newId = results.getResults().get(0)
+					.getId();
+			String oldId = "test_id";
+			EuropeanaId eId = new EuropeanaId();
+			eId.setNewId(newId);
+			eId.setOldId(oldId);
+			
+			idServer.saveEuropeanaId(eId);
+			Assert.assertNotNull(searchService.resolve("test_id", false));
+		} catch (SolrTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@After
 	public void removeTestData() {
 		if (testCount == no_of_tests) {
 			System.out.println("CLEANING TEST DATA...");
-			
+
 			try {
 				dataLoaded = false;
 				solrServer.deleteByQuery("*:*");

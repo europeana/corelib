@@ -36,7 +36,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
  * 
  */
 public class MongoUtilsTest {
-
+	
 	@Test
 	public void testContainsStringArray() {
 		String[] arr = new String[] { "1", "2", "3" };

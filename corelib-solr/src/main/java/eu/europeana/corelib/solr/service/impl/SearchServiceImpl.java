@@ -98,10 +98,10 @@ public class SearchServiceImpl implements SearchService {
 	private SolrServer solrServer;
 
 	@Resource(name = "corelib_solr_mongoServer")
-	private EdmMongoServer mongoServer;
+	protected EdmMongoServer mongoServer;
 
 	@Resource(name = "corelib_solr_idServer")
-	private EuropeanaIdMongoServer idServer;
+	protected EuropeanaIdMongoServer idServer;
 	
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
@@ -483,7 +483,6 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	public void setSolrServer(SolrServer solrServer) {
-		// If it is instance of CommonsHTTPSolrServer
 		this.solrServer = setServer(solrServer);
 	}
 

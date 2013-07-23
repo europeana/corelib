@@ -32,7 +32,7 @@
 	<import resource="corelib-definitions-test.xml" />
 	
 	<!-- OVERRIDE FOR TESTING -->
-	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.impl.SearchServiceImpl"
+	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.TestSearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrEmbedded"
 	/>
 	 <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
