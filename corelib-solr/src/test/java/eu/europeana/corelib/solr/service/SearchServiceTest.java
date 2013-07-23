@@ -60,10 +60,13 @@ import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 public class SearchServiceTest {
 
 	private static String COLLECTION = "src/test/resources/records.zip";
-
+	private MongodExecutable mongodExecutable = null;
+	private int port = 10000;
+	
 	@Resource
 	private SearchService searchService;
 
+	
 	private EdmMongoServer mongoDBServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
@@ -74,13 +77,15 @@ public class SearchServiceTest {
 	private static int testCount = 0;
 
 	private static int no_of_tests = 0;
-	private MongodExecutable mongodExecutable = null;
-
+	
+	
+	
+	
 	@Before
 	public void loadTestData() {
 		if (!dataLoaded) {
 			try {
-				int port = 27017;
+				
 				MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
 						false);
 
@@ -88,7 +93,6 @@ public class SearchServiceTest {
 
 				mongodExecutable = runtime.prepare(conf);
 				mongodExecutable.start();
-
 				Mongo mongo = new Mongo("localhost", port);
 				mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test",
 						"", "");

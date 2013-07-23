@@ -35,5 +35,6 @@
 	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.impl.SearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrEmbedded"
 	/>
-
+	 <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
 </beans>	
