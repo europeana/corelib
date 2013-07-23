@@ -4,4 +4,7 @@ import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 
 public class EdmMongoServerTest extends EdmMongoServerImpl {
 
+	public void doNothing(){
+		
+	}
 }
