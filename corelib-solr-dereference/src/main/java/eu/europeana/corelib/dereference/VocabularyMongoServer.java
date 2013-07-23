@@ -3,7 +3,7 @@ package eu.europeana.corelib.dereference;
 import eu.europeana.corelib.dereference.impl.ControlledVocabularyImpl;
 import eu.europeana.corelib.solr.MongoServer;
 /**
- * Vocabulary Mapping mmongo server
+ * Vocabulary Mapping mongo server
  * @author Yorgos.Mamakis@ KB.nl
  *
  */
