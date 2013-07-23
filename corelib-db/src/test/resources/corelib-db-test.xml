@@ -58,6 +58,7 @@
     
     <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
         <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
+        <bean name="corelib_solr_mongo_apilog" class="eu.europeana.corelib.EmptyBean"/>
     <bean name="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
 
     <bean name="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
