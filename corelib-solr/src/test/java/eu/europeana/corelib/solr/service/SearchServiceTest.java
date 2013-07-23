@@ -209,7 +209,7 @@ public class SearchServiceTest {
 		List<BriefBean> mlt = searchService.findMoreLikeThis(results
 				.getResults().get(0).getId());
 		Assert.assertNotNull(mlt);
-		Assert.assertEquals(10, mlt.size());
+		Assert.assertEquals(4, mlt.size());
 	}
 
 	@Test
@@ -248,10 +248,13 @@ public class SearchServiceTest {
 			EuropeanaId eId = new EuropeanaId();
 			eId.setNewId(newId);
 			eId.setOldId(oldId);
-			
+			Mongo mongo = new Mongo("localhost", port);
+			idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
+			idServer.createDatastore();
 			idServer.saveEuropeanaId(eId);
+			
 			Assert.assertNotNull(searchService.resolve("test_id", false));
-		} catch (SolrTypeException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

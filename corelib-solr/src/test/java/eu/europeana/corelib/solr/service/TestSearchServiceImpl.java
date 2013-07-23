@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.service;
 
+import org.junit.Test;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
@@ -20,4 +21,8 @@ public class TestSearchServiceImpl extends SearchServiceImpl implements
 		this.idServer = mongoServer;
 	}
 
+	@Test
+	public void doNothing(){
+		return;
+	}
 }
