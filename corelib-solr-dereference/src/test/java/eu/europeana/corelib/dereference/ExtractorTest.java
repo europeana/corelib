@@ -89,6 +89,7 @@ public class ExtractorTest {
 					extractor.getEdmLabel("test_contributor").get(0).getLabel());
 			assertEquals("test_contributor",
 					extractor.getMappedField(EdmLabel.PROXY_DC_CONTRIBUTOR));
+			mongodExecutable.stop();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

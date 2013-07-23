@@ -44,7 +44,7 @@ public class CollectionMongoServerTest {
 			Assert.assertEquals(1,colServer.retrieveAllCollections().size());
 			Assert.assertEquals(colServer.findNewCollectionId("54321"),"12345");
 			Assert.assertEquals(colServer.findOldCollectionId("12345"),"54321");
-			
+			mongodExecutable.stop();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

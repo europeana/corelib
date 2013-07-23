@@ -84,6 +84,8 @@ public class VocabularyMongoServerTest {
 			e.printStackTrace();
 		}
 		server.getDatastore().getDB().dropDatabase();
+		mongodExecutable.stop();
+		
 	}
 	
 }

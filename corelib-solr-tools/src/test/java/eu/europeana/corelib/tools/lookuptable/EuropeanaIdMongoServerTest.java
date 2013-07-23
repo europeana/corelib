@@ -45,7 +45,7 @@ public class EuropeanaIdMongoServerTest {
 			Assert.assertTrue(server.oldIdExists("newId"));
 			Assert.assertEquals( server.retrieveEuropeanaIdFromNew("newId").get(0).getOldId(),"oldId");
 			Assert.assertEquals(server.retrieveEuropeanaIdFromOld("oldId").getNewId(), "newId");
-			
+			mongodExecutable.stop();
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
