@@ -36,8 +36,10 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
 import org.apache.solr.common.SolrDocument;
@@ -305,6 +307,21 @@ public class SearchServiceImpl implements SearchService {
 	public List<Term> suggestions(String query, int pageSize)
 			throws SolrTypeException {
 		return suggestions(query, pageSize, null);
+	}
+	
+	@Override
+	public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
+			throws SolrTypeException {
+		Query query = new Query(queryString).setParameter("rows", "0").setParameter("facet", "true")
+				.setRefinements(refinements).setParameter("facet.mincount", "1").setParameter("facet.limit", "750")
+				.setAllowSpellcheck(false);
+		final ResultSet<BriefBean> response = search(BriefBean.class, query);
+		for (FacetField facetField : response.getFacetFields()) {
+			if (facetField.getName().equalsIgnoreCase(facetFieldName)) {
+				return facetField.getValues();
+			}
+		}
+		return new ArrayList<FacetField.Count>();
 	}
 
 	@Override

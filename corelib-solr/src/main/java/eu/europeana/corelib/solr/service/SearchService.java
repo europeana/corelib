@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField;
 
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -119,6 +120,23 @@ public interface SearchService {
 	 */
 	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query)
 			throws SolrTypeException;
+	
+	/**
+	 * Create collection list for a given query and facet field
+	 * 
+	 * @param facetFieldName 
+	 * 				The Facet field to create the collection for
+	 * @param queryString
+	 * 				The Query to use for creating the collection 
+	 * @param refinements
+	 * 				Optional refinements
+	 * @return
+	 * 				A List of FacetField.Count objects containing the collection
+	 * @throws SolrTypeException
+	 * 
+	 */
+	List<FacetField.Count> createCollections(String facetFieldName,
+			String queryString, String... refinements) throws SolrTypeException;	
 
 	/**
 	 * returns a list of search suggestions and frequencies
