@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
@@ -106,7 +107,12 @@ public class SearchServiceMock implements SearchService {
 	public List<Term> suggestions(String query, int pageSize) {
 		return null;
 	}
-
+	
+	@Override
+	public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
+			throws SolrTypeException {
+		return null;
+	}
 
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)

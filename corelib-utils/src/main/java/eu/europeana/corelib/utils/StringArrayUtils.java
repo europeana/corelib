@@ -92,7 +92,7 @@ public class StringArrayUtils {
 		}
 		return list;
 	}
-	
+
 	public static String[] toArray(String... items) {
 		return items;
 	}
@@ -159,7 +159,7 @@ public class StringArrayUtils {
 		}
 		return itemList.toArray(new String[itemList.size()]);
 	}
-	
+
 	public static String concat(String... strings) {
 		if (isNotBlank(strings)) {
 			StringBuilder sb = new StringBuilder();
@@ -169,6 +169,21 @@ public class StringArrayUtils {
 			return sb.toString();
 		}
 		return null;
+	}
+
+	/**
+	 * Remove all leading/trailing whitespace, and replace multiple spaces between text to a single space
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String clean(String s) {
+		s = StringUtils.trim(s);
+		if (StringUtils.isNotEmpty(s)) {
+			String regex = "\\s{2,}";
+			s = s.replaceAll(regex, " ");
+		}
+		return s;
 	}
 
 }
