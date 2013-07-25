@@ -26,6 +26,7 @@
 
 	<!-- USING OTHER MODULES -->
 	<import resource="corelib-definitions-context.xml"/>
+	<import resource="corelib-logging-context.xml"/>
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-web-email.xml"/>
