@@ -19,10 +19,12 @@ package eu.europeana.corelib.solr.utils;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+
 /**
  * Enumeration mapping information from ESE to EDM
+ * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * 
  */
 public enum EseEdmMap {
 
@@ -46,38 +48,48 @@ public enum EseEdmMap {
 	},
 	DC_IDENTIFIER("dc_identifier") {
 		@Override
-		public	String getEdmValue(FullBean bean) {
-			return bean.getProxies().get(0).getDcIdentifier().values().iterator().next().get(0);
+		public String getEdmValue(FullBean bean) {
+			return bean.getProxies().get(0).getDcIdentifier().values()
+					.iterator().next().get(0);
 		}
-	}, 
-	EUROPEANA_FAKE("europeana_fake"){
+	},
+	EUROPEANA_FAKE("europeana_fake") {
 		@Override
-		public	String getEdmValue(FullBean bean) {
+		public String getEdmValue(FullBean bean) {
 			return bean.getAggregations().get(0).getAbout();
 		}
-	}
-	;
+	},
+	EUROPEANA_HASVIEW("edm_hasView") {
+		@Override
+		public String getEdmValue(FullBean bean) {
+			return bean.getEuropeanaAggregation().getEdmHasView()[0];
+		}
+	};
 	private String field;
+
 	private EseEdmMap(String field) {
 		this.field = field;
 	}
+
 	/**
 	 * Return the field value from a bean
+	 * 
 	 * @param bean
 	 * @return
 	 */
-	
-	public String getField (){
+
+	public String getField() {
 		return this.field;
 	}
-	
-	public static EseEdmMap getEseEdmMap(String field){
-		for(EseEdmMap map: EseEdmMap.values())
-		if(StringUtils.equals(map.field, field)){
-			return map;
-		}
+
+	public static EseEdmMap getEseEdmMap(String field) {
+		for (EseEdmMap map : EseEdmMap.values())
+			if (StringUtils.equals(map.field, field)) {
+				return map;
+			}
 		throw new RuntimeException("Field not found :" + field);
 	}
+
 	public abstract String getEdmValue(FullBean bean);
 
 }
