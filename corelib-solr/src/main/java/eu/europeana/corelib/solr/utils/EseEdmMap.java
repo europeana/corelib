@@ -23,6 +23,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 /**
  * Enumeration mapping information from ESE to EDM
  * 
+ * 
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
@@ -60,7 +61,7 @@ public enum EseEdmMap {
 		}
 	},
 	EUROPEANA_HASVIEW("edm_hasView") {
-		@Override
+		@Override 
 		public String getEdmValue(FullBean bean) {
 			return bean.getEuropeanaAggregation().getEdmHasView()[0];
 		}
