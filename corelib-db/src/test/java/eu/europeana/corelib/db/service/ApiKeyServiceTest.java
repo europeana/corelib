@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.MongoProvider;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
@@ -32,6 +33,8 @@ public class ApiKeyServiceTest {
 
 	private static final long DEFAULT_USAGE_LIMIT = 10000;
 
+	@Resource(name="corelib_solr_mongoProvider")
+	private MongoProvider mongoProvider;
 	@Resource
 	private UserService userService;
 

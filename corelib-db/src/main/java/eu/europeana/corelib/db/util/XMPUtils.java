@@ -48,6 +48,9 @@ import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
+import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
+import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 
 /**
@@ -118,7 +121,8 @@ public class XMPUtils {
 				.get(EDMXMPValues.edm_provider);
 		List<LanguageValueBean> edm_rights = values
 				.get(EDMXMPValues.edm_rights);
-		List<LanguageValueBean> xmpMM_OriginalDocumentID = values.get(EDMXMPValues.xmpMM_OriginalDocumentID);
+		List<LanguageValueBean> xmpMM_OriginalDocumentID = values
+				.get(EDMXMPValues.xmpMM_OriginalDocumentID);
 		List<LanguageValueBean> xmpMM_DocumentID = values
 				.get(EDMXMPValues.stref_DocumentID);
 		List<LanguageValueBean> xmpRights_Marked = values
@@ -133,7 +137,6 @@ public class XMPUtils {
 		xml.append("<x:xmpmeta xmlns:x='adobe:ns:meta/'>");
 
 		xml.append(" <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>");
-
 
 		if (dc_title != null || dc_rights != null || edm_rights != null) {
 
@@ -162,12 +165,11 @@ public class XMPUtils {
 					xml.append("</dc:title>");
 				}
 
-
 			}
-			
+
 			if (dc_rights != null || edm_rights != null) {
 				xml.append("<dc:rights><rdf:Bag>");
-				
+
 				if (edm_rights != null) {
 					for (LanguageValueBean val : edm_rights) {
 						xml.append("<rdf:li>");
@@ -175,7 +177,7 @@ public class XMPUtils {
 						xml.append("</rdf:li>");
 					}
 				}
-				
+
 				if (dc_rights != null) {
 					for (LanguageValueBean val : dc_rights) {
 						xml.append("<rdf:li xml:lang='");
@@ -190,8 +192,7 @@ public class XMPUtils {
 
 			if (size == ThumbSize.TINY) {
 				xml.append("</rdf:Description>");
-			}
-			else{
+			} else {
 
 				if (dc_description != null) {
 					if (dc_description.size() == 1) {
@@ -313,7 +314,6 @@ public class XMPUtils {
 
 				}
 
-
 				xml.append("</rdf:Description>");
 
 				if (edm_dataProvider != null || edm_provider != null) {
@@ -331,29 +331,29 @@ public class XMPUtils {
 					xml.append("</rdf:Description>");
 				}
 
-				
 				xml.append("<rdf:Description rdf:about='' xmlns:xmpRights='http://ns.adobe.com/xap/1.0/rights/' xmlns:xmpMM='http://ns.adobe.com/xap/1.0/mm/'>");
-					if (xmpRights_Marked != null) {
-						xml.append("<xmpRights:Marked>");
-						xml.append(xmpRights_Marked.get(0).getValue());
-						xml.append("</xmpRights:Marked>");
-					}
-					if (xmpRights_WebStatement != null) {
-						xml.append("<xmpRights:WebStatement>");
-						xml.append(escapeXML(xmpRights_WebStatement.get(0).getValue()));
-						xml.append("</xmpRights:WebStatement>");
-					}
-				
+				if (xmpRights_Marked != null) {
+					xml.append("<xmpRights:Marked>");
+					xml.append(xmpRights_Marked.get(0).getValue());
+					xml.append("</xmpRights:Marked>");
+				}
+				if (xmpRights_WebStatement != null) {
+					xml.append("<xmpRights:WebStatement>");
+					xml.append(escapeXML(xmpRights_WebStatement.get(0)
+							.getValue()));
+					xml.append("</xmpRights:WebStatement>");
+				}
+
 				if (xmpMM_OriginalDocumentID != null) {
 					xml.append("<xmpMM:OriginalDocumentID>");
-					xml.append(escapeXML(xmpMM_OriginalDocumentID.get(0).getValue()));
+					xml.append(escapeXML(xmpMM_OriginalDocumentID.get(0)
+							.getValue()));
 					xml.append("</xmpMM:OriginalDocumentID>");
 				}
 				xml.append("</rdf:Description>");
-				
-				//xmpMM:OriginalDocumentID from edm:object
-				
-				
+
+				// xmpMM:OriginalDocumentID from edm:object
+
 				// CC segment
 
 				if (cc_attributionName != null || cc_morePermissions != null
@@ -416,7 +416,6 @@ public class XMPUtils {
 			}
 		}
 
-		
 		if (size == ThumbSize.TINY) {
 			// DerivedFrom Element
 
@@ -451,20 +450,18 @@ public class XMPUtils {
 				xml.append("</stRef:documentID >");
 
 				/*
-				if (xmpMM_OriginalDocumentID != null) {
-					xml.append("<stRef:OriginalDocumentID>");
-					xml.append(escapeXML(thumbnailURL));
-					xml.append("</stRef:OriginalDocumentID>");
-				}
-				*/
+				 * if (xmpMM_OriginalDocumentID != null) {
+				 * xml.append("<stRef:OriginalDocumentID>");
+				 * xml.append(escapeXML(thumbnailURL));
+				 * xml.append("</stRef:OriginalDocumentID>"); }
+				 */
 
 				xml.append("</xmpMM:DerivedFrom>");
 
 				xml.append("</rdf:Description>");
 			}
 		}
-		
-		
+
 		xml.append(" </rdf:RDF>");
 		xml.append("</x:xmpmeta>");
 		xml.append("<?xpacket end='w'?>");
@@ -513,16 +510,17 @@ public class XMPUtils {
 
 				putInValuesMap(aggregation.getIsShownBy(),
 						EDMXMPValues.xmpMM_OriginalDocumentID, EDMXMPValuesMap);
-				
+
 				List<HasView> hasviewl = aggregation.getHasViewList();
-				
-				if(hasviewl != null){
-					for(HasView hasview : hasviewl){
+
+				if (hasviewl != null) {
+					for (HasView hasview : hasviewl) {
 						putInValuesMap(hasview.getResource(),
-								EDMXMPValues.xmpMM_OriginalDocumentID, EDMXMPValuesMap);
+								EDMXMPValues.xmpMM_OriginalDocumentID,
+								EDMXMPValuesMap);
 					}
 				}
-				
+
 				// Check the rights resource or literal
 				LanguageValueBean rights = putInValuesMap(
 						aggregation.getRights(), EDMXMPValues.edm_rights,
@@ -555,7 +553,7 @@ public class XMPUtils {
 				// Check the Provider resource or literal
 				putInValuesMap(aggregation.getProvider(),
 						EDMXMPValues.edm_provider, EDMXMPValuesMap);
-				
+
 				// Check the isShownAt resource or literal
 				putInValuesMap(aggregation.getIsShownAt(),
 						EDMXMPValues.xmpRights_WebStatement, EDMXMPValuesMap);
@@ -603,7 +601,8 @@ public class XMPUtils {
 										EDMXMPValuesMap);
 							} else {
 								putInValuesMap(
-										"See: http://www.europeana.eu/portal/record"+pcho.getAbout()+".html",
+										"See: http://www.europeana.eu/portal/record"
+												+ pcho.getAbout() + ".html",
 										EDMXMPValues.dc_description,
 										EDMXMPValuesMap);
 							}
@@ -623,18 +622,16 @@ public class XMPUtils {
 					}
 
 					/*
-					// Check the dc:coverage resource or literal
-					if (dcchoice.ifCoverage()) {
-						putInValuesMap(dcchoice.getCoverage(),
-								EDMXMPValues.dc_coverage, EDMXMPValuesMap);
-					}
-
-					// Check the dc:spatial resource or literal
-					if (dcchoice.ifSpatial()) {
-						putInValuesMap(dcchoice.getSpatial(),
-								EDMXMPValues.dcterms_spatial, EDMXMPValuesMap);
-					}
-					*/
+					 * // Check the dc:coverage resource or literal if
+					 * (dcchoice.ifCoverage()) {
+					 * putInValuesMap(dcchoice.getCoverage(),
+					 * EDMXMPValues.dc_coverage, EDMXMPValuesMap); }
+					 * 
+					 * // Check the dc:spatial resource or literal if
+					 * (dcchoice.ifSpatial()) {
+					 * putInValuesMap(dcchoice.getSpatial(),
+					 * EDMXMPValues.dcterms_spatial, EDMXMPValuesMap); }
+					 */
 
 					// Check the dc:temporal resource or literal
 					if (dcchoice.ifTemporal()) {
@@ -682,7 +679,8 @@ public class XMPUtils {
 	}
 
 	/**
-	 * Invokes the getResource,getString,getLang methods on an object via reflection
+	 * Invokes the getResource,getString,getLang methods on an object via
+	 * reflection
 	 * 
 	 * @param object
 	 * @return
@@ -701,8 +699,16 @@ public class XMPUtils {
 			try {
 				if (methods[i].getName().equals("getResource")) {
 					if (vlb.getValue() == null) {
-						String resource = (String) methods[i].invoke(object);
-						vlb.setValue(resource);
+						if (object.getClass().isAssignableFrom(
+								ResourceOrLiteralType.class)) {
+							Resource resource = (Resource) methods[i]
+									.invoke(object);
+							vlb.setValue(resource.getResource());
+						}
+						else if(object.getClass().isAssignableFrom(ResourceType.class)){
+							String resource = (String) methods[i].invoke(object);
+							vlb.setValue(resource);
+						}
 					}
 
 				}
@@ -771,19 +777,19 @@ public class XMPUtils {
 		xml = writer.toString();
 		return xml;
 	}
-	
-	
+
 	/**
 	 * Escapes an XML String
+	 * 
 	 * @param tobeEscaped
 	 * @return
 	 */
-	private static String escapeXML(String tobeEscaped){
-		
+	private static String escapeXML(String tobeEscaped) {
+
 		String escaped = StringEscapeUtils.escapeXml(tobeEscaped);
-		
+
 		return escaped;
-		
+
 	}
 
 }

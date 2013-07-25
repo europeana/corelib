@@ -50,7 +50,7 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 	public static final String QUERY_SORT_BY_DATE_ASC = "ApiKey.sortByDateAsc";
 
 	@Id
-	@Column(length = FIELDSIZE_APIKEY, nullable=false, unique=true)
+	@Column(length = FIELDSIZE_APIKEY, nullable=false)
 	private String apiKey;
 
 	@Column(length = FIELDSIZE_APIKEY, nullable=false)

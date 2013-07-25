@@ -32,6 +32,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.MongoProvider;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
@@ -44,7 +45,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class TokenServiceTest {
-
+	@Resource(name="corelib_solr_mongoProvider")
+	private MongoProvider mongoProvider;
 	@Resource(name = "corelib_db_tokenDao")
 	private RelationalDao<TokenImpl> dao;
 

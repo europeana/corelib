@@ -123,6 +123,12 @@
 			<artifactId>sanselan</artifactId>
 			<version>0.97-incubator</version>
 		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>1.33</version>
+			<scope>test</scope>
+		</dependency>
 <!--		<dependency>
 			<groupId>net.vz.mongodb.jackson</groupId>
 			<artifactId>mongo-jackson-mapper</artifactId>

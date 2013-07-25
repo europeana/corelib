@@ -41,6 +41,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.MongoProvider;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.Image;
 import eu.europeana.corelib.db.entity.nosql.ImageCache;
@@ -59,7 +60,8 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
 public class ThumbnailServiceTest {
 
 	private static Logger LOGGER = Logger.getLogger(ThumbnailServiceTest.class);
-
+	@Resource(name="corelib_solr_mongoProvider")
+	private MongoProvider mongoProvider;
 	@Resource(name = "corelib_db_imageDao")
 	NosqlDao<ImageCache, String> imageDao;
 
@@ -145,7 +147,7 @@ public class ThumbnailServiceTest {
 
 		IUnmarshallingContext uctx = context.createUnmarshallingContext();
 
-		File test = new File("src/test/resources/edm/edmsample.xml");
+		File test = new File("../corelib-solr/src/test/resources/test_files/edm_new.xml");
 
 		InputStream ins = new FileInputStream(test);
 

@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.MongoProvider;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.ApiLog;
@@ -28,7 +29,8 @@ import eu.europeana.corelib.utils.model.DateInterval;
 public class ApiLogServiceTest {
 
 	String apiKey = "testKey";
-
+	@Resource(name="corelib_solr_mongoProvider")
+	private MongoProvider mongoProvider;
 	@Resource private ApiLogService apiLogService;
 
 	@Resource(name = "corelib_db_apiLogDao")
