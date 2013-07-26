@@ -37,6 +37,7 @@ import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
@@ -125,7 +126,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public User findByEmail(String email) {
 		if (StringUtils.isNotBlank(email)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_EMAIL,
+			return getDao().findOneByNamedQuery(User.QUERY_FINDBY_EMAIL,
 					StringUtils.lowerCase(email));
 		}
 		return null;
@@ -134,7 +135,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public User findByApiKey(String apiKey) {
 		if (StringUtils.isNotBlank(apiKey)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_APIKEY,
+			return getDao().findOneByNamedQuery(User.QUERY_FINDBY_APIKEY,
 					apiKey);
 		}
 		return null;
@@ -143,7 +144,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public User findByName(String userName) {
 		if (StringUtils.isNotBlank(userName)) {
-			return getDao().findOneByNamedQuery(UserImpl.QUERY_FINDBY_NAME,
+			return getDao().findOneByNamedQuery(User.QUERY_FINDBY_NAME,
 					userName);
 		}
 		return null;
@@ -256,7 +257,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		SavedItemImpl savedItem = new SavedItemImpl();
+		SavedItem savedItem = new SavedItemImpl();
 		FullBean bean = null;
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
@@ -287,7 +288,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 
-		SocialTagImpl socialTag = new SocialTagImpl();
+		SocialTag socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
 		socialTag.setTag(StringUtils.abbreviate(tag,
 				RelationalDatabase.FIELDSIZE_TAG));
@@ -309,9 +310,17 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public void removeSavedItem(Long userId, Long savedItemId)
 			throws DatabaseException {
-		SavedItemImpl savedItem = getDao().findByPK(SavedItemImpl.class,
+		SavedItem savedItem = getDao().findByPK(SavedItemImpl.class,
 				savedItemId);
 		if ((savedItem != null) && savedItem.getUser().getId().equals(userId)) {
+			savedItem.getUser().getSavedItems().remove(savedItem);
+		}
+	}
+	
+	@Override
+	public void removeSavedItem(Long userId, String objectId) throws DatabaseException {
+		SavedItem savedItem = getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, objectId);
+		if (savedItem != null) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
 	}
@@ -319,7 +328,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Override
 	public void removeSocialTag(Long userId, Long socialTagId)
 			throws DatabaseException {
-		SocialTagImpl socialTag = getDao().findByPK(SocialTagImpl.class,
+		SocialTag socialTag = getDao().findByPK(SocialTagImpl.class,
 				socialTagId);
 		if ((socialTag != null) && socialTag.getUser().getId().equals(userId)) {
 			socialTag.getUser().getSocialTags().remove(socialTag);
@@ -331,7 +340,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if (userId == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		return getDao().findByNamedQueryCustom(TagCloudItem.class, SocialTagImpl.QUERY_CREATECLOUD_BYUSER, userId);
+		return getDao().findByNamedQueryCustom(TagCloudItem.class, SocialTag.QUERY_CREATECLOUD_BYUSER, userId);
 	}
 	
 	@Override
@@ -339,7 +348,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if ( (userId == null) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		return getDao().findByNamedQuery(SocialTag.class, SocialTagImpl.QUERY_FINDBY_TAG, userId, StringUtils.lowerCase(tag));
+		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_TAG, userId, StringUtils.lowerCase(tag));
 	}
 
 	private FullBean populateEuropeanaUserObject(User user,
@@ -412,9 +421,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		instance.setDocType(bean.getType());
 		instance.setUser(user);
 		if (instance instanceof SavedItemImpl) {
-			user.getSavedItems().add((SavedItemImpl) instance);
+			user.getSavedItems().add((SavedItem) instance);
 		} else {
-			user.getSocialTags().add((SocialTagImpl) instance);
+			user.getSocialTags().add((SocialTag) instance);
 		}
 		return bean;
 	}

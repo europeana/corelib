@@ -47,17 +47,16 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 *             When the Token is invalid
 	 */
-	User create(String tokenString, String username, String password)
-			throws DatabaseException;
-
+	User create(String tokenString, String username, String password) throws DatabaseException;
 
 	/**
 	 * Creates a new User, based on a existing token, and given params
 	 * 
 	 */
-	User create(String tokenString, String username, String password, boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, String website, String address, String phone, String fieldOfWork) throws DatabaseException;
-	
+	User create(String tokenString, String username, String password, boolean isApiRegistration, String company,
+			String country, String firstName, String lastName, String website, String address, String phone,
+			String fieldOfWork) throws DatabaseException;
+
 	/**
 	 * Returns a User if there is a valid email provided.
 	 * 
@@ -109,8 +108,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or passwords are provided
 	 */
-	User changePassword(Long userId, String oldPassword, String newPassword)
-			throws DatabaseException;
+	User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedSearch to an existing User
@@ -125,8 +123,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or query(string) is provided
 	 */
-	User createSavedSearch(Long userId, String query, String queryString)
-			throws DatabaseException;
+	User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException;
 
 	/**
 	 * Creates and add a SavedItem to an existing User
@@ -139,8 +136,7 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user or object id is provided
 	 */
-	User createSavedItem(Long userId, String europeanaObjectId)
-			throws DatabaseException;
+	User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
 
 	/**
 	 * Creates and add a SocialTag to an existing user
@@ -154,28 +150,40 @@ public interface UserService extends AbstractService<User> {
 	 * @exception DatabaseException
 	 *                Thrown when no valid user, object id or tag is provided
 	 */
-	User createSocialTag(Long userId, String europeanaObjectId, String tag)
-			throws DatabaseException;
+	User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
 
 	/**
 	 * Removes a SavedSearch from database and User.
 	 * 
+	 * @param userId
+	 *            The id of the existing user
 	 * @param savedSearchId
 	 *            The primary key of the saved search to remove
 	 * @throws DatabaseException
 	 */
-	void removeSavedSearch(Long userId, Long savedSearchId)
-			throws DatabaseException;
+	void removeSavedSearch(Long userId, Long savedSearchId) throws DatabaseException;
 
 	/**
 	 * Removes a SavedItem from database and User.
 	 * 
+	 * @param userId
+	 *            The id of the existing user
 	 * @param savedItemId
 	 *            The primary key of the saved item to remove
 	 * @throws DatabaseException
 	 */
-	void removeSavedItem(Long userId, Long savedItemId)
-			throws DatabaseException;
+	void removeSavedItem(Long userId, Long savedItemId) throws DatabaseException;
+
+	/**
+	 * Removes a SavedItem from database by objectid
+	 * 
+	 * @param userId
+	 *            The id of the existing user
+	 * @param objectId
+	 *            EuropeanaObjectId
+	 * @throws DatabaseException
+	 */
+	void removeSavedItem(Long userId, String objectId) throws DatabaseException;
 
 	/**
 	 * Removes a SocialTag from database and User.
@@ -184,44 +192,42 @@ public interface UserService extends AbstractService<User> {
 	 *            The primary key of the social tag to remove
 	 * @throws DatabaseException
 	 */
-	void removeSocialTag(Long userId, Long socialTagId)
-			throws DatabaseException;
+	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
 
 	/**
 	 * Upgrades an Api Key only account to a full MyEuropeana account
 	 * 
 	 * @param userId
-	 * 			Existing id of user account
+	 *            Existing id of user account
 	 * @param userName
-	 * 			Requested username for MyEuropeana
+	 *            Requested username for MyEuropeana
 	 * @param password
-	 * 			New password for upgraded account
-	 * @return
-	 * 			The upgraded user account
+	 *            New password for upgraded account
+	 * @return The upgraded user account
 	 * @throws DatabaseException
 	 */
 	User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException;
-	
+
 	/**
 	 * Returns a distinct list of tags (combination of tag as a string and a count)
 	 * 
 	 * @param userId
-	 * 			Existing id of user account
+	 *            Existing id of user account
 	 * @return
 	 */
 	List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException;
-	
+
 	/**
 	 * Returns a list of SocialTag objects filtered by User and Tag
 	 * 
 	 * @param userId
-	 * 			Existing id of user account
+	 *            Existing id of user account
 	 * @param tag
-	 * 			Tag string to filter on (case-insensitive)
+	 *            Tag string to filter on (case-insensitive)
 	 * @return
 	 * 
 	 * @throws DatabaseException
 	 */
 	List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException;
-	
+
 }

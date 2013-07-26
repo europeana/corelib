@@ -124,6 +124,20 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 */
 	E findOneByNamedQuery(String query, Object... params);
 
+	/**
+	 * Find a custom entity by named query.
+	 *  Given params will be inserted into query in order of params.
+	 * 
+	 * @param clazz
+	 *            The class of the Entity type to retrieve
+	 * @param query
+	 *            Name of the Named Query
+	 * @param params
+	 *            Params in order as marked in Named Query
+	 * @return First matching entity, null if no matches are found
+	 */
+	<T> T findOneByNamedQuery(Class<T> clazz, String qName, Object... params);
+
 
 	/*
 	 * MODIFIERS

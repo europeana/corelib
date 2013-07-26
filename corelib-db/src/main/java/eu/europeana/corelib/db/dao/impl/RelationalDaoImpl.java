@@ -122,14 +122,19 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 		}
 		return query.getResultList();
 	}
-
+	
 	@Override
-	public E findOneByNamedQuery(String qName, Object... params) {
+	public <T> T findOneByNamedQuery(Class<T> clazz, String qName, Object... params) {
 		try {
-			return createNamedQuery(domainClazz, qName, params).getSingleResult();
+			return createNamedQuery(clazz, qName, params).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public E findOneByNamedQuery(String qName, Object... params) {
+		return findOneByNamedQuery(domainClazz, qName, params);
 	}
 	
 	@Override

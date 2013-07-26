@@ -24,6 +24,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
  */
 public interface SocialTag extends EuropeanaUserObject, Comparable<SocialTag> {
 
+	public static final String QUERY_CREATECLOUD_BYUSER = "SocialTag.createCloudByUser";
+	public static final String QUERY_FINDBY_TAG = "SocialTag.FindByTag";
+
 	String getTag();
 
 	void setTag(String tag);

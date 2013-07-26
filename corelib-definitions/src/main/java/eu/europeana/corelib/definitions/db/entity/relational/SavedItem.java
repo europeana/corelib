@@ -24,6 +24,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
  */
 public interface SavedItem extends EuropeanaUserObject, Comparable<SavedItem> {
 
+	public static final String QUERY_FINDBY_OBJECTID = "SavedItem.FindByObjectId";
+
 	String getAuthor();
 
 	void setAuthor(String author);
