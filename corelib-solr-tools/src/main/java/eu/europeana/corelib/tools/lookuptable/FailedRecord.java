@@ -52,6 +52,8 @@ public class FailedRecord {
 
 	private Date date;
 	
+	private String message;
+	
 	
 	/**
 	 * The record Identifier
@@ -148,6 +150,20 @@ public class FailedRecord {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

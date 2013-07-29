@@ -176,7 +176,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 			
 			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())){
 				
-				generateFailedRecord(constructedeuropeanaId, xml,
+				generateFailedRecord(constructedeuropeanaId, xml,null,
 						LookupState.DUPLICATE_INCOLLECTION);
 				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
 				updateops.set(XMLCHECKSUM, xmlChecksum);
@@ -206,10 +206,13 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
 			
+			
+			
 			if(constructedeuropeanaId.getSessionID().equals(
 					retrievedeuropeanaID.getSessionID())){
 				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
-				generateFailedRecord(constructedeuropeanaId, xml,
+				
+				generateFailedRecord(constructedeuropeanaId, xml, null,
 						LookupState.DUPLICATE_INCOLLECTION);
 				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
 				
@@ -219,6 +222,10 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				lookupresult.setState(LookupState.IDENTICAL);
 				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
 			}
+			else{
+				System.out.println("None of the above");
+			}
+			
 			
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
 		}
@@ -236,10 +243,14 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 						retrievedeuropeanaID.getOrid())
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
+			
 			lookupresult
 					.setState(LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 
-			generateFailedRecord(constructedeuropeanaId, xml,
+			String message = "Duplicate record exists between collections:" + constructedeuropeanaId.getCid() +
+					" and " + retrievedeuropeanaID.getCid();
+			
+			generateFailedRecord(constructedeuropeanaId, xml, message,
 					LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
 			
@@ -254,9 +265,33 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 			lookupresult
 					.setState(LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 			
-			generateFailedRecord(constructedeuropeanaId, xml,
+			
+			String message = "Record with duplicate identifier exists between collections:" + constructedeuropeanaId.getCid() +
+					" and " + retrievedeuropeanaID.getCid();
+			
+			generateFailedRecord(constructedeuropeanaId, xml, message,
 					LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
+		}
+		else if (constructedeuropeanaId.getCid().equals(
+				retrievedeuropeanaID.getCid())
+				&& constructedeuropeanaId.getEid().equals(
+						retrievedeuropeanaID.getEid())
+				&& !constructedeuropeanaId.getOrid().equals(
+						retrievedeuropeanaID.getOrid())
+				&& !constructedeuropeanaId.getXmlchecksum().equals(
+						retrievedeuropeanaID.getXmlchecksum())) {
+			
+			lookupresult
+			.setState(LookupState.DERIVED_DUPLICATE_INCOLLECTION);
+			
+			
+			String message = "Records " + constructedeuropeanaId.getOrid() + " and " + retrievedeuropeanaID.getOrid() +
+					" resulted in the creation of a common identifier during Europeana UUID generation (" +
+					constructedeuropeanaId.getEid() + ")";
+			
+			generateFailedRecord(constructedeuropeanaId, xml, message, 
+					LookupState.DERIVED_DUPLICATE_INCOLLECTION);
 		}
 
 
@@ -304,7 +339,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 * @param lookupState
 	 *            The reason it failed
 	 */
-	private void generateFailedRecord(EuropeanaIdRegistry eurId, String xml,
+	private void generateFailedRecord(EuropeanaIdRegistry eurId, String xml,String message,
 			LookupState lookupState) {
 		FailedRecord failedRecord = datastore.find(FailedRecord.class)
 				.filter("originalId", eurId.getOrid())
@@ -320,6 +355,9 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 			failedRecord.setXml(xml);
 			failedRecord.setLookupState(lookupState);
 			failedRecord.setDate(new Date());
+			if(message != null){
+				failedRecord.setMessage(message);
+			}
 			datastore.save(failedRecord);
 		}
 		// or else update the fields that might have changed (xml representation
@@ -503,6 +541,9 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 			record.put("edm", failedRecord.getXml());
 			record.put("lookupState", failedRecord.getLookupState().toString());
 			record.put("date", failedRecord.getDate().toString());
+			if(failedRecord.getMessage() != null){
+				record.put("message", failedRecord.getMessage());
+			}	
 			failedRecords.add(record);
 		}
 		return failedRecords;

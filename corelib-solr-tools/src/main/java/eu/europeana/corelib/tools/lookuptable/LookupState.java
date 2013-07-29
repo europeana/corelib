@@ -41,9 +41,14 @@ public enum LookupState {
 	IDENTICAL,
 	
 	/**
-	 * Status that indicates that the same record is contained twice in the same collection
+	 * Status that indicates that 2 records with the same id are contained twice in the same collection
 	 */
 	DUPLICATE_INCOLLECTION,
+	
+	/**
+	 * Status that indicates that 2 records obtained the same identifier during the import process
+	 */
+	DERIVED_DUPLICATE_INCOLLECTION,
 	
 	/**
 	 * Indicates that the same identifier is present in more than one collections
