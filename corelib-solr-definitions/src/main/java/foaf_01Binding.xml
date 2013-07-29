@@ -1,6 +1,0 @@
-<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
-  <namespace uri="http://xmlns.com/foaf/0.1/" prefix="foaf"/>
-  <mapping class="eu.europeana.corelib.definitions.jibx.Name" name="name" ns="http://xmlns.com/foaf/0.1/">
-    <structure map-as="rdf:LiteralType"/>
-  </mapping>
-</binding>
