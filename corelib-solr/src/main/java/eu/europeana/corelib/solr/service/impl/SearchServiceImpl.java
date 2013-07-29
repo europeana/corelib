@@ -519,12 +519,13 @@ public class SearchServiceImpl implements SearchService {
 	private SolrServer setServer(SolrServer solrServer) {
 		
 		if (solrServer instanceof HttpSolrServer) {
-			AbstractHttpClient client = (AbstractHttpClient) ((HttpSolrServer)solrServer)
+			HttpSolrServer server = new HttpSolrServer(
+					((HttpSolrServer) solrServer).getBaseURL());
+			AbstractHttpClient client = (AbstractHttpClient) server
 			        .getHttpClient();
 			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
 			        username, password));
-		return new HttpSolrServer(
-					((HttpSolrServer) solrServer).getBaseURL());
+		return server;
 		} else {
 			return solrServer;
 		}
@@ -568,17 +569,19 @@ public class SearchServiceImpl implements SearchService {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
 	
-	private class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
-		  private final UsernamePasswordCredentials credentials;
-
-		  public PreEmptiveBasicAuthenticator(String user, String pass) {
-		    credentials = new UsernamePasswordCredentials(user, pass);
-		  }
-
-		  @Override
-		  public void process(HttpRequest request, HttpContext context)
-		      throws HttpException, IOException {
-		    request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
-		  }
-		}
+	
 }
+
+class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
+	  private final UsernamePasswordCredentials credentials;
+
+	  public PreEmptiveBasicAuthenticator(String user, String pass) {
+	    credentials = new UsernamePasswordCredentials(user, pass);
+	  }
+
+	  @Override
+	  public void process(HttpRequest request, HttpContext context)
+	      throws HttpException, IOException {
+	    request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
+	  }
+	}
