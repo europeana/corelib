@@ -57,7 +57,7 @@ import eu.europeana.corelib.tools.AppContext;
 public class Extractor {
 
 	private VocabularyMongoServer mongoServer;
-	private ControlledVocabularyImpl vocabulary;
+	protected ControlledVocabularyImpl vocabulary;
 
 	/**
 	 * Constructor for use with object injection
@@ -230,7 +230,7 @@ public class Extractor {
 	 *         and empty values
 	 */
 	public HashMap<String, List<EdmMappedField>> readSchema(String location) {
-
+		
 		vocabulary.setElements(readFromFile(location));
 		return (HashMap<String, List<EdmMappedField>>) vocabulary.getElements();
 	}
@@ -275,6 +275,10 @@ public class Extractor {
 	
 	
 	
+	public void setMongoServer(VocabularyMongoServer mongoServer) {
+		this.mongoServer = mongoServer;
+	}
+
 	private boolean validate(ControlledVocabulary voc) {
 
 		Map<String, List<EdmMappedField>> elems = voc.getElements();
@@ -368,7 +372,7 @@ public class Extractor {
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (XMLStreamException e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
@@ -384,5 +388,8 @@ public class Extractor {
 			throw e;
 		}
 
+	}
+	public void setVocabulary(ControlledVocabularyImpl voc){
+		this.vocabulary = voc;
 	}
 }
