@@ -2,6 +2,11 @@
 .classpath
 .project
 .settings/
+.externalToolBuilders/
 
 # Maven
 */target/**
+
+# Temp files
+*~
+*.bak

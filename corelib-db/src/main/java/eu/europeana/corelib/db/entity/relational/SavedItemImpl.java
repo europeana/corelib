@@ -19,6 +19,8 @@ package eu.europeana.corelib.db.entity.relational;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
@@ -30,6 +32,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDITEM)
+@NamedQueries ({
+	@NamedQuery(name=SavedItem.QUERY_FINDBY_OBJECTID, query="select e from SavedItemImpl e where e.user.id = ? and e.europeanaUri = ?")
+})
 public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
 	private static final long serialVersionUID = -7059004310525816113L;
 

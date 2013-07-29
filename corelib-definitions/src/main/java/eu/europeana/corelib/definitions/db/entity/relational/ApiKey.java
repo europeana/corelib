@@ -23,6 +23,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConne
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface ApiKey extends UserConnected<String> {
+	
+	public static final String QUERY_SORT_BY_DATE_DESC = "ApiKey.sortByDateDesc";
+	public static final String QUERY_SORT_BY_DATE_ASC = "ApiKey.sortByDateAsc";
 
 	void setApiKey(String apiKey);
 

@@ -26,13 +26,13 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 
 	@Override
 	public List<ApiKey> findAllSortByDate(boolean asc) {
-		String namedQuery = asc ? ApiKeyImpl.QUERY_SORT_BY_DATE_ASC : ApiKeyImpl.QUERY_SORT_BY_DATE_DESC;
+		String namedQuery = asc ? ApiKey.QUERY_SORT_BY_DATE_ASC : ApiKey.QUERY_SORT_BY_DATE_DESC;
 		return getDao().findByNamedQuery(namedQuery);
 	}
 
 	@Override
 	public List<ApiKey> findAllSortByDate(boolean asc, int offset, int limit) {
-		String namedQuery = asc ? ApiKeyImpl.QUERY_SORT_BY_DATE_ASC : ApiKeyImpl.QUERY_SORT_BY_DATE_DESC;
+		String namedQuery = asc ? ApiKey.QUERY_SORT_BY_DATE_ASC : ApiKey.QUERY_SORT_BY_DATE_DESC;
 		return getDao().findByNamedQueryLimited(namedQuery, offset, limit);
 	}
 
