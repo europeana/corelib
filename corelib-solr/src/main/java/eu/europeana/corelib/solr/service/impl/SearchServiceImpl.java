@@ -30,6 +30,13 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.protocol.HttpContext;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -37,9 +44,9 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
 import org.apache.solr.common.SolrDocument;
@@ -108,6 +115,12 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
+	@Value("#{europeanaProperties['solr.username']}")
+	private String username;
+	@Value("#{europeanaProperties['solr.password']}")
+	private String password;
+	
+	
 	private String mltFields;
 
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
@@ -504,8 +517,13 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private SolrServer setServer(SolrServer solrServer) {
+		
 		if (solrServer instanceof HttpSolrServer) {
-			return new HttpSolrServer(
+			AbstractHttpClient client = (AbstractHttpClient) ((HttpSolrServer)solrServer)
+			        .getHttpClient();
+			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
+			        username, password));
+		return new HttpSolrServer(
 					((HttpSolrServer) solrServer).getBaseURL());
 		} else {
 			return solrServer;
@@ -549,4 +567,18 @@ public class SearchServiceImpl implements SearchService {
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
+	
+	private class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
+		  private final UsernamePasswordCredentials credentials;
+
+		  public PreEmptiveBasicAuthenticator(String user, String pass) {
+		    credentials = new UsernamePasswordCredentials(user, pass);
+		  }
+
+		  @Override
+		  public void process(HttpRequest request, HttpContext context)
+		      throws HttpException, IOException {
+		    request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
+		  }
+		}
 }
