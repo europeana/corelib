@@ -56,8 +56,8 @@ import eu.europeana.corelib.tools.AppContext;
  */
 public class Extractor {
 
-	private VocabularyMongoServer mongoServer;
-	private ControlledVocabularyImpl vocabulary;
+	protected VocabularyMongoServer mongoServer;
+	protected ControlledVocabularyImpl vocabulary;
 
 	/**
 	 * Constructor for use with object injection
@@ -384,5 +384,13 @@ public class Extractor {
 			throw e;
 		}
 
+	}
+	
+	public void setMongoServer(VocabularyMongoServer server){
+		this.mongoServer = server;
+	}
+	
+	public void setVocabulary(ControlledVocabularyImpl vocabulary){
+		this.vocabulary = vocabulary;
 	}
 }
