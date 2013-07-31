@@ -348,7 +348,15 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if ( (userId == null) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_TAG, userId, StringUtils.lowerCase(tag));
+		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG, userId, StringUtils.lowerCase(tag));
+	}
+	
+	@Override
+	public List<SocialTag> findSocialTagsByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
+		if ( (userId == null) || StringUtils.isBlank(europeanaId)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_EUROPEANAID, userId, europeanaId);
 	}
 	
 	@Override

@@ -232,6 +232,19 @@ public interface UserService extends AbstractService<User> {
 	List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException;
 
 	/**
+	 * Returns a list of SocialTag objects filtered by User and EuropeanaId
+	 * 
+	 * @param userId
+	 *            Existing id of user account
+	 * @param europeanaId
+	 *            EuropeanaObjectId
+	 * @return
+	 * 
+	 * @throws DatabaseException
+	 */
+	List<SocialTag> findSocialTagsByEuropeanaId(Long userId, String europeanaId) throws DatabaseException;
+
+	/**
 	 * 
 	 * @param userId
 	 *            Existing id of user account
