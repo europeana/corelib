@@ -318,8 +318,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 	
 	@Override
-	public void removeSavedItem(Long userId, String objectId) throws DatabaseException {
-		SavedItem savedItem = getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, objectId);
+	public void removeSavedItem(Long userId, String europeanaId) throws DatabaseException {
+		SavedItem savedItem = findSavedItemByEuropeanaId(userId, europeanaId); 
 		if (savedItem != null) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
@@ -349,6 +349,14 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_TAG, userId, StringUtils.lowerCase(tag));
+	}
+	
+	@Override
+	public SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
+		if ( (userId == null) || StringUtils.isBlank(europeanaId)) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		return getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, europeanaId);
 	}
 
 	private FullBean populateEuropeanaUserObject(User user,

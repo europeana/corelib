@@ -22,6 +22,7 @@ import java.util.List;
 import eu.europeana.corelib.db.entity.relational.custom.TagCloudItem;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
+import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 
@@ -229,5 +230,17 @@ public interface UserService extends AbstractService<User> {
 	 * @throws DatabaseException
 	 */
 	List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException;
+
+	/**
+	 * 
+	 * @param userId
+	 *            Existing id of user account
+	 * @param europeanaId
+	 *            EuropeanaObjectId
+	 * @return
+	 * 
+	 * @throws DatabaseException
+	 */
+	SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException;
 
 }
