@@ -169,6 +169,7 @@
             <enumeration value="Iceland"/>
             <enumeration value="Ireland"/>
             <enumeration value="Italy"/>
+            <enumeration value="Israel"/>
             <enumeration value="Latvia"/>
             <enumeration value="Liechtenstein"/>
             <enumeration value="Lithuania"/>
@@ -208,17 +209,21 @@
             <enumeration value="en"/>
             <enumeration value="es"/>
             <enumeration value="et"/>
+            <enumeration value="eu"/>
             <enumeration value="fi"/>
             <enumeration value="fr"/>
             <enumeration value="ga"/>
             <enumeration value="gd"/>
+            <enumeration value="he"/>
             <enumeration value="hr"/>
             <enumeration value="hu"/>
             <enumeration value="ie"/>
             <enumeration value="is"/>
             <enumeration value="it"/>
+            <enumeration value="ka"/>
             <enumeration value="lt"/>
             <enumeration value="lv"/>
+            <enumeration value="mk"/>
             <enumeration value="mt"/>
             <enumeration value="mul"/>
             <enumeration value="nl"/>
@@ -232,6 +237,7 @@
             <enumeration value="sr"/>
             <enumeration value="sv"/>
             <enumeration value="tr"/>
+            <enumeration value="uk"/>
             <enumeration value="yi"/>
             <enumeration value="cy"/>
         </restriction>
@@ -488,16 +494,20 @@
                 en:English
                 es:Spanish
                 et:Estonian
+                eu:Basque 
                 fi:Finnish
                 fr:French
-                ga:Galician
+                ga:Galician (Irish)
                 gd:Gaelic (Scottish)
+                he:Hebrew
                 hu:Hungarian
                 ie:Interlingue
                 is:Icelandic
                 it:Italian
-                lt:Lithuanian
+                ka:Georgian
+                lt:Lithuan	an
                 lv:Latvian (Lettish)
+                mk:Macedonian
                 mt:Maltese
                 mul:Multilingual Content
                 nl:Netherlands
@@ -511,8 +521,10 @@
                 sr:Serbian
                 sv:Swedish
                 tr:Turkish
+                uk:Ukrainian
                 yi:Yiddish
-                cy:Welsh</documentation>
+                cy:Welsh
+                </documentation>
         </annotation>
     </element>
     
