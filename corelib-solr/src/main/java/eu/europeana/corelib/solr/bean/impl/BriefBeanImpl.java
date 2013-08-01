@@ -119,6 +119,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("proxy_dc_title")
 	protected String[] proxyDcTitle;
 
+	@Field("description")
+	protected String[] description;
+	
 	@Override
 	public String[] getEdmPreview(){
 		return this.edmPreview;
@@ -130,7 +133,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 			return this.title.clone();
 		} else if (this.proxyDcTitle != null) {
 			return this.proxyDcTitle.clone();
-		} else {
+		} else if (this.description != null) {
+			return this.description.clone();
+		}else {
 			return null;
 		}
 	}
