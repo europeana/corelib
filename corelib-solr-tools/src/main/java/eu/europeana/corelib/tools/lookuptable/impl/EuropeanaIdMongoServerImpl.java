@@ -137,7 +137,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public boolean newIdExists(String oldId) {
-		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId) != null ? true
+		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).get() != null ? true
 				: false;
 	}
 
