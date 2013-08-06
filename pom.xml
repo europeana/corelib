@@ -135,4 +135,9 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+	<scm>
+		<url>https://github.com/europeana/corelib</url>
+		<connection>git@github.com:europeana/corelib.git</connection>
+		<developerConnection>git@github.com:europeana/corelib.git</developerConnection>
+	</scm>
 </project>
