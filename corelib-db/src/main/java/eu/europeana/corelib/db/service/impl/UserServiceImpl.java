@@ -336,6 +336,23 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 	
 	@Override
+	public void removeSocialTag(Long userId, String europeanaId, String tag) throws DatabaseException {
+		List<SocialTag> results = null;
+		if (StringUtils.isNotBlank(europeanaId) && StringUtils.isNotBlank(tag)) {
+			results = getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG, userId, StringUtils.lowerCase(tag), europeanaId);
+			
+		} else if (StringUtils.isNotBlank(tag)) {
+			results = findSocialTagsByTag(userId, tag);
+		} else if (StringUtils.isNotBlank(europeanaId)) {
+			results = findSocialTagsByEuropeanaId(userId, europeanaId);
+		}
+		if ( (results != null) && !results.isEmpty()) {
+			results.get(0).getUser().getSocialTags().removeAll(results);
+		}
+		
+	}
+	
+	@Override
 	public List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException {
 		if (userId == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);

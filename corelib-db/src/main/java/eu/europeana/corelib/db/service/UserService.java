@@ -196,6 +196,18 @@ public interface UserService extends AbstractService<User> {
 	void removeSocialTag(Long userId, Long socialTagId) throws DatabaseException;
 
 	/**
+	 * Remove SocialTag(s) matching the objectId and/or tag
+	 * 
+	 * @param userId
+	 *            The id of the existing user
+	 * @param objectId
+	 *            EuropeanaObjectId
+	 * @throws DatabaseException
+	 */
+	void removeSocialTag(Long userId, String objectId, String tag) throws DatabaseException;
+	
+	
+	/**
 	 * Upgrades an Api Key only account to a full MyEuropeana account
 	 * 
 	 * @param userId
