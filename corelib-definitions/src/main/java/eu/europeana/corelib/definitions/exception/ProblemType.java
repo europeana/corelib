@@ -45,6 +45,7 @@ public enum ProblemType {
 	NO_OLD_PASSWORD("Old password does not exist.", ProblemResponseAction.IGNORE),
 	NO_USER_ID("User id does not exist.", ProblemResponseAction.IGNORE),
 	NO_USER("User does not exist.", ProblemResponseAction.IGNORE),
+	DUPLICATE("Record already exists.", ProblemResponseAction.IGNORE),
 	;
 
 	private String message;

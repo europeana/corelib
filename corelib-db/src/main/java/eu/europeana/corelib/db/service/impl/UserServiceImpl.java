@@ -257,6 +257,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
+		
+		if (findSavedItemByEuropeanaId(userId, europeanaObjectId) != null) {
+			throw new DatabaseException(ProblemType.DUPLICATE);
+		}
+		
 		SavedItem savedItem = new SavedItemImpl();
 		FullBean bean = null;
 
