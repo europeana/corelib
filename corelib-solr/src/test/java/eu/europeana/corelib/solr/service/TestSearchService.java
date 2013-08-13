@@ -1,6 +1,5 @@
 package eu.europeana.corelib.solr.service;
 
-import eu.europeana.corelib.dereference.VocabularyMongoServer;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 

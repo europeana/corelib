@@ -476,6 +476,7 @@ public class SearchServiceImpl implements SearchService {
 	/**
 	 * Get the suggestions 
 	 */
+	@Override
 	public List<Term> suggestions(String query, int pageSize, String field) {
 		log.fine(String.format("%s, %d, %s", query, pageSize, field));
 		List<Term> results = new ArrayList<Term>();
@@ -556,6 +557,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
 		long t0 = new Date().getTime();

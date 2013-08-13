@@ -26,7 +26,6 @@ import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.dereference.VocabularyMongoServer;
-import eu.europeana.corelib.solr.MongoServer;
 
 /**
  * A mongo server instance for use with the controlled vocabularies

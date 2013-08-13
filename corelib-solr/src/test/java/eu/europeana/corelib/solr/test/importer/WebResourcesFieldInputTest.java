@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.easymock.EasyMock;
-import org.junit.After;
 import org.junit.Test;
 
 import com.google.code.morphia.Datastore;
@@ -34,7 +33,6 @@ import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;

@@ -1,7 +1,8 @@
 package eu.europeana.corelib.tools.lookuptable;
-import com.google.code.morphia.Datastore;
 import java.util.List;
 import java.util.Map;
+
+import com.google.code.morphia.Datastore;
 
 
 public interface EuropeanaIdRegistryMongoServer {

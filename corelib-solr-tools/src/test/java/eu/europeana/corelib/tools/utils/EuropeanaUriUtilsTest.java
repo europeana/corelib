@@ -1,7 +1,8 @@
 package eu.europeana.corelib.tools.utils;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 public class EuropeanaUriUtilsTest {

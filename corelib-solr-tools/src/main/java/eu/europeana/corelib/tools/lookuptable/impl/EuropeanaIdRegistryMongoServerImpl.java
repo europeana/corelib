@@ -33,7 +33,6 @@ import com.mongodb.Mongo;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistry;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistryMongoServer;
 import eu.europeana.corelib.tools.lookuptable.FailedRecord;

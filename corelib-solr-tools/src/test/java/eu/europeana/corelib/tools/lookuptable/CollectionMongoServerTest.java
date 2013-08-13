@@ -3,7 +3,6 @@ package eu.europeana.corelib.tools.lookuptable;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +13,6 @@ import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
-
 import eu.europeana.corelib.tools.lookuptable.impl.CollectionMongoServerImpl;
 
 public class CollectionMongoServerTest {

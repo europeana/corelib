@@ -23,11 +23,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.solr.common.SolrInputDocument;
 import org.easymock.EasyMock;
-import org.junit.After;
 import org.junit.Test;
 
 import com.google.code.morphia.Datastore;
@@ -43,7 +40,6 @@ import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;

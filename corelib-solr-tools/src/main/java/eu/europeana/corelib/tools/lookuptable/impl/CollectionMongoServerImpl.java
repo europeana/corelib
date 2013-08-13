@@ -19,8 +19,6 @@ package eu.europeana.corelib.tools.lookuptable.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;

@@ -22,8 +22,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
@@ -36,8 +34,6 @@ import eu.europeana.corelib.definitions.jibx.ProxyIn;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
-import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -57,8 +53,6 @@ import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
-import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
-import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
 /**
  * A FullBean Constructor from an EDM XML

@@ -16,7 +16,7 @@
  */
 package eu.europeana.corelib.tools;
 
-import org.springframework.context.ApplicationContext;  
+import org.springframework.context.ApplicationContext;
 /**
  * The Application Context
  * @author Yorgos.Mamakis@ kb.nl

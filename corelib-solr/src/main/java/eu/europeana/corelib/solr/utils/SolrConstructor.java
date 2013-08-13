@@ -31,7 +31,6 @@ import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
-//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
@@ -41,6 +40,7 @@ import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
+//import eu.europeana.corelib.definitions.jibx.RDF.Choice;
 
 /**
  * Construct a SolrInputDocument from a JiBX RDF Entity

@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.dao.BasicDAO;
-import com.mongodb.ReadPreference;
-import com.mongodb.ReadPreference.TaggedReadPreference;
 
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;

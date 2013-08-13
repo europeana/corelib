@@ -9,7 +9,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mongodb.Mongo;
@@ -19,7 +18,6 @@ import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
-
 import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdRegistryMongoServerImpl;
 
 public class EuropeanaIdRegistryMongoServerTest {

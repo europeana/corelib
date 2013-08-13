@@ -6,7 +6,6 @@ import java.util.Date;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Test;
 
 import com.mongodb.Mongo;
@@ -16,7 +15,6 @@ import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
-
 import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
 
 public class EuropeanaIdMongoServerTest {
