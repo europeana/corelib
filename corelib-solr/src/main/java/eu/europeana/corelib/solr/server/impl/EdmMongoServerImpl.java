@@ -126,11 +126,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public FullBean getFullBean(String id) {
-		if (datastore.find(FullBeanImpl.class).field("about").equal(id).get() != null) {
-			return datastore.find(FullBeanImpl.class).field("about").equal(id)
-					.get();
-		}
-		return null;
+		return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 	}
 
 	@Override
