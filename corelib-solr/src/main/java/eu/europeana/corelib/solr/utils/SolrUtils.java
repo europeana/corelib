@@ -382,4 +382,16 @@ public final class SolrUtils {
 		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ")
 				.replace("\\-", "-");
 	}
+	
+	public static String escapeFacet(String field, String query) {
+		if (StringUtils.isNotBlank(field) && StringUtils.isNotBlank(query)) {
+			query = escapeQuery(StringUtils.trim(query));
+			StringBuilder sb = new StringBuilder(StringUtils.trim(field));
+			sb.append(":\"");
+			sb.append(query);
+			sb.append("\"");
+			return sb.toString();
+		}
+		return null;
+	}
 }
