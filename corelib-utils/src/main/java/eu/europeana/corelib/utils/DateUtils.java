@@ -24,11 +24,11 @@ import java.util.Date;
  *
  */
 public class DateUtils {
-	
+
 	private DateUtils() {
 		// do not allow instances of this class
 	}
-	
+
 	/**
 	 * Clone a date
 	 * @param date
@@ -40,5 +40,4 @@ public class DateUtils {
 		}
 		return null;
 	}
-
 }

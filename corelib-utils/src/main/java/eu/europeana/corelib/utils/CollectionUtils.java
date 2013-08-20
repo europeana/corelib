@@ -8,5 +8,4 @@ public class CollectionUtils {
 		}
 		return list[0];
 	}
-	
 }

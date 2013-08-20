@@ -24,6 +24,4 @@ public class EdmMappedField {
 	public void setAttribute(String attribute) {
 		this.attribute = attribute;
 	}
-	
-	
 }

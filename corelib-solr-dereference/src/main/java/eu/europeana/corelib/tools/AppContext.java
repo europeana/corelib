@@ -17,12 +17,13 @@
 package eu.europeana.corelib.tools;
 
 import org.springframework.context.ApplicationContext;
+
 /**
  * The Application Context
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-public class AppContext {  
+public class AppContext {
   
     private static ApplicationContext applicationContext;  
   
