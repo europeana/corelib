@@ -9,6 +9,9 @@ Contains our core ingestion and search code.
 ## SOLR
 ...
 
+## Utils
+...
+
 ## Web
 ....
 
