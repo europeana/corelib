@@ -100,11 +100,14 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public EuropeanaId retrieveEuropeanaIdFromOld(String oldId) {
+		if (datastore==null){
+			createDatastore();
+		}
 		try {
 			
 			EuropeanaId id = datastore.find(EuropeanaId.class)
 					.field("oldId").equal(oldId).get();
-			System.out.println(oldId);
+			
 			return id;
 		} catch (Exception e) {
 			System.out.println(e);
