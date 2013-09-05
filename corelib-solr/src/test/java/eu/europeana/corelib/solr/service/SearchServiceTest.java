@@ -156,7 +156,7 @@ public class SearchServiceTest {
 				new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "
-				+ results.getResultSize(), results.getResultSize() == 250);
+				+ results.getResultSize(), results.getResultSize() == 195);
 		Assert.assertTrue("Did not return expected facet list: "
 				+ results.getFacetFields().size(), results.getFacetFields()
 				.size() == 8);
@@ -172,7 +172,7 @@ public class SearchServiceTest {
 				query);
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "
-				+ results.getResultSize(), results.getResultSize() == 4);
+				+ results.getResultSize(), results.getResultSize() == 195);
 
 	}
 
@@ -209,7 +209,7 @@ public class SearchServiceTest {
 		List<BriefBean> mlt = searchService.findMoreLikeThis(results
 				.getResults().get(0).getId());
 		Assert.assertNotNull(mlt);
-		Assert.assertEquals(4, mlt.size());
+		Assert.assertEquals(10, mlt.size());
 	}
 
 	@Test

@@ -157,7 +157,7 @@
 	<dynamicField name="europeana_aggregation_edm_country.*" type="string" indexed="true" stored="true" multiValued="false"/>
 	<field name="europeana_aggregation_edm_language" type="string" indexed="true" stored="true" multiValued="true"/>
 	<dynamicField name="europeana_aggregation_edm_language.*" type="string" indexed="true" stored="true" multiValued="true"/>
-	<field name="europeana_aggregation_edm_rights" type="string" indexed="true" stored="false" multiValued="false"/>
+	<field name="europeana_aggregation_edm_rights" type="string" indexed="true" stored="false" multiValued="true"/>
 	<dynamicField name="europeana_aggregation_edm_rights.*" type="string" indexed="true" stored="false" multiValued="false"/>
 <field name="europeana_aggregation_edm_preview" type="string" indexed="true" stored="true" multiValued="true"/>
 	<!-- WEB RESOURCE -->
