@@ -120,7 +120,8 @@ public class SearchServiceImpl implements SearchService {
 	@Value("#{europeanaProperties['solr.password']}")
 	private String password;
 	
-	
+	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+
 	private String mltFields;
 
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
@@ -181,6 +182,13 @@ public class SearchServiceImpl implements SearchService {
 		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
 		if(newId!=null){
 			idServer.updateTime(newId.getNewId(), europeanaObjectId);
+			return newId.getNewId();
+		}
+		
+		newId = idServer
+				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + europeanaObjectId);
+		if(newId!=null){
+			idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX +europeanaObjectId);
 			return newId.getNewId();
 		}
 		return null;
