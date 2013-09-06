@@ -71,6 +71,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
 
@@ -175,6 +176,24 @@ public class SearchServiceImpl implements SearchService {
 		return fullBean;
 	}
 
+	@Override
+	public String resolveId(String europeanaObjectId) {
+		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
+		if(newId!=null){
+			idServer.updateTime(newId.getNewId(), europeanaObjectId);
+			return newId.getNewId();
+		}
+		return null;
+	}
+
+
+	@Override
+	public String resolveId(String collectionId, String recordId) {
+		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
+				recordId));
+	}
+	
+	
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException {
@@ -569,8 +588,9 @@ public class SearchServiceImpl implements SearchService {
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
-	
-	
+
+
+
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {

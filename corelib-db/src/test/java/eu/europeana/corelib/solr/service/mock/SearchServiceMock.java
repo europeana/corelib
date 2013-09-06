@@ -161,4 +161,16 @@ public class SearchServiceMock implements SearchService {
 			boolean similarItems) throws SolrTypeException {
 		return null;
 	}
+
+	@Override
+	public String resolveId(String europeanaObjectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String resolveId(String collectionId, String recordId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

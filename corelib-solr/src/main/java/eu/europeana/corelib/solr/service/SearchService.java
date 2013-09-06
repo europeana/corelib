@@ -96,6 +96,27 @@ public interface SearchService {
 			throws SolrTypeException;
 
 	/**
+	 * Retrieve the new record Id for the redirect from the old record id
+	 * 
+	 * @param europeanaObjectId
+	 *            - The old record id
+	 * @return The new record Id
+	 */
+	String resolveId(String europeanaObjectId);
+
+	/**
+	 * Retrieve the new record Id for the redirect from the old collection id
+	 * and record id
+	 * 
+	 * @param collectionId
+	 *            - The collection Id
+	 * @param recordId
+	 *            - The record Id
+	 * @return The new record id
+	 */
+	String resolveId(String collectionId, String recordId);
+
+	/**
 	 * Perform a search in SOLR based on the given query and return the results
 	 * in the format of the given class.
 	 * 
@@ -120,23 +141,22 @@ public interface SearchService {
 	 */
 	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query)
 			throws SolrTypeException;
-	
+
 	/**
 	 * Create collection list for a given query and facet field
 	 * 
-	 * @param facetFieldName 
-	 * 				The Facet field to create the collection for
+	 * @param facetFieldName
+	 *            The Facet field to create the collection for
 	 * @param queryString
-	 * 				The Query to use for creating the collection 
+	 *            The Query to use for creating the collection
 	 * @param refinements
-	 * 				Optional refinements
-	 * @return
-	 * 				A List of FacetField.Count objects containing the collection
+	 *            Optional refinements
+	 * @return A List of FacetField.Count objects containing the collection
 	 * @throws SolrTypeException
 	 * 
 	 */
 	List<FacetField.Count> createCollections(String facetFieldName,
-			String queryString, String... refinements) throws SolrTypeException;	
+			String queryString, String... refinements) throws SolrTypeException;
 
 	/**
 	 * returns a list of search suggestions and frequencies
