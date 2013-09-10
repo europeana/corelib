@@ -136,9 +136,8 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
 			throws MongoDBException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),similarItems);
+		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
 	}
-
 
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
@@ -438,6 +437,9 @@ public class SearchServiceImpl implements SearchService {
 				resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
 				resultSet.setResultSize(queryResponse.getResults().getNumFound());
 				resultSet.setSearchTime(queryResponse.getElapsedTime());
+				if (solrQuery.getBool("facet", false)) {
+					resultSet.setFacetFields(queryResponse.getFacetFields());
+				}
 			} catch (SolrServerException e) {
 				log.severe("SolrServerException: " + e.getMessage());
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
@@ -446,8 +448,6 @@ public class SearchServiceImpl implements SearchService {
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 			}
 		}
-
-
 
 		return resultSet;
 	}
