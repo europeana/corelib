@@ -41,6 +41,7 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.service.SearchService;
@@ -92,7 +93,7 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
-	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws SolrTypeException {
+	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws MongoDBException {
 		// not needed in this mock...
 		return null;
 	}
