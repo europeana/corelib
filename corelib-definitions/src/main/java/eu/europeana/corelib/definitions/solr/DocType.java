@@ -46,6 +46,13 @@ public enum DocType {
 		return null;
 	}
 
+	/**
+	 * Returns DocType object belongs to the name of that type (if any).
+	 * @param string
+	 *   The name of the DocType
+	 * @return
+	 *   The DocType object or null
+	 */
 	public static DocType safeValueOf(String string) {
 		if (StringUtils.isNotBlank(string)) {
 			for (DocType t : values()) {
