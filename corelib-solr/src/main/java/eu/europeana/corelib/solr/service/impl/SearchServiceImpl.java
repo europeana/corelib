@@ -55,6 +55,8 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.google.code.morphia.mapping.MappingException;
+
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
@@ -65,6 +67,7 @@ import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
@@ -132,14 +135,15 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
-			throws SolrTypeException {
+			throws MongoDBException {
 		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),similarItems);
 	}
 
 
 	@Override
-	public FullBean findById(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
+	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
 		long t0 = new Date().getTime();
+		try{
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null && similarItems) {
@@ -151,6 +155,10 @@ public class SearchServiceImpl implements SearchService {
 		}
 
 		return fullBean;
+		}
+		catch (MappingException e){
+			throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
+		}
 	}
 
 	@Override

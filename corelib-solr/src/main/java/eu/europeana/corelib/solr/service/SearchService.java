@@ -25,11 +25,13 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
+import eu.europeana.corelib.definitions.exception.EuropeanaException;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 
@@ -54,7 +56,7 @@ public interface SearchService {
 	 * @throws SolrTypeException
 	 */
 	FullBean findById(String collectionId, String recordId, boolean similarItems)
-			throws SolrTypeException;
+			throws MongoDBException;
 
 	/**
 	 * Retrieve a record by id.
@@ -67,7 +69,7 @@ public interface SearchService {
 	 * @throws SolrTypeException
 	 */
 	FullBean findById(String europeanaObjectId, boolean similarItems)
-			throws SolrTypeException;
+			throws MongoDBException;
 
 	/**
 	 * Retrieve a record by id.

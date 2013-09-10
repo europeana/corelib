@@ -46,6 +46,7 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.solr.ContentLoader;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
@@ -188,7 +189,7 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void testFindById() throws SolrTypeException {
+	public void testFindById() throws MongoDBException,SolrTypeException {
 		testCount++;
 		Query query = new Query("*:*");
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
