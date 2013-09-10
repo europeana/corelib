@@ -50,10 +50,12 @@ public final class SolrUtils {
 	}
 
 	/**
-	 * Checks if the Facet is a TYPE known DocType according to EDM
+	 * Checks if there is no TYPE facet with an invalid type according to EDM
+	 *
 	 * 
 	 * @param refinements
 	 * @return
+	 *   Returns true if there is no TYPE facet or each type facet has valid value
 	 */
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
