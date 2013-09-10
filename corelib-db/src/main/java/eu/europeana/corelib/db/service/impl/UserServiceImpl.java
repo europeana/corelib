@@ -46,7 +46,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
-import eu.europeana.corelib.solr.exceptions.SolrTypeException;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -396,7 +396,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		FullBean bean;
 		try {
 			bean = searchService.findById(europeanaObjectId,false);
-		} catch (SolrTypeException e) {
+		} catch (MongoDBException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}
 

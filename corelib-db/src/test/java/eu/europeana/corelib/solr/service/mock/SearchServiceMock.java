@@ -92,7 +92,7 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
-	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws SolrTypeException {
+	public FullBean findById(String collectionId, String recordId,boolean similarItems) {
 		// not needed in this mock...
 		return null;
 	}
