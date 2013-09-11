@@ -62,7 +62,7 @@ public final class ProvidedCHOFieldInput {
 			ProvidedCHOType providedCHO, SolrInputDocument solrInputDocument)
 			throws InstantiationException, IllegalAccessException {
 		solrInputDocument.addField(EdmLabel.EUROPEANA_ID.toString(),
-				"/item"+providedCHO.getAbout());
+				providedCHO.getAbout());
 		if (providedCHO.getSameAList() != null) {
 			for (SameAs sameAs : providedCHO.getSameAList()) {
 				solrInputDocument.addField(
