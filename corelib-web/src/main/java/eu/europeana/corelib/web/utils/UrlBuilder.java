@@ -34,6 +34,8 @@ public class UrlBuilder {
 
 	private String protocol = "http";
 	private StringBuilder baseUrl;
+	
+	private boolean relativeUrl = false;
 
 	private Map<String, String> params = new HashMap<String, String>();
 	private Map<String, List<String>> multiParams = new HashMap<String, List<String>>();
@@ -47,9 +49,13 @@ public class UrlBuilder {
 	
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
-		if (StringUtils.contains(url,"://")) {
-			protocol = StringUtils.substringBefore(url, "://");
-			url = StringUtils.substringAfter(url, "://");
+		if (StringUtils.startsWith(url, "/")) {
+			relativeUrl = true;
+		} else {
+			if (StringUtils.contains(url,"://")) {
+				protocol = StringUtils.substringBefore(url, "://");
+				url = StringUtils.substringAfter(url, "://");
+			}
 		}
 		if (StringUtils.containsNone(url, "?")) {
 			url = StringUtils.replace(url, "//", "/");
@@ -208,8 +214,11 @@ public class UrlBuilder {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(protocol);
-		sb.append("://").append(baseUrl.toString());
+		StringBuilder sb = new StringBuilder();
+		if (!relativeUrl) {
+			sb.append(protocol).append("://");
+		}
+		sb.append(baseUrl.toString());
 		if (params.size() + multiParams.size() > 0) {
 			boolean first = true;
 			sb.append("?");
