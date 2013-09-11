@@ -275,10 +275,12 @@ public class ConceptUpdater implements Updater<ConceptImpl,Concept>{
 			}
 		}
 
+		if(originalValues!=null){
 		for (String arrStr : originalValues) {
 			if (!newList.contains(arrStr)) {
 				newList.add(arrStr);
 			}
+		}
 		}
 		return newList;
 	}

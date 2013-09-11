@@ -93,7 +93,11 @@ public class SearchServiceMock implements SearchService {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws MongoDBException {
+=======
+	public FullBean findById(String collectionId, String recordId,boolean similarItems) {
+>>>>>>> 6d0b9742555daf63b98a9383997a92ce73887dbf
 		// not needed in this mock...
 		return null;
 	}
