@@ -47,10 +47,9 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
-<<<<<<< HEAD
+
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
-=======
->>>>>>> 6d0b9742555daf63b98a9383997a92ce73887dbf
+
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
