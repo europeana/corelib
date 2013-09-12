@@ -62,7 +62,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private Morphia morphia;
 	EuropeanaIdMongoServer europeanaIdMongoServer;
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-
+	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
+	
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
 		log.info("EDMMongoServer is instantiated");
@@ -144,6 +145,15 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		System.out.println(RESOLVE_PREFIX + id);
 		newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+
+		if (newId != null) {
+			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+			return datastore.find(FullBeanImpl.class).field("about")
+					.equal(newId.getNewId()).get();
+		}
+		
+		newId = europeanaIdMongoServer
+				.retrieveEuropeanaIdFromOld(PORTAL_PREFIX + id);
 
 		if (newId != null) {
 			europeanaIdMongoServer.updateTime(newId.getNewId(), id);

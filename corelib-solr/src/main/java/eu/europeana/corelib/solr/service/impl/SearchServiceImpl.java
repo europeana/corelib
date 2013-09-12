@@ -125,6 +125,8 @@ public class SearchServiceImpl implements SearchService {
 	
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 
+	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
+	
 	private String mltFields;
 
 	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
@@ -198,6 +200,14 @@ public class SearchServiceImpl implements SearchService {
 			idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX +europeanaObjectId);
 			return newId.getNewId();
 		}
+		
+		newId = idServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX+europeanaObjectId);
+		
+		if(newId!=null){
+			idServer.updateTime(newId.getNewId(), PORTAL_PREFIX +europeanaObjectId);
+			return newId.getNewId();
+		}
+		
 		return null;
 	}
 
