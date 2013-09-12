@@ -38,6 +38,11 @@ public class UrlBuilderTest {
 		String clean = "ftp://www.europeana.eu/portal/index.html?var1=value1&var2=value2";
 		UrlBuilder url = new UrlBuilder(dirty);
 		assertEquals("Cleaning of ending or double &", clean, url.toString());
+
+		String expected = "www.europeana.eu/portal/user";
+		url = new UrlBuilder("http://www.europeana.eu");
+		url.addPath("portal", "user").disableProtocol();
+		assertEquals("Disabling protocol", expected, url.toString());
 	}
 		
 	@Test
@@ -61,19 +66,15 @@ public class UrlBuilderTest {
 		assertEquals("Adding path and page failed", expected, url.toString());
 		
 		url = new UrlBuilder("http://www.europeana.eu/");
-		url.addPath("portal/");
-		url.addPage("/index.html?");
+		url.addPath("portal/").addPage("/index.html?");
 		assertEquals("Adding path and page containing unneeded slashes failed", expected, url.toString());
 		
 		expected = "http://www.europeana.eu/portal/record/09303/0B7E902E597DA16379C9AEC6EDC8C1E19CEBE9DC.html?start=1&query=money&startPage=1&rows=24";
 		url = new UrlBuilder("http://www.europeana.eu/");
-		url.addPath("portal/", "record");
-		url.addPath("09303");
+		url.addPath("portal/", "record").addPath("09303");
 		url.addPage("0B7E902E597DA16379C9AEC6EDC8C1E19CEBE9DC.html");
-		url.addParam("start", "1", true);
-		url.addParam("query", "money", true);
-		url.addParam("startPage", "1", true);
-		url.addParam("rows", "24", true);
+		url.addParam("start", "1", true).addParam("query", "money", true);
+		url.addParam("startPage", "1", true).addParam("rows", "24", true);
 		assertEquals("Adding path and page containing unneeded slashes failed", expected, url.toString());
 	}
 
