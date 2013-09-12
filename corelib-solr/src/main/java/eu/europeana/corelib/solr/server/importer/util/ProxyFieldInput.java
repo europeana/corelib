@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
+import eu.europeana.corelib.definitions.jibx.Year;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.MongoServer;
@@ -96,7 +97,12 @@ public final class ProxyFieldInput {
 			solrInputDocument.addField(EdmLabel.EDM_ISEUROPEANA_PROXY
 					.toString(), proxy.getEuropeanaProxy().isEuropeanaProxy());
 		}
-
+		if(proxy.getYearList()!=null){
+		for(Year year:proxy.getYearList()){
+		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
+				year, EdmLabel.PROXY_EDM_YEAR);
+		}
+		}
 		// Retrieve the dcterms and dc namespace fields
 		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy
 				.getChoiceList();
@@ -271,6 +277,8 @@ public final class ProxyFieldInput {
 				.getProxyInList()));
 		mongoProxy.setEdmHasMet(MongoUtils.createLiteralMapFromList(proxy
 				.getHasMetList()));
+		mongoProxy.setYear(MongoUtils.createLiteralMapFromList(proxy
+				.getYearList()));
 		mongoProxy.setEdmHasType(MongoUtils
 				.createResourceOrLiteralMapFromList(proxy.getHasTypeList()));
 		mongoProxy.setEdmIncorporates(SolrUtils.resourceListToArray(proxy
@@ -1236,7 +1244,7 @@ public final class ProxyFieldInput {
 		ProxyImpl retProxy = ((EdmMongoServer) mongoServer).getDatastore()
 				.find(ProxyImpl.class).filter("about", proxy.getAbout()).get();
 		if (retProxy != null) {
-			Updater<ProxyImpl,ProxyImpl> proxyUpdater = new ProxyUpdater();
+			Updater<ProxyImpl, ProxyImpl> proxyUpdater = new ProxyUpdater();
 			proxyUpdater.update(retProxy, mongoProxy, mongoServer);
 		} else {
 			mongoServer.getDatastore().save(mongoProxy);
