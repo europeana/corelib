@@ -36,6 +36,7 @@ public class UrlBuilder {
 	private StringBuilder baseUrl;
 	
 	private boolean relativeUrl = false;
+	private boolean trailingSlash = false;
 
 	private Map<String, String> params = new HashMap<String, String>();
 	private Map<String, List<String>> multiParams = new HashMap<String, List<String>>();
@@ -49,7 +50,7 @@ public class UrlBuilder {
 	
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
-		if (StringUtils.startsWith(url, "/")) {
+		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, "/")) {
 			relativeUrl = true;
 		} else {
 			if (StringUtils.contains(url,"://")) {
@@ -93,6 +94,7 @@ public class UrlBuilder {
 				baseUrl.append("/").append(path);
 			}
 		}
+		trailingSlash = true;
 		return this;
 	}
 	
@@ -101,6 +103,7 @@ public class UrlBuilder {
 			page = StringUtils.strip(page, "/?&");
 			baseUrl.append("/").append(page);
 		}
+		trailingSlash = false;
 		return this;
 	}
 
@@ -233,6 +236,9 @@ public class UrlBuilder {
 			sb.append(protocol).append("://");
 		}
 		sb.append(baseUrl.toString());
+		if (trailingSlash) {
+			sb.append("/");
+		}
 		if (params.size() + multiParams.size() > 0) {
 			boolean first = true;
 			sb.append("?");

@@ -39,15 +39,15 @@ public class UrlBuilderTest {
 		UrlBuilder url = new UrlBuilder(dirty);
 		assertEquals("Cleaning of ending or double &", clean, url.toString());
 
-		String expected = "www.europeana.eu/portal/user";
-		url = new UrlBuilder("http://www.europeana.eu");
+		String expected = "www.europeana.eu/portal/user/";
+		url = new UrlBuilder("http://www.europeana.eu/");
 		url.addPath("portal", "user").disableProtocol();
 		assertEquals("Disabling protocol", expected, url.toString());
 	}
 		
 	@Test
 	public void testAddPath() {
-		String expected = "http://www.europeana.eu/portal/user";
+		String expected = "http://www.europeana.eu/portal/user/";
 		UrlBuilder url = new UrlBuilder("http://www.europeana.eu");
 		url.addPath("portal", "user");
 		assertEquals("Adding two paths failed", expected, url.toString());
