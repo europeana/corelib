@@ -35,17 +35,16 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.ApplicationContext;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
+import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.dereference.ControlledVocabulary;
 import eu.europeana.corelib.dereference.VocabularyMongoServer;
 import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
-import eu.europeana.corelib.tools.AppContext;
 
 /**
  * Denormalization Utility. It retrieves the description of a reference URI
@@ -67,10 +66,8 @@ public class Extractor {
 	 */
 	public Extractor(ControlledVocabularyImpl controlledVocabulary) {
 		vocabulary = controlledVocabulary;
-		ApplicationContext applicationContext = AppContext
-				.getApplicationContext();
-		mongoServer = (VocabularyMongoServer) applicationContext
-				.getBean("corelib_solr_vocabularyMongoServer");
+		mongoServer = ApplicationContextContainer
+				.getBean(VocabularyMongoServer.class, "corelib_solr_vocabularyMongoServer");
 	}
 
 	public Extractor() {

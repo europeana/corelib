@@ -28,4 +28,6 @@
 
 	<util:properties id="europeanaProperties" location="file:${EUROPEANA_PROPERTIES}" />
 
+	<bean name="corelib_definitions_contextcontainer" class="eu.europeana.corelib.definitions.ApplicationContextContainer"/>
+
 </beans>

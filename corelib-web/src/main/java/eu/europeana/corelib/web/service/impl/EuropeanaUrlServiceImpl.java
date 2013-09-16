@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 
+import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.web.service.EuropeanaUrlService;
 import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
@@ -13,6 +14,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 
 	@Resource
 	private Configuration configuration;
+	
+	public static EuropeanaUrlService getBeanInstance() {
+		return ApplicationContextContainer.getBean(EuropeanaUrlServiceImpl.class);
+	}
 	
 	@Override
 	public UrlBuilder getApi2Home(String apikey) {
