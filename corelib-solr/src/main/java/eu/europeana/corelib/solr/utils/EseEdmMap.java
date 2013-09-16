@@ -19,6 +19,8 @@ package eu.europeana.corelib.solr.utils;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
+import eu.europeana.corelib.solr.exceptions.EdmFieldNotFoundException;
+import eu.europeana.corelib.solr.exceptions.EdmValueNotFoundException;
 
 /**
  * Enumeration mapping information from ESE to EDM
@@ -32,40 +34,93 @@ public enum EseEdmMap {
 	EUROPEANA_ISSHOWNBY("europeana_isShownBy") {
 		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getAggregations().get(0).getEdmIsShownBy();
+			try {
+				return bean.getAggregations().get(0).getEdmIsShownBy();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException("edm:isShownBy",
+						bean.getAbout());
+			}
 		}
 	},
 	EUROPEANA_ISSHOWNAT("europeana_isShownAt") {
 		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getAggregations().get(0).getEdmIsShownAt();
+			try {
+				return bean.getAggregations().get(0).getEdmIsShownAt();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException("edm:isShownAt",
+						bean.getAbout());
+			}
 		}
 	},
 	EUROPEANA_OBJECT("europeana_object") {
 		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getAggregations().get(0).getEdmObject();
+			try {
+				return bean.getAggregations().get(0).getEdmObject();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException("edm:object",
+						bean.getAbout());
+			}
 		}
 	},
 	DC_IDENTIFIER("dc_identifier") {
 		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getProxies().get(0).getDcIdentifier().values()
-					.iterator().next().get(0);
+			try {
+				return bean.getProxies().get(0).getDcIdentifier().values()
+						.iterator().next().get(0);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException("dc:identifier",
+						bean.getAbout());
+			}
 		}
 	},
 	EUROPEANA_FAKE("europeana_fake") {
 		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getAggregations().get(0).getAbout();
+			try {
+				return bean.getAggregations().get(0).getAbout();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException(
+						"ore:Aggregation@rdf:about", bean.getAbout());
+			}
 		}
 	},
 	EUROPEANA_HASVIEW("edm_hasView") {
-		@Override 
+		@Override
 		public String getEdmValue(FullBean bean) {
-			return bean.getEuropeanaAggregation().getEdmHasView()[0];
+			try {
+				return bean.getEuropeanaAggregation().getEdmHasView()[0];
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdmValueNotFoundException("edm:hasView",
+						bean.getAbout());
+			}
 		}
-	};
+	},
+	// For 1914-1918
+	ID_EUROPEANAURI("oai_europeana19141918_id_europeanaURI") {
+		@Override
+		public String getEdmValue(FullBean bean) {
+			try {
+				return bean.getAbout();
+			} catch (NullPointerException e) {
+				throw e;
+			}
+		}
+	},
+	EUROPEANA_IDENTIFIER("europeana_identifier") {
+		@Override
+		public String getEdmValue(FullBean bean) {
+			try {
+				return bean.getAbout();
+			} catch (NullPointerException e) {
+				throw e;
+			}
+		}
+	}
+
+	;
 	private String field;
 
 	private EseEdmMap(String field) {
@@ -83,14 +138,15 @@ public enum EseEdmMap {
 		return this.field;
 	}
 
-	public static EseEdmMap getEseEdmMap(String field) {
+	public static EseEdmMap getEseEdmMap(String field, String recordId) {
 		for (EseEdmMap map : EseEdmMap.values())
 			if (StringUtils.equals(map.field, field)) {
 				return map;
 			}
-		throw new RuntimeException("Field not found :" + field);
+		throw new EdmFieldNotFoundException(field, recordId);
 	}
 
-	public abstract String getEdmValue(FullBean bean);
+	public abstract String getEdmValue(FullBean bean)
+			throws EdmValueNotFoundException, NullPointerException;
 
 }
