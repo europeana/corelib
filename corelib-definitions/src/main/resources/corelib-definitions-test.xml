@@ -29,6 +29,6 @@
 	<util:properties id="europeanaProperties" location="classpath:test-config/europeana-test.properties" />
 
 	<!-- INTERNAL DEFINITIONS -->
-	<import resource="internal/ccorelib-definitions-beans.xml"/>
+	<import resource="internal/corelib-definitions-beans.xml"/>
 
 </beans>
