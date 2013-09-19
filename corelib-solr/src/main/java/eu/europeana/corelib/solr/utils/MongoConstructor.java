@@ -203,6 +203,8 @@ public class MongoConstructor {
 		if (record.getEuropeanaAggregationList() != null) {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
+				AggregatedCHO aggregatedCho = new AggregatedCHO();
+				aggregatedCho.setResource(providedCHO+record.getProvidedCHOList().get(0).getAbout());
 				eaggregation.setAbout(europeanaAggregationAbout);
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
 						.createAggregationMongoFields(eaggregation,
