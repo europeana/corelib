@@ -24,14 +24,14 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getApi2Home(String apikey) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
-		url.addPath("v2").addParam(PARAM_API_V2_APIKEY, apikey, true);
+		url.addPath(PATH_API_V2).addParam(PARAM_API_V2_APIKEY, apikey, true);
 		return url;
 	}
 
 	@Override
 	public UrlBuilder getApi2SearchJson(String apikey, String query, String rows) throws UnsupportedEncodingException {
 		UrlBuilder url = getApi2Home(apikey);
-		url.addPage("search.json").addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, "UTF-8"), true);
+		url.addPage("search.json").addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, ENC_UTF8), true);
 		url.addParam(PARAM_SEARCH_ROWS, rows, true);
 		return url;
 	}
@@ -39,21 +39,21 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getApi2RecordJson(String apikey, String collectionid, String objectid) {
 		UrlBuilder url = getApi2Home(apikey);
-		url.addPath("record", collectionid).addPage(objectid+".json");
+		url.addPath(PATH_RECORD, collectionid).addPage(objectid+EXT_JSON);
 		return url;
 	}
 	
 	@Override
 	public UrlBuilder getApi2RecordJson(String apikey, String europeanaId) {
 		UrlBuilder url = getApi2Home(apikey);
-		url.addPath("record").addPage(europeanaId+".json");
+		url.addPath(PATH_RECORD).addPage(europeanaId+EXT_JSON);
 		return url;
 	}
 	
 	@Override
 	public UrlBuilder getApi2Redirect(int uid, String shownAt, String provider, String europeanaId, String profile) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
-		url.addPath(String.valueOf(uid), "redirect").disableTrailingSlash();
+		url.addPath(String.valueOf(uid), PATH_API_REDIRECT).disableTrailingSlash();
 		url.addParam("shownAt", shownAt).addParam("provider", provider);
 		url.addParam("id", getPortalResolve(europeanaId).toString()).addParam("profile", profile);
 		return url;
@@ -73,8 +73,8 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	
 	@Override
 	public UrlBuilder getPortalResolve(String europeanaId) {
-		UrlBuilder url = new UrlBuilder("http://www.europeana.eu");
-		url.addPath("resolve","record", europeanaId).disableTrailingSlash();
+		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
+		url.addPath(PATH_PORTAL_RESOLVE,PATH_RECORD, europeanaId).disableTrailingSlash();
 		return url;
 	}
 
@@ -87,7 +87,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public UrlBuilder getPortalSearch(boolean relative, String searchpage, String query, String rows)
 			throws UnsupportedEncodingException {
 		UrlBuilder url = getPortalHome(relative);
-		url.addPage(searchpage).addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, "UTF-8"), true);
+		url.addPage(searchpage).addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, ENC_UTF8), true);
 		url.addParam(PARAM_SEARCH_ROWS, rows, true);
 		return url;
 	}
@@ -95,14 +95,14 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getPortalRecord(boolean relative, String collectionid, String objectid) {
 		UrlBuilder url = getPortalHome(relative);
-		url.addPath("record", collectionid).addPage(objectid+".html");
+		url.addPath(PATH_RECORD, collectionid).addPage(objectid+EXT_HTML);
 		return url;
 	}
 	
 	@Override
 	public UrlBuilder getPortalRecord(boolean relative, String europeanaId) {
 		UrlBuilder url = getPortalHome(relative);
-		url.addPath("record").addPage(europeanaId+".html");
+		url.addPath(PATH_RECORD).addPage(europeanaId+EXT_HTML);
 		return url;
 	}
 	
@@ -110,7 +110,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
 		UrlBuilder url = new UrlBuilder(URL_IMAGE_SITE);
 		try {
-			url.addParam("uri", URLEncoder.encode(thumbnail, "UTF-8"));
+			url.addParam("uri", URLEncoder.encode(thumbnail, ENC_UTF8));
 		} catch (UnsupportedEncodingException e) {
 		}
 		url.addParam("size", ThumbSize.LARGE.toString());
