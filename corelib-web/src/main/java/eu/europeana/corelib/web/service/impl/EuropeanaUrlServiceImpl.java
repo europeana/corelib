@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import javax.annotation.Resource;
 
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
+import eu.europeana.corelib.definitions.model.ThumbSize;
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.web.service.EuropeanaUrlService;
 import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
@@ -42,6 +44,22 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	}
 	
 	@Override
+	public UrlBuilder getApi2RecordJson(String apikey, String europeanaId) {
+		UrlBuilder url = getApi2Home(apikey);
+		url.addPath("record").addPage(europeanaId+".json");
+		return url;
+	}
+	
+	@Override
+	public UrlBuilder getApi2Redirect(int uid, String shownAt, String provider, String europeanaId, String profile) {
+		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
+		url.addPath(String.valueOf(uid), "redirect").disableTrailingSlash();
+		url.addParam("shownAt", shownAt).addParam("provider", provider);
+		url.addParam("id", getPortalResolve(europeanaId).toString()).addParam("profile", profile);
+		return url;
+	}
+	
+	@Override
 	public UrlBuilder getPortalHome(boolean relative) {
 		UrlBuilder url;
 		if (relative) {
@@ -50,6 +68,13 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 			url = new UrlBuilder(configuration.getPortalServer());
 		}
 		url.addPath(configuration.getPortalName());
+		return url;
+	}
+	
+	@Override
+	public UrlBuilder getPortalResolve(String europeanaId) {
+		UrlBuilder url = new UrlBuilder("http://www.europeana.eu");
+		url.addPath("resolve","record", europeanaId).disableTrailingSlash();
 		return url;
 	}
 
@@ -73,5 +98,25 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		url.addPath("record", collectionid).addPage(objectid+".html");
 		return url;
 	}
+	
+	@Override
+	public UrlBuilder getPortalRecord(boolean relative, String europeanaId) {
+		UrlBuilder url = getPortalHome(relative);
+		url.addPath("record").addPage(europeanaId+".html");
+		return url;
+	}
+	
+	@Override
+	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
+		UrlBuilder url = new UrlBuilder(URL_IMAGE_SITE);
+		try {
+			url.addParam("uri", URLEncoder.encode(thumbnail, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+		}
+		url.addParam("size", ThumbSize.LARGE.toString());
+		url.addParam("type", type.toString());
+		return url;
+	}
+	
 
 }

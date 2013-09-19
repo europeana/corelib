@@ -18,7 +18,7 @@
 package eu.europeana.corelib.web.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +38,8 @@ public class UrlBuilder {
 	private boolean relativeUrl = false;
 	private boolean trailingSlash = false;
 
-	private Map<String, String> params = new HashMap<String, String>();
-	private Map<String, List<String>> multiParams = new HashMap<String, List<String>>();
+	private Map<String, String> params = new LinkedHashMap<String, String>();
+	private Map<String, List<String>> multiParams = new LinkedHashMap<String, List<String>>();
 
 	public UrlBuilder(String url) {
 		setBaseUrl(url);
@@ -86,6 +86,11 @@ public class UrlBuilder {
 		relativeUrl = true;
 		return this;
 	}
+
+	public UrlBuilder disableTrailingSlash() {
+		trailingSlash = false;
+		return this;
+	}
 	
 	public UrlBuilder addPath(String... paths) {
 		if (StringArrayUtils.isNotBlank(paths)) {
@@ -127,6 +132,11 @@ public class UrlBuilder {
 		}
 		return this;
 	}
+	
+	public UrlBuilder addParam(String key, String value) {
+		return addParam(key, value, true);
+	}
+
 
 	public UrlBuilder addParam(String key, String value, boolean override) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
@@ -138,6 +148,10 @@ public class UrlBuilder {
 		return this;
 	}
 
+	public UrlBuilder addParam(String key, String[] values) {
+		return addParam(key, values, true);
+	}
+	
 	public UrlBuilder addParam(String key, String[] values, boolean override) {
 		if (StringUtils.isNotBlank(key)) {
 			if (override) {

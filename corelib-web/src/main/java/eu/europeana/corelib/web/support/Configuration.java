@@ -122,6 +122,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['api.optOutList']}")
 	private String optOutList;
 
+	@Value("#{europeanaProperties['api.rowLimit']}")
+	private int apiRowLimit = 96;
+
 	@Value("#{europeanaProperties['portal.sitemap.cache']}")
 	private String sitemapCache;
 
@@ -305,5 +308,9 @@ public class Configuration {
 
 	public String getSitemapCache() {
 		return sitemapCache;
+	}
+	
+	public int getApiRowLimit() {
+		return apiRowLimit;
 	}
 }
