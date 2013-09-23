@@ -144,7 +144,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
 		long t0 = new Date().getTime();
-		try{
+		
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null && similarItems) {
@@ -156,10 +156,8 @@ public class SearchServiceImpl implements SearchService {
 		}
 
 		return fullBean;
-		}
-		catch (MappingException e){
-			throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
-		}
+		
+		
 	}
 
 	@Override
