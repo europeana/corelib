@@ -49,7 +49,7 @@ public interface EuropeanaUrlService {
 
 	UrlBuilder getApi2RecordJson(String apikey, String europeanaId);
 	
-	UrlBuilder getApi2Redirect(int uid, String showAt, String provider, String europeanaId, String profile);
+	UrlBuilder getApi2Redirect(long uid, String showAt, String provider, String europeanaId, String profile);
 	
 	UrlBuilder getPortalHome(boolean relative);
 
