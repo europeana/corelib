@@ -38,7 +38,7 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void getPortalResolveTest() {
 		String expected = "http://www.europeana.eu/resolve/record/euro/testrecord";
-		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord").toString());
+		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord"));
 
 	}
 

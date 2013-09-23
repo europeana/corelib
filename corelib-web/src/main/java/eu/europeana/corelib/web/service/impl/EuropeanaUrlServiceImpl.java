@@ -55,7 +55,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
 		url.addPath(String.valueOf(uid), PATH_API_REDIRECT).disableTrailingSlash();
 		url.addParam("shownAt", shownAt).addParam("provider", provider);
-		url.addParam("id", getPortalResolve(europeanaId).toString()).addParam("profile", profile);
+		url.addParam("id", getPortalResolve(europeanaId)).addParam("profile", profile);
 		return url;
 	}
 	
@@ -72,10 +72,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	}
 	
 	@Override
-	public UrlBuilder getPortalResolve(String europeanaId) {
+	public String getPortalResolve(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
 		url.addPath(PATH_PORTAL_RESOLVE,PATH_RECORD, europeanaId).disableTrailingSlash();
-		return url;
+		return url.toString();
 	}
 
 	@Override
