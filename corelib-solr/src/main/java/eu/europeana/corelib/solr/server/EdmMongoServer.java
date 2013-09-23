@@ -18,6 +18,7 @@ package eu.europeana.corelib.solr.server;
 
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.MongoServer;
+import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 /**
@@ -35,8 +36,9 @@ public interface EdmMongoServer extends MongoServer {
 	 *            The object id to retrieve from the database
 	 * @return A document from MongoDB - case where the user selects to retrieve
 	 *         one specific object
+	 * @throws MongoDBException 
 	 */
-	FullBean getFullBean(String id);
+	FullBean getFullBean(String id) throws MongoDBException;
 
 	/**
 	 * Search using the rdf:about field of an EDM entity

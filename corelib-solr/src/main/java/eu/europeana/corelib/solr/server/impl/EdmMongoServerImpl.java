@@ -23,8 +23,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
+import com.google.code.morphia.mapping.MappingException;
 import com.mongodb.Mongo;
 
+import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -63,7 +65,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	EuropeanaIdMongoServer europeanaIdMongoServer;
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-	
+
 	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
 		log.info("EDMMongoServer is instantiated");
@@ -80,7 +82,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	}
 
-	
 	@Override
 	public void setEuropeanaIdMongoServer(
 			EuropeanaIdMongoServer europeanaIdMongoServer) {
@@ -126,8 +127,13 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public FullBean getFullBean(String id) {
-		return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
+	public FullBean getFullBean(String id) throws MongoDBException {
+		try {
+			return datastore.find(FullBeanImpl.class).field("about").equal(id)
+					.get();
+		} catch (RuntimeException e) {
+			throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
+		}
 	}
 
 	@Override
@@ -151,9 +157,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			return datastore.find(FullBeanImpl.class).field("about")
 					.equal(newId.getNewId()).get();
 		}
-		
-		newId = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(PORTAL_PREFIX + id);
+
+		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX
+				+ id);
 
 		if (newId != null) {
 			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
