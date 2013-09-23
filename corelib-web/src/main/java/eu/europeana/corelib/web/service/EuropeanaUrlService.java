@@ -31,6 +31,7 @@ public interface EuropeanaUrlService {
 	static final String EXT_JSON			= ".json";
 	static final String EXT_JSON_LD			= ".jsonld";
 	static final String EXT_HTML			= ".html";
+	static final String EXT_SRW				= ".srw";
 	
 	// GENERAL PARAMS
 	static final String PARAM_SEARCH_QUERY 	= "query";
@@ -39,15 +40,25 @@ public interface EuropeanaUrlService {
 	static final String PARAM_SEARCH_FACET 	= "qf";
 
 	// API PARAMS
-	static final String PARAM_API_V2_APIKEY	= "wskey";
+	static final String PARAM_API_APIKEY	= "wskey";
+	static final String PARAM_API_V1_SEARCH_QUERY	= "searchTerms";
+	static final String PARAM_API_V1_SEARCH_START	= "startPage";
+
+	UrlBuilder getApi1Home(String apikey);
 	
 	UrlBuilder getApi2Home(String apikey);
+
+	UrlBuilder getApi1SearchJson(String apikey, String query, int start) throws UnsupportedEncodingException;
 	
 	UrlBuilder getApi2SearchJson(String apikey, String query, String rows) throws UnsupportedEncodingException;
 
 	UrlBuilder getApi2RecordJson(String apikey, String collectionid, String objectid);
 
 	UrlBuilder getApi2RecordJson(String apikey, String europeanaId);
+
+	UrlBuilder getApi1Record(String apikey, String europeanaId, String extention);
+	
+	UrlBuilder getApi2Record(String apikey, String europeanaId, String extention);
 	
 	UrlBuilder getApi2Redirect(long uid, String showAt, String provider, String europeanaId, String profile);
 	

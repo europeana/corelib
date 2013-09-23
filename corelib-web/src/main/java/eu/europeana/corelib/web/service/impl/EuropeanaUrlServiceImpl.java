@@ -20,19 +20,34 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public static EuropeanaUrlService getBeanInstance() {
 		return ApplicationContextContainer.getBean(EuropeanaUrlServiceImpl.class);
 	}
+
+	@Override
+	public UrlBuilder getApi1Home(String apikey) {
+		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
+		url.addPath(PATH_API_V1).addParam(PARAM_API_APIKEY, apikey, true);
+		return url;
+	}
 	
 	@Override
 	public UrlBuilder getApi2Home(String apikey) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
-		url.addPath(PATH_API_V2).addParam(PARAM_API_V2_APIKEY, apikey, true);
+		url.addPath(PATH_API_V2).addParam(PARAM_API_APIKEY, apikey, true);
 		return url;
 	}
-
+	
+	@Override
+	public UrlBuilder getApi1SearchJson(String apikey, String query, int start) throws UnsupportedEncodingException {
+		UrlBuilder url = getApi1Home(apikey);
+		url.addPage("search.json").addParam(PARAM_API_V1_SEARCH_QUERY, URLEncoder.encode(query, ENC_UTF8), true);
+		url.addParam(PARAM_API_V1_SEARCH_START, String.valueOf(start));
+		return url;
+	}
+	
 	@Override
 	public UrlBuilder getApi2SearchJson(String apikey, String query, String rows) throws UnsupportedEncodingException {
 		UrlBuilder url = getApi2Home(apikey);
-		url.addPage("search.json").addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, ENC_UTF8), true);
-		url.addParam(PARAM_SEARCH_ROWS, rows, true);
+		url.addPage("search.json").addParam(PARAM_SEARCH_QUERY, URLEncoder.encode(query, ENC_UTF8));
+		url.addParam(PARAM_SEARCH_ROWS, rows);
 		return url;
 	}
 	
@@ -45,8 +60,20 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	
 	@Override
 	public UrlBuilder getApi2RecordJson(String apikey, String europeanaId) {
+		return getApi2Record(apikey, europeanaId, EXT_JSON);
+	}
+	
+	@Override
+	public UrlBuilder getApi1Record(String apikey, String europeanaId, String extention) {
+		UrlBuilder url = getApi1Home(apikey);
+		url.addPath(PATH_RECORD).addPage(europeanaId+extention);
+		return url;
+	}
+	
+	@Override
+	public UrlBuilder getApi2Record(String apikey, String europeanaId, String extention) {
 		UrlBuilder url = getApi2Home(apikey);
-		url.addPath(PATH_RECORD).addPage(europeanaId+EXT_JSON);
+		url.addPath(PATH_RECORD).addPage(europeanaId+extention);
 		return url;
 	}
 	
