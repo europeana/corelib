@@ -278,13 +278,13 @@ public final class MongoUtils {
 					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
-				if (obj.getString() != null) {
+				if (StringUtils.isNotBlank(obj.getString())) {
 					List<String> val = retMap.get("def") != null ? retMap
 							.get("def") : new ArrayList<String>();
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
-				if (obj.getResource() != null) {
+				if (obj.getResource() != null && StringUtils.isNotBlank(obj.getResource().getResource())) {
 					List<String> val = retMap.get("def") != null ? retMap
 							.get("def") : new ArrayList<String>();
 					val.add(obj.getResource().getResource());
