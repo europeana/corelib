@@ -104,6 +104,13 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		url.addPath(PATH_PORTAL_RESOLVE,PATH_RECORD, europeanaId).disableTrailingSlash();
 		return url.toString();
 	}
+	
+	@Override
+	public String getPortalResolve(String collectionid, String objectid) {
+		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
+		url.addPath(PATH_PORTAL_RESOLVE,PATH_RECORD, collectionid, objectid).disableTrailingSlash();
+		return url.toString();
+	}
 
 	@Override
 	public UrlBuilder getPortalSearch(boolean relative, String query, String rows) throws UnsupportedEncodingException {
