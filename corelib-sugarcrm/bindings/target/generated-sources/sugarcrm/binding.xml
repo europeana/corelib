@@ -1,0 +1,5 @@
+<binding name="binding" package="eu.europeana.uim.sugarcrmclient.jibxbindings" trim-whitespace="true">
+  <include path="sugarcrmBinding.xml"/>
+  <include path="soap_encodingBinding.xml"/>
+  <include path="wsdlBinding.xml"/>
+</binding>

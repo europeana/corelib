@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/osgi
+	http://www.springframework.org/schema/osgi/spring-osgi.xsd
+	http://www.springframework.org/schema/oxm 
+	http://www.springframework.org/schema/oxm/spring-oxm-1.5.xsd">
+
+
+
+	<!-- Spring specific declarations of SugarCRM Client instances -->
+	<bean id="sugarWsClientFactory" class="eu.europeana.uim.sugarcrmclient.ws.ClientFactory">
+		<property name="webServiceTemplate" ref="webServiceTemplate" />
+	</bean>
+
+	<bean id="sugarWsClient" factory-bean="sugarWsClientFactory"
+		factory-method="createInstance">
+		<constructor-arg value="#{europeanaProperties['sugarcrm.host']}" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.user']}" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.password']}" />
+	</bean>
+
+	<bean id="messageFactory"
+		class="eu.europeana.uim.sugarcrmclient.internal.ExtendedSaajSoapMessageFactory" />
+
+	<bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+		<constructor-arg ref="messageFactory" />
+		<!-- <property name="defaultUri" value="${host}" /> -->
+		<property name="marshaller" ref="jibxMarshaller" />
+		<property name="unmarshaller" ref="jibxMarshaller" />
+	</bean>
+
+	<bean id="jibxMarshaller" class="org.springframework.oxm.jibx.JibxMarshaller">
+		<property name="targetClass"
+			value="eu.europeana.uim.sugarcrmclient.jibxbindings.Login" />
+	</bean>
+
+	<!-- Quartz Scheduler Bean -->
+	<bean name="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="eu.europeana.uim.sugarcrmclient.ws.quartz.PollingBean" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="sugarWsClient" value-ref="sugarWsClient" />
+			</map>
+		</property>
+		
+	</bean>
+
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="sugarCRMPollingJob" />
+		<property name="startDelay" value="10000" />
+		<property name="repeatInterval" value="150000" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+	</bean>
+
+
+</beans>

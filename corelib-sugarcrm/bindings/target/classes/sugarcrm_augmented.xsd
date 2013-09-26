@@ -1,0 +1,1513 @@
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns="http://www.sugarcrm.com/sugarcrm" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://www.sugarcrm.com/sugarcrm">
+	
+	<xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"
+		schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+	<xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" schemaLocation="http://schemas.xmlsoap.org/wsdl/" />
+	
+
+	
+	<xsd:element name="note_attachment" type="tns:note_attachment" />
+
+	<xsd:element name="new_note_attachment" type="tns:new_note_attachment" />
+	
+	<xsd:element name="new_return_note_attachment" type="tns:new_return_note_attachment" />
+	
+	<xsd:element name="return_note_attachment" type="tns:return_note_attachment" />
+	
+	<!-- 
+	<xsd:element name="user_auth" type="tns:user_auth" />
+	 -->
+	 
+	<xsd:element name="field" type="tns:field" />
+	
+	<xsd:element name="link_field" type="tns:link_field" />
+	
+	<xsd:element name="field_list" type="tns:field_list" />
+	
+	<xsd:element name="link_field_list" type="tns:link_field_list" />
+	
+	<xsd:element name="name_value" type="tns:name_value" />
+	
+	<xsd:element name="name_value_list" type="tns:name_value_list" />
+	
+	<xsd:element name="name_value_lists" type="tns:name_value_lists" />
+	
+	<xsd:element name="select_fields" type="tns:select_fields" />
+	
+	<xsd:element name="module_fields" type="tns:module_fields" />
+	
+	<xsd:element name="new_module_fields" type="tns:new_module_fields" />
+	
+	<xsd:element name="module_list" type="tns:module_list" />
+	
+	<xsd:element name="error_value" type="tns:error_value" />
+	
+	<xsd:element name="entry_value" type="tns:entry_value" />
+	
+	<xsd:element name="entry_list" type="tns:entry_list" />
+	
+	<xsd:element name="get_mailmerge_document_result" type="tns:get_mailmerge_document_result" />
+	
+	<xsd:element name="link_name_to_fields_array" type="tns:link_name_to_fields_array" />
+	
+	<xsd:element name="link_value" type="tns:link_value" />
+	
+	<xsd:element name="link_array_list" type="tns:link_array_list" />
+	
+	<xsd:element name="link_name_value" type="tns:link_name_value" />
+	
+	<xsd:element name="link_list" type="tns:link_list" />
+	
+	<xsd:element name="link_lists" type="tns:link_lists" />
+	
+	<xsd:element name="get_entry_result_version2" type="tns:get_entry_result_version2" />
+	
+	<xsd:element name="return_search_result" type="tns:return_search_result" />
+	
+	<xsd:element name="get_entry_list_result" type="tns:get_entry_list_result" />
+	
+	<xsd:element name="get_entry_list_result_version2" type="tns:get_entry_list_result_version2" />
+	
+	<xsd:element name="get_entry_result" type="tns:get_entry_result" />
+	
+	<xsd:element name="get_server_info_result" type="tns:get_server_info_result" />
+	
+	<xsd:element name="set_entry_result" type="tns:set_entry_result" />
+	
+	<xsd:element name="new_set_entry_result" type="tns:new_set_entry_result" />
+	
+	<xsd:element name="new_set_entries_result" type="tns:new_set_entries_result" />
+	
+	<xsd:element name="set_entries_result" type="tns:set_entries_result" />
+	
+	<xsd:element name="id_mod" type="tns:id_mod" />
+	
+	<xsd:element name="ids_mods" type="tns:ids_mods" />
+	
+	<xsd:element name="get_relationships_result" type="tns:get_relationships_result" />
+	
+	<xsd:element name="set_relationship_value" type="tns:set_relationship_value" />
+	
+	<xsd:element name="set_relationship_list" type="tns:set_relationship_list" />
+	
+	<xsd:element name="new_set_relationhip_ids" type="tns:new_set_relationhip_ids" />
+	
+	<xsd:element name="new_set_relationship_list_result" type="tns:new_set_relationship_list_result" />
+	
+	<xsd:element name="set_relationship_list_result" type="tns:set_relationship_list_result" />
+	
+	<xsd:element name="document_revision" type="tns:document_revision" />
+	
+	<xsd:element name="get_entry_list_result_encoded" type="tns:get_entry_list_result_encoded" />
+	
+	<xsd:element name="get_sync_result_encoded" type="tns:get_sync_result_encoded" />
+	
+	<xsd:element name="get_quick_sync_result_encoded" type="tns:get_quick_sync_result_encoded" />
+	
+	<xsd:element name="return_document_revision" type="tns:return_document_revision" />
+	
+	<xsd:element name="new_return_document_revision" type="tns:new_return_document_revision" />
+	
+	<xsd:element name="name_value_operator" type="tns:name_value_operator" />
+	
+	<xsd:element name="name_value_operator_list" type="tns:name_value_operator_list" />
+	
+	<xsd:element name="newsletter" type="tns:newsletter" />
+	
+	<xsd:element name="newsletter_list" type="tns:newsletter_list" />
+	
+	<xsd:element name="get_subscription_lists_result" type="tns:get_subscription_lists_result" />
+	
+	<xsd:element name="str_array" type="tns:str_array" />
+	
+	<xsd:element name="name_value_lists_error" type="tns:name_value_lists_error" />
+	
+	<xsd:element name="get_entries_count_result" type="tns:get_entries_count_result" />
+	
+	<xsd:element name="set_entries_detail_result" type="tns:set_entries_detail_result" />
+	
+	<xsd:element name="contact_detail" type="tns:contact_detail" />
+	
+	<xsd:element name="contact_detail_array" type="tns:contact_detail_array" />
+	
+	<xsd:element name="user_detail" type="tns:user_detail" />
+	
+	<xsd:element name="user_detail_array" type="tns:user_detail_array" />
+	
+	<xsd:element name="is_user_admin" type="tns:is_user_admin" />
+	
+	<xsd:element name="is_user_adminResponse" type="tns:is_user_adminResponse" />
+	
+    <xsd:element name="login" type="tns:login" /> 
+	
+	<xsd:element name="loginResponse" type="tns:loginResponse" />
+	
+	<xsd:element name="is_loopback" type="tns:is_loopback" />
+
+	<xsd:element name="is_loopbackResponse" type="tns:is_loopbackResponse" />
+
+	<xsd:element name="seamless_login" type="tns:seamless_login" />
+	
+	<xsd:element name="seamless_loginResponse" type="tns:seamless_loginResponse" />
+
+	<xsd:element name="get_entry_list" type="tns:get_entry_list" />
+	
+	<xsd:element name="get_entry_listResponse" type="tns:get_entry_listResponse" />
+
+	<xsd:element name="get_entry" type="tns:get_entry" />
+	
+	<xsd:element name="get_entryResponse" type="tns:get_entryResponse" />
+
+	<xsd:element name="get_entries" type="tns:get_entries" />
+	
+	<xsd:element name="get_entriesResponse" type="tns:get_entriesResponse" />
+
+	<xsd:element name="set_entry" type="tns:set_entry" />
+
+	<xsd:element name="set_entryResponse" type="tns:set_entryResponse" />
+
+	<xsd:element name="set_entries" type="tns:set_entries" />
+	
+	<xsd:element name="set_entriesResponse" type="tns:set_entriesResponse" />
+	
+	<xsd:element name="set_note_attachment" type="tns:set_note_attachment" />
+	
+	<xsd:element name="set_note_attachmentResponse" type="tns:set_note_attachmentResponse" />
+	
+	<xsd:element name="get_note_attachment" type="tns:get_note_attachment" />
+	
+	<xsd:element name="get_note_attachmentResponse" type="tns:get_note_attachmentResponse" />
+	
+	<xsd:element name="relate_note_to_module" type="tns:relate_note_to_module" />
+	
+	<xsd:element name="relate_note_to_moduleResponse" type="tns:relate_note_to_moduleResponse" />
+	
+	<xsd:element name="get_related_notes" type="tns:get_related_notes" />
+	
+	<xsd:element name="get_related_notesResponse" type="tns:get_related_notesResponse" />
+	
+	<xsd:element name="logout" type="tns:logout" />
+	
+	<xsd:element name="logoutResponse" type="tns:logoutResponse" />
+	
+	<xsd:element name="get_module_fields" type="tns:get_module_fields" />
+	
+	<xsd:element name="get_module_fieldsResponse" type="tns:get_module_fieldsResponse" />
+	
+	<xsd:element name="get_available_modules" type="tns:get_available_modules" />
+	
+	<xsd:element name="get_available_modulesResponse" type="tns:get_available_modulesResponse" />
+	
+	<xsd:element name="update_portal_user" type="tns:update_portal_user" />
+	
+	<xsd:element name="update_portal_userResponse" type="tns:update_portal_userResponse" />
+	
+	<xsd:element name="get_user_id" type="tns:get_user_id" />
+	
+	<xsd:element name="get_user_idResponse" type="tns:get_user_idResponse" />
+	
+	<xsd:element name="get_user_team_id" type="tns:get_user_team_id" />
+	
+
+	<xsd:element name="get_user_team_idResponse" type="tns:get_user_team_idResponse" />
+	
+
+	<xsd:element name="get_server_time" type="tns:get_server_time" />
+
+	<xsd:element name="get_server_timeResponse" type="tns:get_server_timeResponse" />
+	
+
+	<xsd:element name="get_gmt_time" type="tns:get_gmt_time" />
+
+	<xsd:element name="get_gmt_timeResponse" type="tns:get_gmt_timeResponse" />
+	
+
+	<xsd:element name="get_sugar_flavor" type="tns:get_sugar_flavor" />
+
+	<xsd:element name="get_sugar_flavorResponse" type="tns:get_sugar_flavorResponse" />
+	
+
+	<xsd:element name="get_server_version" type="tns:get_server_version" />
+
+	<xsd:element name="get_server_versionResponse" type="tns:get_server_versionResponse" />
+	
+
+	<xsd:element name="get_relationships" type="tns:get_relationships" />
+	
+
+	<xsd:element name="get_relationshipsResponse" type="tns:get_relationshipsResponse" />
+	
+
+	<xsd:element name="set_relationship" type="tns:set_relationship" />
+	
+
+	<xsd:element name="set_relationshipResponse" type="tns:set_relationshipResponse" />
+	
+
+	<xsd:element name="set_relationships" type="tns:set_relationships" />
+	
+
+	<xsd:element name="set_relationshipsResponse" type="tns:set_relationshipsResponse" />
+	
+
+	<xsd:element name="set_document_revision" type="tns:set_document_revision" />
+	
+
+	<xsd:element name="set_document_revisionResponse" type="tns:set_document_revisionResponse" />
+	
+
+	<xsd:element name="search_by_module" type="tns:search_by_module" />
+	
+
+	<xsd:element name="search_by_moduleResponse" type="tns:search_by_moduleResponse" />
+	
+
+	<xsd:element name="get_mailmerge_document" type="tns:get_mailmerge_document" />
+	
+
+	<xsd:element name="get_mailmerge_documentResponse" type="tns:get_mailmerge_documentResponse" />
+	
+
+	<xsd:element name="get_mailmerge_document2" type="tns:get_mailmerge_document2" />
+	
+
+	<xsd:element name="get_mailmerge_document2Response" type="tns:get_mailmerge_document2Response" />
+	
+
+	<xsd:element name="get_document_revision" type="tns:get_document_revision" />
+	
+
+	<xsd:element name="get_document_revisionResponse" type="tns:get_document_revisionResponse" />
+	
+
+	<xsd:element name="set_campaign_merge" type="tns:set_campaign_merge" />
+	
+
+	<xsd:element name="set_campaign_mergeResponse" type="tns:set_campaign_mergeResponse" />
+	
+
+	<xsd:element name="get_entries_count" type="tns:get_entries_count" />
+	
+
+	<xsd:element name="get_entries_countResponse" type="tns:get_entries_countResponse" />
+	
+
+	<xsd:element name="set_entries_details" type="tns:set_entries_details" />
+	
+
+	<xsd:element name="set_entries_detailsResponse" type="tns:set_entries_detailsResponse" />
+	
+
+	<xsd:element name="sync_get_modified_relationships" type="tns:sync_get_modified_relationships" />
+	
+
+	<xsd:element name="sync_get_modified_relationshipsResponse" type="tns:sync_get_modified_relationshipsResponse" />
+	
+
+	<xsd:element name="get_modified_entries" type="tns:get_modified_entries" />
+	
+
+	<xsd:element name="get_modified_entriesResponse" type="tns:get_modified_entriesResponse" />
+	
+
+	<xsd:element name="get_attendee_list" type="tns:get_attendee_list" />
+	
+
+	<xsd:element name="get_attendee_listResponse" type="tns:get_attendee_listResponse" />
+	
+
+	<xsd:element name="create_session" type="tns:create_session" />
+	
+
+	<xsd:element name="create_sessionResponse" type="tns:create_sessionResponse" />
+	
+
+	<xsd:element name="end_session" type="tns:end_session" />
+	
+
+	<xsd:element name="end_sessionResponse" type="tns:end_sessionResponse" />
+	
+	<xsd:element name="get_contact_relationships" type="tns:get_contact_relationships" />
+	
+	<xsd:element name="get_contact_relationshipsResponse" type="tns:get_contact_relationshipsResponse" />
+	
+	<xsd:element name="user_list" type="tns:user_list" />
+	
+	<xsd:element name="user_listResponse" type="tns:user_listResponse" />
+	
+	<xsd:element name="search" type="tns:search" />
+	
+	<xsd:element name="searchResponse" type="tns:searchResponse" />
+	
+	<xsd:element name="track_email" type="tns:track_email" />
+	
+	<xsd:element name="track_emailResponse" type="tns:track_emailResponse" />
+	
+	<xsd:element name="create_contact" type="tns:create_contact" />
+
+	<xsd:element name="create_contactResponse" type="tns:create_contactResponse" />
+
+	<xsd:element name="create_lead" type="tns:create_lead" />
+
+	<xsd:element name="create_leadResponse" type="tns:create_leadResponse" />
+
+	<xsd:element name="create_account" type="tns:create_account" />
+
+	<xsd:element name="create_accountResponse" type="tns:create_accountResponse" />	
+	
+	<xsd:element name="create_opportunity" type="tns:create_opportunity" />
+	
+	<xsd:element name="create_opportunityResponse" type="tns:create_opportunityResponse" />
+	
+	<xsd:element name="create_case" type="tns:create_case" />
+
+	<xsd:element name="create_caseResponse" type="tns:create_caseResponse" />
+	
+	
+	
+	<xsd:complexType name="note_attachment">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="filename" type="xsd:string" />
+			<xsd:element name="file" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	
+	
+	<xsd:complexType name="new_note_attachment">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="filename" type="xsd:string" />
+			<xsd:element name="file" type="xsd:string" />
+			<xsd:element name="related_module_id" type="xsd:string" />
+			<xsd:element name="related_module_name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="new_return_note_attachment">
+		<xsd:all>
+			<xsd:element name="note_attachment" type="tns:new_note_attachment" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="return_note_attachment">
+		<xsd:all>
+			<xsd:element name="note_attachment" type="tns:note_attachment" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="user_auth">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="version" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="field">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="type" type="xsd:string" />
+			<xsd:element name="label" type="xsd:string" />
+			<xsd:element name="required" type="xsd:int" />
+			<xsd:element name="options" type="tns:name_value_list" />
+			<xsd:element name="default_value" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="link_field">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="type" type="xsd:string" />
+			<xsd:element name="relationship" type="xsd:string" />
+			<xsd:element name="module" type="xsd:string" />
+			<xsd:element name="bean_name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="field_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:field[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="link_field_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:link_field[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="name_value">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="value" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="name_value_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:name_value[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="name_value_lists">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:name_value_list[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="select_fields">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="xsd:string[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="module_fields">
+		<xsd:all>
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="module_fields" type="tns:field_list" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="new_module_fields">
+		<xsd:all>
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="module_fields" type="tns:field_list" />
+			<xsd:element name="link_fields" type="tns:link_field_list" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="module_list">
+		<xsd:all>
+			<xsd:element name="modules" type="tns:select_fields" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="error_value">
+		<xsd:all>
+			<xsd:element name="number" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="name" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="description" type="xsd:string" minOccurs="0"/>
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="entry_value">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="name_value_list" type="tns:name_value_list" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="entry_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:entry_value[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="get_mailmerge_document_result">
+		<xsd:all>
+			<xsd:element name="html" type="xsd:string" />
+			<xsd:element name="name_value_list" type="tns:name_value_list" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="link_name_to_fields_array">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="value" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="link_value">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:name_value_list[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="link_array_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:link_value[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="link_name_value">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="records" type="tns:link_array_list" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="link_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:link_name_value[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="link_lists">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:link_list[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="get_entry_result_version2">
+		<xsd:all>
+			<xsd:element name="entry_list" type="tns:entry_list" />
+			<xsd:element name="relationship_list" type="tns:link_lists" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="return_search_result">
+		<xsd:all>
+			<xsd:element name="entry_list" type="tns:link_list" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_entry_list_result">
+		<xsd:all>
+			<xsd:element name="result_count" type="xsd:int" />
+			<xsd:element name="next_offset" type="xsd:int" minOccurs="0"/>
+			<xsd:element name="field_list" type="tns:field_list" minOccurs="0"/>
+			<xsd:element name="entry_list" type="tns:entry_list" minOccurs="0"/>
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_entry_list_result_version2">
+		<xsd:all>
+			<xsd:element name="result_count" type="xsd:int" />
+			<xsd:element name="next_offset" type="xsd:int" minOccurs="0"/>
+			<xsd:element name="entry_list" type="tns:entry_list" />
+			<xsd:element name="relationship_list" type="tns:link_lists" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_entry_result">
+		<xsd:all>
+			<xsd:element name="field_list" type="tns:field_list" minOccurs="0"/>
+			<xsd:element name="entry_list" type="tns:entry_list" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_server_info_result">
+		<xsd:all>
+			<xsd:element name="flavor" type="xsd:string" />
+			<xsd:element name="version" type="xsd:string" />
+			<xsd:element name="gmt_time" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_entry_result">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="new_set_entry_result">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="new_set_entries_result">
+		<xsd:all>
+			<xsd:element name="ids" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_entries_result">
+		<xsd:all>
+			<xsd:element name="ids" type="tns:select_fields" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="id_mod">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="date_modified" type="xsd:string" />
+			<xsd:element name="deleted" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="ids_mods">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:id_mod[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="get_relationships_result">
+		<xsd:all>
+			<xsd:element name="ids" type="tns:ids_mods" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_relationship_value">
+		<xsd:all>
+			<xsd:element name="module1" type="xsd:string" />
+			<xsd:element name="module1_id" type="xsd:string" />
+			<xsd:element name="module2" type="xsd:string" />
+			<xsd:element name="module2_id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_relationship_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:set_relationship_value[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="new_set_relationhip_ids">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:select_fields[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="new_set_relationship_list_result">
+		<xsd:all>
+			<xsd:element name="created" type="xsd:int" />
+			<xsd:element name="failed" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_relationship_list_result">
+		<xsd:all>
+			<xsd:element name="created" type="xsd:int" />
+			<xsd:element name="failed" type="xsd:int" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="document_revision">
+		<xsd:all>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="document_name" type="xsd:string" />
+			<xsd:element name="revision" type="xsd:string" />
+			<xsd:element name="filename" type="xsd:string" />
+			<xsd:element name="file" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_entry_list_result_encoded">
+		<xsd:all>
+			<xsd:element name="result_count" type="xsd:int" />
+			<xsd:element name="next_offset" type="xsd:int" minOccurs="0"/>
+			<xsd:element name="total_count" type="xsd:int" />
+			<xsd:element name="field_list" type="tns:select_fields" />
+			<xsd:element name="entry_list" type="xsd:string" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_sync_result_encoded">
+		<xsd:all>
+			<xsd:element name="result" type="xsd:string" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_quick_sync_result_encoded">
+		<xsd:all>
+			<xsd:element name="result" type="xsd:string" />
+			<xsd:element name="result_count" type="xsd:int" />
+			<xsd:element name="next_offset" type="xsd:int" minOccurs="0"/>
+			<xsd:element name="total_count" type="xsd:int" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="return_document_revision">
+		<xsd:all>
+			<xsd:element name="document_revision" type="tns:document_revision" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="new_return_document_revision">
+		<xsd:all>
+			<xsd:element name="document_revision" type="tns:document_revision" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="name_value_operator">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="value" type="xsd:string" />
+			<xsd:element name="operator" type="xsd:string" />
+			<xsd:element name="value_array" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="name_value_operator_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:name_value_operator[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="newsletter">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="prospect_list_id" type="xsd:string" />
+			<xsd:element name="campaign_id" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="frequency" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="newsletter_list">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:newsletter[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="get_subscription_lists_result">
+		<xsd:all>
+			<xsd:element name="unsubscribed" type="tns:newsletter_list" />
+			<xsd:element name="subscribed" type="tns:newsletter_list" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="str_array">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="xsd:string[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="name_value_lists_error">
+		<xsd:all>
+			<xsd:element name="name_value_lists" type="tns:name_value_lists" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="get_entries_count_result">
+		<xsd:all>
+			<xsd:element name="result_count" type="xsd:int" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="set_entries_detail_result">
+		<xsd:all>
+			<xsd:element name="name_value_lists" type="tns:name_value_lists" />
+			<xsd:element name="error" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="contact_detail">
+		<xsd:all>
+			<xsd:element name="email_address" type="xsd:string" />
+			<xsd:element name="name1" type="xsd:string" />
+			<xsd:element name="name2" type="xsd:string" />
+			<xsd:element name="association" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="msi_id" type="xsd:string" />
+			<xsd:element name="type" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="contact_detail_array">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:contact_detail[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="user_detail">
+		<xsd:all>
+			<xsd:element name="email_address" type="xsd:string" />
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="first_name" type="xsd:string" />
+			<xsd:element name="last_name" type="xsd:string" />
+			<xsd:element name="department" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="title" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="user_detail_array">
+		<xsd:complexContent>
+			<xsd:restriction base="SOAP-ENC:Array">
+				<xsd:attribute ref="SOAP-ENC:arrayType"
+					wsdl:arrayType="tns:user_detail[]" />
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="is_user_admin">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="is_user_adminResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="login">
+		<xsd:all>
+			<xsd:element name="user_auth" type="tns:user_auth" />
+			<xsd:element name="application_name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="loginResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="is_loopback" />
+
+	<xsd:complexType name="is_loopbackResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="seamless_login">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="seamless_loginResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entry_list">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="query" type="xsd:string" />
+			<xsd:element name="order_by" type="xsd:string" />
+			<xsd:element name="offset" type="xsd:int" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+			<xsd:element name="max_results" type="xsd:int" />
+			<xsd:element name="deleted" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entry_listResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_list_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="get_entry">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entryResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entries">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="ids" type="tns:select_fields" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entriesResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entry">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="name_value_list" type="tns:name_value_list" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entryResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entries">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="name_value_lists" type="tns:name_value_lists" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entriesResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entries_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="set_note_attachment">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="note" type="tns:note_attachment" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_note_attachmentResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_note_attachment">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_note_attachmentResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:return_note_attachment" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="relate_note_to_module">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="note_id" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="module_id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="relate_note_to_moduleResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_related_notes">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="module_id" type="xsd:string" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_related_notesResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="logout">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="logoutResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_module_fields">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_module_fieldsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:module_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_available_modules">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_available_modulesResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:module_list" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="update_portal_user">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="portal_name" type="xsd:string" />
+			<xsd:element name="name_value_list" type="tns:name_value_list" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="update_portal_userResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_user_id">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_user_idResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_user_team_id">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_user_team_idResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_server_time" />
+
+	<xsd:complexType name="get_server_timeResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_gmt_time" />
+
+	<xsd:complexType name="get_gmt_timeResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_sugar_flavor" />
+
+	<xsd:complexType name="get_sugar_flavorResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_server_version" />
+
+	<xsd:complexType name="get_server_versionResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_relationships">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="module_id" type="xsd:string" />
+			<xsd:element name="related_module" type="xsd:string" />
+			<xsd:element name="related_module_query" type="xsd:string" />
+			<xsd:element name="deleted" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_relationshipsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_relationships_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_relationship">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="set_relationship_value" type="tns:set_relationship_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_relationshipResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_relationships">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="set_relationship_list" type="tns:set_relationship_list" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_relationshipsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_relationship_list_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_document_revision">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="note" type="tns:document_revision" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_document_revisionResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entry_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="search_by_module">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="search_string" type="xsd:string" />
+			<xsd:element name="modules" type="tns:select_fields" />
+			<xsd:element name="offset" type="xsd:int" />
+			<xsd:element name="max_results" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="search_by_moduleResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_list_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_mailmerge_document">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="file_name" type="xsd:string" />
+			<xsd:element name="fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_mailmerge_documentResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_sync_result_encoded" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_mailmerge_document2">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="file_name" type="xsd:string" />
+			<xsd:element name="fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_mailmerge_document2Response">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_mailmerge_document_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_document_revision">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="i" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_document_revisionResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:return_document_revision" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_campaign_merge">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="targets" type="tns:select_fields" />
+			<xsd:element name="campaign_id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_campaign_mergeResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:error_value" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entries_count">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="query" type="xsd:string" />
+			<xsd:element name="deleted" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_entries_countResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entries_count_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entries_details">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="name_value_lists" type="tns:name_value_lists" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="set_entries_detailsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:set_entries_detail_result" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="sync_get_modified_relationships">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="related_module" type="xsd:string" />
+			<xsd:element name="from_date" type="xsd:string" />
+			<xsd:element name="to_date" type="xsd:string" />
+			<xsd:element name="offset" type="xsd:int" />
+			<xsd:element name="max_results" type="xsd:int" />
+			<xsd:element name="deleted" type="xsd:int" />
+			<xsd:element name="module_id" type="xsd:string" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+			<xsd:element name="ids" type="tns:select_fields" />
+			<xsd:element name="relationship_name" type="xsd:string" />
+			<xsd:element name="deletion_date" type="xsd:string" />
+			<xsd:element name="php_serialize" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="sync_get_modified_relationshipsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_entry_list_result_encoded" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_modified_entries">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="ids" type="tns:select_fields" />
+			<xsd:element name="select_fields" type="tns:select_fields" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_modified_entriesResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_sync_result_encoded" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_attendee_list">
+		<xsd:all>
+			<xsd:element name="session" type="xsd:string" />
+			<xsd:element name="module_name" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_attendee_listResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:get_sync_result_encoded" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_session">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_sessionResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="end_session">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="end_sessionResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="contact_by_email">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="email_address" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="contact_by_emailResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:contact_detail_array" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_contact_relationships">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="get_contact_relationshipsResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:contact_detail_array" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="user_list">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="user_listResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:user_detail_array" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="search">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="searchResponse">
+		<xsd:all>
+			<xsd:element name="return" type="tns:contact_detail_array" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="track_email">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="parent_id" type="xsd:string" />
+			<xsd:element name="contact_ids" type="xsd:string" />
+			<xsd:element name="date_sent" type="xsd:date" />
+			<xsd:element name="email_subject" type="xsd:string" />
+			<xsd:element name="email_body" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="track_emailResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_contact">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="first_name" type="xsd:string" />
+			<xsd:element name="last_name" type="xsd:string" />
+			<xsd:element name="email_address" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_contactResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_lead">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="first_name" type="xsd:string" />
+			<xsd:element name="last_name" type="xsd:string" />
+			<xsd:element name="email_address" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_leadResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_account">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="phone" type="xsd:string" />
+			<xsd:element name="website" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_accountResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_opportunity">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="amount" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="create_opportunityResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="create_case">
+		<xsd:all>
+			<xsd:element name="user_name" type="xsd:string" />
+			<xsd:element name="password" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="create_caseResponse">
+		<xsd:all>
+			<xsd:element name="return" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+
+</xsd:schema>

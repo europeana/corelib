@@ -1,0 +1,345 @@
+<binding xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" trim-whitespace="true">
+  <namespace uri="http://schemas.xmlsoap.org/soap/encoding/" prefix="SOAP-ENC"/>
+  <mapping abstract="true" type-name="SOAP-ENC:commonAttributes-AttributeGroup" class="eu.europeana.uim.sugarcrmclient.jibxbindings.CommonAttributes">
+    <value style="attribute" name="id" get-method="getId" set-method="setId" usage="optional"/>
+    <value style="attribute" name="href" get-method="getHref" set-method="setHref" usage="optional"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:arrayAttributes-AttributeGroup" class="eu.europeana.uim.sugarcrmclient.jibxbindings.ArrayAttributes">
+    <structure get-method="getArrayType" set-method="setArrayType" usage="optional">
+      <value style="attribute" name="arrayType" ns="http://schemas.xmlsoap.org/soap/encoding/" get-method="getArrayType" set-method="setArrayType" usage="optional"/>
+    </structure>
+    <structure get-method="getOffset" set-method="setOffset" usage="optional">
+      <value style="attribute" name="offset" ns="http://schemas.xmlsoap.org/soap/encoding/" get-method="getOffset" set-method="setOffset" usage="optional"/>
+    </structure>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:Array-Group" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Array">
+    <structure get-method="getAnyList" set-method="setAnyList" usage="optional" marshaller="org.jibx.extras.DomListMapper" unmarshaller="org.jibx.extras.DomListMapper"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:Array" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Array1">
+    <structure map-as="SOAP-ENC:Array-Group" get-method="getArray" set-method="setArray" usage="optional"/>
+    <structure map-as="SOAP-ENC:arrayAttributes-AttributeGroup" get-method="getArrayAttributes" set-method="setArrayAttributes" usage="optional"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Array1" name="Array" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:Array"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:Struct-Group" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Struct">
+    <structure get-method="getAnyList" set-method="setAnyList" usage="optional" marshaller="org.jibx.extras.DomListMapper" unmarshaller="org.jibx.extras.DomListMapper"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:Struct" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Struct1">
+    <structure map-as="SOAP-ENC:Struct-Group" get-method="getStruct" set-method="setStruct" usage="optional"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Struct1" name="Struct" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:Struct"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:duration" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Duration">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Duration" name="duration" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:duration"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:dateTime" class="eu.europeana.uim.sugarcrmclient.jibxbindings.DateTime">
+    <value style="text" get-method="getDateTime" set-method="setDateTime"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.DateTime" name="dateTime" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:dateTime"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:NOTATION" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NOTATION">
+    <value style="text" get-method="getQName" set-method="setQName"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NOTATION" name="NOTATION" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:NOTATION"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:time" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Time">
+    <value style="text" get-method="getTime" set-method="setTime"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Time" name="time" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:time"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:date" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Date">
+    <value style="text" get-method="getDate" set-method="setDate"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Date" name="date" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:date"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:gYearMonth" class="eu.europeana.uim.sugarcrmclient.jibxbindings.GYearMonth">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.GYearMonth" name="gYearMonth" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:gYearMonth"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:gYear" class="eu.europeana.uim.sugarcrmclient.jibxbindings.GYear">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.GYear" name="gYear" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:gYear"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:gMonthDay" class="eu.europeana.uim.sugarcrmclient.jibxbindings.GMonthDay">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.GMonthDay" name="gMonthDay" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:gMonthDay"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:gDay" class="eu.europeana.uim.sugarcrmclient.jibxbindings.GDay">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.GDay" name="gDay" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:gDay"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:gMonth" class="eu.europeana.uim.sugarcrmclient.jibxbindings.GMonth">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.GMonth" name="gMonth" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:gMonth"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:boolean" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Boolean">
+    <value style="text" get-method="isBoolean" set-method="setBoolean"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Boolean" name="boolean" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:boolean"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:base64Binary" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Base64Binary">
+    <value style="text" get-method="getBase64Binary" set-method="setBase64Binary"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Base64Binary" name="base64Binary" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:base64Binary"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:hexBinary" class="eu.europeana.uim.sugarcrmclient.jibxbindings.HexBinary">
+    <value style="text" get-method="getHexBinary" set-method="setHexBinary"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.HexBinary" name="hexBinary" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:hexBinary"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:float" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Float">
+    <value style="text" get-method="getFloat" set-method="setFloat"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Float" name="float" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:float"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:double" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Double">
+    <value style="text" get-method="getDouble" set-method="setDouble"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Double" name="double" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:double"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:anyURI" class="eu.europeana.uim.sugarcrmclient.jibxbindings.AnyURI">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.AnyURI" name="anyURI" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:anyURI"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:QName" class="eu.europeana.uim.sugarcrmclient.jibxbindings.QName">
+    <value style="text" get-method="getQName1" set-method="setQName1"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.QName" name="QName" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:QName"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:string" class="eu.europeana.uim.sugarcrmclient.jibxbindings._String">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._String" name="string" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:string"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:normalizedString" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NormalizedString">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NormalizedString" name="normalizedString" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:normalizedString"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:token" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Token">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Token" name="token" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:token"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:language" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Language">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Language" name="language" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:language"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:Name" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Name">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Name" name="Name" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:Name"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:NMTOKEN" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NMTOKEN">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NMTOKEN" name="NMTOKEN" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:NMTOKEN"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:NCName" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NCName">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NCName" name="NCName" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:NCName"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:NMTOKENS" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NMTOKENS">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NMTOKENS" name="NMTOKENS" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:NMTOKENS"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:ID" class="eu.europeana.uim.sugarcrmclient.jibxbindings.ID">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.ID" name="ID" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:ID"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:IDREF" class="eu.europeana.uim.sugarcrmclient.jibxbindings.IDREF">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.IDREF" name="IDREF" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:IDREF"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:ENTITY" class="eu.europeana.uim.sugarcrmclient.jibxbindings.ENTITY">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.ENTITY" name="ENTITY" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:ENTITY"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:IDREFS" class="eu.europeana.uim.sugarcrmclient.jibxbindings.IDREFS">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.IDREFS" name="IDREFS" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:IDREFS"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:ENTITIES" class="eu.europeana.uim.sugarcrmclient.jibxbindings.ENTITIES">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.ENTITIES" name="ENTITIES" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:ENTITIES"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:decimal" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Decimal">
+    <value style="text" get-method="getDecimal" set-method="setDecimal"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Decimal" name="decimal" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:decimal"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:integer" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Integer">
+    <value style="text" get-method="getInteger" set-method="setInteger"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Integer" name="integer" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:integer"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:nonPositiveInteger" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NonPositiveInteger">
+    <value style="text" get-method="getInteger" set-method="setInteger"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NonPositiveInteger" name="nonPositiveInteger" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:nonPositiveInteger"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:negativeInteger" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NegativeInteger">
+    <value style="text" get-method="getInteger" set-method="setInteger"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NegativeInteger" name="negativeInteger" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:negativeInteger"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:long" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Long">
+    <value style="text" get-method="getLong" set-method="setLong"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Long" name="long" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:long"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:int" class="eu.europeana.uim.sugarcrmclient.jibxbindings.Int">
+    <value style="text" get-method="getInt" set-method="setInt"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.Int" name="int" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:int"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:short" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Short">
+    <value style="text" get-method="getShort" set-method="setShort"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Short" name="short" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:short"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:byte" class="eu.europeana.uim.sugarcrmclient.jibxbindings._Byte">
+    <value style="text" get-method="getByte" set-method="setByte"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings._Byte" name="byte" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:byte"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:nonNegativeInteger" class="eu.europeana.uim.sugarcrmclient.jibxbindings.NonNegativeInteger">
+    <value style="text" get-method="getInteger" set-method="setInteger"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.NonNegativeInteger" name="nonNegativeInteger" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:nonNegativeInteger"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:unsignedLong" class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedLong">
+    <value style="text" get-method="getLong" set-method="setLong"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedLong" name="unsignedLong" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:unsignedLong"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:unsignedInt" class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedInt">
+    <value style="text" get-method="getInt" set-method="setInt"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedInt" name="unsignedInt" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:unsignedInt"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:unsignedShort" class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedShort">
+    <value style="text" get-method="getShort" set-method="setShort"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedShort" name="unsignedShort" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:unsignedShort"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:unsignedByte" class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedByte">
+    <value style="text" get-method="getByte" set-method="setByte"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.UnsignedByte" name="unsignedByte" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:unsignedByte"/>
+  </mapping>
+  <mapping abstract="true" type-name="SOAP-ENC:positiveInteger" class="eu.europeana.uim.sugarcrmclient.jibxbindings.PositiveInteger">
+    <value style="text" get-method="getString" set-method="setString"/>
+    <structure map-as="SOAP-ENC:commonAttributes-AttributeGroup" get-method="getCommonAttributes" set-method="setCommonAttributes" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.PositiveInteger" name="positiveInteger" ns="http://schemas.xmlsoap.org/soap/encoding/">
+    <structure map-as="SOAP-ENC:positiveInteger"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.AnyType" name="anyType" ns="http://schemas.xmlsoap.org/soap/encoding/"/>
+</binding>

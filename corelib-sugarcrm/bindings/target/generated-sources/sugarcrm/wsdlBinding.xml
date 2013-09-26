@@ -1,0 +1,144 @@
+<binding xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" trim-whitespace="true">
+  <namespace uri="http://schemas.xmlsoap.org/wsdl/" default="elements" prefix="wsdl"/>
+  <mapping abstract="true" type-name="wsdl:tDocumentation" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TDocumentation">
+    <structure get-method="getAnyList" set-method="setAnyList" usage="optional" marshaller="org.jibx.extras.DomListMapper" unmarshaller="org.jibx.extras.DomListMapper"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tDocumented" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TDocumented">
+    <structure map-as="wsdl:tDocumentation" get-method="getDocumentation" set-method="setDocumentation" usage="optional" name="documentation"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tExtensibleAttributesDocumented" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TExtensibleAttributesDocumented">
+    <structure map-as="wsdl:tDocumented"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tExtensibleDocumented" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TExtensibleDocumented">
+    <structure map-as="wsdl:tDocumented"/>
+    <structure get-method="getAnyList" set-method="setAnyList" usage="optional" marshaller="org.jibx.extras.DomListMapper" unmarshaller="org.jibx.extras.DomListMapper"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:anyTopLevelOptionalElement-Group" class="eu.europeana.uim.sugarcrmclient.jibxbindings.AnyTopLevelOptionalElement">
+    <structure ordered="false" choice="true">
+      <structure map-as="wsdl:tImport" test-method="ifImport" get-method="getImport" set-method="setImport" usage="optional" name="import"/>
+      <structure map-as="wsdl:tTypes" test-method="ifTypes" get-method="getTypes" set-method="setTypes" usage="optional" name="types"/>
+      <structure map-as="wsdl:tMessage" test-method="ifMessage" get-method="getMessage" set-method="setMessage" usage="optional" name="message"/>
+      <structure map-as="wsdl:tPortType" test-method="ifPortType" get-method="getPortType" set-method="setPortType" usage="optional" name="portType"/>
+      <structure map-as="wsdl:tBinding" test-method="ifBinding" get-method="getBinding" set-method="setBinding" usage="optional" name="binding"/>
+      <structure map-as="wsdl:tService" test-method="ifService" get-method="getService" set-method="setService" usage="optional" name="service"/>
+    </structure>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tDefinitions" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TDefinitions">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <collection get-method="getAnyTopLevelOptionalElementList" set-method="setAnyTopLevelOptionalElementList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:anyTopLevelOptionalElement-Group"/>
+    </collection>
+    <value style="attribute" name="targetNamespace" get-method="getTargetNamespace" set-method="setTargetNamespace" usage="optional"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName" usage="optional"/>
+  </mapping>
+  <mapping class="eu.europeana.uim.sugarcrmclient.jibxbindings.TDefinitions" name="definitions">
+    <structure map-as="wsdl:tDefinitions"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tImport" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TImport">
+    <structure map-as="wsdl:tExtensibleAttributesDocumented"/>
+    <value style="attribute" name="namespace" get-method="getNamespace" set-method="setNamespace"/>
+    <value style="attribute" name="location" get-method="getLocation" set-method="setLocation"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tTypes" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TTypes">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tMessage" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TMessage">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <collection get-method="getPartList" set-method="setPartList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:tPart" name="part"/>
+    </collection>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tPart" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TPart">
+    <structure map-as="wsdl:tExtensibleAttributesDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+    <value style="attribute" name="element" get-method="getElement" set-method="setElement" usage="optional"/>
+    <value style="attribute" name="type" get-method="getType" set-method="setType" usage="optional"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tPortType" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TPortType">
+    <structure map-as="wsdl:tExtensibleAttributesDocumented"/>
+    <collection get-method="getOperationList" set-method="setOperationList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:tOperation" name="operation"/>
+    </collection>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tOperation" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TOperation">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <structure usage="optional" ordered="false" choice="true">
+      <structure map-as="wsdl:request-response-or-one-way-operation-Group" test-method="ifRequestResponseOrOneWayOperation" get-method="getRequestResponseOrOneWayOperation" set-method="setRequestResponseOrOneWayOperation" usage="optional"/>
+      <structure map-as="wsdl:solicit-response-or-notification-operation-Group" test-method="ifSolicitResponseOrNotificationOperation" get-method="getSolicitResponseOrNotificationOperation" set-method="setSolicitResponseOrNotificationOperation" usage="optional"/>
+    </structure>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+    <value style="attribute" name="parameterOrder" get-method="getParameterOrder" set-method="setParameterOrder" usage="optional"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:request-response-or-one-way-operation-Group" class="eu.europeana.uim.sugarcrmclient.jibxbindings.RequestResponseOrOneWayOperation">
+    <structure map-as="wsdl:tParam" get-method="getInput" set-method="setInput" name="input"/>
+    <structure get-method="getSequence" set-method="setSequence" usage="optional">
+      <structure map-as="wsdl:tParam" get-method="getOutput" set-method="setOutput" name="output"/>
+      <collection get-method="getFaultList" set-method="setFaultList" usage="optional" create-type="java.util.ArrayList">
+        <structure map-as="wsdl:tFault" name="fault"/>
+      </collection>
+    </structure>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:solicit-response-or-notification-operation-Group" class="eu.europeana.uim.sugarcrmclient.jibxbindings.SolicitResponseOrNotificationOperation">
+    <structure map-as="wsdl:tParam" get-method="getOutput" set-method="setOutput" name="output"/>
+    <structure get-method="getSequence" set-method="setSequence" usage="optional">
+      <structure map-as="wsdl:tParam" get-method="getInput" set-method="setInput" name="input"/>
+      <collection get-method="getFaultList" set-method="setFaultList" usage="optional" create-type="java.util.ArrayList">
+        <structure map-as="wsdl:tFault" name="fault"/>
+      </collection>
+    </structure>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tParam" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TParam">
+    <structure map-as="wsdl:tExtensibleAttributesDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName" usage="optional"/>
+    <value style="attribute" name="message" get-method="getMessage" set-method="setMessage"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tFault" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TFault">
+    <structure map-as="wsdl:tExtensibleAttributesDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+    <value style="attribute" name="message" get-method="getMessage" set-method="setMessage"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tBinding" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TBinding">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <collection get-method="getOperationList" set-method="setOperationList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:tBindingOperation" name="operation"/>
+    </collection>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+    <value style="attribute" name="type" get-method="getType" set-method="setType"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tBindingOperationMessage" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TBindingOperationMessage">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName" usage="optional"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tBindingOperationFault" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TBindingOperationFault">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tBindingOperation" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TBindingOperation">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <structure map-as="wsdl:tBindingOperationMessage" get-method="getInput" set-method="setInput" usage="optional" name="input"/>
+    <structure map-as="wsdl:tBindingOperationMessage" get-method="getOutput" set-method="setOutput" usage="optional" name="output"/>
+    <collection get-method="getFaultList" set-method="setFaultList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:tBindingOperationFault" name="fault"/>
+    </collection>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tService" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TService">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <collection get-method="getPortList" set-method="setPortList" usage="optional" create-type="java.util.ArrayList">
+      <structure map-as="wsdl:tPort" name="port"/>
+    </collection>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tPort" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TPort">
+    <structure map-as="wsdl:tExtensibleDocumented"/>
+    <value style="attribute" name="name" get-method="getName" set-method="setName"/>
+    <value style="attribute" name="binding" get-method="getBinding" set-method="setBinding"/>
+  </mapping>
+  <mapping abstract="true" type-name="wsdl:tExtensibilityElement" class="eu.europeana.uim.sugarcrmclient.jibxbindings.TExtensibilityElement">
+    <structure get-method="getRequired" set-method="setRequired" usage="optional">
+      <value style="attribute" name="required" ns="http://schemas.xmlsoap.org/wsdl/" get-method="isRequired" set-method="setRequired" usage="optional"/>
+    </structure>
+  </mapping>
+</binding>
