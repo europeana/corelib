@@ -47,7 +47,7 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.solr.utils.MongoConstructor;
 import eu.europeana.corelib.solr.utils.SolrConstructor;
-import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance

@@ -70,6 +70,10 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 		assertEquals("getPortalHome relative url failed", expected,
 				europeanaUrlService.getPortalRecord(true, "/euro/testrecord").toString());
 
+		expected = "http://www.europeana.eu/portal/record/euro/testrecord.html";
+		assertEquals("getCanonicalPortalRecord failed", expected,
+				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
+		
 	}
 
 }

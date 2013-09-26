@@ -39,6 +39,12 @@ public interface EuropeanaUrlService {
 	static final String PARAM_SEARCH_START 	= "start";
 	static final String PARAM_SEARCH_FACET 	= "qf";
 
+	// PORTAL PARAMS
+	static final String PARAM_REDIRECT_SHOWNAT 		= "shownAt";
+	static final String PARAM_REDIRECT_SHOWNBY 		= "shownBy";
+	static final String PARAM_REDIRECT_PROVIDER 	= "provider";
+	static final String PARAM_REDIRECT_EUROPEANAID 	= "id";
+	
 	// API PARAMS
 	static final String PARAM_API_APIKEY	= "wskey";
 	static final String PARAM_API_V1_SEARCH_QUERY	= "searchTerms";
@@ -76,6 +82,10 @@ public interface EuropeanaUrlService {
 	
 	UrlBuilder getPortalRecord(boolean relative, String europeanaId);
 
+	UrlBuilder getCanonicalPortalRecord(String europeanaId);
+	
 	UrlBuilder getThumbnailUrl(String thumbnail, DocType type);
+	
+	String extractEuropeanaId(String url);
 	
 }

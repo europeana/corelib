@@ -38,7 +38,7 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistryMongoServer;
 import eu.europeana.corelib.tools.lookuptable.FailedRecord;
 import eu.europeana.corelib.tools.lookuptable.LookupResult;
 import eu.europeana.corelib.tools.lookuptable.LookupState;
-import eu.europeana.corelib.tools.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 
 /**
  * Class for setting and accessing the EuropeanaIdRegistry Lookup Table

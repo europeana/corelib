@@ -5,9 +5,12 @@ import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.model.ThumbSize;
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.service.EuropeanaUrlService;
 import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
@@ -141,6 +144,13 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	}
 	
 	@Override
+	public UrlBuilder getCanonicalPortalRecord(String europeanaId) {
+		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
+		url.addPath(PATH_PORTAL,PATH_RECORD).addPage(europeanaId+EXT_HTML);
+		return url;
+	}
+	
+	@Override
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
 		UrlBuilder url = new UrlBuilder(URL_IMAGE_SITE);
 		try {
@@ -150,6 +160,18 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		url.addParam("size", ThumbSize.LARGE.toString());
 		url.addParam("type", type.toString());
 		return url;
+	}
+	
+	@Override
+	public String extractEuropeanaId(String url) {
+		if (StringUtils.contains(url, PATH_RECORD)) {
+			url = StringUtils.removeEnd(url, EXT_HTML);
+			String recordId = StringUtils.substringAfterLast(url, UrlBuilder.PATH_SEPERATOR);
+			url = StringUtils.substringBeforeLast(url, UrlBuilder.PATH_SEPERATOR);
+			String collectionId = StringUtils.substringAfterLast(url, UrlBuilder.PATH_SEPERATOR);
+			return EuropeanaUriUtils.createResolveEuropeanaId(collectionId, recordId);
+		}
+		return null;
 	}
 	
 
