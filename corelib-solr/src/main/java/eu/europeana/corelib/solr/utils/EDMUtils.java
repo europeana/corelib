@@ -559,7 +559,7 @@ public class EDMUtils {
 			// rights1.setLang(lang);
 			// rights1.setString("");
 			Resource res = new Resource();
-			res.setResource("");
+			res.setResource("http://www.europeana.eu/rights/rr-f/");
 			rights1.setResource(res);
 			aggregation.setRights(rights1);
 		}
@@ -1421,7 +1421,7 @@ public class EDMUtils {
 				rights1 = new Rights1();
 				
 				Resource testResource = new Resource();
-				testResource.setResource("");
+				testResource.setResource("http://www.europeana.eu/rights/rr-f/");
 				rights1.setResource(testResource);
 			}
 			aggregation.setRights(rights1);
