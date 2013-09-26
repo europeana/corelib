@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
+
 
 public class EuropeanaUriUtilsTest {
 

@@ -131,8 +131,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		try {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id)
 					.get();
-		} catch (RuntimeException e) {
-			throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
+		} catch (RuntimeException re) {
+			if (re.getCause() != null
+				&& re.getCause() instanceof MappingException) {
+				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
+			}
+			throw re;
 		}
 	}
 
@@ -147,8 +151,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.field("about").equal(newId.getNewId()).get();
 			return fBean;
 		}
-		System.out.println(id);
-		System.out.println(RESOLVE_PREFIX + id);
+
 		newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
 
@@ -167,6 +170,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.equal(newId.getNewId()).get();
 		}
 
+		log.info(String.format("Unresolvable Europeana ID: %s", id));
 		return null;
 	}
 

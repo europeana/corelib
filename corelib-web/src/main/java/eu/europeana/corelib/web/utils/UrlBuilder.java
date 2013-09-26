@@ -31,7 +31,10 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class UrlBuilder {
+	
 
+	public static final String PATH_SEPERATOR = "/";
+	
 	private String protocol = "http";
 	private StringBuilder baseUrl;
 	
@@ -50,7 +53,7 @@ public class UrlBuilder {
 	
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
-		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, "/")) {
+		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, PATH_SEPERATOR)) {
 			relativeUrl = true;
 		} else {
 			if (StringUtils.contains(url,"://")) {
@@ -59,7 +62,7 @@ public class UrlBuilder {
 			}
 		}
 		if (StringUtils.containsNone(url, "?")) {
-			url = StringUtils.replace(url, "//", "/");
+			url = StringUtils.replace(url, "//", PATH_SEPERATOR);
 		}
 		baseUrl = new StringBuilder(url); 
 	}
@@ -96,7 +99,7 @@ public class UrlBuilder {
 		if (StringArrayUtils.isNotBlank(paths)) {
 			for (String path: paths) {
 				path = StringUtils.strip(path, "/?&");
-				baseUrl.append("/").append(path);
+				baseUrl.append(PATH_SEPERATOR).append(path);
 			}
 		}
 		trailingSlash = true;
@@ -106,7 +109,7 @@ public class UrlBuilder {
 	public UrlBuilder addPage(String page) {
 		if (StringUtils.isNotBlank(page)) {
 			page = StringUtils.strip(page, "/?&");
-			baseUrl.append("/").append(page);
+			baseUrl.append(PATH_SEPERATOR).append(page);
 		}
 		trailingSlash = false;
 		return this;
@@ -251,7 +254,7 @@ public class UrlBuilder {
 		}
 		sb.append(baseUrl.toString());
 		if (trailingSlash) {
-			sb.append("/");
+			sb.append(PATH_SEPERATOR);
 		}
 		if (params.size() + multiParams.size() > 0) {
 			boolean first = true;

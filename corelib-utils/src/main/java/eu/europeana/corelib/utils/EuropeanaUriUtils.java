@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.tools.utils;
+package eu.europeana.corelib.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
