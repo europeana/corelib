@@ -53,7 +53,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 public class EDMUtils {
 
 	private static IBindingFactory bfact;
-	private final static String SPACE = " ";
+	private final static String SPACE=" ";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -222,11 +222,11 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							AltLabel altLabel = new AltLabel();
 							altLabel.setString(str);
-							// if (lang == null) {
-							// lang = new LiteralType.Lang();
-							// lang.setLang("");
-							// }
-							// altLabel.setLang(lang);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+							}
+							altLabel.setLang(lang);
 							Concept.Choice ch = new Concept.Choice();
 							ch.setAltLabel(altLabel);
 							choices.add(ch);
@@ -245,9 +245,11 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							PrefLabel prefLabel = new PrefLabel();
 							prefLabel.setString(str);
-							if (lang != null) {
-								prefLabel.setLang(lang);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
 							}
+							prefLabel.setLang(lang);
 							Concept.Choice ch = new Concept.Choice();
 							ch.setPrefLabel(prefLabel);
 							choices.add(ch);
@@ -266,9 +268,11 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							Notation notation = new Notation();
 							notation.setString(str);
-							if (lang != null) {
-								notation.setLang(lang);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
 							}
+							notation.setLang(lang);
 							Concept.Choice ch = new Concept.Choice();
 							ch.setNotation(notation);
 							choices.add(ch);
@@ -287,9 +291,11 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							Note note = new Note();
 							note.setString(str);
-							if (lang != null) {
-								note.setLang(lang);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
 							}
+							note.setLang(lang);
 							Concept.Choice ch = new Concept.Choice();
 							ch.setNote(note);
 							choices.add(ch);
@@ -553,13 +559,12 @@ public class EDMUtils {
 			aggregation.setRights(rights);
 		} else {
 			Rights1 rights1 = new Rights1();
-			// ResourceOrLiteralType.Lang lang = new
-			// ResourceOrLiteralType.Lang();
-			// lang.setLang("");
-			// rights1.setLang(lang);
-			// rights1.setString("");
+			ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
+			lang.setLang("");
+			rights1.setLang(lang);
+			rights1.setString("");
 			Resource res = new Resource();
-			res.setResource("http://www.europeana.eu/rights/rr-f/");
+			res.setResource("http://testrights/");
 			rights1.setResource(res);
 			aggregation.setRights(rights1);
 		}
@@ -581,23 +586,23 @@ public class EDMUtils {
 
 	private static Country convertMapToCountry(
 			Map<String, List<String>> edmCountry) {
-
+		
 		if (edmCountry != null && edmCountry.size() > 0) {
 			Country country = new Country();
 			StringBuilder sb = new StringBuilder();
-			String[] splitCountry = edmCountry.entrySet().iterator().next()
-					.getValue().get(0).split(SPACE);
-			for (String countryWord : splitCountry) {
-				if (StringUtils.equals("and", countryWord)) {
+			String[] splitCountry = edmCountry.entrySet()
+					.iterator().next().getValue().get(0).split(SPACE);
+			for(String countryWord:splitCountry){
+				if(StringUtils.equals("and", countryWord)){
 					sb.append(countryWord);
 				} else {
 					sb.append(StringUtils.capitalize(countryWord));
 				}
 				sb.append(SPACE);
 			}
-
+			
 			country.setCountry(CountryCodes.convert(sb.toString().trim()));
-
+			
 			return country;
 		}
 		return null;
@@ -824,10 +829,11 @@ public class EDMUtils {
 					for (String str : entry.getValue()) {
 						Identifier obj = new Identifier();
 						obj.setString(str);
-						if (lang != null) {
-							obj.setLang(lang);
+						if (lang == null) {
+							lang = new LiteralType.Lang();
+							lang.setLang("");
 						}
-
+						obj.setLang(lang);
 						EuropeanaType.Choice ch = new EuropeanaType.Choice();
 						ch.setIdentifier(obj);
 						dcChoices.add(ch);
@@ -936,10 +942,11 @@ public class EDMUtils {
 					for (String str : entry.getValue()) {
 						Title obj = new Title();
 						obj.setString(str);
-						if (lang != null) {
-							obj.setLang(lang);
+						if (lang == null) {
+							lang = new LiteralType.Lang();
+							lang.setLang("");
 						}
-						
+						obj.setLang(lang);
 						EuropeanaType.Choice ch = new EuropeanaType.Choice();
 						ch.setTitle(obj);
 						dcChoices.add(ch);
@@ -976,10 +983,11 @@ public class EDMUtils {
 					for (String str : entry.getValue()) {
 						Alternative obj = new Alternative();
 						obj.setString(str);
-						if (lang != null) {
-							obj.setLang(lang);
+						if (lang == null) {
+							lang = new LiteralType.Lang();
+							lang.setLang("");
 						}
-						
+						obj.setLang(lang);
 						EuropeanaType.Choice ch = new EuropeanaType.Choice();
 						ch.setAlternative(obj);
 						dcChoices.add(ch);
@@ -1419,9 +1427,11 @@ public class EDMUtils {
 					aggr.getEdmRights());
 			if (rights1 == null) {
 				rights1 = new Rights1();
-				
+				ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
+				lang.setLang("");
+				rights1.setString("");
 				Resource testResource = new Resource();
-				testResource.setResource("http://www.europeana.eu/rights/rr-f/");
+				testResource.setResource("http://testedmrights/");
 				rights1.setResource(testResource);
 			}
 			aggregation.setRights(rights1);
@@ -1602,10 +1612,12 @@ public class EDMUtils {
 							LiteralType t = (LiteralType) clazz.newInstance();
 
 							t.setString(str);
-							if (lang != null) {
-								t.setLang(lang);
+							if (lang == null) {
+								lang = new LiteralType.Lang();
+								lang.setLang("");
+
 							}
-							
+							t.setLang(lang);
 							list.add((T) t);
 						}
 					} else if (clazz.getSuperclass().isAssignableFrom(
@@ -1629,10 +1641,13 @@ public class EDMUtils {
 							} else {
 								t.setString(str);
 							}
-							if (lang != null) {
-								t.setLang(lang);
+							if (lang == null) {
+
+								lang = new ResourceOrLiteralType.Lang();
+								lang.setLang("");
+
 							}
-							
+							t.setLang(lang);
 							list.add((T) t);
 						}
 					}
@@ -1671,21 +1686,23 @@ public class EDMUtils {
 						}
 
 						ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
-						
+						Resource resource = new Resource();
+						resource.setResource("");
+
+						obj.setResource(resource);
+						obj.setString("");
 						for (String str : entry.getValue()) {
-							
 							if (isUri(str)) {
-								Resource resource = new Resource();
-								resource.setResource(str);
 								obj.setResource(resource);
 							} else {
 								obj.setString(str);
 							}
 						}
-						if (lang != null) {
-							obj.setLang(lang);
+						if (lang == null) {
+							lang = new ResourceOrLiteralType.Lang();
+							lang.setLang("");
 						}
-						
+						obj.setLang(lang);
 						return (T) obj;
 					} else if (clazz.getSuperclass().isAssignableFrom(
 							LiteralType.class)) {
@@ -1696,14 +1713,15 @@ public class EDMUtils {
 							lang.setLang(entry.getKey());
 						}
 						LiteralType obj = ((LiteralType) t);
-						
+						obj.setString("");
 						for (String str : entry.getValue()) {
 							obj.setString(str);
 						}
-						if (lang != null) {
-							obj.setLang(lang);
+						if (lang == null) {
+							lang = new LiteralType.Lang();
+							lang.setLang("");
 						}
-						
+						obj.setLang(lang);
 						return (T) obj;
 					}
 				} catch (InstantiationException e) {
@@ -1722,20 +1740,22 @@ public class EDMUtils {
 	private static void createResourceOrLiteralFromString(
 			ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang,
 			String value) {
-	
+		Resource resource = new Resource();
+		resource.setResource("");
+
+		obj.setResource(resource);
+		obj.setString("");
 		if (isUri(value)) {
-			Resource resource = new Resource();
-			resource.setResource(value);
 			obj.setResource(resource);
-			
 		} else {
 			obj.setString(value);
 		}
-		if (lang != null) {
-			obj.setLang(lang);
+		if (lang == null) {
+			lang = new ResourceOrLiteralType.Lang();
+			lang.setLang("");
 		}
 
-	
+		obj.setLang(lang);
 	}
 
 	private static boolean isUri(String str) {
