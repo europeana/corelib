@@ -75,5 +75,23 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
 		
 	}
+	
+	@Test
+	public void extractEuropeanaIdTest() {
+		final String expected = "/euro/testrecord";
+		
+		assertEquals("extractEuropeanaIdTest full url failed", expected,
+				europeanaUrlService.extractEuropeanaId("http://localhost:8081/portal/record/euro/testrecord.html"));
+
+		assertEquals("extractEuropeanaIdTest full resolve url failed", expected,
+				europeanaUrlService.extractEuropeanaId("http://localhost:8081/resolve/record/euro/testrecord"));
+
+		assertEquals("extractEuropeanaIdTest url failed", expected,
+				europeanaUrlService.extractEuropeanaId("/portal/record/euro/testrecord.html"));
+
+		assertEquals("extractEuropeanaIdTest resolve url failed", expected,
+				europeanaUrlService.extractEuropeanaId("/resolve/record/euro/testrecord"));
+		
+	}
 
 }
