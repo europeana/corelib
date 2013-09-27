@@ -36,7 +36,7 @@
 
 
 		<dependency>
-			<groupId>eu.europeana</groupId>
+			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-sugarcrm-bindings</artifactId>
 			<version>${corelib.version}</version>
 		</dependency>
