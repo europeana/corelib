@@ -303,16 +303,16 @@ public final class SolrUtils {
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
 			if (obj.getResource() != null) {
-				solrInputDocument.addField(label.toString(), obj.getResource()
-						.getResource());
+				solrInputDocument.addField(label.toString(), StringUtils.trim(obj.getResource()
+						.getResource()));
 			}
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
 					solrInputDocument.addField(label.toString() + "."
-							+ obj.getLang().getLang(), obj.getString());
+							+ obj.getLang().getLang(), StringUtils.trim(obj.getString()));
 				} else {
 					solrInputDocument.addField(label.toString(),
-							obj.getString());
+							StringUtils.trim(obj.getString()));
 				}
 			}
 		}

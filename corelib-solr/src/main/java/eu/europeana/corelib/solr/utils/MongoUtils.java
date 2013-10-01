@@ -80,8 +80,8 @@ public final class MongoUtils {
 	public static boolean contains(Map<String, List<String>> map, String key,
 			String val) {
 		if (map.keySet().contains(key)) {
-			for(String str :map.get(key)){
-				if(StringUtils.equals(str, val)){
+			for (String str : map.get(key)) {
+				if (StringUtils.equals(str, val)) {
 					return true;
 				}
 			}
@@ -263,9 +263,10 @@ public final class MongoUtils {
 		if (obj != null) {
 			if (obj.getLang() != null
 					&& StringUtils.isNotEmpty(obj.getLang().getLang())) {
-				if (obj.getString() != null) {
+				if (obj.getString() != null
+						&& StringUtils.trimToNull(obj.getString()) != null) {
 					List<String> val = new ArrayList<String>();
-					val.add(obj.getString());
+					val.add(StringUtils.trim(obj.getString()));
 					retMap.put(obj.getLang().getLang(), val);
 				}
 				if (obj.getResource() != null) {
@@ -278,16 +279,19 @@ public final class MongoUtils {
 					retMap.put(obj.getLang().getLang(), val);
 				}
 			} else {
-				if (StringUtils.isNotBlank(obj.getString())) {
+				if (StringUtils.isNotBlank(StringUtils.trimToNull(obj
+						.getString()))) {
 					List<String> val = retMap.get("def") != null ? retMap
 							.get("def") : new ArrayList<String>();
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
-				if (obj.getResource() != null && StringUtils.isNotBlank(obj.getResource().getResource())) {
+				if (obj.getResource() != null
+						&& StringUtils.isNotBlank(StringUtils.trimToNull(obj
+								.getResource().getResource()))) {
 					List<String> val = retMap.get("def") != null ? retMap
 							.get("def") : new ArrayList<String>();
-					val.add(obj.getResource().getResource());
+					val.add(StringUtils.trim(obj.getResource().getResource()));
 					retMap.put("def", val);
 				}
 			}
@@ -320,7 +324,7 @@ public final class MongoUtils {
 					if (val == null) {
 						val = new ArrayList<String>();
 					}
-					val.add(obj.getString());
+					val.add(StringUtils.trim(obj.getString()));
 					retMap.put(lang, val);
 				} else {
 					List<String> val = retMap.get("def");
@@ -377,11 +381,11 @@ public final class MongoUtils {
 						String lang = obj.getLang().getLang();
 						if (retMap.containsKey(lang)) {
 							List<String> val = retMap.get(lang);
-							val.add(obj.getResource().getResource());
+							val.add(StringUtils.trim(obj.getResource().getResource()));
 							retMap.put(lang, val);
 						} else {
 							List<String> val = new ArrayList<String>();
-							val.add(obj.getResource().getResource());
+							val.add(StringUtils.trim(obj.getResource().getResource()));
 							retMap.put(lang, val);
 
 						}
@@ -390,7 +394,7 @@ public final class MongoUtils {
 						if (val == null) {
 							val = new ArrayList<String>();
 						}
-						val.add(obj.getResource().getResource());
+						val.add(StringUtils.trim(obj.getResource().getResource()));
 						retMap.put("def", val);
 					}
 				}
