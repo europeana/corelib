@@ -31,6 +31,7 @@ public class ConceptUpdater implements Updater<ConceptImpl,Concept>{
 		UpdateOperations<ConceptImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(ConceptImpl.class);
 		boolean update = false;
+		if(concept.getChoiceList()!=null){
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
 				Map<String, List<String>> newNoteMap;
@@ -256,6 +257,7 @@ public class ConceptUpdater implements Updater<ConceptImpl,Concept>{
 		}
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
+		}
 		}
 	}
 
