@@ -13,7 +13,7 @@
   <artifactId>corelib-sugarcrm-bindings</artifactId>
   <packaging>jar</packaging>
 
-  <name>corelib-sugarcrm-bindings</name>
+  <name>Europeana Core Library JIBX Bindings for SugarCRM Client</name>
   
 	<dependencies>
 		<!-- JIBX dependencies -->
