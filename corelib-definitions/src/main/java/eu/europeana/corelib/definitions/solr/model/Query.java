@@ -36,8 +36,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public class Query implements Cloneable {
 
-	private final Logger log = Logger.getLogger(getClass().getName());
-
 	/**
 	 * Default start parameter for Solr
 	 */
@@ -51,6 +49,8 @@ public class Query implements Cloneable {
 	private String query;
 
 	private String[] refinements;
+
+	private Map<String, String> valueReplacements;
 
 	private int start;
 
@@ -134,6 +134,11 @@ public class Query implements Cloneable {
 			this.refinements = StringArrayUtils.EMPTY_ARRAY;
 		}
 		this.refinements = (String[]) ArrayUtils.add(this.refinements, refinement);
+		return this;
+	}
+
+	public Query setValueReplacements(Map<String, String> valueReplacements) {
+		this.valueReplacements = valueReplacements;
 		return this;
 	}
 
@@ -282,6 +287,15 @@ public class Query implements Cloneable {
 		Map<String, FacetCollector> register = new LinkedHashMap<String, FacetCollector>();
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
+				boolean replaced = false;
+				if (valueReplacements != null && valueReplacements.containsKey(facetTerm)) {
+					facetTerm = valueReplacements.get(facetTerm);
+					replaced = true;
+					if (StringUtils.isBlank(facetTerm)) {
+						continue;
+					}
+				}
+
 				int colon = facetTerm.indexOf(":");
 				String facetName = facetTerm.substring(0, colon);
 				boolean isTagged = false;
@@ -298,7 +312,7 @@ public class Query implements Cloneable {
 					if (register.containsKey(facetName)) {
 						collector = register.get(facetName);
 					} else {
-						collector = new FacetCollector(facetName, isApiQuery());
+						collector = new FacetCollector(facetName, isApiQuery(), replaced);
 						register.put(facetName, collector);
 					}
 					if (isTagged && !collector.isTagged()) {
@@ -322,14 +336,21 @@ public class Query implements Cloneable {
 		private String name;
 		private List<String> values = new ArrayList<String>();
 		private boolean isApiQuery = false;
+		private boolean hasORedQuery = false;
+		private boolean replaced = false;
 
 		public FacetCollector(String name) {
 			this.name = name;
 		}
 
 		public FacetCollector(String name, boolean isApiQuery) {
-			this.name = name;
+			this(name);
 			this.isApiQuery = isApiQuery;
+		}
+
+		public FacetCollector(String name, boolean isApiQuery, boolean replaced) {
+			this(name, isApiQuery);
+			this.replaced = replaced;
 		}
 
 		public boolean isTagged() {
@@ -356,12 +377,22 @@ public class Query implements Cloneable {
 			this.values = values;
 		}
 
+		private boolean isAlreadyQuoted(String value) {
+			return value.startsWith("\"") && value.endsWith("\"");
+		}
+
+		private boolean isORed(String value) {
+			return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
+		}
+
 		public void addValue(String value) {
-			
 			if (name.equals(Facet.RIGHTS.name())) {
+				if (isORed(value)) {
+					this.hasORedQuery = true;
+				}
 				if (value.endsWith("*")) {
 					value = value.replace(":", "\\:").replace("/", "\\/");
-				} else if (!value.endsWith("*") && !value.startsWith("\"") && !value.endsWith("\"")) {
+				} else if (!isAlreadyQuoted(value) && !isORed(value)) {
 					value = '"' + value + '"';
 				}
 			} else if (name.equals(Facet.TYPE.name())) {
@@ -382,14 +413,15 @@ public class Query implements Cloneable {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			if (isTagged) {
+			if (isTagged && !replaced) {
 				sb.append("{!tag=").append(name).append("}");
 			}
 			sb.append(name);
 			sb.append(":");
 			if (values.size() > 1) {
 				sb.append("(");
-				sb.append(StringUtils.join(values, " OR "));
+				String operator = hasORedQuery ? " AND " : " OR ";
+				sb.append(StringUtils.join(values, operator));
 				sb.append(")");
 			} else {
 				sb.append(values.get(0));
