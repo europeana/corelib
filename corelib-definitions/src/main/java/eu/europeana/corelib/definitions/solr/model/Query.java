@@ -255,6 +255,12 @@ public class Query implements Cloneable {
 			}
 		}
 
+		if (getFacetQueries() != null) {
+			for (String query : getFacetQueries()) {
+				params.add("facet.query=" + query);
+			}
+		}
+
 		return StringUtils.join(params, "&");
 	}
 

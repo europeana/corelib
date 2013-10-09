@@ -18,9 +18,14 @@
 package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -45,6 +50,8 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  */
 public final class SolrUtils {
 
+	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+)\\}");
+
 	private SolrUtils() {
 
 	}
@@ -62,8 +69,8 @@ public final class SolrUtils {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")
 						&& !StringUtils.contains(refinement, " OR ")) {
-					if (DocType.safeValueOf(StringUtils.substringAfter(
-							refinement, "TYPE:")) == null) {
+					if (DocType.safeValueOf(
+							StringUtils.substringAfter(refinement, "TYPE:")) == null) {
 						return false;
 					}
 				}
@@ -384,7 +391,7 @@ public final class SolrUtils {
 		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ")
 				.replace("\\-", "-");
 	}
-	
+
 	public static String escapeFacet(String field, String query) {
 		if (StringUtils.isNotBlank(field) && StringUtils.isNotBlank(query)) {
 			query = escapeQuery(StringUtils.trim(query));
@@ -395,5 +402,39 @@ public final class SolrUtils {
 			return sb.toString();
 		}
 		return null;
+	}
+
+	/**
+	 * The QueryFacets are in this form:
+	 * {!id=REUSABILITY:Limited}RIGHTS:(http\:\/\/creativecommons.org\/licenses\/by-nc\/*
+	 * OR http\:\/\/creativecommons.org\/licenses\/by-nc-sa\/* OR http\:\/\/creativecommons.org\/licenses\/by-nc-nd\/* 
+	 * OR http\:\/\/creativecommons.org\/licenses\/by-nd\/*
+	 * OR http\:\/\/www.europeana.eu\/rights\/out-of-copyright-non-commercial\/*)
+	 * 
+	 * this function creates a hierarchy:
+	 * REUSABILITY
+	 *   Limited: x
+	 *   Free: y
+	 * ...
+	 * 
+	 * @param queryFacets
+	 * @return
+	 */
+	public static List<FacetField> extractQueryFacets(Map<String, Integer> queryFacets) {
+		Map<String, FacetField> map = new HashMap<String, FacetField>();
+		for (String query : queryFacets.keySet()) {
+			Matcher matcher = ID_PATTERN.matcher(query);
+			if (!matcher.find()) {
+				continue;
+			}
+			String field = matcher.group(1);
+			String value = matcher.group(2);
+			if (!map.containsKey(field)) {
+				map.put(field, new FacetField(field));
+			}
+			map.get(field).add(value, queryFacets.get(query));
+		}
+		List<FacetField> list = new ArrayList<FacetField>(map.values());
+		return list;
 	}
 }
