@@ -21,7 +21,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-definitions</artifactId>
-	<name>Europeana CoreLibrary Definitions</name>
+	<name>Europeana Core Library Definitions</name>
 	<url>http://www.europeanalabs.eu</url>
 	<dependencies>
 		<!-- Corelib -->

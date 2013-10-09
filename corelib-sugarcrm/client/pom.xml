@@ -13,7 +13,7 @@
 
     <groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-sugarcrm-client</artifactId>
-	<name>corelib-sugarcrm</name>
+	<name>Europeana Core Library SugarCRM SOAP Client</name>
     <packaging>jar</packaging>
   
 	<properties>

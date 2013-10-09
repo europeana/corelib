@@ -50,7 +50,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public class EDMUtils {
+public class EdmUtils {
 
 	private static IBindingFactory bfact;
 	private final static String SPACE=" ";
@@ -1612,11 +1612,11 @@ public class EDMUtils {
 							LiteralType t = (LiteralType) clazz.newInstance();
 
 							t.setString(str);
-							if (lang == null) {
-								lang = new LiteralType.Lang();
-								lang.setLang("");
-
-							}
+//							if (lang == null) {
+//								lang = new LiteralType.Lang();
+//								lang.setLang("");
+//
+//							}
 							t.setLang(lang);
 							list.add((T) t);
 						}
@@ -1632,8 +1632,8 @@ public class EDMUtils {
 							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
 									.newInstance();
 							Resource resource = new Resource();
-							resource.setResource("");
-							t.setResource(resource);
+//							resource.setResource("");
+//							t.setResource(resource);
 
 							t.setString("");
 							if (isUri(str)) {
@@ -1641,12 +1641,12 @@ public class EDMUtils {
 							} else {
 								t.setString(str);
 							}
-							if (lang == null) {
-
-								lang = new ResourceOrLiteralType.Lang();
-								lang.setLang("");
-
-							}
+//							if (lang == null) {
+//
+//								lang = new ResourceOrLiteralType.Lang();
+//								lang.setLang("");
+//
+//							}
 							t.setLang(lang);
 							list.add((T) t);
 						}
@@ -1687,9 +1687,9 @@ public class EDMUtils {
 
 						ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
 						Resource resource = new Resource();
-						resource.setResource("");
+//						resource.setResource("");
 
-						obj.setResource(resource);
+//						obj.setResource(resource);
 						obj.setString("");
 						for (String str : entry.getValue()) {
 							if (isUri(str)) {
@@ -1698,10 +1698,10 @@ public class EDMUtils {
 								obj.setString(str);
 							}
 						}
-						if (lang == null) {
-							lang = new ResourceOrLiteralType.Lang();
-							lang.setLang("");
-						}
+//						if (lang == null) {
+//							lang = new ResourceOrLiteralType.Lang();
+//							lang.setLang("");
+//						}
 						obj.setLang(lang);
 						return (T) obj;
 					} else if (clazz.getSuperclass().isAssignableFrom(
@@ -1717,10 +1717,10 @@ public class EDMUtils {
 						for (String str : entry.getValue()) {
 							obj.setString(str);
 						}
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
+//						if (lang == null) {
+//							lang = new LiteralType.Lang();
+//							lang.setLang("");
+//						}
 						obj.setLang(lang);
 						return (T) obj;
 					}
@@ -1741,19 +1741,19 @@ public class EDMUtils {
 			ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang,
 			String value) {
 		Resource resource = new Resource();
-		resource.setResource("");
-
-		obj.setResource(resource);
+//		resource.setResource("");
+//
+//		obj.setResource(resource);
 		obj.setString("");
 		if (isUri(value)) {
 			obj.setResource(resource);
 		} else {
 			obj.setString(value);
 		}
-		if (lang == null) {
-			lang = new ResourceOrLiteralType.Lang();
-			lang.setLang("");
-		}
+//		if (lang == null) {
+//			lang = new ResourceOrLiteralType.Lang();
+//			lang.setLang("");
+//		}
 
 		obj.setLang(lang);
 	}

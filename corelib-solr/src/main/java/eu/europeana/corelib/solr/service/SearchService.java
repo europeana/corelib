@@ -227,4 +227,7 @@ public interface SearchService {
 	 */
 	Date getLastSolrUpdate() throws SolrServerException, IOException;
 
+	Map<String, Integer> queryFacetSearch(String query, String[] qf,
+			List<String> queries);
+
 }

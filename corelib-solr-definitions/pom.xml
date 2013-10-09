@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-solr-definitions</artifactId>
-	<name>Europeana CoreLibrary Solr Definitions</name>
+	<name>Europeana Core Library Solr Definitions</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jibx.version>1.2.3</jibx.version>

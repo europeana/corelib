@@ -325,6 +325,12 @@ public class SearchServiceImpl implements SearchService {
 					}
 				}
 
+				if (query.getFacetQueries() != null) {
+					for (String facetQuery : query.getFacetQueries()) {
+						solrQuery.addFacetQuery(facetQuery);
+					}
+				}
+
 				try {
 					log.fine("Solr query is: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
@@ -380,19 +386,27 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public Map<String, Integer> seeAlso(List<String> queries) {
+		return queryFacetSearch("*:*", null, queries);
+	}
+
+	@Override
+	public Map<String, Integer> queryFacetSearch(String query, String[] qf, List<String> queries) {
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery("*:*");
+		solrQuery.setQuery(query);
+		if (qf != null) {
+			solrQuery.addFilterQuery(qf);
+		}
 		solrQuery.setRows(0);
 		solrQuery.setFacet(true);
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
-		for (String query : queries) {
-			solrQuery.addFacetQuery(query);
+		for (String queryFacet : queries) {
+			solrQuery.addFacetQuery(queryFacet);
 		}
 		QueryResponse response;
 		Map<String, Integer> seeAlso = null;
 		try {
+			log.fine("Solr query is: " + solrQuery.toString());
 			response = solrServer.query(solrQuery);
-			log.fine(solrQuery.toString());
 			logTime("seeAlso", response.getElapsedTime());
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
@@ -564,10 +578,9 @@ public class SearchServiceImpl implements SearchService {
 		if (solrServer instanceof HttpSolrServer) {
 			HttpSolrServer server = new HttpSolrServer(
 					((HttpSolrServer) solrServer).getBaseURL());
-			AbstractHttpClient client = (AbstractHttpClient) server
-			        .getHttpClient();
+			AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
 			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
-			        username, password));
+					username, password));
 		return server;
 		} else {
 			return solrServer;
@@ -612,21 +625,18 @@ public class SearchServiceImpl implements SearchService {
 	public void logTime(String type, long time) {
 		log.fine(String.format("elapsed time (%s): %d", type, time));
 	}
-
-
-
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
-	  private final UsernamePasswordCredentials credentials;
+	private final UsernamePasswordCredentials credentials;
 
-	  public PreEmptiveBasicAuthenticator(String user, String pass) {
-	    credentials = new UsernamePasswordCredentials(user, pass);
-	  }
-
-	  @Override
-	  public void process(HttpRequest request, HttpContext context)
-	      throws HttpException, IOException {
-	    request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
-	  }
+	public PreEmptiveBasicAuthenticator(String user, String pass) {
+		credentials = new UsernamePasswordCredentials(user, pass);
 	}
+
+	@Override
+	public void process(HttpRequest request, HttpContext context)
+			throws HttpException, IOException {
+		request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
+	}
+}

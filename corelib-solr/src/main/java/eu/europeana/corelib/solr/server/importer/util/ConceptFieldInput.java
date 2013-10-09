@@ -70,6 +70,7 @@ public final class ConceptFieldInput {
 			SolrInputDocument solrInputDocument) {
 		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(),
 				concept.getAbout());
+		if(concept.getChoiceList()!=null){
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifAltLabel()) {
 				AltLabel altLabel = choice.getAltLabel();
@@ -144,6 +145,7 @@ public final class ConceptFieldInput {
 								EdmLabel.CC_SKOS_NOTATIONS);
 			}
 		}
+		}
 		return solrInputDocument;
 	}
 
@@ -169,9 +171,12 @@ public final class ConceptFieldInput {
 		if (conceptMongo == null) {
 			// If it does not exist
 			conceptMongo = createNewConcept(concept);
-		
+			try{
 				mongoServer.getDatastore().save(conceptMongo);
-			
+			}
+			catch(Exception e){
+				conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
+			}
 		} else {
 			conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
 		}
@@ -192,6 +197,7 @@ public final class ConceptFieldInput {
 	private ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
 		conceptMongo.setAbout(concept.getAbout());
+		if(concept.getChoiceList()!=null){
 		for (Concept.Choice choice : concept.getChoiceList()) {
 			if (choice.ifNote()) {
 				if (conceptMongo.getNote() == null) {
@@ -284,7 +290,7 @@ public final class ConceptFieldInput {
 			}
 		}
 		
-	
+		}
 		return conceptMongo;
 	}
 }
