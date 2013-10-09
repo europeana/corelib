@@ -67,6 +67,7 @@ public class Query implements Cloneable {
 	private List<String> searchRefinements;
 	private List<String> facetRefinements;
 	private List<String> filteredFacets;
+	private Map<String, String> facetQueries;
 
 	private boolean produceFacetUnion = true;
 
@@ -140,6 +141,29 @@ public class Query implements Cloneable {
 	public Query setValueReplacements(Map<String, String> valueReplacements) {
 		this.valueReplacements = valueReplacements;
 		return this;
+	}
+
+	public Query addFacetQuery(String key, String query) {
+		if (facetQueries == null) {
+			facetQueries = new LinkedHashMap<String, String>();
+		}
+		facetQueries.put(key, query);
+		return this;
+	}
+
+	public Query setFacetQueries(Map<String, String> facetQueries) {
+		this.facetQueries = facetQueries;
+		return this;
+	}
+
+	public List<String> getFacetQueries() {
+		List<String> queries = new ArrayList<String>();
+		if (facetQueries != null) {
+			for (String key : facetQueries.keySet()) {
+				queries.add("{!id=" + key + "}" + facetQueries.get(key));
+			}
+		}
+		return queries;
 	}
 
 	public Integer getStart() {

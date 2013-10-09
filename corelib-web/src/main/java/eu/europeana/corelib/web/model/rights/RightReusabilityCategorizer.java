@@ -38,6 +38,7 @@ public class RightReusabilityCategorizer {
 	private static String allRightsQuery;
 
 	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
+	private static Map<String, String> queryFacetMap;
 
 	public RightReusabilityCategorizer() {
 		numberOfFree = 0;
@@ -123,6 +124,15 @@ public class RightReusabilityCategorizer {
 
 	private static String join(List<String> urls) {
 		return "RIGHTS:(" + StringUtils.join(urls, " OR ") + ")";
+	}
+
+	public static Map<String, String> getQueryFacets() {
+		if (queryFacetMap == null) {
+			queryFacetMap = new HashMap<String, String>();
+			queryFacetMap.put("REUSABILITY:Free", getFreeRightsQuery());
+			queryFacetMap.put("REUSABILITY:Limited", getLimitedRightsQuery());
+		}
+		return queryFacetMap;
 	}
 
 	private String cleanUrl(String url) {
