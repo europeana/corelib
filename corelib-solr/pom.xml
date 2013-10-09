@@ -56,6 +56,11 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-web</artifactId>
+			<version>${version.europeanaCorelib}</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-utils</artifactId>
 			<version>${version.europeanaCorelib}</version>
 		</dependency>

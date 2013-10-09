@@ -134,7 +134,8 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	
 	@Override
 	public String getEdmPreview(){
-		return edmPreview;
+		
+		return "";
 	}
 	
 	@Override

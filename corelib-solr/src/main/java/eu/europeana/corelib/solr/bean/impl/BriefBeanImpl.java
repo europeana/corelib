@@ -30,6 +30,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.BriefBean
@@ -124,7 +125,14 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	
 	@Override
 	public String[] getEdmPreview(){
-		return this.edmPreview;
+		List<String> previews = new ArrayList<String>();
+		
+		if (this.edmObject!=null){
+			for (String str:edmObject){
+				previews.add(new EuropeanaUrlServiceImpl().getThumbnailUrl(str, getType()).toString());
+			}
+		}
+		return previews.toArray(new String[previews.size()]);
 	}
 
 	@Override

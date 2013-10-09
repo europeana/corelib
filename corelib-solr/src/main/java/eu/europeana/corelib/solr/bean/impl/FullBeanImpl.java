@@ -49,6 +49,7 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
@@ -179,11 +180,25 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
+		String previewUrl = null;
+		DocType type = null;
+		if (this.getAggregations().get(0).getEdmObject() != null) {
+			previewUrl = this.getAggregations().get(0).getEdmObject();
+
+		}
+		if (previewUrl != null) {
+			this.europeanaAggregation
+					.setEdmPreview(new EuropeanaUrlServiceImpl()
+							.getThumbnailUrl(previewUrl, type).toString());
+		} else {
+			this.europeanaAggregation.setEdmPreview("");
+		}
 		return this.europeanaAggregation;
 	}
 
 	@Override
-	public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
+	public void setEuropeanaAggregation(
+			EuropeanaAggregation europeanaAggregation) {
 		this.europeanaAggregation = (EuropeanaAggregationImpl) europeanaAggregation;
 	}
 
@@ -274,10 +289,10 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getUserTags() {
-		return this.userTags!=null?this.userTags.clone():null;
+		return this.userTags != null ? this.userTags.clone() : null;
 	}
 
-	public void setUserTags(String[] userTags){
+	public void setUserTags(String[] userTags) {
 		this.userTags = userTags.clone();
 	}
 
@@ -291,14 +306,13 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public int hashCode() {
-		return StringUtils.isNotBlank(this.about) 
-			? this.about.hashCode() 
-			: this.europeanaId.toStringMongod().hashCode();
+		return StringUtils.isNotBlank(this.about) ? this.about.hashCode()
+				: this.europeanaId.toStringMongod().hashCode();
 	}
 
 	@Override
 	public String[] getCountry() {
-		return this.country!=null?country.clone():null;
+		return this.country != null ? country.clone() : null;
 	}
 
 	@Override
@@ -308,12 +322,14 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public String[] getEuropeanaCollectionName() {
-		return this.europeanaCollectionName!=null?this.europeanaCollectionName.clone():null;
+		return this.europeanaCollectionName != null ? this.europeanaCollectionName
+				.clone() : null;
 	}
 
 	@Override
 	public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
-		this.europeanaCollectionName = europeanaCollectionName!=null?europeanaCollectionName.clone():null;
+		this.europeanaCollectionName = europeanaCollectionName != null ? europeanaCollectionName
+				.clone() : null;
 	}
 
 	@Override
@@ -337,7 +353,7 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public void setOptOut(boolean optOut){
+	public void setOptOut(boolean optOut) {
 		this.optOut = optOut;
 	}
 }
