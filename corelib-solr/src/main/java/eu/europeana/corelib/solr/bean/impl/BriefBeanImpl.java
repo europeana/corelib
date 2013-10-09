@@ -129,7 +129,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 		
 		if (this.edmObject!=null){
 			for (String str:edmObject){
-				previews.add(new EuropeanaUrlServiceImpl().getThumbnailUrl(str, getType()).toString());
+				previews.add(EuropeanaUrlServiceImpl.getBeanInstance().getThumbnailUrl(str, getType()).toString());
 			}
 		}
 		return previews.toArray(new String[previews.size()]);

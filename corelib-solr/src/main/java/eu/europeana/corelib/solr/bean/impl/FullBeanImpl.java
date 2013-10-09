@@ -188,7 +188,7 @@ public class FullBeanImpl implements FullBean {
 		}
 		if (previewUrl != null) {
 			this.europeanaAggregation
-					.setEdmPreview(new EuropeanaUrlServiceImpl()
+					.setEdmPreview(EuropeanaUrlServiceImpl.getBeanInstance()
 							.getThumbnailUrl(previewUrl, type).toString());
 		} else {
 			this.europeanaAggregation.setEdmPreview("");

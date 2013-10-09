@@ -55,7 +55,7 @@ public final class EuropeanaAggregationFieldInput {
 	 */
 	private final static String EUROPEANA_URI = "http://www.europeana.eu/portal/record";
 	private final static String EDM_PREVIEW_PREFIX = "http://europeanastatic.eu/api/image?uri=";
-	private final static String EDM_PREVIEW_SUFFIX = "&size=LARGE&type=TEXT";
+	private final static String EDM_PREVIEW_SUFFIX = "&size=LARGE&type=";
 
 	public EuropeanaAggregationFieldInput() {
 
@@ -118,8 +118,8 @@ public final class EuropeanaAggregationFieldInput {
 				aggregation.getAggregatedCHO() != null ? aggregation
 						.getAggregatedCHO().getResource() : null);
 		
-		solrInputDocument.addField(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
-				.toString(), previewUrl != null ? generateEdmPreview(previewUrl) : null);
+//		solrInputDocument.addField(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
+//				.toString(), previewUrl != null ? generateEdmPreview(previewUrl) : null);
 		if (aggregation.getAggregateList() != null) {
 			for (Aggregates aggregates : aggregation.getAggregateList()) {
 				solrInputDocument.addField(
