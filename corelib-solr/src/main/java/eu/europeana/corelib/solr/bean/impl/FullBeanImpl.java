@@ -181,7 +181,7 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
 		String previewUrl = null;
-		DocType type = null;
+		
 		if (this.getAggregations().get(0).getEdmObject() != null) {
 			previewUrl = this.getAggregations().get(0).getEdmObject();
 
