@@ -38,6 +38,7 @@ import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Country;
 import eu.europeana.corelib.definitions.jibx.CountryCodes;
 import eu.europeana.corelib.definitions.jibx.Creator;
+import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
@@ -45,8 +46,10 @@ import eu.europeana.corelib.definitions.jibx.LandingPage;
 import eu.europeana.corelib.definitions.jibx.Language1;
 import eu.europeana.corelib.definitions.jibx.LanguageCodes;
 import eu.europeana.corelib.definitions.jibx.Preview;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights1;
+import eu.europeana.corelib.definitions.jibx.Type1;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
@@ -70,6 +73,10 @@ public class EuropeanaAggregationFieldInputTest {
 	@Test
 	public void testAggregation() {
 		EuropeanaAggregationType eAggregation = createAggregationJibx();
+		ProxyType proxy = new ProxyType();
+		Type1 type = new Type1();
+		type.setType(EdmType.TEXT);
+		proxy.setType(type);
 		RDF rdf = new RDF();
 		List<Aggregation> aggregations = new ArrayList<Aggregation>();
 		Aggregation aggr = new Aggregation();
@@ -94,6 +101,7 @@ public class EuropeanaAggregationFieldInputTest {
 			solrDocument = new EuropeanaAggregationFieldInput()
 					.createAggregationSolrFields(eAggregation, solrDocument,
 							SolrUtils.getPreviewUrl(rdf));
+			
 			assertEquals(eAggregation.getAbout(),
 					solrDocument
 							.getFieldValue(EdmLabel.EDM_EUROPEANA_AGGREGATION
@@ -133,11 +141,6 @@ public class EuropeanaAggregationFieldInputTest {
 					solrDocument
 							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE
 									.toString()));
-//			assertEquals(
-//					generateEdmPreview(eAggregation.getPreview().getResource()),
-//					solrDocument
-//							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW
-//									.toString()));
 			assertEquals(
 					eAggregation.getRights().getString(),
 					solrDocument
@@ -203,8 +206,6 @@ public class EuropeanaAggregationFieldInputTest {
 			assertEquals(aggregation.getLanguage().getLanguage().xmlValue(),
 					aggregationMongo.getEdmLanguage().values().iterator()
 							.next().get(0));
-//			assertEquals(generateEdmPreview(rdf.getAggregationList().get(0).getObject()
-//					.getResource()), aggregationMongo.getEdmPreview());
 			assertEquals(aggregation.getRights().getString(), aggregationMongo
 					.getEdmRights().values().iterator().next().get(0));
 			assertEquals(aggregation.getAggregateList().get(0).getResource(),
