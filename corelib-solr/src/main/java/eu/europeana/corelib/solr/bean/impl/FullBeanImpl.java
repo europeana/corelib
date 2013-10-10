@@ -181,15 +181,15 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
 		String previewUrl = null;
-		
+
 		if (this.getAggregations().get(0).getEdmObject() != null) {
 			previewUrl = this.getAggregations().get(0).getEdmObject();
 
 		}
 		if (previewUrl != null) {
-			this.europeanaAggregation
-					.setEdmPreview(EuropeanaUrlServiceImpl.getBeanInstance()
-							.getThumbnailUrl(previewUrl, type).toString());
+			this.europeanaAggregation.setEdmPreview(EuropeanaUrlServiceImpl
+					.getBeanInstance().getThumbnailUrl(previewUrl, type)
+					.toString());
 		} else {
 			this.europeanaAggregation.setEdmPreview("");
 		}
@@ -279,7 +279,10 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public DocType getType() {
-		return this.type;
+		if (type != null) {
+			return this.type;
+		}
+		return this.getProxies().get(0).getEdmType();
 	}
 
 	@Override
