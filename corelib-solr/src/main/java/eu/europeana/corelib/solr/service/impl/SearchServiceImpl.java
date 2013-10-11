@@ -407,7 +407,7 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			log.fine("Solr query is: " + solrQuery.toString());
 			response = solrServer.query(solrQuery);
-			logTime("seeAlso", response.getElapsedTime());
+			logTime("queryFacetSearch", response.getElapsedTime());
 			seeAlso = response.getFacetQuery();
 		} catch (SolrServerException e) {
 			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
