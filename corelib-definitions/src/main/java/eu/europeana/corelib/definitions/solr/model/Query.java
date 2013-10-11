@@ -36,6 +36,9 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public class Query implements Cloneable {
 
+	private final static String OR = " OR ";
+	private final static String AND = " AND ";
+
 	/**
 	 * Default start parameter for Solr
 	 */
@@ -445,6 +448,22 @@ public class Query implements Cloneable {
 			}
 		}
 
+		private String join(List<String> valueList, String booleanOperator) {
+			if (valueList.size() == 0) {
+				return null;
+			}
+			StringBuilder sb = new StringBuilder();
+			if (valueList.size() > 1) {
+				sb.append("(");
+				sb.append(StringUtils.join(valueList, booleanOperator));
+				sb.append(")");
+			} else {
+				sb.append(valueList.get(0));
+			}
+
+			return sb.toString();
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
@@ -454,27 +473,18 @@ public class Query implements Cloneable {
 			sb.append(name);
 			sb.append(":");
 
-			StringBuilder valuesBuilder = new StringBuilder();
-			if (values.size() > 0) {
-				if (values.size() > 1) {
-					valuesBuilder.append("(");
-					valuesBuilder.append(StringUtils.join(values, " OR "));
-					valuesBuilder.append(")");
-				} else {
-					valuesBuilder.append(values.get(0));
-				}
-			}
+			String valuesString = join(values, OR);
+			String replacedValuesString = join(replacedValues, OR);
 
-			if (replacedValues.size() == 0) {
-				sb.append(valuesBuilder.toString());
-			} else {
-				if (valuesBuilder.length() > 0) {
-					replacedValues.add(0, valuesBuilder.toString());
-				}
-				if (replacedValues.size() == 1) {
-					sb.append(replacedValues.get(0));
+			if (StringUtils.isNotBlank(valuesString)) {
+				if (StringUtils.isNotBlank(replacedValuesString)) {
+					sb.append(String.format("(%s AND %s)", valuesString, replacedValuesString));
 				} else {
-					sb.append("(").append(StringUtils.join(replacedValues, " AND ")).append(")");
+					sb.append(valuesString);
+				}
+			} else {
+				if (StringUtils.isNotBlank(replacedValuesString)) {
+					sb.append(replacedValuesString);
 				}
 			}
 
