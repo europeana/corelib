@@ -342,13 +342,13 @@ public class Query implements Cloneable {
 					if (register.containsKey(facetName)) {
 						collector = register.get(facetName);
 					} else {
-						collector = new FacetCollector(facetName, isApiQuery(), replaced);
+						collector = new FacetCollector(facetName, isApiQuery());
 						register.put(facetName, collector);
 					}
 					if (isTagged && !collector.isTagged()) {
 						collector.setTagged(true);
 					}
-					collector.addValue(facetTerm.substring(colon + 1));
+					collector.addValue(facetTerm.substring(colon + 1), replaced);
 				}
 			} else {
 				searchRefinements.add(facetTerm);
@@ -365,6 +365,7 @@ public class Query implements Cloneable {
 		private boolean isTagged = true;
 		private String name;
 		private List<String> values = new ArrayList<String>();
+		private List<String> replacedValues = new ArrayList<String>();
 		private boolean isApiQuery = false;
 		private boolean hasORedQuery = false;
 		private boolean replaced = false;
@@ -415,7 +416,7 @@ public class Query implements Cloneable {
 			return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
 		}
 
-		public void addValue(String value) {
+		public void addValue(String value, boolean isReplaced) {
 			if (name.equals(Facet.RIGHTS.name())) {
 				if (isORed(value)) {
 					this.hasORedQuery = true;
@@ -437,7 +438,11 @@ public class Query implements Cloneable {
 					}
 				}
 			}
-			values.add(value);
+			if (isReplaced) {
+				replacedValues.add(value);
+			} else {
+				values.add(value);
+			}
 		}
 
 		@Override
@@ -448,14 +453,31 @@ public class Query implements Cloneable {
 			}
 			sb.append(name);
 			sb.append(":");
-			if (values.size() > 1) {
-				sb.append("(");
-				String operator = hasORedQuery ? " AND " : " OR ";
-				sb.append(StringUtils.join(values, operator));
-				sb.append(")");
-			} else {
-				sb.append(values.get(0));
+
+			StringBuilder valuesBuilder = new StringBuilder();
+			if (values.size() > 0) {
+				if (values.size() > 1) {
+					valuesBuilder.append("(");
+					valuesBuilder.append(StringUtils.join(values, " OR "));
+					valuesBuilder.append(")");
+				} else {
+					valuesBuilder.append(values.get(0));
+				}
 			}
+
+			if (replacedValues.size() == 0) {
+				sb.append(valuesBuilder.toString());
+			} else {
+				if (valuesBuilder.length() > 0) {
+					replacedValues.add(0, valuesBuilder.toString());
+				}
+				if (replacedValues.size() == 1) {
+					sb.append(replacedValues.get(0));
+				} else {
+					sb.append("(").append(StringUtils.join(replacedValues, " AND ")).append(")");
+				}
+			}
+
 			return sb.toString();
 		}
 	}
