@@ -18,10 +18,13 @@ package eu.europeana.corelib.solr.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.jibx.runtime.BindingDirectory;
@@ -43,17 +46,21 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * Convert a FullBean to EDM
  * 
  * @author Yorgos.Mamakis@ kb.nl
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  */
 public class EdmUtils {
 
+	private static final Logger log = Logger.getLogger(EdmUtils.class.getCanonicalName());
+
 	private static IBindingFactory bfact;
-	private final static String SPACE=" ";
+	private final static String SPACE = " ";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -99,44 +106,14 @@ public class EdmUtils {
 			for (Timespan ts : timespans) {
 				TimeSpanType timeSpan = new TimeSpanType();
 				timeSpan.setAbout(ts.getAbout());
-				List<AltLabel> altLabelList = convertListFromMap(
-						AltLabel.class, ts.getAltLabel());
-				if (altLabelList != null) {
-					timeSpan.setAltLabelList(altLabelList);
-				}
-				Begin begin = convertMapToObj(Begin.class, ts.getBegin());
-				if (begin != null) {
-					timeSpan.setBegin(begin);
-				}
-				End end = convertMapToObj(End.class, ts.getEnd());
-				if (end != null) {
-					timeSpan.setEnd(end);
-				}
-				List<HasPart> hasPartList = convertListFromMap(HasPart.class,
-						ts.getDctermsHasPart());
-				if (hasPartList != null) {
-					timeSpan.setHasPartList(hasPartList);
-				}
-				List<IsPartOf> isPartOfList = convertListFromMap(
-						IsPartOf.class, ts.getIsPartOf());
-				if (isPartOfList != null) {
-					timeSpan.setIsPartOfList(isPartOfList);
-				}
-				List<Note> noteList = convertListFromMap(Note.class,
-						ts.getNote());
-				if (noteList != null) {
-					timeSpan.setNoteList(noteList);
-				}
-				List<SameAs> sameAsList = convertListFromArray(SameAs.class,
-						ts.getOwlSameAs());
-				if (sameAsList != null) {
-					timeSpan.setSameAList(sameAsList);
-				}
-				List<PrefLabel> prefLabelList = convertListFromMap(
-						PrefLabel.class, ts.getPrefLabel());
-				if (prefLabelList != null) {
-					timeSpan.setPrefLabelList(prefLabelList);
-				}
+				addAsList(timeSpan, AltLabel.class, ts.getAltLabel());
+				addAsObject(timeSpan, Begin.class, ts.getBegin());
+				addAsObject(timeSpan, End.class, ts.getEnd());
+				addAsList(timeSpan, HasPart.class, ts.getDctermsHasPart());
+				addAsList(timeSpan, IsPartOf.class, ts.getIsPartOf());
+				addAsList(timeSpan, Note.class, ts.getNote());
+				addAsList(timeSpan, SameAs.class, ts.getOwlSameAs());
+				addAsList(timeSpan, PrefLabel.class, ts.getPrefLabel());
 				timespanList.add(timeSpan);
 			}
 			rdf.setTimeSpanList(timespanList);
@@ -156,8 +133,7 @@ public class EdmUtils {
 					pType.setAlt(alt);
 				}
 
-				if (place.getLatitude() != null
-						&& place.getLongitude() != null
+				if (place.getLatitude() != null && place.getLongitude() != null
 						&& (place.getLatitude() != 0 && place.getLongitude() != 0)) {
 					Lat lat = new Lat();
 					lat.setLat(place.getLatitude());
@@ -167,36 +143,12 @@ public class EdmUtils {
 					_long.setLong(place.getLongitude());
 					pType.setLong(_long);
 				}
-				List<AltLabel> altLabelList = convertListFromMap(
-						AltLabel.class, place.getAltLabel());
-				if (altLabelList != null) {
-					pType.setAltLabelList(altLabelList);
-				}
-				List<HasPart> hasPartList = convertListFromMap(HasPart.class,
-						place.getDcTermsHasPart());
-				if (hasPartList != null) {
-					pType.setHasPartList(hasPartList);
-				}
-				List<IsPartOf> isPartOfList = convertListFromMap(
-						IsPartOf.class, place.getIsPartOf());
-				if (isPartOfList != null) {
-					pType.setIsPartOfList(isPartOfList);
-				}
-				List<Note> noteList = convertListFromMap(Note.class,
-						place.getNote());
-				if (noteList != null) {
-					pType.setNoteList(noteList);
-				}
-				List<PrefLabel> prefLabelList = convertListFromMap(
-						PrefLabel.class, place.getPrefLabel());
-				if (prefLabelList != null) {
-					pType.setPrefLabelList(prefLabelList);
-				}
-				List<SameAs> sameAsList = convertListFromArray(SameAs.class,
-						place.getOwlSameAs());
-				if (sameAsList != null) {
-					pType.setSameAList(sameAsList);
-				}
+				addAsList(pType, AltLabel.class, place.getAltLabel());
+				addAsList(pType, HasPart.class, place.getDcTermsHasPart());
+				addAsList(pType, IsPartOf.class, place.getIsPartOf());
+				addAsList(pType, Note.class, place.getNote());
+				addAsList(pType, PrefLabel.class, place.getPrefLabel());
+				addAsList(pType, SameAs.class, place.getOwlSameAs());
 				placeList.add(pType);
 			}
 			rdf.setPlaceList(placeList);
@@ -210,179 +162,21 @@ public class EdmUtils {
 				Concept con = new Concept();
 				con.setAbout(concept.getAbout());
 				List<Concept.Choice> choices = new ArrayList<Concept.Choice>();
-				if (concept.getAltLabel() != null) {
-					for (Entry<String, List<String>> entry : concept
-							.getAltLabel().entrySet()) {
-						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals("def", entry.getKey())) {
-							lang = new LiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							AltLabel altLabel = new AltLabel();
-							altLabel.setString(str);
-							if (lang == null) {
-								lang = new LiteralType.Lang();
-								lang.setLang("");
-							}
-							altLabel.setLang(lang);
-							Concept.Choice ch = new Concept.Choice();
-							ch.setAltLabel(altLabel);
-							choices.add(ch);
-						}
-					}
-				}
-				if (concept.getPrefLabel() != null) {
-					for (Entry<String, List<String>> entry : concept
-							.getPrefLabel().entrySet()) {
-						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals("def", entry.getKey())) {
-							lang = new LiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							PrefLabel prefLabel = new PrefLabel();
-							prefLabel.setString(str);
-							if (lang == null) {
-								lang = new LiteralType.Lang();
-								lang.setLang("");
-							}
-							prefLabel.setLang(lang);
-							Concept.Choice ch = new Concept.Choice();
-							ch.setPrefLabel(prefLabel);
-							choices.add(ch);
-						}
-					}
-				}
-				if (concept.getNotation() != null) {
-					for (Entry<String, List<String>> entry : concept
-							.getNotation().entrySet()) {
-						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals("def", entry.getKey())) {
-							lang = new LiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							Notation notation = new Notation();
-							notation.setString(str);
-							if (lang == null) {
-								lang = new LiteralType.Lang();
-								lang.setLang("");
-							}
-							notation.setLang(lang);
-							Concept.Choice ch = new Concept.Choice();
-							ch.setNotation(notation);
-							choices.add(ch);
-						}
-					}
-				}
-				if (concept.getNote() != null) {
-					for (Entry<String, List<String>> entry : concept.getNote()
-							.entrySet()) {
-						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals("def", entry.getKey())) {
-							lang = new LiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							Note note = new Note();
-							note.setString(str);
-							if (lang == null) {
-								lang = new LiteralType.Lang();
-								lang.setLang("");
-							}
-							note.setLang(lang);
-							Concept.Choice ch = new Concept.Choice();
-							ch.setNote(note);
-							choices.add(ch);
-						}
-					}
-				}
-				if (concept.getBroader() != null) {
-					for (String broaderString : concept.getBroader()) {
-						Broader broader = new Broader();
-						broader.setResource(broaderString);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setBroader(broader);
-						choices.add(ch);
-					}
-				}
-				if (concept.getBroadMatch() != null) {
-					for (String str : concept.getBroadMatch()) {
-						BroadMatch broadMatch = new BroadMatch();
-						broadMatch.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setBroadMatch(broadMatch);
-						choices.add(ch);
-					}
-				}
-				if (concept.getCloseMatch() != null) {
-					for (String str : concept.getCloseMatch()) {
-						CloseMatch closeMatch = new CloseMatch();
-						closeMatch.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setCloseMatch(closeMatch);
-						choices.add(ch);
-					}
-				}
-				if (concept.getExactMatch() != null) {
-					for (String str : concept.getExactMatch()) {
-						ExactMatch exactMatch = new ExactMatch();
-						exactMatch.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setExactMatch(exactMatch);
-						choices.add(ch);
-					}
-				}
-				if (concept.getInScheme() != null) {
-					for (String str : concept.getInScheme()) {
-						InScheme inScheme = new InScheme();
-						inScheme.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setInScheme(inScheme);
-						choices.add(ch);
-					}
-				}
-				if (concept.getNarrower() != null) {
-					for (String str : concept.getNarrower()) {
-						Narrower narrower = new Narrower();
-						narrower.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setNarrower(narrower);
-						choices.add(ch);
-					}
-				}
-				if (concept.getNarrowMatch() != null) {
-					for (String str : concept.getNarrowMatch()) {
-						NarrowMatch narrowMatch = new NarrowMatch();
-						narrowMatch.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setNarrowMatch(narrowMatch);
-						choices.add(ch);
-					}
-				}
-				if (concept.getRelatedMatch() != null) {
-					for (String str : concept.getRelatedMatch()) {
-						RelatedMatch relatedMatch = new RelatedMatch();
-						relatedMatch.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setRelatedMatch(relatedMatch);
-						choices.add(ch);
-					}
-				}
-				if (concept.getRelated() != null) {
-					for (String str : concept.getRelated()) {
-						Related related = new Related();
-						related.setResource(str);
-						Concept.Choice ch = new Concept.Choice();
-						ch.setRelated(related);
-						choices.add(ch);
-					}
-				}
+
+				addConceptChoice(choices, AltLabel.class, concept.getAltLabel());
+				addConceptChoice(choices, PrefLabel.class, concept.getPrefLabel());
+				addConceptChoice(choices, Notation.class, concept.getNotation());
+				addConceptChoice(choices, Note.class, concept.getNote());
+				addConceptChoice(choices, Broader.class, concept.getBroader());
+				addConceptChoice(choices, BroadMatch.class, concept.getBroadMatch());
+				addConceptChoice(choices, CloseMatch.class, concept.getCloseMatch());
+				addConceptChoice(choices, ExactMatch.class, concept.getExactMatch());
+				addConceptChoice(choices, InScheme.class, concept.getInScheme());
+				addConceptChoice(choices, Narrower.class, concept.getNarrower());
+				addConceptChoice(choices, NarrowMatch.class, concept.getNarrowMatch());
+				addConceptChoice(choices, RelatedMatch.class, concept.getRelatedMatch());
+				addConceptChoice(choices, Related.class, concept.getRelated());
+
 				con.setChoiceList(choices);
 				conceptList.add(con);
 			}
@@ -390,178 +184,35 @@ public class EdmUtils {
 		}
 	}
 
-	private static void appendAgents(RDF rdf, List<AgentImpl> agents) {
-		if (agents != null) {
-			List<AgentType> agentList = new ArrayList<AgentType>();
-
-			for (AgentImpl ag : agents) {
-				AgentType agent = new AgentType();
-				agent.setAbout(ag.getAbout());
-				List<AltLabel> altLabelList = convertListFromMap(
-						AltLabel.class, ag.getAltLabel());
-				if (altLabelList != null) {
-					agent.setAltLabelList(altLabelList);
-				}
-				Begin begin = convertMapToObj(Begin.class, ag.getBegin());
-				if (begin != null) {
-					agent.setBegin(begin);
-				}
-				End end = convertMapToObj(End.class, ag.getEnd());
-				if (end != null) {
-					agent.setEnd(end);
-				}
-				BiographicalInformation bio = convertMapToObj(
-						BiographicalInformation.class,
-						ag.getRdaGr2BiographicalInformation());
-				if (bio != null) {
-					agent.setBiographicalInformation(bio);
-				}
-				List<Date> dateList = convertListFromMap(Date.class,
-						ag.getDcDate());
-				if (dateList != null) {
-					agent.setDateList(dateList);
-				}
-				DateOfBirth dob = convertMapToObj(DateOfBirth.class,
-						ag.getRdaGr2DateOfBirth());
-				if (dob != null) {
-					agent.setDateOfBirth(dob);
-				}
-				DateOfDeath dod = convertMapToObj(DateOfDeath.class,
-						ag.getRdaGr2DateOfDeath());
-				if (dod != null) {
-					agent.setDateOfDeath(dod);
-				}
-				DateOfEstablishment doe = convertMapToObj(
-						DateOfEstablishment.class,
-						ag.getRdaGr2DateOfEstablishment());
-				if (doe != null) {
-					agent.setDateOfEstablishment(doe);
-				}
-				DateOfTermination dot = convertMapToObj(
-						DateOfTermination.class,
-						ag.getRdaGr2DateOfTermination());
-				if (dot != null) {
-					agent.setDateOfTermination(dot);
-				}
-				Gender gender = convertMapToObj(Gender.class,
-						ag.getRdaGr2Gender());
-				if (gender != null) {
-					agent.setGender(gender);
-				}
-				List<HasMet> hasMetList = convertListFromMap(HasMet.class,
-						ag.getEdmHasMet());
-				if (hasMetList != null) {
-					agent.setHasMetList(hasMetList);
-				}
-				List<Identifier> identifierList = convertListFromMap(
-						Identifier.class, ag.getDcIdentifier());
-				if (identifierList != null) {
-					agent.setIdentifierList(identifierList);
-				}
-				List<IsRelatedTo> isRelatedToList = convertListFromMap(
-						IsRelatedTo.class, ag.getEdmIsRelatedTo());
-				if (isRelatedToList != null) {
-					agent.setIsRelatedToList(isRelatedToList);
-				}
-				List<Name> nameList = convertListFromMap(Name.class,
-						ag.getFoafName());
-				if (nameList != null) {
-					agent.setNameList(nameList);
-				}
-				List<Note> noteList = convertListFromMap(Note.class,
-						ag.getNote());
-				if (noteList != null) {
-					agent.setNoteList(noteList);
-				}
-				List<PrefLabel> prefLabelList = convertListFromMap(
-						PrefLabel.class, ag.getPrefLabel());
-				if (prefLabelList != null) {
-					agent.setPrefLabelList(prefLabelList);
-				}
-				ProfessionOrOccupation profOrOcc = convertMapToObj(
-						ProfessionOrOccupation.class,
-						ag.getRdaGr2ProfessionOrOccupation());
-				if (profOrOcc != null) {
-					agent.setProfessionOrOccupation(profOrOcc);
-				}
-				List<SameAs> sameAsList = convertListFromArray(SameAs.class,
-						ag.getOwlSameAs());
-				if (sameAsList != null) {
-					agent.setSameAList(sameAsList);
-				}
-				agentList.add(agent);
-			}
-			rdf.setAgentList(agentList);
-		}
-	}
-
 	private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean) {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
-		EuropeanaAggregation europeanaAggregation = fBean
-				.getEuropeanaAggregation();
+		EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
 		aggregation.setAbout(europeanaAggregation.getAbout());
 
-		AggregatedCHO cho = convertStringToObj(AggregatedCHO.class,
-				europeanaAggregation.getAggregatedCHO());
-		if (cho != null) {
-			aggregation.setAggregatedCHO(cho);
-		} else {
+		if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
 			AggregatedCHO agCHO = new AggregatedCHO();
 			agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
 			aggregation.setAggregatedCHO(agCHO);
 		}
-		List<Aggregates> aggregatesList = convertListFromArray(
-				Aggregates.class, europeanaAggregation.getAggregates());
-		if (aggregatesList != null) {
-			aggregation.setAggregateList(aggregatesList);
-		}
+		addAsList(aggregation, Aggregates.class, europeanaAggregation.getAggregates());
 		CollectionName collectionName = new CollectionName();
 		collectionName.setString(fBean.getEuropeanaCollectionName()[0]);
 		aggregation.setCollectionName(collectionName);
-		Country country = convertMapToCountry(europeanaAggregation
-				.getEdmCountry());
+		Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
 		if (country != null) {
 			aggregation.setCountry(country);
 		}
-		Creator creator = convertMapToObj(Creator.class,
-				europeanaAggregation.getDcCreator());
-		if (creator != null) {
-			aggregation.setCreator(creator);
-		}
-		List<HasView> hasViewList = convertListFromArray(HasView.class,
-				europeanaAggregation.getEdmHasView());
-		if (hasViewList != null) {
-			aggregation.setHasViewList(hasViewList);
-		}
-		IsShownBy isShownBy = convertStringToObj(IsShownBy.class,
-				europeanaAggregation.getEdmIsShownBy());
-		if (isShownBy != null) {
-			aggregation.setIsShownBy(isShownBy);
-		}
-		LandingPage lp = convertStringToObj(LandingPage.class,
-				europeanaAggregation.getEdmLandingPage());
-		if (lp != null) {
-			aggregation.setLandingPage(lp);
-		}
-		Language1 language = convertMapToLanguage(europeanaAggregation
-				.getEdmLanguage());
+		addAsObject(aggregation, Creator.class, europeanaAggregation.getDcCreator());
+		addAsList(aggregation, HasView.class, europeanaAggregation.getEdmHasView());
+		addAsObject(aggregation, IsShownBy.class, europeanaAggregation.getEdmIsShownBy());
+		addAsObject(aggregation, LandingPage.class, europeanaAggregation.getEdmLandingPage());
+		Language1 language = convertMapToLanguage(europeanaAggregation.getEdmLanguage());
 		if (language != null) {
 			aggregation.setLanguage(language);
 		}
-		Preview preview = convertStringToObj(Preview.class,
-				europeanaAggregation.getEdmPreview());
-		if (preview != null) {
-			aggregation.setPreview(preview);
-		}
-		Rights1 rights = convertMapToObj(Rights1.class,
-				europeanaAggregation.getEdmRights());
-		if (rights != null) {
-			aggregation.setRights(rights);
-		} else {
+		addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
+		if (!addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights())) {
 			Rights1 rights1 = new Rights1();
-			ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
-			lang.setLang("");
-			rights1.setLang(lang);
 			rights1.setString("");
 			Resource res = new Resource();
 			res.setResource("http://testrights/");
@@ -573,36 +224,32 @@ public class EdmUtils {
 		rdf.setEuropeanaAggregationList(lst);
 	}
 
-	private static Language1 convertMapToLanguage(
-			Map<String, List<String>> edmLanguage) {
+	private static Language1 convertMapToLanguage(Map<String, List<String>> edmLanguage) {
 		if (edmLanguage != null && edmLanguage.size() > 0) {
 			Language1 lang = new Language1();
-			lang.setLanguage(LanguageCodes.convert(edmLanguage.entrySet()
-					.iterator().next().getValue().get(0)));
+			lang.setLanguage(LanguageCodes.convert(edmLanguage.entrySet().iterator().next().getValue().get(0)));
 			return lang;
 		}
 		return null;
 	}
 
-	private static Country convertMapToCountry(
-			Map<String, List<String>> edmCountry) {
-		
+	private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
+
 		if (edmCountry != null && edmCountry.size() > 0) {
 			Country country = new Country();
 			StringBuilder sb = new StringBuilder();
-			String[] splitCountry = edmCountry.entrySet()
-					.iterator().next().getValue().get(0).split(SPACE);
-			for(String countryWord:splitCountry){
-				if(StringUtils.equals("and", countryWord)){
+			String[] splitCountry = edmCountry.entrySet().iterator().next().getValue().get(0).split(SPACE);
+			for (String countryWord : splitCountry) {
+				if (StringUtils.equals("and", countryWord)) {
 					sb.append(countryWord);
 				} else {
 					sb.append(StringUtils.capitalize(countryWord));
 				}
 				sb.append(SPACE);
 			}
-			
+
 			country.setCountry(CountryCodes.convert(sb.toString().trim()));
-			
+
 			return country;
 		}
 		return null;
@@ -613,34 +260,9 @@ public class EdmUtils {
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
 			proxy.setAbout(prx.getAbout());
-			CurrentLocation cl = convertStringToObj(CurrentLocation.class,
-					prx.getEdmCurrentLocation());
-			if (cl != null) {
-				proxy.setCurrentLocation(cl);
-			}
 			EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 			europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
 			proxy.setEuropeanaProxy(europeanaProxy);
-			List<HasMet> hasMetList = convertListFromMap(HasMet.class,
-					prx.getEdmHasMet());
-			if (hasMetList != null) {
-				proxy.setHasMetList(hasMetList);
-			}
-			List<HasType> hasTypeList = convertListFromMap(HasType.class,
-					prx.getEdmHasType());
-			if (hasTypeList != null) {
-				proxy.setHasTypeList(hasTypeList);
-			}
-			List<Incorporates> incorporates = convertListFromArray(
-					Incorporates.class, prx.getEdmIncorporates());
-			if (incorporates != null) {
-				proxy.setIncorporateList(incorporates);
-			}
-			List<IsDerivativeOf> derivativeList = convertListFromArray(
-					IsDerivativeOf.class, prx.getEdmIsDerivativeOf());
-			if (derivativeList != null) {
-				proxy.setIsDerivativeOfList(derivativeList);
-			}
 
 			List<IsNextInSequence> nis = null;
 
@@ -660,718 +282,65 @@ public class EdmUtils {
 				proxy.setIsNextInSequenceList(nis);
 			}
 
-			List<IsRelatedTo> isRelatedToList = convertListFromMap(
-					IsRelatedTo.class, prx.getEdmIsRelatedTo());
-			if (isRelatedToList != null) {
-				proxy.setIsRelatedToList(isRelatedToList);
-			}
-			IsRepresentationOf isRepOf = convertStringToObj(
-					IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
-			if (isRepOf != null) {
-				proxy.setIsRepresentationOf(isRepOf);
-			}
-			List<IsSimilarTo> isSimilarTo = convertListFromArray(
-					IsSimilarTo.class, prx.getEdmIsSimilarTo());
-			if (isSimilarTo != null) {
-				proxy.setIsSimilarToList(isSimilarTo);
-			}
-			List<IsSuccessorOf> isSuccessorOf = convertListFromArray(
-					IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-			if (isSuccessorOf != null) {
-				proxy.setIsSuccessorOfList(isSuccessorOf);
-			}
-			ProxyFor proxyFor = convertStringToObj(ProxyFor.class,
-					prx.getProxyFor());
-			if (proxyFor != null) {
-				proxy.setProxyFor(proxyFor);
-			}
-			List<ProxyIn> proxyIn = convertListFromArray(ProxyIn.class,
-					prx.getProxyIn());
-			if (proxyIn != null) {
-				proxy.setProxyInList(proxyIn);
-			}
+			Type1 type = new Type1();
 			if (!prx.isEuropeanaProxy()) {
-
-				Type1 type = new Type1();
-
-				type.setType(EdmType.valueOf(prx.getEdmType().toString()
-						.replace("3D", "_3_D")));
-
-				proxy.setType(type);
-
+				type.setType(EdmType.valueOf(prx.getEdmType().toString().replace("3D", "_3_D")));
 			} else {
-				Type1 type = new Type1();
 				type.setType(EdmType.IMAGE);
-				proxy.setType(type);
 			}
-			List<Year> years = convertListFromMap(Year.class, prx.getYear());
-			if (years != null) {
-				proxy.setYearList(years);
-			}
+			proxy.setType(type);
+
+			addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
+			addAsList(proxy, HasMet.class, prx.getEdmHasMet());
+			addAsList(proxy, HasType.class, prx.getEdmHasType());
+			addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
+			addAsList(proxy, IsDerivativeOf.class, prx.getEdmIsDerivativeOf());
+			addAsList(proxy, IsRelatedTo.class, prx.getEdmIsRelatedTo());
+			addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
+			addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
+			addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
+			addAsObject(proxy, ProxyFor.class, prx.getProxyFor());
+			addAsList(proxy, ProxyIn.class, prx.getProxyIn());
+			addAsList(proxy, Year.class, prx.getYear());
+
 			List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
-			if (prx.getDcContributor() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcContributor()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Contributor obj = new Contributor();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setContributor(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcCoverage() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcCoverage()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Coverage obj = new Coverage();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setCoverage(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcCreator() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcCreator()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Creator obj = new Creator();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setCreator(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcDate() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcDate()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Date obj = new Date();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setDate(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcDescription() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcDescription()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Description obj = new Description();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setDescription(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcFormat() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcFormat()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Format obj = new Format();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setFormat(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcIdentifier() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcIdentifier()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Identifier obj = new Identifier();
-						obj.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						obj.setLang(lang);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIdentifier(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcPublisher() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcPublisher()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Publisher obj = new Publisher();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setPublisher(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcRelation() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcRelation()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Relation obj = new Relation();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setRelation(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcRights() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcRights()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Rights obj = new Rights();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setRights(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcSource() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcSource()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Source obj = new Source();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setSource(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcSubject() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcSubject()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Subject obj = new Subject();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setSubject(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcTitle() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcTitle()
-						.entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Title obj = new Title();
-						obj.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						obj.setLang(lang);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setTitle(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDcType() != null) {
-				for (Entry<String, List<String>> entry : prx.getDcType()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Type obj = new Type();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setType(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsAlternative() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsAlternative().entrySet()) {
-					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new LiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Alternative obj = new Alternative();
-						obj.setString(str);
-						if (lang == null) {
-							lang = new LiteralType.Lang();
-							lang.setLang("");
-						}
-						obj.setLang(lang);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setAlternative(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsConformsTo() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsConformsTo().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						ConformsTo obj = new ConformsTo();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setConformsTo(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsCreated() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsCreated().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Created obj = new Created();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setCreated(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsExtent() != null) {
-				for (Entry<String, List<String>> entry : prx.getDctermsExtent()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Extent obj = new Extent();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setExtent(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsHasFormat() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsHasFormat().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						HasFormat obj = new HasFormat();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setHasFormat(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsHasPart() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsHasPart().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						HasPart obj = new HasPart();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setHasPart(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsHasVersion() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsHasVersion().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						HasVersion obj = new HasVersion();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setHasVersion(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsFormatOf() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsFormatOf().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsFormatOf obj = new IsFormatOf();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsFormatOf(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsPartOf() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsPartOf().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsPartOf obj = new IsPartOf();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsPartOf(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsReferencedBy() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsReferencedBy().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsReferencedBy obj = new IsReferencedBy();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsReferencedBy(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsReplacedBy() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsReplacedBy().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsReplacedBy obj = new IsReplacedBy();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsReplacedBy(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIssued() != null) {
-				for (Entry<String, List<String>> entry : prx.getDctermsIssued()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Issued obj = new Issued();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIssued(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsRequiredBy() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsRequiredBy().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsRequiredBy obj = new IsRequiredBy();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsRequiredBy(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsIsVersionOf() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsIsVersionOf().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						IsVersionOf obj = new IsVersionOf();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setIsVersionOf(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsMedium() != null) {
-				for (Entry<String, List<String>> entry : prx.getDctermsMedium()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Medium obj = new Medium();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setMedium(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsProvenance() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsProvenance().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Provenance obj = new Provenance();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setProvenance(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsReferences() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsReferences().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						References obj = new References();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setReferences(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsReplaces() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsReplaces().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Replaces obj = new Replaces();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setReplaces(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsRequires() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsRequires().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Requires obj = new Requires();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setRequires(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsSpatial() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsSpatial().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Spatial obj = new Spatial();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setSpatial(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsTemporal() != null) {
-				for (Entry<String, List<String>> entry : prx
-						.getDctermsTemporal().entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						Temporal obj = new Temporal();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setTemporal(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
-			if (prx.getDctermsTOC() != null) {
-				for (Entry<String, List<String>> entry : prx.getDctermsTOC()
-						.entrySet()) {
-					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey())
-							&& !StringUtils.equals("def", entry.getKey())) {
-						lang = new ResourceOrLiteralType.Lang();
-						lang.setLang(entry.getKey());
-					}
-					for (String str : entry.getValue()) {
-						TableOfContents obj = new TableOfContents();
-						createResourceOrLiteralFromString(obj, lang, str);
-						EuropeanaType.Choice ch = new EuropeanaType.Choice();
-						ch.setTableOfContents(obj);
-						dcChoices.add(ch);
-					}
-				}
-			}
+			addEuropeanaTypeChoice(dcChoices, Contributor.class, prx.getDcContributor());
+			addEuropeanaTypeChoice(dcChoices, Coverage.class, prx.getDcCoverage());
+			addEuropeanaTypeChoice(dcChoices, Creator.class, prx.getDcCreator());
+			addEuropeanaTypeChoice(dcChoices, Date.class, prx.getDcDate());
+			addEuropeanaTypeChoice(dcChoices, Description.class, prx.getDcDescription());
+			addEuropeanaTypeChoice(dcChoices, Format.class, prx.getDcFormat());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Identifier.class, prx.getDcIdentifier());
+			addEuropeanaTypeChoice(dcChoices, Publisher.class, prx.getDcPublisher());
+			addEuropeanaTypeChoice(dcChoices, Relation.class, prx.getDcRelation());
+			addEuropeanaTypeChoice(dcChoices, Rights.class, prx.getDcRights());
+			addEuropeanaTypeChoice(dcChoices, Source.class, prx.getDcSource());
+			addEuropeanaTypeChoice(dcChoices, Subject.class, prx.getDcSubject());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Title.class, prx.getDcTitle());
+			addEuropeanaTypeChoice(dcChoices, Type.class, prx.getDcType());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Alternative.class, prx.getDctermsAlternative());
+			addEuropeanaTypeChoice(dcChoices, ConformsTo.class, prx.getDctermsConformsTo());
+			addEuropeanaTypeChoice(dcChoices, Created.class, prx.getDctermsCreated());
+			addEuropeanaTypeChoice(dcChoices, Extent.class, prx.getDctermsExtent());
+			addEuropeanaTypeChoice(dcChoices, HasFormat.class, prx.getDctermsHasFormat());
+			addEuropeanaTypeChoice(dcChoices, HasPart.class, prx.getDctermsHasPart());
+			addEuropeanaTypeChoice(dcChoices, HasVersion.class, prx.getDctermsHasVersion());
+			addEuropeanaTypeChoice(dcChoices, IsFormatOf.class, prx.getDctermsIsFormatOf());
+			addEuropeanaTypeChoice(dcChoices, IsPartOf.class, prx.getDctermsIsPartOf());
+			addEuropeanaTypeChoice(dcChoices, IsReferencedBy.class, prx.getDctermsIsReferencedBy());
+			addEuropeanaTypeChoice(dcChoices, IsReplacedBy.class, prx.getDctermsIsReplacedBy());
+			addEuropeanaTypeChoice(dcChoices, Issued.class, prx.getDctermsIssued());
+			addEuropeanaTypeChoice(dcChoices, IsRequiredBy.class, prx.getDctermsIsRequiredBy());
+			addEuropeanaTypeChoice(dcChoices, IsVersionOf.class, prx.getDctermsIsVersionOf());
+			addEuropeanaTypeChoice(dcChoices, Medium.class, prx.getDctermsMedium());
+			addEuropeanaTypeChoice(dcChoices, Provenance.class, prx.getDctermsProvenance());
+			addEuropeanaTypeChoice(dcChoices, References.class, prx.getDctermsReferences());
+			addEuropeanaTypeChoice(dcChoices, Replaces.class, prx.getDctermsReplaces());
+			addEuropeanaTypeChoice(dcChoices, Requires.class, prx.getDctermsRequires());
+			addEuropeanaTypeChoice(dcChoices, Spatial.class, prx.getDctermsSpatial());
+			addEuropeanaTypeChoice(dcChoices, Temporal.class, prx.getDctermsTemporal());
+			addEuropeanaTypeChoice(dcChoices, TableOfContents.class, prx.getDctermsTOC());
+
 			proxy.setChoiceList(dcChoices);
 			proxyList.add(proxy);
 		}
@@ -1379,79 +348,39 @@ public class EdmUtils {
 		rdf.setProxyList(proxyList);
 	}
 
-	private static void appendAggregation(RDF rdf,
-			List<AggregationImpl> aggregations) {
+	private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations) {
 		List<Aggregation> aggregationList = new ArrayList<Aggregation>();
 		for (AggregationImpl aggr : aggregations) {
 			Aggregation aggregation = new Aggregation();
 			aggregation.setAbout(aggr.getAbout());
-			AggregatedCHO agCho = convertStringToObj(AggregatedCHO.class,
-					aggr.getAggregatedCHO());
-			if (agCho != null) {
-				aggregation.setAggregatedCHO(agCho);
-			} else {
+			if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
 				AggregatedCHO cho = new AggregatedCHO();
 				cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
 				aggregation.setAggregatedCHO(cho);
 			}
-			DataProvider dProvider = convertMapToObj(DataProvider.class,
-					aggr.getEdmDataProvider());
-			if (dProvider == null) {
-				dProvider = convertMapToObj(DataProvider.class,
-						aggr.getEdmProvider());
+			if (!addAsObject(aggregation, DataProvider.class, aggr.getEdmDataProvider())) {
+				addAsObject(aggregation, DataProvider.class, aggr.getEdmProvider());
 			}
-			if (dProvider != null) {
-				aggregation.setDataProvider(dProvider);
-			}
-			IsShownAt isShownAt = convertStringToObj(IsShownAt.class,
-					aggr.getEdmIsShownAt());
-			if (isShownAt != null) {
-				aggregation.setIsShownAt(isShownAt);
-			}
-			IsShownBy isShownBy = convertStringToObj(IsShownBy.class,
-					aggr.getEdmIsShownBy());
-			if (isShownBy != null) {
-				aggregation.setIsShownBy(isShownBy);
-			}
-			_Object object = convertStringToObj(_Object.class,
-					aggr.getEdmObject());
-			if (object != null) {
-				aggregation.setObject(object);
-			}
-			Provider provider = convertMapToObj(Provider.class,
-					aggr.getEdmProvider());
-			if (provider != null) {
-				aggregation.setProvider(provider);
-			}
-			Rights1 rights1 = convertMapToObj(Rights1.class,
-					aggr.getEdmRights());
-			if (rights1 == null) {
-				rights1 = new Rights1();
-				ResourceOrLiteralType.Lang lang = new ResourceOrLiteralType.Lang();
-				lang.setLang("");
+			addAsObject(aggregation, IsShownAt.class, aggr.getEdmIsShownAt());
+			addAsObject(aggregation, IsShownBy.class, aggr.getEdmIsShownBy());
+			addAsObject(aggregation, _Object.class, aggr.getEdmObject());
+			addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
+			if (!addAsObject(aggregation, Rights1.class, aggr.getEdmRights())) {
+				Rights1 rights1 = new Rights1();
 				rights1.setString("");
 				Resource testResource = new Resource();
 				testResource.setResource("http://testedmrights/");
 				rights1.setResource(testResource);
+				aggregation.setRights(rights1);
 			}
-			aggregation.setRights(rights1);
 			if (aggr.getEdmUgc() != null) {
 				Ugc ugc = new Ugc();
 
-				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr
-						.getEdmUgc())));
+				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr.getEdmUgc())));
 				aggregation.setUgc(ugc);
 			}
-			List<Rights> rightsList = convertListFromMap(Rights.class,
-					aggr.getDcRights());
-			if (rightsList != null) {
-				aggregation.setRightList(rightsList);
-			}
-			List<HasView> hasViewList = convertListFromArray(HasView.class,
-					aggr.getHasView());
-			if (hasViewList != null) {
-				aggregation.setHasViewList(hasViewList);
-			}
+			addAsList(aggregation, Rights.class, aggr.getDcRights());
+			addAsList(aggregation, HasView.class, aggr.getHasView());
 			createWebResources(rdf, aggr);
 			aggregationList.add(aggregation);
 		}
@@ -1463,66 +392,18 @@ public class EdmUtils {
 		for (WebResource wr : aggr.getWebResources()) {
 			WebResourceType wResource = new WebResourceType();
 			wResource.setAbout(wr.getAbout());
-			List<ConformsTo> conformsToList = convertListFromMap(
-					ConformsTo.class, wr.getDctermsConformsTo());
-			if (conformsToList != null) {
-				wResource.setConformsToList(conformsToList);
-			}
-			List<Created> createdList = convertListFromMap(Created.class,
-					wr.getDctermsCreated());
-			if (createdList != null) {
-				wResource.setCreatedList(createdList);
-			}
-			List<Description> descriptionList = convertListFromMap(
-					Description.class, wr.getDcDescription());
-			if (descriptionList != null) {
-				wResource.setDescriptionList(descriptionList);
-			}
-			List<Extent> extentList = convertListFromMap(Extent.class,
-					wr.getDctermsExtent());
-			if (extentList != null) {
-				wResource.setExtentList(extentList);
-			}
-			List<Format> formatList = convertListFromMap(Format.class,
-					wr.getDcFormat());
-			if (formatList != null) {
-				wResource.setFormatList(formatList);
-			}
-			List<HasPart> hasPartList = convertListFromMap(HasPart.class,
-					wr.getDctermsHasPart());
-			if (hasPartList != null) {
-				wResource.setHasPartList(hasPartList);
-			}
-			List<IsFormatOf> isFormatOfList = convertListFromMap(
-					IsFormatOf.class, wr.getDctermsIsFormatOf());
-			if (isFormatOfList != null) {
-				wResource.setIsFormatOfList(isFormatOfList);
-			}
-			IsNextInSequence isNextInSequence = convertStringToObj(
-					IsNextInSequence.class, wr.getIsNextInSequence());
-			if (isNextInSequence != null) {
-				wResource.setIsNextInSequence(isNextInSequence);
-			}
-			List<Issued> issuedList = convertListFromMap(Issued.class,
-					wr.getDctermsIssued());
-			if (issuedList != null) {
-				wResource.setIssuedList(issuedList);
-			}
-			List<Rights> rightsList = convertListFromMap(Rights.class,
-					wr.getWebResourceDcRights());
-			if (rightsList != null) {
-				wResource.setRightList(rightsList);
-			}
-			Rights1 rights = convertMapToObj(Rights1.class,
-					wr.getWebResourceEdmRights());
-			if (rights != null) {
-				wResource.setRights(rights);
-			}
-			List<Source> sourceList = convertListFromMap(Source.class,
-					wr.getDcSource());
-			if (sourceList != null) {
-				wResource.setSourceList(sourceList);
-			}
+			addAsList(wResource, ConformsTo.class, wr.getDctermsConformsTo());
+			addAsList(wResource, Created.class, wr.getDctermsCreated());
+			addAsList(wResource, Description.class, wr.getDcDescription());
+			addAsList(wResource, Extent.class, wr.getDctermsExtent());
+			addAsList(wResource, Format.class, wr.getDcFormat());
+			addAsList(wResource, HasPart.class, wr.getDctermsHasPart());
+			addAsList(wResource, IsFormatOf.class, wr.getDctermsIsFormatOf());
+			addAsObject(wResource, IsNextInSequence.class, wr.getIsNextInSequence());
+			addAsList(wResource, Issued.class, wr.getDctermsIssued());
+			addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
+			addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
+			addAsList(wResource, Source.class, wr.getDcSource());
 			webResources.add(wResource);
 		}
 
@@ -1534,35 +415,299 @@ public class EdmUtils {
 		for (ProvidedCHOImpl pCho : chos) {
 			ProvidedCHOType pChoJibx = new ProvidedCHOType();
 			pChoJibx.setAbout(pCho.getAbout());
-			List<SameAs> sList = convertListFromArray(SameAs.class,
-					pCho.getOwlSameAs());
-			if (sList != null) {
-				pChoJibx.setSameAList(sList);
-			}
+			addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
 			pChoList.add(pChoJibx);
 		}
 		rdf.setProvidedCHOList(pChoList);
 	}
 
-	private static <T> T convertStringToObj(Class<T> clazz, String str) {
-		try {
-			if (str != null) {
-				T obj = clazz.newInstance();
-				((ResourceType) obj).setResource(str);
-				return obj;
+	private static void appendAgents(RDF rdf, List<AgentImpl> agents) {
+		if (agents != null) {
+			List<AgentType> agentList = new ArrayList<AgentType>();
+
+			for (AgentImpl ag : agents) {
+				AgentType agent = new AgentType();
+				agent.setAbout(ag.getAbout());
+				addAsList(agent, AltLabel.class, ag.getAltLabel());
+				addAsObject(agent, Begin.class, ag.getBegin());
+				addAsObject(agent, End.class, ag.getEnd());
+				addAsObject(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
+				addAsList(agent, Date.class, ag.getDcDate());
+				addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
+				addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
+				addAsObject(agent, DateOfEstablishment.class, ag.getRdaGr2DateOfEstablishment());
+				addAsObject(agent, DateOfTermination.class, ag.getRdaGr2DateOfTermination());
+				addAsObject(agent, Gender.class, ag.getRdaGr2Gender());
+				addAsList(agent, HasMet.class, ag.getEdmHasMet());
+				addAsList(agent, Identifier.class, ag.getDcIdentifier());
+				addAsList(agent, IsRelatedTo.class, ag.getEdmIsRelatedTo());
+				addAsList(agent, Name.class, ag.getFoafName());
+				addAsList(agent, Note.class, ag.getNote());
+				addAsList(agent, PrefLabel.class, ag.getPrefLabel());
+				addAsObject(agent, ProfessionOrOccupation.class, ag.getRdaGr2ProfessionOrOccupation());
+				addAsList(agent, SameAs.class, ag.getOwlSameAs());
+				agentList.add(agent);
 			}
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			rdf.setAgentList(agentList);
 		}
-		return null;
 	}
 
-	private static <T> List<T> convertListFromArray(Class<T> clazz,
-			String[] vals) {
+	private static void addConceptChoice(List<Concept.Choice> choices, Class<? extends LiteralType> clazz,
+			Map<String, List<String>> map) {
+		if ((map != null) && !map.isEmpty()) {
+			try {
+				for (Entry<String, List<String>> entry : map.entrySet()) {
+					Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+					LiteralType.Lang lang = null;
+					if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+						lang = new LiteralType.Lang();
+						lang.setLang(entry.getKey());
+					}
+					for (String str : entry.getValue()) {
+						if (StringUtils.isNotBlank(str)) {
+							LiteralType obj = clazz.newInstance();
+							obj.setString(str);
+							obj.setLang(lang);
+							Concept.Choice ch = new Concept.Choice();
+							method.invoke(choices, obj);
+							choices.add(ch);
+						}
+					}
+				}
+			} catch (SecurityException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (NoSuchMethodException e) {
+				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+			} catch (IllegalArgumentException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InstantiationException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			}
+		}
+	}
+
+	private static void addConceptChoice(List<Concept.Choice> choices, Class<? extends ResourceType> clazz,
+			String[] array) {
+		if (StringArrayUtils.isNotBlank(array)) {
+			try {
+				Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				for (String str : array) {
+					if (StringUtils.isNotBlank(str)) {
+						ResourceType obj = clazz.newInstance();
+						obj.setResource(str);
+						Concept.Choice ch = new Concept.Choice();
+						method.invoke(choices, obj);
+						choices.add(ch);
+					}
+				}
+			} catch (SecurityException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (NoSuchMethodException e) {
+				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+			} catch (IllegalArgumentException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InstantiationException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			}
+		}
+	}
+
+	private static void addEuropeanaTypeChoice(List<EuropeanaType.Choice> dcChoices,
+			Class<? extends ResourceOrLiteralType> clazz, Map<String, List<String>> entries) {
+		if ((entries != null) && !entries.isEmpty()) {
+			try {
+				Method method = EuropeanaType.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				for (Entry<String, List<String>> entry : entries.entrySet()) {
+					ResourceOrLiteralType.Lang lang = null;
+					if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+						lang = new ResourceOrLiteralType.Lang();
+						lang.setLang(entry.getKey());
+					}
+					for (String str : entry.getValue()) {
+						if (StringUtils.isNotBlank(str)) {
+							ResourceOrLiteralType obj = clazz.newInstance();
+							if (isUri(str)) {
+								Resource resource = new Resource();
+								resource.setResource(str);
+								obj.setResource(resource);
+								obj.setString("");
+							} else {
+								obj.setString(str);
+							}
+							obj.setLang(lang);
+							EuropeanaType.Choice ch = new EuropeanaType.Choice();
+							method.invoke(ch, obj);
+							dcChoices.add(ch);
+						}
+					}
+				}
+			} catch (SecurityException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (NoSuchMethodException e) {
+				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+			} catch (IllegalArgumentException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InstantiationException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			}
+		}
+	}
+
+	private static void addEuropeanaTypeChoiceLiteral(List<EuropeanaType.Choice> dcChoices,
+			Class<? extends LiteralType> clazz, Map<String, List<String>> entries) {
+		if ((entries != null) && !entries.isEmpty()) {
+			try {
+				Method method = EuropeanaType.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				for (Entry<String, List<String>> entry : entries.entrySet()) {
+					LiteralType.Lang lang = null;
+					if (StringUtils.isNotBlank(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+						lang = new LiteralType.Lang();
+						lang.setLang(entry.getKey());
+					}
+					for (String str : entry.getValue()) {
+						if (StringUtils.isNotBlank(str)) {
+							LiteralType obj = clazz.newInstance();
+							obj.setString(str);
+							obj.setLang(lang);
+							EuropeanaType.Choice ch = new EuropeanaType.Choice();
+							method.invoke(ch, obj);
+							dcChoices.add(ch);
+						}
+					}
+				}
+			} catch (SecurityException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (NoSuchMethodException e) {
+				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+			} catch (IllegalArgumentException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InvocationTargetException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			} catch (InstantiationException e) {
+				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+			}
+		}
+	}
+
+	private static boolean addAsObject(Object dest, Class<? extends ResourceType> clazz, String str) {
+		try {
+			if (StringUtils.isNotBlank(str)) {
+				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
+				Object obj = clazz.newInstance();
+				((ResourceType) obj).setResource(str);
+				method.invoke(dest, obj);
+				return true;
+			}
+		} catch (SecurityException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		} catch (InstantiationException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		}
+		return false;
+	}
+
+	private static <T> boolean addAsObject(Object dest, Class<T> clazz, Map<String, List<String>> map) {
+		try {
+			if ((map != null) && (!map.isEmpty())) {
+				T obj = convertMapToObj(clazz, map);
+				if (obj != null) {
+					Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
+					method.invoke(dest, obj);
+					return true;
+				}
+			}
+		} catch (SecurityException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		}
+		return false;
+	}
+
+	private static <T> boolean addAsList(Object dest, Class<T> clazz, Map<String, List<String>> map) {
+		try {
+			if ((map != null) && !map.isEmpty()) {
+				log.info("set" + clazz.getSimpleName() + "List");
+				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
+				method.invoke(dest, convertListFromMap(clazz, map));
+				return true;
+			}
+		} catch (SecurityException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		}
+		return false;
+	}
+
+	private static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
+		try {
+			if (StringArrayUtils.isNotBlank(vals)) {
+				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
+				method.invoke(dest, convertListFromArray(clazz, vals));
+				return true;
+			}
+		} catch (SecurityException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		}
+		return false;
+	}
+
+	
+	private static String getSetterMethodName(Class<?> clazz, boolean list) {
+		StringBuilder sb = new StringBuilder("set");
+		String clazzName = clazz.getSimpleName();
+		clazzName = StringUtils.strip(clazzName, "_1");
+		sb.append(clazzName);
+		if (list) {
+			sb.append("List");
+		}
+		return sb.toString();
+	}
+	
+	private static <T> List<T> convertListFromArray(Class<T> clazz, String[] vals) {
 		List<T> tList = new ArrayList<T>();
 		try {
 			if (vals != null) {
@@ -1573,26 +718,24 @@ public class EdmUtils {
 				}
 				return tList;
 			}
+		} catch (SecurityException e) {
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
 		}
 
 		return null;
 	}
 
-	private static <T> List<T> convertListFromMap(Class<T> clazz,
-			Map<String, List<String>> map) {
+	private static <T> List<T> convertListFromMap(Class<T> clazz, Map<String, List<String>> map) {
 		if (map != null) {
 			List<T> list = new ArrayList<T>();
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 
-					if (clazz.getSuperclass().isAssignableFrom(
-							ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
 						for (String str : entry.getValue()) {
 							ResourceType t = (ResourceType) clazz.newInstance();
 
@@ -1600,11 +743,9 @@ public class EdmUtils {
 							list.add((T) t);
 						}
 
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
 						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new LiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
@@ -1612,51 +753,36 @@ public class EdmUtils {
 							LiteralType t = (LiteralType) clazz.newInstance();
 
 							t.setString(str);
-//							if (lang == null) {
-//								lang = new LiteralType.Lang();
-//								lang.setLang("");
-//
-//							}
 							t.setLang(lang);
 							list.add((T) t);
 						}
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new ResourceOrLiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
 						for (String str : entry.getValue()) {
-							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
-									.newInstance();
+							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
 							Resource resource = new Resource();
-//							resource.setResource("");
-//							t.setResource(resource);
-
 							t.setString("");
 							if (isUri(str)) {
 								t.setResource(resource);
 							} else {
 								t.setString(str);
 							}
-//							if (lang == null) {
-//
-//								lang = new ResourceOrLiteralType.Lang();
-//								lang.setLang("");
-//
-//							}
 							t.setLang(lang);
 							list.add((T) t);
 						}
 					}
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (SecurityException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+				} catch (IllegalArgumentException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+				} catch (InstantiationException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				}
 
 			}
@@ -1665,31 +791,27 @@ public class EdmUtils {
 		return null;
 	}
 
-	private static <T> T convertMapToObj(Class<T> clazz,
-			Map<String, List<String>> map) {
+	private static <T> T convertMapToObj(Class<T> clazz, Map<String, List<String>> map) {
 		if (map != null) {
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 					T t = clazz.newInstance();
-					if (clazz.getSuperclass().isAssignableFrom(
-							ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
 						((ResourceType) t).setResource(entry.getValue().get(0));
 						return t;
 
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new ResourceOrLiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
 
 						ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
 						Resource resource = new Resource();
-//						resource.setResource("");
+						// resource.setResource("");
 
-//						obj.setResource(resource);
+						// obj.setResource(resource);
 						obj.setString("");
 						for (String str : entry.getValue()) {
 							if (isUri(str)) {
@@ -1698,17 +820,11 @@ public class EdmUtils {
 								obj.setString(str);
 							}
 						}
-//						if (lang == null) {
-//							lang = new ResourceOrLiteralType.Lang();
-//							lang.setLang("");
-//						}
 						obj.setLang(lang);
 						return (T) obj;
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
 						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new LiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
@@ -1717,45 +833,22 @@ public class EdmUtils {
 						for (String str : entry.getValue()) {
 							obj.setString(str);
 						}
-//						if (lang == null) {
-//							lang = new LiteralType.Lang();
-//							lang.setLang("");
-//						}
 						obj.setLang(lang);
 						return (T) obj;
 					}
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (SecurityException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+				} catch (IllegalArgumentException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+				} catch (InstantiationException e) {
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				}
 
 			}
 		}
 		return null;
-	}
-
-	private static void createResourceOrLiteralFromString(
-			ResourceOrLiteralType obj, ResourceOrLiteralType.Lang lang,
-			String value) {
-		Resource resource = new Resource();
-//		resource.setResource("");
-//
-//		obj.setResource(resource);
-		obj.setString("");
-		if (isUri(value)) {
-			obj.setResource(resource);
-		} else {
-			obj.setString(value);
-		}
-//		if (lang == null) {
-//			lang = new ResourceOrLiteralType.Lang();
-//			lang.setLang("");
-//		}
-
-		obj.setLang(lang);
 	}
 
 	private static boolean isUri(String str) {
