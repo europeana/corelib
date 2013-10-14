@@ -103,8 +103,9 @@ public class SearchServiceImpl implements SearchService {
 	/**
 	 * The list of possible field input for spelling suggestions
 	 */
-	private static final List<String> SPELL_FIELDS = Arrays.asList("who",
-			"what", "where", "when", "title");
+	private static final List<String> SPELL_FIELDS = Arrays.asList(
+		"who", "what", "where", "when", "title"
+	);
 
 	// provided by setter
 	private SolrServer solrServer;
@@ -120,6 +121,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Value("#{europeanaProperties['solr.username']}")
 	private String username;
+
 	@Value("#{europeanaProperties['solr.password']}")
 	private String password;
 	
