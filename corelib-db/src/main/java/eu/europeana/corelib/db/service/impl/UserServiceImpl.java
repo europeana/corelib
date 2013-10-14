@@ -47,9 +47,6 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
-
-import eu.europeana.corelib.solr.exceptions.SolrTypeException;
-
 import eu.europeana.corelib.solr.service.SearchService;
 
 /**
@@ -347,7 +344,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	public void removeSocialTag(Long userId, String europeanaId, String tag) throws DatabaseException {
 		List<SocialTag> results = null;
 		if (StringUtils.isNotBlank(europeanaId) && StringUtils.isNotBlank(tag)) {
-			results = getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG, userId, StringUtils.lowerCase(tag), europeanaId);
+			results = getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG_EUROPEANAID, userId, StringUtils.lowerCase(tag), europeanaId);
 			
 		} else if (StringUtils.isNotBlank(tag)) {
 			results = findSocialTagsByTag(userId, tag);
