@@ -90,13 +90,10 @@ public class EdmUtils {
 			marshallingContext.marshalDocument(rdf, "UTF-8", true);
 			return out.toString("UTF-8");
 		} catch (JiBXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
-
 		return null;
 	}
 
@@ -695,7 +692,6 @@ public class EdmUtils {
 		return false;
 	}
 
-	
 	private static String getSetterMethodName(Class<?> clazz, boolean list) {
 		StringBuilder sb = new StringBuilder("set");
 		String clazzName = clazz.getSimpleName();
@@ -706,7 +702,7 @@ public class EdmUtils {
 		}
 		return sb.toString();
 	}
-	
+
 	private static <T> List<T> convertListFromArray(Class<T> clazz, String[] vals) {
 		List<T> tList = new ArrayList<T>();
 		try {
@@ -729,6 +725,7 @@ public class EdmUtils {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> List<T> convertListFromMap(Class<T> clazz, Map<String, List<String>> map) {
 		if (map != null) {
 			List<T> list = new ArrayList<T>();
@@ -791,6 +788,7 @@ public class EdmUtils {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> T convertMapToObj(Class<T> clazz, Map<String, List<String>> map) {
 		if (map != null) {
 			for (Entry<String, List<String>> entry : map.entrySet()) {
