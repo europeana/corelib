@@ -2,11 +2,14 @@ package eu.europeana.corelib.definitions.solr.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
+
+import eu.europeana.corelib.definitions.solr.Facet;
 
 public class QueryTest {
 
@@ -113,4 +116,35 @@ public class QueryTest {
 		assertEquals("{!tag=RIGHTS}" + expected, query.getRefinements(true)[0]);
 	}
 
+	/**
+	 * Testing removeFacet()
+	 */
+	@Test
+	public void testRemoveFacet() {
+		Query query = new Query("*:*");
+		List<Facet> facetList = Arrays.asList(query.getFacets());
+		assertTrue(facetList.contains(Facet.RIGHTS));
+		assertEquals(Facet.values().length, facetList.size());
+
+		query.removeFacet(Facet.RIGHTS);
+		facetList = Arrays.asList(query.getFacets());
+		assertFalse(facetList.contains(Facet.RIGHTS));
+		assertEquals(Facet.values().length - 1, facetList.size());
+	}
+
+	/**
+	 * Testing setFacet()
+	 */
+	@Test
+	public void testSetFacet() {
+		Query query = new Query("*:*");
+		List<Facet> facetList = Arrays.asList(query.getFacets());
+		assertTrue(facetList.contains(Facet.RIGHTS));
+		assertEquals(Facet.values().length, facetList.size());
+
+		query.setFacet(Facet.RIGHTS);
+		facetList = Arrays.asList(query.getFacets());
+		assertTrue(facetList.contains(Facet.RIGHTS));
+		assertEquals(1, facetList.size());
+	}
 }

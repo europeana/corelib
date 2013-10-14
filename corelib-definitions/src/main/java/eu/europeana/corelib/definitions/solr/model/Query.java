@@ -309,6 +309,21 @@ public class Query implements Cloneable {
 		}
 	}
 
+	public void removeFacet(Facet facetToRemove) {
+		List<Facet> _facets = new ArrayList<Facet>();
+		for (Facet facet : facets) {
+			if (!facet.equals(facetToRemove)) {
+				_facets.add(facet);
+			}
+		}
+		facets = _facets.toArray(new Facet[_facets.size()]);
+	}
+
+	public void setFacet(Facet facet) {
+		facets = new Facet[1];
+		facets[0] = facet;
+	}
+
 	public void divideRefinements() {
 		searchRefinements = new ArrayList<String>();
 		facetRefinements = new ArrayList<String>();
