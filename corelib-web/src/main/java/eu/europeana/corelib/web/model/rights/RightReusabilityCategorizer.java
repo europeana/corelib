@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.model.RightsOption;
+import eu.europeana.corelib.definitions.solr.model.QueryFacet;
 
 public class RightReusabilityCategorizer {
 
@@ -38,7 +39,7 @@ public class RightReusabilityCategorizer {
 	private static String allRightsQuery;
 
 	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
-	private static Map<String, String> queryFacetMap;
+	private static List<QueryFacet> queryFacets;
 
 	public RightReusabilityCategorizer() {
 		numberOfFree = 0;
@@ -126,13 +127,13 @@ public class RightReusabilityCategorizer {
 		return "RIGHTS:(" + StringUtils.join(urls, " OR ") + ")";
 	}
 
-	public static Map<String, String> getQueryFacets() {
-		if (queryFacetMap == null) {
-			queryFacetMap = new HashMap<String, String>();
-			queryFacetMap.put("REUSABILITY:Free", getFreeRightsQuery());
-			queryFacetMap.put("REUSABILITY:Limited", getLimitedRightsQuery());
+	public static List<QueryFacet> getQueryFacets() {
+		if (queryFacets == null) {
+			queryFacets = new ArrayList<QueryFacet>();
+			queryFacets.add(new QueryFacet(getFreeRightsQuery(), "REUSABILITY:Free", "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getLimitedRightsQuery(), "REUSABILITY:Limited", "REUSABILITY"));
 		}
-		return queryFacetMap;
+		return queryFacets;
 	}
 
 	private String cleanUrl(String url) {

@@ -50,7 +50,7 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  */
 public final class SolrUtils {
 
-	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+)\\}");
+	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
 
 	private SolrUtils() {
 
