@@ -25,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
  * @author kevinparkings
  * @author Andy MacLean
  */
-
 public enum RightsOption {
 
 	// CC_ZERO("http://creativecommons.org/publicdomain/zero", "CC0", "cc_zero.png"), 

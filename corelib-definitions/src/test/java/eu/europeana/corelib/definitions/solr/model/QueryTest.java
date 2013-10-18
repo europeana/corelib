@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import eu.europeana.corelib.definitions.solr.Facet;
@@ -94,7 +95,9 @@ public class QueryTest {
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
 
 		String expected = "RIGHTS:(" + singleRight + " AND " + rights + ")";
-		assertEquals("{!tag=RIGHTS}" + expected, query.getRefinements(true)[0]);
+		String[] results = query.getRefinements(true);
+		assertEquals("{!tag=RIGHTS}RIGHTS:" + singleRight, results[0]);
+		assertEquals("{!tag=REUSABILITY}RIGHTS:" + rights, results[1]);
 	}
 
 	/**
@@ -112,8 +115,10 @@ public class QueryTest {
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
 
-		String expected = "RIGHTS:((" + singleRight + " OR " + anotherRight + ") AND " + rights + ")";
+		String expected = "RIGHTS:(" + singleRight + " OR " + anotherRight + ")";
+		String[] results = query.getRefinements(true);
 		assertEquals("{!tag=RIGHTS}" + expected, query.getRefinements(true)[0]);
+		assertEquals("{!tag=REUSABILITY}RIGHTS:" + rights, results[1]);
 	}
 
 	/**

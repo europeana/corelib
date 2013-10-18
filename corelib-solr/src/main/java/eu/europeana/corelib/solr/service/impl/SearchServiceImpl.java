@@ -343,6 +343,9 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setResultSize(queryResponse.getResults().getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
 					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+					if (queryResponse.getFacetQuery() != null) {
+						resultSet.setQueryFacets(queryResponse.getFacetQuery());
+					}
 				} catch (SolrServerException e) {
 					log.severe("SolrServerException: " + e.getMessage());
 					resultSet = null;
@@ -405,12 +408,12 @@ public class SearchServiceImpl implements SearchService {
 			solrQuery.addFacetQuery(queryFacet);
 		}
 		QueryResponse response;
-		Map<String, Integer> seeAlso = null;
+		Map<String, Integer> queryFacets = null;
 		try {
 			log.fine("Solr query is: " + solrQuery.toString());
 			response = solrServer.query(solrQuery);
 			logTime("queryFacetSearch", response.getElapsedTime());
-			seeAlso = response.getFacetQuery();
+			queryFacets = response.getFacetQuery();
 		} catch (SolrServerException e) {
 			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
 			e.printStackTrace();
@@ -420,7 +423,7 @@ public class SearchServiceImpl implements SearchService {
 			e.printStackTrace();
 		}
 
-		return seeAlso;
+		return queryFacets;
 	}
 
 	@SuppressWarnings("unchecked")

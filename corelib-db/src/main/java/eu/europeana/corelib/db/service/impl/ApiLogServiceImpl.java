@@ -87,14 +87,29 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		return query.countAll();
 	}
 
+	/**
+	 * Date range query
+	 * db.logEntries.find({
+	 *   "timestamp": {
+	 *     $gte : new ISODate("2013-09-14T12:52:34.872Z"),
+	 *     $lt  : new ISODate("2013-10-14T12:52:34.872Z")
+	 *   }
+	 * })
+	 */
 	private void addDateRangeQuery(Query<ApiLog> query, DateInterval interval) {
 		query.field("timestamp").greaterThanOrEq(interval.getBegin());
 		query.field("timestamp").lessThan(interval.getEnd());
 	}
 
-	// by users
-	// db.logs.group({key: {apiKey: true}, cond: {}, initial: {count:0},
-	// $reduce: function(obj, out){out.count++}});
+	/**
+	 * by users
+	 * db.logs.group({
+	 *   key: {apiKey: true},
+	 *   cond: {},
+	 *   initial: {count:0},
+	 *   $reduce: function(obj, out){out.count++}
+	 * });
+	 */
 	@Override
 	public List<UserStatistics> getStatisticsForUser() {
 		DBObject result = groupByApiKey(null);
@@ -104,9 +119,15 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		return statistics;
 	}
 
-	// by types
-	// db.logs.group({key: {recordType: true, profile: true}, cond: {}, initial:
-	// {count:0}, $reduce: function(obj, out){out.count++}});
+	/**
+	 * Query by types
+	 * db.logs.group({
+	 *   key: {recordType: true, profile: true},
+	 *   cond: {},
+	 *   initial: {count:0},
+	 *   $reduce: function(obj, out){out.count++}
+	 * });
+	 */
 	@Override
 	public List<TypeStatistics> getStatisticsForType() {
 		DBObject keys = new BasicDBObject("recordType", true);
@@ -126,12 +147,19 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		getDao().deleteAll();
 	}
 
-	// db.logs.group({
-	//   key: {apiKey: true}, 
-	//   cond: {"timestamp": {$gte: ISODate("2013-04-30T22:00:00.000Z"), $lt: ISODate("2013-05-31T21:59:59.000Z")}}, 
-	//   initial: {count:0}, 
-	//   $reduce: function(obj, out){out.count++}
-	// });
+	/**
+	 * db.logs.group({
+	 *   key: {apiKey: true},
+	 *   cond: {
+	 *     "timestamp": {
+	 *       $gte: ISODate("2013-04-30T22:00:00.000Z"),
+	 *       $lt:  ISODate("2013-05-31T21:59:59.000Z")
+	 *     }
+	 *   },
+	 *   initial: {count:0},
+	 *   $reduce: function(obj, out){out.count++}
+	 * });
+	 */
 	@Override
 	public List<UserStatistics> getStatisticsForUsersByInterval(DateInterval interval) {
 		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(

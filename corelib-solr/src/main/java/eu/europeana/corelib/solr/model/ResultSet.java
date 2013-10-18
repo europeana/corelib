@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
@@ -36,6 +37,8 @@ public class ResultSet<T> {
 	private List<FacetField> facetFields;
 
 	private SpellCheckResponse spellcheck;
+
+	private Map<String, Integer> queryFacets;
 
 	// statistics
 
@@ -101,6 +104,15 @@ public class ResultSet<T> {
 		return this;
 	}
 
+	public Map<String, Integer> getQueryFacets() {
+		return queryFacets;
+	}
+
+	public ResultSet<T> setQueryFacets(Map<String, Integer> queryFacets) {
+		this.queryFacets = queryFacets;
+		return this;
+	}
+
 	@Override
 	public String toString() {
 		return "ResultSet [query=" + query + ", results=" + results
@@ -108,4 +120,5 @@ public class ResultSet<T> {
 				+ ", resultSize=" + resultSize + ", searchTime=" + searchTime
 				+ "]";
 	}
+
 }

@@ -336,7 +336,9 @@ public class Query implements Cloneable {
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
 				boolean replaced = false;
+				String pseudoFacetName = null;
 				if (valueReplacements != null && valueReplacements.containsKey(facetTerm)) {
+					pseudoFacetName = facetTerm.substring(0, facetTerm.indexOf(":"));
 					facetTerm = valueReplacements.get(facetTerm);
 					replaced = true;
 					if (StringUtils.isBlank(facetTerm)) {
@@ -352,21 +354,24 @@ public class Query implements Cloneable {
 					isTagged = true;
 				}
 
-				if (!allFacetList.contains(facetName)) {
-					searchRefinements.add(facetTerm);
-					continue;
-				} else {
+				if (allFacetList.contains(facetName)) {
+					String key = pseudoFacetName == null ? facetName : pseudoFacetName;
 					FacetCollector collector;
-					if (register.containsKey(facetName)) {
-						collector = register.get(facetName);
+					if (register.containsKey(key)) {
+						collector = register.get(key);
 					} else {
 						collector = new FacetCollector(facetName, isApiQuery());
-						register.put(facetName, collector);
+						if (pseudoFacetName != null) {
+							collector.setTagName(pseudoFacetName);
+						}
+						register.put(key, collector);
 					}
 					if (isTagged && !collector.isTagged()) {
 						collector.setTagged(true);
 					}
 					collector.addValue(facetTerm.substring(colon + 1), replaced);
+				} else {
+					searchRefinements.add(facetTerm);
 				}
 			} else {
 				searchRefinements.add(facetTerm);
@@ -382,6 +387,7 @@ public class Query implements Cloneable {
 	private class FacetCollector {
 		private boolean isTagged = true;
 		private String name;
+		private String tagName;
 		private List<String> values = new ArrayList<String>();
 		private List<String> replacedValues = new ArrayList<String>();
 		private boolean isApiQuery = false;
@@ -390,6 +396,7 @@ public class Query implements Cloneable {
 
 		public FacetCollector(String name) {
 			this.name = name;
+			this.tagName = name;
 		}
 
 		public FacetCollector(String name, boolean isApiQuery) {
@@ -416,6 +423,10 @@ public class Query implements Cloneable {
 
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		public void setTagName(String tagName) {
+			this.tagName = tagName;
 		}
 
 		public List<String> getValues() {
@@ -483,7 +494,7 @@ public class Query implements Cloneable {
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			if (isTagged && !replaced) {
-				sb.append("{!tag=").append(name).append("}");
+				sb.append("{!tag=").append(tagName).append("}");
 			}
 			sb.append(name);
 			sb.append(":");
