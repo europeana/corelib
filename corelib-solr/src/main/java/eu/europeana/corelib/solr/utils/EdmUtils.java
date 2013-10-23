@@ -57,10 +57,12 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  */
 public class EdmUtils {
 
-	private static final Logger log = Logger.getLogger(EdmUtils.class.getCanonicalName());
+	private static final Logger log = Logger.getLogger(EdmUtils.class
+			.getCanonicalName());
 
 	private static IBindingFactory bfact;
 	private final static String SPACE = " ";
+	private final static String PREFIX = "http://data.europeana.eu";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -130,7 +132,8 @@ public class EdmUtils {
 					pType.setAlt(alt);
 				}
 
-				if (place.getLatitude() != null && place.getLongitude() != null
+				if (place.getLatitude() != null
+						&& place.getLongitude() != null
 						&& (place.getLatitude() != 0 && place.getLongitude() != 0)) {
 					Lat lat = new Lat();
 					lat.setLat(place.getLatitude());
@@ -161,17 +164,23 @@ public class EdmUtils {
 				List<Concept.Choice> choices = new ArrayList<Concept.Choice>();
 
 				addConceptChoice(choices, AltLabel.class, concept.getAltLabel());
-				addConceptChoice(choices, PrefLabel.class, concept.getPrefLabel());
+				addConceptChoice(choices, PrefLabel.class,
+						concept.getPrefLabel());
 				addConceptChoice(choices, Notation.class, concept.getNotation());
 				addConceptChoice(choices, Note.class, concept.getNote());
 				addConceptChoice(choices, Broader.class, concept.getBroader());
-				addConceptChoice(choices, BroadMatch.class, concept.getBroadMatch());
-				addConceptChoice(choices, CloseMatch.class, concept.getCloseMatch());
-				addConceptChoice(choices, ExactMatch.class, concept.getExactMatch());
+				addConceptChoice(choices, BroadMatch.class,
+						concept.getBroadMatch());
+				addConceptChoice(choices, CloseMatch.class,
+						concept.getCloseMatch());
+				addConceptChoice(choices, ExactMatch.class,
+						concept.getExactMatch());
 				addConceptChoice(choices, InScheme.class, concept.getInScheme());
 				addConceptChoice(choices, Narrower.class, concept.getNarrower());
-				addConceptChoice(choices, NarrowMatch.class, concept.getNarrowMatch());
-				addConceptChoice(choices, RelatedMatch.class, concept.getRelatedMatch());
+				addConceptChoice(choices, NarrowMatch.class,
+						concept.getNarrowMatch());
+				addConceptChoice(choices, RelatedMatch.class,
+						concept.getRelatedMatch());
 				addConceptChoice(choices, Related.class, concept.getRelated());
 
 				con.setChoiceList(choices);
@@ -183,59 +192,76 @@ public class EdmUtils {
 
 	private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean) {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
-		EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
-		aggregation.setAbout(europeanaAggregation.getAbout());
+		EuropeanaAggregation europeanaAggregation = fBean
+				.getEuropeanaAggregation();
+		aggregation.setAbout(PREFIX+europeanaAggregation.getAbout());
 
-		if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
+		if (!addAsObject(aggregation, AggregatedCHO.class,
+				europeanaAggregation.getAggregatedCHO())) {
 			AggregatedCHO agCHO = new AggregatedCHO();
-			agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
+			agCHO.setResource(PREFIX+fBean.getProvidedCHOs().get(0).getAbout());
 			aggregation.setAggregatedCHO(agCHO);
 		}
-		addAsList(aggregation, Aggregates.class, europeanaAggregation.getAggregates());
+		addAsList(aggregation, Aggregates.class,
+				europeanaAggregation.getAggregates());
 		CollectionName collectionName = new CollectionName();
 		collectionName.setString(fBean.getEuropeanaCollectionName()[0]);
 		aggregation.setCollectionName(collectionName);
-		Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
+		Country country = convertMapToCountry(europeanaAggregation
+				.getEdmCountry());
 		if (country != null) {
 			aggregation.setCountry(country);
 		}
-		addAsObject(aggregation, Creator.class, europeanaAggregation.getDcCreator());
-		addAsList(aggregation, HasView.class, europeanaAggregation.getEdmHasView());
-		addAsObject(aggregation, IsShownBy.class, europeanaAggregation.getEdmIsShownBy());
-		addAsObject(aggregation, LandingPage.class, europeanaAggregation.getEdmLandingPage());
-		Language1 language = convertMapToLanguage(europeanaAggregation.getEdmLanguage());
+		addAsObject(aggregation, Creator.class,
+				europeanaAggregation.getDcCreator());
+		addAsList(aggregation, HasView.class,
+				europeanaAggregation.getEdmHasView());
+		addAsObject(aggregation, IsShownBy.class,
+				europeanaAggregation.getEdmIsShownBy());
+		addAsObject(aggregation, LandingPage.class,
+				europeanaAggregation.getEdmLandingPage());
+		Language1 language = convertMapToLanguage(europeanaAggregation
+				.getEdmLanguage());
 		if (language != null) {
 			aggregation.setLanguage(language);
 		}
-		addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
-		if (!addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights())) {
-			Rights1 rights1 = new Rights1();
-			rights1.setString("");
-			Resource res = new Resource();
-			res.setResource("http://testrights/");
-			rights1.setResource(res);
-			aggregation.setRights(rights1);
-		}
+		addAsObject(aggregation, Preview.class,
+				europeanaAggregation.getEdmPreview());
+		addAsObject(aggregation, Rights1.class,
+				europeanaAggregation.getEdmRights());
+		// if (!addAsObject(aggregation, Rights1.class,
+		// europeanaAggregation.getEdmRights())) {
+		// Rights1 rights1 = new Rights1();
+		// rights1.setString("");
+		// Resource res = new Resource();
+		// res.setResource("http://testrights/");
+		// rights1.setResource(res);
+		// aggregation.setRights(rights1);
+		// }
 		List<EuropeanaAggregationType> lst = new ArrayList<EuropeanaAggregationType>();
 		lst.add(aggregation);
 		rdf.setEuropeanaAggregationList(lst);
 	}
 
-	private static Language1 convertMapToLanguage(Map<String, List<String>> edmLanguage) {
+	private static Language1 convertMapToLanguage(
+			Map<String, List<String>> edmLanguage) {
 		if (edmLanguage != null && edmLanguage.size() > 0) {
 			Language1 lang = new Language1();
-			lang.setLanguage(LanguageCodes.convert(edmLanguage.entrySet().iterator().next().getValue().get(0)));
+			lang.setLanguage(LanguageCodes.convert(edmLanguage.entrySet()
+					.iterator().next().getValue().get(0)));
 			return lang;
 		}
 		return null;
 	}
 
-	private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
+	private static Country convertMapToCountry(
+			Map<String, List<String>> edmCountry) {
 
 		if (edmCountry != null && edmCountry.size() > 0) {
 			Country country = new Country();
 			StringBuilder sb = new StringBuilder();
-			String[] splitCountry = edmCountry.entrySet().iterator().next().getValue().get(0).split(SPACE);
+			String[] splitCountry = edmCountry.entrySet().iterator().next()
+					.getValue().get(0).split(SPACE);
 			for (String countryWord : splitCountry) {
 				if (StringUtils.equals("and", countryWord)) {
 					sb.append(countryWord);
@@ -256,7 +282,7 @@ public class EdmUtils {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
-			proxy.setAbout(prx.getAbout());
+			proxy.setAbout(PREFIX + prx.getAbout());
 			EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 			europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
 			proxy.setEuropeanaProxy(europeanaProxy);
@@ -281,62 +307,94 @@ public class EdmUtils {
 
 			Type1 type = new Type1();
 			if (!prx.isEuropeanaProxy()) {
-				type.setType(EdmType.valueOf(prx.getEdmType().toString().replace("3D", "_3_D")));
+				type.setType(EdmType.valueOf(prx.getEdmType().toString()
+						.replace("3D", "_3_D")));
 			} else {
 				type.setType(EdmType.IMAGE);
 			}
 			proxy.setType(type);
 
-			addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
+			addAsObject(proxy, CurrentLocation.class,
+					prx.getEdmCurrentLocation());
 			addAsList(proxy, HasMet.class, prx.getEdmHasMet());
 			addAsList(proxy, HasType.class, prx.getEdmHasType());
 			addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
 			addAsList(proxy, IsDerivativeOf.class, prx.getEdmIsDerivativeOf());
 			addAsList(proxy, IsRelatedTo.class, prx.getEdmIsRelatedTo());
-			addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
+			addAsObject(proxy, IsRepresentationOf.class,
+					prx.getEdmIsRepresentationOf());
 			addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
 			addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-			addAsObject(proxy, ProxyFor.class, prx.getProxyFor());
-			addAsList(proxy, ProxyIn.class, prx.getProxyIn());
+			addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
+			addAsList(proxy, ProxyIn.class, prx.getProxyIn(), PREFIX);
 			addAsList(proxy, Year.class, prx.getYear());
 
 			List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
-			addEuropeanaTypeChoice(dcChoices, Contributor.class, prx.getDcContributor());
-			addEuropeanaTypeChoice(dcChoices, Coverage.class, prx.getDcCoverage());
+			addEuropeanaTypeChoice(dcChoices, Contributor.class,
+					prx.getDcContributor());
+			addEuropeanaTypeChoice(dcChoices, Coverage.class,
+					prx.getDcCoverage());
 			addEuropeanaTypeChoice(dcChoices, Creator.class, prx.getDcCreator());
 			addEuropeanaTypeChoice(dcChoices, Date.class, prx.getDcDate());
-			addEuropeanaTypeChoice(dcChoices, Description.class, prx.getDcDescription());
+			addEuropeanaTypeChoice(dcChoices, Description.class,
+					prx.getDcDescription());
 			addEuropeanaTypeChoice(dcChoices, Format.class, prx.getDcFormat());
-			addEuropeanaTypeChoiceLiteral(dcChoices, Identifier.class, prx.getDcIdentifier());
-			addEuropeanaTypeChoice(dcChoices, Publisher.class, prx.getDcPublisher());
-			addEuropeanaTypeChoice(dcChoices, Relation.class, prx.getDcRelation());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Identifier.class,
+					prx.getDcIdentifier());
+			addEuropeanaTypeChoice(dcChoices, Publisher.class,
+					prx.getDcPublisher());
+			addEuropeanaTypeChoice(dcChoices, Relation.class,
+					prx.getDcRelation());
 			addEuropeanaTypeChoice(dcChoices, Rights.class, prx.getDcRights());
 			addEuropeanaTypeChoice(dcChoices, Source.class, prx.getDcSource());
 			addEuropeanaTypeChoice(dcChoices, Subject.class, prx.getDcSubject());
-			addEuropeanaTypeChoiceLiteral(dcChoices, Title.class, prx.getDcTitle());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Title.class,
+					prx.getDcTitle());
 			addEuropeanaTypeChoice(dcChoices, Type.class, prx.getDcType());
-			addEuropeanaTypeChoiceLiteral(dcChoices, Alternative.class, prx.getDctermsAlternative());
-			addEuropeanaTypeChoice(dcChoices, ConformsTo.class, prx.getDctermsConformsTo());
-			addEuropeanaTypeChoice(dcChoices, Created.class, prx.getDctermsCreated());
-			addEuropeanaTypeChoice(dcChoices, Extent.class, prx.getDctermsExtent());
-			addEuropeanaTypeChoice(dcChoices, HasFormat.class, prx.getDctermsHasFormat());
-			addEuropeanaTypeChoice(dcChoices, HasPart.class, prx.getDctermsHasPart());
-			addEuropeanaTypeChoice(dcChoices, HasVersion.class, prx.getDctermsHasVersion());
-			addEuropeanaTypeChoice(dcChoices, IsFormatOf.class, prx.getDctermsIsFormatOf());
-			addEuropeanaTypeChoice(dcChoices, IsPartOf.class, prx.getDctermsIsPartOf());
-			addEuropeanaTypeChoice(dcChoices, IsReferencedBy.class, prx.getDctermsIsReferencedBy());
-			addEuropeanaTypeChoice(dcChoices, IsReplacedBy.class, prx.getDctermsIsReplacedBy());
-			addEuropeanaTypeChoice(dcChoices, Issued.class, prx.getDctermsIssued());
-			addEuropeanaTypeChoice(dcChoices, IsRequiredBy.class, prx.getDctermsIsRequiredBy());
-			addEuropeanaTypeChoice(dcChoices, IsVersionOf.class, prx.getDctermsIsVersionOf());
-			addEuropeanaTypeChoice(dcChoices, Medium.class, prx.getDctermsMedium());
-			addEuropeanaTypeChoice(dcChoices, Provenance.class, prx.getDctermsProvenance());
-			addEuropeanaTypeChoice(dcChoices, References.class, prx.getDctermsReferences());
-			addEuropeanaTypeChoice(dcChoices, Replaces.class, prx.getDctermsReplaces());
-			addEuropeanaTypeChoice(dcChoices, Requires.class, prx.getDctermsRequires());
-			addEuropeanaTypeChoice(dcChoices, Spatial.class, prx.getDctermsSpatial());
-			addEuropeanaTypeChoice(dcChoices, Temporal.class, prx.getDctermsTemporal());
-			addEuropeanaTypeChoice(dcChoices, TableOfContents.class, prx.getDctermsTOC());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Alternative.class,
+					prx.getDctermsAlternative());
+			addEuropeanaTypeChoice(dcChoices, ConformsTo.class,
+					prx.getDctermsConformsTo());
+			addEuropeanaTypeChoice(dcChoices, Created.class,
+					prx.getDctermsCreated());
+			addEuropeanaTypeChoice(dcChoices, Extent.class,
+					prx.getDctermsExtent());
+			addEuropeanaTypeChoice(dcChoices, HasFormat.class,
+					prx.getDctermsHasFormat());
+			addEuropeanaTypeChoice(dcChoices, HasPart.class,
+					prx.getDctermsHasPart());
+			addEuropeanaTypeChoice(dcChoices, HasVersion.class,
+					prx.getDctermsHasVersion());
+			addEuropeanaTypeChoice(dcChoices, IsFormatOf.class,
+					prx.getDctermsIsFormatOf());
+			addEuropeanaTypeChoice(dcChoices, IsPartOf.class,
+					prx.getDctermsIsPartOf());
+			addEuropeanaTypeChoice(dcChoices, IsReferencedBy.class,
+					prx.getDctermsIsReferencedBy());
+			addEuropeanaTypeChoice(dcChoices, IsReplacedBy.class,
+					prx.getDctermsIsReplacedBy());
+			addEuropeanaTypeChoice(dcChoices, Issued.class,
+					prx.getDctermsIssued());
+			addEuropeanaTypeChoice(dcChoices, IsRequiredBy.class,
+					prx.getDctermsIsRequiredBy());
+			addEuropeanaTypeChoice(dcChoices, IsVersionOf.class,
+					prx.getDctermsIsVersionOf());
+			addEuropeanaTypeChoice(dcChoices, Medium.class,
+					prx.getDctermsMedium());
+			addEuropeanaTypeChoice(dcChoices, Provenance.class,
+					prx.getDctermsProvenance());
+			addEuropeanaTypeChoice(dcChoices, References.class,
+					prx.getDctermsReferences());
+			addEuropeanaTypeChoice(dcChoices, Replaces.class,
+					prx.getDctermsReplaces());
+			addEuropeanaTypeChoice(dcChoices, Requires.class,
+					prx.getDctermsRequires());
+			addEuropeanaTypeChoice(dcChoices, Spatial.class,
+					prx.getDctermsSpatial());
+			addEuropeanaTypeChoice(dcChoices, Temporal.class,
+					prx.getDctermsTemporal());
+			addEuropeanaTypeChoice(dcChoices, TableOfContents.class,
+					prx.getDctermsTOC());
 
 			proxy.setChoiceList(dcChoices);
 			proxyList.add(proxy);
@@ -345,35 +403,42 @@ public class EdmUtils {
 		rdf.setProxyList(proxyList);
 	}
 
-	private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations) {
+	private static void appendAggregation(RDF rdf,
+			List<AggregationImpl> aggregations) {
 		List<Aggregation> aggregationList = new ArrayList<Aggregation>();
 		for (AggregationImpl aggr : aggregations) {
 			Aggregation aggregation = new Aggregation();
-			aggregation.setAbout(aggr.getAbout());
-			if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
+			aggregation.setAbout(PREFIX + aggr.getAbout());
+			if (!addAsObject(aggregation, AggregatedCHO.class,
+					aggr.getAggregatedCHO())) {
 				AggregatedCHO cho = new AggregatedCHO();
 				cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
 				aggregation.setAggregatedCHO(cho);
 			}
-			if (!addAsObject(aggregation, DataProvider.class, aggr.getEdmDataProvider())) {
-				addAsObject(aggregation, DataProvider.class, aggr.getEdmProvider());
+			if (!addAsObject(aggregation, DataProvider.class,
+					aggr.getEdmDataProvider())) {
+				addAsObject(aggregation, DataProvider.class,
+						aggr.getEdmProvider());
 			}
 			addAsObject(aggregation, IsShownAt.class, aggr.getEdmIsShownAt());
 			addAsObject(aggregation, IsShownBy.class, aggr.getEdmIsShownBy());
 			addAsObject(aggregation, _Object.class, aggr.getEdmObject());
 			addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
-			if (!addAsObject(aggregation, Rights1.class, aggr.getEdmRights())) {
-				Rights1 rights1 = new Rights1();
-				rights1.setString("");
-				Resource testResource = new Resource();
-				testResource.setResource("http://testedmrights/");
-				rights1.setResource(testResource);
-				aggregation.setRights(rights1);
-			}
+			addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
+			// if (!addAsObject(aggregation, Rights1.class,
+			// aggr.getEdmRights())) {
+			// Rights1 rights1 = new Rights1();
+			// rights1.setString("");
+			// Resource testResource = new Resource();
+			// testResource.setResource("http://testedmrights/");
+			// rights1.setResource(testResource);
+			// aggregation.setRights(rights1);
+			// }
 			if (aggr.getEdmUgc() != null) {
 				Ugc ugc = new Ugc();
 
-				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr.getEdmUgc())));
+				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr
+						.getEdmUgc())));
 				aggregation.setUgc(ugc);
 			}
 			addAsList(aggregation, Rights.class, aggr.getDcRights());
@@ -396,7 +461,8 @@ public class EdmUtils {
 			addAsList(wResource, Format.class, wr.getDcFormat());
 			addAsList(wResource, HasPart.class, wr.getDctermsHasPart());
 			addAsList(wResource, IsFormatOf.class, wr.getDctermsIsFormatOf());
-			addAsObject(wResource, IsNextInSequence.class, wr.getIsNextInSequence());
+			addAsObject(wResource, IsNextInSequence.class,
+					wr.getIsNextInSequence());
 			addAsList(wResource, Issued.class, wr.getDctermsIssued());
 			addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
 			addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
@@ -411,7 +477,7 @@ public class EdmUtils {
 		List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
 		for (ProvidedCHOImpl pCho : chos) {
 			ProvidedCHOType pChoJibx = new ProvidedCHOType();
-			pChoJibx.setAbout(pCho.getAbout());
+			pChoJibx.setAbout(PREFIX + pCho.getAbout());
 			addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
 			pChoList.add(pChoJibx);
 		}
@@ -428,12 +494,15 @@ public class EdmUtils {
 				addAsList(agent, AltLabel.class, ag.getAltLabel());
 				addAsObject(agent, Begin.class, ag.getBegin());
 				addAsObject(agent, End.class, ag.getEnd());
-				addAsObject(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
+				addAsObject(agent, BiographicalInformation.class,
+						ag.getRdaGr2BiographicalInformation());
 				addAsList(agent, Date.class, ag.getDcDate());
 				addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
 				addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-				addAsObject(agent, DateOfEstablishment.class, ag.getRdaGr2DateOfEstablishment());
-				addAsObject(agent, DateOfTermination.class, ag.getRdaGr2DateOfTermination());
+				addAsObject(agent, DateOfEstablishment.class,
+						ag.getRdaGr2DateOfEstablishment());
+				addAsObject(agent, DateOfTermination.class,
+						ag.getRdaGr2DateOfTermination());
 				addAsObject(agent, Gender.class, ag.getRdaGr2Gender());
 				addAsList(agent, HasMet.class, ag.getEdmHasMet());
 				addAsList(agent, Identifier.class, ag.getDcIdentifier());
@@ -441,7 +510,8 @@ public class EdmUtils {
 				addAsList(agent, Name.class, ag.getFoafName());
 				addAsList(agent, Note.class, ag.getNote());
 				addAsList(agent, PrefLabel.class, ag.getPrefLabel());
-				addAsObject(agent, ProfessionOrOccupation.class, ag.getRdaGr2ProfessionOrOccupation());
+				addAsObject(agent, ProfessionOrOccupation.class,
+						ag.getRdaGr2ProfessionOrOccupation());
 				addAsList(agent, SameAs.class, ag.getOwlSameAs());
 				agentList.add(agent);
 			}
@@ -449,14 +519,16 @@ public class EdmUtils {
 		}
 	}
 
-	private static void addConceptChoice(List<Concept.Choice> choices, Class<? extends LiteralType> clazz,
-			Map<String, List<String>> map) {
+	private static void addConceptChoice(List<Concept.Choice> choices,
+			Class<? extends LiteralType> clazz, Map<String, List<String>> map) {
 		if ((map != null) && !map.isEmpty()) {
 			try {
 				for (Entry<String, List<String>> entry : map.entrySet()) {
-					Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+					Method method = Concept.Choice.class.getMethod(
+							getSetterMethodName(clazz, false), clazz);
 					LiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+					if (StringUtils.isNotEmpty(entry.getKey())
+							&& !StringUtils.equals("def", entry.getKey())) {
 						lang = new LiteralType.Lang();
 						lang.setLang(entry.getKey());
 					}
@@ -487,11 +559,12 @@ public class EdmUtils {
 		}
 	}
 
-	private static void addConceptChoice(List<Concept.Choice> choices, Class<? extends ResourceType> clazz,
-			String[] array) {
+	private static void addConceptChoice(List<Concept.Choice> choices,
+			Class<? extends ResourceType> clazz, String[] array) {
 		if (StringArrayUtils.isNotBlank(array)) {
 			try {
-				Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				Method method = Concept.Choice.class.getMethod(
+						getSetterMethodName(clazz, false), clazz);
 				for (String str : array) {
 					if (StringUtils.isNotBlank(str)) {
 						ResourceType obj = clazz.newInstance();
@@ -517,14 +590,18 @@ public class EdmUtils {
 		}
 	}
 
-	private static void addEuropeanaTypeChoice(List<EuropeanaType.Choice> dcChoices,
-			Class<? extends ResourceOrLiteralType> clazz, Map<String, List<String>> entries) {
+	private static void addEuropeanaTypeChoice(
+			List<EuropeanaType.Choice> dcChoices,
+			Class<? extends ResourceOrLiteralType> clazz,
+			Map<String, List<String>> entries) {
 		if ((entries != null) && !entries.isEmpty()) {
 			try {
-				Method method = EuropeanaType.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				Method method = EuropeanaType.Choice.class.getMethod(
+						getSetterMethodName(clazz, false), clazz);
 				for (Entry<String, List<String>> entry : entries.entrySet()) {
 					ResourceOrLiteralType.Lang lang = null;
-					if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+					if (StringUtils.isNotEmpty(entry.getKey())
+							&& !StringUtils.equals("def", entry.getKey())) {
 						lang = new ResourceOrLiteralType.Lang();
 						lang.setLang(entry.getKey());
 					}
@@ -562,14 +639,18 @@ public class EdmUtils {
 		}
 	}
 
-	private static void addEuropeanaTypeChoiceLiteral(List<EuropeanaType.Choice> dcChoices,
-			Class<? extends LiteralType> clazz, Map<String, List<String>> entries) {
+	private static void addEuropeanaTypeChoiceLiteral(
+			List<EuropeanaType.Choice> dcChoices,
+			Class<? extends LiteralType> clazz,
+			Map<String, List<String>> entries) {
 		if ((entries != null) && !entries.isEmpty()) {
 			try {
-				Method method = EuropeanaType.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
+				Method method = EuropeanaType.Choice.class.getMethod(
+						getSetterMethodName(clazz, false), clazz);
 				for (Entry<String, List<String>> entry : entries.entrySet()) {
 					LiteralType.Lang lang = null;
-					if (StringUtils.isNotBlank(entry.getKey()) && !StringUtils.equals("def", entry.getKey())) {
+					if (StringUtils.isNotBlank(entry.getKey())
+							&& !StringUtils.equals("def", entry.getKey())) {
 						lang = new LiteralType.Lang();
 						lang.setLang(entry.getKey());
 					}
@@ -600,10 +681,12 @@ public class EdmUtils {
 		}
 	}
 
-	private static boolean addAsObject(Object dest, Class<? extends ResourceType> clazz, String str) {
+	private static boolean addAsObject(Object dest,
+			Class<? extends ResourceType> clazz, String str) {
 		try {
 			if (StringUtils.isNotBlank(str)) {
-				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
+				Method method = dest.getClass().getMethod(
+						getSetterMethodName(clazz, false), clazz);
 				Object obj = clazz.newInstance();
 				((ResourceType) obj).setResource(str);
 				method.invoke(dest, obj);
@@ -625,12 +708,14 @@ public class EdmUtils {
 		return false;
 	}
 
-	private static <T> boolean addAsObject(Object dest, Class<T> clazz, Map<String, List<String>> map) {
+	private static <T> boolean addAsObject(Object dest, Class<T> clazz,
+			Map<String, List<String>> map) {
 		try {
 			if ((map != null) && (!map.isEmpty())) {
 				T obj = convertMapToObj(clazz, map);
 				if (obj != null) {
-					Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
+					Method method = dest.getClass().getMethod(
+							getSetterMethodName(clazz, false), clazz);
 					method.invoke(dest, obj);
 					return true;
 				}
@@ -649,11 +734,13 @@ public class EdmUtils {
 		return false;
 	}
 
-	private static <T> boolean addAsList(Object dest, Class<T> clazz, Map<String, List<String>> map) {
+	private static <T> boolean addAsList(Object dest, Class<T> clazz,
+			Map<String, List<String>> map) {
 		try {
 			if ((map != null) && !map.isEmpty()) {
 				log.info("set" + clazz.getSimpleName() + "List");
-				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
+				Method method = dest.getClass().getMethod(
+						getSetterMethodName(clazz, true), List.class);
 				method.invoke(dest, convertListFromMap(clazz, map));
 				return true;
 			}
@@ -671,11 +758,24 @@ public class EdmUtils {
 		return false;
 	}
 
-	private static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
+	private static <T> boolean addAsList(Object dest, Class<T> clazz,
+			String[] vals, String... prefix) {
 		try {
 			if (StringArrayUtils.isNotBlank(vals)) {
-				Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-				method.invoke(dest, convertListFromArray(clazz, vals));
+				Method method = dest.getClass().getMethod(
+						getSetterMethodName(clazz, true), List.class);
+				if (prefix.length == 1) {
+					String[] valNew = new String[vals.length];
+					int i=0;
+					for (String val:vals){
+						valNew[i]=PREFIX+val;
+						i++;
+					}
+					method.invoke(dest, convertListFromArray(clazz, valNew));
+				} else {
+					
+					method.invoke(dest, convertListFromArray(clazz, vals));
+				}
 				return true;
 			}
 		} catch (SecurityException e) {
@@ -703,7 +803,8 @@ public class EdmUtils {
 		return sb.toString();
 	}
 
-	private static <T> List<T> convertListFromArray(Class<T> clazz, String[] vals) {
+	private static <T> List<T> convertListFromArray(Class<T> clazz,
+			String[] vals) {
 		List<T> tList = new ArrayList<T>();
 		try {
 			if (vals != null) {
@@ -726,13 +827,15 @@ public class EdmUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> List<T> convertListFromMap(Class<T> clazz, Map<String, List<String>> map) {
+	private static <T> List<T> convertListFromMap(Class<T> clazz,
+			Map<String, List<String>> map) {
 		if (map != null) {
 			List<T> list = new ArrayList<T>();
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 
-					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(
+							ResourceType.class)) {
 						for (String str : entry.getValue()) {
 							ResourceType t = (ResourceType) clazz.newInstance();
 
@@ -740,9 +843,11 @@ public class EdmUtils {
 							list.add((T) t);
 						}
 
-					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							LiteralType.class)) {
 						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new LiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
@@ -753,33 +858,42 @@ public class EdmUtils {
 							t.setLang(lang);
 							list.add((T) t);
 						}
-					} else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new ResourceOrLiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
 						for (String str : entry.getValue()) {
-							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
+							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
+									.newInstance();
 							Resource resource = new Resource();
 							t.setString("");
 							if (isUri(str)) {
+								resource.setResource(str);
 								t.setResource(resource);
 							} else {
 								t.setString(str);
+								t.setLang(lang);
 							}
-							t.setLang(lang);
+
 							list.add((T) t);
 						}
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				}
 
 			}
@@ -789,18 +903,22 @@ public class EdmUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T convertMapToObj(Class<T> clazz, Map<String, List<String>> map) {
+	private static <T> T convertMapToObj(Class<T> clazz,
+			Map<String, List<String>> map) {
 		if (map != null) {
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
 					T t = clazz.newInstance();
-					if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
+					if (clazz.getSuperclass().isAssignableFrom(
+							ResourceType.class)) {
 						((ResourceType) t).setResource(entry.getValue().get(0));
 						return t;
 
-					} else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							ResourceOrLiteralType.class)) {
 						ResourceOrLiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new ResourceOrLiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
@@ -813,16 +931,20 @@ public class EdmUtils {
 						obj.setString("");
 						for (String str : entry.getValue()) {
 							if (isUri(str)) {
+								resource.setResource(str);
 								obj.setResource(resource);
 							} else {
 								obj.setString(str);
+								obj.setLang(lang);
 							}
 						}
-						obj.setLang(lang);
+
 						return (T) obj;
-					} else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
+					} else if (clazz.getSuperclass().isAssignableFrom(
+							LiteralType.class)) {
 						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(), "def")) {
+						if (StringUtils.isNotEmpty(entry.getKey())
+								&& !StringUtils.equals(entry.getKey(), "def")) {
 							lang = new LiteralType.Lang();
 							lang.setLang(entry.getKey());
 						}
@@ -835,13 +957,17 @@ public class EdmUtils {
 						return (T) obj;
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				}
 
 			}
