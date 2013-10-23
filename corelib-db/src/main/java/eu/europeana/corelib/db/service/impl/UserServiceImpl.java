@@ -295,8 +295,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 		SocialTag socialTag = new SocialTagImpl();
 		populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
+
 		socialTag.setTag(StringUtils.abbreviate(tag,
 				RelationalDatabase.FIELDSIZE_TAG));
+
 		return user;
 	}
 

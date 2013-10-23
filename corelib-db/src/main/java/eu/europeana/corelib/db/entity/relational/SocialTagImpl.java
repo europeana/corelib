@@ -35,11 +35,11 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
 @NamedQueries ({
-	@NamedQuery(name=SocialTag.QUERY_CREATECLOUD_BYUSER, 
-			query="SELECT NEW eu.europeana.corelib.db.entity.relational.custom.TagCloudItem(e.tag, count(*) ) FROM SocialTagImpl e WHERE e.user.id = ? GROUP BY e.tag"),
-	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_TAG, query="select e from SocialTagImpl e where e.user.id = ? and lower(e.tag) = ?"),
-	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_EUROPEANAID, query="select e from SocialTagImpl e where e.user.id = ? and e.europeanaUri = ?"),
-	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_TAG_EUROPEANAID, query="select e from SocialTagImpl e where e.user.id = ? and lower(e.tag) = ? and e.europeanaUri = ?")
+	@NamedQuery(name=SocialTag.QUERY_CREATECLOUD_BYUSER,
+			query="SELECT NEW eu.europeana.corelib.db.entity.relational.custom.TagCloudItem(e.tag, count(*)) FROM SocialTagImpl e WHERE e.user.id = ? GROUP BY e.tag"),
+	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_TAG, query="SELECT e FROM SocialTagImpl e WHERE e.user.id = ? AND lower(e.tag) = ?"),
+	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_EUROPEANAID, query="SELECT e FROM SocialTagImpl e WHERE e.user.id = ? AND e.europeanaUri = ?"),
+	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_TAG_EUROPEANAID, query="SELECT e FROM SocialTagImpl e WHERE e.user.id = ? AND lower(e.tag) = ? AND e.europeanaUri = ?")
 })
 public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;

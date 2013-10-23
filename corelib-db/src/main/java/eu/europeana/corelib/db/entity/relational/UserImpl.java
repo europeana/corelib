@@ -39,6 +39,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
@@ -121,18 +123,22 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	private Set<SavedItem> savedItems = new HashSet<SavedItem>();
 
 	@OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
 
 	@OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	private Set<SocialTag> socialTags = new HashSet<SocialTag>();
 
 	@OneToMany(targetEntity=ApiKeyImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	private Set<ApiKey> apiKeys = new HashSet<ApiKey>();
 
 	/**
