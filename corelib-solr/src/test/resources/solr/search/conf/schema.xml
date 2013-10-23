@@ -551,7 +551,7 @@
 			stored="false" multiValued="false" />
 
 		<!-- AGENT -->
-		<field name="edm_agent" type="string" indexed="true" stored="false"
+		<field name="edm_agent" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="ag_skos_prefLabel" type="text" indexed="true"
 			stored="true" multiValued="true" />
@@ -633,7 +633,7 @@
 		<dynamicField name="ag_edm_end.*" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<!-- TIMESPAN -->
-		<field name="edm_timespan" type="string" indexed="true" stored="false"
+		<field name="edm_timespan" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="ts_skos_prefLabel" type="text" indexed="true"
 			stored="true" multiValued="true" />
@@ -673,7 +673,7 @@
 		<dynamicField name="ts_edm_end.*" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<!-- PLACE -->
-		<field name="edm_place" type="string" indexed="true" stored="false"
+		<field name="edm_place" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="pl_skos_prefLabel" type="text" indexed="true"
 			stored="true" multiValued="true" />
@@ -717,7 +717,7 @@
 			indexed="true" stored="false" multiValued="true" />
 
 		<!-- CONCEPT -->
-		<field name="skos_concept" type="string" indexed="true" stored="false"
+		<field name="skos_concept" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="cc_skos_prefLabel" type="text" indexed="true"
 			stored="true" multiValued="true" />
