@@ -79,7 +79,8 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
 		datastore = morphia.createDatastore(mongoServer, databaseName);
-
+		System.out.println(mongoServer.getAddress().getHost());
+		System.out.println(mongoServer.getAddress().getPort());
 		datastore.ensureIndexes();
 		log.info("VocabularyMongoServer datastore is created");
 	}
