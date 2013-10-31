@@ -72,14 +72,16 @@ public class EmailBuilderImpl implements EmailBuilder {
 		message.setFrom(emailFrom);
 		message.setSubject(subject);
 
-		String text = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
-				+ TEMPLATE_NAME_AFFIX_TEXT, model);
+		String text = VelocityEngineUtils.mergeTemplateIntoString(engine,
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_TEXT,
+			"UTF-8", model);
 
-		String html = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
-				+ TEMPLATE_NAME_AFFIX_HTML, model);
+		String html = VelocityEngineUtils.mergeTemplateIntoString(engine,
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML,
+			"UTF-8", model);
 
 		MimeBodyPart textPart = new MimeBodyPart();
-		textPart.setText(text, "UTF-8");
+		textPart.setText(text);
 
 		BodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent(html, "text/html");
