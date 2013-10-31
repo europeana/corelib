@@ -78,8 +78,8 @@ public class EmailBuilderImpl implements EmailBuilder {
 		String html = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
 				+ TEMPLATE_NAME_AFFIX_HTML, model);
 
-		BodyPart textPart = new MimeBodyPart();
-		textPart.setText(text);
+		MimeBodyPart textPart = new MimeBodyPart();
+		textPart.setText(text, "UTF-8");
 
 		BodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent(html, "text/html");
