@@ -29,6 +29,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -389,8 +391,6 @@ public class ClientUtils {
 	}
 	
 	
-
-	
 	/**
 	 * Auxiliary method for extractiing information from DOM objects embedded in
 	 * SOAP responses
@@ -415,6 +415,24 @@ public class ClientUtils {
 		return null;
 	}
 	
+	
+	/**
+	 * Returns a Map containing SUgarCRM identifiers
+	 * 
+	 * @param el
+	 * @return the populated map
+	 */
+	public static Map<String,String> mapFromElement(Element el) {
+		HashMap<String,String> retMap = new HashMap<String,String>();
+		NodeList nl = el.getElementsByTagName("item");
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node nd = nl.item(i);
+			String id = nd.getChildNodes().item(0).getTextContent();
+			String content = nd.getChildNodes().item(1).getTextContent();
+			retMap.put(id, content);
+		}
+		return retMap;
+	}
 	
 	
 	/**
