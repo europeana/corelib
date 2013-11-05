@@ -76,13 +76,11 @@ public class EmailBuilderImpl implements EmailBuilder {
 		message.setSubject(subject);
 
 		String text = VelocityEngineUtils.mergeTemplateIntoString(engine,
-			config.getTemplate() + TEMPLATE_NAME_AFFIX_TEXT,
-			"UTF-8", model);
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_TEXT, model);
 		log.info("Text: " + text);
 
 		String html = VelocityEngineUtils.mergeTemplateIntoString(engine,
-			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML,
-			"UTF-8", model);
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML, model);
 
 		MimeBodyPart textPart = new MimeBodyPart();
 		textPart.setText(text);
