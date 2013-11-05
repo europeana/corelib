@@ -65,7 +65,7 @@ public class EmailBuilderImpl implements EmailBuilder {
 	@Override
 	public void prepare(MimeMessage mimeMessage) throws MessagingException {
 
-		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
 
 		if (StringUtils.contains(emailTo, ",")) {
 			message.setTo(StringUtils.split(emailTo, ","));
