@@ -110,8 +110,8 @@ public class AggregationFieldInputTest {
 					solrDocument
 							.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER
 									.toString()));
-			assertEquals(aggregation.getUgc().getUgc().toString(),
-					solrDocument.getFieldValue(EdmLabel.EDM_UGC.toString()));
+			assertEquals(aggregation.getUgc().getUgc().toString().toLowerCase(),
+					solrDocument.getFieldValue(EdmLabel.EDM_UGC.toString()).toString());
 			assertEquals(
 					aggregation.getRights().getString(),
 					solrDocument
