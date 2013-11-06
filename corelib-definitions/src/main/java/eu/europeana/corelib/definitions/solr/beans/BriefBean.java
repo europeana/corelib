@@ -185,4 +185,10 @@ public interface BriefBean extends IdBean {
 	 * @return edm:preview field
 	 */
 	String[] getEdmPreview();
+	
+	/**
+	 * 
+	 * @return the score of the result
+	 */
+	float getScore();
 }

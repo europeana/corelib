@@ -123,6 +123,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Field("description")
 	protected String[] description;
 	
+	@Field("score")
+	protected Float score;
+	
 	@Override
 	public String[] getEdmPreview(){
 		List<String> previews = new ArrayList<String>();
@@ -294,5 +297,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	@Override
 	public Date getTimestamp() {
 		return timestamp;
+	}
+
+	@Override
+	public float getScore() {
+		return score;
 	}
 }
