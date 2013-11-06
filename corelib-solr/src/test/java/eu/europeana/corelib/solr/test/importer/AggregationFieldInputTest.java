@@ -203,7 +203,7 @@ public class AggregationFieldInputTest {
 			assertEquals(aggregation.getProvider().getString(),
 					aggregationMongo.getEdmProvider().values().iterator()
 							.next().get(0));
-			assertEquals(aggregation.getUgc().getUgc().toString(),
+			assertEquals(aggregation.getUgc().getUgc().toString().toLowerCase(),
 					aggregationMongo.getEdmUgc());
 			assertEquals(aggregation.getRights().getString(), aggregationMongo
 					.getEdmRights().values().iterator().next().get(0));
