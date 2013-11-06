@@ -109,16 +109,6 @@ public enum EseEdmMap {
 				throw e;
 			}
 		}
-	},
-	EUROPEANA_IDENTIFIER("europeana_identifier") {
-		@Override
-		public String getEdmValue(FullBean bean) {
-			try {
-				return bean.getAbout();
-			} catch (NullPointerException e) {
-				throw e;
-			}
-		}
 	}
 
 	;

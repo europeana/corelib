@@ -180,19 +180,19 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
-		String previewUrl = null;
-
-		if (this.getAggregations().get(0).getEdmObject() != null) {
-			previewUrl = this.getAggregations().get(0).getEdmObject();
-
-		}
-		if (previewUrl != null) {
-			this.europeanaAggregation.setEdmPreview(EuropeanaUrlServiceImpl
-					.getBeanInstance().getThumbnailUrl(previewUrl, getType())
-					.toString());
-		} else {
-			this.europeanaAggregation.setEdmPreview("");
-		}
+//		String previewUrl = null;
+//
+//		if (this.getAggregations().get(0).getEdmObject() != null) {
+//			previewUrl = this.getAggregations().get(0).getEdmObject();
+//
+//		}
+//		if (previewUrl != null) {
+//			this.europeanaAggregation.setEdmPreview(EuropeanaUrlServiceImpl
+//					.getBeanInstance().getThumbnailUrl(previewUrl, getType())
+//					.toString());
+//		} else {
+//			this.europeanaAggregation.setEdmPreview("");
+//		}
 		return this.europeanaAggregation;
 	}
 

@@ -290,7 +290,7 @@ public final class AggregationFieldInput {
 				EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS);
 		if (aggregation.getUgc() != null) {
 			solrInputDocument.addField(EdmLabel.EDM_UGC.toString(), aggregation
-					.getUgc().getUgc().toString());
+					.getUgc().getUgc().toString().toLowerCase());
 		}
 		if (aggregation.getRightList() != null) {
 			for (Rights rights : aggregation.getRightList()) {
@@ -492,7 +492,7 @@ public final class AggregationFieldInput {
 		}
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
-					.setEdmUgc(aggregation.getUgc().getUgc().toString());
+					.setEdmUgc(aggregation.getUgc().getUgc().toString().toLowerCase());
 		}
 
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
