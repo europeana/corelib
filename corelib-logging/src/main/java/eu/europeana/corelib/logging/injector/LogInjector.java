@@ -2,7 +2,6 @@ package eu.europeana.corelib.logging.injector;
 
 import java.lang.reflect.Field;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.Ordered;
@@ -10,6 +9,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 
 import eu.europeana.corelib.logging.Log;
+import eu.europeana.corelib.logging.Logger;
 
 public class LogInjector implements BeanPostProcessor, Ordered {
 
@@ -31,8 +31,9 @@ public class LogInjector implements BeanPostProcessor, Ordered {
 			public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
 				// make the field accessible if defined private
 				ReflectionUtils.makeAccessible(field);
-				if (field.getAnnotation(Log.class) != null) {
-					field.set(bean, LoggerFactory.getLogger(bean.getClass()));
+				Log log = field.getAnnotation(Log.class);
+				if (log != null) {
+					field.set(bean, Logger.getLogger(bean.getClass())); 
 				}
 			}
 		});

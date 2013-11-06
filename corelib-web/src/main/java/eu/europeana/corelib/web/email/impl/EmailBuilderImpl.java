@@ -18,6 +18,7 @@
 package eu.europeana.corelib.web.email.impl;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.mail.BodyPart;
@@ -39,6 +40,8 @@ import eu.europeana.corelib.web.exception.EmailServiceException;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class EmailBuilderImpl implements EmailBuilder {
+
+	Logger log = Logger.getLogger(EmailBuilderImpl.class.getCanonicalName());
 
 	private static final String TEMPLATE_NAME_AFFIX_TEXT = ".txt.vm";
 	private static final String TEMPLATE_NAME_AFFIX_HTML = ".html.vm";
@@ -62,7 +65,7 @@ public class EmailBuilderImpl implements EmailBuilder {
 	@Override
 	public void prepare(MimeMessage mimeMessage) throws MessagingException {
 
-		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
 		if (StringUtils.contains(emailTo, ",")) {
 			message.setTo(StringUtils.split(emailTo, ","));
@@ -72,14 +75,15 @@ public class EmailBuilderImpl implements EmailBuilder {
 		message.setFrom(emailFrom);
 		message.setSubject(subject);
 
-		String text = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
-				+ TEMPLATE_NAME_AFFIX_TEXT, model);
+		String text = VelocityEngineUtils.mergeTemplateIntoString(engine,
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_TEXT, model);
+		log.info("Text: " + text);
 
-		String html = VelocityEngineUtils.mergeTemplateIntoString(engine, config.getTemplate()
-				+ TEMPLATE_NAME_AFFIX_HTML, model);
+		String html = VelocityEngineUtils.mergeTemplateIntoString(engine,
+			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML, model);
 
 		MimeBodyPart textPart = new MimeBodyPart();
-		textPart.setText(text, "UTF-8");
+		textPart.setText(text);
 
 		BodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent(html, "text/html");
