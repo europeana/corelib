@@ -49,7 +49,6 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
@@ -180,19 +179,7 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public EuropeanaAggregation getEuropeanaAggregation() {
-//		String previewUrl = null;
-//
-//		if (this.getAggregations().get(0).getEdmObject() != null) {
-//			previewUrl = this.getAggregations().get(0).getEdmObject();
-//
-//		}
-//		if (previewUrl != null) {
-//			this.europeanaAggregation.setEdmPreview(EuropeanaUrlServiceImpl
-//					.getBeanInstance().getThumbnailUrl(previewUrl, getType())
-//					.toString());
-//		} else {
-//			this.europeanaAggregation.setEdmPreview("");
-//		}
+		
 		return this.europeanaAggregation;
 	}
 

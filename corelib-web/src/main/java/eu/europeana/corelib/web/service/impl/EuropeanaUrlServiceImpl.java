@@ -23,7 +23,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public static EuropeanaUrlService getBeanInstance() {
 		return ApplicationContextContainer.getBean(EuropeanaUrlServiceImpl.class);
 	}
-
+	
 	@Override
 	public UrlBuilder getApi1Home(String apikey) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
