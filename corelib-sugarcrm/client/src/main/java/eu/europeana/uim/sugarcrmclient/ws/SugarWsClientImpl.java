@@ -122,6 +122,8 @@ public class SugarWsClientImpl implements SugarWsClient {
 
 		LoginResponse response = invokeWSTemplate(login, LoginResponse.class);
 		String sessionID = response.getReturn().getId();
+		this.sessionID = sessionID;
+		
 		if ("-1".equals(sessionID)) {
 			throw new JIXBLoginFailureException(response.getReturn().getError());
 		}
