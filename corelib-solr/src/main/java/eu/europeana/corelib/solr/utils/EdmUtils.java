@@ -570,7 +570,7 @@ public class EdmUtils {
 						ResourceType obj = clazz.newInstance();
 						obj.setResource(str);
 						Concept.Choice ch = new Concept.Choice();
-						method.invoke(choices, obj);
+						method.invoke(ch, obj);
 						choices.add(ch);
 					}
 				}
