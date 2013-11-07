@@ -538,7 +538,7 @@ public class EdmUtils {
 							obj.setString(str);
 							obj.setLang(lang);
 							Concept.Choice ch = new Concept.Choice();
-							method.invoke(choices, obj);
+							method.invoke(ch, obj);
 							choices.add(ch);
 						}
 					}
