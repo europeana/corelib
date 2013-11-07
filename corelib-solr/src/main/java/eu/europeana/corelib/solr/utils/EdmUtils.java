@@ -343,6 +343,7 @@ public class EdmUtils {
 					prx.getDcIdentifier());
 			addEuropeanaTypeChoice(dcChoices, Publisher.class,
 					prx.getDcPublisher());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Language.class, prx.getDcLanguage());
 			addEuropeanaTypeChoice(dcChoices, Relation.class,
 					prx.getDcRelation());
 			addEuropeanaTypeChoice(dcChoices, Rights.class, prx.getDcRights());
