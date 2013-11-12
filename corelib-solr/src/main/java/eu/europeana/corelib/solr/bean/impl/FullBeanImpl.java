@@ -74,7 +74,9 @@ public class FullBeanImpl implements FullBean {
 
 	protected String[] language;
 
-	protected Date timestamp;
+	protected Date timestampCreated;
+	
+	protected Date timestampUpdated;
 
 	protected DocType type;
 
@@ -323,10 +325,15 @@ public class FullBeanImpl implements FullBean {
 	}
 
 	@Override
-	public Date getTimestamp() {
-		return timestamp;
+	public Date getTimestampCreated() {
+		return this.timestampCreated;
 	}
 
+	@Override
+	public Date getTimestampUpdated() {
+		return timestampUpdated;
+	}
+	
 	@Override
 	public List<? extends BriefBean> getSimilarItems() {
 		return this.similarItems;
@@ -345,5 +352,21 @@ public class FullBeanImpl implements FullBean {
 	@Override
 	public void setOptOut(boolean optOut) {
 		this.optOut = optOut;
+	}
+
+	@Override
+	public Date getTimestamp() {
+		return null;
+	}
+
+	@Override
+	public void setTimestampCreated(Date timestampCreated) {
+		this.timestampCreated = timestampCreated;
+		
+	}
+
+	@Override
+	public void setTimestampUpdated(Date timestampUpdated) {
+		this.timestampUpdated = timestampUpdated;
 	}
 }

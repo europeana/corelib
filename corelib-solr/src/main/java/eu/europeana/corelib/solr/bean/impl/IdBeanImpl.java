@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.Date;
+
 import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -35,6 +37,12 @@ public class IdBeanImpl implements IdBean {
 	@Field("edm_previewNoDistribute")
 	protected boolean optOut;
 
+	@Field("timestamp_created")
+	protected Date timestampCreated;
+	
+	@Field("timestamp_update")
+	protected Date timestampUpdated;
+	
 	@Override
 	public String getId() {
 		return this.id;
@@ -43,5 +51,15 @@ public class IdBeanImpl implements IdBean {
 	@Override
 	public Boolean isOptedOut() {
 		return this.optOut;
+	}
+
+	@Override
+	public Date getTimestampCreated() {
+		return this.timestampCreated;
+	}
+
+	@Override
+	public Date getTimestampUpdated() {
+		return this.timestampUpdated;
 	}
 }

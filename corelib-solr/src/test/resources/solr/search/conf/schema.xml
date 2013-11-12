@@ -923,7 +923,9 @@
 		<field name="_version_" type="long" indexed="true" stored="true"
 			multiValued="false" />
 		<!-- / - -->
-
+		
+		<!-- Yorgos Mamakis 12/11/2013  -->
+		<dynamicField name="timestamp_*" type="date" indexed="true" stored="true" multiValued="false"/>
 
 
 

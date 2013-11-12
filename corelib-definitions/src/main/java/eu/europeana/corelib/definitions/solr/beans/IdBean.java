@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.Date;
+
 public interface IdBean {
 
 	/**
@@ -31,4 +33,8 @@ public interface IdBean {
 	 * @return if the provider has opted out for this record
 	 */
 	Boolean isOptedOut();
+	
+	Date getTimestampCreated();
+	
+	Date getTimestampUpdated();
 }

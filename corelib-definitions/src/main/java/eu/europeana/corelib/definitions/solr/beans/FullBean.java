@@ -281,4 +281,12 @@ public interface FullBean extends IdBean {
 	 * @param optOut
 	 */
 	void setOptOut(boolean optOut);
+	
+	Date getTimestampCreated();
+	
+	Date getTimestampUpdated();
+	
+	void setTimestampCreated(Date timestampCreated);
+	
+	void setTimestampUpdated(Date timestampUpdated);
 }
