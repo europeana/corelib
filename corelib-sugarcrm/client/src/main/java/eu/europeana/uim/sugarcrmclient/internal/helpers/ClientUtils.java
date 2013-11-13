@@ -47,6 +47,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import eu.europeana.uim.sugarcrmclient.enums.EuropeanaDatasetStates;
+import eu.europeana.uim.sugarcrmclient.enums.EuropeanaOrgRole;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.Array;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.ArrayAttributes;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.ArrayAttributes.ArrayType;
@@ -71,7 +72,8 @@ import org.jibx.runtime.JiBXException;
 public class ClientUtils {
 
 	private static org.apache.log4j.Logger logger = Logger.getLogger(ClientUtils.class);
-
+	
+	
 	/**
 	 * Utility Class (Does not instantiate)
 	 */
@@ -464,4 +466,31 @@ public class ClientUtils {
 		}
 	}
 		
+	
+	/**
+	 * Translates the status code returned by SugarCRM into a human readable form.
+	 * 
+	 * @param sugarcrmStatusStr
+	 * @return
+	 */
+	public static String translateType(String provtype){
+		if(provtype != null){
+		EuropeanaOrgRole actualvalue = null;
+		for(EuropeanaOrgRole e : EuropeanaOrgRole.values()){
+			if(e.getSysId().equals(provtype)){
+				actualvalue = e;
+			}
+		}
+		
+		if(actualvalue != null){
+			return actualvalue.getDescription();
+		}
+		else{
+			return "Unknown Type";
+		}
+		}
+		else{
+			return "Undefined";
+		}
+	}
 }
