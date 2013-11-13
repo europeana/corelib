@@ -44,6 +44,7 @@ public enum EuropeanaUpdatableField{
 	PLANNED_VIDEO("planned_video_c","planned_video_c","Ingested Video"),
 	PLANNED_TEXT("planned_text_c","planned_text_c","Ingested Text"),
 	PLANNED_IMAGE("planned_image_c","planned_image_c","Ingested Images"),
+	DELETED_RECORDS("deleted_records_c","deleted_records_c","Deleted Records"),
 	
 	HARVEST_URL("harvest_url_c","harvest_url_c","Harvest URL"),
 	SETSPEC("setspec_c","setspec_c","Setspec"),
