@@ -21,7 +21,7 @@ Private key  : ${apiKey.privateKey}<br/>
 The Europeana API Team</p>
 
 <p>
-Europeana API Technical Documentation - <a href="http://preview.europeana.eu/portal2/api-documentation.html">http://preview.europeana.eu/portal2/api-documentation.html</a><br/>
+Europeana API Technical Documentation - <a href="http://www.europeana.eu/portal/api-introduction.html">http://www.europeana.eu/portal/api-introduction.html</a><br/>
 Europeana API Forum - <a href="https://groups.google.com/forum/?pli=1#!forum/europeanaapi">https://groups.google.com/forum/?pli=1#!forum/europeanaapi</a><br/>
 More about the Europeana API services - <a href="http://pro.europeana.eu/api">http://pro.europeana.eu/api</a>
 </p>
