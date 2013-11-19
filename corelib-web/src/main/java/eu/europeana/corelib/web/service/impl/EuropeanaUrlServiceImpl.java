@@ -154,7 +154,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
 		UrlBuilder url = new UrlBuilder(URL_IMAGE_SITE);
 		try {
-			url.addParam("uri", URLEncoder.encode(thumbnail, ENC_UTF8));
+			url.addParam("uri", URLEncoder.encode(thumbnail.trim(), ENC_UTF8));
 		} catch (UnsupportedEncodingException e) {
 		}
 		url.addParam("size", ThumbSize.LARGE.toString());
