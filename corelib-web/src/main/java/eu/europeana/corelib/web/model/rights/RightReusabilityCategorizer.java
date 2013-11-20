@@ -13,37 +13,37 @@ import eu.europeana.corelib.definitions.solr.model.QueryFacet;
 
 public class RightReusabilityCategorizer {
 
-	private static final String FREE = "free";
-	private static final String LIMITED = "limited";
-	private static final String UNCATEGORIZED = "uncategorized";
+	public static final String OPEN = "open";
+	public static final String RESTRICTED = "restricted";
+	public static final String UNCATEGORIZED = "uncategorized";
 
-	private long numberOfFree;
-	private long numberOfLimited;
+	private long numberOfOpen;
+	private long numberOfRestricted;
 
-	private static List<String> freeUrls = Arrays.asList(new String[]{
+	private static List<String> openUrls = Arrays.asList(new String[]{
 		RightsOption.NOC.getUrl(),
 		RightsOption.CC_ZERO.getUrl() + "/1.0/",
 		RightsOption.CC_BY.getUrl(),
 		RightsOption.CC_BY_SA.getUrl()
 	});
-	private static String freeRightsQuery;
+	private static String openRightsQuery;
 
-	private static List<String> limitedUrls = Arrays.asList(new String[]{
+	private static List<String> restrictedUrls = Arrays.asList(new String[]{
 		RightsOption.CC_BY_NC.getUrl(),
 		RightsOption.CC_BY_NC_SA.getUrl(),
 		RightsOption.CC_BY_NC_ND.getUrl(),
 		RightsOption.CC_BY_ND.getUrl(),
 		RightsOption.OOC_NC.getUrl()
 	});
-	private static String limitedRightsQuery;
+	private static String restrictedRightsQuery;
 	private static String allRightsQuery;
 
 	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
 	private static List<QueryFacet> queryFacets;
 
 	public RightReusabilityCategorizer() {
-		numberOfFree = 0;
-		numberOfLimited = 0;
+		numberOfOpen = 0;
+		numberOfRestricted = 0;
 	}
 
 	public String categorize(String url, long count) {
@@ -55,26 +55,26 @@ public class RightReusabilityCategorizer {
 
 		if (examinedUrlsMap.containsKey(cleanedUrl)) {
 			category = examinedUrlsMap.get(cleanedUrl);
-			if (category.equals(FREE)) {
-				numberOfFree += count;
-			} else if (category.equals(LIMITED)) {
-				numberOfLimited += count;
+			if (category.equals(OPEN)) {
+				numberOfOpen += count;
+			} else if (category.equals(RESTRICTED)) {
+				numberOfRestricted += count;
 			}
 		} else {
-			for (String rightUrl : freeUrls) {
+			for (String rightUrl : openUrls) {
 				if (cleanedUrl.startsWith(rightUrl)) {
-					numberOfFree += count;
-					category = FREE;
+					numberOfOpen += count;
+					category = OPEN;
 					examinedUrlsMap.put(cleanedUrl, category);
 					break;
 				}
 			}
 			if (category == null) {
-				for (String rightUrl : limitedUrls) {
+				for (String rightUrl : restrictedUrls) {
 					// log.info(rightUrl);
 					if (cleanedUrl.startsWith(rightUrl)) {
-						numberOfLimited += count;
-						category = LIMITED;
+						numberOfRestricted += count;
+						category = RESTRICTED;
 						examinedUrlsMap.put(cleanedUrl, category);
 						break;
 					}
@@ -87,25 +87,25 @@ public class RightReusabilityCategorizer {
 		return category;
 	}
 
-	public static String getFreeRightsQuery() {
-		if (freeRightsQuery == null) {
-			freeRightsQuery = join(solarizeUrls(freeUrls));
+	public static String getOpenStringRightsQuery() {
+		if (openRightsQuery == null) {
+			openRightsQuery = join(solarizeUrls(openUrls));
 		}
-		return freeRightsQuery;
+		return openRightsQuery;
 	}
 
-	public static String getLimitedRightsQuery() {
-		if (limitedRightsQuery == null) {
-			limitedRightsQuery = join(solarizeUrls(limitedUrls));
+	public static String getRestrictedRightsQuery() {
+		if (restrictedRightsQuery == null) {
+			restrictedRightsQuery = join(solarizeUrls(restrictedUrls));
 		}
-		return limitedRightsQuery;
+		return restrictedRightsQuery;
 	}
 
 	public static String getAllRightsQuery() {
 		if (allRightsQuery == null) {
 			List<String> solarizedUrls = new ArrayList<String>();
-			solarizedUrls.addAll(solarizeUrls(freeUrls));
-			solarizedUrls.addAll(solarizeUrls(limitedUrls));
+			solarizedUrls.addAll(solarizeUrls(openUrls));
+			solarizedUrls.addAll(solarizeUrls(restrictedUrls));
 			allRightsQuery = join(solarizedUrls);
 		}
 		return allRightsQuery;
@@ -130,8 +130,8 @@ public class RightReusabilityCategorizer {
 	public static List<QueryFacet> getQueryFacets() {
 		if (queryFacets == null) {
 			queryFacets = new ArrayList<QueryFacet>();
-			queryFacets.add(new QueryFacet(getFreeRightsQuery(), "REUSABILITY:Free", "REUSABILITY"));
-			queryFacets.add(new QueryFacet(getLimitedRightsQuery(), "REUSABILITY:Limited", "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getOpenStringRightsQuery(), "REUSABILITY:" + OPEN, "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getRestrictedRightsQuery(), "REUSABILITY:" + RESTRICTED, "REUSABILITY"));
 		}
 		return queryFacets;
 	}
@@ -140,11 +140,11 @@ public class RightReusabilityCategorizer {
 		return url.trim().replace("&qf=RIGHTS:", "").replace("\"", "").replace("RIGHTS:", "");
 	}
 
-	public long getNumberOfFree() {
-		return numberOfFree;
+	public long getNumberOfOpen() {
+		return numberOfOpen;
 	}
 
-	public long getNumberOfLimited() {
-		return numberOfLimited;
+	public long getNumberOfRestricted() {
+		return numberOfRestricted;
 	}
 }
