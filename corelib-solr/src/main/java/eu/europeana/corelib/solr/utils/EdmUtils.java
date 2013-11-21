@@ -63,6 +63,7 @@ public class EdmUtils {
 	private static IBindingFactory bfact;
 	private final static String SPACE = " ";
 	private final static String PREFIX = "http://data.europeana.eu";
+	private static String prefix="";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -71,7 +72,10 @@ public class EdmUtils {
 	 *            The FullBean to convert
 	 * @return The resulting EDM string in RDF-XML
 	 */
-	public static synchronized String toEDM(FullBeanImpl fullBean) {
+	public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
+		if(isUim){
+			prefix=PREFIX;
+		}
 		RDF rdf = new RDF();
 		appendCHO(rdf, fullBean.getProvidedCHOs());
 		appendAggregation(rdf, fullBean.getAggregations());
@@ -194,12 +198,12 @@ public class EdmUtils {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
 		EuropeanaAggregation europeanaAggregation = fBean
 				.getEuropeanaAggregation();
-		aggregation.setAbout(PREFIX+europeanaAggregation.getAbout());
+		aggregation.setAbout(prefix+europeanaAggregation.getAbout());
 
 		if (!addAsObject(aggregation, AggregatedCHO.class,
 				europeanaAggregation.getAggregatedCHO())) {
 			AggregatedCHO agCHO = new AggregatedCHO();
-			agCHO.setResource(PREFIX+fBean.getProvidedCHOs().get(0).getAbout());
+			agCHO.setResource(prefix+fBean.getProvidedCHOs().get(0).getAbout());
 			aggregation.setAggregatedCHO(agCHO);
 		}
 		addAsList(aggregation, Aggregates.class,
@@ -282,7 +286,7 @@ public class EdmUtils {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
-			proxy.setAbout(PREFIX + prx.getAbout());
+			proxy.setAbout(prefix + prx.getAbout());
 			EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 			europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
 			proxy.setEuropeanaProxy(europeanaProxy);
@@ -325,8 +329,8 @@ public class EdmUtils {
 					prx.getEdmIsRepresentationOf());
 			addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
 			addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-			addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
-			addAsList(proxy, ProxyIn.class, prx.getProxyIn(), PREFIX);
+			addAsObject(proxy, ProxyFor.class, prefix + prx.getProxyFor());
+			addAsList(proxy, ProxyIn.class, prx.getProxyIn(), prefix);
 			addAsList(proxy, Year.class, prx.getYear());
 
 			List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
@@ -769,7 +773,7 @@ public class EdmUtils {
 					String[] valNew = new String[vals.length];
 					int i=0;
 					for (String val:vals){
-						valNew[i]=PREFIX+val;
+						valNew[i]=prefix+val;
 						i++;
 					}
 					method.invoke(dest, convertListFromArray(clazz, valNew));
