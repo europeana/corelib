@@ -2,7 +2,9 @@ package eu.europeana.corelib.web.model.rights;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,13 @@ public class RightReusabilityCategorizer {
 	public static final String OPEN = "open";
 	public static final String RESTRICTED = "restricted";
 	public static final String UNCATEGORIZED = "uncategorized";
+
+	private static Map<String, String> reusabilityValueMap = new LinkedHashMap<String, String>();
+	static {
+		reusabilityValueMap.put(RightReusabilityCategorizer.OPEN, "reusabilityOpen_t");
+		reusabilityValueMap.put(RightReusabilityCategorizer.RESTRICTED, "reusabilityRestricted_t");
+		reusabilityValueMap = Collections.unmodifiableMap(reusabilityValueMap);
+	}
 
 	private long numberOfOpen;
 	private long numberOfRestricted;
@@ -146,5 +155,18 @@ public class RightReusabilityCategorizer {
 
 	public long getNumberOfRestricted() {
 		return numberOfRestricted;
+	}
+
+	/**
+	 * Get a translation key belongs to the field value
+	 * @param value
+	 * @return
+	 */
+	public static String getTranslationKey(String value) {
+		return reusabilityValueMap.containsKey(value.toLowerCase()) ? reusabilityValueMap.get(value.toLowerCase()) : null;
+	}
+
+	public static Map<String, String> getReusabilityValueMap() {
+		return reusabilityValueMap;
 	}
 }
