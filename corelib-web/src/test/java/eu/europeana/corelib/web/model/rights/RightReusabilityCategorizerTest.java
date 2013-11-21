@@ -14,14 +14,14 @@ public class RightReusabilityCategorizerTest {
 	public void testGetFreeRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*)";
 
-		assertEquals(query, RightReusabilityCategorizer.getFreeRightsQuery());
+		assertEquals(query, RightReusabilityCategorizer.getOpenStringRightsQuery());
 	}
 
 	@Test
 	public void testGetLimitedRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
 
-		assertEquals(query, RightReusabilityCategorizer.getLimitedRightsQuery());
+		assertEquals(query, RightReusabilityCategorizer.getRestrictedRightsQuery());
 	}
 
 	@Test
@@ -366,9 +366,9 @@ public class RightReusabilityCategorizerTest {
 			total += entry.getValue();
 		}
 
-		assertTrue(total > (categorizer.getNumberOfFree() + categorizer.getNumberOfLimited()));
-		assertEquals(6808439, categorizer.getNumberOfFree());
-		assertEquals(1322152, categorizer.getNumberOfLimited());
+		assertTrue(total > (categorizer.getNumberOfOpen() + categorizer.getNumberOfRestricted()));
+		assertEquals(6808439, categorizer.getNumberOfOpen());
+		assertEquals(1322152, categorizer.getNumberOfRestricted());
 
 		// Testing whether the cache is working
 		categorizer = new RightReusabilityCategorizer();
@@ -378,9 +378,9 @@ public class RightReusabilityCategorizerTest {
 			total += entry.getValue();
 		}
 
-		assertTrue(total > (categorizer.getNumberOfFree() + categorizer.getNumberOfLimited()));
-		assertEquals(6808439, categorizer.getNumberOfFree());
-		assertEquals(1322152, categorizer.getNumberOfLimited());
+		assertTrue(total > (categorizer.getNumberOfOpen() + categorizer.getNumberOfRestricted()));
+		assertEquals(6808439, categorizer.getNumberOfOpen());
+		assertEquals(1322152, categorizer.getNumberOfRestricted());
 	}
 
 }
