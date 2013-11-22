@@ -743,7 +743,6 @@ public class EdmUtils {
 			Map<String, List<String>> map) {
 		try {
 			if ((map != null) && !map.isEmpty()) {
-				log.info("set" + clazz.getSimpleName() + "List");
 				Method method = dest.getClass().getMethod(
 						getSetterMethodName(clazz, true), List.class);
 				method.invoke(dest, convertListFromMap(clazz, map));
@@ -800,7 +799,12 @@ public class EdmUtils {
 	private static String getSetterMethodName(Class<?> clazz, boolean list) {
 		StringBuilder sb = new StringBuilder("set");
 		String clazzName = clazz.getSimpleName();
-		clazzName = StringUtils.strip(clazzName, "_1");
+		if(StringUtils.equals("Rights", clazzName)&& list){
+			clazzName = "Right";
+		}
+		clazzName = StringUtils.strip(clazzName,"_1");
+		clazzName = StringUtils.strip(clazzName,"1");
+		
 		sb.append(clazzName);
 		if (list) {
 			sb.append("List");
