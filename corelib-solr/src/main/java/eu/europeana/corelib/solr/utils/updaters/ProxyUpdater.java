@@ -1,5 +1,8 @@
 package eu.europeana.corelib.solr.utils.updaters;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
@@ -7,320 +10,280 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 
-public class ProxyUpdater implements Updater<ProxyImpl,ProxyImpl> {
+public class ProxyUpdater implements Updater<ProxyImpl, ProxyImpl> {
+	UpdateOperations<ProxyImpl> ops;
+
+	private boolean update(Map<String, List<String>> orig,
+			Map<String, List<String>> ret, String field) {
+		if (orig != null) {
+			if (ret == null || !MongoUtils.mapEquals(ret, orig)) {
+				ops.set(field, orig);
+				return true;
+			}
+		} else {
+			if (ret != null) {
+				ops.unset(field);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean updateArray(String[] orig,
+			String[] ret, String field) {
+		if (orig != null) {
+			if (ret == null || !MongoUtils.arrayEquals(ret, orig)) {
+				ops.set(field, orig);
+				return true;
+			}
+		} else {
+			if (ret != null) {
+				ops.unset(field);
+				return true;
+			}
+		}
+		return false;
+	}
 	public void update(ProxyImpl retProxy, ProxyImpl proxy,
 			MongoServer mongoServer) {
 		Query<ProxyImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ProxyImpl.class).field("about")
 				.equal(proxy.getAbout());
-		UpdateOperations<ProxyImpl> ops = mongoServer.getDatastore()
+		ops = mongoServer.getDatastore()
 				.createUpdateOperations(ProxyImpl.class);
 		boolean update = false;
-		if (proxy.getDcContributor() != null) {
-			if (retProxy.getDcContributor() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcContributor(),
-							proxy.getDcContributor())) {
-				ops.set("dcContributor", proxy.getDcContributor());
-				update = true;
-			}
-		}
-		if (proxy.getDcCoverage() != null) {
-			if (retProxy.getDcCoverage() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcCoverage(),
-							proxy.getDcCoverage())) {
-				ops.set("dcCoverage", proxy.getDcCoverage());
-				update = true;
-			}
-		}
-		if (proxy.getDcCreator() != null) {
-			if (retProxy.getDcCreator() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcCreator(),
-							proxy.getDcCreator())) {
-				ops.set("dcCreator", proxy.getDcCreator());
-				update = true;
-			}
-		}
-		if (proxy.getDcDate() != null) {
-			if (retProxy.getDcDate() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcDate(),
-							proxy.getDcDate())) {
-				ops.set("dcDate", proxy.getDcDate());
-				update = true;
-			}
-		}
-		if (proxy.getDcDescription() != null) {
-			if (retProxy.getDcDescription() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcDescription(),
-							proxy.getDcDescription())) {
-				ops.set("dcDescription", proxy.getDcDescription());
-				update = true;
-			}
-		}
-		if (proxy.getDcFormat() != null) {
-			if (retProxy.getDcFormat() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcFormat(),
-							proxy.getDcFormat())) {
-				ops.set("dcFormat", proxy.getDcFormat());
-				update = true;
-			}
-		}
-		if (proxy.getDcIdentifier() != null) {
-			if (retProxy.getDcIdentifier() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcIdentifier(),
-							proxy.getDcIdentifier())) {
-				ops.set("dcIdentifier", proxy.getDcIdentifier());
-				update = true;
-			}
-		}
-		if (proxy.getDcLanguage() != null) {
-			if (retProxy.getDcLanguage() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcLanguage(),
-							proxy.getDcLanguage())) {
-				ops.set("dcLanguage", proxy.getDcLanguage());
-				update = true;
-			}
-		}
-		if (proxy.getDcPublisher() != null) {
-			if (retProxy.getDcPublisher() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcPublisher(),
-							proxy.getDcPublisher())) {
-				ops.set("dcPublisher", proxy.getDcPublisher());
-				update = true;
-			}
-		}
-		if (proxy.getDcRelation() != null) {
-			if (retProxy.getDcRelation() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcRelation(),
-							proxy.getDcRelation())) {
-				ops.set("dcRelation", proxy.getDcRelation());
-				update = true;
-			}
-		}
-		if (proxy.getDcRights() != null) {
-			if (retProxy.getDcRights() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcRights(),
-							proxy.getDcRights())) {
-				ops.set("dcRights", proxy.getDcRights());
-				update = true;
-			}
-		}
-		if (proxy.getDcSource() != null) {
-			if (retProxy.getDcSource() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcSource(),
-							proxy.getDcSource())) {
-				ops.set("dcSource", proxy.getDcSource());
-				update = true;
-			}
-		}
-		if (proxy.getDcSubject() != null) {
-			if (retProxy.getDcSubject() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcSubject(),
-							proxy.getDcSubject())) {
-				ops.set("dcSubject", proxy.getDcSubject());
-				update = true;
-			}
-		}
-		if (proxy.getDcTitle() != null) {
-			if (retProxy.getDcTitle() == null
-					|| !MongoUtils.mapEquals(proxy.getDcTitle(),
-							retProxy.getDcTitle())) {
-				ops.set("dcTitle", proxy.getDcTitle());
-				update = true;
-			}
-		}
-		if (proxy.getDcType() != null) {
-			if (retProxy.getDcType() == null
-					|| !MongoUtils.mapEquals(retProxy.getDcType(),
-							proxy.getDcType())) {
-				ops.set("dcType", proxy.getDcType());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsAlternative() != null) {
-			if (retProxy.getDctermsAlternative() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsAlternative(),
-							proxy.getDctermsAlternative())) {
-				ops.set("dctermsAlternative", proxy.getDctermsAlternative());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsConformsTo() != null) {
-			if (retProxy.getDctermsConformsTo() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsConformsTo(),
-							proxy.getDctermsConformsTo())) {
-				ops.set("dctermsConformsTo", proxy.getDctermsConformsTo());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsCreated() != null) {
-			if (retProxy.getDctermsCreated() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsCreated(),
-							proxy.getDctermsCreated())) {
-				ops.set("dctermsCreated", proxy.getDctermsCreated());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsExtent() != null) {
-			if (retProxy.getDctermsExtent() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsExtent(),
-							proxy.getDctermsExtent())) {
-				ops.set("dctermsExtent", proxy.getDctermsExtent());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsHasFormat() != null) {
-			if (retProxy.getDctermsHasFormat() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsHasFormat(),
-							proxy.getDctermsHasFormat())) {
-				ops.set("dctermsHasFormat", proxy.getDctermsHasFormat());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsHasPart() != null) {
-			if (retProxy.getDctermsHasPart() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsHasPart(),
-							proxy.getDctermsHasPart())) {
-				ops.set("dctermsHasPart", proxy.getDctermsHasPart());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsHasVersion() != null) {
-			if (retProxy.getDctermsHasVersion() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsHasVersion(),
-							proxy.getDctermsHasVersion())) {
-				ops.set("dctermsHasVersion", proxy.getDctermsHasVersion());
-				update = true;
-			}
-
-		}
-		if (proxy.getDctermsIsFormatOf() != null) {
-			if (retProxy.getDctermsIsFormatOf() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIsFormatOf(),
-							proxy.getDctermsIsFormatOf())) {
-				ops.set("dctermsIsFormatOf", proxy.getDctermsIsFormatOf());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIsPartOf() != null) {
-			if (retProxy.getDctermsIsPartOf() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIsPartOf(),
-							proxy.getDctermsIsPartOf())) {
-				ops.set("dctermsIsPartOf", proxy.getDctermsIsPartOf());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIsReferencedBy() != null) {
-			if (retProxy.getDctermsIsReferencedBy() == null
-					|| !MongoUtils.mapEquals(
-							retProxy.getDctermsIsReferencedBy(),
-							proxy.getDctermsIsReferencedBy())) {
-				ops.set("dctermsIsReferencedBy",
-						proxy.getDctermsIsReferencedBy());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIsReplacedBy() != null) {
-			if (retProxy.getDctermsIsReplacedBy() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIsReplacedBy(),
-							proxy.getDctermsIsReplacedBy())) {
-				ops.set("dctermsIsReplacedBy", proxy.getDctermsIsReplacedBy());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIsRequiredBy() != null) {
-			if (retProxy.getDctermsIsRequiredBy() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIsRequiredBy(),
-							proxy.getDctermsIsRequiredBy())) {
-				ops.set("dctermsIsRequiredBy", proxy.getDctermsIsRequiredBy());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIssued() != null) {
-			if (retProxy.getDctermsIssued() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIssued(),
-							proxy.getDctermsIssued())) {
-				ops.set("dctermsIssued", proxy.getDctermsIssued());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsIsVersionOf() != null) {
-			if (retProxy.getDctermsIsVersionOf() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsIssued(),
-							proxy.getDctermsIssued())) {
-				ops.set("dctermsIsVersionOf", proxy.getDctermsIsVersionOf());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsMedium() != null) {
-			if (retProxy.getDctermsMedium() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsMedium(),
-							proxy.getDctermsMedium())) {
-				ops.set("dctermsMedium", proxy.getDctermsMedium());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsProvenance() != null) {
-			if (retProxy.getDctermsProvenance() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsProvenance(),
-							proxy.getDctermsProvenance())) {
-				ops.set("dctermsProvenance", proxy.getDctermsProvenance());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsReferences() != null) {
-			if (retProxy.getDctermsReferences() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsReferences(),
-							proxy.getDctermsReferences())) {
-				ops.set("dctermsReferences", proxy.getDctermsReferences());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsReplaces() != null) {
-
-			if (retProxy.getDctermsReplaces() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsReplaces(),
-							proxy.getDctermsReplaces())) {
-				ops.set("dctermsReplaces", proxy.getDctermsReplaces());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsRequires() != null) {
-			if (retProxy.getDctermsRequires() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsRequires(),
-							proxy.getDctermsRequires())) {
-				ops.set("dctermsRequires", proxy.getDctermsRequires());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsSpatial() != null) {
-			if (retProxy.getDctermsSpatial() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsSpatial(),
-							proxy.getDctermsSpatial())) {
-				ops.set("dctermsSpatial", proxy.getDctermsSpatial());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsTOC() != null) {
-			if (retProxy.getDctermsTOC() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsTOC(),
-							proxy.getDctermsTOC())) {
-				ops.set("dctermsTOC", proxy.getDctermsTOC());
-				update = true;
-			}
-		}
-		if (proxy.getDctermsTemporal() != null) {
-			if (retProxy.getDctermsTemporal() == null
-					|| !MongoUtils.mapEquals(retProxy.getDctermsTemporal(),
-							proxy.getDctermsTemporal())) {
-				ops.set("dctermsTemporal", proxy.getDctermsTemporal());
-				update = true;
-			}
-		}
+		update = update
+				|| update(
+						proxy.getDcContributor() != null ? proxy.getDcContributor()
+								: null,
+						retProxy.getDcContributor() != null ? retProxy
+								.getDcContributor() : null, "dcContributor");
+		update = update
+				|| update(
+						proxy.getDcCoverage() != null ? proxy.getDcCoverage()
+								: null,
+						retProxy.getDcCoverage() != null ? retProxy
+								.getDcCoverage() : null, "dcCoverage");
+		update = update
+				|| update(
+						proxy.getDcCreator() != null ? proxy.getDcCreator()
+								: null,
+						retProxy.getDcCreator() != null ? retProxy
+								.getDcCreator() : null, "dcCreator");
+		update = update
+				|| update(
+						proxy.getDcDate() != null ? proxy.getDcDate()
+								: null,
+						retProxy.getDcDate() != null ? retProxy
+								.getDcDate() : null, "dcDate");
+		update = update
+				|| update(
+						proxy.getDcDescription() != null ? proxy.getDcDescription()
+								: null,
+						retProxy.getDcDescription() != null ? retProxy
+								.getDcDescription() : null, "dcDescription");
+		update = update
+				|| update(
+						proxy.getDcFormat() != null ? proxy.getDcFormat()
+								: null,
+						retProxy.getDcFormat() != null ? retProxy
+								.getDcFormat() : null, "dcFormat");
+		update = update
+				|| update(
+						proxy.getDcIdentifier() != null ? proxy.getDcIdentifier()
+								: null,
+						retProxy.getDcIdentifier() != null ? retProxy
+								.getDcIdentifier() : null, "dcIdentifier");
+		update = update
+				|| update(
+						proxy.getDcLanguage() != null ? proxy.getDcLanguage()
+								: null,
+						retProxy.getDcLanguage() != null ? retProxy
+								.getDcLanguage() : null, "dcLanguage");
+		update = update
+				|| update(
+						proxy.getDcPublisher() != null ? proxy.getDcPublisher()
+								: null,
+						retProxy.getDcPublisher() != null ? retProxy
+								.getDcPublisher() : null, "dcPublisher");
+		update = update
+				|| update(
+						proxy.getDcRelation() != null ? proxy.getDcRelation()
+								: null,
+						retProxy.getDcRelation() != null ? retProxy
+								.getDcRelation() : null, "dcRelation");
+		update = update
+				|| update(
+						proxy.getDcRights() != null ? proxy.getDcRights()
+								: null,
+						retProxy.getDcRights() != null ? retProxy
+								.getDcRights() : null, "dcRights");
+		update = update
+				|| update(
+						proxy.getDcSource() != null ? proxy.getDcSource()
+								: null,
+						retProxy.getDcSource() != null ? retProxy
+								.getDcSource() : null, "dcSource");
+		update = update
+				|| update(
+						proxy.getDcSubject() != null ? proxy.getDcSubject()
+								: null,
+						retProxy.getDcSubject() != null ? retProxy
+								.getDcSubject() : null, "dcSubject");
+		update = update
+				|| update(
+						proxy.getDcTitle() != null ? proxy.getDcTitle()
+								: null,
+						retProxy.getDcTitle() != null ? retProxy
+								.getDcTitle() : null, "dcTitle");
+		update = update
+				|| update(
+						proxy.getDcType() != null ? proxy.getDcType()
+								: null,
+						retProxy.getDcType() != null ? retProxy
+								.getDcType() : null, "dcType");
+		update = update
+				|| update(
+						proxy.getDctermsAlternative() != null ? proxy.getDctermsAlternative()
+								: null,
+						retProxy.getDctermsAlternative() != null ? retProxy
+								.getDctermsAlternative() : null, "dctermsAlternative");
+		update = update
+				|| update(
+						proxy.getDctermsConformsTo() != null ? proxy.getDctermsConformsTo()
+								: null,
+						retProxy.getDctermsConformsTo() != null ? retProxy
+								.getDctermsConformsTo() : null, "dctermsConformsTo");
+		update = update
+				|| update(
+						proxy.getDctermsCreated() != null ? proxy.getDctermsCreated()
+								: null,
+						retProxy.getDctermsCreated() != null ? retProxy
+								.getDctermsCreated() : null, "dctermsCreated");
+		update = update
+				|| update(
+						proxy.getDctermsExtent() != null ? proxy.getDctermsExtent()
+								: null,
+						retProxy.getDctermsExtent() != null ? retProxy
+								.getDctermsExtent() : null, "dctermsExtent");
+		update = update
+				|| update(
+						proxy.getDctermsHasFormat() != null ? proxy.getDctermsHasFormat()
+								: null,
+						retProxy.getDctermsHasFormat() != null ? retProxy
+								.getDctermsHasFormat(): null, "dctermsHasFormat");
+		update = update
+				|| update(
+						proxy.getDctermsHasPart() != null ? proxy.getDctermsHasPart()
+								: null,
+						retProxy.getDctermsHasPart() != null ? retProxy
+								.getDctermsHasPart() : null, "dctermsHasPart");
+		update = update
+				|| update(
+						proxy.getDctermsHasVersion() != null ? proxy.getDctermsHasVersion()
+								: null,
+						retProxy.getDctermsHasVersion() != null ? retProxy
+								.getDctermsHasVersion() : null, "dctermsHasVersion");
+		update = update
+				|| update(
+						proxy.getDctermsIsFormatOf() != null ? proxy.getDctermsIsFormatOf()
+								: null,
+						retProxy.getDctermsIsFormatOf() != null ? retProxy
+								.getDctermsIsFormatOf() : null, "dctermsIsFormatOf");
+		update = update
+				|| update(
+						proxy.getDctermsIsPartOf() != null ? proxy.getDctermsIsPartOf()
+								: null,
+						retProxy.getDctermsIsPartOf() != null ? retProxy
+								.getDctermsIsPartOf() : null, "dctermsIsPartOf");
+		update = update
+				|| update(
+						proxy.getDctermsIsReferencedBy() != null ? proxy.getDctermsIsReferencedBy()
+								: null,
+						retProxy.getDctermsIsReferencedBy() != null ? retProxy
+								.getDctermsIsReferencedBy(): null, "dctermsIsReferencedBy");
+		update = update
+				|| update(
+						proxy.getDctermsIsReplacedBy() != null ? proxy.getDctermsIsReplacedBy()
+								: null,
+						retProxy.getDctermsIsReplacedBy() != null ? retProxy
+								.getDctermsIsReplacedBy() : null, "dctermsIsReplacedBy");
+		update = update
+				|| update(
+						proxy.getDctermsIsRequiredBy() != null ? proxy.getDctermsIsRequiredBy()
+								: null,
+						retProxy.getDctermsIsRequiredBy() != null ? retProxy
+								.getDctermsIsRequiredBy(): null, "dctermsRequiredBy");
+		update = update
+				|| update(
+						proxy.getDctermsIssued() != null ? proxy.getDctermsIssued()
+								: null,
+						retProxy.getDctermsIssued() != null ? retProxy
+								.getDctermsIssued() : null, "dctermsIssued");
+		update = update
+				|| update(
+						proxy.getDctermsIsVersionOf() != null ? proxy.getDctermsIsVersionOf()
+								: null,
+						retProxy.getDctermsIsVersionOf() != null ? retProxy
+								.getDctermsIsVersionOf(): null, "dctermsIsVersionOf");
+		update = update
+				|| update(
+						proxy.getDctermsMedium() != null ? proxy.getDctermsMedium()
+								: null,
+						retProxy.getDctermsMedium() != null ? retProxy
+								.getDctermsMedium() : null, "dctermsMedium");
+		update = update
+				|| update(
+						proxy.getDctermsProvenance() != null ? proxy.getDctermsProvenance()
+								: null,
+						retProxy.getDctermsProvenance() != null ? retProxy
+								.getDctermsProvenance() : null, "dctermsProvenance");
+		update = update
+				|| update(
+						proxy.getDctermsReferences() != null ? proxy.getDctermsReferences()
+								: null,
+						retProxy.getDctermsReferences() != null ? retProxy
+								.getDctermsReferences() : null, "dctermsReferences");
+		update = update
+				|| update(
+						proxy.getDctermsReplaces() != null ? proxy.getDctermsReplaces()
+								: null,
+						retProxy.getDctermsReplaces() != null ? retProxy
+								.getDctermsReplaces(): null, "dctermsReplaces");
+		update = update
+				|| update(
+						proxy.getDctermsRequires() != null ? proxy.getDctermsRequires()
+								: null,
+						retProxy.getDctermsRequires() != null ? retProxy
+								.getDctermsRequires() : null, "dctermsRequires");
+		update = update
+				|| update(
+						proxy.getDctermsSpatial() != null ? proxy.getDctermsSpatial()
+								: null,
+						retProxy.getDctermsSpatial()!= null ? retProxy
+								.getDctermsSpatial(): null, "dctermsSpatial");
+		update = update
+				|| update(
+						proxy.getDctermsTOC() != null ? proxy.getDctermsTOC()
+								: null,
+						retProxy.getDctermsTOC() != null ? retProxy
+								.getDctermsTOC() : null, "dctermsTOC");
+		update = update
+				|| update(
+						proxy.getDctermsTemporal() != null ? proxy.getDctermsTemporal()
+								: null,
+						retProxy.getDctermsTemporal()!= null ? retProxy
+								.getDctermsTemporal() : null, "dctermsTemporal");
 		if (proxy.getEdmType() != null) {
 			if (retProxy.getEdmType() == null
 					|| !retProxy.getEdmType().equals(proxy.getEdmType())) {
 				ops.set("edmType", proxy.getEdmType());
 				update = true;
+			} 
+		} else {
+			if(retProxy.getEdmType()!=null){
+				ops.unset("edmType");
+				update=true;
 			}
 		}
 		if (proxy.getEdmCurrentLocation() != null) {
@@ -330,27 +293,93 @@ public class ProxyUpdater implements Updater<ProxyImpl,ProxyImpl> {
 				ops.set("edmCurrentLocation", proxy.getEdmCurrentLocation());
 				update = true;
 			}
-		}
-		if (proxy.getEdmRights() != null) {
-			if (retProxy.getEdmRights() != null
-					|| !MongoUtils.mapEquals(retProxy.getEdmRights(),
-							proxy.getEdmRights())) {
-				ops.set("edmRights", proxy.getEdmRights());
-				update = true;
+		} else {
+			if(retProxy.getEdmCurrentLocation()!=null){
+				ops.unset("edmCurrentLocation");
+				update= true;
 			}
 		}
-		if (proxy.getProxyIn() != null) {
-			if (retProxy.getProxyIn() == null
-					|| !MongoUtils.arrayEquals(retProxy.getProxyIn(),
-							proxy.getProxyIn())) {
-				ops.set("proxyIn", proxy.getProxyIn());
-				update = true;
-			}
-		}
+		update = update
+				|| update(
+						proxy.getEdmRights() != null ? proxy.getEdmRights()
+								: null,
+						retProxy.getEdmRights()!= null ? retProxy
+								.getEdmRights() : null, "edmRights");
+		update = update
+				|| update(
+						proxy.getEdmHasMet() != null ? proxy.getEdmHasMet()
+								: null,
+						retProxy.getEdmHasMet()!= null ? retProxy
+								.getEdmHasMet() : null, "edmHasMet");
+		update = update
+				|| update(
+						proxy.getEdmHasType()!= null ? proxy.getEdmHasType()
+								: null,
+						retProxy.getEdmHasType()!= null ? retProxy
+								.getEdmHasType(): null, "edmHasType");
+		update = update
+				|| update(
+						proxy.getEdmIsRelatedTo()!= null ? proxy.getEdmIsRelatedTo()
+								: null,
+						retProxy.getEdmIsRelatedTo()!= null ? retProxy
+								.getEdmIsRelatedTo(): null, "edmIsRelatedTo");
+		update = update
+				|| updateArray(
+						proxy.getEdmIsDerivativeOf() != null ? proxy.getEdmIsDerivativeOf()
+								: null,
+						retProxy.getEdmIsDerivativeOf()!= null ? retProxy
+								.getEdmIsDerivativeOf() : null, "edmIsDerivativeOf");
+		update = update
+				|| updateArray(
+						proxy.getEdmIsNextInSequence() != null ? proxy.getEdmIsNextInSequence()
+								: null,
+						retProxy.getEdmIsNextInSequence()!= null ? retProxy
+								.getEdmIsNextInSequence() : null, "edmIsNextInSequence");
+		update = update
+				|| updateArray(
+						proxy.getEdmIsSimilarTo() != null ? proxy.getEdmIsSimilarTo()
+								: null,
+						retProxy.getEdmIsSimilarTo()!= null ? retProxy
+								.getEdmIsSimilarTo() : null, "edmIsSimilarTo");
+		update = update
+				|| updateArray(
+						proxy.getEdmIsSuccessorOf() != null ? proxy.getEdmIsSuccessorOf()
+								: null,
+						retProxy.getEdmIsSuccessorOf()!= null ? retProxy
+								.getEdmIsSuccessorOf() : null, "edmIsSuccessorOf");
+		update = update
+				|| updateArray(
+						proxy.getEdmWasPresentAt()!= null ? proxy.getEdmWasPresentAt()
+								: null,
+						retProxy.getEdmWasPresentAt()!= null ? retProxy
+								.getEdmWasPresentAt() : null, "edmWasPresentAt");
+		update = update
+				|| updateArray(
+						proxy.getProxyIn() != null ? proxy.getProxyIn()
+								: null,
+						retProxy.getProxyIn()!= null ? retProxy
+								.getProxyIn() : null, "proxyIn");
 		if (proxy.getProxyFor() != null) {
-			if (retProxy.getProxyFor() != null
+			if (retProxy.getProxyFor() == null
 					|| !retProxy.getProxyFor().equals(proxy.getProxyFor())) {
 				ops.set("proxyFor", proxy.getProxyFor());
+				update = true;
+			}
+		}  else {
+			if (retProxy.getProxyFor()!=null){
+				ops.unset("proxyFor");
+				update = true;
+			}
+		}
+		if (proxy.getEdmIsRepresentationOf() != null) {
+			if (retProxy.getEdmIsRepresentationOf() == null
+					|| !retProxy.getEdmIsRepresentationOf().equals(proxy.getEdmIsRepresentationOf())) {
+				ops.set("edmIsRepresentationOf", proxy.getEdmIsRepresentationOf());
+				update = true;
+			}
+		}  else {
+			if (retProxy.getEdmIsRepresentationOf()!=null){
+				ops.unset("edmIsRepresentationOf");
 				update = true;
 			}
 		}

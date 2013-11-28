@@ -33,6 +33,7 @@ import eu.europeana.corelib.definitions.jibx.Identifier;
 import eu.europeana.corelib.definitions.jibx.IsRelatedTo;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -124,7 +125,11 @@ public final class AgentFieldInput {
 						solrInputDocument, hasMet, EdmLabel.AG_EDM_HASMET);
 			}
 		}
-
+		if(agentType.getSameAList()!=null){
+			for(SameAs sameAs:agentType.getSameAList()){
+				solrInputDocument = SolrUtils.addFieldFromResource(solrInputDocument, sameAs, EdmLabel.AG_OWL_SAMEAS);
+			}
+		}
 		if (agentType.getIsRelatedToList() != null) {
 			for (IsRelatedTo isRelatedTo : agentType.getIsRelatedToList()) {
 				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(

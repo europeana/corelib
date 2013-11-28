@@ -802,6 +802,9 @@ public class EdmUtils {
 		if(StringUtils.equals("Rights", clazzName)&& list){
 			clazzName = "Right";
 		}
+		if(StringUtils.equals("SameAs", clazzName) && list){
+			clazzName="SameA";
+		}
 		clazzName = StringUtils.strip(clazzName,"_1");
 		clazzName = StringUtils.strip(clazzName,"1");
 		

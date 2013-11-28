@@ -461,14 +461,18 @@ public final class AggregationFieldInput {
 		if (isShownAt != null) {
 			mongoAggregation.setEdmIsShownAt(isShownAt);
 			ups.set("edmIsShownAt", isShownAt);
+		} else {
+			ups.unset("edmIsShownAt");
 		}
-
+		
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource();
 		if (isShownBy != null) {
 			mongoAggregation.setEdmIsShownBy(isShownBy);
 
 			ups.set("edmIsShownBy", isShownBy);
+		} else {
+			ups.unset("edmIsShownBy");
 		}
 
 		String object = SolrUtils.exists(_Object.class,
@@ -477,18 +481,24 @@ public final class AggregationFieldInput {
 			mongoAggregation.setEdmObject(object);
 
 			ups.set("edmObject", object);
+		} else {
+			ups.unset("edmObject");
 		}
 		Map<String, List<String>> prov = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation.getProvider());
 		if (prov != null) {
 			mongoAggregation.setEdmProvider(prov);
 			ups.set("edmProvider", prov);
+		} else {
+			ups.unset("edmProvider");
 		}
 		Map<String, List<String>> rights = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation.getRights());
 		if (rights != null) {
 			mongoAggregation.setEdmRights(rights);
 			ups.set("edmRights", rights);
+		} else {
+			ups.unset("edmRights");
 		}
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
@@ -505,6 +515,8 @@ public final class AggregationFieldInput {
 		if (rights1 != null) {
 			mongoAggregation.setDcRights(rights1);
 			ups.set("dcRights", rights1);
+		} else {
+			ups.unset("dcRights");
 		}
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();
@@ -515,6 +527,8 @@ public final class AggregationFieldInput {
 					.toArray(new String[hasViewList.size()]));
 			ups.set("hasView",
 					hasViewList.toArray(new String[hasViewList.size()]));
+		} else {
+			ups.unset("hasView");
 		}
 
 		AggregationImpl retAggr = mongoServer.getDatastore()

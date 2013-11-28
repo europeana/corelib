@@ -236,6 +236,8 @@ public final class EuropeanaAggregationFieldInput {
 		if (creator != null) {
 			ops.set("dcCreator", creator);
 			mongoAggregation.setDcCreator(creator);
+		} else {
+			ops.unset("dcCreator");
 		}
 
 		Map<String, List<String>> country = MongoUtils
@@ -245,6 +247,8 @@ public final class EuropeanaAggregationFieldInput {
 		if (country != null) {
 			mongoAggregation.setEdmCountry(country);
 			ops.set("edmCountry", country);
+		} else {
+			ops.unset("edmCountry");
 		}
 
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
@@ -252,6 +256,8 @@ public final class EuropeanaAggregationFieldInput {
 		if (isShownBy != null) {
 			mongoAggregation.setEdmIsShownBy(isShownBy);
 			ops.set("edmIsShownBy", isShownBy);
+		} else {
+			ops.unset("edmIsShownBy");
 		}
 		String landingPage = SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource();
@@ -282,12 +288,16 @@ public final class EuropeanaAggregationFieldInput {
 		if (edmRights != null) {
 			mongoAggregation.setEdmRights(edmRights);
 			ops.set("edmRights", edmRights);
+		} else {
+			ops.unset("edmRights");
 		}
 		String[] aggregates = SolrUtils.resourceListToArray(aggregation
 				.getAggregateList());
 		if (aggregates != null) {
 			mongoAggregation.setAggregates(aggregates);
 			ops.set("aggregates", aggregates);
+		} else {
+			ops.unset("edmHasView");
 		}
 		String[] hasViewList = SolrUtils.resourceListToArray(aggregation
 				.getHasViewList());

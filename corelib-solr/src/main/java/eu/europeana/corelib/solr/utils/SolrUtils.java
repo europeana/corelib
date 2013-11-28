@@ -50,7 +50,8 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  */
 public final class SolrUtils {
 
-	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
+	private static final Pattern ID_PATTERN = Pattern
+			.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
 
 	private SolrUtils() {
 
@@ -58,19 +59,19 @@ public final class SolrUtils {
 
 	/**
 	 * Checks if there is no TYPE facet with an invalid type according to EDM
-	 *
+	 * 
 	 * 
 	 * @param refinements
-	 * @return
-	 *   Returns true if there is no TYPE facet or each type facet has valid value
+	 * @return Returns true if there is no TYPE facet or each type facet has
+	 *         valid value
 	 */
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
 				if (StringUtils.contains(refinement, "TYPE:")
 						&& !StringUtils.contains(refinement, " OR ")) {
-					if (DocType.safeValueOf(
-							StringUtils.substringAfter(refinement, "TYPE:")) == null) {
+					if (DocType.safeValueOf(StringUtils.substringAfter(
+							refinement, "TYPE:")) == null) {
 						return false;
 					}
 				}
@@ -94,8 +95,6 @@ public final class SolrUtils {
 			throws InstantiationException, IllegalAccessException {
 		return (object == null ? clazz.newInstance() : object);
 	}
-
-	
 
 	/**
 	 * Returns an array of strings based on values from a ResourceOrLiteralType
@@ -133,12 +132,12 @@ public final class SolrUtils {
 			List<? extends ResourceOrLiteralType> list) {
 		if (list != null) {
 			List<String> lst = new ArrayList<String>();
-			
+
 			for (ResourceOrLiteralType obj : list) {
-				if(obj.getResource()!=null){
+				if (obj.getResource() != null) {
 					lst.add(obj.getResource().getResource());
 				}
-				if(obj.getString()!=null){
+				if (obj.getString() != null) {
 					lst.add(obj.getString());
 				}
 			}
@@ -279,6 +278,27 @@ public final class SolrUtils {
 	}
 
 	/**
+	 * Adds a field to a document from a ResourceType object
+	 * 
+	 * @param solrInputDocument
+	 *            The document to add a document to
+	 * @param obj
+	 *            The object to add
+	 * @param label
+	 *            The label of the field to add the object to
+	 * @return
+	 */
+	public static <T extends ResourceType> SolrInputDocument addFieldFromResource(
+			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
+		if (obj != null) {
+			if (obj.getResource() != null) {
+				solrInputDocument.addField(label.toString(), obj.getResource());
+			}
+		}
+		return solrInputDocument;
+	}
+
+	/**
 	 * Adds a field from an enumeration.
 	 * 
 	 * @param solrInputDocument
@@ -310,13 +330,14 @@ public final class SolrUtils {
 			SolrInputDocument solrInputDocument, T obj, EdmLabel label) {
 		if (obj != null) {
 			if (obj.getResource() != null) {
-				solrInputDocument.addField(label.toString(), StringUtils.trim(obj.getResource()
-						.getResource()));
+				solrInputDocument.addField(label.toString(),
+						StringUtils.trim(obj.getResource().getResource()));
 			}
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
 					solrInputDocument.addField(label.toString() + "."
-							+ obj.getLang().getLang(), StringUtils.trim(obj.getString()));
+							+ obj.getLang().getLang(),
+							StringUtils.trim(obj.getString()));
 				} else {
 					solrInputDocument.addField(label.toString(),
 							StringUtils.trim(obj.getString()));
@@ -406,21 +427,20 @@ public final class SolrUtils {
 
 	/**
 	 * The QueryFacets are in this form:
-	 * {!id=REUSABILITY:Limited}RIGHTS:(http\:\/\/creativecommons.org\/licenses\/by-nc\/*
-	 * OR http\:\/\/creativecommons.org\/licenses\/by-nc-sa\/* OR http\:\/\/creativecommons.org\/licenses\/by-nc-nd\/* 
-	 * OR http\:\/\/creativecommons.org\/licenses\/by-nd\/*
-	 * OR http\:\/\/www.europeana.eu\/rights\/out-of-copyright-non-commercial\/*)
+	 * {!id=REUSABILITY:Limited}RIGHTS:(http\:\
+	 * /\/creativecommons.org\/licenses\/by-nc\/* OR
+	 * http\:\/\/creativecommons.org\/licenses\/by-nc-sa\/* OR
+	 * http\:\/\/creativecommons.org\/licenses\/by-nc-nd\/* OR
+	 * http\:\/\/creativecommons.org\/licenses\/by-nd\/* OR
+	 * http\:\/\/www.europeana.eu\/rights\/out-of-copyright-non-commercial\/*)
 	 * 
-	 * this function creates a hierarchy:
-	 * REUSABILITY
-	 *   Limited: x
-	 *   Free: y
-	 * ...
+	 * this function creates a hierarchy: REUSABILITY Limited: x Free: y ...
 	 * 
 	 * @param queryFacets
 	 * @return
 	 */
-	public static List<FacetField> extractQueryFacets(Map<String, Integer> queryFacets) {
+	public static List<FacetField> extractQueryFacets(
+			Map<String, Integer> queryFacets) {
 		Map<String, FacetField> map = new HashMap<String, FacetField>();
 		for (String query : queryFacets.keySet()) {
 			Matcher matcher = ID_PATTERN.matcher(query);
