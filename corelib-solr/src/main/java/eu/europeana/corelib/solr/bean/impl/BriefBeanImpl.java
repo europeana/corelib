@@ -271,7 +271,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public String[] getEdmTimespanEnd() {
-		return (this.edmTimespan != null ? this.edmTimespanEnd.clone() : null);
+		return (this.edmTimespanEnd != null ? this.edmTimespanEnd.clone() : null);
 	}
 
 	@Override
