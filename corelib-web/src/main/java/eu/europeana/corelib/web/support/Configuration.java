@@ -231,7 +231,10 @@ public class Configuration {
 	}
 
 	public boolean getDebugMode() {
-		return StringUtils.isBlank(debug) || Boolean.parseBoolean(debug);
+		if (StringUtils.isBlank(debug)) {
+			return false;
+		}
+		return Boolean.parseBoolean(debug);
 	}
 
 	public String getResponsiveCache() {
