@@ -1,5 +1,6 @@
 package eu.europeana.corelib.web.support;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -128,6 +129,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.sitemap.cache']}")
 	private String sitemapCache;
 
+	@Value("#{europeanaProperties['portal.soundCloudAwareCollections']}")
+	private String soundCloudAwareCollectionsString;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -139,6 +143,9 @@ public class Configuration {
 	private String canonicalUrl;
 
 	private List<String> staticPageInVersions;
+
+	/** Collection IDs which supports the SoundCloud widget */
+	private List<String> soundCloudAwareCollections;
 
 	// /////////////////////////////// getters and setters
 
@@ -251,7 +258,7 @@ public class Configuration {
 			int i = 1;
 			while (europeanaProperties.containsKey("portal.seeAlso.field." + i)) {
 				String[] parts = europeanaProperties.getProperty("portal.seeAlso.field." + i).split("=", 2);
-				seeAlsoTranslations.put(parts[0], parts[1]);
+				seeAlsoTranslations.put(parts[0].trim(), parts[1].trim());
 				i++;
 			}
 		}
@@ -266,7 +273,7 @@ public class Configuration {
 			while (europeanaProperties.containsKey(key + i)) {
 				String[] parts = europeanaProperties.getProperty(key + i).split(",");
 				for (int j = 1, l = parts.length; j < l; j++) {
-					seeAlsoAggregations.put(parts[j], parts[0]);
+					seeAlsoAggregations.put(parts[j].trim(), parts[0].trim());
 				}
 				i++;
 			}
@@ -300,9 +307,24 @@ public class Configuration {
 
 	public List<String> getStaticPageInVersions() {
 		if (staticPageInVersions == null) {
-			staticPageInVersions = Arrays.asList(staticPageInVersionsString.split(","));
+			String[] items = staticPageInVersionsString.split(",");
+			staticPageInVersions = new ArrayList<String>();
+			for (String item : items) {
+				staticPageInVersions.add(item.trim());
+			}
 		}
 		return staticPageInVersions;
+	}
+
+	public List<String> getSoundCloudAwareCollections() {
+		if (soundCloudAwareCollections == null) {
+			String[] items = soundCloudAwareCollectionsString.split(",");
+			soundCloudAwareCollections = new ArrayList<String>();
+			for (String item : items) {
+				soundCloudAwareCollections.add(item.trim());
+			}
+		}
+		return soundCloudAwareCollections;
 	}
 
 	public String getOptOutList() {
