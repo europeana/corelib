@@ -11,20 +11,29 @@ import org.junit.Test;
 public class RightReusabilityCategorizerTest {
 
 	@Test
-	public void testGetFreeRightsQuery() {
+	/**
+	 * Testing Open rights Solr query (getOpenStringRightsQuery())
+	 */
+	public void testGetOpenRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*)";
 
-		assertEquals(query, RightReusabilityCategorizer.getOpenStringRightsQuery());
+		assertEquals(query, RightReusabilityCategorizer.getOpenRightsQuery());
 	}
 
 	@Test
-	public void testGetLimitedRightsQuery() {
+	/**
+	 * Testing restricted rights Solr query (getRestrictedRightsQuery())
+	 */
+	public void testGetRestrictedRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
 
 		assertEquals(query, RightReusabilityCategorizer.getRestrictedRightsQuery());
 	}
 
 	@Test
+	/**
+	 * Testing all reusable rights Solr query (getAllRightsQuery())
+	 */
 	public void testGetAllRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
 
@@ -32,6 +41,32 @@ public class RightReusabilityCategorizerTest {
 	}
 
 	@Test
+	/**
+	 * Testing permission query (getPermissionRightsQuery())
+	 */
+	public void testGetPermissionRightsQuery() {
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+
+		String query = "RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+		query = "RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS);
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+		query = "RIGHTS:(http\\:\\/\\/www.europeana.eu\\/rights\\/rr-f\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/rr-p\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/rr-r\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/unknown\\/*)";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_POSITIVE);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+	}
+
+	@Test
+	/**
+	 * Testing the categorize() function
+	 */
 	public void testCategorize() {
 		Map<String, Integer> rightUrls = new LinkedHashMap<String, Integer>();
 		rightUrls.put("", 1733097);

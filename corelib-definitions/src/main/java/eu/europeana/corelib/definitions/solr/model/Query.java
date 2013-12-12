@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.definitions.solr.model;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -66,6 +68,7 @@ public class Query implements Cloneable {
 	private Map<String, String> parameters = new HashMap<String, String>();
 
 	private String queryType;
+	private String executedQuery;
 
 	private List<String> searchRefinements;
 	private List<String> facetRefinements;
@@ -324,6 +327,19 @@ public class Query implements Cloneable {
 		facets[0] = facet;
 	}
 
+	public String getExecutedQuery() {
+		return executedQuery;
+	}
+
+	public void setExecutedQuery(String executedQuery) {
+		try {
+			this.executedQuery = URLDecoder.decode(executedQuery, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			this.executedQuery = executedQuery;
+			e.printStackTrace();
+		}
+	}
+
 	public void divideRefinements() {
 		searchRefinements = new ArrayList<String>();
 		facetRefinements = new ArrayList<String>();
@@ -391,7 +407,6 @@ public class Query implements Cloneable {
 		private List<String> values = new ArrayList<String>();
 		private List<String> replacedValues = new ArrayList<String>();
 		private boolean isApiQuery = false;
-		private boolean hasORedQuery = false;
 		private boolean replaced = false;
 
 		public FacetCollector(String name) {
@@ -404,11 +419,6 @@ public class Query implements Cloneable {
 			this.isApiQuery = isApiQuery;
 		}
 
-		public FacetCollector(String name, boolean isApiQuery, boolean replaced) {
-			this(name, isApiQuery);
-			this.replaced = replaced;
-		}
-
 		public boolean isTagged() {
 			return isTagged;
 		}
@@ -417,42 +427,23 @@ public class Query implements Cloneable {
 			this.isTagged = isTagged;
 		}
 
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
 		public void setTagName(String tagName) {
 			this.tagName = tagName;
-		}
-
-		public List<String> getValues() {
-			return values;
-		}
-
-		public void setValues(List<String> values) {
-			this.values = values;
 		}
 
 		private boolean isAlreadyQuoted(String value) {
 			return value.startsWith("\"") && value.endsWith("\"");
 		}
 
-		private boolean isORed(String value) {
+		private boolean hasOr(String value) {
 			return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
 		}
 
 		public void addValue(String value, boolean isReplaced) {
 			if (name.equals(Facet.RIGHTS.name())) {
-				if (isORed(value)) {
-					this.hasORedQuery = true;
-				}
 				if (value.endsWith("*")) {
 					value = value.replace(":", "\\:").replace("/", "\\/");
-				} else if (!isAlreadyQuoted(value) && !isORed(value)) {
+				} else if (!isAlreadyQuoted(value) && !hasOr(value)) {
 					value = '"' + value + '"';
 				}
 			} else if (name.equals(Facet.TYPE.name())) {
