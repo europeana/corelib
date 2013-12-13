@@ -7,10 +7,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.definitions.solr.model.QueryFacet;
+import eu.europeana.corelib.definitions.solr.model.TaggedQuery;
 
 public class RightReusabilityCategorizer {
 
@@ -24,6 +26,11 @@ public class RightReusabilityCategorizer {
 	public static final int PERMISSION_STRATEGY_POSITIVE = 3;
 
 	private static int permissionStrategy = PERMISSION_STRATEGY_NEGATIVE_ALL;
+
+	private final static int SELECTED_OPEN = 1;
+	private final static int SELECTED_RESTRICTED = 2;
+	private final static int SELECTED_PERMISSION = 4;
+
 	private static int savedStrategy = 0;
 
 	private static Map<String, String> reusabilityValueMap = new LinkedHashMap<String, String>();
@@ -251,5 +258,56 @@ public class RightReusabilityCategorizer {
 
 	public static void setPermissionStrategy(int permissionStrategy) {
 		RightReusabilityCategorizer.permissionStrategy = permissionStrategy;
+	}
+
+	public static Map<String, String> mapValueReplacements(String[] qf) {
+		return mapValueReplacements(qf, false);
+	}
+
+	public static Map<String, String> mapValueReplacements(String[] qf, boolean fromApi) {
+		if (ArrayUtils.isEmpty(qf)) {
+			return null;
+		}
+
+		Map<String, String> valueReplacements = new HashMap<String, String>();
+		String open = "REUSABILITY:" + OPEN;
+		String restricted = "REUSABILITY:" + RESTRICTED;
+		String permission = "REUSABILITY:" + PERMISSION;
+
+		int reusabilityFilters = 0;
+		for (String value : qf) {
+			if (value.equalsIgnoreCase(open) || (fromApi && value.equalsIgnoreCase(OPEN))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getOpenRightsQuery());
+				valueReplacements.put(open, query.toString());
+				reusabilityFilters += SELECTED_OPEN;
+			} else if (value.equalsIgnoreCase(restricted) || (fromApi && value.equalsIgnoreCase(RESTRICTED))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getRestrictedRightsQuery());
+				valueReplacements.put(restricted, query.toString());
+				reusabilityFilters += SELECTED_RESTRICTED;
+			} else if (value.equalsIgnoreCase(permission) || (fromApi && value.equalsIgnoreCase(PERMISSION))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getPermissionRightsQuery());
+				valueReplacements.put(permission, query.toString());
+				reusabilityFilters += SELECTED_PERMISSION;
+			}
+		}
+
+		if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getAllRightsQuery());
+			valueReplacements.put(open, query.toString());
+			valueReplacements.put(restricted, "");
+		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_PERMISSION)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getNoRestrictedRightsQuery());
+			valueReplacements.put(open, query.toString());
+			valueReplacements.put(permission, "");
+		} else if (reusabilityFilters == (SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getNoOpenRightsQuery());
+			valueReplacements.put(restricted, query.toString());
+			valueReplacements.put(permission, "");
+		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
+			valueReplacements.put(open, "");
+			valueReplacements.put(restricted, "");
+			valueReplacements.put(permission, "");
+		}
+		return valueReplacements;
 	}
 }
