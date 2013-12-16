@@ -152,4 +152,5 @@ public class QueryTest {
 		assertTrue(facetList.contains(Facet.RIGHTS));
 		assertEquals(1, facetList.size());
 	}
+
 }

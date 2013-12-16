@@ -1,50 +1,80 @@
 package eu.europeana.corelib.web.model.rights;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.definitions.solr.model.QueryFacet;
+import eu.europeana.corelib.definitions.solr.model.TaggedQuery;
 
 public class RightReusabilityCategorizer {
 
 	public static final String OPEN = "open";
 	public static final String RESTRICTED = "restricted";
 	public static final String UNCATEGORIZED = "uncategorized";
+	public static final String PERMISSION = "permission";
+
+	public static final int PERMISSION_STRATEGY_NEGATIVE_ALL = 1;
+	public static final int PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS = 2;
+	public static final int PERMISSION_STRATEGY_POSITIVE = 3;
+
+	private static int permissionStrategy = PERMISSION_STRATEGY_NEGATIVE_ALL;
+
+	private final static int SELECTED_OPEN = 1;
+	private final static int SELECTED_RESTRICTED = 2;
+	private final static int SELECTED_PERMISSION = 4;
+
+	private static int savedStrategy = 0;
 
 	private static Map<String, String> reusabilityValueMap = new LinkedHashMap<String, String>();
 	static {
 		reusabilityValueMap.put(RightReusabilityCategorizer.OPEN, "reusabilityOpen_t");
 		reusabilityValueMap.put(RightReusabilityCategorizer.RESTRICTED, "reusabilityRestricted_t");
+		reusabilityValueMap.put(RightReusabilityCategorizer.PERMISSION, "reusabilityPermission_t");
 		reusabilityValueMap = Collections.unmodifiableMap(reusabilityValueMap);
 	}
 
 	private long numberOfOpen;
 	private long numberOfRestricted;
+	private long numberOfPermission;
 
-	private static List<String> openUrls = Arrays.asList(new String[]{
-		RightsOption.NOC.getUrl(),
-		RightsOption.CC_ZERO.getUrl() + "/1.0/",
-		RightsOption.CC_BY.getUrl(),
-		RightsOption.CC_BY_SA.getUrl()
-	});
+	private static List<String> openUrls = new ArrayList<String>();
+	static {
+		openUrls.add(RightsOption.NOC.getUrl());
+		openUrls.add(RightsOption.CC_ZERO.getUrl() + "/1.0/");
+		openUrls.add(RightsOption.CC_BY.getUrl());
+		openUrls.add(RightsOption.CC_BY_SA.getUrl());
+	}
 	private static String openRightsQuery;
+	private static String noOpenRightsQuery;
 
-	private static List<String> restrictedUrls = Arrays.asList(new String[]{
-		RightsOption.CC_BY_NC.getUrl(),
-		RightsOption.CC_BY_NC_SA.getUrl(),
-		RightsOption.CC_BY_NC_ND.getUrl(),
-		RightsOption.CC_BY_ND.getUrl(),
-		RightsOption.OOC_NC.getUrl()
-	});
+	private static List<String> restrictedUrls = new ArrayList<String>();
+	static {
+		restrictedUrls.add(RightsOption.CC_BY_NC.getUrl());
+		restrictedUrls.add(RightsOption.CC_BY_NC_SA.getUrl());
+		restrictedUrls.add(RightsOption.CC_BY_NC_ND.getUrl());
+		restrictedUrls.add(RightsOption.CC_BY_ND.getUrl());
+		restrictedUrls.add(RightsOption.OOC_NC.getUrl());
+	}
 	private static String restrictedRightsQuery;
+	private static String noRestrictedRightsQuery;
+
+	private static List<String> permissionUrls = new ArrayList<String>();
+	static {
+		permissionUrls.add("http://www.europeana.eu/rights/rr-f/");
+		permissionUrls.add("http://www.europeana.eu/rights/rr-p/");
+		permissionUrls.add("http://www.europeana.eu/rights/rr-r/");
+		permissionUrls.add("http://www.europeana.eu/rights/unknown/");
+	}
+	private static String permissionRightsQuery;
+
 	private static String allRightsQuery;
 
 	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
@@ -53,6 +83,7 @@ public class RightReusabilityCategorizer {
 	public RightReusabilityCategorizer() {
 		numberOfOpen = 0;
 		numberOfRestricted = 0;
+		numberOfPermission = 0;
 	}
 
 	public String categorize(String url, long count) {
@@ -96,11 +127,18 @@ public class RightReusabilityCategorizer {
 		return category;
 	}
 
-	public static String getOpenStringRightsQuery() {
+	public static String getOpenRightsQuery() {
 		if (openRightsQuery == null) {
 			openRightsQuery = join(solarizeUrls(openUrls));
 		}
 		return openRightsQuery;
+	}
+
+	public static String getNoOpenRightsQuery() {
+		if (noOpenRightsQuery == null) {
+			noOpenRightsQuery = joinNegatives(solarizeUrls(openUrls));
+		}
+		return noOpenRightsQuery;
 	}
 
 	public static String getRestrictedRightsQuery() {
@@ -108,6 +146,13 @@ public class RightReusabilityCategorizer {
 			restrictedRightsQuery = join(solarizeUrls(restrictedUrls));
 		}
 		return restrictedRightsQuery;
+	}
+
+	public static String getNoRestrictedRightsQuery() {
+		if (noRestrictedRightsQuery == null) {
+			noRestrictedRightsQuery = joinNegatives(solarizeUrls(restrictedUrls));
+		}
+		return noRestrictedRightsQuery;
 	}
 
 	public static String getAllRightsQuery() {
@@ -118,6 +163,25 @@ public class RightReusabilityCategorizer {
 			allRightsQuery = join(solarizedUrls);
 		}
 		return allRightsQuery;
+	}
+
+	public static String getPermissionRightsQuery() {
+		if (permissionRightsQuery == null || savedStrategy != permissionStrategy) {
+			if (permissionStrategy == PERMISSION_STRATEGY_POSITIVE) {
+				permissionRightsQuery = join(solarizeUrls(permissionUrls));
+			} else {
+				List<String> solarizedUrls = new ArrayList<String>();
+				solarizedUrls.addAll(solarizeUrls(openUrls));
+				solarizedUrls.addAll(solarizeUrls(restrictedUrls));
+				if (permissionStrategy == PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS) {
+					permissionRightsQuery = joinNegatives(solarizedUrls);
+				} else {
+					permissionRightsQuery = joinAllNegatives(solarizedUrls);
+				}
+			}
+			savedStrategy = permissionStrategy;
+		}
+		return permissionRightsQuery;
 	}
 
 	private static List<String> solarizeUrls(List<String> urls) {
@@ -132,15 +196,29 @@ public class RightReusabilityCategorizer {
 		return url.replace(":", "\\:").replace("/", "\\/") + "*";
 	}
 
+	private static String rights(String content) {
+		return "RIGHTS:(" + content + ")";
+	}
+
 	private static String join(List<String> urls) {
-		return "RIGHTS:(" + StringUtils.join(urls, " OR ") + ")";
+		return rights(StringUtils.join(urls, " OR "));
+	}
+
+	private static String joinNegatives(List<String> urls) {
+		return rights("NOT(" + StringUtils.join(urls, " OR ") + ")");
+	}
+
+	private static String joinAllNegatives(List<String> urls) {
+		return joinNegatives(urls);
+		// return "*:* AND -" + rights(StringUtils.join(urls, " OR "));
 	}
 
 	public static List<QueryFacet> getQueryFacets() {
 		if (queryFacets == null) {
 			queryFacets = new ArrayList<QueryFacet>();
-			queryFacets.add(new QueryFacet(getOpenStringRightsQuery(), "REUSABILITY:" + OPEN, "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getOpenRightsQuery(), "REUSABILITY:" + OPEN, "REUSABILITY"));
 			queryFacets.add(new QueryFacet(getRestrictedRightsQuery(), "REUSABILITY:" + RESTRICTED, "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getPermissionRightsQuery(), "REUSABILITY:" + PERMISSION, "REUSABILITY"));
 		}
 		return queryFacets;
 	}
@@ -157,6 +235,10 @@ public class RightReusabilityCategorizer {
 		return numberOfRestricted;
 	}
 
+	public long getNumberOfPermission() {
+		return numberOfPermission;
+	}
+
 	/**
 	 * Get a translation key belongs to the field value
 	 * @param value
@@ -168,5 +250,64 @@ public class RightReusabilityCategorizer {
 
 	public static Map<String, String> getReusabilityValueMap() {
 		return reusabilityValueMap;
+	}
+
+	public static int getPermissionStrategy() {
+		return permissionStrategy;
+	}
+
+	public static void setPermissionStrategy(int permissionStrategy) {
+		RightReusabilityCategorizer.permissionStrategy = permissionStrategy;
+	}
+
+	public static Map<String, String> mapValueReplacements(String[] qf) {
+		return mapValueReplacements(qf, false);
+	}
+
+	public static Map<String, String> mapValueReplacements(String[] qf, boolean fromApi) {
+		if (ArrayUtils.isEmpty(qf)) {
+			return null;
+		}
+
+		Map<String, String> valueReplacements = new HashMap<String, String>();
+		String open = "REUSABILITY:" + OPEN;
+		String restricted = "REUSABILITY:" + RESTRICTED;
+		String permission = "REUSABILITY:" + PERMISSION;
+
+		int reusabilityFilters = 0;
+		for (String value : qf) {
+			if (value.equalsIgnoreCase(open) || (fromApi && value.equalsIgnoreCase(OPEN))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getOpenRightsQuery());
+				valueReplacements.put(open, query.toString());
+				reusabilityFilters += SELECTED_OPEN;
+			} else if (value.equalsIgnoreCase(restricted) || (fromApi && value.equalsIgnoreCase(RESTRICTED))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getRestrictedRightsQuery());
+				valueReplacements.put(restricted, query.toString());
+				reusabilityFilters += SELECTED_RESTRICTED;
+			} else if (value.equalsIgnoreCase(permission) || (fromApi && value.equalsIgnoreCase(PERMISSION))) {
+				TaggedQuery query = new TaggedQuery("REUSABILITY", getPermissionRightsQuery());
+				valueReplacements.put(permission, query.toString());
+				reusabilityFilters += SELECTED_PERMISSION;
+			}
+		}
+
+		if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getAllRightsQuery());
+			valueReplacements.put(open, query.toString());
+			valueReplacements.put(restricted, "");
+		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_PERMISSION)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getNoRestrictedRightsQuery());
+			valueReplacements.put(open, query.toString());
+			valueReplacements.put(permission, "");
+		} else if (reusabilityFilters == (SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getNoOpenRightsQuery());
+			valueReplacements.put(restricted, query.toString());
+			valueReplacements.put(permission, "");
+		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
+			valueReplacements.put(open, "");
+			valueReplacements.put(restricted, "");
+			valueReplacements.put(permission, "");
+		}
+		return valueReplacements;
 	}
 }

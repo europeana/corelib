@@ -11,7 +11,7 @@ public class QueryFacetTest {
 		QueryFacet queryFacet = new QueryFacet("query AND string", "TEST:test", "REUSABILITY");
 		assertEquals("query AND string", queryFacet.getQuery());
 		assertEquals("TEST:test", queryFacet.getId());
-		assertEquals("REUSABILITY", queryFacet.getEx());
+		assertEquals("REUSABILITY", queryFacet.getExclusion());
 		assertEquals("{!id=TEST:test ex=REUSABILITY}query AND string", queryFacet.getQueryFacetString());
 	}
 

@@ -335,6 +335,7 @@ public class SearchServiceImpl implements SearchService {
 
 				try {
 					log.fine("Solr query is: " + solrQuery);
+					query.setExecutedQuery(solrQuery.toString());
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
 

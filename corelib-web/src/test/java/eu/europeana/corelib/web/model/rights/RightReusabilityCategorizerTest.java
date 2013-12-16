@@ -2,28 +2,44 @@ package eu.europeana.corelib.web.model.rights;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class RightReusabilityCategorizerTest {
 
-	@Test
-	public void testGetFreeRightsQuery() {
-		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*)";
-
-		assertEquals(query, RightReusabilityCategorizer.getOpenStringRightsQuery());
+	@Before
+	public void before() {
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
 	}
 
+	/**
+	 * Testing Open rights Solr query (getOpenStringRightsQuery())
+	 */
 	@Test
-	public void testGetLimitedRightsQuery() {
+	public void testGetOpenRightsQuery() {
+		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*)";
+
+		assertEquals(query, RightReusabilityCategorizer.getOpenRightsQuery());
+	}
+
+	/**
+	 * Testing restricted rights Solr query (getRestrictedRightsQuery())
+	 */
+	@Test
+	public void testGetRestrictedRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
 
 		assertEquals(query, RightReusabilityCategorizer.getRestrictedRightsQuery());
 	}
 
+	/**
+	 * Testing all reusable rights Solr query (getAllRightsQuery())
+	 */
 	@Test
 	public void testGetAllRightsQuery() {
 		String query = "RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
@@ -31,6 +47,124 @@ public class RightReusabilityCategorizerTest {
 		assertEquals(query, RightReusabilityCategorizer.getAllRightsQuery());
 	}
 
+	/**
+	 * Testing permission query (getPermissionRightsQuery())
+	 */
+	@Test
+	public void testGetPermissionRightsQuery() {
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+
+		String query = "RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_ALL);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+		query = "RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS);
+		assertEquals(RightReusabilityCategorizer.getPermissionStrategy(), RightReusabilityCategorizer.PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+		query = "RIGHTS:(http\\:\\/\\/www.europeana.eu\\/rights\\/rr-f\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/rr-p\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/rr-r\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/unknown\\/*)";
+		RightReusabilityCategorizer.setPermissionStrategy(RightReusabilityCategorizer.PERMISSION_STRATEGY_POSITIVE);
+		assertEquals(query, RightReusabilityCategorizer.getPermissionRightsQuery());
+
+	}
+
+	/**
+	 * Testing the mapValueReplacements() function
+	 */
+	@Test
+	public void testMapValueReplacementsFromApi() {
+		String open = "{!tag=REUSABILITY}RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*)";
+		String notOpen = "{!tag=REUSABILITY}RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/*))";
+		String restricted = "{!tag=REUSABILITY}RIGHTS:(http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
+		String notRestricted = "{!tag=REUSABILITY}RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		String permission = "{!tag=REUSABILITY}RIGHTS:(NOT(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*))";
+		String openAndRestricted = "{!tag=REUSABILITY}RIGHTS:(http\\:\\/\\/creativecommons.org\\/publicdomain\\/mark\\/* OR http\\:\\/\\/creativecommons.org\\/publicdomain\\/zero\\/1.0\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-sa\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nc-nd\\/* OR http\\:\\/\\/creativecommons.org\\/licenses\\/by-nd\\/* OR http\\:\\/\\/www.europeana.eu\\/rights\\/out-of-copyright-non-commercial\\/*)";
+
+		String[] reusability;
+		Map<String, String> valueReplacements;
+		Map<String, String> expected;
+
+		reusability = new String[]{"open"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:open", open);
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:open"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"restricted"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:restricted", restricted);
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+
+		reusability = new String[]{"REUSABILITY:restricted"};
+		assertEquals(expected, valueReplacements);
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"permission"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:permission", permission);
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:permission"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"open", "restricted"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:open", openAndRestricted);
+		expected.put("REUSABILITY:restricted", "");
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:open", "REUSABILITY:restricted"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"open", "permission"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:open", notRestricted);
+		expected.put("REUSABILITY:permission", "");
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:open", "REUSABILITY:permission"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"restricted", "permission"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:restricted", notOpen);
+		expected.put("REUSABILITY:permission", "");
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:restricted", "REUSABILITY:permission"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"open", "restricted", "permission"};
+		expected = new HashMap<String, String>();
+		expected.put("REUSABILITY:open", "");
+		expected.put("REUSABILITY:restricted", "");
+		expected.put("REUSABILITY:permission", "");
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability, true);
+		assertEquals(expected, valueReplacements);
+
+		reusability = new String[]{"REUSABILITY:open", "REUSABILITY:restricted", "REUSABILITY:permission"};
+		valueReplacements = RightReusabilityCategorizer.mapValueReplacements(reusability);
+		assertEquals(expected, valueReplacements);
+	}
+
+	/**
+	 * Testing the categorize() function
+	 */
 	@Test
 	public void testCategorize() {
 		Map<String, Integer> rightUrls = new LinkedHashMap<String, Integer>();
@@ -382,5 +516,4 @@ public class RightReusabilityCategorizerTest {
 		assertEquals(6808439, categorizer.getNumberOfOpen());
 		assertEquals(1322152, categorizer.getNumberOfRestricted());
 	}
-
 }

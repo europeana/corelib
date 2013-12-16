@@ -88,6 +88,12 @@ public interface BriefBean extends IdBean {
 	 */
 	String[] getDctermsSpatial();
 
+	/**
+	 * 
+	 * @return edm:isShownAt
+	 */
+	String[] getEdmIsShownAt(); // provider_aggregation_edm_isShownAt
+
 	// Ranking and Enrichment terms
 
 	/**
