@@ -447,6 +447,15 @@ public final class AggregationFieldInput {
 			EdmMongoServer mongoServer, List<WebResourceImpl> webResources)
 			throws InstantiationException, IllegalAccessException {
 		AggregationImpl mongoAggregation = new AggregationImpl();
+		AggregationImpl retAggr = mongoServer.getDatastore()
+				.find(AggregationImpl.class)
+				.filter("about", aggregation.getAbout()).get();
+		boolean update = false;
+		if(retAggr!=null){
+			update =true;
+			mongoAggregation = retAggr;
+		}
+		
 		mongoAggregation.setAbout(aggregation.getAbout());
 		Map<String, List<String>> dp = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation
@@ -455,11 +464,11 @@ public final class AggregationFieldInput {
 		UpdateOperations<AggregationImpl> ups = mongoServer.getDatastore()
 				.createUpdateOperations(AggregationImpl.class);
 		ups.set("edmDataProvider", dp);
-
+		
 		String isShownAt = SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource();
+		mongoAggregation.setEdmIsShownAt(isShownAt);
 		if (isShownAt != null) {
-			mongoAggregation.setEdmIsShownAt(isShownAt);
 			ups.set("edmIsShownAt", isShownAt);
 		} else {
 			ups.unset("edmIsShownAt");
@@ -467,8 +476,9 @@ public final class AggregationFieldInput {
 		
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource();
+		mongoAggregation.setEdmIsShownBy(isShownBy);
 		if (isShownBy != null) {
-			mongoAggregation.setEdmIsShownBy(isShownBy);
+			
 
 			ups.set("edmIsShownBy", isShownBy);
 		} else {
@@ -477,8 +487,9 @@ public final class AggregationFieldInput {
 
 		String object = SolrUtils.exists(_Object.class,
 				(aggregation.getObject())).getResource();
+		mongoAggregation.setEdmObject(object);
 		if (object != null) {
-			mongoAggregation.setEdmObject(object);
+			
 
 			ups.set("edmObject", object);
 		} else {
@@ -494,8 +505,9 @@ public final class AggregationFieldInput {
 		}
 		Map<String, List<String>> rights = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation.getRights());
+		mongoAggregation.setEdmRights(rights);
 		if (rights != null) {
-			mongoAggregation.setEdmRights(rights);
+			
 			ups.set("edmRights", rights);
 		} else {
 			ups.unset("edmRights");
@@ -503,6 +515,8 @@ public final class AggregationFieldInput {
 		if (aggregation.getUgc() != null) {
 			mongoAggregation
 					.setEdmUgc(aggregation.getUgc().getUgc().toString().toLowerCase());
+		} else {
+			mongoAggregation.setEdmUgc(null);
 		}
 
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
@@ -512,8 +526,9 @@ public final class AggregationFieldInput {
 
 		Map<String, List<String>> rights1 = MongoUtils
 				.createResourceOrLiteralMapFromList(aggregation.getRightList());
+		mongoAggregation.setDcRights(rights1);
 		if (rights1 != null) {
-			mongoAggregation.setDcRights(rights1);
+			
 			ups.set("dcRights", rights1);
 		} else {
 			ups.unset("dcRights");
@@ -528,23 +543,15 @@ public final class AggregationFieldInput {
 			ups.set("hasView",
 					hasViewList.toArray(new String[hasViewList.size()]));
 		} else {
+			mongoAggregation.setHasView(null);
 			ups.unset("hasView");
 		}
-
-		AggregationImpl retAggr = mongoServer.getDatastore()
-				.find(AggregationImpl.class)
-				.filter("about", aggregation.getAbout()).get();
-
-		if (retAggr != null) {
-			if (webResources != null) {
-				retAggr.setWebResources(webResources);
-			}
-			mongoServer.getDatastore().update(retAggr, ups);
-			return retAggr;
+		if (webResources != null) {
+			mongoAggregation.setWebResources(webResources);
+		}
+		if (update==true) {
+			mongoServer.getDatastore().update(mongoAggregation, ups);
 		} else {
-			if (webResources != null) {
-				mongoAggregation.setWebResources(webResources);
-			}
 			mongoServer.getDatastore().save(mongoAggregation);
 		}
 		return mongoAggregation;
