@@ -16,6 +16,8 @@
  */
 package eu.europeana.corelib.utils;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,4 +87,17 @@ public class StringArrayUtilsTest {
 		String str = "3";
 		Assert.assertEquals(3, StringArrayUtils.addToArray(items, str).length);
 	}
+	
+	@Test
+	public void testSplitWebParamater() {
+		assertArrayEquals(new String[] {"open"}, StringArrayUtils.splitWebParamater(new String[]{"open"}));
+		assertArrayEquals(new String[] {"open", "permission"}, StringArrayUtils.splitWebParamater(new String[]{"open", "permission"}));
+		assertArrayEquals(new String[] {"open", "permission"}, StringArrayUtils.splitWebParamater(new String[]{"open permission"}));
+		assertArrayEquals(new String[] {"open", "permission"}, StringArrayUtils.splitWebParamater(new String[]{"open+permission"}));
+		assertArrayEquals(new String[] {"open", "permission"}, StringArrayUtils.splitWebParamater(new String[]{"open,permission"}));
+
+		// this is not cleared
+		assertArrayEquals(new String[] {"open/permission"}, StringArrayUtils.splitWebParamater(new String[]{"open/permission"}));
+	}
+	
 }
