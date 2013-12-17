@@ -106,7 +106,9 @@ public class StringArrayUtils {
 	public static void addToList(List<String> list, String[] toAdd) {
 		if ((list != null) && (isNotBlank(toAdd))) {
 			for (String string : toAdd) {
-				list.add(string);
+				if (StringUtils.isNotBlank(string)) {
+					list.add(string);
+				}
 			}
 		}
 	}
@@ -185,5 +187,21 @@ public class StringArrayUtils {
 		}
 		return s;
 	}
+	
+
+	public static String[] splitWebParamater(String[] array) {
+		if (isBlank(array)) {
+			return EMPTY_ARRAY;
+		}
+		List<String> result = new ArrayList<String>();
+		for (String item : array) {
+			if (StringUtils.isNotBlank(item)) {
+				String[] items = StringUtils.split(item, " +,"); 
+				addToList(result, items);
+			}
+		}
+		return toArray(result);
+	}
+	
 
 }
