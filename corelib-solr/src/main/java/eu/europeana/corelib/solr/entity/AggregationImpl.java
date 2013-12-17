@@ -178,7 +178,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public void setHasView(String[] hasView) {
-		this.hasView = hasView.clone();
+		this.hasView = hasView !=null? hasView.clone():null;
 	}
 
 	@Override
