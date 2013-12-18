@@ -221,6 +221,13 @@ public class Query implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * Replace special facets.
+	 * 
+	 * Right now there are two special facets: DEFAULT and REUSABILITY. DEFAULT
+	 * is replaced to the portal's default facet list. REUSABILITY will be skipped,
+	 * because it is a special query facet
+	 */
 	private void replaceSpecialFacets() {
 		List<String> additionalFacets = new ArrayList<String>();
 		for (String facet : facets) {
