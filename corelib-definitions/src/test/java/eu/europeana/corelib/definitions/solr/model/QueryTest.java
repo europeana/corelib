@@ -3,12 +3,10 @@ package eu.europeana.corelib.definitions.solr.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import eu.europeana.corelib.definitions.solr.Facet;
@@ -94,8 +92,6 @@ public class QueryTest {
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
-
-		String expected = "RIGHTS:(" + singleRight + " AND " + rights + ")";
 		String[] results = query.getRefinements(true);
 		assertEquals("{!tag=RIGHTS}RIGHTS:" + singleRight, results[0]);
 		assertEquals("{!tag=REUSABILITY}RIGHTS:" + rights, results[1]);
@@ -135,6 +131,16 @@ public class QueryTest {
 		query.removeFacet(Facet.RIGHTS);
 		facetList = query.getFacets();
 		assertFalse(facetList.contains(Facet.RIGHTS.toString()));
+		assertEquals(Facet.values().length - 1, facetList.size());
+
+		query = new Query("*:*");
+		facetList = query.getFacets();
+		assertTrue(facetList.contains("RIGHTS"));
+		assertEquals(Facet.values().length, facetList.size());
+
+		query.removeFacet("RIGHTS");
+		facetList = query.getFacets();
+		assertFalse(facetList.contains("RIGHTS"));
 		assertEquals(Facet.values().length - 1, facetList.size());
 	}
 
@@ -196,12 +202,25 @@ public class QueryTest {
 		Query query = new Query("*:*");
 		List<String> facetList;
 
-		List<String> newFacets = new ArrayList<String>();
+		List<String> newFacets;
+
+		// test DEFAULT
+		newFacets = new ArrayList<String>();
 		newFacets.add("DEFAULT");
 		query.setFacets(newFacets);
 		facetList = query.getFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(8, facetList.size());
+
+		// test DEFAULT + something else
+		newFacets = new ArrayList<String>();
+		newFacets.add("DEFAULT");
+		newFacets.add("proxy_dc_contributor");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertTrue("should contain rights", facetList.contains("proxy_dc_contributor"));
+		assertEquals(9, facetList.size());
 	}
 
 	@Test

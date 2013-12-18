@@ -223,20 +223,14 @@ public class Query implements Cloneable {
 
 	private void replaceSpecialFacets() {
 		List<String> additionalFacets = new ArrayList<String>();
-		List<String> removableFacets = new ArrayList<String>();
 		for (String facet : facets) {
 			if (StringUtils.equals("DEFAULT", facet)) {
-				removableFacets.add("DEFAULT");
-				additionalFacets.addAll(defaultFacets);
+				additionalFacets.addAll(new ArrayList<String>(defaultFacets));
+			} else {
+				additionalFacets.add(facet);
 			}
 		}
-		if (!removableFacets.isEmpty()) {
-			facets.removeAll(removableFacets);
-		}
-
-		if (!additionalFacets.isEmpty()) {
-			facets.addAll(additionalFacets);
-		}
+		facets = additionalFacets;
 	}
 
 	public boolean isApiQuery() {
@@ -347,11 +341,13 @@ public class Query implements Cloneable {
 	}
 
 	public void removeFacet(Facet facetToRemove) {
-		facets.remove(facetToRemove.toString());
+		removeFacet(facetToRemove.toString());
 	}
 
 	public void removeFacet(String facetToRemove) {
-		facets.remove(facetToRemove);
+		if (facets.contains(facetToRemove)) {
+			facets.remove(facetToRemove);
+		}
 	}
 
 	public void setFacet(String facet) {

@@ -87,7 +87,10 @@ public class StringArrayUtilsTest {
 		String str = "3";
 		Assert.assertEquals(3, StringArrayUtils.addToArray(items, str).length);
 	}
-	
+
+	/**
+	 * Testing StringArrayUtils.splitWebParameter()
+	 */
 	@Test
 	public void testSplitWebParamater() {
 		assertArrayEquals(new String[]{"open"}, StringArrayUtils.splitWebParameter(new String[]{"open"}));
@@ -96,8 +99,11 @@ public class StringArrayUtilsTest {
 		assertArrayEquals(new String[]{"open", "permission"}, StringArrayUtils.splitWebParameter(new String[]{"open+permission"}));
 		assertArrayEquals(new String[]{"open", "permission"}, StringArrayUtils.splitWebParameter(new String[]{"open,permission"}));
 
+		assertArrayEquals(new String[]{"restricted", "open", "permission"}, StringArrayUtils.splitWebParameter(new String[]{"restricted", "open permission"}));
+		assertArrayEquals(new String[]{"restricted", "open", "permission"}, StringArrayUtils.splitWebParameter(new String[]{"restricted", "open+permission"}));
+		assertArrayEquals(new String[]{"restricted", "open", "permission"}, StringArrayUtils.splitWebParameter(new String[]{"restricted", "open,permission"}));
+
 		// this is not cleared
 		assertArrayEquals(new String[]{"open/permission"}, StringArrayUtils.splitWebParameter(new String[]{"open/permission"}));
 	}
-	
 }
