@@ -226,6 +226,8 @@ public class Query implements Cloneable {
 		for (String facet : facets) {
 			if (StringUtils.equals("DEFAULT", facet)) {
 				additionalFacets.addAll(new ArrayList<String>(defaultFacets));
+			} else if (StringUtils.equals("REUSABILITY", facet)) {
+				// skip it
 			} else {
 				additionalFacets.add(facet);
 			}
