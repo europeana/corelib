@@ -2,6 +2,7 @@ package eu.europeana.corelib.definitions.solr.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -127,14 +128,29 @@ public class QueryTest {
 	@Test
 	public void testRemoveFacet() {
 		Query query = new Query("*:*");
-		List<Facet> facetList = Arrays.asList(query.getFacets());
-		assertTrue(facetList.contains(Facet.RIGHTS));
+		List<String> facetList = query.getFacets();
+		assertTrue(facetList.contains(Facet.RIGHTS.name()));
 		assertEquals(Facet.values().length, facetList.size());
 
 		query.removeFacet(Facet.RIGHTS);
-		facetList = Arrays.asList(query.getFacets());
-		assertFalse(facetList.contains(Facet.RIGHTS));
+		facetList = query.getFacets();
+		assertFalse(facetList.contains(Facet.RIGHTS.toString()));
 		assertEquals(Facet.values().length - 1, facetList.size());
+	}
+
+	/**
+	 * Testing setFacet()
+	 */
+	@Test
+	public void testSetFacet1() {
+		Query query = new Query("*:*");
+		List<String> facetList;
+
+		query.setFacets(new String[]{"RIGHTS"});
+		facetList = query.getFacets();
+		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
+		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
+		assertEquals(1, facetList.size());
 	}
 
 	/**
@@ -143,14 +159,72 @@ public class QueryTest {
 	@Test
 	public void testSetFacet() {
 		Query query = new Query("*:*");
-		List<Facet> facetList = Arrays.asList(query.getFacets());
-		assertTrue(facetList.contains(Facet.RIGHTS));
+		List<String> facetList;
+
+		facetList = query.getFacets();
+		assertTrue(facetList.contains("RIGHTS"));
 		assertEquals(Facet.values().length, facetList.size());
 
-		query.setFacet(Facet.RIGHTS);
-		facetList = Arrays.asList(query.getFacets());
-		assertTrue(facetList.contains(Facet.RIGHTS));
+		query.setFacets(new String[]{"RIGHTS", "YEAR"});
+		facetList = query.getFacets();
+		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
+		assertTrue("should not contain YEAR", facetList.contains("YEAR"));
+		assertFalse("should not contain UGC", facetList.contains("UGC"));
+		assertEquals(2, facetList.size());
+
+		List<String> newFacets = new ArrayList<String>();
+		newFacets.add("RIGHTS");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
 		assertEquals(1, facetList.size());
+
+		newFacets = new ArrayList<String>();
+		newFacets.add("RIGHTS");
+		newFacets.add("YEAR");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertTrue("should not contain YEAR", facetList.contains("YEAR"));
+		assertFalse("should not contain UGC", facetList.contains("UGC"));
+		assertEquals(2, facetList.size());
 	}
 
+	@Test
+	public void testDefaultFacet() {
+		Query query = new Query("*:*");
+		List<String> facetList;
+
+		List<String> newFacets = new ArrayList<String>();
+		newFacets.add("DEFAULT");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertEquals(8, facetList.size());
+	}
+
+	@Test
+	public void testDefaultFacetAfterRemoving() {
+		Query query = new Query("*:*");
+		List<String> facetList;
+
+		List<String> newFacets = new ArrayList<String>();
+		newFacets.add("DEFAULT");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertEquals(8, facetList.size());
+
+		query.removeFacet("RIGHTS");
+
+		query = new Query("*:*");
+
+		newFacets = new ArrayList<String>();
+		newFacets.add("DEFAULT");
+		query.setFacets(newFacets);
+		facetList = query.getFacets();
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertEquals(8, facetList.size());
+	}
 }

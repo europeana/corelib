@@ -55,10 +55,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.google.code.morphia.mapping.MappingException;
-
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
@@ -303,8 +300,7 @@ public class SearchServiceImpl implements SearchService {
 					solrQuery.setFacet(true);
 					List<String> filteredFacets = query.getFilteredFacets();
 					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets.size() > 0);
-					for (Facet facet : query.getFacets()) {
-						String facetToAdd = facet.toString();
+					for (String facetToAdd : query.getFacets()) {
 						if (query.isProduceFacetUnion()) {
 							if (hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
 								facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);

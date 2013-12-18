@@ -20,12 +20,12 @@ package eu.europeana.corelib.definitions.solr.model;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +39,6 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 public class Query implements Cloneable {
 
 	private final static String OR = " OR ";
-	private final static String AND = " AND ";
 
 	/**
 	 * Default start parameter for Solr
@@ -61,7 +60,15 @@ public class Query implements Cloneable {
 
 	private int pageSize;
 
-	private Facet[] facets = Facet.values();
+	private static List<String> defaultFacets;
+	static {
+		defaultFacets = new ArrayList<String>();
+		for (Facet facet : Facet.values()) {
+			defaultFacets.add(facet.toString());
+		}
+	}
+
+	private List<String> facets = new ArrayList<String>(defaultFacets);
 
 	private List<String> allFacetList;
 
@@ -190,17 +197,46 @@ public class Query implements Cloneable {
 		return this;
 	}
 
-	public Facet[] getFacets() {
+	public List<String> getFacets() {
 		return facets;
 	}
 
-	public Query setFacets(Facet[] facets) {
+	public Query setFacets(String... facets) {
 		if (facets != null) {
-			this.facets = facets.clone();
+			this.facets = Arrays.asList(facets);
+			replaceSpecialFacets();
 		} else {
-			this.facets = Facet.values();
+			this.facets = defaultFacets;
 		}
 		return this;
+	}
+
+	public Query setFacets(List<String> facets) {
+		if (facets != null) {
+			this.facets = facets;
+			replaceSpecialFacets();
+		} else {
+			this.facets = defaultFacets;
+		}
+		return this;
+	}
+
+	private void replaceSpecialFacets() {
+		List<String> additionalFacets = new ArrayList<String>();
+		List<String> removableFacets = new ArrayList<String>();
+		for (String facet : facets) {
+			if (StringUtils.equals("DEFAULT", facet)) {
+				removableFacets.add("DEFAULT");
+				additionalFacets.addAll(defaultFacets);
+			}
+		}
+		if (!removableFacets.isEmpty()) {
+			facets.removeAll(removableFacets);
+		}
+
+		if (!additionalFacets.isEmpty()) {
+			facets.addAll(additionalFacets);
+		}
 	}
 
 	public boolean isApiQuery() {
@@ -250,7 +286,7 @@ public class Query implements Cloneable {
 		}
 
 		if (facets != null) {
-			for (Facet facet : facets) {
+			for (String facet : facets) {
 				params.add("facet.field=" + facet);
 			}
 		}
@@ -307,24 +343,20 @@ public class Query implements Cloneable {
 
 	private void createAllFacetList() {
 		allFacetList = new ArrayList<String>();
-		for (Facet facet : facets) {
-			allFacetList.add(facet.toString());
-		}
+		allFacetList.addAll(facets);
 	}
 
 	public void removeFacet(Facet facetToRemove) {
-		List<Facet> _facets = new ArrayList<Facet>();
-		for (Facet facet : facets) {
-			if (!facet.equals(facetToRemove)) {
-				_facets.add(facet);
-			}
-		}
-		facets = _facets.toArray(new Facet[_facets.size()]);
+		facets.remove(facetToRemove.toString());
 	}
 
-	public void setFacet(Facet facet) {
-		facets = new Facet[1];
-		facets[0] = facet;
+	public void removeFacet(String facetToRemove) {
+		facets.remove(facetToRemove);
+	}
+
+	public void setFacet(String facet) {
+		facets = new ArrayList<String>();
+		facets.add(facet);
 	}
 
 	public String getExecutedQuery() {
