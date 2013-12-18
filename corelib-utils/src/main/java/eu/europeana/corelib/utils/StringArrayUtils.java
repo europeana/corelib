@@ -187,9 +187,16 @@ public class StringArrayUtils {
 		}
 		return s;
 	}
-	
 
-	public static String[] splitWebParamater(String[] array) {
+	/**
+	 * Create a normalized array from web parameters, which can be array of strings concatenated by space, + or ,.
+	 * 
+	 * @param array
+	 *   The array of parameters
+	 * @return
+	 *   The normalized array
+	 */
+	public static String[] splitWebParameter(String[] array) {
 		if (isBlank(array)) {
 			return EMPTY_ARRAY;
 		}
@@ -202,6 +209,4 @@ public class StringArrayUtils {
 		}
 		return toArray(result);
 	}
-	
-
 }
