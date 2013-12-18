@@ -18,6 +18,7 @@
 package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,9 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	@Field("pl_dcterms_isPartOf")
 	private String[] dctermsIsPartOf;
+
+	@Field("timestamp")
+	private Date timestamp;
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
@@ -198,5 +202,9 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
 	public void setCompleteness(String completeness) {
 		this.completeness = completeness;
+	}
+
+	public Date getTimestamp() {
+		return (Date) (timestamp != null ? this.timestamp.clone() : null);
 	}
 }

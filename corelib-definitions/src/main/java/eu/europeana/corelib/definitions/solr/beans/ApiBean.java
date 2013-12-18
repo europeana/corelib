@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.beans;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -122,4 +123,6 @@ public interface ApiBean extends BriefBean {
 	 * @param dctermsIsPartOf
 	 */
 	void setDctermsIsPartOf(String[] dctermsIsPartOf);
+
+	Date getTimestamp();
 }
