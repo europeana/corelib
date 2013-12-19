@@ -124,5 +124,6 @@ public interface ApiBean extends BriefBean {
 	 */
 	void setDctermsIsPartOf(String[] dctermsIsPartOf);
 
-	Date getTimestamp();
+	Date getTimestampCreated();
+	Date getTimestampUpdate();
 }

@@ -82,8 +82,11 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Field("pl_dcterms_isPartOf")
 	private String[] dctermsIsPartOf;
 
-	@Field("timestamp")
-	private Date timestamp;
+	@Field("timestamp_created")
+	private Date timestampCreated;
+
+	@Field("timestamp_update")
+	private Date timestampUpdate;
 
 	@Override
 	public String[] getEdmPlaceBroaderTerm() {
@@ -204,7 +207,11 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 		this.completeness = completeness;
 	}
 
-	public Date getTimestamp() {
-		return (Date) (timestamp != null ? this.timestamp.clone() : null);
+	public Date getTimestampCreated() {
+		return (Date) (timestampCreated != null ? this.timestampCreated.clone() : null);
+	}
+
+	public Date getTimestampUpdate() {
+		return (Date) (timestampUpdate != null ? this.timestampUpdate.clone() : null);
 	}
 }
