@@ -309,6 +309,19 @@ public class EdmUtils {
 				proxy.setIsNextInSequenceList(nis);
 			}
 
+			String[] pIn  = prx.getProxyIn();
+			List<ProxyIn> pInList= null;
+			if(pIn!=null){
+				pInList = new ArrayList<ProxyIn>();
+				for(int i =0 ;i<pIn.length;i++){
+					ProxyIn proxyIn = new ProxyIn();
+					proxyIn.setResource(prefix+ pIn[i]);
+					pInList.add(proxyIn);
+				}
+			}
+			if(pInList!=null){
+				proxy.setProxyInList(pInList);
+			}
 			Type1 type = new Type1();
 			if (!prx.isEuropeanaProxy()) {
 				type.setType(EdmType.valueOf(prx.getEdmType().toString()
@@ -330,7 +343,6 @@ public class EdmUtils {
 			addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
 			addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
 			addAsObject(proxy, ProxyFor.class, prefix + prx.getProxyFor());
-			addAsList(proxy, ProxyIn.class, prx.getProxyIn(), prefix);
 			addAsList(proxy, Year.class, prx.getYear());
 
 			List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
