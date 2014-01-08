@@ -110,7 +110,33 @@ public enum EseEdmMap {
 			}
 		}
 	}
+	,
+	EUROPEANA_IDENTIFIER("europeana_identifier"){
 
+		@Override
+		public String getEdmValue(FullBean bean)
+				throws EdmValueNotFoundException, NullPointerException {
+			try{
+				return bean.getProvidedCHOs().get(0).getOwlSameAs()[0];
+			} catch (NullPointerException e){
+				throw e;
+			}
+		}
+		
+	},
+	HEADER_IDENTIFIER("header_identifier"){
+
+		@Override
+		public String getEdmValue(FullBean bean)
+				throws EdmValueNotFoundException, NullPointerException {
+			try{
+				return bean.getProvidedCHOs().get(0).getOwlSameAs()[0];
+			} catch (NullPointerException e){
+				throw e;
+			}
+		}
+		
+	}
 	;
 	private String field;
 
