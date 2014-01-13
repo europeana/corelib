@@ -168,6 +168,22 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean resolve(String europeanaObjectId,boolean similarItems) throws SolrTypeException {
+		
+		FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
+		FullBean fullBeanNew = fullBean;
+		if(fullBean!=null){
+			while(fullBeanNew!=null){
+				fullBeanNew = resolveInternal(fullBeanNew.getAbout(), similarItems);
+				if(fullBeanNew!=null){
+					fullBean = fullBeanNew;
+				}
+			}
+		}
+
+		return fullBean;
+	}
+
+	private FullBean resolveInternal(String europeanaObjectId, boolean similarItems) throws SolrTypeException{
 		long t0 = new Date().getTime();
 		mongoServer.setEuropeanaIdMongoServer(idServer);
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
@@ -179,12 +195,33 @@ public class SearchServiceImpl implements SearchService {
 				log.severe("SolrServerException: " + e.getMessage());
 			}
 		}
-
 		return fullBean;
 	}
-
+	
+	
 	@Override
 	public String resolveId(String europeanaObjectId) {
+		String lastId = resolveIdInternal(europeanaObjectId);
+		String newId = lastId;
+		if(lastId!=null){
+			while(newId!=null){
+				newId = resolveIdInternal(newId);
+				if(newId!=null){
+					lastId = newId;
+				}
+			}
+		}
+		return lastId;
+	}
+
+
+	@Override
+	public String resolveId(String collectionId, String recordId) {
+		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
+				recordId));
+	}
+	
+	private String resolveIdInternal(String europeanaObjectId){
 		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
 		if(newId!=null){
 			idServer.updateTime(newId.getNewId(), europeanaObjectId);
@@ -204,17 +241,8 @@ public class SearchServiceImpl implements SearchService {
 			idServer.updateTime(newId.getNewId(), PORTAL_PREFIX +europeanaObjectId);
 			return newId.getNewId();
 		}
-		
 		return null;
 	}
-
-
-	@Override
-	public String resolveId(String collectionId, String recordId) {
-		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
-				recordId));
-	}
-	
 	
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
