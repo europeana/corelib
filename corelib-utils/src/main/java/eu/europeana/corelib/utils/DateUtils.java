@@ -16,7 +16,9 @@
  */
 package eu.europeana.corelib.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Date util classes
@@ -24,6 +26,11 @@ import java.util.Date;
  *
  */
 public class DateUtils {
+
+	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	static {
+		formatter.setTimeZone(TimeZone.getTimeZone("GTM"));
+	}
 
 	private DateUtils() {
 		// do not allow instances of this class
@@ -39,5 +46,15 @@ public class DateUtils {
 			return new Date(date.getTime());
 		}
 		return null;
+	}
+
+	/**
+	 * Format a date
+	 * @param date
+	 * @return
+	 *   An ISO 8061 string presentation in GTM time zone
+	 */
+	public static String format(Date date) {
+		return formatter.format(date);
 	}
 }
