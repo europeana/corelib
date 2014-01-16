@@ -83,7 +83,7 @@ public class EmailBuilderImpl implements EmailBuilder {
 			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML, model);
 
 		MimeBodyPart textPart = new MimeBodyPart();
-		textPart.setText(text);
+		textPart.setText(text, "UTF-8");
 
 		BodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent(html, "text/html");
