@@ -132,11 +132,16 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.soundCloudAwareCollections']}")
 	private String soundCloudAwareCollectionsString;
 
+	@Value("#{europeanaProperties['portal.mlt.stopwords']}")
+	private String mltStopwordsFile;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
 
 	private Map<String, String> seeAlsoAggregations;
+
+	private Map<String, String> mltTranslations;
 
 	private String portalUrl;
 
@@ -265,6 +270,19 @@ public class Configuration {
 		return seeAlsoTranslations;
 	}
 
+	public Map<String, String> getMltTranslations() {
+		if (mltTranslations == null) {
+			mltTranslations = new HashMap<String, String>();
+			int i = 1;
+			while (europeanaProperties.containsKey("portal.mlt.field." + i)) {
+				String[] parts = europeanaProperties.getProperty("portal.mlt.field." + i).split("=", 2);
+				mltTranslations.put(parts[0].trim(), parts[1].trim());
+				i++;
+			}
+		}
+		return mltTranslations;
+	}
+
 	public Map<String, String> getSeeAlsoAggregations() {
 		if (seeAlsoAggregations == null) {
 			seeAlsoAggregations = new HashMap<String, String>();
@@ -337,5 +355,9 @@ public class Configuration {
 	
 	public int getApiRowLimit() {
 		return apiRowLimit;
+	}
+
+	public String getMltStopwordsFile() {
+		return mltStopwordsFile;
 	}
 }
