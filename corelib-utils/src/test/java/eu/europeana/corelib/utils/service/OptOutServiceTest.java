@@ -25,18 +25,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 /**
  * Opt-out service tests
  * @author Peter.Kiraly@ kb.nl
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-utils-context.xml", "/corelib-utils-test.xml" })
 public class OptOutServiceTest {
-	
+
 	@Resource
 	private OptOutService optOutService;
-	
+
 	@Test
 	public void testCheckByEuropeanaId() {
 	}
@@ -55,5 +55,5 @@ public class OptOutServiceTest {
 		assertTrue("CollectionId 08501 should be in list", optOutService.check(String.format(url, "08501")));
 		assertFalse("CollectionId 11111 should not be in list", optOutService.check(String.format(url, "11111")));
 	}
-	
+
 }

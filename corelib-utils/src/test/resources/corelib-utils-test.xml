@@ -34,4 +34,8 @@
 		<constructor-arg value="classpath:/testdata/opt-out-list.txt"/>
 	</bean>
 
+	<bean name="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
+		<constructor-arg value="classpath:/testdata/mlt_stopwords.txt"/>
+	</bean>
+
 </beans>
