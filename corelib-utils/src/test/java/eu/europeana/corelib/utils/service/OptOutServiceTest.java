@@ -38,10 +38,6 @@ public class OptOutServiceTest {
 	private OptOutService optOutService;
 
 	@Test
-	public void testCheckByEuropeanaId() {
-	}
-
-	@Test
 	public void checkByCollectionId() {
 		assertTrue("CollectionId 90801 should be in list", optOutService.check("/90801/testrecordid"));
 		assertTrue("CollectionId 08501 should be in list", optOutService.check("/08501/testrecordid"));
