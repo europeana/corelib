@@ -30,15 +30,14 @@
 	">
 
 	<!-- Override to use test list -->
-	<!-- 
 	<bean name="corelib_utils_optOutService" class="eu.europeana.corelib.utils.service.impl.OptOutServiceImpl">
-		<constructor-arg value="classpath:/testdata/opt-out-list.txt"/>
+		<constructor-arg value="classpath:/testdata/opt-out-list.txt" />
 	</bean>
 
 	<bean name="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
-		<constructor-arg value="classpath:/testdata/mlt_stopwords.txt"/>
+		<constructor-arg value="classpath:/testdata/mlt_stopwords.txt" />
 	</bean>
-	-->
+	<!-- 
 	<bean name="corelib_utils_optOutService" class="eu.europeana.corelib.utils.service.impl.OptOutServiceImpl">
 		<constructor-arg value="#{europeanaProperties['api.optOutList']}"/>
 	</bean>
@@ -46,5 +45,6 @@
 	<bean name="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
 		<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>
 	</bean>
+	-->
 
 </beans>
