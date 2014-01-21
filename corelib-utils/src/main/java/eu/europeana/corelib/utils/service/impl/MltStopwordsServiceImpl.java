@@ -33,10 +33,6 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 	 */
 	private List<String> stopwords = new ArrayList<String>();
 
-	public MltStopwordsServiceImpl(String filename) {
-		this(new File(filename));
-	}
-
 	public MltStopwordsServiceImpl(File stopwordFile) {
 		this.stopwordFile = stopwordFile;
 		reloadStopwords();

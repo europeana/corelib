@@ -33,10 +33,6 @@ public class OptOutServiceImpl implements OptOutService {
 	 */
 	private List<String> optOutDatasets = new ArrayList<String>();
 
-	public OptOutServiceImpl(String filename) {
-		this(new File(filename));
-	}
-
 	public OptOutServiceImpl(File optOutList) {
 		this.optOutList = optOutList;
 		reloadOptOutDatasets();
