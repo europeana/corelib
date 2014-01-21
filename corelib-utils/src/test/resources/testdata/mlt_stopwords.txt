@@ -1,0 +1,6 @@
+image
+text
+video
+sound
+stillimage
+still image
