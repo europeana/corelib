@@ -85,7 +85,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 	@Field("timestamp_created")
 	private Date timestampCreated;
 
-	@Field("timestamp_update")
+	@Field("timestamp_update") //This is obviously a typo, but do not change it as it will render previous ingested records unusable
 	private Date timestampUpdate;
 
 	@Override

@@ -326,12 +326,12 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Date getTimestampCreated() {
-		return this.timestampCreated;
+		return this.timestampCreated!=null? this.timestampCreated:new Date(0);
 	}
 
 	@Override
 	public Date getTimestampUpdated() {
-		return timestampUpdated;
+		return timestampUpdated!=null? this.timestampUpdated:new Date(0);
 	}
 	
 	@Override
