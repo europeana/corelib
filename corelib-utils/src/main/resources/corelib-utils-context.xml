@@ -35,8 +35,9 @@
 		<constructor-arg value="#{europeanaProperties['api.optOutList']}"/>
 	</bean>
 
+<!-- 
 	<bean name="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
 		<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>
 	</bean>
-
+ -->
 </beans>
