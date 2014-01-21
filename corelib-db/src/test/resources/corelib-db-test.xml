@@ -22,53 +22,52 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-	
+
 	<!-- INTERNAL -->
 	<import resource="corelib-definitions-test.xml" />
-    
-    <!-- 
-    	Overriding dataSource with a memory based database configuration
-     -->    
-    <bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource"
-    	p:url="jdbc:hsqldb:mem:."
-    />
 
-    <!-- 
-    	Overriding entityManagerFactory with a memory based database configuration
-     -->    
-    <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-    	p:dataSource-ref="corelib_db_dataSource"
-    >
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-            	p:showSql="false"
-            	p:generateDdl="true"
-            	p:databasePlatform="org.hibernate.dialect.HSQLDialect"
-            />
-        </property>
-    </bean>
+	<!-- 
+		Overriding dataSource with a memory based database configuration
+	-->
+	<bean id="corelib_db_dataSource" class="org.hsqldb.jdbc.JDBCDataSource"
+		p:url="jdbc:hsqldb:mem:."
+	/>
 
-    
-    <!-- Mocking services from other modules and overruling their configuration -->
-    
-    <bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
-    
-    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    
-    <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
-        
-    <bean name="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
+	<!-- 
+		Overriding entityManagerFactory with a memory based database configuration
+	-->
+	<bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		p:dataSource-ref="corelib_db_dataSource"
+	>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+				p:showSql="false"
+				p:generateDdl="true"
+				p:databasePlatform="org.hibernate.dialect.HSQLDialect"
+			/>
+		</property>
+	</bean>
 
-    <bean name="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
-    
-    <bean name="corelib_solr_mongoProvider" class="eu.europeana.corelib.MongoProvider" />
+	<!-- Mocking services from other modules and overruling their configuration -->
 
-   <!--Log4j Configuration-->  
-   <bean id="log4jInitialization"
-	class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
+
+	<bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
+
+	<bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
+
+	<bean name="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
+
+	<bean name="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
+
+	<bean name="corelib_solr_mongoProvider" class="eu.europeana.corelib.MongoProvider" />
+
+	<!--Log4j Configuration-->
+	<bean id="log4jInitialization"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
 		<property name="targetMethod" value="initLogging" />
 		<property name="arguments">
@@ -77,7 +76,4 @@
 			</list>
 		</property>
 	</bean>
-
-
-
 </beans>
