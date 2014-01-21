@@ -1,7 +1,6 @@
 package eu.europeana.corelib.web.support;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,9 +130,6 @@ public class Configuration {
 
 	@Value("#{europeanaProperties['portal.soundCloudAwareCollections']}")
 	private String soundCloudAwareCollectionsString;
-
-	@Value("#{europeanaProperties['portal.mlt.stopwords']}")
-	private String mltStopwordsFile;
 
 	// ///////////////////////////// generated/derivated properties
 
@@ -355,9 +351,5 @@ public class Configuration {
 	
 	public int getApiRowLimit() {
 		return apiRowLimit;
-	}
-
-	public String getMltStopwordsFile() {
-		return mltStopwordsFile;
 	}
 }
