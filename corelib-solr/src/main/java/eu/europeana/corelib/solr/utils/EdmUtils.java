@@ -323,12 +323,8 @@ public class EdmUtils {
 				proxy.setProxyInList(pInList);
 			}
 			Type1 type = new Type1();
-			if (!prx.isEuropeanaProxy()) {
 				type.setType(EdmType.valueOf(prx.getEdmType().toString()
 						.replace("3D", "_3_D")));
-			} else {
-				type.setType(EdmType.IMAGE);
-			}
 			proxy.setType(type);
 
 			addAsObject(proxy, CurrentLocation.class,
