@@ -255,6 +255,10 @@ public class Query implements Cloneable {
 		return parameters;
 	}
 
+	public boolean hasParameter(String key) {
+		return parameters.containsKey(key);
+	}
+
 	/**
 	 * Adds Solr parameters to the Query object
 	 *

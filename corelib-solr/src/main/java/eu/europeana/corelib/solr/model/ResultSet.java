@@ -30,20 +30,41 @@ import eu.europeana.corelib.definitions.solr.model.Query;
  */
 public class ResultSet<T> {
 
+	/**
+	 * The request query object
+	 */
 	private Query query;
 
+	/**
+	 * The list of result objects
+	 */
 	private List<T> results;
 
+	/**
+	 * The list of facets
+	 */
 	private List<FacetField> facetFields;
 
+	/**
+	 * The spellcheck component response
+	 */
 	private SpellCheckResponse spellcheck;
 
+	/**
+	 * The query facets response
+	 */
 	private Map<String, Integer> queryFacets;
 
 	// statistics
 
+	/**
+	 * The total number of results
+	 */
 	private long resultSize;
 
+	/**
+	 * The time in millisecond how long the search has been taken
+	 */
 	private long searchTime;
 
 	/**
@@ -86,6 +107,10 @@ public class ResultSet<T> {
 		return this;
 	}
 
+	/**
+	 * Gets the total number of results
+	 * @return
+	 */
 	public long getResultSize() {
 		return resultSize;
 	}
