@@ -106,5 +106,23 @@ public interface EuropeanaIdRegistryMongoServer {
 	public abstract List<Map<String, String>> getFailedRecords(
 			String collectionId);
 	
+	/**
+	 * Marks the specific ID as deleted
+	 * @param europeanaID
+	 * @param isdeleted
+	 */
+	public void markdeleted(String europeanaID, boolean isdeleted); 
+	
+	
+	/**
+	 * Check if the record that corresponds to the specific europeana id is deleted
+	 * @param europeanaID
+	 */
+	public boolean isdeleted(String europeanaID);
+	
+	/**
+	 * Get the Morphia Datastore instance
+	 * @return a Datastore
+	 */
 	public Datastore getDatastore();
 }
