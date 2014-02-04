@@ -21,12 +21,21 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
-	<util:properties id="europeanaProperties" location="file:${EUROPEANA_PROPERTIES}" />
+	<bean id="europeanaProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" 
+		p:ignoreResourceNotFound="true">
+		<property name="locations">
+			<list>
+				<value>classpath:cloud_config.properties</value>
+				<value>file:${EUROPEANA_PROPERTIES}</value>
+			</list>
+		</property>
+	</bean> 
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-definitions-beans.xml"/>

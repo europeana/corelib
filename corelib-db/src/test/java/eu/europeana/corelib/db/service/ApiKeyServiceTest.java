@@ -75,6 +75,7 @@ public class ApiKeyServiceTest {
 		String email = "test@kb.nl";
 		String apiKey = generatePassPhrase(9);
 		String privateKey = generatePassPhrase(9);
+		String appName = "test";
 		String tokenString = "test_token_new";
 		String username = "test";
 		String company = "test_company";
@@ -90,10 +91,11 @@ public class ApiKeyServiceTest {
 		token.setToken(tokenString);
 		tokenService.store(token);
 		ApiKey createdApiKey = apiKeyService.createApiKey(tokenString, email, apiKey, privateKey,
-				DEFAULT_USAGE_LIMIT, username, company, country, firstName,
+				DEFAULT_USAGE_LIMIT, appName, username, company, country, firstName,
 				lastName, website, address, phone, fieldOfWork);
 		User user = createdApiKey.getUser();
 		assertEquals(apiKey, createdApiKey.getId());
+		assertEquals(appName, createdApiKey.getApplicationName());
 		assertEquals(user.getId(), createdApiKey.getUser().getId());
 
 		userService.remove(user);

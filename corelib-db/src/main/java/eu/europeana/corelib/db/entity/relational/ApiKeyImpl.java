@@ -55,6 +55,9 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 
 	@Column
 	private long usageLimit;
+	
+	@Column(name="appName", nullable=true)
+	private String applicationName;
 
 	/**
 	 * GETTERS & SETTTERS
@@ -95,5 +98,15 @@ public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalD
 		return "ApiKeyImpl [apiKey=" + apiKey + ", privateKey=" + privateKey
 				+ ", usageLimit=" + usageLimit + ", user=" + getUser()
 				+ "]";
+	}
+
+	@Override
+	public String getApplicationName() {
+		return applicationName;
+	}
+
+	@Override
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 }

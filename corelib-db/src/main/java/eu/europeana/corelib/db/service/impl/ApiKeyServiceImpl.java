@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+
 import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
@@ -48,10 +50,18 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 		}
 		return requestNumber;
 	}
+	
+	@Override
+	public void updateApplicationName(Long userId, String apiKey, String applicationName) throws DatabaseException {
+		ApiKey key = getDao().findByPK(apiKey);
+		if ((key != null) && key.getUser().getId().equals(userId)) {
+			key.setApplicationName(StringUtils.trimToNull(applicationName));
+		}
+	}
 
 	@Override
 	public ApiKey createApiKey(String token, String email, String apiKey,
-			String privateKey, Long limit, String username,
+			String privateKey, Long limit, String appName, String username,
 			String company, String country, String firstName, String lastName, 
 			String website, String address, String phone, String fieldOfWork)
 			throws DatabaseException {
@@ -77,6 +87,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 		api.setPrivateKey(privateKey);
 		api.setUsageLimit(limit);
 		api.setUser(user);
+		api.setApplicationName(appName);
 		user.getApiKeys().add(api);
 		return api;
 	}

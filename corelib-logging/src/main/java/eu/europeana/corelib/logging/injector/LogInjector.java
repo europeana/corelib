@@ -2,6 +2,7 @@ package eu.europeana.corelib.logging.injector;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.Ordered;
@@ -33,7 +34,11 @@ public class LogInjector implements BeanPostProcessor, Ordered {
 				ReflectionUtils.makeAccessible(field);
 				Log log = field.getAnnotation(Log.class);
 				if (log != null) {
-					field.set(bean, Logger.getLogger(bean.getClass())); 
+					if (StringUtils.isNotBlank(log.value())) {
+						field.set(bean, Logger.getLogger(log.value()));
+					} else {
+						field.set(bean, Logger.getLogger(bean.getClass())); 
+					}
 				}
 			}
 		});

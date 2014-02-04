@@ -51,12 +51,23 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
 	 */
 	void removeApiKey(Long userId, String apiKey) throws DatabaseException;
 
+	/**
+	 * Updates the application for the specified api key.
+	 * 
+	 * @param userId
+	 * @param apiKeyId
+	 *            The primary key of the API key to update
+	 * @param applicationName
+	 * 			Application name, null value is acceptable to clear the value. 
+	 * @throws DatabaseException
+	 */
+	void updateApplicationName(Long userId, String apiKey, String applicationName) throws DatabaseException;
 
 	/**
 	 * Creates an API Key
 	 */
 	ApiKey createApiKey(String token, String email, String apiKey,
-			String privateKey, Long limit, String username, String company,
+			String privateKey, Long limit, String appName, String username, String company,
 			String country, String firstName, String lastName, String website,
 			String address, String phone, String fieldOfWork) throws DatabaseException;	
 }

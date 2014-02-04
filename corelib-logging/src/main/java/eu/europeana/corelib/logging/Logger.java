@@ -1,27 +1,27 @@
 package eu.europeana.corelib.logging;
 
-import java.util.logging.Level;
+import org.apache.log4j.Level;
 
 public class Logger {
 	
 	public static Logger getLogger(String logname) {
-		return new Logger(java.util.logging.Logger.getLogger(logname));
+		return new Logger(org.apache.log4j.Logger.getLogger(logname));
 	}
 	
 	public static Logger getLogger(Class<?> clazz) {
-		return getLogger(clazz.getName());
+		return new Logger(org.apache.log4j.Logger.getLogger(clazz));
 	}
 	
-	private final java.util.logging.Logger log;
+	private final org.apache.log4j.Logger log;
 	
-	public Logger(java.util.logging.Logger log) {
+	public Logger(org.apache.log4j.Logger log) {
 		this.log = log;
 	}
 	
 	// INFO
 	
 	public boolean isInfoEnabled() {
-		return log.isLoggable(Level.INFO);
+		return log.isInfoEnabled();
 	}
 	
 	public void info(String msg) {
@@ -31,57 +31,65 @@ public class Logger {
 	// DEBUG
 	
 	public boolean isDebugEnabled() {
-		return log.isLoggable(Level.FINE);
+		return log.isDebugEnabled();
 	}
 	
 	public void debug(String msg) {
-		log.log(Level.FINE, msg);
+		log.debug(msg);
 	}
 	
 	public void debug(String msg, Throwable e) {
-		log.log(Level.FINE, msg, e);
+		log.debug(msg, e);
 	}
 	
 	// TRACE
 	
 	public boolean isTraceEnabled() {
-		return log.isLoggable(Level.FINER);
+		return log.isTraceEnabled();
 	}
 	
 	public void trace(String msg) {
-		log.log(Level.FINER, msg);
+		log.trace(msg);
 	}
 	
 	public void trace(String msg, Throwable e) {
-		log.log(Level.FINER, msg, e);
+		log.trace(msg, e);
 	}
 	
 	// WARNING
 	
 	public boolean isWarningEnabled() {
-		return log.isLoggable(Level.WARNING);
+		return log.isEnabledFor(Level.WARN);
 	}
-	
+
 	public void warn(String msg) {
-		log.warning(msg);
+		log.warn(msg);
 	}
 	
 	public void warning(String msg) {
-		log.warning(msg);
+		log.warn(msg);
+	}
+	
+	public void warn(String msg, Throwable e) {
+		log.warn(msg,e);
+	}
+	
+	public void warning(String msg, Throwable e) {
+		log.warn(msg,e);
 	}
 	
 	// ERROR / SEVERE
 	
 	public boolean isErrorEnabled() {
-		return log.isLoggable(Level.SEVERE);
+		return log.isEnabledFor(Level.ERROR);
 	}
 	
 	public void error(String msg) {
-		log.severe(msg);
+		log.error(msg);
 	}
 	
 	public void error(String msg, Throwable e) {
-		log.log(Level.SEVERE, msg, e);
+		log.error(msg, e);
 	}
 
 }
