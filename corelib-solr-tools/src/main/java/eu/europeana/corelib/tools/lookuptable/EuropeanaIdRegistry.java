@@ -17,18 +17,19 @@
 package eu.europeana.corelib.tools.lookuptable;
 
 import java.util.Date;
-
 import org.bson.types.ObjectId;
-
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
+
 /**
  * Mongo Entity for the representation of the lookup table of the EuropeanaIDs
  * @author yorgos.mamakis@ kb.nl
  * @author Georgios Markakis <gwarkx@hotmail.com>
+ * 
  * @since 3 Oct 2012
  */
+
 @Entity ("EuropeanaIdRegistry")
 public class EuropeanaIdRegistry {
 	
@@ -64,14 +65,20 @@ public class EuropeanaIdRegistry {
 	 */
 	private Date last_checked;
 	
-	
 	/**
 	 * The UIM sessionID
 	 */
 	@Indexed (unique=false)
 	private String sessionID; 
 	
+	/**
+	 * Whether the id corresponds to a record that has been deleted
+	 */
+	private boolean deleted;
 	
+	
+
+
 	/**
 	 * Get the record ID
 	 * @return the record ID
@@ -171,5 +178,22 @@ public class EuropeanaIdRegistry {
 	 */
 	public void setSessionID(String sessionID) {
 		this.sessionID = sessionID;
+	}
+	
+	/**
+	 * Is the id's record deleted
+	 * @return
+	 */
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * Set the record of the id as deleted
+	 * 
+	 * @param deleted
+	 */
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

@@ -21,15 +21,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.codec.digest.DigestUtils;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
-
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
@@ -520,11 +517,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		datastore.update(updateQuery, ops);
 	}
 
-	
-		
 
-	
-	
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdRegistryMongoServer#getFailedRecords(java.lang.String)
 	 */
@@ -547,4 +540,33 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		}
 		return failedRecords;
 	}
+
+	/* (non-Javadoc)
+	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistryMongoServer#markdeleted(java.lang.String, boolean)
+	 */
+	@Override
+	public void markdeleted(String europeanaID, boolean isdeleted) {
+		UpdateOperations<EuropeanaIdRegistry> ops =datastore.createUpdateOperations(EuropeanaIdRegistry.class)
+				.set("deleted",isdeleted);
+		
+		Query<EuropeanaIdRegistry> query = datastore
+				.createQuery(EuropeanaIdRegistry.class).field("eid").equal(europeanaID);
+		datastore.findAndModify(query, ops);
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistryMongoServer#isdeleted(java.lang.String)
+	 */
+	@Override
+	public boolean isdeleted(String europeanaID) {
+		
+		Query<EuropeanaIdRegistry> query = datastore
+				.createQuery(EuropeanaIdRegistry.class).field("eid").equal(europeanaID);
+		
+		EuropeanaIdRegistry  idr = datastore.find(EuropeanaIdRegistry.class).filter("eid", europeanaID).get();
+		return idr.isDeleted();
+	}
+	
+	
+	
 }
