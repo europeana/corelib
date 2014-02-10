@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -32,8 +33,7 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 
 		String localeName = request.getParameter(this.paramName);
 
-		if (localeName != null
-			&& !localeName.equals("")
+		if (StringUtils.isNotBlank(localeName)
 			&& !(localeName.contains("*"))) {
 
 			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
