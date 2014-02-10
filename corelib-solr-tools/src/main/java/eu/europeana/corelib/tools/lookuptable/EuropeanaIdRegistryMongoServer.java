@@ -35,6 +35,13 @@ public interface EuropeanaIdRegistryMongoServer {
 			String collectionID);
 
 	/**
+	 * Delete all failed records entries for a collection
+	 * 
+	 * @param collectionID
+	 */
+	public abstract void deleteFailedRecords(String collectionID);
+	
+	/**
 	 * Find the EuropeanaId records based on the oldId
 	 * 
 	 * @param oldId

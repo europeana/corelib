@@ -152,7 +152,18 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 			}
 		} else {
 			
-			constructedeuropeanaId.setId(retrievedeuropeanaID.getId());
+			// Check if the identifier is already registered but it has been marked as deleted
+			if(retrievedeuropeanaID.isDeleted()){
+				lookupresult.setState(LookupState.ID_REGISTERED);
+				lookupresult.setEuropeanaID(europeanaIDString);
+				return lookupresult;
+			}
+			else{
+				constructedeuropeanaId.setId(retrievedeuropeanaID.getId());
+				constructedeuropeanaId.setDeleted(false);
+			}
+			
+		
 		}
 
 		// Otherwise proceed to UUID scenaria
@@ -415,6 +426,19 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		
 		datastore.findAndDelete(deleteQuery);
 	}
+	
+	
+	/* (non-Javadoc)
+	 * @see eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdRegistryMongoServer#deleteFailedRecord(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void deleteFailedRecords(String collectionID){
+		Query<FailedRecord> deleteQuery = datastore
+				.createQuery(FailedRecord.class).field("collectionId").equal(collectionID);
+		
+		datastore.findAndDelete(deleteQuery);
+	}
+	
 	
 	
 	/**
