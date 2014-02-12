@@ -23,9 +23,9 @@ package eu.europeana.corelib.definitions.solr;
  */
 public enum Facet {
 
-	UGC("UGC"), 
-	LANGUAGE("LANGUAGE"), 
-	TYPE("TYPE"), 
+	UGC("UGC"),
+	LANGUAGE("LANGUAGE"),
+	TYPE("TYPE"),
 	YEAR("YEAR"),
 	PROVIDER("PROVIDER"),
 	DATA_PROVIDER("DATA_PROVIDER"),
@@ -42,4 +42,5 @@ public enum Facet {
 	public String toString(){
 		return facet;
 	}
+
 }
