@@ -17,14 +17,7 @@
 
 package eu.europeana.corelib.web.email.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.mail.BodyPart;
@@ -32,7 +25,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -47,8 +39,6 @@ import eu.europeana.corelib.web.exception.EmailServiceException;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class EmailBuilderImpl implements EmailBuilder {
-
-	Logger log = Logger.getLogger(EmailBuilderImpl.class.getCanonicalName());
 
 	private static final String TEMPLATE_NAME_AFFIX_TEXT = ".txt.vm";
 	private static final String TEMPLATE_NAME_AFFIX_HTML = ".html.vm";
@@ -84,7 +74,6 @@ public class EmailBuilderImpl implements EmailBuilder {
 
 		String text = VelocityEngineUtils.mergeTemplateIntoString(engine,
 			config.getTemplate() + TEMPLATE_NAME_AFFIX_TEXT, "UTF-8", model);
-		log.info("Text: " + text);
 
 		String html = VelocityEngineUtils.mergeTemplateIntoString(engine,
 			config.getTemplate() + TEMPLATE_NAME_AFFIX_HTML, model);
