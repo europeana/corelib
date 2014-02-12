@@ -8,16 +8,14 @@ API key      : ${apiKey.id}
 Private key  : ${apiKey.privateKey}
 ==========
 
-Use the API key in your API calls. Keep your private key confidential.
+Use the API key in your API calls. This key does not need to be kept confidential.
+The private key must be kept confidential and must not be exposed in user interfaces or in markup.
 
-The new Europeana API is currently in testing. We expect the testing period to last until late November 2012. During the testing period the API call base domain is preview.europeana.eu. When the new API enters production the base domain will change to europeana.eu. Please note that all keys registered during the testing period will carry over to the production version.
+Our technical documentation is available at http://www.europeana.eu/portal/api-introduction.html including an API-console for testing the API and community developed libraries for a variety of programming languages.
 
-The API documentation will be updated to reflect any changes made to the API as a result of the testing.  Please join us at the Europeana API Forum to ask questions or give us your feedback on our new API. You can also contact us directly by mailing api@europeana.eu
+Please join us at the Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi - to ask questions to us and other developers and to give us your feedback on our new API. You can also contact us directly by mailing api@europeana.eu and we'd be especially grateful if you would let us know about your implementation so that we can feature it in our application gallery!
 
 Best regards,
 The Europeana API Team
 
-Europeana API Technical Documentation - http://www.europeana.eu/portal/api-introduction.html
-Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi
 More about the Europeana API services - http://pro.europeana.eu/api
-
