@@ -409,7 +409,8 @@ public final class SolrUtils {
 	}
 
 	public static String escapeQuery(String query) {
-		return ClientUtils.escapeQueryChars(query).replace("\\ ", " ")
+		return ClientUtils.escapeQueryChars(query)
+				.replace("\\ ", " ")
 				.replace("\\-", "-");
 	}
 
