@@ -60,8 +60,7 @@ public class PollingBean extends QuartzJobBean {
 		try {
 			sugarWsClient.setSessionID(sugarWsClient.login(ClientUtils.createStandardLoginObject(username,password)));
 		} catch (JIXBLoginFailureException e) {
-			//What to do if destination is unreachable or credetials changed?
-			e.printStackTrace();
+			sugarWsClient.setSessionID("-1");
 		}
 
 	}
