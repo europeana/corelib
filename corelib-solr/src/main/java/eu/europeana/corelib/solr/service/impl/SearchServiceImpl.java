@@ -372,11 +372,11 @@ public class SearchServiceImpl implements SearchService {
 						resultSet.setQueryFacets(queryResponse.getFacetQuery());
 					}
 				} catch (SolrServerException e) {
-					log.severe("SolrServerException: " + e.getMessage());
+					log.severe("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				} catch (SolrException e) {
-					log.severe("SolrException: " + e.getMessage());
+					log.severe("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
