@@ -84,13 +84,17 @@ public enum RightsOption {
 	/**
 	 * http://www.europeana.eu/rights/rr-f/
 	 */
-	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free Access - Rights Reserved", "icon-copyright", false, true),
+	//EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free Access - Rights Reserved", "icon-copyright", false, true),
+	// See #1287
+	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free Access - no re-use", "icon-copyright", false, true),
 
 	// EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "eu_paid_access.jpg", "eu_paid_access.png"), // +transparent
 	/**
 	 * http://www.europeana.eu/rights/rr-p/
 	 */
-	EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "icon-copyright", false, true),
+	//EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "icon-copyright", false, true),
+	// See #1241
+	EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - no re-use", "icon-copyright", false, true),
 
 	// EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Restricted Access - Rights Reserved", "eu_restricted_access.jpg", "cc-restrictedaccess.png"), // +transparent
 	/**
