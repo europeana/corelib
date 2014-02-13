@@ -37,11 +37,9 @@ public class ClientFactory {
 			client.setSessionID(client.login(ClientUtils.createStandardLoginObject(userName,password)));
 		} catch (JIXBLoginFailureException e) {
 			client.setSessionID("-1");
-			e.printStackTrace();
 		} catch (Exception e){
 			LOGGER.info("======= Warning: could not connect to SugarCrm Server =====");
-
-			e.printStackTrace();
+			client.setSessionID("-1");
 		}
 	
 		
@@ -74,7 +72,7 @@ public class ClientFactory {
 			e.printStackTrace();
 		} catch (Exception e){
 			LOGGER.info("======= Warning: could not connect to SugarCrm Server =====");
-
+			client.setSessionID("-1");
 			e.printStackTrace();
 		}
 	
