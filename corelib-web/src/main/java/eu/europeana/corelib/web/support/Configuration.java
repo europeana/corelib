@@ -131,6 +131,21 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.soundCloudAwareCollections']}")
 	private String soundCloudAwareCollectionsString;
 
+	@Value("#{europeanaProperties['portal.weight.title']}")
+	private double weightTitle;
+
+	@Value("#{europeanaProperties['portal.weight.who']}")
+	private double weightWho;
+
+	@Value("#{europeanaProperties['portal.weight.what']}")
+	private double weightWhat;
+
+	@Value("#{europeanaProperties['portal.weight.provider']}")
+	private double weightProvider;
+
+	@Value("#{europeanaProperties['portal.weight.dataProvider']}")
+	private double weightDataProvider;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -351,5 +366,25 @@ public class Configuration {
 	
 	public int getApiRowLimit() {
 		return apiRowLimit;
+	}
+
+	public double getWeightTitle() {
+		return weightTitle;
+	}
+
+	public double getWeightWho() {
+		return weightWho;
+	}
+
+	public double getWeightWhat() {
+		return weightWhat;
+	}
+
+	public double getWeightProvider() {
+		return weightProvider;
+	}
+
+	public double getWeightDataProvider() {
+		return weightDataProvider;
 	}
 }
