@@ -131,19 +131,19 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.soundCloudAwareCollections']}")
 	private String soundCloudAwareCollectionsString;
 
-	@Value("#{europeanaProperties['portal.weight.title']}")
+	@Value("#{europeanaProperties['portal.mlt.weight.title']}")
 	private double weightTitle;
 
-	@Value("#{europeanaProperties['portal.weight.who']}")
+	@Value("#{europeanaProperties['portal.mlt.weight.who']}")
 	private double weightWho;
 
-	@Value("#{europeanaProperties['portal.weight.what']}")
+	@Value("#{europeanaProperties['portal.mlt.weight.what']}")
 	private double weightWhat;
 
-	@Value("#{europeanaProperties['portal.weight.provider']}")
+	@Value("#{europeanaProperties['portal.mlt.weight.provider']}")
 	private double weightProvider;
 
-	@Value("#{europeanaProperties['portal.weight.dataProvider']}")
+	@Value("#{europeanaProperties['portal.mlt.weight.dataProvider']}")
 	private double weightDataProvider;
 
 	// ///////////////////////////// generated/derivated properties
