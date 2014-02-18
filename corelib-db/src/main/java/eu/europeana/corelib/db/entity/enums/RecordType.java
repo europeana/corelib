@@ -25,5 +25,5 @@ package eu.europeana.corelib.db.entity.enums;
  * 
  */
 public enum RecordType {
-	OBJECT, SEARCH, LIMIT, REDIRECT;
+	OBJECT, SEARCH, LIMIT, REDIRECT, PROVIDERS, PROVIDER, PROVIDER_DATASETS, DATASETS, DATASET;
 }

@@ -34,6 +34,17 @@ import eu.europeana.corelib.utils.model.DateInterval;
  */
 public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 
+	/**
+	 * Log a API request
+	 * @param apiKey
+	 *   The API key (wskey)
+	 * @param requestedUri
+	 *   The requested URL
+	 * @param rType
+	 *   The record type to request
+	 * @param profile
+	 *   The profile
+	 */
 	void logApiRequest(String apiKey, String requestedUri, RecordType rType, String profile);
 
 	/*
