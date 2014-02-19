@@ -57,6 +57,8 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.SelectFields;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.UserAuth;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.NameValueList;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.NameValue;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
@@ -64,34 +66,39 @@ import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
 
 /**
- * This Class provides auxiliary methods that can be used for the creation & instantiation
- * of SugarWSClient instances (see provided Junit tests for usage examples). 
+ * This Class provides auxiliary methods that can be used for the creation &
+ * instantiation of SugarWSClient instances (see provided Junit tests for usage
+ * examples).
  * 
  * @author Georgios Markakis
  */
 public class ClientUtils {
 
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ClientUtils.class);
-	
-	
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ClientUtils.class);
+
+	private static Map<String, Map<String, String>> translateMap;
+
 	/**
 	 * Utility Class (Does not instantiate)
 	 */
-	private ClientUtils(){
-		
+	private ClientUtils() {
+
 	}
-	
+
 	/**
-	 * This method marshals the contents of a  JAXB Element and outputs the results to the
-	 * Logger.  
-	 * @param jaxbObject A JIBX representation of a SugarCRM SOAP Element. 
+	 * This method marshals the contents of a JAXB Element and outputs the
+	 * results to the Logger.
+	 * 
+	 * @param jaxbObject
+	 *            A JIBX representation of a SugarCRM SOAP Element.
 	 */
-	public static void logMarshalledObject(Object jibxObject){		
+	public static void logMarshalledObject(Object jibxObject) {
 
 		try {
 
 			String xmlContent = unmarshallObject(jibxObject);
-			
+
 			logger.info("===========================================");
 			StringBuffer sb = new StringBuffer("Soap Ouput for Class: ");
 			sb.append(jibxObject.getClass().getSimpleName());
@@ -102,24 +109,24 @@ public class ClientUtils {
 
 			logger.error(e.getMessage());
 		}
-		
+
 	}
-	
-	
-	
+
 	/**
-	 * This method marshals the contents of a  JAXB Element and outputs the results to the
-	 * Karaf output console.
-	 *   
-	 * @param out the (Karaf console) printwriter
+	 * This method marshals the contents of a JAXB Element and outputs the
+	 * results to the Karaf output console.
+	 * 
+	 * @param out
+	 *            the (Karaf console) printwriter
 	 * @param jibxObject
 	 */
-	public static void logMarshalledObjectOsgi(PrintStream out, Object jibxObject){
+	public static void logMarshalledObjectOsgi(PrintStream out,
+			Object jibxObject) {
 
 		try {
 
 			String xmlContent = unmarshallObject(jibxObject);
-			
+
 			out.println("===========================================");
 			StringBuffer sb = new StringBuffer("Soap Ouput for Class: ");
 			sb.append(jibxObject.getClass().getSimpleName());
@@ -129,11 +136,9 @@ public class ClientUtils {
 		} catch (JiBXException e) {
 			logger.error(e.getMessage());
 		}
-		
+
 	}
-	
-	
-	
+
 	/**
 	 * Private auxiliary method that performs the unmarshalling of the object
 	 * 
@@ -141,7 +146,8 @@ public class ClientUtils {
 	 * @return
 	 * @throws JiBXException
 	 */
-	private static String unmarshallObject(Object jibxObject) throws JiBXException{
+	private static String unmarshallObject(Object jibxObject)
+			throws JiBXException {
 		IBindingFactory context;
 		context = BindingDirectory.getFactory(jibxObject.getClass());
 
@@ -149,72 +155,71 @@ public class ClientUtils {
 		mctx.setIndent(2);
 		StringWriter stringWriter = new StringWriter();
 		mctx.setOutput(stringWriter);
-		mctx.marshalDocument(jibxObject);		
-		
+		mctx.marshalDocument(jibxObject);
+
 		String xmlContents = stringWriter.toString();
-		
+
 		return xmlContents;
 	}
-	
-	
+
 	/**
 	 * Encrypts a given String into a MD5 format.
-	 * @param value The string to be encrypted
+	 * 
+	 * @param value
+	 *            The string to be encrypted
 	 * @return the encrypted String
 	 */
-	public static String md5(String value){	
+	public static String md5(String value) {
 		MessageDigest mdEnc;
-		try {	
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(value.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String hashtext = number.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(value.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+			return hashtext;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return "";
 	}
-	
-	
-	
+
 	/**
 	 * Creates a Login Soap Request given the user credentials.
-	 * @param username 
+	 * 
+	 * @param username
 	 * @param passwrd
-	 * @return  a Login Soap Request Jaxb representation
+	 * @return a Login Soap Request Jaxb representation
 	 */
-	public static Login createStandardLoginObject(String username, String passwrd){
-		
-		
+	public static Login createStandardLoginObject(String username,
+			String passwrd) {
+
 		Login login = new Login();
 		UserAuth user = new UserAuth();
 
 		user.setUserName(username);
 		user.setPassword(md5(passwrd));
 		user.setVersion("1.0");
-		
+
 		login.setApplicationName("EuropeanaSugarCRMClient");
 		login.setUserAuth(user);
-		
+
 		return login;
 	}
-	
-	
-	
-	
+
 	/**
-	 * Creates a SelectFields Soap Object given a List<String> fieldnames object which sets the 
-	 * fields to be retrieved.
+	 * Creates a SelectFields Soap Object given a List<String> fieldnames object
+	 * which sets the fields to be retrieved.
+	 * 
 	 * @param fieldnames
 	 * @return
 	 */
-	public static SelectFields generatePopulatedSelectFields(List<String> fieldnames){
-		
+	public static SelectFields generatePopulatedSelectFields(
+			List<String> fieldnames) {
+
 		SelectFields selfields = new SelectFields();
 		StringBuffer arrayType = new StringBuffer();
 		arrayType.append("string[");
@@ -223,75 +228,76 @@ public class ClientUtils {
 		CommonAttributes commonAttributes = new CommonAttributes();
 		commonAttributes.setHref(arrayType.toString());
 		selfields.setCommonAttributes(commonAttributes);
-		
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder;
+
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+				.newInstance();
+		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-	        Document document = documentBuilder.newDocument();
-	        
-	        for( String fieldname : fieldnames){
-	        	Element element = document.createElement("string");
-	        	Array array =  new Array();
-	        	array.getAnyList();
-				selfields.setArray(array );
-	    		element.appendChild(document.createTextNode(fieldname));  		
-	        }
+			Document document = documentBuilder.newDocument();
+
+			for (String fieldname : fieldnames) {
+				Element element = document.createElement("string");
+				Array array = new Array();
+				array.getAnyList();
+				selfields.setArray(array);
+				element.appendChild(document.createTextNode(fieldname));
+			}
 
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
+
 		return selfields;
-		
+
 	}
-	
+
 	/**
-	 * Creates a NameValueList Soap Element given a List<String> namevalues object which sets the 
-	 * fields to be retrieved.
+	 * Creates a NameValueList Soap Element given a List<String> namevalues
+	 * object which sets the fields to be retrieved.
+	 * 
 	 * @param fieldnames
 	 * @return
 	 */
-	public static NameValueList generatePopulatedNameValueList(List<NameValue> namevalues){
+	public static NameValueList generatePopulatedNameValueList(
+			List<NameValue> namevalues) {
 
 		NameValueList namevalueList = new NameValueList();
 		StringBuffer arrayType = new StringBuffer();
 		arrayType.append("name_value[");
 		arrayType.append(namevalues.size());
-		arrayType.append("]");		
+		arrayType.append("]");
 		Array array = new Array();
 		ArrayType arrTypeObj = new ArrayType();
 		arrTypeObj.setArrayType(arrayType.toString());
-		
+
 		ArrayAttributes atts = new ArrayAttributes();
 		atts.setArrayType(arrTypeObj);
-		
+
 		namevalueList.setArrayAttributes(atts);
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder;
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+				.newInstance();
+		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-	        Document document = documentBuilder.newDocument();
-	        
-	        for( NameValue namevalue : namevalues){
-	        	Element name_value = document.createElement("name_value");
-	        	
-	        	Element name = document.createElement("name");
-	        	Element value = document.createElement("value");
-	        	
-	        	name.appendChild(document.createTextNode(namevalue.getName()));
-	        	value.appendChild(document.createTextNode(namevalue.getValue()));
-	        	name_value.appendChild(name);
-	        	name_value.appendChild(value);
-	        	
-	    		array.getAnyList().add(name_value);
-	        		    		
-	        }
-	        
-	        namevalueList.setArray(array);
-	        
+			Document document = documentBuilder.newDocument();
+
+			for (NameValue namevalue : namevalues) {
+				Element name_value = document.createElement("name_value");
+
+				Element name = document.createElement("name");
+				Element value = document.createElement("value");
+
+				name.appendChild(document.createTextNode(namevalue.getName()));
+				value.appendChild(document.createTextNode(namevalue.getValue()));
+				name_value.appendChild(name);
+				name_value.appendChild(value);
+
+				array.getAnyList().add(name_value);
+			}
+
+			namevalueList.setArray(array);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			return null;
@@ -300,11 +306,7 @@ public class ClientUtils {
 		return namevalueList;
 
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * @param responseString
 	 * @return
@@ -313,73 +315,79 @@ public class ClientUtils {
 	 * @throws IOException
 	 * @throws XPathExpressionException
 	 */
-	public static HashMap <String,HashMap<String,String>>  responseFactory(String responseString) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException{
-		
-		HashMap <String,HashMap<String,String>> returnMap = new HashMap<String,HashMap<String,String>>();
-		
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	public static HashMap<String, HashMap<String, String>> responseFactory(
+			String responseString) throws ParserConfigurationException,
+			SAXException, IOException, XPathExpressionException {
+
+		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
+
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+				.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
-	    DocumentBuilder documentBuilder= documentBuilderFactory.newDocumentBuilder();
+		DocumentBuilder documentBuilder = documentBuilderFactory
+				.newDocumentBuilder();
 
-	    Document document = documentBuilder.parse(new InputSource(new StringReader(responseString)));
-		
-	    String messageName = document.getFirstChild().getNodeName();
-	
-	    XPathFactory factory = XPathFactory.newInstance();
-	    XPath xpath = factory.newXPath();
-	    
-	    xpath.setNamespaceContext(new SugarCRMNamespaceContext());
-	    XPathExpression expr = xpath.compile("//ns1:get_entry_listResponse/return/entry_list/item");
+		Document document = documentBuilder.parse(new InputSource(
+				new StringReader(responseString)));
 
-	    Object result = expr.evaluate(document, XPathConstants.NODESET);
-	    NodeList nodes = (NodeList) result;
-	    
-	    
-	    for (int i = 0; i < nodes.getLength(); i++) {
-	    	
-	    	NodeList innerNodes = nodes.item(i).getChildNodes();
-	    	    	
-	    	String id =  innerNodes.item(0).getTextContent();
-	    	
-	    	HashMap <String,String> elementData = new HashMap <String,String>();
-	    	
-	    	NodeList infoNodes = innerNodes.item(2).getChildNodes();
-	    	
-	    	for (int z=0; z < infoNodes.getLength(); z++){
-	    		String name = infoNodes.item(z).getFirstChild().getTextContent();
-	    		String value = infoNodes.item(z).getLastChild().getTextContent();
-	    		
-	    		elementData.put(name,value);		
-	    	}	    		    	
-	    	returnMap.put(id, elementData);
-	    }
+		String messageName = document.getFirstChild().getNodeName();
+
+		XPathFactory factory = XPathFactory.newInstance();
+		XPath xpath = factory.newXPath();
+
+		xpath.setNamespaceContext(new SugarCRMNamespaceContext());
+		XPathExpression expr = xpath
+				.compile("//ns1:get_entry_listResponse/return/entry_list/item");
+
+		Object result = expr.evaluate(document, XPathConstants.NODESET);
+		NodeList nodes = (NodeList) result;
+
+		for (int i = 0; i < nodes.getLength(); i++) {
+
+			NodeList innerNodes = nodes.item(i).getChildNodes();
+
+			String id = innerNodes.item(0).getTextContent();
+
+			HashMap<String, String> elementData = new HashMap<String, String>();
+
+			NodeList infoNodes = innerNodes.item(2).getChildNodes();
+
+			for (int z = 0; z < infoNodes.getLength(); z++) {
+				String name = infoNodes.item(z).getFirstChild()
+						.getTextContent();
+				String value = infoNodes.item(z).getLastChild()
+						.getTextContent();
+
+				elementData.put(name, value);
+			}
+			returnMap.put(id, elementData);
+		}
 		return returnMap;
 	}
-	
-	
-	
-	
+
 	/**
 	 * @param responseString
 	 * @return
 	 */
-	public static String extractSimpleResponse(String responseString){
-		
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	public static String extractSimpleResponse(String responseString) {
+
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+				.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
-	    DocumentBuilder documentBuilder;
+		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		    Document document = documentBuilder.parse(new InputSource(new StringReader(responseString)));
-		    String sessionID  = null;		    
-		    NodeList nl = document.getElementsByTagName("id");
-		    
-		    if (nl.getLength() > 0){
-		    	sessionID = nl.item(0).getTextContent();
-		    }
-		    
-		    return sessionID;
-		    
+			Document document = documentBuilder.parse(new InputSource(
+					new StringReader(responseString)));
+			String sessionID = null;
+			NodeList nl = document.getElementsByTagName("id");
+
+			if (nl.getLength() > 0) {
+				sessionID = nl.item(0).getTextContent();
+			}
+
+			return sessionID;
+
 		} catch (ParserConfigurationException e) {
 			logger.error(e.getMessage());
 		} catch (SAXException e) {
@@ -388,11 +396,9 @@ public class ClientUtils {
 			logger.error(e.getMessage());
 		}
 
-
 		return null;
 	}
-	
-	
+
 	/**
 	 * Auxiliary method for extractiing information from DOM objects embedded in
 	 * SOAP responses
@@ -416,16 +422,15 @@ public class ClientUtils {
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * Returns a Map containing SUgarCRM identifiers
 	 * 
 	 * @param el
 	 * @return the populated map
 	 */
-	public static Map<String,String> mapFromElement(Element el) {
-		HashMap<String,String> retMap = new HashMap<String,String>();
+	public static Map<String, String> mapFromElement(Element el) {
+		HashMap<String, String> retMap = new HashMap<String, String>();
 		NodeList nl = el.getElementsByTagName("item");
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node nd = nl.item(i);
@@ -435,61 +440,84 @@ public class ClientUtils {
 		}
 		return retMap;
 	}
-	
-	
+
 	/**
-	 * Translates the status code returned by SugarCRM into a human readable form.
+	 * Translates the status code returned by SugarCRM into a human readable
+	 * form.
 	 * 
 	 * @param sugarcrmStatusStr
 	 * @return
 	 */
-	public static String translateStatus(String sugarcrmStatusStr){
-		
-		if(sugarcrmStatusStr != null){
-		sugarcrmStatusStr = sugarcrmStatusStr.replace(" ","%");
-		EuropeanaDatasetStates actualvalue = null;
-		for(EuropeanaDatasetStates e : EuropeanaDatasetStates.values()){
-			if(e.getSysId().equals(sugarcrmStatusStr)){
-				actualvalue = e;
+	public static String translateStatus(String sugarcrmStatusStr) {
+		if (translateMap == null) {
+			setUpDatasetStates();
+		}
+
+		if (sugarcrmStatusStr != null) {
+			sugarcrmStatusStr = sugarcrmStatusStr.replace(" ", "%");
+			if (translateMap.get("sys2desc").containsKey(sugarcrmStatusStr)) {
+				return translateMap.get("sys2desc").get(sugarcrmStatusStr);
+			} else {
+				return "Unknown State";
 			}
-		}
-		
-		if(actualvalue != null){
-			return actualvalue.getDescription();
-		}
-		else{
-			return "Unknown State";
-		}
-		}
-		else{
+		} else {
 			return "No State Defined";
 		}
 	}
-		
-	
+
 	/**
-	 * Translates the status code returned by SugarCRM into a human readable form.
+	 * Translates the description of a Dataset status to its stored value.
+	 * 
+	 * @param description
+	 * @return
+	 */
+	public static String translateDsStatusDescription(String description) {
+		if (translateMap == null) {
+			setUpDatasetStates();
+		}
+
+		if (StringUtils.isNotBlank(description) && translateMap.get("desc2sys").containsKey(description)) {
+			return translateMap.get("desc2sys").get(description).replace("%", " ");
+		} else {
+			return null;
+		}
+	}
+
+	private static void setUpDatasetStates() {
+		if (translateMap == null) {
+			translateMap = new HashMap<String, Map<String,String>>();
+			translateMap.put("sys2desc", new HashMap<String, String>());
+			translateMap.put("desc2sys", new HashMap<String, String>());
+		}
+
+		for (EuropeanaDatasetStates e : EuropeanaDatasetStates.values()) {
+			translateMap.get("sys2desc").put(e.getSysId(), e.getDescription());
+			translateMap.get("desc2sys").put(e.getDescription(), e.getSysId());
+		}
+	}
+
+	/**
+	 * Translates the status code returned by SugarCRM into a human readable
+	 * form.
 	 * 
 	 * @param sugarcrmStatusStr
 	 * @return
 	 */
-	public static String translateType(String provtype){
-		if(provtype != null){
-		EuropeanaOrgRole actualvalue = null;
-		for(EuropeanaOrgRole e : EuropeanaOrgRole.values()){
-			if(e.getSysId().equals(provtype)){
-				actualvalue = e;
+	public static String translateType(String provtype) {
+		if (provtype != null) {
+			EuropeanaOrgRole actualvalue = null;
+			for (EuropeanaOrgRole e : EuropeanaOrgRole.values()) {
+				if (e.getSysId().equals(provtype)) {
+					actualvalue = e;
+				}
 			}
-		}
-		
-		if(actualvalue != null){
-			return actualvalue.getDescription();
-		}
-		else{
-			return "Unknown Type";
-		}
-		}
-		else{
+
+			if (actualvalue != null) {
+				return actualvalue.getDescription();
+			} else {
+				return "Unknown Type";
+			}
+		} else {
 			return "Undefined";
 		}
 	}
