@@ -65,7 +65,7 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 				message.append("portal.name: ").append(portalName).append("\n");
 				message.append("portal.server: ").append(portalServer).append("\n");
 				message.append("\n");
-				message.append("Missig tag:").append(code);
+				message.append("Missing tag:").append(code);
 				try {
 					emailService.sendException("Missing locale key:"+code, message.toString());
 				} catch (EmailServiceException e) {
