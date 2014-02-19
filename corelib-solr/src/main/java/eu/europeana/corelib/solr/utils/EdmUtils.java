@@ -77,9 +77,10 @@ public class EdmUtils {
 			prefix=PREFIX;
 		}
 		RDF rdf = new RDF();
+		String type = getType(fullBean);
 		appendCHO(rdf, fullBean.getProvidedCHOs());
 		appendAggregation(rdf, fullBean.getAggregations());
-		appendProxy(rdf, fullBean.getProxies());
+		appendProxy(rdf, fullBean.getProxies(),type);
 		appendEuropeanaAggregation(rdf, fullBean);
 		appendAgents(rdf, fullBean.getAgents());
 		appendConcepts(rdf, fullBean.getConcepts());
@@ -99,6 +100,15 @@ public class EdmUtils {
 			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		} catch (UnsupportedEncodingException e) {
 			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+		}
+		return null;
+	}
+
+	private static String getType(FullBeanImpl fullBean) {
+		for(ProxyImpl prx :fullBean.getProxies()){
+			if(!prx.isEuropeanaProxy()){
+				return prx.getEdmType().toString();
+			}
 		}
 		return null;
 	}
@@ -282,7 +292,7 @@ public class EdmUtils {
 		return null;
 	}
 
-	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies) {
+	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies,String typeStr) {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
@@ -323,7 +333,7 @@ public class EdmUtils {
 				proxy.setProxyInList(pInList);
 			}
 			Type1 type = new Type1();
-				type.setType(EdmType.valueOf(prx.getEdmType().toString()
+				type.setType(EdmType.valueOf(typeStr
 						.replace("3D", "_3_D")));
 			proxy.setType(type);
 
