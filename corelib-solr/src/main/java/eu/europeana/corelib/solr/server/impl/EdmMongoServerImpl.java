@@ -135,6 +135,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			if (re.getCause() != null
 				&& re.getCause() instanceof MappingException) {
 				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
+				
 			}
 			throw re;
 		}

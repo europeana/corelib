@@ -28,6 +28,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.HasType;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
@@ -102,6 +103,13 @@ public final class ProxyFieldInput {
 		solrInputDocument = SolrUtils.addFieldFromLiteral(solrInputDocument,
 				year, EdmLabel.PROXY_EDM_YEAR);
 		}
+		}
+		if(proxy.getHasTypeList()!=null){
+			for(HasType ht : proxy.getHasTypeList()){
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, ht,
+						EdmLabel.PROXY_EDM_HAS_TYPE);
+			}
 		}
 		// Retrieve the dcterms and dc namespace fields
 		List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy
