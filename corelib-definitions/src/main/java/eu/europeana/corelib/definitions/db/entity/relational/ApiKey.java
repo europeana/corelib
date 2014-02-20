@@ -32,9 +32,9 @@ public interface ApiKey extends UserConnected<String> {
 	String getPrivateKey();
 
 	void setPrivateKey(String privateKey);
-	
+
 	String getApplicationName();
-	
+
 	void setApplicationName(String applicationName);
 
 	long getUsageLimit();
