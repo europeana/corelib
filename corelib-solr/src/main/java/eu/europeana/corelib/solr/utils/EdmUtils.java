@@ -208,7 +208,11 @@ public class EdmUtils {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
 		EuropeanaAggregation europeanaAggregation = fBean
 				.getEuropeanaAggregation();
-		aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
+		if (europeanaAggregation.getAbout().startsWith(PREFIX)) {
+			aggregation.setAbout(europeanaAggregation.getAbout());
+		} else {
+			aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
+		}
 
 		if (!addAsObject(aggregation, AggregatedCHO.class,
 				europeanaAggregation.getAggregatedCHO())) {
@@ -296,7 +300,11 @@ public class EdmUtils {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
-			proxy.setAbout(PREFIX + prx.getAbout());
+			if (prx.getAbout().startsWith(PREFIX)) {
+				proxy.setAbout(prx.getAbout());
+			} else {
+				proxy.setAbout(PREFIX + prx.getAbout());
+			}
 			EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 			europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
 			proxy.setEuropeanaProxy(europeanaProxy);
@@ -431,7 +439,11 @@ public class EdmUtils {
 		List<Aggregation> aggregationList = new ArrayList<Aggregation>();
 		for (AggregationImpl aggr : aggregations) {
 			Aggregation aggregation = new Aggregation();
-			aggregation.setAbout(PREFIX + aggr.getAbout());
+			if (aggr.getAbout().startsWith(PREFIX)) {
+				aggregation.setAbout(aggr.getAbout());
+			} else {
+				aggregation.setAbout(PREFIX + aggr.getAbout());
+			}
 			if (!addAsObject(aggregation, AggregatedCHO.class,
 					aggr.getAggregatedCHO())) {
 				AggregatedCHO cho = new AggregatedCHO();
@@ -500,7 +512,12 @@ public class EdmUtils {
 		List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
 		for (ProvidedCHOImpl pCho : chos) {
 			ProvidedCHOType pChoJibx = new ProvidedCHOType();
-			pChoJibx.setAbout(PREFIX + pCho.getAbout());
+			if (pCho.getAbout().startsWith(PREFIX)) {
+				pChoJibx.setAbout(pCho.getAbout());
+			} else {
+				pChoJibx.setAbout(PREFIX + pCho.getAbout());
+			}
+			
 			addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
 			pChoList.add(pChoJibx);
 		}
