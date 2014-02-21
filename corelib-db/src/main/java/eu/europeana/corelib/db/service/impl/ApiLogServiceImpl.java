@@ -103,7 +103,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 
 	/**
 	 * by users
-	 * db.logs.group({
+	 * db.logEntries.group({
 	 *   key: {apiKey: true},
 	 *   cond: {},
 	 *   initial: {count:0},
@@ -121,7 +121,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 
 	/**
 	 * Query by types
-	 * db.logs.group({
+	 * db.logEntries.group({
 	 *   key: {recordType: true, profile: true},
 	 *   cond: {},
 	 *   initial: {count:0},
@@ -148,7 +148,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	/**
-	 * db.logs.group({
+	 * db.logEntries.group({
 	 *   key: {apiKey: true},
 	 *   cond: {
 	 *     "timestamp": {

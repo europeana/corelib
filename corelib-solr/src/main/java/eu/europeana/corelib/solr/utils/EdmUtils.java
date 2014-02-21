@@ -63,7 +63,7 @@ public class EdmUtils {
 	private static IBindingFactory bfact;
 	private final static String SPACE = " ";
 	private final static String PREFIX = "http://data.europeana.eu";
-	private static String prefix="";
+	private static String prefix = "";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -73,14 +73,14 @@ public class EdmUtils {
 	 * @return The resulting EDM string in RDF-XML
 	 */
 	public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
-		if(isUim){
-			prefix=PREFIX;
+		if (isUim) {
+			prefix = PREFIX;
 		}
 		RDF rdf = new RDF();
 		String type = getType(fullBean);
 		appendCHO(rdf, fullBean.getProvidedCHOs());
 		appendAggregation(rdf, fullBean.getAggregations());
-		appendProxy(rdf, fullBean.getProxies(),type);
+		appendProxy(rdf, fullBean.getProxies(), type);
 		appendEuropeanaAggregation(rdf, fullBean);
 		appendAgents(rdf, fullBean.getAgents());
 		appendConcepts(rdf, fullBean.getConcepts());
@@ -105,8 +105,8 @@ public class EdmUtils {
 	}
 
 	private static String getType(FullBeanImpl fullBean) {
-		for(ProxyImpl prx :fullBean.getProxies()){
-			if(!prx.isEuropeanaProxy()){
+		for (ProxyImpl prx :fullBean.getProxies()) {
+			if (!prx.isEuropeanaProxy()) {
 				return prx.getEdmType().toString();
 			}
 		}
@@ -208,12 +208,12 @@ public class EdmUtils {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
 		EuropeanaAggregation europeanaAggregation = fBean
 				.getEuropeanaAggregation();
-		aggregation.setAbout(prefix+europeanaAggregation.getAbout());
+		aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
 
 		if (!addAsObject(aggregation, AggregatedCHO.class,
 				europeanaAggregation.getAggregatedCHO())) {
 			AggregatedCHO agCHO = new AggregatedCHO();
-			agCHO.setResource(prefix+fBean.getProvidedCHOs().get(0).getAbout());
+			agCHO.setResource(prefix + fBean.getProvidedCHOs().get(0).getAbout());
 			aggregation.setAggregatedCHO(agCHO);
 		}
 		addAsList(aggregation, Aggregates.class,
@@ -292,11 +292,11 @@ public class EdmUtils {
 		return null;
 	}
 
-	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies,String typeStr) {
+	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
-			proxy.setAbout(prefix + prx.getAbout());
+			proxy.setAbout(PREFIX + prx.getAbout());
 			EuropeanaProxy europeanaProxy = new EuropeanaProxy();
 			europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
 			proxy.setEuropeanaProxy(europeanaProxy);
@@ -321,15 +321,15 @@ public class EdmUtils {
 
 			String[] pIn  = prx.getProxyIn();
 			List<ProxyIn> pInList= null;
-			if(pIn!=null){
+			if (pIn != null) {
 				pInList = new ArrayList<ProxyIn>();
-				for(int i =0 ;i<pIn.length;i++){
+				for (int i = 0; i < pIn.length; i++) {
 					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(prefix+ pIn[i]);
+					proxyIn.setResource(prefix + pIn[i]);
 					pInList.add(proxyIn);
 				}
 			}
-			if(pInList!=null){
+			if (pInList != null) {
 				proxy.setProxyInList(pInList);
 			}
 			Type1 type = new Type1();
@@ -788,9 +788,9 @@ public class EdmUtils {
 						getSetterMethodName(clazz, true), List.class);
 				if (prefix.length == 1) {
 					String[] valNew = new String[vals.length];
-					int i=0;
-					for (String val:vals){
-						valNew[i]=prefix+val;
+					int i = 0;
+					for (String val : vals) {
+						valNew[i] = prefix + val;
 						i++;
 					}
 					method.invoke(dest, convertListFromArray(clazz, valNew));
@@ -817,15 +817,15 @@ public class EdmUtils {
 	private static String getSetterMethodName(Class<?> clazz, boolean list) {
 		StringBuilder sb = new StringBuilder("set");
 		String clazzName = clazz.getSimpleName();
-		if(StringUtils.equals("Rights", clazzName)&& list){
+		if (StringUtils.equals("Rights", clazzName)&& list) {
 			clazzName = "Right";
 		}
-		if(StringUtils.equals("SameAs", clazzName) && list){
-			clazzName="SameA";
+		if (StringUtils.equals("SameAs", clazzName) && list) {
+			clazzName = "SameA";
 		}
-		clazzName = StringUtils.strip(clazzName,"_1");
-		clazzName = StringUtils.strip(clazzName,"1");
-		
+		clazzName = StringUtils.strip(clazzName, "_1");
+		clazzName = StringUtils.strip(clazzName, "1");
+
 		sb.append(clazzName);
 		if (list) {
 			sb.append("List");
@@ -913,19 +913,14 @@ public class EdmUtils {
 						}
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				}
-
 			}
 			return list;
 		}
@@ -987,19 +982,14 @@ public class EdmUtils {
 						return (T) obj;
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 				}
-
 			}
 		}
 		return null;
