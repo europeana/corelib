@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.zookeeper.proto.op_result_t;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -1028,7 +1029,10 @@ public class EdmUtils {
 	}
 
 	private static boolean isUri(String str) {
-		if (StringUtils.startsWith(str, "http://")) {
+		if (   StringUtils.startsWith(str, "http://")
+			|| StringUtils.startsWith(str, "https://")
+			|| StringUtils.startsWith(str, "urn:")
+			|| StringUtils.startsWith(str, "#")) {
 			return true;
 		}
 		return false;
