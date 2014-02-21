@@ -208,7 +208,7 @@ public class EdmUtils {
 		EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
 		EuropeanaAggregation europeanaAggregation = fBean
 				.getEuropeanaAggregation();
-		if (europeanaAggregation.getAbout().startsWith(PREFIX)) {
+		if (isUri(europeanaAggregation.getAbout())) {
 			aggregation.setAbout(europeanaAggregation.getAbout());
 		} else {
 			aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
@@ -217,7 +217,11 @@ public class EdmUtils {
 		if (!addAsObject(aggregation, AggregatedCHO.class,
 				europeanaAggregation.getAggregatedCHO())) {
 			AggregatedCHO agCHO = new AggregatedCHO();
-			agCHO.setResource(prefix + fBean.getProvidedCHOs().get(0).getAbout());
+			if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
+				agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
+			} else {
+				agCHO.setResource(PREFIX + fBean.getProvidedCHOs().get(0).getAbout());
+			}
 			aggregation.setAggregatedCHO(agCHO);
 		}
 		addAsList(aggregation, Aggregates.class,
@@ -300,7 +304,7 @@ public class EdmUtils {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
-			if (prx.getAbout().startsWith(PREFIX)) {
+			if (isUri(prx.getAbout())) {
 				proxy.setAbout(prx.getAbout());
 			} else {
 				proxy.setAbout(PREFIX + prx.getAbout());
@@ -333,7 +337,11 @@ public class EdmUtils {
 				pInList = new ArrayList<ProxyIn>();
 				for (int i = 0; i < pIn.length; i++) {
 					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(prefix + pIn[i]);
+					if (isUri(pIn[i])) {
+						proxyIn.setResource(pIn[i]);
+					} else {
+						proxyIn.setResource(PREFIX + pIn[i]);
+					}
 					pInList.add(proxyIn);
 				}
 			}
@@ -356,7 +364,7 @@ public class EdmUtils {
 					prx.getEdmIsRepresentationOf());
 			addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
 			addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-			addAsObject(proxy, ProxyFor.class, prefix + prx.getProxyFor());
+			addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
 			addAsList(proxy, Year.class, prx.getYear());
 
 			List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
@@ -439,15 +447,18 @@ public class EdmUtils {
 		List<Aggregation> aggregationList = new ArrayList<Aggregation>();
 		for (AggregationImpl aggr : aggregations) {
 			Aggregation aggregation = new Aggregation();
-			if (aggr.getAbout().startsWith(PREFIX)) {
+			if (isUri(aggr.getAbout())) {
 				aggregation.setAbout(aggr.getAbout());
 			} else {
 				aggregation.setAbout(PREFIX + aggr.getAbout());
 			}
-			if (!addAsObject(aggregation, AggregatedCHO.class,
-					aggr.getAggregatedCHO())) {
+			if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
 				AggregatedCHO cho = new AggregatedCHO();
-				cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
+				if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
+					cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
+				} else {
+					cho.setResource(PREFIX + rdf.getProvidedCHOList().get(0).getAbout());
+				}
 				aggregation.setAggregatedCHO(cho);
 			}
 			if (!addAsObject(aggregation, DataProvider.class,
@@ -512,7 +523,7 @@ public class EdmUtils {
 		List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
 		for (ProvidedCHOImpl pCho : chos) {
 			ProvidedCHOType pChoJibx = new ProvidedCHOType();
-			if (pCho.getAbout().startsWith(PREFIX)) {
+			if (isUri(pCho.getAbout())) {
 				pChoJibx.setAbout(pCho.getAbout());
 			} else {
 				pChoJibx.setAbout(PREFIX + pCho.getAbout());
@@ -728,7 +739,11 @@ public class EdmUtils {
 				Method method = dest.getClass().getMethod(
 						getSetterMethodName(clazz, false), clazz);
 				Object obj = clazz.newInstance();
-				((ResourceType) obj).setResource(str);
+				if (isUri(str)) {
+					((ResourceType) obj).setResource(str);
+				} else {
+					((ResourceType) obj).setResource(PREFIX + str);
+				}
 				method.invoke(dest, obj);
 				return true;
 			}
