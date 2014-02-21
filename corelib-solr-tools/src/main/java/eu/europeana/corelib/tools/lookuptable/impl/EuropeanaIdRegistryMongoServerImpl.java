@@ -153,15 +153,10 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		} else {
 			
 			// Check if the identifier is already registered but it has been marked as deleted
-			if(retrievedeuropeanaID.isDeleted()){
-				lookupresult.setState(LookupState.ID_REGISTERED);
-				lookupresult.setEuropeanaID(europeanaIDString);
-				return lookupresult;
-			}
-			else{
+
 				constructedeuropeanaId.setId(retrievedeuropeanaID.getId());
 				constructedeuropeanaId.setDeleted(false);
-			}
+
 			
 		
 		}
@@ -181,7 +176,8 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 						retrievedeuropeanaID.getXmlchecksum()))		
 				 {
 			
-			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())){
+			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID()) 
+					&& !retrievedeuropeanaID.isDeleted()){
 				
 				generateFailedRecord(constructedeuropeanaId, xml,null,
 						LookupState.DUPLICATE_INCOLLECTION);
@@ -212,11 +208,9 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 						retrievedeuropeanaID.getOrid())
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
-			
-			
-			
-			if(constructedeuropeanaId.getSessionID().equals(
-					retrievedeuropeanaID.getSessionID())){
+
+			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())
+					&& !retrievedeuropeanaID.isDeleted()){
 				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
 				
 				generateFailedRecord(constructedeuropeanaId, xml, null,
@@ -229,10 +223,6 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				lookupresult.setState(LookupState.IDENTICAL);
 				retrievedeuropeanaID.setSessionID(constructedeuropeanaId.getSessionID());
 			}
-			else{
-				System.out.println("None of the above");
-			}
-			
 			
 			return processlookupresult(retrievedeuropeanaID,updateops, lookupresult,sessionID);
 		}
@@ -305,6 +295,13 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		return lookupresult;
 	}
 
+	/**
+	 * @param retrievedeuropeanaID
+	 * @param updateops
+	 * @param lookupresult
+	 * @param sessionID
+	 * @return
+	 */
 	private LookupResult  processlookupresult(EuropeanaIdRegistry retrievedeuropeanaID,
 			UpdateOperations<EuropeanaIdRegistry> updateops,LookupResult lookupresult,String sessionID){
 		// Update Session ID
@@ -319,6 +316,10 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	}
 	
 	
+	/**
+	 * @param constructedeuropeanaId
+	 * @return
+	 */
 	private boolean checkForChangedCollection(
 			EuropeanaIdRegistry constructedeuropeanaId) {
 		EuropeanaIdRegistry retrievedId = retrieveFromOriginalXML(
