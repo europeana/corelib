@@ -55,6 +55,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	private final static String SESSION = "sessionID";
 	private final static String CID = "cid";
 	private final static String XMLCHECKSUM = "xmlchecksum";
+	private final static String ISDELETED = "deleted";
 	private EuropeanaIdMongoServer europeanaIdMongoServer;
 
 	/**
@@ -129,7 +130,8 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		constructedeuropeanaId.setLast_checked(new Date());
 		constructedeuropeanaId.setSessionID(sessionID);
 		constructedeuropeanaId.setXmlchecksum(xmlChecksum);
-
+		constructedeuropeanaId.setDeleted(false);
+		
 		// Retrieve by the EuropeanaID to check if the item is already
 		// registered
 		EuropeanaIdRegistry retrievedeuropeanaID = retrieveEuropeanaIdFromNew(europeanaIDString);
@@ -150,19 +152,12 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				updateops.set(CID, collectionID);
 				return lookupresult;
 			}
-		} else {
-			
-			// Check if the identifier is already registered but it has been marked as deleted
-
+		}
+		else {
 				constructedeuropeanaId.setId(retrievedeuropeanaID.getId());
-				constructedeuropeanaId.setDeleted(false);
-
-			
-		
 		}
 
 		// Otherwise proceed to UUID scenaria
-
 		// First check if its an Update (eid cid origid are the same, but xml is
 		// different)
 		// Update the XML checksum
@@ -176,9 +171,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 						retrievedeuropeanaID.getXmlchecksum()))		
 				 {
 			
-			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID()) 
-					&& !retrievedeuropeanaID.isDeleted()){
-				
+			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())){
 				generateFailedRecord(constructedeuropeanaId, xml,null,
 						LookupState.DUPLICATE_INCOLLECTION);
 				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
@@ -209,8 +202,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				&& constructedeuropeanaId.getXmlchecksum().equals(
 						retrievedeuropeanaID.getXmlchecksum())) {
 
-			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())
-					&& !retrievedeuropeanaID.isDeleted()){
+			if(constructedeuropeanaId.getSessionID().equals(retrievedeuropeanaID.getSessionID())){
 				lookupresult.setState(LookupState.DUPLICATE_INCOLLECTION);
 				
 				generateFailedRecord(constructedeuropeanaId, xml, null,
@@ -277,18 +269,18 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				&& !constructedeuropeanaId.getOrid().equals(
 						retrievedeuropeanaID.getOrid())
 				&& !constructedeuropeanaId.getXmlchecksum().equals(
-						retrievedeuropeanaID.getXmlchecksum())) {
+						retrievedeuropeanaID.getXmlchecksum())) 
+		{
 			
-			lookupresult
-			.setState(LookupState.DERIVED_DUPLICATE_INCOLLECTION);
-			
-			
+			lookupresult.setState(LookupState.DERIVED_DUPLICATE_INCOLLECTION);
+						
 			String message = "Records " + constructedeuropeanaId.getOrid() + " and " + retrievedeuropeanaID.getOrid() +
 					" resulted in the creation of a common identifier during Europeana UUID generation (" +
 					constructedeuropeanaId.getEid() + ")";
 			
 			generateFailedRecord(constructedeuropeanaId, xml, message, 
 					LookupState.DERIVED_DUPLICATE_INCOLLECTION);
+
 		}
 
 
@@ -459,8 +451,18 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	@Override
 	public List<EuropeanaIdRegistry> retrieveEuropeanaIdFromOriginal(
 			String originalId, String collectionid) {
-		return datastore.find(EuropeanaIdRegistry.class).field(ORID)
-				.equal(originalId).asList();
+		List<EuropeanaIdRegistry> retlist = new ArrayList<EuropeanaIdRegistry>();
+		
+		List<EuropeanaIdRegistry> list = datastore.find(EuropeanaIdRegistry.class).field(ORID)
+		.equal(originalId).asList();
+		
+		for(EuropeanaIdRegistry entry : list){
+			if(!entry.isDeleted()){
+				retlist.add(entry);
+			}
+		}
+		
+		return retlist;
 	}
 
 	/* (non-Javadoc)
@@ -476,7 +478,12 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		if (retrList.isEmpty()) {
 			return null;
 		} else {
-			return retrList.get(0);
+			for(EuropeanaIdRegistry entry : retrList){
+				if(!entry.isDeleted()){
+					return entry;
+				}
+			}
+			return null;
 		}
 	}
 
