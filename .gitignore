@@ -10,3 +10,4 @@
 # Temp files
 *~
 *.bak
+.DS_Store
