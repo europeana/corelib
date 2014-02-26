@@ -32,6 +32,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getBegin()!=null){
+				ops.unset("begin");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getDateList() != null) {
@@ -43,6 +48,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("dcDate", date);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getDcDate()!=null){
+				ops.unset("dcDate");
+				update = true;
 			}
 		}
 
@@ -56,6 +66,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("dcIdentifier", identifier);
 					update = update | true;
 				}
+			}
+		} else {
+			if (agent.getDcIdentifier()!=null){
+				ops.unset("dcIdentifier");
+				update = true;
 			}
 		}
 
@@ -72,7 +87,13 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getRdaGr2BiographicalInformation()!=null){
+				ops.unset("rdaGr2BiographicalInformation");
+				update = true;
+			}
 		}
+		
 
 		if (jibxAgent.getDateOfBirth() != null) {
 			Map<String, List<String>> dob = MongoUtils
@@ -86,6 +107,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getRdaGr2DateOfBirth()!=null){
+				ops.unset("rdaGr2DateOfBirth");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getDateOfDeath() != null) {
@@ -98,6 +124,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("rdaGr2DateOfDeath", dod);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getRdaGr2DateOfDeath()!=null){
+				ops.unset("rdaGr2DateOfDeath");
+				update = true;
 			}
 		}
 
@@ -113,7 +144,13 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getRdaGr2DateOfEstablishment()!=null){
+				ops.unset("rdaGr2DateOfEstablishment");
+				update = true;
+			}
 		}
+		
 
 		if (jibxAgent.getDateOfTermination() != null) {
 			Map<String, List<String>> dot = MongoUtils
@@ -127,6 +164,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = update | true;
 				}
 			}
+		} else {
+			if (agent.getRdaGr2DateOfTermination()!=null){
+				ops.unset("rdaGr2DateOfTermination");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getGender() != null) {
@@ -139,6 +181,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("rdaGr2Gender", gender);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getRdaGr2Gender()!=null){
+				ops.unset("rdaGr2Gender");
+				update = true;
 			}
 		}
 
@@ -155,6 +202,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getRdaGr2ProfessionOrOccupation()!=null){
+				ops.unset("rdaGr2ProfessionOrOccupation");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getHasMetList() != null) {
@@ -166,6 +218,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("edmHasMet", hasMet);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getEdmHasMet()!=null){
+				ops.unset("edmHasMet");
+				update = true;
 			}
 		}
 
@@ -181,6 +238,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getEdmIsRelatedTo()!=null){
+				ops.unset("edmIsRelatedTo");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getNameList() != null) {
@@ -194,6 +256,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 				}
 			}
 
+		} else {
+			if (agent.getFoafName()!=null){
+				ops.unset("foafName");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getSameAList() != null) {
@@ -207,6 +274,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getOwlSameAs()!=null){
+				ops.unset("owlSameAs");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getEnd() != null) {
@@ -218,6 +290,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("end", end);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getEnd()!=null){
+				ops.unset("end");
+				update = true;
 			}
 		}
 
@@ -231,6 +308,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					update = true;
 				}
 			}
+		} else {
+			if (agent.getNote()!=null){
+				ops.unset("note");
+				update = true;
+			}
 		}
 
 		if (jibxAgent.getAltLabelList() != null) {
@@ -242,6 +324,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("altLabel", altLabel);
 					update = true;
 				}
+			}
+		} else {
+			if (agent.getAltLabel()!=null){
+				ops.unset("altLabel");
+				update = true;
 			}
 		}
 
@@ -255,6 +342,11 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 					ops.set("prefLabel", prefLabel);
 					update = true;
 				}
+			}
+		}else {
+			if (agent.getPrefLabel()!=null){
+				ops.unset("predfLabel");
+				update = true;
 			}
 		}
 		if (update) {

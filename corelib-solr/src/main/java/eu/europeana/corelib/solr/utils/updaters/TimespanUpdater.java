@@ -35,6 +35,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 				}
 			}
 
+		} else {
+			if (mongoTimespan.getBegin()!=null){
+				ops.unset("begin");
+				update = true;
+			}
 		}
 		if (timeSpan.getEnd() != null) {
 			Map<String, List<String>> end = MongoUtils
@@ -45,6 +50,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 					ops.set("end", end);
 					update = true;
 				}
+			}
+		}else {
+			if (mongoTimespan.getEnd()!=null){
+				ops.unset("end");
+				update = true;
 			}
 		}
 
@@ -58,6 +68,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 					update = true;
 				}
 			}
+		} else {
+			if (mongoTimespan.getNote()!=null){
+				ops.unset("note");
+				update = true;
+			}
 		}
 
 		if (timeSpan.getAltLabelList() != null) {
@@ -70,6 +85,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 					ops.set("altLabel", altLabel);
 					update = true;
 				}
+			}
+		} else {
+			if (mongoTimespan.getAltLabel()!=null){
+				ops.unset("altLAbel");
+				update = true;
 			}
 		}
 
@@ -86,6 +106,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 					update = true;
 				}
 			}
+		} else {
+			if (mongoTimespan.getPrefLabel()!=null){
+				ops.unset("prefLabel");
+				update = true;
+			}
 		}
 
 		if (timeSpan.getHasPartList() != null) {
@@ -99,6 +124,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 					ops.set("dctermsHasPart", hasPart);
 					update = true;
 				}
+			}
+		} else {
+			if (mongoTimespan.getDctermsHasPart()!=null){
+				ops.unset("dctermsHasPart");
+				update = true;
 			}
 		}
 
@@ -119,6 +149,11 @@ public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 			}
 			ops.set("owlSameAs", StringArrayUtils.toArray(owlSameAs));
 			update = true;
+		} else {
+			if (mongoTimespan.getOwlSameAs()!=null){
+				ops.unset("owlSameAs");
+				update = true;
+			}
 		}
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
