@@ -16,15 +16,18 @@ public class WikipediaJsonTest {
 
 	@Test
 	public void wikipediaJsonTest() throws IOException {
-		String json = IOUtils.toString(getClass().getResourceAsStream("/testdata/wikipedia_langlinks.json"));
+		String json = IOUtils.toString(getClass().getResourceAsStream(
+				"/testdata/wikipedia_langlinks.json"));
 		Gson gson = new Gson();
 		WikipediaQuery query = gson.fromJson(json, WikipediaQuery.class);
 		assertNotNull("Parser returned null", query);
 		assertNotNull("Query in results shouldn't be null", query.getQuery());
-		assertNotNull("Map of pages shouldn't be null", query.getQuery().getPages());
-		
-		assertEquals("Not exactly 1 page in result", query.getQuery().getPages().size(), 1);
-		
+		assertNotNull("Map of pages shouldn't be null", query.getQuery()
+				.getPages());
+
+		assertEquals("Not exactly 1 page in result", query.getQuery()
+				.getPages().size(), 1);
+
 	}
-	
+
 }
