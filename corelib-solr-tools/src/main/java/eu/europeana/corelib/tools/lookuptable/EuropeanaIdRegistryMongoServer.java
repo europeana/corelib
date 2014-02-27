@@ -5,6 +5,10 @@ import java.util.Map;
 import com.google.code.morphia.Datastore;
 
 
+/**
+ * @author Georgios Markakis (gwarkx@hotmail.com)
+ * @since Feb 27, 2014
+ */
 public interface EuropeanaIdRegistryMongoServer {
 
 	public abstract EuropeanaIdMongoServer getEuropeanaIdMongoServer();
