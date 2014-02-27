@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -61,6 +60,8 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.logging.Log;
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
@@ -112,7 +113,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
-	
+
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
 
@@ -121,14 +122,17 @@ public class SearchServiceImpl implements SearchService {
 
 	@Value("#{europeanaProperties['solr.password']}")
 	private String password;
-	
+
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 
 	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-	
+
 	private String mltFields;
 
-	private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
+	@Log
+	private Logger log;
+
+	// private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
 
 	// private static final String TERMS_QUERY_TYPE = "/terms";
 
@@ -143,20 +147,18 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
 		long t0 = new Date().getTime();
-		
+
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null && similarItems) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
 			} catch (SolrServerException e) {
-				log.severe("SolrServerException: " + e.getMessage());
+				log.error("SolrServerException: " + e.getMessage());
 			}
 		}
 
 		return fullBean;
-		
-		
 	}
 
 	@Override
@@ -168,7 +170,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public FullBean resolve(String europeanaObjectId,boolean similarItems) throws SolrTypeException {
-		
+
 		FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
 		FullBean fullBeanNew = fullBean;
 		if(fullBean!=null){
@@ -192,13 +194,12 @@ public class SearchServiceImpl implements SearchService {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
 			} catch (SolrServerException e) {
-				log.severe("SolrServerException: " + e.getMessage());
+				log.error("SolrServerException: " + e.getMessage());
 			}
 		}
 		return fullBean;
 	}
-	
-	
+
 	@Override
 	public String resolveId(String europeanaObjectId) {
 		String lastId = resolveIdInternal(europeanaObjectId);
@@ -214,36 +215,35 @@ public class SearchServiceImpl implements SearchService {
 		return lastId;
 	}
 
-
 	@Override
 	public String resolveId(String collectionId, String recordId) {
 		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
 				recordId));
 	}
-	
+
 	private String resolveIdInternal(String europeanaObjectId){
 		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
-		if(newId!=null){
+		if (newId != null) {
 			idServer.updateTime(newId.getNewId(), europeanaObjectId);
 			return newId.getNewId();
 		}
-		
+
 		newId = idServer
 				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + europeanaObjectId);
-		if(newId!=null){
+		if (newId != null) {
 			idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX +europeanaObjectId);
 			return newId.getNewId();
 		}
-		
+
 		newId = idServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX+europeanaObjectId);
-		
-		if(newId!=null){
+
+		if (newId != null) {
 			idServer.updateTime(newId.getNewId(), PORTAL_PREFIX +europeanaObjectId);
 			return newId.getNewId();
 		}
 		return null;
 	}
-	
+
 	@Override
 	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException {
@@ -272,7 +272,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.count", count);
 		solrQuery.set("rows", 1);
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
-		log.fine(solrQuery.toString());
+		log.debug(solrQuery.toString());
 
 		QueryResponse response = solrServer.query(solrQuery);
 		logTime("MoreLikeThis", response.getElapsedTime());
@@ -358,7 +358,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 
 				try {
-					log.fine("Solr query is: " + solrQuery);
+					log.debug("Solr query is: " + solrQuery);
 					query.setExecutedQuery(solrQuery.toString());
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
@@ -372,11 +372,11 @@ public class SearchServiceImpl implements SearchService {
 						resultSet.setQueryFacets(queryResponse.getFacetQuery());
 					}
 				} catch (SolrServerException e) {
-					log.severe("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
+					log.error("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				} catch (SolrException e) {
-					log.severe("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
+					log.error("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
@@ -398,13 +398,21 @@ public class SearchServiceImpl implements SearchService {
 			throws SolrTypeException {
 		return suggestions(query, pageSize, null);
 	}
-	
+
 	@Override
-	public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
-			throws SolrTypeException {
-		Query query = new Query(queryString).setParameter("rows", "0").setParameter("facet", "true")
-				.setRefinements(refinements).setParameter("facet.mincount", "1").setParameter("facet.limit", "750")
+	public List<Count> createCollections(String facetFieldName,
+			String queryString, String... refinements)
+				throws SolrTypeException {
+
+		Query query = new Query(queryString)
+				.setParameter("rows", "0")
+				.setParameter("facet", "true")
+				.setRefinements(refinements)
+				.setParameter("facet.mincount", "1")
+				.setParameter("facet.limit", "750")
 				.setAllowSpellcheck(false);
+		query.setFacet(facetFieldName);
+
 		final ResultSet<BriefBean> response = search(BriefBean.class, query);
 		for (FacetField facetField : response.getFacetFields()) {
 			if (facetField.getName().equalsIgnoreCase(facetFieldName)) {
@@ -435,15 +443,15 @@ public class SearchServiceImpl implements SearchService {
 		QueryResponse response;
 		Map<String, Integer> queryFacets = null;
 		try {
-			log.fine("Solr query is: " + solrQuery.toString());
+			log.debug("Solr query is: " + solrQuery.toString());
 			response = solrServer.query(solrQuery);
 			logTime("queryFacetSearch", response.getElapsedTime());
 			queryFacets = response.getFacetQuery();
 		} catch (SolrServerException e) {
-			log.severe("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
+			log.error("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
 			e.printStackTrace();
 		} catch (Exception e) {
-			log.severe("Exception: " + e.getClass().getCanonicalName() + " " + e.getMessage() + " for query " 
+			log.error("Exception: " + e.getClass().getCanonicalName() + " " + e.getMessage() + " for query " 
 					+ solrQuery.toString());
 			e.printStackTrace();
 		}
@@ -454,7 +462,7 @@ public class SearchServiceImpl implements SearchService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException {
-		
+
 		ResultSet<T> resultSet = new ResultSet<T>();
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
@@ -482,7 +490,7 @@ public class SearchServiceImpl implements SearchService {
 			}
 
 			try {
-				log.fine("Solr query is: " + solrQuery);
+				log.debug("Solr query is: " + solrQuery);
 				QueryResponse queryResponse = solrServer.query(solrQuery);
 				logTime("search", queryResponse.getElapsedTime());
 
@@ -493,10 +501,10 @@ public class SearchServiceImpl implements SearchService {
 					resultSet.setFacetFields(queryResponse.getFacetFields());
 				}
 			} catch (SolrServerException e) {
-				log.severe("SolrServerException: " + e.getMessage());
+				log.error("SolrServerException: " + e.getMessage());
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 			} catch (SolrException e) {
-				log.severe("SolrException: " + e.getMessage());
+				log.error("SolrException: " + e.getMessage());
 				throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 			}
 		}
@@ -553,7 +561,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 		} catch (SolrServerException e) {
-			log.severe("Exception :" + e.getMessage());
+			log.error("Exception :" + e.getMessage());
 		}
 
 		return results;
@@ -564,7 +572,7 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	@Override
 	public List<Term> suggestions(String query, int pageSize, String field) {
-		log.fine(String.format("%s, %d, %s", query, pageSize, field));
+		log.debug(String.format("%s, %d, %s", query, pageSize, field));
 		List<Term> results = new ArrayList<Term>();
 		long start = new Date().getTime();
 		total.put(query, 0l);
@@ -591,8 +599,8 @@ public class SearchServiceImpl implements SearchService {
 		Collections.sort(results);
 		logTime("suggestions", (new Date().getTime() - start));
 		total.remove(query);
-		
-		log.fine(String.format("Returned %d results in %d ms",
+
+		log.debug(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
 		return results.size() > pageSize ? results.subList(0, pageSize)
@@ -604,14 +612,13 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private SolrServer setServer(SolrServer solrServer) {
-		
 		if (solrServer instanceof HttpSolrServer) {
 			HttpSolrServer server = new HttpSolrServer(
 					((HttpSolrServer) solrServer).getBaseURL());
 			AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
 			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
 					username, password));
-		return server;
+			return server;
 		} else {
 			return solrServer;
 		}
@@ -653,7 +660,7 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	public void logTime(String type, long time) {
-		log.fine(String.format("elapsed time (%s): %d", type, time));
+		log.debug(String.format("elapsed time (%s): %d", type, time));
 	}
 }
 
