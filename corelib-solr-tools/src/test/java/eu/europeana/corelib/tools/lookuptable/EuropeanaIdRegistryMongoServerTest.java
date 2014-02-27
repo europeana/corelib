@@ -102,12 +102,7 @@ public class EuropeanaIdRegistryMongoServerTest {
 	
 	
 	
-	@Test
-	public void testCollectionChanged(){
-		saverecord(sid);
-		Assert.assertEquals(server.lookupUiniqueId(oid, "12346", xml_checksum, sid).getState(),LookupState.COLLECTION_CHANGED);
-		server.getDatastore().getDB().dropDatabase();
-	}
+	
 	
 	@Test
 	public void testDuplicateIdAcross(){

@@ -60,10 +60,6 @@ public enum LookupState {
 	 */
 	DUPLICATE_RECORD_ACROSS_COLLECTIONS,
 	
-	/**
-	 * Indicates that the collection for this record has changed
-	 */
-	COLLECTION_CHANGED,
 	
 	//System Specific
 	

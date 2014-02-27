@@ -147,7 +147,6 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 				lookupresult.setEuropeanaID(europeanaIDString);
 				return lookupresult;
 			} else {
-				lookupresult.setState(LookupState.COLLECTION_CHANGED);
 				updateops.set(EID, constructedeuropeanaId.getEid());
 				updateops.set(CID, collectionID);
 				return lookupresult;
