@@ -272,7 +272,9 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.count", count);
 		solrQuery.set("rows", 1);
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
-		log.debug(solrQuery.toString());
+		if (log != null && log.isDebugEnabled()) {
+			log.debug(solrQuery.toString());
+		}
 
 		QueryResponse response = solrServer.query(solrQuery);
 		logTime("MoreLikeThis", response.getElapsedTime());
@@ -358,7 +360,9 @@ public class SearchServiceImpl implements SearchService {
 				}
 
 				try {
-					log.debug("Solr query is: " + solrQuery);
+					if (log != null && log.isDebugEnabled()) {
+						log.debug("Solr query is: " + solrQuery);
+					}
 					query.setExecutedQuery(solrQuery.toString());
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
@@ -443,7 +447,9 @@ public class SearchServiceImpl implements SearchService {
 		QueryResponse response;
 		Map<String, Integer> queryFacets = null;
 		try {
-			log.debug("Solr query is: " + solrQuery.toString());
+			if (log != null && log.isDebugEnabled()) {
+				log.debug("Solr query is: " + solrQuery.toString());
+			}
 			response = solrServer.query(solrQuery);
 			logTime("queryFacetSearch", response.getElapsedTime());
 			queryFacets = response.getFacetQuery();
@@ -490,7 +496,9 @@ public class SearchServiceImpl implements SearchService {
 			}
 
 			try {
-				log.debug("Solr query is: " + solrQuery);
+				if (log != null && log.isDebugEnabled()) {
+					log.debug("Solr query is: " + solrQuery);
+				}
 				QueryResponse queryResponse = solrServer.query(solrQuery);
 				logTime("search", queryResponse.getElapsedTime());
 
@@ -572,7 +580,9 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	@Override
 	public List<Term> suggestions(String query, int pageSize, String field) {
-		log.debug(String.format("%s, %d, %s", query, pageSize, field));
+		if (log != null && log.isDebugEnabled()) {
+			log.debug(String.format("%s, %d, %s", query, pageSize, field));
+		}
 		List<Term> results = new ArrayList<Term>();
 		long start = new Date().getTime();
 		total.put(query, 0l);
@@ -600,9 +610,11 @@ public class SearchServiceImpl implements SearchService {
 		logTime("suggestions", (new Date().getTime() - start));
 		total.remove(query);
 
-		log.debug(String.format("Returned %d results in %d ms",
+		if (log != null && log.isDebugEnabled()) {
+			log.debug(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
+		}
 		return results.size() > pageSize ? results.subList(0, pageSize)
 				: results;
 	}
@@ -655,12 +667,16 @@ public class SearchServiceImpl implements SearchService {
 		long t0 = new Date().getTime();
 		NamedList<Object> namedList = solrServer.request(new LukeRequest());
 		NamedList<Object> index = (NamedList<Object>) namedList.get("index");
-		log.info("spent: " + (new Date().getTime() - t0));
+		if (log != null && log.isInfoEnabled()) {
+			log.info("spent: " + (new Date().getTime() - t0));
+		}
 		return (Date) index.get("lastModified");
 	}
 
 	public void logTime(String type, long time) {
-		log.debug(String.format("elapsed time (%s): %d", type, time));
+		if (log != null && log.isDebugEnabled()) {
+			log.debug(String.format("elapsed time (%s): %d", type, time));
+		}
 	}
 }
 
