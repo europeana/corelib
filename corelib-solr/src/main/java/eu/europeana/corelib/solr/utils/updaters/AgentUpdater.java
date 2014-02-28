@@ -345,7 +345,7 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 			}
 		}else {
 			if (agent.getPrefLabel()!=null){
-				ops.unset("predfLabel");
+				ops.unset("prefLabel");
 				update = true;
 			}
 		}
