@@ -24,8 +24,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
@@ -52,7 +52,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	private JavaMailSender mailSender;
 
 	@Resource
-	private ReloadableResourceBundleMessageSource messageSource;
+	private MessageSource messageSource;
 
 	/**
 	 * Sends a token to user as part of registration confirmation
