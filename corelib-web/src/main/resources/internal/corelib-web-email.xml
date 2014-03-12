@@ -100,7 +100,7 @@
 		</entry>
 		<entry key="registerApiNotifyUser">
 			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-api-notify-user"
+				p:template="/email/register-api-notify-user-multilang"
 				p:emailFrom="#{europeanaProperties['system.from']}"
 				p:subject="Thank you for registering for the new Europeana API"
 			/>

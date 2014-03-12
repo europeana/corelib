@@ -1,0 +1,21 @@
+
+${line1}
+
+${line2}
+
+==========
+API key      : ${apiKey.id}
+Private key  : ${apiKey.privateKey}
+==========
+
+${line3a}
+${line3b}
+
+${line4}
+
+${line5}
+
+${line6a}
+${line6b}
+
+${line7}

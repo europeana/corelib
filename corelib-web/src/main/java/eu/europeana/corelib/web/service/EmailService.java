@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.web.service;
 
+import java.util.Locale;
+
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
@@ -43,5 +45,5 @@ public interface EmailService {
 
 	void sendRegisterApiNotifyAdmin(User user) throws EmailServiceException;
 
-	void sendRegisterApiNotifyUser(ApiKey apiKey) throws EmailServiceException;
+	void sendRegisterApiNotifyUser(ApiKey apiKey, Locale locale) throws EmailServiceException;
 }

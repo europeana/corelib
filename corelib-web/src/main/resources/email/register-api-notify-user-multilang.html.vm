@@ -1,0 +1,26 @@
+<html>
+<body>
+
+<p>${line1}</p>
+
+<p>${line2}</p>
+
+<p style="font-family:Courier,Courier New">==========<br/>
+${apikey_label}      : ${apiKey.id}<br/>
+${privatekey_label}  : ${apiKey.privateKey}<br/>
+==========</p>
+
+<p>${line3a}<br/>
+${line3b}<p>
+
+<p>${line4}</p>
+
+<p>${line5}</p>
+
+<p>${line6a}<br/>
+${line6b}</p>
+
+<p>${line7}</p>
+
+</body>
+</html>

@@ -18,11 +18,14 @@
 package eu.europeana.corelib.web.service.impl;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
@@ -45,9 +48,11 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Log
 	private Logger log;
 
-
 	@Resource
 	private JavaMailSender mailSender;
+
+	@Resource
+	private ReloadableResourceBundleMessageSource messageSource;
 
 	/**
 	 * Sends a token to user as part of registration confirmation
@@ -148,13 +153,30 @@ public abstract class EmailServiceImpl implements EmailService {
 	 * Sends email to the user about the details of API registration
 	 */
 	@Override
-	public void sendRegisterApiNotifyUser(final ApiKey apiKey) throws EmailServiceException {
+	public void sendRegisterApiNotifyUser(final ApiKey apiKey, Locale locale) throws EmailServiceException {
 		if (apiKey == null) {
 			log.error("Problem with sendRegisterApiNotifyUser: apiKey is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("apiKey", apiKey);
+
+		// adding translatable message keys
+		String prefix = "register_api_notify_user_";
+		String suffix = "_t";
+		String[] labels = new String[] {
+				"line1", "line2", "apikey_label", "privatekey_label", "line3a",
+				"line3b", "line4", "line5", "line6a", "line6b", "line7"
+		};
+		for (String label : labels) {
+			try {
+				String value = messageSource.getMessage(prefix + label + suffix, null, locale);
+				model.put(label, value);
+			} catch (NoSuchMessageException e) {
+				log.error(String.format("Label %s is not defined", label));
+			}
+		}
+
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
 		builder.setTemplate("registerApiNotifyUser"); // see corelib_web_emailConfigs
