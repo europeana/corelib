@@ -172,6 +172,14 @@ public abstract class EmailServiceImpl implements EmailService {
 			try {
 				String value = messageSource.getMessage(prefix + label + suffix, null, locale);
 				model.put(label, value);
+				String html = value;
+				if (StringUtils.contains(html, "http://") || StringUtils.contains(html, "https://")) {
+					html = html.replaceAll("(https?://[^ ,]+)", "<a href=\"$1\" target=\"_blank\">$1</a>");
+				}
+				if (StringUtils.contains(html, "@")) {
+					html = html.replaceAll("([^ ,]+@[^ ,]+)", "<a href=\"mailto:$1\" target=\"_blank\">$1</a>");
+				}
+				model.put(label + "_html", html);
 			} catch (NoSuchMessageException e) {
 				log.error(String.format("Label %s is not defined", label));
 			}
