@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.web.interceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,6 +31,7 @@ import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.exception.WebConfigurationException;
 import eu.europeana.corelib.web.model.PageData;
+import eu.europeana.corelib.web.support.Configuration;
 
 /**
  * This interceptor used by Portal catches all request after processing the controller and populates all default
@@ -41,24 +43,12 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 
 	@Log
 	private Logger log;
-
-	@Value("#{europeanaProperties['debug']}")
-	private boolean debug;
+	
+	@Resource
+	private Configuration config;
 
 	@Value("#{europeanaProperties['portal.indexable']}")
 	private boolean indexable;
-
-	@Value("#{europeanaProperties['imageCacheUrl']}")
-	private String imageCacheUrl;
-
-	@Value("#{europeanaProperties['portal.name']}")
-	private String portalName;
-
-	@Value("#{europeanaProperties['portal.server']}")
-	private String portalServer;
-
-	@Value("#{europeanaProperties['portal.server.canonical']}")
-	private String cannonicalPortalServer;
 
 	@Value("#{europeanaProperties['portal.google.analytics.id']}")
 	private String portalGoogleAnalyticsId;
@@ -92,7 +82,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			model.setCurrentUrl(currentUrl.toString());
 
 			// BOOLEANS
-			model.setDebug(Boolean.valueOf(debug));
+			model.setDebug(Boolean.valueOf(config.getDebugMode()));
 			model.setIndexable(indexable);
 			// is minify=true is set, force minify anyway, ignoring debug settings!
 			if (request.getParameterMap().containsKey("minify")) {
@@ -100,10 +90,10 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			}
 
 			// MANDATORY VALUES
-			model.setPortalServer(checkMandatoryValue(portalServer, "portal.server"));
-			model.setMetaCanonicalUrl(cannonicalPortalServer);
-			model.setPortalName(checkMandatoryValue(portalName, "portal.name"));
-			model.setCacheUrl(checkMandatoryValue(imageCacheUrl, "imageCacheUrl"));
+			model.setPortalServer(checkMandatoryValue(config.getPortalServer(), "portal.server"));
+			model.setMetaCanonicalUrl(config.getCanonicalUrl());
+			model.setPortalName(checkMandatoryValue(config.getPortalName(), "portal.name"));
+			model.setCacheUrl(checkMandatoryValue(config.getImageCacheUrl(), "imageCacheUrl"));
 
 			// OPTIONALS, TRIMMED TO EMPTY STRING (preventing nullpointers)
 			model.setGoogleAnalyticsId(StringUtils.trimToEmpty(portalGoogleAnalyticsId));
