@@ -77,5 +77,4 @@ public class UrlBuilderTest {
 		url.addParam("startPage", "1", true).addParam("rows", "24", true);
 		assertEquals("Adding path and page containing unneeded slashes failed", expected, url.toString());
 	}
-
 }

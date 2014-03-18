@@ -17,6 +17,8 @@
 
 package eu.europeana.corelib.web.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,19 +27,21 @@ import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class UrlBuilder {
-	
+
+	private static Logger log = Logger.getLogger(UrlBuilder.class.getCanonicalName());
 
 	public static final String PATH_SEPERATOR = "/";
-	
+
 	private String protocol = "http";
 	private StringBuilder baseUrl;
-	
+
 	private boolean relativeUrl = false;
 	private boolean trailingSlash = false;
 
@@ -50,7 +54,7 @@ public class UrlBuilder {
 			stripBaseUrl();
 		}
 	}
-	
+
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
 		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, PATH_SEPERATOR)) {
@@ -84,7 +88,7 @@ public class UrlBuilder {
 		}
 		addParamsFromURL(toProcess);
 	}
-	
+
 	public UrlBuilder disableProtocol() {
 		relativeUrl = true;
 		return this;
@@ -94,7 +98,7 @@ public class UrlBuilder {
 		trailingSlash = false;
 		return this;
 	}
-	
+
 	public UrlBuilder addPath(String... paths) {
 		if (StringArrayUtils.isNotBlank(paths)) {
 			for (String path: paths) {
@@ -105,7 +109,7 @@ public class UrlBuilder {
 		trailingSlash = true;
 		return this;
 	}
-	
+
 	public UrlBuilder addPage(String page) {
 		if (StringUtils.isNotBlank(page)) {
 			page = StringUtils.strip(page, "/?&");
@@ -135,11 +139,14 @@ public class UrlBuilder {
 		}
 		return this;
 	}
-	
+
 	public UrlBuilder addParam(String key, String value) {
 		return addParam(key, value, true);
 	}
 
+	public UrlBuilder addParam(String key, int value) {
+		return addParam(key, String.valueOf(value), true);
+	}
 
 	public UrlBuilder addParam(String key, String value, boolean override) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
@@ -154,7 +161,7 @@ public class UrlBuilder {
 	public UrlBuilder addParam(String key, String[] values) {
 		return addParam(key, values, true);
 	}
-	
+
 	public UrlBuilder addParam(String key, String[] values, boolean override) {
 		if (StringUtils.isNotBlank(key)) {
 			if (override) {
@@ -263,7 +270,7 @@ public class UrlBuilder {
 				if (!first) {
 					sb.append("&");
 				}
-				sb.append(key).append("=").append(params.get(key));
+				sb.append(key).append("=").append(encode(params.get(key)));
 				first = false;
 			}
 			for (String key : multiParams.keySet()) {
@@ -271,11 +278,20 @@ public class UrlBuilder {
 					if (!first) {
 						sb.append("&");
 					}
-					sb.append(key).append("=").append(s);
+					sb.append(key).append("=").append(encode(s));
 					first = false;
 				}
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String encode(String value) {
+		try {
+			value = URLEncoder.encode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			log.error("UnsupportedEncodingException: " + e.getLocalizedMessage());
+		}
+		return value;
 	}
 }
