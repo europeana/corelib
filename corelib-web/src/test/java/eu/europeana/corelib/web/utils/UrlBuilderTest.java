@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class UrlBuilderTest {
-	
+
 	@Test
 	public void testUrlCleaning() {
 		String dirty = "http://www.europeana.eu//portal/index.html?";
@@ -44,7 +44,7 @@ public class UrlBuilderTest {
 		url.addPath("portal", "user").disableProtocol();
 		assertEquals("Disabling protocol", expected, url.toString());
 	}
-		
+
 	@Test
 	public void testAddPath() {
 		String expected = "http://www.europeana.eu/portal/user/";
@@ -56,7 +56,7 @@ public class UrlBuilderTest {
 		url.addPath("portal/", "/user");
 		assertEquals("Adding two paths containing unneeded slashes failed", expected, url.toString());
 	}
-	
+
 	@Test
 	public void testAddPage() {
 		String expected = "http://www.europeana.eu/portal/index.html";
@@ -76,5 +76,17 @@ public class UrlBuilderTest {
 		url.addParam("start", "1", true).addParam("query", "money", true);
 		url.addParam("startPage", "1", true).addParam("rows", "24", true);
 		assertEquals("Adding path and page containing unneeded slashes failed", expected, url.toString());
+	}
+
+	/**
+	 * Testing addParamsFromURL() method
+	 */
+	@Test
+	public void testAddParamsFromURL() {
+		UrlBuilder url = new UrlBuilder("http://www.europeana.eu");
+		url.addParamsFromURL("query=*%3A*&qf=DATA_PROVIDER:\"Musik & Teatermuseet\"&qf=paris");
+		assertEquals("Adding path and page containing unneeded slashes failed",
+				"http://www.europeana.eu?query=*%3A*&qf=DATA_PROVIDER%3A%22Musik+%26+Teatermuseet%22&qf=paris",
+				url.toString());
 	}
 }

@@ -19,6 +19,7 @@ package eu.europeana.corelib.web.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -121,18 +124,18 @@ public class UrlBuilder {
 
 	public UrlBuilder addParamsFromURL(String url, String... ignoreKeys) {
 		if (StringUtils.isNotBlank(url)) {
-			String[] parameters = StringUtils.split(url, "&");
-			for (String string : parameters) {
-				String[] param = StringUtils.split(string, "=");
-				if (param.length == 2) {
-					if (StringArrayUtils.isBlank(ignoreKeys)
-							|| !ArrayUtils.contains(ignoreKeys, param[0])) {
-						if (multiParams.containsKey(param[0])
-								|| params.containsKey(param[0])) {
-							addMultiParam(param[0], param[1]);
-						} else {
-							addParam(param[0], param[1], true);
-						}
+			List<NameValuePair> queryParams = URLEncodedUtils.parse(url, Charset.forName("UTF-8"));
+			if (queryParams == null) {
+				return this;
+			}
+			for (NameValuePair param : queryParams) {
+				if (StringArrayUtils.isBlank(ignoreKeys)
+						|| !ArrayUtils.contains(ignoreKeys, param.getName())) {
+					if (multiParams.containsKey(param.getName())
+							|| params.containsKey(param.getName())) {
+						addMultiParam(param.getName(), param.getValue());
+					} else {
+						addParam(param.getName(), param.getValue(), true);
 					}
 				}
 			}
@@ -146,6 +149,10 @@ public class UrlBuilder {
 
 	public UrlBuilder addParam(String key, int value) {
 		return addParam(key, String.valueOf(value), true);
+	}
+
+	public UrlBuilder addParam(String key, int value, boolean override) {
+		return addParam(key, String.valueOf(value), override);
 	}
 
 	public UrlBuilder addParam(String key, String value, boolean override) {

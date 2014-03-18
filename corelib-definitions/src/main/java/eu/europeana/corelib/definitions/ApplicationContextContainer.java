@@ -45,5 +45,4 @@ public class ApplicationContextContainer implements ApplicationContextAware {
 	public static <T> T getBean(Class<T> beanClazz, String beanName) {
 		return applicationContext.getBean(beanName, beanClazz);
 	}
-	
 }
