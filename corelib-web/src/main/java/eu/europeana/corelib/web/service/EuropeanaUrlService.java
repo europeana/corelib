@@ -73,6 +73,8 @@ public interface EuropeanaUrlService {
 
 	String getPortalResolve(String collectionid, String objectid);
 
+	UrlBuilder getPortalSearch() throws UnsupportedEncodingException;
+
 	UrlBuilder getPortalSearch(boolean relative, String query, String rows) throws UnsupportedEncodingException;
 
 	UrlBuilder getPortalSearch(boolean relative, String searchpage, String query, String rows) throws UnsupportedEncodingException;

@@ -19,7 +19,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 
 	@Resource
 	private Configuration configuration;
-	
+
 	public static EuropeanaUrlService getBeanInstance() {
 		return ApplicationContextContainer.getBean(EuropeanaUrlServiceImpl.class);
 	}
@@ -119,6 +119,11 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
 		url.addPath(PATH_PORTAL_RESOLVE, PATH_RECORD, collectionid, objectid).disableTrailingSlash();
 		return url.toString();
+	}
+
+	@Override
+	public UrlBuilder getPortalSearch() throws UnsupportedEncodingException {
+		return getPortalSearch(true, "search.html", null, null);
 	}
 
 	@Override
