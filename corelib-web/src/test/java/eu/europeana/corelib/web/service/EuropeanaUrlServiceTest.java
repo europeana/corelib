@@ -19,13 +19,12 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	@Resource
 	private EuropeanaUrlService europeanaUrlService;
 
-	
 	@Test
 	public void getApi2RedirectTest() {
-		String expected = "http://localhost:8080/api/123/redirect?shownAt=http://www.kb.nl&provider=example&id=http://www.europeana.eu/resolve/record/kb/record&profile=full";
+		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=http%3A%2F%2Fwww.europeana.eu%2Fresolve%2Frecord%2Fkb%2Frecord&profile=full";
 		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getApi2Redirect(123, "http://www.kb.nl", "example", "/kb/record", "full").toString());
 	}
-	
+
 	@Test
 	public void getPortalHomeTest() {
 		String expected = "http://localhost:8081/portal/";
@@ -39,7 +38,6 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalResolveTest() {
 		String expected = "http://www.europeana.eu/resolve/record/euro/testrecord";
 		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord"));
-
 	}
 
 	@Test
@@ -73,13 +71,12 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 		expected = "http://www.europeana.eu/portal/record/euro/testrecord.html";
 		assertEquals("getCanonicalPortalRecord failed", expected,
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
-		
 	}
-	
+
 	@Test
 	public void extractEuropeanaIdTest() {
 		final String expected = "/euro/testrecord";
-		
+
 		assertEquals("extractEuropeanaIdTest full url failed", expected,
 				europeanaUrlService.extractEuropeanaId("http://localhost:8081/portal/record/euro/testrecord.html"));
 
@@ -91,7 +88,6 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 		assertEquals("extractEuropeanaIdTest resolve url failed", expected,
 				europeanaUrlService.extractEuropeanaId("/resolve/record/euro/testrecord"));
-		
 	}
 
 }
