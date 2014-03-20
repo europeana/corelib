@@ -27,11 +27,13 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import eu.europeana.corelib.web.exception.InvalidUrlException;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -43,57 +45,76 @@ public class UrlBuilder {
 	public static final String PATH_SEPERATOR = "/";
 
 	private String protocol = "http";
-	private StringBuilder baseUrl;
+	private String domain = null;
+	private int port = 80;
+	private StringBuilder path;
+	private String anchor = null;
 
-	private boolean relativeUrl = false;
+	private boolean disableProtocol = false;
+	private boolean disableDomain = false;
 	private boolean trailingSlash = false;
 
 	private Map<String, String> params = new LinkedHashMap<String, String>();
 	private Map<String, List<String>> multiParams = new LinkedHashMap<String, List<String>>();
 
 	public UrlBuilder(String url) {
-		setBaseUrl(url);
-		if (StringUtils.contains(baseUrl.toString(), '?')) {
-			stripBaseUrl();
-		}
+		setBaseUrl(StringUtils.replace(url, "&amp;", "&"));
 	}
 
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
 		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, PATH_SEPERATOR)) {
-			relativeUrl = true;
+			disableDomain = true;
 		} else {
-			if (StringUtils.contains(url,"://")) {
+			if (StringUtils.contains(url, "://")) {
 				protocol = StringUtils.substringBefore(url, "://");
 				url = StringUtils.substringAfter(url, "://");
 			}
+			domain = StringUtils.substringBefore(url, PATH_SEPERATOR);
+			if (!StringUtils.contains(domain, ":")) {
+				url = StringUtils.substringAfter(url, domain);
+			} else {
+				port = NumberUtils.toInt( StringUtils.substringAfter(domain, ":") );
+				domain = StringUtils.substringBefore(domain, ":");
+				url = StringUtils.substringAfter(url, ":"+port);
+			}
 		}
-		if (StringUtils.containsNone(url, "?")) {
-			url = StringUtils.replace(url, "//", PATH_SEPERATOR);
+		if (StringUtils.contains(url, "#")) {
+			anchor = StringUtils.substringAfterLast(url, "#");
+			url = StringUtils.substringBeforeLast(url, "#");
 		}
-		baseUrl = new StringBuilder(url); 
+		if (StringUtils.contains(url, '?')) {
+			url = stripBaseUrl(url);
+		}
+		path = new StringBuilder(StringUtils.replace(url, "//", PATH_SEPERATOR));
 	}
 
-	private void stripBaseUrl() {
-		setBaseUrl(StringUtils.replace(baseUrl.toString(), "&amp;", "&"));
-		String[] result = StringUtils.split(baseUrl.toString(), '?');
+	private String stripBaseUrl(String url) {
+		String[] result = StringUtils.split(url, '?');
+		String stripped;
 		String toProcess = null;
 		if (result.length == 2) {
-			setBaseUrl(result[0]);
+			stripped = result[0];
 			toProcess = result[1];
 		} else {
-			if (StringUtils.endsWith(baseUrl.toString(), "?")) {
-				setBaseUrl(result[0]);
+			if (StringUtils.endsWith(url, "?")) {
+				stripped = result[0];
 			} else {
-				setBaseUrl("");
+				stripped = "";
 				toProcess = result[0];
 			}
 		}
 		addParamsFromURL(toProcess);
+		return stripped;
 	}
 
 	public UrlBuilder disableProtocol() {
-		relativeUrl = true;
+		disableProtocol = true;
+		return this;
+	}
+
+	public UrlBuilder disableDomain() {
+		disableDomain = true;
 		return this;
 	}
 
@@ -102,11 +123,15 @@ public class UrlBuilder {
 		return this;
 	}
 
+	public void setAnchor(String a) {
+		anchor = a;
+	}
+
 	public UrlBuilder addPath(String... paths) {
 		if (StringArrayUtils.isNotBlank(paths)) {
-			for (String path: paths) {
-				path = StringUtils.strip(path, "/?&");
-				baseUrl.append(PATH_SEPERATOR).append(path);
+			for (String p : paths) {
+				p = StringUtils.strip(p, "/?&");
+				path.append(PATH_SEPERATOR).append(p);
 			}
 		}
 		trailingSlash = true;
@@ -116,7 +141,7 @@ public class UrlBuilder {
 	public UrlBuilder addPage(String page) {
 		if (StringUtils.isNotBlank(page)) {
 			page = StringUtils.strip(page, "/?&");
-			baseUrl.append(PATH_SEPERATOR).append(page);
+			path.append(PATH_SEPERATOR).append(page);
 		}
 		trailingSlash = false;
 		return this;
@@ -239,6 +264,17 @@ public class UrlBuilder {
 		return this;
 	}
 
+	public void setDomain(String newDomain) {
+		if (StringUtils.isNotBlank(newDomain)) {
+			if (StringUtils.contains(newDomain, "://")) {
+				newDomain = StringUtils.substringAfter(newDomain, "://");
+			}
+			domain = StringUtils.substringBefore(newDomain, PATH_SEPERATOR);
+			disableDomain=false;
+			disableProtocol=false;
+		}
+	}
+
 	public UrlBuilder addMultiParam(String key, String value) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
 			List<String> list = null;
@@ -259,17 +295,35 @@ public class UrlBuilder {
 		}
 		return this;
 	}
-
-	@Override
-	public String toString() {
+	
+	private StringBuilder createCanonical() {
 		StringBuilder sb = new StringBuilder();
-		if (!relativeUrl) {
-			sb.append(protocol).append("://");
+		if (!disableDomain && StringUtils.isNotBlank(domain)) {
+			if (!disableProtocol) {
+				sb.append(protocol).append("://");
+			}
+			sb.append(domain);
+			if (port != 80) {
+				sb.append(":").append(port);
+			}
 		}
-		sb.append(baseUrl.toString());
+		sb.append(path.toString());
 		if (trailingSlash) {
 			sb.append(PATH_SEPERATOR);
 		}
+		return sb;
+	}
+
+	public String toCanonicalUrl() throws InvalidUrlException {
+		if (disableDomain || disableProtocol || StringUtils.isBlank(domain)) {
+			throw new InvalidUrlException();
+		}
+		return createCanonical().toString();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = createCanonical();
 		if (params.size() + multiParams.size() > 0) {
 			boolean first = true;
 			sb.append("?");
@@ -289,6 +343,9 @@ public class UrlBuilder {
 					first = false;
 				}
 			}
+		}
+		if (StringUtils.isNotBlank(anchor)) {
+			sb.append("#").append(anchor);
 		}
 		return sb.toString();
 	}

@@ -26,6 +26,8 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 
 import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.web.exception.InvalidUrlException;
+import eu.europeana.corelib.web.utils.UrlBuilder;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -239,15 +241,14 @@ public abstract class PageData {
 	}
 
 	public String getMetaCanonicalUrl() {
-		String canonical = StringUtils.defaultIfBlank(metaCanonicalUrl,
-				getCurrentUrl());
-		canonical = StringUtils.substringBefore(canonical, "#");
-		if (StringUtils.startsWithIgnoreCase(canonical, "http")) {
-			return canonical;
+		UrlBuilder url = new UrlBuilder(getCurrentUrl());
+		url.setDomain(metaCanonicalUrl);
+		try {
+			return url.toCanonicalUrl();
+		} catch (InvalidUrlException e) {
+			// ignore. should never happen
+			return StringUtils.defaultIfBlank(metaCanonicalUrl, getCurrentUrl());
 		}
-		return portalServer
-				+ (StringUtils.startsWith(canonical, "/") ? StringUtils
-						.substringAfter(canonical, "/") : canonical);
 	}
 
 	public void setMetaCanonicalUrl(String metaCanonicalUrl) {

@@ -1,8 +1,10 @@
 package eu.europeana.corelib.web.utils;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import eu.europeana.corelib.web.exception.InvalidUrlException;
 
 public class UrlBuilderTest {
 
@@ -76,6 +78,29 @@ public class UrlBuilderTest {
 		url.addParam("start", "1", true).addParam("query", "money", true);
 		url.addParam("startPage", "1", true).addParam("rows", "24", true);
 		assertEquals("Adding path and page containing unneeded slashes failed", expected, url.toString());
+	}
+	
+	@Test
+	public void testSetDomain() {
+		String expected = "https://github.com/eLedge/UrlBuilder";
+		UrlBuilder url = new UrlBuilder("https://eledge.net/eLedge/UrlBuilder");
+		url.setDomain("http://github.com/");
+		assertEquals("Domain replacement failed", expected, url.toString());
+	}
+	
+	@Test
+	public void testCanonicalUrl() throws InvalidUrlException {
+		String expected = "http://eledge.net:8080/page/example.html";
+		String expected2 = "http://eledge.net:8080/page/example.html?test=1#anchor";
+		UrlBuilder url =  new UrlBuilder("http://eledge.net:8080//page/example.html?test=1#anchor");
+		assertEquals("Canonical URL cleaning failed", expected, url.toCanonicalUrl());
+		assertEquals("URL cleaning failed", expected2, url.toString());
+	}
+	
+	
+	@Test(expected=InvalidUrlException.class)
+	public void testInvalidCanonicalUrl() throws InvalidUrlException {
+		new UrlBuilder("/page/example.html?test=1#anchor").toCanonicalUrl();
 	}
 
 	/**

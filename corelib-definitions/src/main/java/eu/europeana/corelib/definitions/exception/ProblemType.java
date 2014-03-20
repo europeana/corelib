@@ -46,7 +46,8 @@ public enum ProblemType {
 	NO_USER_ID("User id does not exist.", ProblemResponseAction.IGNORE),
 	NO_USER("User does not exist.", ProblemResponseAction.IGNORE),
 	DUPLICATE("Record already exists.", ProblemResponseAction.IGNORE),
-	RECORD_RETRIEVAL_ERROR("Record retrieval error", ProblemResponseAction.LOG)
+	RECORD_RETRIEVAL_ERROR("Record retrieval error", ProblemResponseAction.LOG),
+	INVALID_URL("Url is invalid", ProblemResponseAction.LOG)
 	;
 
 	private String message;

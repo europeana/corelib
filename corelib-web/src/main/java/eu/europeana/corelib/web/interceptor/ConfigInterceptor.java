@@ -91,7 +91,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 
 			// MANDATORY VALUES
 			model.setPortalServer(checkMandatoryValue(config.getPortalServer(), "portal.server"));
-			model.setMetaCanonicalUrl(config.getCanonicalUrl());
+			model.setMetaCanonicalUrl(config.getCannonicalPortalServer());
 			model.setPortalName(checkMandatoryValue(config.getPortalName(), "portal.name"));
 			model.setCacheUrl(checkMandatoryValue(config.getImageCacheUrl(), "imageCacheUrl"));
 
