@@ -156,8 +156,6 @@ public class Configuration {
 
 	private String portalUrl;
 
-	private String canonicalUrl;
-
 	private List<String> staticPageInVersions;
 
 	/** Collection IDs which supports the SoundCloud widget */
@@ -321,18 +319,6 @@ public class Configuration {
 		}
 		return portalUrl;
 	}
-
-//	public String getCanonicalUrl() {
-////		if (canonicalUrl == null) {
-////			StringBuilder sb = new StringBuilder(cannonicalPortalServer);
-////			if (!cannonicalPortalServer.endsWith("/") && !portalName.startsWith("/")) {
-////				sb.append("/");
-////			}
-////			sb.append(portalName);
-////			canonicalUrl = sb.toString();
-////		}
-//		return canonicalUrl;
-//	}
 
 	public List<String> getStaticPageInVersions() {
 		if (staticPageInVersions == null) {

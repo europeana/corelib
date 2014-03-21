@@ -123,8 +123,9 @@ public class UrlBuilder {
 		return this;
 	}
 
-	public void setAnchor(String a) {
+	public UrlBuilder setAnchor(String a) {
 		anchor = a;
+		return this;
 	}
 
 	public UrlBuilder addPath(String... paths) {
@@ -350,7 +351,7 @@ public class UrlBuilder {
 		return sb.toString();
 	}
 
-	public static String encode(String value) {
+	private String encode(String value) {
 		try {
 			value = URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
