@@ -1,9 +1,11 @@
 package eu.europeana.corelib.dereference.impl;
 
+import java.io.Serializable;
+
 import com.google.code.morphia.annotations.Entity;
 
 @Entity
-public class EdmMappedField {
+public class EdmMappedField implements Serializable{
 
 	private String label;
 	

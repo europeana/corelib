@@ -66,8 +66,9 @@ public class Extractor {
 	 */
 	public Extractor(ControlledVocabularyImpl controlledVocabulary) {
 		vocabulary = controlledVocabulary;
-		mongoServer = ApplicationContextContainer
-				.getBean(VocabularyMongoServer.class, "corelib_solr_vocabularyMongoServer");
+		mongoServer = ApplicationContextContainer.getBean(
+				VocabularyMongoServer.class,
+				"corelib_solr_vocabularyMongoServer");
 	}
 
 	public Extractor() {
@@ -100,7 +101,6 @@ public class Extractor {
 				: null;
 	}
 
-
 	/**
 	 * Append a value to a Concept field
 	 * 
@@ -118,7 +118,6 @@ public class Extractor {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	
 
 	/**
 	 * Retrieve the value of a field. The value retrieved is part of the
@@ -144,40 +143,49 @@ public class Extractor {
 	 * @param fieldToMap
 	 * @param europeanaField
 	 */
-	public void setMappedField(String fieldToMap, EdmLabel europeanaField, String attribute) {
-		HashMap<String, List<EdmMappedField>> elements = vocabulary.getElements() != null ? (HashMap<String, List<EdmMappedField>>) vocabulary
+	public void setMappedField(String fieldToMap, EdmLabel europeanaField,
+			String attribute) {
+		HashMap<String, List<EdmMappedField>> elements = vocabulary
+				.getElements() != null ? (HashMap<String, List<EdmMappedField>>) vocabulary
 				.getElements() : new HashMap<String, List<EdmMappedField>>();
 		List<EdmMappedField> field = elements.get(fieldToMap);
 		if (field == null) {
 			elements.put(fieldToMap, new ArrayList<EdmMappedField>());
 			field = elements.get(fieldToMap);
-		} 
-		if (!field.contains(europeanaField)) {
+		}
+
+		if (!field.contains(europeanaField) && europeanaField != null) {
 			EdmMappedField edmMappedField = new EdmMappedField();
 			edmMappedField.setLabel(europeanaField.toString());
-			edmMappedField.setAttribute(StringUtils.isNotBlank(attribute)?attribute:null);
-				
-			
+			edmMappedField
+					.setAttribute(StringUtils.isNotBlank(attribute) ? attribute
+							: null);
+
 			field.add(edmMappedField);
 			elements.put(fieldToMap, field);
 
+		} else if (europeanaField == null) {
+			elements.put(fieldToMap, new ArrayList<EdmMappedField>());
 		}
 		vocabulary.setElements(elements);
-		ControlledVocabularyImpl vocRet = mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName());
-		if(vocRet==null){
+		ControlledVocabularyImpl vocRet = mongoServer
+				.getControlledVocabularyByName(vocabulary.getName());
+		if (vocRet == null) {
 			mongoServer.getDatastore().save(vocabulary);
 		} else {
-			UpdateOperations<ControlledVocabularyImpl> ops = mongoServer.getDatastore().createUpdateOperations(ControlledVocabularyImpl.class);
+			UpdateOperations<ControlledVocabularyImpl> ops = mongoServer
+					.getDatastore().createUpdateOperations(
+							ControlledVocabularyImpl.class);
 			Query<ControlledVocabularyImpl> updateQuery = mongoServer
-					.getDatastore()
-					.createQuery(ControlledVocabularyImpl.class)
+					.getDatastore().createQuery(ControlledVocabularyImpl.class)
 					.field("name").equal(vocabulary.getName());
-			
+
 			vocRet.setElements(elements);
-			validate(vocRet);
-			ops.set("elements", vocRet.getElements());
-			mongoServer.getDatastore().update(updateQuery,ops);
-			vocabulary = mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName());
+			if (validate(vocRet)) {
+				ops.set("elements", elements);
+				mongoServer.getDatastore().update(updateQuery, ops);
+			}
+			
 		}
 	}
 
@@ -190,7 +198,9 @@ public class Extractor {
 	 */
 	public String getMappedField(EdmLabel europeanaField) {
 		for (String key : vocabulary.getElements().keySet()) {
-			if (europeanaField.toString().equals(vocabulary.getElements().get(key).get(0).getLabel().toString())) {
+			if (europeanaField.toString().equals(
+					vocabulary.getElements().get(key).get(0).getLabel()
+							.toString())) {
 				return key;
 			}
 		}
@@ -207,8 +217,8 @@ public class Extractor {
 	public boolean isMapped(String field) {
 
 		if (vocabulary != null) {
-			for (Entry<String, List<EdmMappedField>> entry : vocabulary.getElements()
-					.entrySet()) {
+			for (Entry<String, List<EdmMappedField>> entry : vocabulary
+					.getElements().entrySet()) {
 				if (StringUtils.contains(entry.getKey(), field)
 						&& entry.getValue().size() > 0) {
 					return true;
@@ -248,9 +258,11 @@ public class Extractor {
 	/**
 	 * Save the mapping of a controlled vocabulary
 	 */
-	public boolean saveMapping(int iterations) {
+	public boolean saveMapping(int iterations, String[] vocabularyRules,
+			String vocabularyUrl) {
 		if (vocabulary != null && validate(vocabulary)) {
-			if (mongoServer.getControlledVocabularyByUri(vocabulary.getURI(), vocabulary.getName()) != null) {
+			if (mongoServer.getControlledVocabularyByUri(vocabulary.getURI(),
+					vocabulary.getName()) != null) {
 				Query<ControlledVocabularyImpl> updateQuery = mongoServer
 						.getDatastore()
 						.createQuery(ControlledVocabularyImpl.class)
@@ -259,8 +271,11 @@ public class Extractor {
 						.getDatastore()
 						.createUpdateOperations(ControlledVocabularyImpl.class)
 						.set("elements", vocabulary.getElements());
-						ops.set("iterations",iterations);
+				ops.set("iterations", iterations);
+				ops.set("URI", vocabularyUrl);
+				ops.set("rules", vocabularyRules);
 				mongoServer.getDatastore().update(updateQuery, ops);
+
 			} else {
 				mongoServer.getDatastore().save(vocabulary);
 			}
@@ -269,54 +284,55 @@ public class Extractor {
 		return false;
 	}
 
-	
-	
-	
 	private boolean validate(ControlledVocabulary voc) {
 
 		Map<String, List<EdmMappedField>> elems = voc.getElements();
 		List<EdmMappedField> validateList = new ArrayList<EdmMappedField>();
 		for (Entry<String, List<EdmMappedField>> entry : elems.entrySet()) {
-			if (entry.getValue()!=null){
-			validateList.addAll(entry.getValue());
+			if (entry.getValue() != null) {
+				validateList.addAll(entry.getValue());
 			} else {
-				//if it is null ignore for validation and normalize
-				
+				// if it is null ignore for validation and normalize
+
 				elems.put(entry.getKey(), new ArrayList<EdmMappedField>());
 			}
 		}
 		Set<EdmLabel> edmLabelSet = new HashSet<EdmLabel>();
 		for (EdmMappedField label : validateList) {
-			if(StringUtils.equals(EdmLabel.EDM_AGENT.toString(), label.getLabel())){
+			if (StringUtils.equals(EdmLabel.EDM_AGENT.toString(),
+					label.getLabel())) {
 				edmLabelSet.add(EdmLabel.EDM_AGENT);
-			} else if (StringUtils.equals(EdmLabel.SKOS_CONCEPT.toString(), label.getLabel())){
+			} else if (StringUtils.equals(EdmLabel.SKOS_CONCEPT.toString(),
+					label.getLabel())) {
 				edmLabelSet.add(EdmLabel.SKOS_CONCEPT);
-			} else if (StringUtils.equals(EdmLabel.EDM_TIMESPAN.toString(), label.getLabel())){
+			} else if (StringUtils.equals(EdmLabel.EDM_TIMESPAN.toString(),
+					label.getLabel())) {
 				edmLabelSet.add(EdmLabel.EDM_TIMESPAN);
-			} else if (StringUtils.equals(EdmLabel.EDM_PLACE.toString(), label.getLabel())){
+			} else if (StringUtils.equals(EdmLabel.EDM_PLACE.toString(),
+					label.getLabel())) {
 				edmLabelSet.add(EdmLabel.EDM_PLACE);
-			} 
-			
+			}
+
 		}
 		for (EdmMappedField label : validateList) {
-			if(label.getLabel().startsWith("ag")){
-				if(!edmLabelSet.contains(EdmLabel.EDM_AGENT)){
+			if (label.getLabel().startsWith("ag")) {
+				if (!edmLabelSet.contains(EdmLabel.EDM_AGENT)) {
 					return false;
-				} 
-			} else if(label.getLabel().startsWith("ts")){
-				if(!edmLabelSet.contains(EdmLabel.EDM_TIMESPAN)){
+				}
+			} else if (label.getLabel().startsWith("ts")) {
+				if (!edmLabelSet.contains(EdmLabel.EDM_TIMESPAN)) {
 					return false;
-				} 
-			} else if(label.getLabel().startsWith("pl")){
-				if(!edmLabelSet.contains(EdmLabel.EDM_PLACE)){
+				}
+			} else if (label.getLabel().startsWith("pl")) {
+				if (!edmLabelSet.contains(EdmLabel.EDM_PLACE)) {
 					return false;
-				} 
-			} else if(label.getLabel().startsWith("cc")){
-				if(!edmLabelSet.contains(EdmLabel.SKOS_CONCEPT)){
+				}
+			} else if (label.getLabel().startsWith("cc")) {
+				if (!edmLabelSet.contains(EdmLabel.SKOS_CONCEPT)) {
 					return false;
-				} 
+				}
 			}
-			
+
 		}
 		voc.setElements(elems);
 		return true;
@@ -330,7 +346,8 @@ public class Extractor {
 	 * @return an empty hashmap with its keys being the controlled vocabularies
 	 *         mappable fileds and the values null
 	 */
-	private HashMap<String, List<EdmMappedField>> readFromFile(String localLocation) {
+	private HashMap<String, List<EdmMappedField>> readFromFile(
+			String localLocation) {
 		HashMap<String, List<EdmMappedField>> elements = new HashMap<String, List<EdmMappedField>>();
 		XMLInputFactory inFactory = new WstxInputFactory();
 		Source source;
@@ -382,12 +399,12 @@ public class Extractor {
 		}
 
 	}
-	
-	public void setMongoServer(VocabularyMongoServer server){
+
+	public void setMongoServer(VocabularyMongoServer server) {
 		this.mongoServer = server;
 	}
-	
-	public void setVocabulary(ControlledVocabularyImpl vocabulary){
+
+	public void setVocabulary(ControlledVocabularyImpl vocabulary) {
 		this.vocabulary = vocabulary;
 	}
 }

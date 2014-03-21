@@ -68,7 +68,7 @@ public class ExtractorTest {
 			assertNotNull(extractor);
 			extractor.setMappedField("test_contributor",
 					EdmLabel.PROXY_DC_CONTRIBUTOR, "xml:lang");
-			extractor.saveMapping(0);
+			extractor.saveMapping(0, vocabulary.getRules(),vocabulary.getURI());
 			assertEquals(1, extractor.getControlledVocabularies().size());
 			assertNotNull(mongoServer.getControlledVocabulary("URI",
 					"http://testuri/record"));

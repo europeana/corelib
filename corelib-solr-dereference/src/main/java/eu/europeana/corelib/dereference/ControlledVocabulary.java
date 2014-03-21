@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.dereference;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import eu.europeana.corelib.dereference.impl.EdmMappedField;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-public interface ControlledVocabulary {
+public interface ControlledVocabulary extends Serializable{
 
 	/**
 	 * Retrieve the original elements of the controlled vocabulary

@@ -127,4 +127,11 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		}
 		return null;
 	}
+
+	@Override
+	public ControlledVocabularyImpl getControlledVocabularyByName(String name) {
+		return getDatastore().find(ControlledVocabularyImpl.class).filter("name", name).get();
+	}
+	
+	
 }

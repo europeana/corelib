@@ -25,5 +25,7 @@ public interface VocabularyMongoServer extends MongoServer{
 
 	public abstract ControlledVocabularyImpl getControlledVocabularyByUri(
 			String uri, String name);
+	
+	ControlledVocabularyImpl getControlledVocabularyByName(String name);
 
 }
