@@ -1,4 +1,4 @@
-package eu.europeana.corelib.solr.utils.update;
+package eu.europeana.corelib.solr.utils.construct;
 
 import java.util.ArrayList;
 import java.util.List;

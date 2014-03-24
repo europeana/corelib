@@ -1,4 +1,4 @@
-package eu.europeana.corelib.solr.utils.update;
+package eu.europeana.corelib.solr.utils.construct;
 
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;

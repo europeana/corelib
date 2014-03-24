@@ -52,228 +52,191 @@ public class ProxyUpdater implements Updater<ProxyImpl, ProxyImpl> {
 		ops = mongoServer.getDatastore()
 				.createUpdateOperations(ProxyImpl.class);
 		boolean update = false;
-		update = update
-				|| update(
+		update =  update(
 						proxy.getDcContributor() != null ? proxy.getDcContributor()
 								: null,
 						retProxy.getDcContributor() != null ? retProxy
-								.getDcContributor() : null, "dcContributor");
-		update = update
-				|| update(
+								.getDcContributor() : null, "dcContributor") || update;
+		update =  update(
 						proxy.getDcCoverage() != null ? proxy.getDcCoverage()
 								: null,
 						retProxy.getDcCoverage() != null ? retProxy
-								.getDcCoverage() : null, "dcCoverage");
-		update = update
-				|| update(
+								.getDcCoverage() : null, "dcCoverage") || update;
+		update = update(
 						proxy.getDcCreator() != null ? proxy.getDcCreator()
 								: null,
 						retProxy.getDcCreator() != null ? retProxy
-								.getDcCreator() : null, "dcCreator");
-		update = update
-				|| update(
+								.getDcCreator() : null, "dcCreator")||update;
+		update =  update(
 						proxy.getDcDate() != null ? proxy.getDcDate()
 								: null,
 						retProxy.getDcDate() != null ? retProxy
-								.getDcDate() : null, "dcDate");
-		update = update
-				|| update(
+								.getDcDate() : null, "dcDate")||update;
+		update = update(
 						proxy.getDcDescription() != null ? proxy.getDcDescription()
 								: null,
 						retProxy.getDcDescription() != null ? retProxy
-								.getDcDescription() : null, "dcDescription");
-		update = update
-				|| update(
+								.getDcDescription() : null, "dcDescription")||update;
+		update =  update(
 						proxy.getDcFormat() != null ? proxy.getDcFormat()
 								: null,
 						retProxy.getDcFormat() != null ? retProxy
-								.getDcFormat() : null, "dcFormat");
-		update = update
-				|| update(
+								.getDcFormat() : null, "dcFormat")||update;
+		update =  update(
 						proxy.getDcIdentifier() != null ? proxy.getDcIdentifier()
 								: null,
 						retProxy.getDcIdentifier() != null ? retProxy
-								.getDcIdentifier() : null, "dcIdentifier");
-		update = update
-				|| update(
+								.getDcIdentifier() : null, "dcIdentifier")||update;
+		update =  update(
 						proxy.getDcLanguage() != null ? proxy.getDcLanguage()
 								: null,
 						retProxy.getDcLanguage() != null ? retProxy
-								.getDcLanguage() : null, "dcLanguage");
-		update = update
-				|| update(
+								.getDcLanguage() : null, "dcLanguage")||update;
+		update =  update(
 						proxy.getDcPublisher() != null ? proxy.getDcPublisher()
 								: null,
 						retProxy.getDcPublisher() != null ? retProxy
-								.getDcPublisher() : null, "dcPublisher");
-		update = update
-				|| update(
+								.getDcPublisher() : null, "dcPublisher")||update;
+		update =  update(
 						proxy.getDcRelation() != null ? proxy.getDcRelation()
 								: null,
 						retProxy.getDcRelation() != null ? retProxy
-								.getDcRelation() : null, "dcRelation");
-		update = update
-				|| update(
+								.getDcRelation() : null, "dcRelation")||update;
+		update =  update(
 						proxy.getDcRights() != null ? proxy.getDcRights()
 								: null,
 						retProxy.getDcRights() != null ? retProxy
-								.getDcRights() : null, "dcRights");
-		update = update
-				|| update(
+								.getDcRights() : null, "dcRights")||update;
+		update =  update(
 						proxy.getDcSource() != null ? proxy.getDcSource()
 								: null,
 						retProxy.getDcSource() != null ? retProxy
-								.getDcSource() : null, "dcSource");
-		update = update
-				|| update(
+								.getDcSource() : null, "dcSource")||update;
+		update =  update(
 						proxy.getDcSubject() != null ? proxy.getDcSubject()
 								: null,
 						retProxy.getDcSubject() != null ? retProxy
-								.getDcSubject() : null, "dcSubject");
-		update = update
-				|| update(
+								.getDcSubject() : null, "dcSubject")||update;
+		update =  update(
 						proxy.getDcTitle() != null ? proxy.getDcTitle()
 								: null,
 						retProxy.getDcTitle() != null ? retProxy
-								.getDcTitle() : null, "dcTitle");
-		update = update
-				|| update(
+								.getDcTitle() : null, "dcTitle")||update;
+		update = update(
 						proxy.getDcType() != null ? proxy.getDcType()
 								: null,
 						retProxy.getDcType() != null ? retProxy
-								.getDcType() : null, "dcType");
-		update = update
-				|| update(
+								.getDcType() : null, "dcType")||update;
+		update =  update(
 						proxy.getDctermsAlternative() != null ? proxy.getDctermsAlternative()
 								: null,
 						retProxy.getDctermsAlternative() != null ? retProxy
-								.getDctermsAlternative() : null, "dctermsAlternative");
-		update = update
-				|| update(
+								.getDctermsAlternative() : null, "dctermsAlternative")||update;
+		update =  update(
 						proxy.getDctermsConformsTo() != null ? proxy.getDctermsConformsTo()
 								: null,
 						retProxy.getDctermsConformsTo() != null ? retProxy
-								.getDctermsConformsTo() : null, "dctermsConformsTo");
-		update = update
-				|| update(
+								.getDctermsConformsTo() : null, "dctermsConformsTo")||update;
+		update = update(
 						proxy.getDctermsCreated() != null ? proxy.getDctermsCreated()
 								: null,
 						retProxy.getDctermsCreated() != null ? retProxy
-								.getDctermsCreated() : null, "dctermsCreated");
-		update = update
-				|| update(
+								.getDctermsCreated() : null, "dctermsCreated")||update;
+		update =  update(
 						proxy.getDctermsExtent() != null ? proxy.getDctermsExtent()
 								: null,
 						retProxy.getDctermsExtent() != null ? retProxy
-								.getDctermsExtent() : null, "dctermsExtent");
-		update = update
-				|| update(
+								.getDctermsExtent() : null, "dctermsExtent")||update;
+		update = update(
 						proxy.getDctermsHasFormat() != null ? proxy.getDctermsHasFormat()
 								: null,
 						retProxy.getDctermsHasFormat() != null ? retProxy
-								.getDctermsHasFormat(): null, "dctermsHasFormat");
-		update = update
-				|| update(
+								.getDctermsHasFormat(): null, "dctermsHasFormat")||update;
+		update = update(
 						proxy.getDctermsHasPart() != null ? proxy.getDctermsHasPart()
 								: null,
 						retProxy.getDctermsHasPart() != null ? retProxy
-								.getDctermsHasPart() : null, "dctermsHasPart");
-		update = update
-				|| update(
+								.getDctermsHasPart() : null, "dctermsHasPart")||update;
+		update =update(
 						proxy.getDctermsHasVersion() != null ? proxy.getDctermsHasVersion()
 								: null,
 						retProxy.getDctermsHasVersion() != null ? retProxy
-								.getDctermsHasVersion() : null, "dctermsHasVersion");
-		update = update
-				|| update(
+								.getDctermsHasVersion() : null, "dctermsHasVersion")||update;
+		update =  update(
 						proxy.getDctermsIsFormatOf() != null ? proxy.getDctermsIsFormatOf()
 								: null,
 						retProxy.getDctermsIsFormatOf() != null ? retProxy
-								.getDctermsIsFormatOf() : null, "dctermsIsFormatOf");
-		update = update
-				|| update(
+								.getDctermsIsFormatOf() : null, "dctermsIsFormatOf")||update;
+		update = update(
 						proxy.getDctermsIsPartOf() != null ? proxy.getDctermsIsPartOf()
 								: null,
 						retProxy.getDctermsIsPartOf() != null ? retProxy
-								.getDctermsIsPartOf() : null, "dctermsIsPartOf");
-		update = update
-				|| update(
+								.getDctermsIsPartOf() : null, "dctermsIsPartOf")||update;
+		update =  update(
 						proxy.getDctermsIsReferencedBy() != null ? proxy.getDctermsIsReferencedBy()
 								: null,
 						retProxy.getDctermsIsReferencedBy() != null ? retProxy
-								.getDctermsIsReferencedBy(): null, "dctermsIsReferencedBy");
-		update = update
-				|| update(
+								.getDctermsIsReferencedBy(): null, "dctermsIsReferencedBy")||update;
+		update = update(
 						proxy.getDctermsIsReplacedBy() != null ? proxy.getDctermsIsReplacedBy()
 								: null,
 						retProxy.getDctermsIsReplacedBy() != null ? retProxy
-								.getDctermsIsReplacedBy() : null, "dctermsIsReplacedBy");
-		update = update
-				|| update(
+								.getDctermsIsReplacedBy() : null, "dctermsIsReplacedBy")||update;
+		update =  update(
 						proxy.getDctermsIsRequiredBy() != null ? proxy.getDctermsIsRequiredBy()
 								: null,
 						retProxy.getDctermsIsRequiredBy() != null ? retProxy
-								.getDctermsIsRequiredBy(): null, "dctermsRequiredBy");
-		update = update
-				|| update(
+								.getDctermsIsRequiredBy(): null, "dctermsRequiredBy")||update;
+		update =  update(
 						proxy.getDctermsIssued() != null ? proxy.getDctermsIssued()
 								: null,
 						retProxy.getDctermsIssued() != null ? retProxy
-								.getDctermsIssued() : null, "dctermsIssued");
-		update = update
-				|| update(
+								.getDctermsIssued() : null, "dctermsIssued")||update;
+		update =  update(
 						proxy.getDctermsIsVersionOf() != null ? proxy.getDctermsIsVersionOf()
 								: null,
 						retProxy.getDctermsIsVersionOf() != null ? retProxy
-								.getDctermsIsVersionOf(): null, "dctermsIsVersionOf");
-		update = update
-				|| update(
+								.getDctermsIsVersionOf(): null, "dctermsIsVersionOf")||update;
+		update = update(
 						proxy.getDctermsMedium() != null ? proxy.getDctermsMedium()
 								: null,
 						retProxy.getDctermsMedium() != null ? retProxy
-								.getDctermsMedium() : null, "dctermsMedium");
-		update = update
-				|| update(
+								.getDctermsMedium() : null, "dctermsMedium")||update;
+		update =  update(
 						proxy.getDctermsProvenance() != null ? proxy.getDctermsProvenance()
 								: null,
 						retProxy.getDctermsProvenance() != null ? retProxy
-								.getDctermsProvenance() : null, "dctermsProvenance");
-		update = update
-				|| update(
+								.getDctermsProvenance() : null, "dctermsProvenance")||update;
+		update =  update(
 						proxy.getDctermsReferences() != null ? proxy.getDctermsReferences()
 								: null,
 						retProxy.getDctermsReferences() != null ? retProxy
-								.getDctermsReferences() : null, "dctermsReferences");
-		update = update
-				|| update(
+								.getDctermsReferences() : null, "dctermsReferences")||update;
+		update =  update(
 						proxy.getDctermsReplaces() != null ? proxy.getDctermsReplaces()
 								: null,
 						retProxy.getDctermsReplaces() != null ? retProxy
-								.getDctermsReplaces(): null, "dctermsReplaces");
-		update = update
-				|| update(
+								.getDctermsReplaces(): null, "dctermsReplaces")||update;
+		update = update(
 						proxy.getDctermsRequires() != null ? proxy.getDctermsRequires()
 								: null,
 						retProxy.getDctermsRequires() != null ? retProxy
-								.getDctermsRequires() : null, "dctermsRequires");
-		update = update
-				|| update(
+								.getDctermsRequires() : null, "dctermsRequires")||update;
+		update = update(
 						proxy.getDctermsSpatial() != null ? proxy.getDctermsSpatial()
 								: null,
 						retProxy.getDctermsSpatial()!= null ? retProxy
-								.getDctermsSpatial(): null, "dctermsSpatial");
-		update = update
-				|| update(
+								.getDctermsSpatial(): null, "dctermsSpatial")||update;
+		update =  update(
 						proxy.getDctermsTOC() != null ? proxy.getDctermsTOC()
 								: null,
 						retProxy.getDctermsTOC() != null ? retProxy
-								.getDctermsTOC() : null, "dctermsTOC");
-		update = update
-				|| update(
+								.getDctermsTOC() : null, "dctermsTOC")||update;
+		update =  update(
 						proxy.getDctermsTemporal() != null ? proxy.getDctermsTemporal()
 								: null,
 						retProxy.getDctermsTemporal()!= null ? retProxy
-								.getDctermsTemporal() : null, "dctermsTemporal");
+								.getDctermsTemporal() : null, "dctermsTemporal")||update;
 		if (proxy.getEdmType() != null) {
 			if (retProxy.getEdmType() == null
 					|| !retProxy.getEdmType().equals(proxy.getEdmType())) {
@@ -299,66 +262,56 @@ public class ProxyUpdater implements Updater<ProxyImpl, ProxyImpl> {
 				update= true;
 			}
 		}
-		update = update
-				|| update(
+		update = update(
 						proxy.getEdmRights() != null ? proxy.getEdmRights()
 								: null,
 						retProxy.getEdmRights()!= null ? retProxy
-								.getEdmRights() : null, "edmRights");
-		update = update
-				|| update(
+								.getEdmRights() : null, "edmRights")||update;
+		update =  update(
 						proxy.getEdmHasMet() != null ? proxy.getEdmHasMet()
 								: null,
 						retProxy.getEdmHasMet()!= null ? retProxy
-								.getEdmHasMet() : null, "edmHasMet");
-		update = update
-				|| update(
+								.getEdmHasMet() : null, "edmHasMet")|| update;
+		update =  update(
 						proxy.getEdmHasType()!= null ? proxy.getEdmHasType()
 								: null,
 						retProxy.getEdmHasType()!= null ? retProxy
-								.getEdmHasType(): null, "edmHasType");
-		update = update
-				|| update(
+								.getEdmHasType(): null, "edmHasType") ||update;
+		update = update(
 						proxy.getEdmIsRelatedTo()!= null ? proxy.getEdmIsRelatedTo()
 								: null,
 						retProxy.getEdmIsRelatedTo()!= null ? retProxy
-								.getEdmIsRelatedTo(): null, "edmIsRelatedTo");
-		update = update
-				|| updateArray(
+								.getEdmIsRelatedTo(): null, "edmIsRelatedTo")||update;
+		update =  updateArray(
 						proxy.getEdmIsDerivativeOf() != null ? proxy.getEdmIsDerivativeOf()
 								: null,
 						retProxy.getEdmIsDerivativeOf()!= null ? retProxy
-								.getEdmIsDerivativeOf() : null, "edmIsDerivativeOf");
-		update = update
-				|| updateArray(
+								.getEdmIsDerivativeOf() : null, "edmIsDerivativeOf")||update;
+		update =  updateArray(
 						proxy.getEdmIsNextInSequence() != null ? proxy.getEdmIsNextInSequence()
 								: null,
 						retProxy.getEdmIsNextInSequence()!= null ? retProxy
-								.getEdmIsNextInSequence() : null, "edmIsNextInSequence");
-		update = update
-				|| updateArray(
+								.getEdmIsNextInSequence() : null, "edmIsNextInSequence")||update;
+		update = updateArray(
 						proxy.getEdmIsSimilarTo() != null ? proxy.getEdmIsSimilarTo()
 								: null,
 						retProxy.getEdmIsSimilarTo()!= null ? retProxy
-								.getEdmIsSimilarTo() : null, "edmIsSimilarTo");
-		update = update
-				|| updateArray(
+								.getEdmIsSimilarTo() : null, "edmIsSimilarTo")||update;
+		update = updateArray(
 						proxy.getEdmIsSuccessorOf() != null ? proxy.getEdmIsSuccessorOf()
 								: null,
 						retProxy.getEdmIsSuccessorOf()!= null ? retProxy
-								.getEdmIsSuccessorOf() : null, "edmIsSuccessorOf");
-		update = update
-				|| updateArray(
+								.getEdmIsSuccessorOf() : null, "edmIsSuccessorOf")||update;
+		update = updateArray(
 						proxy.getEdmWasPresentAt()!= null ? proxy.getEdmWasPresentAt()
 								: null,
 						retProxy.getEdmWasPresentAt()!= null ? retProxy
-								.getEdmWasPresentAt() : null, "edmWasPresentAt");
-		update = update
-				|| updateArray(
+								.getEdmWasPresentAt() : null, "edmWasPresentAt")||update;
+		update =  updateArray(
 						proxy.getProxyIn() != null ? proxy.getProxyIn()
 								: null,
 						retProxy.getProxyIn()!= null ? retProxy
-								.getProxyIn() : null, "proxyIn");
+								.getProxyIn() : null, "proxyIn")||update;
 		if (proxy.getProxyFor() != null) {
 			if (retProxy.getProxyFor() == null
 					|| !retProxy.getProxyFor().equals(proxy.getProxyFor())) {
