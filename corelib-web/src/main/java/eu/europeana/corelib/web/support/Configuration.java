@@ -244,7 +244,10 @@ public class Configuration {
 	}
 
 	public boolean isContentChecker() {
-		return isContentChecker.equals("true");
+		if (StringUtils.isBlank(isContentChecker)) {
+			return false;
+		}
+		return Boolean.parseBoolean(isContentChecker);
 	}
 
 	public int getRowLimit() {
