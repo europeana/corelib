@@ -308,7 +308,9 @@ public class UrlBuilder {
 				sb.append(":").append(port);
 			}
 		}
-		sb.append(path.toString());
+		if (path != null) {
+			sb.append(path.toString());
+		}
 		if (trailingSlash) {
 			sb.append(PATH_SEPERATOR);
 		}
