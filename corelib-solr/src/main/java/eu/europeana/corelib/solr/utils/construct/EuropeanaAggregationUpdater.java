@@ -11,7 +11,7 @@ public class EuropeanaAggregationUpdater implements
 		Updater<EuropeanaAggregationImpl> {
 
 	@Override
-	public void update(EuropeanaAggregationImpl mongoEntity,
+	public EuropeanaAggregationImpl update(EuropeanaAggregationImpl mongoEntity,
 			EuropeanaAggregationImpl newEntity, MongoServer mongoServer) {
 		Query<EuropeanaAggregationImpl> updateQuery = mongoServer
 				.getDatastore().createQuery(EuropeanaAggregationImpl.class)
@@ -25,11 +25,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !mongoEntity.getAggregatedCHO().equals(
 							newEntity.getAggregatedCHO())) {
 				ops.set("aggregatedCHO", newEntity.getAggregatedCHO());
+				mongoEntity.setAggregatedCHO(newEntity.getAggregatedCHO());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getAggregatedCHO() != null) {
 				ops.unset("aggregatedCHO");
+				mongoEntity.setAggregatedCHO(null);
 				update = true;
 			}
 		}
@@ -39,11 +41,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !mongoEntity.getEdmIsShownBy().equals(
 							newEntity.getEdmIsShownBy())) {
 				ops.set("edmIsShownBy", newEntity.getEdmIsShownBy());
+				mongoEntity.setEdmIsShownBy(newEntity.getEdmIsShownBy());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmIsShownBy() != null) {
 				ops.unset("edmIsShownBy");
+				mongoEntity.setEdmIsShownBy(null);
 				update = true;
 			}
 		}
@@ -53,11 +57,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !MongoUtils.mapEquals(newEntity.getEdmRights(),
 							mongoEntity.getEdmRights())) {
 				ops.set("edmRights", newEntity.getEdmRights());
+				mongoEntity.setEdmRights(newEntity.getEdmRights());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmRights() != null) {
 				ops.unset("edmRights");
+				mongoEntity.setEdmRights(null);
 				update = true;
 			}
 		}
@@ -67,11 +73,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !MongoUtils.mapEquals(newEntity.getEdmCountry(),
 							mongoEntity.getEdmCountry())) {
 				ops.set("edmCountry", newEntity.getEdmCountry());
+				mongoEntity.setEdmCountry(newEntity.getEdmCountry());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmCountry() != null) {
 				ops.unset("edmCountry");
+				mongoEntity.setEdmCountry(null);
 				update = true;
 			}
 		}
@@ -80,11 +88,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !newEntity.getEdmLandingPage().equals(
 							mongoEntity.getEdmRights())) {
 				ops.set("edmLandingPage", newEntity.getEdmLandingPage());
+				mongoEntity.setEdmLandingPage(newEntity.getEdmLandingPage());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmLandingPage() != null) {
 				ops.unset("edmLandingPage");
+				mongoEntity.setEdmLandingPage(null);
 				update = true;
 			}
 		}
@@ -94,11 +104,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !MongoUtils.mapEquals(mongoEntity.getEdmLanguage(),
 							newEntity.getEdmLanguage())) {
 				ops.set("edmLanguage", newEntity.getEdmLanguage());
+				mongoEntity.setEdmLanguage(newEntity.getEdmLanguage());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmLanguage() != null) {
 				ops.unset("edmLanguage");
+				mongoEntity.setEdmLanguage(null);
 				update = true;
 			}
 		}
@@ -108,11 +120,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !MongoUtils.mapEquals(mongoEntity.getDcCreator(),
 							newEntity.getDcCreator())) {
 				ops.set("dcCreator", newEntity.getDcCreator());
+				mongoEntity.setDcCreator(newEntity.getDcCreator());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getDcCreator() != null) {
 				ops.unset("dcCreator");
+				mongoEntity.setDcCreator(null);
 				update = true;
 			}
 		}
@@ -121,11 +135,13 @@ public class EuropeanaAggregationUpdater implements
 					|| !mongoEntity.getEdmPreview().equals(
 							newEntity.getDcCreator())) {
 				ops.set("edmPreview", newEntity.getEdmPreview());
+				mongoEntity.setEdmPreview(newEntity.getEdmPreview());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getEdmPreview() != null) {
 				ops.unset("edmPreview");
+				mongoEntity.setEdmPreview(null);
 				update = true;
 			}
 		}
@@ -134,22 +150,23 @@ public class EuropeanaAggregationUpdater implements
 					|| !MongoUtils.arrayEquals(newEntity.getAggregates(),
 							mongoEntity.getAggregates())) {
 				ops.set("aggregates", newEntity.getAggregates());
+				mongoEntity.setAggregates(newEntity.getAggregates());
 				update = true;
 			}
 		} else {
 			if (mongoEntity.getAggregates() != null) {
 				ops.unset("aggregates");
+				mongoEntity.setAggregates(null);
 				update = true;
 			}
 		}
-		if (newEntity.getWebResources() != null) {
-			mongoEntity.setWebResources(newEntity.getWebResources());
-			mongoServer.getDatastore().save(newEntity.getWebResources());
-			update = true;
-		}
+		MongoUtils.update(EuropeanaAggregationImpl.class,
+				mongoEntity.getAbout(), mongoServer, "webResources",
+				newEntity.getWebResources());
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}
+		return mongoEntity;
 	}
 
 }

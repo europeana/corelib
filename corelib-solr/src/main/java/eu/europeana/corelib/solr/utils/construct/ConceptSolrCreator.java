@@ -7,20 +7,17 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
-/*
-	CC_SKOS_BROADER("cc_skos_broader", SolrType.NOT_STORED), 
-	CC_SKOS_NARROWER("cc_skos_narrower", SolrType.NOT_STORED),
-	CC_SKOS_RELATED("cc_skos_related", SolrType.NOT_STORED),
-	CC_SKOS_BROADMATCH("cc_skos_broadMatch", SolrType.NOT_STORED),
-	CC_SKOS_NARROWMATCH("cc_skos_narrowMatch", SolrType.NOT_STORED),
-	CC_SKOS_RELATEDMATCH("cc_skos_relatedMatch", SolrType.NOT_STORED),
-	CC_SKOS_EXACTMATCH("cc_skos_exactMatch", SolrType.NOT_STORED),
-	CC_SKOS_CLOSEMATCH("cc_skos_closeMatch", SolrType.NOT_STORED),
-	CC_SKOS_NOTATIONS("cc_skos_notation", SolrType.NOT_STORED),
-	CC_SKOS_INSCHEME("cc_skos_inScheme", SolrType.NOT_STORED),
+/**
+ * Generate Concept SOLR fields from Mongo
+ * @author Yorgos.Mamakis@ europeana.eu
+ *
  */
 public class ConceptSolrCreator {
-
+	/**
+	 * Create SOLR fields from a Mongo concept
+	 * @param doc The solr document to modify
+	 * @param concept The concept mongo entity to append
+	 */
 	public void create(SolrInputDocument doc, ConceptImpl concept){
 		Collection<Object> values = doc.getFieldValues(
 				EdmLabel.SKOS_CONCEPT.toString());

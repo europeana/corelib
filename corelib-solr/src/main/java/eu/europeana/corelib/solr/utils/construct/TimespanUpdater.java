@@ -12,7 +12,7 @@ import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 public class TimespanUpdater implements Updater<TimespanImpl> {
-	public void update(TimespanImpl mongoTimespan, TimespanImpl timeSpan,
+	public TimespanImpl update(TimespanImpl mongoTimespan, TimespanImpl timeSpan,
 			MongoServer mongoServer) {
 		Query<TimespanImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(TimespanImpl.class).field("about")
@@ -26,6 +26,7 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 						|| !MongoUtils.mapEquals(timeSpan.getBegin(),
 								mongoTimespan.getBegin())) {
 					ops.set("begin", timeSpan.getBegin());
+					mongoTimespan.setBegin(timeSpan.getBegin());
 					update = true;
 				
 			}
@@ -33,18 +34,22 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 		} else {
 			if (mongoTimespan.getBegin()!=null){
 				ops.unset("begin");
+				mongoTimespan.setBegin(null);
 				update = true;
+				
 			}
 		}
 		if (timeSpan.getEnd() != null) {
 				if (mongoTimespan.getEnd() == null
 						|| !MongoUtils.mapEquals(timeSpan.getEnd(), mongoTimespan.getEnd())) {
 					ops.set("end", timeSpan.getEnd());
+					mongoTimespan.setEnd(timeSpan.getEnd());
 					update = true;
 				}
 		}else {
 			if (mongoTimespan.getEnd()!=null){
 				ops.unset("end");
+				mongoTimespan.setEnd(null);
 				update = true;
 			}
 		}
@@ -53,11 +58,13 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 				if (mongoTimespan.getNote() == null
 						|| MongoUtils.mapEquals(timeSpan.getNote(), mongoTimespan.getNote())) {
 					ops.set("note", timeSpan.getNote());
+					mongoTimespan.setNote(timeSpan.getNote());
 					update = true;
 				}
 		} else {
 			if (mongoTimespan.getNote()!=null){
 				ops.unset("note");
+				mongoTimespan.setNote(null);
 				update = true;
 			}
 		}
@@ -67,11 +74,13 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 						|| MongoUtils.mapEquals(timeSpan.getAltLabel(),
 								mongoTimespan.getAltLabel())) {
 					ops.set("altLabel", timeSpan.getAltLabel());
+					mongoTimespan.setAltLabel(timeSpan.getAltLabel());
 					update = true;
 				}
 		} else {
 			if (mongoTimespan.getAltLabel()!=null){
-				ops.unset("altLAbel");
+				ops.unset("altLabel");
+				mongoTimespan.setAltLabel(null);
 				update = true;
 			}
 		}
@@ -82,11 +91,13 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 								mongoTimespan.getPrefLabel())) {
 
 					ops.set("prefLabel", timeSpan.getPrefLabel());
+					mongoTimespan.setPrefLabel(timeSpan.getPrefLabel());
 					update = true;
 				}
 		} else {
 			if (mongoTimespan.getPrefLabel()!=null){
 				ops.unset("prefLabel");
+				mongoTimespan.setPrefLabel(null);
 				update = true;
 			}
 		}
@@ -96,11 +107,13 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 						|| MongoUtils.mapEquals(timeSpan.getDctermsHasPart(),
 								mongoTimespan.getDctermsHasPart())) {
 					ops.set("dctermsHasPart", timeSpan.getDctermsHasPart());
+					mongoTimespan.setDctermsHasPart(timeSpan.getDctermsHasPart());
 					update = true;
 				}
 		} else {
 			if (mongoTimespan.getDctermsHasPart()!=null){
 				ops.unset("dctermsHasPart");
+				mongoTimespan.setDctermsHasPart(null);
 				update = true;
 			}
 		}
@@ -121,15 +134,18 @@ public class TimespanUpdater implements Updater<TimespanImpl> {
 				}
 			}
 			ops.set("owlSameAs", StringArrayUtils.toArray(owlSameAs));
+			mongoTimespan.setOwlSameAs(timeSpan.getOwlSameAs());
 			update = true;
 		} else {
 			if (mongoTimespan.getOwlSameAs()!=null){
 				ops.unset("owlSameAs");
+				mongoTimespan.setOwlSameAs(timeSpan.getOwlSameAs());
 				update = true;
 			}
 		}
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}
+		return mongoTimespan;
 	}
 }

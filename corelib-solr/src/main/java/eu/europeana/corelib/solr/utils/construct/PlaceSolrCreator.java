@@ -8,7 +8,18 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 
+/**
+ * Generate Place SOLR fields from Mongo
+ * @author Yorgos.Mamakis@ europeana.eu
+ *
+ */
 public class PlaceSolrCreator {
+	
+	/**
+	 * Create SOLR fields from a Mongo Place
+	 * @param doc The solr document to modify
+	 * @param place The place mongo entity to append
+	 */
 	public void create(SolrInputDocument doc, PlaceImpl place) {
 
 		Collection<Object> values = doc.getFieldValues(EdmLabel.EDM_PLACE.toString());

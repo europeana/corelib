@@ -8,9 +8,17 @@ import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 
-
+/**
+ * Generate Timespan SOLR fields from Mongo
+ * @author Yorgos.Mamakis@ europeana.eu
+ *
+ */
 public class TimespanSolrCreator {
-
+	/**
+	 * Create SOLR fields from a Mongo concept
+	 * @param doc The solr document to modify
+	 * @param ts The timespan mongo entity to append
+	 */
 	public void create(SolrInputDocument doc, TimespanImpl ts) {
 		Collection<Object> values = doc.getFieldValues(
 				EdmLabel.EDM_TIMESPAN.toString());

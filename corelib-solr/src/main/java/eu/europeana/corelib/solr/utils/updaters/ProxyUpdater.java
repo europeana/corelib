@@ -9,7 +9,7 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
-
+@Deprecated
 public class ProxyUpdater implements Updater<ProxyImpl, ProxyImpl> {
 	UpdateOperations<ProxyImpl> ops;
 

@@ -11,7 +11,7 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
-
+@Deprecated
 public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 
 	public  void update(AgentImpl agent, AgentType jibxAgent,

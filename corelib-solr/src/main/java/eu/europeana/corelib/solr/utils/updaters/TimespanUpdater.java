@@ -13,7 +13,7 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
-
+@Deprecated
 public class TimespanUpdater implements Updater<TimespanImpl, TimeSpanType> {
 	public void update(TimespanImpl mongoTimespan, TimeSpanType timeSpan,
 			MongoServer mongoServer) {

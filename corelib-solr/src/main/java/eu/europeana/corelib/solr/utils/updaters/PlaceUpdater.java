@@ -13,7 +13,7 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
-
+@Deprecated
 public class PlaceUpdater implements Updater<PlaceImpl, PlaceType> {
 
 	public void update(PlaceImpl place, PlaceType jibxPlace,

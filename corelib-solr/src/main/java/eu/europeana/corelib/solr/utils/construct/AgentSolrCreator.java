@@ -7,9 +7,17 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.entity.AgentImpl;
-
+/**
+ * Generate Agent SOLR fields from Mongo
+ * @author Yorgos.Mamakis@ europeana.eu
+ *
+ */
 public class AgentSolrCreator {
-
+	/**
+	 * Create SOLR fields from a Mongo Agent
+	 * @param doc The solr document to modify
+	 * @param agent The agent mongo entity to append
+	 */
 	public void create(SolrInputDocument doc, AgentImpl agent){
 		Collection<Object> values = doc.getFieldValues(
 				EdmLabel.EDM_AGENT.toString());

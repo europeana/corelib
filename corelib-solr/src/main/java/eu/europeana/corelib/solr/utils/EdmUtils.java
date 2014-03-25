@@ -106,7 +106,7 @@ public class EdmUtils {
 	}
 
 	private static String getType(FullBeanImpl fullBean) {
-		for (ProxyImpl prx :fullBean.getProxies()) {
+		for (ProxyImpl prx : fullBean.getProxies()) {
 			if (!prx.isEuropeanaProxy()) {
 				return prx.getEdmType().toString();
 			}
@@ -221,7 +221,8 @@ public class EdmUtils {
 			if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
 				agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
 			} else {
-				agCHO.setResource(PREFIX + fBean.getProvidedCHOs().get(0).getAbout());
+				agCHO.setResource(PREFIX
+						+ fBean.getProvidedCHOs().get(0).getAbout());
 			}
 			aggregation.setAggregatedCHO(agCHO);
 		}
@@ -301,7 +302,8 @@ public class EdmUtils {
 		return null;
 	}
 
-	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
+	private static void appendProxy(RDF rdf, List<ProxyImpl> proxies,
+			String typeStr) {
 		List<ProxyType> proxyList = new ArrayList<ProxyType>();
 		for (ProxyImpl prx : proxies) {
 			ProxyType proxy = new ProxyType();
@@ -332,8 +334,8 @@ public class EdmUtils {
 				proxy.setIsNextInSequenceList(nis);
 			}
 
-			String[] pIn  = prx.getProxyIn();
-			List<ProxyIn> pInList= null;
+			String[] pIn = prx.getProxyIn();
+			List<ProxyIn> pInList = null;
 			if (pIn != null) {
 				pInList = new ArrayList<ProxyIn>();
 				for (int i = 0; i < pIn.length; i++) {
@@ -350,8 +352,7 @@ public class EdmUtils {
 				proxy.setProxyInList(pInList);
 			}
 			Type1 type = new Type1();
-				type.setType(EdmType.valueOf(typeStr
-						.replace("3D", "_3_D")));
+			type.setType(EdmType.valueOf(typeStr.replace("3D", "_3_D")));
 			proxy.setType(type);
 
 			addAsObject(proxy, CurrentLocation.class,
@@ -382,7 +383,8 @@ public class EdmUtils {
 					prx.getDcIdentifier());
 			addEuropeanaTypeChoice(dcChoices, Publisher.class,
 					prx.getDcPublisher());
-			addEuropeanaTypeChoiceLiteral(dcChoices, Language.class, prx.getDcLanguage());
+			addEuropeanaTypeChoiceLiteral(dcChoices, Language.class,
+					prx.getDcLanguage());
 			addEuropeanaTypeChoice(dcChoices, Relation.class,
 					prx.getDcRelation());
 			addEuropeanaTypeChoice(dcChoices, Rights.class, prx.getDcRights());
@@ -453,12 +455,14 @@ public class EdmUtils {
 			} else {
 				aggregation.setAbout(PREFIX + aggr.getAbout());
 			}
-			if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
+			if (!addAsObject(aggregation, AggregatedCHO.class,
+					aggr.getAggregatedCHO())) {
 				AggregatedCHO cho = new AggregatedCHO();
 				if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
 					cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
 				} else {
-					cho.setResource(PREFIX + rdf.getProvidedCHOList().get(0).getAbout());
+					cho.setResource(PREFIX
+							+ rdf.getProvidedCHOList().get(0).getAbout());
 				}
 				aggregation.setAggregatedCHO(cho);
 			}
@@ -529,7 +533,7 @@ public class EdmUtils {
 			} else {
 				pChoJibx.setAbout(PREFIX + pCho.getAbout());
 			}
-			
+
 			addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
 			pChoList.add(pChoJibx);
 		}
@@ -828,7 +832,7 @@ public class EdmUtils {
 					}
 					method.invoke(dest, convertListFromArray(clazz, valNew));
 				} else {
-					
+
 					method.invoke(dest, convertListFromArray(clazz, vals));
 				}
 				return true;
@@ -850,13 +854,13 @@ public class EdmUtils {
 	private static String getSetterMethodName(Class<?> clazz, boolean list) {
 		StringBuilder sb = new StringBuilder("set");
 		String clazzName = clazz.getSimpleName();
-		if (StringUtils.equals("Rights", clazzName)&& list) {
+		if (StringUtils.equals("Rights", clazzName) && list) {
 			clazzName = "Right";
 		}
 		if (StringUtils.equals("SameAs", clazzName) && list) {
 			clazzName = "SameA";
 		}
-		if(StringUtils.equals("Agrregates", clazzName) && list){
+		if (StringUtils.equals("Agrregates", clazzName) && list) {
 			clazzName = "Aggregate";
 		}
 		clazzName = StringUtils.strip(clazzName, "_1");
@@ -899,63 +903,73 @@ public class EdmUtils {
 			List<T> list = new ArrayList<T>();
 			for (Entry<String, List<String>> entry : map.entrySet()) {
 				try {
+					if (entry.getValue() != null) {
+						if (clazz.getSuperclass().isAssignableFrom(
+								ResourceType.class)) {
 
-					if (clazz.getSuperclass().isAssignableFrom(
-							ResourceType.class)) {
-						for (String str : entry.getValue()) {
-							ResourceType t = (ResourceType) clazz.newInstance();
+							for (String str : entry.getValue()) {
+								ResourceType t = (ResourceType) clazz
+										.newInstance();
 
-							t.setResource(str);
-							list.add((T) t);
-						}
-
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							LiteralType.class)) {
-						LiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
-							lang = new LiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							LiteralType t = (LiteralType) clazz.newInstance();
-
-							t.setString(str);
-							t.setLang(lang);
-							list.add((T) t);
-						}
-					} else if (clazz.getSuperclass().isAssignableFrom(
-							ResourceOrLiteralType.class)) {
-						ResourceOrLiteralType.Lang lang = null;
-						if (StringUtils.isNotEmpty(entry.getKey())
-								&& !StringUtils.equals(entry.getKey(), "def")) {
-							lang = new ResourceOrLiteralType.Lang();
-							lang.setLang(entry.getKey());
-						}
-						for (String str : entry.getValue()) {
-							ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
-									.newInstance();
-							Resource resource = new Resource();
-							t.setString("");
-							if (isUri(str)) {
-								resource.setResource(str);
-								t.setResource(resource);
-							} else {
-								t.setString(str);
-								t.setLang(lang);
+								t.setResource(str);
+								list.add((T) t);
 							}
 
-							list.add((T) t);
+						} else if (clazz.getSuperclass().isAssignableFrom(
+								LiteralType.class)) {
+							LiteralType.Lang lang = null;
+							if (StringUtils.isNotEmpty(entry.getKey())
+									&& !StringUtils.equals(entry.getKey(),
+											"def")) {
+								lang = new LiteralType.Lang();
+								lang.setLang(entry.getKey());
+							}
+							for (String str : entry.getValue()) {
+								LiteralType t = (LiteralType) clazz
+										.newInstance();
+
+								t.setString(str);
+								t.setLang(lang);
+								list.add((T) t);
+							}
+						} else if (clazz.getSuperclass().isAssignableFrom(
+								ResourceOrLiteralType.class)) {
+							ResourceOrLiteralType.Lang lang = null;
+							if (StringUtils.isNotEmpty(entry.getKey())
+									&& !StringUtils.equals(entry.getKey(),
+											"def")) {
+								lang = new ResourceOrLiteralType.Lang();
+								lang.setLang(entry.getKey());
+							}
+							for (String str : entry.getValue()) {
+								ResourceOrLiteralType t = (ResourceOrLiteralType) clazz
+										.newInstance();
+								Resource resource = new Resource();
+								t.setString("");
+								if (isUri(str)) {
+									resource.setResource(str);
+									t.setResource(resource);
+								} else {
+									t.setString(str);
+									t.setLang(lang);
+								}
+
+								list.add((T) t);
+							}
 						}
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				}
 			}
 			return list;
@@ -1018,13 +1032,17 @@ public class EdmUtils {
 						return (T) obj;
 					}
 				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				} catch (InstantiationException e) {
-					log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+					log.severe(e.getClass().getSimpleName() + "  "
+							+ e.getMessage());
 				}
 			}
 		}
@@ -1032,10 +1050,10 @@ public class EdmUtils {
 	}
 
 	private static boolean isUri(String str) {
-		if (   StringUtils.startsWith(str, "http://")
-			|| StringUtils.startsWith(str, "https://")
-			|| StringUtils.startsWith(str, "urn:")
-			|| StringUtils.startsWith(str, "#")) {
+		if (StringUtils.startsWith(str, "http://")
+				|| StringUtils.startsWith(str, "https://")
+				|| StringUtils.startsWith(str, "urn:")
+				|| StringUtils.startsWith(str, "#")) {
 			return true;
 		}
 		return false;

@@ -20,7 +20,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
-
+@Deprecated
 public class ConceptUpdater implements Updater<ConceptImpl,Concept>{
 
 	public void update(ConceptImpl conceptMongo, Concept concept,
