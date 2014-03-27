@@ -391,6 +391,45 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		return getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, europeanaId);
 	}
 
+	@Override
+	public User updateUserLanguagePortal(Long userId, String languageCode) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		User user = getDao().findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user.setLanguagePortal(languageCode);
+		return user;
+	}
+
+	@Override
+	public User updateUserLanguageItem(Long userId, String languageCode) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		User user = getDao().findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user.setLanguageItem(languageCode);
+		return user;
+	}
+
+	@Override
+	public User updateUserLanguageSearch(Long userId, String... languageCodes) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		User user = getDao().findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user.setLanguageSearch(languageCodes);
+		return user;
+	}
+
 	private FullBean populateEuropeanaUserObject(User user,
 			String europeanaObjectId, EuropeanaUserObject instance)
 			throws DatabaseException {

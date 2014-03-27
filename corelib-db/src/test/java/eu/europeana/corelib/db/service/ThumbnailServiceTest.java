@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
-import org.apache.log4j.Logger;
 import org.apache.sanselan.ImageReadException;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
@@ -38,6 +37,8 @@ import org.jibx.runtime.JiBXException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -59,7 +60,7 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class ThumbnailServiceTest {
 
-	private static Logger LOGGER = Logger.getLogger(ThumbnailServiceTest.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ThumbnailServiceTest.class);
 	@Resource(name="corelib_solr_mongoProvider")
 	private MongoProvider mongoProvider;
 	@Resource(name = "corelib_db_imageDao")
