@@ -88,6 +88,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['api2.url']}")
 	private String api2url;
 
+	@Value("#{europeanaProperties['api2.canonical.url']}")
+	private String api2canonicalUrl;
+
 	@Value("#{europeanaProperties['api2.key']}")
 	private String api2key;
 
@@ -181,6 +184,10 @@ public class Configuration {
 
 	public String getApi2url() {
 		return api2url;
+	}
+
+	public String getApi2CanonicalUrl() {
+		return api2canonicalUrl;
 	}
 
 	public String getApi2key() {
