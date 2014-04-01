@@ -66,7 +66,7 @@
 	<bean name="corelib_solr_mongoProvider" class="eu.europeana.corelib.MongoProvider" />
 
 	<!--Log4j Configuration-->
-	<bean id="log4jInitialization"
+	<!-- <bean id="log4jInitialization"
 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
 		<property name="targetMethod" value="initLogging" />
@@ -75,5 +75,5 @@
 				<value>classpath:testlog4j.properties</value>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 </beans>

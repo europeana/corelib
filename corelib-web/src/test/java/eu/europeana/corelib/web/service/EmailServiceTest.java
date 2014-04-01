@@ -255,50 +255,40 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 		
 			@Override
 			public String getFirstName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void setFirstName(String firstName) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public String getLastName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void setLastName(String lastName) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public String getCompany() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public String getCountry() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void setCompany(String company) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void setCountry(String country) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
@@ -332,6 +322,36 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 
 			@Override
 			public void setFieldOfWork(String fieldOfWork) {}
+
+			@Override
+			public String getLanguagePortal() {
+				return null;
+			}
+
+			@Override
+			public void setLanguagePortal(String languageCode) {
+				
+			}
+
+			@Override
+			public String getLanguageItem() {
+				return null;
+			}
+
+			@Override
+			public void setLanguageItem(String languageCode) {
+				
+			}
+
+			@Override
+			public String[] getLanguageSearch() {
+				return null;
+			}
+
+			@Override
+			public void setLanguageSearch(String... languageCodes) {
+			}
+
 		};
 	}
 

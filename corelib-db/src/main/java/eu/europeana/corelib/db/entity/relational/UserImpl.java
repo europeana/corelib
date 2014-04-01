@@ -38,6 +38,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -120,6 +121,15 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 
 	@Column(length=FIELDSIZE_FIELDOFWORK)
 	private String fieldOfWork;
+	
+	@Column
+	private String languagePortal;
+	
+	@Column
+	private String languageItem;
+	
+	@Column
+	private String languageSearch;
 
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
@@ -319,4 +329,45 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public void setFieldOfWork(String fieldOfWork) {
 		this.fieldOfWork = fieldOfWork;
 	}
+
+	@Override
+	public String[] getLanguageSearch() {
+		if (StringUtils.isNotBlank(this.languageSearch)) {
+			return StringUtils.split(languageSearch,",");
+		}
+		return ArrayUtils.EMPTY_STRING_ARRAY;
+	}
+
+	@Override
+	public void setLanguageSearch(String... languageCodes) {
+		if (languageCodes != null) {
+			if ( (languageCodes.length == 1) && StringUtils.contains(languageCodes[0], ",")) {
+				languageSearch = StringUtils.trimToNull(StringUtils.lowerCase(languageCodes[0]));
+			} else {
+				languageSearch = StringUtils.trimToNull(StringUtils.lowerCase(StringUtils.join(languageCodes, ",")));
+			}
+		}
+	}
+	
+	@Override
+	public String getLanguageItem() {
+		return languageItem;
+	}
+	
+	@Override
+	public String getLanguagePortal() {
+		return languagePortal;
+	}
+	
+	@Override
+	public void setLanguageItem(String languageCode) {
+		languageItem = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
+	}
+	
+	@Override
+	public void setLanguagePortal(String languageCode) {
+		languagePortal = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
+	}
+	
+	
 }

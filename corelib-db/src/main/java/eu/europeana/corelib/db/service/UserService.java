@@ -268,4 +268,44 @@ public interface UserService extends AbstractService<User> {
 	 */
 	SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException;
 
+	/**
+	 * Set the language portal to the user profile
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @param languageCode
+	 * 			2 character language code, empty string or null will clear the value in profile
+	 * @return
+	 * 			Updated user profile
+	 * @throws DatabaseException
+	 */
+	User updateUserLanguagePortal(Long userId, String languageCode)  throws DatabaseException;
+
+	/**
+	 * Set the item default translation setting to the user profile
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @param languageCode
+	 * 			2 character language code, empty string or null will clear the value in profile
+	 * @return
+	 * 			Updated user profile
+	 * @throws DatabaseException
+	 */
+	User updateUserLanguageItem(Long userId, String languageCode)  throws DatabaseException;
+
+	/**
+	 * Set the preferred search query translations to the user profile
+	 * 
+	 * @param userId
+	 * 			Existing id of user account
+	 * @param languageCodes
+	 * 			Two options: only 1 string with codes, comma separated or a string array of codes
+	 * 			2 character language code, empty string or null will clear the value in profile
+	 * @return
+	 * 			Updated user profile
+	 * @throws DatabaseException
+	 */
+	User updateUserLanguageSearch(Long userId, String... languageCodes)  throws DatabaseException;
+	
 }
