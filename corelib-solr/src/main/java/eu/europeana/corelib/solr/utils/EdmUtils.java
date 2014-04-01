@@ -860,7 +860,7 @@ public class EdmUtils {
 		if (StringUtils.equals("SameAs", clazzName) && list) {
 			clazzName = "SameA";
 		}
-		if (StringUtils.equals("Agrregates", clazzName) && list) {
+		if (StringUtils.equals("Aggregates", clazzName) && list) {
 			clazzName = "Aggregate";
 		}
 		clazzName = StringUtils.strip(clazzName, "_1");
