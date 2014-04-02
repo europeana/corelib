@@ -45,12 +45,14 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.ContentLoader;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
+import eu.europeana.corelib.solr.service.impl.SearchServiceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl;
@@ -103,6 +105,7 @@ public class SearchServiceTest {
 				idServer.createDatastore();
 				searchService.setEdmMongoServer(mongoDBServer);
 				searchService.setEuropeanaIdMongoServer(idServer);
+				searchService.setLogger(Logger.getLogger(SearchServiceImpl.class));
 				for (Method method : this.getClass().getMethods()) {
 					for (Annotation annotation : method.getAnnotations()) {
 						if (annotation.annotationType().equals(

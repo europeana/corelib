@@ -130,7 +130,7 @@ public class SearchServiceImpl implements SearchService {
 	private String mltFields;
 
 	@Log
-	private Logger log;
+	protected Logger log;
 
 	// private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
 
@@ -272,7 +272,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt.count", count);
 		solrQuery.set("rows", 1);
 		solrQuery.setTimeAllowed(TIME_ALLOWED);
-		if (log != null && log.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			log.debug(solrQuery.toString());
 		}
 
@@ -360,7 +360,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 
 				try {
-					if (log != null && log.isDebugEnabled()) {
+					if (log.isDebugEnabled()) {
 						log.debug("Solr query is: " + solrQuery);
 					}
 					query.setExecutedQuery(solrQuery.toString());
@@ -447,7 +447,7 @@ public class SearchServiceImpl implements SearchService {
 		QueryResponse response;
 		Map<String, Integer> queryFacets = null;
 		try {
-			if (log != null && log.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				log.debug("Solr query is: " + solrQuery.toString());
 			}
 			response = solrServer.query(solrQuery);
@@ -496,7 +496,7 @@ public class SearchServiceImpl implements SearchService {
 			}
 
 			try {
-				if (log != null && log.isDebugEnabled()) {
+				if (log.isDebugEnabled()) {
 					log.debug("Solr query is: " + solrQuery);
 				}
 				QueryResponse queryResponse = solrServer.query(solrQuery);
@@ -580,7 +580,7 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	@Override
 	public List<Term> suggestions(String query, int pageSize, String field) {
-		if (log != null && log.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			log.debug(String.format("%s, %d, %s", query, pageSize, field));
 		}
 		List<Term> results = new ArrayList<Term>();
@@ -610,7 +610,7 @@ public class SearchServiceImpl implements SearchService {
 		logTime("suggestions", (new Date().getTime() - start));
 		total.remove(query);
 
-		if (log != null && log.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			log.debug(String.format("Returned %d results in %d ms",
 				results.size() > pageSize ? pageSize : results.size(),
 				new Date().getTime() - start));
@@ -667,14 +667,14 @@ public class SearchServiceImpl implements SearchService {
 		long t0 = new Date().getTime();
 		NamedList<Object> namedList = solrServer.request(new LukeRequest());
 		NamedList<Object> index = (NamedList<Object>) namedList.get("index");
-		if (log != null && log.isInfoEnabled()) {
+		if (log.isInfoEnabled()) {
 			log.info("spent: " + (new Date().getTime() - t0));
 		}
 		return (Date) index.get("lastModified");
 	}
 
 	public void logTime(String type, long time) {
-		if (log != null && log.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			log.debug(String.format("elapsed time (%s): %d", type, time));
 		}
 	}
