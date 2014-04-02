@@ -132,14 +132,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>europeanalabs.eu</id>
-			<name>europeanalabs.eu-releases</name>
-			<url>http://europeanalabs.eu/artifactory/libs-releases-local</url>
+			<id>artifactory.eanadev.org</id>
+			<name>artifactory.eanadev.org-releases</name>
+			<url>http://artifactory.eanadev.org/artifactory/libs-releases-local</url>
 		</repository>
 		<snapshotRepository>
-			<id>europeanalabs.eu</id>
-			<name>europeanalabs.eu-snapshots</name>
-			<url>http://europeanalabs.eu/artifactory/libs-snapshots-local</url>
+			<id>artifactory.eanadev.org</id>
+			<name>artifactory.eanadev.org-snapshots</name>
+			<url>http://artifactory.eanadev.org/artifactory/libs-snapshots-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 
