@@ -121,14 +121,14 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 
 	@Column(length=FIELDSIZE_FIELDOFWORK)
 	private String fieldOfWork;
-	
-	@Column
+
+	@Column(length=FIELDSIZE_LANGUAGEPORTAL)
 	private String languagePortal;
-	
-	@Column
+
+	@Column(length=FIELDSIZE_LANGUAGEITEM)
 	private String languageItem;
-	
-	@Column
+
+	@Column(length=FIELDSIZE_LANGUAGESEARCH)
 	private String languageSearch;
 
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)

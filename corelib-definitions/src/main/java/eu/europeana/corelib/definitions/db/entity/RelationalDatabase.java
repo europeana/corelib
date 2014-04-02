@@ -23,11 +23,11 @@ package eu.europeana.corelib.definitions.db.entity;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public interface RelationalDatabase {
-	
+
 	// apikey
 	String TABLENAME_APIKEY = "apikey";
 	int FIELDSIZE_APIKEY = 30;
-	
+
 	// user
 	String TABLENAME_USER = "users";
 	int FIELDSIZE_PERSONAL = 100;
@@ -42,6 +42,9 @@ public interface RelationalDatabase {
 	int FIELDSIZE_PHONE = 15;
 	int FIELDSIZE_WEBSITE = 100;
 	int FIELDSIZE_FIELDOFWORK = 50;
+	int FIELDSIZE_LANGUAGEPORTAL = 20;
+	int FIELDSIZE_LANGUAGEITEM = 20;
+	int FIELDSIZE_LANGUAGESEARCH = 20;
 
 	// token
 	String TABLENAME_TOKEN = "token";
