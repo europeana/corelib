@@ -36,21 +36,21 @@
 	<repositories>
 		<repository>
 			<id>releases</id>
-			<url>http://europeanalabs.eu/artifactory/repo</url>
+			<url>http://artifactory.eanadev.org/artifactory/repo</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>snapshots</id>
-			<url>http://europeanalabs.eu/artifactory/repo</url>
+			<url>http://artifactory.eanadev.org/artifactory/repo</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
 		</repository>
 		<repository>
 			<id>ext-snapshots</id>
-			<url>http://europeanalabs.eu/artifactory/ext-snapshots-local</url>
+			<url>http://artifactory.eanadev.org/artifactory/ext-snapshots-local</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
