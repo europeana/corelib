@@ -43,9 +43,7 @@ public class SipCreatorUtils extends MappingParser {
 		String inputString = this.readFile(file);
 		if (inputString != null) {
 
-			return StringUtils.substringAfterLast(StringUtils.substringBetween(
-					inputString, BEGIN_HASH_FUNCTION_NO_RECORD,
-					END_HASH_FUNCTION), ".");
+			return StringUtils.substringAfterLast(inputString, ".");
 
 		}
 		return null;
