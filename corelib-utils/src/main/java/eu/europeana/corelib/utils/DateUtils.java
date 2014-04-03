@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -56,5 +57,16 @@ public class DateUtils {
 	 */
 	public static String format(Date date) {
 		return formatter.format(date);
+	}
+
+
+	public static Date parse(String date) {
+		try {
+			return formatter.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
