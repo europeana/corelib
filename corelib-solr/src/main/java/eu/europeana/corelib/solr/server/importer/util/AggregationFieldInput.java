@@ -88,6 +88,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDcDescription(),
 									desMap)) {
 						ups.set("dcDescription", desMap);
+						retWebResource.setDcDescription(desMap);
 						update = true;
 					}
 					webResource.setDcDescription(desMap);
@@ -102,6 +103,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDcFormat(),
 									forMap)) {
 						ups.set("dcFormat", forMap);
+						retWebResource.setDcFormat(forMap);
 						update = true;
 					}
 					webResource.setDcFormat(forMap);
@@ -115,6 +117,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDcSource(),
 									sourceMap)) {
 						ups.set("dcSource", sourceMap);
+						retWebResource.setDcSource(sourceMap);
 						update = true;
 					}
 					webResource.setDcSource(sourceMap);
@@ -128,6 +131,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDctermsConformsTo(),
 									webResource.getDctermsConformsTo())) {
 						ups.set("dctermsConformsTo", conformsToMap);
+						retWebResource.setDctermsConformsTo(conformsToMap);
 						update = true;
 					}
 					webResource.setDctermsConformsTo(conformsToMap);
@@ -141,6 +145,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDctermsCreated(),
 									createdMap)) {
 						ups.set("dctermsCreated", createdMap);
+						retWebResource.setDctermsCreated(createdMap);
 						update = true;
 					}
 					webResource.setDctermsCreated(createdMap);
@@ -154,6 +159,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDctermsExtent(),
 									extentMap)) {
 						ups.set("dctermsExtent", extentMap);
+						retWebResource.setDctermsExtent(extentMap);
 						update = true;
 					}
 					webResource.setDctermsExtent(extentMap);
@@ -168,10 +174,27 @@ public final class AggregationFieldInput {
 									retWebResource.getDctermsHasPart(),
 									hasPartMap)) {
 						ups.set("dctermsHasPart", hasPartMap);
+						retWebResource.setDctermsHasPart(hasPartMap);
 						update = true;
 					}
 					webResource.setDctermsHasPart(hasPartMap);
 				}
+				
+				Map<String, List<String>> isFormatOfMap = MongoUtils
+						.createResourceOrLiteralMapFromList(wResourceType
+								.getIsFormatOfList());
+				if (isFormatOfMap != null) {
+					if (retWebResource != null
+							&& !MongoUtils.mapEquals(
+									retWebResource.getDctermsIsFormatOf(),
+									hasPartMap)) {
+						ups.set("isFormatOf", isFormatOfMap);
+						retWebResource.setDctermsIsFormatOf(isFormatOfMap);;
+						update = true;
+					}
+					webResource.setDctermsIsFormatOf(isFormatOfMap);
+				}
+				
 				Map<String, List<String>> issuedMap = MongoUtils
 						.createResourceOrLiteralMapFromList(wResourceType
 								.getIssuedList());
@@ -181,6 +204,7 @@ public final class AggregationFieldInput {
 									retWebResource.getDctermsIssued(),
 									issuedMap)) {
 						ups.set("dctermsIssued", issuedMap);
+						retWebResource.setDctermsIssued(issuedMap);
 						update = true;
 					}
 					webResource.setDctermsIssued(issuedMap);
@@ -194,6 +218,7 @@ public final class AggregationFieldInput {
 									retWebResource.getWebResourceDcRights(),
 									rightMap)) {
 						ups.set("webResourceDcRights", rightMap);
+						retWebResource.setWebResourceDcRights(rightMap);
 						update = true;
 					}
 					webResource.setWebResourceDcRights(rightMap);
@@ -207,6 +232,7 @@ public final class AggregationFieldInput {
 									retWebResource.getWebResourceEdmRights(),
 									edmRightsMap)) {
 						ups.set("webResourceEdmRights", edmRightsMap);
+						retWebResource.setWebResourceEdmRights(edmRightsMap);
 						update = true;
 					}
 					webResource.setWebResourceEdmRights(edmRightsMap);
@@ -214,12 +240,15 @@ public final class AggregationFieldInput {
 				if (wResourceType.getIsNextInSequence() != null) {
 					webResource.setIsNextInSequence(wResourceType
 							.getIsNextInSequence().getResource());
-					if (retWebResource != null && retWebResource.getIsNextInSequence()!=null
-							&& !retWebResource.getIsNextInSequence().equals(
+					if (retWebResource != null && (retWebResource.getIsNextInSequence()==null
+							|| !retWebResource.getIsNextInSequence().equals(
 									wResourceType
-									.getIsNextInSequence().getResource())) {
+									.getIsNextInSequence().getResource()))) {
 						ups.set("isNextInSequence", wResourceType
 								.getIsNextInSequence().getResource());
+						retWebResource.setIsNextInSequence(wResourceType
+								.getIsNextInSequence().getResource());
+						update = true;
 					}
 				}
 
