@@ -32,7 +32,7 @@ public class SipCreatorUtils extends MappingParser {
 	private final static String INPUT_FOLDER = "/input_source/";
 	private final static String SUFFIX = ".xml.mapping";
 	private final static String BEGIN_HASH_FUNCTION_RECORD = "createEuropeanaURI(input.record.";
-	private final static String BEGIN_HASH_FUNCTION_NO_RECORD = "createEuropeanaURI(input.";
+	private final static String BEGIN_HASH_FUNCTION_NO_RECORD = "createEuropeanaURI(";
 	private final static String END_HASH_FUNCTION = ")";
 
 	@Override
@@ -43,7 +43,7 @@ public class SipCreatorUtils extends MappingParser {
 		String inputString = this.readFile(file);
 		if (inputString != null) {
 
-			return StringUtils.substringAfterLast(inputString, ".");
+			return StringUtils.substringAfterLast(StringUtils.substringBetween(inputString, BEGIN_HASH_FUNCTION_NO_RECORD, END_HASH_FUNCTION), ".");
 
 		}
 		return null;
