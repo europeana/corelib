@@ -326,14 +326,14 @@ public class FullBeanImpl implements FullBean {
 
 	@Override
 	public Date getTimestampCreated() {
-		return this.timestampCreated!=null? this.timestampCreated:new Date(0);
+		return this.timestampCreated != null ? this.timestampCreated : new Date(0);
 	}
 
 	@Override
 	public Date getTimestampUpdated() {
-		return timestampUpdated!=null? this.timestampUpdated:new Date(0);
+		return timestampUpdated != null ? this.timestampUpdated : new Date(0);
 	}
-	
+
 	@Override
 	public List<? extends BriefBean> getSimilarItems() {
 		return this.similarItems;
