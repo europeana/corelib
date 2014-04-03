@@ -214,7 +214,7 @@ public final class AggregationFieldInput {
 				if (wResourceType.getIsNextInSequence() != null) {
 					webResource.setIsNextInSequence(wResourceType
 							.getIsNextInSequence().getResource());
-					if (retWebResource != null
+					if (retWebResource != null && retWebResource.getIsNextInSequence()!=null
 							&& !retWebResource.getIsNextInSequence().equals(
 									wResourceType
 									.getIsNextInSequence().getResource())) {
