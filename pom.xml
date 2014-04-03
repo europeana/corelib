@@ -36,21 +36,21 @@
 	<repositories>
 		<repository>
 			<id>releases</id>
-			<url>http://artifactory.eanadev.org/artifactory/repo</url>
+			<url>http://europeanalabs.eu/artifactory/repo</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>snapshots</id>
-			<url>http://artifactory.eanadev.org/artifactory/repo</url>
+			<url>http://europeanalabs.eu/artifactory/repo</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
 		</repository>
 		<repository>
 			<id>ext-snapshots</id>
-			<url>http://artifactory.eanadev.org/artifactory/ext-snapshots-local</url>
+			<url>http://europeanalabs.eu/artifactory/ext-snapshots-local</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -132,14 +132,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>artifactory.eanadev.org</id>
-			<name>artifactory.eanadev.org-releases</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-releases-local</url>
+			<id>europeanalabs.eu</id>
+			<name>europeanalabs.eu-releases</name>
+			<url>http://europeanalabs.eu/artifactory/libs-releases-local</url>
 		</repository>
 		<snapshotRepository>
-			<id>artifactory.eanadev.org</id>
-			<name>artifactory.eanadev.org-snapshots</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshots-local</url>
+			<id>europeanalabs.eu</id>
+			<name>europeanalabs.eu-snapshots</name>
+			<url>http://europeanalabs.eu/artifactory/libs-snapshots-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 
