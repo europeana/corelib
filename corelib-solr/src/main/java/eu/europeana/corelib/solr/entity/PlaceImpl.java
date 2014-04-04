@@ -52,7 +52,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	@Override
 	public Float getLatitude() {
-		if(this.latitude==null || this.longitude==null ||(this.latitude==0 && this.longitude==0)){
+		if (this.latitude == null || this.longitude == null || (this.latitude == 0 && this.longitude == 0)) {
 			return null;
 		}
 		return this.latitude;
@@ -60,7 +60,7 @@ public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	@Override
 	public Float getLongitude() {
-		if(this.latitude==null || this.longitude==null ||(this.latitude==0 && this.longitude==0)){
+		if (this.latitude == null || this.longitude == null || (this.latitude == 0 && this.longitude == 0)) {
 			return null;
 		}
 		return this.longitude;
