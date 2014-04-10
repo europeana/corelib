@@ -43,7 +43,6 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
@@ -61,10 +60,7 @@ public final class SolrUtils {
 	@Resource
 	private static WikipediaApiService wikipediaApiService;
 
-	private static Logger log = Logger.getLogger(SolrUtils.class.getCanonicalName());
-
-	private static final Pattern ID_PATTERN = Pattern
-			.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
+	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
 
 	private SolrUtils() {
 
