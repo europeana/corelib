@@ -197,6 +197,8 @@ public enum EdmLabel {
 	AG_FOAF_NAME("ag_foaf_name", SolrType.NOT_STORED),
 	AG_RDAGR2_DATEOFBIRTH("ag_rdagr2_dateOfBirth", SolrType.NOT_STORED),
 	AG_RDAGR2_DATEOFDEATH("ag_rdagr2_dateOfDeath", SolrType.NOT_STORED),
+	AG_RDAGR2_PLACEOFBIRTH("ag_rdagr2_placeOfBirth", SolrType.NOT_STORED),
+	AG_RDAGR2_PLACEOFDEATH("ag_rdagr2_placeOfDeath", SolrType.NOT_STORED),
 	AG_RDAGR2_DATEOFESTABLISHMENT("ag_rdagr2_dateOfEstablishment", SolrType.NOT_STORED),
 	AG_RDAGR2_DATEOFTERMINATION("ag_rdagr2_dateOfTermination", SolrType.NOT_STORED),
 	AG_RDAGR2_GENDER("ag_rdagr2_gender", SolrType.NOT_STORED),

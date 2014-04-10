@@ -116,6 +116,42 @@ public class AgentUpdater implements Updater<AgentImpl> {
 			}
 		}
 
+		
+//		if (newAgent.getRdaGr2PlaceOfBirth() != null) {
+//			if (agent.getRdaGr2PlaceOfBirth() == null
+//					|| !MongoUtils.mapEquals(newAgent.getRdaGr2PlaceOfBirth(),
+//							agent.getRdaGr2PlaceOfBirth())) {
+//
+//				ops.set("rdaGr2PlaceOfBirth", newAgent.getRdaGr2PlaceOfBirth());
+//				agent.setRdaGr2PlaceOfBirth(newAgent.getRdaGr2PlaceOfBirth());
+//				update = true;
+//			}
+//	} else {
+//		if (agent.getRdaGr2PlaceOfBirth() != null) {
+//			ops.unset("rdaGr2PlaceOfBirth");
+//			agent.setRdaGr2PlaceOfBirth(null);
+//			update = true;
+//		}
+//	}
+//
+//	if (newAgent.getRdaGr2PlaceOfDeath() != null) {
+//			if (agent.getRdaGr2PlaceOfDeath() == null
+//					|| !MongoUtils.mapEquals(newAgent.getRdaGr2PlaceOfDeath(),
+//							agent.getRdaGr2PlaceOfDeath())) {
+//				ops.set("rdaGr2PlaceOfDeath", newAgent.getRdaGr2PlaceOfDeath());
+//				agent.setRdaGr2PlaceOfDeath(newAgent.getRdaGr2PlaceOfDeath());
+//				update = true;
+//			}
+//	} else {
+//		if (agent.getRdaGr2PlaceOfDeath() != null) {
+//			ops.unset("rdaGr2PlaceOfDeath");
+//			agent.setRdaGr2PlaceOfDeath(null);
+//			update = true;
+//		}
+//	}
+
+		
+		
 		if (newAgent.getRdaGr2DateOfEstablishment() != null) {
 				if (agent.getRdaGr2DateOfEstablishment() == null
 						|| !MongoUtils.mapEquals(newAgent.getRdaGr2DateOfEstablishment(),
