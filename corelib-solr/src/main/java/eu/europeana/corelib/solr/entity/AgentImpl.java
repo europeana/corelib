@@ -50,6 +50,8 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 
 	private Map<String,List<String>> rdaGr2DateOfBirth;
 	private Map<String,List<String>> rdaGr2DateOfDeath;
+	private Map<String,List<String>> rdaGr2PlaceOfBirth;
+	private Map<String,List<String>> rdaGr2PlaceOfDeath;
 	private Map<String,List<String>> rdaGr2DateOfEstablishment;
 	private Map<String,List<String>> rdaGr2DateOfTermination;
 	private Map<String,List<String>> rdaGr2Gender;
@@ -183,6 +185,22 @@ public class AgentImpl extends ContextualClassImpl implements Agent {
 	@Override
 	public Map<String,List<String>> getRdaGr2DateOfDeath() {
 		return this.rdaGr2DateOfDeath;
+	}
+
+	public Map<String, List<String>> getRdaGr2PlaceOfBirth() {
+		return rdaGr2PlaceOfBirth;
+	}
+
+	public void setRdaGr2PlaceOfBirth(Map<String, List<String>> rdaGr2PlaceOfBirth) {
+		this.rdaGr2PlaceOfBirth = rdaGr2PlaceOfBirth;
+	}
+
+	public Map<String, List<String>> getRdaGr2PlaceOfDeath() {
+		return rdaGr2PlaceOfDeath;
+	}
+
+	public void setRdaGr2PlaceOfDeath(Map<String, List<String>> rdaGr2PlaceOfDeath) {
+		this.rdaGr2PlaceOfDeath = rdaGr2PlaceOfDeath;
 	}
 
 	@Override

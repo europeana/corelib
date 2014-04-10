@@ -156,6 +156,18 @@ public final class AgentFieldInput {
 					EdmLabel.AG_RDAGR2_DATEOFDEATH);
 		}
 
+//		if (agentType.getPlaceOfBirth() != null) {
+//			solrInputDocument = SolrUtils.addFieldFromLiteral(
+//					solrInputDocument, agentType.getPlaceOfBirth(),
+//					EdmLabel.AG_RDAGR2_PLACEOFBIRTH);
+//		}
+//
+//		if (agentType.getPlaceOfDeath() != null) {
+//			solrInputDocument = SolrUtils.addFieldFromLiteral(
+//					solrInputDocument, agentType.getPlaceOfDeath(),
+//					EdmLabel.AG_RDAGR2_PLACEOFDEATH);
+//		}
+		
 		if (agentType.getDateOfEstablishment() != null) {
 			solrInputDocument = SolrUtils.addFieldFromLiteral(
 					solrInputDocument, agentType.getDateOfEstablishment(),
@@ -286,6 +298,10 @@ public final class AgentFieldInput {
 				.createLiteralMapFromString(agentType.getDateOfBirth()));
 		agent.setRdaGr2DateOfDeath(MongoUtils
 				.createLiteralMapFromString(agentType.getDateOfDeath()));
+//		agent.setRdaGr2PlaceOfBirth(MongoUtils
+//				.createLiteralMapFromString(agentType.getPlaceOfBirth()));
+//		agent.setRdaGr2PlaceOfDeath(MongoUtils
+//				.createLiteralMapFromString(agentType.getPlaceOfDeath()));
 		agent.setRdaGr2DateOfEstablishment(MongoUtils
 				.createLiteralMapFromString(agentType.getDateOfEstablishment()));
 		agent.setRdaGr2DateOfTermination(MongoUtils

@@ -227,6 +227,34 @@ public class AgentSolrCreator {
 			}
 		}
 		
+		
+//		if (agent.getRdaGr2PlaceOfBirth() != null) {
+//			for (String key : agent.getRdaGr2PlaceOfBirth().keySet()) {
+//				values = doc.getFieldValues(
+//						EdmLabel.AG_RDAGR2_PLACEOFBIRTH.toString());
+//				if (values == null) {
+//					values = new ArrayList<Object>();
+//				}
+//				values.addAll(agent.getRdaGr2PlaceOfBirth().get(key));
+//				doc.setField(EdmLabel.AG_RDAGR2_PLACEOFBIRTH.toString(),
+//						values);
+//			}
+//		}
+//		
+//		if (agent.getRdaGr2PlaceOfDeath() != null) {
+//			for (String key : agent.getRdaGr2PlaceOfDeath().keySet()) {
+//				values = doc.getFieldValues(
+//						EdmLabel.AG_RDAGR2_PLACEOFDEATH.toString());
+//				if (values == null) {
+//					values = new ArrayList<Object>();
+//				}
+//				values.addAll(agent.getRdaGr2PlaceOfDeath().get(key));
+//				doc.setField(EdmLabel.AG_RDAGR2_PLACEOFDEATH.toString(),
+//						values);
+//			}
+//		}
+		
+		
 		if (agent.getRdaGr2DateOfEstablishment() != null) {
 			for (String key : agent.getRdaGr2DateOfEstablishment().keySet()) {
 				values = doc.getFieldValues(

@@ -132,6 +132,45 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 			}
 		}
 
+		
+//		if (jibxAgent.getPlaceOfBirth() != null) {
+//			Map<String, List<String>> dob = MongoUtils
+//					.createLiteralMapFromString(jibxAgent.getPlaceOfBirth());
+//			if (dob != null) {
+//				if (agent.getRdaGr2PlaceOfBirth() == null
+//						|| !MongoUtils.mapEquals(dob,
+//								agent.getRdaGr2PlaceOfBirth())) {
+//
+//					ops.set("rdaGr2PlaceOfBirth", dob);
+//					update = true;
+//				}
+//			}
+//		} else {
+//			if (agent.getRdaGr2PlaceOfBirth()!=null){
+//				ops.unset("rdaGr2PlaceOfBirth");
+//				update = true;
+//			}
+//		}
+//
+//		if (jibxAgent.getPlaceOfDeath() != null) {
+//			Map<String, List<String>> dod = MongoUtils
+//					.createLiteralMapFromString(jibxAgent.getPlaceOfDeath());
+//			if (dod != null) {
+//				if (agent.getRdaGr2PlaceOfDeath() == null
+//						|| !MongoUtils.mapEquals(dod,
+//								agent.getRdaGr2PlaceOfDeath())) {
+//					ops.set("rdaGr2PlaceOfDeath", dod);
+//					update = true;
+//				}
+//			}
+//		} else {
+//			if (agent.getRdaGr2PlaceOfDeath()!=null){
+//				ops.unset("rdaGr2PlaceOfDeath");
+//				update = true;
+//			}
+//		}
+//		
+		
 		if (jibxAgent.getDateOfEstablishment() != null) {
 			Map<String, List<String>> doe = MongoUtils
 					.createLiteralMapFromString(jibxAgent

@@ -33,9 +33,9 @@ public class Collection {
 	@Id
 	private ObjectId id;
 	
-	
+	@Indexed
 	private String newCollectionId;
-	@Indexed (unique=true)
+	@Indexed
 	private String oldCollectionId;
 
 	/**
