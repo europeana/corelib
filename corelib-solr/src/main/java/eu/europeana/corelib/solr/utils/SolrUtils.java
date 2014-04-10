@@ -24,7 +24,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
+import org.apache.lucene.search.TermQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
@@ -38,9 +43,12 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.web.service.WikipediaApiService;
+import eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl;
 
 /**
  * Set of utils for SOLR queries
@@ -49,6 +57,11 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  * 
  */
 public final class SolrUtils {
+
+	@Resource
+	private static WikipediaApiService wikipediaApiService;
+
+	private static Logger log = Logger.getLogger(SolrUtils.class.getCanonicalName());
 
 	private static final Pattern ID_PATTERN = Pattern
 			.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
@@ -375,7 +388,7 @@ public final class SolrUtils {
 	 * @param query
 	 * @return
 	 */
-	public static String translateQuery(String query) {
+	public static String rewriteQueryFields(String query) {
 		if (!query.contains(":")) {
 			return query;
 		}
@@ -458,4 +471,57 @@ public final class SolrUtils {
 		List<FacetField> list = new ArrayList<FacetField>(map.values());
 		return list;
 	}
+
+	public static String translateQuery(String query, List<String> languages) {
+		if (isSimpleQuery(query)) {
+			if (wikipediaApiService == null) {
+				wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
+			}
+			List<String> alternatives = wikipediaApiService.getLanguageLinks(query, languages);
+			for (int i = 0, l = alternatives.size(); i < l; i++) {
+				alternatives.set(i, createPhraseValue(alternatives.get(i)));
+			}
+			query = StringUtils.join(alternatives, " OR ");
+		}
+		return query;
+	}
+
+	public static boolean isSimpleQuery(String queryTerm) {
+		return isNotFieldQuery(queryTerm)
+				&& (isTermQuery(queryTerm)
+				|| containsNoneSearchOperators(queryTerm));
+	}
+
+	public static boolean isTermQuery(String queryTerm) {
+		StandardQueryParser queryParserHelper = new StandardQueryParser();
+		org.apache.lucene.search.Query query = null;
+		try {
+			query = queryParserHelper.parse(queryTerm, "text");
+		} catch (QueryNodeException e) {
+			e.printStackTrace();
+		}
+		return (query != null && query instanceof TermQuery);
+	}
+
+	private static boolean containsNoneSearchOperators(String queryTerm) {
+		return !StringUtils.contains(queryTerm, " AND ")
+			&& !StringUtils.contains(queryTerm, " NOT ")
+			&& !StringUtils.contains(queryTerm, " OR ")
+			&& !StringUtils.contains(queryTerm, "*");
+	}
+
+	private static boolean isNotFieldQuery(String queryTerm) {
+		return !StringUtils.contains(queryTerm, ":");
+	}
+
+	public static String createPhraseValue(String value) {
+		value = StringUtils.trim(value);
+		if (StringUtils.containsNone(value, " ") &&  StringUtils.containsNone(value, "/")) {
+			return value;
+		} else {
+			return String.format("\"%s\"", value);
+		}
+	}
+
+
 }

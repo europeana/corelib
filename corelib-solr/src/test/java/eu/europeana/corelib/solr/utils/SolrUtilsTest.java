@@ -70,7 +70,7 @@ public class SolrUtilsTest {
 		};
 		for (String query : identicalQueries.keySet()) {
 			assertEquals(identicalQueries.get(query),
-					SolrUtils.translateQuery(query));
+					SolrUtils.rewriteQueryFields(query));
 		}
 
 		Map<String, String> aggregatedQueries = new HashMap<String, String>() {
@@ -84,17 +84,17 @@ public class SolrUtilsTest {
 		};
 		for (String query : aggregatedQueries.keySet()) {
 			assertEquals(aggregatedQueries.get(query),
-					SolrUtils.translateQuery(query));
+					SolrUtils.rewriteQueryFields(query));
 		}
 
 		for (FieldMapping field : FieldMapping.values()) {
 			String eseQuery = field.getEseField() + ":test";
 			String edmQuery = field.getEdmField() + ":test";
 			// ESE is translated to EDM
-			assertEquals(edmQuery, SolrUtils.translateQuery(eseQuery));
+			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(eseQuery));
 
 			// but EDM is not transformed
-			assertEquals(edmQuery, SolrUtils.translateQuery(edmQuery));
+			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(edmQuery));
 		}
 
 		// testing replace in context
@@ -102,10 +102,10 @@ public class SolrUtilsTest {
 			String eseQuery = "test " + field.getEseField() + ":test";
 			String edmQuery = "test " + field.getEdmField() + ":test";
 			// ESE is translated to EDM
-			assertEquals(edmQuery, SolrUtils.translateQuery(eseQuery));
+			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(eseQuery));
 
 			// but EDM is not transformed
-			assertEquals(edmQuery, SolrUtils.translateQuery(edmQuery));
+			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(edmQuery));
 		}
 	}
 
@@ -269,12 +269,24 @@ public class SolrUtilsTest {
 		assertEquals("test obj",SolrUtils.getPreviewUrl(rdf));
 		
 	}
-	
+
 	@Test
-	public void testEscapeQueryChars(){
-		assertEquals("http\\:\\/\\/ -",SolrUtils.escapeQuery("http:// -"));
+	public void testEscapeQueryChars() {
+		assertEquals("http\\:\\/\\/ -", SolrUtils.escapeQuery("http:// -"));
 	}
 	
+	@Test
+	public void testIsSimpleQuery() {
+		assertTrue(SolrUtils.isSimpleQuery("spinoza"));
+		assertTrue(SolrUtils.isSimpleQuery("den haag"));
+		assertTrue(SolrUtils.isSimpleQuery("den END haag"));
+		assertTrue(SolrUtils.isSimpleQuery("den and haag"));
+		assertFalse(SolrUtils.isSimpleQuery("den OR haag"));
+		assertFalse(SolrUtils.isSimpleQuery("den AND haag"));
+		assertFalse(SolrUtils.isSimpleQuery("den:haag"));
+		assertFalse(SolrUtils.isSimpleQuery("haag*"));
+	}
+
 	private ResourceOrLiteralType prepareRLT() {
 		ResourceOrLiteralType rlt = new ResourceOrLiteralType();
 		Lang lang = new Lang();
@@ -286,13 +298,13 @@ public class SolrUtilsTest {
 		rlt.setString("test string");
 		return rlt;
 	}
-	
+
 	private ResourceType prepareRT(){
 		ResourceType rt = new ResourceType();
 		rt.setResource("test resource");
 		return rt;
 	}
-	
+
 	private LiteralType prepareLT(){
 		LiteralType lt = new LiteralType();
 		LiteralType.Lang lang = new LiteralType.Lang();
