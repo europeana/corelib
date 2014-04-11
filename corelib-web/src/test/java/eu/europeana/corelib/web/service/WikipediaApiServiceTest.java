@@ -27,19 +27,19 @@ public class WikipediaApiServiceTest {
 
 	@Test
 	public void testGetLanguageLinks() {
-		Map<String, String> languageVersions = wikipediaApiService.getLanguageLinks("den haag");
+		Map<String, String> languageVersions = wikipediaApiService.getLanguageLinks("den haag", "en");
 		assertNotNull(languageVersions);
 		assertEquals(106, languageVersions.size());
 	}
 
 	@Test
 	public void testGetLanguageVersions() {
+		List<String> translations;
 		List<String> languages = new ArrayList<String>();
 		languages.add("en");
 		languages.add("nl");
 		languages.add("bg");
 
-		List<String> translations;
 		translations = wikipediaApiService.getLanguageLinks("den haag", languages);
 		assertNotNull(translations);
 		assertEquals(3, translations.size());
