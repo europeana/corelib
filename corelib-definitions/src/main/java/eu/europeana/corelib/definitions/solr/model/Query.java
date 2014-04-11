@@ -26,17 +26,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import eu.europeana.corelib.definitions.solr.Facet;
+import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import eu.europeana.corelib.utils.model.LanguageVersion;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class Query implements Cloneable {
+
+	Logger log = Logger.getLogger(Query.class.getCanonicalName());
 
 	private final static String OR = " OR ";
 
@@ -53,6 +59,8 @@ public class Query implements Cloneable {
 	private String query;
 
 	private String[] refinements;
+
+	private List<LanguageVersion> queryTranslations;
 
 	private Map<String, String> valueReplacements;
 
@@ -109,6 +117,24 @@ public class Query implements Cloneable {
 		return query;
 	}
 
+	public String getQuery(boolean withTranslations) {
+		StringBuffer concatenatedQuery = new StringBuffer(getQuery());
+		log.info(String.format("%s,  %s", withTranslations, !CollectionUtils.isEmpty(getQueryTranslations())));
+		if (withTranslations && !CollectionUtils.isEmpty(getQueryTranslations())) {
+			concatenatedQuery.append(" OR ").append(concatenateQueryTranslations());
+		}
+		log.info(concatenatedQuery.toString());
+		return concatenatedQuery.toString();
+	}
+
+	private String concatenateQueryTranslations() {
+		List<String> queryTranslationTerms = new ArrayList<String>();
+		for (LanguageVersion term : getQueryTranslations()) {
+			queryTranslationTerms.add(EuropeanaStringUtils.createPhraseValue(term.getText()));
+		}
+		return StringUtils.join(queryTranslationTerms, " OR ");
+	}
+
 	public Query setQuery(String query) {
 		this.query = query;
 		return this;
@@ -153,6 +179,15 @@ public class Query implements Cloneable {
 
 	public Query setValueReplacements(Map<String, String> valueReplacements) {
 		this.valueReplacements = valueReplacements;
+		return this;
+	}
+
+	public List<LanguageVersion> getQueryTranslations() {
+		return queryTranslations;
+	}
+
+	public Query setQueryTranslations(List<LanguageVersion> queryTranslations) {
+		this.queryTranslations = queryTranslations;
 		return this;
 	}
 

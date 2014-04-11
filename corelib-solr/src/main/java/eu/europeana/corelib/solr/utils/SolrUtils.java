@@ -46,6 +46,7 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.utils.model.LanguageVersion;
 import eu.europeana.corelib.web.service.WikipediaApiService;
 import eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl;
 
@@ -468,18 +469,15 @@ public final class SolrUtils {
 		return list;
 	}
 
-	public static String translateQuery(String query, List<String> languages) {
+	public static List<LanguageVersion> translateQuery(String query, List<String> languages) {
+		List<LanguageVersion> queryTranslations = null;
 		if (isSimpleQuery(query)) {
 			if (wikipediaApiService == null) {
 				wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
 			}
-			List<String> alternatives = wikipediaApiService.getLanguageLinks(query, languages);
-			for (int i = 0, l = alternatives.size(); i < l; i++) {
-				alternatives.set(i, createPhraseValue(alternatives.get(i)));
-			}
-			query = StringUtils.join(alternatives, " OR ");
+			queryTranslations = wikipediaApiService.getLanguageLinks(query, languages);
 		}
-		return query;
+		return queryTranslations;
 	}
 
 	public static boolean isSimpleQuery(String queryTerm) {
@@ -509,15 +507,4 @@ public final class SolrUtils {
 	private static boolean isNotFieldQuery(String queryTerm) {
 		return !StringUtils.contains(queryTerm, ":");
 	}
-
-	public static String createPhraseValue(String value) {
-		value = StringUtils.trim(value);
-		if (StringUtils.containsNone(value, " ") &&  StringUtils.containsNone(value, "/")) {
-			return value;
-		} else {
-			return String.format("\"%s\"", value);
-		}
-	}
-
-
 }

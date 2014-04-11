@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.gson.Gson;
 
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
+import eu.europeana.corelib.utils.model.LanguageVersion;
 import eu.europeana.corelib.web.model.ApiResult;
 import eu.europeana.corelib.web.model.wikipedia.WikipediaQuery;
 import eu.europeana.corelib.web.model.wikipedia.WikipediaQuery.Query.Page;
@@ -28,11 +29,9 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 
 	public WikipediaApiServiceImpl() {}
 
-	public List<String> getLanguageLinks(String titles, List<String> languages) {
-		List<String> translations = new ArrayList<String>();
+	public List<LanguageVersion> getLanguageLinks(String titles, List<String> languages) {
+		List<LanguageVersion> translations = new ArrayList<LanguageVersion>();
 		List<String> smallCaseTranslations = new ArrayList<String>();
-		translations.add(titles);
-		smallCaseTranslations.add(titles.toLowerCase());
 		for (String languageCode : languages) {
 			Map<String, String> langVersions = getLanguageLinks(titles, languageCode);
 			for (String language : languages) {
@@ -40,7 +39,7 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 					String langVersion = langVersions.get(language);
 					if (!smallCaseTranslations.contains(langVersion.toLowerCase())) {
 						smallCaseTranslations.add(langVersion.toLowerCase());
-						translations.add(langVersion);
+						translations.add(new LanguageVersion(langVersion, language));
 					}
 				}
 			}

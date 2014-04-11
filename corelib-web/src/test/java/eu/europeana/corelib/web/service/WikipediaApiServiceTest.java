@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.utils.model.LanguageVersion;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml" })
 public class WikipediaApiServiceTest {
@@ -34,7 +36,7 @@ public class WikipediaApiServiceTest {
 
 	@Test
 	public void testGetLanguageVersions() {
-		List<String> translations;
+		List<LanguageVersion> translations;
 		List<String> languages = new ArrayList<String>();
 		languages.add("en");
 		languages.add("nl");

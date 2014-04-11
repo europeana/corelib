@@ -36,10 +36,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.protocol.HttpContext;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.util.Version;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -305,7 +301,7 @@ public class SearchServiceImpl implements SearchService {
 		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
 			String[] refinements = query.getRefinements(true);
 			if (SolrUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
+				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
 				if (refinements != null) {
 					solrQuery.addFilterQuery(refinements);
