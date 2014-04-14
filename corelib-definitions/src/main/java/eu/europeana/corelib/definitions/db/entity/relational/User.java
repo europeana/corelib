@@ -99,16 +99,16 @@ public interface User extends IdentifiedEntity<Long> {
 	String getFieldOfWork();
 
 	void setFieldOfWork(String fieldOfWork);
-	
+
 	String getLanguagePortal();
-	
+
 	void setLanguagePortal(String languageCode);
-	
+
 	String getLanguageItem();
-	
+
 	void setLanguageItem(String languageCode);
-	
+
 	String[] getLanguageSearch();
-	
+
 	void setLanguageSearch(String... languageCodes);
 }
