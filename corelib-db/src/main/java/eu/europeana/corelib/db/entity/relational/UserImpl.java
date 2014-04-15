@@ -333,7 +333,7 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Override
 	public String[] getLanguageSearch() {
 		if (StringUtils.isNotBlank(this.languageSearch)) {
-			return StringUtils.split(languageSearch,",");
+			return StringUtils.split(languageSearch, SEARCH_LANGUAGES_SEPARATOR);
 		}
 		return ArrayUtils.EMPTY_STRING_ARRAY;
 	}
@@ -341,10 +341,14 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Override
 	public void setLanguageSearch(String... languageCodes) {
 		if (languageCodes != null) {
-			if ( (languageCodes.length == 1) && StringUtils.contains(languageCodes[0], ",")) {
-				languageSearch = StringUtils.trimToNull(StringUtils.lowerCase(languageCodes[0]));
+			if ((languageCodes.length == 1) &&
+				StringUtils.contains(languageCodes[0], SEARCH_LANGUAGES_SEPARATOR)) {
+				languageSearch = StringUtils.trimToNull(
+						StringUtils.lowerCase(languageCodes[0]));
 			} else {
-				languageSearch = StringUtils.trimToNull(StringUtils.lowerCase(StringUtils.join(languageCodes, ",")));
+				languageSearch = StringUtils.trimToNull(
+						StringUtils.lowerCase(
+							StringUtils.join(languageCodes, SEARCH_LANGUAGES_SEPARATOR)));
 			}
 		}
 	}
@@ -368,6 +372,4 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public void setLanguagePortal(String languageCode) {
 		languagePortal = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
 	}
-	
-	
 }

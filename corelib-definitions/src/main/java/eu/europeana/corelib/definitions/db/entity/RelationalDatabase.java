@@ -66,4 +66,6 @@ public interface RelationalDatabase {
 	// social tags
 	String TABLENAME_SOCIALTAGS = "SocialTag";
 	int FIELDSIZE_TAG = 60;
+
+	String SEARCH_LANGUAGES_SEPARATOR = "|";
 }
