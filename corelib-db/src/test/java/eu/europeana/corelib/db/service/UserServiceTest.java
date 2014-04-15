@@ -376,10 +376,10 @@ public class UserServiceTest {
 		final String EMAIL = "testCreateSocialTag@europeana.eu";
 		final String USERNAME = "testCreateSocialTag";
 		final String PASSWORD = "test";
-		
+
 		final String LANGCODE = "nl";
 		final String[] LANGCODES_ARRAY = {"nl", "en", "de"};
-		final String LANGCODES = "fi,es,it,fr";
+		final String LANGCODES = "fi|es|it|fr";
 
 		Token token = tokenService.create(EMAIL);
 		assertNotNull("Unable to create token", token);
@@ -390,36 +390,33 @@ public class UserServiceTest {
 		assertNull("By default the value should be empty", user.getLanguageItem());
 		assertNotNull("By default the value should be empty", user.getLanguageSearch());
 		assertTrue("By default it should return an empty array", user.getLanguageSearch().length == 0);
-		
+
 		user = userService.updateUserLanguagePortal(user.getId(), LANGCODE);
 		assertEquals("Value should be set to NL", LANGCODE, user.getLanguagePortal());
-		
+
 		user = userService.updateUserLanguageItem(user.getId(), LANGCODE);
 		assertEquals("Value should be set to NL", LANGCODE, user.getLanguageItem());
-		
+
 		user = userService.updateUserLanguageSearch(user.getId(), LANGCODES);
 		assertNotNull("Should never return null", user.getLanguageSearch());
 		assertEquals("Shoud contain all values", 4, user.getLanguageSearch().length);
-		
+
 		user = userService.updateUserLanguageSearch(user.getId(), LANGCODES_ARRAY);
 		assertNotNull("Should never return null", user.getLanguageSearch());
 		assertEquals("Shoud contain all values", LANGCODES_ARRAY.length, user.getLanguageSearch().length);
-		
+
 		user = userService.updateUserLanguagePortal(user.getId(), null);
 		user = userService.updateUserLanguageItem(user.getId(), null);
 		user = userService.updateUserLanguageSearch(user.getId(), (String)null);
-		
+
 		assertNotNull("Unable to create user", user);
 		assertNull("By default the value should be empty", user.getLanguagePortal());
 		assertNull("By default the value should be empty", user.getLanguageItem());
 		assertNotNull("By default the value should be empty", user.getLanguageSearch());
 		assertTrue("By default it should return an empty array", user.getLanguageSearch().length == 0);
-		
-		
 	}
 
 	private String hashPassword(String password) {
 		return new ShaPasswordEncoder().encodePassword(password, null);
 	}
-
 }
