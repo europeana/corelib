@@ -15,6 +15,7 @@ public class Configuration {
 
 	public static final String FACET_UCG_FILTER = "-UGC:true";
 	public static final String FACET_TYPE = "TYPE:";
+	public static final int DEFAULT_KEYWORD_LANGUAGES_LIMIT = 6;
 
 	@Resource
 	private Properties europeanaProperties;
@@ -150,7 +151,7 @@ public class Configuration {
 	private double weightDataProvider;
 
 	@Value("#{europeanaProperties['portal.keywordLanguagesLimit']}")
-	private int keywordLanguagesLimit = 6;
+	private Integer keywordLanguagesLimit;
 
 	// ///////////////////////////// generated/derivated properties
 
@@ -388,6 +389,6 @@ public class Configuration {
 	}
 
 	public int getKeywordLanguagesLimit() {
-		return keywordLanguagesLimit;
+		return (keywordLanguagesLimit == null) ? DEFAULT_KEYWORD_LANGUAGES_LIMIT : keywordLanguagesLimit;
 	}
 }
