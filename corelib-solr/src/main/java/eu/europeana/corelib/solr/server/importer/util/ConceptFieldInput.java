@@ -194,7 +194,7 @@ public final class ConceptFieldInput {
 				.get();
 	}
 
-	private ConceptImpl createNewConcept(Concept concept) {
+	public ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();
 		conceptMongo.setAbout(concept.getAbout());
 		if(concept.getChoiceList()!=null){

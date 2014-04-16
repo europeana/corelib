@@ -187,7 +187,7 @@ public final class PlaceFieldInput {
 	 *            The JiBX Place Entity
 	 * @return A new Mongo Place Entity
 	 */
-	private PlaceImpl createNewPlace(PlaceType placeType) {
+	public PlaceImpl createNewPlace(PlaceType placeType) {
 		PlaceImpl place = new PlaceImpl();
 		// place.setId(new ObjectId());
 		place.setAbout(placeType.getAbout());

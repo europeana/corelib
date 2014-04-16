@@ -232,7 +232,6 @@ public final class AgentFieldInput {
 			try {
 				mongoServer.getDatastore().save(agent);
 			} catch (Exception e) {
-				e.printStackTrace();
 				AgentImpl agentSec = ((EdmMongoServer) mongoServer)
 						.getDatastore().find(AgentImpl.class)
 						.filter("about", agentType.getAbout()).get();
@@ -275,7 +274,7 @@ public final class AgentFieldInput {
 	 * @throws IOException
 	 * @throws MalformedURLException
 	 */
-	private AgentImpl createNewAgent(AgentType agentType)
+	public AgentImpl createNewAgent(AgentType agentType)
 			throws MalformedURLException, IOException {
 		AgentImpl agent = new AgentImpl();
 		agent.setAbout(agentType.getAbout());

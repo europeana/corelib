@@ -140,7 +140,7 @@ public final class TimespanFieldInput {
 
 	}
 
-	private TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
+	public TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();
 		mongoTimespan.setAbout(timeSpan.getAbout());
 		mongoTimespan.setNote(MongoUtils.createLiteralMapFromList(timeSpan

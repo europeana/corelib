@@ -139,4 +139,26 @@ public final class ProvidedCHOFieldInput {
 		MongoUtils.delete(ProvidedCHOImpl.class, about, mongoServer);
 	}
 
+        
+        
+        /**
+	 * 
+	 * Method Creating a MongoDB Entity of a ProvidedCHO
+	 * 
+	 * @param providedCHO
+	 *            The ProvidedCHO representation from the JiBX bindings
+	 * @return The MongoDB ProvidedCHO Entity
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public ProvidedCHOImpl createProvidedCHOMongoFields(
+			ProvidedCHOType providedCHO)
+			throws InstantiationException, IllegalAccessException {
+		ProvidedCHOImpl mongoProvidedCHO = new ProvidedCHOImpl();
+			mongoProvidedCHO.setAbout("/item" + providedCHO.getAbout());
+
+			mongoProvidedCHO.setOwlSameAs(SolrUtils
+					.resourceListToArray(providedCHO.getSameAList()));
+		return (ProvidedCHOImpl) mongoProvidedCHO;
+	}
 }

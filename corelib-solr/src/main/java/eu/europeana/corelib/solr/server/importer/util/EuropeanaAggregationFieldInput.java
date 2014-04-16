@@ -376,4 +376,83 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		return null;
 	}
+        
+        /**
+	 * Create a EuropeanaAggregation to save in MongoDB storage
+	 * 
+	 * @param aggregation
+	 *            The RDF EuropeanaAggregation representation
+	 * @param mongoServer
+	 *            The MongoServer to use to save the EuropeanaAggregation
+	 * @return the EuropeanaAggregation created
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public EuropeanaAggregationImpl createAggregationMongoFields(
+			eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType aggregation,
+			 String previewUrl)
+			throws InstantiationException, IllegalAccessException {
+		EuropeanaAggregationImpl mongoAggregation = new EuropeanaAggregationImpl();
+		
+		mongoAggregation.setAbout(aggregation.getAbout());
+
+		Map<String, List<String>> creator = MongoUtils
+				.createResourceOrLiteralMapFromString(aggregation.getCreator());
+		
+			mongoAggregation.setDcCreator(creator);
+	
+
+		Map<String, List<String>> country = MongoUtils
+				.createLiteralMapFromString(aggregation.getCountry()
+						.getCountry().xmlValue().toLowerCase());
+			mongoAggregation.setEdmCountry(country);
+		String isShownBy = SolrUtils.exists(IsShownBy.class,
+				aggregation.getIsShownBy()).getResource();
+			mongoAggregation.setEdmIsShownBy(isShownBy);
+		String landingPage = SolrUtils.exists(LandingPage.class,
+				aggregation.getLandingPage()).getResource();
+			mongoAggregation.setEdmLandingPage(landingPage);
+			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
+					+ aggregation.getAggregatedCHO().getResource());
+
+		Map<String, List<String>> language = MongoUtils
+				.createLiteralMapFromString(aggregation.getLanguage()
+						.getLanguage().xmlValue().toLowerCase());
+
+		mongoAggregation.setEdmLanguage(language);
+
+		String agCHO = SolrUtils.exists(AggregatedCHO.class,
+				aggregation.getAggregatedCHO()).getResource();
+		mongoAggregation.setAggregatedCHO(agCHO);
+
+		Map<String, List<String>> edmRights = MongoUtils
+				.createResourceOrLiteralMapFromString(aggregation.getRights());
+			mongoAggregation.setEdmRights(edmRights);
+		String[] aggregates = SolrUtils.resourceListToArray(aggregation
+				.getAggregateList());
+			mongoAggregation.setAggregates(aggregates);
+		String[] hasViewList = SolrUtils.resourceListToArray(aggregation
+				.getHasViewList());
+		mongoAggregation.setEdmHasView(hasViewList);
+		// TODO: This is the future scenario
+		// String preview = SolrUtils.exists(Preview.class,
+		// aggregation.getPreview()).getResource();
+		// if (preview != null) {
+		// mongoAggregation.setEdmPreview(preview);
+		// ops.set("edmPreview", preview);
+		// } else {
+		// mongoAggregation.setEdmPreview(EUROPEANA_URI + agCHO
+		// + "&size=BRIEF_DOC");
+		// ops.set("edmPreview", EUROPEANA_URI + agCHO + "&size=BRIEF_DOC");
+		// }
+//		if (previewUrl != null) {
+//			String preview = EuropeanaUrlServiceImpl
+//					.getBeanInstance().getThumbnailUrl(previewUrl, type);
+//			mongoAggregation.setEdmPreview(preview);
+//			ops.set("edmPreview", preview);
+//		}
+		// TODO: Currently the europeana aggregation does not generate any
+		// WebResource, do we want it?
+		return mongoAggregation;
+	}
 }
