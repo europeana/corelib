@@ -2,10 +2,14 @@ package eu.europeana.corelib.solr.utils.construct;
 
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
+import eu.europeana.corelib.definitions.solr.entity.WebResource;
 
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AggregationUpdater implements Updater<AggregationImpl> {
 
@@ -209,8 +213,13 @@ public class AggregationUpdater implements Updater<AggregationImpl> {
 				update = true;
 			}
 		}
-		MongoUtils.update(AggregationImpl.class, mongoEntity.getAbout(),
-				mongoServer, "webResources", newEntity.getWebResources());
+		
+                List<WebResource> webResources = new ArrayList<WebResource>();
+                for(WebResource wr : mongoEntity.getWebResources()){
+                    webResources.add(new WebResourceCreator().saveWebResource(wr, mongoServer));
+                }
+                mongoEntity.setWebResources(webResources);
+                
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}
