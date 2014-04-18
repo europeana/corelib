@@ -29,8 +29,6 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 				"(Film)", "(Biologie)"}));
 		removableParts.put("en", Arrays.asList(new String[]{
 				"(disambiguation)", "(film)"}));
-		removableParts.put("es", Arrays.asList(new String[]{"(desambiguación)"}));
-		removableParts.put("hu", Arrays.asList(new String[]{"(egyértelműsítő lap)"}));
 		removableParts.put("nl", Arrays.asList(new String[]{"(film)"}));
 	}
 
