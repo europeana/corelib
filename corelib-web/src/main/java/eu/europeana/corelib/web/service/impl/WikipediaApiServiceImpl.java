@@ -3,6 +3,7 @@ package eu.europeana.corelib.web.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,16 @@ import eu.europeana.corelib.web.service.WikipediaApiService;
 public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements WikipediaApiService {
 
 	private static final String LANGLINKS = ".wikipedia.org/w/api.php?action=query&prop=langlinks&lllimit=200&redirects=&format=json";
+	private static Map<String, List<String>> removableParts = new HashMap<String, List<String>>();
+	static {
+		removableParts.put("de", Arrays.asList(new String[]{
+				"(Film)", "(Biologie)"}));
+		removableParts.put("en", Arrays.asList(new String[]{
+				"(disambiguation)", "(film)"}));
+		removableParts.put("es", Arrays.asList(new String[]{"(desambiguación)"}));
+		removableParts.put("hu", Arrays.asList(new String[]{"(egyértelműsítő lap)"}));
+		removableParts.put("nl", Arrays.asList(new String[]{"(film)"}));
+	}
 
 	public static WikipediaApiService getBeanInstance() {
 		return ApplicationContextContainer.getBean(WikipediaApiServiceImpl.class);
@@ -36,10 +47,10 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 			Map<String, String> langVersions = getLanguageLinks(titles, languageCode);
 			for (String language : languages) {
 				if (langVersions.containsKey(language)) {
-					String langVersion = langVersions.get(language);
+					String langVersion = String.format("%s (%s)", langVersions.get(language), language);
 					if (!smallCaseTranslations.contains(langVersion.toLowerCase())) {
 						smallCaseTranslations.add(langVersion.toLowerCase());
-						translations.add(new LanguageVersion(langVersion, language));
+						translations.add(new LanguageVersion(langVersions.get(language), language));
 					}
 				}
 			}
@@ -61,7 +72,8 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 		if (page != null && page.getPageid() != 0) {
 			if (page.getLanglinks() != null && page.getLanglinks().size() > 0) {
 				for (WikiLangLink langLinks : page.getLanglinks()) {
-					languageVersions.put(langLinks.getLang(), langLinks.getTranslation());
+					languageVersions.put(langLinks.getLang(), 
+						clearRemovableParts(langLinks.getLang(), langLinks.getTranslation()));
 				}
 			}
 			if (!languageVersions.containsKey(languageCode)) {
@@ -69,6 +81,16 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 			}
 		}
 		return languageVersions;
+	}
+
+	private String clearRemovableParts(String lang, String translation) {
+		List<String> removables = removableParts.get(lang);
+		if (removables != null) {
+			for (String removable : removables) {
+				translation = StringUtils.removeEnd(translation, removable).trim();
+			}
+		}
+		return translation;
 	}
 
 	private WikipediaQuery parseJson(ApiResult result) {

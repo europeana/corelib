@@ -130,7 +130,10 @@ public class Query implements Cloneable {
 	private String concatenateQueryTranslations() {
 		List<String> queryTranslationTerms = new ArrayList<String>();
 		for (LanguageVersion term : getQueryTranslations()) {
-			queryTranslationTerms.add(EuropeanaStringUtils.createPhraseValue(term.getText()));
+			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
+			if (!queryTranslationTerms.contains(phrase)) {
+				queryTranslationTerms.add(phrase);
+			}
 		}
 		return StringUtils.join(queryTranslationTerms, " OR ");
 	}
