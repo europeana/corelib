@@ -47,6 +47,7 @@ import eu.europeana.corelib.solr.server.importer.util.WebResourcesFieldInput;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
+@Deprecated
 public class SolrConstructor {
 	
 	
