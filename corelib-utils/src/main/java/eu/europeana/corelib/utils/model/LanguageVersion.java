@@ -1,6 +1,6 @@
 package eu.europeana.corelib.utils.model;
 
-public class LanguageVersion {
+public class LanguageVersion implements Comparable<LanguageVersion> {
 
 	protected String text;
 	protected String languageCode;
@@ -56,5 +56,14 @@ public class LanguageVersion {
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(LanguageVersion other) {
+		if (this.getLanguageCode().compareTo(other.getLanguageCode()) != 0) {
+			return this.getLanguageCode().compareTo(other.getLanguageCode());
+		} else {
+			return this.getText().compareTo(other.getText());
+		}
 	}
 }

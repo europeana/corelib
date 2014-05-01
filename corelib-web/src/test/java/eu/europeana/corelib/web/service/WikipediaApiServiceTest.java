@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +51,6 @@ public class WikipediaApiServiceTest {
 		languages.add("af");
 		translations = wikipediaApiService.getLanguageLinks("den haag", languages);
 		assertNotNull(translations);
-		assertEquals(2, translations.size());
+		assertEquals(3, translations.size());
 	}
 }

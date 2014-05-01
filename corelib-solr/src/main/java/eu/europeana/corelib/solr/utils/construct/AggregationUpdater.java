@@ -21,7 +21,9 @@ public class AggregationUpdater implements Updater<AggregationImpl> {
 				.equal(mongoEntity.getAbout());
 		UpdateOperations<AggregationImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(AggregationImpl.class);
+
 		boolean update = false;
+
                 update = MongoUtils.updateString(mongoEntity, newEntity, "edmPreviewNoDistribute", ops)||update;
 		update = MongoUtils.updateString(mongoEntity, newEntity, "aggregatedCHO", ops)||update;
                 update = MongoUtils.updateString(mongoEntity, newEntity, "edmIsShownAt", ops)||update;
@@ -42,11 +44,10 @@ public class AggregationUpdater implements Updater<AggregationImpl> {
                 }
                 mongoEntity.setWebResources(webResources);
                 
+
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}
 		return mongoEntity;
 	}
-
 }
-
