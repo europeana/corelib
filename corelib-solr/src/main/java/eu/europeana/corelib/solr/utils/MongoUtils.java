@@ -434,7 +434,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved, (Object)null);
 				return true;
 			}
 		}
@@ -455,7 +455,7 @@ public final class MongoUtils {
         public static <T> boolean updateArray(T saved, T updated, String updateField, UpdateOperations ops){
             try {
                 Method getter = saved.getClass().getMethod("get"+StringUtils.capitalize(updateField));
-                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), Map.class);
+                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), String[].class);
                 String[] savedValues =(String[]) getter.invoke(saved);
                 String[] updatedValues = (String[]) getter.invoke(updated);
                 
@@ -470,7 +470,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved, (Object)null);
 				return true;
 			}
 		}
@@ -491,7 +491,7 @@ public final class MongoUtils {
          public static <T> boolean updateString(T saved, T updated, String updateField, UpdateOperations ops){
             try {
                 Method getter = saved.getClass().getMethod("get"+StringUtils.capitalize(updateField));
-                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), Map.class);
+                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), String.class);
                 String savedValues =(String) getter.invoke(saved);
                 String updatedValues = (String) getter.invoke(updated);
                 
@@ -505,7 +505,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved,(Object) null);
 				return true;
 			}
 		}
