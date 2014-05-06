@@ -434,7 +434,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved, (Object)null);
 				return true;
 			}
 		}
@@ -470,7 +470,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved, (Object)null);
 				return true;
 			}
 		}
@@ -505,7 +505,7 @@ public final class MongoUtils {
 		} else {
 			if (saved != null) {
 				ops.unset(updateField);
-				setter.invoke(saved, null);
+				setter.invoke(saved,(Object) null);
 				return true;
 			}
 		}
