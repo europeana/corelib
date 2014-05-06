@@ -541,12 +541,13 @@ public class SearchServiceImpl implements SearchService {
 			params.set("timeAllowed", TIME_ALLOWED);
 
 			// get the query response
-			QueryResponse qResp = solrServer.query(params);
-			SpellCheckResponse spResponse = qResp.getSpellCheckResponse();
+			QueryResponse queryResponse = solrServer.query(params);
+			SpellCheckResponse spellcheckResponse = queryResponse.getSpellCheckResponse();
 			//if the suggestions are not empty and there are collated results
-			if (!spResponse.getSuggestions().isEmpty()
-					&& spResponse.getCollatedResults() != null) {
-				for (Collation collation : spResponse.getCollatedResults()) {
+			if (spellcheckResponse != null
+				&& !spellcheckResponse.getSuggestions().isEmpty()
+				&& spellcheckResponse.getCollatedResults() != null) {
+				for (Collation collation : spellcheckResponse.getCollatedResults()) {
 					StringBuilder termResult = new StringBuilder();
 					for (Correction cor : collation.getMisspellingsAndCorrections()) {
 						//pickup the corrections, remove duplicates
