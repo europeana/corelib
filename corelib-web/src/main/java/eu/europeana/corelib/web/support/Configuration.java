@@ -16,6 +16,8 @@ public class Configuration {
 	public static final String FACET_UCG_FILTER = "-UGC:true";
 	public static final String FACET_TYPE = "TYPE:";
 	public static final int DEFAULT_KEYWORD_LANGUAGES_LIMIT = 6;
+	public static final String OLD_MYEUROPEANA_URL = "myeuropeana.html";
+	public static final String NEW_MYEUROPEANA_URL = "myeuropeana";
 
 	@Resource
 	private Properties europeanaProperties;
@@ -153,6 +155,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.keywordLanguagesLimit']}")
 	private Integer keywordLanguagesLimit;
 
+	@Value("#{europeanaProperties['portal.useNewMyEuropeanaUrl']}")
+	private String useNewMyEuropeanaUrlString;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -167,6 +172,8 @@ public class Configuration {
 
 	/** Collection IDs which supports the SoundCloud widget */
 	private List<String> soundCloudAwareCollections;
+
+	private Boolean useNewMyEuropeanaUrl;
 
 	// /////////////////////////////// getters and setters
 
@@ -390,5 +397,16 @@ public class Configuration {
 
 	public int getKeywordLanguagesLimit() {
 		return (keywordLanguagesLimit == null) ? DEFAULT_KEYWORD_LANGUAGES_LIMIT : keywordLanguagesLimit;
+	}
+
+	public String getMyEuropeanaUrl() {
+		if (useNewMyEuropeanaUrl == null) {
+			if (StringUtils.isBlank(useNewMyEuropeanaUrlString)) {
+				useNewMyEuropeanaUrl = false;
+			} else {
+				useNewMyEuropeanaUrl = Boolean.parseBoolean(useNewMyEuropeanaUrlString.trim());
+			}
+		}
+		return (useNewMyEuropeanaUrl) ? NEW_MYEUROPEANA_URL : OLD_MYEUROPEANA_URL;
 	}
 }
