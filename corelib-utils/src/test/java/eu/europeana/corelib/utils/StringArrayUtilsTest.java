@@ -19,6 +19,7 @@ package eu.europeana.corelib.utils;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -40,6 +41,15 @@ public class StringArrayUtilsTest {
 		Assert.assertFalse(StringArrayUtils.isNotBlank(new String[] { "" }));
 		Assert.assertFalse(StringArrayUtils.isNotBlank(new String[] {}));
 		Assert.assertFalse(StringArrayUtils.isNotBlank(null));
+	}
+
+	@Test
+	public void isNotBlankLinkTest() {
+		Assert.assertTrue(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { "test" })));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { " " })));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { "" })));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] {})));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(null));
 	}
 
 	@Test
