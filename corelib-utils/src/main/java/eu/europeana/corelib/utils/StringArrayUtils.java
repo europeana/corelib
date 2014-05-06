@@ -47,6 +47,16 @@ public class StringArrayUtils {
 	}
 
 	/**
+	 * Check if an array is not empty
+	 * 
+	 * @param array
+	 * @return
+	 */
+	public static boolean isNotBlankList(List<String> array) {
+		return ((array != null) && (array.size() > 0)) && StringUtils.join(array, "").trim().length() > 0;
+	}
+
+	/**
 	 * Check if an array is empty
 	 * 
 	 * @param array
