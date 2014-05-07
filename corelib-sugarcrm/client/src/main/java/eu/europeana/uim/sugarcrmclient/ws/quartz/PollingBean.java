@@ -25,44 +25,47 @@ import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import eu.europeana.uim.sugarcrmclient.internal.helpers.ClientUtils;
 import eu.europeana.uim.sugarcrmclient.ws.SugarWsClient;
-import eu.europeana.uim.sugarcrmclient.ws.SugarWsClientImpl;
 import eu.europeana.uim.sugarcrmclient.ws.exceptions.JIXBLoginFailureException;
-
 
 /**
  * This Class implements the Quartz-based polling mechanism for sugarcrm
- * plugin.It refreshes the session by logging in in given time intervals
- * in order to keep the client connection alive.
- *   
+ * plugin.It refreshes the session by logging in in given time intervals in
+ * order to keep the client connection alive.
+ * 
  * @author Georgios Markakis
  */
 public class PollingBean extends QuartzJobBean {
 
-	  private SugarWsClientImpl sugarWsClient;
-	  
-	  /**
-	   * Setter for sugarcrmPlugin spring injected property
-	   */ 
-	  public void setSugarWsClient(SugarWsClientImpl sugarWsClient) {
-	    this.sugarWsClient = sugarWsClient;
-	  }	
-	
-	
-	/* (non-Javadoc)s
-	 * @see org.springframework.scheduling.quartz.QuartzJobBean#executeInternal(org.quartz.JobExecutionContext)
+	private SugarWsClient sugarWsClient;
+
+	/**
+	 * Setter for sugarcrmPlugin spring injected property
+	 */
+	public void setSugarWsClient(SugarWsClient sugarWsClient) {
+		this.sugarWsClient = sugarWsClient;
+	}
+
+	/*
+	 * (non-Javadoc)s
+	 * 
+	 * @see
+	 * org.springframework.scheduling.quartz.QuartzJobBean#executeInternal(org
+	 * .quartz.JobExecutionContext)
 	 */
 	@Override
 	protected void executeInternal(JobExecutionContext arg0)
 			throws JobExecutionException {
-        String username = sugarWsClient.getUsername();
+		String username = sugarWsClient.getUsername();
 		String password = sugarWsClient.getPassword();
-		
+
 		try {
-			sugarWsClient.setSessionID(sugarWsClient.login(ClientUtils.createStandardLoginObject(username,password)));
+			sugarWsClient.setSessionID(
+				sugarWsClient.login(
+					ClientUtils.createStandardLoginObject(username, password)));
 		} catch (JIXBLoginFailureException e) {
 			sugarWsClient.setSessionID("-1");
+		} catch (Exception e) {
+			sugarWsClient.setSessionID("-1");
 		}
-
 	}
-
 }

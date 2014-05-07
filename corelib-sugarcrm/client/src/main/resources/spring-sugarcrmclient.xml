@@ -9,8 +9,6 @@
 	http://www.springframework.org/schema/oxm 
 	http://www.springframework.org/schema/oxm/spring-oxm-1.5.xsd">
 
-
-
 	<!-- Spring specific declarations of SugarCRM Client instances -->
 	<bean id="sugarWsClientFactory" class="eu.europeana.uim.sugarcrmclient.ws.ClientFactory">
 		<property name="webServiceTemplate" ref="webServiceTemplate" />
@@ -40,14 +38,12 @@
 
 	<!-- Quartz Scheduler Bean -->
 	<bean name="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass"
-			value="eu.europeana.uim.sugarcrmclient.ws.quartz.PollingBean" />
+		<property name="jobClass" value="eu.europeana.uim.sugarcrmclient.ws.quartz.PollingBean" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="sugarWsClient" value-ref="sugarWsClient" />
 			</map>
 		</property>
-		
 	</bean>
 
 	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -63,6 +59,4 @@
 			</list>
 		</property>
 	</bean>
-
-
 </beans>

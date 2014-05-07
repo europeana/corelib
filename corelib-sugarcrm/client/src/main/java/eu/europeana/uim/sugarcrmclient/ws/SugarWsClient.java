@@ -20,7 +20,6 @@
  */
 package eu.europeana.uim.sugarcrmclient.ws;
 
-
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetAvailableModules;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetAvailableModulesResponse;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetEntries;
@@ -105,7 +104,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws GenericSugarCrmException
 	 */
-	IsUserAdminResponse isuseradmin(IsUserAdmin request)
+	IsUserAdminResponse isUserAdmin(IsUserAdmin request)
 			throws Exception;
 
 	/**
@@ -116,7 +115,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws GenericSugarCrmException
 	 */
-	GetUserIdResponse getuserid(GetUserId request)
+	GetUserIdResponse getUserId(GetUserId request)
 			throws Exception;
 
 	/**
@@ -127,7 +126,7 @@ public interface SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 * @throws GenericSugarCrmException
 	 */
-	GetAvailableModulesResponse getavailablemodules(GetAvailableModules request)
+	GetAvailableModulesResponse getAvailableModules(GetAvailableModules request)
 			throws JIXBQueryResultException;
 
 	/**
@@ -137,7 +136,7 @@ public interface SugarWsClient {
 	 * @return a GetModuleFieldsResponse containing a list of module fields
 	 * @throws JIXBQueryResultException
 	 */
-	GetModuleFieldsResponse getmodulefields(GetModuleFields request)
+	GetModuleFieldsResponse getModuleFields(GetModuleFields request)
 			throws JIXBQueryResultException;
 
 	/**
@@ -147,7 +146,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBQueryResultException
 	 */
-	GetEntryListResponse getentrylist(GetEntryList request)
+	GetEntryListResponse getEntryList(GetEntryList request)
 			throws JIXBQueryResultException;
 
 	/**
@@ -157,7 +156,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBQueryResultException
 	 */
-	GetEntryResponse getentry(GetEntry request) throws JIXBQueryResultException;
+	GetEntryResponse getEntry(GetEntry request) throws JIXBQueryResultException;
 
 	/**
 	 * Creates/Updates an entry in SugarCRM
@@ -166,7 +165,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBQueryResultException
 	 */
-	SetEntryResponse setentry(SetEntry request) throws JIXBQueryResultException;
+	SetEntryResponse setEntry(SetEntry request) throws JIXBQueryResultException;
 
 	/**
 	 * Gets the entries for a request
@@ -175,7 +174,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBQueryResultException
 	 */
-	GetEntriesResponse getentries(GetEntries request)
+	GetEntriesResponse getEntries(GetEntries request)
 			throws JIXBQueryResultException;
 
 	/**
@@ -185,7 +184,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBFileAttachmentException
 	 */
-	SetNoteAttachmentResponse setnoteattachment(SetNoteAttachment request)
+	SetNoteAttachmentResponse setNoteAttachment(SetNoteAttachment request)
 			throws JIXBFileAttachmentException;
 
 	/**
@@ -195,7 +194,7 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBFileAttachmentException
 	 */
-	GetNoteAttachmentResponse getnoteattachment(GetNoteAttachment request)
+	GetNoteAttachmentResponse getNoteAttachment(GetNoteAttachment request)
 			throws JIXBFileAttachmentException;
 
 	/**
@@ -205,8 +204,13 @@ public interface SugarWsClient {
 	 * @return
 	 * @throws JIXBQueryResultException
 	 */
-	GetRelationshipsResponse getrelationships(GetRelationships request)
+	GetRelationshipsResponse getRelationships(GetRelationships request)
 			throws JIXBQueryResultException;
+
+	/**
+	 * Set session id
+	 */
+	void setSessionID(String sessionID);
 
 	/**
 	 * Get the current session id
@@ -214,26 +218,24 @@ public interface SugarWsClient {
 	 * @return
 	 */
 	String getSessionID();
-	
-	
+
 	/**
 	 * @return
 	 */
 	String getUsername();
-	
+
 	/**
 	 * @param username
 	 */
 	void setUsername(String username);
-	
+
 	/**
 	 * @return
 	 */
 	String getPassword();
-	
+
 	/**
 	 * @param password
 	 */
 	void setPassword(String password);
-
 }

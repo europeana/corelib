@@ -14,9 +14,8 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.JIXBLoginFailureException;
  */
 public class ClientFactory {
 
-	
 	private WebServiceTemplate webServiceTemplate;
-	private static org.apache.log4j.Logger LOGGER = Logger.getLogger(ClientUtils.class);	
+	private static Logger LOGGER = Logger.getLogger(ClientUtils.class);
 
 	/**
 	 * Internal factory method used by Spring 
@@ -25,14 +24,14 @@ public class ClientFactory {
 	 * @param password
 	 * @return
 	 */
-	public  SugarWsClient createInstance(String uri,String userName, String password){
-		
+	public SugarWsClient createInstance(String uri, String userName, String password) {
+
 		SugarWsClientImpl client = new SugarWsClientImpl();
 		client.setUsername(userName);
 		client.setPassword(password);
 		webServiceTemplate.setDefaultUri(uri);
 		client.setWebServiceTemplate(webServiceTemplate);
-		
+
 		try {
 			client.setSessionID(client.login(ClientUtils.createStandardLoginObject(userName,password)));
 		} catch (JIXBLoginFailureException e) {
@@ -41,12 +40,10 @@ public class ClientFactory {
 			LOGGER.info("======= Warning: could not connect to SugarCrm Server =====");
 			client.setSessionID("-1");
 		}
-	
-		
+
 		return client;
 	}
-	
-	
+
 	/**
 	 * Internal factory method used by Spring 
 	 * 
@@ -55,7 +52,7 @@ public class ClientFactory {
 	 * @return
 	 */
 	public  SugarWsClient createInstance(){
-		
+
 		SugarWsClientImpl client = new SugarWsClientImpl();
 		String userName = PropertyReader.getProperty(UimConfigurationProperty.SUGARCRM_USERNAME);
 		String password = PropertyReader.getProperty(UimConfigurationProperty.SUGARCRM_PASSWORD);
@@ -64,7 +61,7 @@ public class ClientFactory {
 		client.setUsername(userName);
 		client.setPassword(password);
 		client.setWebServiceTemplate(webServiceTemplate);
-		
+
 		try {
 			client.setSessionID(client.login(ClientUtils.createStandardLoginObject(userName,password)));
 		} catch (JIXBLoginFailureException e) {
@@ -75,26 +72,21 @@ public class ClientFactory {
 			client.setSessionID("-1");
 			e.printStackTrace();
 		}
-	
-		
+
 		return client;
 	}
-	
-	
+
 	/**
 	 * @return
 	 */
 	public WebServiceTemplate getWebServiceTemplate(){
 		return this.webServiceTemplate;
 	}
-	
-	
-	
+
 	/**
 	 * @param webServiceTemplate
 	 */
 	public void setWebServiceTemplate(WebServiceTemplate webServiceTemplate){
 		this.webServiceTemplate = webServiceTemplate;
 	}
-	
 }

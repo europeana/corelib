@@ -170,7 +170,7 @@ public class ClientUtils {
 	 * @return the encrypted String
 	 */
 	public static String md5(String value) {
-		MessageDigest mdEnc;
+		// MessageDigest mdEnc;
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			byte[] messageDigest = md.digest(value.getBytes());
@@ -330,7 +330,7 @@ public class ClientUtils {
 		Document document = documentBuilder.parse(new InputSource(
 				new StringReader(responseString)));
 
-		String messageName = document.getFirstChild().getNodeName();
+		//String messageName = document.getFirstChild().getNodeName();
 
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
@@ -400,7 +400,7 @@ public class ClientUtils {
 	}
 
 	/**
-	 * Auxiliary method for extractiing information from DOM objects embedded in
+	 * Auxiliary method for extracting information from DOM objects embedded in
 	 * SOAP responses
 	 * 
 	 * @param value

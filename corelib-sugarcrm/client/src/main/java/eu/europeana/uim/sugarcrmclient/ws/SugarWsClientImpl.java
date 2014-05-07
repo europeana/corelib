@@ -20,8 +20,8 @@
  */
 package eu.europeana.uim.sugarcrmclient.ws;
 
+import org.apache.log4j.Logger;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
 
 import eu.europeana.uim.sugarcrmclient.jibxbindings.IsUserAdmin;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.IsUserAdminResponse;
@@ -47,9 +47,9 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.SetNoteAttachment;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.SetNoteAttachmentResponse;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetNoteAttachment;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetNoteAttachmentResponse;
-import eu.europeana.uim.sugarcrmclient.ws.exceptions.*;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetRelationships;
 import eu.europeana.uim.sugarcrmclient.jibxbindings.GetRelationshipsResponse;
+import eu.europeana.uim.sugarcrmclient.ws.exceptions.*;
 
 /**
  * The core class for performing SOAP based sugarCRM operations
@@ -58,33 +58,32 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.GetRelationshipsResponse;
  */
 public class SugarWsClientImpl implements SugarWsClient {
 
+	Logger log = Logger.getLogger(SugarWsClientImpl.class.getCanonicalName());
+
 	private WebServiceTemplate webServiceTemplate;
 
 	private String username;
-	
+
 	private String password;
-	
+
 	private String sessionID;
 
-	
 	/**
 	 * Default Constructor
 	 */
 	public SugarWsClientImpl(){
 	}
-	
-	
+
 	/**
 	 * Used for unit/integration tests
 	 * @param username
 	 * @param password
 	 */
 	public SugarWsClientImpl(String username,String password){
-	   this.username = username;
-	   this.password = password;
+		this.username = username;
+		this.password = password;
 	}
-	
-	
+
 	/**
 	 * Generic auxiliary method for marshalling and unmarshalling requests and
 	 * responses via Spring-WS
@@ -99,9 +98,10 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 */
 	private <T, S> S invokeWSTemplate(T wsOperation, Class<S> responseClass) {
 
+		log.info("uri: " + webServiceTemplate.getDefaultUri());
+
 		@SuppressWarnings("unchecked")
-		S wsResponse = (S) webServiceTemplate
-				.marshalSendAndReceive(wsOperation);
+		S wsResponse = (S) webServiceTemplate.marshalSendAndReceive(wsOperation);
 
 		return wsResponse;
 	}
@@ -123,7 +123,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 		LoginResponse response = invokeWSTemplate(login, LoginResponse.class);
 		String sessionID = response.getReturn().getId();
 		this.sessionID = sessionID;
-		
+
 		if ("-1".equals(sessionID)) {
 			throw new JIXBLoginFailureException(response.getReturn().getError());
 		}
@@ -156,8 +156,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * Public method for performing Logout operations (see Junit test for usage
 	 * example)
 	 * 
-	 * @param a
-	 *            logout request object
+	 * @param a logout request object
 	 * @return a LogoutResponse object
 	 * @throws JIXBLogoutFailureException
 	 *             when logout fails
@@ -189,7 +188,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws GenericSugarCrmException
 	 */
 	@Override
-	public IsUserAdminResponse isuseradmin(IsUserAdmin request)
+	public IsUserAdminResponse isUserAdmin(IsUserAdmin request)
 			throws Exception {
 
 		try {
@@ -211,7 +210,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws GenericSugarCrmException
 	 */
 	@Override
-	public GetUserIdResponse getuserid(GetUserId request)
+	public GetUserIdResponse getUserId(GetUserId request)
 			throws Exception {
 
 		try {
@@ -233,7 +232,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws GenericSugarCrmException
 	 */
 	@Override
-	public GetAvailableModulesResponse getavailablemodules(
+	public GetAvailableModulesResponse getAvailableModules(
 			GetAvailableModules request) throws JIXBQueryResultException {
 
 		GetAvailableModulesResponse response = invokeWSTemplate(request,
@@ -253,7 +252,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public GetModuleFieldsResponse getmodulefields(GetModuleFields request)
+	public GetModuleFieldsResponse getModuleFields(GetModuleFields request)
 			throws JIXBQueryResultException {
 
 		GetModuleFieldsResponse response = invokeWSTemplate(request,
@@ -273,8 +272,10 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public GetEntryListResponse getentrylist(GetEntryList request)
+	public GetEntryListResponse getEntryList(GetEntryList request)
 			throws JIXBQueryResultException {
+
+		log.info("module: " + request.getModuleName() + ", query: " + request.getQuery());
 
 		GetEntryListResponse response = invokeWSTemplate(request,
 				GetEntryListResponse.class);
@@ -294,7 +295,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public GetEntryResponse getentry(GetEntry request)
+	public GetEntryResponse getEntry(GetEntry request)
 			throws JIXBQueryResultException {
 
 		GetEntryResponse response = invokeWSTemplate(request,
@@ -315,7 +316,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public SetEntryResponse setentry(SetEntry request)
+	public SetEntryResponse setEntry(SetEntry request)
 			throws JIXBQueryResultException {
 
 		SetEntryResponse response = invokeWSTemplate(request,
@@ -336,7 +337,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public GetEntriesResponse getentries(GetEntries request)
+	public GetEntriesResponse getEntries(GetEntries request)
 			throws JIXBQueryResultException {
 
 		GetEntriesResponse response = invokeWSTemplate(request,
@@ -356,7 +357,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @return
 	 */
 	@Override
-	public SetNoteAttachmentResponse setnoteattachment(SetNoteAttachment request)
+	public SetNoteAttachmentResponse setNoteAttachment(SetNoteAttachment request)
 			throws JIXBFileAttachmentException {
 
 		SetNoteAttachmentResponse response = invokeWSTemplate(request,
@@ -377,7 +378,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @return
 	 */
 	@Override
-	public GetNoteAttachmentResponse getnoteattachment(GetNoteAttachment request)
+	public GetNoteAttachmentResponse getNoteAttachment(GetNoteAttachment request)
 			throws JIXBFileAttachmentException {
 
 		GetNoteAttachmentResponse response = invokeWSTemplate(request,
@@ -399,7 +400,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @throws JIXBQueryResultException
 	 */
 	@Override
-	public GetRelationshipsResponse getrelationships(GetRelationships request)
+	public GetRelationshipsResponse getRelationships(GetRelationships request)
 			throws JIXBQueryResultException {
 
 		GetRelationshipsResponse response = invokeWSTemplate(request,
@@ -411,7 +412,6 @@ public class SugarWsClientImpl implements SugarWsClient {
 		return response;
 	}
 
-	
 	/**
 	 * @return
 	 */
@@ -424,7 +424,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	public String getUsername() {
 		return username;
 	}
-	
+
 	@Override
 	public void setUsername(String username) {
 		this.username = username;
@@ -439,8 +439,7 @@ public class SugarWsClientImpl implements SugarWsClient {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
+
 	/* Getters & Setters */
 
 	/**
@@ -472,14 +471,8 @@ public class SugarWsClientImpl implements SugarWsClient {
 		return webServiceTemplate.getDefaultUri();
 	}
 
-	/**
-	 * @param sessionID
-	 */
+	@Override
 	public void setSessionID(String sessionID) {
 		this.sessionID = sessionID;
 	}
-
-
-
-
 }

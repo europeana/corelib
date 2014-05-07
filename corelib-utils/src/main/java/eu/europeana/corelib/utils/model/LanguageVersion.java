@@ -66,4 +66,10 @@ public class LanguageVersion implements Comparable<LanguageVersion> {
 			return this.getText().compareTo(other.getText());
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "LanguageVersion [text=" + text + ", languageCode="
+				+ languageCode + "]";
+	}
 }
