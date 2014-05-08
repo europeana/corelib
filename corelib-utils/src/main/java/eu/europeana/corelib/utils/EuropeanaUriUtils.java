@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,4 +78,23 @@ public class EuropeanaUriUtils {
 				collectionId.length() - 1) : collectionId;
 	}
 
+	public static String encode(String value) {
+		if (StringUtils.isNotBlank(value)) {
+			try {
+				value = URLEncoder.encode(value, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+			}
+		}
+		return value;
+	}
+
+	public static String decode(String value) {
+		if (StringUtils.isNotBlank(value)) {
+			try {
+				value = URLDecoder.decode(value, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+			}
+		}
+		return value;
+	}
 }
