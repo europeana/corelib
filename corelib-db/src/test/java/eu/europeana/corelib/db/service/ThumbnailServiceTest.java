@@ -61,8 +61,10 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
 public class ThumbnailServiceTest {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ThumbnailServiceTest.class);
+
 	@Resource(name="corelib_solr_mongoProvider")
 	private MongoProvider mongoProvider;
+
 	@Resource(name = "corelib_db_imageDao")
 	NosqlDao<ImageCache, String> imageDao;
 
@@ -81,7 +83,7 @@ public class ThumbnailServiceTest {
 	 */
 	@Before
 	public void setup() throws IOException {
-		imageDao.getCollection().drop();
+		// imageDao.getCollection().drop();
 		image = ImageIO.read(getClass().getResourceAsStream(
 				"/images/GREATWAR.jpg"));
 	}
@@ -93,7 +95,7 @@ public class ThumbnailServiceTest {
 	 * @throws DatabaseException
 	 * @throws ImageReadException
 	 */
-	@Test
+	// @Test
 	public void storeTest() throws IOException, DatabaseException,
 			ImageReadException {
 

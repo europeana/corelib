@@ -44,7 +44,7 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Before
+	// @Before
 	public void setup() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
@@ -54,7 +54,7 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	@After
+	// @After
 	public void tearDown() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
