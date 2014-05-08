@@ -29,9 +29,12 @@ import eu.europeana.corelib.utils.model.DateInterval;
 public class ApiLogServiceTest {
 
 	String apiKey = "testKey";
+
 	@Resource(name="corelib_solr_mongoProvider")
 	private MongoProvider mongoProvider;
-	@Resource private ApiLogService apiLogService;
+
+	@Resource
+	private ApiLogService apiLogService;
 
 	@Resource(name = "corelib_db_apiLogDao")
 	NosqlDao<ImageCache, String> apiLogDao;
