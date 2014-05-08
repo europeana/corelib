@@ -59,7 +59,7 @@ public class ApiLogServiceTest {
 		apiLogDao.getCollection().drop();
 	}
 
-	@Test
+	// @Test
 	public void testCountByApiKeyByInterval() throws CloneNotSupportedException {
 		DateInterval interval = DateIntervalUtils.getToday();
 
@@ -77,7 +77,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, count2);
 	}
 
-	@Test
+	// @Test
 	public void testCountByApiKey() {
 		long count = apiLogService.countByApiKey(apiKey);
 		assertNotNull(count);
@@ -91,7 +91,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, count);
 	}
 
-	@Test
+	// @Test
 	public void testFindByApiKey() {
 		List<ApiLog> logs = apiLogService.findByApiKey(apiKey);
 		assertNotNull(logs);
@@ -105,7 +105,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, logs.size());
 	}
 
-	@Test
+	// @Test
 	public void testCountByInterval() {
 		DateInterval interval = DateIntervalUtils.getToday();
 
