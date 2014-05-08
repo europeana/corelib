@@ -24,8 +24,8 @@ import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.utils.model.DateInterval;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiLogServiceTest {
 
 	String apiKey = "testKey";

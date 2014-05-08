@@ -34,7 +34,6 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.MongoProvider;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
@@ -55,8 +54,7 @@ import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class UserServiceTest {
-	@Resource(name = "corelib_solr_mongoProvider")
-	private MongoProvider mongoProvider;
+
 	@Resource
 	private UserService userService;
 

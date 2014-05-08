@@ -27,8 +27,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-db-context.xml" , "/corelib-db-test.xml"})
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiKeyServiceTest {
 
 	private static final long DEFAULT_USAGE_LIMIT = 10000;
