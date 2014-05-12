@@ -1,7 +1,7 @@
 package eu.europeana.corelib.utils.service;
 
 public interface OptOutService {
-	
+
 	/**
 	 * Checks whether a document ID refers to an opted out dataset
 	 * 

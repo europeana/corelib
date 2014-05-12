@@ -20,7 +20,6 @@
  */
 package eu.europeana.uim.sugarcrmclient.ws;
 
-import org.apache.log4j.Logger;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
 import eu.europeana.uim.sugarcrmclient.jibxbindings.IsUserAdmin;
@@ -57,8 +56,6 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.*;
  * @author Georgios Markakis
  */
 public class SugarWsClientImpl implements SugarWsClient {
-
-	Logger log = Logger.getLogger(SugarWsClientImpl.class.getCanonicalName());
 
 	private WebServiceTemplate webServiceTemplate;
 
@@ -97,8 +94,6 @@ public class SugarWsClientImpl implements SugarWsClient {
 	 * @return the unmarshalled response object
 	 */
 	private <T, S> S invokeWSTemplate(T wsOperation, Class<S> responseClass) {
-
-		log.info("uri: " + webServiceTemplate.getDefaultUri());
 
 		@SuppressWarnings("unchecked")
 		S wsResponse = (S) webServiceTemplate.marshalSendAndReceive(wsOperation);
@@ -274,8 +269,6 @@ public class SugarWsClientImpl implements SugarWsClient {
 	@Override
 	public GetEntryListResponse getEntryList(GetEntryList request)
 			throws JIXBQueryResultException {
-
-		log.info("module: " + request.getModuleName() + ", query: " + request.getQuery());
 
 		GetEntryListResponse response = invokeWSTemplate(request,
 				GetEntryListResponse.class);

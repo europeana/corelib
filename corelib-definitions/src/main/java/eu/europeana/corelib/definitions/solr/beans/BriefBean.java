@@ -92,7 +92,7 @@ public interface BriefBean extends IdBean {
 	 * 
 	 * @return edm:isShownAt
 	 */
-	String[] getEdmIsShownAt(); // provider_aggregation_edm_isShownAt
+	String[] getEdmIsShownAt();
 
 	// Ranking and Enrichment terms
 

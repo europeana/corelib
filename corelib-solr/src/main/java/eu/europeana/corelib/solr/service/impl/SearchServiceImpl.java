@@ -65,6 +65,7 @@ import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
@@ -298,7 +299,7 @@ public class SearchServiceImpl implements SearchService {
 		ResultSet<T> resultSet = new ResultSet<T>();
 		Class<? extends IdBeanImpl> beanClazz = SolrUtils.getImplementationClass(beanInterface);
 
-		if (beanClazz == BriefBeanImpl.class || beanClazz == ApiBeanImpl.class) {
+		if (isValidBeanClass(beanClazz)) {
 			String[] refinements = query.getRefinements(true);
 			if (SolrUtils.checkTypeFacet(refinements)) {
 				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
@@ -392,9 +393,22 @@ public class SearchServiceImpl implements SearchService {
 
 		} else {
 			resultSet = null;
-			throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+			ProblemType type = ProblemType.INVALIDCLASS;
+			type.appendMessage("Bean class: " + beanClazz);
+			throw new SolrTypeException(type);
 		}
 		return resultSet;
+	}
+
+	/**
+	 * Flag whether the bean class is one of the allowable ones.
+	 * @param beanClazz
+	 * @return
+	 */
+	private boolean isValidBeanClass(Class<? extends IdBeanImpl> beanClazz) {
+		return beanClazz == BriefBeanImpl.class
+			|| beanClazz == ApiBeanImpl.class
+			|| beanClazz == RichBeanImpl.class;
 	}
 
 	@Override

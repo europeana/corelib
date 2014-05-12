@@ -127,7 +127,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	protected Float score;
 
 	@Field("provider_aggregation_edm_isShownAt")
-	protected String[] edmIsShownAt; // provider_aggregation_edm_isShownAt
+	protected String[] edmIsShownAt;
 
 	@Override
 	public String[] getEdmPreview(){
