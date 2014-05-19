@@ -158,6 +158,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.useNewMyEuropeanaUrl']}")
 	private String useNewMyEuropeanaUrlString;
 
+	@Value("#{europeanaProperties['portal.bing.translate.key']}")
+	private String bingTranslateId;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -408,5 +411,9 @@ public class Configuration {
 			}
 		}
 		return (useNewMyEuropeanaUrl) ? NEW_MYEUROPEANA_URL : OLD_MYEUROPEANA_URL;
+	}
+
+	public String getBingTranslateId() {
+		return bingTranslateId;
 	}
 }
