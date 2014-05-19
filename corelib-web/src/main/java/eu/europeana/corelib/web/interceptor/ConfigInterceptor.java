@@ -102,7 +102,6 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			model.setShareThisId(StringUtils.trimToEmpty(portalSharethisId));
 			model.setFacebookId(StringUtils.trimToEmpty(portalFacebookId));
 			model.setBingTranslateId(StringUtils.trimToEmpty(portalBingTranslateId));
-			
 		}
 	}
 
