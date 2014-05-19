@@ -41,6 +41,13 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+                <repository>
+			<id>ext-releases</id>
+			<url>http://artifactory.eanadev.org/artifactory/ext-release-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>snapshots</id>
 			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot-local</url>
@@ -75,7 +82,7 @@
 		<version.europeanaCorelib>2.0-SNAPSHOT</version.europeanaCorelib>
 		<version.europeanaApi2>2.0.12</version.europeanaApi2>
 		<version.log4j>1.2.15</version.log4j>
-		<version.jdk>1.6</version.jdk>
+		<version.jdk>1.7</version.jdk>
 		<version.junit>4.10</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
 		<version.apacheSolr>4.0.0</version.apacheSolr>
