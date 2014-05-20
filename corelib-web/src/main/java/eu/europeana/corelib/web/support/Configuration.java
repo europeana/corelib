@@ -161,6 +161,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.bing.translate.key']}")
 	private String bingTranslateId;
 
+	@Value("#{europeanaProperties['portal.useBackendItemTranslation']}")
+	private String useBackendItemTranslationString;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -411,6 +414,13 @@ public class Configuration {
 			}
 		}
 		return (useNewMyEuropeanaUrl) ? NEW_MYEUROPEANA_URL : OLD_MYEUROPEANA_URL;
+	}
+
+	public boolean useBackendTranslation() {
+		if (StringUtils.isBlank(useBackendItemTranslationString)) {
+			return false;
+		}
+		return Boolean.parseBoolean(useBackendItemTranslationString);
 	}
 
 	public String getBingTranslateId() {
