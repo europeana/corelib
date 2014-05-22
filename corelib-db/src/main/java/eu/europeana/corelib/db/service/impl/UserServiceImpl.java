@@ -36,6 +36,7 @@ import eu.europeana.corelib.db.service.ApiKeyService;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
+import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
@@ -67,6 +68,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 	@Resource
 	private ApiKeyService apiKeyService;
+
+	public static UserService getBeanInstance() {
+		return ApplicationContextContainer.getBean(UserService.class);
+	}
 
 	@Override
 	public User create(String tokenString, String username, String password)

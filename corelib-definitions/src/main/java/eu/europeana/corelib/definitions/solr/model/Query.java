@@ -128,14 +128,7 @@ public class Query implements Cloneable {
 	}
 
 	private String concatenateQueryTranslations() {
-		List<String> queryTranslationTerms = new ArrayList<String>();
-		for (LanguageVersion term : getQueryTranslations()) {
-			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
-			if (!queryTranslationTerms.contains(phrase)) {
-				queryTranslationTerms.add(phrase);
-			}
-		}
-		return StringUtils.join(queryTranslationTerms, " OR ");
+		return concatenateQueryTranslations(getQueryTranslations());
 	}
 
 	public Query setQuery(String query) {
@@ -477,6 +470,17 @@ public class Query implements Cloneable {
 		for (FacetCollector collector : register.values()) {
 			facetRefinements.add(collector.toString());
 		}
+	}
+
+	public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
+		List<String> queryTranslationTerms = new ArrayList<String>();
+		for (LanguageVersion term : languageVersions) {
+			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
+			if (!queryTranslationTerms.contains(phrase)) {
+				queryTranslationTerms.add(phrase);
+			}
+		}
+		return StringUtils.join(queryTranslationTerms, " OR ");
 	}
 
 	private class FacetCollector {
