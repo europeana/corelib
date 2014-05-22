@@ -121,7 +121,7 @@ public final class AgentFieldInput {
 
 		if (agentType.getHasMetList() != null) {
 			for (HasMet hasMet : agentType.getHasMetList()) {
-				solrInputDocument = SolrUtils.addFieldFromLiteral(
+				solrInputDocument = SolrUtils.addFieldFromResource(
 						solrInputDocument, hasMet, EdmLabel.AG_EDM_HASMET);
 			}
 		}
@@ -283,7 +283,7 @@ public final class AgentFieldInput {
 				.getDateList()));
 		agent.setDcIdentifier(MongoUtils.createLiteralMapFromList(agentType
 				.getIdentifierList()));
-		agent.setEdmHasMet(MongoUtils.createLiteralMapFromList(agentType
+		agent.setEdmHasMet(MongoUtils.createResourceMapFromList(agentType
 				.getHasMetList()));
 		agent.setEdmIsRelatedTo(MongoUtils
 				.createResourceOrLiteralMapFromList(agentType

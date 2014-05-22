@@ -30,6 +30,7 @@ import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
+import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import java.lang.reflect.InvocationTargetException;
@@ -186,6 +187,8 @@ public final class MongoUtils {
 
 		return null;
 	}
+        
+        
 
 	/**
 	 * Method that converts a Enum object to a multilingual map of strings
@@ -338,6 +341,25 @@ public final class MongoUtils {
 					val.add(obj.getString());
 					retMap.put("def", val);
 				}
+			}
+			return retMap;
+		}
+		return null;
+	}
+        
+        public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromList(
+			List<T> list) {
+		if (list != null && list.size() > 0) {
+			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+			for (T obj : list) {
+				
+					List<String> val = retMap.get("def");
+					if (val == null) {
+						val = new ArrayList<String>();
+					}
+					val.add(StringUtils.trim(obj.getResource()));
+					retMap.put("def", val);
+				
 			}
 			return retMap;
 		}

@@ -283,7 +283,7 @@ public final class ProxyFieldInput {
 				.getProxyFor().getResource()));
 		mongoProxy.setProxyIn(SolrUtils.resourceListToArray(proxy
 				.getProxyInList()));
-		mongoProxy.setEdmHasMet(MongoUtils.createLiteralMapFromList(proxy
+		mongoProxy.setEdmHasMet(MongoUtils.createResourceMapFromList(proxy
 				.getHasMetList()));
 		mongoProxy.setYear(MongoUtils.createLiteralMapFromList(proxy
 				.getYearList()));
@@ -1426,7 +1426,7 @@ public final class ProxyFieldInput {
 				.getProxyFor().getResource()));
 		mongoProxy.setProxyIn(SolrUtils.resourceListToArray(proxy
 				.getProxyInList()));
-		mongoProxy.setEdmHasMet(MongoUtils.createLiteralMapFromList(proxy
+		mongoProxy.setEdmHasMet(MongoUtils.createResourceMapFromList(proxy
 				.getHasMetList()));
 		mongoProxy.setYear(MongoUtils.createLiteralMapFromList(proxy
 				.getYearList()));

@@ -250,7 +250,7 @@ public class AgentUpdater implements Updater<AgentImpl,AgentType>{
 
 		if (jibxAgent.getHasMetList() != null) {
 			Map<String, List<String>> hasMet = MongoUtils
-					.createLiteralMapFromList(jibxAgent.getHasMetList());
+					.createResourceMapFromList(jibxAgent.getHasMetList());
 			if (hasMet != null) {
 				if (agent.getEdmHasMet() == null
 						|| !MongoUtils.mapEquals(hasMet, agent.getEdmHasMet())) {
