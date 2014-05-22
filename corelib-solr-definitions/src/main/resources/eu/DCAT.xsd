@@ -17,54 +17,44 @@
 -->
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:adms="http://www.w3.org/ns/adms#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:edm="http://www.europeana.eu/schemas/edm/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
-    targetNamespace="http://xmlns.com/foaf/0.1/">
+    xmlns:dcterms="http://purl.org/dc/terms/" 
+    targetNamespace="http://www.w3.org/ns/dcat#">
 
     <annotation>
-        <documentation> Europeana representation of Foaf elements</documentation>
+        <documentation> Europeana representation of Data Catalog Vocabulary (DCAT) elements</documentation>
     </annotation>
-    
+
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
     <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
-    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd" />
+    <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd" />
+    <import namespace="http://www.w3.org/ns/adms#" schemaLocation="ADMS.xsd" />
     
-    <element name="homepage" type="rdf:ResourceType">
-    </element>
-    
-    <element name="name" type="rdf:LiteralType">
-    </element>
-    
-    
-    <element name="Organisation">
+    <element name="Dataset">
         <complexType>
             <annotation>
-                <documentation> The EDM representation of an Organization 
-                    providing data to Europeana</documentation>
+                <documentation> The EDM representation of Dataset 
+                    consisting of records ingested in Europeana</documentation>
             </annotation>
             <complexContent>
                 <extension base="rdf:AboutType">
                     <sequence>
-                        <element ref="dc:identifier" maxOccurs="1" minOccurs="1"/>
-                        <element ref="skos:prefLabel" maxOccurs="unbounded" minOccurs="0"/>
-                        <element ref="skos:altLabel" maxOccurs="unbounded" minOccurs="0"/>
-                        <element ref="edm:acronym"  maxOccurs="unbounded" minOccurs="0"/>
-                        <element ref="edm:organisationScope" maxOccurs="1" minOccurs="1"/>
-                        <element ref="edm:organisationDomain" maxOccurs="1" minOccurs="1"/>
-                        <element ref="edm:organisationSector" maxOccurs="1" minOccurs="1"/>
-                        <element ref="edm:geographicLevel" maxOccurs="1" minOccurs="1"/>
-                        <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
-                        <element ref="edm:europeanaRole" maxOccurs="1" minOccurs="1"/>
-                        <element ref="foaf:homepage" maxOccurs="1" minOccurs="0"/>
+                        <element ref="edm:datasetName" maxOccurs="1" minOccurs="1"/>
+                        <element ref="edm:provider" maxOccurs="1" minOccurs="1"/>
+                        <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="dcterms:created" maxOccurs="1" minOccurs="0"/>
+                        <element ref="dcterms:extent" maxOccurs="1" minOccurs="1"/>
+                        <element ref="adms:status" maxOccurs="1" minOccurs="1"/>
                     </sequence>
                 </extension>
             </complexContent>
         </complexType>
     </element>
-    
     
 </schema>

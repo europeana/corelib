@@ -74,6 +74,8 @@
           <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfBirth" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfDeath" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
@@ -147,6 +149,7 @@
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
+          <element ref="dc:creator" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:description" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
