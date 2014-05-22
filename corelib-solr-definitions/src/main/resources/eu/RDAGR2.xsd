@@ -32,6 +32,13 @@
     <element name="dateOfDeath" type="rdf:LiteralType">
     </element>
     
+    <element name="placeOfBirth" type="rdf:LiteralType">    
+    </element>
+    
+    <element name="placeOfDeath" type="rdf:LiteralType">
+    </element>
+    
+    
     <element name="dateOfEstablishment" type="rdf:LiteralType">
     </element>
     

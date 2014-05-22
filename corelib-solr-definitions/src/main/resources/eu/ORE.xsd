@@ -47,7 +47,7 @@
                     <sch:pattern name="Either Is shownby or is shownat should be present">
                         <sch:rule context="ore:Aggregation">
                             <sch:assert test="edm:isShownAt or edm:isShownBy">id: <sch:value-of
-                                    select="@rdf:about"/> An ore:Aggregation must have either
+                                select="@rdf:about"/> An ore:Aggregation must have either
                                 edm:isShownAt or edm:isShownBy </sch:assert>
                         </sch:rule>
                         <sch:rule context="ore:Aggregation">
