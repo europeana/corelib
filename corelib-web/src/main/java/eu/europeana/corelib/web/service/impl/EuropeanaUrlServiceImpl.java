@@ -1,7 +1,6 @@
 package eu.europeana.corelib.web.service.impl;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 
@@ -165,10 +164,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
 		UrlBuilder url = new UrlBuilder(URL_IMAGE_SITE);
-		try {
-			url.addParam("uri", URLEncoder.encode(thumbnail.trim(), ENC_UTF8));
-		} catch (UnsupportedEncodingException e) {
-		}
+		url.addParam("uri", thumbnail.trim());
 		url.addParam("size", ThumbSize.LARGE.toString());
 		url.addParam("type", type.toString());
 		return url;

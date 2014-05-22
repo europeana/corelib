@@ -75,7 +75,7 @@ public class FullBeanImpl implements FullBean {
 	protected String[] language;
 
 	protected Date timestampCreated;
-	
+
 	protected Date timestampUpdated;
 
 	protected DocType type;

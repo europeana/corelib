@@ -42,9 +42,13 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 		List<LanguageVersion> translations = new ArrayList<LanguageVersion>();
 		List<String> smallCaseTranslations = new ArrayList<String>();
 		for (String languageCode : languages) {
+			if (StringUtils.isBlank(languageCode)) {
+				continue;
+			}
 			Map<String, String> langVersions = getLanguageLinks(titles, languageCode);
 			for (String language : languages) {
-				if (langVersions.containsKey(language)) {
+				if (langVersions.containsKey(language)
+					&& StringUtils.isNotBlank(langVersions.get(language))) {
 					String langVersion = String.format("%s (%s)", langVersions.get(language), language);
 					if (!smallCaseTranslations.contains(langVersion.toLowerCase())) {
 						smallCaseTranslations.add(langVersion.toLowerCase());
