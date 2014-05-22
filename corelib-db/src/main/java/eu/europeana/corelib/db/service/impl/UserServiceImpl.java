@@ -70,7 +70,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	private ApiKeyService apiKeyService;
 
 	public static UserService getBeanInstance() {
-		return ApplicationContextContainer.getBean(UserService.class);
+		return ApplicationContextContainer.getBean(UserServiceImpl.class);
 	}
 
 	@Override
