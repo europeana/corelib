@@ -64,6 +64,11 @@
 			<artifactId>corelib-utils</artifactId>
 			<version>${version.europeanaCorelib}</version>
 		</dependency>
+                <dependency>
+                    <groupId>eu.europeana.publication</groupId>
+                    <artifactId>publication-common</artifactId>
+                    <version>0.0.1-SNAPSHOT</version>
+                </dependency>
 		<!-- SOLR -->
 		<dependency>
 			<groupId>org.apache.solr</groupId>
@@ -141,6 +146,31 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+                    <groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>[3.0, )</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>[1.2, 1.3)</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-neo4j</artifactId>
+			<version>2.2.0.RELEASE</version>
+                </dependency>
+                <dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-jndi</artifactId>
 			<version>8.1.14.v20131031</version>

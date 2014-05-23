@@ -31,8 +31,12 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
+import eu.europeana.publication.common.ICollection;
+import eu.europeana.publication.common.IDocument;
+import eu.europeana.publication.common.State;
+import java.util.Map;
 
-public class FullBeanHandler {
+public class FullBeanHandler implements ICollection{
 	
 	private EdmMongoServer mongoServer;
 	Logger log = Logger.getLogger(this.getClass().getName());
@@ -287,4 +291,41 @@ public class FullBeanHandler {
 		}
 		return fullBean;
 	}
+
+
+    @Override
+    public List<IDocument> getDocumentsByStatesUsingBatch(List<State> stateVlues,
+            Map<String, List<String>> queryChoices, int batchSize) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public IDocument getDocumentById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void insertDocument(IDocument document) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateDocumentUsingId(IDocument document) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cloneDocument(IDocument originalDocument, IDocument clonedDocument) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteDocument(IDocument id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void commit() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

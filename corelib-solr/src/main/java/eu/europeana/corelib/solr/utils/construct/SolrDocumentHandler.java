@@ -13,7 +13,12 @@ import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.entity.Timespan;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.publication.common.ICollection;
+import eu.europeana.publication.common.IDocument;
+import eu.europeana.publication.common.State;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -24,7 +29,7 @@ import org.apache.solr.common.SolrInputDocument;
  *
  * @author Yorgos.Mamakis@ europeana.eu
  */
-public class SolrDocumentHandler {
+public class SolrDocumentHandler implements ICollection{
     public void save(FullBeanImpl fBean, HttpSolrServer solrServer){
         
         SolrInputDocument doc = new SolrInputDocument();
@@ -58,5 +63,43 @@ public class SolrDocumentHandler {
         } catch (IOException ex) {
             Logger.getLogger(SolrDocumentHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+
+    @Override
+    public List<IDocument> getDocumentsByStatesUsingBatch(List<State> stateVlues,
+            Map<String, List<String>> queryChoices, int batchSize) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public IDocument getDocumentById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void insertDocument(IDocument document) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    @Override
+    public void updateDocumentUsingId(IDocument document) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cloneDocument(IDocument originalDocument, IDocument clonedDocument) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteDocument(IDocument id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void commit() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

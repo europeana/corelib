@@ -21,13 +21,15 @@ import org.bson.types.ObjectId;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
+import eu.europeana.publication.common.IDocument;
+import eu.europeana.publication.common.State;
 /**
  * Mongo Entity for the representation of the lookup table of the EuropeanaIDs
  * @author yorgos.mamakis@ kb.nl
  *
  */
 @Entity ("EuropeanaID")
-public class EuropeanaId {
+public class EuropeanaId implements IDocument{
 	
 	@Id
 	private ObjectId id;
@@ -38,14 +40,23 @@ public class EuropeanaId {
 	private long timestamp;
 	private long lastAccess; 
 	
+        @Indexed
+        private State state;
 	/**
 	 * Get the record ID
 	 * @return the record ID
 	 */
-	public ObjectId getId() {
+	public ObjectId getObjectId() {
 		return id;
 	}
 	
+        @Override
+        public String getId(){
+            if (id!=null){
+                return id.toString();
+            }
+            return null;
+        }
 	/**
 	 * Set the recordID
 	 * @param id The id to set
@@ -117,5 +128,20 @@ public class EuropeanaId {
 	public void setNewId(String newId) {
 		this.newId = newId;
 	}
+
+    @Override
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    @Override
+    public State getState() {
+       return this.state;
+    }
+
+    @Override
+    public void setId(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
 }

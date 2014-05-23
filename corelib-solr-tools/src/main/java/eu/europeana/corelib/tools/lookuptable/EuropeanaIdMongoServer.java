@@ -3,9 +3,10 @@ package eu.europeana.corelib.tools.lookuptable;
 import java.util.List;
 
 import com.google.code.morphia.Datastore;
+import eu.europeana.publication.common.ICollection;
 
 
-public interface EuropeanaIdMongoServer {
+public interface EuropeanaIdMongoServer extends ICollection{
 
 	public abstract void createDatastore();
 
