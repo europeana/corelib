@@ -19,6 +19,11 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
+                <dependency>
+                    <groupId>eu.europeana.publication</groupId>
+                    <artifactId>publication-common</artifactId>
+                    <version>0.0.1-SNAPSHOT</version>
+                </dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.mongodb</groupId> -->
 <!-- 			<artifactId>mongo-java-driver</artifactId> -->
