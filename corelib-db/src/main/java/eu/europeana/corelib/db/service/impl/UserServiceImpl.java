@@ -69,10 +69,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Resource
 	private ApiKeyService apiKeyService;
 
-	public static UserService getBeanInstance() {
-		return ApplicationContextContainer.getBean(UserService.class);
-	}
-
 	@Override
 	public User create(String tokenString, String username, String password)
 			throws DatabaseException {
