@@ -1,5 +1,7 @@
 package eu.europeana.corelib.web.model.mediaservice;
 
+import eu.europeana.corelib.definitions.solr.DocType;
+
 public abstract class MediaService {
 
 	protected String id;
@@ -22,6 +24,8 @@ public abstract class MediaService {
 	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), id);
 	}
+
+	public abstract DocType getDataType();
 
 	protected abstract String getUrlPattern();
 

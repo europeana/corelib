@@ -1,5 +1,7 @@
 package eu.europeana.corelib.web.model.mediaservice;
 
+import eu.europeana.corelib.definitions.solr.DocType;
+
 public class DailyMotion extends MediaService {
 
 	protected String urlPattern = "http://www.dailymotion.com/video/%s";
@@ -13,6 +15,11 @@ public class DailyMotion extends MediaService {
 	@Override
 	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), id, id, id);
+	}
+
+	@Override
+	public DocType getDataType() {
+		return DocType.VIDEO;
 	}
 
 	protected String getUrlPattern() {;

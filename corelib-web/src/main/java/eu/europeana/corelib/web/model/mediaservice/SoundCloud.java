@@ -2,6 +2,7 @@ package eu.europeana.corelib.web.model.mediaservice;
 
 import javax.annotation.Resource;
 
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.web.model.mediaservice.soundcloud.Track;
 import eu.europeana.corelib.web.service.SoundCloudApiService;
 
@@ -52,6 +53,11 @@ public class SoundCloud extends MediaService {
 	@Override
 	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), trackId);
+	}
+
+	@Override
+	public DocType getDataType() {
+		return DocType.SOUND;
 	}
 
 	protected String getUrlPattern() {;

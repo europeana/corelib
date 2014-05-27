@@ -1,5 +1,7 @@
 package eu.europeana.corelib.web.model.mediaservice;
 
+import eu.europeana.corelib.definitions.solr.DocType;
+
 public class AudioBoo extends MediaService {
 
 	protected String urlPattern = "http://audioboo.fm/boos/%s";
@@ -13,6 +15,11 @@ public class AudioBoo extends MediaService {
 	@Override
 	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), id, id);
+	}
+
+	@Override
+	public DocType getDataType() {
+		return DocType.SOUND;
 	}
 
 	protected String getUrlPattern() {;

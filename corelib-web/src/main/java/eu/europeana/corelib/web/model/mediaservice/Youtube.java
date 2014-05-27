@@ -1,5 +1,7 @@
 package eu.europeana.corelib.web.model.mediaservice;
 
+import eu.europeana.corelib.definitions.solr.DocType;
+
 public class Youtube extends MediaService {
 
 	protected String urlPattern = "http://youtube.com/watch?v=%s";
@@ -8,6 +10,11 @@ public class Youtube extends MediaService {
 
 	public Youtube(String id) {
 		super(id);
+	}
+
+	@Override
+	public DocType getDataType() {
+		return DocType.VIDEO;
 	}
 
 	protected String getUrlPattern() {;
