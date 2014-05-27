@@ -3,6 +3,8 @@ package eu.europeana.corelib.web.model.mediaservice;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 public enum MediaServiceType {
 
 	SOUNDCLOUD("^urn:soundcloud:(.*?)$", SoundCloud.class),
@@ -31,17 +33,19 @@ public enum MediaServiceType {
 	}
 
 	public static MediaService findInstance(String urn) {
-		for (MediaServiceType service : MediaServiceType.values()) {
-			MediaService mediaService = service.getInstance(urn);
-			if (mediaService != null) {
-				return mediaService;
+		if (StringUtils.isNotBlank(urn)) {
+			for (MediaServiceType service : MediaServiceType.values()) {
+				MediaService mediaService = service.getInstance(urn);
+				if (mediaService != null) {
+					return mediaService;
+				}
 			}
 		}
 		return null;
 	}
 
 	public MediaService getInstance(String urn) {
-		if (clazz != null) {
+		if (StringUtils.isNotBlank(urn) && clazz != null) {
 			Matcher matcher = urnPattern.matcher(urn);
 			if (matcher.find()) {
 				return factory.create(clazz, matcher.group(1));
