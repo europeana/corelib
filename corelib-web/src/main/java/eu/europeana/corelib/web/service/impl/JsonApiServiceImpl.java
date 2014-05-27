@@ -17,6 +17,8 @@ import eu.europeana.corelib.web.service.JsonApiService;
 
 public class JsonApiServiceImpl implements JsonApiService {
 
+	private static final String USER_AGENT = "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)";
+
 	private Logger log = Logger.getLogger(JsonApiServiceImpl.class.getCanonicalName());
 
 	private String lastUrl;
@@ -30,7 +32,7 @@ public class JsonApiServiceImpl implements JsonApiService {
 		try {
 			HttpClient client = new HttpClient();
 			GetMethod method = new GetMethod(url);
-			method.setRequestHeader("User-Agent", "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)");
+			method.setRequestHeader("User-Agent", USER_AGENT);
 			result.setHttpStatusCode(client.executeMethod(method));
 
 			StringWriter writer = new StringWriter();
