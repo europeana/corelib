@@ -164,6 +164,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.useBackendItemTranslation']}")
 	private String useBackendItemTranslationString;
 
+	@Value("#{europeanaProperties['portal.soundcloud.clientID']}")
+	private String soundcloudClientID;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -425,5 +428,13 @@ public class Configuration {
 
 	public String getBingTranslateId() {
 		return bingTranslateId;
+	}
+
+	public String getSoundcloudClientID() {
+		return soundcloudClientID;
+	}
+
+	public void setSoundcloudClientID(String soundcloudClientID) {
+		this.soundcloudClientID = soundcloudClientID;
 	}
 }

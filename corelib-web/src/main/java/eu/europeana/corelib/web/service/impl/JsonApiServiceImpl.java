@@ -30,6 +30,7 @@ public class JsonApiServiceImpl implements JsonApiService {
 		try {
 			HttpClient client = new HttpClient();
 			GetMethod method = new GetMethod(url);
+			method.setRequestHeader("User-Agent", "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)");
 			result.setHttpStatusCode(client.executeMethod(method));
 
 			StringWriter writer = new StringWriter();
