@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -41,8 +40,6 @@ import eu.europeana.corelib.utils.model.LanguageVersion;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class Query implements Cloneable {
-
-	Logger log = Logger.getLogger(Query.class.getCanonicalName());
 
 	private final static String OR = " OR ";
 
@@ -119,11 +116,9 @@ public class Query implements Cloneable {
 
 	public String getQuery(boolean withTranslations) {
 		StringBuffer concatenatedQuery = new StringBuffer(getQuery());
-		log.info(String.format("%s,  %s", withTranslations, !CollectionUtils.isEmpty(getQueryTranslations())));
 		if (withTranslations && !CollectionUtils.isEmpty(getQueryTranslations())) {
 			concatenatedQuery.append(" OR ").append(concatenateQueryTranslations());
 		}
-		log.info(concatenatedQuery.toString());
 		return concatenatedQuery.toString();
 	}
 
