@@ -11,7 +11,7 @@ public class AudioBoo extends MediaService {
 	}
 
 	@Override
-	public String getEmbededHtml() {
+	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), id, id);
 	}
 

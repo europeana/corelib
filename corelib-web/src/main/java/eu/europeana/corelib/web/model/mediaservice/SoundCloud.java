@@ -45,12 +45,12 @@ public class SoundCloud extends MediaService {
 	}
 
 	@Override
-	public String getEmbededUrl() {
+	public String getEmbeddedUrl() {
 		return String.format(getEmbeddedUrlPattern(), trackId);
 	}
 
 	@Override
-	public String getEmbededHtml() {
+	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), trackId);
 	}
 

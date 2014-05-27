@@ -38,8 +38,8 @@ public class MediaServiceTypeTest {
 		assertEquals(mediaService0, mediaService);
 
 		assertEquals("http://audioboo.fm/boos/793330", mediaService.getUrl());
-		assertEquals("https://audioboo.fm/boos/793330/embed/v2?eid=AQAAAGBQf1PyGgwA", mediaService.getEmbededUrl());
-		assertEquals("<div class=\"ab-player\" data-boourl=\"https://audioboo.fm/boos/793330/embed/v2?eid=AQAAAGBQf1PyGgwA\" data-boowidth=\"100%\" data-maxheight=\"150\" data-iframestyle=\"background-color:transparent; display:block; box-shadow:0 0 1px 1px rgba(0, 0, 0, 0.15); min-width:349px; max-width:700px;\" style=\"background-color:transparent;\"><a href=\"http://audioboo.fm/boos/\">793330 on Audioboo</a></div><script type=\"text/javascript\">(function() { var po = document.createElement(\"script\"); po.type = \"text/javascript\"; po.async = true; po.src = \"https://d15mj6e6qmt1na.cloudfront.net/cdn/embed.js\"; var s = document.getElementsByTagName(\"script\")[0]; s.parentNode.insertBefore(po, s); })();</script>", mediaService.getEmbededHtml());
+		assertEquals("https://audioboo.fm/boos/793330/embed/v2?eid=AQAAAGBQf1PyGgwA", mediaService.getEmbeddedUrl());
+		assertEquals("<div class=\"ab-player\" data-boourl=\"https://audioboo.fm/boos/793330/embed/v2?eid=AQAAAGBQf1PyGgwA\" data-boowidth=\"100%\" data-maxheight=\"150\" data-iframestyle=\"background-color:transparent; display:block; box-shadow:0 0 1px 1px rgba(0, 0, 0, 0.15); min-width:349px; max-width:700px;\" style=\"background-color:transparent;\"><a href=\"http://audioboo.fm/boos/\">793330 on Audioboo</a></div><script type=\"text/javascript\">(function() { var po = document.createElement(\"script\"); po.type = \"text/javascript\"; po.async = true; po.src = \"https://d15mj6e6qmt1na.cloudfront.net/cdn/embed.js\"; var s = document.getElementsByTagName(\"script\")[0]; s.parentNode.insertBefore(po, s); })();</script>", mediaService.getEmbeddedHtml());
 	}
 
 	@Test
@@ -51,8 +51,8 @@ public class MediaServiceTypeTest {
 		assertEquals(mediaService0, mediaService);
 
 		assertEquals("http://www.dailymotion.com/video/x18cxlz", mediaService.getUrl());
-		assertEquals("http://www.dailymotion.com/embed/video/x18cxlz", mediaService.getEmbededUrl());
-		assertEquals("<iframe frameborder=\"0\" width=\"480\" height=\"270\" src=\"http://www.dailymotion.com/embed/video/x18cxlz\" allowfullscreen></iframe><br /><a href=\"http://www.dailymotion.com/video/x18cxlz\" target=\"_blank\">x18cxlz</a>", mediaService.getEmbededHtml());
+		assertEquals("http://www.dailymotion.com/embed/video/x18cxlz", mediaService.getEmbeddedUrl());
+		assertEquals("<iframe frameborder=\"0\" width=\"480\" height=\"270\" src=\"http://www.dailymotion.com/embed/video/x18cxlz\" allowfullscreen></iframe><br /><a href=\"http://www.dailymotion.com/video/x18cxlz\" target=\"_blank\">x18cxlz</a>", mediaService.getEmbeddedHtml());
 	}
 
 	@Test
@@ -64,8 +64,8 @@ public class MediaServiceTypeTest {
 		assertEquals(mediaService0, mediaService);
 
 		assertEquals("http://soundcloud.com/dick-1952/geluid-diverse-elektrische", mediaService.getUrl());
-		assertEquals("https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true", mediaService.getEmbededUrl());
-		assertEquals("<iframe width=\"100%\" height=\"450\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true\"></iframe>", mediaService.getEmbededHtml());
+		assertEquals("https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true", mediaService.getEmbeddedUrl());
+		assertEquals("<iframe width=\"100%\" height=\"450\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true\"></iframe>", mediaService.getEmbeddedHtml());
 	}
 
 	@Test
@@ -77,8 +77,8 @@ public class MediaServiceTypeTest {
 
 		assertEquals(mediaService0, mediaService);
 		assertEquals("http://soundcloud.com/dick-1952/geluid-diverse-elektrische", mediaService.getUrl());
-		assertEquals("https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true", mediaService.getEmbededUrl());
-		assertEquals("<iframe width=\"100%\" height=\"450\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true\"></iframe>", mediaService.getEmbededHtml());
+		assertEquals("https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true", mediaService.getEmbeddedUrl());
+		assertEquals("<iframe width=\"100%\" height=\"450\" scrolling=\"no\" frameborder=\"no\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/150424305&amp;auto_play=false&amp;hide_related=false&amp;visual=true\"></iframe>", mediaService.getEmbeddedHtml());
 	}
 
 	@Test
@@ -90,8 +90,8 @@ public class MediaServiceTypeTest {
 		assertEquals(mediaService0, mediaService);
 
 		assertEquals("http://vimeo.com/24453345", mediaService.getUrl());
-		assertEquals("http://player.vimeo.com/video/24453345?title=0&byline=0&portrait=0", mediaService.getEmbededUrl());
-		assertEquals("<iframe src=\"http://player.vimeo.com/video/24453345?title=0&amp;byline=0&amp;portrait=0\" width=\"WIDTH\" height=\"HEIGHT\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href=\"http://vimeo.com/24453345\">24453345</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>", mediaService.getEmbededHtml());
+		assertEquals("http://player.vimeo.com/video/24453345?title=0&byline=0&portrait=0", mediaService.getEmbeddedUrl());
+		assertEquals("<iframe src=\"http://player.vimeo.com/video/24453345?title=0&amp;byline=0&amp;portrait=0\" width=\"WIDTH\" height=\"HEIGHT\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href=\"http://vimeo.com/24453345\">24453345</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>", mediaService.getEmbeddedHtml());
 	}
 
 	@Test
@@ -103,8 +103,8 @@ public class MediaServiceTypeTest {
 		assertEquals(mediaService0, mediaService);
 
 		assertEquals("http://youtube.com/watch?v=cwHVie7GpNw", mediaService.getUrl());
-		assertEquals("http://youtube.com/embed/cwHVie7GpNw", mediaService.getEmbededUrl());
-		assertEquals("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/cwHVie7GpNw\" frameborder=\"0\" allowfullscreen></iframe>", mediaService.getEmbededHtml());
+		assertEquals("http://youtube.com/embed/cwHVie7GpNw", mediaService.getEmbeddedUrl());
+		assertEquals("<iframe width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/cwHVie7GpNw\" frameborder=\"0\" allowfullscreen></iframe>", mediaService.getEmbeddedHtml());
 	}
 
 }

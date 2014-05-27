@@ -15,11 +15,11 @@ public abstract class MediaService {
 		return String.format(getUrlPattern(), id);
 	}
 
-	public String getEmbededUrl() {
+	public String getEmbeddedUrl() {
 		return String.format(getEmbeddedUrlPattern(), id);
 	}
 
-	public String getEmbededHtml() {
+	public String getEmbeddedHtml() {
 		return String.format(getEmbeddedHtmlPattern(), id);
 	}
 
