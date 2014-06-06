@@ -6,11 +6,12 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 
 public class AgentUpdater implements Updater<AgentImpl> {
 
 	public AgentImpl update(AgentImpl agent, AgentImpl newAgent,
-			MongoServer mongoServer) {
+			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
 		Query<AgentImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(AgentImpl.class).field("about")
 				.equal(agent.getAbout());
@@ -32,7 +33,7 @@ public class AgentUpdater implements Updater<AgentImpl> {
 		update = MongoUtils.updateMap(agent,newAgent,"edmHasMet",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"edmisRelatedTo",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"foafName",ops)||update;
-                update = MongoUtils.updateMap(agent,newAgent,"owlSameAs",ops)||update;
+                update = MongoUtils.updateArray(agent,newAgent,"owlSameAs",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"end",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"note",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"altLabel",ops)||update;

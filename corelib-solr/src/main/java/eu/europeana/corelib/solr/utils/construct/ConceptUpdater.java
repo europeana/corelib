@@ -6,12 +6,13 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 
 public class ConceptUpdater implements Updater<ConceptImpl> {
 
         @Override
 	public ConceptImpl update(ConceptImpl conceptMongo, ConceptImpl concept,
-			MongoServer mongoServer) {
+			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
 		Query<ConceptImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ConceptImpl.class).field("about")
 				.equal(conceptMongo.getAbout());

@@ -9,10 +9,11 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 
 public class TimespanUpdater implements Updater<TimespanImpl> {
 	public TimespanImpl update(TimespanImpl mongoTimespan, TimespanImpl timeSpan,
-			MongoServer mongoServer) {
+			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
 		Query<TimespanImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(TimespanImpl.class).field("about")
 				.equal(mongoTimespan.getAbout());

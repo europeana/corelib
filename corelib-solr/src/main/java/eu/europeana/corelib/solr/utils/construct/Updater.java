@@ -1,6 +1,7 @@
 package eu.europeana.corelib.solr.utils.construct;
 
 import eu.europeana.corelib.solr.MongoServer;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Updater of EDM contextual classes
@@ -10,5 +11,5 @@ import eu.europeana.corelib.solr.MongoServer;
  */
 public interface Updater<T> {
 
-	T update(T mongoEntity, T newEntity, MongoServer mongoServer);
+	T update(T mongoEntity, T newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException;
 }

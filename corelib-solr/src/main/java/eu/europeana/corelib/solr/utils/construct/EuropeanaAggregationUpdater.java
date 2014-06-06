@@ -7,15 +7,16 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EuropeanaAggregationUpdater implements
-		Updater<EuropeanaAggregationImpl> {
+		Updater<EuropeanaAggregationImpl>  {
 
 	@Override
 	public EuropeanaAggregationImpl update(EuropeanaAggregationImpl mongoEntity,
-			EuropeanaAggregationImpl newEntity, MongoServer mongoServer) {
+			EuropeanaAggregationImpl newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
 		Query<EuropeanaAggregationImpl> updateQuery = mongoServer
 				.getDatastore().createQuery(EuropeanaAggregationImpl.class)
 				.field("about").equal(mongoEntity.getAbout());

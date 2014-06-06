@@ -6,12 +6,13 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 
 public class ProvidedChoUpdater implements Updater<ProvidedCHOImpl> {
 
 	@Override
 	public ProvidedCHOImpl update(ProvidedCHOImpl mongoEntity, ProvidedCHOImpl newEntity,
-			MongoServer mongoServer) {
+			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
 		Query<ProvidedCHOImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ProvidedCHOImpl.class).field("about")
 				.equal(mongoEntity.getAbout());

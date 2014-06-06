@@ -18,7 +18,7 @@ public class ProxyUpdater implements Updater<ProxyImpl> {
     UpdateOperations<ProxyImpl> ops;
 
       public ProxyImpl update(ProxyImpl retProxy, ProxyImpl proxy,
-            MongoServer mongoServer) {
+            MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
         Query<ProxyImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(ProxyImpl.class).field("about")
                 .equal(proxy.getAbout());
