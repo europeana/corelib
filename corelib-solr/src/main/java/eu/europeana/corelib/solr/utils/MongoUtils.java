@@ -491,7 +491,7 @@ public final class MongoUtils {
 					|| !MongoUtils.arrayEquals(updatedValues,
 							savedValues)) {
 				ops.set(updateField, updatedValues);
-				setter.invoke(saved,updatedValues);
+				setter.invoke(saved,new Object[]{updatedValues});
 				return true;
 			}
 		} else {
