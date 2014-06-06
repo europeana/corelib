@@ -31,7 +31,7 @@ public class AgentUpdater implements Updater<AgentImpl> {
 		update = MongoUtils.updateMap(agent,newAgent,"rdaGr2ProfessionOrOccupation",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"rdaGr2BiographicalInformation",ops)||update;
 		update = MongoUtils.updateMap(agent,newAgent,"edmHasMet",ops)||update;
-                update = MongoUtils.updateMap(agent,newAgent,"edmisRelatedTo",ops)||update;
+                update = MongoUtils.updateMap(agent,newAgent,"edmIsRelatedTo",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"foafName",ops)||update;
                 update = MongoUtils.updateArray(agent,newAgent,"owlSameAs",ops)||update;
                 update = MongoUtils.updateMap(agent,newAgent,"end",ops)||update;
