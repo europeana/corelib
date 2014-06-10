@@ -7,6 +7,7 @@ import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class AggregationUpdater implements Updater<AggregationImpl> {
 
     @Override
     public AggregationImpl update(AggregationImpl mongoEntity, AggregationImpl newEntity,
-            MongoServer mongoServer) {
+            MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
 
         Query<AggregationImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(AggregationImpl.class).field("about")

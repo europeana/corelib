@@ -96,7 +96,7 @@
 		<version.jibx>1.2.3</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.7.2</version.mongoDriver>
-		<version.mongoMorphia>0.99</version.mongoMorphia>
+		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
 		<version.slf4j>1.7.5</version.slf4j>

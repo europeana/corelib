@@ -9,11 +9,12 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 
 public class PlaceUpdater implements Updater<PlaceImpl> {
 
 	public PlaceImpl update(PlaceImpl place, PlaceImpl newPlace,
-			MongoServer mongoServer) {
+			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
 		Query<PlaceImpl> query = mongoServer.getDatastore()
 				.createQuery(PlaceImpl.class).field("about")
 				.equal(place.getAbout());

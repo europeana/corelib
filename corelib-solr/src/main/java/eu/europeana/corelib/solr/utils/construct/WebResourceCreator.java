@@ -12,13 +12,14 @@ import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
+import java.lang.reflect.InvocationTargetException;
 /**
  *
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class WebResourceCreator {
 
-    public WebResource saveWebResource(WebResource wr, MongoServer mongo) {
+    public WebResource saveWebResource(WebResource wr, MongoServer mongo) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
 
         WebResourceImpl wrMongo = ((EdmMongoServer) mongo).searchByAbout(WebResourceImpl.class, wr.getAbout());
         if (wrMongo != null) {
@@ -29,7 +30,7 @@ public class WebResourceCreator {
         return wr;
     }
 
-    private WebResource updateWebResource(WebResource wrMongo, WebResource wr, MongoServer mongoServer) {
+    private WebResource updateWebResource(WebResource wrMongo, WebResource wr, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
         Query<WebResourceImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(WebResourceImpl.class).field("about")
                 .equal(wr.getAbout());
