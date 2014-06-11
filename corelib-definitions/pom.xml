@@ -39,7 +39,7 @@
 		 <dependency>
 			<groupId>com.google.code.morphia</groupId>
 			<artifactId>morphia</artifactId>
-			<version>0.99</version>
+			<version>${version.mongoMorphia}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
