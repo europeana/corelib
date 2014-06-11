@@ -70,16 +70,21 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 
 	private Map<String, String> extractLanguageVersions(WikipediaQuery query, String languageCode) {
 		Map<String, String> languageVersions = new HashMap<String, String>();
-		Page page = query.getQuery().getPages().values().iterator().next();
-		if (page != null && page.getPageid() != 0) {
-			if (page.getLanglinks() != null && page.getLanglinks().size() > 0) {
-				for (WikiLangLink langLinks : page.getLanglinks()) {
-					languageVersions.put(langLinks.getLang(), 
-						clearRemovableParts(langLinks.getLang(), langLinks.getTranslation()));
+		if (query != null 
+				&& query.getQuery() != null 
+				&& query.getQuery().getPages() != null
+				&& query.getQuery().getPages().values() != null) {
+			Page page = query.getQuery().getPages().values().iterator().next();
+			if (page != null && page.getPageid() != 0) {
+				if (page.getLanglinks() != null && page.getLanglinks().size() > 0) {
+					for (WikiLangLink langLinks : page.getLanglinks()) {
+						languageVersions.put(langLinks.getLang(),
+								clearRemovableParts(langLinks.getLang(), langLinks.getTranslation()));
+					}
 				}
-			}
-			if (!languageVersions.containsKey(languageCode)) {
-				languageVersions.put(languageCode, page.getTitle());
+				if (!languageVersions.containsKey(languageCode)) {
+					languageVersions.put(languageCode, page.getTitle());
+				}
 			}
 		}
 		return languageVersions;
