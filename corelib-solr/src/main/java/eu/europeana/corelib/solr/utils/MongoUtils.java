@@ -187,8 +187,6 @@ public final class MongoUtils {
 
 		return null;
 	}
-        
-        
 
 	/**
 	 * Method that converts a Enum object to a multilingual map of strings
@@ -225,11 +223,15 @@ public final class MongoUtils {
 				for (String keyA : mapA.keySet()) {
 					List<String> listA = mapA.get(keyA);
 					List<String> listB = mapB.get(keyA);
-					Collections.sort(listA);
-					Collections.sort(listB);
-					equals = equals & listA.equals(listB);
+					if (listA != null && listB != null) {
+						Collections.sort(listA);
+						Collections.sort(listB);
+						equals = equals & listA.equals(listB);
+						return equals;
+					}
+					
 				}
-				return equals;
+
 			}
 		}
 		return false;
@@ -346,20 +348,20 @@ public final class MongoUtils {
 		}
 		return null;
 	}
-        
-        public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromList(
+
+	public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromList(
 			List<T> list) {
 		if (list != null && list.size() > 0) {
 			Map<String, List<String>> retMap = new HashMap<String, List<String>>();
 			for (T obj : list) {
-				
-					List<String> val = retMap.get("def");
-					if (val == null) {
-						val = new ArrayList<String>();
-					}
-					val.add(StringUtils.trim(obj.getResource()));
-					retMap.put("def", val);
-				
+
+				List<String> val = retMap.get("def");
+				if (val == null) {
+					val = new ArrayList<String>();
+				}
+				val.add(StringUtils.trim(obj.getResource()));
+				retMap.put("def", val);
+
 			}
 			return retMap;
 		}
@@ -436,127 +438,156 @@ public final class MongoUtils {
 		}
 		return null;
 	}
-        
-        
-        public static <T> boolean updateMap(T saved, T updated, String updateField, UpdateOperations ops) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-            try {
-                Method getter = saved.getClass().getMethod("get"+StringUtils.capitalize(updateField));
-                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), Map.class);
-                Map<String,List<String>> savedValues =(Map<String, List<String>>) getter.invoke(saved);
-                Map<String,List<String>> updatedValues = (Map<String, List<String>>) getter.invoke(updated);
-                
-                if (updatedValues!= null) {
-			if (savedValues == null
-					|| !MongoUtils.mapEquals(updatedValues,
-							savedValues)) {
-				ops.set(updateField, updatedValues);
-				setter.invoke(saved,updatedValues);
-				return true;
+
+	public static <T> boolean updateMap(T saved, T updated, String updateField,
+			UpdateOperations ops) throws NoSuchMethodException,
+			IllegalAccessException, InvocationTargetException {
+		try {
+			Method getter = saved.getClass().getMethod(
+					"get" + StringUtils.capitalize(updateField));
+			Method setter = saved.getClass().getMethod(
+					"set" + StringUtils.capitalize(updateField), Map.class);
+			Map<String, List<String>> savedValues = (Map<String, List<String>>) getter
+					.invoke(saved);
+			Map<String, List<String>> updatedValues = (Map<String, List<String>>) getter
+					.invoke(updated);
+
+			if (updatedValues != null) {
+				if (savedValues == null
+						|| !MongoUtils.mapEquals(updatedValues, savedValues)) {
+					ops.set(updateField, updatedValues);
+					setter.invoke(saved, updatedValues);
+					return true;
+				}
+			} else {
+				if (saved != null) {
+					ops.unset(updateField);
+					setter.invoke(saved, (Object) null);
+					return true;
+				}
 			}
-		} else {
-			if (saved != null) {
-				ops.unset(updateField);
-				setter.invoke(saved, (Object)null);
-				return true;
-			}
+		} catch (NoSuchMethodException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (SecurityException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalAccessException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalArgumentException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (InvocationTargetException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
 		}
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (SecurityException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            }
-            return false;
-        }
-        
-        public static <T> boolean updateArray(T saved, T updated, String updateField, UpdateOperations ops) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
-            try {
-                Method getter = saved.getClass().getMethod("get"+StringUtils.capitalize(updateField));
-                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), String[].class);
-                String[] savedValues =(String[]) getter.invoke(saved);
-                String[] updatedValues = (String[]) getter.invoke(updated);
-                
-                if (updatedValues!= null) {
-			if (savedValues == null
-					|| !MongoUtils.arrayEquals(updatedValues,
-							savedValues)) {
-				ops.set(updateField, updatedValues);
-				setter.invoke(saved,new Object[]{updatedValues});
-				return true;
+		return false;
+	}
+
+	public static <T> boolean updateArray(T saved, T updated,
+			String updateField, UpdateOperations ops)
+			throws NoSuchMethodException, IllegalAccessException,
+			InvocationTargetException {
+		try {
+			Method getter = saved.getClass().getMethod(
+					"get" + StringUtils.capitalize(updateField));
+			Method setter = saved.getClass()
+					.getMethod("set" + StringUtils.capitalize(updateField),
+							String[].class);
+			String[] savedValues = (String[]) getter.invoke(saved);
+			String[] updatedValues = (String[]) getter.invoke(updated);
+
+			if (updatedValues != null) {
+				if (savedValues == null
+						|| !MongoUtils.arrayEquals(updatedValues, savedValues)) {
+					ops.set(updateField, updatedValues);
+					setter.invoke(saved, new Object[] { updatedValues });
+					return true;
+				}
+			} else {
+				if (saved != null) {
+					ops.unset(updateField);
+					setter.invoke(saved, (Object) null);
+					return true;
+				}
 			}
-		} else {
-			if (saved != null) {
-				ops.unset(updateField);
-				setter.invoke(saved, (Object)null);
-				return true;
-			}
+		} catch (NoSuchMethodException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (SecurityException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalAccessException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalArgumentException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (InvocationTargetException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
 		}
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (SecurityException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            }
-            return false;
-        }
-        
-         public static <T> boolean updateString(T saved, T updated, String updateField, UpdateOperations ops) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
-            try {
-                Method getter = saved.getClass().getMethod("get"+StringUtils.capitalize(updateField));
-                Method setter = saved.getClass().getMethod("set"+StringUtils.capitalize(updateField), String.class);
-                String savedValues =(String) getter.invoke(saved);
-                String updatedValues = (String) getter.invoke(updated);
-                
-                if (updatedValues!= null) {
-			if (savedValues == null
-					|| !StringUtils.equals(updatedValues, savedValues)) {
-				ops.set(updateField, updatedValues);
-				setter.invoke(saved,updatedValues);
-				return true;
+		return false;
+	}
+
+	public static <T> boolean updateString(T saved, T updated,
+			String updateField, UpdateOperations ops)
+			throws NoSuchMethodException, IllegalAccessException,
+			InvocationTargetException {
+		try {
+			Method getter = saved.getClass().getMethod(
+					"get" + StringUtils.capitalize(updateField));
+			Method setter = saved.getClass().getMethod(
+					"set" + StringUtils.capitalize(updateField), String.class);
+			String savedValues = (String) getter.invoke(saved);
+			String updatedValues = (String) getter.invoke(updated);
+
+			if (updatedValues != null) {
+				if (savedValues == null
+						|| !StringUtils.equals(updatedValues, savedValues)) {
+					ops.set(updateField, updatedValues);
+					setter.invoke(saved, updatedValues);
+					return true;
+				}
+			} else {
+				if (saved != null) {
+					ops.unset(updateField);
+					setter.invoke(saved, (Object) null);
+					return true;
+				}
 			}
-		} else {
-			if (saved != null) {
-				ops.unset(updateField);
-				setter.invoke(saved,(Object) null);
-				return true;
-			}
+		} catch (NoSuchMethodException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (SecurityException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalAccessException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalArgumentException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (InvocationTargetException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
 		}
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (SecurityException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            } catch (InvocationTargetException ex) {
-                Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-                throw ex;
-            }
-            return false;
-        }
+		return false;
+	}
 }
