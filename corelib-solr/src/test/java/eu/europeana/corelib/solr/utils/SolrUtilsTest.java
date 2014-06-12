@@ -259,22 +259,21 @@ public class SolrUtilsTest {
 		aggregation.setIsShownBy(isShownBy);
 		aggregations.add(aggregation);
 		rdf.setAggregationList(aggregations);
-		assertEquals("test isShownBy",SolrUtils.getPreviewUrl(rdf));
+		assertEquals("test isShownBy", SolrUtils.getPreviewUrl(rdf));
 		_Object obj = new _Object();
 		obj.setResource("test obj");
 		aggregation.setObject(obj);
 		aggregations.clear();
 		aggregations.add(aggregation);
 		rdf.setAggregationList(aggregations);
-		assertEquals("test obj",SolrUtils.getPreviewUrl(rdf));
-		
+		assertEquals("test obj", SolrUtils.getPreviewUrl(rdf));
 	}
 
 	@Test
 	public void testEscapeQueryChars() {
 		assertEquals("http\\:\\/\\/ -", SolrUtils.escapeQuery("http:// -"));
 	}
-	
+
 	@Test
 	public void testIsSimpleQuery() {
 		assertTrue(SolrUtils.isSimpleQuery("spinoza"));
