@@ -30,7 +30,15 @@ import org.apache.solr.common.SolrInputDocument;
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class SolrDocumentHandler implements ICollection{
-    public void save(FullBeanImpl fBean, HttpSolrServer solrServer){
+    
+    HttpSolrServer solrServer;
+    
+    
+    
+    public SolrDocumentHandler(HttpSolrServer solrServer){
+        this.solrServer = solrServer;
+    }
+    public void save(FullBeanImpl fBean){
         
         SolrInputDocument doc = new SolrInputDocument();
         new ProvidedChoSolrCreator().create(doc, fBean.getProvidedCHOs().get(0));
@@ -73,7 +81,7 @@ public class SolrDocumentHandler implements ICollection{
     }
 
     @Override
-    public IDocument getDocumentById(String id) {
+    public IDocument getDocumentById(IDocument id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
