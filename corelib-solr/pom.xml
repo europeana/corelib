@@ -96,6 +96,12 @@
             <artifactId>lucene-core</artifactId>
 		    <version>${version.apacheSolr}</version>
         </dependency>
+        
+        <dependency> 
+            <groupId>org.neo4j</groupId> 
+            <artifactId>neo4j-rest-graphdb</artifactId> 
+            <version>2.0.1</version> 
+        </dependency> 
         <!-- MONGODB -->
 <!--         <dependency> -->
 <!--         	<groupId>org.mongodb</groupId> -->

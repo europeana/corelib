@@ -62,6 +62,8 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
@@ -70,12 +72,14 @@ import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
+import eu.europeana.corelib.solr.server.Neo4jServer;
 import eu.europeana.corelib.solr.service.SearchService;
 import eu.europeana.corelib.solr.service.query.MoreLikeThis;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import org.neo4j.graphdb.Node;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
@@ -114,6 +118,9 @@ public class SearchServiceImpl implements SearchService {
 
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
+        
+        @Resource(name = "corelib_solr_neo4jServer")
+        protected Neo4jServer neo4jServer;
 
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
@@ -651,6 +658,41 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
+   
+
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
+        List<Node> children = neo4jServer.getChildren(getNode(nodeId),offset,limit);
+        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+        for(Node child:children){
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        }
+        return beans;
+    }
+
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId, int offset) {
+        return getChildren(nodeId,offset,10);
+    }
+
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId) {
+        return getChildren(nodeId,0,10);
+    }
+
+    private Node getNode(String id){
+        return neo4jServer.getNode(id);
+    }
+
+    @Override
+    public Neo4jBean getHierarchicalBean(String nodeId) {
+        Node node = getNode(nodeId);
+        if(node!=null){
+            return Node2Neo4jBeanConverter.toNeo4jBean(node);
+        }
+        return null;
+    }
+    
 	private enum SuggestionTitle {
 		TITLE("title", "Title"),
 		DATE("when", "Time/Period"),
@@ -693,6 +735,45 @@ public class SearchServiceImpl implements SearchService {
 			log.debug(String.format("elapsed time (%s): %d", type, time));
 		}
 	}
+
+	@Override
+	public Neo4jBean getParent(String nodeId) {
+		
+		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(getNode(nodeId)));
+	}
+
+	@Override
+	public List<Neo4jBean> getPreviousSiblings(String nodeId, int limit) {
+		List<Node> children = neo4jServer.getPreviousSiblings(getNode(nodeId),limit);
+        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+        for(Node child:children){
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        }
+        return beans;
+	}
+
+	@Override
+	public List<Neo4jBean> getPreviousSiblings(String nodeId) {
+		
+		return getPreviousSiblings(nodeId,10);
+	}
+
+	@Override
+	public List<Neo4jBean> getNextSiblings(String nodeId, int limit) {
+		List<Node> children = neo4jServer.getNextSiblings(getNode(nodeId),limit);
+        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+        for(Node child:children){
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        }
+        return beans;
+	}
+
+	@Override
+	public List<Neo4jBean> getNextSiblings(String nodeId) {
+		return getNextSiblings(nodeId,10);
+	}
+        
+        
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {

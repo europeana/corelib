@@ -34,7 +34,7 @@
 		<property name="defaultMaxConnectionsPerHost" value="64"/>
 		<property name="maxTotalConnections" value="125"/>
 	</bean>
-
+        
 	
 	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
 		<constructor-arg>

@@ -32,10 +32,10 @@
     <element name="dateOfDeath" type="rdf:LiteralType">
     </element>
     
-    <element name="placeOfBirth" type="rdf:LiteralType">    
+    <element name="placeOfBirth" type="rdf:ResourceOrLiteralType">    
     </element>
     
-    <element name="placeOfDeath" type="rdf:LiteralType">
+    <element name="placeOfDeath" type="rdf:ResourceOrLiteralType">
     </element>
     
     

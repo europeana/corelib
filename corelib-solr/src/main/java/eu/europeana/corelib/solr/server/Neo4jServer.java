@@ -1,12 +1,17 @@
 package eu.europeana.corelib.solr.server;
 
-import eu.europeana.corelib.definitions.solr.entity.AbstractEdmEntity;
+import java.util.List;
+import org.neo4j.graphdb.Node;
 
 public interface Neo4jServer extends AbstractServer{
 
-	void save(AbstractEdmEntity entity);
+	Node getNode(String id);
+        
+	List<Node> getChildren(Node id, int offset, int limit);
 	
-	<T extends AbstractEdmEntity> T find(String ID,T obj);
-		
-	void delete(String ID);
+	Node getParent(Node id);
+	
+	List<Node> getNextSiblings(Node id, int limit);
+	
+	List<Node> getPreviousSiblings(Node id, int limit);
 }

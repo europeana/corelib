@@ -6,20 +6,22 @@
 
 package eu.europeana.corelib.neo4j.entity;
 
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  *
  * @author gmamakis
  */
-public enum RelType implements RelationshipType{
+public enum RelType{
     EDM_IS_NEXT_INSEQUENCE("edm:isNextInSequence"),DCTERMS_ISPARTOF("dcterms:isPartOf"),DCTERMS_HASPART("dcterms:hasPart");
     
     private String relType;
     private RelType(String relType){
         this.relType = relType;
+        
     }
  
+    
+    
     public String getRelType(){
         return this.relType;
     }

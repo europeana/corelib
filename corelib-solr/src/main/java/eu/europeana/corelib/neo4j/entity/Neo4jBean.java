@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package eu.europeana.corelib.neo4j.entity;
 
@@ -11,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author gmamakis
+ * Neo4jBean
+ * 
+ * @author Yorgos.Mamakis@ europeana.eu
  */
 public class Neo4jBean {
     
@@ -20,11 +16,11 @@ public class Neo4jBean {
     
     private Map<String,List<String>> description;
     
-    private String title;
+    private Map<String,List<String>> title;
     
     private DocType type;
     
-    private Boolean hasChildren;
+    private Boolean children;
 
     public String getId() {
         return id;
@@ -42,11 +38,11 @@ public class Neo4jBean {
         this.description = description;
     }
 
-    public String getTitle() {
+    public Map<String,List<String>> getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(Map<String,List<String>> title) {
         this.title = title;
     }
 
@@ -58,12 +54,12 @@ public class Neo4jBean {
         this.type = type;
     }
 
-    public Boolean isHasChildren() {
-        return hasChildren;
+    public Boolean hasChildren() {
+        return children;
     }
 
-    public void setHasChildren(Boolean hasChildren) {
-        this.hasChildren = hasChildren;
+    public void setHasChildren(Boolean children) {
+        this.children = children;
     }
     
     
