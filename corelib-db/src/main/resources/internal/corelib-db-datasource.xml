@@ -57,13 +57,13 @@
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<bean id="corelib_db_mongo" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['mongodb.host']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.port']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}" />
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}" />
 	</bean>
 
 	<bean id="corelib_db_mongo_apilog" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}" />
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}" />
 	</bean>
 
 	<bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia"/>

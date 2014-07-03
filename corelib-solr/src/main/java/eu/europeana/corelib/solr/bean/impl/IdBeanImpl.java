@@ -39,10 +39,10 @@ public class IdBeanImpl implements IdBean {
 
 	@Field("timestamp_created")
 	protected Date timestampCreated;
-	
+
 	@Field("timestamp_update")
 	protected Date timestampUpdated;
-	
+
 	@Override
 	public String getId() {
 		return this.id;
