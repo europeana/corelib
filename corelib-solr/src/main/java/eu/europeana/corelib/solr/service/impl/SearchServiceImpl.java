@@ -282,9 +282,9 @@ public class SearchServiceImpl implements SearchService {
 
 		@SuppressWarnings("unchecked")
 		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
-		@SuppressWarnings("unchecked")
 		List<BriefBean> beans = new ArrayList<BriefBean>();
 		if (moreLikeThisList.size() > 0) {
+			@SuppressWarnings("unchecked")
 			List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList.getVal(0);
 			for (SolrDocument doc : docs) {
 				beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class, doc));
