@@ -231,21 +231,21 @@ public interface SearchService {
 	Map<String, Integer> queryFacetSearch(String query, String[] qf,
 			List<String> queries);
 
-        Neo4jBean getHierarchicalBean(String nodeId);
-        
-        List<Neo4jBean> getChildren(String nodeId, int offset, int limit);
-        
-        List<Neo4jBean> getChildren(String nodeId, int offset);
-        
-        List<Neo4jBean> getChildren(String nodeId);
-        
-        Neo4jBean getParent(String nodeId);
-        
-        List<Neo4jBean> getPreviousSiblings(String nodeId,int limit);
-        
-        List<Neo4jBean> getPreviousSiblings(String nodeId);
-        
-        List<Neo4jBean> getNextSiblings(String nodeId,int limit);
-        
-        List<Neo4jBean> getNextSiblings(String nodeId);
+	Neo4jBean getHierarchicalBean(String nodeId);
+
+	List<Neo4jBean> getChildren(String nodeId, int offset, int limit);
+
+	List<Neo4jBean> getChildren(String nodeId, int offset);
+
+	List<Neo4jBean> getChildren(String nodeId);
+
+	Neo4jBean getParent(String nodeId);
+
+	List<Neo4jBean> getPreviousSiblings(String nodeId, int limit);
+
+	List<Neo4jBean> getPreviousSiblings(String nodeId);
+
+	List<Neo4jBean> getNextSiblings(String nodeId, int limit);
+
+	List<Neo4jBean> getNextSiblings(String nodeId);
 }
