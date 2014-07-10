@@ -3,6 +3,7 @@ package eu.europeana.corelib.neo4j.entity;
 
 import eu.europeana.corelib.definitions.solr.DocType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Node2Neo4jBeanConverter {
                 if (titleValue == null) {
                     titleValue = new ArrayList<String>();
                 }
-                titleValue.addAll((List<String>) node.getProperty(key));
+                titleValue.addAll(Arrays.asList((String[]) node.getProperty(key)));
                 titles.put(StringUtils.substringAfter(key, "dc:title_xml:lang_"), titleValue);
             }
         }

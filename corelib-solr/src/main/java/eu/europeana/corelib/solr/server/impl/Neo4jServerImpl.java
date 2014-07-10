@@ -76,7 +76,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 			if (nodes != null) {
 				for (Node child : nodes) {
 					if (!child.hasRelationship(new Relation(
-							RelType.EDM_IS_NEXT_INSEQUENCE.getRelType()),
+							RelType.EDM_ISNEXTINSEQUENCE.getRelType()),
 							Direction.INCOMING)) {
 						children.add(child);
 						children.addAll(getNextSiblings(child, offset+limit));
@@ -102,13 +102,13 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
 	public List<Node> getNextSiblings(Node id, int limit) {
 		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-				RelType.EDM_IS_NEXT_INSEQUENCE.getRelType()));
+				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
 	}
 
 	@Override
 	public List<Node> getPreviousSiblings(Node id, int limit) {
 		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-				RelType.EDM_IS_NEXT_INSEQUENCE.getRelType()));
+				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
 	}
 
 	private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
