@@ -1,4 +1,3 @@
-
 package eu.europeana.corelib.neo4j.entity;
 
 import eu.europeana.corelib.definitions.solr.DocType;
@@ -18,7 +17,8 @@ import org.neo4j.graphdb.Node;
  */
 public class Node2Neo4jBeanConverter {
 
-    public static Neo4jBean toNeo4jBean(Node node) {
+	public static Neo4jBean toNeo4jBean(Node node) {
+    	if(node!=null){
         Neo4jBean neo4jBean = new Neo4jBean();
         neo4jBean.setId((String) node.getProperty("rdf:about"));
         neo4jBean.setType(DocType.valueOf((String) node.getProperty("edm:type")));
@@ -51,5 +51,7 @@ public class Node2Neo4jBeanConverter {
         neo4jBean.setHasChildren(node.hasRelationship(new Relation(RelType.DCTERMS_HASPART.getRelType())));
 
         return neo4jBean;
+        }
+    	return null;
     }
 }
