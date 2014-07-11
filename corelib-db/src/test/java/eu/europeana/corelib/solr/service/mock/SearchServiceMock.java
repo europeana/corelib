@@ -214,27 +214,35 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
+
+
 	@Override
-	public List<Neo4jBean> getPreviousSiblings(String nodeId, int limit) {
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Neo4jBean> getPreviousSiblings(String nodeId) {
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Neo4jBean> getNextSiblings(String nodeId, int limit) {
+	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Neo4jBean> getNextSiblings(String nodeId) {
+	public List<Neo4jBean> getFollowingSiblings(String nodeId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public long getChildrenCount(String nodeId) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
