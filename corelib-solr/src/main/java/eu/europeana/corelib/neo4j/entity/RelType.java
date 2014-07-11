@@ -14,7 +14,7 @@ import javax.management.InvalidAttributeValueException;
  */
 public enum RelType {
 	EDM_ISNEXTINSEQUENCE("edm:isNextInSequence"), DCTERMS_ISPARTOF(
-			"dcterms:isPartOf"), DCTERMS_HASPART("dcterms:hasPart");
+			"dcterms:isPartOf"), DCTERMS_HASPART("dcterms:hasPart"),ISFIRSTINSEQUENCE("isFirstInSequence");
 
 	private String relType;
 

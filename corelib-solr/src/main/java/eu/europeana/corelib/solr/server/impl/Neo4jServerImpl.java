@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package eu.europeana.corelib.solr.server.impl;
 
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import eu.europeana.corelib.neo4j.entity.RelType;
 import eu.europeana.corelib.neo4j.entity.Relation;
 import eu.europeana.corelib.solr.server.Neo4jServer;
+import java.util.Iterator;
 
 /**
  *
@@ -32,107 +32,105 @@ import eu.europeana.corelib.solr.server.Neo4jServer;
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-	private RestGraphDatabase graphDb;
-	private RestIndex<Node> index;
+    private RestGraphDatabase graphDb;
+    private RestIndex<Node> index;
 
-	public Neo4jServerImpl(String serverPath, String index) {
-		this.graphDb = new RestGraphDatabase(serverPath);
-		this.index = this.graphDb.getRestAPI().getIndex(index);
-	}
+    public Neo4jServerImpl(String serverPath, String index) {
+        this.graphDb = new RestGraphDatabase(serverPath);
+        this.index = this.graphDb.getRestAPI().getIndex(index);
+    }
 
-	@Override
-	public Node getNode(String id) {
-		IndexHits<Node> nodes = index.get("rdf_about", id);
-		if (nodes.size() > 0) {
-			return nodes.getSingle();
-		}
-		return null;
-	}
+    @Override
+    public Node getNode(String id) {
+        IndexHits<Node> nodes = index.get("rdf_about", id);
+        if (nodes.size() > 0) {
+            return nodes.getSingle();
+        }
+        return null;
+    }
 
-	@Override
-	public List<Node> getChildren(Node id, int offset, int limit) {
+    @Override
+    public List<Node> getChildren(Node id, int offset, int limit) {
 
-		List<Node> children = new ArrayList<Node>();
-		RestTraversal traversal = (RestTraversal) graphDb
-				.traversalDescription();
+        List<Node> children = new ArrayList<Node>();
+        RestTraversal traversal = (RestTraversal) graphDb
+                .traversalDescription();
 
-		traversal.evaluator(Evaluators.excludeStartPosition());
+        traversal.evaluator(Evaluators.excludeStartPosition());
 
-		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-		traversal.breadthFirst();
-		traversal.maxDepth(1);
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(1);
 
-		traversal.relationships(
-				new Relation(RelType.DCTERMS_HASPART.getRelType()),
-				Direction.OUTGOING);
+        traversal.relationships(
+                new Relation(RelType.ISFIRSTINSEQUENCE.getRelType()),
+                Direction.OUTGOING);
 
-		Traverser tr = traversal.traverse(id);
-		ResourceIterator<Path> resIter = tr.iterator();
+        Traverser tr = traversal.traverse(id);
+        Iterator<Node> resIter = tr.nodes().iterator();
 
-		while (resIter.hasNext()) {
-			Path path = resIter.next();
+        while (resIter.hasNext()) {
+            Node node = resIter.next();
 
-			Iterable<Node> nodes = path.nodes();
-			if (nodes != null) {
-				for (Node child : nodes) {
-					if (!child.hasRelationship(new Relation(
-							RelType.EDM_ISNEXTINSEQUENCE.getRelType()),
-							Direction.INCOMING)) {
-						children.add(child);
-						children.addAll(getNextSiblings(child, offset+limit));
-					}
-				}
-			}
+            if (node != null) {
+                if(offset==0){
+                children.add(node);
+                children.addAll(getNextSiblings(node, limit-1));
+                } else {
+                    children.addAll(getNextSiblings(node,offset+limit));
+                }
 
-		}
-		return children.subList(offset, limit);
-	}
+            }
 
-	@Override
-	public Node getParent(Node id) {
-		
-		List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, new Relation(
-				RelType.DCTERMS_ISPARTOF.getRelType()));
-		if(nodes.size()>0){
-			return nodes.get(0);
-		}
-		return null;
-	}
+        }
+        return children.subList(offset, limit);
+    }
 
-	@Override
-	public List<Node> getNextSiblings(Node id, int limit) {
-		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
-	}
+    @Override
+    public Node getParent(Node id) {
 
-	@Override
-	public List<Node> getPreviousSiblings(Node id, int limit) {
-		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
-	}
+        List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, new Relation(
+                RelType.DCTERMS_ISPARTOF.getRelType()));
+        if (nodes.size() > 0) {
+            return nodes.get(0);
+        }
+        return null;
+    }
 
-	private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
-			Relation relType) {
-		List<Node> children = new ArrayList<Node>();
-		RestTraversal traversal = (RestTraversal) graphDb
-				.traversalDescription();
+    @Override
+    public List<Node> getNextSiblings(Node id, int limit) {
+        return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
+                RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+    }
 
-		traversal.evaluator(Evaluators.excludeStartPosition());
+    @Override
+    public List<Node> getPreviousSiblings(Node id, int limit) {
+        return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
+                RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+    }
 
-		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-		traversal.breadthFirst();
-		traversal.maxDepth(limit);
+    private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
+            Relation relType) {
+        List<Node> children = new ArrayList<Node>();
+        RestTraversal traversal = (RestTraversal) graphDb
+                .traversalDescription();
 
-		traversal.relationships(relType, direction);
-		Traverser tr = traversal.traverse(id);
-		ResourceIterator<Path> resIter = tr.iterator();
+        traversal.evaluator(Evaluators.excludeStartPosition());
 
-		while (resIter.hasNext()) {
-			Path path = resIter.next();
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(limit);
 
-			children.add(path.endNode());
+        traversal.relationships(relType, direction);
+        Traverser tr = traversal.traverse(id);
+        Iterator<Node> resIter = tr.nodes().iterator();
 
-		}
-		return (children);
-	}
+        while (resIter.hasNext()) {
+            Node node = resIter.next();
+
+            children.add(node);
+
+        }
+        return (children);
+    }
 }
