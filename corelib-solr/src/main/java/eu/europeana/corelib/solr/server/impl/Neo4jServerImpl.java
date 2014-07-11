@@ -99,7 +99,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
     @Override
     public List<Node> getNextSiblings(Node id, int limit) {
-        return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
+        return getRelatedNodes(id, limit, Direction.INCOMING, new Relation(
                 RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
     }
 
