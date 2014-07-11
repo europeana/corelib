@@ -79,6 +79,7 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+
 import org.neo4j.graphdb.Node;
 
 /**
@@ -736,6 +737,8 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
+	
+	
 	@Override
 	public Neo4jBean getParent(String nodeId) {
 		
@@ -743,8 +746,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<Neo4jBean> getPreviousSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getPreviousSiblings(getNode(nodeId),limit);
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
+		List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId),limit);
         List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
         for(Node child:children){
         	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
@@ -753,14 +756,14 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<Neo4jBean> getPreviousSiblings(String nodeId) {
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
 		
-		return getPreviousSiblings(nodeId,10);
+		return getPreceedingSiblings(nodeId,10);
 	}
 
 	@Override
-	public List<Neo4jBean> getNextSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getNextSiblings(getNode(nodeId),limit);
+	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
+		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),limit);
         List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
         for(Node child:children){
         	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
@@ -769,8 +772,13 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<Neo4jBean> getNextSiblings(String nodeId) {
-		return getNextSiblings(nodeId,10);
+	public List<Neo4jBean> getFollowingSiblings(String nodeId) {
+		return getFollowingSiblings(nodeId,10);
+	}
+
+	@Override
+	public long getChildrenCount(String nodeId) {
+		return neo4jServer.getChildrenCount(getNode(nodeId));
 	}
         
         

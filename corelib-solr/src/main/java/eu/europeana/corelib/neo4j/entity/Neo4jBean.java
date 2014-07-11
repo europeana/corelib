@@ -26,6 +26,8 @@ public class Neo4jBean {
 	private DocType type;
 
 	private Boolean children;
+	
+	private Long index;
 
 	public String getId() {
 		return id;
@@ -66,5 +68,13 @@ public class Neo4jBean {
 
 	public void setHasChildren(Boolean children) {
 		this.children = children;
+	}
+
+	public Long getIndex() {
+		return index;
+	}
+
+	public void setIndex(Long index) {
+		this.index = index;
 	}
 }

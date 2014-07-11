@@ -241,11 +241,13 @@ public interface SearchService {
 
 	Neo4jBean getParent(String nodeId);
 
-	List<Neo4jBean> getPreviousSiblings(String nodeId, int limit);
+	List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit);
 
-	List<Neo4jBean> getPreviousSiblings(String nodeId);
+	List<Neo4jBean> getPreceedingSiblings(String nodeId);
 
-	List<Neo4jBean> getNextSiblings(String nodeId, int limit);
+	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit);
 
-	List<Neo4jBean> getNextSiblings(String nodeId);
+	List<Neo4jBean> getFollowingSiblings(String nodeId);
+	
+	long getChildrenCount(String nodeId);
 }
