@@ -75,9 +75,9 @@ public class Neo4jServerImpl implements Neo4jServer {
             if (node != null) {
                 if(offset==0){
                 children.add(node);
-                children.addAll(getNextSiblings(node, limit-1));
+                children.addAll(getFollowingSiblings(node, limit-1));
                 } else {
-                    children.addAll(getNextSiblings(node,offset+limit));
+                    children.addAll(getFollowingSiblings(node,offset+limit));
                 }
 
             }
@@ -98,13 +98,13 @@ public class Neo4jServerImpl implements Neo4jServer {
     }
 
     @Override
-    public List<Node> getNextSiblings(Node id, int limit) {
+    public List<Node> getFollowingSiblings(Node id, int limit) {
         return getRelatedNodes(id, limit, Direction.INCOMING, new Relation(
                 RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
     }
 
     @Override
-    public List<Node> getPreviousSiblings(Node id, int limit) {
+    public List<Node> getPreceedingSiblings(Node id, int limit) {
         return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
                 RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
     }
@@ -133,4 +133,36 @@ public class Neo4jServerImpl implements Neo4jServer {
         }
         return (children);
     }
+
+	@Override
+	public long getChildrenCount(Node id) {
+        RestTraversal traversal = (RestTraversal) graphDb
+                .traversalDescription();
+
+        traversal.evaluator(Evaluators.excludeStartPosition());
+
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(1);
+
+        traversal.relationships(
+                new Relation(RelType.ISLASTINSEQUENCE.getRelType()),
+                Direction.OUTGOING);
+
+        Traverser tr = traversal.traverse(id);
+        Iterator<Node> resIter = tr.nodes().iterator();
+
+        while (resIter.hasNext()) {
+            Node node = resIter.next();
+
+            if (node != null) {
+                return (Long)node.getSingleRelationship(new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType()),
+                Direction.OUTGOING).getProperty("index");
+            }
+
+        }
+        
+        return 0;
+        
+	}
 }
