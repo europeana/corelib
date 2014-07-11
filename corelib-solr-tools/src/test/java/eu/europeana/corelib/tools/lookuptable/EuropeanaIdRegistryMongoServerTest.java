@@ -24,25 +24,28 @@ public class EuropeanaIdRegistryMongoServerTest {
 
 	EuropeanaIdRegistryMongoServerImpl server;
 	EuropeanaIdRegistry registry;
-	String cid="12345";
-	String oid="test_oid";
-	String eid="/12345/test_oid";
-	String sid="test_sid";
-	String sid2="test_sid2";
-	String xml_checksum="tst_checksum";
+	String cid = "12345";
+	String oid = "test_oid";
+	String eid = "/12345/test_oid";
+	String sid = "test_sid";
+	String sid2 = "test_sid2";
+	String xml_checksum = "tst_checksum";
 	MongodExecutable mongodExecutable;
+
 	@Before
-	public void prepare(){
-		try{
+	public void prepare() {
+		try {
 			int port = 10000;
-			MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
-					false);
+			MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
 
 			MongodStarter runtime = MongodStarter.getDefaultInstance();
 
-			 mongodExecutable = runtime.prepare(conf);
+			mongodExecutable = runtime.prepare(conf);
 			mongodExecutable.start();
-			server = new EuropeanaIdRegistryMongoServerImpl(new Mongo("localhost",port), "europeana_registry_test");
+			server = new EuropeanaIdRegistryMongoServerImpl(
+				new Mongo("localhost", port),
+				"europeana_registry_test"
+			);
 			server.getEuropeanaIdMongoServer().createDatastore();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -55,81 +58,89 @@ public class EuropeanaIdRegistryMongoServerTest {
 			e.printStackTrace();
 		}
 	}
-	
 
-	@Test 
-	public void testRegistered(){
-			Assert.assertTrue(!server.newIdExists(oid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).size(),0);
-			Assert.assertTrue(!server.oldIdExists(eid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid),null);
-			Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)), null);
-			LookupResult lresult = server.lookupUiniqueId(oid, cid, xml_checksum, sid);			
-			Assert.assertEquals(LookupState.ID_REGISTERED,lresult.getState());
-			
-			server.getDatastore().getDB().dropDatabase();
-	}
-	
-	
-	@Test 
-	public void testIdentical(){
-		
-			saverecord(sid);		
-			Assert.assertTrue(server.newIdExists(oid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).get(0).getEid(),registry.getEid());
-			Assert.assertTrue(server.oldIdExists(eid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid).getOrid(),registry.getOrid());
-			Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)).getEid(), registry.getEid());
-			Assert.assertEquals(LookupState.IDENTICAL,server.lookupUiniqueId(oid, cid, xml_checksum, sid2).getState());
-			
-			server.getDatastore().getDB().dropDatabase();
-	}
-	
-	@Test 
-	public void testDuplicateInCollection(){
-		
-			saverecord(sid);
-			
-			Assert.assertTrue(server.newIdExists(oid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).get(0).getEid(),registry.getEid());
-			Assert.assertTrue(server.oldIdExists(eid));
-			Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid).getOrid(),registry.getOrid());
-			Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)).getEid(), registry.getEid());
-			Assert.assertEquals(LookupState.DUPLICATE_INCOLLECTION,server.lookupUiniqueId(oid, cid, xml_checksum, sid).getState());
-			
-			server.getDatastore().getDB().dropDatabase();
-	}
-	
-	
-	
-	
-	
 	@Test
-	public void testDuplicateIdAcross(){
-		saverecord(sid);
-		Assert.assertEquals(server.lookupUiniqueId(oid, "12345a", xml_checksum+"new", sid).getState(),LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+	public void testRegistered() {
+		Assert.assertNotNull("Server should be initialized", server);
+
+		Assert.assertTrue(!server.newIdExists(oid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).size(),0);
+		Assert.assertTrue(!server.oldIdExists(eid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid),null);
+		Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)), null);
+		LookupResult lresult = server.lookupUiniqueId(oid, cid, xml_checksum, sid);
+		Assert.assertEquals(LookupState.ID_REGISTERED,lresult.getState());
 		server.getDatastore().getDB().dropDatabase();
 	}
-	
+
 	@Test
-	public void testDuplicateRecAcross(){
-		saverecord(sid);
+	public void testIdentical(){
+		Assert.assertNotNull("Server should be initialized", server);
+
+		saveRecord(sid);
+		Assert.assertTrue(server.newIdExists(oid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).get(0).getEid(),registry.getEid());
+		Assert.assertTrue(server.oldIdExists(eid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid).getOrid(),registry.getOrid());
+		Assert.assertEquals(server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)).getEid(), registry.getEid());
+		Assert.assertEquals(LookupState.IDENTICAL,server.lookupUiniqueId(oid, cid, xml_checksum, sid2).getState());
+
+		server.getDatastore().getDB().dropDatabase();
+	}
+
+	@Test
+	public void testDuplicateInCollection() {
+		Assert.assertNotNull("Server should be initialized", server);
+
+		saveRecord(sid);
+
+		Assert.assertTrue(server.newIdExists(oid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).get(0).getEid(),registry.getEid());
+		Assert.assertTrue(server.oldIdExists(eid));
+		Assert.assertEquals(server.retrieveEuropeanaIdFromNew(eid).getOrid(), registry.getOrid());
+		Assert.assertEquals(
+			server.retrieveFromOriginalXML(oid, generatechecksum(xml_checksum)).getEid(), 
+			registry.getEid());
+		Assert.assertEquals(
+			LookupState.DUPLICATE_INCOLLECTION,
+			server.lookupUiniqueId(oid, cid, xml_checksum, sid).getState());
+
+		server.getDatastore().getDB().dropDatabase();
+	}
+
+	@Test
+	public void testDuplicateIdAcross() {
+		if (server == null)
+			return;
+
+		saveRecord(sid);
+		Assert.assertEquals(server.lookupUiniqueId(oid, "12345a", xml_checksum+"new", sid).getState(), LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
+		server.getDatastore().getDB().dropDatabase();
+	}
+
+	@Test
+	public void testDuplicateRecAcross() {
+		Assert.assertNotNull("Server should be initialized", server);
+
+		saveRecord(sid);
 		Assert.assertEquals(server.lookupUiniqueId(oid, "12345a", xml_checksum, sid).getState(),LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
 		server.getDatastore().getDB().dropDatabase();
 	}
-	
+
 	@Test
-	public void testUpdate(){
-		saverecord(sid);
+	public void testUpdate() {
+		Assert.assertNotNull("Server should be initialized", server);
+
+		saveRecord(sid);
 		Assert.assertEquals(server.lookupUiniqueId(oid, "12345", xml_checksum+"new", sid2).getState(),LookupState.UPDATE);
 		server.getDatastore().getDB().dropDatabase();
 	}
-	
+
 	@Test
-	public void testFailedrecords(){
-		
-		saverecord(sid);
-		
+	public void testFailedrecords() {
+		Assert.assertNotNull("Server should be initialized", server);
+
+		saveRecord(sid);
 		Assert.assertTrue(server.newIdExists(oid));
 		Assert.assertEquals(server.retrieveEuropeanaIdFromOriginal(oid, cid).get(0).getEid(),registry.getEid());
 		Assert.assertTrue(server.oldIdExists(eid));
@@ -144,9 +155,10 @@ public class EuropeanaIdRegistryMongoServerTest {
 		Assert.assertEquals(valuemap.get("originalId"), "test_oid");
 		Assert.assertEquals(valuemap.get("lookupState"), "DUPLICATE_INCOLLECTION");
 		Assert.assertEquals(valuemap.get("europeanaId"), "/12345/test_oid");
-		
+
 		server.getDatastore().getDB().dropDatabase();
 	}
+
 	/**
 	 * Generates the checksum for the given string
 	 * 
@@ -158,19 +170,18 @@ public class EuropeanaIdRegistryMongoServerTest {
 		return DigestUtils.shaHex(xml);
 	}
 
-	
-	private void saverecord(String sessionID){
+	private void saveRecord(String sessionID) {
 		registry = new EuropeanaIdRegistry();
 		registry.setCid(cid);
 		registry.setEid(eid);
 		registry.setOrid(oid);
 		registry.setSessionID(sessionID);
 		registry.setXmlchecksum(generatechecksum(xml_checksum));
-		server.getDatastore().save(registry);
+		if (server != null) {
+			server.getDatastore().save(registry);
+		}
 	}
-	
-	
-	
+
 	@After
 	public void cleanup(){
 		mongodExecutable.stop();
