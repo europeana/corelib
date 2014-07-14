@@ -76,6 +76,11 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<name>NEO4J</name>
+			<url>http://m2.neo4j.org/content/groups/public</url>
+			<id>NEO4J</id>
+		</repository>
 	</repositories>
 
 	<properties>
