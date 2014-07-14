@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Converter from Node to Neo4jBean
@@ -60,15 +61,12 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setDescription(descriptions);
 			neo4jBean.setHasChildren(node.hasRelationship(new Relation(
 					RelType.DCTERMS_HASPART.getRelType())));
-			if (node.hasRelationship(
-					new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType()),
-					Direction.OUTGOING)) {
-				neo4jBean.setIndex((Long) node
-						.getSingleRelationship(
-								new Relation(RelType.EDM_ISNEXTINSEQUENCE
-										.getRelType()), Direction.OUTGOING)
-						.getProperty("index"));
-
+			Relation nextInSequenceRelation = new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType());
+			if (node.hasRelationship(nextInSequenceRelation, Direction.OUTGOING)) {
+				Relationship nextInSequence = node.getSingleRelationship(nextInSequenceRelation, Direction.OUTGOING);
+				if (nextInSequence.hasProperty("index")) {
+					neo4jBean.setIndex((Long) nextInSequence.getProperty("index"));
+				}
 			}
 			return neo4jBean;
 		}
