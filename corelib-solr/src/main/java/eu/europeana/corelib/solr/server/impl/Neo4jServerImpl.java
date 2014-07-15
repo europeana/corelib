@@ -6,6 +6,8 @@
 package eu.europeana.corelib.solr.server.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +27,6 @@ import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Uniqueness;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
-import org.neo4j.rest.graphdb.converter.ResultTypeConverter;
 import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
 
@@ -178,8 +179,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 					"application/json");
 			client.executeMethod(httpMethod);
 			
-			System.out.println(httpMethod.getResponseBodyAsString());
-			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsString(), CustomResponse.class);
+			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
 			if (cr.getResults() !=null && cr.getResults().size()>0 
 					&& cr.getResults().get(0) != null
 					&& cr.getResults().get(0).getData()!=null
