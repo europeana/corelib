@@ -100,7 +100,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 			}
 		}
 
-		int normalizedOffset = (children.size() > (offset-1)) ? (offset-1) : children.size();
+		int normalizedOffset = (children.size() > offset) ? offset : children.size();
 		int normalizedLimit = normalizedOffset + limit;
 		if (children.size() <= normalizedLimit) {
 			normalizedLimit = children.size();
