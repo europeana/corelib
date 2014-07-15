@@ -14,7 +14,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -29,6 +28,7 @@ import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
 
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.neo4j.entity.CustomResponse;
 import eu.europeana.corelib.neo4j.entity.IndexObject;
 import eu.europeana.corelib.neo4j.entity.RelType;
