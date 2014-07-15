@@ -198,6 +198,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 							.size() > 0 )
 			return Long.parseLong(cr.getResults().get(0).getData().get(0).get("row").get(0));
 		} catch (Exception e){
+			log.error("error: " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 
