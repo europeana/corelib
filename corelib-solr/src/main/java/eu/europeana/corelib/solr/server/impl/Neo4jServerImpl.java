@@ -184,7 +184,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 			log.info("request: " + httpMethod.getURI());
 			log.info("path: " + httpMethod.getPath());
-			log.info("response: " + streamToString(httpMethod.getResponseBodyAsStream()));
+			// log.info("response: " + streamToString(httpMethod.getResponseBodyAsStream()));
 
 			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
 			if (cr.getResults() !=null && cr.getResults().size()>0 
