@@ -98,7 +98,13 @@ public class Neo4jServerImpl implements Neo4jServer {
             }
 
         }
-        return children.subList(offset, children.size()>limit? limit : children.size());
+        //return children.subList(offset, children.size()>limit? limit : children.size());
+        int normalizedOffset = (children.size() > offset) ? offset : children.size();
+        int normalizedLimit = normalizedOffset + limit;
+        if (children.size() <= normalizedLimit) {
+            normalizedLimit = children.size();
+        }
+        return children.subList(normalizedOffset, normalizedLimit);
     }
 
     @Override
