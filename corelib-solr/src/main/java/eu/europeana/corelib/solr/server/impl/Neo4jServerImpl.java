@@ -5,10 +5,7 @@
  */
 package eu.europeana.corelib.solr.server.impl;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -98,13 +95,12 @@ public class Neo4jServerImpl implements Neo4jServer {
 					children.add(node);
 					children.addAll(getFollowingSiblings(node, limit-1));
 				} else {
-					children.addAll(getFollowingSiblings(node,offset+limit));
+					children.addAll(getFollowingSiblings(node, (offset-1)+limit));
 				}
 			}
 		}
 
-		//return children.subList(offset, children.size()>limit? limit : children.size());
-		int normalizedOffset = (children.size() > offset) ? offset : children.size();
+		int normalizedOffset = (children.size() > (offset-1)) ? (offset-1) : children.size();
 		int normalizedLimit = normalizedOffset + limit;
 		if (children.size() <= normalizedLimit) {
 			normalizedLimit = children.size();
@@ -161,42 +157,33 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public long getChildrenCount(Node id) {
-		System.out.println("getChildrenCount");
 
 		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part) as children
 		ObjectNode obj = JsonNodeFactory.instance.objectNode();
 		ArrayNode statements = JsonNodeFactory.instance.arrayNode();
 		obj.put("statements", statements);
 		ObjectNode statement = JsonNodeFactory.instance.objectNode();
-		statement
-				.put("statement",
-						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
+		statement.put("statement",
+			"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
 		ObjectNode parameters = statement.with("parameters");
 		statements.add(statement);
 		parameters.put("from", (String) id.getProperty("rdf:about"));
 		try{
 			String str = new ObjectMapper().writeValueAsString(obj);
-			PostMethod httpMethod = new PostMethod(
-					serverPath +"transaction/commit");
+			PostMethod httpMethod = new PostMethod(serverPath + "transaction/commit");
 			httpMethod.setRequestBody(str);
-			httpMethod.setRequestHeader("content-type",
-					"application/json");
+			httpMethod.setRequestHeader("content-type", "application/json");
 			client.executeMethod(httpMethod);
 
-			log.info("request: " + httpMethod.getURI());
-			log.info("path: " + httpMethod.getPath());
-			// log.info("response: " + streamToString(httpMethod.getResponseBodyAsStream()));
-
-			System.out.println("getChildrenCount: readValue");
-			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
-			if (cr.getResults() !=null && cr.getResults().size()>0 
+			CustomResponse cr = new ObjectMapper().readValue(
+					httpMethod.getResponseBodyAsStream(), CustomResponse.class);
+			if (cr.getResults() != null && cr.getResults().size() > 0
 					&& cr.getResults().get(0) != null
 					&& cr.getResults().get(0).getData()!=null
 					&& cr.getResults().get(0).getData().get(0) != null
 					&& cr.getResults().get(0).getData().get(0).get("row") != null
-					&& cr.getResults().get(0).getData().get(0).get("row")
-							.size() > 0 )
-			return Long.parseLong(cr.getResults().get(0).getData().get(0).get("row").get(0));
+					&& cr.getResults().get(0).getData().get(0).get("row").size() > 0)
+				return Long.parseLong(cr.getResults().get(0).getData().get(0).get("row").get(0));
 		} catch (Exception e){
 			log.error("error: " + e.getLocalizedMessage());
 			e.printStackTrace();
@@ -220,19 +207,5 @@ public class Neo4jServerImpl implements Neo4jServer {
 		}
 
 		return 0;
-	}
-	
-	private String streamToString(InputStream stream) {
-		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-		String output = "";
-		String readLine;
-		try {
-			while(((readLine = br.readLine()) != null)) {
-				output.concat(readLine);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return output;
 	}
 }

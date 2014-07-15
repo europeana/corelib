@@ -174,11 +174,11 @@ public class SearchServiceImpl implements SearchService {
 	public FullBean resolve(String collectionId, String recordId, boolean similarItems)
 			throws SolrTypeException {
 		return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
-				recordId),similarItems);
+				recordId), similarItems);
 	}
 
 	@Override
-	public FullBean resolve(String europeanaObjectId,boolean similarItems) throws SolrTypeException {
+	public FullBean resolve(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
 
 		FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
 		FullBean fullBeanNew = fullBean;
@@ -587,7 +587,8 @@ public class SearchServiceImpl implements SearchService {
 					//return the term, the number of hits for each collation and the field that it should be mapped to
 					Term term = new Term(termResult.toString().trim(),
 							collation.getNumberOfHits(),
-							SuggestionTitle.getMappedTitle(field),SolrUtils.escapeFacet(field, termResult.toString()));
+							SuggestionTitle.getMappedTitle(field),
+							SolrUtils.escapeFacet(field, termResult.toString()));
 					results.add(term);
 				}
 			}
@@ -659,41 +660,39 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
-   
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
+		List<Node> children = neo4jServer.getChildren(getNode(nodeId), offset, limit);
+		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		for (Node child : children) {
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+		}
+		return beans;
+	}
 
-    @Override
-    public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
-        List<Node> children = neo4jServer.getChildren(getNode(nodeId),offset,limit);
-        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
-        for(Node child:children){
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
-        }
-        return beans;
-    }
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId, int offset) {
+		return getChildren(nodeId, offset, 10);
+	}
 
-    @Override
-    public List<Neo4jBean> getChildren(String nodeId, int offset) {
-        return getChildren(nodeId,offset,10);
-    }
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId) {
+		return getChildren(nodeId, 0, 10);
+	}
 
-    @Override
-    public List<Neo4jBean> getChildren(String nodeId) {
-        return getChildren(nodeId,0,10);
-    }
+	private Node getNode(String id) {
+		return neo4jServer.getNode(id);
+	}
 
-    private Node getNode(String id){
-        return neo4jServer.getNode(id);
-    }
+	@Override
+	public Neo4jBean getHierarchicalBean(String nodeId) {
+		Node node = getNode(nodeId);
+		if (node != null) {
+			return Node2Neo4jBeanConverter.toNeo4jBean(node, getNodeId(node));
+		}
+		return null;
+	}
 
-    @Override
-    public Neo4jBean getHierarchicalBean(String nodeId) {
-        Node node = getNode(nodeId);
-        if(node!=null){
-            return Node2Neo4jBeanConverter.toNeo4jBean(node,getNodeId(node));
-        }
-        return null;
-    }
-    
 	private enum SuggestionTitle {
 		TITLE("title", "Title"),
 		DATE("when", "Time/Period"),
@@ -737,55 +736,50 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
-	
-	
 	@Override
 	public Neo4jBean getParent(String nodeId) {
 		Node child = getNode(nodeId);
-		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(child),getNodeId(child));
+		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(child), getNodeId(child));
 	}
 
 	@Override
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId),limit);
-        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
-        for(Node child:children){
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
-        }
-        return beans;
+		List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId), limit);
+		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		for (Node child : children) {
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+		}
+		return beans;
 	}
 
 	@Override
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
-		
-		return getPreceedingSiblings(nodeId,10);
+		return getPreceedingSiblings(nodeId, 10);
 	}
 
 	@Override
 	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),limit);
-        List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
-        for(Node child:children){
-        	
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
-        }
-        return beans;
+		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId), limit);
+		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		for (Node child : children) {
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+		}
+		return beans;
 	}
 
 	@Override
 	public List<Neo4jBean> getFollowingSiblings(String nodeId) {
-		return getFollowingSiblings(nodeId,10);
+		return getFollowingSiblings(nodeId, 10);
 	}
 
 	@Override
 	public long getChildrenCount(String nodeId) {
 		return neo4jServer.getChildrenCount(getNode(nodeId));
 	}
-    
+
 	private long getNodeId(Node nodeId){
 		return neo4jServer.getNodeIndex(nodeId);
 	}
-    
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
@@ -798,6 +792,6 @@ class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
 	@Override
 	public void process(HttpRequest request, HttpContext context)
 			throws HttpException, IOException {
-		request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
+		request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
 	}
 }
