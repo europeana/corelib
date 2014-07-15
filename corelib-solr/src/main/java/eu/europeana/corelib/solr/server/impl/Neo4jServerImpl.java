@@ -14,6 +14,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -41,123 +42,124 @@ import eu.europeana.corelib.solr.server.Neo4jServer;
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-    private RestGraphDatabase graphDb;
-    private RestIndex<Node> index;
-    private HttpClient client;
-    private String customPath;
-    private String serverPath;
-    public Neo4jServerImpl(String serverPath, String index, String customPath) {
-        this.graphDb = new RestGraphDatabase(serverPath);
-        this.index = this.graphDb.getRestAPI().getIndex(index);
-        this.client = new HttpClient();
-        this.customPath = customPath;
-        this.serverPath = serverPath;
-    }
+	Logger log = Logger.getLogger(Neo4jServerImpl.class.getCanonicalName());
 
-    @Override
-    public Node getNode(String id) {
-        IndexHits<Node> nodes = index.get("rdf_about", id);
-        if (nodes.size() > 0) {
-            return nodes.getSingle();
-        }
-        return null;
-    }
+	private RestGraphDatabase graphDb;
+	private RestIndex<Node> index;
+	private HttpClient client;
+	private String customPath;
+	private String serverPath;
 
-    @Override
-    public List<Node> getChildren(Node id, int offset, int limit) {
+	public Neo4jServerImpl(String serverPath, String index, String customPath) {
+		this.graphDb = new RestGraphDatabase(serverPath);
+		this.index = this.graphDb.getRestAPI().getIndex(index);
+		this.client = new HttpClient();
+		this.customPath = customPath;
+		this.serverPath = serverPath;
+	}
 
-        List<Node> children = new ArrayList<Node>();
-        RestTraversal traversal = (RestTraversal) graphDb
-                .traversalDescription();
+	@Override
+	public Node getNode(String id) {
+		IndexHits<Node> nodes = index.get("rdf_about", id);
+		if (nodes.size() > 0) {
+			return nodes.getSingle();
+		}
+		return null;
+	}
 
-        traversal.evaluator(Evaluators.excludeStartPosition());
+	@Override
+	public List<Node> getChildren(Node id, int offset, int limit) {
 
-        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-        traversal.breadthFirst();
-        traversal.maxDepth(1);
+		List<Node> children = new ArrayList<Node>();
+		RestTraversal traversal = (RestTraversal) graphDb
+				.traversalDescription();
 
-        traversal.relationships(
-                new Relation(RelType.ISFIRSTINSEQUENCE.getRelType()),
-                Direction.OUTGOING);
+		traversal.evaluator(Evaluators.excludeStartPosition());
 
-        Traverser tr = traversal.traverse(id);
-        Iterator<Node> resIter = tr.nodes().iterator();
+		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+		traversal.breadthFirst();
+		traversal.maxDepth(1);
 
-        while (resIter.hasNext()) {
-            Node node = resIter.next();
+		traversal.relationships(
+				new Relation(RelType.ISFIRSTINSEQUENCE.getRelType()),
+				Direction.OUTGOING);
 
-            if (node != null) {
-                if(offset==0){
-                children.add(node);
-                children.addAll(getFollowingSiblings(node, limit-1));
-                } else {
-                    children.addAll(getFollowingSiblings(node,offset+limit));
-                }
+		Traverser tr = traversal.traverse(id);
+		Iterator<Node> resIter = tr.nodes().iterator();
 
-            }
+		while (resIter.hasNext()) {
+			Node node = resIter.next();
 
-        }
-        //return children.subList(offset, children.size()>limit? limit : children.size());
-        int normalizedOffset = (children.size() > offset) ? offset : children.size();
-        int normalizedLimit = normalizedOffset + limit;
-        if (children.size() <= normalizedLimit) {
-            normalizedLimit = children.size();
-        }
-        return children.subList(normalizedOffset, normalizedLimit);
-    }
+			if (node != null) {
+				if (offset == 0) {
+					children.add(node);
+					children.addAll(getFollowingSiblings(node, limit-1));
+				} else {
+					children.addAll(getFollowingSiblings(node,offset+limit));
+				}
+			}
+		}
 
-    @Override
-    public Node getParent(Node id) {
+		//return children.subList(offset, children.size()>limit? limit : children.size());
+		int normalizedOffset = (children.size() > offset) ? offset : children.size();
+		int normalizedLimit = normalizedOffset + limit;
+		if (children.size() <= normalizedLimit) {
+			normalizedLimit = children.size();
+		}
+		return children.subList(normalizedOffset, normalizedLimit);
+	}
 
-        List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, new Relation(
-                RelType.DCTERMS_ISPARTOF.getRelType()));
-        if (nodes.size() > 0) {
-            return nodes.get(0);
-        }
-        return null;
-    }
+	@Override
+	public Node getParent(Node id) {
 
-    @Override
-    public List<Node> getFollowingSiblings(Node id, int limit) {
-        return getRelatedNodes(id, limit, Direction.INCOMING, new Relation(
-                RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
-    }
+		List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, new Relation(
+				RelType.DCTERMS_ISPARTOF.getRelType()));
+		if (nodes.size() > 0) {
+			return nodes.get(0);
+		}
+		return null;
+	}
 
-    @Override
-    public List<Node> getPreceedingSiblings(Node id, int limit) {
-        return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-                RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
-    }
+	@Override
+	public List<Node> getFollowingSiblings(Node id, int limit) {
+		return getRelatedNodes(id, limit, Direction.INCOMING, new Relation(
+				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+	}
 
-    private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
-            Relation relType) {
-        List<Node> children = new ArrayList<Node>();
-        RestTraversal traversal = (RestTraversal) graphDb
-                .traversalDescription();
+	@Override
+	public List<Node> getPreceedingSiblings(Node id, int limit) {
+		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
+				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+	}
 
-        traversal.evaluator(Evaluators.excludeStartPosition());
+	private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
+			Relation relType) {
+		List<Node> children = new ArrayList<Node>();
+		RestTraversal traversal = (RestTraversal) graphDb
+				.traversalDescription();
 
-        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-        traversal.breadthFirst();
-        traversal.maxDepth(limit);
+		traversal.evaluator(Evaluators.excludeStartPosition());
 
-        traversal.relationships(relType, direction);
-        Traverser tr = traversal.traverse(id);
-        Iterator<Node> resIter = tr.nodes().iterator();
+		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+		traversal.breadthFirst();
+		traversal.maxDepth(limit);
 
-        while (resIter.hasNext()) {
-            Node node = resIter.next();
+		traversal.relationships(relType, direction);
+		Traverser tr = traversal.traverse(id);
+		Iterator<Node> resIter = tr.nodes().iterator();
 
-            children.add(node);
+		while (resIter.hasNext()) {
+			Node node = resIter.next();
+			children.add(node);
+		}
 
-        }
-        return (children);
-    }
+		return (children);
+	}
 
 	@Override
 	public long getChildrenCount(Node id) {
-        
-        // start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part) as children
+
+		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part) as children
 		ObjectNode obj = JsonNodeFactory.instance.objectNode();
 		ArrayNode statements = JsonNodeFactory.instance.arrayNode();
 		obj.put("statements", statements);
@@ -176,7 +178,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 			httpMethod.setRequestHeader("content-type",
 					"application/json");
 			client.executeMethod(httpMethod);
-			
+
+			log.info("request: " + httpMethod.getURI());
+			log.info("path: " + httpMethod.getPath());
+			log.info("response: " + httpMethod.getResponseBodyAsString());
+
 			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
 			if (cr.getResults() !=null && cr.getResults().size()>0 
 					&& cr.getResults().get(0) != null
@@ -189,15 +195,13 @@ public class Neo4jServerImpl implements Neo4jServer {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-        return 0;
-        
+
+		return 0;
 	}
-	
-	
-	
+
 	@Override
 	public long getNodeIndex(Node node){
-		GetMethod method = new GetMethod(customPath+"/"+node.getId());
+		GetMethod method = new GetMethod(customPath + "/" + node.getId());
 		try {
 			client.executeMethod(method);
 			String respBody = method.getResponseBodyAsString();
@@ -208,6 +212,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return 0;
 	}
 }
