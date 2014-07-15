@@ -161,6 +161,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public long getChildrenCount(Node id) {
+		System.out.println("getChildrenCount");
 
 		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part) as children
 		ObjectNode obj = JsonNodeFactory.instance.objectNode();
@@ -186,6 +187,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 			log.info("path: " + httpMethod.getPath());
 			// log.info("response: " + streamToString(httpMethod.getResponseBodyAsStream()));
 
+			System.out.println("getChildrenCount: readValue");
 			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
 			if (cr.getResults() !=null && cr.getResults().size()>0 
 					&& cr.getResults().get(0) != null
