@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 /**
@@ -61,7 +62,7 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setTitle(titles);
 			neo4jBean.setDescription(descriptions);
 			neo4jBean.setHasChildren(node.hasRelationship(new Relation(
-					RelType.DCTERMS_HASPART.getRelType())));
+					RelType.DCTERMS_HASPART.getRelType()),Direction.OUTGOING));
 			neo4jBean.setIndex(index);
 			return neo4jBean;
 		}
