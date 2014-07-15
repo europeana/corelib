@@ -79,7 +79,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
         traversal.relationships(
                 new Relation(RelType.ISFIRSTINSEQUENCE.getRelType()),
-                Direction.INCOMING);
+                Direction.OUTGOING);
 
         Traverser tr = traversal.traverse(id);
         Iterator<Node> resIter = tr.nodes().iterator();
