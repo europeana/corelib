@@ -666,7 +666,7 @@ public class SearchServiceImpl implements SearchService {
         List<Node> children = neo4jServer.getChildren(getNode(nodeId),offset,limit);
         List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
         for(Node child:children){
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
         }
         return beans;
     }
@@ -689,7 +689,7 @@ public class SearchServiceImpl implements SearchService {
     public Neo4jBean getHierarchicalBean(String nodeId) {
         Node node = getNode(nodeId);
         if(node!=null){
-            return Node2Neo4jBeanConverter.toNeo4jBean(node);
+            return Node2Neo4jBeanConverter.toNeo4jBean(node,getNodeId(node));
         }
         return null;
     }
@@ -741,8 +741,8 @@ public class SearchServiceImpl implements SearchService {
 	
 	@Override
 	public Neo4jBean getParent(String nodeId) {
-		
-		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(getNode(nodeId)));
+		Node child = getNode(nodeId);
+		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(child),getNodeId(child));
 	}
 
 	@Override
@@ -750,7 +750,7 @@ public class SearchServiceImpl implements SearchService {
 		List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId),limit);
         List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
         for(Node child:children){
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
         }
         return beans;
 	}
@@ -766,7 +766,8 @@ public class SearchServiceImpl implements SearchService {
 		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),limit);
         List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
         for(Node child:children){
-        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child));
+        	
+        	beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,getNodeId(child)));
         }
         return beans;
 	}
@@ -780,8 +781,11 @@ public class SearchServiceImpl implements SearchService {
 	public long getChildrenCount(String nodeId) {
 		return neo4jServer.getChildrenCount(getNode(nodeId));
 	}
-        
-        
+    
+	private long getNodeId(Node nodeId){
+		return neo4jServer.getNodeIndex(nodeId);
+	}
+    
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {

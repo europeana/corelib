@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Converter from Node to Neo4jBean
@@ -21,7 +19,10 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Node2Neo4jBeanConverter {
 
-	public static Neo4jBean toNeo4jBean(Node node) {
+	
+	
+	
+	public static Neo4jBean toNeo4jBean(Node node, long index) {
 		if (node != null) {
 			Neo4jBean neo4jBean = new Neo4jBean();
 			neo4jBean.setId((String) node.getProperty("rdf:about"));
@@ -61,15 +62,11 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setDescription(descriptions);
 			neo4jBean.setHasChildren(node.hasRelationship(new Relation(
 					RelType.DCTERMS_HASPART.getRelType())));
-			Relation nextInSequenceRelation = new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType());
-			if (node.hasRelationship(nextInSequenceRelation, Direction.OUTGOING)) {
-				Relationship nextInSequence = node.getSingleRelationship(nextInSequenceRelation, Direction.OUTGOING);
-				if (nextInSequence.hasProperty("index")) {
-					neo4jBean.setIndex((Long) nextInSequence.getProperty("index"));
-				}
-			}
+			neo4jBean.setIndex(index);
 			return neo4jBean;
 		}
 		return null;
 	}
+	
+	
 }

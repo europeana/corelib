@@ -16,5 +16,7 @@ public interface Neo4jServer extends AbstractServer{
 	List<Node> getPreceedingSiblings(Node id, int limit);
 	
 	long getChildrenCount(Node id);
+
+	long getNodeIndex(Node node);
 	
 }
