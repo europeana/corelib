@@ -5,7 +5,10 @@
  */
 package eu.europeana.corelib.solr.server.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -181,7 +184,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 			log.info("request: " + httpMethod.getURI());
 			log.info("path: " + httpMethod.getPath());
-			log.info("response: " + httpMethod.getResponseBodyAsString());
+			log.info("response: " + streamToString(httpMethod.getResponseBodyAsStream()));
 
 			CustomResponse cr = new ObjectMapper().readValue(httpMethod.getResponseBodyAsStream(), CustomResponse.class);
 			if (cr.getResults() !=null && cr.getResults().size()>0 
@@ -214,5 +217,19 @@ public class Neo4jServerImpl implements Neo4jServer {
 		}
 
 		return 0;
+	}
+	
+	private String streamToString(InputStream stream) {
+		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+		String output = "";
+		String readLine;
+		try {
+			while(((readLine = br.readLine()) != null)) {
+				output.concat(readLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return output;
 	}
 }
