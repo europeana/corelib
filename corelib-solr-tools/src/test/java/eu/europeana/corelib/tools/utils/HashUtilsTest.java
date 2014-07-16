@@ -26,6 +26,8 @@ public class HashUtilsTest {
 	public void testHashSHA256(){
 		System.out.println(HashUtils.createHashSHA256("http://www.europeana1914-1918.eu/attachments/22106/1517.22106.full.jpg"));
 		System.out.println(HashUtils.createHash(" http://www.europeana1914-1918.eu/en/contributions/96"));
+		System.out.println(HashUtils.createHash("http://bibliotecadigitalhispanica.bne.es/webclient/MetadataManager?pid=1883679"));
+		
 		assertEquals("9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08", HashUtils.createHashSHA256("test"));
 		assertEquals("67449F383489576A1FBDEF286EBA5415054F0DD9", HashUtils.createHash("http://kulturarvsdata.se/SMVK-VKM/fotografi/1226859"));
 	}
