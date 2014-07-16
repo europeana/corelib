@@ -27,8 +27,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiKeyServiceTest {
 
 	private static final long DEFAULT_USAGE_LIMIT = 10000;
@@ -55,7 +55,7 @@ public class ApiKeyServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @Before
+	@Before
 	public void setup() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
@@ -65,12 +65,12 @@ public class ApiKeyServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @After
+	@After
 	public void tearDown() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
 
-	// @Test
+	@Test
 	public void createApiKeyTest() throws DatabaseException {
 		String email = "test@kb.nl";
 		String apiKey = generatePassPhrase(9);
@@ -101,7 +101,7 @@ public class ApiKeyServiceTest {
 		userService.remove(user);
 	}
 
-	// @Test
+	@Test
 	public void checkReachedLimitSuccessTest() throws DatabaseException, LimitReachedException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");
@@ -114,7 +114,7 @@ public class ApiKeyServiceTest {
 		assertEquals(1, requested);
 	}
 
-	// @Test
+	 @Test
 	public void checkReachedLimitWithDatabaseExceptionTest() throws LimitReachedException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");
@@ -131,7 +131,7 @@ public class ApiKeyServiceTest {
 		}
 	}
 
-	// @Test
+	 @Test
 	public void checkReachedLimitWithLimitReachedExceptionTest() throws DatabaseException {
 		ApiKey apiKey = new ApiKeyImpl();
 		apiKey.setApiKey("testKey");

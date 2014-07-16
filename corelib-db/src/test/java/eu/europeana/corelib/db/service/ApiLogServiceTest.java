@@ -24,8 +24,8 @@ import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.utils.model.DateInterval;
 
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
+ @RunWith(SpringJUnit4ClassRunner.class)
+ @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiLogServiceTest {
 
 	String apiKey = "testKey";
@@ -44,7 +44,7 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @Before
+	 @Before
 	public void setup() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
@@ -54,12 +54,12 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @After
+	 @After
 	public void tearDown() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
 
-	// @Test
+	 @Test
 	public void testCountByApiKeyByInterval() throws CloneNotSupportedException {
 		DateInterval interval = DateIntervalUtils.getToday();
 
@@ -77,7 +77,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, count2);
 	}
 
-	// @Test
+	 @Test
 	public void testCountByApiKey() {
 		long count = apiLogService.countByApiKey(apiKey);
 		assertNotNull(count);
@@ -91,7 +91,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, count);
 	}
 
-	// @Test
+	  @Test
 	public void testFindByApiKey() {
 		List<ApiLog> logs = apiLogService.findByApiKey(apiKey);
 		assertNotNull(logs);
@@ -105,7 +105,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, logs.size());
 	}
 
-	// @Test
+	 @Test
 	public void testCountByInterval() {
 		DateInterval interval = DateIntervalUtils.getToday();
 

@@ -56,8 +56,8 @@ import eu.europeana.corelib.definitions.model.ThumbSize;
  * 
  * @since 4 May 2012
  */
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml" })
+ @RunWith(SpringJUnit4ClassRunner.class)
+ @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml" })
 public class ThumbnailServiceTest {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ThumbnailServiceTest.class);
@@ -81,7 +81,7 @@ public class ThumbnailServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @Before
+	 @Before
 	public void setup() throws IOException {
 		imageDao.getCollection().drop();
 		image = ImageIO.read(getClass().getResourceAsStream(
@@ -95,7 +95,7 @@ public class ThumbnailServiceTest {
 	 * @throws DatabaseException
 	 * @throws ImageReadException
 	 */
-	// @Test
+	 @Test
 	public void storeTest() throws IOException, DatabaseException,
 			ImageReadException {
 
@@ -141,7 +141,7 @@ public class ThumbnailServiceTest {
 	 * @throws FileNotFoundException
 	 * @throws DatabaseException
 	 */
-	// @Test
+	 @Test
 	public void storewithXMPTest() throws JiBXException, FileNotFoundException,
 			DatabaseException {
 
