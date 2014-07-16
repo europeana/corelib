@@ -43,7 +43,7 @@ public class Node2Neo4jBeanConverter {
 						descriptionValue = new ArrayList<String>();
 					}
 					descriptionValue.addAll(
-							(List<String>) node.getProperty(key));
+						(List<String>) node.getProperty(key));
 					descriptions.put(StringUtils.substringAfter(key,
 							"dc:description_xml:lang_"), descriptionValue);
 				} else if (key.startsWith("dc:title")) {
