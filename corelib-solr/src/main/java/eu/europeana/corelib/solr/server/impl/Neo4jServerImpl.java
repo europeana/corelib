@@ -95,9 +95,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 			if (node != null) {
 				if (offset == 0) {
 					children.add(node);
-					children.addAll(getFollowingSiblings(node, 1, limit - 1));
+					children.addAll(getFollowingSiblings(node, limit - 1, 0));
 				} else {
-					children.addAll(getFollowingSiblings(node, offset, limit));
+					children.addAll(getFollowingSiblings(node, limit, offset));
 				}
 			}
 		}
@@ -107,8 +107,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public Node getParent(Node id) {
-
-		List<Node> nodes = getRelatedNodes(id, 0, 1, Direction.OUTGOING, dctermsIsPartOfRelation);
+		List<Node> nodes = getRelatedNodes(id, 1, 0, Direction.OUTGOING, dctermsIsPartOfRelation);
 		if (nodes.size() > 0) {
 			return nodes.get(0);
 		}
@@ -121,7 +120,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	private List<Node> getFollowingSiblings(Node id, int limit, int offset) {
-		return getRelatedNodes(id, offset, limit, Direction.INCOMING, edmIsNextInSequenceRelation);
+		return getRelatedNodes(id, limit, offset, Direction.INCOMING, edmIsNextInSequenceRelation);
 	}
 
 	@Override
@@ -130,10 +129,10 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	private List<Node> getPreceedingSiblings(Node id, int limit, int offset) {
-		return getRelatedNodes(id, offset, limit, Direction.OUTGOING, edmIsNextInSequenceRelation);
+		return getRelatedNodes(id, limit, offset, Direction.OUTGOING, edmIsNextInSequenceRelation);
 	}
 
-	private List<Node> getRelatedNodes(Node id, int offset, int limit, Direction direction,
+	private List<Node> getRelatedNodes(Node id, int limit, int offset, Direction direction,
 			Relation relType) {
 		List<Node> children = new ArrayList<Node>();
 		RestTraversal traversal = (RestTraversal) graphDb
@@ -149,10 +148,10 @@ public class Neo4jServerImpl implements Neo4jServer {
 		Traverser tr = traversal.traverse(id);
 		Iterator<Node> resIter = tr.nodes().iterator();
 
-		int i = 0;
+		int i = 1;
 		while (resIter.hasNext()) {
 			Node node = resIter.next();
-			if (i++ >= offset) {
+			if (i >= offset) {
 				if (children.size() <= limit) {
 					children.add(node);
 				}
@@ -160,6 +159,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 					break;
 				}
 			}
+			i++;
 		}
 
 		return (children);
