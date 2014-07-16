@@ -20,9 +20,8 @@ import org.neo4j.graphdb.Node;
  */
 public class Node2Neo4jBeanConverter {
 
-	
-	
-	
+	private static final Relation dctermsHasPartRelation = new Relation(RelType.DCTERMS_HASPART.getRelType());
+
 	public static Neo4jBean toNeo4jBean(Node node, long index) {
 		if (node != null) {
 			Neo4jBean neo4jBean = new Neo4jBean();
@@ -43,8 +42,8 @@ public class Node2Neo4jBeanConverter {
 					if (descriptionValue == null) {
 						descriptionValue = new ArrayList<String>();
 					}
-					descriptionValue.addAll((List<String>) node
-							.getProperty(key));
+					descriptionValue.addAll(
+							(List<String>) node.getProperty(key));
 					descriptions.put(StringUtils.substringAfter(key,
 							"dc:description_xml:lang_"), descriptionValue);
 				} else if (key.startsWith("dc:title")) {
@@ -61,13 +60,10 @@ public class Node2Neo4jBeanConverter {
 			}
 			neo4jBean.setTitle(titles);
 			neo4jBean.setDescription(descriptions);
-			neo4jBean.setHasChildren(node.hasRelationship(new Relation(
-					RelType.DCTERMS_HASPART.getRelType()),Direction.OUTGOING));
+			neo4jBean.setHasChildren(node.hasRelationship(dctermsHasPartRelation, Direction.OUTGOING));
 			neo4jBean.setIndex(index);
 			return neo4jBean;
 		}
 		return null;
 	}
-	
-	
 }

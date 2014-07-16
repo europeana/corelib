@@ -3,7 +3,7 @@ package eu.europeana.corelib.solr.server;
 import java.util.List;
 import org.neo4j.graphdb.Node;
 
-public interface Neo4jServer extends AbstractServer{
+public interface Neo4jServer extends AbstractServer {
 
 	Node getNode(String id);
 
@@ -18,5 +18,4 @@ public interface Neo4jServer extends AbstractServer{
 	long getChildrenCount(Node id);
 
 	long getNodeIndex(Node node);
-
 }

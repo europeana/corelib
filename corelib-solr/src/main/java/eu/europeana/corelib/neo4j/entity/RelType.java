@@ -13,23 +13,26 @@ import javax.management.InvalidAttributeValueException;
  * @author gmamakis
  */
 public enum RelType {
-	EDM_ISNEXTINSEQUENCE("edm:isNextInSequence"), DCTERMS_ISPARTOF(
-			"dcterms:isPartOf"), DCTERMS_HASPART("dcterms:hasPart"),ISFIRSTINSEQUENCE("isFirstInSequence"),ISLASTINSEQUENCE("isLastInSequence");
+
+	EDM_ISNEXTINSEQUENCE("edm:isNextInSequence"),
+	DCTERMS_ISPARTOF("dcterms:isPartOf"),
+	DCTERMS_HASPART("dcterms:hasPart"),
+	ISFIRSTINSEQUENCE("isFirstInSequence"),
+	ISLASTINSEQUENCE("isLastInSequence");
 
 	private String relType;
 
 	private RelType(String relType) {
 		this.relType = relType;
-
 	}
 
 	public String getRelType() {
 		return this.relType;
 	}
 
-	public static RelType getByRelType(String relType) throws InvalidAttributeValueException{
-		for(RelType rel:RelType.values()){
-			if(rel.getRelType().equalsIgnoreCase(relType)){
+	public static RelType getByRelType(String relType) throws InvalidAttributeValueException {
+		for (RelType rel : RelType.values()) {
+			if (rel.getRelType().equalsIgnoreCase(relType)) {
 				return rel;
 			}
 		}

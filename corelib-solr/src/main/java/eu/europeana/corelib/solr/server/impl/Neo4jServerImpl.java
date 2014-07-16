@@ -50,6 +50,10 @@ public class Neo4jServerImpl implements Neo4jServer {
 	private String customPath;
 	private String serverPath;
 
+	private static final Relation edmIsNextInSequenceRelation = new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType());
+	private static final Relation isFirstInSequenceRelation = new Relation(RelType.ISFIRSTINSEQUENCE.getRelType());
+	private static final Relation dctermsIsPartOfRelation = new Relation(RelType.DCTERMS_ISPARTOF.getRelType());
+
 	public Neo4jServerImpl(String serverPath, String index, String customPath) {
 		this.graphDb = new RestGraphDatabase(serverPath);
 		this.index = this.graphDb.getRestAPI().getIndex(index);
@@ -80,9 +84,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		traversal.breadthFirst();
 		traversal.maxDepth(1);
 
-		traversal.relationships(
-				new Relation(RelType.ISFIRSTINSEQUENCE.getRelType()),
-				Direction.OUTGOING);
+		traversal.relationships(isFirstInSequenceRelation, Direction.OUTGOING);
 
 		Traverser tr = traversal.traverse(id);
 		Iterator<Node> resIter = tr.nodes().iterator();
@@ -93,13 +95,17 @@ public class Neo4jServerImpl implements Neo4jServer {
 			if (node != null) {
 				if (offset == 0) {
 					children.add(node);
-					children.addAll(getFollowingSiblings(node, limit-1));
+					children.addAll(getFollowingSiblings(node, limit - 1));
 				} else {
-					children.addAll(getFollowingSiblings(node, (offset-1)+limit));
+					children.addAll(getFollowingSiblings(node, offset + limit));
 				}
 			}
 		}
 
+		// if offset > 1 children doesn't contains the first children, so we have to shift offset by one
+		if (offset > 0) {
+			offset--;
+		}
 		int normalizedOffset = (children.size() > offset) ? offset : children.size();
 		int normalizedLimit = normalizedOffset + limit;
 		if (children.size() <= normalizedLimit) {
@@ -111,8 +117,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
 	public Node getParent(Node id) {
 
-		List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, new Relation(
-				RelType.DCTERMS_ISPARTOF.getRelType()));
+		List<Node> nodes = getRelatedNodes(id, 1, Direction.OUTGOING, dctermsIsPartOfRelation);
 		if (nodes.size() > 0) {
 			return nodes.get(0);
 		}
@@ -121,14 +126,12 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public List<Node> getFollowingSiblings(Node id, int limit) {
-		return getRelatedNodes(id, limit, Direction.INCOMING, new Relation(
-				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+		return getRelatedNodes(id, limit, Direction.INCOMING, edmIsNextInSequenceRelation);
 	}
 
 	@Override
 	public List<Node> getPreceedingSiblings(Node id, int limit) {
-		return getRelatedNodes(id, limit, Direction.OUTGOING, new Relation(
-				RelType.EDM_ISNEXTINSEQUENCE.getRelType()));
+		return getRelatedNodes(id, limit, Direction.OUTGOING, edmIsNextInSequenceRelation);
 	}
 
 	private List<Node> getRelatedNodes(Node id, int limit, Direction direction,
