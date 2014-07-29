@@ -27,6 +27,7 @@ public class WikipediaApiServiceTest {
 	public void setUp() throws Exception {
 	}
 
+	/*
 	@Test
 	public void testGetLanguageLinks() {
 		Map<String, String> languageVersions = wikipediaApiService.getLanguageLinks("den haag", "en");
@@ -52,4 +53,5 @@ public class WikipediaApiServiceTest {
 		assertNotNull(translations);
 		assertEquals(3, translations.size());
 	}
+	*/
 }
