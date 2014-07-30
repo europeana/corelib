@@ -420,13 +420,10 @@ public class Configuration {
 	}
 
 	public boolean useBackendTranslation() {
-		return false;
-		/*
 		if (StringUtils.isBlank(useBackendItemTranslationString)) {
 			return false;
 		}
 		return Boolean.parseBoolean(useBackendItemTranslationString);
-		*/
 	}
 
 	public String getBingTranslateId() {
