@@ -33,11 +33,6 @@ public class SoundCloudApiServiceTest {
 	}
 
 	@Test
-	public void testX() {
-		assertEquals(1, 1);
-	}
-	/*
-	@Test
 	public void testResolvePath() {
 		for (TrackData pair : pairs) {
 			Track track = service.resolvePath(pair.getPath());
@@ -56,8 +51,7 @@ public class SoundCloudApiServiceTest {
 			assertEquals("http://soundcloud.com/" + pair.getPath(), track.getPermalink_url());
 		}
 	}
-	*/
-	
+
 	private class TrackData {
 		private String path;
 		private String trackId;
