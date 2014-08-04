@@ -151,9 +151,10 @@
 	</distributionManagement>
 
 	<scm>
+		<connection>scm:git:git@github.com:europeana/corelib.git</connection>
+		<developerConnection>scm:git:git@github.com:europeana/corelib.git</developerConnection>
 		<url>https://github.com/europeana/corelib</url>
-		<connection>git@github.com:europeana/corelib.git</connection>
-		<developerConnection>git@github.com:europeana/corelib.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 	
 	<reporting>
