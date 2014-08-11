@@ -26,8 +26,10 @@ public class Neo4jBean {
 	private DocType type;
 
 	private Boolean children;
-	
+
 	private Long index;
+
+	private Long childrenCount;
 
 	public String getId() {
 		return id;
@@ -76,5 +78,13 @@ public class Neo4jBean {
 
 	public void setIndex(Long index) {
 		this.index = index;
+	}
+
+	public Long getChildrenCount() {
+		return childrenCount;
+	}
+
+	public void setChildrenCount(Long childrenCount) {
+		this.childrenCount = childrenCount;
 	}
 }
