@@ -29,7 +29,7 @@ public class Neo4jBean {
 
 	private Long index;
 
-	private Long childrenCount;
+	private Long childrenCount = 0L;
 
 	public String getId() {
 		return id;
