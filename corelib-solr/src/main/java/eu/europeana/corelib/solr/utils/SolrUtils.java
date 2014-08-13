@@ -561,4 +561,8 @@ public final class SolrUtils {
 		}
 		return doc;
 	}
+
+	public static String normalizeBooleans(String query) {
+		return QueryParser.normalizeBooleans(query);
+	}
 }
