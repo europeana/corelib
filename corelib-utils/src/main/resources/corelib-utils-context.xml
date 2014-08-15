@@ -38,4 +38,13 @@
 	<bean name="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
 		<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>
 	</bean>
+
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"/>
+	</bean>
+
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml"/>
+		<property name="shared" value="true"/>
+	</bean>
 </beans>

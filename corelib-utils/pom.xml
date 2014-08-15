@@ -64,6 +64,13 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.2</version>
 		</dependency>
+		<!-- ehcache, see http://ehcache.org -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>${version.ehcache}</version>
+		</dependency>
+
 		<!-- TESTING PURPOSES -->
 		<dependency>
 			<scope>test</scope>

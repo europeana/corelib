@@ -30,7 +30,7 @@ public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implement
 	@Override
 	public String translate(String text, String languageCode) {
 		String url = buildTranslateUrl(text, languageCode);
-		log.info("url: " + url);
+		log.info("Calling translate url: " + url);
 		ApiResult result = getJsonResponse(url);
 		return parseJson(result);
 	}
