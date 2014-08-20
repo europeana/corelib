@@ -573,7 +573,8 @@ public final class AggregationFieldInput {
                 (aggregation.getIsShownAt())).getResource();
         mongoAggregation.setEdmIsShownAt(isShownAt);
         if (isShownAt != null) {
-            ups.set("edmIsShownAt", isShownAt);
+        	 mongoAggregation.setEdmIsShownAt(isShownAt.trim());
+            ups.set("edmIsShownAt", isShownAt.trim());
         } else {
             ups.unset("edmIsShownAt");
         }
@@ -582,8 +583,8 @@ public final class AggregationFieldInput {
                 (aggregation.getIsShownBy())).getResource();
         mongoAggregation.setEdmIsShownBy(isShownBy);
         if (isShownBy != null) {
-
-            ups.set("edmIsShownBy", isShownBy);
+        	 mongoAggregation.setEdmIsShownBy(isShownBy.trim());
+            ups.set("edmIsShownBy", isShownBy.trim());
         } else {
             ups.unset("edmIsShownBy");
         }
@@ -592,8 +593,8 @@ public final class AggregationFieldInput {
                 (aggregation.getObject())).getResource();
         mongoAggregation.setEdmObject(object);
         if (object != null) {
-
-            ups.set("edmObject", object);
+        	mongoAggregation.setEdmObject(object.trim());
+            ups.set("edmObject", object.trim());
         } else {
             ups.unset("edmObject");
         }
@@ -638,7 +639,7 @@ public final class AggregationFieldInput {
         if (aggregation.getHasViewList() != null) {
             List<String> hasViewList = new ArrayList<String>();
             for (HasView hasView : aggregation.getHasViewList()) {
-                hasViewList.add(hasView.getResource());
+                hasViewList.add(hasView.getResource().trim());
             }
             mongoAggregation.setHasView(hasViewList
                     .toArray(new String[hasViewList.size()]));
@@ -704,15 +705,15 @@ public final class AggregationFieldInput {
 
         String isShownAt = SolrUtils.exists(IsShownAt.class,
                 (aggregation.getIsShownAt())).getResource();
-        mongoAggregation.setEdmIsShownAt(isShownAt);
+        mongoAggregation.setEdmIsShownAt(isShownAt!=null?isShownAt.trim():null);
 
         String isShownBy = SolrUtils.exists(IsShownBy.class,
                 (aggregation.getIsShownBy())).getResource();
-        mongoAggregation.setEdmIsShownBy(isShownBy);
+        mongoAggregation.setEdmIsShownBy(isShownBy!=null?isShownBy.trim():null);
 
         String object = SolrUtils.exists(_Object.class,
                 (aggregation.getObject())).getResource();
-        mongoAggregation.setEdmObject(object);
+        mongoAggregation.setEdmObject(object!=null?object.trim():null);
 
         Map<String, List<String>> prov = MongoUtils
                 .createResourceOrLiteralMapFromString(aggregation.getProvider());
@@ -739,7 +740,7 @@ public final class AggregationFieldInput {
         if (aggregation.getHasViewList() != null) {
             List<String> hasViewList = new ArrayList<String>();
             for (HasView hasView : aggregation.getHasViewList()) {
-                hasViewList.add(hasView.getResource());
+                hasViewList.add(hasView.getResource().trim());
             }
             mongoAggregation.setHasView(hasViewList
                     .toArray(new String[hasViewList.size()]));
