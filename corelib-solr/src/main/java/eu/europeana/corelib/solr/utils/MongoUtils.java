@@ -506,6 +506,9 @@ public final class MongoUtils {
 			if (updatedValues != null) {
 				if (savedValues == null
 						|| !MongoUtils.arrayEquals(updatedValues, savedValues)) {
+					for(int i=0;i<updatedValues.length;i++){
+						updatedValues[i]=updatedValues[i].trim();
+					}
 					ops.set(updateField, updatedValues);
 					setter.invoke(saved, new Object[] { updatedValues });
 					return true;
@@ -556,8 +559,8 @@ public final class MongoUtils {
 			if (updatedValues != null) {
 				if (savedValues == null
 						|| !StringUtils.equals(updatedValues, savedValues)) {
-					ops.set(updateField, updatedValues);
-					setter.invoke(saved, updatedValues);
+					ops.set(updateField, updatedValues.trim());
+					setter.invoke(saved, updatedValues.trim());
 					return true;
 				}
 			} else {
