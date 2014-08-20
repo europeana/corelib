@@ -38,7 +38,7 @@ public class CollectionBridge implements ICollection{
     HttpSolrServer solrServer;
     
     @Override
-    public IDocument getDocumentById(IDocument id) {
+    public IDocument getDocumentById(String id) {
         for(ICollection collection : getCollectionHandlers(id.getClass())){
            return collection.getDocumentById(id);
         }
