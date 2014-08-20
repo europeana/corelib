@@ -939,7 +939,8 @@ public class EdmUtils {
 							ResourceOrLiteralType.Lang lang = null;
 							if (StringUtils.isNotEmpty(entry.getKey())
 									&& !StringUtils.equals(entry.getKey(),
-											"def")) {
+											"def")&& !StringUtils.equals(entry.getKey(),
+													"eur")) {
 								lang = new ResourceOrLiteralType.Lang();
 								lang.setLang(entry.getKey());
 							}
