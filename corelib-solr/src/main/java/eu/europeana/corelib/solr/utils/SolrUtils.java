@@ -43,6 +43,7 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.beans.RichBean;
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
@@ -61,6 +62,8 @@ import java.util.Collection;
  *
  */
 public final class SolrUtils {
+
+	private static Logger log = Logger.getLogger(SolrUtils.class.getCanonicalName());
 
 	@Resource
 	private static WikipediaApiService wikipediaApiService;
@@ -477,14 +480,19 @@ public final class SolrUtils {
 
 	public static List<LanguageVersion> translateQuery(String query,
 			List<String> languages) {
-		List<LanguageVersion> queryTranslations = null;
-		if (isSimpleQuery(query)) {
+		List<LanguageVersion> queryTranslations = new ArrayList<LanguageVersion>();
+		// if (isSimpleQuery(query)) {
 			if (wikipediaApiService == null) {
 				wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
 			}
-			queryTranslations = wikipediaApiService.getLanguageLinks(query,
-					languages);
-		}
+			QueryExtractor queryExtractor = new QueryExtractor(query);
+			List<String> queryTerms = queryExtractor.extractTerms(true);
+			for (String queryTerm : queryTerms) {
+				List<LanguageVersion> terms = wikipediaApiService.getVersionsInMultiLanguage(queryTerm, languages);
+				log.info("terms: " + StringUtils.join(terms, ", "));
+				queryTranslations.addAll(terms);
+			}
+		// }
 		return queryTranslations;
 	}
 
@@ -563,6 +571,6 @@ public final class SolrUtils {
 	}
 
 	public static String normalizeBooleans(String query) {
-		return QueryParser.normalizeBooleans(query);
+		return QueryNormalizer.normalizeBooleans(query);
 	}
 }

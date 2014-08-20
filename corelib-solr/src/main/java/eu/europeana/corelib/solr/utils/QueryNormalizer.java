@@ -2,7 +2,7 @@ package eu.europeana.corelib.solr.utils;
 
 import org.apache.commons.lang.StringUtils;
 
-public class QueryParser {
+public class QueryNormalizer {
 
 	public static String normalizeBooleans(String query) {
 		if (isSimpleBoolean(query)) {

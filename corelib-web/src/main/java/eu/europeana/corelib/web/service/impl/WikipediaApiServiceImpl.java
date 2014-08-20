@@ -38,14 +38,18 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 
 	public WikipediaApiServiceImpl() {}
 
-	public List<LanguageVersion> getLanguageLinks(String titles, List<String> languages) {
+	/**
+	 * Returns the list of language versions in multiple languages
+	 */
+	@Override
+	public List<LanguageVersion> getVersionsInMultiLanguage(String title, List<String> languages) {
 		List<LanguageVersion> translations = new ArrayList<LanguageVersion>();
 		List<String> smallCaseTranslations = new ArrayList<String>();
 		for (String languageCode : languages) {
 			if (StringUtils.isBlank(languageCode)) {
 				continue;
 			}
-			Map<String, String> langVersions = getLanguageLinks(titles, languageCode);
+			Map<String, String> langVersions = getVersionsInLanguage(title, languageCode);
 			for (String language : languages) {
 				if (langVersions.containsKey(language)
 					&& StringUtils.isNotBlank(langVersions.get(language))) {
@@ -60,9 +64,13 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 		return translations;
 	}
 
+	/**
+	 * Returns the map of language code - language version, 
+	 * such as ("fr" - "Mona Lisa", "fr" - "La Joconde", ...)
+	 */
 	@Override
-	public Map<String, String> getLanguageLinks(String titles, String languageCode) {
-		String url = buildLanguageLinksUrl(titles, languageCode);
+	public Map<String, String> getVersionsInLanguage(String title, String languageCode) {
+		String url = buildLanguageLinksUrl(title, languageCode);
 		ApiResult result = getJsonResponse(url);
 		WikipediaQuery wikipediaQuery = parseJson(result);
 		return extractLanguageVersions(wikipediaQuery, languageCode);

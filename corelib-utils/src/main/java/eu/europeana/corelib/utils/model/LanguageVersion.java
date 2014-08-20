@@ -1,5 +1,10 @@
 package eu.europeana.corelib.utils.model;
 
+/**
+ * A simple class for holding information about a text and its language code.
+ * 
+ * @author Peter.Kiraly@europeana.eu
+ */
 public class LanguageVersion implements Comparable<LanguageVersion> {
 
 	protected String text;

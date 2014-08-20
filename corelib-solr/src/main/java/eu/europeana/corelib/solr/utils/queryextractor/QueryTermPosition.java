@@ -1,16 +1,24 @@
 package eu.europeana.corelib.solr.utils.queryextractor;
 
-public class QueryTerm {
+public class QueryTermPosition {
+
 	private int start;
 	private int end;
 	private String transformed;
 	private String original;
+	private int position;
 
-	public QueryTerm(int start, int end, String transformed, String original) {
+	public QueryTermPosition(int start, int end, String transformed, String original, int position) {
 		this.start = start;
 		this.end = end;
 		this.transformed = transformed;
 		this.original = original;
+		this.position = position;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%d) %s -> %s (%d-%d)", position, original, transformed, start, end);
 	}
 
 	public int getStart() {
@@ -43,5 +51,9 @@ public class QueryTerm {
 
 	public void setOriginal(String original) {
 		this.original = original;
+	}
+
+	public int getPosition() {
+		return position;
 	}
 }

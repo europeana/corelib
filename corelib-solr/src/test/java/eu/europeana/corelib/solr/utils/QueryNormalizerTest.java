@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import eu.europeana.corelib.solr.utils.QueryParser;
+import eu.europeana.corelib.solr.utils.QueryNormalizer;
 
-public class QueryParserTest {
+public class QueryNormalizerTest {
 
 	@Test
 	public void test() {
@@ -25,7 +25,7 @@ public class QueryParserTest {
 		for (int i = 0; i < rawQueries.length; i++) {
 			assertEquals(
 				normalizedQueries[i],
-				QueryParser.normalizeBooleans(rawQueries[i])
+				QueryNormalizer.normalizeBooleans(rawQueries[i])
 			);
 		}
 	}
