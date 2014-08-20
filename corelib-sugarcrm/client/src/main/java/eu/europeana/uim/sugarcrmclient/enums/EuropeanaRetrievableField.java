@@ -20,15 +20,13 @@
  */
 package eu.europeana.uim.sugarcrmclient.enums;
 
-
-
-
 /**
  *  This enumeration indicates the Fields that should be just retrieved
  *  by the SugarCRM client. 
  * @author Georgios Markakis
  */
 public enum EuropeanaRetrievableField {
+
 	ID("id", "id", "ID"),
 	NAME("name", "collectionID", "Name"),
 	DATE_ENTERED("date_entered", "date_entered", "Date Entered"),

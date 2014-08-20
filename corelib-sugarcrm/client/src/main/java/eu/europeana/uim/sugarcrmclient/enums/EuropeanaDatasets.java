@@ -20,36 +20,29 @@
  */
 package eu.europeana.uim.sugarcrmclient.enums;
 
-
-
 /**
  * Enumerations holding the names of the system modules in sugarCRM currently being used
  * 
  * @author Georgios Markakis
  */
-public enum EuropeanaDatasets{
+public enum EuropeanaDatasets {
+
 	ORGANIZATIONS("Accounts"),
 	DATASETS("Opportunities");
-	
+
 	private final String sysId;
-	
-	
+
 	/**
 	 * @param sysId
 	 */
 	EuropeanaDatasets(String sysId){
 		this.sysId = sysId;
-
 	}
-
 
 	/**
 	 * @return
 	 */
-    public String getSysId() {
+	public String getSysId() {
 		return sysId;
 	}
-
-
-
 }

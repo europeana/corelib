@@ -40,7 +40,7 @@ public enum EuropeanaDatasetStates {
 	private final String sysId;
 	private final String description;
 
-	EuropeanaDatasetStates(String sysId, String description){
+	EuropeanaDatasetStates(String sysId, String description) {
 		this.sysId = sysId;
 		this.description = description;
 	}

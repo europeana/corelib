@@ -43,20 +43,21 @@ import eu.europeana.corelib.dereference.VocabularyMongoServer;
  *
  */
 public class VocabularyMongoServerTest {
+
 	VocabularyMongoServer server;
+
 	@Test
 	public void test(){
 		int port = 10000;
-		MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
-				false);
+		MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
 
 		MongodStarter runtime = MongodStarter.getDefaultInstance();
 
 		MongodExecutable mongodExecutable = runtime.prepare(conf);
-		
+
 		try {
 			mongodExecutable.start();
-			server = new VocabularyMongoServerImpl(new Mongo("localhost",port), "vocTest");
+			server = new VocabularyMongoServerImpl(new Mongo("localhost", port), "vocTest");
 			ControlledVocabularyImpl voc = new ControlledVocabularyImpl();
 			voc.setName("name");
 			voc.setLocation("location");
@@ -83,9 +84,10 @@ public class VocabularyMongoServerTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		server.getDatastore().getDB().dropDatabase();
+
+		if (server != null) {
+			server.getDatastore().getDB().dropDatabase();
+		}
 		mongodExecutable.stop();
-		
 	}
-	
 }

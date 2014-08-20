@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +25,8 @@ import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.utils.model.DateInterval;
 
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
+ @RunWith(SpringJUnit4ClassRunner.class)
+ @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class ApiLogServiceTest {
 
 	String apiKey = "testKey";
@@ -44,7 +45,7 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @Before
+	 @Before
 	public void setup() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
@@ -54,12 +55,12 @@ public class ApiLogServiceTest {
 	 * 
 	 * @throws IOException
 	 */
-	// @After
+	 @After
 	public void tearDown() throws IOException {
 		apiLogDao.getCollection().drop();
 	}
 
-	// @Test
+	@Test
 	public void testCountByApiKeyByInterval() throws CloneNotSupportedException {
 		DateInterval interval = DateIntervalUtils.getToday();
 
@@ -70,14 +71,18 @@ public class ApiLogServiceTest {
 		apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
 		apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
 
+		// Give the system some time to process the requests;
+		// rather than force the system to sleep, use a time in the future
+		DateTime dt = new DateTime().plusMillis(50);
+
 		// the interval contains the end date, which was before insertions, so we have to refresh it.
-		interval.setEnd(new Date());
+		interval.setEnd(dt.toDate());
 		long count2 = apiLogService.countByIntervalAndApiKey(interval, apiKey);
 		assertNotNull(count2);
 		assertEquals(2, count2);
 	}
 
-	// @Test
+	@Test
 	public void testCountByApiKey() {
 		long count = apiLogService.countByApiKey(apiKey);
 		assertNotNull(count);
@@ -91,7 +96,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, count);
 	}
 
-	// @Test
+	@Test
 	public void testFindByApiKey() {
 		List<ApiLog> logs = apiLogService.findByApiKey(apiKey);
 		assertNotNull(logs);
@@ -105,7 +110,7 @@ public class ApiLogServiceTest {
 		assertEquals(2, logs.size());
 	}
 
-	// @Test
+	@Test
 	public void testCountByInterval() {
 		DateInterval interval = DateIntervalUtils.getToday();
 

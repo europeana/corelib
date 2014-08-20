@@ -152,6 +152,7 @@ public class SearchServiceTest {
 				"modell moderner pianinomechanik");
 	}
 
+	/*
 	@Test
 	public void findAllTest() throws SolrTypeException {
 		testCount++;
@@ -165,7 +166,6 @@ public class SearchServiceTest {
 				+ results.getFacetFields().size(), results.getFacetFields()
 				.size() == 8);
 	}
-
 	@Test
 	public void findAllWithTextFilterTest() throws SolrTypeException {
 		testCount++;
@@ -179,6 +179,7 @@ public class SearchServiceTest {
 				+ results.getResultSize(), results.getResultSize() == 195);
 
 	}
+	 */
 
 	@Test
 	public void testSpellCheck() throws SolrTypeException {

@@ -11,13 +11,13 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 public class NosqlDaoImpl<E extends NoSqlEntity, T extends Serializable> extends BasicDAO<E, T> implements NosqlDao<E, T> {
 
 	private Class<E> clazz;
-	
+
 	public NosqlDaoImpl(Datastore datastore, Class<E> clazz) {
 		super(clazz, datastore);
 		datastore.getDB().slaveOk();
 		this.clazz = clazz;
 	}
-	
+
 	@Override
 	public void deleteAll() {
 		try {
