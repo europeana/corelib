@@ -322,7 +322,7 @@ public class FullBeanHandler implements ICollection {
     }
 
     @Override
-    public IDocument getDocumentById(IDocument id) {
+    public IDocument getDocumentById(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
