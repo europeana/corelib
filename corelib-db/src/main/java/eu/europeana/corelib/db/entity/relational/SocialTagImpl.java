@@ -66,6 +66,9 @@ public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag 
 		if (this.getDateSaved().before(o.getDateSaved())) {
 			return 1;
 		}
+		if (this.getDateSaved().after(o.getDateSaved())) {
+			return -1;
+		}
 		return 0;
 	}
 }
