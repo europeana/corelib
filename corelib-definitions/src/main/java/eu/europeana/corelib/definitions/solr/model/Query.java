@@ -115,9 +115,14 @@ public class Query implements Cloneable {
 	}
 
 	public String getQuery(boolean withTranslations) {
-		StringBuffer concatenatedQuery = new StringBuffer(getQuery());
+		StringBuffer concatenatedQuery = new StringBuffer();
 		if (withTranslations && !CollectionUtils.isEmpty(getQueryTranslations())) {
-			concatenatedQuery.append(" OR ").append(concatenateQueryTranslations());
+			concatenatedQuery
+				.append("(").append(getQuery()).append(")")
+				.append(" OR ")
+				.append(concatenateQueryTranslations());
+		} else {
+			concatenatedQuery.append(getQuery());
 		}
 		return concatenatedQuery.toString();
 	}
