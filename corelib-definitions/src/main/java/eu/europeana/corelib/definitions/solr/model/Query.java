@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
@@ -57,7 +56,7 @@ public class Query implements Cloneable {
 
 	private String[] refinements;
 
-	private List<LanguageVersion> queryTranslations;
+	private QueryTranslation queryTranslation;
 
 	private Map<String, String> valueReplacements;
 
@@ -115,20 +114,12 @@ public class Query implements Cloneable {
 	}
 
 	public String getQuery(boolean withTranslations) {
-		StringBuffer concatenatedQuery = new StringBuffer();
-		if (withTranslations && !CollectionUtils.isEmpty(getQueryTranslations())) {
-			concatenatedQuery
-				.append("(").append(getQuery()).append(")")
-				.append(" OR ")
-				.append(concatenateQueryTranslations());
-		} else {
-			concatenatedQuery.append(getQuery());
+		if (withTranslations == true
+			&& queryTranslation != null
+			&& StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
+			return queryTranslation.getModifiedQuery();
 		}
-		return concatenatedQuery.toString();
-	}
-
-	private String concatenateQueryTranslations() {
-		return concatenateQueryTranslations(getQueryTranslations());
+		return query;
 	}
 
 	public Query setQuery(String query) {
@@ -178,13 +169,13 @@ public class Query implements Cloneable {
 		return this;
 	}
 
-	public List<LanguageVersion> getQueryTranslations() {
-		return queryTranslations;
+	public Query setQueryTranslation(QueryTranslation queryTranslation) {
+		this.queryTranslation = queryTranslation;
+		return this;
 	}
 
-	public Query setQueryTranslations(List<LanguageVersion> queryTranslations) {
-		this.queryTranslations = queryTranslations;
-		return this;
+	public QueryTranslation getQueryTranslation() {
+		return queryTranslation;
 	}
 
 	public Query addFacetQuery(QueryFacet queryFacet) {

@@ -8,6 +8,12 @@ public class QueryTermPosition {
 	private String original;
 	private int position;
 
+	public QueryTermPosition(int start, int end, String original) {
+		this.start = start;
+		this.end = end;
+		this.original = original;
+	}
+
 	public QueryTermPosition(int start, int end, String transformed, String original, int position) {
 		this.start = start;
 		this.end = end;
@@ -56,4 +62,10 @@ public class QueryTermPosition {
 	public int getPosition() {
 		return position;
 	}
+
+	@Override
+	protected QueryTermPosition clone() throws CloneNotSupportedException {
+		return new QueryTermPosition(start, end, new String(transformed), new String(original), position);
+	}
+
 }

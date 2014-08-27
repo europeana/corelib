@@ -43,11 +43,16 @@ import eu.europeana.corelib.definitions.solr.beans.ApiBean;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.beans.RichBean;
-import eu.europeana.corelib.logging.Logger;
+import eu.europeana.corelib.definitions.solr.model.QueryTranslation;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryExtractor;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryModification;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryNormalizer;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryToken;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryType;
 import eu.europeana.corelib.utils.model.LanguageVersion;
 import eu.europeana.corelib.web.service.WikipediaApiService;
 import eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl;
@@ -62,8 +67,6 @@ import java.util.Collection;
  *
  */
 public final class SolrUtils {
-
-	private static Logger log = Logger.getLogger(SolrUtils.class.getCanonicalName());
 
 	@Resource
 	private static WikipediaApiService wikipediaApiService;
@@ -478,22 +481,39 @@ public final class SolrUtils {
 		return list;
 	}
 
-	public static List<LanguageVersion> translateQuery(String query,
+	public static QueryTranslation translateQuery(String query,
 			List<String> languages) {
-		List<LanguageVersion> queryTranslations = new ArrayList<LanguageVersion>();
-		// if (isSimpleQuery(query)) {
-			if (wikipediaApiService == null) {
-				wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
+		QueryTranslation queryTranslation = new QueryTranslation();
+		if (wikipediaApiService == null) {
+			wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
+		}
+		QueryExtractor queryExtractor = new QueryExtractor(query);
+		String modifiedQuery = new String(query);
+		List<QueryToken> queryTokens = queryExtractor.extractInfo(true);
+		List<QueryModification> queryModifications = new ArrayList<QueryModification>();
+		for (QueryToken token : queryTokens) {
+			if (!token.getType().equals(QueryType.TERMRANGE)) {
+				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
+				token.getExtendedPosition();
+				queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
+				QueryModification queryModification = token.createModification(modifiedQuery, 
+						extractLanguageVersions(languageVersions));
+				if (queryModification != null) {
+					queryModifications.add(queryModification);
+				}
 			}
-			QueryExtractor queryExtractor = new QueryExtractor(query);
-			List<String> queryTerms = queryExtractor.extractTerms(true);
-			for (String queryTerm : queryTerms) {
-				List<LanguageVersion> terms = wikipediaApiService.getVersionsInMultiLanguage(queryTerm, languages);
-				log.info("terms: " + StringUtils.join(terms, ", "));
-				queryTranslations.addAll(terms);
-			}
-		// }
-		return queryTranslations;
+		}
+		queryTranslation.sortLanguageVersions();
+		queryTranslation.setModifiedQuery(queryExtractor.rewrite(queryModifications));
+		return queryTranslation;
+	}
+
+	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
+		List<String> terms = new ArrayList<String>();
+		for (LanguageVersion languageVersion : languageVersions) {
+			terms.add(languageVersion.getText());
+		}
+		return terms;
 	}
 
 	public static boolean isSimpleQuery(String queryTerm) {
@@ -572,5 +592,29 @@ public final class SolrUtils {
 
 	public static String normalizeBooleans(String query) {
 		return QueryNormalizer.normalizeBooleans(query);
+	}
+
+	public static void translateQuery(String rawQueryString, QueryTranslation translatedQueries) {
+		Map<String, List<LanguageVersion>> languageVersionMap = translatedQueries.getSortedMap();
+		int lastPart = 0;
+		String rewritten = "";
+		for (String key : languageVersionMap.keySet()) {
+			String[] parts = key.split(":", 2);
+			int start = Integer.parseInt(parts[0]);
+			int end = Integer.parseInt(parts[1]);
+			rewritten += rawQueryString.substring(lastPart, start);
+			String query = rawQueryString.substring(start, end);
+			lastPart = end;
+			List<String> languageVersions = extractLanguageVersions(languageVersionMap.get(key));
+			if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
+				query = "(" + query + ")";
+			}
+			String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
+			rewritten += modification;
+		}
+		if (lastPart < rawQueryString.length()) {
+			rewritten += rawQueryString.substring(lastPart);
+		}
+		translatedQueries.setModifiedQuery(rewritten);
 	}
 }
