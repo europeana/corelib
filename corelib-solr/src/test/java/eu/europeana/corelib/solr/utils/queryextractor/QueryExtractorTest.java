@@ -1,15 +1,20 @@
-package eu.europeana.corelib.solr.utils;
+package eu.europeana.corelib.solr.utils.queryextractor;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
+
+import eu.europeana.corelib.solr.utils.queryextractor.QueryExtractor;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryToken;
 
 public class QueryExtractorTest {
 
 	@Test
-	public void testParseQuery() {
+	public void testExtractTerms() {
 		assertEquals(Arrays.asList("spinoza"), new QueryExtractor("spinoza").extractTerms());
 		assertEquals(Arrays.asList("den", "haag"), new QueryExtractor("den haag").extractTerms());
 		assertEquals(Arrays.asList("den haag"), new QueryExtractor("den haag").extractTerms(true));
@@ -37,7 +42,7 @@ public class QueryExtractorTest {
 		assertEquals(Arrays.asList("den", "haag"), new QueryExtractor("den NOT haag").extractTerms(true));
 		assertEquals(Arrays.asList("den haag"), new QueryExtractor("\"den haag\"").extractTerms());
 		assertEquals(Arrays.asList("den haag"), new QueryExtractor("\"den haag\"").extractTerms(true));
-		assertEquals(Arrays.asList("den haag"), new QueryExtractor("\"den, haag\"").extractTerms());
+		assertEquals(Arrays.asList("den, haag"), new QueryExtractor("\"den, haag\"").extractTerms());
 		assertEquals(Arrays.asList("den, haag"), new QueryExtractor("\"den, haag\"").extractTerms(true));
 		assertEquals(Arrays.asList("den", "haag", "den haag"), 
 				new QueryExtractor("den OR haag OR \"den haag\"").extractTerms());
@@ -59,6 +64,14 @@ public class QueryExtractorTest {
 		assertEquals(Arrays.asList("Spinoza"), new QueryExtractor("Spinoza~").extractTerms(true));
 		assertEquals(Arrays.asList("spinoza"), new QueryExtractor("spinoza~0.3").extractTerms());
 		assertEquals(Arrays.asList("Spinoza"), new QueryExtractor("Spinoza~0.3").extractTerms(true));
+		assertEquals(Arrays.asList("Spinoza", "spinoza"), new QueryExtractor("Spinoza OR spinoza").extractTerms());
+		assertEquals(Arrays.asList("Spinoza", "spinoza"), new QueryExtractor("Spinoza OR spinoza").extractTerms(true));
+		assertEquals(Arrays.asList("apples"), new QueryExtractor("apples").extractTerms());
+		assertEquals(Arrays.asList("apples"), new QueryExtractor("apples").extractTerms(true));
+	}
+
+	@Test
+	public void testTermRangeQueries() {
 		assertEquals(Arrays.asList("1989", "1990"), new QueryExtractor("year:[1989 TO 1990]").extractTerms());
 		assertEquals(Arrays.asList("1989", "1990"), new QueryExtractor("year:[1989 TO 1990]").extractTerms(true));
 		assertEquals(Arrays.asList("1989", "1990"), new QueryExtractor("year:[1989 TO 1990}").extractTerms());
@@ -75,9 +88,46 @@ public class QueryExtractorTest {
 		assertEquals(Arrays.asList("2013-03-15t19:58:36.43z", "2013-04-15t19:58:36.43z"),
 			new QueryExtractor(
 				"timestamp_created:[2013-03-15T19:58:36.43Z TO 2013-04-15T19:58:36.43Z]").extractTerms());
-		assertEquals(Arrays.asList("Spinoza", "spinoza"), new QueryExtractor("Spinoza OR spinoza").extractTerms());
-		assertEquals(Arrays.asList("Spinoza", "spinoza"), new QueryExtractor("Spinoza OR spinoza").extractTerms(true));
-		assertEquals(Arrays.asList("apples"), new QueryExtractor("apples").extractTerms());
-		assertEquals(Arrays.asList("apples"), new QueryExtractor("apples").extractTerms(true));
+	}
+
+	@Test
+	public void testPhraseTerms() {
+		assertEquals(Arrays.asList("den, haag"), new QueryExtractor("\"den, haag\"").extractTerms());
+		assertEquals(Arrays.asList("den haag"), new QueryExtractor("\"den haag\"").extractTerms());
+	}
+
+	@Test
+	public void testExtractInfo() {
+		List<QueryToken> tokens = new QueryExtractor("\"den, haag\"").extractInfo(true);
+		assertEquals(1, tokens.size());
+		assertEquals("den, haag", tokens.get(0).getPosition().getOriginal());
+		assertEquals(1, tokens.get(0).getPosition().getStart());
+		assertEquals(10, tokens.get(0).getPosition().getEnd());
+		assertEquals(QueryType.PHRASE, tokens.get(0).getType());
+
+		tokens = new QueryExtractor("\"den haag\"").extractInfo(true);
+		assertEquals(1, tokens.size());
+		assertEquals("den haag", tokens.get(0).getPosition().getOriginal());
+		assertEquals(1, tokens.get(0).getPosition().getStart());
+		assertEquals(9, tokens.get(0).getPosition().getEnd());
+		assertEquals(QueryType.PHRASE, tokens.get(0).getType());
+	}
+
+	@Test
+	public void testInjectAlternatives() {
+		String query = "la joconde";
+		String modifiedQuery = query;
+		List<String> alternatives = Arrays.asList("la gioconda", "mona lisa");
+		QueryExtractor queryExtractor = new QueryExtractor(query);
+		List<QueryToken> tokens = queryExtractor.extractInfo(true);
+		List<QueryModification> queryModifications = new ArrayList<QueryModification>();
+		for (QueryToken token : tokens) {
+			QueryModification queryModification = token.createModification(query, alternatives);
+			if (queryModification != null) {
+				queryModifications.add(queryModification);
+			}
+		}
+		modifiedQuery = queryExtractor.rewrite(queryModifications);
+		assertEquals("(la joconde) OR \"la gioconda\" OR \"mona lisa\"", modifiedQuery);
 	}
 }

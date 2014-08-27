@@ -94,6 +94,13 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
+		<!-- Enable this for the harvester client
+		<dependency>
+			<groupId>eu.europeana</groupId>
+			<artifactId>harvester-client</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		 -->
 
 		<!-- TESTING -->
 		<dependency>

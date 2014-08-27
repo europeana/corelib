@@ -1,10 +1,10 @@
-package eu.europeana.corelib.solr.utils;
+package eu.europeana.corelib.solr.utils.queryextractor;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import eu.europeana.corelib.solr.utils.QueryNormalizer;
+import eu.europeana.corelib.solr.utils.queryextractor.QueryNormalizer;
 
 public class QueryNormalizerTest {
 
