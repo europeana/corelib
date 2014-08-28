@@ -3,7 +3,9 @@ package eu.europeana.corelib.solr.utils.queryextractor;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +33,7 @@ import eu.europeana.corelib.solr.utils.SimpleAnalyzer;
 
 public class QueryExtractor {
 
-	private Logger logger = Logger.getLogger(QueryExtractor.class.getCanonicalName());
+	private Logger log = Logger.getLogger(QueryExtractor.class.getCanonicalName());
 
 	private static Analyzer analyzer = new SimpleAnalyzer();
 
@@ -73,16 +75,30 @@ public class QueryExtractor {
 	}
 
 	public String rewrite(List<QueryModification> modifications) {
-		String rewriten = rawQueryString;
+		boolean[] mask = new boolean[rawQueryString.length()];
+		Map<Integer, String> map = new HashMap<Integer, String>();
 		for (int i = modifications.size()-1; i >= 0; i--) {
 			QueryModification modification = modifications.get(i);
 			if (modification != null) {
-				rewriten = (modification.getStart() > 0 ? rewriten.substring(0, modification.getStart()-1) : "")
-					+ modification.getModification()
-					+ (modification.getEnd() < rewriten.length() ? rewriten.substring(modification.getEnd()) : "");
+				for (int j = modification.getStart(); j < modification.getEnd(); j++) {
+					mask[j] = true;
+				}
+				map.put(modification.getStart(), modification.getModification());
 			}
 		}
-		return rewriten;
+		String rewritten = "";
+		boolean lastValue = false;
+		for (int i = 0; i < mask.length; i++) {
+			if (mask[i] == false) {
+				rewritten += rawQueryString.substring(i, i+1);
+			} else {
+				if (lastValue == false) {
+					rewritten += map.get(i);
+				}
+			}
+			lastValue = mask[i];
+		}
+		return rewritten;
 	}
 
 	private void parseQuery() {
@@ -168,7 +184,7 @@ public class QueryExtractor {
 					token.setPosition(new QueryTermPosition(start, end, foundPart, original, pos));
 				}
 			} else {
-				logger.debug("token not found for: " + token.getNormalizedQueryTerm());
+				log.debug("token not found for: " + token.getNormalizedQueryTerm());
 			}
 		}
 	}
@@ -201,7 +217,7 @@ public class QueryExtractor {
 			queryTypeStack.add(QueryType.TERMRANGE);
 			deconstructTermRangeQuery((TermRangeQuery)query, queryTypeStack);
 		} else {
-			logger.debug("Unhandled query class: " + query.getClass());
+			log.debug("Unhandled query class: " + query.getClass());
 		}
 		queryTypeStack.pop();
 		return true;

@@ -18,8 +18,10 @@ package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -481,8 +483,7 @@ public final class SolrUtils {
 		return list;
 	}
 
-	public static QueryTranslation translateQuery(String query,
-			List<String> languages) {
+	public static QueryTranslation translateQuery(String query, List<String> languages) {
 		QueryTranslation queryTranslation = new QueryTranslation();
 		if (wikipediaApiService == null) {
 			wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
@@ -495,11 +496,15 @@ public final class SolrUtils {
 			if (!token.getType().equals(QueryType.TERMRANGE)) {
 				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
 				token.getExtendedPosition();
-				queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
-				QueryModification queryModification = token.createModification(modifiedQuery, 
-						extractLanguageVersions(languageVersions));
-				if (queryModification != null) {
-					queryModifications.add(queryModification);
+				if (languageVersions.size() > 0) {
+					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
+					List<String> alternatives = extractLanguageVersions(languageVersions);
+					if (alternatives.size() > 0) {
+						QueryModification queryModification = token.createModification(modifiedQuery, alternatives);
+						if (queryModification != null) {
+							queryModifications.add(queryModification);
+						}
+					}
 				}
 			}
 		}
@@ -509,11 +514,16 @@ public final class SolrUtils {
 	}
 
 	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
-		List<String> terms = new ArrayList<String>();
+		List<String> termsList = new ArrayList<String>();
+		Set<String> terms = new HashSet<String>();
 		for (LanguageVersion languageVersion : languageVersions) {
-			terms.add(languageVersion.getText());
+			String text = languageVersion.getText();
+			if (StringUtils.isNotBlank(text)) {
+				terms.add(languageVersion.getText());
+			}
 		}
-		return terms;
+		termsList.addAll(terms);
+		return termsList;
 	}
 
 	public static boolean isSimpleQuery(String queryTerm) {
@@ -606,11 +616,13 @@ public final class SolrUtils {
 			String query = rawQueryString.substring(start, end);
 			lastPart = end;
 			List<String> languageVersions = extractLanguageVersions(languageVersionMap.get(key));
-			if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
-				query = "(" + query + ")";
+			if (languageVersions != null && languageVersions.size() > 0) {
+				if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
+					query = "(" + query + ")";
+				}
+				String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
+				rewritten += modification;
 			}
-			String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
-			rewritten += modification;
 		}
 		if (lastPart < rawQueryString.length()) {
 			rewritten += rawQueryString.substring(lastPart);

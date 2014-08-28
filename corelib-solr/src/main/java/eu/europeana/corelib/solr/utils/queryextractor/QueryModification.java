@@ -41,6 +41,4 @@ public class QueryModification {
 	public String toString() {
 		return String.format("QueryModification: %s (%d-%d)", modification, start, end);
 	}
-	
-	
 }
