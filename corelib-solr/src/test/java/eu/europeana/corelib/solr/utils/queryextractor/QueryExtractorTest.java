@@ -132,11 +132,14 @@ public class QueryExtractorTest {
 
 		queryExtractor = new QueryExtractor("(mona lisa) OR (den haag)");
 		queryModifications = new ArrayList<QueryModification>();
-		queryModifications.add(new QueryModification(1, 10, "((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")"));
-		queryModifications.add(new QueryModification(16, 24, "((den haag) OR \"The Hague\" OR \"Den Haag\" OR \"Haag\" OR \"La Haye\" OR \"L'Aia\" OR \"Hága\")"));
+		queryModifications.add(new QueryModification(1, 10, 
+				"((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")"));
+		queryModifications.add(new QueryModification(16, 24, 
+				"((den haag) OR \"The Hague\" OR \"Den Haag\" OR \"Haag\" OR "
+				+ "\"La Haye\" OR \"L'Aia\" OR \"Haga\")"));
 		modifiedQuery = queryExtractor.rewrite(queryModifications);
 		assertEquals("(((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")) OR (((den haag) OR \"The Hague\" "
-				+ "OR \"Den Haag\" OR \"Haag\" OR \"La Haye\" OR \"L'Aia\" OR \"Hága\"))", modifiedQuery);
+				+ "OR \"Den Haag\" OR \"Haag\" OR \"La Haye\" OR \"L'Aia\" OR \"Haga\"))", modifiedQuery);
 
 	}
 }
