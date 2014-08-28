@@ -3,7 +3,6 @@ package eu.europeana.corelib.solr.utils.queryextractor;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,26 +75,28 @@ public class QueryExtractor {
 	}
 
 	public String rewrite(List<QueryModification> modifications) {
-		BitSet mask = new BitSet(rawQueryString.length());
+		boolean[] mask = new boolean[rawQueryString.length()];
 		Map<Integer, String> map = new HashMap<Integer, String>();
 		for (int i = modifications.size()-1; i >= 0; i--) {
 			QueryModification modification = modifications.get(i);
 			if (modification != null) {
-				mask.flip(modification.getStart(), modification.getEnd());
+				for (int j = modification.getStart(); j < modification.getEnd(); j++) {
+					mask[j] = true;
+				}
 				map.put(modification.getStart(), modification.getModification());
 			}
 		}
 		String rewritten = "";
 		boolean lastValue = false;
-		for (int i = 0; i <= mask.length(); i++) {
-			if (mask.get(i) == false) {
+		for (int i = 0; i < mask.length; i++) {
+			if (mask[i] == false) {
 				rewritten += rawQueryString.substring(i, i+1);
 			} else {
 				if (lastValue == false) {
 					rewritten += map.get(i);
 				}
 			}
-			lastValue = mask.get(i);
+			lastValue = mask[i];
 		}
 		return rewritten;
 	}
