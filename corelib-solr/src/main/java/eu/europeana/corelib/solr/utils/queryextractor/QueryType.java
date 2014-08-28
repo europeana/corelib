@@ -11,9 +11,9 @@ public enum QueryType {
 	PREFIX("PrefixQuery"),
 	FUZZY("FuzzyQuery"),
 	TERMRANGE("TermRangeQuery");
-	
+
 	private String type;
-	
+
 	private QueryType(String type) {
 		this.type = type;
 	}

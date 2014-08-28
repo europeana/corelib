@@ -42,5 +42,4 @@ public enum Facet {
 	public String toString(){
 		return facet;
 	}
-
 }

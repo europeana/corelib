@@ -5,7 +5,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 
 @SuppressWarnings("serial")
 public class InvalidUrlException extends EuropeanaException {
-	
+
 	public InvalidUrlException() {
 		super(ProblemType.INVALID_URL);
 	}

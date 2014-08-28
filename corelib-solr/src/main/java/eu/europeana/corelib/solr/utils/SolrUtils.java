@@ -481,8 +481,7 @@ public final class SolrUtils {
 		return list;
 	}
 
-	public static QueryTranslation translateQuery(String query,
-			List<String> languages) {
+	public static QueryTranslation translateQuery(String query, List<String> languages) {
 		QueryTranslation queryTranslation = new QueryTranslation();
 		if (wikipediaApiService == null) {
 			wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
@@ -495,11 +494,15 @@ public final class SolrUtils {
 			if (!token.getType().equals(QueryType.TERMRANGE)) {
 				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
 				token.getExtendedPosition();
-				queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
-				QueryModification queryModification = token.createModification(modifiedQuery, 
-						extractLanguageVersions(languageVersions));
-				if (queryModification != null) {
-					queryModifications.add(queryModification);
+				if (languageVersions.size() > 0) {
+					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
+					List<String> alternatives = extractLanguageVersions(languageVersions);
+					if (alternatives.size() > 0) {
+						QueryModification queryModification = token.createModification(modifiedQuery, alternatives);
+						if (queryModification != null) {
+							queryModifications.add(queryModification);
+						}
+					}
 				}
 			}
 		}
@@ -511,7 +514,10 @@ public final class SolrUtils {
 	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
 		List<String> terms = new ArrayList<String>();
 		for (LanguageVersion languageVersion : languageVersions) {
-			terms.add(languageVersion.getText());
+			String text = languageVersion.getText();
+			if (StringUtils.isNotBlank(text)) {
+				terms.add(languageVersion.getText());
+			}
 		}
 		return terms;
 	}
@@ -606,11 +612,13 @@ public final class SolrUtils {
 			String query = rawQueryString.substring(start, end);
 			lastPart = end;
 			List<String> languageVersions = extractLanguageVersions(languageVersionMap.get(key));
-			if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
-				query = "(" + query + ")";
+			if (languageVersions != null && languageVersions.size() > 0) {
+				if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
+					query = "(" + query + ")";
+				}
+				String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
+				rewritten += modification;
 			}
-			String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
-			rewritten += modification;
 		}
 		if (lastPart < rawQueryString.length()) {
 			rewritten += rawQueryString.substring(lastPart);

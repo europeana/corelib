@@ -77,7 +77,7 @@ public class QueryToken {
 	}
 
 	public QueryModification createModification(String rawQueryString, List<String> alternatives) {
-		if (getType().equals(QueryType.TERMRANGE)) {
+		if (alternatives.size() == 0 || getType().equals(QueryType.TERMRANGE)) {
 			return null;
 		}
 		int start = position.getStart();
@@ -108,5 +108,4 @@ public class QueryToken {
 		}
 		return String.format("%d:%d", start, end);
 	}
-
 }
