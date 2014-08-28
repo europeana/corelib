@@ -3,8 +3,11 @@ package eu.europeana.corelib.solr.utils.queryextractor;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -74,18 +77,42 @@ public class QueryExtractor {
 
 	public String rewrite(List<QueryModification> modifications) {
 		String rewritten = "";
+		log.info("rawQueryString: " + rawQueryString + ", size: " + rawQueryString.length());
+		BitSet bits = new BitSet(rawQueryString.length());
+		Map<Integer, String> map = new TreeMap<Integer, String>();
 		int lastEnd = 0;
 		for (int i = modifications.size()-1; i >= 0; i--) {
 			QueryModification modification = modifications.get(i);
 			if (modification != null) {
-				rewritten += (modification.getStart() > 0 ? rawQueryString.substring(lastEnd, modification.getStart()-1) : "");
+				bits.flip(modification.getStart(), modification.getEnd());
+				map.put(modification.getStart(), modification.getModification());
+				/*
+				log.info("modification: " + modification);
+				log.info("extract from " + lastEnd + "-" + (modification.getStart()-1) + " " + modification.getModification());
+				rewritten += (modification.getStart() > 0 ? rawQueryString.substring(lastEnd, (modification.getStart()-1)) : "");
 				rewritten += modification.getModification();
 				lastEnd = modification.getEnd() + 1;
+				*/
 			}
 		}
-		if (lastEnd < rawQueryString.length()) {
+		boolean lastValue = false;
+		for (int i = 0; i<bits.length(); i++) {
+			if (bits.get(i) == false) {
+				log.info(rawQueryString.substring(i, i+1));
+				rewritten += rawQueryString.substring(i, i+1);
+			} else {
+				if (lastValue == false) {
+					rewritten += map.get(i);
+				}
+			}
+			lastValue = bits.get(i);
+		}
+		log.info("rewritten: " + rewritten);
+		/*
+		if (lastEnd <= rawQueryString.length()-1) {
 			rewritten += rawQueryString.substring(lastEnd);
 		}
+		*/
 		return rewritten;
 	}
 

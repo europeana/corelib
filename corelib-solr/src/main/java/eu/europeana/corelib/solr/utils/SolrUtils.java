@@ -18,8 +18,10 @@ package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +46,7 @@ import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.beans.RichBean;
 import eu.europeana.corelib.definitions.solr.model.QueryTranslation;
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
@@ -67,6 +70,8 @@ import java.util.Collection;
  *
  */
 public final class SolrUtils {
+
+	static Logger log = Logger.getLogger(SolrUtils.class.getCanonicalName());
 
 	@Resource
 	private static WikipediaApiService wikipediaApiService;
@@ -500,6 +505,7 @@ public final class SolrUtils {
 					if (alternatives.size() > 0) {
 						QueryModification queryModification = token.createModification(modifiedQuery, alternatives);
 						if (queryModification != null) {
+							log.info("registered modification: " + queryModification);
 							queryModifications.add(queryModification);
 						}
 					}
@@ -512,14 +518,16 @@ public final class SolrUtils {
 	}
 
 	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
-		List<String> terms = new ArrayList<String>();
+		List<String> termsList = new ArrayList<String>();
+		Set<String> terms = new HashSet<String>();
 		for (LanguageVersion languageVersion : languageVersions) {
 			String text = languageVersion.getText();
 			if (StringUtils.isNotBlank(text)) {
 				terms.add(languageVersion.getText());
 			}
 		}
-		return terms;
+		termsList.addAll(terms);
+		return termsList;
 	}
 
 	public static boolean isSimpleQuery(String queryTerm) {
