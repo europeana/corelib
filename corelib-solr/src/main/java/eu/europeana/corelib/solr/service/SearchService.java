@@ -30,9 +30,11 @@ import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
+import org.neo4j.graphdb.Node;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query
@@ -229,4 +231,23 @@ public interface SearchService {
 	Map<String, Integer> queryFacetSearch(String query, String[] qf,
 			List<String> queries);
 
+	Neo4jBean getHierarchicalBean(String nodeId);
+
+	List<Neo4jBean> getChildren(String nodeId, int offset, int limit);
+
+	List<Neo4jBean> getChildren(String nodeId, int offset);
+
+	List<Neo4jBean> getChildren(String nodeId);
+
+	Neo4jBean getParent(String nodeId);
+
+	List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit);
+
+	List<Neo4jBean> getPreceedingSiblings(String nodeId);
+
+	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit);
+
+	List<Neo4jBean> getFollowingSiblings(String nodeId);
+	
+	long getChildrenCount(String nodeId);
 }

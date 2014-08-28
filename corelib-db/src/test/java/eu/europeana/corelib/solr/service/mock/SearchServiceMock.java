@@ -39,6 +39,7 @@ import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
@@ -181,5 +182,67 @@ public class SearchServiceMock implements SearchService {
 			List<String> queries) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Neo4jBean getHierarchicalBean(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId, int offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getChildren(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Neo4jBean getParent(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Neo4jBean> getFollowingSiblings(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getChildrenCount(String nodeId) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -33,8 +33,8 @@ public class WikipediaApiServiceTest {
 		assertNotNull(languageVersions);
 		//assertEquals(108, languageVersions.size());
 	}
-
 	/*
+	
 	@Test
 	public void testGetLanguageVersions() {
 		List<LanguageVersion> translations;

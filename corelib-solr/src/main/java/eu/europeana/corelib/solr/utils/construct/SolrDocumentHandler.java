@@ -30,14 +30,11 @@ import org.apache.solr.common.SolrInputDocument;
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class SolrDocumentHandler implements ICollection{
-    
-    HttpSolrServer solrServer;
-    
-    
-    
+    private HttpSolrServer solrServer;
     public SolrDocumentHandler(HttpSolrServer solrServer){
         this.solrServer = solrServer;
     }
+    
     public void save(FullBeanImpl fBean){
         
         SolrInputDocument doc = new SolrInputDocument();

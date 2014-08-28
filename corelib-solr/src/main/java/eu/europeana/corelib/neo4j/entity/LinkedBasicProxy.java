@@ -14,20 +14,20 @@
  *  See the Licence for the specific language governing permissions and limitations under 
  *  the Licence.
  */
+package eu.europeana.corelib.neo4j.entity;
 
-package eu.europeana.corelib.db.entity.enums;
+import java.util.HashSet;
+import java.util.Set;
+import org.neo4j.graphdb.Direction;
+
 
 /**
- * Record type enumeration. This denotes whether an API call was for a search result or for a specific object
- * 
- * @author Yorgos.Mamakis@ kb.nl
- * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
+ * @author Georgios Markakis (gwarkx@hotmail.com)
+ *
+ * @since Mar 12, 2014
  */
-public enum RecordType {
-	OBJECT, OBJECT_JSONLD, OBJECT_RDF, SEARCH, SEARCH_KML, LIMIT, REDIRECT,
-	PROVIDERS, PROVIDER, PROVIDER_DATASETS, DATASETS, DATASET,
-	HIERARCHY_SELF, HIERARCHY_CHILDREN, HIERARCHY_PARENT, HIERARCHY_FOLLOWING_SIBLINGS,
-	HIERARCHY_PRECEEDING_SIBLINGS,
-	TRANSLATE_QUERY;
+public interface LinkedBasicProxy extends LinkedEDMNode{
+
+
+	
 }
