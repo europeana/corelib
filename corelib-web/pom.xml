@@ -95,6 +95,11 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${version.guava}</version>
+		</dependency>
+		<dependency>
 			<groupId>eu.europeana</groupId>
 			<artifactId>harvester-client</artifactId>
 			<version>0.1-SNAPSHOT</version>

@@ -25,14 +25,15 @@
 	">
 
 	<!-- USING OTHER MODULES -->
-	<import resource="corelib-definitions-context.xml"/>
-	<import resource="corelib-logging-context.xml"/>
+	<import resource="corelib-definitions-context.xml" />
+	<import resource="corelib-logging-context.xml" />
 
 	<!-- INTERNAL DEFINITIONS -->
-	<import resource="internal/corelib-web-email.xml"/>
+	<import resource="internal/corelib-web-email.xml" />
+	<import resource="internal/corelib-web-contentreuseframework.xml" />
 
 	<!-- CONFIGURATION -->
-	<bean name="europeana_configuration" class="eu.europeana.corelib.web.support.Configuration"/>
+	<bean name="europeana_configuration" class="eu.europeana.corelib.web.support.Configuration" />
 
 	<!-- SERVICES -->
 	<bean id="corelib_web_europeanaUrlService" class="eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl" />

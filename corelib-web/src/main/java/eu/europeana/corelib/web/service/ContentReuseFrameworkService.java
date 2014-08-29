@@ -1,10 +1,8 @@
 package eu.europeana.corelib.web.service;
 
-import java.util.List;
-
-import eu.europeana.harvester.domain.ImageMetaInfo;
+import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
 
 public interface ContentReuseFrameworkService {
 
-	List<ImageMetaInfo> getMetadata(String recordId);
+	SourceDocumentReferenceMetaInfo getMetadata(String recordId);
 }

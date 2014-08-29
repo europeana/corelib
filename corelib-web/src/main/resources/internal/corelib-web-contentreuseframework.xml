@@ -30,4 +30,7 @@
 		<constructor-arg ref="harvesterClientConfig" />
 	</bean>
 
+	<bean id="corelib_web_contentReuseFrameworkService" 
+		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
+
 </beans>

@@ -95,7 +95,7 @@
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
 		<version.jibx>1.2.3</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
-		<version.mongoDriver>2.7.2</version.mongoDriver>
+		<version.mongoDriver>2.10.1</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
@@ -104,6 +104,7 @@
 		<version.gson>2.2.4</version.gson>
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.ehcache>2.8.3</version.ehcache>
+		<version.guava>17.0</version.guava>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

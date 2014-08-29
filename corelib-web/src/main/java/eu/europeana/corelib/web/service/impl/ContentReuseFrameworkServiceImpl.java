@@ -1,11 +1,9 @@
 package eu.europeana.corelib.web.service.impl;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import eu.europeana.corelib.web.service.ContentReuseFrameworkService;
-import eu.europeana.harvester.domain.ImageMetaInfo;
+import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
 import eu.europeana.harvester.client.HarvesterClientImpl;
 
 public class ContentReuseFrameworkServiceImpl implements ContentReuseFrameworkService {
@@ -13,10 +11,11 @@ public class ContentReuseFrameworkServiceImpl implements ContentReuseFrameworkSe
 	@Resource
 	HarvesterClientImpl harvesterClient;
 
+	public ContentReuseFrameworkServiceImpl() {}
+
 	@Override
-	public List<ImageMetaInfo> getMetadata(String recordId) {
-		//harvesterClient.createOrModifySourceDocumentReference(arg0);
-		return null;
+	public SourceDocumentReferenceMetaInfo getMetadata(String url) {
+		return harvesterClient.retrieveMetaInfoByUrl(url);
 	}
 
 }
