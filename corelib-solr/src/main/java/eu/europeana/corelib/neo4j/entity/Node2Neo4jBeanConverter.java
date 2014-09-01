@@ -61,7 +61,9 @@ public class Node2Neo4jBeanConverter {
 			}
 			neo4jBean.setTitle(titles);
 			neo4jBean.setDescription(descriptions);
-			neo4jBean.setHasChildren(node.hasRelationship(dctermsHasPartRelation, Direction.OUTGOING));
+                        if(node.hasProperty("hasParent")){
+                            neo4jBean.setParent((String)node.getProperty("hasParent"));
+                        }
 			neo4jBean.setIndex(index);
 			return neo4jBean;
 		}

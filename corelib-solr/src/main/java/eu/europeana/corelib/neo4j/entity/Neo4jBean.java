@@ -27,7 +27,7 @@ public class Neo4jBean {
 
 	private Boolean children;
 
-	private Boolean hasParent;
+	private String parent;
 
 	private Long index;
 
@@ -90,11 +90,11 @@ public class Neo4jBean {
 		this.childrenCount = childrenCount;
 	}
 
-	public Boolean getHasParent() {
-		return hasParent;
+	public String getParent() {
+		return parent;
 	}
 
-	public void setHasParent(Boolean hasParent) {
-		this.hasParent = hasParent;
+	public void setParent(String parent) {
+		this.parent = parent;
 	}
 }
