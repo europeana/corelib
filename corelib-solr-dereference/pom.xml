@@ -11,8 +11,8 @@
   <groupId>eu.europeana.corelib</groupId>
   <artifactId>corelib-solr-dereference</artifactId>
   <url>http://maven.apache.org</url>
-  <dependencies>
-  <dependency>
+	<dependencies>
+		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>wstx-asl</artifactId>
 			<version>${version.woodstox}</version>
@@ -22,18 +22,18 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commonsLang}</version>
 		</dependency>
-      <dependency>
-        	<groupId>org.mongodb</groupId>
-        	<artifactId>mongo-java-driver</artifactId>
-        	<version>${version.mongoDriver}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.google.code.morphia</groupId>
-        	<artifactId>morphia</artifactId>
-        	<version>${version.mongoMorphia}</version>
-        	<scope>compile</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${version.mongoDriver}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${version.mongoMorphia}</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
@@ -49,23 +49,22 @@
 			<artifactId>corelib-definitions</artifactId>
 			<version>${version.europeanaCorelib}</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
 			<version>${version.apacheSolr}</version>
 		</dependency>
 		<dependency>
-                <groupId>org.apache.solr</groupId>
-                <artifactId>solr-core</artifactId>
-                <version>${version.apacheSolr}</version>
-        </dependency>
-	    <dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>${version.apacheSolr}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-test-framework</artifactId>
 			<version>${version.apacheSolr}</version>
 			<scope>test</scope>
-	    </dependency>
+		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
@@ -79,15 +78,15 @@
 			<artifactId>spring-test</artifactId>
 			<version>${version.springCore}</version>
 		</dependency>
-	<dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <name>Europeana Core Library Dereferencing Toolkit</name>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<name>Europeana Core Library Dereferencing Toolkit</name>
 </project>
