@@ -738,11 +738,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
-	@Override
-	public Neo4jBean getParent(String nodeId) {
-		Node child = getNode(nodeId);
-		return Node2Neo4jBeanConverter.toNeo4jBean(neo4jServer.getParent(child), getNodeId(child));
-	}
+	
 
 	@Override
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
