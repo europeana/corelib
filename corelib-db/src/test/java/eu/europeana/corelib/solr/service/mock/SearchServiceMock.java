@@ -208,11 +208,7 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
-	@Override
-	public Neo4jBean getParent(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 
