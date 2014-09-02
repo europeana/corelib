@@ -239,7 +239,6 @@ public interface SearchService {
 
 	List<Neo4jBean> getChildren(String nodeId);
 
-	Neo4jBean getParent(String nodeId);
 
 	List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit);
 
