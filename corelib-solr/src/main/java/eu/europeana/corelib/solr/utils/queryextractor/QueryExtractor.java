@@ -219,7 +219,9 @@ public class QueryExtractor {
 		} else {
 			log.debug("Unhandled query class: " + query.getClass());
 		}
-		queryTypeStack.pop();
+		if (queryTypeStack.size() > 0) {
+			queryTypeStack.pop();
+		}
 		return true;
 	}
 

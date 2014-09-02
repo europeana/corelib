@@ -15,6 +15,7 @@ public class QueryExtractorTest {
 
 	@Test
 	public void testExtractTerms() {
+		assertEquals(new ArrayList<String>(), new QueryExtractor("*:*").extractTerms());
 		assertEquals(Arrays.asList("spinoza"), new QueryExtractor("spinoza").extractTerms());
 		assertEquals(Arrays.asList("den", "haag"), new QueryExtractor("den haag").extractTerms());
 		assertEquals(Arrays.asList("den haag"), new QueryExtractor("den haag").extractTerms(true));
