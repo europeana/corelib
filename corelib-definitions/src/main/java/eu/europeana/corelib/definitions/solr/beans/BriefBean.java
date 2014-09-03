@@ -197,4 +197,11 @@ public interface BriefBean extends IdBean {
 	 * @return the score of the result
 	 */
 	float getScore();
+        
+        Map<String, List<String>> getEdmPlaceLabelLangAware();
+        
+        Map<String, List<String>> getEdmTimespanLabelLangAware();
+        
+        Map<String, List<String>> getEdmAgentLabelLangAware();
+                
 }
