@@ -126,4 +126,10 @@ public interface ApiBean extends BriefBean {
 
 	Date getTimestampCreated();
 	Date getTimestampUpdate();
+        
+        Map<String, List<String>> getEdmConceptPrefLabelLangAware();
+        
+        Map<String, List<String>> getEdmConceptBroaderLabelLangAware();
+        
+        Map<String, List<String>> getEdmPlaceAltLabelLangAware();
 }
