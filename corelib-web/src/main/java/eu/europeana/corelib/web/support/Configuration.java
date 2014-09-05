@@ -167,6 +167,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.soundcloud.clientID']}")
 	private String soundcloudClientID;
 
+	@Value("#{europeanaProperties['portal.hierarchyRoots']}")
+	private String hierarchyRootsString;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -183,6 +186,8 @@ public class Configuration {
 	private List<String> soundCloudAwareCollections;
 
 	private Boolean useNewMyEuropeanaUrl;
+
+	private List<String> hierarchyRoots;
 
 	// /////////////////////////////// getters and setters
 
@@ -370,6 +375,17 @@ public class Configuration {
 			}
 		}
 		return soundCloudAwareCollections;
+	}
+
+	public List<String> getHierarchyRoots() {
+		if (hierarchyRoots == null) {
+			String[] items = hierarchyRootsString.split(",");
+			hierarchyRoots = new ArrayList<String>();
+			for (String item : items) {
+				hierarchyRoots.add(item.trim());
+			}
+		}
+		return hierarchyRoots;
 	}
 
 	public String getOptOutList() {

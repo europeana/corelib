@@ -80,8 +80,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	public List<Node> getChildren(Node id, int offset, int limit) {
 
 		List<Node> children = new ArrayList<Node>();
-		RestTraversal traversal = (RestTraversal) graphDb
-				.traversalDescription();
+		RestTraversal traversal = (RestTraversal) graphDb.traversalDescription();
 
 		traversal.evaluator(Evaluators.excludeStartPosition());
 
@@ -89,7 +88,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		traversal.breadthFirst();
 		traversal.maxDepth(1);
 
-		traversal.relationships(isFirstInSequenceRelation, Direction.OUTGOING);
+		traversal.relationships(isFirstInSequenceRelation, Direction.INCOMING);
 
 		Traverser tr = traversal.traverse(id);
 		Iterator<Node> resIter = tr.nodes().iterator();
