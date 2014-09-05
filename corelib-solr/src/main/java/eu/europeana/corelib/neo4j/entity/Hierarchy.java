@@ -9,7 +9,6 @@ package eu.europeana.corelib.neo4j.entity;
 import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.neo4j.graphdb.Node;
 
 /**
  *
@@ -17,31 +16,40 @@ import org.neo4j.graphdb.Node;
  */
 @JsonSerialize
 public class Hierarchy {
-    List<CustomNode> parents = new ArrayList<CustomNode>();
-    List<CustomNode> siblings = new ArrayList<CustomNode>();
-    List<CustomNode> previousSiblings = new ArrayList<CustomNode>();
+	List<CustomNode> parents = new ArrayList<CustomNode>();
+	List<CustomNode> siblings = new ArrayList<CustomNode>();
+	List<CustomNode> preceedingSiblings = new ArrayList<CustomNode>();
+	List<CustomNode> followingSiblings = new ArrayList<CustomNode>();
 
-    public List<CustomNode> getParents() {
-        return parents;
-    }
+	public List<CustomNode> getParents() {
+		return parents;
+	}
 
-    public void setParents(List<CustomNode> parents) {
-        this.parents = parents;
-    }
+	public void setParents(List<CustomNode> parents) {
+		this.parents = parents;
+	}
 
-    public List<CustomNode> getSiblings() {
-        return siblings;
-    }
+	public List<CustomNode> getSiblings() {
+		return siblings;
+	}
 
-    public void setSiblings(List<CustomNode> siblings) {
-        this.siblings = siblings;
-    }
+	public void setSiblings(List<CustomNode> siblings) {
+		this.siblings = siblings;
+	}
 
-    public List<CustomNode> getPreviousSiblings() {
-        return previousSiblings;
-    }
+	public List<CustomNode> getPreceedingSiblings() {
+		return preceedingSiblings;
+	}
 
-    public void setPreviousSiblings(List<CustomNode> previousSiblings) {
-        this.previousSiblings = previousSiblings;
-    }
+	public void setPreceedingSiblings(List<CustomNode> previousSiblings) {
+		this.preceedingSiblings = previousSiblings;
+	}
+
+	public List<CustomNode> getFollowingSiblings() {
+		return followingSiblings;
+	}
+
+	public void setFollowingSiblings(List<CustomNode> followingSiblings) {
+		this.followingSiblings = followingSiblings;
+	}
 }

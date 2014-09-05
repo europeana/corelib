@@ -14,9 +14,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
@@ -32,7 +30,6 @@ import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
 import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.CustomResponse;
 import eu.europeana.corelib.neo4j.entity.Hierarchy;
 import eu.europeana.corelib.neo4j.entity.IndexObject;
@@ -208,8 +205,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public long getNodeIndex(Node node){
-		GetMethod method = new GetMethod(customPath + "/europeana/" + node.getId());
+		GetMethod method = new GetMethod(customPath + "/europeana/hierarchycount/nodeId/" + node.getId());
 		try {
+			log.info("path: " + method.getPath());
 			client.executeMethod(method);
 			String respBody = method.getResponseBodyAsString();
 			IndexObject obj = new ObjectMapper().readValue(respBody, IndexObject.class);
@@ -222,28 +220,27 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 		return 0;
 	}
-        
-        @Override
-        public Hierarchy  getInitialStruct(String id){
-            GetMethod method = new GetMethod(customPath + "/initial/startup/nodeId/" + StringUtils.replace(id, "/", "%2F"));
-            try {
+
+	@Override
+	public Hierarchy  getInitialStruct(String id) {
+		GetMethod method = new GetMethod(customPath + "/initial/startup/nodeId/" + StringUtils.replace(id, "/", "%2F"));
+		log.info("path: " + method.getPath());
+		try {
 			client.executeMethod(method);
 			String respBody = method.getResponseBodyAsString();
 			ObjectMapper mapper = new ObjectMapper();
-			
 			Hierarchy obj = mapper.readValue(respBody, Hierarchy.class);
-                        return obj;
+			return obj;
 		} catch (HttpException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
 
-            return null;
-        }
-        
-        @Override
-        public String getCustomPath(){
-            return customPath;
-        }
+	@Override
+	public String getCustomPath(){
+		return customPath;
+	}
 }

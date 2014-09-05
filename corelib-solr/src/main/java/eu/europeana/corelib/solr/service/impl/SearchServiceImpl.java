@@ -777,10 +777,11 @@ public class SearchServiceImpl implements SearchService {
 	private long getNodeId(Node nodeId){
 		return neo4jServer.getNodeIndex(nodeId);
 	}
-        
-        public Neo4jStructBean getInitialStruct(String nodeId){
-            return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
-        }
+
+	@Override
+	public Neo4jStructBean getInitialStruct(String nodeId) {
+		return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
+	}
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
