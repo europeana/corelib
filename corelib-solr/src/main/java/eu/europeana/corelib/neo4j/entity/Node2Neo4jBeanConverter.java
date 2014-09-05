@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.TextNode;
 import org.neo4j.graphdb.Node;
 
@@ -127,8 +128,11 @@ public class Node2Neo4jBeanConverter {
 					if (descriptionValue == null) {
 						descriptionValue = new ArrayList<String>();
 					}
-					descriptionValue.addAll((List<String>) node
-							.getProperty(key));
+					if (node.getProperty(key) instanceof ArrayNode) {
+						descriptionValue = extractArrayNode(node, key);
+					} else {
+						descriptionValue.addAll((List<String>) node.getProperty(key));
+					}
 					descriptions.put(StringUtils.substringAfter(key,
 							"dc:description_xml:lang_"), descriptionValue);
 				} else if (key.startsWith("dc:title")) {
@@ -137,14 +141,8 @@ public class Node2Neo4jBeanConverter {
 					if (titleValue == null) {
 						titleValue = new ArrayList<String>();
 					}
-					if (node.getProperty(key) instanceof org.codehaus.jackson.node.ArrayNode) {
-						int size = ((org.codehaus.jackson.node.ArrayNode) node
-								.getProperty(key)).size();
-						for (int i = 0; i < size; i++) {
-							titleValue
-									.add(((org.codehaus.jackson.node.ArrayNode) node
-											.getProperty(key)).get(i).asText());
-						}
+					if (node.getProperty(key) instanceof ArrayNode) {
+						titleValue = extractArrayNode(node, key);
 					} else {
 						titleValue.addAll(Arrays.asList((String[]) node
 								.getProperty(key)));
@@ -158,11 +156,19 @@ public class Node2Neo4jBeanConverter {
 			if (node.hasProperty("hasParent")) {
 				neo4jBean.setParent(node.getProperty("hasParent").toString());
 			}
-			neo4jBean.setIndex(Long.parseLong(node.getProperty("index")
-					.toString()));
+			neo4jBean.setIndex(Long.parseLong(node.getProperty("index").toString()));
 			return neo4jBean;
 		}
 		return null;
+	}
+
+	private static List<String> extractArrayNode(CustomNode node, String key) {
+		List<String> values = new ArrayList<String>();
+		int size = ((ArrayNode) node.getProperty(key)).size();
+		for (int i = 0; i < size; i++) {
+			values.add(((ArrayNode) node.getProperty(key)).get(i).asText());
+		}
+		return values;
 	}
 
 }
