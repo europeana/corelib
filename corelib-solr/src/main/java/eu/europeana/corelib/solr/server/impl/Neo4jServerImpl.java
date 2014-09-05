@@ -20,6 +20,7 @@ import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.Traverser;
@@ -136,6 +137,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	private List<Node> getRelatedNodes(Node id, int limit, int offset, Direction direction,
 			Relation relType) {
 		List<Node> children = new ArrayList<Node>();
+		Transaction tx = graphDb.beginTx();
 		RestTraversal traversal = (RestTraversal) graphDb
 				.traversalDescription();
 
@@ -163,6 +165,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 			i++;
 		}
 
+		tx.success();
+		tx.finish();
 		return (children);
 	}
 
