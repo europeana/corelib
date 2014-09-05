@@ -14,7 +14,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
@@ -27,9 +29,12 @@ import org.neo4j.kernel.Uniqueness;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
+import org.springframework.util.StringUtils;
 
 import eu.europeana.corelib.logging.Logger;
+import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.CustomResponse;
+import eu.europeana.corelib.neo4j.entity.Hierarchy;
 import eu.europeana.corelib.neo4j.entity.IndexObject;
 import eu.europeana.corelib.neo4j.entity.RelType;
 import eu.europeana.corelib.neo4j.entity.Relation;
@@ -204,7 +209,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public long getNodeIndex(Node node){
-		GetMethod method = new GetMethod(customPath + "/" + node.getId());
+		GetMethod method = new GetMethod(customPath + "/europeana/" + node.getId());
 		try {
 			client.executeMethod(method);
 			String respBody = method.getResponseBodyAsString();
@@ -218,4 +223,28 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 		return 0;
 	}
+        
+        @Override
+        public Hierarchy  getInitialStruct(String id){
+            GetMethod method = new GetMethod(customPath + "/initial/startup/nodeId/" + StringUtils.replace(id, "/", "%2F"));
+            try {
+			client.executeMethod(method);
+			String respBody = method.getResponseBodyAsString();
+			ObjectMapper mapper = new ObjectMapper();
+			
+			Hierarchy obj = mapper.readValue(respBody, Hierarchy.class);
+                        return obj;
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+            return null;
+        }
+        
+        @Override
+        public String getCustomPath(){
+            return customPath;
+        }
 }
