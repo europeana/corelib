@@ -100,6 +100,10 @@ public class QueryToken {
 	}
 
 	public String getExtendedPosition() {
+		if (position == null) {
+			log.info("no position for " + normalizedQueryTerm);
+			return null;
+		}
 		int start = position.getStart();
 		int end = position.getEnd();
 		if (getType().equals(QueryType.PHRASE)) {
