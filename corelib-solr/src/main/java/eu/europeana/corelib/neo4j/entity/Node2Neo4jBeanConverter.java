@@ -144,11 +144,9 @@ public class Node2Neo4jBeanConverter {
 					if (node.getProperty(key) instanceof ArrayNode) {
 						titleValue = extractArrayNode(node, key);
 					} else {
-						titleValue.addAll(Arrays.asList((String[]) node
-								.getProperty(key)));
+						titleValue.addAll(Arrays.asList((String[]) node.getProperty(key)));
 					}
-					titles.put(StringUtils.substringAfter(key,
-							"dc:title_xml:lang_"), titleValue);
+					titles.put(StringUtils.substringAfter(key, "dc:title_xml:lang_"), titleValue);
 				}
 			}
 			neo4jBean.setTitle(titles);
