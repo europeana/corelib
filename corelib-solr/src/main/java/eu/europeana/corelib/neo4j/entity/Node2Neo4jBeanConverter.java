@@ -114,7 +114,7 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setType(DocType.safeValueOf(node.getProperty("edm:type")
 					.toString()));
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
-                        if(node.hasProperty("hasChildren")){
+                        if(node.hasProperty("hasChildren")&& node.hasProperty("childrenCount")){
                         	IntNode childrenCount = (IntNode)node.getProperty("childrenCount");
                             neo4jBean.setChildrenCount(childrenCount.asLong());
                         }
