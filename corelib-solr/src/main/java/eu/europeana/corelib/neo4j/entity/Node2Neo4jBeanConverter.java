@@ -30,7 +30,7 @@ public class Node2Neo4jBeanConverter {
 		if (node != null) {
 			Neo4jBean neo4jBean = new Neo4jBean();
 			neo4jBean.setId((String) node.getProperty("rdf:about"));
-			neo4jBean.setType(DocType.valueOf((String) node.getProperty("edm:type")));
+			neo4jBean.setType(DocType.valueOf(((String) node.getProperty("edm:type")).replace("\"", "")));
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
 			Map<String, List<String>> titles = new HashMap<String, List<String>>();
 			Map<String, List<String>> descriptions = new HashMap<String, List<String>>();
@@ -112,7 +112,8 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean
 					.setId(((TextNode) node.getProperty("rdf:about")).asText());
 			neo4jBean.setType(DocType.safeValueOf(node.getProperty("edm:type")
-					.toString()));
+					.toString().replace("\"", "")));
+			
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
                         if(node.hasProperty("hasChildren")&& node.hasProperty("childrenCount")){
                         	IntNode childrenCount = (IntNode)node.getProperty("childrenCount");
