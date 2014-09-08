@@ -113,6 +113,9 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setType(DocType.safeValueOf(node.getProperty("edm:type")
 					.toString()));
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
+                        if(node.hasProperty("hasChildren")){
+                            neo4jBean.setChildrenCount((Long)node.getProperty("childrenCount"));
+                        }
 			Map<String, List<String>> titles = new HashMap<String, List<String>>();
 			Map<String, List<String>> descriptions = new HashMap<String, List<String>>();
 
