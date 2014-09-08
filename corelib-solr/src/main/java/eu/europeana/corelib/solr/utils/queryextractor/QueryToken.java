@@ -101,7 +101,6 @@ public class QueryToken {
 
 	public String getExtendedPosition() {
 		if (position == null) {
-			log.info("no position for " + normalizedQueryTerm);
 			return null;
 		}
 		int start = position.getStart();
