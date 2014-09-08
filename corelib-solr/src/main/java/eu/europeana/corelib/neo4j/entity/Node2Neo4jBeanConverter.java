@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.IntNode;
 import org.codehaus.jackson.node.TextNode;
 import org.neo4j.graphdb.Node;
 
@@ -114,7 +115,8 @@ public class Node2Neo4jBeanConverter {
 					.toString()));
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
                         if(node.hasProperty("hasChildren")){
-                            neo4jBean.setChildrenCount((Long)node.getProperty("childrenCount"));
+                        	IntNode childrenCount = (IntNode)node.getProperty("childrenCount");
+                            neo4jBean.setChildrenCount(childrenCount.asLong());
                         }
 			Map<String, List<String>> titles = new HashMap<String, List<String>>();
 			Map<String, List<String>> descriptions = new HashMap<String, List<String>>();
