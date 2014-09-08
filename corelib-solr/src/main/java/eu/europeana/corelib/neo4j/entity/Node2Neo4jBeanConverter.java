@@ -29,8 +29,7 @@ public class Node2Neo4jBeanConverter {
 		if (node != null) {
 			Neo4jBean neo4jBean = new Neo4jBean();
 			neo4jBean.setId((String) node.getProperty("rdf:about"));
-			neo4jBean.setType(DocType.valueOf((String) node
-					.getProperty("edm:type")));
+			neo4jBean.setType(DocType.valueOf((String) node.getProperty("edm:type")));
 			neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
 			Map<String, List<String>> titles = new HashMap<String, List<String>>();
 			Map<String, List<String>> descriptions = new HashMap<String, List<String>>();
@@ -38,27 +37,25 @@ public class Node2Neo4jBeanConverter {
 			Iterator<String> keyIterator = keys.iterator();
 			while (keyIterator.hasNext()) {
 				String key = keyIterator.next();
+				String languageKey;
 				if (key.startsWith("dc:description")) {
-					List<String> descriptionValue = descriptions
-							.get(StringUtils.substringAfter(key,
-									"dc:description_xml:lang_"));
+					languageKey = StringUtils.substringAfter(key, "dc:description_xml:lang_");
+					List<String> descriptionValue = descriptions.get(languageKey);
 					if (descriptionValue == null) {
 						descriptionValue = new ArrayList<String>();
 					}
-					descriptionValue.addAll((List<String>) node
-							.getProperty(key));
-					descriptions.put(StringUtils.substringAfter(key,
-							"dc:description_xml:lang_"), descriptionValue);
+					descriptionValue.addAll(
+						Arrays.asList((String[]) node.getProperty(key)));
+					descriptions.put(languageKey, descriptionValue);
 				} else if (key.startsWith("dc:title")) {
-					List<String> titleValue = titles.get(StringUtils
-							.substringAfter(key, "dc:title_xml:lang_"));
+					languageKey = StringUtils.substringAfter(key, "dc:title_xml:lang_");
+					List<String> titleValue = titles.get(languageKey);
 					if (titleValue == null) {
 						titleValue = new ArrayList<String>();
 					}
 					titleValue.addAll(Arrays.asList((String[]) node
 							.getProperty(key)));
-					titles.put(StringUtils.substringAfter(key,
-							"dc:title_xml:lang_"), titleValue);
+					titles.put(languageKey, titleValue);
 				}
 			}
 			neo4jBean.setTitle(titles);
@@ -121,10 +118,10 @@ public class Node2Neo4jBeanConverter {
 
 			Set<String> keySet = node.getPropertyKeys();
 			for (String key : keySet) {
+				String languageKey;
 				if (key.startsWith("dc:description")) {
-					List<String> descriptionValue = descriptions
-							.get(StringUtils.substringAfter(key,
-									"dc:description_xml:lang_"));
+					languageKey = StringUtils.substringAfter(key,"dc:description_xml:lang_");
+					List<String> descriptionValue = descriptions.get(languageKey);
 					if (descriptionValue == null) {
 						descriptionValue = new ArrayList<String>();
 					}
@@ -133,11 +130,10 @@ public class Node2Neo4jBeanConverter {
 					} else {
 						descriptionValue.addAll((List<String>) node.getProperty(key));
 					}
-					descriptions.put(StringUtils.substringAfter(key,
-							"dc:description_xml:lang_"), descriptionValue);
+					descriptions.put(languageKey, descriptionValue);
 				} else if (key.startsWith("dc:title")) {
-					List<String> titleValue = titles.get(StringUtils
-							.substringAfter(key, "dc:title_xml:lang_"));
+					languageKey = StringUtils.substringAfter(key, "dc:title_xml:lang_");
+					List<String> titleValue = titles.get(languageKey);
 					if (titleValue == null) {
 						titleValue = new ArrayList<String>();
 					}
@@ -146,7 +142,7 @@ public class Node2Neo4jBeanConverter {
 					} else {
 						titleValue.addAll(Arrays.asList((String[]) node.getProperty(key)));
 					}
-					titles.put(StringUtils.substringAfter(key, "dc:title_xml:lang_"), titleValue);
+					titles.put(languageKey, titleValue);
 				}
 			}
 			neo4jBean.setTitle(titles);
