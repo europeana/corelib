@@ -5,11 +5,7 @@ import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.logging.Logger;
-
 public class QueryToken {
-
-	Logger log = Logger.getLogger(QueryToken.class.getCanonicalName());
 
 	private Stack<QueryType> typeStack;
 	private String normalizedQueryTerm;
@@ -91,8 +87,6 @@ public class QueryToken {
 			query = "(" + query + ")";
 		}
 		String replacement = query + " OR \"" + StringUtils.join(alternatives, "\" OR \"") + "\"";
-		log.info(query + " vs " + rawQueryString);
-		log.info(String.format("start: %d, end: %d, length: %d", start, end, rawQueryString.length()));
 		if (!(start == 0 && end == rawQueryString.length())) {
 			replacement = "(" + replacement + ")";
 		}
