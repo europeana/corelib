@@ -170,6 +170,15 @@ public class QueryExtractor {
 					if (token.getNormalizedQueryTerm().equals(position.getTransformed())) {
 						token.setPosition(position);
 						lastFoundPosition = i;
+						if (token.getType().equals(QueryType.TERM)
+							&& position.getStart() > 0
+							&& position.getEnd() < rawQueryString.length()
+							&& rawQueryString.substring(position.getStart()-1, position.getStart()).equals("\"")
+							&& rawQueryString.substring(position.getEnd(), position.getEnd()+1).equals("\"")
+							) {
+							token.getTypeStack().pop();
+							token.getTypeStack().add(QueryType.PHRASE);
+						}
 						success = true;
 						break;
 					}
