@@ -99,6 +99,11 @@ public class QueryExtractorTest {
 	}
 
 	@Test
+	public void testAsterix() {
+		assertEquals(Arrays.asList("test"), new QueryExtractor("*:* test").extractTerms());
+	}
+
+	@Test
 	public void testExtractInfo() {
 		List<QueryToken> tokens = new QueryExtractor("\"den, haag\"").extractInfo(true);
 		assertEquals(1, tokens.size());
