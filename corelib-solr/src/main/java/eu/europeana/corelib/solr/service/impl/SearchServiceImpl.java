@@ -63,6 +63,7 @@ import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
@@ -777,6 +778,11 @@ public class SearchServiceImpl implements SearchService {
 
 	private long getNodeId(Node nodeId){
 		return neo4jServer.getNodeIndex(nodeId);
+	}
+
+	@Override
+	public Neo4jStructBean getInitialStruct(String nodeId) {
+		return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
 	}
 }
 

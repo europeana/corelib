@@ -40,6 +40,7 @@ import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
@@ -146,8 +147,6 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
-	
-
 	@Override
 	public Date getLastSolrUpdate() throws SolrServerException, IOException {
 		return null;
@@ -208,10 +207,6 @@ public class SearchServiceMock implements SearchService {
 		return null;
 	}
 
-	
-
-
-
 	@Override
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
 		// TODO Auto-generated method stub
@@ -240,5 +235,11 @@ public class SearchServiceMock implements SearchService {
 	public long getChildrenCount(String nodeId) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Neo4jStructBean getInitialStruct(String nodeId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

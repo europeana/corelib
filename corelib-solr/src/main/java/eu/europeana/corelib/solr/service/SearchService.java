@@ -31,9 +31,11 @@ import eu.europeana.corelib.definitions.solr.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
+
 import org.neo4j.graphdb.Node;
 
 /**
@@ -231,22 +233,102 @@ public interface SearchService {
 	Map<String, Integer> queryFacetSearch(String query, String[] qf,
 			List<String> queries);
 
+	/**
+	 * Get a node object
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @return
+	 */
 	Neo4jBean getHierarchicalBean(String nodeId);
 
+	/**
+	 * Get the children of the node (max 10)
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @param offset
+	 *   The offset of the first child
+	 * @param limit
+	 *   The number of records to retrieve
+	 * @return
+	 */
 	List<Neo4jBean> getChildren(String nodeId, int offset, int limit);
 
+	/**
+	 * Get the children of the node (max 10)
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @param offset
+	 *   The offset of the first child
+	 * @return
+	 */
 	List<Neo4jBean> getChildren(String nodeId, int offset);
 
+	/**
+	 * Get the children of the node (max 10)
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @return
+	 */
 	List<Neo4jBean> getChildren(String nodeId);
 
-
+	/**
+	 * Get the nodes preceeding siblings
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @param limit
+	 *   How many siblings to retrieve
+	 * @return
+	 */
 	List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit);
 
+	/**
+	 * Get the nodes preceeding siblings (max 10)
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @return
+	 */
 	List<Neo4jBean> getPreceedingSiblings(String nodeId);
 
+	/**
+	 * Get the nodes following siblings
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @param limit
+	 *   How many siblings to retrieve
+	 * @return
+	 */
 	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit);
 
+	/**
+	 * Get the node's 10 following siblings
+	 * @param nodeId
+	 * @return
+	 */
 	List<Neo4jBean> getFollowingSiblings(String nodeId);
-	
+
+	/**
+	 * Get the number of children this node has
+	 * 
+	 * @param nodeId
+	 * @return
+	 */
 	long getChildrenCount(String nodeId);
+
+	/**
+	 * Get the initial structure, which contains self, the ancestors, 
+	 * preceeding and following siblings
+	 * 
+	 * @param nodeId
+	 *   The ID of the record
+	 * @return
+	 *   The complex structure
+	 */
+	Neo4jStructBean getInitialStruct(String nodeId);
 }

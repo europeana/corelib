@@ -167,6 +167,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.soundcloud.clientID']}")
 	private String soundcloudClientID;
 
+	@Value("#{europeanaProperties['portal.hierarchyRoots']}")
+	private String hierarchyRootsString;
+
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
@@ -183,6 +186,8 @@ public class Configuration {
 	private List<String> soundCloudAwareCollections;
 
 	private Boolean useNewMyEuropeanaUrl;
+
+	private List<String> hierarchyRoots;
 
 	// /////////////////////////////// getters and setters
 
@@ -352,10 +357,12 @@ public class Configuration {
 
 	public List<String> getStaticPageInVersions() {
 		if (staticPageInVersions == null) {
-			String[] items = staticPageInVersionsString.split(",");
 			staticPageInVersions = new ArrayList<String>();
-			for (String item : items) {
-				staticPageInVersions.add(item.trim());
+			if (StringUtils.isNotBlank(staticPageInVersionsString)) {
+				String[] items = staticPageInVersionsString.split(",");
+				for (String item : items) {
+					staticPageInVersions.add(item.trim());
+				}
 			}
 		}
 		return staticPageInVersions;
@@ -363,13 +370,28 @@ public class Configuration {
 
 	public List<String> getSoundCloudAwareCollections() {
 		if (soundCloudAwareCollections == null) {
-			String[] items = soundCloudAwareCollectionsString.split(",");
 			soundCloudAwareCollections = new ArrayList<String>();
-			for (String item : items) {
-				soundCloudAwareCollections.add(item.trim());
+			if (StringUtils.isNotBlank(soundCloudAwareCollectionsString)) {
+				String[] items = soundCloudAwareCollectionsString.split(",");
+				for (String item : items) {
+					soundCloudAwareCollections.add(item.trim());
+				}
 			}
 		}
 		return soundCloudAwareCollections;
+	}
+
+	public List<String> getHierarchyRoots() {
+		if (hierarchyRoots == null) {
+			hierarchyRoots = new ArrayList<String>();
+			if (StringUtils.isNotBlank(hierarchyRootsString)) {
+				String[] items = hierarchyRootsString.split(",");
+				for (String item : items) {
+					hierarchyRoots.add(item.trim());
+				}
+			}
+		}
+		return hierarchyRoots;
 	}
 
 	public String getOptOutList() {

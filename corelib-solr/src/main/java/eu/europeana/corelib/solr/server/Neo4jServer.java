@@ -1,6 +1,9 @@
 package eu.europeana.corelib.solr.server;
 
+import eu.europeana.corelib.neo4j.entity.Hierarchy;
+
 import java.util.List;
+
 import org.neo4j.graphdb.Node;
 
 public interface Neo4jServer extends AbstractServer {
@@ -18,4 +21,8 @@ public interface Neo4jServer extends AbstractServer {
 	long getChildrenCount(Node id);
 
 	long getNodeIndex(Node node);
+        
+        Hierarchy  getInitialStruct(String id);
+        
+        String getCustomPath();
 }
