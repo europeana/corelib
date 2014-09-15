@@ -21,6 +21,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
@@ -170,6 +171,15 @@ public class QueryExtractor {
 					if (token.getNormalizedQueryTerm().equals(position.getTransformed())) {
 						token.setPosition(position);
 						lastFoundPosition = i;
+						if (token.getType().equals(QueryType.TERM)
+							&& position.getStart() > 0
+							&& position.getEnd() < rawQueryString.length()
+							&& rawQueryString.substring(position.getStart()-1, position.getStart()).equals("\"")
+							&& rawQueryString.substring(position.getEnd(), position.getEnd()+1).equals("\"")
+							) {
+							token.getTypeStack().pop();
+							token.getTypeStack().add(QueryType.PHRASE);
+						}
 						success = true;
 						break;
 					}
@@ -216,8 +226,12 @@ public class QueryExtractor {
 			group++;
 			queryTypeStack.add(QueryType.TERMRANGE);
 			deconstructTermRangeQuery((TermRangeQuery)query, queryTypeStack);
+		} else if (query instanceof MatchAllDocsQuery) {
+			group++;
+			queryTypeStack.add(QueryType.MATCHALLDOCS);
+			deconstructMatchAllDocsQuery((MatchAllDocsQuery)query, queryTypeStack);
 		} else {
-			log.debug("Unhandled query class: " + query.getClass());
+			log.warning("Unhandled query class: " + query.getClass());
 		}
 		if (queryTypeStack.size() > 0) {
 			queryTypeStack.pop();
@@ -248,6 +262,10 @@ public class QueryExtractor {
 
 	private void deconstructPrefixQuery(PrefixQuery query, Stack<QueryType> queryTypeStack) {
 		queryTokens.add(new QueryToken(query.getPrefix().text(), queryTypeStack, group));
+	}
+
+	private void deconstructMatchAllDocsQuery(MatchAllDocsQuery query, Stack<QueryType> queryTypeStack) {
+		// queryTokens.add(new QueryToken(query.toString(), queryTypeStack, group));
 	}
 
 	private void deconstructBooleanQuery(BooleanQuery query, Stack<QueryType> queryTypeStack) {

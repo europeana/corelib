@@ -10,7 +10,8 @@ public enum QueryType {
 	BOOLEAN_NOT("BooleanQuery.NOT"),
 	PREFIX("PrefixQuery"),
 	FUZZY("FuzzyQuery"),
-	TERMRANGE("TermRangeQuery");
+	TERMRANGE("TermRangeQuery"),
+	MATCHALLDOCS("MatchAllDocsQuery");
 
 	private String type;
 

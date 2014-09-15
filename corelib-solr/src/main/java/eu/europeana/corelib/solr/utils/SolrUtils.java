@@ -495,7 +495,6 @@ public final class SolrUtils {
 		for (QueryToken token : queryTokens) {
 			if (!token.getType().equals(QueryType.TERMRANGE)) {
 				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
-				token.getExtendedPosition();
 				if (languageVersions.size() > 0) {
 					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
 					List<String> alternatives = extractLanguageVersions(languageVersions);

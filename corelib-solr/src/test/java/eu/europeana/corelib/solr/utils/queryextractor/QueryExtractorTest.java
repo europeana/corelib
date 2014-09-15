@@ -95,6 +95,12 @@ public class QueryExtractorTest {
 	public void testPhraseTerms() {
 		assertEquals(Arrays.asList("den, haag"), new QueryExtractor("\"den, haag\"").extractTerms());
 		assertEquals(Arrays.asList("den haag"), new QueryExtractor("\"den haag\"").extractTerms());
+		assertEquals(Arrays.asList("newspaper"), new QueryExtractor("what:\"newspaper\"").extractTerms());
+	}
+
+	@Test
+	public void testAsterix() {
+		assertEquals(Arrays.asList("test"), new QueryExtractor("*:* test").extractTerms());
 	}
 
 	@Test
@@ -116,9 +122,29 @@ public class QueryExtractorTest {
 
 	@Test
 	public void testInjectAlternatives() {
-		String query = "la joconde";
-		String modifiedQuery = query;
-		List<String> alternatives = Arrays.asList("la gioconda", "mona lisa");
+		assertEquals("(la joconde) OR \"la gioconda\" OR \"mona lisa\"",
+				rewriteQuery("la joconde", Arrays.asList("la gioconda", "mona lisa")));
+
+		QueryExtractor queryExtractor = new QueryExtractor("(mona lisa) OR (den haag)");
+		List<QueryModification> queryModifications = new ArrayList<QueryModification>();
+		queryModifications.add(new QueryModification(1, 10, 
+				"((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")"));
+		queryModifications.add(new QueryModification(16, 24, 
+				"((den haag) OR \"The Hague\" OR \"Den Haag\" OR \"Haag\" OR "
+				+ "\"La Haye\" OR \"L'Aia\" OR \"Haga\")"));
+		String modifiedQuery = queryExtractor.rewrite(queryModifications);
+		assertEquals("(((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")) OR (((den haag) OR \"The Hague\" "
+				+ "OR \"Den Haag\" OR \"Haag\" OR \"La Haye\" OR \"L'Aia\" OR \"Haga\"))", modifiedQuery);
+	}
+
+	@Test
+	public void testPhraseAlternatives() {
+		assertEquals("what:(\"newspaper\" OR \"Zeitung\" OR \"Krant\" OR \"Newspaper\")",
+			rewriteQuery("what:\"newspaper\"", Arrays.asList("Zeitung", "Krant", "Newspaper")));
+	}
+
+	private String rewriteQuery(String query, List<String> alternatives) {
+		String modifiedQuery;
 		QueryExtractor queryExtractor = new QueryExtractor(query);
 		List<QueryToken> tokens = queryExtractor.extractInfo(true);
 		List<QueryModification> queryModifications = new ArrayList<QueryModification>();
@@ -129,18 +155,7 @@ public class QueryExtractorTest {
 			}
 		}
 		modifiedQuery = queryExtractor.rewrite(queryModifications);
-		assertEquals("(la joconde) OR \"la gioconda\" OR \"mona lisa\"", modifiedQuery);
-
-		queryExtractor = new QueryExtractor("(mona lisa) OR (den haag)");
-		queryModifications = new ArrayList<QueryModification>();
-		queryModifications.add(new QueryModification(1, 10, 
-				"((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")"));
-		queryModifications.add(new QueryModification(16, 24, 
-				"((den haag) OR \"The Hague\" OR \"Den Haag\" OR \"Haag\" OR "
-				+ "\"La Haye\" OR \"L'Aia\" OR \"Haga\")"));
-		modifiedQuery = queryExtractor.rewrite(queryModifications);
-		assertEquals("(((mona lisa) OR \"La Joconde\" OR \"Gioconda\" OR \"Mona Lisa\")) OR (((den haag) OR \"The Hague\" "
-				+ "OR \"Den Haag\" OR \"Haag\" OR \"La Haye\" OR \"L'Aia\" OR \"Haga\"))", modifiedQuery);
-
+		return modifiedQuery;
 	}
 }
+
