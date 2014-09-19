@@ -113,7 +113,7 @@ public class AggregationFieldInputTest {
 			assertEquals(aggregation.getUgc().getUgc().toString().toLowerCase(),
 					solrDocument.getFieldValue(EdmLabel.EDM_UGC.toString()).toString());
 			assertEquals(
-					aggregation.getRights().getString(),
+					aggregation.getRights().getResource(),
 					solrDocument
 							.getFieldValue(EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS
 									.toString()));
@@ -162,7 +162,7 @@ public class AggregationFieldInputTest {
 									.getProvider()))).andReturn(null);
 			EasyMock.expect(
 					ups.set("edmRights", MongoUtils
-							.createResourceOrLiteralMapFromString(aggregation
+							.createResourceMapFromString(aggregation
 									.getRights()))).andReturn(null);
 			EasyMock.expect(
 					ups.set("aggregatedCHO", aggregation.getAggregatedCHO()
@@ -205,7 +205,7 @@ public class AggregationFieldInputTest {
 							.next().get(0));
 			assertEquals(aggregation.getUgc().getUgc().toString().toLowerCase(),
 					aggregationMongo.getEdmUgc());
-			assertEquals(aggregation.getRights().getString(), aggregationMongo
+			assertEquals(aggregation.getRights().getResource(), aggregationMongo
 					.getEdmRights().values().iterator().next().get(0));
 			assertEquals(aggregation.getRightList().get(0).getString(),
 					aggregationMongo.getDcRights().values().iterator().next()
@@ -251,7 +251,7 @@ public class AggregationFieldInputTest {
 		ugc.setUgc(UGCType.TRUE);
 		aggregation.setUgc(ugc);
 		Rights1 rights = new Rights1();
-		rights.setString("test rights");
+		rights.setResource("test rights");
 		aggregation.setRights(rights);
 		List<Rights> rightsList = new ArrayList<Rights>();
 		Rights rights1 = new Rights();

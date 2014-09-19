@@ -65,7 +65,7 @@ public final class WebResourcesFieldInput {
 		solrInputDocument.addField(EdmLabel.EDM_WEB_RESOURCE.toString(),
 				webResource.getAbout());
 		solrInputDocument = SolrUtils
-				.addFieldFromResourceOrLiteral(solrInputDocument, webResource.getRights(),
+				.addFieldFromResource(solrInputDocument, webResource.getRights(),
 						EdmLabel.WR_EDM_RIGHTS);
 		if (webResource.getRightList() != null) {
 			for (Rights dcRights : webResource.getRightList()) {
@@ -161,7 +161,7 @@ public final class WebResourcesFieldInput {
 			WebResourceType webResource, MongoServer mongoServer) {
 		WebResourceImpl mongoWebResource = new WebResourceImpl();
 		mongoWebResource.setAbout(webResource.getAbout());
-		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceOrLiteralMapFromString(webResource.getRights()));
+		mongoWebResource.setWebResourceEdmRights(MongoUtils.createResourceMapFromString(webResource.getRights()));
 		mongoWebResource.setWebResourceDcRights(MongoUtils.createResourceOrLiteralMapFromList(webResource.getRightList()));
 		mongoWebResource.setDcDescription(MongoUtils.createResourceOrLiteralMapFromList(webResource
 								.getDescriptionList()));

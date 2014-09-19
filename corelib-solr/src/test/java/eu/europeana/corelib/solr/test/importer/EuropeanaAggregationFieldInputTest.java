@@ -142,7 +142,7 @@ public class EuropeanaAggregationFieldInputTest {
 							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE
 									.toString()));
 			assertEquals(
-					eAggregation.getRights().getString(),
+					eAggregation.getRights().getResource(),
 					solrDocument
 							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS
 									.toString()));
@@ -206,7 +206,7 @@ public class EuropeanaAggregationFieldInputTest {
 			assertEquals(aggregation.getLanguage().getLanguage().xmlValue(),
 					aggregationMongo.getEdmLanguage().values().iterator()
 							.next().get(0));
-			assertEquals(aggregation.getRights().getString(), aggregationMongo
+			assertEquals(aggregation.getRights().getResource(), aggregationMongo
 					.getEdmRights().values().iterator().next().get(0));
 			assertEquals(aggregation.getAggregateList().get(0).getResource(),
 					aggregationMongo.getAggregates()[0]);
@@ -252,7 +252,7 @@ public class EuropeanaAggregationFieldInputTest {
 		language.setLanguage(LanguageCodes.EN);
 		aggregation.setLanguage(language);
 		Rights1 rights = new Rights1();
-		rights.setString("test rights");
+		rights.setResource("test rights");
 		aggregation.setRights(rights);
 		List<Aggregates> aggregatesList = new ArrayList<Aggregates>();
 		Aggregates aggregates = new Aggregates();

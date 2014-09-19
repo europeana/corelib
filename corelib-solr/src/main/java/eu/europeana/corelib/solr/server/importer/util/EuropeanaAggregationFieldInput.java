@@ -110,7 +110,7 @@ public final class EuropeanaAggregationFieldInput {
 				aggregation.getLanguage().getLanguage().xmlValue(),
 
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE);
-		solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+		solrInputDocument = SolrUtils.addFieldFromResource(
 				solrInputDocument, aggregation.getRights(),
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS);
 		solrInputDocument.addField(
@@ -284,7 +284,7 @@ public final class EuropeanaAggregationFieldInput {
 		ops.set("aggregatedCHO", agCHO);
 
 		Map<String, List<String>> edmRights = MongoUtils
-				.createResourceOrLiteralMapFromString(aggregation.getRights());
+				.createResourceMapFromString(aggregation.getRights());
 		if (edmRights != null) {
 			mongoAggregation.setEdmRights(edmRights);
 			ops.set("edmRights", edmRights);
@@ -426,7 +426,7 @@ public final class EuropeanaAggregationFieldInput {
 		mongoAggregation.setAggregatedCHO(agCHO);
 
 		Map<String, List<String>> edmRights = MongoUtils
-				.createResourceOrLiteralMapFromString(aggregation.getRights());
+				.createResourceMapFromString(aggregation.getRights());
 			mongoAggregation.setEdmRights(edmRights);
 		String[] aggregates = SolrUtils.resourceListToArray(aggregation
 				.getAggregateList());

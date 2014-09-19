@@ -310,6 +310,26 @@ public final class MongoUtils {
 		return null;
 	}
 
+	public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromString(
+			T obj) {
+		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
+		if (obj != null) {
+			
+				if (StringUtils.isNotBlank(StringUtils.trimToNull(obj
+						.getResource()))) {
+					List<String> val = retMap.get("def") != null ? retMap
+							.get("def") : new ArrayList<String>();
+					val.add(obj.getResource());
+					retMap.put("def", val);
+				}
+				
+			
+			return retMap;
+	
+		}
+		return null;
+	}
+	
 	/**
 	 * Method that converts a LiteralType.class list to a multilingual map of
 	 * strings
@@ -439,6 +459,8 @@ public final class MongoUtils {
 		return null;
 	}
 
+	
+	
 	public static <T> boolean updateMap(T saved, T updated, String updateField,
 			UpdateOperations ops) throws NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
