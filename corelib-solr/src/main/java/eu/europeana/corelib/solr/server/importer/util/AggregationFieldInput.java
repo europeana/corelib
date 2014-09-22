@@ -223,7 +223,7 @@ public final class AggregationFieldInput {
                     webResource.setWebResourceDcRights(rightMap);
                 }
                 Map<String, List<String>> edmRightsMap = MongoUtils
-                        .createResourceOrLiteralMapFromString(wResourceType
+                        .createResourceMapFromString(wResourceType
                                 .getRights());
                 if (edmRightsMap != null) {
                     if (retWebResource != null
@@ -338,7 +338,7 @@ public final class AggregationFieldInput {
 
                 webResource.setWebResourceDcRights(rightMap);
                 Map<String, List<String>> edmRightsMap = MongoUtils
-                        .createResourceOrLiteralMapFromString(wResourceType
+                        .createResourceMapFromString(wResourceType
                                 .getRights());
 
                 webResource.setWebResourceEdmRights(edmRightsMap);
@@ -403,7 +403,7 @@ public final class AggregationFieldInput {
                 EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
                 SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
                 .getResource());
-        solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+        solrInputDocument = SolrUtils.addFieldFromResource(
                 solrInputDocument, aggregation.getRights(),
                 EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS);
         if (aggregation.getUgc() != null) {
@@ -607,7 +607,7 @@ public final class AggregationFieldInput {
             ups.unset("edmProvider");
         }
         Map<String, List<String>> rights = MongoUtils
-                .createResourceOrLiteralMapFromString(aggregation.getRights());
+                .createResourceMapFromString(aggregation.getRights());
         mongoAggregation.setEdmRights(rights);
         if (rights != null) {
 
@@ -719,7 +719,7 @@ public final class AggregationFieldInput {
                 .createResourceOrLiteralMapFromString(aggregation.getProvider());
         mongoAggregation.setEdmProvider(prov);
         Map<String, List<String>> rights = MongoUtils
-                .createResourceOrLiteralMapFromString(aggregation.getRights());
+                .createResourceMapFromString(aggregation.getRights());
         mongoAggregation.setEdmRights(rights);
 
         if (aggregation.getUgc() != null) {

@@ -51,9 +51,7 @@ public class WebResourcesFieldInputTest {
 		WebResourceType webResource = new WebResourceType();
 		webResource.setAbout("test about");
 		Rights1 rights = new Rights1();
-		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rightsResource = new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
-		rightsResource.setResource("test resource");
-		rights.setResource(rightsResource);
+		rights.setResource("test resource");
 		webResource.setRights(rights);
 		List<Rights> rightsList = new ArrayList<Rights>();
 		Rights rights1 = new Rights();
@@ -83,7 +81,7 @@ public class WebResourcesFieldInputTest {
 		WebResourceImpl webResourceMongo = new WebResourcesFieldInput()
 				.createWebResourceMongoField(webResource, mongoServer);
 		assertEquals(webResource.getAbout(), webResourceMongo.getAbout());
-		assertEquals(webResource.getRights().getResource().getResource(),
+		assertEquals(webResource.getRights().getResource(),
 				webResourceMongo.getWebResourceEdmRights().values().iterator()
 						.next().get(0));
 		assertEquals(webResource.getRightList().get(0).getResource()
@@ -98,7 +96,7 @@ public class WebResourcesFieldInputTest {
 			assertEquals(webResource.getAbout(),
 					solrDocument.getFieldValue(EdmLabel.EDM_WEB_RESOURCE
 							.toString()));
-			assertEquals(webResource.getRights().getResource().getResource(),
+			assertEquals(webResource.getRights().getResource(),
 					solrDocument.getFieldValue(EdmLabel.WR_EDM_RIGHTS
 							.toString()));
 			assertEquals(
