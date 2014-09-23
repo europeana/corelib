@@ -72,8 +72,8 @@ public class Node2Neo4jBeanConverter {
 
 	public static Neo4jStructBean toNeo4jStruct(Hierarchy hierarchy) {
 		Neo4jStructBean struct = new Neo4jStructBean();
-		if (hierarchy == null) {
-			return struct;
+		if (hierarchy == null|| hierarchy.getParents().size()==0) {
+			return null;
 		}
 
 		List<CustomNode> parents = hierarchy.getParents();
