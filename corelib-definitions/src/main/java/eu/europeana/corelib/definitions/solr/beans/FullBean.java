@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.License;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -289,4 +290,8 @@ public interface FullBean extends IdBean {
 	void setTimestampCreated(Date timestampCreated);
 	
 	void setTimestampUpdated(Date timestampUpdated);
+	
+	List<? extends License> getLicenses();
+	
+	void setLicenses(List<? extends License> licenses);
 }

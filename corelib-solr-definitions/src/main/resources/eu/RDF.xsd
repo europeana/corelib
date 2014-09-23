@@ -48,6 +48,12 @@
     <attribute ref="rdf:resource" use="required" />
   </complexType>
 
+<complexType name="DateType">
+	<simpleContent>
+		<restriction base="date"/>
+	</simpleContent>
+</complexType>
+
   <complexType name="AboutType">
     <annotation>
       <appinfo>

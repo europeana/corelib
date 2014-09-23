@@ -1,8 +1,10 @@
 package eu.europeana.corelib.solr.utils.construct;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -25,6 +27,7 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -34,8 +37,6 @@ import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.publication.common.ICollection;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 public class FullBeanHandler implements ICollection {
 
@@ -143,6 +144,7 @@ public class FullBeanHandler implements ICollection {
         List<ConceptImpl> concepts = new ArrayList<ConceptImpl>();
         List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
         List<PlaceImpl> places = new ArrayList<PlaceImpl>();
+        List<LicenseImpl> licenses = new ArrayList<>();
         if (fullBean.getAgents() != null) {
             for (AgentImpl agent : fullBean.getAgents()) {
                 AgentImpl retAgent = mongoServer.searchByAbout(AgentImpl.class,
@@ -215,7 +217,28 @@ public class FullBeanHandler implements ICollection {
                 }
             }
         }
-
+        
+        if(fullBean.getLicenses()!=null){
+        	for(LicenseImpl license: fullBean.getLicenses()){
+        		LicenseImpl retLicense =mongoServer.searchByAbout(
+                        LicenseImpl.class, license.getAbout());
+        	
+        	if (retLicense != null) {
+                licenses.add(new LicenseUpdater().update(retLicense, license,
+                        mongoServer));
+            } else {
+                try {
+                    mongoServer.getDatastore().save(license);
+                    licenses.add(license);
+                } catch (Exception e) {
+                    licenses.add(new LicenseUpdater().update(mongoServer.searchByAbout(
+                            LicenseImpl.class, license.getAbout()), license,
+                            mongoServer));
+                }
+            }
+        	}
+        }
+        
         if (isFirstSave) {
             mongoServer.getDatastore().save(fullBean.getProvidedCHOs());
             mongoServer.getDatastore().save(fullBean.getEuropeanaAggregation());
@@ -263,7 +286,7 @@ public class FullBeanHandler implements ICollection {
         fullBean.setPlaces(places);
         fullBean.setConcepts(concepts);
         fullBean.setTimespans(timespans);
-
+        fullBean.setLicenses(licenses);
     }
 
     public FullBeanImpl updateFullBean(FullBeanImpl fullBean) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{

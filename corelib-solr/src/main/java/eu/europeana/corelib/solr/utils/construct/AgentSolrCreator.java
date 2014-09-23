@@ -37,36 +37,12 @@ public class AgentSolrCreator {
         SolrUtils.addFromMap(doc, EdmLabel.AG_FOAF_NAME, agent.getFoafName());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_DATEOFBIRTH, agent.getRdaGr2DateOfBirth());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_DATEOFDEATH, agent.getRdaGr2DateOfDeath());
+        SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_PLACEOFBIRTH, agent.getRdaGr2PlaceOfBirth());
+        SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_PLACEOFDEATH, agent.getRdaGr2PlaceOfDeath());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_DATEOFESTABLISHMENT, agent.getRdaGr2DateOfEstablishment());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_DATEOFTERMINATION, agent.getRdaGr2DateOfTermination());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_GENDER, agent.getRdaGr2Gender());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_PROFESSIONOROCCUPATION, agent.getRdaGr2ProfessionOrOccupation());
         SolrUtils.addFromMap(doc, EdmLabel.AG_RDAGR2_BIOGRAPHICALINFORMATION, agent.getRdaGr2BiographicalInformation());
-
-//		if (agent.getRdaGr2PlaceOfBirth() != null) {
-//			for (String key : agent.getRdaGr2PlaceOfBirth().keySet()) {
-//				values = doc.getFieldValues(
-//						EdmLabel.AG_RDAGR2_PLACEOFBIRTH.toString());
-//				if (values == null) {
-//					values = new ArrayList<Object>();
-//				}
-//				values.addAll(agent.getRdaGr2PlaceOfBirth().get(key));
-//				doc.setField(EdmLabel.AG_RDAGR2_PLACEOFBIRTH.toString(),
-//						values);
-//			}
-//		}
-//		
-//		if (agent.getRdaGr2PlaceOfDeath() != null) {
-//			for (String key : agent.getRdaGr2PlaceOfDeath().keySet()) {
-//				values = doc.getFieldValues(
-//						EdmLabel.AG_RDAGR2_PLACEOFDEATH.toString());
-//				if (values == null) {
-//					values = new ArrayList<Object>();
-//				}
-//				values.addAll(agent.getRdaGr2PlaceOfDeath().get(key));
-//				doc.setField(EdmLabel.AG_RDAGR2_PLACEOFDEATH.toString(),
-//						values);
-//			}
-//		}
     }
 }

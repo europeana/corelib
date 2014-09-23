@@ -55,6 +55,7 @@ public class WebResourceImpl implements WebResource {
 	private Map<String,List<String>> dctermsCreated;
 	private Map<String,List<String>> dctermsIsFormatOf;
 	private Map<String,List<String>> dctermsHasPart;
+	private Map<String,List<String>> dcCreator;
 	private String isNextInSequence;
 
 	@Override
@@ -197,6 +198,16 @@ public class WebResourceImpl implements WebResource {
 		return this.id;
 	}
 
+	@Override
+	public Map<String,List<String>> getDcCreator(){
+		return this.dcCreator;
+	}
+	
+	@Override
+	public void setDcCreator(Map<String,List<String>> dcCreator){
+		this.dcCreator=dcCreator;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o == null){

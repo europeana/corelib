@@ -25,6 +25,7 @@ import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.License;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
@@ -35,6 +36,7 @@ import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.EuropeanaAggregationFieldInput;
+import eu.europeana.corelib.solr.server.importer.util.LicenseFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
@@ -114,7 +116,11 @@ public class SolrConstructor {
 				solrInputDocument = new WebResourcesFieldInput().createWebResourceSolrFields(wresource, solrInputDocument);
 			}
 		}
-
+		if(rdf.getLicenseList()!=null){
+			for(License license: rdf.getLicenseList()){
+				solrInputDocument = new LicenseFieldInput().createLicenseSolrFields(license, solrInputDocument);
+			}
+		}
 		return solrInputDocument;
 	}
 }

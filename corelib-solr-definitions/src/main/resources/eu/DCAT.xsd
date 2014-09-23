@@ -47,7 +47,7 @@
                     <sequence>
                         <element ref="edm:datasetName" maxOccurs="1" minOccurs="1"/>
                         <element ref="edm:provider" maxOccurs="1" minOccurs="1"/>
-                        <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="0"/>
+                        <element ref="dc:identifier" maxOccurs="1" minOccurs="1"/>
                         <element ref="dcterms:created" maxOccurs="1" minOccurs="0"/>
                         <element ref="dcterms:extent" maxOccurs="1" minOccurs="1"/>
                         <element ref="adms:status" maxOccurs="1" minOccurs="1"/>

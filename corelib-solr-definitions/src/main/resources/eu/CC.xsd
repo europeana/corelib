@@ -30,6 +30,6 @@
 			</complexContent>
 		</complexType>
 	</element>
-	<element name="deprecatedOn" type="rdf:LiteralType">
+	<element name="deprecatedOn" type="rdf:DateType">
 	</element>
 </schema>

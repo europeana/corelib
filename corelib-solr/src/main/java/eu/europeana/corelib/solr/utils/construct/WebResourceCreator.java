@@ -39,6 +39,7 @@ public class WebResourceCreator {
         boolean update = false;
         update = MongoUtils.updateMap(wrMongo, wr, "dcDescription", ops) || update;
         update = MongoUtils.updateMap(wrMongo, wr, "dcFormat", ops) || update;
+        update = MongoUtils.updateMap(wrMongo, wr, "dcCreator", ops) || update;
         update = MongoUtils.updateMap(wrMongo, wr, "dcSource", ops) || update;
         update = MongoUtils.updateMap(wrMongo, wr, "dctermsConformsTo", ops) || update;
         update = MongoUtils.updateMap(wrMongo, wr, "dctermsCreated", ops) || update;

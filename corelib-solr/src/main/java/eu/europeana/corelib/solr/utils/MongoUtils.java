@@ -238,6 +238,30 @@ public final class MongoUtils {
 	}
 
 	/**
+	 * Checks whether two maps contain exactly the same key,value combinations
+	 * 
+	 * @param mapA
+	 * @param mapB
+	 * @return
+	 */
+	public static boolean mapRefEquals(Map<String, String> mapA,
+			Map<String, String> mapB) {
+		if (mapA != null && mapB != null) {
+			if (mapA.keySet().equals(mapB.keySet())) {
+				boolean equals = true;
+				for (String keyA : mapA.keySet()) {
+					String strA = mapA.get(keyA);
+					String strB = mapB.get(keyA);
+					return StringUtils.equals(strA, strB);
+					
+				}
+
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Check if two arrays contain the same values
 	 * 
 	 * @param arrA
@@ -310,6 +334,50 @@ public final class MongoUtils {
 		return null;
 	}
 
+	/**
+	 * Method that converts a ResourceOrLiteralType.class object to a
+	 * multilingual map of strings
+	 * 
+	 * @param obj
+	 *            The ResourceOrLiteralType object
+	 * @return A Map of strings. The keys are the languages and the values are
+	 *         lists of strings for the corresponding language. If the object is
+	 *         null, the method returns null. In case a language is missing the
+	 *         def notation is used as key
+	 */
+	public static <T extends ResourceOrLiteralType> Map<String, String> createResourceOrLiteralRefFromString(
+			T obj) {
+		Map<String, String> retMap = new HashMap<String, String>();
+		if (obj != null) {
+			if (obj.getLang() != null
+					&& StringUtils.isNotEmpty(obj.getLang().getLang())) {
+				if (obj.getString() != null
+						&& StringUtils.trimToNull(obj.getString()) != null) {
+					String val = StringUtils.trim(obj.getString());
+					retMap.put(obj.getLang().getLang(), val);
+				}
+				if (obj.getResource() != null) {
+					String val = obj.getResource().getResource();
+					retMap.put(obj.getLang().getLang(), val);
+				}
+			} else {
+				if (obj.getString() != null
+						&& StringUtils.trimToNull(obj.getString()) != null) {
+					String val = StringUtils.trim(obj.getString());
+					retMap.put("def", val);
+				}
+				if (obj.getResource() != null) {
+					String val = obj.getResource().getResource();
+					retMap.put("def", val);
+				}
+			}
+			return retMap;
+		}
+
+		return null;
+	}
+	
+	
 	public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromString(
 			T obj) {
 		Map<String, List<String>> retMap = new HashMap<String, List<String>>();
@@ -459,7 +527,56 @@ public final class MongoUtils {
 		return null;
 	}
 
-	
+	public static <T> boolean updateMapRef(T saved, T updated, String updateField,
+			UpdateOperations ops) throws NoSuchMethodException,
+			IllegalAccessException, InvocationTargetException {
+		try {
+			Method getter = saved.getClass().getMethod(
+					"get" + StringUtils.capitalize(updateField));
+			Method setter = saved.getClass().getMethod(
+					"set" + StringUtils.capitalize(updateField), Map.class);
+			Map<String, String> savedValues = (Map<String, String>) getter
+					.invoke(saved);
+			Map<String, String> updatedValues = (Map<String, String>) getter
+					.invoke(updated);
+
+			if (updatedValues != null) {
+				if (savedValues == null
+						|| !MongoUtils.mapRefEquals(updatedValues, savedValues)) {
+					ops.set(updateField, updatedValues);
+					setter.invoke(saved, updatedValues);
+					return true;
+				}
+			} else {
+				if (saved != null) {
+					ops.unset(updateField);
+					setter.invoke(saved, (Object) null);
+					return true;
+				}
+			}
+		} catch (NoSuchMethodException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (SecurityException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalAccessException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (IllegalArgumentException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		} catch (InvocationTargetException ex) {
+			Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE,
+					null, ex);
+			throw ex;
+		}
+		return false;
+	}
 	
 	public static <T> boolean updateMap(T saved, T updated, String updateField,
 			UpdateOperations ops) throws NoSuchMethodException,

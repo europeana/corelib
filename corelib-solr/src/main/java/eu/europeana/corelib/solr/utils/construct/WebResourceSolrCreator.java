@@ -25,6 +25,7 @@ public class WebResourceSolrCreator {
         SolrUtils.addFromMap(doc, EdmLabel.WR_DC_DESCRIPTION, wr.getDcDescription());
         SolrUtils.addFromMap(doc, EdmLabel.WR_DC_FORMAT, wr.getDcFormat());
         SolrUtils.addFromMap(doc, EdmLabel.WR_DC_SOURCE, wr.getDcSource());
+        SolrUtils.addFromMap(doc, EdmLabel.WR_DC_CREATOR, wr.getDcCreator());
         SolrUtils.addFromMap(doc, EdmLabel.WR_DCTERMS_CONFORMSTO, wr.getDctermsConformsTo());
         SolrUtils.addFromMap(doc, EdmLabel.WR_DCTERMS_CREATED, wr.getDctermsCreated());
         SolrUtils.addFromMap(doc, EdmLabel.WR_DCTERMS_EXTENT, wr.getDctermsExtent());

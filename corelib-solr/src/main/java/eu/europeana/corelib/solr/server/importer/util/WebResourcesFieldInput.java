@@ -20,6 +20,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.ConformsTo;
 import eu.europeana.corelib.definitions.jibx.Created;
+import eu.europeana.corelib.definitions.jibx.Creator;
 import eu.europeana.corelib.definitions.jibx.Description;
 import eu.europeana.corelib.definitions.jibx.Extent;
 import eu.europeana.corelib.definitions.jibx.Format;
@@ -145,6 +146,14 @@ public final class WebResourcesFieldInput {
 								EdmLabel.WR_DCTERMS_ISSUED);
 			}
 		}
+		
+		if(webResource.getCreatorList()!=null){
+			for(Creator creator:webResource.getCreatorList()){
+				solrInputDocument = SolrUtils
+						.addFieldFromResourceOrLiteral(solrInputDocument, creator,
+								EdmLabel.WR_DC_CREATOR);
+			}
+		}
 		return solrInputDocument;
 	}
 
@@ -166,6 +175,7 @@ public final class WebResourcesFieldInput {
 		mongoWebResource.setDcDescription(MongoUtils.createResourceOrLiteralMapFromList(webResource
 								.getDescriptionList()));
 		mongoWebResource.setDcFormat(MongoUtils.createResourceOrLiteralMapFromList(webResource.getFormatList()));
+		mongoWebResource.setDcCreator(MongoUtils.createResourceOrLiteralMapFromList(webResource.getCreatorList()));
 		mongoWebResource.setDcSource(MongoUtils.createResourceOrLiteralMapFromList(webResource.getSourceList()));
 		mongoWebResource.setDctermsConformsTo(MongoUtils.createResourceOrLiteralMapFromList(webResource.getConformsToList()));
 		mongoWebResource.setDctermsCreated(MongoUtils.createResourceOrLiteralMapFromList(webResource.getCreatedList()));
