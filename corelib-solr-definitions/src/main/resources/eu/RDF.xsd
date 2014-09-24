@@ -52,7 +52,7 @@
 	<simpleContent>
 		<restriction base="date"/>
 	</simpleContent>
-	<attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema-datatypes#date"/>
+	<attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#date"/>
 </complexType>
 
   <complexType name="AboutType">
