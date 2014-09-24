@@ -57,6 +57,8 @@ public class WebResourceImpl implements WebResource {
 	private Map<String,List<String>> dctermsHasPart;
 	private Map<String,List<String>> dcCreator;
 	private String isNextInSequence;
+	private String[] owlSameAs;
+	
 
 	@Override
 	public String getAbout() {
@@ -222,5 +224,15 @@ public class WebResourceImpl implements WebResource {
 	@Override
 	public int hashCode() {
 		return this.about.hashCode();
+	}
+
+	@Override
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
+	}
+
+	@Override
+	public String[] getOwlSameAs() {
+		return this.owlSameAs;
 	}
 }

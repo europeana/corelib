@@ -73,7 +73,7 @@ public enum EdmLabel {
 	WR_DCTERMS_ISFORMATOF("wr_dcterms_isFormatOf", SolrType.NOT_STORED), 
 	WR_DCTERMS_HAS_PART("wr_dcterms_hasPart", SolrType.NOT_STORED), 
 	WR_EDM_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
-
+	WR_OWL_SAMEAS("wr_owl_sameAs",SolrType.NOT_STORED),
 	// PROVIDER PROXY
 	ORE_PROXY("proxy_ore_proxy", SolrType.INDEXED), 
 	EDM_ISEUROPEANA_PROXY("edm_europeana_proxy",SolrType.NOT_STORED),
