@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import javax.annotation.Resource;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml" })
 public class MicrosoftTranslatorServiceTest {
