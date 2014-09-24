@@ -16,7 +16,7 @@ public class MicrosoftTranslatorServiceTest {
 	@Resource
 	private MicrosoftTranslatorService microsoftTranslator;
 
-	@Test
+//	@Test
 	public void testTranslateLocation() {
 		String translated = microsoftTranslator.translate("den haag", "en");
 		System.out.println(translated);
@@ -24,7 +24,7 @@ public class MicrosoftTranslatorServiceTest {
 		assertEquals("The Hague", translated);
 	}
 
-	@Test
+//	@Test
 	public void testTranslateSentence() {
 		String translated = microsoftTranslator.translate("Stevie Wonder is een Amerikaans zanger, componist en multi-instrumentalist.", "en");
 		System.out.println(translated);
