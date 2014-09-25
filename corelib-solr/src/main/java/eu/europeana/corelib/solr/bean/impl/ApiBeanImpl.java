@@ -231,8 +231,9 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     public Map<String, List<String>> getEdmConceptPrefLabelLangAware() {
         if (edmConceptPrefLabelLangAware != null) {
             Map<String, List<String>> retMap = new HashMap<>();
-            Set<String> cleaned = new HashSet<String>();
+            
             for (String key : edmConceptPrefLabelLangAware.keySet()) {
+            	Set<String> cleaned = new HashSet<String>();
             	for(String dup : edmConceptPrefLabelLangAware.get(key)){
             		cleaned.add(dup);
             	}
