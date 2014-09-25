@@ -19,13 +19,15 @@ package eu.europeana.corelib.solr.bean.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.solr.beans.ApiBean;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.ApiBean
@@ -229,9 +231,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     public Map<String, List<String>> getEdmConceptPrefLabelLangAware() {
         if (edmConceptPrefLabelLangAware != null) {
             Map<String, List<String>> retMap = new HashMap<>();
-
+            Set<String> cleaned = new HashSet<String>();
             for (String key : edmConceptPrefLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmConceptPrefLabelLangAware.get(key));
+            	for(String dup : edmConceptPrefLabelLangAware.get(key)){
+            		cleaned.add(dup);
+            	}
+            	
+                retMap.put(StringUtils.substringAfter(key, "."), new ArrayList<String>(cleaned));
             }
 
             return retMap;
