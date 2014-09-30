@@ -8,23 +8,23 @@ import org.apache.commons.lang.StringUtils;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.definitions.solr.entity.Organisation;
+import eu.europeana.corelib.definitions.solr.entity.Organization;
 import eu.europeana.corelib.solr.MongoServer;
-import eu.europeana.corelib.solr.entity.OrganisationImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
 //TODO: NOT TO BE USED
-public class OrganisationUpdater implements Updater<Organisation, eu.europeana.corelib.definitions.jibx.Organisation> {
+public class OrganizationUpdater implements Updater<Organization, eu.europeana.corelib.definitions.jibx.Organization> {
 
 	@Override
-	public void update(Organisation mongoEntity,
-			eu.europeana.corelib.definitions.jibx.Organisation jibxEntity,
+	public void update(Organization mongoEntity,
+			eu.europeana.corelib.definitions.jibx.Organization jibxEntity,
 			MongoServer mongoServer) {
-		Query<OrganisationImpl> updateQuery = mongoServer.getDatastore()
-				.createQuery(OrganisationImpl.class).field("about")
+		Query<OrganizationImpl> updateQuery = mongoServer.getDatastore()
+				.createQuery(OrganizationImpl.class).field("about")
 				.equal(jibxEntity.getAbout());
-		UpdateOperations<OrganisationImpl> ops = mongoServer.getDatastore()
-				.createUpdateOperations(OrganisationImpl.class);
+		UpdateOperations<OrganizationImpl> ops = mongoServer.getDatastore()
+				.createUpdateOperations(OrganizationImpl.class);
 		boolean update = false;
 		
 		if (jibxEntity.getBegin() != null) {
@@ -412,55 +412,55 @@ public class OrganisationUpdater implements Updater<Organisation, eu.europeana.c
 			}
 		}
 		
-		if(jibxEntity.getOrganisationScope()!=null){
+		if(jibxEntity.getOrganizationScope()!=null){
 			Map<String, String> organizationScope = MongoUtils
-					.createResourceOrLiteralRefFromString(jibxEntity.getOrganisationScope());
+					.createResourceOrLiteralRefFromString(jibxEntity.getOrganizationScope());
 			if (organizationScope != null) {
-				if (mongoEntity.getEdmOrganisationScope() == null
+				if (mongoEntity.getEdmOrganizationScope() == null
 						|| !MongoUtils.mapRefEquals(organizationScope,
-								mongoEntity.getEdmOrganisationScope())) {
+								mongoEntity.getEdmOrganizationScope())) {
 					ops.set("edmOrganizationScope", organizationScope);
 					update = true;
 				}
 			}
 		}else {
-			if (mongoEntity.getEdmOrganisationScope()!=null){
+			if (mongoEntity.getEdmOrganizationScope()!=null){
 				ops.unset("edmOrganizationScope");
 				update = true;
 			}
 		}
 		
-		if(jibxEntity.getOrganisationDomain()!=null){
+		if(jibxEntity.getOrganizationDomain()!=null){
 			Map<String, String> organizationDomain= MongoUtils
-					.createResourceOrLiteralRefFromString(jibxEntity.getOrganisationDomain());
+					.createResourceOrLiteralRefFromString(jibxEntity.getOrganizationDomain());
 			if (organizationDomain != null) {
-				if (mongoEntity.getEdmOrganisationDomain() == null
+				if (mongoEntity.getEdmOrganizationDomain() == null
 						|| !MongoUtils.mapRefEquals(organizationDomain,
-								mongoEntity.getEdmOrganisationDomain())) {
+								mongoEntity.getEdmOrganizationDomain())) {
 					ops.set("edmOrganizationDomain", organizationDomain);
 					update = true;
 				}
 			}
 		}else {
-			if (mongoEntity.getEdmOrganisationDomain()!=null){
+			if (mongoEntity.getEdmOrganizationDomain()!=null){
 				ops.unset("edmOrganizationDomain");
 				update = true;
 			}
 		}
 		
-		if(jibxEntity.getOrganisationSector()!=null){
+		if(jibxEntity.getOrganizationSector()!=null){
 			Map<String, String> organizationSector= MongoUtils
-					.createResourceOrLiteralRefFromString(jibxEntity.getOrganisationSector());
+					.createResourceOrLiteralRefFromString(jibxEntity.getOrganizationSector());
 			if (organizationSector != null) {
-				if (mongoEntity.getEdmOrganisationSector() == null
+				if (mongoEntity.getEdmOrganizationSector() == null
 						|| !MongoUtils.mapRefEquals(organizationSector,
-								mongoEntity.getEdmOrganisationSector())) {
+								mongoEntity.getEdmOrganizationSector())) {
 					ops.set("edmOrganizationSector", organizationSector);
 					update = true;
 				}
 			}
 		}else {
-			if (mongoEntity.getEdmOrganisationSector()!=null){
+			if (mongoEntity.getEdmOrganizationSector()!=null){
 				ops.unset("edmOrganizationSector");
 				update = true;
 			}

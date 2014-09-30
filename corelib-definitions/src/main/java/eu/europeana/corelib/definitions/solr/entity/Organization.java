@@ -3,23 +3,23 @@ package eu.europeana.corelib.definitions.solr.entity;
 import java.util.List;
 import java.util.Map;
 //TODO: NOT TO BE USED
-public interface Organisation extends Agent{
+public interface Organization extends Agent{
 	
 	Map<String,List<String>> getEdmAcronym();
 	
 	void setEdmAcronym(Map<String,List<String>> edmAcronym);
 	
-	Map<String,String> getEdmOrganisationScope();
+	Map<String,String> getEdmOrganizationScope();
 	
-	void setEdmOrganisationScope(Map<String,String> edmOrganisationScope);
+	void setEdmOrganizationScope(Map<String,String> edmOrganizationScope);
 	
-	Map<String,String> getEdmOrganisationDomain();
+	Map<String,String> getEdmOrganizationDomain();
 	
-	void setEdmOrganisationDomain(Map<String,String> edmOrganisationDomain);
+	void setEdmOrganizationDomain(Map<String,String> edmOrganizationDomain);
 	
-	Map<String,String> getEdmOrganisationSector();
+	Map<String,String> getEdmOrganizationSector();
 	
-	void setEdmOrganisationSector(Map<String,String> edmOrganisationSector);
+	void setEdmOrganizationSector(Map<String,String> edmOrganizationSector);
 	
 	Map<String,String> getEdmGeographicLevel();
 	

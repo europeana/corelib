@@ -74,7 +74,7 @@
             <element ref="ore:Proxy"  minOccurs="1" maxOccurs="unbounded"/>
             <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="cc:License" minOccurs="0" maxOccurs="unbounded"/>
-            <element ref="foaf:Organisation" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="foaf:Organization" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="dcat:Dataset" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
     </complexType>

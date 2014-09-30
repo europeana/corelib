@@ -1,6 +1,6 @@
 package eu.europeana.corelib.solr.utils.updaters;
 
-import java.util.Date;
+import java.sql.Date;
 
 import org.apache.commons.lang.StringUtils;
 

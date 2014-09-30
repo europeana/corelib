@@ -36,7 +36,7 @@
 	</element>
 
 
-	<element name="Organisation">
+	<element name="Organization">
 		<complexType>
 			<annotation>
 				<documentation> The EDM representation of an Organization
@@ -51,11 +51,11 @@
 							to get a 1-1 cardinality -->
 						<element ref="edm:acronym" maxOccurs="unbounded"
 							minOccurs="0" />
-						<element ref="edm:organisationScope" maxOccurs="1"
+						<element ref="edm:organizationScope" maxOccurs="1"
 							minOccurs="1" />
-						<element ref="edm:organisationDomain" maxOccurs="1"
+						<element ref="edm:organizationDomain" maxOccurs="1"
 							minOccurs="1" />
-						<element ref="edm:organisationSector" maxOccurs="1"
+						<element ref="edm:organizationSector" maxOccurs="1"
 							minOccurs="1" />
 						<element ref="edm:geographicLevel" maxOccurs="1"
 							minOccurs="1" />

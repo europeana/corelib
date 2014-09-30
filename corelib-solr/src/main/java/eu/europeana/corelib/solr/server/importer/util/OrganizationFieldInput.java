@@ -2,9 +2,9 @@ package eu.europeana.corelib.solr.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.definitions.solr.entity.Organisation;
+import eu.europeana.corelib.definitions.solr.entity.Organization;
 import eu.europeana.corelib.solr.MongoServer;
-import eu.europeana.corelib.solr.entity.OrganisationImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.server.EdmMongoServer;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 import eu.europeana.corelib.solr.utils.SolrUtils;
@@ -12,108 +12,108 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
 public class OrganizationFieldInput {
 
 	public SolrInputDocument createOrganizationSolrFields(
-			eu.europeana.corelib.definitions.jibx.Organisation organisation,
+			eu.europeana.corelib.definitions.jibx.Organization organization,
 			SolrInputDocument solrInputDocument) {
 		//TODO: to be implemented when required, not now 
 		
 		return solrInputDocument;
 	}
 	
-	public Organisation createOrganisationMongoFields(
-			eu.europeana.corelib.definitions.jibx.Organisation jibxOrganisation) {
-		Organisation mongoOrganisation = new OrganisationImpl();
-		mongoOrganisation.setAbout(jibxOrganisation.getAbout());
-		mongoOrganisation.setAltLabel(MongoUtils
-				.createLiteralMapFromList(jibxOrganisation.getAltLabelList()));
-		mongoOrganisation.setBegin(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation.getBegin()));
-		mongoOrganisation.setDcDate(MongoUtils
-				.createResourceOrLiteralMapFromList(jibxOrganisation
+	public Organization createOrganizationMongoFields(
+			eu.europeana.corelib.definitions.jibx.Organization jibxOrganization) {
+		Organization mongoOrganization = new OrganizationImpl();
+		mongoOrganization.setAbout(jibxOrganization.getAbout());
+		mongoOrganization.setAltLabel(MongoUtils
+				.createLiteralMapFromList(jibxOrganization.getAltLabelList()));
+		mongoOrganization.setBegin(MongoUtils
+				.createLiteralMapFromString(jibxOrganization.getBegin()));
+		mongoOrganization.setDcDate(MongoUtils
+				.createResourceOrLiteralMapFromList(jibxOrganization
 						.getDateList()));
-		mongoOrganisation
+		mongoOrganization
 				.setDcIdentifier(MongoUtils
-						.createLiteralMapFromList(jibxOrganisation
+						.createLiteralMapFromList(jibxOrganization
 								.getIdentifierList()));
-		mongoOrganisation.setEdmAcronym(MongoUtils
-				.createLiteralMapFromList(jibxOrganisation.getAcronymList()));
-		if (jibxOrganisation.getCountry() != null) {
-			mongoOrganisation.setEdmCountry(jibxOrganisation.getCountry()
+		mongoOrganization.setEdmAcronym(MongoUtils
+				.createLiteralMapFromList(jibxOrganization.getAcronymList()));
+		if (jibxOrganization.getCountry() != null) {
+			mongoOrganization.setEdmCountry(jibxOrganization.getCountry()
 					.getCountry().xmlValue());
 		}
-		mongoOrganisation.setEdmEuropeanaRole(MongoUtils
-				.createResourceOrLiteralMapFromList(jibxOrganisation
+		mongoOrganization.setEdmEuropeanaRole(MongoUtils
+				.createResourceOrLiteralMapFromList(jibxOrganization
 						.getEuropeanaRoleList()));
-		mongoOrganisation.setEdmGeorgraphicLevel(MongoUtils
-				.createResourceOrLiteralRefFromString(jibxOrganisation
+		mongoOrganization.setEdmGeorgraphicLevel(MongoUtils
+				.createResourceOrLiteralRefFromString(jibxOrganization
 						.getGeographicLevel()));
-		mongoOrganisation.setEdmHasMet(MongoUtils
-				.createResourceMapFromList(jibxOrganisation.getHasMetList()));
-		mongoOrganisation.setEdmIsRelatedTo(MongoUtils
-				.createResourceOrLiteralMapFromList(jibxOrganisation
+		mongoOrganization.setEdmHasMet(MongoUtils
+				.createResourceMapFromList(jibxOrganization.getHasMetList()));
+		mongoOrganization.setEdmIsRelatedTo(MongoUtils
+				.createResourceOrLiteralMapFromList(jibxOrganization
 						.getIsRelatedToList()));
-		mongoOrganisation.setEdmOrganisationDomain(MongoUtils
-				.createResourceOrLiteralRefFromString(jibxOrganisation
-						.getOrganisationDomain()));
-		mongoOrganisation.setEdmOrganisationScope(MongoUtils
-				.createResourceOrLiteralRefFromString(jibxOrganisation
-						.getOrganisationScope()));
-		mongoOrganisation.setEdmOrganisationSector(MongoUtils
-				.createResourceOrLiteralRefFromString(jibxOrganisation
-						.getOrganisationSector()));
-		mongoOrganisation.setEnd(MongoUtils.createLiteralMapFromString(jibxOrganisation.getEnd()));
-		if(jibxOrganisation.getHomepage()!=null){
-			mongoOrganisation.setFoafHomepage(jibxOrganisation.getHomepage().getResource());
+		mongoOrganization.setEdmOrganizationDomain(MongoUtils
+				.createResourceOrLiteralRefFromString(jibxOrganization
+						.getOrganizationDomain()));
+		mongoOrganization.setEdmOrganizationScope(MongoUtils
+				.createResourceOrLiteralRefFromString(jibxOrganization
+						.getOrganizationScope()));
+		mongoOrganization.setEdmOrganizationSector(MongoUtils
+				.createResourceOrLiteralRefFromString(jibxOrganization
+						.getOrganizationSector()));
+		mongoOrganization.setEnd(MongoUtils.createLiteralMapFromString(jibxOrganization.getEnd()));
+		if(jibxOrganization.getHomepage()!=null){
+			mongoOrganization.setFoafHomepage(jibxOrganization.getHomepage().getResource());
 		}
-		mongoOrganisation.setFoafName(MongoUtils.createLiteralMapFromList(jibxOrganisation.getNameList()));
-		mongoOrganisation.setNote(MongoUtils.createLiteralMapFromList(jibxOrganisation.getNoteList()));
-		mongoOrganisation.setOwlSameAs(SolrUtils.resourceListToArray(jibxOrganisation.getSameAList()));
-		mongoOrganisation.setRdaGr2BiographicalInformation(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation
+		mongoOrganization.setFoafName(MongoUtils.createLiteralMapFromList(jibxOrganization.getNameList()));
+		mongoOrganization.setNote(MongoUtils.createLiteralMapFromList(jibxOrganization.getNoteList()));
+		mongoOrganization.setOwlSameAs(SolrUtils.resourceListToArray(jibxOrganization.getSameAList()));
+		mongoOrganization.setRdaGr2BiographicalInformation(MongoUtils
+				.createLiteralMapFromString(jibxOrganization
 						.getBiographicalInformation()));
-		mongoOrganisation.setRdaGr2DateOfBirth(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation.getDateOfBirth()));
-		mongoOrganisation.setRdaGr2DateOfDeath(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation.getDateOfDeath()));
-		mongoOrganisation.setRdaGr2PlaceOfBirth(MongoUtils
-				.createResourceOrLiteralMapFromString(jibxOrganisation.getPlaceOfBirth()));
-		mongoOrganisation.setRdaGr2PlaceOfDeath(MongoUtils
-				.createResourceOrLiteralMapFromString(jibxOrganisation.getPlaceOfDeath()));
-		mongoOrganisation.setRdaGr2DateOfEstablishment(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation.getDateOfEstablishment()));
-		mongoOrganisation.setRdaGr2DateOfTermination(MongoUtils
-				.createLiteralMapFromString(jibxOrganisation.getDateOfTermination()));
-		mongoOrganisation.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(jibxOrganisation
+		mongoOrganization.setRdaGr2DateOfBirth(MongoUtils
+				.createLiteralMapFromString(jibxOrganization.getDateOfBirth()));
+		mongoOrganization.setRdaGr2DateOfDeath(MongoUtils
+				.createLiteralMapFromString(jibxOrganization.getDateOfDeath()));
+		mongoOrganization.setRdaGr2PlaceOfBirth(MongoUtils
+				.createResourceOrLiteralMapFromString(jibxOrganization.getPlaceOfBirth()));
+		mongoOrganization.setRdaGr2PlaceOfDeath(MongoUtils
+				.createResourceOrLiteralMapFromString(jibxOrganization.getPlaceOfDeath()));
+		mongoOrganization.setRdaGr2DateOfEstablishment(MongoUtils
+				.createLiteralMapFromString(jibxOrganization.getDateOfEstablishment()));
+		mongoOrganization.setRdaGr2DateOfTermination(MongoUtils
+				.createLiteralMapFromString(jibxOrganization.getDateOfTermination()));
+		mongoOrganization.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(jibxOrganization
 				.getGender()));
-		mongoOrganisation.setRdaGr2ProfessionOrOccupation(MongoUtils
-				.createResourceOrLiteralMapFromString(jibxOrganisation
+		mongoOrganization.setRdaGr2ProfessionOrOccupation(MongoUtils
+				.createResourceOrLiteralMapFromString(jibxOrganization
 						.getProfessionOrOccupation()));
-		return mongoOrganisation;
+		return mongoOrganization;
 	}
 
-	public Organisation createLicenseMongoFields(
-			eu.europeana.corelib.definitions.jibx.Organisation jibxOrganisation,
+	public Organization createLicenseMongoFields(
+			eu.europeana.corelib.definitions.jibx.Organization jibxOrganization,
 			MongoServer mongoServer) {
-		Organisation mongoOrganisation = ((EdmMongoServer) mongoServer).getDatastore()
-				.find(Organisation.class).filter("about", jibxOrganisation.getAbout())
+		Organization mongoOrganization = ((EdmMongoServer) mongoServer).getDatastore()
+				.find(Organization.class).filter("about", jibxOrganization.getAbout())
 				.get();
 
-		if (mongoOrganisation == null) {
-			mongoOrganisation = createOrganisationMongoFields(jibxOrganisation);
+		if (mongoOrganization == null) {
+			mongoOrganization = createOrganizationMongoFields(jibxOrganization);
 			try {
-				mongoServer.getDatastore().save(mongoOrganisation);
+				mongoServer.getDatastore().save(mongoOrganization);
 			} catch (Exception e) {
-				mongoOrganisation = updateOrganisation(mongoOrganisation, jibxOrganisation,
+				mongoOrganization = updateOrganization(mongoOrganization, jibxOrganization,
 						mongoServer);
 			}
 		} else {
-			mongoOrganisation = updateOrganisation(mongoOrganisation, jibxOrganisation, mongoServer);
+			mongoOrganization = updateOrganization(mongoOrganization, jibxOrganization, mongoServer);
 		}
-		return mongoOrganisation;
+		return mongoOrganization;
 	}
 
-	private Organisation updateOrganisation(
-			Organisation mongoOrganisation,
-			eu.europeana.corelib.definitions.jibx.Organisation jibxOrganisation,
+	private Organization updateOrganization(
+			Organization mongoOrganization,
+			eu.europeana.corelib.definitions.jibx.Organization jibxOrganization,
 			MongoServer mongoServer) {
 		
 		return null;

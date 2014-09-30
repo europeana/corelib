@@ -5,20 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.definitions.solr.entity.Organisation;
+import eu.europeana.corelib.definitions.solr.entity.Organization;
 import eu.europeana.corelib.solr.MongoServer;
-import eu.europeana.corelib.solr.entity.OrganisationImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
 //TODO: NOT TO BE USED
-public class OrganisationUpdater implements Updater<Organisation> {
-	public Organisation update(Organisation mongoEntity, Organisation newEntity,
+public class OrganizationUpdater implements Updater<Organization> {
+	public Organization update(Organization mongoEntity, Organization newEntity,
 			MongoServer mongoServer) throws NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
-		Query<OrganisationImpl> updateQuery = mongoServer.getDatastore()
-				.createQuery(OrganisationImpl.class).field("about")
+		Query<OrganizationImpl> updateQuery = mongoServer.getDatastore()
+				.createQuery(OrganizationImpl.class).field("about")
 				.equal(mongoEntity.getAbout());
-		UpdateOperations<OrganisationImpl> ops = mongoServer.getDatastore()
-				.createUpdateOperations(OrganisationImpl.class);
+		UpdateOperations<OrganizationImpl> ops = mongoServer.getDatastore()
+				.createUpdateOperations(OrganizationImpl.class);
 		boolean update = false;
 		
 		update = MongoUtils.updateMap(mongoEntity, newEntity, "begin", ops) || update;

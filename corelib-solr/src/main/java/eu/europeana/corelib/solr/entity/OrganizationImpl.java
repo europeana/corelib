@@ -8,16 +8,16 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
 
-import eu.europeana.corelib.definitions.solr.entity.Organisation;
+import eu.europeana.corelib.definitions.solr.entity.Organization;
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("Organization")
 //TODO: NOT TO BE USED
-public class OrganisationImpl extends AgentImpl implements Organisation {
+public class OrganizationImpl extends AgentImpl implements Organization {
 
 	private Map<String,List<String>> edmAcronym;
-	private Map<String,String> edmOrganisationScope;
-	private Map<String,String> edmOrganisationDomain;
-	private Map<String,String> edmOrganisationSector;
+	private Map<String,String> edmOrganizationScope;
+	private Map<String,String> edmOrganizationDomain;
+	private Map<String,String> edmOrganizationSector;
 	private Map<String,String> edmGeographicLevel;
 	private String edmCountry;
 	private Map<String,List<String>> edmEuropeanaRole;
@@ -35,33 +35,33 @@ public class OrganisationImpl extends AgentImpl implements Organisation {
 	}
 
 	@Override
-	public Map<String,String> getEdmOrganisationScope() {
-		return this.edmOrganisationScope;
+	public Map<String,String> getEdmOrganizationScope() {
+		return this.edmOrganizationScope;
 	}
 
 	@Override
-	public void setEdmOrganisationScope(Map<String,String> edmOrganisationScope) {
-		this.edmOrganisationScope = edmOrganisationScope;
+	public void setEdmOrganizationScope(Map<String,String> edmOrganizationScope) {
+		this.edmOrganizationScope = edmOrganizationScope;
 	}
 
 	@Override
-	public Map<String,String> getEdmOrganisationDomain() {
-		return this.edmOrganisationDomain;
+	public Map<String,String> getEdmOrganizationDomain() {
+		return this.edmOrganizationDomain;
 	}
 
 	@Override
-	public void setEdmOrganisationDomain(Map<String,String> edmOrganisationDomain) {
-		this.edmOrganisationDomain = edmOrganisationDomain;
+	public void setEdmOrganizationDomain(Map<String,String> edmOrganizationDomain) {
+		this.edmOrganizationDomain = edmOrganizationDomain;
 	}
 
 	@Override
-	public Map<String,String> getEdmOrganisationSector() {
-		return this.edmOrganisationSector;
+	public Map<String,String> getEdmOrganizationSector() {
+		return this.edmOrganizationSector;
 	}
 
 	@Override
-	public void setEdmOrganisationSector(Map<String,String> edmOrganisationSector) {
-		this.edmOrganisationSector= edmOrganisationSector;
+	public void setEdmOrganizationSector(Map<String,String> edmOrganizationSector) {
+		this.edmOrganizationSector= edmOrganizationSector;
 	}
 
 	@Override

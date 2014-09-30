@@ -37,6 +37,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.License;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -396,11 +397,15 @@ public class FullBeanImpl implements FullBean, IDocument {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
     public List<LicenseImpl> getLicenses() {
 		return licenses;
 	}
 
-	public void setLicenses(List<LicenseImpl> licenses) {
-		this.licenses = licenses;
+    @Override
+	public void setLicenses(List<? extends License> licenses) {
+		this.licenses = (List<LicenseImpl>)licenses;
 	}
+
+	
 }
