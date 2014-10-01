@@ -13,8 +13,6 @@ import java.util.List;
 
 public class EuropeanaAggregationUpdater implements
 		Updater<EuropeanaAggregationImpl>  {
-private static final String PORTAL_PREFIX = "http://europeana.eu/portal/record/";
-    private static final String PORTAL_SUFFIX = ".html";
 	@Override
 	public EuropeanaAggregationImpl update(EuropeanaAggregationImpl mongoEntity,
 			EuropeanaAggregationImpl newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
