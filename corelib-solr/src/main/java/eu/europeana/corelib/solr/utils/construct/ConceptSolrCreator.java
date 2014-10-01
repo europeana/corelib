@@ -21,7 +21,6 @@ public class ConceptSolrCreator {
                 SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_PREF_LABEL, concept.getPrefLabel());
                 SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_ALT_LABEL, concept.getAltLabel());
                 SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_HIDDEN_LABEL, concept.getHiddenLabel());
-                SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_PREF_LABEL, concept.getPrefLabel());
 		SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_NOTE, concept.getNote());
                 SolrUtils.addFromMap(doc, EdmLabel.CC_SKOS_NOTATIONS, concept.getNotation());
 		SolrUtils.addFromStringArray(doc, EdmLabel.CC_SKOS_BROADER, concept.getBroader());
