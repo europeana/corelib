@@ -170,6 +170,38 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.hierarchyRoots']}")
 	private String hierarchyRootsString;
 
+	
+	
+	
+
+	@Value("#{europeanaProperties['portal.bing.translate.clientId']}")
+	private String bingTranslateClientId;
+
+	public String getBingTranslateClientId() {
+		return bingTranslateClientId;
+	}
+
+	public void setBingTranslateClientId(String bingTranslateClientId) {
+		this.bingTranslateClientId = bingTranslateClientId;
+	}
+
+	@Value("#{europeanaProperties['portal.bing.translate.clientSecret']}")
+	private String bingTranslateClientSecret;
+
+	
+	public String getBingTranslateClientSecret() {
+		return bingTranslateClientSecret;
+	}
+
+	public void setBingTranslateClientSecret(String bingTranslateClientSecret) {
+		this.bingTranslateClientSecret = bingTranslateClientSecret;
+	}
+
+
+	
+	
+	
+	
 	// ///////////////////////////// generated/derivated properties
 
 	private Map<String, String> seeAlsoTranslations;
