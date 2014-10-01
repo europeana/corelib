@@ -13,7 +13,8 @@ import java.util.List;
 
 public class EuropeanaAggregationUpdater implements
 		Updater<EuropeanaAggregationImpl>  {
-
+private static final String PORTAL_PREFIX = "http://europeana.eu/portal/record/";
+    private static final String PORTAL_SUFFIX = ".html";
 	@Override
 	public EuropeanaAggregationImpl update(EuropeanaAggregationImpl mongoEntity,
 			EuropeanaAggregationImpl newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
@@ -28,7 +29,7 @@ public class EuropeanaAggregationUpdater implements
 		update = MongoUtils.updateString(mongoEntity, newEntity, "edmIsShownBy", ops)||update;
                 update = MongoUtils.updateMap(mongoEntity, newEntity, "edmRights", ops)||update;
 		update = MongoUtils.updateMap(mongoEntity, newEntity, "edmCountry", ops)||update;
-		update = MongoUtils.updateString(mongoEntity, newEntity, "edmLandingPage", ops)||update;
+		//update = MongoUtils.updateString(mongoEntity, newEntity, "edmLandingPage", ops)||update;
 		update = MongoUtils.updateMap(mongoEntity, newEntity, "edmLanguage", ops)||update;
                 update = MongoUtils.updateMap(mongoEntity, newEntity, "dcCreator", ops)||update;
 		update = MongoUtils.updateString(mongoEntity, newEntity, "edmPreview", ops)||update;
