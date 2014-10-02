@@ -72,6 +72,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 		this.serverPath = serverPath;
 	}
 
+	public  Neo4jServerImpl() {
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public Node getNode(String id) {
 		IndexHits<Node> nodes = index.get("rdf_about", id);

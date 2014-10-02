@@ -37,4 +37,5 @@
 	/>
 	 <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
 	 <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmbeddedNeo4j"/>
 </beans>	
