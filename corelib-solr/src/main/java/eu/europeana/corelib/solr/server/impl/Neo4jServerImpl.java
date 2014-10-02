@@ -82,6 +82,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	@Override
+	public boolean isHierarchy(String id){
+		return getNode(id)!=null;
+	}
+	
+	@Override
 	public List<Node> getChildren(Node id, int offset, int limit) {
 
 		List<Node> children = new ArrayList<Node>();

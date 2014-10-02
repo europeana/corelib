@@ -672,6 +672,10 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
+	public boolean isHierarchy (String nodeId){
+		return neo4jServer.isHierarchy(nodeId);
+	}
+	@Override
 	public List<Neo4jBean> getChildren(String nodeId, int offset) {
 		return getChildren(nodeId, offset, 10);
 	}
