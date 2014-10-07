@@ -46,10 +46,12 @@
                 <extension base="rdf:AboutType">
                     <sequence>
                         <element ref="edm:datasetName" maxOccurs="1" minOccurs="1"/>
+                        <!-- TODO: The edm:provider is inherited from the main EDM schema. 
+							This means that it is of type ResourceOrLiteral -->
                         <element ref="edm:provider" maxOccurs="1" minOccurs="1"/>
-                        <element ref="dc:identifier" maxOccurs="1" minOccurs="1"/>
-                        <element ref="dcterms:created" maxOccurs="1" minOccurs="0"/>
-                        <element ref="dcterms:extent" maxOccurs="1" minOccurs="1"/>
+                        <element ref="dc:identifier" maxOccurs="unbounded" minOccurs="1"/>
+                        <element ref="dcterms:created" maxOccurs="1" minOccurs="1"/>
+                        <element ref="dcterms:extent" maxOccurs="1" minOccurs="0"/>
                         <element ref="adms:status" maxOccurs="1" minOccurs="1"/>
                     </sequence>
                 </extension>

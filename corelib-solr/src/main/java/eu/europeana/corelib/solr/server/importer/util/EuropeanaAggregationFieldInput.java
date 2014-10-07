@@ -260,15 +260,12 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		String landingPage = SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource();
-		if (landingPage != null) {
-			mongoAggregation.setEdmLandingPage(landingPage);
-			ops.set("edmLandingPage", landingPage);
-		} else {
+	
 			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
 					+ aggregation.getAggregatedCHO().getResource()+".html");
 			ops.set("edmLandingPage", EUROPEANA_URI
 					+ aggregation.getAggregatedCHO().getResource()+".html");
-		}
+		
 
 		Map<String, List<String>> language = MongoUtils
 				.createLiteralMapFromString(aggregation.getLanguage()
