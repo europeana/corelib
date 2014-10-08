@@ -49,6 +49,9 @@ public class EuropeanaAggregationSolrCreator {
 
     private boolean contains(Map<String, List<String>> edmRights,
             List<String> licIds) {
+    	if(edmRights==null){
+    		return false;
+    	}
         return licIds.contains(edmRights.values().iterator().next());
     }
 
