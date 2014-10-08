@@ -28,7 +28,7 @@ public class EuropeanaAggregationSolrCreator {
     public void create(SolrInputDocument doc, EuropeanaAggregation aggr, List<String> licIds) {
         SolrUtils.addFromString(doc, EdmLabel.EDM_EUROPEANA_AGGREGATION, aggr.getAbout());
         SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR, aggr.getDcCreator());
-        if (!contains(aggr.getEdmRights(), licIds)) {
+        if (licIds!=null && !contains(aggr.getEdmRights(), licIds)) {
             SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS, aggr.getEdmRights());
         }
         SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY, aggr.getEdmCountry());

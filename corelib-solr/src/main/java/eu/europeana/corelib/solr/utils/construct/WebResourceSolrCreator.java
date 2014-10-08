@@ -26,7 +26,7 @@ public class WebResourceSolrCreator {
 		SolrUtils.addFromString(doc, EdmLabel.EDM_WEB_RESOURCE, wr.getAbout());
 		SolrUtils.addFromString(doc, EdmLabel.WR_EDM_IS_NEXT_IN_SEQUENCE,
 				wr.getIsNextInSequence());
-		if (!contains(wr.getWebResourceEdmRights(), licIds)) {
+		if (licIds!=null && !contains(wr.getWebResourceEdmRights(), licIds)) {
 			SolrUtils.addFromMap(doc, EdmLabel.WR_EDM_RIGHTS,
 					wr.getWebResourceEdmRights());
 		}
@@ -55,7 +55,7 @@ public class WebResourceSolrCreator {
 
 	private boolean contains(Map<String, List<String>> webResourceEdmRights,
 			List<String> licIds) {
-		if (webResourceEdmRights == null) {
+		if (licIds == null || webResourceEdmRights == null) {
 			return false;
 		}
 		return licIds.contains(webResourceEdmRights.values().iterator().next());
