@@ -79,7 +79,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 	public Node getNode(String id) {
 		IndexHits<Node> nodes = index.get("rdf_about", id);
 		if (nodes.size() > 0) {
-			return nodes.getSingle();
+			if(nodes.getSingle().hasRelationship()){
+				return nodes.getSingle();
+			}
 		}
 		return null;
 	}
