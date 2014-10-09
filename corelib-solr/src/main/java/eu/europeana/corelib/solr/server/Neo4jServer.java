@@ -25,4 +25,6 @@ public interface Neo4jServer extends AbstractServer {
         Hierarchy  getInitialStruct(String id);
         
         String getCustomPath();
+
+		boolean isHierarchy(String id);
 }

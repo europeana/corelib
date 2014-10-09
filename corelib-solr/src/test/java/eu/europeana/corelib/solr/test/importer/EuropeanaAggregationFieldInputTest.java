@@ -132,7 +132,7 @@ public class EuropeanaAggregationFieldInputTest {
 							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_ISSHOWNBY
 									.toString()));
 			assertEquals(
-					eAggregation.getLandingPage().getResource(),
+					"http://www.europeana.eu/portal/recordtest aggregatedCHO.html",
 					solrDocument
 							.getFieldValue(EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE
 									.toString()));
@@ -201,7 +201,7 @@ public class EuropeanaAggregationFieldInputTest {
 							.get(0));
 			assertEquals(aggregation.getIsShownBy().getResource(),
 					aggregationMongo.getEdmIsShownBy());
-			assertEquals(aggregation.getLandingPage().getResource(),
+			assertEquals("http://europeana.eu/portal/record/.html",
 					aggregationMongo.getEdmLandingPage());
 			assertEquals(aggregation.getLanguage().getLanguage().xmlValue(),
 					aggregationMongo.getEdmLanguage().values().iterator()

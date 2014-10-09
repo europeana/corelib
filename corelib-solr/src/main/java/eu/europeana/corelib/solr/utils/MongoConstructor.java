@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.License;
 import eu.europeana.corelib.definitions.jibx.PlaceType;
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.ProxyFor;
@@ -39,6 +40,7 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -49,6 +51,7 @@ import eu.europeana.corelib.solr.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.AggregationFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ConceptFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.EuropeanaAggregationFieldInput;
+import eu.europeana.corelib.solr.server.importer.util.LicenseFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProvidedCHOFieldInput;
 import eu.europeana.corelib.solr.server.importer.util.ProxyFieldInput;
@@ -87,7 +90,7 @@ public class MongoConstructor {
 		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-
+		List<LicenseImpl> licenses = new ArrayList<LicenseImpl>();
 		String aggregationAbout = "/aggregation/provider";
 		String europeanaAggregationAbout = "/aggregation/europeana";
 		String proxyAbout = "/proxy/provider";
@@ -110,6 +113,11 @@ public class MongoConstructor {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
+		}
+		if(record.getLicenseList()!=null){
+		for(License license:record.getLicenseList()){
+			licenses.add(new LicenseFieldInput().createLicenseMongoFields(license, mongoServer));
+		}
 		}
 		for (ProxyType proxytype : record.getProxyList()) {
 
@@ -216,6 +224,9 @@ public class MongoConstructor {
 		fullBean.setProvidedCHOs(providedCHOs);
 
 		fullBean.setAggregations(aggregations);
+		if(licenses.size()>0){
+			fullBean.setLicenses(licenses);
+		}
 		try {
 			if (agents.size() > 0) {
 				fullBean.setAgents(agents);
@@ -250,7 +261,7 @@ public class MongoConstructor {
 		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-
+		List<LicenseImpl> licenses = new ArrayList<LicenseImpl>();
 		String aggregationAbout = "/aggregation/provider";
 		String europeanaAggregationAbout = "/aggregation/europeana";
 		String proxyAbout = "/proxy/provider";

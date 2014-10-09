@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.zookeeper.proto.op_result_t;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -43,6 +42,7 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -87,6 +87,7 @@ public class EdmUtils {
 		appendConcepts(rdf, fullBean.getConcepts());
 		appendPlaces(rdf, fullBean.getPlaces());
 		appendTimespans(rdf, fullBean.getTimespans());
+		appendLicenses(rdf, fullBean.getLicenses());
 		IMarshallingContext marshallingContext;
 		try {
 			if (bfact == null) {
@@ -103,6 +104,23 @@ public class EdmUtils {
 			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return null;
+	}
+
+	private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses) {
+		if(licenses!=null){
+			List<License> licenseList = new ArrayList<License>();
+			for(LicenseImpl lic : licenses){
+				License license = new License();
+				license.setAbout(lic.getAbout());
+				addAsObject(license,InheritFrom.class,lic.getOdrlInheritFrom());
+				DateType date= new DateType();
+				date.setDate(lic.getCcDeprecatedOn());
+				license.setDeprecatedOn(date);
+				licenseList.add(license);
+			}
+			rdf.setLicenseList(licenseList);
+		}
+		
 	}
 
 	private static String getType(FullBeanImpl fullBean) {

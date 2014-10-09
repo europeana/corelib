@@ -12,6 +12,7 @@ import com.google.code.morphia.annotations.Reference;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("EuropeanaAggregation")
@@ -63,7 +64,8 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public String getEdmLandingPage() {
-		return this.edmLandingPage;
+            String finalUrl = "http://europeana.eu/portal/record/"+StringUtils.substringAfter(this.aggregatedCHO, "/item/")+".html";
+		return finalUrl;
 	}
 
 	@Override

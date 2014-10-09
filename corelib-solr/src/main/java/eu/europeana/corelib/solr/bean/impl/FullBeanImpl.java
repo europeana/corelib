@@ -16,11 +16,20 @@
  */
 package eu.europeana.corelib.solr.bean.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Indexed;
 import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
+
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
@@ -28,6 +37,7 @@ import eu.europeana.corelib.definitions.solr.entity.Agent;
 import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.solr.entity.License;
 import eu.europeana.corelib.definitions.solr.entity.Place;
 import eu.europeana.corelib.definitions.solr.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.solr.entity.Proxy;
@@ -36,18 +46,13 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
-import java.util.Date;
-import java.util.List;
-import org.apache.commons.lang.StringUtils;
-import org.bson.types.ObjectId;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.beans.FullBean
@@ -109,8 +114,13 @@ public class FullBeanImpl implements FullBean, IDocument {
 
     @Reference
     protected List<ProxyImpl> proxies;
+    
+    @Reference
+    protected List<LicenseImpl> licenses;
 
-    protected String[] country;
+   
+
+	protected String[] country;
     protected String[] userTags;
 
     protected String[] europeanaCollectionName;
@@ -386,4 +396,16 @@ public class FullBeanImpl implements FullBean, IDocument {
     public void setId(String string) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public List<LicenseImpl> getLicenses() {
+		return licenses;
+	}
+
+    @Override
+	public void setLicenses(List<? extends License> licenses) {
+		this.licenses = (List<LicenseImpl>)licenses;
+	}
+
+	
 }

@@ -72,15 +72,25 @@ public class Neo4jServerImpl implements Neo4jServer {
 		this.serverPath = serverPath;
 	}
 
+	public  Neo4jServerImpl() {
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public Node getNode(String id) {
 		IndexHits<Node> nodes = index.get("rdf_about", id);
 		if (nodes.size() > 0) {
-			return nodes.getSingle();
+			if(nodes.getSingle().hasRelationship()){
+				return nodes.getSingle();
+			}
 		}
 		return null;
 	}
 
+	@Override
+	public boolean isHierarchy(String id){
+		return getNode(id)!=null;
+	}
+	
 	@Override
 	public List<Node> getChildren(Node id, int offset, int limit) {
 

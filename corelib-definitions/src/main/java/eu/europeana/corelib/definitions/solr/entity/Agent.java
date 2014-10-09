@@ -158,6 +158,30 @@ public interface Agent extends ContextualClass {
 	 * Sets the rdaGr2:dateOfDeath for an edm:Agent
 	 * @param rdaGr2DateOfDeath
 	 */
+	void setRdaGr2PlaceOfDeath(Map<String,List<String>> rdaGr2PlaceOfDeath);
+	
+	/**
+	 * 
+	 * @return the rdaGr2:dateOfDeath for an edm:Agent
+	 */
+	Map<String,List<String>> getRdaGr2PlaceOfDeath();
+
+	/**
+	 * Sets the rdaGr2:dateOfBirth for an edm:Agent
+	 * @param rdaGr2DateOfBirth
+	 */
+	void setRdaGr2PlaceOfBirth(Map<String,List<String>> rdaGr2PlaceOfBirth);
+	
+	/**
+	 * 
+	 * @return the rdaGr2:dateOfBirth for an edm:Agent
+	 */
+	Map<String,List<String>> getRdaGr2PlaceOfBirth();
+	
+	/**
+	 * Sets the rdaGr2:dateOfDeath for an edm:Agent
+	 * @param rdaGr2DateOfDeath
+	 */
 	void setRdaGr2DateOfDeath(Map<String,List<String>> rdaGr2DateOfDeath);
 	
 	/**

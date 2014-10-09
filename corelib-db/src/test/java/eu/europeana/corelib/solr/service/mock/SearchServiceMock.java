@@ -239,7 +239,11 @@ public class SearchServiceMock implements SearchService {
 
 	@Override
 	public Neo4jStructBean getInitialStruct(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Neo4jStructBean();
+	}
+
+	@Override
+	public boolean isHierarchy(String nodeId) {
+		return false;
 	}
 }

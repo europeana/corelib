@@ -570,7 +570,7 @@
         </annotation>
     </element>
 
-    <element name="organisationScope" type="rdf:ResourceOrLiteralType">
+    <element name="organizationScope" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation> Scope of an Organization 
                 Example: Cross/Single/Thematic/Individual </documentation>
@@ -578,14 +578,14 @@
     </element>
 
 
-    <element name="organisationDomain" type="rdf:ResourceOrLiteralType">
+    <element name="organizationDomain" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation> Domain of an Organization 
                 Example: Library/Archive/Museum </documentation>
         </annotation>
     </element>
 
-    <element name="organisationSector" type="rdf:ResourceOrLiteralType">
+    <element name="organizationSector" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation> Sector of an Organization 
                 Example: Private/Public/Goverment Department </documentation>

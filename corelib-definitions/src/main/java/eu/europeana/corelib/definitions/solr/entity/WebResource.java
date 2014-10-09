@@ -178,4 +178,12 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
 
+	Map<String, List<String>> getDcCreator();
+
+	void setDcCreator(Map<String, List<String>> dcCreator);
+	
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
+
 }

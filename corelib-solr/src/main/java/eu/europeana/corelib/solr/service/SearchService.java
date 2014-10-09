@@ -331,4 +331,6 @@ public interface SearchService {
 	 *   The complex structure
 	 */
 	Neo4jStructBean getInitialStruct(String nodeId);
+
+	boolean isHierarchy(String nodeId);
 }

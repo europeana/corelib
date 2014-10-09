@@ -1,7 +1,6 @@
 package eu.europeana.corelib.solr.utils.construct;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
 
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
@@ -9,7 +8,6 @@ import com.google.code.morphia.query.UpdateOperations;
 import eu.europeana.corelib.solr.MongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.utils.MongoUtils;
-import java.lang.reflect.InvocationTargetException;
 
 public class PlaceUpdater implements Updater<PlaceImpl> {
 

@@ -102,9 +102,8 @@ public final class EuropeanaAggregationFieldInput {
 				.getIsShownBy().getResource() : null);
 		solrInputDocument.addField(
 				EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE.toString(),
-				aggregation.getLandingPage() != null ? aggregation
-						.getLandingPage().getResource() : EUROPEANA_URI
-						+ aggregation.getAggregatedCHO().getResource());
+				 EUROPEANA_URI
+						+ aggregation.getAggregatedCHO().getResource() +".html");
 
 		solrInputDocument = SolrUtils.addFieldFromEnum(solrInputDocument,
 				aggregation.getLanguage().getLanguage().xmlValue(),
@@ -261,15 +260,12 @@ public final class EuropeanaAggregationFieldInput {
 		}
 		String landingPage = SolrUtils.exists(LandingPage.class,
 				aggregation.getLandingPage()).getResource();
-		if (landingPage != null) {
-			mongoAggregation.setEdmLandingPage(landingPage);
-			ops.set("edmLandingPage", landingPage);
-		} else {
+	
 			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource());
+					+ aggregation.getAggregatedCHO().getResource()+".html");
 			ops.set("edmLandingPage", EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource());
-		}
+					+ aggregation.getAggregatedCHO().getResource()+".html");
+		
 
 		Map<String, List<String>> language = MongoUtils
 				.createLiteralMapFromString(aggregation.getLanguage()
@@ -409,11 +405,9 @@ public final class EuropeanaAggregationFieldInput {
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				aggregation.getIsShownBy()).getResource();
 			mongoAggregation.setEdmIsShownBy(isShownBy);
-		String landingPage = SolrUtils.exists(LandingPage.class,
-				aggregation.getLandingPage()).getResource();
-			mongoAggregation.setEdmLandingPage(landingPage);
+		
 			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource());
+					+ aggregation.getAggregatedCHO().getResource()+".html");
 
 		Map<String, List<String>> language = MongoUtils
 				.createLiteralMapFromString(aggregation.getLanguage()
