@@ -27,7 +27,9 @@ public class AggregationSolrCreator {
 				EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION, aggr.getAbout());
 		SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS,
 				aggr.getDcRights());
-		if (licIds!=null && !contains(aggr.getEdmRights(), licIds)) {
+		if (licIds != null && aggr.getEdmRights() != null
+				&& aggr.getEdmRights().values() != null
+				&& !contains(aggr.getEdmRights(), licIds)) {
 			SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS,
 					aggr.getEdmRights());
 		}
