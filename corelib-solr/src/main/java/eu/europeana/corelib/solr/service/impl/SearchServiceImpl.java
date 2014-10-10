@@ -52,12 +52,14 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
+import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Value;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.logging.Log;
@@ -80,8 +82,6 @@ import eu.europeana.corelib.solr.utils.SolrUtils;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
-
-import org.neo4j.graphdb.Node;
 
 /**
  * @see eu.europeana.corelib.solr.service.SearchService
@@ -159,6 +159,11 @@ public class SearchServiceImpl implements SearchService {
 		long t0 = new Date().getTime();
 
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+		if(!isHierarchy(fullBean.getAbout())){
+			for(Proxy prx : fullBean.getProxies()){
+				prx.setDctermsHasPart(null);
+			}
+		}
 		logTime("mongo findById", (new Date().getTime() - t0));
 		if (fullBean != null && similarItems) {
 			try {
