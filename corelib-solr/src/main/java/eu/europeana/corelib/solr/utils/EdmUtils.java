@@ -883,6 +883,9 @@ public class EdmUtils {
 		if (StringUtils.equals("Aggregates", clazzName) && list) {
 			clazzName = "Aggregate";
 		}
+		if(StringUtils.equals("Incorporates", clazzName) && list){
+			clazzName = "Incorporate";
+		}
 		clazzName = StringUtils.strip(clazzName, "_1");
 		clazzName = StringUtils.strip(clazzName, "1");
 
