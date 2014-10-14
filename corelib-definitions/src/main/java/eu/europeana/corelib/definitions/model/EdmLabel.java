@@ -123,6 +123,7 @@ public enum EdmLabel {
 	PROXY_EDM_UNSTORED("proxy_edm_unstored", SolrType.NOT_STORED), 
 	PROXY_EDM_IS_NEXT_IN_SEQUENCE("proxy_edm_isNextInSequence", SolrType.NOT_STORED), 
 	PROXY_EDM_HAS_TYPE("proxy_edm_hasType", SolrType.NOT_STORED), 
+	PROXY_EDM_HAS_MET("proxy_edm_hasMet", SolrType.NOT_STORED), 
 	PROXY_EDM_INCORPORATES("proxy_edm_incorporates", SolrType.NOT_STORED), 
 	PROXY_EDM_ISDERIVATIVE_OF("proxy_edm_isDerivativeOf", SolrType.NOT_STORED), 
 	PROXY_EDM_ISRELATEDTO("proxy_edm_isRelatedTo", SolrType.NOT_STORED), 

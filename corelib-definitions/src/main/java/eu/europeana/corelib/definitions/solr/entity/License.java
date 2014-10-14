@@ -1,6 +1,6 @@
 package eu.europeana.corelib.definitions.solr.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 public interface License extends AbstractEdmEntity{
 

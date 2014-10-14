@@ -114,7 +114,7 @@ public class EdmUtils {
 				license.setAbout(lic.getAbout());
 				addAsObject(license,InheritFrom.class,lic.getOdrlInheritFrom());
 				DateType date= new DateType();
-				date.setDate(lic.getCcDeprecatedOn());
+				date.setDate(new java.sql.Date(lic.getCcDeprecatedOn().getTime()));
 				license.setDeprecatedOn(date);
 				licenseList.add(license);
 			}
@@ -525,6 +525,7 @@ public class EdmUtils {
 			wResource.setAbout(wr.getAbout());
 			addAsList(wResource, ConformsTo.class, wr.getDctermsConformsTo());
 			addAsList(wResource, Created.class, wr.getDctermsCreated());
+			addAsList(wResource, Creator.class, wr.getDcCreator());
 			addAsList(wResource, Description.class, wr.getDcDescription());
 			addAsList(wResource, Extent.class, wr.getDctermsExtent());
 			addAsList(wResource, Format.class, wr.getDcFormat());
@@ -536,6 +537,7 @@ public class EdmUtils {
 			addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
 			addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
 			addAsList(wResource, Source.class, wr.getDcSource());
+			addAsList(wResource,SameAs.class,wr.getOwlSameAs());
 			webResources.add(wResource);
 		}
 
@@ -573,8 +575,8 @@ public class EdmUtils {
 				addAsList(agent, Date.class, ag.getDcDate());
 				addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
 				addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-//				addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
-//				addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
+				addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
+				addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
 				addAsObject(agent, DateOfEstablishment.class,
 						ag.getRdaGr2DateOfEstablishment());
 				addAsObject(agent, DateOfTermination.class,
