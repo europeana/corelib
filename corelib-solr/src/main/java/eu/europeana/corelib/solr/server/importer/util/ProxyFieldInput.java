@@ -28,6 +28,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.HasMet;
 import eu.europeana.corelib.definitions.jibx.HasType;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
@@ -109,6 +110,13 @@ public final class ProxyFieldInput {
 				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
 						solrInputDocument, ht,
 						EdmLabel.PROXY_EDM_HAS_TYPE);
+			}
+		}
+		if(proxy.getHasMetList()!=null){
+			for(HasMet ht : proxy.getHasMetList()){
+				solrInputDocument = SolrUtils.addFieldFromResource(
+						solrInputDocument, ht,
+						EdmLabel.PROXY_EDM_HAS_MET);
 			}
 		}
 		// Retrieve the dcterms and dc namespace fields
@@ -1432,6 +1440,8 @@ public final class ProxyFieldInput {
 				.getYearList()));
 		mongoProxy.setEdmHasType(MongoUtils
 				.createResourceOrLiteralMapFromList(proxy.getHasTypeList()));
+		mongoProxy.setEdmHasType(MongoUtils
+				.createResourceMapFromList(proxy.getHasMetList()));
 		mongoProxy.setEdmIncorporates(SolrUtils.resourceListToArray(proxy
 				.getIncorporateList()));
 		mongoProxy.setEdmIsDerivativeOf(SolrUtils.resourceListToArray(proxy

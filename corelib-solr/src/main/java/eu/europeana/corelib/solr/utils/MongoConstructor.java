@@ -368,6 +368,11 @@ public class MongoConstructor {
 				agents.add(new AgentFieldInput().createNewAgent(agent));
 			}
 		}
+		if(record.getLicenseList()!=null){
+			for(License license: record.getLicenseList()){
+				licenses.add(new LicenseFieldInput().createLicenseMongoFields(license));
+			}
+		}
 		if (record.getEuropeanaAggregationList() != null) {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
@@ -398,6 +403,9 @@ public class MongoConstructor {
 			}
 			if (proxies.size() > 0) {
 				fullBean.setProxies(proxies);
+			}
+			if(licenses.size()>0){
+				fullBean.setLicenses(licenses);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

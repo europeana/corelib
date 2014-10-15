@@ -1,6 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
