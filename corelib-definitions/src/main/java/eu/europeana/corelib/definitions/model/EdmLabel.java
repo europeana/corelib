@@ -45,7 +45,9 @@ public enum EdmLabel {
 	PROVIDER_AGGREGATION_DC_RIGHTS("provider_aggregation_dc_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_RIGHTS("provider_aggregation_edm_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_UNSTORED("provider_aggregation_edm_unstored", SolrType.NOT_STORED),
-
+        PROVIDER_AGGREGATION_CC_LICENSE("provider_aggregation_cc_license", SolrType.INDEXED),
+	PROVIDER_AGGREGATION_ODRL_INHERITED_FROM("provider_aggregation_odrl_inherited_from",SolrType.INDEXED),
+	PROVIDER_AGGREGATION_CC_DEPRECATED_ON("provider_aggregation_cc_deprecated_on",SolrType.INDEXED),
 	// EUROPEANA AGGREGATION
 	EDM_EUROPEANA_AGGREGATION("edm_europeana_aggregation", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO("europeana_aggregation_ore_aggregatedCHO", SolrType.INDEXED), 
@@ -74,6 +76,13 @@ public enum EdmLabel {
 	WR_DCTERMS_HAS_PART("wr_dcterms_hasPart", SolrType.NOT_STORED), 
 	WR_EDM_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
 	WR_OWL_SAMEAS("wr_owl_sameAs",SolrType.NOT_STORED),
+        WR_CC_LICENSE("wr_cc_license", SolrType.INDEXED),
+	WR_ODRL_INHERITED_FROM("wr_odrl_inherited_from",SolrType.INDEXED),
+	WR_CC_DEPRECATED_ON("wr_cc_deprecated_on",SolrType.INDEXED),
+        
+        LIC_RDF_ABOUT("cc_license", SolrType.INDEXED),
+	LIC_ODRL_INHERITED_FROM("odrl_inherited_from",SolrType.INDEXED),
+	LIC_CC_DEPRECATED_ON("cc_deprecated_on",SolrType.INDEXED),
 	// PROVIDER PROXY
 	ORE_PROXY("proxy_ore_proxy", SolrType.INDEXED), 
 	EDM_ISEUROPEANA_PROXY("edm_europeana_proxy",SolrType.NOT_STORED),
@@ -207,10 +216,7 @@ public enum EdmLabel {
 	AG_RDAGR2_PROFESSIONOROCCUPATION("ag_rdagr2_professionOrOccupation", SolrType.NOT_STORED),
 	AG_RDAGR2_BIOGRAPHICALINFORMATION("ag_rdagr2_biographicalInformation", SolrType.NOT_STORED),
 	
-	//LICENSE FIELDS
-	LIC_RDF_ABOUT("cc_license",SolrType.FACET),
-	LIC_ODRL_INHERITED_FROM("lic_odrl_inherited_from",SolrType.NOT_STORED),
-	LIC_CC_DEPRECATED_ON("lic_cc_deprecated_on",SolrType.NOT_STORED),
+	
 	
 	//ORGANISATION FIELDS
 	FOAF_ORGANIZATION("foaf_organization",SolrType.FACET),
