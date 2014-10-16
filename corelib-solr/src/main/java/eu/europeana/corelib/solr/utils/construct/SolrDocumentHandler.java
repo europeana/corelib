@@ -19,6 +19,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.Agent;
+import eu.europeana.corelib.definitions.solr.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.entity.Concept;
 import eu.europeana.corelib.definitions.solr.entity.License;
 import eu.europeana.corelib.definitions.solr.entity.Place;
@@ -73,7 +74,14 @@ public class SolrDocumentHandler implements ICollection {
 			new PlaceSolrCreator().create(doc, place);
 		}
 		for (License lic : fBean.getLicenses()) {
-			new LicenseSolrCreator().create(doc, lic);
+                        boolean isAggregation = false;
+                        for(Aggregation aggr:fBean.getAggregations()){
+                            if(aggr.getEdmRights()!=null && aggr.getEdmRights().get("def").contains(lic.getAbout())){
+                                isAggregation = true;
+                                break;
+                            }
+                        }
+			new LicenseSolrCreator().create(doc, lic, isAggregation);
 		}
 		doc.addField(EdmLabel.EUROPEANA_COMPLETENESS.toString(),
 				fBean.getEuropeanaCompleteness());

@@ -118,7 +118,16 @@ public class SolrConstructor {
 		}
 		if(rdf.getLicenseList()!=null){
 			for(License license: rdf.getLicenseList()){
-				solrInputDocument = new LicenseFieldInput().createLicenseSolrFields(license, solrInputDocument);
+                            boolean isAggregation=false;
+                            for(Aggregation aggr: rdf.getAggregationList()){
+                               if(aggr.getRights()!=null){
+                                   if(license.getAbout().equalsIgnoreCase(aggr.getRights().getResource())){
+                                       isAggregation = true;
+                                       break;
+                                   }
+                               }
+                            }
+				solrInputDocument = new LicenseFieldInput().createLicenseSolrFields(license, solrInputDocument,isAggregation);
 			}
 		}
 		return solrInputDocument;

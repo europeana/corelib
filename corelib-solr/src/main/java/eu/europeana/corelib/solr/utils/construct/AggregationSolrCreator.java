@@ -32,6 +32,7 @@ public class AggregationSolrCreator {
 				&& !contains(aggr.getEdmRights(), licIds)) {
 			SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS,
 					aggr.getEdmRights());
+                        
 		}
 		SolrUtils.addFromMap(doc,
 				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER,
