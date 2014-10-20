@@ -36,6 +36,7 @@ import eu.europeana.corelib.definitions.jibx.DataProvider;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
+import eu.europeana.corelib.definitions.jibx.License;
 import eu.europeana.corelib.definitions.jibx.Provider;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
@@ -69,7 +70,7 @@ public class AggregationFieldInputTest {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {
 			solrDocument = new AggregationFieldInput()
-					.createAggregationSolrFields(aggregation, solrDocument);
+					.createAggregationSolrFields(aggregation, solrDocument, new ArrayList<License> ());
 			assertEquals(
 					aggregation.getAbout(),
 					solrDocument
