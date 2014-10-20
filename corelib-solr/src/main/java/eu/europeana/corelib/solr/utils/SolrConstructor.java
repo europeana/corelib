@@ -76,7 +76,7 @@ public class SolrConstructor {
 		}
 		if(rdf.getAggregationList()!=null){
 			for(Aggregation aggregation : rdf.getAggregationList()){
-				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(aggregation, solrInputDocument);
+				solrInputDocument = new AggregationFieldInput().createAggregationSolrFields(aggregation, solrInputDocument, rdf.getLicenseList());
 				solrInputDocument = new ProxyFieldInput().addProxyForSolr(aggregation, solrInputDocument);
 			}
 		}

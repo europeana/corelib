@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownAt;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
+import eu.europeana.corelib.definitions.jibx.License;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
@@ -378,8 +379,9 @@ public final class AggregationFieldInput {
 	 * @throws IllegalAccessException
 	 */
 	public SolrInputDocument createAggregationSolrFields(
-			Aggregation aggregation, SolrInputDocument solrInputDocument)
-			throws InstantiationException, IllegalAccessException {
+			Aggregation aggregation, SolrInputDocument solrInputDocument,
+			List<License> licenses) throws InstantiationException,
+			IllegalAccessException {
 
 		solrInputDocument.addField(
 				EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION.toString(),
@@ -406,9 +408,22 @@ public final class AggregationFieldInput {
 				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
-		solrInputDocument = SolrUtils.addFieldFromResource(solrInputDocument,
-				aggregation.getRights(),
-				EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS);
+		boolean saveRights = true;
+		if(licenses!=null){
+			String rights = aggregation.getRights().getResource();
+			for(License lic:licenses){
+				if(StringUtils.equals(rights, lic.getAbout())){
+					saveRights=false;
+					break;
+				}
+			}
+		}
+		if(saveRights){
+			solrInputDocument = SolrUtils.addFieldFromResource(
+					solrInputDocument, aggregation.getRights(),
+					EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS);
+		}
+		
 		if (aggregation.getUgc() != null) {
 			solrInputDocument.addField(EdmLabel.EDM_UGC.toString(), aggregation
 					.getUgc().getUgc().toString().toLowerCase());
