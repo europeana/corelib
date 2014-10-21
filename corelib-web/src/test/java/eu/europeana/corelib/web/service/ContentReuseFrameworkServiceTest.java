@@ -1,27 +1,31 @@
 package eu.europeana.corelib.web.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.google.common.base.Charsets;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
 import eu.europeana.harvester.domain.ImageMetaInfo;
 
+// FIXME: These tests are currently ignored as they rely on an external db.
+// They need to be refactored using an embedded MongoDB
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-web-context.xml", "/corelib-web-test.xml"})
+@Ignore
 public class ContentReuseFrameworkServiceTest {
 
 	@Resource(name = "corelib_web_contentReuseFrameworkService")
