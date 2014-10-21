@@ -5,8 +5,6 @@
  */
 package eu.europeana.corelib.solr.utils.construct;
 
-import java.util.List;
-import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
 
@@ -14,6 +12,7 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.solr.entity.WebResource;
 import eu.europeana.corelib.solr.utils.SolrUtils;
+import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -25,12 +24,9 @@ public class EuropeanaAggregationSolrCreator {
     private static final String PORTAL_PREFIX = "http://europeana.eu/portal/record/";
     private static final String PORTAL_SUFFIX = ".html";
 
-    public void create(SolrInputDocument doc, EuropeanaAggregation aggr, List<String> licIds) {
+    public void create(SolrInputDocument doc, EuropeanaAggregation aggr) {
         SolrUtils.addFromString(doc, EdmLabel.EDM_EUROPEANA_AGGREGATION, aggr.getAbout());
         SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_DC_CREATOR, aggr.getDcCreator());
-        if (licIds!=null && !contains(aggr.getEdmRights(), licIds)) {
-            SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_RIGHTS, aggr.getEdmRights());
-        }
         SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_COUNTRY, aggr.getEdmCountry());
         SolrUtils.addFromMap(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_LANGUAGE, aggr.getEdmLanguage());
         SolrUtils.addFromStringArray(doc, EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATES, aggr.getAggregates());
@@ -42,17 +38,10 @@ public class EuropeanaAggregationSolrCreator {
         SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW, aggr.getEdmPreview());
         if (aggr.getWebResources() != null) {
             for (WebResource wr : aggr.getWebResources()) {
-                new WebResourceSolrCreator().create(doc, wr, licIds);
+                new WebResourceSolrCreator().create(doc, wr, new ArrayList<String>());
             }
         }
     }
 
-    private boolean contains(Map<String, List<String>> edmRights,
-            List<String> licIds) {
-    	if(edmRights==null){
-    		return false;
-    	}
-        return licIds.contains(edmRights.values().iterator().next());
-    }
 
 }

@@ -27,7 +27,7 @@ public class AggregationSolrCreator {
 				EdmLabel.PROVIDER_AGGREGATION_ORE_AGGREGATION, aggr.getAbout());
 		SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS,
 				aggr.getDcRights());
-		if (licIds != null && aggr.getEdmRights() != null
+		if (licIds.size()>0 && aggr.getEdmRights() != null
 				&& aggr.getEdmRights().values() != null
 				&& !contains(aggr.getEdmRights(), licIds)) {
 			SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_EDM_RIGHTS,
@@ -67,6 +67,7 @@ public class AggregationSolrCreator {
 
 	private boolean contains(Map<String, List<String>> edmRights,
 			List<String> licIds) {
-		return licIds.contains(edmRights.values().iterator().next());
+		boolean contains = licIds.contains(edmRights.get("def").get(0));
+		return contains;
 	}
 }

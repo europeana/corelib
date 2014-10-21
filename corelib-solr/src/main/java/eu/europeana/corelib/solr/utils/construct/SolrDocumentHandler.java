@@ -57,7 +57,7 @@ public class SolrDocumentHandler implements ICollection {
 		new AggregationSolrCreator()
 				.create(doc, fBean.getAggregations().get(0),licIds);
 		new EuropeanaAggregationSolrCreator().create(doc,
-				fBean.getEuropeanaAggregation(),licIds);
+				fBean.getEuropeanaAggregation());
 		for (Proxy prx : fBean.getProxies()) {
 			new ProxySolrCreator().create(doc, prx);
 		}
@@ -81,6 +81,7 @@ public class SolrDocumentHandler implements ICollection {
                                 break;
                             }
                         }
+                        System.out.println(isAggregation);
 			new LicenseSolrCreator().create(doc, lic, isAggregation);
 		}
 		doc.addField(EdmLabel.EUROPEANA_COMPLETENESS.toString(),
