@@ -260,7 +260,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	@Override
 	public Hierarchy getInitialStruct(String id) {
-		if(isHierarchy(id)){
+		if(!isHierarchy(id)){
 			return null;
 		}
 		GetMethod method = new GetMethod(customPath
