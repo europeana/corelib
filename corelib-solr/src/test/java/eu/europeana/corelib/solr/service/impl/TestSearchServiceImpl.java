@@ -38,4 +38,9 @@ public class TestSearchServiceImpl extends SearchServiceImpl implements
 		this.log = log;
 		
 	}
+	
+	@Override
+	public boolean isHierarchy(String nodeId){
+		return true;
+	}
 }
