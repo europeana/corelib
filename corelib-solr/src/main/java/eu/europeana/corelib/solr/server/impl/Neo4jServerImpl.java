@@ -63,7 +63,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 			RelType.ISFIRSTINSEQUENCE.getRelType());
 	private static final Relation dctermsIsPartOfRelation = new Relation(
 			RelType.DCTERMS_ISPARTOF.getRelType());
-
+	private static final Relation dctermsHasPartRelation = new Relation(
+			RelType.DCTERMS_HASPART.getRelType());
 	public Neo4jServerImpl(String serverPath, String index, String customPath) {
 		this.graphDb = new RestGraphDatabase(serverPath);
 		this.index = this.graphDb.getRestAPI().getIndex(index);
@@ -79,7 +80,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	public Node getNode(String id) {
 		IndexHits<Node> nodes = index.get("rdf_about", id);
 		if (nodes.size() > 0) {
-			if(nodes.getSingle().hasRelationship()){
+			if(nodes.getSingle().hasRelationship(dctermsIsPartOfRelation)||nodes.getSingle().hasRelationship(dctermsHasPartRelation)){
 				return nodes.getSingle();
 			}
 		}
