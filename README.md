@@ -17,9 +17,9 @@ or
 ``mvn clean install`` (add ``-DskipTests``) to skip the unit tests during build
 
 ### Known issues
-Note: there are a number of older/outdated libraries still being referenced as dependencies, some of which may not be provided anymore by the central repositories. The Europeana artifactory has a copy of these dependencies, so to adding this repository successfully build the code, 
+Note: there are a number of older/outdated libraries still being referenced as dependencies, some of which may not be provided anymore by the central repositories. The Europeana artifactory has a copy of these dependencies; add this repository as a mirror (to the ``<mirrors>`` section of the maven settings file, usually found in ~/.m2/settings) to successfully build the code
 
-* Maven 2.2.1: The 2.2.1 version of Maven has a [known issue](http://jira.codehaus.org/browse/WAGON-314) that it does not follow redirects (HTTP 301). This manifests itself currently in trying to download the net.java.jvnet-parent:1 pom. A workaround is to add the following mirror settings to ``<mirrors>`` section of the maven settings file (usually found in ~/.m2/settings):
+* Maven 2.2.1: The 2.2.1 version of Maven has a [known issue](http://jira.codehaus.org/browse/WAGON-314) that it does not follow redirects (HTTP 301). This manifests itself currently in trying to download the net.java.jvnet-parent:1 pom. A workaround is to add the following mirror settings:
 ```bash
 </mirror>
     <mirror>
