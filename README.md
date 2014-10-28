@@ -28,3 +28,4 @@ Note: there are a number of older/outdated libraries still being referenced as d
     <mirrorOf></mirrorOf>
 </mirror>
 ``` 
+* Java 8 / Maven: The combination of Java 8 and Maven has a [known issue](http://jira.codehaus.org/browse/JIBX-515) in that it doesn not generate the JIBX content. A workaround is posted in the link
