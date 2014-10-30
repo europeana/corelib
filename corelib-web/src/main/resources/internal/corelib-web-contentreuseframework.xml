@@ -18,9 +18,9 @@
 	">
 
 	<bean id="morphiaDataStore" class="eu.europeana.harvester.db.MorphiaDataStore">
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.host']}" />
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.port']}" />
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.dbname']}" />
+		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.host']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.port']}" type="int"/>
+		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.dbname']}" type="java.lang.String"/>
 	</bean>
 
 	<bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig" />
