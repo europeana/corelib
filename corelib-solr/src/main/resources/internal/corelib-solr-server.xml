@@ -48,21 +48,21 @@
 
 	<bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.username']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
 	</bean>
 	
 	<bean id="corelib_solr_idServer" class="eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo"/>
 		<constructor-arg value="EuropeanaId"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.username']}"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.password']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
 	</bean>
 
 	<bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}" type="java.lang.String"/>
 	</bean>
 	
 	<bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.solr.server.impl.Neo4jServerImpl">
