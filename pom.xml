@@ -31,7 +31,6 @@
 		<module>corelib-solr-tools</module>
 		<module>corelib-sugarcrm/bindings</module>
 		<module>corelib-sugarcrm/client</module>
-	 <module>corelib</module>
 	</modules>
 
 	<repositories>
