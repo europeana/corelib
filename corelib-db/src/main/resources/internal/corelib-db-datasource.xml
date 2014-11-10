@@ -57,31 +57,32 @@
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<bean id="corelib_db_mongo" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['mongodb.host']}" />
-		<constructor-arg value="#{europeanaProperties['mongodb.port']}" />
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int" />
 	</bean>
 
 	<bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia"/>
 
 	<bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia" factory-method="createDatastore">
 		<constructor-arg ref="corelib_db_mongo"/>
-		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>
+<!--		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"/>-->
+		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String" />
 	</bean>
 
 	<bean id="corelib_db_mongo_apilog" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector" />
 
 	<bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
 		<constructor-arg value="API log" />
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}" />
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}" />
-		<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}"/>
+                <constructor-arg value="#{europeanaProperties['mongodb.apilog.host']}" type="java.lang.String" />
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.port']}" type="int" />
+		<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}" type="java.lang.String" />
 	</bean>
 
 	<bean id="corelib_db_morphia_datastore_sugarcrmcache" factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
 		<constructor-arg value="SugarCRM cache" />
-		<constructor-arg value="#{europeanaProperties['cachemongodb.host']}" />
-		<constructor-arg value="#{europeanaProperties['cachemongodb.port']}" />
-		<constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"/>
+		<constructor-arg value="#{europeanaProperties['cachemongodb.host']}" type="java.lang.String" />
+		<constructor-arg value="#{europeanaProperties['cachemongodb.port']}" type="int" />
+		<constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}" type="java.lang.String" />
 	</bean>
 
 </beans>
