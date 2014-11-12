@@ -357,6 +357,17 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 			@Override
 			public void setLanguageSearch(String... languageCodes) {
 			}
+			
+			
+			@Override
+			public Boolean getLanguageSearchApplied() {
+				return Boolean.TRUE;
+			}
+
+			@Override
+			public void setLanguageSearchApplied(Boolean languageSearchApplied) {
+			}
+
 
 		};
 	}
