@@ -114,4 +114,9 @@ public interface User extends IdentifiedEntity<Long> {
 	String[] getLanguageSearch();
 
 	void setLanguageSearch(String... languageCodes);
+	
+	Boolean getLanguageSearchApplied();
+
+	void setLanguageSearchApplied(Boolean languageSearchApplied);
+
 }
