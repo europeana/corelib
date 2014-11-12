@@ -17,8 +17,12 @@
 
 package eu.europeana.corelib.db.entity.relational;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -244,6 +248,19 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public Set<SocialTag> getSocialTags() {
 		return socialTags;
 	}
+
+    @Override       
+    public List<SocialTag> getSocialTagsOrdered() {
+      List<SocialTag> list = new ArrayList<SocialTag>(socialTags);
+
+      Comparator<SocialTag> alphabetical =  new Comparator<SocialTag>() {
+            public int compare(SocialTag s1, SocialTag s2) {
+                    return s1.getTag().compareTo(s2.getTag());
+            }
+        };
+        Collections.sort(list, alphabetical);
+        return list;
+    }
 
 	@Override
 	public Set<ApiKey> getApiKeys() {
