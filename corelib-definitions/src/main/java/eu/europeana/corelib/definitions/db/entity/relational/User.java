@@ -18,6 +18,7 @@
 package eu.europeana.corelib.definitions.db.entity.relational;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
@@ -65,6 +66,8 @@ public interface User extends IdentifiedEntity<Long> {
 	Set<SavedSearch> getSavedSearches();
 
 	Set<SocialTag> getSocialTags();
+
+    List<SocialTag> getSocialTagsOrdered();
 
 	Set<ApiKey> getApiKeys();
 
