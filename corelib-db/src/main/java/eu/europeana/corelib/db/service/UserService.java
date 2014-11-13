@@ -308,4 +308,6 @@ public interface UserService extends AbstractService<User> {
 	 */
 	User updateUserLanguageSearch(Long userId, String... languageCodes)  throws DatabaseException;
 	
+	User updateUserLanguageSearchApplied(Long userId, Boolean languageSearchApplied)  throws DatabaseException;
+	
 }
