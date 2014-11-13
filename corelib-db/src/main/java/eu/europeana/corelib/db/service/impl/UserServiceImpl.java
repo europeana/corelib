@@ -430,6 +430,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		user.setLanguageSearch(languageCodes);
 		return user;
 	}
+	
+	@Override
+	public User updateUserLanguageSearchApplied(Long userId, Boolean languageSearchApplied) throws DatabaseException {
+		if (userId == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		User user = getDao().findByPK(userId);
+		if (user == null) {
+			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+		}
+		user.setLanguageSearchApplied(languageSearchApplied);
+		return user;
+	}
 
 	private FullBean populateEuropeanaUserObject(User user,
 			String europeanaObjectId, EuropeanaUserObject instance)
