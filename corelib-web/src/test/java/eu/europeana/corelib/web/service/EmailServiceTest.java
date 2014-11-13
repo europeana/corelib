@@ -20,6 +20,7 @@ package eu.europeana.corelib.web.service;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -206,6 +207,11 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
 			public Set<SocialTag> getSocialTags() {
 				return null;
 			}
+			
+            @Override
+            public List<SocialTag> getSocialTagsOrdered() {
+                return null;
+            }
 
 			@Override
 			public Set<SavedSearch> getSavedSearches() {
