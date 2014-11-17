@@ -135,7 +135,7 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column(length=FIELDSIZE_LANGUAGESEARCH)
 	private String languageSearch;
 
-	@Column
+	@Column (columnDefinition="boolean default true")
 	private Boolean languageSearchApplied;
 
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
