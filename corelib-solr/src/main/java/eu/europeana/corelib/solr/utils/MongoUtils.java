@@ -219,14 +219,14 @@ public final class MongoUtils {
 			Map<String, List<String>> mapB) {
 		if (mapA != null && mapB != null) {
 			if (mapA.keySet().equals(mapB.keySet())) {
-				boolean equals = false;
+				boolean equals = true;
 				for (String keyA : mapA.keySet()) {
 					List<String> listA = mapA.get(keyA);
 					List<String> listB = mapB.get(keyA);
 					if (listA != null && listB != null) {
 						Collections.sort(listA);
 						Collections.sort(listB);
-						equals = equals | listA.equals(listB);
+						equals = equals & listA.equals(listB);
 						
 					}
 					
