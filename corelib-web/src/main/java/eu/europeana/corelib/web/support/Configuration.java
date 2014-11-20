@@ -164,6 +164,9 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.useBackendItemTranslation']}")
 	private String useBackendItemTranslationString;
 
+	@Value("#{europeanaProperties['portal.useAutomatedFrontendTranslation']}")
+	private String useAutomatedFrontendTranslationString;
+
 	@Value("#{europeanaProperties['portal.soundcloud.clientID']}")
 	private String soundcloudClientID;
 
@@ -478,6 +481,13 @@ public class Configuration {
 			return false;
 		}
 		return Boolean.parseBoolean(useBackendItemTranslationString);
+	}
+	
+	public boolean useAutomatedFrontendTranslation() {
+		if (StringUtils.isBlank(useAutomatedFrontendTranslationString)) {
+			return false;
+		}
+		return Boolean.parseBoolean(useAutomatedFrontendTranslationString);
 	}
 
 	public String getBingTranslateId() {
