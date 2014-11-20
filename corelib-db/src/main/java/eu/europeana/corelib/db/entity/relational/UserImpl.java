@@ -135,6 +135,9 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column(length=FIELDSIZE_LANGUAGESEARCH)
 	private String languageSearch;
 
+	@Column (columnDefinition="boolean default true")
+	private Boolean languageSearchApplied;
+
 	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name = "userid", nullable = false)
 	@Fetch(FetchMode.SELECT)
@@ -389,4 +392,15 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public void setLanguagePortal(String languageCode) {
 		languagePortal = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
 	}
+	
+	@Override
+	public Boolean getLanguageSearchApplied() {
+		return languageSearchApplied;
+	}
+
+	@Override
+	public void setLanguageSearchApplied(Boolean languageSearchApplied) {
+		this.languageSearchApplied = languageSearchApplied;
+	}
+
 }
