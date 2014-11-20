@@ -392,10 +392,6 @@ public class Configuration {
 		return gftChannelAttributes;
 	}
         
-        
-        
-        
-        
 	public String getPortalUrl() {
 		if (portalUrl == null) {
 			StringBuilder sb = new StringBuilder(portalServer);
