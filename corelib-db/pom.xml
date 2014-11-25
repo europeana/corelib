@@ -134,11 +134,6 @@
 			<version>1.33</version>
 			<scope>test</scope>
 		</dependency>
-<!--		<dependency>
-			<groupId>net.vz.mongodb.jackson</groupId>
-			<artifactId>mongo-jackson-mapper</artifactId>
-			<version>1.4.2</version>
-		</dependency>-->
  	</dependencies>
 	<organization>
 		<name>Europeana Foundation</name>

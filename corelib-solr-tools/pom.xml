@@ -23,12 +23,6 @@
 			<artifactId>publication-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.mongodb</groupId> -->
-<!-- 			<artifactId>mongo-java-driver</artifactId> -->
-<!-- 			<version>${version.mongoDriver}</version> -->
-<!-- 			<scope>compile</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.google.code.morphia</groupId>
 			<artifactId>morphia</artifactId>
