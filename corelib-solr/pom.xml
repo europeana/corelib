@@ -29,32 +29,32 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-definitions</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr-definitions</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr-dereference</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr-tools</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-web</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-utils</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.publication</groupId>

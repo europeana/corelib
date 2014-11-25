@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-solr-dereference</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>

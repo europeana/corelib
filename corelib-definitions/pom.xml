@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-utils</artifactId>
-			<version>${version.europeanaCorelib}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- Other -->
 		<dependency>

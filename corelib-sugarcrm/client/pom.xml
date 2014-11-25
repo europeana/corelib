@@ -27,9 +27,6 @@
 		<jibx.version>1.2.3</jibx.version>
 		<junit-version>4.5</junit-version>
 		<pax-exam-version>1.2.4</pax-exam-version>
-		<europeana.uim.version>2.0.0-SNAPSHOT</europeana.uim.version>
-		<europeana.uim.groupId>eu.europeana</europeana.uim.groupId>
-		<corelib.version>2.0-SNAPSHOT</corelib.version>
 	</properties>
 
 	<dependencies>
@@ -38,7 +35,7 @@
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-sugarcrm-bindings</artifactId>
-			<version>${corelib.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
             <dependency>
