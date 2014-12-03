@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-solr-definitions</artifactId>
+			<artifactId>corelib-edm-definitions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -40,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-solr</artifactId>
+			<artifactId>corelib-storage</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Spring -->
