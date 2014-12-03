@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:europeana="http://www.europeana.eu" xmlns:dcterms="http://purl.org/dc/terms/">
+	<record>
+		<dc:identifier>DE_ArchLABW_5_197046</dc:identifier>
+		<dcterms:isPartOf>Plakatsammlung Karl Fritz</dcterms:isPartOf>
+		<dc:source>Landesarchiv Baden-Württemberg: Staatsarchiv Freiburg</dc:source>
+		<dc:source>http://www.landesarchiv-bw.de/staf</dc:source>
+		<dc:relation>http://www.landesarchiv-bw.de/plink/?f=5-13080</dc:relation>
+		<dc:identifier>W 113 Nr. 0130</dc:identifier>
+		<dc:description>Kontext: Plakatsammlung Karl Fritz>> Plakatsammlung Karl Fritz</dc:description>
+		<europeana:year>1897</europeana:year>
+		<dcterms:temporal xml:lang="de">1897</dcterms:temporal>
+		<dc:title>"Arbeiter, Wähler!" (Zentrum, Wahlplakat Stichwahl 1897)</dc:title>
+		<europeana:unstored>1 Ex. (28 x 42)</europeana:unstored>
+		<europeana:isShownAt>http://www.landesarchiv-bw.de/plink/?f=5-197046</europeana:isShownAt>
+		<europeana:uri>http://www.europeana.eu/resolve/record/00735/3801ED6B69D3930954B4C17CB304AA7D23296B34</europeana:uri>
+		<europeana:object>http://www.landesarchiv-bw.de/plink/?f=5-197046-1&amp;ext=1</europeana:object>
+		<europeana:isShownBy>http://www.landesarchiv-bw.de/plink/?f=5-197046-1</europeana:isShownBy>
+		<europeana:country>germany</europeana:country>
+		<europeana:provider>Landesarchiv Baden-Württemberg</europeana:provider>
+		<europeana:language>de</europeana:language>
+		<europeana:hasObject>true</europeana:hasObject>
+		<europeana:type>IMAGE</europeana:type>
+	</record>
+</metadata>

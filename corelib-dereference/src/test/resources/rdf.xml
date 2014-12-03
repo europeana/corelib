@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:viaf="http://viaf.org/ontology/1.1/#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:skosxl="http://www.w3.org/2008/05/skos-xl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:rdaEnt="http://rdvocab.info/uri/schema/FRBRentitiesRDA/" xml:base="http://viaf.org/">
+<foaf:Document rdf:about="http://viaf.org/viaf/231677054/">
+<void:inDataset rdf:resource="http://viaf.org/viaf/data"/>
+<foaf:primaryTopic rdf:resource="http://viaf.org/viaf/231677054"/>
+</foaf:Document>
+<rdf:Description rdf:about="http://viaf.org/viaf/231677054">
+<!--The primary entity (formerly a viaf:NameAuthorityCluster)-->
+<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+<rdf:type rdf:resource="http://rdvocab.info/uri/schema/FRBRentitiesRDA/Person"/>
+<foaf:name>Doyle, Marcus, 1972-</foaf:name>
+<foaf:name>Doyle, Marcus English photographer, born 1972</foaf:name>
+<foaf:name>Marcus Doyle</foaf:name>
+<rdaGr2:dateOfBirth>1972-10-26</rdaGr2:dateOfBirth>
+<owl:sameAs rdf:resource="http://data.bnf.fr/ark:/12148/cb15104059n#foaf:Person"/>
+</rdf:Description>
+<!--Controlled and alternate headings from various authority files-->
+<skos:Concept rdf:about="http://viaf.org/viaf/sourceID/BNF%7C15104059#skos:Concept">
+<skos:inScheme rdf:resource="http://viaf.org/authorityScheme/BNF"/>
+<skos:prefLabel>Doyle, Marcus, 1972-</skos:prefLabel>
+<skos:exactMatch rdf:resource="http://data.bnf.fr/ark:/12148/cb15104059n"/>
+<rdfs:seeAlso rdf:resource="http://catalogue.bnf.fr/ark:/12148/cb15104059n"/>
+<foaf:focus rdf:resource="http://viaf.org/viaf/231677054"/>
+</skos:Concept>
+<skos:Concept rdf:about="http://viaf.org/viaf/sourceID/LC%7Cno2007005948#skos:Concept">
+<skos:inScheme rdf:resource="http://viaf.org/authorityScheme/LC"/>
+<skos:prefLabel>Doyle, Marcus, 1972-</skos:prefLabel>
+<skos:exactMatch rdf:resource="http://id.loc.gov/authorities/names/no2007005948"/>
+<foaf:focus rdf:resource="http://viaf.org/viaf/231677054"/>
+</skos:Concept>
+<skos:Concept rdf:about="http://viaf.org/viaf/sourceID/JPG%7C500342866#skos:Concept">
+<skos:inScheme rdf:resource="http://viaf.org/authorityScheme/JPG"/>
+<skos:prefLabel>Doyle, Marcus English photographer, born 1972</skos:prefLabel>
+<skos:altLabel>Marcus Doyle</skos:altLabel>
+<foaf:focus rdf:resource="http://viaf.org/viaf/231677054"/>
+</skos:Concept>
+<!--Deprecated identifiers-->
+<rdf:Description rdf:about="http://viaf.org/viaf/231677054/#skos:Concept">
+<rdfs:comment>This concept identifier is deprecated. See the foaf:focus link for the primary entity.</rdfs:comment>
+<foaf:focus rdf:resource="http://viaf.org/viaf/231677054"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://viaf.org/viaf/231677054/#foaf:Person">
+<rdfs:comment>This primary entity identifier is deprecated. See the owl:sameAs link for the new identifier.</rdfs:comment>
+<owl:sameAs rdf:resource="http://viaf.org/viaf/231677054"/>
+</rdf:Description>
+</rdf:RDF>

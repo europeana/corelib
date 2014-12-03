@@ -1,0 +1,32 @@
+Issues and comments on EDM schema XSD files, 12-07-04
+-- Antoine Isaac 
+
+====================== Disclaimer
+
+This document just draws a flat lists the issues and questions raised, in a flat way. Some issues are merely cosmetic, like the presence of element type, which are in fact not used. Others are more important, as they should impact (marginally, though) the way we communicate on EDM with data providers.
+
+
+====================== Cardinality 
+
+- problem of cardinality and order of sub-elements. Our templates specify min and max occurrences [1]. To represent them in XML schema, one must also constrain the order of the elements representing these properties, which is done in NTUA's schema. Personally, I'd favor dropping all occurrence constraints so as NOT to have an order constraint on elements. But some (Borys and Nicola) seem to prefer keeping the constraints, and putting a sequence. 
+Note that we can make different decisions, for different parts of the schema. 
+[1] http://europeanalabs.eu/wiki/EDMObjectTemplatesProviders
+
+For contextual resources:
+-- skos:prefLabel (currently maxOccurs="unbounded" minOccurs="0") should have a miximum occurrence of 1 *per language tag*. This might be just impossible to implement in XML schema in fact.
+
+======================= Documentation regarding usage in external tools 
+- Add specific information to the providers regarding the use of the EDM XSD schema in various tools or APIs
+
+- Validating a file in Oxygen XML editor
+Select the Document/Validate/Validation Options menu entry. There in the XML Parser Features sections check the 
+"http://apache.org/xml/features/honour-all-schemaLocations" option. This instructs the parser to include the elements declared in all other files that are imported by EDM.xsd. 
+Then select the EDM.xml file and "Document/Validate/Validate with" option and poit it to the localy stored or remote URI location of the EDM.xsd file. 
+
+- Validating an XML Document via the JAXP Java API
+If you are using JAXP to validate your EDM data in you application, you should set the same values.
+
+DocumentBuilderFactory factory= DocumentBuilderFactory.newInstance();
+
+factory.setFeature("http://apache.org/xml/features/validation/schema-full-checking", false);
+factory.setFeature("http://apache.org/xml/features/honour-all-schemaLocations", true);

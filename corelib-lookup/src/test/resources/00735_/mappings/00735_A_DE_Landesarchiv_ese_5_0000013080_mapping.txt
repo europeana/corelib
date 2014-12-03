@@ -1,0 +1,102 @@
+# -About this file-
+#    This text file is designed as a mapping aid. Based on the analysis file, the person who maps the source metadata
+#    element (i.e. the metadata of a content provider) to Europeana Semantic Elements (ESE) should provide appropriate
+#    input. On the left, you see the xPath of all tags available in the xml file, followed by >>. After familializing the
+#    ESE specification document, please provide the equivalent ESE elements after >>. For example, Measurement >> dcterms:extent.
+#
+# There are some rules for mappings (Please read carefully):
+# 1) Map original source elements to the ESE as much as possible.
+#
+# 2) Put "N/A" if the element is not important to map to the ESE. Do not make empty elements. For example, ReferenceNo >> N/A.
+#    (N.B. All important elements which cannot be mapped should be dump into <europeana:unstored> (See below <europeana:unstored>))
+#
+# 3) Use the ESE refinement (qualifier) only when the semantic of an original source element clearly corresponds to it.
+#    Otherwise, use the upper level ESE elements.
+#
+# 4) The persistent link to digital object and/or full information page should be described in URL. Sometimes they are
+#    re-constructed by both metadata values and information external to the metadata. Those two links are providing the
+#    shorter click distance from Europeana to the best resolution digital object display and to the digital object display
+#    in context for more information. If only one persistent link is available please map it to the <europeana:isShownBy>
+#    element.
+#
+# 5) In case of multiple dc:Date, insert (YEAR) to indicate a particular dc:date used for "When" facet and timeline browsing.
+#    For example, ObjectDate >> dc:date (YEAR)
+#
+# 6) Insert (ID) for the unique identifier of a record. This can be URL, but also string (catalogue number etc). For example,
+#    RECORDID >> dc:identifier (ID). This information is mandatory.
+#
+# 7) If a single element is mapped to two ESE, use "_||_" syntax between the two elements. For example, the element mappable
+#    to both europeana:isShownBy and europeana:object, type europeana:isShownBy_||_europeana:object
+#
+# -About Europeana-specific elements-
+# a) <europeana:isShownBy> as a subproperty of <dc:relation>
+#    This is expressed by an unambiguous URI reference to the digital object in the best resolution available on the content
+#    provider web site. The link to the digital object is mandatory and will be used as a hyperlink associated with the
+#    clickable button and clickable icon to view or play the object on the content provider's web site.
+#
+# b) <europeana:isShownAt> as a subproperty of <dc:relation>
+#    This is expressed by an unambiguous URI reference to the digital object in full information context on the content
+#    provider's web site. This link will be active in the Europeana interface. It will lead the user to the digital object
+#    displayed in full information context on the content provider's web site.
+#
+# c) <europeana:userTag>
+#    User created tags through the Europeana interface. Mapping is not needed, so please do not use it in this mapping aid.
+#
+# d) <europeana:unstored>
+#    Dump all "interesting" unmappable elements into this single field for indexing. It is not necessary to map all available
+#    elements.
+#
+# e) <europeana:object>
+#    URL of a digital object to generate its thumbnail/sample. This is only for internal use for developers.
+#
+# -Comments for mapping-
+#    Any comments should be written after #. For example, #This is an example.
+
+# Europeana.eu mapping file for 00735_A_DE_Landesarchiv_ese_5_0000013080.xml
+
+# xpath source data field => Europeana metadata field 
+
+/metadata/record/dc:description  =>  dc:description
+
+/metadata/record/dc:identifier  =>  dc:identifier
+
+/metadata/record/dc:relation  =>  dc:relation
+
+/metadata/record/dc:source  =>  dc:source
+
+/metadata/record/dc:title  =>  dc:title
+
+/metadata/record/dcterms:isPartOf  =>  dcterms:isPartOf
+
+/metadata/record/dcterms:temporal  =>  dcterms:temporal
+
+/metadata/record/dcterms:temporal@xml:lang  =>  N/A
+
+/metadata/record/europeana:country  =>  europeana:country
+
+/metadata/record/europeana:isShownAt  =>  europeana:isShownAt (ID)
+
+/metadata/record/europeana:isShownBy  =>  europeana:isShownBy
+
+/metadata/record/europeana:language  =>  europeana:language
+
+/metadata/record/europeana:object  =>  europeana:object
+
+/metadata/record/europeana:provider  =>  europeana:provider
+
+/metadata/record/europeana:type  =>  europeana:type
+
+/metadata/record/europeana:unstored  =>  europeana:unstored
+
+/metadata/record/europeana:year  =>  europeana:year
+
+# 1st mapping on 15-06-2009 10:25 by Go
+
+#[Valentine - 15-06-2009 17.15] 1st normalisation
+#recordSeparator="record" collectionId="00735">
+#<addition key="EUROPEANA_TYPE" value="IMAGE"/>
+
+#1st Quality Check on 16-06-2009 15:25 by Go
+# No change needed. Please go to indexing.
+
+#[Content Review by Valentine 30-06-2009]
