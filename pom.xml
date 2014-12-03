@@ -63,7 +63,7 @@
 			<id>ext-snapshots</id>
 			<url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url>
 			<releases>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</releases>
 		</repository>
 		<repository>
@@ -87,6 +87,22 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>springbyexample.org</id>
+			<name>Spring by Example</name>
+			<url>http://www.springbyexample.org/maven/repo</url>
+		</repository>
+
+		<repository>
+			<id>com.springsource.repository.bundles.release</id>
+			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.external</id>
+			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
 		</repository>
 	</repositories>
 
