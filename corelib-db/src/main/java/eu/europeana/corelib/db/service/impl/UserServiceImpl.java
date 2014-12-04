@@ -194,17 +194,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.NO_USER_ID);
 		}
 
-		/*
-		if (StringUtils.isBlank(oldPassword)) {
-			throw new DatabaseException(ProblemType.NO_OLD_PASSWORD);
-		}
-		*/
 
 		if (StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.NO_PASSWORD);
 		}
 
-		if ((userId == null) || StringUtils.isBlank(oldPassword)
+		if (StringUtils.isBlank(oldPassword)
 				|| StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
