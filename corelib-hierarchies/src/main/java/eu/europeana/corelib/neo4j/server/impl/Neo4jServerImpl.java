@@ -17,10 +17,12 @@
 package eu.europeana.corelib.neo4j.server.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -58,7 +60,7 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-	Logger log = Logger.getLogger(Neo4jServerImpl.class.getCanonicalName());
+	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class.getCanonicalName());
 
 	private RestGraphDatabase graphDb;
 	private RestIndex<Node> index;
@@ -66,13 +68,13 @@ public class Neo4jServerImpl implements Neo4jServer {
 	private String customPath;
 	private String serverPath;
 
-	private static final Relation edmIsNextInSequenceRelation = new Relation(
+	private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(
 			RelType.EDM_ISNEXTINSEQUENCE.getRelType());
-	private static final Relation isFirstInSequenceRelation = new Relation(
+	private static final Relation ISFIRSTINSEQUENCERELATION = new Relation(
 			RelType.ISFIRSTINSEQUENCE.getRelType());
-	private static final Relation dctermsIsPartOfRelation = new Relation(
+	private static final Relation DCTERMSISPARTOFRELATION = new Relation(
 			RelType.DCTERMS_ISPARTOF.getRelType());
-	private static final Relation dctermsHasPartRelation = new Relation(
+	private static final Relation DCTERMSHASPARTRELATION = new Relation(
 			RelType.DCTERMS_HASPART.getRelType());
 
 	/**
@@ -100,9 +102,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 	public Node getNode(String id) {
 		IndexHits<Node> nodes = index.get("rdf_about", id);
 		if (nodes.size() > 0) {
-			if (nodes.getSingle().hasRelationship(dctermsIsPartOfRelation)
+			if (nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION)
 					|| nodes.getSingle()
-							.hasRelationship(dctermsHasPartRelation)) {
+							.hasRelationship(DCTERMSHASPARTRELATION)) {
 				return nodes.getSingle();
 			}
 		}
@@ -127,11 +129,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 		traversal.breadthFirst();
 		traversal.maxDepth(1);
 
-		traversal.relationships(isFirstInSequenceRelation, Direction.INCOMING);
+		traversal.relationships(ISFIRSTINSEQUENCERELATION, Direction.INCOMING);
 
 		Traverser tr = traversal.traverse(id);
 		Iterator<Node> resIter = tr.nodes().iterator();
-
+	
 		while (resIter.hasNext()) {
 			Node node = resIter.next();
 
@@ -151,7 +153,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
 	public Node getParent(Node id) {
 		List<Node> nodes = getRelatedNodes(id, 1, 0, Direction.OUTGOING,
-				dctermsIsPartOfRelation);
+				DCTERMSISPARTOFRELATION);
 		if (nodes.size() > 0) {
 			return nodes.get(0);
 		}
@@ -165,7 +167,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	private List<Node> getFollowingSiblings(Node id, int limit, int offset) {
 		return getRelatedNodes(id, limit, offset, Direction.INCOMING,
-				edmIsNextInSequenceRelation);
+				EDMISNEXTINSEQUENCERELATION);
 	}
 
 	@Override
@@ -175,7 +177,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 
 	private List<Node> getPreceedingSiblings(Node id, int limit, int offset) {
 		return getRelatedNodes(id, limit, offset, Direction.OUTGOING,
-				edmIsNextInSequenceRelation);
+				EDMISNEXTINSEQUENCERELATION);
 	}
 
 	private List<Node> getRelatedNodes(Node id, int limit, int offset,
@@ -237,9 +239,10 @@ public class Neo4jServerImpl implements Neo4jServer {
 			//httpMethod.setRequestBody(str);
 			httpMethod.setHeader("content-type", "application/json");
 			HttpResponse resp = client.execute(httpMethod);
-
+			
 			CustomResponse cr = new ObjectMapper().readValue(
-					resp.getEntity().getContent(), CustomResponse.class);
+					 resp.getEntity().getContent(), CustomResponse.class);
+			
 			if (cr.getResults() != null
 					&& cr.getResults().size() > 0
 					&& cr.getResults().get(0) != null
@@ -251,7 +254,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 				return Long.parseLong(cr.getResults().get(0).getData().get(0)
 						.get("row").get(0));
 		} catch (Exception e) {
-			log.error("error: " + e.getLocalizedMessage());
+			e.printStackTrace();
+			LOG.error("error: " + e.getLocalizedMessage());
 		} finally {
 			httpMethod.releaseConnection();
 		}
@@ -271,7 +275,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 					resp.getEntity().getContent(), IndexObject.class);
 			return obj.getLength();
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			LOG.error(e.getMessage());
 		} finally {
 			method.releaseConnection();
 		}
@@ -286,7 +290,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		HttpGet method = new HttpGet(customPath
 				+ "/initial/startup/nodeId/"
 				+ StringUtils.replace(id, "/", "%2F"));
-		log.info("path: " + method.getURI());
+		LOG.info("path: " + method.getURI());
 		try {
 			HttpResponse resp = client.execute(method);
 
@@ -295,7 +299,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 					Hierarchy.class);
 			return obj;
 		}  catch (IOException e) {
-			log.error(e.getMessage());
+			LOG.error(e.getMessage());
 		} finally {
 			method.releaseConnection();
 		}

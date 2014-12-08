@@ -2,6 +2,8 @@ package eu.europeana.corelib.neo4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,35 +25,54 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
 
+import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.neo4j.entity.Hierarchy;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
 
 public class Neo4jTest {
-	private Process neo4j;
-	private RestGraphDatabase db;
-	private Neo4jServer server;
+	private static Process neo4j;
+	private static RestGraphDatabase db;
+	private static Neo4jServer server;
+	private static int no_of_tests;
+	private static int testCount;
+	private static boolean dataLoaded = false;
+
 	@Before
 	public void prepare() {
-		TarGZipUnArchiver unzip = new TarGZipUnArchiver();
-		unzip.enableLogging(new ConsoleLogger(
-				org.codehaus.plexus.logging.Logger.LEVEL_INFO, "UnArchiver"));
-		try {
+		if (!dataLoaded) {
+			TarGZipUnArchiver unzip = new TarGZipUnArchiver();
+			unzip.enableLogging(new ConsoleLogger(
+					org.codehaus.plexus.logging.Logger.LEVEL_INFO, "UnArchiver"));
+			try {
 
-			unzip.extract(
-					"src/test/resources/neo4j-community-2.1.2-unix.tar.gz",
-					new File("src/test/resources"));
-			neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
-					"start").start();
-			System.out.println(new String(IOUtils.toByteArray(neo4j
-					.getInputStream())));
-			db = new RestGraphDatabase("http://localhost:7474/db/data");
-			db.getRestAPI().index().forNodes("edmsearch2");
-			prepareData();
-			server = new Neo4jServerImpl(
-					"http://localhost:7474/db/data", "edmsearch2",
-					"http://localhost:7474");
-		} catch (IOException e) {
-			e.printStackTrace();
+				unzip.extract(
+						"src/test/resources/neo4j-community-2.1.2-unix.tar.gz",
+						new File("src/test/resources"));
+				neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
+						"start").start();
+				System.out.println(new String(IOUtils.toByteArray(neo4j
+						.getInputStream())));
+				db = new RestGraphDatabase("http://localhost:7474/db/data/");
+				db.getRestAPI().index().forNodes("edmsearch2");
+				prepareData();
+				server = new Neo4jServerImpl("http://localhost:7474/db/data/",
+						"edmsearch2", "http://localhost:7474");
+				for (Method method : this.getClass().getMethods()) {
+					for (Annotation annotation : method.getAnnotations()) {
+						if (annotation.annotationType().equals(
+								org.junit.Test.class)) {
+							no_of_tests++;
+						}
+					}
+				}
+				dataLoaded = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -108,16 +129,18 @@ public class Neo4jTest {
 			}
 			if (StringUtils.isNotEmpty(record.getEdmIsFirstInSequence())) {
 				RelType rel = new RelType();
-				rel.toNode = record.getRdfAbout();
-				rel.fromNode = record.getEdmIsFirstInSequence();
+				rel.toNode = record.getEdmIsFirstInSequence();
+						
+				rel.fromNode = record.getRdfAbout();
 				rel.setRelType(DynamicRelationshipType
 						.withName("isFirstInSequence"));
 				relationships.add(rel);
 			}
 			if (StringUtils.isNotEmpty(record.getEdmIsLastInSequence())) {
 				RelType rel = new RelType();
-				rel.toNode = record.getRdfAbout();
-				rel.fromNode = record.getEdmIsLastInSequence();
+				rel.toNode = record.getEdmIsLastInSequence();
+						
+				rel.fromNode = record.getRdfAbout();
 				rel.setRelType(DynamicRelationshipType
 						.withName("isLastInSequence"));
 				relationships.add(rel);
@@ -145,31 +168,146 @@ public class Neo4jTest {
 
 	@Test
 	public void testNull() {
-		Assert.assertNull(server.getNode("test"));
-		
+		testCount++;
+		Node node = server.getNode("test");
+		Assert.assertNull(node);
+		Assert.assertNull(Node2Neo4jBeanConverter.toNeo4jBean(node, 1));
 	}
-	
+
 	@Test
-	public void assertHierarchy(){
+	public void testNotNull() {
+		testCount++;
+		Node node = server.getNode("uri2");
+		Assert.assertNotNull(node);
+		Neo4jBean bean = Node2Neo4jBeanConverter.toNeo4jBean(node,
+				server.getNodeIndex(node));
+		Assert.assertNotNull(bean);
+
+		Assert.assertEquals(bean.getParent(), "uri0");
+		Assert.assertEquals(bean.getChildrenCount().longValue(), 0l);
+		Assert.assertEquals(bean.getType(), DocType.safeValueOf("TEXT"));
+		Map<String, List<String>> title = new HashMap<>();
+		List<String> titleList = new ArrayList<>();
+		titleList.add("testtitle2");
+		title.put("en", titleList);
+
+		Assert.assertEquals(bean.getTitle(), title);
+		Map<String, List<String>> description = new HashMap<>();
+		List<String> descriptionList = new ArrayList<>();
+		descriptionList.add("testdescription2");
+		description.put("en", descriptionList);
+		Assert.assertEquals(bean.getDescription(), description);
+		Assert.assertEquals(bean.getIndex().longValue(), 1);
+
+		Hierarchy hierarchy = server.getInitialStruct(bean.getId());
+		Assert.assertNotNull(hierarchy);
+		Neo4jStructBean structBean = Node2Neo4jBeanConverter
+				.toNeo4jStruct(hierarchy);
+		Assert.assertNotNull(structBean);
+
+		Assert.assertEquals(structBean.getSelf().getId(), bean.getId());
+		Assert.assertEquals(structBean.getSelf().getIndex(), bean.getIndex());
+		Assert.assertEquals(structBean.getSelf().getChildrenCount(),
+				bean.getChildrenCount());
+		Assert.assertEquals(structBean.getSelf().getDescription(),
+				bean.getDescription());
+		Assert.assertEquals(structBean.getSelf().getTitle(), bean.getTitle());
+		Assert.assertEquals(structBean.getSelf().getType(), bean.getType());
+		Assert.assertEquals(structBean.getSelf().getParent(), bean.getParent());
+		Assert.assertEquals(structBean.getSelf(), bean);
+		Assert.assertEquals(structBean.getParents().size(), 1);
+		Node parent = server.getParent(node);
+		Assert.assertEquals(
+				structBean.getParents().get(0),
+				Node2Neo4jBeanConverter.toNeo4jBean(parent,
+						server.getNodeIndex(parent)));
+		Neo4jBean child1 = Node2Neo4jBeanConverter.toNeo4jBean(
+				server.getNode("uri1"),
+				server.getNodeIndex(server.getNode("uri1")));
+		Neo4jBean child2 = Node2Neo4jBeanConverter.toNeo4jBean(
+				server.getNode("uri3"),
+				server.getNodeIndex(server.getNode("uri3")));
+		Neo4jBean child3 = Node2Neo4jBeanConverter.toNeo4jBean(
+				server.getNode("uri4"),
+				server.getNodeIndex(server.getNode("uri4")));
+
+		Assert.assertEquals(structBean.getPreceedingSiblings().size(), 1);
+		Assert.assertEquals(structBean.getPreceedingSiblings().get(0), child1);
+		Assert.assertEquals(structBean.getFollowingSiblings().size(), 2);
+		Assert.assertEquals(structBean.getFollowingSiblings().get(0), child2);
+		Assert.assertEquals(structBean.getFollowingSiblings().get(1), child3);
+		Assert.assertEquals(server.getChildrenCount(parent), 4);
+		Assert.assertNotEquals(bean, child1);
+		List<Node> node1 = server.getPreceedingSiblings(node, 10);
+		Assert.assertEquals(node1.size(), 1);
+		Assert.assertEquals(
+				child1,
+				Node2Neo4jBeanConverter.toNeo4jBean(node1.get(0),
+						server.getNodeIndex(node1.get(0))));
+		List<Node> node2 = server.getFollowingSiblings(node, 10);
+		Assert.assertEquals(node2.size(), 2);
+		Assert.assertEquals(
+				child2,
+				Node2Neo4jBeanConverter.toNeo4jBean(node2.get(0),
+						server.getNodeIndex(node2.get(0))));
+		Assert.assertEquals(
+				child3,
+				Node2Neo4jBeanConverter.toNeo4jBean(node2.get(1),
+						server.getNodeIndex(node2.get(1))));
+		Assert.assertNotEquals(bean,child2);
+		
+		List<Node> children = server.getChildren(parent, 0, 10);
+		Assert.assertEquals(children.size(),server.getChildrenCount(parent));
+		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(children.get(0),
+				server.getNodeIndex(children.get(0))));
+		Assert.assertEquals(bean, Node2Neo4jBeanConverter.toNeo4jBean(children.get(1),
+						server.getNodeIndex(children.get(1))));
+		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(children.get(2),
+				server.getNodeIndex(children.get(2))));
+		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children.get(3),
+				server.getNodeIndex(children.get(3))));
+		
+		List<Node> children2 = server.getChildren(parent, 3, 10);
+		Assert.assertEquals(children2.size(),1);
+		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children2.get(0),
+				server.getNodeIndex(children2.get(0))));
+
+		
+		Assert.assertEquals("http://localhost:7474", server.getCustomPath());
+		Assert.assertNull(server.getParent(parent));
+	}
+
+	@Test
+	public void assertHierarchy() {
+		testCount++;
 		Assert.assertTrue(server.isHierarchy("uri4"));
 	}
-	
+
 	@Test
-	public void assertNotHierarch(){
-		Assert.assertFalse(server.isHierarchy("tes"));
+	public void assertNotHierarchy() {
+		testCount++;
+		Assert.assertFalse(server.isHierarchy("test"));
+	}
+
+	@Test
+	public void assertNullHierarchy() {
+		testCount++;
+		Assert.assertNull(server.getInitialStruct("test"));
 	}
 
 	@After
 	public void destroy() {
-		try {
-			neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
-					"stop").start();
-			System.out.println(new String(IOUtils.toByteArray(neo4j
-					.getInputStream())));
-			FileUtils.deleteDirectory(new File("neo4j-community-2.1.2"));
+		if (testCount == no_of_tests) {
+			try {
+				neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
+						"stop").start();
+				System.out.println(new String(IOUtils.toByteArray(neo4j
+						.getInputStream())));
+				FileUtils.deleteDirectory(new File("neo4j-community-2.1.2"));
 
-		} catch (IOException e) {
-			e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -177,7 +315,6 @@ public class Neo4jTest {
 		private String fromNode;
 		private String toNode;
 		private DynamicRelationshipType relType;
-
 
 		public void setRelType(DynamicRelationshipType relType) {
 			this.relType = relType;

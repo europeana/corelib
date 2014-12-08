@@ -202,7 +202,7 @@ public class Node2Neo4jBeanConverter {
 			neo4jBean.setTitle(titles);
 			neo4jBean.setDescription(descriptions);
 			if (node.hasProperty("hasParent")) {
-				neo4jBean.setParent(node.getProperty("hasParent").toString());
+				neo4jBean.setParent(StringUtils.replace(node.getProperty("hasParent").toString(),"\"",""));
 			}
 			neo4jBean.setIndex(Long.parseLong(node.getProperty("index")
 					.toString()));
