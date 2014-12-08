@@ -64,7 +64,6 @@ public class EdmUtils {
 	private static IBindingFactory bfact;
 	private final static String SPACE = " ";
 	private final static String PREFIX = "http://data.europeana.eu";
-	private static String prefix = "";
 
 	/**
 	 * Convert a FullBean to an EDM String
@@ -74,9 +73,7 @@ public class EdmUtils {
 	 * @return The resulting EDM string in RDF-XML
 	 */
 	public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
-		if (isUim) {
-			prefix = PREFIX;
-		}
+
 		RDF rdf = new RDF();
 		String type = getType(fullBean);
 		appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -98,29 +95,29 @@ public class EdmUtils {
 			marshallingContext.setOutput(out, null);
 			marshallingContext.marshalDocument(rdf, "UTF-8", true);
 			return out.toString("UTF-8");
-		} catch (JiBXException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (UnsupportedEncodingException e) {
+		} catch (JiBXException | UnsupportedEncodingException e) {
 			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return null;
 	}
 
 	private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses) {
-		if(licenses!=null){
+		if (licenses != null) {
 			List<License> licenseList = new ArrayList<License>();
-			for(LicenseImpl lic : licenses){
+			for (LicenseImpl lic : licenses) {
 				License license = new License();
 				license.setAbout(lic.getAbout());
-				addAsObject(license,InheritFrom.class,lic.getOdrlInheritFrom());
-				DateType date= new DateType();
-				date.setDate(new java.sql.Date(lic.getCcDeprecatedOn().getTime()));
+				addAsObject(license, InheritFrom.class,
+						lic.getOdrlInheritFrom());
+				DateType date = new DateType();
+				date.setDate(new java.sql.Date(lic.getCcDeprecatedOn()
+						.getTime()));
 				license.setDeprecatedOn(date);
 				licenseList.add(license);
 			}
 			rdf.setLicenseList(licenseList);
 		}
-		
+
 	}
 
 	private static String getType(FullBeanImpl fullBean) {
@@ -271,15 +268,7 @@ public class EdmUtils {
 				europeanaAggregation.getEdmPreview());
 		addAsObject(aggregation, Rights1.class,
 				europeanaAggregation.getEdmRights());
-		// if (!addAsObject(aggregation, Rights1.class,
-		// europeanaAggregation.getEdmRights())) {
-		// Rights1 rights1 = new Rights1();
-		// rights1.setString("");
-		// Resource res = new Resource();
-		// res.setResource("http://testrights/");
-		// rights1.setResource(res);
-		// aggregation.setRights(rights1);
-		// }
+
 		List<EuropeanaAggregationType> lst = new ArrayList<EuropeanaAggregationType>();
 		lst.add(aggregation);
 		rdf.setEuropeanaAggregationList(lst);
@@ -494,15 +483,7 @@ public class EdmUtils {
 			addAsObject(aggregation, _Object.class, aggr.getEdmObject());
 			addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
 			addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
-			// if (!addAsObject(aggregation, Rights1.class,
-			// aggr.getEdmRights())) {
-			// Rights1 rights1 = new Rights1();
-			// rights1.setString("");
-			// Resource testResource = new Resource();
-			// testResource.setResource("http://testedmrights/");
-			// rights1.setResource(testResource);
-			// aggregation.setRights(rights1);
-			// }
+
 			if (aggr.getEdmUgc() != null) {
 				Ugc ugc = new Ugc();
 
@@ -537,7 +518,7 @@ public class EdmUtils {
 			addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
 			addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
 			addAsList(wResource, Source.class, wr.getDcSource());
-			addAsList(wResource,SameAs.class,wr.getOwlSameAs());
+			addAsList(wResource, SameAs.class, wr.getOwlSameAs());
 			webResources.add(wResource);
 		}
 
@@ -575,8 +556,10 @@ public class EdmUtils {
 				addAsList(agent, Date.class, ag.getDcDate());
 				addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
 				addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-				addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
-				addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
+				addAsObject(agent, PlaceOfBirth.class,
+						ag.getRdaGr2PlaceOfBirth());
+				addAsObject(agent, PlaceOfDeath.class,
+						ag.getRdaGr2PlaceOfDeath());
 				addAsObject(agent, DateOfEstablishment.class,
 						ag.getRdaGr2DateOfEstablishment());
 				addAsObject(agent, DateOfTermination.class,
@@ -621,17 +604,9 @@ public class EdmUtils {
 						}
 					}
 				}
-			} catch (SecurityException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (IllegalAccessException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (NoSuchMethodException e) {
-				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-			} catch (IllegalArgumentException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InvocationTargetException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InstantiationException e) {
+			} catch (SecurityException | IllegalAccessException
+					| NoSuchMethodException | IllegalArgumentException
+					| InvocationTargetException | InstantiationException e) {
 				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 			}
 		}
@@ -652,17 +627,9 @@ public class EdmUtils {
 						choices.add(ch);
 					}
 				}
-			} catch (SecurityException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (IllegalAccessException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (NoSuchMethodException e) {
-				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-			} catch (IllegalArgumentException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InvocationTargetException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InstantiationException e) {
+			} catch (SecurityException | IllegalAccessException
+					| NoSuchMethodException | IllegalArgumentException
+					| InvocationTargetException | InstantiationException e) {
 				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 			}
 		}
@@ -701,17 +668,9 @@ public class EdmUtils {
 						}
 					}
 				}
-			} catch (SecurityException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (IllegalAccessException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (NoSuchMethodException e) {
-				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-			} catch (IllegalArgumentException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InvocationTargetException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InstantiationException e) {
+			} catch (SecurityException | IllegalAccessException
+					| NoSuchMethodException | IllegalArgumentException
+					| InvocationTargetException | InstantiationException e) {
 				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 			}
 		}
@@ -743,17 +702,9 @@ public class EdmUtils {
 						}
 					}
 				}
-			} catch (SecurityException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (IllegalAccessException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (NoSuchMethodException e) {
-				log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-			} catch (IllegalArgumentException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InvocationTargetException e) {
-				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-			} catch (InstantiationException e) {
+			} catch (SecurityException | IllegalAccessException
+					| NoSuchMethodException | IllegalArgumentException
+					| InvocationTargetException | InstantiationException e) {
 				log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 			}
 		}
@@ -774,17 +725,9 @@ public class EdmUtils {
 				method.invoke(dest, obj);
 				return true;
 			}
-		} catch (SecurityException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (IllegalAccessException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (IllegalArgumentException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (InvocationTargetException e) {
-			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-		} catch (InstantiationException e) {
+		} catch (SecurityException | IllegalAccessException
+				| NoSuchMethodException | IllegalArgumentException
+				| InvocationTargetException | InstantiationException e) {
 			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return false;
@@ -802,16 +745,10 @@ public class EdmUtils {
 					return true;
 				}
 			}
-		} catch (SecurityException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalAccessException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalArgumentException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (InvocationTargetException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (SecurityException | IllegalAccessException
+				| NoSuchMethodException | IllegalArgumentException
+				| InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return false;
 	}
@@ -825,16 +762,10 @@ public class EdmUtils {
 				method.invoke(dest, convertListFromMap(clazz, map));
 				return true;
 			}
-		} catch (SecurityException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalAccessException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalArgumentException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (InvocationTargetException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (SecurityException | IllegalAccessException
+				| NoSuchMethodException | IllegalArgumentException
+				| InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return false;
 	}
@@ -859,16 +790,10 @@ public class EdmUtils {
 				}
 				return true;
 			}
-		} catch (SecurityException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalAccessException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalArgumentException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (InvocationTargetException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
+		} catch (SecurityException | IllegalAccessException
+				| NoSuchMethodException | IllegalArgumentException
+				| InvocationTargetException e) {
+			log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
 		}
 		return false;
 	}
@@ -885,7 +810,7 @@ public class EdmUtils {
 		if (StringUtils.equals("Aggregates", clazzName) && list) {
 			clazzName = "Aggregate";
 		}
-		if(StringUtils.equals("Incorporates", clazzName) && list){
+		if (StringUtils.equals("Incorporates", clazzName) && list) {
 			clazzName = "Incorporate";
 		}
 		clazzName = StringUtils.strip(clazzName, "_1");
@@ -910,11 +835,8 @@ public class EdmUtils {
 				}
 				return tList;
 			}
-		} catch (SecurityException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (InstantiationException e) {
-			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
-		} catch (IllegalAccessException e) {
+		} catch (SecurityException | InstantiationException
+				| IllegalAccessException e) {
 			log.severe(e.getClass().getSimpleName() + " " + e.getMessage());
 		}
 
@@ -962,8 +884,9 @@ public class EdmUtils {
 							ResourceOrLiteralType.Lang lang = null;
 							if (StringUtils.isNotEmpty(entry.getKey())
 									&& !StringUtils.equals(entry.getKey(),
-											"def")&& !StringUtils.equals(entry.getKey(),
-													"eur")) {
+											"def")
+									&& !StringUtils.equals(entry.getKey(),
+											"eur")) {
 								lang = new ResourceOrLiteralType.Lang();
 								lang.setLang(entry.getKey());
 							}
@@ -984,16 +907,8 @@ public class EdmUtils {
 							}
 						}
 					}
-				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (InstantiationException e) {
+				} catch (SecurityException | IllegalAccessException
+						| IllegalArgumentException | InstantiationException e) {
 					log.severe(e.getClass().getSimpleName() + "  "
 							+ e.getMessage());
 				}
@@ -1057,16 +972,8 @@ public class EdmUtils {
 						obj.setLang(lang);
 						return (T) obj;
 					}
-				} catch (SecurityException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (IllegalAccessException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (IllegalArgumentException e) {
-					log.severe(e.getClass().getSimpleName() + "  "
-							+ e.getMessage());
-				} catch (InstantiationException e) {
+				} catch (SecurityException | IllegalAccessException
+						| IllegalArgumentException | InstantiationException e) {
 					log.severe(e.getClass().getSimpleName() + "  "
 							+ e.getMessage());
 				}

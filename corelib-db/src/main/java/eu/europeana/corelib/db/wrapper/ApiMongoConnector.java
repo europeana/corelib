@@ -27,6 +27,10 @@ import com.google.code.morphia.Datastore;
 
 import eu.europeana.corelib.logging.Logger;
 
+/**
+ * Api Mongo connector
+ *
+ */
 public class ApiMongoConnector {
 
 	private static Logger log = Logger.getLogger(ApiMongoConnector.class

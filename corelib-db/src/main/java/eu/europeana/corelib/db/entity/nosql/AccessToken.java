@@ -1,3 +1,6 @@
+/**
+	 * Only for internal (test) usage, clears a table...
+	 */
 package eu.europeana.corelib.db.entity.nosql;
 
 import java.util.Date;
@@ -24,12 +27,20 @@ public class AccessToken extends RefreshToken {
 
 	private Date expires;
 
+	/**
+	 * Empty constructor
+	 */
 	public AccessToken() {
 	}
 
+	/**
+	 * Default constructor
+	 * @param id The id of the token
+	 * @param expires The expiration date of the token
+	 */
 	public AccessToken(String id, Date expires) {
 		super(id);
-		this.expires = expires;
+		this.expires = new Date(expires.getTime());
 	}
 
 	/**
@@ -69,10 +80,10 @@ public class AccessToken extends RefreshToken {
 	}
 
 	public Date getExpires() {
-		return expires;
+		return new Date(expires.getTime());
 	}
 
 	public void setExpires(Date expires) {
-		this.expires = expires;
+		this.expires = new Date(expires.getTime());
 	}
 }

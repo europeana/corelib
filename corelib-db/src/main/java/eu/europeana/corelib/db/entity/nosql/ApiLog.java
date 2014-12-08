@@ -26,6 +26,10 @@ import com.google.code.morphia.annotations.Indexed;
 import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
+/**
+ * Class representing API log entry
+ *
+ */
 @Entity("logEntries")
 public class ApiLog implements NoSqlEntity {
 
@@ -72,11 +76,11 @@ public class ApiLog implements NoSqlEntity {
 	}
 
 	public Date getTimestamp() {
-		return timestamp;
+		return new Date(timestamp.getTime());
 	}
 
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		this.timestamp = new Date(timestamp.getTime());
 	}
 
 	public String getProfile() {
