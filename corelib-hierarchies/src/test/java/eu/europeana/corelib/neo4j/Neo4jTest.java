@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ * 
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.neo4j;
 
 import java.io.File;
@@ -33,6 +49,11 @@ import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
 
+/**
+ * Unit tests for neo4j
+ * @author Yorgos.Mamakis@ europeana.eu
+ *
+ */
 public class Neo4jTest {
 	private static Process neo4j;
 	private static RestGraphDatabase db;
@@ -41,6 +62,9 @@ public class Neo4jTest {
 	private static int testCount;
 	private static boolean dataLoaded = false;
 
+	/**
+	 * Unzip neo4j server, load and index data. This should happen only once
+	 */
 	@Before
 	public void prepare() {
 		if (!dataLoaded) {
@@ -166,6 +190,9 @@ public class Neo4jTest {
 		}
 	}
 
+	/**
+	 * Test Null object
+	 */
 	@Test
 	public void testNull() {
 		testCount++;
@@ -174,6 +201,9 @@ public class Neo4jTest {
 		Assert.assertNull(Node2Neo4jBeanConverter.toNeo4jBean(node, 1));
 	}
 
+	/**
+	 * Test non null object
+	 */
 	@Test
 	public void testNotNull() {
 		testCount++;
@@ -277,24 +307,35 @@ public class Neo4jTest {
 		Assert.assertNull(server.getParent(parent));
 	}
 
+	/**
+	 * Test that an object belongs to hierarchy
+	 */
 	@Test
 	public void assertHierarchy() {
 		testCount++;
 		Assert.assertTrue(server.isHierarchy("uri4"));
 	}
-
+	/**
+	 * Test that an object does not belong to hierarchy
+	 */
 	@Test
 	public void assertNotHierarchy() {
 		testCount++;
 		Assert.assertFalse(server.isHierarchy("test"));
 	}
-
+	
+	/**
+	 * Test null hierarchy
+	 */
 	@Test
 	public void assertNullHierarchy() {
 		testCount++;
 		Assert.assertNull(server.getInitialStruct("test"));
 	}
 
+	/**
+	 * Shutdown neo4j and remove the temp folder
+	 */
 	@After
 	public void destroy() {
 		if (testCount == no_of_tests) {
@@ -311,11 +352,20 @@ public class Neo4jTest {
 		}
 	}
 
+	/**
+	 * Relationship holder
+	 * @author Yorgos.Mamakis@ europeana.eu
+	 *
+	 */
 	private class RelType {
 		private String fromNode;
 		private String toNode;
 		private DynamicRelationshipType relType;
-
+		
+		/**
+		 * Set the relation type between 2 nodes
+		 * @param relType
+		 */
 		public void setRelType(DynamicRelationshipType relType) {
 			this.relType = relType;
 		}
