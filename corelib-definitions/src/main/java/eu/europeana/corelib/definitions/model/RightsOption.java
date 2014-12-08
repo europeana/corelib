@@ -117,7 +117,7 @@ public enum RightsOption {
 	 * http://www.europeana.eu/rights/out-of-copyright-non-commercial/
 	 */
 	OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
-			"Out of copyright - non commercial reuse", "icon-publicdomain icon-nceu", false, true);
+			"Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false, true);
 
 	private String url = null;
 	private String rightsText = null;
