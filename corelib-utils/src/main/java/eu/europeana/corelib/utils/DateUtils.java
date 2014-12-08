@@ -21,13 +21,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
+
 /**
  * Date util classes
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  *
  */
 public class DateUtils {
-
+	private static final Logger LOG = Logger.getLogger(DateUtils.class);
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	static {
 		formatter.setTimeZone(TimeZone.getTimeZone("GTM"));
@@ -60,12 +62,16 @@ public class DateUtils {
 	}
 
 
+	/**
+	 * Read a date from a string
+	 * @param date
+	 * @return
+	 */
 	public static Date parse(String date) {
 		try {
 			return formatter.parse(date);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return null;
 	}

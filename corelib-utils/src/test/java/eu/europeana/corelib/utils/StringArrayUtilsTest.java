@@ -17,10 +17,13 @@
 package eu.europeana.corelib.utils;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -75,7 +78,8 @@ public class StringArrayUtilsTest {
 
 		list.add("2");
 		Assert.assertEquals(2, StringArrayUtils.toArray(list).length);
-
+		
+		Assert.assertEquals(2, StringArrayUtils.toArray("1","2").length);
 	}
 
 	@Test
@@ -96,8 +100,10 @@ public class StringArrayUtilsTest {
 		String[] items = new String[] { "1", "2" };
 		String str = "3";
 		Assert.assertEquals(3, StringArrayUtils.addToArray(items, str).length);
+		Assert.assertEquals(1, StringArrayUtils.addToArray(null, str).length);
 	}
 
+	
 	/**
 	 * Testing StringArrayUtils.splitWebParameter()
 	 */
@@ -115,5 +121,22 @@ public class StringArrayUtilsTest {
 
 		// this is not cleared
 		assertArrayEquals(new String[]{"open/permission"}, StringArrayUtils.splitWebParameter(new String[]{"open/permission"}));
+		assertArrayEquals(StringArrayUtils.splitWebParameter(new String[1]),StringArrayUtils.EMPTY_ARRAY);
+		assertArrayEquals(StringArrayUtils.splitWebParameter(new String[]{""}),StringArrayUtils.EMPTY_ARRAY);
+	}
+	
+	@Test
+	public void toListTest(){
+		List<String> strList = new ArrayList<>();
+		strList.add("1");
+		strList.add("2");
+		assertEquals(strList,StringArrayUtils.toList("1","2"));
+	}
+	@Test
+	public void toSetTest(){
+		Set<String> strList = new HashSet<>();
+		strList.add("1");
+		
+		assertEquals(strList,StringArrayUtils.toSet("1","1"));
 	}
 }

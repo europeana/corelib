@@ -134,52 +134,69 @@ public class Neo4jBean {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Neo4jBean other = (Neo4jBean) obj;
 		if (children == null) {
-			if (other.children != null)
+			if (other.children != null) {
 				return false;
-		} else if (!children.equals(other.children))
+			}
+		} else if (!children.equals(other.children)) {
 			return false;
+		}
 		if (childrenCount == null) {
-			if (other.childrenCount != null)
+			if (other.childrenCount != null) {
 				return false;
-		} else if (!childrenCount.equals(other.childrenCount))
+			}
+		} else if (!childrenCount.equals(other.childrenCount)) {
 			return false;
+		}
 		if (description == null) {
-			if (other.description != null)
+			if (other.description != null) {
 				return false;
-		} else if (!description.equals(other.description))
+			}
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (index == null) {
-			if (other.index != null)
+			if (other.index != null) {
 				return false;
-		} else if (!index.equals(other.index))
+			}
+		} else if (!index.equals(other.index)) {
 			return false;
+		}
 		if (parent == null) {
-			if (other.parent != null)
+			if (other.parent != null) {
 				return false;
-		} else if (!parent.equals(other.parent))
+			}
+		} else if (!parent.equals(other.parent)) {
 			return false;
+		}
 		if (title == null) {
-			if (other.title != null)
+			if (other.title != null) {
 				return false;
-		} else if (!title.equals(other.title))
+			}
+		} else if (!title.equals(other.title)) {
 			return false;
-		if (type != other.type)
+		}
+		if (type != other.type) {
 			return false;
+		}
 		return true;
 	}
-	
-	
+
 }
