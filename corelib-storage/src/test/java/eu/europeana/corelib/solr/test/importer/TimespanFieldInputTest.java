@@ -110,7 +110,8 @@ public class TimespanFieldInputTest {
 		
 		EasyMock.replay(query,ds,mongoServer);
 		TimespanImpl timespanMongo = new TimespanFieldInput()
-				.createTimespanMongoField(timespan, mongoServer);
+				.createNewTimespan(timespan);
+		mongoServer.getDatastore().save(timespanMongo);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
 		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next().get(0));
 		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd().values().iterator().next().get(0));

@@ -18,7 +18,6 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
@@ -28,9 +27,6 @@ import eu.europeana.corelib.definitions.jibx.TimeSpanType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.edm.utils.updaters.TimespanUpdater;
-import eu.europeana.corelib.edm.utils.updaters.Updater;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 
 /**
@@ -103,42 +99,8 @@ public final class TimespanFieldInput {
 		return solrInputDocument;
 	}
 
-	/**
-	 * Create a MongoDB Timespan Entity
-	 * 
-	 * @param timeSpan
-	 *            The JiBX Timespan Entity
-	 * @param mongoServer
-	 *            The MongoDB Server to save the Timespan Entity
-	 * @return The MongoDB Entity
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	public TimespanImpl createTimespanMongoField(TimeSpanType timeSpan,
-			MongoServer mongoServer) {
-		TimespanImpl mongoTimespan = ((EdmMongoServer) mongoServer)
-				.getDatastore().find(TimespanImpl.class)
-				.filter("about", timeSpan.getAbout()).get();
-		if (mongoTimespan == null) {
-			mongoTimespan = createNewTimespan(timeSpan);
 
-			mongoServer.getDatastore().save(mongoTimespan);
-
-		} else {
-			mongoTimespan = updateTimespan(mongoTimespan, timeSpan, mongoServer);
-		}
-		return mongoTimespan;
-	}
-
-	private TimespanImpl updateTimespan(TimespanImpl mongoTimespan,
-			TimeSpanType timeSpan, MongoServer mongoServer) {
-		Updater<TimespanImpl, TimeSpanType> timespanUpdater = new TimespanUpdater();
-		timespanUpdater.update(mongoTimespan, timeSpan, mongoServer);
-		return ((EdmMongoServer) mongoServer).getDatastore()
-				.find(TimespanImpl.class).filter("about", timeSpan.getAbout())
-				.get();
-
-	}
+	
 
 	public TimespanImpl createNewTimespan(TimeSpanType timeSpan) {
 		TimespanImpl mongoTimespan = new TimespanImpl();

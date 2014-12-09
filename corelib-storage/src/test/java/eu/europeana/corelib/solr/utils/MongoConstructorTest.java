@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.io.FileUtils;
 import org.jibx.runtime.BindingDirectory;
@@ -35,16 +36,21 @@ import com.mongodb.MongoException;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.jibx.EuropeanaProxy;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.utils.MongoConstructor;
+import eu.europeana.corelib.edm.utils.construct.FullBeanHandler;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
 /**
  * Mongo Constructor unit tests
@@ -63,7 +69,10 @@ public class MongoConstructorTest {
 					FileUtils.readFileToString(new File(
 							"src/test/resources/test_files/edm_new.xml"))));
 			int port = 10000;
-			MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
+			IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+			        .net(new Net(port, Network.localhostIsIPv6()))
+			        .build();
+//					(Version.V2_0_7, port, false);
 
 			MongodStarter runtime = MongodStarter.getDefaultInstance();
 
@@ -71,8 +80,9 @@ public class MongoConstructorTest {
 			mongodExecutable.start();
 			EdmMongoServer mongoServer = new EdmMongoServerImpl(new Mongo(
 					"localhost", port), "europeana_test", "", "");
-			FullBean fBean = new MongoConstructor().constructFullBean(rdf,
-					mongoServer);
+			FullBeanHandler handler = new FullBeanHandler(mongoServer);
+			FullBeanImpl fBean = new MongoConstructor().constructFullBean(rdf);
+			handler.saveEdmClasses(fBean, true);
 			assertNotNull(fBean);
 			ProxyType proxy = rdf.getProxyList().get(0);
 			EuropeanaProxy eProxy = new EuropeanaProxy();
@@ -80,7 +90,8 @@ public class MongoConstructorTest {
 			proxy.setEuropeanaProxy(eProxy);
 			rdf.getProxyList().clear();
 			rdf.getProxyList().add(proxy);
-			FullBean fBeanUpdate = new MongoConstructor().constructFullBean(rdf, mongoServer);
+			FullBean fBeanUpdate = new MongoConstructor().constructFullBean(rdf);
+			handler.saveEdmClasses(fBean, false);
 			assertNotNull(fBeanUpdate);
 			assertTrue(fBeanUpdate.getProxies().get(0).isEuropeanaProxy());
 			
@@ -96,6 +107,12 @@ public class MongoConstructorTest {
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

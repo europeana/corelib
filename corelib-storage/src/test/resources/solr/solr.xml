@@ -32,5 +32,23 @@
     <core name="search" instanceDir="search">
 	<property name="dataDir" value="data" />
     </core>
+<!--  <core name="suggestions1" instanceDir="suggestions1">
+	<property name="dataDir" value="data" />
+    </core> -->
+<!-- <core name="suggestions2" instanceDir="suggestions2">
+        <property name="dataDir" value="data" />
+    </core>
+ <core name="suggestions3" instanceDir="suggestions3">
+        <property name="dataDir" value="data" />
+    </core>
+ <core name="suggestions4" instanceDir="suggestions4">
+        <property name="dataDir" value="data" />
+    </core>
+ <core name="suggestions5" instanceDir="suggestions5">
+        <property name="dataDir" value="data" />
+    </core>
+ <core name="suggestions6" instanceDir="suggestions6">
+        <property name="dataDir" value="data" />
+    </core>-->
   </cores> 
 </solr>

@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -44,6 +45,7 @@ import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.utils.MongoConstructor;
 import eu.europeana.corelib.edm.utils.SolrConstructor;
+import eu.europeana.corelib.edm.utils.construct.FullBeanHandler;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
@@ -115,7 +117,9 @@ public class ContentLoader {
 				i++;
 				RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
 				
-				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf,(EdmMongoServerImpl) mongoDBServer);
+				FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
+				FullBeanHandler handler = new FullBeanHandler(mongoDBServer);
+				handler.saveEdmClasses(fullBean, true);
 				String about = EuropeanaUriUtils.createEuropeanaId("00000", fullBean.getAbout());
 				fullBean.setAbout(about);
 				if(mongoDBServer.getFullBean(about)==null){
@@ -157,6 +161,12 @@ public class ContentLoader {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (MongoDBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

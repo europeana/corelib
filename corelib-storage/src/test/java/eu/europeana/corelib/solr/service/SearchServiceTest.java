@@ -25,8 +25,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,8 +39,11 @@ import com.mongodb.Mongo;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
@@ -77,7 +80,7 @@ public class SearchServiceTest {
 	private EuropeanaIdMongoServer idServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
-	private SolrServer solrServer;
+	private EmbeddedSolrServer solrServer;
 
 	private static boolean dataLoaded = false;
 
@@ -90,8 +93,9 @@ public class SearchServiceTest {
 		if (!dataLoaded) {
 			try {
 
-				MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
-						false);
+				IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+				        .net(new Net(port, Network.localhostIsIPv6()))
+				        .build();
 
 				MongodStarter runtime = MongodStarter.getDefaultInstance();
 
@@ -145,11 +149,11 @@ public class SearchServiceTest {
 		testCount++;
 
 		List<Term> terms = searchService.suggestions("model mod", 10, "title");
-		Assert.assertEquals(terms.size(), 10);
+		Assert.assertEquals(terms.size(), 2);
 		Assert.assertEquals(terms.get(0).getField(), "Title");
-		Assert.assertEquals(terms.get(0).getFrequency(), 3);
+		Assert.assertEquals(terms.get(0).getFrequency(), 1);
 		Assert.assertEquals(terms.get(0).getTerm(),
-				"modell moderner pianinomechanik");
+				"modell der dulcitone mechanik");
 	}
 
 	/*
@@ -188,7 +192,7 @@ public class SearchServiceTest {
 		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
 				query);
 
-		Assert.assertNotNull(results.getSpellcheck());
+		Assert.assertNull(results.getSpellcheck());
 
 	}
 
