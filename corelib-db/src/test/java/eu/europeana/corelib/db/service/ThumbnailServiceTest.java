@@ -150,7 +150,7 @@ public class ThumbnailServiceTest {
 
 		IUnmarshallingContext uctx = context.createUnmarshallingContext();
 
-		File test = new File("../corelib-storage/src/test/resources/test_files/edm_new.xml");
+		File test = new File("../corelib-search/src/test/resources/test_files/edm_new.xml");
 
 		InputStream ins = new FileInputStream(test);
 

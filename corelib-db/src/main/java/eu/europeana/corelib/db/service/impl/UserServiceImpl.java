@@ -48,7 +48,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.service.SearchService;
+import eu.europeana.corelib.search.SearchService;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

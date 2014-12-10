@@ -31,6 +31,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+            <groupId>eu.europeana.corelib</groupId>
+            <artifactId>corelib-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-edm-definitions</artifactId>
 			<version>${project.version}</version>
@@ -40,27 +45,13 @@
 			<artifactId>corelib-common-storage</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-hierarchies</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>google-collections</artifactId>
-					<groupId>com.google.collections</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-lookup</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-web</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-utils</artifactId>
@@ -191,17 +182,7 @@
 			<version>8.1.14.v20131031</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-XX:-UseSplitVerifier</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>

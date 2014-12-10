@@ -7,7 +7,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
-	<artifactId>corelib-edm-definitions</artifactId>
+	<artifactId>${artifact.id}</artifactId>
 	<name>Europeana Core Library EDM Schema definitions</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

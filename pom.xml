@@ -6,9 +6,7 @@
 	Unless required by applicable law or agreed to in writing, software distributed 
 	under the Licence is distributed on an "AS IS" basis, without warranties 
 	or conditions of any kind, either express or implied. See the Licence for 
-	the specific language governing permissions and limitations under the Licence. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	the specific language governing permissions and limitations under the Licence. --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
@@ -35,7 +33,8 @@
 		<module>corelib-sugarcrm/client</module>
 		<module>corelib-common-storage</module>
 		<module>corelib-hierarchies</module>
-	</modules>
+    <module>corelib-search</module>
+  </modules>
 
 	<repositories>
 		<repository>

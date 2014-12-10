@@ -40,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-storage</artifactId>
+			<artifactId>corelib-search</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Spring -->

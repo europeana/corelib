@@ -37,13 +37,10 @@ import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LandingPage;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
-import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
 
 /**
  * Constructor of a Europeana Aggregation
