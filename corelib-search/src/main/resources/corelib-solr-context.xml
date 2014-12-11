@@ -32,7 +32,7 @@
 	<import resource="internal/corelib-solr-server.xml" />
 	<import resource="corelib-hierarchy-server.xml"/>
 	<!-- SERVICES -->
-	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.service.impl.SearchServiceImpl"
+	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrServer"
 	/>
 </beans>

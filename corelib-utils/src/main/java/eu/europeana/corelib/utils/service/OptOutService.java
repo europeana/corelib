@@ -16,7 +16,7 @@
  */
 
 package eu.europeana.corelib.utils.service;
-
+@Deprecated
 public interface OptOutService {
 
 	/**
@@ -30,6 +30,8 @@ public interface OptOutService {
 	 * 
 	 * @return TRUE if it is opted out, otherwise FALSE
 	 */
+
 	boolean check(String id);
 
+	
 }

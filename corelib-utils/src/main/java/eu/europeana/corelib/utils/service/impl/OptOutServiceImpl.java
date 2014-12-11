@@ -30,7 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import eu.europeana.corelib.utils.service.OptOutService;
-
+@Deprecated
 public class OptOutServiceImpl implements OptOutService {
 
 	private final File optOutList;
