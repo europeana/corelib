@@ -22,8 +22,8 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 	@Resource
 	private EmailService emailService;
 	
-	@Value("#{europeanaProperties['portal.name']}")
-	private String portalName;
+//	@Value("#{europeanaProperties['portal.name']}")
+//	private String portalName;
 
 	@Value("#{europeanaProperties['portal.server']}")
 	private String portalServer;
@@ -62,7 +62,7 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 		    @Override
 			public void run() {
 				StringBuilder message = new StringBuilder();
-				message.append("portal.name: ").append(portalName).append("\n");
+//				message.append("portal.name: ").append(portalName).append("\n");
 				message.append("portal.server: ").append(portalServer).append("\n");
 				message.append("\n");
 				message.append("Missing tag:").append(code);
