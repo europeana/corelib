@@ -98,11 +98,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public UrlBuilder getPortalHome(boolean relative) {
 		UrlBuilder url;
 		if (relative) {
-			url = new UrlBuilder("/");
+			url = new UrlBuilder("");
 		} else {
 			url = new UrlBuilder(configuration.getPortalServer());
 		}
-		url.addPath(configuration.getPortalName());
 		return url;
 	}
 
@@ -157,7 +156,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getCanonicalPortalRecord(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
-		url.addPath(PATH_PORTAL, PATH_RECORD).addPage(europeanaId + EXT_HTML);
+		url.addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
 		return url;
 	}
 

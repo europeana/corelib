@@ -17,7 +17,7 @@ public interface EuropeanaUrlService {
 	static final String PATH_RECORD 		= "record";
 	
 	// PORTAL PATHS
-	static final String PATH_PORTAL 		= "portal";
+	//static final String PATH_PORTAL 		= "portal";
 	static final String PATH_PORTAL_RESOLVE = "resolve";
 
 	// API PATHS

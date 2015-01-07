@@ -20,6 +20,7 @@ import java.util.Date;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 /**
  * Date util classes
@@ -35,4 +36,15 @@ public class DateUtilsTest {
 		Assert.assertEquals("Cloned day not the same", today,  DateUtils.clone(today));
 	}
 
+	@Test
+	public void formatTest(){
+		
+		Date date = new Date(10000000l);
+		Assert.assertTrue(StringUtils.equals(DateUtils. format(date),"1970-01-01T02:46:40.000Z"));
+	}
+	
+	@Test
+	public void parseTest(){
+		Assert.assertEquals(10000000l,DateUtils.parse("1970-01-01T02:46:40.000Z").getTime());
+	}
 }

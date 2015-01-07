@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ *  
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under 
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under 
+ *  the Licence.
+ */
 package eu.europeana.corelib.db.entity.nosql;
 
 import com.google.code.morphia.annotations.Entity;
@@ -6,6 +22,10 @@ import com.google.code.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
+/**
+ * A refresh token for OAuth2
+ *
+ */
 @Entity("OAuth2RefreshToken")
 public class RefreshToken implements NoSqlEntity {
 
@@ -35,19 +55,19 @@ public class RefreshToken implements NoSqlEntity {
 	}
 
 	public byte[] getToken() {
-		return token;
+		return token.clone();
 	}
 
 	public void setToken(byte[] token) {
-		this.token = token;
+		this.token = token.clone();
 	}
 
 	public byte[] getAuthentication() {
-		return authentication;
+		return authentication.clone();
 	}
 
 	public void setAuthentication(byte[] authentication) {
-		this.authentication = authentication;
+		this.authentication = authentication.clone();
 	}
 
 	public String getApiKey() {

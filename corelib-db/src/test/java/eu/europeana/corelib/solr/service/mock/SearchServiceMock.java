@@ -41,17 +41,17 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.edm.service.SearchService;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.search.SearchService;
+import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.model.ResultSet;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.edm.service.SearchService
+ * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceMock implements SearchService {
 

@@ -40,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-storage</artifactId>
+			<artifactId>corelib-search</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Spring -->
@@ -79,7 +79,14 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${version.hibernateCore}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>cglib</artifactId>
+					<groupId>cglib</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+		
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -129,7 +136,7 @@
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-			<version>1.33</version>
+			<version>1.46.4</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

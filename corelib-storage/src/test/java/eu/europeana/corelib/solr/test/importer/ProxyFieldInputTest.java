@@ -316,7 +316,8 @@ public class ProxyFieldInputTest {
 		
 		try {
 			mongoProxy = new ProxyFieldInput().createProxyMongoFields(
-					mongoProxy, proxy, mongoServer);
+					mongoProxy, proxy);
+			mongoServer.getDatastore().save(mongoProxy);
 			assertEquals(proxy.getAbout(), mongoProxy.getAbout());
 			assertEquals(proxy.getType().getType().toString(), mongoProxy.getEdmType()
 					.toString());

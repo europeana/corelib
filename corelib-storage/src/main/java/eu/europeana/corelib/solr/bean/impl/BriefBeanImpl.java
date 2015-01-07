@@ -137,7 +137,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("provider_aggregation_edm_isShownAt")
     protected String[] edmIsShownAt;
-
+    
+    @Field("edm_previewNoDistribute")
+    protected Boolean edmPreviewNotDistribute;
     @Override
     public String[] getEdmPreview() {
         List<String> previews = new ArrayList<String>();
@@ -362,5 +364,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         }
         return null;
     }
+
+	@Override
+	public Boolean getPreviewNoDistribute() {
+		return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
+	}
 
 }

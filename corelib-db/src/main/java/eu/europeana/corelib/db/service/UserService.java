@@ -308,6 +308,13 @@ public interface UserService extends AbstractService<User> {
 	 */
 	User updateUserLanguageSearch(Long userId, String... languageCodes)  throws DatabaseException;
 	
+	/**
+	 * Set a flag for enabling query translations
+	 * @param userId Existing id of user account
+	 * @param languageSearchApplied Whether query translations are enabled or not
+	 * @return Updated user profile
+	 * @throws DatabaseException
+	 */
 	User updateUserLanguageSearchApplied(Long userId, Boolean languageSearchApplied)  throws DatabaseException;
 	
 }

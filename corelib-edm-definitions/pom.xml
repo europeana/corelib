@@ -7,11 +7,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
-	<artifactId>corelib-edm-definitions</artifactId>
+	<artifactId>${artifact.id}</artifactId>
 	<name>Europeana Core Library EDM Schema definitions</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jibx.version>1.2.3</jibx.version>
 	</properties>
 	<dependencies>
 		<!-- JIBX dependencies -->
@@ -37,7 +36,7 @@
 			<plugin>
 				<groupId>org.jibx</groupId>
 				<artifactId>maven-jibx-plugin</artifactId>
-				<version>${jibx.version}</version>
+				<version>${version.jibx}</version>
 				<executions>
 					<execution>
 						<id>generate-java-code-from-schema (EDM)</id>
@@ -48,7 +47,7 @@
 							<directory>src/main/resources/eu</directory>
 							<targetDirectory>src/main/java</targetDirectory>
 							<includes>
-								<include>EDM-INTERNAL.xsd</include>
+								<include>${edm.version}</include>
 							</includes>
 							<options>
 								<package>eu.europeana.corelib.definitions.jibx</package>
@@ -101,7 +100,7 @@
 											maven-jibx-plugin
 										</artifactId>
 										<versionRange>
-											[1.2.3,)
+											[1.2.5,)
 										</versionRange>
 										<goals>
 											<goal>bind</goal>
@@ -116,16 +115,41 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<argLine>-XX:-UseSplitVerifier</argLine>
-					</configuration>
-				</plugin>
+<!-- 				<plugin> -->
+<!-- 					<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 					<artifactId>maven-surefire-plugin</artifactId> -->
+<!-- 					<configuration> -->
+<!-- 						<argLine>-XX:-UseSplitVerifier</argLine> -->
+<!-- 					</configuration> -->
+<!-- 				</plugin> -->
 			</plugins>
 		</pluginManagement>
+		
+		
 	</build>
+	<profiles>
+            <profile>
+                <id>
+                    internal
+                </id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                    <edm.version>EDM-INTERNAL.xsd</edm.version>
+                    <artifact.id>corelib-edm-definitions</artifact.id>
+                </properties>
+            </profile>
+            <profile>
+                <id>
+                    external
+                </id>
+                <properties>
+                    <edm.version>EDM.xsd</edm.version>
+                    <artifact.id>corelib-edm-definitions-external</artifact.id>
+                </properties>
+            </profile>
+        </profiles>
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>

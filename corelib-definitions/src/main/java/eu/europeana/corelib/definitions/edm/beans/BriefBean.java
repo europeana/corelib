@@ -219,4 +219,9 @@ public interface BriefBean extends IdBean {
 	 */
 	Map<String, List<String>> getEdmAgentLabelLangAware();
 
+	/**
+	 * Opt out fix
+	 * @return
+	 */
+	Boolean getPreviewNoDistribute();
 }

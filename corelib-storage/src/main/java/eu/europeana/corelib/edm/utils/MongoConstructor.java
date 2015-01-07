@@ -64,21 +64,9 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
  */
 public class MongoConstructor {
 
-	/**
-	 * Constructs a FullBean from an RDF TODO: check for sanity
-	 * 
-	 * @param record
-	 *            The RDF record to use for the Fullbean contruction
-	 * @param mongoServer
-	 *            The mongo server used to save the FullBean
-	 * @return
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws MalformedURLException
-	 * @throws IOException
-	 */
-         @Deprecated
-	public FullBeanImpl constructFullBean(RDF record, EdmMongoServer mongoServer)
+	
+
+	public FullBeanImpl constructFullBean(RDF record)
 			throws InstantiationException, IllegalAccessException,
 			MalformedURLException, IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
@@ -105,19 +93,9 @@ public class MongoConstructor {
 			proxyAbout = proxyAbout + pcho.getAbout();
 			europeanaProxy = europeanaProxy + pcho.getAbout();
 
-			try {
-				providedCHOs.add(new ProvidedCHOFieldInput()
-						.createProvidedCHOMongoFields(pcho, mongoServer));
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-		if(record.getLicenseList()!=null){
-		for(License license:record.getLicenseList()){
-			licenses.add(new LicenseFieldInput().createLicenseMongoFields(license, mongoServer));
-		}
+			providedCHOs.add(new ProvidedCHOFieldInput()
+					.createProvidedCHOMongoFields(pcho));
+
 		}
 		for (ProxyType proxytype : record.getProxyList()) {
 
@@ -142,183 +120,21 @@ public class MongoConstructor {
 
 				}
 			} else {
-				for (EuropeanaAggregationType aggr: record.getEuropeanaAggregationList()){
-					List<ProxyIn> proxyInList =  new ArrayList<ProxyIn>();
-					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(europeanaAggregationAbout);
-					proxyInList.add(proxyIn);
-					proxytype.setProxyInList(proxyInList);
-				}
-			}
-			
-			for (ProvidedCHOType pCho : record.getProvidedCHOList()) {
-				
-					ProxyFor pFor = new ProxyFor();
-					pFor.setResource(providedCHO + pCho.getAbout());
-					proxytype.setProxyFor(pFor);
-				
-
-			}
-
-			proxies.add(new ProxyFieldInput().createProxyMongoFields(
-					new ProxyImpl(), proxytype, mongoServer));
-		}
-		for (Aggregation aggregation : record.getAggregationList()) {
-			AggregatedCHO ag = new AggregatedCHO();
-			ag.setResource(providedCHO + fullBean.getAbout());
-			aggregation.setAggregatedCHO(ag);
-			aggregation.setAbout(aggregationAbout);
-			List<WebResourceImpl> webResourcesMongo = new ArrayList<WebResourceImpl>();
-			if (record.getWebResourceList() != null
-					&& record.getWebResourceList().size() > 0) {
-				webResourcesMongo = new AggregationFieldInput()
-						.createWebResources(record.getWebResourceList(),
-								mongoServer);
-
-			}
-
-			aggregations.add(new AggregationFieldInput()
-					.createAggregationMongoFields(aggregation, mongoServer,
-							webResourcesMongo));
-
-		}
-
-		if (record.getConceptList() != null) {
-			for (Concept concept : record.getConceptList()) {
-				concepts.add(new ConceptFieldInput().createConceptMongoFields(
-						concept, mongoServer, record));
-			}
-		}
-
-		if (record.getPlaceList() != null) {
-			for (PlaceType place : record.getPlaceList()) {
-				places.add(new PlaceFieldInput().createPlaceMongoFields(place,
-						mongoServer));
-			}
-		}
-
-		if (record.getTimeSpanList() != null) {
-			for (TimeSpanType tspan : record.getTimeSpanList()) {
-				timespans.add(new TimespanFieldInput()
-						.createTimespanMongoField(tspan, mongoServer));
-			}
-		}
-		if (record.getAgentList() != null) {
-			for (AgentType agent : record.getAgentList()) {
-				agents.add(new AgentFieldInput().createAgentMongoEntity(agent,
-						mongoServer));
-			}
-		}
-		if (record.getEuropeanaAggregationList() != null) {
-			for (EuropeanaAggregationType eaggregation : record
-					.getEuropeanaAggregationList()) {
-				AggregatedCHO aggregatedCho = new AggregatedCHO();
-				aggregatedCho.setResource(providedCHO+record.getProvidedCHOList().get(0).getAbout());
-				eaggregation.setAbout(europeanaAggregationAbout);
-				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
-						.createAggregationMongoFields(eaggregation,
-								mongoServer, SolrUtils.getPreviewUrl(record)));
-			}
-		}
-
-		fullBean.setProvidedCHOs(providedCHOs);
-
-		fullBean.setAggregations(aggregations);
-		if(licenses.size()>0){
-			fullBean.setLicenses(licenses);
-		}
-		try {
-			if (agents.size() > 0) {
-				fullBean.setAgents(agents);
-			}
-			if (concepts.size() > 0) {
-				fullBean.setConcepts(concepts);
-			}
-			if (places.size() > 0) {
-				fullBean.setPlaces(places);
-			}
-			if (timespans.size() > 0) {
-				fullBean.setTimespans(timespans);
-			}
-			if (proxies.size() > 0) {
-				fullBean.setProxies(proxies);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return fullBean;
-	}
-
-        public FullBeanImpl constructFullBean(RDF record)
-			throws InstantiationException, IllegalAccessException,
-			MalformedURLException, IOException {
-		FullBeanImpl fullBean = new FullBeanImpl();
-		List<AgentImpl> agents = new ArrayList<AgentImpl>();
-		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
-		List<ConceptImpl> concepts = new ArrayList<ConceptImpl>();
-		List<PlaceImpl> places = new ArrayList<PlaceImpl>();
-		List<WebResource> webResources = new ArrayList<WebResource>();
-		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
-		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
-		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-		List<LicenseImpl> licenses = new ArrayList<LicenseImpl>();
-		String aggregationAbout = "/aggregation/provider";
-		String europeanaAggregationAbout = "/aggregation/europeana";
-		String proxyAbout = "/proxy/provider";
-		String europeanaProxy = "/proxy/europeana";
-		String providedCHO = "/item";
-
-		for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
-			fullBean.setAbout(pcho.getAbout());
-			aggregationAbout = aggregationAbout + pcho.getAbout();
-			europeanaAggregationAbout = europeanaAggregationAbout
-					+ pcho.getAbout();
-			proxyAbout = proxyAbout + pcho.getAbout();
-			europeanaProxy = europeanaProxy + pcho.getAbout();
-
-		
-				providedCHOs.add(new ProvidedCHOFieldInput()
-						.createProvidedCHOMongoFields(pcho));
-			
-		}
-		for (ProxyType proxytype : record.getProxyList()) {
-
-			boolean isEuropeanaProxy = false;
-			if (proxytype.getEuropeanaProxy() != null) {
-				if (!proxytype.getEuropeanaProxy().isEuropeanaProxy()) {
-					proxytype.setAbout(proxyAbout);
-					isEuropeanaProxy = false;
-				} else {
-					proxytype.setAbout(europeanaProxy);
-					isEuropeanaProxy = true;
-
-				}
-			}
-			if (!isEuropeanaProxy) {
-				for (Aggregation aggr : record.getAggregationList()) {
+				for (EuropeanaAggregationType aggr : record
+						.getEuropeanaAggregationList()) {
 					List<ProxyIn> proxyInList = new ArrayList<ProxyIn>();
 					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(aggregationAbout);
-					proxyInList.add(proxyIn);
-					proxytype.setProxyInList(proxyInList);
-
-				}
-			} else {
-				for (EuropeanaAggregationType aggr: record.getEuropeanaAggregationList()){
-					List<ProxyIn> proxyInList =  new ArrayList<ProxyIn>();
-					ProxyIn proxyIn = new ProxyIn();
 					proxyIn.setResource(europeanaAggregationAbout);
 					proxyInList.add(proxyIn);
 					proxytype.setProxyInList(proxyInList);
 				}
 			}
-			
+
 			for (ProvidedCHOType pCho : record.getProvidedCHOList()) {
-				
-					ProxyFor pFor = new ProxyFor();
-					pFor.setResource(providedCHO + pCho.getAbout());
-					proxytype.setProxyFor(pFor);
-				
+
+				ProxyFor pFor = new ProxyFor();
+				pFor.setResource(providedCHO + pCho.getAbout());
+				proxytype.setProxyFor(pFor);
 
 			}
 
@@ -346,8 +162,7 @@ public class MongoConstructor {
 
 		if (record.getConceptList() != null) {
 			for (Concept concept : record.getConceptList()) {
-				concepts.add(new ConceptFieldInput().createNewConcept(
-						concept));
+				concepts.add(new ConceptFieldInput().createNewConcept(concept));
 			}
 		}
 
@@ -359,8 +174,8 @@ public class MongoConstructor {
 
 		if (record.getTimeSpanList() != null) {
 			for (TimeSpanType tspan : record.getTimeSpanList()) {
-				timespans.add(new TimespanFieldInput()
-						.createNewTimespan(tspan));
+				timespans
+						.add(new TimespanFieldInput().createNewTimespan(tspan));
 			}
 		}
 		if (record.getAgentList() != null) {
@@ -368,16 +183,18 @@ public class MongoConstructor {
 				agents.add(new AgentFieldInput().createNewAgent(agent));
 			}
 		}
-		if(record.getLicenseList()!=null){
-			for(License license: record.getLicenseList()){
-				licenses.add(new LicenseFieldInput().createLicenseMongoFields(license));
+		if (record.getLicenseList() != null) {
+			for (License license : record.getLicenseList()) {
+				licenses.add(new LicenseFieldInput()
+						.createLicenseMongoFields(license));
 			}
 		}
 		if (record.getEuropeanaAggregationList() != null) {
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
 				AggregatedCHO aggregatedCho = new AggregatedCHO();
-				aggregatedCho.setResource(providedCHO+record.getProvidedCHOList().get(0).getAbout());
+				aggregatedCho.setResource(providedCHO
+						+ record.getProvidedCHOList().get(0).getAbout());
 				eaggregation.setAbout(europeanaAggregationAbout);
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
 						.createAggregationMongoFields(eaggregation,
@@ -404,7 +221,7 @@ public class MongoConstructor {
 			if (proxies.size() > 0) {
 				fullBean.setProxies(proxies);
 			}
-			if(licenses.size()>0){
+			if (licenses.size() > 0) {
 				fullBean.setLicenses(licenses);
 			}
 		} catch (Exception e) {
@@ -412,5 +229,5 @@ public class MongoConstructor {
 		}
 		return fullBean;
 	}
-        
+
 }

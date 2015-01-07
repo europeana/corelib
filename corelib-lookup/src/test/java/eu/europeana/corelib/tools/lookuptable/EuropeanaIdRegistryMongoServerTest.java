@@ -16,12 +16,12 @@ import com.mongodb.MongoException;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 import eu.europeana.corelib.lookup.impl.EuropeanaIdRegistryMongoServerImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdRegistry;
-import eu.europeana.corelib.tools.lookuptable.LookupResult;
-import eu.europeana.corelib.tools.lookuptable.LookupState;
 
 public class EuropeanaIdRegistryMongoServerTest {
 
@@ -39,7 +39,9 @@ public class EuropeanaIdRegistryMongoServerTest {
 	public void prepare() {
 		try {
 			int port = 10000;
-			MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
+			IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+			        .net(new Net(port, Network.localhostIsIPv6()))
+			        .build();
 
 			MongodStarter runtime = MongodStarter.getDefaultInstance();
 

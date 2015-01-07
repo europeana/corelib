@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elevate>
+	<query text="The Milkmaid">
+  	<doc id="/90402/SK_A_2344" />
+ 	</query>
+
+	<query text="Het Melkmeisje">
+  	<doc id="/90402/SK_A_2344" />
+ 	</query>
+
+ 	<query text="Mona Lisa">
+  	<doc id="/08501/E83B976C1E5BDFDB78F600B5206AD1FE300F141E" />
+	<doc id="/03919/FCD38BDE7A03579F24BEDA5D157943B75BB36F11" />
+	<doc id="/08501/BFEDA8C5F46930228355F50FA9F5298D982DD6B8" />
+	<doc id="/92034/GVNRC_SFA03_SFA022800005" />
+ 	</query>
+
+	<query text="La Gioconda">
+  	<doc id="/08501/E83B976C1E5BDFDB78F600B5206AD1FE300F141E" />
+	<doc id="/03919/FCD38BDE7A03579F24BEDA5D157943B75BB36F11" />
+	<doc id="/08501/BFEDA8C5F46930228355F50FA9F5298D982DD6B8" />
+	<doc id="/92034/GVNRC_SFA03_SFA022800005" />
+ 	</query>
+
+	<query text="La Joconde">
+  	<doc id="/08501/E83B976C1E5BDFDB78F600B5206AD1FE300F141E" />
+	<doc id="/03919/FCD38BDE7A03579F24BEDA5D157943B75BB36F11" />
+	<doc id="/08501/BFEDA8C5F46930228355F50FA9F5298D982DD6B8" />
+	<doc id="/92034/GVNRC_SFA03_SFA022800005" />
+ 	</query>
+
+	<query text="botticelli">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63813" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63830" />
+	<doc id="/90402/SK_A_3381" />
+ 	</query>
+
+	<query text="sandro botticelli">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63813" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63830" />
+	<doc id="/90402/SK_A_3381" />
+ 	</query>
+
+	<query text="botticelli, sandro">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63813" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63830" />
+	<doc id="/90402/SK_A_3381" />
+ 	</query>
+
+	<query text="the last supper">
+  	<doc id="/07501/8D3349C2B4008DF51B1AC698A083EF6F1F9B27BF" />
+ 	</query>
+
+	<query text="girl with a pearl earring">
+  	<doc id="/92034/GVNRC_MAU01_0670" />
+	<doc id="/2023702/139F01ABF25C3FA405E4DC57D89E9A7F3469DC4C" />
+	<doc id="/2023702/DB3B39F79735E4361D61A7D1F21EB713FCFB4447" />
+ 	</query>
+
+	<query text="the nightwatch">
+  	<doc id="/90402/SK_C_5" />
+	<doc id="/90402/RP_P_OB_67_591" />
+	<doc id="/92034/GVNRC_IISG02_30051001482915" />
+	<doc id="/90402/SK_A_4691" />
+ 	</query>
+
+
+	<query text="allegoria della primavera">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/08504/B31020A52050B44ACE01C0CC06E1CB827AE2125C" />
+ 	</query>
+
+	<query text="la primavera">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/08504/B31020A52050B44ACE01C0CC06E1CB827AE2125C" />
+ 	</query>
+
+	<query text="primavera">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/08504/B31020A52050B44ACE01C0CC06E1CB827AE2125C" />
+ 	</query>
+
+	<query text="allegory of spring">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63812" />
+	<doc id="/08504/B31020A52050B44ACE01C0CC06E1CB827AE2125C" />
+ 	</query>
+
+	<query text="battaglia di san romano">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63864" />
+	<doc id="/08501/CF9B859CB7BF6B4EF9ABA5E18E420864BE81CEB4" />
+ 	</query>
+
+	<query text="the battle of san romano">
+  	<doc id="/2048011/Athena_Plus_ProvidedCHO_CulturaItaliaMuseiD_Italia_oai_culturaitalia_it_museiditalia_work_63864" />
+	<doc id="/08501/CF9B859CB7BF6B4EF9ABA5E18E420864BE81CEB4" />
+ 	</query>
+
+	<query text="the battle of carnival and lent">
+  	<doc id="/15502/GG_1016" />
+ 	</query>
+
+	<query text="le combat de carnaval et carême">
+  	<doc id="/15502/GG_1016" />
+ 	</query>
+
+	<query text="lotta tra carnevale e quaresima">
+  	<doc id="/15502/GG_1016" />
+ 	</query>
+
+	<query text="Anatomy Lesson of Dr Nicolaes Tulp">
+  	<doc id="/92034/GVNRC_MAU01_0146" />
+	<doc id="/9200105/BibliographicResource_3000006111602" />
+	<doc id="/9200105/BibliographicResource_3000006112553" />
+ 	</query>
+
+	<query text="Tower of Babel">
+  	<doc id="/15502/GG_1026" />
+	<doc id="/04101/9F3E24735E33A005C2C1EB5259A6ABF962EEF451" />
+	<doc id="/2022352/C9E9F6A2CCD7B57DC5F6CC9DFC7E2AD7530609E8" />
+	<doc id="/07927/diglit_kircher1679" />
+ 	</query>
+
+	<query text="procession to calvary">
+  	<doc id="/15502/GG_1025" />
+ 	</query>
+</elevate>
+
