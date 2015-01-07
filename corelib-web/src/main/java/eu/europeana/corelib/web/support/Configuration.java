@@ -223,15 +223,10 @@ public class Configuration {
 	/** Collection IDs which supports the SoundCloud widget */
 	private List<String> soundCloudAwareCollections;
 
-	private Boolean useNewMyEuropeanaUrl;
 
 	private List<String> hierarchyRoots;
 
 	// /////////////////////////////// getters and setters
-
-//	public String getPortalName() {
-//		return portalName;
-//	}
 
 	public String getPortalServer() {
 		return portalServer;
@@ -396,14 +391,13 @@ public class Configuration {
 	}
         
 	public String getPortalUrl() {
-//		if (portalUrl == null) {
-//			StringBuilder sb = new StringBuilder(portalServer);
-//			if (!portalServer.endsWith("/") && !portalName.startsWith("/")) {
-//				sb.append("/");
-//			}
-//			sb.append(portalName);
-//			portalUrl = sb.toString();
-//		}
+		if (portalUrl == null) {
+			StringBuilder sb = new StringBuilder(portalServer);
+			if (!portalServer.endsWith("/")) {
+				sb.append("/");
+			}
+			portalUrl = sb.toString();
+		}
 		return portalUrl;
 	}
 

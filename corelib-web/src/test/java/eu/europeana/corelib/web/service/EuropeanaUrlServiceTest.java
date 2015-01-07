@@ -27,11 +27,10 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void getPortalHomeTest() {
-		String expected = "http://localhost:8081/portal/";
+		String expected = "http://localhost:8081";
 		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getPortalHome(false).toString());
 
-		expected = "/portal/";
-		assertEquals("getPortalHome relative url failed", expected, europeanaUrlService.getPortalHome(true).toString());
+		
 	}
 
 	@Test
@@ -44,11 +43,11 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalSearchTest() throws UnsupportedEncodingException {
 		final String query = "leerdam";
 		final String rows = "24";
-		String expected = "http://localhost:8081/portal/search.html?query=leerdam&rows=24";
+		String expected = "http://localhost:8081/search.html?query=leerdam&rows=24";
 		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getPortalSearch(false, query, rows)
 				.toString());
 
-		expected = "/portal/search.html?query=leerdam&rows=24";
+		expected = "/search.html?query=leerdam&rows=24";
 		assertEquals("getPortalHome relative url failed", expected,
 				europeanaUrlService.getPortalSearch(true, query, rows).toString());
 	}
@@ -57,18 +56,18 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalRecordTest() {
 		final String collectionId = "euro";
 		final String recordId = "testrecord";
-		String expected = "http://localhost:8081/portal/record/euro/testrecord.html";
+		String expected = "http://localhost:8081/record/euro/testrecord.html";
 		assertEquals("getPortalHome full url failed", expected,
 				europeanaUrlService.getPortalRecord(false, collectionId, recordId).toString());
 
-		expected = "/portal/record/euro/testrecord.html";
+		expected = "/record/euro/testrecord.html";
 		assertEquals("getPortalHome relative url failed", expected,
 				europeanaUrlService.getPortalRecord(true, collectionId, recordId).toString());
 		
 		assertEquals("getPortalHome relative url failed", expected,
 				europeanaUrlService.getPortalRecord(true, "/euro/testrecord").toString());
 
-		expected = "http://www.europeana.eu/portal/record/euro/testrecord.html";
+		expected = "http://www.europeana.eu/record/euro/testrecord.html";
 		assertEquals("getCanonicalPortalRecord failed", expected,
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
 	}
@@ -78,13 +77,13 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 		final String expected = "/euro/testrecord";
 
 		assertEquals("extractEuropeanaIdTest full url failed", expected,
-				europeanaUrlService.extractEuropeanaId("http://localhost:8081/portal/record/euro/testrecord.html"));
+				europeanaUrlService.extractEuropeanaId("http://localhost:8081/record/euro/testrecord.html"));
 
 		assertEquals("extractEuropeanaIdTest full resolve url failed", expected,
 				europeanaUrlService.extractEuropeanaId("http://localhost:8081/resolve/record/euro/testrecord"));
 
 		assertEquals("extractEuropeanaIdTest url failed", expected,
-				europeanaUrlService.extractEuropeanaId("/portal/record/euro/testrecord.html"));
+				europeanaUrlService.extractEuropeanaId("/record/euro/testrecord.html"));
 
 		assertEquals("extractEuropeanaIdTest resolve url failed", expected,
 				europeanaUrlService.extractEuropeanaId("/resolve/record/euro/testrecord"));

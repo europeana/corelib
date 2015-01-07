@@ -367,7 +367,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
 	@Override
 	public Boolean getPreviewNoDistribute() {
-		return edmPreviewNotDistribute;
+		return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
 	}
 
 }

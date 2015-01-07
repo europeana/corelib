@@ -22,8 +22,6 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 	@Resource
 	private EmailService emailService;
 	
-//	@Value("#{europeanaProperties['portal.name']}")
-//	private String portalName;
 
 	@Value("#{europeanaProperties['portal.server']}")
 	private String portalServer;

@@ -66,5 +66,4 @@
 		<constructor-arg value="#{europeanaProperties['neo4j.index']}" />
 		<constructor-arg value="#{europeanaProperties['neo4j.custom']}" />
 	</bean>
-
 </beans>

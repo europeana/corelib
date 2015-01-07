@@ -98,11 +98,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	public UrlBuilder getPortalHome(boolean relative) {
 		UrlBuilder url;
 		if (relative) {
-			url = new UrlBuilder("/");
+			url = new UrlBuilder("");
 		} else {
 			url = new UrlBuilder(configuration.getPortalServer());
 		}
-		//url.addPath(configuration.getPortalName());
 		return url;
 	}
 

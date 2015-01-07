@@ -143,12 +143,6 @@ public class SearchServiceImpl implements SearchService {
 	@Log
 	protected Logger log;
 
-	// private static final Logger log = Logger.getLogger(SearchServiceImpl.class.getCanonicalName());
-
-	// private static final String TERMS_QUERY_TYPE = "/terms";
-
-	// private static final String TERMS_REGEX_FLAG = "case_insensitive";
-
 	@Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
 			throws MongoDBException {

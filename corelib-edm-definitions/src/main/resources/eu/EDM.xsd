@@ -29,6 +29,6 @@
   </annotation>
   
   <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="EDM-EXTERNAL-MAIN.xsd"/>
-
+  <include schemaLocation="RDF.xsd"/>
   <element name="RDF" type="edm:RDF"/>
 </schema>
