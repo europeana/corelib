@@ -383,14 +383,12 @@ public class Configuration {
 
         // Google Field Trip attribute getter
 	public Map<String, String> getGftChannelAttributes(String channel) {
-		if (gftChannelAttributes == null) {
-			gftChannelAttributes = new HashMap<String, String>();
-			int i = 1;
-			while (europeanaProperties.containsKey("gft.channel." + channel + "." + i)) {
-				String[] parts = europeanaProperties.getProperty("gft.channel." + channel + "." + i).split("=", 2);
-				gftChannelAttributes.put(parts[0].trim(), parts[1].trim());
-				i++;
-			}
+		gftChannelAttributes = new HashMap<String, String>();
+		int i = 1;
+		while (europeanaProperties.containsKey("gft.channel." + channel + "." + i)) {
+			String[] parts = europeanaProperties.getProperty("gft.channel." + channel + "." + i).split("=", 2);
+			gftChannelAttributes.put(parts[0].trim(), parts[1].trim());
+			i++;
 		}
 		return gftChannelAttributes;
 	}
