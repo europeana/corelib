@@ -86,7 +86,8 @@ public enum RightsOption {
 	 */
 	//EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free Access - Rights Reserved", "icon-copyright", false, true),
 	// See #1287
-	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free access - no re-use", "icon-copyright", false, true),
+	// See #1846
+	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false, true),
 
 	// EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "eu_paid_access.jpg", "eu_paid_access.png"), // +transparent
 	/**
