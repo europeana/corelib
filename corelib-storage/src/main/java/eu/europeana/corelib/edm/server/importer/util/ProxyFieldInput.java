@@ -338,8 +338,8 @@ public final class ProxyFieldInput {
 				.getYearList()));
 		mongoProxy.setEdmHasType(MongoUtils
 				.createResourceOrLiteralMapFromList(proxy.getHasTypeList()));
-		mongoProxy.setEdmHasType(MongoUtils.createResourceMapFromList(proxy
-				.getHasMetList()));
+		mongoProxy.setEdmHasType(MongoUtils.createResourceOrLiteralMapFromList(proxy
+				.getHasTypeList()));
 		mongoProxy.setEdmIncorporates(SolrUtils.resourceListToArray(proxy
 				.getIncorporateList()));
 		mongoProxy.setEdmIsDerivativeOf(SolrUtils.resourceListToArray(proxy
