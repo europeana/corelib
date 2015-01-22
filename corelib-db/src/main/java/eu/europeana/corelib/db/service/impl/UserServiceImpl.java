@@ -423,6 +423,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		user.setLanguageSearch(languageCodes);
+		updateUserLanguageSearchApplied(userId, languageCodes.length > 0 );
 		return user;
 	}
 	
