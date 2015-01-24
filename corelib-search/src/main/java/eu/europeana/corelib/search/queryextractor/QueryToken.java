@@ -77,17 +77,9 @@ public class QueryToken {
 		if (alternatives.size() == 0 || getType().equals(QueryType.TERMRANGE)) {
 			return null;
 		}
-		
-		int start;
-		int end;
-		
-		if(position == null){
-			int s = Math.max(0, rawQueryString.indexOf(":")+1);
-			
-			position = new QueryTermPosition(s, s + rawQueryString.length()-(s), rawQueryString);
-		}
-		start = position.getStart();
-		end = position.getEnd();
+
+		int start = position.getStart();
+		int end = position.getEnd();
 		if (getType().equals(QueryType.PHRASE)) {
 			start--;
 			end++;

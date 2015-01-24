@@ -33,7 +33,12 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 	}
 
 	public static WikipediaApiService getBeanInstance() {
-		return ApplicationContextContainer.getBean(WikipediaApiServiceImpl.class);
+		try{
+			return ApplicationContextContainer.getBean(WikipediaApiServiceImpl.class);			
+		}
+		catch(NullPointerException e){
+			return new WikipediaApiServiceImpl();
+		}
 	}
 
 	public WikipediaApiServiceImpl() {}
