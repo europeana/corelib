@@ -75,7 +75,7 @@ public class Neo4jBean {
 	}
 
 	public Long getIndex() {
-		return index;
+		return index + 1;
 	}
 
 	public void setIndex(Long index) {
