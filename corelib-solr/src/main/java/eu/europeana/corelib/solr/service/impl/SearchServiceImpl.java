@@ -159,7 +159,7 @@ public class SearchServiceImpl implements SearchService {
 		long t0 = new Date().getTime();
 
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		if(fullBean !=null && !isHierarchy(fullBean.getAbout())){
+		if(fullBean != null && isHierarchy(fullBean.getAbout())){
 			for(Proxy prx : fullBean.getProxies()){
 				prx.setDctermsHasPart(null);
 			}
