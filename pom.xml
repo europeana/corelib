@@ -94,7 +94,7 @@
 		<version.jdk>1.7</version.jdk>
 		<version.junit>4.10</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
-		<version.apacheSolr>4.0.0</version.apacheSolr>
+		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
 		<version.springCore>3.1.4.RELEASE</version.springCore>
 		<version.springSecurity>3.1.4.RELEASE</version.springSecurity>

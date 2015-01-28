@@ -25,8 +25,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -77,7 +77,7 @@ public class SearchServiceTest {
 	private EuropeanaIdMongoServer idServer;
 
 	@Resource(name = "corelib_solr_solrEmbedded")
-	private SolrServer solrServer;
+	private EmbeddedSolrServer solrServer;
 
 	private static boolean dataLoaded = false;
 
@@ -89,7 +89,7 @@ public class SearchServiceTest {
 	public void loadTestData() {
 		if (!dataLoaded) {
 			try {
-
+				
 				MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
 						false);
 
@@ -143,7 +143,7 @@ public class SearchServiceTest {
 	@Test
 	public void findSuggestions() throws SolrTypeException {
 		testCount++;
-
+		
 		List<Term> terms = searchService.suggestions("model mod", 10, "title");
 		Assert.assertEquals(terms.size(), 10);
 		Assert.assertEquals(terms.get(0).getField(), "Title");

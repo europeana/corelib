@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--DRAFT -->
 <schema name="europeana" version="1.4">
+<!--  <similarity class="eu.europeana.ranking.bm25f.similarity.BM25FSimilarityFactory" /> -->
 	<types>
 		<!-- ASSETS TRAINING FIELDTYPES -->
 		<fieldType name="int" class="solr.TrieIntField"
@@ -161,7 +162,7 @@
 		<field name="relation" type="text" indexed="true" stored="true"
 			multiValued="true" />
 		<field name="country" type="text" indexed="true" stored="true"
-			multivalued="true" />
+			multiValued="true" />
 		<field name="title" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
 		<field name="who" type="text" indexed="true" stored="true"
@@ -294,17 +295,22 @@
 			multiValued="true" />
 		<dynamicField name="wr_dc_source.*" type="string"
 			indexed="true" stored="false" multiValued="true" />
+		<field name="wr_dc_creator" type="string" indexed="true" stored="true"
+                        multiValued="true" />
+                <dynamicField name="wr_dc_creator.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+
 		<field name="wr_dcterms_extent" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<dynamicField name="wr_dcterms_extent.*" type="string"
 			indexed="true" stored="false" multiValued="true" />
 		<field name="wr_dcterms_issued" type="string" indexed="true"
 			stored="false" multiValued="true" />
-		<field name="wr_dcterms_issued.*" type="string" indexed="true"
+		<dynamicField name="wr_dcterms_issued.*" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<field name="wr_dcterms_conformsTo" type="string" indexed="true"
 			stored="false" multiValued="true" />
-		<field name="wr_dcterms_conformsTo.*" type="string" indexed="true"
+		<dynamicField name="wr_dcterms_conformsTo.*" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<field name="wr_dcterms_created" type="string" indexed="true"
 			stored="false" multiValued="true" />
@@ -319,8 +325,10 @@
 		<dynamicField name="wr_dcterms_hasPart.*" type="string"
 			indexed="true" stored="false" multiValued="true" />
 		<field name="wr_edm_isNextInSequence" type="string" indexed="true"
-			stored="false" multiValued="false" />
-
+			stored="false" multiValued="true" />
+		<field name="wr_owl_sameAs" type="string" indexed="true"
+                        stored="false" multiValued="true" />
+		
 		<!--PROVIDER PROXY RELATED -->
 		<field name="proxy_ore_proxy" type="string" indexed="true"
 			stored="false" multiValued="true" />
@@ -587,6 +595,10 @@
 			stored="false" multiValued="true" />
 		<field name="ag_rdagr2_dateOfDeath" type="string" indexed="true"
 			stored="false" multiValued="true" />
+		<field name="ag_rdagr2_placeOfBirth" type="string" indexed="true"
+                        stored="false" multiValued="true" />
+                <field name="ag_rdagr2_placeOfDeath" type="string" indexed="true"
+                        stored="false" multiValued="true" />
 		<field name="ag_rdagr2_dateOfEstablishment" type="string"
 			indexed="true" stored="false" multiValued="true" />
 		<field name="ag_rdagr2_dateOfTermination" type="string" indexed="true"
@@ -618,6 +630,11 @@
 			indexed="true" stored="false" multiValued="true" />
 		<dynamicField name="ag_rdagr2_dateOfDeath.*" type="string"
 			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="ag_rdagr2_placeOfBirth.*" type="string"
+                        indexed="true" stored="false" multiValued="true" />
+                <dynamicField name="ag_rdagr2_placeOfDeath.*" type="string"
+                        indexed="true" stored="false" multiValued="true" />
+
 		<dynamicField name="ag_rdagr2_dateOfEstablishment.*"
 			type="string" indexed="true" stored="false" multiValued="true" />
 		<dynamicField name="ag_rdagr2_dateOfTermination.*" type="string"
@@ -645,6 +662,8 @@
 			indexed="true" stored="false" multiValued="true" />
 		<field name="ts_skos_note" type="string" indexed="true" stored="false"
 			multiValued="true" />
+<dynamicField name="ts_skos_note.*" type="string" indexed="true" stored="false"
+                        multiValued="true" />
 		<field name="ts_skos_hiddenLabel" type="string" indexed="true"
 			stored="false" multiValued="true" />
 		<dynamicField name="ts_skos_hiddenLabel.*" type="string"
@@ -759,7 +778,7 @@
 			stored="false" multiValued="true" />
 		<dynamicField name="cc_skos_notation.*" type="string"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_inScheme" type="string" indexedd="true"
+		<field name="cc_skos_inScheme" type="string" indexed="true"
 			stored="false" multiValued="true" />
 
 		<!-- CONCEPTSCHEME -->
@@ -918,10 +937,115 @@
 		<field name="europeana_pt_edm_wasPresentAt" type="string"
 			indexed="true" stored="false" multiValued="true" />
 
+		<!-- Yorgos Mamakis License and Organization fields -->
+		 <field name="cc_license" type="string"
+                        indexed="true" stored="true" multiValued="false" />
+		<field name="lic_odrl_inherited_from" type="string"
+                        indexed="true" stored="false" multiValued="false" />
+		<field name="lic_cc_deprecated_on" type="date"
+                        indexed="true" stored="false" multiValued="false" />
+		<field name="foaf_organization" type="string"
+                        indexed="true" stored="true" multiValued="false" />
+<field name="org_skos_prefLabel" type="text" indexed="true"
+			stored="true" multiValued="true" />
+		<field name="org_skos_altLabel" type="text" indexed="true"
+			stored="false" multiValued="true" />
+		<dynamicField name="org_skos_prefLabel.*" type="text"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_skos_altLabel.*" type="text"
+			indexed="true" stored="true" multiValued="true" />
+		<field name="org_skos_hiddenLabel" type="text" indexed="true"
+			stored="false" multiValued="true" />
+		<dynamicField name="org_skos_hiddenLabel.*" type="text"
+			indexed="true" stored="false" multiValued="true" />
+		<field name="org_skos_note" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<dynamicField name="org_skos_note.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<field name="org_edm_wasPresentAt" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_edm_hasMet" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="org_edm_isRelatedTo" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_owl_sameAs" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="org_foaf_name" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="org_dc_date" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="org_dc_identifier" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_rdagr2_dateOfBirth" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_rdagr2_dateOfDeath" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_rdagr2_dateOfEstablishment" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<field name="org_rdagr2_dateOfTermination" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_rdagr2_gender" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<field name="org_rdagr2_professionOrOccupation" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<field name="org_rdagr2_biographicalInformation" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<field name="org_edm_begin" type="string" indexed="true" stored="false"
+			multiValued="true" />
+		<field name="org_edm_end" type="string" indexed="true" stored="false"
+			multiValued="true" />
+
+		<dynamicField name="org_edm_hasMet.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_edm_isRelatedTo.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_owl_sameAs.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_foaf_name.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_dc_date.*" type="string" indexed="true"
+			stored="false" multiValued="true" />
+		<dynamicField name="org_dc_identifier.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_dateOfBirth.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_dateOfDeath.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_dateOfEstablishment.*"
+			type="string" indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_dateOfTermination.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_gender.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_professionOrOccupation.*"
+			type="string" indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_rdagr2_biographicalInformation.*"
+			type="string" indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_edm_begin.*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="org_edm_end.*" type="string" indexed="true" stored="false" multiValued="true"/>		
+		<dynamicField name="org_edm_acronym.*" type="string" indexed="true" stored="false" multiValued="true"/>
+		<field name="org_edm_acronym" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="org_edm_organizationScope.*" type="string" indexed="true" stored="false" multiValued="false"/>
+                <field name="org_edm_organizationScope" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="org_edm_organizationDomain.*" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="org_edm_organizationDomain" type="string" indexed="true" stored="true" multiValued="true"/>
+		<dynamicField name="org_edm_organizationSector.*" type="string" indexed="true" stored="false" multiValued="false"/>
+                <field name="org_edm_organizationSector" type="string" indexed="true" stored="false" multiValued="true"/>
+		<dynamicField name="org_edm_geographicLevel.*" type="string" indexed="true" stored="false" multiValued="false"/>
+                <field name="org_edm_geographicLevel" type="string" indexed="true" stored="false" multiValued="true"/>
+                <field name="org_edm_country" type="string" indexed="true" stored="true" multiValued="true"/>
+		<dynamicField name="org_edm_europeanaRole.*" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="org_edm_europeanaRole" type="string" indexed="true" stored="true" multiValued="true"/>
+		 <field name="org_foaf_homepage" type="string" indexed="true" stored="false" multiValued="false"/>
+
+
+
 		<!-- Diego Ceccarelli <diego.ceccarelli@isti.cnr.it> 17-11-2012 -->
 		<!-- SEVERE: Unable to use updateLog: _version_ field must exist in schema -->
 		<field name="_version_" type="long" indexed="true" stored="true"
 			multiValued="false" />
+
 		<!-- / - -->
 		
 		<!-- Yorgos Mamakis 12/11/2013  -->
@@ -1027,6 +1151,7 @@
 		dest="DATA_PROVIDER" />
 	<copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
 	<copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
+	<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />
 	<copyField source="ag_skos_prefLabel.*" dest="text" />
 	<copyField source="ag_skos_altLabel.*" dest="text" />
 	<copyField source="ag_skos_hiddenLabel.*" dest="text" />
@@ -1036,6 +1161,16 @@
 	<copyField source="ag_skos_prefLabel.*" dest="ag_skos_prefLabel" />
 	<copyField source="ag_skos_altLabel.*" dest="ag_skos_altLabel" />
 	<copyField source="ag_skos_hiddenLabel.*" dest="ag_skos_hiddenLabel" />
+	<copyField source="org_skos_prefLabel.*" dest="text" />
+        <copyField source="org_skos_altLabel.*" dest="text" />
+        <copyField source="org_skos_hiddenLabel.*" dest="text" />
+        <copyField source="org_skos_prefLabel" dest="text" />
+        <copyField source="org_skos_altLabel" dest="text" />
+        <copyField source="org_skos_hiddenLabel" dest="text" />
+        <copyField source="org_skos_prefLabel.*" dest="org_skos_prefLabel" />
+        <copyField source="org_skos_altLabel.*" dest="org_skos_altLabel" />
+        <copyField source="org_skos_hiddenLabel.*" dest="org_skos_hiddenLabel" />
+
 	<copyField source="pl_skos_prefLabel.*" dest="text" />
 	<copyField source="pl_skos_altLabel.*" dest="text" />
 	<copyField source="pl_skos_hiddenLabel.*" dest="text" />
@@ -1087,6 +1222,7 @@
 	<copyField source="europeana_aggregation_edm_language.*"
 		dest="europeana_aggregation_edm_language" />
 	<copyField source="wr_dc_rights.*" dest="wr_dc_rights" />
+	<copyField source="wr_dc_creator.*" dest="wr_dc_creator" />
 	<copyField source="wr_edm_rights.*" dest="wr_edm_rights" />
 	<copyField source="wr_dc_description.*" dest="wr_dc_description" />
 	<copyField source="wr_dc_format.*" dest="wr_dc_format" />
@@ -1095,6 +1231,8 @@
 	<copyField source="wr_dcterms_created.*" dest="wr_dcterms_created" />
 	<copyField source="wr_dcterms_isFormatOf.*" dest="wr_dcterms_isFormatOf" />
 	<copyField source="wr_dcterms_hasPart.*" dest="wr_dcterms_hasPart" />
+	<copyField source="wr_dcterms_conformsTo.*" dest="wr_dcterms_conformsTo" />
+	<copyField source="wr_dcterms_issued.*" dest="wr_dcterms_issued" />
 	<copyField source="proxy_dc_contributor.*" dest="proxy_dc_contributor" />
 	<copyField source="proxy_dc_coverage.*" dest="proxy_dc_coverage" />
 	<copyField source="proxy_dc_creator.*" dest="proxy_dc_creator" />
@@ -1143,6 +1281,8 @@
 	<copyField source="ag_dc_identifier.*" dest="ag_dc_identifier" />
 	<copyField source="ag_rdagr2_dateOfBirth.*" dest="ag_rdagr2_dateOfBirth" />
 	<copyField source="ag_rdagr2_dateOfDeath.*" dest="ag_rdagr2_dateOfDeath" />
+	 <copyField source="ag_rdagr2_placeOfBirth.*" dest="ag_rdagr2_placeOfBirth" />
+        <copyField source="ag_rdagr2_placeOfDeath.*" dest="ag_rdagr2_placeOfDeath" />
 	<copyField source="ag_rdagr2_dateOfEstablishment.*" dest="ag_rdagr2_dateOfEstablishment" />
 	<copyField source="ag_rdagr2_dateOfTermination.*" dest="ag_rdagr2_dateOfTermination" />
 	<copyField source="ag_rdagr2_gender.*" dest="ag_rdagr2_gender" />
@@ -1150,6 +1290,29 @@
 	<copyField source="ag_rdagr2_biographicalInformation.*" dest="ag_rdagr2_biographicalInformation" />
 	<copyField source="ag_edm_begin.*" dest="ag_edm_begin" />
 	<copyField source="ag_edm_end.*" dest="ag_edm_end" />
+	
+	<copyField source="org_skos_note.*" dest="org_skos_note" />
+        <copyField source="org_edm_hasMet.*" dest="org_edm_hasMet" />
+        <copyField source="org_edm_isRelatedTo.*" dest="org_edm_isRelatedTo" />
+        <copyField source="org_owl_sameAs.*" dest="org_owl_sameAs" />
+        <copyField source="org_foaf_name.*" dest="org_foaf_name" />
+        <copyField source="org_dc_date.*" dest="org_dc_date" />
+        <copyField source="org_dc_identifier.*" dest="org_dc_identifier" />
+        <copyField source="org_rdagr2_dateOfBirth.*" dest="org_rdagr2_dateOfBirth" />
+        <copyField source="org_rdagr2_dateOfDeath.*" dest="org_rdagr2_dateOfDeath" />
+        <copyField source="org_rdagr2_dateOfEstablishment.*" dest="org_rdagr2_dateOfEstablishment" />
+        <copyField source="org_rdagr2_dateOfTermination.*" dest="org_rdagr2_dateOfTermination" />
+        <copyField source="org_rdagr2_gender.*" dest="org_rdagr2_gender" />
+        <copyField source="org_rdagr2_professionOrOccupation.*" dest="org_rdagr2_professionOrOccupation" />
+        <copyField source="org_rdagr2_biographicalInformation.*" dest="org_rdagr2_biographicalInformation" />
+        <copyField source="org_edm_begin.*" dest="org_edm_begin" />
+        <copyField source="org_edm_end.*" dest="org_edm_end" />
+	<copyField source="org_edm_acronym.*" dest="org_edm_acronym" />
+	<copyField source="org_edm_organizationScope.*" dest="org_edm_organizationScope" />
+	<copyField source="org_edm_organizationDomain.*" dest="org_edm_organizationDomain" />
+	<copyField source="org_edm_organizationSector.*" dest="org_edm_organizationSector" />
+	<copyField source="org_edm_geographicLevel.*" dest="org_edm_geographicLevel" />
+	<copyField source="org_edm_europeanaRole.*" dest="org_edm_europeanaRole" />
 	<copyField source="ts_dcterms_hasPart.*" dest="ts_dcterms_hasPart" />
 	<copyField source="ts_dcterms_isPartOf.*" dest="ts_dcterms_isPartOf" />
 	<copyField source="ts_dcterms_isPartOf_label.*" dest="ts_dcterms_isPartOf_label" />
