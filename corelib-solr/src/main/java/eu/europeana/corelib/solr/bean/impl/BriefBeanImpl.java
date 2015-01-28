@@ -76,6 +76,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("proxy_dc_contributor")
     protected String[] dcContributor;
+    
+    @Field("proxy_dc_language")
+    protected String[] dcLanguage;
 
     @Field("edm_place")
     protected String[] edmPlace;
@@ -176,6 +179,11 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Override
     public String[] getDcContributor() {
         return (this.dcContributor != null ? this.dcContributor.clone() : null);
+    }
+
+    @Override
+    public String[] getDcLanguage() {
+        return (this.dcLanguage != null ? this.dcLanguage.clone() : null);
     }
 
     @Override
