@@ -181,8 +181,8 @@
 			<artifactId>jetty-jndi</artifactId>
 			<version>8.1.14.v20131031</version>
 		</dependency>
+
 	</dependencies>
-	
 	<organization>
 		<name>Europeana Foundation</name>
 	</organization>

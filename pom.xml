@@ -118,7 +118,6 @@
 	</repositories>
 
 	<properties>
-
 		<version.europeanaApi2>2.1.0</version.europeanaApi2>
 		<version.log4j>1.2.15</version.log4j>
 		<version.jdk>1.7</version.jdk>
