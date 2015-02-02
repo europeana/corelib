@@ -75,7 +75,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 		if (modelAndView != null && !modelAndView.getViewName().startsWith("redirect:")
 				&& modelAndView.getModel().containsKey(PageData.PARAM_MODEL)) {
 			PageData model = (PageData) modelAndView.getModel().get(PageData.PARAM_MODEL);
-			StringBuilder currentUrl = new StringBuilder(request.getRequestURI());
+			StringBuilder currentUrl = new StringBuilder(config.getPortalServer()+"/"+request.getPathInfo());
 			if (request.getQueryString() != null) {
 				currentUrl.append("?").append(request.getQueryString());
 			}
