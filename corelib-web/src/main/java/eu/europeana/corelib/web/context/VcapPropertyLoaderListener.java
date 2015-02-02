@@ -45,7 +45,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 		try {
 			props.load(new FileInputStream(europeanaProperties));
 			if (!props.containsKey("postgres.db")) {
-				FileUtils.writeStringToFile(europeanaProperties, "postgres.db"
+				FileUtils.writeStringToFile(europeanaProperties, "\n" + "postgres.db"
 						+ "=" + env.getProperty(POSTGRESDB) + "\n", true);
 				FileUtils.writeStringToFile(
 						europeanaProperties,
