@@ -48,11 +48,7 @@
 		<bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
 			factory-method="createDatastore">
 			<constructor-arg value="API log" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
 			<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}"
 				type="java.lang.String" />
 			<constructor-arg
@@ -66,10 +62,7 @@
 		<bean id="corelib_db_morphia_datastore_sugarcrmcache"
 			factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
 			<constructor-arg value="SugarCRM cache" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
 			<constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"
 				type="java.lang.String" />
 			<constructor-arg
