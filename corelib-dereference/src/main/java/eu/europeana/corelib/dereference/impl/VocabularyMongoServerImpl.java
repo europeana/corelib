@@ -63,6 +63,7 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName) {
 		log.info("VocabularyMongoServer is instantiated");
 		this.mongoServer = mongoServer;
+		
 		this.databaseName = databaseName;
 		createDatastore();
 	}
