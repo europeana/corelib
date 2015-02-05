@@ -11,7 +11,7 @@ or
 * Java version "1.7.0_67", Oracle Java(TM) SE Runtime Environment (build 1.7.0_67-b01)
 
 ### Tools
-* Maven (v2.2.1), although v3.x may also work
+* Maven v3.x
 
 ## Build
 ``mvn clean install`` (add ``-DskipTests``) to skip the unit tests during build
