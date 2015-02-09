@@ -283,9 +283,13 @@ public final class SolrUtils {
 			}
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
+					String str = StringUtils.trim(obj.getString());
+					if(str.length()>32767){
+						str = StringUtils.substring(str, 0,32000);
+					}
 					solrInputDocument.addField(label.toString() + "."
-							+ obj.getLang().getLang(),
-							StringUtils.trim(obj.getString()));
+							+ obj.getLang().getLang(),str
+							);
 				} else {
 					solrInputDocument.addField(label.toString(),
 							StringUtils.trim(obj.getString()));
@@ -359,7 +363,16 @@ public final class SolrUtils {
 				if (values == null) {
 					values = new ArrayList<Object>();
 				}
-				values.addAll(val.get(key));
+				List<String> lst = val.get(key);
+				List<String>normalized = new ArrayList<>();
+				for(String str:lst){
+					if(str.length()>32767){
+						str = StringUtils.substring(str, 0,32000);
+						
+					}
+					normalized.add(str);
+				}
+				values.addAll(normalized);
 				doc.setField(edmLabel.toString() + "." + key, values);
 			}
 		}
