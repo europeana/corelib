@@ -94,7 +94,6 @@ public class SolrDocumentHandler implements ICollection {
 			new LicenseSolrCreator().create(doc, lic, isAggregation);
 		}
                 }
-                System.out.println(doc.getField("proxy_dc_description.def").toString().getBytes().length);
 		doc.addField(EdmLabel.EUROPEANA_COMPLETENESS.toString(),
 				fBean.getEuropeanaCompleteness());
 		doc.addField(EdmLabel.EUROPEANA_COLLECTIONNAME.toString(),
