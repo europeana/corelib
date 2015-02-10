@@ -370,9 +370,9 @@ public final class SolrUtils {
 				List<String>normalized = new ArrayList<>();
 				for(String str:lst){
                                    
-					if(str.getBytes().length>32767){
+					if(str.getBytes().length>32766){
 						
-						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32767);
+						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32766);
                                                 str = new String(btCopy);
 					}
                                          
