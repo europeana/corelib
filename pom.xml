@@ -28,6 +28,7 @@
 		<module>corelib-web</module>
 		<module>corelib-solr-definitions</module>
 		<module>corelib-solr-dereference</module>
+		<module>corelib-media-storage</module>
 		<module>corelib-solr-tools</module>
 		<module>corelib-sugarcrm/bindings</module>
 		<module>corelib-sugarcrm/client</module>
