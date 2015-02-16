@@ -47,6 +47,7 @@ import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
 import eu.europeana.corelib.solr.service.SearchService;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -246,4 +247,9 @@ public class SearchServiceMock implements SearchService {
 	public boolean isHierarchy(String nodeId) {
 		return false;
 	}
+
+    @Override
+    public Integer search(Integer mediaType, String mimeType, String imageSize, Boolean imageColor, Boolean imageGrayScale, String imageAspectRatio, String imageColorPalette, Boolean soundHQ, String soundDuration, Boolean videoHQ, String videoDuration) {
+        throw new NotImplementedException();
+    }
 }
