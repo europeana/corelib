@@ -27,6 +27,12 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
+	<bean id="corelib_web_mailSender"
+	 class="org.springframework.mail.javamail.JavaMailSenderImpl"
+	 p:host="#{europeanaProperties['smtp.host']}"
+	 p:username="#{europeanaProperties['smtp.username']}"
+	 p:password="#{europeanaProperties['smtp.password']}"/>
+<!-- 
 	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 	
 	    <property name="host"><value>smtp.gmail.com</value></property>
@@ -52,6 +58,7 @@
 		    </props>
 	    </property>
 	</bean>
+ --> 
 
 
 
