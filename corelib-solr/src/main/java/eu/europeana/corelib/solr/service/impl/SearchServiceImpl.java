@@ -849,11 +849,13 @@ public class SearchServiceImpl implements SearchService {
                                 final Boolean imageColor, final Boolean imageGrayScale,
                                 final String imageAspectRatio, final String imageColorPalette) {
         ImageOrientation imageOrientation = null;
-        if(imageAspectRatio.equals("portrait")) {
-            imageOrientation = ImageOrientation.PORTRAIT;
-        }
-        if(imageAspectRatio.equals("landscape")) {
-            imageOrientation = ImageOrientation.LANDSCAPE;
+        if(imageAspectRatio != null) {
+            if (imageAspectRatio.equals("portrait")) {
+                imageOrientation = ImageOrientation.PORTRAIT;
+            }
+            if (imageAspectRatio.equals("landscape")) {
+                imageOrientation = ImageOrientation.LANDSCAPE;
+            }
         }
 
         final Integer mediaTypeCode = 1;
