@@ -17,6 +17,7 @@
 package eu.europeana.corelib.solr.service.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.service.domain.ImageOrientation;
 import eu.europeana.corelib.solr.service.logic.SoundTagExtractor;
 import eu.europeana.corelib.solr.service.logic.CommonTagExtractor;
@@ -123,11 +131,14 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	protected EdmMongoServer mongoServer;
 
+    @Resource(name = "corelib_solr_mongoServer_metainfo")
+    protected EdmMongoServer metainfoMongoServer;
+
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
         
-        @Resource(name = "corelib_solr_neo4jServer")
-        protected Neo4jServer neo4jServer;
+    @Resource(name = "corelib_solr_neo4jServer")
+    protected Neo4jServer neo4jServer;
 
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
@@ -884,6 +895,23 @@ public class SearchServiceImpl implements SearchService {
         final Integer durationCode = VideoTagExtractor.getDurationCode(duration);
 
         return mediaTypeCode<<25 | mimeTypeCode<<15 | qualityCode<<13 | durationCode<<10;
+    }
+
+    @Override
+    public WebResourceMetaInfo getMetaInfo(String recordID) {
+        final DB db = metainfoMongoServer.getDatastore().getDB();
+        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
+
+        final BasicDBObject query = new BasicDBObject("_id", recordID);
+        final DBCursor cursor = webResourceMetaInfoColl.find(query);
+
+        final Type type = new TypeToken<WebResourceMetaInfo>(){}.getType();
+
+        if(cursor.hasNext()) {
+            return new Gson().fromJson(cursor.next().toString(), type);
+        }
+
+        return null;
     }
 
 }

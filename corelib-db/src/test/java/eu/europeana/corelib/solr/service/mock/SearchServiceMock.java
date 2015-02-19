@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
@@ -250,6 +251,11 @@ public class SearchServiceMock implements SearchService {
 
     @Override
     public Integer search(Integer mediaType, String mimeType, String imageSize, Boolean imageColor, Boolean imageGrayScale, String imageAspectRatio, String imageColorPalette, Boolean soundHQ, String soundDuration, Boolean videoHQ, String videoDuration) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public WebResourceMetaInfo getMetaInfo(String recordID) {
         throw new NotImplementedException();
     }
 }

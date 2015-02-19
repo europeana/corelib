@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -339,4 +340,6 @@ public interface SearchService {
                           String imageAspectRatio, String imageColorPalette,
                           Boolean soundHQ, String soundDuration,
                           Boolean videoHQ, String videoDuration);
+
+    public WebResourceMetaInfo getMetaInfo(String recordID);
 }
