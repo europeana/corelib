@@ -234,7 +234,7 @@ public abstract class PageData {
 		UrlBuilder url = new UrlBuilder(getCurrentUrl());
 		url.setDomain(metaCanonicalUrl);
 		try {
-			return url.toCanonicalUrl();
+			return url.toCanonicalUrl().replace("//", "/");
 		} catch (InvalidUrlException e) {
 			// ignore. should never happen
 			return StringUtils.defaultIfBlank(metaCanonicalUrl, getCurrentUrl());
