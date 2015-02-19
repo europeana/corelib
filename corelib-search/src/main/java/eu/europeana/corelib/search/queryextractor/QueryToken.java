@@ -61,6 +61,7 @@ public class QueryToken {
 		cloned.normalizedQueryTerm = new String(this.normalizedQueryTerm);
 		cloned.typeStack = (Stack<QueryType>) this.typeStack.clone();
 		cloned.group = new Integer(this.group);
+		
 		return cloned;
 	}
 
@@ -76,12 +77,14 @@ public class QueryToken {
 		if (alternatives.size() == 0 || getType().equals(QueryType.TERMRANGE)) {
 			return null;
 		}
+
 		int start = position.getStart();
 		int end = position.getEnd();
 		if (getType().equals(QueryType.PHRASE)) {
 			start--;
 			end++;
 		}
+
 		String query = rawQueryString.substring(start, end);
 		if (query.contains(" ") && !getType().equals(QueryType.PHRASE)) {
 			query = "(" + query + ")";

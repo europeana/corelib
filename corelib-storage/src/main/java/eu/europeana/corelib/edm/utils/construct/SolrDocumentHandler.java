@@ -47,7 +47,7 @@ public class SolrDocumentHandler implements ICollection {
 		SolrInputDocument doc = new SolrInputDocument();
 		List<LicenseImpl> licenses = fBean.getLicenses();
 		List<String> licIds = new ArrayList<String>();
-		if (licenses.size() > 0) {
+		if (licenses!=null &&licenses.size() > 0) {
 			for (LicenseImpl lic : licenses) {
 				licIds.add(lic.getAbout());
 			}
@@ -61,18 +61,27 @@ public class SolrDocumentHandler implements ICollection {
 		for (Proxy prx : fBean.getProxies()) {
 			new ProxySolrCreator().create(doc, prx);
 		}
+                if(fBean.getConcepts()!=null){
 		for (Concept concept : fBean.getConcepts()) {
 			new ConceptSolrCreator().create(doc, concept);
 		}
+                }
+                if(fBean.getTimespans()!=null){
 		for (Timespan ts : fBean.getTimespans()) {
 			new TimespanSolrCreator().create(doc, ts);
 		}
+                }
+                if(fBean.getAgents()!=null){
 		for (Agent agent : fBean.getAgents()) {
 			new AgentSolrCreator().create(doc, agent);
 		}
+                }
+                if(fBean.getPlaces()!=null){
 		for (Place place : fBean.getPlaces()) {
 			new PlaceSolrCreator().create(doc, place);
 		}
+                }
+                if(fBean.getLicenses()!=null){
 		for (License lic : fBean.getLicenses()) {
                         boolean isAggregation = false;
                         for(Aggregation aggr:fBean.getAggregations()){
@@ -84,6 +93,7 @@ public class SolrDocumentHandler implements ICollection {
                         System.out.println(isAggregation);
 			new LicenseSolrCreator().create(doc, lic, isAggregation);
 		}
+                }
 		doc.addField(EdmLabel.EUROPEANA_COMPLETENESS.toString(),
 				fBean.getEuropeanaCompleteness());
 		doc.addField(EdmLabel.EUROPEANA_COLLECTIONNAME.toString(),

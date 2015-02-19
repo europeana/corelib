@@ -92,7 +92,6 @@ public class SearchServiceTest {
 	public void loadTestData() {
 		if (!dataLoaded) {
 			try {
-
 				IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
 				        .net(new Net(port, Network.localhostIsIPv6()))
 				        .build();
@@ -147,7 +146,7 @@ public class SearchServiceTest {
 	@Test
 	public void findSuggestions() throws SolrTypeException {
 		testCount++;
-
+		
 		List<Term> terms = searchService.suggestions("model mod", 10, "title");
 		Assert.assertEquals(terms.size(), 2);
 		Assert.assertEquals(terms.get(0).getField(), "Title");

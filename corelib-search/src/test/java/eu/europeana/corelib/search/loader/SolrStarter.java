@@ -36,7 +36,8 @@ public class SolrStarter {
 	Properties props;
 
 	public SolrStarter() {
-		this(new ClassPathXmlApplicationContext(new String[] { "corelib-solr-context.xml", "corelib-solr-test.xml" }));
+		this(new ClassPathXmlApplicationContext(new String[] { "corelib-solr-context.xml", "corelib-solr-test.xml",
+				"resources/solr/search/conf/solrconfig.xml" }));
 	}
 
 	public SolrStarter(ApplicationContext context) {

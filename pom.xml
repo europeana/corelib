@@ -118,7 +118,6 @@
 	</repositories>
 
 	<properties>
-
 		<version.europeanaApi2>2.1.0</version.europeanaApi2>
 		<version.log4j>1.2.15</version.log4j>
 		<version.jdk>1.7</version.jdk>
@@ -126,7 +125,7 @@
 		<version.servletJstl>1.2</version.servletJstl>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springCore>4.1.3.RELEASE</version.springCore>
+		<version.springCore>4.0.9.RELEASE</version.springCore>
 		<version.springSecurity>3.2.5.RELEASE</version.springSecurity>
 		<version.springSecurityOauth>2.0.5.BUILD-SNAPSHOT</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>

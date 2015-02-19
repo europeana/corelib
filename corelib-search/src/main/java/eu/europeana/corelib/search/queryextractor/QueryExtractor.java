@@ -155,7 +155,9 @@ public class QueryExtractor {
 	}
 
 	private void insertPositions(List<QueryTermPosition> termPositions) {
+		
 		int i = 0, lastFoundPosition = -1, max = termPositions.size();
+		
 		for (QueryToken token : queryTokens) {
 			boolean isPhrase = token.getType().equals(QueryType.PHRASE);
 			List<QueryTermPosition> bag = new ArrayList<QueryTermPosition>();
@@ -198,6 +200,16 @@ public class QueryExtractor {
 						success = true;
 						break;
 					}
+					else{
+						// ANDY
+						if(position.getTransformed().indexOf(":")>-1){							
+							token.setPosition(position);
+							lastFoundPosition = i;
+							success = true;
+							break;
+						}
+						// END ANDY
+					}
 				}
 			}
 			if (success) {
@@ -209,9 +221,9 @@ public class QueryExtractor {
 					token.setPosition(new QueryTermPosition(start, end,
 							foundPart, original, pos));
 				}
-			} else {
-				log.debug("token not found for: "
-						+ token.getNormalizedQueryTerm());
+			}
+			else {
+				log.debug("token not found for: " + token.getNormalizedQueryTerm());
 			}
 		}
 	}
@@ -330,6 +342,7 @@ public class QueryExtractor {
 	}
 
 	private List<QueryTermPosition> extractTokens(String text) {
+
 		List<QueryTermPosition> queryTerms = new ArrayList<QueryTermPosition>();
 		TokenStream ts;
 		try {
@@ -339,14 +352,23 @@ public class QueryExtractor {
 			CharTermAttribute charTermAttribute = ts
 					.addAttribute(CharTermAttribute.class);
 			ts.reset();
-			
+
 			int i = 0;
 			while (ts.incrementToken()) {
 				int start = offsetAttribute.startOffset();
 				int end = offsetAttribute.endOffset();
 				String term = charTermAttribute.toString();
-				queryTerms.add(new QueryTermPosition(start, end, term, text
-						.substring(start, end), i++));
+				
+				// ANDY  
+				if(term.indexOf(":") > -1){
+					start = start + term.indexOf(":")+1;
+				}
+				// END ANDY
+				
+				queryTerms.add(
+					new QueryTermPosition(start, end, term, text.substring(start, end), i++)
+				);
+				
 			}
 			ts.end();
 			ts.close();

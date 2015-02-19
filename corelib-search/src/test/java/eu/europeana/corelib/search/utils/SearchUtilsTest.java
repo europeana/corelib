@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,14 +15,47 @@ import eu.europeana.corelib.definitions.edm.beans.ApiBean;
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.model.QueryTranslation;
 import eu.europeana.corelib.edm.utils.FieldMapping;
-import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 
 public class SearchUtilsTest {
 
+	@Test
+	public void translateQueryTitle() {
+		QueryTranslation qt;
+		qt = SearchUtils.translateQuery("title:paris", getLanguageList());
+		qt = SearchUtils.translateQuery("title:paris", getLanguageList(true));
+		assertEquals(1, 1);
+	}
+
+	@Test
+	public void translateQueryTitles() {
+		QueryTranslation qt;
+		qt = SearchUtils.translateQuery("title:paris rome berlin", getLanguageList(true));
+		qt = SearchUtils.translateQuery("title:paris rome berlin", getLanguageList());
+		assertEquals(1, 1);
+	}
+
+	@Test
+	public void translateQueryQuotedTitle() {
+		QueryTranslation qt;
+		qt = SearchUtils.translateQuery("title:\"paris\"", getLanguageList());
+		qt = SearchUtils.translateQuery("title:\"paris\"", getLanguageList(true));
+		assertEquals(1, 1);
+	}
+	
+	@Test
+	public void translateQueryQuotedTitles() {
+		QueryTranslation qt;
+		qt = SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList());
+		qt = SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList(true));
+		assertEquals(1, 1);
+	}	
+	
+	
 	@Test
 	/**
 	 * Tests the translateQuery function.
@@ -107,4 +141,24 @@ public class SearchUtilsTest {
 		assertFalse(SearchUtils.isSimpleQuery("den:haag"));
 		assertFalse(SearchUtils.isSimpleQuery("haag*"));
 	}
+	
+
+	private ArrayList <String> getLanguageList(){
+		return getLanguageList(false);
+	}
+	
+	private ArrayList <String> getLanguageList(boolean empty){
+		ArrayList <String> languages = new ArrayList<String>();
+		if(empty){
+			return languages;
+		}
+		languages.add( "da" );
+		languages.add( "de" );
+		languages.add( "fr" );
+		languages.add( "ga" );
+		languages.add( "it" );
+		languages.add( "nl" );
+		return languages;
+	}
+
 }

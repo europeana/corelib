@@ -27,12 +27,40 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
-	<bean id="corelib_web_mailSender" 
-		class="org.springframework.mail.javamail.JavaMailSenderImpl"
-		p:host="#{europeanaProperties['smtp.host']}"
-		p:username="#{europeanaProperties['smtp.username']}"
-		p:password="#{europeanaProperties['smtp.password']}"
-	/>
+	<bean id="corelib_web_mailSender"
+	 class="org.springframework.mail.javamail.JavaMailSenderImpl"
+	 p:host="#{europeanaProperties['smtp.host']}"
+	 p:username="#{europeanaProperties['smtp.username']}"
+	 p:password="#{europeanaProperties['smtp.password']}"/>
+<!-- 
+	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	
+	    <property name="host"><value>smtp.gmail.com</value></property>
+        <property name="port"><value>587</value></property>
+        <property name="protocol"><value>smtp</value></property>
+   
+	    <property name="username"><value>#{europeanaProperties['smtp.username']}</value></property>
+	    <property name="password"><value>#{europeanaProperties['smtp.password']}</value></property>
+	    
+	    <property name="javaMailProperties">
+    	    <props>
+		        <prop key="mail.smtp.auth">true</prop>
+		        <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.smtp.quitwait">false</prop>
+
+
+	   			<prop key="mail.smtp.user">#{europeanaProperties['smtp.username']}</prop>
+	   			<prop key="mail.smtp.password">#{europeanaProperties['smtp.password']}</prop>
+				<prop key="mail.smtp.port">587</prop>
+        		<prop key="mail.smtp.auth">true</prop>
+        
+				<prop key="mail.debug">true</prop>
+		    </props>
+	    </property>
+	</bean>
+ --> 
+
+
 
 	<bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
