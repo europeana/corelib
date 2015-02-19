@@ -26,6 +26,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 	private final static String MONGOHOSTS = "vcap.services.europeana-object-db.credentials.hosts";
 	private final static String MONGOPORTS = "vcap.services.europeana-object-db.credentials.ports";
 	private final static String REDISHOST = "vcap.services.redis.credentials.host";
+    private final static String REDISPORT = "vcap.services.redis.credentials.port";
 	private final static String REDISPASSWORD = "vcap.services.redis.credentials.password";
 
 	private static StandardServletEnvironment env = new StandardServletEnvironment();
@@ -71,6 +72,8 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 						+ "=" + host.split(":")[1] + "\n", true);
 				FileUtils.writeStringToFile(europeanaProperties, "redis.host"
 						+ "=" + env.getProperty(REDISHOST) +"\n", true);
+                FileUtils.writeStringToFile(europeanaProperties, "redis.port"
+                    + "=" + env.getProperty(REDISPORT) +"\n", true);
 				FileUtils.writeStringToFile(europeanaProperties, "redis.password"
 						+ "=" + env.getProperty(REDISPASSWORD), true);
 			}
