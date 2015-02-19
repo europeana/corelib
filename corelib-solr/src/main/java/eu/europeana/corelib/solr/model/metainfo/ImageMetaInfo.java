@@ -1,7 +1,5 @@
 package eu.europeana.corelib.solr.model.metainfo;
 
-import eu.europeana.harvester.domain.ImageOrientation;
-
 import java.io.Serializable;
 
 /**

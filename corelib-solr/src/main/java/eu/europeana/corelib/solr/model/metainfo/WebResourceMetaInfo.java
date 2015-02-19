@@ -2,9 +2,6 @@ package eu.europeana.corelib.solr.model.metainfo;
 
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Property;
-import eu.europeana.harvester.domain.AudioMetaInfo;
-import eu.europeana.harvester.domain.ImageMetaInfo;
-import eu.europeana.harvester.domain.TextMetaInfo;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one field which is not null.
@@ -18,7 +15,7 @@ public class WebResourceMetaInfo {
     /**
      * A class which contains information about an IMAGE document
      */
-    private final eu.europeana.harvester.domain.ImageMetaInfo imageMetaInfo;
+    private final ImageMetaInfo imageMetaInfo;
 
     /**
      * A class which contains information about an AUDIO document
@@ -43,7 +40,7 @@ public class WebResourceMetaInfo {
         this.textMetaInfo = null;
     }
 
-    public WebResourceMetaInfo(final String recordID, final eu.europeana.harvester.domain.ImageMetaInfo imageMetaInfo,
+    public WebResourceMetaInfo(final String recordID, final ImageMetaInfo imageMetaInfo,
                                            final AudioMetaInfo audioMetaInfo, final VideoMetaInfo videoMetaInfo, TextMetaInfo textMetaInfo) {
         this.id = recordID;
         this.imageMetaInfo = imageMetaInfo;
