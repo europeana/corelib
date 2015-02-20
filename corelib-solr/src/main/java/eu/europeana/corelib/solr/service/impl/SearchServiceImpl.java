@@ -831,7 +831,7 @@ public class SearchServiceImpl implements SearchService {
             imageAspectRatio = imageAspectRatio.toLowerCase();
         }
         if(imageColorPalette != null) {
-            imageColorPalette = imageColorPalette.toLowerCase();
+            imageColorPalette = imageColorPalette.toUpperCase();
         }
         if(soundDuration != null) {
             soundDuration = soundDuration.toLowerCase();
