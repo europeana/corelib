@@ -38,12 +38,7 @@
 				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.port']}" type="int" />
-				<constructor-arg
-                value="#{europeanaProperties['mongodb.username']}"
-                type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.password']}"
-                type="java.lang.String" />
+				
 		</bean>
 
 		<bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
@@ -106,6 +101,12 @@
 			<constructor-arg ref="corelib_db_mongo" />
 			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
 				type="java.lang.String" />
+				<constructor-arg
+                value="#{europeanaProperties['mongodb.username']}"
+                type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.password']}"
+                type="java.lang.String" />
 		</bean>
 
 		<bean id="corelib_db_mongo_apilog" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector" />
