@@ -59,14 +59,14 @@
 				type="java.lang.String" />
 		</bean>
 
-		<bean id="corelib_db_morphia_datastore_sugarcrmcache"
+		<bean id="corelib_db_morphia_datastore_oauth2"
 			factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
-			<constructor-arg value="SugarCRM cache" />
+			<constructor-arg value="OAuth2" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.port']}" type="int" />
-			<constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"
+			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
 				type="java.lang.String" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.username']}"
@@ -75,6 +75,23 @@
 				value="#{europeanaProperties['mongodb.password']}"
 				type="java.lang.String" />
 		</bean>
+		
+		<bean id="corelib_db_morphia_datastore_sugarcrmcache"
+            factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
+            <constructor-arg value="SugarCRM cache" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.port']}" type="int" />
+            <constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"
+                type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.username']}"
+                type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.password']}"
+                type="java.lang.String" />
+        </bean>
 
 		<bean id="corelib_db_entityManagerFactory"
 			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
@@ -101,12 +118,6 @@
 			<constructor-arg ref="corelib_db_mongo" />
 			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
 				type="java.lang.String" />
-				<constructor-arg
-                value="#{europeanaProperties['mongodb.username']}"
-                type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.password']}"
-                type="java.lang.String" />
 		</bean>
 
 		<bean id="corelib_db_mongo_apilog" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector" />
