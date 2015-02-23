@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.cloudfoundry.VcapApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -36,10 +37,10 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 		api2.url=http://hostname.domain/api
 		api2.canonical.url=http://hostname.domain/api
 	*/
-	private final static String PORTALSERVER = "portal.server";
-	private final static String PORTALCANONICALURL = "portal.server.canonical";
-	private final static String API2URL = "api2.url";
-	private final static String API2CANONICALURL="api2.canonical.url";
+	private final static String PORTALSERVER = "portal_server";
+	private final static String PORTALCANONICALURL = "portal_server_canonical";
+	private final static String API2URL = "api2_url";
+	private final static String API2CANONICALURL="api2_canonical_url";
 	
 	private static StandardServletEnvironment env = new StandardServletEnvironment();
 
@@ -91,19 +92,19 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 						+ "=" + env.getProperty(REDISPASSWORD)+"\n", true);
 				
 				if(env.containsProperty(API2CANONICALURL)){
-					FileUtils.writeStringToFile(europeanaProperties, API2CANONICALURL
+					FileUtils.writeStringToFile(europeanaProperties, StringUtils.replaceChars(API2CANONICALURL,"_",".")
 							+ "=" + HTTP+env.getSystemEnvironment().get(API2CANONICALURL)+"\n", true);
 				}
 				if(env.containsProperty(API2URL)){
-					FileUtils.writeStringToFile(europeanaProperties, API2URL
+					FileUtils.writeStringToFile(europeanaProperties, StringUtils.replaceChars(API2URL,"_",".")
 							+ "=" + HTTP+env.getSystemEnvironment().get(API2URL)+"\n", true);
 				}
 				if(env.containsProperty(PORTALCANONICALURL)){
-					FileUtils.writeStringToFile(europeanaProperties, PORTALCANONICALURL
+					FileUtils.writeStringToFile(europeanaProperties, StringUtils.replaceChars(PORTALCANONICALURL,"_",".")
 							+ "=" + HTTP+env.getSystemEnvironment().get(PORTALCANONICALURL)+"\n", true);
 				}
 				if(env.containsProperty(PORTALSERVER)){
-					FileUtils.writeStringToFile(europeanaProperties, PORTALSERVER
+					FileUtils.writeStringToFile(europeanaProperties, StringUtils.replaceChars(PORTALSERVER,"_",".")
 							+ "=" + HTTP+env.getSystemEnvironment().get(PORTALSERVER)+"\n", true);
 				}
 			}
