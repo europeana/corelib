@@ -28,7 +28,20 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 	private final static String REDISHOST = "vcap.services.redis.credentials.host";
     private final static String REDISPORT = "vcap.services.redis.credentials.port";
 	private final static String REDISPASSWORD = "vcap.services.redis.credentials.password";
+	private final static String APIURL = "api.url";
+	private final static String APICANONICALURL="api.canonical.url";
+	/*portal.server = http://hostname.domain/portal
+		portal.server.canonical=http://hostname.domain
 
+		# no trailing slash
+		api2.url=http://hostname.domain/api
+		api2.canonical.url=http://hostname.domain/api
+	*/
+	private final static String PORTALSERVER = "portal.server";
+	private final static String PORTALCANONICALURL = "portal.server.canonical";
+	private final static String API2URL = "api2.url";
+	private final static String API2CANONICALURL="api2.canonical.url";
+	
 	private static StandardServletEnvironment env = new StandardServletEnvironment();
 
 	public VcapPropertyLoaderListener() {
@@ -75,7 +88,31 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
                 FileUtils.writeStringToFile(europeanaProperties, "redis.port"
                     + "=" + env.getProperty(REDISPORT) +"\n", true);
 				FileUtils.writeStringToFile(europeanaProperties, "redis.password"
-						+ "=" + env.getProperty(REDISPASSWORD), true);
+						+ "=" + env.getProperty(REDISPASSWORD)+"\n", true);
+				if (env.containsProperty(APIURL)){
+					FileUtils.writeStringToFile(europeanaProperties, APIURL
+							+ "=" + env.getProperty(APIURL) +"\n", true);
+				}
+				if(env.containsProperty(APICANONICALURL)){
+					FileUtils.writeStringToFile(europeanaProperties, APICANONICALURL
+							+ "=" + env.getProperty(APICANONICALURL)+"\n", true);
+				}
+				if(env.containsProperty(API2CANONICALURL)){
+					FileUtils.writeStringToFile(europeanaProperties, API2CANONICALURL
+							+ "=" + env.getProperty(API2CANONICALURL)+"\n", true);
+				}
+				if(env.containsProperty(API2URL)){
+					FileUtils.writeStringToFile(europeanaProperties, API2URL
+							+ "=" + env.getProperty(API2URL)+"\n", true);
+				}
+				if(env.containsProperty(PORTALCANONICALURL)){
+					FileUtils.writeStringToFile(europeanaProperties, PORTALCANONICALURL
+							+ "=" + env.getProperty(PORTALCANONICALURL)+"\n", true);
+				}
+				if(env.containsProperty(PORTALSERVER)){
+					FileUtils.writeStringToFile(europeanaProperties, PORTALSERVER
+							+ "=" + env.getProperty(PORTALSERVER)+"\n", true);
+				}
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
