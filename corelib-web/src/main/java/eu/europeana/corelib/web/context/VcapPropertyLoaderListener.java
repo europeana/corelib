@@ -30,6 +30,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 	private final static String REDISPASSWORD = "vcap.services.redis.credentials.password";
 	private final static String APIURL = "api.url";
 	private final static String APICANONICALURL="api.canonical.url";
+	private final static String HTTP="http://";
 	/*portal.server = http://hostname.domain/portal
 		portal.server.canonical=http://hostname.domain
 
@@ -91,27 +92,27 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 						+ "=" + env.getProperty(REDISPASSWORD)+"\n", true);
 				if (env.containsProperty(APIURL)){
 					FileUtils.writeStringToFile(europeanaProperties, APIURL
-							+ "=" + env.getProperty(APIURL) +"\n", true);
+							+ "=" +HTTP+ env.getProperty(APIURL) +"\n", true);
 				}
 				if(env.containsProperty(APICANONICALURL)){
 					FileUtils.writeStringToFile(europeanaProperties, APICANONICALURL
-							+ "=" + env.getProperty(APICANONICALURL)+"\n", true);
+							+ "=" + HTTP+ env.getProperty(APICANONICALURL)+"\n", true);
 				}
 				if(env.containsProperty(API2CANONICALURL)){
 					FileUtils.writeStringToFile(europeanaProperties, API2CANONICALURL
-							+ "=" + env.getProperty(API2CANONICALURL)+"\n", true);
+							+ "=" + HTTP+env.getProperty(API2CANONICALURL)+"\n", true);
 				}
 				if(env.containsProperty(API2URL)){
 					FileUtils.writeStringToFile(europeanaProperties, API2URL
-							+ "=" + env.getProperty(API2URL)+"\n", true);
+							+ "=" + HTTP+env.getProperty(API2URL)+"\n", true);
 				}
 				if(env.containsProperty(PORTALCANONICALURL)){
 					FileUtils.writeStringToFile(europeanaProperties, PORTALCANONICALURL
-							+ "=" + env.getProperty(PORTALCANONICALURL)+"\n", true);
+							+ "=" + HTTP+env.getProperty(PORTALCANONICALURL)+"\n", true);
 				}
 				if(env.containsProperty(PORTALSERVER)){
 					FileUtils.writeStringToFile(europeanaProperties, PORTALSERVER
-							+ "=" + env.getProperty(PORTALSERVER)+"\n", true);
+							+ "=" + HTTP+env.getProperty(PORTALSERVER)+"\n", true);
 				}
 			}
 		} catch (IOException e1) {
