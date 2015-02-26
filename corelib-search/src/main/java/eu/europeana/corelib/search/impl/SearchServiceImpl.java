@@ -97,6 +97,7 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	private static final int DEFAULT_MLT_COUNT = 10;
 
+	private static boolean STARTED = false;
 	private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
 
 	/**
@@ -197,6 +198,10 @@ public class SearchServiceImpl implements SearchService {
 
 	private FullBean resolveInternal(String europeanaObjectId, boolean similarItems) throws SolrTypeException{
 		long t0 = new Date().getTime();
+		if(!STARTED){
+			idServer.createDatastore();
+			STARTED=true;
+		}
 		mongoServer.setEuropeanaIdMongoServer(idServer);
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
 		logTime("mongo resolve", (new Date().getTime() - t0));
@@ -232,6 +237,10 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private String resolveIdInternal(String europeanaObjectId){
+		if(!STARTED){
+			idServer.createDatastore();
+			STARTED= true;
+		}
 		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
 		if (newId != null) {
 			idServer.updateTime(newId.getNewId(), europeanaObjectId);
