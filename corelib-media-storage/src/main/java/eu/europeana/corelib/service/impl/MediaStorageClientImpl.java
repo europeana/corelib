@@ -66,8 +66,16 @@ public class MediaStorageClientImpl implements MediaStorageClient {
         final Integer versionNumber = (Integer) mongoMetaData.get(String.valueOf(MetaDataFields.VERSIONNUMBER));
         final Map<String, String> metaData = (Map<String, String>) mongoMetaData.get(String.valueOf(MetaDataFields.TECHNICAL_METADATA));
 
+        Integer size = null;
+        if(metaData.containsKey("size")) {
+            size = Integer.parseInt(metaData.get("size"));
+        }
+        if(metaData.containsKey("height")) {
+            size = Integer.parseInt(metaData.get("height"));
+        }
+
         return new MediaFile(source, name, aliases, contentMd5, originalUrl, createdAt,
-                content, versionNumber, contentType, metaData, Integer.parseInt(metaData.get("height")));
+                content, versionNumber, contentType, metaData, size);
     }
 
     @Override

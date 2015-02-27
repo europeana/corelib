@@ -75,19 +75,19 @@ public class MediaFile {
     private final Map<String,String> metaData;
 
     /**
-     * The height of the thumbnail
+     * The size of the thumbnail
      */
-    private final Integer height;
+    private final Integer size;
 
     public MediaFile(String source, String name, List<String> aliases, String contentMd5,
                      String originalUrl, DateTime createdAt, byte[] content, Integer versionNumber, String contentType,
-                     Map<String, String> metaData, int height) {
+                     Map<String, String> metaData, int size) {
         final MessageDigest messageDigest;
         String temp;
         try {
             messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.reset();
-            messageDigest.update((originalUrl + height).getBytes());
+            messageDigest.update((originalUrl + size).getBytes());
             final byte[] resultByte = messageDigest.digest();
             StringBuffer sb = new StringBuffer();
             for (byte aResultByte : resultByte) {
@@ -110,12 +110,12 @@ public class MediaFile {
         this.versionNumber = versionNumber;
         this.contentType = contentType;
         this.metaData = metaData;
-        this.height = height;
+        this.size = size;
     }
 
     public MediaFile(String id, String source, String name, List<String> aliases, String contentMd5,
                      String originalUrl, DateTime createdAt, byte[] content, Integer versionNumber, String contentType,
-                     Map<String, String> metaData, int height) {
+                     Map<String, String> metaData, int size) {
         this.id = id;
         this.source = source;
         this.length = (long) content.length;
@@ -128,7 +128,7 @@ public class MediaFile {
         this.versionNumber = versionNumber;
         this.contentType = contentType;
         this.metaData = metaData;
-        this.height = height;
+        this.size = size;
     }
 
     public String getId() {
@@ -179,8 +179,8 @@ public class MediaFile {
         return metaData;
     }
 
-    public Integer getHeight() {
-        return height;
+    public Integer getSize() {
+        return size;
     }
 
     public MediaFile withMetaInfo(String[] colorPalette) {
@@ -190,10 +190,10 @@ public class MediaFile {
             newMetaData.put("color"+i, color);
             i++;
         }
-        newMetaData.put("height", String.valueOf(this.height));
+        newMetaData.put("size", String.valueOf(this.size));
 
         return new MediaFile(this.id, this.source, this.name, this.aliases, this.contentMd5, this.originalUrl,
-                this.createdAt, this.content, this.versionNumber, this.contentType, newMetaData, this.height);
+                this.createdAt, this.content, this.versionNumber, this.contentType, newMetaData, this.size);
     }
 
 }

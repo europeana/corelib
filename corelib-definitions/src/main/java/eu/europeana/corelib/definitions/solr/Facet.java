@@ -30,7 +30,8 @@ public enum Facet {
 	PROVIDER("PROVIDER"),
 	DATA_PROVIDER("DATA_PROVIDER"),
 	COUNTRY("COUNTRY"),
-	RIGHTS("RIGHTS");
+	RIGHTS("RIGHTS"),
+    FACET_TAGS("facet_tags");
 
 	private String facet;
 
