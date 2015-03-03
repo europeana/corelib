@@ -78,6 +78,9 @@ public enum  EDMXMPValues {
 		this.setFieldId(id);
 	}
 
+	/**
+	 * GETTERS and SETTERS
+	 */
 	public String getFieldId() {
 		return fieldId;
 	}

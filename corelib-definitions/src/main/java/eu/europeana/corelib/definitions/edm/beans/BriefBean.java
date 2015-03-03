@@ -179,6 +179,12 @@ public interface BriefBean extends IdBean {
 	 * @return dc:contributor
 	 */
 	String[] getDcContributor();
+        
+	/**
+	 * 
+	 * @return dc:language
+	 */
+        String[] getDcLanguage();
 
 	/**
 	 * 
@@ -219,4 +225,9 @@ public interface BriefBean extends IdBean {
 	 */
 	Map<String, List<String>> getEdmAgentLabelLangAware();
 
+	/**
+	 * Opt out fix
+	 * @return
+	 */
+	Boolean getPreviewNoDistribute();
 }

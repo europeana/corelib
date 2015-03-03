@@ -97,7 +97,6 @@
             </appinfo>
         </annotation>
 
-        
         <complexContent>
             <extension base="rdf:AboutType">
                 <sequence>

@@ -13,10 +13,12 @@ import com.mongodb.MongoException;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 import eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 
 public class EuropeanaIdMongoServerTest {
 	EuropeanaIdMongoServerImpl server;
@@ -24,8 +26,9 @@ public class EuropeanaIdMongoServerTest {
 	public void test(){
 		try {
 			int port = 10000;
-			MongodConfig conf = new MongodConfig(Version.V2_0_7, port,
-					false);
+			IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+			        .net(new Net(port, Network.localhostIsIPv6()))
+			        .build();
 
 			MongodStarter runtime = MongodStarter.getDefaultInstance();
 

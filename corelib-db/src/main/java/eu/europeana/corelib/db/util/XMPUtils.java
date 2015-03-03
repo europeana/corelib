@@ -496,7 +496,7 @@ public class XMPUtils {
 		List<ProxyType> proxyList = edmRecord.getProxyList();
 
 		// Deal with Aggregation elements
-		if (!aggregationList.isEmpty() && aggregationList != null) {
+		if (aggregationList != null &&!aggregationList.isEmpty()) {
 
 			for (Aggregation aggregation : aggregationList) {
 
@@ -562,7 +562,7 @@ public class XMPUtils {
 		}
 
 		// Deal with Proxy elements
-		if (!proxyList.isEmpty() && proxyList != null) {
+		if (proxyList != null &&!proxyList.isEmpty()) {
 
 			for (ProxyType pcho : proxyList) {
 
@@ -621,17 +621,7 @@ public class XMPUtils {
 								EDMXMPValues.dc_subject, EDMXMPValuesMap);
 					}
 
-					/*
-					 * // Check the dc:coverage resource or literal if
-					 * (dcchoice.ifCoverage()) {
-					 * putInValuesMap(dcchoice.getCoverage(),
-					 * EDMXMPValues.dc_coverage, EDMXMPValuesMap); }
-					 * 
-					 * // Check the dc:spatial resource or literal if
-					 * (dcchoice.ifSpatial()) {
-					 * putInValuesMap(dcchoice.getSpatial(),
-					 * EDMXMPValues.dcterms_spatial, EDMXMPValuesMap); }
-					 */
+					
 
 					// Check the dc:temporal resource or literal
 					if (dcchoice.ifTemporal()) {
@@ -724,7 +714,7 @@ public class XMPUtils {
 				}
 
 			} catch (IllegalArgumentException e) {
-
+				
 			} catch (IllegalAccessException e) {
 
 			} catch (InvocationTargetException e) {

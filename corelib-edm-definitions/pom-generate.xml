@@ -12,7 +12,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jibx.version>1.2.3</jibx.version>
+		<jibx.version>1.2.5</jibx.version>
 	</properties>
 	<dependencies>
 		<!-- JIBX dependencies -->
@@ -81,13 +81,13 @@
 					<target>${version.jdk}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-XX:-UseSplitVerifier</argLine>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-surefire-plugin</artifactId> -->
+<!-- 				<configuration> -->
+<!-- 					<argLine>-XX:-UseSplitVerifier</argLine> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 
 		<pluginManagement>
@@ -108,7 +108,7 @@
 											maven-jibx-plugin
 										</artifactId>
 										<versionRange>
-											[1.2.3,)
+											[1.2.5,)
 										</versionRange>
 										<goals>
 											<goal>bind</goal>

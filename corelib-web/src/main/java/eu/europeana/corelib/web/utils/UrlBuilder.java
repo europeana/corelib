@@ -40,7 +40,8 @@ import eu.europeana.corelib.web.exception.InvalidUrlException;
  */
 public class UrlBuilder {
 
-	private static Logger log = Logger.getLogger(UrlBuilder.class.getCanonicalName());
+	private static Logger log = Logger.getLogger(UrlBuilder.class
+			.getCanonicalName());
 
 	public static final String PATH_SEPERATOR = "/";
 
@@ -63,7 +64,8 @@ public class UrlBuilder {
 
 	private void setBaseUrl(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
-		if (StringUtils.isBlank(url) || StringUtils.startsWith(url, PATH_SEPERATOR)) {
+		if (StringUtils.isBlank(url)
+				|| StringUtils.startsWith(url, PATH_SEPERATOR)) {
 			disableDomain = true;
 		} else {
 			if (StringUtils.contains(url, "://")) {
@@ -74,9 +76,10 @@ public class UrlBuilder {
 			if (!StringUtils.contains(domain, ":")) {
 				url = StringUtils.substringAfter(url, domain);
 			} else {
-				port = NumberUtils.toInt( StringUtils.substringAfter(domain, ":") );
+				port = NumberUtils.toInt(StringUtils
+						.substringAfter(domain, ":"));
 				domain = StringUtils.substringBefore(domain, ":");
-				url = StringUtils.substringAfter(url, ":"+port);
+				url = StringUtils.substringAfter(url, ":" + port);
 			}
 		}
 		if (StringUtils.contains(url, "#")) {
@@ -142,7 +145,12 @@ public class UrlBuilder {
 	public UrlBuilder addPage(String page) {
 		if (StringUtils.isNotBlank(page)) {
 			page = StringUtils.strip(page, "/?&");
-			path.append(PATH_SEPERATOR).append(page);
+			if (StringUtils.isBlank(path.toString())) {
+				path.append(page);
+			} else {
+				path.append(PATH_SEPERATOR).append(page);
+
+			}
 		}
 		trailingSlash = false;
 		return this;
@@ -150,7 +158,8 @@ public class UrlBuilder {
 
 	public UrlBuilder addParamsFromURL(String url, String... ignoreKeys) {
 		if (StringUtils.isNotBlank(url)) {
-			List<NameValuePair> queryParams = URLEncodedUtils.parse(url, Charset.forName("UTF-8"));
+			List<NameValuePair> queryParams = URLEncodedUtils.parse(url,
+					Charset.forName("UTF-8"));
 			if (queryParams == null) {
 				return this;
 			}
@@ -271,8 +280,8 @@ public class UrlBuilder {
 				newDomain = StringUtils.substringAfter(newDomain, "://");
 			}
 			domain = StringUtils.substringBefore(newDomain, PATH_SEPERATOR);
-			disableDomain=false;
-			disableProtocol=false;
+			disableDomain = false;
+			disableProtocol = false;
 		}
 	}
 
@@ -296,7 +305,7 @@ public class UrlBuilder {
 		}
 		return this;
 	}
-	
+
 	private StringBuilder createCanonical() {
 		StringBuilder sb = new StringBuilder();
 		if (!disableDomain && StringUtils.isNotBlank(domain)) {
@@ -357,7 +366,8 @@ public class UrlBuilder {
 		try {
 			value = URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			log.error("UnsupportedEncodingException: " + e.getLocalizedMessage());
+			log.error("UnsupportedEncodingException: "
+					+ e.getLocalizedMessage());
 		}
 		return value;
 	}

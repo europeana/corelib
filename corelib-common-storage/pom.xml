@@ -31,7 +31,6 @@
 			<groupId>com.google.code.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<version>${version.mongoMorphia}</version>
-			<scope>compile</scope>
 		</dependency>
   </dependencies>
 </project>

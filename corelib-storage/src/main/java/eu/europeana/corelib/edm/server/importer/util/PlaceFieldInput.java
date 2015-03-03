@@ -18,7 +18,6 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.HasPart;
 import eu.europeana.corelib.definitions.jibx.IsPartOf;
@@ -29,9 +28,6 @@ import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.edm.utils.updaters.PlaceUpdater;
-import eu.europeana.corelib.edm.utils.updaters.Updater;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 
 /**
@@ -117,68 +113,6 @@ public final class PlaceFieldInput {
 		return solrInputDocument;
 	}
 
-	/**
-	 * Create or Update a MongoDB Place Entity
-	 * 
-	 * @param placeType
-	 *            The JiBX Place Entity
-	 * @param mongoServer
-	 *            The MongoDB Server to save the Entity
-	 * @return The MongoDB Place Entity
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	public PlaceImpl createPlaceMongoFields(PlaceType placeType,
-			MongoServer mongoServer) {
-
-		// If place exists in mongo
-
-		PlaceImpl place = ((EdmMongoServer) mongoServer).getDatastore()
-				.find(PlaceImpl.class).filter("about", placeType.getAbout())
-				.get();
-
-		// if it does not exist
-		if (place == null) {
-			place = createNewPlace(placeType);
-			try {
-				mongoServer.getDatastore().save(place);
-			} catch (Exception e) {
-				PlaceImpl placeSec = ((EdmMongoServer) mongoServer)
-						.getDatastore().find(PlaceImpl.class)
-						.filter("about", placeType.getAbout()).get();
-				place = updatePlace(placeSec, placeType, mongoServer);
-			}
-
-		} else {
-			place = updatePlace(place, placeType, mongoServer);
-		}
-
-		return place;
-	}
-
-	/**
-	 * Update a Mongo Place Entity. In the update process everything is appended
-	 * rather than deleted and reconstructed
-	 * 
-	 * @param place
-	 *            The Mongo Place Entity to update
-	 * @param placeType
-	 *            The JiBX Entity from which the Mongo Place Entity will be
-	 *            updated
-	 * @param mongoServer
-	 *            The server on which the Place will be updated
-	 * @return The updated Mongo Place Entity
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	private PlaceImpl updatePlace(PlaceImpl place, PlaceType placeType,
-			MongoServer mongoServer) {
-		Updater<PlaceImpl,PlaceType> placeUpdater = new PlaceUpdater();
-		placeUpdater.update(place, placeType, mongoServer);
-		return ((EdmMongoServer) mongoServer).getDatastore()
-				.find(PlaceImpl.class).filter("about", placeType.getAbout())
-				.get();
-	}
 
 	/**
 	 * Create a new Place Mongo Entity from a JiBX palce

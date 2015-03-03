@@ -21,11 +21,6 @@ import java.net.MalformedURLException;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.mapping.MappingException;
-import com.google.code.morphia.query.Query;
-
-import eu.europeana.corelib.MongoServer;
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Date;
@@ -38,9 +33,6 @@ import eu.europeana.corelib.definitions.jibx.SameAs;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.edm.utils.updaters.AgentUpdater;
-import eu.europeana.corelib.edm.utils.updaters.Updater;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 
 /**
@@ -195,76 +187,8 @@ public final class AgentFieldInput {
 		return solrInputDocument;
 	}
 
-	/**
-	 * Create or Update a Mongo Entity of type Agent from the JiBX AgentType
-	 * object
-	 * 
-	 * Mapping from the JibXBinding Fields to the MongoDB Entity Fields The
-	 * fields mapped are the rdf:about (String -> String) skos:note(List<Note>
-	 * -> String[]) skos:prefLabel(List<PrefLabel> ->
-	 * HashMap<String,String>(lang,description)) skos:altLabel(List<AltLabel> ->
-	 * HashMap<String,String>(lang,description)) edm:begin (String -> Date)
-	 * edm:end (String -> Date)
-	 * 
-	 * @param agentType
-	 *            - JiBX representation of an Agent EDM entity
-	 * @param mongoServer
-	 *            - The mongoServer to save the entity
-	 * @return The created Agent
-	 * @throws IOException
-	 * @throws MalformedURLException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws MappingException
-	 */
-	public AgentImpl createAgentMongoEntity(AgentType agentType,
-			MongoServer mongoServer) throws MalformedURLException, IOException {
-		Datastore ds = ((EdmMongoServer) mongoServer).getDatastore();
-		Query<AgentImpl> query = ds.find(AgentImpl.class);
-		AgentImpl agent = 
-				query.filter("about", agentType.getAbout())
-				.get();
-
-		// if it does not exist
-
-		if (agent == null) {
-			agent = createNewAgent(agentType);
-			try {
-				mongoServer.getDatastore().save(agent);
-			} catch (Exception e) {
-				AgentImpl agentSec = ((EdmMongoServer) mongoServer)
-						.getDatastore().find(AgentImpl.class)
-						.filter("about", agentType.getAbout()).get();
-				agent = updateMongoAgent(agentSec, agentType, mongoServer);
-				
-			}
-		} else {
-			agent = updateMongoAgent(agent, agentType, mongoServer);
-		}
-		return agent;
-	}
-
-	/**
-	 * Update an already stored Agent Mongo Entity
-	 * 
-	 * @param agent
-	 *            The agent to update
-	 * @param agentType
-	 *            The JiBX Agent Entity
-	 * @param mongoServer
-	 *            The MongoDB Server to save the Agent to
-	 * @return The new Agent MongoDB Entity
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	private AgentImpl updateMongoAgent(AgentImpl agent, AgentType agentType,
-			MongoServer mongoServer) {
-		Updater<AgentImpl,AgentType> updater = new AgentUpdater();
-		updater.update(agent, agentType, mongoServer);
-		return ((EdmMongoServer) mongoServer).getDatastore()
-				.find(AgentImpl.class).filter("about", agentType.getAbout())
-				.get();
-	}
+	
+	
 
 	/**
 	 * Create new Agent MongoDB Entity from JiBX Agent Entity

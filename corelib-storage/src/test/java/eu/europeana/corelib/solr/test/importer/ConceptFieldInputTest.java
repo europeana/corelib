@@ -98,7 +98,8 @@ public class ConceptFieldInputTest {
 		concept.setChoiceList(choiceList);
 		// store in mongo
 		ConceptImpl conceptMongo = new ConceptFieldInput()
-				.createConceptMongoFields(concept, mongoServer, null);
+				.createNewConcept(concept);
+		mongoServer.getDatastore().save(conceptMongo);
 		assertEquals(concept.getAbout(), conceptMongo.getAbout());
 		for (Concept.Choice choice2 : concept.getChoiceList()) {
 			if (choice2.ifNote()) {

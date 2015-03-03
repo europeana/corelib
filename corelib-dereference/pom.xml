@@ -53,27 +53,11 @@
 			<artifactId>corelib-definitions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-solrj</artifactId>
-			<version>${version.apacheSolr}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-core</artifactId>
-			<version>${version.apacheSolr}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-test-framework</artifactId>
-			<version>${version.apacheSolr}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-			<version>1.33</version>
+			<version>1.46.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

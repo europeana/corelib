@@ -77,6 +77,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("proxy_dc_contributor")
     protected String[] dcContributor;
+    
+    @Field("proxy_dc_language")
+    protected String[] dcLanguage;
 
     @Field("edm_place")
     protected String[] edmPlace;
@@ -137,7 +140,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("provider_aggregation_edm_isShownAt")
     protected String[] edmIsShownAt;
-
+    
+    @Field("edm_previewNoDistribute")
+    protected Boolean edmPreviewNotDistribute;
     @Override
     public String[] getEdmPreview() {
         List<String> previews = new ArrayList<String>();
@@ -177,6 +182,11 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Override
     public String[] getDcContributor() {
         return (this.dcContributor != null ? this.dcContributor.clone() : null);
+    }
+
+    @Override
+    public String[] getDcLanguage() {
+        return (this.dcLanguage != null ? this.dcLanguage.clone() : null);
     }
 
     @Override
@@ -362,5 +372,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         }
         return null;
     }
+
+	@Override
+	public Boolean getPreviewNoDistribute() {
+		return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
+	}
 
 }

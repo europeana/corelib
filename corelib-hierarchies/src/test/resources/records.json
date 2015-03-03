@@ -1,0 +1,74 @@
+{
+    "records": [
+        {
+            "edm_type": "TEXT",
+            "rdf_about": "uri0",
+            "hasChildren": "true",
+            "dc_description_xml_lang_en": "testdescription0",
+            "dc_title_xml_lang_en": "testtitle0",
+            "hasParent": "",
+            "edm_isNextInSequence": "",
+            "edm_isFirstInSequence": "",
+            "edm_isLastInSequence": "",
+            "dcterms_isPartOf": "",
+            "dcterms_hasPart": [
+                "uri1",
+                "uri2",
+                "uri3",
+                "uri4"
+            ]
+        },
+        {
+            "edm_type": "TEXT",
+            "rdf_about": "uri1",
+            "hasChildren": "false",
+            "dc_description_xml_lang_en": "testdescription1",
+            "dc_title_xml_lang_en": "testtitle1",
+            "hasParent": "uri0",
+            "edm_isNextInSequence": "",
+            "edm_isFirstInSequence": "uri0",
+            "edm_isLastInSequence": "",
+            "dcterms_isPartOf": "uri0",
+            "dcterms_hasPart": [""]
+        },
+        {
+            "edm_type": "TEXT",
+            "rdf_about": "uri2",
+            "hasChildren": "false",
+            "dc_description_xml_lang_en": "testdescription2",
+            "dc_title_xml_lang_en": "testtitle2",
+            "hasParent": "uri0",
+            "edm_isNextInSequence": "uri1",
+            "edm_isFirstInSequence": "",
+            "edm_isLastInSequence": "",
+            "dcterms_isPartOf": "uri0",
+            "dcterms_hasPart": [""]
+        },
+        {
+            "edm_type": "TEXT",
+            "rdf_about": "uri3",
+            "hasChildren": "false",
+            "dc_description_xml_lang_en": "testdescription3",
+            "dc_title_xml_lang_en": "testtitle3",
+            "hasParent": "uri0",
+            "edm_isNextInSequence": "uri2",
+            "edm_isFirstInSequence": "",
+            "edm_isLastInSequence": "",
+            "dcterms_isPartOf": "uri0",
+            "dcterms_hasPart": [""]
+        },
+        {
+            "edm_type": "TEXT",
+            "rdf_about": "uri4",
+            "hasChildren": "false",
+            "dc_description_xml_lang_en": "testdescription4",
+            "dc_title_xml_lang_en": "testtitle4",
+            "hasParent": "uri0",
+            "edm_isNextInSequence": "uri3",
+            "edm_isFirstInSequence": "",
+            "edm_isLastInSequence": "uri0",
+            "dcterms_isPartOf": "uri0",
+            "dcterms_hasPart": [""]
+        }
+    ]
+}

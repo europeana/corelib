@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.BroadMatch;
 import eu.europeana.corelib.definitions.jibx.Broader;
@@ -33,15 +32,11 @@ import eu.europeana.corelib.definitions.jibx.NarrowMatch;
 import eu.europeana.corelib.definitions.jibx.Narrower;
 import eu.europeana.corelib.definitions.jibx.Notation;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Related;
 import eu.europeana.corelib.definitions.jibx.RelatedMatch;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.edm.utils.updaters.ConceptUpdater;
-import eu.europeana.corelib.edm.utils.updaters.Updater;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
@@ -149,50 +144,11 @@ public final class ConceptFieldInput {
 		return solrInputDocument;
 	}
 
-	/**
-	 * Creates or updates a MongoDB Concept Entity
-	 * 
-	 * @param concept
-	 *            The JiBX Concept Entity that has the field values of the
-	 *            Concept
-	 * @param mongoServer
-	 *            The MongoDBServer instance that is going to be used to save
-	 *            the MongoDB Concept
-	 * @return The MongoDB Concept Entity
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	public ConceptImpl createConceptMongoFields(Concept concept,
-			MongoServer mongoServer, RDF rdf) {
-
-		ConceptImpl conceptMongo = ((EdmMongoServer) mongoServer)
-				.getDatastore().find(ConceptImpl.class)
-				.filter("about", concept.getAbout()).get();
-		if (conceptMongo == null) {
-			// If it does not exist
-			conceptMongo = createNewConcept(concept);
-			try{
-				mongoServer.getDatastore().save(conceptMongo);
-			}
-			catch(Exception e){
-				conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
-			}
-		} else {
-			conceptMongo = updateConcept(conceptMongo, concept, mongoServer);
-		}
-		return conceptMongo;
-	}
+	
 
 
 
-	private ConceptImpl updateConcept(ConceptImpl conceptMongo,
-			Concept concept, MongoServer mongoServer) {
-		Updater<ConceptImpl,Concept> conceptUpdater= new ConceptUpdater();
-		conceptUpdater.update(conceptMongo, concept, mongoServer);
-		return (ConceptImpl) ((EdmMongoServer) mongoServer).getDatastore()
-				.find(ConceptImpl.class).filter("about", concept.getAbout())
-				.get();
-	}
+	
 
 	public ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();

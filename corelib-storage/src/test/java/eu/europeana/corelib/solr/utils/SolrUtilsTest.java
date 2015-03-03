@@ -18,23 +18,16 @@ package eu.europeana.corelib.solr.utils;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
-import eu.europeana.corelib.definitions.edm.beans.ApiBean;
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
@@ -45,11 +38,7 @@ import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.edm.utils.FieldMapping;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 
 /**
  * Solr Utils tests
@@ -59,67 +48,7 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
  */
 public class SolrUtilsTest {
 
-	@Test
-	/**
-	 * Tests the translateQuery function.
-	 */
-	public void translateQueryTest() {
-		Map<String, String> identicalQueries = new HashMap<String, String>() {
-			{
-				put("simpleQuery", "simpleQuery");
-				put("proxy_dc_coverage:ok", "proxy_dc_coverage:ok");
-			}
-		};
-		for (String query : identicalQueries.keySet()) {
-			assertEquals(identicalQueries.get(query),
-					SolrUtils.rewriteQueryFields(query));
-		}
-
-		Map<String, String> aggregatedQueries = new HashMap<String, String>() {
-			{
-				put("title:*:*", "title:*");
-				put("who:*:*", "who:*");
-				put("what:*:*", "what:*");
-				put("where:*:*", "where:*");
-				put("when:*:*", "when:*");
-			}
-		};
-		for (String query : aggregatedQueries.keySet()) {
-			assertEquals(aggregatedQueries.get(query),
-					SolrUtils.rewriteQueryFields(query));
-		}
-
-		for (FieldMapping field : FieldMapping.values()) {
-			String eseQuery = field.getEseField() + ":test";
-			String edmQuery = field.getEdmField() + ":test";
-			// ESE is translated to EDM
-			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(eseQuery));
-
-			// but EDM is not transformed
-			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(edmQuery));
-		}
-
-		// testing replace in context
-		for (FieldMapping field : FieldMapping.values()) {
-			String eseQuery = "test " + field.getEseField() + ":test";
-			String edmQuery = "test " + field.getEdmField() + ":test";
-			// ESE is translated to EDM
-			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(eseQuery));
-
-			// but EDM is not transformed
-			assertEquals(edmQuery, SolrUtils.rewriteQueryFields(edmQuery));
-		}
-	}
-
-	@Test
-	public void testTypeFacet() {
-		String[] refinementsOk = new String[] { "TYPE:IMAGE" };
-		String[] refinementsLowercase = new String[] { "TYPE:image" };
-		String[] refinementsBad = new String[] { "TYPE:BAD" };
-		assertTrue(SolrUtils.checkTypeFacet(refinementsOk));
-		assertTrue(SolrUtils.checkTypeFacet(refinementsLowercase));
-		assertFalse(SolrUtils.checkTypeFacet(refinementsBad));
-	}
+	
 
 	@Test
 	public void testExists() {
@@ -239,13 +168,7 @@ public class SolrUtilsTest {
 						.toString(), "en");
 	}
 	
-	@Test
-	public void testGetImplementationClass(){
-		assertTrue(SolrUtils.getImplementationClass(IdBean.class).isAssignableFrom(IdBeanImpl.class));
-		assertTrue(SolrUtils.getImplementationClass(ApiBean.class).isAssignableFrom(ApiBeanImpl.class));
-		assertTrue(SolrUtils.getImplementationClass(BriefBean.class).isAssignableFrom(BriefBeanImpl.class));
-		assertNull(SolrUtils.getImplementationClass(FullBean.class));
-	}
+	
 	
 	@Test
 	public void testGetPreviewURl(){
@@ -271,22 +194,7 @@ public class SolrUtilsTest {
 		assertEquals("test obj", SolrUtils.getPreviewUrl(rdf));
 	}
 
-	@Test
-	public void testEscapeQueryChars() {
-		assertEquals("http\\:\\/\\/ -", SolrUtils.escapeQuery("http:// -"));
-	}
-
-	@Test
-	public void testIsSimpleQuery() {
-		assertTrue(SolrUtils.isSimpleQuery("spinoza"));
-		assertTrue(SolrUtils.isSimpleQuery("den haag"));
-		assertTrue(SolrUtils.isSimpleQuery("den END haag"));
-		assertTrue(SolrUtils.isSimpleQuery("den and haag"));
-		assertFalse(SolrUtils.isSimpleQuery("den OR haag"));
-		assertFalse(SolrUtils.isSimpleQuery("den AND haag"));
-		assertFalse(SolrUtils.isSimpleQuery("den:haag"));
-		assertFalse(SolrUtils.isSimpleQuery("haag*"));
-	}
+	
 
 	private ResourceOrLiteralType prepareRLT() {
 		ResourceOrLiteralType rlt = new ResourceOrLiteralType();

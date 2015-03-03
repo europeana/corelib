@@ -35,6 +35,7 @@
 		<module>corelib-sugarcrm/client</module>
 		<module>corelib-common-storage</module>
 		<module>corelib-hierarchies</module>
+		<module>corelib-search</module>
 	</modules>
 
 	<repositories>
@@ -104,26 +105,35 @@
 			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
 			<url>http://repository.springsource.com/maven/bundles/external</url>
 		</repository>
+
+
+		<repository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<properties>
-
 		<version.europeanaApi2>2.1.0</version.europeanaApi2>
 		<version.log4j>1.2.15</version.log4j>
 		<version.jdk>1.7</version.jdk>
 		<version.junit>4.10</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
-		<version.apacheSolr>4.0.0</version.apacheSolr>
+		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springCore>3.1.4.RELEASE</version.springCore>
-		<version.springSecurity>3.1.4.RELEASE</version.springSecurity>
-		<version.springSecurityOauth>1.0.5.RELEASE</version.springSecurityOauth>
+		<version.springCore>4.0.9.RELEASE</version.springCore>
+		<version.springSecurity>3.2.5.RELEASE</version.springSecurity>
+		<version.springSecurityOauth>2.0.5.BUILD-SNAPSHOT</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsIO>2.4</version.commonsIO>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
-		<version.jibx>1.2.3</version.jibx>
+		<version.jibx>1.2.5</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
-		<version.mongoDriver>2.10.1</version.mongoDriver>
+		<version.mongoDriver>2.12.4</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
