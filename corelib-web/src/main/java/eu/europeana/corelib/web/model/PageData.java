@@ -62,8 +62,6 @@ public abstract class PageData {
 
 	private String facebookId;
 
-	private String portalName;
-
 	private String cacheUrl;
 
 	private String portalServer;
@@ -131,14 +129,6 @@ public abstract class PageData {
 
 	public String getGoogleAnalyticsId() {
 		return googleAnalyticsId;
-	}
-
-	public void setPortalName(String portalName) {
-		this.portalName = portalName;
-	}
-
-	public String getPortalName() {
-		return portalName;
 	}
 
 	public void setCacheUrl(String cacheUrl) {

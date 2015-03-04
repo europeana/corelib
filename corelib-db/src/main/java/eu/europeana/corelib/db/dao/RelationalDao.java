@@ -82,6 +82,14 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 	 */
 	List<E> findByNamedQuery(String query, Object... params);
 	
+	/**
+	 * Find entities by named query in a paginated way. Given params will be inserted into query in order of params.
+	 * @param query Name of the Named Query
+	 * @param offset where to start from
+	 * @param limit how many results to return
+	 * @param params Parameters in order as marked in Named Query
+	 * @return Search results, list is empty when no results match
+	 */
 	List<E> findByNamedQueryLimited(String query, int offset, int limit, Object... params);
 	
 	/**

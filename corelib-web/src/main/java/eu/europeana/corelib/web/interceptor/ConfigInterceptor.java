@@ -20,6 +20,8 @@ package eu.europeana.corelib.web.interceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,12 +77,17 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 		if (modelAndView != null && !modelAndView.getViewName().startsWith("redirect:")
 				&& modelAndView.getModel().containsKey(PageData.PARAM_MODEL)) {
 			PageData model = (PageData) modelAndView.getModel().get(PageData.PARAM_MODEL);
-			StringBuilder currentUrl = new StringBuilder(request.getRequestURI());
+			
+			StringBuilder currentUrl = new StringBuilder(config.getPortalServer());
+
+			currentUrl.append(request.getRequestURI());
+			
+			
 			if (request.getQueryString() != null) {
 				currentUrl.append("?").append(request.getQueryString());
 			}
-			model.setCurrentUrl(currentUrl.toString());
-
+			model.setCurrentUrl(currentUrl.toString().replace("portal/portal/", "portal/"));
+			
 			// BOOLEANS
 			model.setDebug(Boolean.valueOf(config.getDebugMode()));
 			model.setIndexable(indexable);
@@ -92,7 +99,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			// MANDATORY VALUES
 			model.setPortalServer(checkMandatoryValue(config.getPortalServer(), "portal.server"));
 			model.setMetaCanonicalUrl(config.getCannonicalPortalServer());
-			model.setPortalName(checkMandatoryValue(config.getPortalName(), "portal.name"));
+			//model.setPortalName(checkMandatoryValue(config.getPortalName(), "portal.name"));
 			model.setCacheUrl(checkMandatoryValue(config.getImageCacheUrl(), "imageCacheUrl"));
 
 			// OPTIONALS, TRIMMED TO EMPTY STRING (preventing nullpointers)

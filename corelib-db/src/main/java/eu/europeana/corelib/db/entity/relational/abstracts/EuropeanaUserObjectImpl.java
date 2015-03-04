@@ -78,12 +78,12 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 
 	@Override
 	public Date getDateSaved() {
-		return dateSaved;
+		return new Date(dateSaved.getTime());
 	}
 
 	@Override
 	public void setDateSaved(Date dateSaved) {
-		this.dateSaved = dateSaved;
+		this.dateSaved = new Date(dateSaved.getTime());
 	}
 
 	@Override

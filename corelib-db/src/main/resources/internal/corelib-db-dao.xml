@@ -28,7 +28,7 @@
 
 	<!-- MONGO DB -->
 	<bean id="corelib_db_nosql_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
-		<constructor-arg ref="corelib_db_morphia_datastore"/>
+		<constructor-arg ref="corelib_db_morphia_datastore_oauth2"/>
 	</bean>
 
 	<bean id="corelib_db_nosql_apilog_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">

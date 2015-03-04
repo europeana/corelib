@@ -21,10 +21,10 @@ public class Configuration {
 
 	@Resource
 	private Properties europeanaProperties;
-
-	// basic portal value
-	@Value("#{europeanaProperties['portal.name']}")
-	private String portalName;
+//
+//	// basic portal value
+//	@Value("#{europeanaProperties['portal.name']}")
+//	private String portalName;
 
 	@Value("#{europeanaProperties['portal.server']}")
 	private String portalServer;
@@ -155,8 +155,8 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.keywordLanguagesLimit']}")
 	private Integer keywordLanguagesLimit;
 
-	@Value("#{europeanaProperties['portal.useNewMyEuropeanaUrl']}")
-	private String useNewMyEuropeanaUrlString;
+//	@Value("#{europeanaProperties['portal.useNewMyEuropeanaUrl']}")
+//	private String useNewMyEuropeanaUrlString;
 
 	@Value("#{europeanaProperties['portal.bing.translate.key']}")
 	private String bingTranslateId;
@@ -223,15 +223,10 @@ public class Configuration {
 	/** Collection IDs which supports the SoundCloud widget */
 	private List<String> soundCloudAwareCollections;
 
-	private Boolean useNewMyEuropeanaUrl;
 
 	private List<String> hierarchyRoots;
 
 	// /////////////////////////////// getters and setters
-
-	public String getPortalName() {
-		return portalName;
-	}
 
 	public String getPortalServer() {
 		return portalServer;
@@ -396,10 +391,9 @@ public class Configuration {
 	public String getPortalUrl() {
 		if (portalUrl == null) {
 			StringBuilder sb = new StringBuilder(portalServer);
-			if (!portalServer.endsWith("/") && !portalName.startsWith("/")) {
+			if (!portalServer.endsWith("/")) {
 				sb.append("/");
 			}
-			sb.append(portalName);
 			portalUrl = sb.toString();
 		}
 		return portalUrl;
@@ -481,14 +475,15 @@ public class Configuration {
 	}
 
 	public String getMyEuropeanaUrl() {
-		if (useNewMyEuropeanaUrl == null) {
-			if (StringUtils.isBlank(useNewMyEuropeanaUrlString)) {
-				useNewMyEuropeanaUrl = false;
-			} else {
-				useNewMyEuropeanaUrl = Boolean.parseBoolean(useNewMyEuropeanaUrlString.trim());
-			}
-		}
-		return (useNewMyEuropeanaUrl) ? NEW_MYEUROPEANA_URL : OLD_MYEUROPEANA_URL;
+//		if (useNewMyEuropeanaUrl == null) {
+//			if (StringUtils.isBlank(useNewMyEuropeanaUrlString)) {
+//				useNewMyEuropeanaUrl = false;
+//			} else {
+//				useNewMyEuropeanaUrl = Boolean.parseBoolean(useNewMyEuropeanaUrlString.trim());
+//			}
+//		}
+//		return (useNewMyEuropeanaUrl) ? NEW_MYEUROPEANA_URL : OLD_MYEUROPEANA_URL;
+		return NEW_MYEUROPEANA_URL;
 	}
 
 	public boolean useBackendTranslation() {

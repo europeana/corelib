@@ -7,7 +7,8 @@
 	under the Licence is distributed on an "AS IS" basis, without warranties 
 	or conditions of any kind, either express or implied. See the Licence for 
 	the specific language governing permissions and limitations under the Licence. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
@@ -24,14 +25,17 @@
 		<module>corelib-db</module>
 		<module>corelib-definitions</module>
 		<module>corelib-logging</module>
-		<module>corelib-solr</module>
+		<module>corelib-storage</module>
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
-		<module>corelib-solr-definitions</module>
-		<module>corelib-solr-dereference</module>
-		<module>corelib-solr-tools</module>
+		<module>corelib-edm-definitions</module>
+		<module>corelib-dereference</module>
+		<module>corelib-lookup</module>
 		<module>corelib-sugarcrm/bindings</module>
 		<module>corelib-sugarcrm/client</module>
+		<module>corelib-common-storage</module>
+		<module>corelib-hierarchies</module>
+		<module>corelib-search</module>
 	</modules>
 
 	<repositories>
@@ -60,7 +64,7 @@
 			<id>ext-snapshots</id>
 			<url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url>
 			<releases>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</releases>
 		</repository>
 		<repository>
@@ -85,6 +89,32 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>springbyexample.org</id>
+			<name>Spring by Example</name>
+			<url>http://www.springbyexample.org/maven/repo</url>
+		</repository>
+
+		<repository>
+			<id>com.springsource.repository.bundles.release</id>
+			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.external</id>
+			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
+		</repository>
+
+
+		<repository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<properties>
@@ -95,15 +125,15 @@
 		<version.servletJstl>1.2</version.servletJstl>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springCore>3.1.4.RELEASE</version.springCore>
-		<version.springSecurity>3.1.4.RELEASE</version.springSecurity>
-		<version.springSecurityOauth>1.0.5.RELEASE</version.springSecurityOauth>
+		<version.springCore>4.0.9.RELEASE</version.springCore>
+		<version.springSecurity>3.2.5.RELEASE</version.springSecurity>
+		<version.springSecurityOauth>2.0.5.BUILD-SNAPSHOT</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsIO>2.4</version.commonsIO>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
-		<version.jibx>1.2.3</version.jibx>
+		<version.jibx>1.2.5</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
-		<version.mongoDriver>2.10.1</version.mongoDriver>
+		<version.mongoDriver>2.12.4</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
