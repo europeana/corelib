@@ -67,6 +67,12 @@ public class MediaStorageClientImpl implements MediaStorageClient {
         final Map<String, String> metaData = (Map<String, String>) mongoMetaData.get(String.valueOf(MetaDataFields.TECHNICAL_METADATA));
 
         Integer size = null;
+
+        if (null == metaData) {
+            return new MediaFile(source, name, aliases, contentMd5, originalUrl, createdAt,
+                    content, versionNumber, contentType, metaData, size);
+        }
+
         if(metaData.containsKey("size")) {
             size = Integer.parseInt(metaData.get("size"));
         }
