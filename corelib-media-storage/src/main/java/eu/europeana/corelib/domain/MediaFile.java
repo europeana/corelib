@@ -109,7 +109,7 @@ public class MediaFile {
         this.content = content;
         this.versionNumber = versionNumber;
         this.contentType = contentType;
-        this.metaData = metaData;
+        this.metaData = (null == metaData) ? new HashMap<String, String>() : metaData;
         this.size = size;
     }
 
