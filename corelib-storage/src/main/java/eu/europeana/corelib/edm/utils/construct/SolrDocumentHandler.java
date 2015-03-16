@@ -90,7 +90,7 @@ public class SolrDocumentHandler implements ICollection {
 	 * @param fBean The FullBean to convert to a SolrInputDocument
 	 * @return The SolrInputDocument representation of the FullBean
 	 */
-	public SolrInputDocument generate(FullBeanImpl fBean){
+	public SolrInputDocument generate(FullBeanImpl fBean) throws SolrServerException{
 		SolrInputDocument doc = new SolrInputDocument();
 		List<LicenseImpl> licenses = fBean.getLicenses();
 		List<String> licIds = new ArrayList<String>();
@@ -152,10 +152,11 @@ public class SolrDocumentHandler implements ICollection {
 		extractCRFFields(doc, fBean.getProvidedCHOs().get(0).getAbout());
 		return doc;
 	}
-	private void extractCRFFields(SolrInputDocument doc, String about) {
+	
+	private void extractCRFFields(SolrInputDocument doc, String about) throws SolrServerException{
 		ModifiableSolrParams params = new ModifiableSolrParams();
 		params.add("q", ClientUtils.escapeQueryChars(about));
-		try {
+		
 
 			
 			SolrDocumentList resultList = solrServer.query(params).getResults();
@@ -166,10 +167,6 @@ public class SolrDocumentHandler implements ICollection {
 							retrievedDocument.getFieldValue(field));
 				}
 			}
-		} catch (SolrServerException e) {
-			Logger.getLogger(SolrDocumentHandler.class.getName()).log(
-					Level.SEVERE, null, e);
-		}
 
 	}
 
