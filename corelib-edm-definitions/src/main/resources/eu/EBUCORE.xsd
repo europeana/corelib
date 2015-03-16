@@ -112,11 +112,13 @@
       </documentation>
     </annotation>
   </element>
-  <simpleType name="OrientationType">
-    <restriction base="string">
-        <enumeration value="landscape"/>
-        <enumeration value="portrait"/>
-    </restriction>
-  </simpleType>
+   <complexType name="OrientationType">
+    <simpleContent>
+   <restriction base="rdf:StringType">
+     <enumeration value="landscape"/>
+     <enumeration value="portrait"/>
+   </restriction>
+    </simpleContent>
+  </complexType>
   
 </schema>
