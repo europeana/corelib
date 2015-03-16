@@ -265,7 +265,12 @@
         </restriction>
     </simpleType>
 
-
+    <simpleType name="ColorSpaceType">
+        <restriction base="string">
+            <enumeration value="sRGB"/>
+            <enumeration value="grayscale"/>
+        </restriction>
+    </simpleType>
 
     <element name="acronym" type="rdf:LiteralType">
         <annotation>
@@ -725,7 +730,7 @@
             </documentation>
         </annotation>
     </element>
-    <element name="hasColorSpace">
+    <element name="hasColorSpace" type="edm:ColorSpaceType">
         <annotation>
             <documentation>The color space of an image resource i.e. 'grayscale' or 'sRGB'. Example:
             <hasColorSpace>grayscale</hasColorSpace>

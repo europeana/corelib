@@ -96,7 +96,7 @@
       </documentation>
     </annotation>
   </element>
-   <element name="orientation" type="rdf:StringType">
+   <element name="orientation" type="ebucore:OrientationType">
     <annotation>
       <documentation>
        The orientation of a document or an image. Example:
@@ -112,4 +112,11 @@
       </documentation>
     </annotation>
   </element>
+  <simpleType name="OrientationType">
+    <restriction base="string">
+        <enumeration value="landscape"/>
+        <enumeration value="portrait"/>
+    </restriction>
+  </simpleType>
+  
 </schema>
