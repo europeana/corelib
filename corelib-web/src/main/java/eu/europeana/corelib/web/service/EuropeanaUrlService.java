@@ -8,7 +8,7 @@ import eu.europeana.corelib.web.utils.UrlBuilder;
 public interface EuropeanaUrlService {
 	// HARDCODED URLS
 	static final String URL_EUROPEANA 		= "http://www.europeana.eu";
-	static final String URL_IMAGE_SITE 		= "http://europeanastatic.eu/api/image";
+	//static final String URL_IMAGE_SITE 		= "http://europeanastatic.eu/api/image";
 
 	// ENCODING
 	static final String ENC_UTF8 			= "UTF-8";
@@ -17,7 +17,7 @@ public interface EuropeanaUrlService {
 	static final String PATH_RECORD 		= "record";
 	
 	// PORTAL PATHS
-	static final String PATH_PORTAL 		= "portal";
+	//static final String PATH_PORTAL 		= "portal";
 	static final String PATH_PORTAL_RESOLVE = "resolve";
 
 	// API PATHS

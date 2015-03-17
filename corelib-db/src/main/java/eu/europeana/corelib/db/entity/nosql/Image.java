@@ -20,6 +20,7 @@ package eu.europeana.corelib.db.entity.nosql;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.utils.ImageUtils;
 
 /**
@@ -56,7 +57,7 @@ public class Image {
 			setHeight(tmp.getHeight());
 			setWidth(tmp.getWidth());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.getLogger(this.getClass()).error(e.getMessage());
 		}
 	}
 

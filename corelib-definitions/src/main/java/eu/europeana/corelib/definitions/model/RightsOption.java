@@ -86,7 +86,8 @@ public enum RightsOption {
 	 */
 	//EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free Access - Rights Reserved", "icon-copyright", false, true),
 	// See #1287
-	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Free access - no re-use", "icon-copyright", false, true),
+	// See #1846
+	EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false, true),
 
 	// EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "eu_paid_access.jpg", "eu_paid_access.png"), // +transparent
 	/**
@@ -94,7 +95,8 @@ public enum RightsOption {
 	 */
 	//EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid Access - Rights Reserved", "icon-copyright", false, true),
 	// See #1241
-	EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid access - no re-use", "icon-copyright", false, true),
+	//EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Paid access - no re-use", "icon-copyright", false, true),
+	EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Rights Reserved - Paid Access", "icon-copyright", false, true),
 
 	// EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Restricted Access - Rights Reserved", "eu_restricted_access.jpg", "cc-restrictedaccess.png"), // +transparent
 	/**
@@ -117,7 +119,7 @@ public enum RightsOption {
 	 * http://www.europeana.eu/rights/out-of-copyright-non-commercial/
 	 */
 	OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
-			"Out of copyright - non commercial reuse", "icon-publicdomain icon-nceu", false, true);
+			"Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false, true);
 
 	private String url = null;
 	private String rightsText = null;

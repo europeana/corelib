@@ -43,12 +43,12 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.entity.Aggregation;
-import eu.europeana.corelib.definitions.solr.entity.Proxy;
-import eu.europeana.corelib.solr.exceptions.MongoDBException;
-import eu.europeana.corelib.solr.service.SearchService;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.search.SearchService;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -194,17 +194,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.NO_USER_ID);
 		}
 
-		/*
-		if (StringUtils.isBlank(oldPassword)) {
-			throw new DatabaseException(ProblemType.NO_OLD_PASSWORD);
-		}
-		*/
 
 		if (StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.NO_PASSWORD);
 		}
 
-		if ((userId == null) || StringUtils.isBlank(oldPassword)
+		if (StringUtils.isBlank(oldPassword)
 				|| StringUtils.isBlank(newPassword)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
@@ -428,6 +423,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		user.setLanguageSearch(languageCodes);
+		updateUserLanguageSearchApplied(userId, languageCodes.length > 0 );
 		return user;
 	}
 	

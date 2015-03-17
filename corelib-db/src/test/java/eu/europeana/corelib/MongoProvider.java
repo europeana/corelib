@@ -8,11 +8,14 @@ import com.mongodb.Mongo;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
-import eu.europeana.corelib.solr.exceptions.MongoDBException;
-import eu.europeana.corelib.solr.server.EdmMongoServer;
-import eu.europeana.corelib.solr.server.impl.EdmMongoServerImpl;
+import de.flapdoodle.embed.process.runtime.Network;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 
 public class MongoProvider {
 
@@ -20,10 +23,12 @@ public class MongoProvider {
 
 	public MongoProvider() {
 		int port = 10000;
-		MongodConfig conf = new MongodConfig(Version.V2_0_7, port, false);
+		try {
+			IMongodConfig conf = new MongodConfigBuilder()
+					.version(Version.Main.PRODUCTION)
+					.net(new Net(port, Network.localhostIsIPv6())).build();
 		MongodStarter runtime = MongodStarter.getDefaultInstance();
 		MongodExecutable mongodExecutable = runtime.prepare(conf);
-		try {
 			mongodExecutable.start();
 			Mongo mongo = new Mongo("localhost", port);
 			mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test", "",

@@ -28,32 +28,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
+import eu.europeana.corelib.definitions.edm.beans.BriefBean;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.definitions.solr.beans.BriefBean;
-import eu.europeana.corelib.definitions.solr.beans.FullBean;
-import eu.europeana.corelib.definitions.solr.beans.IdBean;
-import eu.europeana.corelib.definitions.solr.entity.Aggregation;
-import eu.europeana.corelib.definitions.solr.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.search.SearchService;
+import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.exceptions.MongoDBException;
-import eu.europeana.corelib.solr.exceptions.SolrTypeException;
-import eu.europeana.corelib.solr.model.ResultSet;
-import eu.europeana.corelib.solr.service.SearchService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
- * @see eu.europeana.corelib.solr.service.SearchService
+ * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceMock implements SearchService {
 

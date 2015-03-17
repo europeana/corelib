@@ -73,7 +73,7 @@ public class StringArrayUtils {
 	 * @return
 	 */
 	public static String[] toArray(List<String> list) {
-		if (list != null) {
+		if (list != null && list.size()>0) {
 			return list.toArray(new String[list.size()]);
 		}
 		return EMPTY_ARRAY;
