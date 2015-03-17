@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.bean.impl;
 import java.util.Date;
 import java.util.List;
 
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -89,6 +90,9 @@ public class FullBeanImpl implements FullBean, IDocument {
     protected boolean optOut;
 
     @Transient
+    protected List<WebResourceMetaInfo> webResourceMetaInfos;
+
+    @Transient
     protected List<BriefBeanImpl> similarItems;
 
     @Reference
@@ -131,6 +135,14 @@ public class FullBeanImpl implements FullBean, IDocument {
     /**
      * GETTERS & SETTTERS
      */
+    public List<WebResourceMetaInfo> getWebResourceMetaInfos() {
+        return this.webResourceMetaInfos;
+    }
+
+    public void setWebResourceMetaInfos(List<WebResourceMetaInfo> webResourceMetaInfos) {
+        this.webResourceMetaInfos = webResourceMetaInfos;
+    }
+
     @Override
     public List<PlaceImpl> getPlaces() {
         return this.places;

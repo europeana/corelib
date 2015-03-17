@@ -35,6 +35,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import eu.europeana.corelib.solr.bean.impl.*;
 import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.service.domain.ImageOrientation;
 import eu.europeana.corelib.solr.service.logic.SoundTagExtractor;
@@ -80,10 +81,6 @@ import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.solr.exceptions.MongoDBException;
 import eu.europeana.corelib.solr.exceptions.SolrTypeException;
 import eu.europeana.corelib.solr.model.ResultSet;
@@ -174,13 +171,34 @@ public class SearchServiceImpl implements SearchService {
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
 		long t0 = new Date().getTime();
 
-		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		if(fullBean !=null && isHierarchy(fullBean.getAbout())){
+        List<WebResourceMetaInfo> webMetaInfo = new ArrayList<>();
+		FullBeanImpl fullBean = (FullBeanImpl)mongoServer.getFullBean(europeanaObjectId);
+
+
+        WebResourceMetaInfo objMetaInfo = getMetaInfo(europeanaObjectId);
+
+        if (null != objMetaInfo) {
+            webMetaInfo.add(getMetaInfo(europeanaObjectId));
+        }
+
+		if(fullBean != null && isHierarchy(fullBean.getAbout())){
 			for(Proxy prx : fullBean.getProxies()){
 				prx.setDctermsHasPart(null);
-			}
+                WebResourceMetaInfo x = getMetaInfo(prx.getId().toString());
+
+                if (null != x) {
+                    webMetaInfo.add(x);
+                }
+            }
+
 		}
 		logTime("mongo findById", (new Date().getTime() - t0));
+
+        if( null != fullBean && !webMetaInfo.isEmpty()) {
+            fullBean.setWebResourceMetaInfos(webMetaInfo);
+        }
+
+
 		if (fullBean != null && similarItems) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
