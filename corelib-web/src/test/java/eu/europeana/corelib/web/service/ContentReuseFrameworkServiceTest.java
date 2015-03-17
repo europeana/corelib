@@ -64,6 +64,7 @@ public class ContentReuseFrameworkServiceTest {
 		return id;
 	}
 
+    // TODO: fix this test. ImageMetaInfo has new constructor
 	private class Image extends ImageMetaInfo {
 		private static final long serialVersionUID = 831205053322762451L;
 
@@ -72,7 +73,7 @@ public class ContentReuseFrameworkServiceTest {
 
 		public Image(String url, String hash, Integer width, Integer height,
 				String mimeType, String fileFormat, String colorSpace) {
-			super(width, height, mimeType, fileFormat, colorSpace);
+			// CHANGED: super(width, height, mimeType, fileFormat, colorSpace);
 			this.url = url;
 			this.hash = hash;
 		}

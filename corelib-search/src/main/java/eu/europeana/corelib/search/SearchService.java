@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -331,4 +332,12 @@ public interface SearchService {
 	Neo4jStructBean getInitialStruct(String nodeId);
 
 	boolean isHierarchy(String nodeId);
+
+    public Integer search(Integer mediaType, String mimeType, String imageSize,
+                          Boolean imageColor, Boolean imageGrayScale,
+                          String imageAspectRatio, String imageColorPalette,
+                          Boolean soundHQ, String soundDuration,
+                          Boolean videoHQ, String videoDuration);
+
+    public WebResourceMetaInfo getMetaInfo(String recordID);
 }

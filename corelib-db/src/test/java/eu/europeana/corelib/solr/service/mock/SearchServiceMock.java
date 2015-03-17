@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 
@@ -45,6 +46,7 @@ import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 
@@ -246,4 +248,14 @@ public class SearchServiceMock implements SearchService {
 	public boolean isHierarchy(String nodeId) {
 		return false;
 	}
+
+    @Override
+    public Integer search(Integer mediaType, String mimeType, String imageSize, Boolean imageColor, Boolean imageGrayScale, String imageAspectRatio, String imageColorPalette, Boolean soundHQ, String soundDuration, Boolean videoHQ, String videoDuration) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public WebResourceMetaInfo getMetaInfo(String recordID) {
+        throw new NotImplementedException();
+    }
 }

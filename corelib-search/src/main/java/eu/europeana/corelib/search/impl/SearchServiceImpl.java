@@ -17,6 +17,7 @@
 package eu.europeana.corelib.search.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,18 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
+import eu.europeana.corelib.search.service.domain.ImageOrientation;
+import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
+import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
+import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
+import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -120,11 +133,14 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	protected EdmMongoServer mongoServer;
 
+    @Resource(name = "corelib_solr_mongoServer_metainfo")
+    protected EdmMongoServer metainfoMongoServer;
+
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
         
-        @Resource(name = "corelib_solr_neo4jServer")
-        protected Neo4jServer neo4jServer;
+    @Resource(name = "corelib_solr_neo4jServer")
+    protected Neo4jServer neo4jServer;
 
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
@@ -686,7 +702,8 @@ public class SearchServiceImpl implements SearchService {
 	public boolean isHierarchy (String nodeId){
 		return neo4jServer.isHierarchy(nodeId);
 	}
-	@Override
+
+    @Override
 	public List<Neo4jBean> getChildren(String nodeId, int offset) {
 		return getChildren(nodeId, offset, 10);
 	}
@@ -797,6 +814,110 @@ public class SearchServiceImpl implements SearchService {
 	public Neo4jStructBean getInitialStruct(String nodeId) {
 		return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
 	}
+
+    // Filter tag generation
+
+    @Override
+    public Integer search(Integer mediaType, String mimeType, String imageSize,
+                          Boolean imageColor, Boolean imageGrayScale,
+                          String imageAspectRatio, String imageColorPalette,
+                          Boolean soundHQ, String soundDuration,
+                          Boolean videoHQ, String videoDuration) {
+        Integer tag = 0;
+
+        if(mimeType != null) {
+            mimeType = mimeType.toLowerCase();
+        }
+        if(imageSize != null) {
+            imageSize = imageSize.toLowerCase();
+        }
+        if(imageAspectRatio != null) {
+            imageAspectRatio = imageAspectRatio.toLowerCase();
+        }
+        if(imageColorPalette != null) {
+            imageColorPalette = imageColorPalette.toUpperCase();
+        }
+        if(soundDuration != null) {
+            soundDuration = soundDuration.toLowerCase();
+        }
+        if(videoDuration != null) {
+            videoDuration = videoDuration.toLowerCase();
+        }
+
+        switch(mediaType) {
+            case 1:
+                tag = searchImage(mimeType, imageSize, imageColor, imageGrayScale,
+                        imageAspectRatio, imageColorPalette);
+                break;
+            case 2:
+                tag = searchSound(mimeType, soundHQ, soundDuration);
+                break;
+            case 3:
+                tag = searchVideo(mimeType, videoHQ, videoDuration);
+                break;
+        }
+
+        return tag;
+    }
+
+    private Integer searchImage(final String mimeType, final String imageSize,
+                                final Boolean imageColor, final Boolean imageGrayScale,
+                                final String imageAspectRatio, final String imageColorPalette) {
+        ImageOrientation imageOrientation = null;
+        if(imageAspectRatio != null) {
+            if (imageAspectRatio.equals("portrait")) {
+                imageOrientation = ImageOrientation.PORTRAIT;
+            }
+            if (imageAspectRatio.equals("landscape")) {
+                imageOrientation = ImageOrientation.LANDSCAPE;
+            }
+        }
+
+        final Integer mediaTypeCode = 1;
+        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
+        final Integer fileSizeCode = ImageTagExtractor.getSizeCode(imageSize);
+        final Integer colorSpaceCode = ImageTagExtractor.getColorSpaceCode(imageColor, imageGrayScale);
+        final Integer aspectRatioCode = ImageTagExtractor.getAspectRatioCode(imageOrientation);
+        final Integer colorCode = ImageTagExtractor.getColorCode(imageColorPalette);
+
+        return mediaTypeCode<<25 | mimeTypeCode<<15 | fileSizeCode<<12 | colorSpaceCode<<10 | aspectRatioCode<<8 | colorCode;
+    }
+
+    private Integer searchSound(final String mimeType, final Boolean soundHQ, final String duration) {
+        final Integer mediaTypeCode = 2;
+        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
+        final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
+        final Integer durationCode = SoundTagExtractor.getDurationCode(duration);
+
+        return mediaTypeCode<<25 | mimeTypeCode<<15 | qualityCode<<13 | durationCode<<10;
+    }
+
+    private Integer searchVideo(final String mimeType, final Boolean videoQuality, final String duration) {
+        final Integer mediaTypeCode = 3;
+        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
+        final Integer qualityCode = VideoTagExtractor.getQualityCode(videoQuality);
+        final Integer durationCode = VideoTagExtractor.getDurationCode(duration);
+
+        return mediaTypeCode<<25 | mimeTypeCode<<15 | qualityCode<<13 | durationCode<<10;
+    }
+
+    @Override
+    public WebResourceMetaInfo getMetaInfo(String recordID) {
+        final DB db = metainfoMongoServer.getDatastore().getDB();
+        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
+
+        final BasicDBObject query = new BasicDBObject("_id", recordID);
+        final DBCursor cursor = webResourceMetaInfoColl.find(query);
+
+        final Type type = new TypeToken<WebResourceMetaInfo>(){}.getType();
+
+        if(cursor.hasNext()) {
+            return new Gson().fromJson(cursor.next().toString(), type);
+        }
+
+        return null;
+    }
+
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
