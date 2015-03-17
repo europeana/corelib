@@ -51,7 +51,8 @@ public class SolrDocumentHandler implements ICollection {
 	 * <field name="facet_tags" type="int" indexed="true" stored="true"
 	 * multiValued="true"/>
 	 */
-	private final List<String> inputFields = new ArrayList<String>(){/**
+	private final List<String> inputFields = new ArrayList<String>(){
+		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
