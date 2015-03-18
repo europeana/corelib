@@ -95,6 +95,7 @@
                     </sch:rule>
                 </sch:pattern>
             </appinfo>
+            
         </annotation>
 
         <complexContent>
@@ -103,6 +104,7 @@
                     <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:collectionName" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:datasetName" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    

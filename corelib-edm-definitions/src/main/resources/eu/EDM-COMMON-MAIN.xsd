@@ -150,10 +150,14 @@
             <enumeration value="Andorra"/>
             <enumeration value="Armenia"/>
             <enumeration value="Austria"/>
+            <enumeration value="Azerbaijan"/>
+            <enumeration value="Australia"/>
             <enumeration value="Belarus"/>
             <enumeration value="Belgium"/>
             <enumeration value="Bosnia and Herzegovina"/>
             <enumeration value="Bulgaria"/>
+            <enumeration value="Canada"/>
+            <enumeration value="China"/>
             <enumeration value="Croatia"/>
             <enumeration value="Cyprus"/>
             <enumeration value="Czech Republic"/>
@@ -165,12 +169,18 @@
             <enumeration value="Georgia"/>
             <enumeration value="Germany"/>
             <enumeration value="Greece"/>
+            <enumeration value="Holy See (Vatican City State)"/>
             <enumeration value="Hungary"/>
             <enumeration value="Iceland"/>
+            <enumeration value="India"/>
             <enumeration value="Ireland"/>
             <enumeration value="Italy"/>
             <enumeration value="Israel"/>
+            <enumeration value="Japan"/>
+            <enumeration value="Kazakhstan"/>
+            <enumeration value="Korea, Republic of"/>
             <enumeration value="Latvia"/>
+            <enumeration value="Lebanon"/>
             <enumeration value="Liechtenstein"/>
             <enumeration value="Lithuania"/>
             <enumeration value="Luxembourg"/>
@@ -195,14 +205,20 @@
             <enumeration value="Turkey"/>
             <enumeration value="Ukraine"/>
             <enumeration value="United Kingdom"/>
+            <enumeration value="United States of America"/>
         </restriction>
     </simpleType>
     
     <simpleType name="LanguageCodes">
         <restriction base="string">
+            <enumeration value="ar"/>
+            <enumeration value="az"/>
+            <enumeration value="be"/>
             <enumeration value="bg"/>
+            <enumeration value="bs"/>
             <enumeration value="ca"/>
             <enumeration value="cs"/>
+            <enumeration value="cy"/>
             <enumeration value="da"/>
             <enumeration value="de"/>
             <enumeration value="el"/>
@@ -214,13 +230,18 @@
             <enumeration value="fr"/>
             <enumeration value="ga"/>
             <enumeration value="gd"/>
+            <enumeration value="gl"/>
             <enumeration value="he"/>
+            <enumeration value="hi"/>
             <enumeration value="hr"/>
             <enumeration value="hu"/>
+            <enumeration value="hy"/>
             <enumeration value="ie"/>
             <enumeration value="is"/>
             <enumeration value="it"/>
+            <enumeration value="ja"/>
             <enumeration value="ka"/>
+            <enumeration value="ko"/>
             <enumeration value="lt"/>
             <enumeration value="lv"/>
             <enumeration value="mk"/>
@@ -234,16 +255,22 @@
             <enumeration value="ru"/>
             <enumeration value="sk"/>
             <enumeration value="sl"/>
+            <enumeration value="sq"/>
             <enumeration value="sr"/>
             <enumeration value="sv"/>
             <enumeration value="tr"/>
             <enumeration value="uk"/>
             <enumeration value="yi"/>
-            <enumeration value="cy"/>
+            <enumeration value="zh"/>
         </restriction>
     </simpleType>
 
-
+    <simpleType name="ColorSpaceType">
+        <restriction base="string">
+            <enumeration value="sRGB"/>
+            <enumeration value="grayscale"/>
+        </restriction>
+    </simpleType>
 
     <element name="acronym" type="rdf:LiteralType">
         <annotation>
@@ -281,7 +308,9 @@
 
     <element name="collectionName" type="rdf:LiteralType">
         <annotation>
-            <documentation>A literal indicating the name of the collection</documentation>
+            <documentation>Deprecated:A literal indicating the name of the collection
+            Use <datasetName/> instead
+            </documentation>
         </annotation>
     </element>
     
@@ -555,6 +584,17 @@
                 uk:Ukrainian
                 yi:Yiddish
                 cy:Welsh
+                sq:Albanian
+                hy:Armenian
+                az:Azerbaijani
+                be:Belarusian
+                bs:Bosnian
+                gl:Galician
+                ja:Japanese
+                ar:Arabic
+                ko:Korean
+                zh:Chinese
+                hi:Hindi
                 </documentation>
         </annotation>
     </element>
@@ -676,5 +716,33 @@
             </documentation>
         </annotation>
     </element>
-       
+    <element name="codecName" type="string">
+        <annotation>
+            <documentation>The name of a device or computer program capable of encoding or decoding a digital data stream or signal (i.e. coder-decoder). Example:
+            <codecName>mp4v</codecName>
+            </documentation>
+        </annotation>
+    </element>
+    <element name="spatialResolution" type="rdf:NonNegativeIntegerType">
+        <annotation>
+            <documentation>The spatial resolution of a media resource expressed in DPIs. Example:
+            <spatialResolution>300</spatialResolution>
+            </documentation>
+        </annotation>
+    </element>
+    <element name="hasColorSpace" type="edm:ColorSpaceType">
+        <annotation>
+            <documentation>The color space of an image resource i.e. 'grayscale' or 'sRGB'. Example:
+            <hasColorSpace>grayscale</hasColorSpace>
+            </documentation>
+        </annotation>
+    </element>
+    <element name="componentColor" type="rdf:HexBinaryType">
+        <annotation>
+            <documentation>A significant color present in an image. The colors must be taken from the CSS3 standard color palette 
+            and are expressed as a hexadecimal binary value. Example:
+            <spatialResolution>FF0000</spatialResolution>
+            </documentation>
+        </annotation>
+    </element>
 </schema>
