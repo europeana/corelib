@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -36,6 +35,7 @@ import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query

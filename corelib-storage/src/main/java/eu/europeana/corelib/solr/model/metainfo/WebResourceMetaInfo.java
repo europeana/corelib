@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.model.metainfo;
+package eu.europeana.corelib.solr.model.metainfo;
 
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Property;

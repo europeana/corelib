@@ -52,8 +52,10 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
+
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.FullBean
@@ -88,6 +90,9 @@ public class FullBeanImpl implements FullBean, IDocument {
     protected int europeanaCompleteness;
 
     protected boolean optOut;
+
+    @Transient
+    protected List<WebResourceMetaInfo> webResourceMetaInfos;
 
     @Transient
     protected List<BriefBeanImpl> similarItems;
@@ -132,6 +137,14 @@ public class FullBeanImpl implements FullBean, IDocument {
     /**
      * GETTERS & SETTTERS
      */
+    public List<WebResourceMetaInfo> getWebResourceMetaInfos() {
+        return this.webResourceMetaInfos;
+    }
+
+    public void setWebResourceMetaInfos(List<WebResourceMetaInfo> webResourceMetaInfos) {
+        this.webResourceMetaInfos = webResourceMetaInfos;
+    }
+
     @Override
     public List<PlaceImpl> getPlaces() {
         return this.places;

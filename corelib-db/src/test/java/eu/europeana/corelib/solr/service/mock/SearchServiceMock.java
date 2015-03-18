@@ -46,9 +46,9 @@ import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
-import eu.europeana.corelib.search.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
