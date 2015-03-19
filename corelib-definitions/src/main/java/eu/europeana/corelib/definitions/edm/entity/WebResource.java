@@ -19,6 +19,10 @@ package eu.europeana.corelib.definitions.edm.entity;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.model.ColorSpace;
+import eu.europeana.corelib.definitions.model.Orientation;
+import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
+
 /**
  * EDM WebResource Fields implementation
  * 
@@ -178,12 +182,120 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
 
+	/**
+	 * dc:creator for edm:WebResource
+	 * @return
+	 */
 	Map<String, List<String>> getDcCreator();
-
+	/**
+	 * dc:creator for edm:WebResource
+	 */
+	
 	void setDcCreator(Map<String, List<String>> dcCreator);
-	
+	/**
+	 * owl:sameAs for edm:WebResource
+	 */
 	void setOwlSameAs(String[] owlSameAs);
-	
+	/**
+	 * owl:sameAs for edm:WebResource
+	 * @return
+	 */
 	String[] getOwlSameAs();
 
+	/**
+	 * rdf:type for edm:WebResource
+	 * @return
+	 */
+	String getRdfType();
+	
+	/**
+	 * edm:codecName
+	 * @return
+	 */
+	String getEdmCodecName();
+	
+	/**
+	 * ebucore:hasMimeType
+	 * @return
+	 */
+	String getEbucoreHasMimeType();
+	
+	/**
+	 * ebucore:fileByteSize
+	 * @return
+	 */
+	Long getEbucoreFileByteSize();
+	
+	/**
+	 * ebucore:duration
+	 * @return
+	 */
+	String getEbucoreDuration();
+	
+	/**
+	 * ebucore:width
+	 * @return
+	 */
+	Integer getEbucoreWidth();
+	
+	/**
+	 * ebucore:height
+	 * @return
+	 */
+	Integer getEbucoreHeight();
+	
+	/**
+	 * edm:spatialResolution
+	 * @return
+	 */
+	Integer getEdmSpatialResolution();
+	
+	
+	/**
+	 * ebucore:sampleSize
+	 * @return
+	 */
+	Integer getEbucoreSampleSize();
+	
+	
+	/**
+	 * ebucore:sampleRate
+	 * @return
+	 */
+	Integer getEbucoreSampleRate();
+	
+	/**
+         * ebucore:frameRate
+         */
+        Double getEbucoreFrameRate();
+	/**
+	 * ebucore:bitRate
+	 * @return
+	 */
+	Integer getEbucoreBitRate();
+	
+	/**
+	 * edm:hasColorSpace
+	 * @return
+	 */
+	ColorSpace getEdmHasColorSpace();
+	
+	
+	/**
+	 * edm:componentColor
+	 * @return
+	 */
+	List<String> getEdmComponentColor();
+	
+	
+	
+	/**
+	 * ebucore:orientation
+	 * @return
+	 */
+	Orientation getEbucoreOrientation();
+	
+	void setSourceDocumentReferenceMetaInfo(SourceDocumentReferenceMetaInfo sourceDocumentReferenceMetaInfo);
+	
+	SourceDocumentReferenceMetaInfo getSourceDocumentReferenceMetaInfo();
 }

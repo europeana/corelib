@@ -1,4 +1,4 @@
-package eu.europeana.corelib.solr.model.metainfo;
+package eu.europeana.corelib.edm.model.metainfo;
 
 /**
  * An enum of possible image orientations.

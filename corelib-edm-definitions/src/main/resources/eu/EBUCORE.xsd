@@ -31,7 +31,7 @@
       </documentation>
     </annotation>
   </element>
-  <element name="hasMimeType">
+  <element name="hasMimeType" type="string">
     <annotation>
       <documentation>
        The main MIME types as defined by IANA: e.g. audio, video, text, application, or a container MIME type. Example:
@@ -40,7 +40,7 @@
     </annotation>
   </element>
   
-  <element name="duration">
+  <element name="duration" type="string">
     <annotation>
       <documentation>
        The duration of a track or a signal expressed in ms. Example:

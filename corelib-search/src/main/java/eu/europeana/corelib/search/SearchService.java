@@ -32,10 +32,10 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.search.model.ResultSet;
-import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query
