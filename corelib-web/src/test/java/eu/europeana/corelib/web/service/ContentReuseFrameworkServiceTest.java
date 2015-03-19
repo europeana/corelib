@@ -27,7 +27,7 @@ import eu.europeana.harvester.domain.ImageMetaInfo;
 @ContextConfiguration({"/corelib-web-context.xml", "/corelib-web-test.xml"})
 @Ignore
 public class ContentReuseFrameworkServiceTest {
-
+//TODO: Unit tests should never depend on an actual server. Refactor
 	@Resource(name = "corelib_web_contentReuseFrameworkService")
 	private ContentReuseFrameworkService crfService;
 
