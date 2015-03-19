@@ -1,0 +1,164 @@
+// SIP-Creator Mapping file
+
+// ## RecordRoot {http://www.openarchives.org/OAI/2.0/}metadata 1238862
+
+// ConstantField collectionId 9200103
+// ConstantField collectionName 
+// ConstantField europeana_provider 
+// ConstantField europeana_language fr
+// ConstantField europeana_country france
+
+output.record {
+
+//<<<dc_contributor
+input.record.dc_contributor.each {
+dc.contributor it
+}
+//>>>
+
+//<<<dc_coverage
+input.record.dc_coverage.each {
+dc.coverage it
+}
+//>>>
+
+//<<<dc_creator
+input.record.dc_creator.each {
+dc.creator it
+}
+//>>>
+
+//<<<dc_date
+input.record.dc_date.each {
+dc.date it
+}
+//>>>
+
+//<<<dc_description
+input.record.dc_description.each {
+dc.description it
+}
+//>>>
+
+//<<<dc_format
+input.record.dc_format.each {
+dc.format it
+}
+//>>>
+
+//<<<dc_identifier
+input.record.dc_identifier.each {
+dc.identifier it
+}
+//>>>
+
+//<<<dc_language
+input.record.dc_language.each {
+dc.language it
+}
+//>>>
+
+//<<<dc_publisher
+input.record.dc_publisher.each {
+dc.publisher it
+}
+//>>>
+
+//<<<dc_relation
+input.record.dc_relation.each {
+dc.relation it
+}
+//>>>
+
+//<<<dc_source
+input.record.dc_source.each {
+dc.source it
+}
+//>>>
+
+//<<<dc_subject
+input.record.dc_subject.each {
+dc.subject it
+}
+//>>>
+
+//<<<dc_title
+input.record.dc_title.each {
+dc.title it
+}
+//>>>
+
+//<<<dc_type
+input.record.dc_type.each {
+dc.type it
+}
+//>>>
+
+//<<<europeana_country
+europeana.country europeana_country
+//>>>
+
+//<<<europeana_dataProvider
+input.record.europeana_dataProvider.each {
+europeana.dataProvider it
+}
+//>>>
+
+//<<<europeana_isShownAt
+input.record.europeana_isShownAt.each {
+europeana.isShownAt it
+}
+//>>>
+
+//<<<europeana_isShownBy
+input.record.europeana_isShownBy.each {
+europeana.isShownBy it
+}
+//>>>
+
+//<<<europeana_language
+europeana.language europeana_language
+//>>>
+
+//<<<europeana_object
+input.record.europeana_object.each {
+europeana.object it
+}
+//>>>
+
+//<<<europeana_type
+europeana.type input.record.europeana_type[0]
+//>>>
+
+//<<<europeana_unstored
+input.record.europeana_unstored.each {
+europeana.unstored it
+}
+//>>>
+
+//<<<europeana_provider
+europeana.provider input.record.europeana_provider[0]
+//>>>
+
+//<<<europeana_uri
+europeana.uri createEuropeanaURI(input.record.europeana_isShownBy[0])
+//>>>
+
+//<<<europeana_type
+europeana.type input.record.europeana_type[0]
+//>>>
+
+//<<<europeana_rights
+input.record.europeana_right.each {
+europeana.rights it
+}
+//>>>
+
+//<<<europeana_year
+input.record.dc_date.each {
+for (part in extractYear(it)) {
+europeana.year part
+}
+}
+//>>>
+}

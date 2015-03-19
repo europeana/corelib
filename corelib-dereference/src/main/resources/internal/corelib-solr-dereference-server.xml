@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+/*
+ * Copyright 2007 EDL FOUNDATION
+ *
+ * Licensed under the EUPL, Version 1.1 or - as soon they 
+ * will be approved by the European Commission - subsequent
+ * versions of the EUPL (the "License");
+ * you may not use this work except in compliance with the
+ * License.
+ * You may obtain a copy of the License at:
+ *
+ * http://ec.europa.eu/idabc/eupl
+ *
+ * Unless required by applicable law or agreed to in
+ * writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied.
+ * See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+ -->
+
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+	
+	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being started when not used...
+	
+	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer" lazy-init="true">
+		<constructor-arg value="#{europeanaProperties['solr.url']}"/>
+		<property name="followRedirects" value="false"/>	
+		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
+		<property name="defaultMaxConnectionsPerHost" value="64"/>
+		<property name="maxTotalConnections" value="125"/>
+	</bean>
+	
+	<bean id="corelib_solr_solrEmbedded" class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer" lazy-init="true">
+		<constructor-arg>
+			<bean class="org.apache.solr.core.CoreContainer">
+				<constructor-arg value="#{europeanaProperties['solr.embedded.url']}"/>
+				<constructor-arg value="#{europeanaProperties['solr.embedded.config']}"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg value="collection1"/>
+	</bean>
+ -->
+
+	<bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.dereference.impl.VocabularyMongoServerImpl">
+		<constructor-arg ref="corelib_solr_mongo"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.vocabularydbname']}" type="java.lang.String"/>
+	</bean>
+</beans>

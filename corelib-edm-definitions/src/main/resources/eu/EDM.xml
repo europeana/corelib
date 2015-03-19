@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="EDM-INTERNAL.xsd" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<rdf:RDF xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM-INTERNAL.xsd"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:edm="http://www.europeana.eu/schemas/edm/"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/"
+ xmlns:ore="http://www.openarchives.org/ore/terms/"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+ xmlns:owl="http://www.w3.org/2002/07/owl#"
+ xmlns:crm="http://www.cidoc-crm.org/rdfs/cidoc_crm_v5.0.2_english_label.rdfs#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+ xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+ xmlns:xalan="http://xml.apache.org/xalan">
+  <edm:ProvidedCHO rdf:about="#GNM:711731"/>
+  <edm:WebResource rdf:about="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135931221_2.jpg">
+    <dcterms:hasPart rdf:resource="http://apart"/>
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </edm:WebResource>
+  <edm:WebResource rdf:about="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135961721_2.jpg">
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </edm:WebResource>
+  <edm:WebResource rdf:about="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135991487_2.jpg">
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </edm:WebResource>
+  <edm:WebResource rdf:about="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273136021972_2.jpg">
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </edm:WebResource>
+  <edm:Agent rdf:about="http://www.mimo-db.eu/InstrumentMaker/Person/3151">
+    <skos:prefLabel>Martin Steinbacher</skos:prefLabel>
+  </edm:Agent>
+  <edm:Place rdf:about="http://sws.geonames.org/2952984/">
+    <skos:prefLabel xml:lang="de">Bamberg</skos:prefLabel>
+  </edm:Place>
+  <skos:Concept rdf:about="http://www.mimo-db.eu/InstrumentsKeywords/2308">
+    <skos:prefLabel>Square pianoforte</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://www.mimo-db.eu/HornbostelAndSachs/6458">
+    <skos:prefLabel xml:lang="en">314.122-4-8 True board zithers with resonator box (box zither) sounded by hammers or beaters, with keyboard</skos:prefLabel>
+  </skos:Concept>
+  <ore:Aggregation rdf:about="http://www.mimo-db.eu/GNM/711731">
+    <edm:aggregatedCHO rdf:resource="#GNM:711731"/>
+    <edm:dataProvider>Germanisches Nationalmuseum</edm:dataProvider>
+    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135931221_2.jpg"/>
+    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135961721_2.jpg"/>
+    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135991487_2.jpg"/>
+    <edm:hasView rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273136021972_2.jpg"/>
+    <edm:isShownAt rdf:resource="http://www.mimo-db.eu/GNM/711731"/>
+    <edm:isShownBy rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135931221_2.jpg"/>
+    <edm:object rdf:resource="http://www.mimo-db.eu/media/GNM/IMAGE/MINe173_1273135931221_2.jpg"/>
+    <edm:provider>MIMO - Musical Instrument Museums Online</edm:provider>
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </ore:Aggregation>
+  <ore:Proxy rdf:about="#GNM:711731">
+    <dc:coverage rdf:resource="http://sws.geonames.org/2952984/"/>
+    <dc:creator rdf:resource="http://www.mimo-db.eu/InstrumentMaker/Person/3151"/>
+    <dc:creator>Steinbacher</dc:creator>
+    <dc:date>1793</dc:date>
+    <dc:description xml:lang="de">Umfang: F1 - f3 (F1 - f4 Karteikarte?). Stoßmechanik. 2 Handhebel: geteiltes Forte und Kniedrücker (2 Kniehebel Karteikarte ?): Laute</dc:description>
+    <dc:identifier>#GNM:711731</dc:identifier>
+    <dc:title xml:lang="de">Tafelklavier</dc:title>
+    <dc:type rdf:resource="http://www.mimo-db.eu/InstrumentsKeywords/2308"/>
+    <dc:type rdf:resource="http://www.mimo-db.eu/HornbostelAndSachs/6458"/>
+    <edm:type>IMAGE</edm:type>
+  </ore:Proxy>
+  <edm:EuropeanaAggregation rdf:about="#GNM:711731">
+    <edm:aggregatedCHO rdf:resource="#GNM:711731"/>
+    <edm:country>Bulgaria</edm:country>
+    <edm:language>bg</edm:language>
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+  </edm:EuropeanaAggregation>
+</rdf:RDF>

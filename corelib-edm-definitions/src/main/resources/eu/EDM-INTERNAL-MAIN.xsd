@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007-2012 The Europeana Foundation
+ 
+   Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+   by the European Commission;
+   You may not use this work except in compliance with the Licence.
+  
+   You may obtain a copy of the Licence at:
+   http://joinup.ec.europa.eu/software/page/eupl
+ 
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+   any kind, either express or implied.
+   See the Licence for the specific language governing permissions and limitations under
+   the Licence.
+-->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.europeana.eu/schemas/edm/"
+    xmlns:edm="http://www.europeana.eu/schemas/edm/" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
+    xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:ore="http://www.openarchives.org/ore/terms/"
+    xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:dcat="http://www.w3.org/ns/dcat#"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+
+    <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
+    <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
+    <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd"/>
+    <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+    <import namespace="http://www.europeana.eu/schemas/edm/enrichment/" schemaLocation="ENRICHMENT.xsd"/>
+    <import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd"/>
+    <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
+    <import namespace="http://xmlns.com/foaf/0.1/" schemaLocation="FOAF.xsd"/>
+    <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
+    <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
+    <import namespace="http://www.w3.org/ns/dcat#" schemaLocation="DCAT.xsd"/>
+   	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
+    <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
+    <include schemaLocation="CONTEXTS.xsd"/>
+ 
+    <complexType name="RDF">
+        <annotation>
+            <documentation> The RDF root element declaration </documentation>
+            <!-- Declared namespaces for schematron validation -->
+            <appinfo>
+                <sch:title>Schematron validation</sch:title>
+                <sch:ns prefix="edm" uri="http://www.europeana.eu/schemas/edm/" />
+                <sch:ns prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+                <sch:ns prefix="dct" uri="http://purl.org/dc/terms/" />
+                <sch:ns prefix="ore" uri="http://www.openarchives.org/ore/terms/" />
+                <sch:ns prefix="owl" uri="http://www.w3.org/2002/07/owl#" />
+                <sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+                <sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
+                <sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
+            </appinfo>
+        </annotation>
+        <sequence minOccurs="1" maxOccurs="1">
+            <element name="ProvidedCHO" type="edm:ProvidedCHOType" minOccurs="1" maxOccurs="unbounded"/>
+            <element name="WebResource" type="edm:WebResourceType"  minOccurs="0" maxOccurs="unbounded"/>
+            <element name="Agent" type="edm:AgentType" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="Place" type="edm:PlaceType" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="TimeSpan" type="edm:TimeSpanType" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="skos:Concept" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="ore:Aggregation" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="ore:Proxy"  minOccurs="1" maxOccurs="unbounded"/>
+            <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="cc:License" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="foaf:Organization" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="dcat:Dataset" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="EuropeanaAggregationType">
+        <annotation>
+            <documentation> The set of resources related to a single cultural heritage object that
+                collectively represent that object in Europeana. Such set consists of: all
+                descriptions about the object that Europeana collects from (possibly different)
+                content providers, including thumbnails and other forms of abstractions, as well as
+                of the description of the object Europeana builds. </documentation>
+            <appinfo>
+                <sch:pattern>
+                    <sch:rule context="edm:EuropeanaAggregation">
+                        <sch:assert test="not(@rdf:about = '')"> 
+                            Empty rdf:about values are not allowed
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </appinfo>
+        </annotation>
+
+        <complexContent>
+            <extension base="rdf:AboutType">
+                <sequence>
+                    <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:collectionName" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    
+                    <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:landingPage" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:language" maxOccurs="1" minOccurs="1"/>
+                    <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
+                    <element ref="ore:aggregates" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="ProvidedCHOType">
+        <complexContent>
+            <annotation>
+                <documentation> This class comprises the Cultural Heritage objects that
+                    Europeana collects descriptions about. </documentation>
+            </annotation>
+            <extension base="rdf:AboutType">
+                <sequence>
+                    <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+</schema>

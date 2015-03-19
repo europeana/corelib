@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-common-storage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-db" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-definitions" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-dereference" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-edm-definitions" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-hierarchies" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-logging" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-lookup" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-media-storage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-solr" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-solr-definitions" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-solr-dereference" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-solr-tools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-storage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-sugarcrm/bindings" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-sugarcrm/client" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/corelib-web" charset="UTF-8" />
+  </component>
+</project>
+

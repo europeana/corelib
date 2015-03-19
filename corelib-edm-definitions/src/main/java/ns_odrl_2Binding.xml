@@ -1,0 +1,6 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/ns/odrl/2/" default="elements" prefix="odrl"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.InheritFrom" name="inheritFrom">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+</binding>

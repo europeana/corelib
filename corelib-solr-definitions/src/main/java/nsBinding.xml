@@ -1,0 +1,11 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://creativecommons.org/ns#" default="elements" prefix="cc"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.DateType" name="deprecatedOn">
+    <structure map-as="rdf:DateType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.License" name="License">
+    <structure map-as="rdf:AboutType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.InheritFrom" get-method="getInheritFrom" set-method="setInheritFrom"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DateType" get-method="getDeprecatedOn" set-method="setDeprecatedOn" usage="optional"/>
+  </mapping>
+</binding>

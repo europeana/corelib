@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:europeana="http://www.europeana.eu" xmlns:dcterms="http://purl.org/dc/terms/">
+<record>
+   <dc:creator>Congrès national des bourses du travail de France et des colonies. Congrès (06 ; 1897 ; Toulouse)</dc:creator>
+   <dc:date>1897</dc:date>
+   <dc:format>111 p. ; in-8</dc:format>
+   <dc:format>application/pdf</dc:format>
+   <dc:identifier>http://gallica.bnf.fr/ark:/12148/bpt6k109918t</dc:identifier>
+   <dc:language>fre</dc:language>
+   <dc:publisher>impr. de G. Berthoumieu (Toulouse)</dc:publisher>
+   <dc:relation>Notice du catalogue : http://catalogue.bnf.fr/ark:/12148/cb33320549f</dc:relation>
+   <dc:source>Bibliothèque nationale de France, département Philosophie, histoire, sciences de l'homme, 8-R-15407 (1897)</dc:source>
+   <dc:title>Compte rendu des travaux du congrès / VIe Congrès de la Fédération nationale des Bourses du travail, tenu à Toulouse les 15, 16, 17 et 18 septembre 1897</dc:title>
+   <dc:type>text</dc:type>
+   <dc:type>monographie imprimée</dc:type>
+   <dc:type>printed monograph</dc:type>
+   <europeana:country>france</europeana:country>
+   <europeana:dataProvider>French National Library - Bibliothèque Nationale de France</europeana:dataProvider>
+   <europeana:isShownAt>http://gallica.bnf.fr/ark:/12148/bpt6k109918t</europeana:isShownAt>
+   <europeana:isShownBy>http://gallica.bnf.fr/ark:/12148/bpt6k109918t/f1.zoom</europeana:isShownBy>
+   <europeana:language>fr</europeana:language>
+   <europeana:object>http://gallica.bnf.fr/ark:/12148/bpt6k109918t.thumbnail.jpg</europeana:object>
+   <europeana:provider>The European Library</europeana:provider>
+   <europeana:rights>http://creativecommons.org/publicdomain/mark/1.0/</europeana:rights>
+   <europeana:type>TEXT</europeana:type>
+   <europeana:unstored>http://gallica.bnf.fr/ark:/12148/bpt6k109918t/texteBrut</europeana:unstored>
+   <europeana:uri>http://www.europeana.eu/resolve/record/9200103/D8FCD2D6798989C5BD6D8727B6DB16E94E573ECD</europeana:uri>
+   <europeana:year>1897</europeana:year>
+</record>
+</metadata>
