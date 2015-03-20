@@ -790,7 +790,8 @@ public class CommonPropertyExtractor {
     }
 
     public static String getMimeType(Integer tag) {
-        final Integer mimeTypeCode = (tag<<7)>>22;
+        final Integer mask = ((1 << 10) - 1) << 15;
+        final Integer mimeTypeCode = (tag & mask) >> 15;
 
         return mimeTypes.get(mimeTypeCode);
     }
