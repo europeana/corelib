@@ -1,0 +1,559 @@
+     @prefix : <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix DOLCE-Lite: <http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#> .
+     @prefix abc: <http://metadata.net/harmony/abc#> .
+     @prefix adms: <http://www.w3.org/ns/adms#> .
+     @prefix crm: <http://www.cidoc-crm.org/rdfs/cidoc-crm#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+     @prefix dcterms: <http://purl.org/dc/terms/> .
+     @prefix edm: <http://www.europeana.eu/schemas/edm/> .
+     @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+     @prefix frbr_core: <http://purl.org/vocab/frbr/core#> .
+     @prefix ore: <http://www.openarchives.org/ore/terms/> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+     @prefix radion: <http://www.w3.org/ns/radion#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+     @prefix vann: <http://purl.org/vocab/vann/> .
+     @prefix voaf: <http://purl.org/vocommons/voaf#> .
+     @prefix wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+     @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+    
+    <>     a voaf:Vocabulary,
+                owl:Ontology;
+         dc:contributor  [
+             a foaf:Organization;
+             foaf:name "Participants of Europeana Version 1.0 Work Package on Further Specification of Functionality and Interoperability aspects of Europeana (WP3)" ],
+                 [
+             a foaf:Person;
+             foaf:name "Hugo Manguinhas" ],
+                <http://www.ibi.hu-berlin.de/institut/personen/iwanowa>,
+                <http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2>,
+                <http://www.image.ece.ntua.gr/~ndroso/>,
+                <http://www.image.ntua.gr/~tzouvaras/>;
+         dc:creator <http://data.semanticweb.org/person/antoine-isaac>;
+         dc:description "The Europeana Data Model (EDM) is aimed at being an integration medium for collecting, connecting and enriching the descriptions provided by Europeana data providers. The RDF vocabulary for http://www.europeana.eu/schemas/edm/ defines the elements introduced by EDM (as opposed to the ones EDM re-uses from other namespaces)."@en;
+         dc:issued "2010-03-25"^^xsd:date;
+         dc:modified "2012-08-20"^^xsd:date;
+         dc:publisher <http://europeana.eu>;
+         dc:title "Europeana Data Model (EDM) vocabulary"@en;
+         vann:changes """
+=======
+Changes between EDM-v524-120820.owl
+and EDM-v523-120123.owl
+=======
+1. edm:isShownAt made a sub-property of edm:hasView
+2. added edm:begin and edm:end and their mappings to CRM
+3. added owl:Class declarations added for compatibility with some OWL-DL reasoners (feedback from Pedro Szekely, ISI)
+4. added "of" at the end of the label for edm:isNextInSequence
+5. added vocabulary metadata to follow Linked Open Vocabularies (http://lov.okfn.org/) and ADMS (https://joinup.ec.europa.eu/asset/adms/release/100) guidelines
+6. removed a domain axiom on edm:hasMet
+7. added edm:collectionName and edm:europeanaProxy
+      """@en;
+         vann:example <http://data.europeana.eu>,
+                <http://pro.europeana.eu/case-studies-edm>;
+         vann:preferredNamespacePrefix "edm";
+         vann:preferredNamespaceUri "http://www.europeana.eu/schemas/edm/";
+         voaf:toDoList """
+=======
+Remaining TODOs for EDM-v524-120820.owl
+=======
+- change FRBR namespace and mappings using FRBRoo namespace or http://metadataregistry.org/schema/show/id/5.html
+- add Martin's mapping to FRBR(oo) for edm:incorporates (equivalent to crm:R14F.incorporates) and edm:WebResource (subclass of F24 Publication Expression)
+- try to capture formal cardinality constraints resulting from "Obligation and Occurrence" documentation, which should be attached to non-EDM constructs (esp. ore:Aggregation)
+- continue adding documentation values (skos:scopeNote, skos:example, etc, according to 1.), starting from edm:InformationResource. Add all Europeana examples and rationale notes for non-EDM constructs
+- use specific EDM-doc properties for "rationale" and "obligation and occurrence". Use skos:definition for "Europeana definition", skos:example for "Example", skos:note for "Europeana note"
+      """@en;
+         owl:versionInfo "5.2.4";
+         adms:relatedWebPage <http://europeanalabs.eu/wiki/EDMPrototypingTask11>;
+         radion:versionNotes """The present specification is based on the document "Definition of the Europeana Data Model elements", originally edited by Carlo Meghini. It is aligned with the version 5.2.4 of these EDM Definitions."""@en;
+         foaf:homePage <http://pro.europeana.eu/edm-documentation> .
+    
+    <http://data.semanticweb.org/person/antoine-isaac>     a foaf:Person;
+         foaf:name "Antoine Isaac" .
+    
+    <http://europeana.eu>     a foaf:Organization;
+         foaf:name "Europeana" .
+    
+    dc:contributor     :subPropertyOf edm:hasMet .
+    
+    dc:coverage     :subPropertyOf edm:hasMet .
+    
+    dc:creator     :subPropertyOf edm:hasMet .
+    
+    dc:date     :subPropertyOf edm:hasMet .
+    
+    dc:format     :subPropertyOf edm:hasType .
+    
+    dc:language     :subPropertyOf edm:hasType .
+    
+    dc:publisher     :subPropertyOf edm:hasMet .
+    
+    dc:relation     :subPropertyOf edm:isRelatedTo .
+    
+    dc:source     :subPropertyOf edm:isDerivativeOf .
+    
+    dc:subject     :subPropertyOf edm:isRelatedTo .
+    
+    dc:type     :subPropertyOf edm:hasType .
+    
+    dcterms:hasFormat     :subPropertyOf  [
+             a rdf:Property;
+             owl:inverseOf edm:isDerivativeOf ] .
+    
+    dcterms:hasVersion     :subPropertyOf  [
+             a rdf:Property;
+             owl:inverseOf edm:isDerivativeOf ] .
+    
+    dcterms:isFormatOf     :subPropertyOf edm:isDerivativeOf .
+    
+    dcterms:isReplacedBy     :subPropertyOf  [
+             a rdf:Property;
+             owl:inverseOf edm:isDerivativeOf ] .
+    
+    dcterms:isVersionOf     :subPropertyOf edm:isDerivativeOf .
+    
+    dcterms:replaces     :subPropertyOf edm:isDerivativeOf .
+    
+    dcterms:tableOfContents     :subPropertyOf edm:hasView .
+    
+    <http://www.cidoc-crm.org/rdfs/cidoc-crm#P79F.beginning_is_qualified_by>     :subPropertyOf edm:begin .
+    
+    <http://www.cidoc-crm.org/rdfs/cidoc-crm#P80F.end_is_qualified_by>     :subPropertyOf edm:end .
+    
+    edm:Agent     a owl:Class;
+         :label "Agent"@en;
+         :subClassOf edm:NonInformationResource;
+         owl:equivalentClass <http://www.cidoc-crm.org/rdfs/cidoc-crm#E39.Actor>;
+         skos:definition """This class comprises people, either individually or in groups, who have the
+potential to perform intentional actions for which they can be held responsible.""";
+         skos:example "Leonardo da Vinci, the British Museum, W3C";
+         skos:scopeNote "Rationale: This class is a domain of edm:wasPresentAt" .
+    
+    edm:EuropeanaAggregation     a owl:Class;
+         :label "Europeana Aggregation";
+         :subClassOf edm:EuropeanaObject,
+                ore:Aggregation;
+         owl:equivalentClass  [
+             a owl:Restriction;
+             owl:cardinality "1"^^xsd:nonNegativeInteger;
+             owl:onProperty edm:aggregatedCHO ];
+         skos:definition """The set of resources related to a single Cultural Heritage Object that
+collectively represent that object in Europeana. Such set consists of: all
+descriptions about the object that Europeana collects from (possibly different) content providers, including thumbnails and other forms of abstractions, as well as of the description of the object Europeana builds.""";
+         skos:example """The 56th issue of "Le Temps" is a (different) Cultural Heritage Object represented in Europeana by another EuropeanaAggregation instance"""@en,
+                """The journal "Le Temps" is a Cultural Heritage Object represented in Europeana by one EuropeanaAggregation instance"""@en,
+                "The painting Mona Lisa is a Cultural Heritage Object represented in Europeana by one EuropeanaAggregation instance"@en;
+         skos:note "An instance of EuropeanaAggregation is created at ingestion time for each different Cultural Heritage Object recognized by Europeana. Such instance is associated to the Cultural Heritage Object that it is about, by the property edm:aggregatedCHO"@en;
+         skos:scopeNote "Obligation and Occurence: The relation between the Cultural Heritage Objects represented in Europeana and the instances of the class EuropeanaAggregation is one-to-one, in the data maintained by Europeana: every Cultural Heritage Object is represented by an instance of EuropeanaAggregation, and every instance of EuropeanaAggregation represent a Cultural Heritage Object."@en,
+                "Rationale: This class is used in Europeana to gather in a single conceptual unit all the information about a Cultural Heritage Object, necessary for all operations on these objects."@en .
+    
+    edm:EuropeanaObject     a owl:Class;
+         :label "Europeana Object"@en;
+         :subClassOf edm:WebResource;
+         skos:definition "Any object that is the result of Europeana\u2019s activities"@en;
+         skos:example "An annotation created by a user through the Europeana portal"@en,
+                "Any content created by the users through the service made available by Europeana for that purpose"@en,
+                "Any instance of the class EuropeanaAggregation"@en;
+         skos:scopeNote "Rationale: This class is used to tag objects that are the result of activity of Europeana, and, as such, objects on which Europeana holds rights"@en .
+    
+    edm:Event     a owl:Class;
+         :label "Event"@en;
+         :subClassOf  [
+             a owl:Restriction;
+             owl:cardinality "1"^^xsd:nonNegativeInteger;
+             owl:onProperty edm:happenedAt ],
+                edm:NonInformationResource;
+         owl:equivalentClass abc:Temporality,
+                frbr_core:Event,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#E4.Period>;
+         skos:definition """An event is a change "of states in cultural, social or physical systems,
+ regardless of scale, brought about by a series or group of coherent physical,
+cultural, technological or legal phenomena" (E5 Event in CIDOC CRM) or a "set of coherent phenomena or cultural manifestations bounded in time and  space" (E4 Period in CIDOC CRM)
+"""@en;
+         skos:example "the 2nd World War"@en,
+                "the act of painting Mona Lisa"@en,
+                "the change of custody of Mona Lisa"@en;
+         skos:note "Events are identified either by the content provider or by Europeana enrichment at ingestion time"@en;
+         skos:scopeNote "Rationale:This class is a domain of edm:happenedAt and the domain of edm:occurredAt"@en .
+    
+    edm:InformationResource     a owl:Class;
+         :label "Information Resource"@en;
+         owl:equivalentClass  [
+             a owl:Class;
+             owl:unionOf  (
+            frbr_core:Work 
+            frbr_core:Expression 
+            frbr_core:Manifestation  ) ],
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#E89.Propositional_Object>;
+         skos:definition "An information resource is a resource whose essential characteristics can be conveyed in a single message. It can be associated with a URI, it can have a representation, for example: a text is an InformationResource."@en .
+    
+    edm:NonInformationResource     a owl:Class;
+         :label "Non-Information Resource"@en;
+         owl:complementOf edm:InformationResource;
+         skos:definition "All resources that are not information resources."@en .
+    
+    edm:PhysicalThing     a owl:Class;
+         :label "Physical Thing"@en;
+         :subClassOf edm:NonInformationResource;
+         owl:equivalentClass <http://www.cidoc-crm.org/rdfs/cidoc-crm#E18.Physical_Thing>;
+         skos:definition """A persistent physical item such as a painting, a building, a book or a stone.
+Persons are not items. This class represents Cultural Heritage Objects known to Europeana to be physical things (such as Mona Lisa) as well as all physical things Europeana refers to in the descriptions of Cultural Heritage Objects (such as the Rosetta Stone)."""@en .
+    
+    edm:Place     a owl:Class;
+         :label "Place"@en;
+         :subClassOf edm:NonInformationResource;
+         owl:equivalentClass abc:Place,
+                frbr_core:Place,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#E53.Place>,
+                DOLCE-Lite:space-region;
+         skos:definition """An "extent in space, in particular on the surface of the earth, in the pure sense of physics: independent from temporal phenomena and matter" (CIDOC CRM)"""@en .
+    
+    edm:ProvidedCHO     a owl:Class;
+         :label "Provided CHO"@en;
+         :subClassOf  [
+             a owl:Restriction;
+             owl:cardinality "1"^^xsd:nonNegativeInteger;
+             owl:onProperty  [
+                 a rdf:Property;
+                 owl:inverseOf edm:aggregatedCHO ] ];
+         skos:definition "This class comprises the Cultural Heritage objects that Europeana collects descriptions about."@en;
+         skos:example "Mona Lisa, Winged Victory of Samothrace"@en;
+         skos:note "This class has been mostly motivated by the need to assign a type to the \u201Ccentral node\u201D in the EDM pattern, during the ingestion process, related to the XML expression of EDM at that stage. It was especially intended to fit the cases where edm:PhysicalThing  cannot be used as the type of the resource standing for the real-world object (independently of any specific data contributor perspective)."@en;
+         skos:scopeNote "Rationale: This class is the range of edm:aggregatedCHO. A resource of type ProvidedCHO can be the subject of statements using edm:isRelatedTo or any more specific property."@en .
+    
+    edm:TimeSpan     a owl:Class;
+         :label "Time Span"@en;
+         :subClassOf dcterms:PeriodOfTime,
+                edm:NonInformationResource;
+         owl:equivalentClass abc:Time,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#E52.Time-Span>,
+                DOLCE-Lite:time-interval;
+         skos:definition """The class of "abstract temporal extents, in the sense of Galilean physics,
+ having a beginning, an end and a duration" (CIDOC CRM)"""@en .
+    
+    edm:WebResource     a owl:Class;
+         :label "Web Resource"@en;
+         :subClassOf edm:InformationResource;
+         skos:definition """Information Resources that have at least one Web Representation and at least
+a URI."""@en .
+    
+    edm:aggregatedCHO     a owl:ObjectProperty;
+         :domain ore:Aggregation;
+         :label "Aggregated Cultural Heritage Object"@en;
+         :range edm:ProvidedCHO;
+         :subPropertyOf dc:subject,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#P129F.is_about>,
+                ore:aggregates;
+         skos:definition """This property associates an ORE aggregation with the Cultural Heritage
+Object(s) (CHO for short) it is about."""@en .
+    
+    edm:begin     a owl:DatatypeProperty;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:Agent 
+            edm:TimeSpan  ) ];
+         :label "Begin"@en;
+         :subPropertyOf edm:isRelatedTo;
+         skos:definition "This property denotes the start date of a period of time."@en .
+    
+    edm:collectionName     a owl:ObjectProperty;
+         :label "Collection Name"@en;
+         skos:definition "This property holds the collection identifier given to the dataset in Europeana."@en;
+         skos:note "The value of this property is provided by Europeana as part of the ingestion process."@en .
+    
+    edm:country     a rdf:Property;
+         :label "Country"@en;
+         :subPropertyOf <http://www.cidoc-crm.org/rdfs/cidoc-crm#P12F.occurred_in_the_presence_of> .
+    
+    edm:currentLocation     a owl:ObjectProperty;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:ProvidedCHO 
+             [
+                     owl:intersectionOf  (
+                    ore:Proxy 
+                     [
+                             owl:onProperty ore:proxyFor;
+                             owl:someValuesFrom edm:ProvidedCHO ] ) ] ) ];
+         :label "Current Location"@en;
+         :range edm:Place;
+         :subPropertyOf dcterms:spatial;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P55F.has_current_location>,
+                wgs84_pos:location;
+         skos:definition "The geographic location and/or name of the repository, building, site, or other entity whose boundaries presently include the resource."@en .
+    
+    edm:dataProvider     a rdf:Property;
+         :domain ore:Aggregation;
+         :label "Europeana Data Provider"@en;
+         :range edm:Agent;
+         :subPropertyOf dcterms:provenance;
+         skos:definition "This element is specifically included to allow the name of the organisation who supplies data to Europeana indirectly via an aggregator to be recorded and displayed in the portal. Aggregator names are recorded in edm:provider. If an organisation provides data directly to Europeana (i.e. not via an aggregator) the values in edm:dataProvider and edm:provider will be the same. Organisation names should be provided as an ordinary text string until the Europeana Authority File for Organisations has been established. At that point providers will be able to send an identifier from the file instead of a text string. The name provided should be the preferred form of the name in the language the provider chooses as the default language for display in the portal. Countries with multiple languages may prefer to concatenate the name in more than one language (See the example below.) Note: Europeana Data Provider is not necessarily the institution where the physical object is located."@en .
+    
+    edm:end     a owl:DatatypeProperty;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:Agent 
+            edm:TimeSpan  ) ];
+         :label "End"@en;
+         :subPropertyOf edm:isRelatedTo;
+         skos:definition "This property denotes the end date of a period of time."@en .
+    
+    edm:europeanaProxy     a owl:ObjectProperty;
+         :label "Europeana Proxy"@en;
+         skos:definition "This property serves only as a flag to indicate that a proxy is a Europeana proxy (as opposed to a provider proxy).  It is for internal use only."@en;
+         skos:note "By default, any proxy without this flag can be interpreted as having the value false and  is a provider proxy."@en .
+    
+    edm:happenedAt     a owl:ObjectProperty;
+         :domain edm:Event;
+         :label "Happened At"@en;
+         :range edm:Place;
+         :subPropertyOf dc:relation;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P7F.took_place_at>;
+         skos:definition """This property associates an event with the place at which the event
+happened."""@en .
+    
+    edm:hasMet     a rdf:Property;
+         :label "Has Met"@en;
+         :subPropertyOf dc:relation;
+         skos:definition "edm:hasMet relates a resource with the objects or phenomena that have happened to or have happened together with the resource under consideration. We can abstractly think of history and the present as a series of \u201Cmeetings\u201D between people and other things in space-time. Therefore we name this relationship as the things the object \u201Chas met\u201D in the course of its existence. These meetings are events in the proper sense, in which other people and things participate in any role."@en .
+    
+    edm:hasType     a owl:ObjectProperty;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:ProvidedCHO 
+             [
+                     owl:intersectionOf  (
+                    ore:Proxy 
+                     [
+                             owl:onProperty ore:proxyFor;
+                             owl:someValuesFrom edm:ProvidedCHO ] ) ] ) ];
+         :label "Has Type"@en;
+         :range edm:NonInformationResource;
+         :subPropertyOf edm:isRelatedTo;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P2F.has_type>;
+         skos:definition """This property relates a resource with the concepts it belongs to in a suitable
+type system such as MIME or any thesaurus that captures categories of objects in a given field (e.g., the \u201CObjects\u201D facet in Getty\u2019s Art and Architecture Thesaurus). It does not capture aboutness."""@en .
+    
+    edm:hasView     a owl:ObjectProperty;
+         :domain ore:Aggregation;
+         :label "Has View"@en;
+         :range edm:WebResource;
+         :subPropertyOf ore:aggregates;
+         skos:definition """This property relates a ORE aggregation about a CHO with a web resource
+providing a view of that CHO. Examples of view are: a thumbnail, a textual
+abstract and a table of contents. The ORE aggregation may be a Europeana
+Aggregation, in which case the view is an object owned by Europeana (i.e., an instance of edm:EuropeanaObject) or an aggregation contributed by a content provider. In order to capture both these cases, the domain of edm:hasView is ore:Aggregation and its range is edm:WebResource"""@en .
+    
+    edm:incorporates     a owl:ObjectProperty;
+         :label "Incorporates"@en;
+         :subPropertyOf edm:isSimilarTo;
+         skos:definition """This property captures the use of some resource to add value to another
+resource. Such resources may be nested, such as performing a theater play text, and then recording the performance, or creating an artful edition of a collection of poems or just aggregating various poems in an anthology. There may be no single part that contains ultimately the incorporated object, which may be dispersed in the presentation. Therefore, incorporated resources do in general not form proper parts. Incorporated resources are not part of the same resource, but are taken from other resources, and have an independent history. Therefore edm:incorporates is not a sub-property of dcterm:hasPart."""@en .
+    
+    edm:isAnnotationOf     a owl:ObjectProperty;
+         :domain edm:EuropeanaObject;
+         :label "Is Annotation Of"@en;
+         :range  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:ProvidedCHO 
+             [
+                     owl:intersectionOf  (
+                    ore:Proxy 
+                     [
+                             owl:onProperty ore:proxyFor;
+                             owl:someValuesFrom edm:ProvidedCHO ] ) ] ) ];
+         :subPropertyOf dc:subject,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#P67F.refers_to>;
+         skos:definition """This property relates an annotation (a Europeana object) with the resource
+that it annotates."""@en .
+    
+    edm:isDerivativeOf     a rdf:Property;
+         :label "Is Derivative Of"@en;
+         :subPropertyOf edm:isSimilarTo;
+         skos:definition "This property captures a narrower notion of derivation than edm:isSimilarTo, in the sense that it relates a resource to another one, obtained by reworking, reducing, expanding, parts or the whole contents of the former, and possibly adding some minor parts. Versions have an even narrower meaning, in that it requires common identity between the related resources. Translations, summaries, abstractions etc. do not qualify as versions, but do qualify as derivatives."@en .
+    
+    edm:isNextInSequence     a owl:ObjectProperty;
+         :label "Is Next In Sequence Of"@en;
+         :subPropertyOf dc:relation;
+         skos:definition "edm:isNextInSequence relates two resources S and R that are ordered parts of the same resource A, and such that R comes immediately after R in the order created by their being parts of S."@en .
+    
+    edm:isRelatedTo     a rdf:Property;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:ProvidedCHO 
+             [
+                     owl:intersectionOf  (
+                    ore:Proxy 
+                     [
+                             owl:onProperty ore:proxyFor;
+                             owl:someValuesFrom edm:ProvidedCHO ] ) ] ) ];
+         :label "Is Related To"@en;
+         skos:definition """edm:isRelatedTo is the most general contextual property in EDM. Contextual
+properties have typically to do either with the things that have happened to or together with the object under consideration, or what the object refers to by its shape, form or features in a figural or encoded form. For sake of simplicity, we include in the contextual relationships also the scholarly classification, which may have either to do with the role and cultural connections of the object in the past, or its kind of structure, substance or contents as it can be verified at present."""@en .
+    
+    edm:isRepresentationOf     a owl:ObjectProperty;
+         :domain edm:InformationResource;
+         :label "Is Representation Of"@en;
+         :subPropertyOf dc:subject,
+                <http://www.cidoc-crm.org/rdfs/cidoc-crm#P138F.represents>;
+         skos:definition "This property associates an information resource to the resource (if any) that it represents"@en .
+    
+    edm:isShownAt     a owl:ObjectProperty;
+         :label "Is Shown At"@en;
+         :range edm:WebResource;
+         :subPropertyOf edm:hasView;
+         skos:definition "An unambiguous URL reference to the digital object on the provider\u2019s web site in its full information context."@en .
+    
+    edm:isShownBy     a owl:ObjectProperty;
+         :label "Is Shown By"@en;
+         :range edm:WebResource;
+         :subPropertyOf edm:hasView;
+         skos:definition "An unambiguous URL reference to the digital object on the provider\u2019s web site in the best available resolution/quality."@en .
+    
+    edm:isSimilarTo     a rdf:Property;
+         :label "Is Similar To"@en;
+         :subPropertyOf dc:relation;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P130F.shows_features_of>;
+         skos:definition "The most generic derivation property, covering also the case of questionable derivation. Is Similar To asserts that parts of the contents of one resource exhibit common features with respect to ideas, shapes, structures, colors, words, plots, topics with the contents of the related resource. Those common features may be attributed to a common origin or influence (in particular for derivation), but also to more generic cultural or psychological factors."@en .
+    
+    edm:isSuccessorOf     a owl:ObjectProperty;
+         :label "Is Successor Of"@en;
+         :subPropertyOf edm:isSimilarTo;
+         skos:definition "This property captures the relation between the continuation of a resource and that resource. This applies to a story, a serial, a journal etc. No content of the successor resource is identical or has a similar form with that of the precursor. The similarity is only in the context, subjects and figures of a plot. Successors typically form part of a common whole \u2013 such as a trilogy, a journal, etc."@en .
+    
+    edm:landingPage     a owl:ObjectProperty;
+         :label "Landing Page"@en;
+         :range edm:WebResource;
+         :subPropertyOf ore:aggregates;
+         skos:definition """This property captures the relation between an aggregation representing a
+Cultural Heritage Object and the Web Resource representing that Object on
+the provider\u2019s web site."""@en .
+    
+    edm:language     a rdf:Property;
+         :comment """The recommended best practice is to use a controlled vocabulary such as
+RFC 4646 (http://www.rfc-archive.org/getrfc.php?rfc=4646) which, in
+conjunction with ISO 639, defines two- and three-letter primary language tags. Either a coded value or text string can be represented here."""@en;
+         :label "Europeana Language"@en;
+         skos:definition "A language assigned to the resource with reference to the Provider."@en .
+    
+    edm:object     a owl:ObjectProperty;
+         :label "Object"@en;
+         :range edm:WebResource;
+         :subPropertyOf edm:hasView;
+         skos:definition """The URL of a thumbnail representing the digital object or, if there is no such
+thumbnail, the URL of the digital object in the best resolution available on the
+web site of the data provider from which a thumbnail could be generated. This will often be the same URL as given in edm:isShownBy."""@en .
+    
+    edm:occurredAt     a owl:ObjectProperty;
+         :domain edm:Event;
+         :label "Occured At"@en;
+         :range edm:TimeSpan;
+         :subPropertyOf dc:relation;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P4F.has_time-span>;
+         skos:definition """This property associates an event to the smallest known time span that
+overlaps with the occurrence of that event"""@en .
+    
+    edm:preview     a owl:ObjectProperty;
+         :label "Preview"@en;
+         :range edm:WebResource;
+         :subPropertyOf edm:hasView;
+         skos:definition "The URL of a thumbnail representing the digital object, generated by Europeana."@en .
+    
+    edm:provider     a rdf:Property;
+         :label "Europeana Provider"@en;
+         :range edm:Agent;
+         :subPropertyOf edm:hasMet;
+         skos:definition "Name of the organization that delivers data to Europeana"@en .
+    
+    edm:realizes     a owl:ObjectProperty;
+         :domain edm:PhysicalThing;
+         :label "Realizes"@en;
+         :range edm:InformationResource;
+         :subPropertyOf edm:isRelatedTo;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P128F.carries>;
+         skos:definition "This property describes a relation between a physical thing and the information resource that is contained in it, visible at it or otherwise carried by it, if applicable."@en .
+    
+    edm:rights     a owl:ObjectProperty;
+         :label "Europeana Rights"@en;
+         skos:definition """Information about copyright of the digital object as specified by isShownBy
+and isShownAt"""@en .
+    
+    edm:type     a owl:DatatypeProperty;
+         :label "Europeana Type"@en;
+         :range  [
+             a :Datatype;
+             owl:oneOf  (
+            "TEXT" 
+            "IMAGE" 
+            "SOUND" 
+            "VIDEO" 
+            "3D"  ) ];
+         :subPropertyOf dc:type;
+         skos:definition "The Europeana material type of the resource"@en .
+    
+    edm:ugc     a owl:DatatypeProperty;
+         :label "UGC"@en;
+         :range  [
+             a :Datatype;
+             owl:oneOf  (
+            "TRUE"  ) ];
+         skos:definition "This element is used to identify user generated content (also called user created content).  It should be applied to all digitised or born digital content contributed by the general public and collected by Europeana through a crowdsourcing initiative or project."@en .
+    
+    edm:unstored     a rdf:Property;
+         :label "Unstored"@en;
+         skos:definition """This is a container element which includes all relevant information that
+otherwise cannot be mapped to another element in the ESE."""@en .
+    
+    edm:uri     a owl:ObjectProperty;
+         :label "Europeana URI"@en;
+         skos:definition "This is a tag created by a user through the Europeana interface."@en .
+    
+    edm:userTag     a rdf:Property;
+         :label "User Tag"@en;
+         :subPropertyOf dc:description;
+         skos:definition "This is a tag created by a user through the Europeana interface."@en .
+    
+    edm:wasPresentAt     a owl:ObjectProperty;
+         :domain  [
+             a owl:Class;
+             owl:unionOf  (
+            edm:Agent 
+            edm:InformationResource 
+            edm:PhysicalThing  ) ];
+         :label "Was Present At"@en;
+         :range edm:Event;
+         :subPropertyOf dc:relation;
+         owl:equivalentProperty <http://www.cidoc-crm.org/rdfs/cidoc-crm#P12B.was_present_at>;
+         skos:definition "This property associates the people, things or information resources with an event at which they were present"@en .
+    
+    edm:year     a rdf:Property;
+         :label "Europeana Year"@en;
+         :subPropertyOf dcterms:temporal;
+         skos:definition """A point of time associated with an event in the life of the original analog or
+born digital object."""@en .
+    
+    <http://www.ibi.hu-berlin.de/institut/personen/iwanowa>     a foaf:Person;
+         foaf:name "Julia Iwanowa" .
+    
+    <http://www.ics.forth.gr/isl/people/people_individual.jsp?Person_ID=2>     a foaf:Person;
+         foaf:name "Martin Doerr" .
+    
+    <http://www.image.ece.ntua.gr/~ndroso/>     a foaf:Person;
+         foaf:name "Nasos Drosopoulos" .
+    
+    <http://www.image.ntua.gr/~tzouvaras/>     a foaf:Person;
+         foaf:name "Vassilis Tzouvaras" .
+    
+    ore:Aggregation     a owl:Class .
+    
+    ore:Proxy     a owl:Class .
+    
+    skos:Concept     a owl:Class;
+         :subClassOf edm:NonInformationResource .

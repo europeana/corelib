@@ -42,6 +42,7 @@ import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -52,7 +53,6 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
 
@@ -90,9 +90,6 @@ public class FullBeanImpl implements FullBean, IDocument {
     protected int europeanaCompleteness;
 
     protected boolean optOut;
-
-    @Transient
-    protected List<WebResourceMetaInfo> webResourceMetaInfos;
 
     @Transient
     protected List<BriefBeanImpl> similarItems;
@@ -134,17 +131,7 @@ public class FullBeanImpl implements FullBean, IDocument {
     @Indexed
     protected State state;
 
-    /**
-     * GETTERS & SETTTERS
-     */
-    public List<WebResourceMetaInfo> getWebResourceMetaInfos() {
-        return this.webResourceMetaInfos;
-    }
-
-    public void setWebResourceMetaInfos(List<WebResourceMetaInfo> webResourceMetaInfos) {
-        this.webResourceMetaInfos = webResourceMetaInfos;
-    }
-
+    
     @Override
     public List<PlaceImpl> getPlaces() {
         return this.places;

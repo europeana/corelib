@@ -78,6 +78,7 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
@@ -95,7 +96,6 @@ import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
-import eu.europeana.corelib.solr.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
@@ -196,9 +196,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		logTime("mongo findById", (new Date().getTime() - t0));
 
-        if( null != fullBean && !webMetaInfo.isEmpty()) {
-            fullBean.setWebResourceMetaInfos(webMetaInfo);
-        }
+      
 
 
 		if (fullBean != null && similarItems) {
