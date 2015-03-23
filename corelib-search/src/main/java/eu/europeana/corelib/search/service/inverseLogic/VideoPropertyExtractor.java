@@ -1,9 +1,10 @@
 package eu.europeana.corelib.search.service.inverseLogic;
 
 public class VideoPropertyExtractor {
+    public static final Integer mask = (1 << 25) - 1;
 
     public static String getQuality(Integer tag) {
-        final Integer qualityCode = (tag<<7)>>20;
+        final Integer qualityCode = (tag & mask)>>13;
 
         switch (qualityCode) {
             case 1: return "HD";
@@ -13,7 +14,7 @@ public class VideoPropertyExtractor {
     }
 
     public static String getDuration(Integer tag) {
-        final Integer durationCode = (tag<<7)>>17;
+        final Integer durationCode = (tag & mask)>>10;
 
         switch (durationCode) {
             case 1: return "short";

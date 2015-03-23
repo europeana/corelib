@@ -9,6 +9,11 @@ public class FacetLabelExtractor {
 
     public static String getFacetLabel(Integer tag) {
         final Integer mediaType = CommonPropertyExtractor.getType(tag);
+        final String  mimeType  = CommonPropertyExtractor.getMimeType(tag);
+
+        if (null != mimeType && !mimeType.trim().isEmpty()) {
+            return mimeType;
+        }
 
         String label;
         switch (mediaType) {
@@ -44,5 +49,6 @@ public class FacetLabelExtractor {
 
             default: return "";
         }
+
     }
 }

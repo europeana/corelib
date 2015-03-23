@@ -148,8 +148,10 @@ public class ImagePropertyExtractor {
         hexColors.put(138, "#9ACD32");
     }
 
+    public static final Integer mask = (1 << 25) - 1;
+
     public static String getSize(Integer tag) {
-        final Integer sizeCode = (tag<<7)>>19;
+        final Integer sizeCode = (tag & mask)>>12;
 
         switch (sizeCode) {
             case 1: return "small";
@@ -162,7 +164,7 @@ public class ImagePropertyExtractor {
     }
 
     public static String getColorSpace(Integer tag) {
-        final Integer colorSpaceCode = (tag<<7)>>17;
+        final Integer colorSpaceCode = (tag & mask)>>10;
 
         switch (colorSpaceCode) {
             case 1: return "sRGB";
@@ -174,7 +176,7 @@ public class ImagePropertyExtractor {
     }
 
     public static String getAspectRatio(Integer tag) {
-        final Integer aspectRatioCode = (tag<<7)>>15;
+        final Integer aspectRatioCode = (tag & mask)>>8;
 
         switch (aspectRatioCode) {
             case 1: return "Landscape";
@@ -185,7 +187,7 @@ public class ImagePropertyExtractor {
     }
 
     public static String getColor(Integer tag) {
-        final Integer colorCode = (tag<<7)>>7;
+        final Integer colorCode = tag & mask;
 
         return hexColors.get(colorCode)!=null?hexColors.get(colorCode):"";
     }
