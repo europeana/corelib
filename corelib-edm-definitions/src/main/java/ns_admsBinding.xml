@@ -1,6 +1,0 @@
-<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
-  <namespace uri="http://www.w3.org/ns/adms#" prefix="adms"/>
-  <mapping class="eu.europeana.corelib.definitions.jibx.Status" name="status" ns="http://www.w3.org/ns/adms#">
-    <structure map-as="rdf:LiteralType"/>
-  </mapping>
-</binding>
