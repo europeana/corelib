@@ -358,7 +358,7 @@ public class EdmUtils {
 			if (pInList != null) {
 				proxy.setProxyInList(pInList);
 			}
-			Type1 type = new Type1();
+			Type2 type = new Type2();
 			type.setType(EdmType.valueOf(typeStr.replace("3D", "_3_D")));
 			proxy.setType(type);
 
