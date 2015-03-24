@@ -36,6 +36,9 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.search.service.domain.ImageOrientation;
 import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
 import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
@@ -78,8 +81,6 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfo;
-import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -93,7 +94,6 @@ import eu.europeana.corelib.search.query.MoreLikeThis;
 import eu.europeana.corelib.search.utils.SearchUtils;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
@@ -169,35 +169,39 @@ public class SearchServiceImpl implements SearchService {
 		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
 	}
 
+    private void injectWebMetaInfo(final FullBean fullBean) {
+
+        for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
+            final String webMetaInfoId = webResource.getId().toString();
+            final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+            webResource.setWebResourceMetaInfo(webMetaInfo);
+        }
+
+        for (final Aggregation aggregation : fullBean.getAggregations()) {
+            for (final WebResource webResource : aggregation.getWebResources()) {
+                final String webMetaInfoId = webResource.getId().toString();
+                final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+                webResource.setWebResourceMetaInfo(webMetaInfo);
+            }
+        }
+
+    }
+
 	@Override
 	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
 		long t0 = new Date().getTime();
 
-        List<WebResourceMetaInfo> webMetaInfo = new ArrayList<>();
-		FullBeanImpl fullBean = (FullBeanImpl)mongoServer.getFullBean(europeanaObjectId);
+		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        injectWebMetaInfo(fullBean);
 
-
-        WebResourceMetaInfo objMetaInfo = getMetaInfo(europeanaObjectId);
-
-        if (null != objMetaInfo) {
-            webMetaInfo.add(getMetaInfo(europeanaObjectId));
-        }
 
 		if(fullBean != null && isHierarchy(fullBean.getAbout())){
 			for(Proxy prx : fullBean.getProxies()){
 				prx.setDctermsHasPart(null);
-                WebResourceMetaInfo x = getMetaInfo(prx.getId().toString());
-
-                if (null != x) {
-                    webMetaInfo.add(x);
-                }
             }
 
 		}
 		logTime("mongo findById", (new Date().getTime() - t0));
-
-      
-
 
 		if (fullBean != null && similarItems) {
 			try {
@@ -242,6 +246,7 @@ public class SearchServiceImpl implements SearchService {
 		}
 		mongoServer.setEuropeanaIdMongoServer(idServer);
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
+        injectWebMetaInfo(fullBean);
 		logTime("mongo resolve", (new Date().getTime() - t0));
 		if (fullBean != null) {
 			try {
@@ -390,9 +395,9 @@ public class SearchServiceImpl implements SearchService {
 					List<String> filteredFacets = query.getFilteredFacets();
 					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets.size() > 0);
 
-                    //System.out.println(Arrays.deepToString(query.getFacets().toArray()));
-                    //System.out.println(Arrays.deepToString(query.getFilteredFacets().toArray()));
-                    //System.out.println();
+                    System.out.println(Arrays.deepToString(query.getFacets().toArray()));
+                    System.out.println(Arrays.deepToString(query.getFilteredFacets().toArray()));
+                    System.out.println();
 
                     for (String facetToAdd : query.getFacets()) {
 						if (query.isProduceFacetUnion()) {
@@ -420,6 +425,7 @@ public class SearchServiceImpl implements SearchService {
 				if (query.getFacetQueries() != null) {
 					for (String facetQuery : query.getFacetQueries()) {
 						solrQuery.addFacetQuery(facetQuery);
+                        System.out.println ("Facet Query: " + facetQuery);
 					}
 				}
 
@@ -428,6 +434,7 @@ public class SearchServiceImpl implements SearchService {
 						log.debug("Solr query is: " + solrQuery);
 					}
 					query.setExecutedQuery(solrQuery.toString());
+                    System.out.println("Solr query: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
 
@@ -928,15 +935,17 @@ public class SearchServiceImpl implements SearchService {
         return mediaTypeCode<<25 | mimeTypeCode<<15 | qualityCode<<13 | durationCode<<10;
     }
 
-    @Override
-    public WebResourceMetaInfo getMetaInfo(String recordID) {
+    private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
+        System.out.println("Meta-Info for: " + webResourceMetaInfoId);
         final DB db = metainfoMongoServer.getDatastore().getDB();
         final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
 
-        final BasicDBObject query = new BasicDBObject("_id", recordID);
+        final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);
         final DBCursor cursor = webResourceMetaInfoColl.find(query);
 
-        final Type type = new TypeToken<WebResourceMetaInfo>(){}.getType();
+        System.out.println("Found: " + cursor.count());
+
+        final Type type = new TypeToken<WebResourceMetaInfoImpl>(){}.getType();
 
         if(cursor.hasNext()) {
             return new Gson().fromJson(cursor.next().toString(), type);

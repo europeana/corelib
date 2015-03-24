@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * A class which contains information about an AUDIO document
  */
-public class AudioMetaInfo implements Serializable {
+public class AudioMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo {
 
     /**
      * The number of samples of a sound that are taken per second to represent the event digitally.
@@ -48,7 +48,7 @@ public class AudioMetaInfo implements Serializable {
      */
     private final Integer bitDepth;
 
-    public AudioMetaInfo() {
+    public AudioMetaInfoImpl() {
         this.sampleRate = null;
         this.bitRate = null;
         this.duration = null;
@@ -59,9 +59,9 @@ public class AudioMetaInfo implements Serializable {
         this.bitDepth = null;
     }
 
-    public AudioMetaInfo(final Integer sampleRate, final Integer bitRate,
-                         final Long duration, final String mimeType, final String fileFormat,
-                         final Long fileSize, final Integer channels, final Integer bitDepth) {
+    public AudioMetaInfoImpl(final Integer sampleRate, final Integer bitRate,
+                             final Long duration, final String mimeType, final String fileFormat,
+                             final Long fileSize, final Integer channels, final Integer bitDepth) {
         this.sampleRate = sampleRate;
         this.bitRate = bitRate;
         this.duration = duration;

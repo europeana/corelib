@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -33,7 +34,6 @@ import com.google.code.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.model.ColorSpace;
 import eu.europeana.corelib.definitions.model.Orientation;
-import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
@@ -64,9 +64,10 @@ public class WebResourceImpl implements WebResource {
 	private Map<String, List<String>> dcCreator;
 	private String isNextInSequence;
 	private String[] owlSameAs;
+
 	@Transient
 	@JsonIgnore
-	private SourceDocumentReferenceMetaInfo sourceDocumentReferenceMetaInfo;
+	private WebResourceMetaInfo webResourceMetaInfo;
 
 	@Override
 	public String getAbout() {
@@ -147,6 +148,7 @@ public class WebResourceImpl implements WebResource {
 	public Map<String, List<String>> getDctermsCreated() {
 		return dctermsCreated;
 	}
+
 
 	@Override
 	public void setDctermsCreated(Map<String, List<String>> dctermsCreated) {
@@ -254,11 +256,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String getEdmCodecName() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getCodec() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 					.getCodec();
 		}
 		return null;
@@ -266,25 +268,25 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String getEbucoreHasMimeType() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getAudioMetaInfo() != null
+				&& webResourceMetaInfo.getAudioMetaInfo()
 						.getMimeType() != null) {
-			return sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+			return webResourceMetaInfo.getAudioMetaInfo()
 					.getMimeType();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getMimeType() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 					.getMimeType();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getMimeType() != null) {
-			return sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			return webResourceMetaInfo.getImageMetaInfo()
 					.getMimeType();
 		}
 		return null;
@@ -292,25 +294,25 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Long getEbucoreFileByteSize() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getAudioMetaInfo() != null
+				&& webResourceMetaInfo.getAudioMetaInfo()
 						.getFileSize() != null) {
-			return sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+			return webResourceMetaInfo.getAudioMetaInfo()
 					.getFileSize();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getFileSize() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 					.getFileSize();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getFileSize() != null) {
-			return sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			return webResourceMetaInfo.getImageMetaInfo()
 					.getFileSize();
 		}
 		return null;
@@ -318,18 +320,18 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String getEbucoreDuration() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getAudioMetaInfo() != null
+				&& webResourceMetaInfo.getAudioMetaInfo()
 						.getDuration() != null) {
-			return Long.toString(sourceDocumentReferenceMetaInfo
+			return Long.toString(webResourceMetaInfo
 					.getAudioMetaInfo().getDuration());
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getDuration() != null) {
-			return Long.toString(sourceDocumentReferenceMetaInfo
+			return Long.toString(webResourceMetaInfo
 					.getVideoMetaInfo().getDuration());
 		}
 
@@ -338,18 +340,18 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEbucoreWidth() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getWidth() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 					.getWidth();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getWidth() != null) {
-			return sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			return webResourceMetaInfo.getImageMetaInfo()
 					.getWidth();
 		}
 		return null;
@@ -357,18 +359,18 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEbucoreHeight() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getHeight() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 					.getHeight();
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getHeight() != null) {
-			return sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			return webResourceMetaInfo.getImageMetaInfo()
 					.getHeight();
 		}
 		return null;
@@ -376,11 +378,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEdmSpatialResolution() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getResolution() != null) {
-			return Integer.parseInt(sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return Integer.parseInt(webResourceMetaInfo.getVideoMetaInfo()
 					.getResolution());
 		}
 		return null;
@@ -394,11 +396,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEbucoreSampleRate() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getAudioMetaInfo() != null
+				&& webResourceMetaInfo.getAudioMetaInfo()
 						.getSampleRate() != null) {
-			return sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+			return webResourceMetaInfo.getAudioMetaInfo()
 					.getSampleRate();
 		}
 		return null;
@@ -406,11 +408,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEbucoreBitRate() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getAudioMetaInfo() != null
+				&& webResourceMetaInfo.getAudioMetaInfo()
 						.getBitRate() != null) {
-			return sourceDocumentReferenceMetaInfo.getAudioMetaInfo()
+			return webResourceMetaInfo.getAudioMetaInfo()
 					.getBitRate();
 		}
 		return null;
@@ -418,11 +420,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public ColorSpace getEdmHasColorSpace() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getColorSpace() != null) {
-			if (sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			if (webResourceMetaInfo.getImageMetaInfo()
 					.getColorSpace().equalsIgnoreCase("grayscale")) {
 				return ColorSpace.GRAYSCALE;
 			} else {
@@ -434,11 +436,11 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public List<String> getEdmComponentColor() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
 						.getColorPalette() != null) {
-			return Arrays.asList(sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			return Arrays.asList(webResourceMetaInfo.getImageMetaInfo()
 						.getColorPalette());
 		}
 		return null;
@@ -446,26 +448,26 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Orientation getEbucoreOrientation() {
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
-						.getWidth() != null&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
+						.getWidth() != null&& webResourceMetaInfo.getVideoMetaInfo()
 						.getHeight() != null) {
-			if (sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
-						.getHeight()>=sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			if (webResourceMetaInfo.getVideoMetaInfo()
+						.getHeight()>=webResourceMetaInfo.getVideoMetaInfo()
 						.getWidth()){
 				return Orientation.PORTRAIT;
 			} else {
 				return Orientation.LANDSCAPE;
 			}
 		}
-		if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
-						.getWidth() != null&& sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getImageMetaInfo() != null
+				&& webResourceMetaInfo.getImageMetaInfo()
+						.getWidth() != null&& webResourceMetaInfo.getImageMetaInfo()
 						.getHeight() != null) {
-			if (sourceDocumentReferenceMetaInfo.getImageMetaInfo()
-						.getHeight()>=sourceDocumentReferenceMetaInfo.getImageMetaInfo()
+			if (webResourceMetaInfo.getImageMetaInfo()
+						.getHeight()>=webResourceMetaInfo.getImageMetaInfo()
 						.getWidth()){
 				return Orientation.PORTRAIT;
 			} else {
@@ -475,25 +477,23 @@ public class WebResourceImpl implements WebResource {
 		return null;
 	}
 
-	@Override
-	public void setSourceDocumentReferenceMetaInfo(
-			SourceDocumentReferenceMetaInfo sourceDocumentReferenceMetaInfo) {
-		this.sourceDocumentReferenceMetaInfo = sourceDocumentReferenceMetaInfo;
+    @Override
+    public void setWebResourceMetaInfo(WebResourceMetaInfo webResourceMetaInfo) {
+        this.webResourceMetaInfo = webResourceMetaInfo;
+    }
 
-	}
-
-	@Override
-	public SourceDocumentReferenceMetaInfo getSourceDocumentReferenceMetaInfo() {
-		return this.sourceDocumentReferenceMetaInfo;
-	}
+    @Override
+    public WebResourceMetaInfo getWebResourceMetaInfo() {
+        return webResourceMetaInfo;
+    }
 
     @Override
     public Double getEbucoreFrameRate() {
-        if (sourceDocumentReferenceMetaInfo != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo() != null
-				&& sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+        if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getVideoMetaInfo() != null
+				&& webResourceMetaInfo.getVideoMetaInfo()
 						.getFrameRate() != null) {
-			return sourceDocumentReferenceMetaInfo.getVideoMetaInfo()
+			return webResourceMetaInfo.getVideoMetaInfo()
 						.getFrameRate();
 		}
         return null;

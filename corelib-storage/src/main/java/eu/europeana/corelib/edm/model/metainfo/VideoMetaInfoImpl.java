@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * A class which contains information about a VIDEO document
  */
-public class VideoMetaInfo implements Serializable {
+public class VideoMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo {
 
     /**
      * The width of frames in pixels.
@@ -54,7 +54,7 @@ public class VideoMetaInfo implements Serializable {
      */
     private final Integer bitRate;
 
-    public VideoMetaInfo() {
+    public VideoMetaInfoImpl() {
         this.width = null;
         this.height = null;
         this.duration = null;
@@ -66,9 +66,9 @@ public class VideoMetaInfo implements Serializable {
         this.bitRate = null;
     }
 
-    public VideoMetaInfo(final Integer width, final Integer height, final Long duration, final String mimeType,
-                         final Double frameRate, final Long fileSize, final String codec,
-                         final String resolution, Integer bitRate) {
+    public VideoMetaInfoImpl(final Integer width, final Integer height, final Long duration, final String mimeType,
+                             final Double frameRate, final Long fileSize, final String codec,
+                             final String resolution, Integer bitRate) {
         this.width = width;
         this.height = height;
         this.duration = duration;

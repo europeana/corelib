@@ -21,7 +21,8 @@ import java.util.Map;
 
 import eu.europeana.corelib.definitions.model.ColorSpace;
 import eu.europeana.corelib.definitions.model.Orientation;
-import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
+import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
+
 
 /**
  * EDM WebResource Fields implementation
@@ -196,6 +197,8 @@ public interface WebResource extends AbstractEdmEntity {
 	 * owl:sameAs for edm:WebResource
 	 */
 	void setOwlSameAs(String[] owlSameAs);
+
+
 	/**
 	 * owl:sameAs for edm:WebResource
 	 * @return
@@ -295,7 +298,7 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	Orientation getEbucoreOrientation();
 	
-	void setSourceDocumentReferenceMetaInfo(SourceDocumentReferenceMetaInfo sourceDocumentReferenceMetaInfo);
-	
-	SourceDocumentReferenceMetaInfo getSourceDocumentReferenceMetaInfo();
+	void setWebResourceMetaInfo(WebResourceMetaInfo webResourceMetaInfo);
+
+    WebResourceMetaInfo getWebResourceMetaInfo();
 }

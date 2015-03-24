@@ -1,11 +1,13 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
+import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
+
 import java.io.Serializable;
 
 /**
  * A class which contains information about an IMAGE document
  */
-public class ImageMetaInfo implements Serializable {
+public class ImageMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {
 
     /**
      * The width of image in pixels.
@@ -48,7 +50,7 @@ public class ImageMetaInfo implements Serializable {
      */
     private final ImageOrientation orientation;
 
-    public ImageMetaInfo() {
+    public ImageMetaInfoImpl() {
         this.width = null;
         this.height = null;
         this.mimeType = null;
@@ -59,9 +61,9 @@ public class ImageMetaInfo implements Serializable {
         this.orientation = null;
     }
 
-    public ImageMetaInfo(final Integer width, final Integer height,
-                         final String mimeType, final String fileFormat, final String colorSpace,
-                         final Long fileSize, final String[] colorPalette, final ImageOrientation orientation) {
+    public ImageMetaInfoImpl(final Integer width, final Integer height,
+                             final String mimeType, final String fileFormat, final String colorSpace,
+                             final Long fileSize, final String[] colorPalette, final ImageOrientation orientation) {
         this.width = width;
         this.height = height;
         this.mimeType = mimeType;

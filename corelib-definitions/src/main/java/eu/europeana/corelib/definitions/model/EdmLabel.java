@@ -249,7 +249,17 @@ public enum EdmLabel {
 	ORG_EDM_COUNTRY("org_edm_country",SolrType.FACET),
 	ORG_EDM_EUROPEANA_ROLE("org_edm_europeanaRole",SolrType.FACET),
 	ORG_FOAF_HOMEPAGE("org_foaf_homepage",SolrType.NOT_STORED),
-	
+
+    //TODO add or remove them
+    /*
+      BUSYMACHINES FACETS
+     */
+
+    FACET_TAGS("facet_tags, SolrType.FACET", SolrType.FACET),
+    IS_FULLTEXT("is_fulltext", SolrType.FACET),
+    HAS_MEDIA("has_media", SolrType.FACET),
+    HAS_THUMBNAILS("has_thumbnails", SolrType.FACET),
+
 	
 	TYPE("TYPE", SolrType.FACET), 
 	LANGUAGE("LANGUAGE", SolrType.FACET), 

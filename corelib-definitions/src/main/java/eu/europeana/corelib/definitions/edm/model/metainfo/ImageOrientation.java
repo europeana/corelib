@@ -1,4 +1,4 @@
-package eu.europeana.corelib.edm.model.metainfo;
+package eu.europeana.corelib.definitions.edm.model.metainfo;
 
 /**
  * An enum of possible image orientations.

@@ -1,17 +1,17 @@
 /*
  * Copyright 2007-2012 The Europeana Foundation
  *
- *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- *  
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
- *  Unless required by applicable law or agreed to in writing, software distributed under 
- *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
  *  any kind, either express or implied.
- *  See the Licence for the specific language governing permissions and limitations under 
+ *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
 
@@ -42,7 +42,6 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.search.SearchService;
@@ -52,7 +51,7 @@ import eu.europeana.corelib.solr.entity.AggregationImpl;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
+ *
  * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceMock implements SearchService {
@@ -82,7 +81,7 @@ public class SearchServiceMock implements SearchService {
 		bean2.setProxies(proxies);
 		mockBean.setAggregations(aggregations);
 		expect(mockBean.getTitle()).andStubReturn(TITLE);
-		
+
 		expect(bean2.getProxies().get(0).getDcPublisher()).andStubReturn(dcPublisher);
 		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
 		expect((List<Aggregation>)mockBean.getAggregations()).andStubReturn(aggregations);
@@ -113,7 +112,7 @@ public class SearchServiceMock implements SearchService {
 	public List<Term> suggestions(String query, int pageSize) {
 		return null;
 	}
-	
+
 	@Override
 	public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
 			throws SolrTypeException {
@@ -251,11 +250,6 @@ public class SearchServiceMock implements SearchService {
 
     @Override
     public Integer search(Integer mediaType, String mimeType, String imageSize, Boolean imageColor, Boolean imageGrayScale, String imageAspectRatio, String imageColorPalette, Boolean soundHQ, String soundDuration, Boolean videoHQ, String videoDuration) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public WebResourceMetaInfo getMetaInfo(String recordID) {
         throw new NotImplementedException();
     }
 }

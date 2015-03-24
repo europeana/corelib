@@ -132,18 +132,30 @@ public class Query implements Cloneable {
 	}
 
 	public String[] getRefinements(boolean useDividedRefinements) {
-		if (!useDividedRefinements) {
-			return refinements;
-		} else {
-			divideRefinements();
-			return (String[])ArrayUtils.addAll(
-				searchRefinements.toArray(new String[searchRefinements.size()]), 
-				facetRefinements.toArray(new String[facetRefinements.size()])
-			);
-		}
-	}
+        try {
+            if (!useDividedRefinements) {
+                return refinements;
+            } else {
+                divideRefinements();
+                return (String[]) ArrayUtils.addAll(
+                        searchRefinements.toArray(new String[searchRefinements.size()]),
+                        facetRefinements.toArray(new String[facetRefinements.size()])
+                );
+            }
+        }
+       finally {
+            System.out.println("FacetRefinement ---- get : ");
+            System.out.println(Arrays.deepToString(facetRefinements.toArray()));
+
+            System.out.println("SearchRefinement ---- get : ");
+            System.out.println(Arrays.deepToString(searchRefinements.toArray()));
+        }
+    }
 
 	public List<String> getFilteredFacets() {
+        if (null != filteredFacets) {
+            System.out.println(Arrays.deepToString(filteredFacets.toArray()));
+        }
 		return filteredFacets;
 	}
 
@@ -411,6 +423,9 @@ public class Query implements Cloneable {
 			return;
 		}
 
+        System.out.println("refinements: " + Arrays.deepToString(refinements));
+        System.out.println();
+
 		Map<String, FacetCollector> register = new LinkedHashMap<String, FacetCollector>();
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
@@ -432,6 +447,8 @@ public class Query implements Cloneable {
 					facetName = facetName.replaceFirst("\\{!tag=.*?\\}", "");
 					isTagged = true;
 				}
+
+                System.out.println("allFacetList: " + facetName);
 
 				if (allFacetList.contains(facetName)) {
 					String key = pseudoFacetName == null ? facetName : pseudoFacetName;
@@ -456,6 +473,8 @@ public class Query implements Cloneable {
 				searchRefinements.add(facetTerm);
 			}
 		}
+
+        System.out.println("Facet refinements: " + Arrays.deepToString(facetRefinements.toArray()));
 
 		filteredFacets = new ArrayList<String>(register.keySet());
 		for (FacetCollector collector : register.values()) {

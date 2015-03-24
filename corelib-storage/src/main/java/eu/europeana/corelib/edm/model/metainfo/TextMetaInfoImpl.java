@@ -2,7 +2,7 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import java.io.Serializable;
 
-public class TextMetaInfo implements Serializable {
+public class TextMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo {
 
     /**
      * An Internet media type is a standard identifier used on the
@@ -25,15 +25,15 @@ public class TextMetaInfo implements Serializable {
      */
     private final Boolean isSearchable;
 
-    public TextMetaInfo(final String mimeType, final Long fileSize,
-                        final Integer resolution, final Boolean isSearchable) {
+    public TextMetaInfoImpl(final String mimeType, final Long fileSize,
+                            final Integer resolution, final Boolean isSearchable) {
         this.mimeType = mimeType;
         this.fileSize = fileSize;
         this.resolution = resolution;
         this.isSearchable = isSearchable;
     }
 
-    public TextMetaInfo() {
+    public TextMetaInfoImpl() {
         this.mimeType = null;
         this.fileSize = null;
         this.resolution = null;

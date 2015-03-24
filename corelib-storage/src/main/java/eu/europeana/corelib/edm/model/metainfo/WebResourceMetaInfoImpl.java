@@ -2,12 +2,15 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Property;
+import eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo;
+import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
+import eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo;
+import eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one field which is not null.
  */
-public class WebResourceMetaInfo {
-
+public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo {
     @Id
     @Property("id")
     private final String id;
@@ -32,7 +35,7 @@ public class WebResourceMetaInfo {
      */
     private final TextMetaInfo textMetaInfo;
 
-    public WebResourceMetaInfo() {
+    public WebResourceMetaInfoImpl() {
         this.id = null;
         this.imageMetaInfo = null;
         this.audioMetaInfo = null;
@@ -40,8 +43,8 @@ public class WebResourceMetaInfo {
         this.textMetaInfo = null;
     }
 
-    public WebResourceMetaInfo(final String recordID, final ImageMetaInfo imageMetaInfo,
-                                           final AudioMetaInfo audioMetaInfo, final VideoMetaInfo videoMetaInfo, TextMetaInfo textMetaInfo) {
+    public WebResourceMetaInfoImpl(final String recordID, final ImageMetaInfoImpl imageMetaInfo,
+                                   final AudioMetaInfo audioMetaInfo, final VideoMetaInfo videoMetaInfo, TextMetaInfo textMetaInfo) {
         this.id = recordID;
         this.imageMetaInfo = imageMetaInfo;
         this.audioMetaInfo = audioMetaInfo;
