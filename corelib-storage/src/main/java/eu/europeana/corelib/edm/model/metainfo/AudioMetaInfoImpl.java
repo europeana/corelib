@@ -10,48 +10,48 @@ import java.io.Serializable;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("AudioMetaInfo")
-public class AudioMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo {
+public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo {
 
     /**
      * The number of samples of a sound that are taken per second to represent the event digitally.
      */
-    private final Integer sampleRate;
+    private Integer sampleRate;
 
     /**
      * The number of bits that are conveyed or processed per unit of time.
      */
-    private final Integer bitRate;
+    private Integer bitRate;
 
     /**
      * The audio document duration in milliseconds.
      */
-    private final Long duration;
+    private Long duration;
 
     /**
      * An Internet media type is a standard identifier used on the
      * Internet to indicate the type of data that a file contains.
      */
-    private final String mimeType;
+    private String mimeType;
 
     /**
      * A file format is a standard way that information is encoded for storage in a computer file.
      */
-    private final String fileFormat;
+    private String fileFormat;
 
     /**
      * The size of the file in bytes.
      */
-    private final Long fileSize;
+    private Long fileSize;
 
     /**
      * Either number of channels (1-7?) or mono/stereo.
      */
-    private final Integer channels;
+    private Integer channels;
 
     /**
      * The number of bits of information in each sample.
      */
-    private final Integer bitDepth;
+    private Integer bitDepth;
 
     public AudioMetaInfoImpl() {
         this.sampleRate = null;
@@ -107,5 +107,37 @@ public class AudioMetaInfoImpl implements Serializable, eu.europeana.corelib.def
 
     public Integer getBitDepth() {
         return bitDepth;
+    }
+
+    public void setSampleRate(Integer sampleRate) {
+        this.sampleRate = sampleRate;
+    }
+
+    public void setBitRate(Integer bitRate) {
+        this.bitRate = bitRate;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public void setChannels(Integer channels) {
+        this.channels = channels;
+    }
+
+    public void setBitDepth(Integer bitDepth) {
+        this.bitDepth = bitDepth;
     }
 }

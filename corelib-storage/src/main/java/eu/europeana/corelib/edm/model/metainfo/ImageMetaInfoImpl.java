@@ -11,48 +11,48 @@ import java.io.Serializable;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("ImageMetaInfo")
-public class ImageMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {
+public class ImageMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {
 
     /**
      * The width of image in pixels.
      */
-    private final Integer width;
+    private Integer width;
 
     /**
      * The height of image in pixels.
      */
-    private final Integer height;
+    private Integer height;
 
     /**
      * An Internet media type is a standard identifier used on the
      * Internet to indicate the type of data that a file contains.
      */
-    private final String mimeType;
+    private String mimeType;
 
     /**
      * A file format is a standard way that information is encoded for storage in a computer file.
      */
-    private final String fileFormat;
+    private String fileFormat;
 
     /**
      * A color space is a specific organization of colors.
      */
-    private final String colorSpace;
+    private String colorSpace;
 
     /**
      * The size of the file in bytes
      */
-    private final Long fileSize;
+    private Long fileSize;
 
     /**
      * An array with up to 6 colors (in the HEX code used for web applications)
      */
-    private final String[] colorPalette;
+    private String[] colorPalette;
 
     /**
      * The orientation of the image (LANDSCAPE or PORTRAIT)
      */
-    private final ImageOrientation orientation;
+    private ImageOrientation orientation;
 
     public ImageMetaInfoImpl() {
         this.width = null;
@@ -108,5 +108,37 @@ public class ImageMetaInfoImpl implements Serializable, eu.europeana.corelib.def
 
     public ImageOrientation getOrientation() {
         return orientation;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
+    }
+
+    public void setColorSpace(String colorSpace) {
+        this.colorSpace = colorSpace;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public void setColorPalette(String[] colorPalette) {
+        this.colorPalette = colorPalette;
+    }
+
+    public void setOrientation(ImageOrientation orientation) {
+        this.orientation = orientation;
     }
 }

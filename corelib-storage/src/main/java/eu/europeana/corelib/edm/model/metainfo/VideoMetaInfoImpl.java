@@ -10,54 +10,54 @@ import java.io.Serializable;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("VideoMetaInfo")
-public class VideoMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo {
+public class VideoMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo {
 
     /**
      * The width of frames in pixels.
      */
-    private final Integer width;
+    private Integer width;
 
     /**
      * The height of frames in pixels.
      */
-    private final Integer height;
+    private Integer height;
 
     /**
      * The video document duration in milliseconds.
      */
-    private final Long duration;
+    private Long duration;
 
     /**
      * An Internet media type is a standard identifier used on the
      * Internet to indicate the type of data that a file contains.
      */
-    private final String mimeType;
+    private String mimeType;
 
     /**
      *  also known as frame frequency and frames per second (FPS), is the frequency (rate)
      *  at which an imaging device produces unique consecutive images called frames.
      */
-    private final Double frameRate;
+    private Double frameRate;
 
     /**
      * The size of the file in bytes.
      */
-    private final Long fileSize;
+    private Long fileSize;
 
     /**
      * The Codec the video is encoded with.
      */
-    private final String codec;
+    private String codec;
 
     /**
      * Width x Height
      */
-    private final String resolution;
+    private String resolution;
 
     /**
      * Number of bits that are transmitted over a set length of time.
      */
-    private final Integer bitRate;
+    private Integer bitRate;
 
     public VideoMetaInfoImpl() {
         this.width = null;
@@ -119,5 +119,41 @@ public class VideoMetaInfoImpl implements Serializable, eu.europeana.corelib.def
 
     public Integer getBitRate() {
         return bitRate;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public void setFrameRate(Double frameRate) {
+        this.frameRate = frameRate;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public void setCodec(String codec) {
+        this.codec = codec;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+
+    public void setBitRate(Integer bitRate) {
+        this.bitRate = bitRate;
     }
 }

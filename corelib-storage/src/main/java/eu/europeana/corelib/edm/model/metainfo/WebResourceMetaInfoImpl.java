@@ -22,22 +22,22 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
     /**
      * A class which contains information about an IMAGE document
      */
-    private final ImageMetaInfo imageMetaInfo;
+    private ImageMetaInfo imageMetaInfo;
 
     /**
      * A class which contains information about an AUDIO document
      */
-    private final AudioMetaInfo audioMetaInfo;
+    private AudioMetaInfo audioMetaInfo;
 
     /**
      * A class which contains information about a VIDEO document
      */
-    private final VideoMetaInfo videoMetaInfo;
+    private VideoMetaInfo videoMetaInfo;
 
     /**
      * A class which contains information about a TEXT document
      */
-    private final TextMetaInfo textMetaInfo;
+    private TextMetaInfo textMetaInfo;
 
     public WebResourceMetaInfoImpl() {
         this.id = null;
@@ -74,5 +74,21 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
 
     public TextMetaInfo getTextMetaInfo() {
         return textMetaInfo;
+    }\
+
+    public void setImageMetaInfo(ImageMetaInfo imageMetaInfo) {
+        this.imageMetaInfo = imageMetaInfo;
+    }
+
+    public void setAudioMetaInfo(AudioMetaInfo audioMetaInfo) {
+        this.audioMetaInfo = audioMetaInfo;
+    }
+
+    public void setVideoMetaInfo(VideoMetaInfo videoMetaInfo) {
+        this.videoMetaInfo = videoMetaInfo;
+    }
+
+    public void setTextMetaInfo(TextMetaInfo textMetaInfo) {
+        this.textMetaInfo = textMetaInfo;
     }
 }

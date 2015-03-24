@@ -33,7 +33,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -42,6 +42,7 @@ import com.mongodb.DBCursor;
 
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.search.service.domain.ImageOrientation;
 import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
@@ -169,7 +170,13 @@ public class SearchServiceImpl implements SearchService {
 	protected Logger log;
     private static final HashFunction hf = Hashing.md5();
 
-	@Override
+    private class TextMetaInfoSerializer implements JsonSerializer<TextMetaInfo> {
+        public JsonElement serialize(TextMetaInfo src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src);
+        }
+    }
+
+    @Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
 			throws MongoDBException {
 		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
