@@ -298,7 +298,4 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	Orientation getEbucoreOrientation();
 	
-	void setWebResourceMetaInfo(WebResourceMetaInfo webResourceMetaInfo);
-
-    WebResourceMetaInfo getWebResourceMetaInfo();
 }

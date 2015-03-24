@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -67,7 +68,7 @@ public class WebResourceImpl implements WebResource {
 
 	@Transient
 	@JsonIgnore
-	private WebResourceMetaInfo webResourceMetaInfo;
+	private WebResourceMetaInfoImpl webResourceMetaInfo;
 
 	@Override
 	public String getAbout() {
@@ -477,12 +478,10 @@ public class WebResourceImpl implements WebResource {
 		return null;
 	}
 
-    @Override
-    public void setWebResourceMetaInfo(WebResourceMetaInfo webResourceMetaInfo) {
+    public void setWebResourceMetaInfo(WebResourceMetaInfoImpl webResourceMetaInfo) {
         this.webResourceMetaInfo = webResourceMetaInfo;
     }
 
-    @Override
     public WebResourceMetaInfo getWebResourceMetaInfo() {
         return webResourceMetaInfo;
     }

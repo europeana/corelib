@@ -50,6 +50,7 @@ import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
 import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
 import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
 
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -170,12 +171,6 @@ public class SearchServiceImpl implements SearchService {
 	protected Logger log;
     private static final HashFunction hf = Hashing.md5();
 
-    private class TextMetaInfoSerializer implements JsonSerializer<TextMetaInfo> {
-        public JsonElement serialize(TextMetaInfo src, Type typeOfSrc, JsonSerializationContext context) {
-            return context.serialize(src);
-        }
-    }
-
     @Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
 			throws MongoDBException {
@@ -191,7 +186,7 @@ public class SearchServiceImpl implements SearchService {
 
             final String webMetaInfoId = hc.toString();
             final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
-            webResource.setWebResourceMetaInfo(webMetaInfo);
+            ((WebResourceImpl)webResource).setWebResourceMetaInfo(webMetaInfo);
         }
 
         for (final Aggregation aggregation : fullBean.getAggregations()) {
@@ -202,7 +197,7 @@ public class SearchServiceImpl implements SearchService {
 
                 final String webMetaInfoId = hc.toString();
                 final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
-                webResource.setWebResourceMetaInfo(webMetaInfo);
+                ((WebResourceImpl)webResource).setWebResourceMetaInfo(webMetaInfo);
             }
         }
 

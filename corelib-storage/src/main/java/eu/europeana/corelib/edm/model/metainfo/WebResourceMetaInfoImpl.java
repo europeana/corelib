@@ -22,22 +22,22 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
     /**
      * A class which contains information about an IMAGE document
      */
-    private ImageMetaInfo imageMetaInfo;
+    private ImageMetaInfoImpl imageMetaInfo;
 
     /**
      * A class which contains information about an AUDIO document
      */
-    private AudioMetaInfo audioMetaInfo;
+    private AudioMetaInfoImpl audioMetaInfo;
 
     /**
      * A class which contains information about a VIDEO document
      */
-    private VideoMetaInfo videoMetaInfo;
+    private VideoMetaInfoImpl videoMetaInfo;
 
     /**
      * A class which contains information about a TEXT document
      */
-    private TextMetaInfo textMetaInfo;
+    private TextMetaInfoImpl textMetaInfo;
 
     public WebResourceMetaInfoImpl() {
         this.id = null;
@@ -48,7 +48,7 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
     }
 
     public WebResourceMetaInfoImpl(final String recordID, final ImageMetaInfoImpl imageMetaInfo,
-                                   final AudioMetaInfo audioMetaInfo, final VideoMetaInfo videoMetaInfo, TextMetaInfo textMetaInfo) {
+                                   final AudioMetaInfoImpl audioMetaInfo, final VideoMetaInfoImpl videoMetaInfo, TextMetaInfoImpl textMetaInfo) {
         this.id = recordID;
         this.imageMetaInfo = imageMetaInfo;
         this.audioMetaInfo = audioMetaInfo;
@@ -60,35 +60,35 @@ public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions
         return id;
     }
 
-    public ImageMetaInfo getImageMetaInfo() {
+    public ImageMetaInfoImpl getImageMetaInfo() {
         return imageMetaInfo;
     }
 
-    public AudioMetaInfo getAudioMetaInfo() {
+    public AudioMetaInfoImpl getAudioMetaInfo() {
         return audioMetaInfo;
     }
 
-    public VideoMetaInfo getVideoMetaInfo() {
+    public VideoMetaInfoImpl getVideoMetaInfo() {
         return videoMetaInfo;
     }
 
-    public TextMetaInfo getTextMetaInfo() {
+    public TextMetaInfoImpl getTextMetaInfo() {
         return textMetaInfo;
-    }\
+    }
 
-    public void setImageMetaInfo(ImageMetaInfo imageMetaInfo) {
+    public void setImageMetaInfo(ImageMetaInfoImpl imageMetaInfo) {
         this.imageMetaInfo = imageMetaInfo;
     }
 
-    public void setAudioMetaInfo(AudioMetaInfo audioMetaInfo) {
+    public void setAudioMetaInfo(AudioMetaInfoImpl audioMetaInfo) {
         this.audioMetaInfo = audioMetaInfo;
     }
 
-    public void setVideoMetaInfo(VideoMetaInfo videoMetaInfo) {
+    public void setVideoMetaInfo(VideoMetaInfoImpl videoMetaInfo) {
         this.videoMetaInfo = videoMetaInfo;
     }
 
-    public void setTextMetaInfo(TextMetaInfo textMetaInfo) {
+    public void setTextMetaInfo(TextMetaInfoImpl textMetaInfo) {
         this.textMetaInfo = textMetaInfo;
     }
 }
