@@ -112,7 +112,8 @@ import eu.europeana.corelib.utils.EuropeanaUriUtils;
  */
 public class SearchServiceImpl implements SearchService {
 
-	/**
+
+    /**
 	 * Default number of documents retrieved by MoreLikeThis
 	 */
 	private static final int DEFAULT_MLT_COUNT = 10;

@@ -1,10 +1,15 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
+import com.google.code.morphia.annotations.Entity;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.io.Serializable;
 
 /**
  * A class which contains information about an AUDIO document
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Entity("AudioMetaInfo")
 public class AudioMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo {
 
     /**

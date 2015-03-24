@@ -1,12 +1,16 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
+import com.google.code.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 
 /**
  * A class which contains information about an IMAGE document
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Entity("ImageMetaInfo")
 public class ImageMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {
 
     /**

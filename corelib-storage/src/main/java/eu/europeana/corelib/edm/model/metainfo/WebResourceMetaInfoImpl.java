@@ -1,15 +1,19 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
+import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Property;
 import eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
 import eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo;
 import eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one field which is not null.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Entity("WebResourceMetaInfo")
 public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo {
     @Id
     @Property("id")

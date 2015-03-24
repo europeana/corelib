@@ -1,7 +1,12 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
+import com.google.code.morphia.annotations.Entity;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.io.Serializable;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Entity("TextMetaInfo")
 public class TextMetaInfoImpl implements Serializable, eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo {
 
     /**
