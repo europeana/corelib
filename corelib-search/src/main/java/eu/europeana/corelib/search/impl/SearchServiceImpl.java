@@ -389,7 +389,12 @@ public class SearchServiceImpl implements SearchService {
 					solrQuery.setFacet(true);
 					List<String> filteredFacets = query.getFilteredFacets();
 					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets.size() > 0);
-					for (String facetToAdd : query.getFacets()) {
+
+                    //System.out.println(Arrays.deepToString(query.getFacets().toArray()));
+                    //System.out.println(Arrays.deepToString(query.getFilteredFacets().toArray()));
+                    //System.out.println();
+
+                    for (String facetToAdd : query.getFacets()) {
 						if (query.isProduceFacetUnion()) {
 							if (hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
 								facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
