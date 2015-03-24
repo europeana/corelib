@@ -29,6 +29,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
@@ -162,6 +166,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Log
 	protected Logger log;
+    private static final HashFunction hf = Hashing.md5();
 
 	@Override
 	public FullBean findById(String collectionId, String recordId, boolean similarItems)
@@ -172,14 +177,22 @@ public class SearchServiceImpl implements SearchService {
     private void injectWebMetaInfo(final FullBean fullBean) {
 
         for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
-            final String webMetaInfoId = webResource.getId().toString();
+            final HashCode hc = hf.newHasher()
+                    .putString(webResource.getAbout(), Charsets.UTF_8)
+                    .hash();
+
+            final String webMetaInfoId = hc.toString();
             final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
             webResource.setWebResourceMetaInfo(webMetaInfo);
         }
 
         for (final Aggregation aggregation : fullBean.getAggregations()) {
             for (final WebResource webResource : aggregation.getWebResources()) {
-                final String webMetaInfoId = webResource.getId().toString();
+                final HashCode hc = hf.newHasher()
+                        .putString(webResource.getAbout(), Charsets.UTF_8)
+                        .hash();
+
+                final String webMetaInfoId = hc.toString();
                 final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
                 webResource.setWebResourceMetaInfo(webMetaInfo);
             }
