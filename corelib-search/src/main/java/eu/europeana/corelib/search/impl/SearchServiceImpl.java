@@ -180,23 +180,47 @@ public class SearchServiceImpl implements SearchService {
     private void injectWebMetaInfo(final FullBean fullBean) {
 
         for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
-            final HashCode hc = hf.newHasher()
+            // Locate the technical meta data from the web resurce about
+            final HashCode hashCodeAbout = hf.newHasher()
                     .putString(webResource.getAbout(), Charsets.UTF_8)
                     .hash();
 
-            final String webMetaInfoId = hc.toString();
-            final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+            String webMetaInfoId = hashCodeAbout.toString();
+            WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+
+            // Locate the technical meta data from the aggregation is shown by
+            if (webMetaInfo == null) {
+                final HashCode hashCodeIsShownBy = hf.newHasher()
+                        .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
+                        .hash();
+                webMetaInfoId = hashCodeIsShownBy.toString();
+                webMetaInfo = getMetaInfo(webMetaInfoId);
+
+            }
+
             ((WebResourceImpl)webResource).setWebResourceMetaInfo(webMetaInfo);
         }
 
         for (final Aggregation aggregation : fullBean.getAggregations()) {
             for (final WebResource webResource : aggregation.getWebResources()) {
-                final HashCode hc = hf.newHasher()
+                final HashCode hashCodeAbout = hf.newHasher()
                         .putString(webResource.getAbout(), Charsets.UTF_8)
                         .hash();
 
-                final String webMetaInfoId = hc.toString();
-                final WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+                // Locate the technical meta data from the web resurce about
+                String webMetaInfoId = hashCodeAbout.toString();
+                WebResourceMetaInfoImpl webMetaInfo = getMetaInfo(webMetaInfoId);
+
+                // Locate the technical meta data from the aggregation is shown by
+                if (webMetaInfo == null) {
+                    final HashCode hashCodeIsShownBy = hf.newHasher()
+                            .putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                            .hash();
+                    webMetaInfoId = hashCodeIsShownBy.toString();
+                    webMetaInfo = getMetaInfo(webMetaInfoId);
+
+                }
+
                 ((WebResourceImpl)webResource).setWebResourceMetaInfo(webMetaInfo);
             }
         }
