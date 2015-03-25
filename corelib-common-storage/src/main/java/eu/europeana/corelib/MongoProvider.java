@@ -1,16 +1,13 @@
 package eu.europeana.corelib;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
-
-import java.net.UnknownHostException;
 
 public class MongoProvider {
 
@@ -41,6 +38,8 @@ public class MongoProvider {
                 MongoClient client =new MongoClient(serverAddresses, builder.build());
                 
                 mongo = client;
+                for (ServerAddress s : client.getAllAddress())
+                   org.apache.log4j.Logger.getLogger(this.getClass()).error("Client: " + s.getHost());
 		//mongo = new Mongo(serverAddresses,settings);
                 org.apache.log4j.Logger.getLogger(this.getClass()).error("MongoProvider says " +mongo==null+"");
 	}
