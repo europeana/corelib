@@ -368,6 +368,7 @@ public final class SolrUtils {
 				}
 				List<String> lst = val.get(key);
 				List<String>normalized = new ArrayList<>();
+				if(val.get(key)!=null){
 				for(String str:lst){
                                    
 					if(str.getBytes().length>32766){
@@ -377,6 +378,7 @@ public final class SolrUtils {
 					}
                                          
 					normalized.add(str);
+				}
 				}
 				values.addAll(normalized);
 				doc.setField(edmLabel.toString() + "." + key, values);
