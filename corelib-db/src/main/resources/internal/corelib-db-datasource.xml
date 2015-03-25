@@ -64,7 +64,7 @@
 			factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
 			<constructor-arg value="OAuth2" />
 			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
+			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.username']}"
 				type="java.lang.String" />
