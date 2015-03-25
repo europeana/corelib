@@ -158,7 +158,7 @@ public class SolrDocumentHandler implements ICollection {
 		doc.addField("timestamp_created", fBean.getTimestampCreated());
 		doc.addField("timestamp_update", fBean.getTimestampUpdated());
 		
-		//extractCRFFields(doc, fBean.getAbout());
+		extractCRFFields(doc, fBean.getAbout());
 		return doc;
 	}
 
