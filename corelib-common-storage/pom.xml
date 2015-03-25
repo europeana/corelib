@@ -25,12 +25,18 @@
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${version.mongoDriver}</version>
-			<scope>compile</scope>
+			
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<version>${version.mongoMorphia}</version>
+			<exclusions>
+			 <exclusion>
+			 <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+			 </exclusion>
+			</exclusions>
 		</dependency>
   </dependencies>
 </project>

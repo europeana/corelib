@@ -72,18 +72,32 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 						"postgres.password" + "="
 								+ env.getProperty(POSTGRESPASSWORD) + "\n",
 						true);
-				FileUtils.writeStringToFile(europeanaProperties, "postgres.host"
-						+ "=" + env.getProperty(POSTGRESHOST) + "\n", true);
-				FileUtils.writeStringToFile(europeanaProperties, "mongodb.username"
-						+ "=" + env.getProperty(MONGOUSERNAME) + "\n", true);
-				FileUtils.writeStringToFile(europeanaProperties, "mongodb.password"
-						+ "=" + env.getProperty(MONGOPASSWORD) + "\n", true);
-				String host = env.getProperty(MONGOHOSTS).replace('[', ' ')
-						.split(",")[0].trim();
-				FileUtils.writeStringToFile(europeanaProperties, "mongodb.host"
-						+ "=" + host.split(":")[0] + "\n", true);
-				FileUtils.writeStringToFile(europeanaProperties, "mongodb.port"
-						+ "=" + host.split(":")[1] + "\n", true);
+				FileUtils.writeStringToFile(europeanaProperties,
+						"postgres.host" + "=" + env.getProperty(POSTGRESHOST)
+								+ "\n", true);
+				FileUtils.writeStringToFile(
+						europeanaProperties,
+						"mongodb.username" + "="
+								+ env.getProperty(MONGOUSERNAME) + "\n", true);
+				FileUtils.writeStringToFile(
+						europeanaProperties,
+						"mongodb.password" + "="
+								+ env.getProperty(MONGOPASSWORD) + "\n", true);
+				org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(MONGOHOSTS));
+				String[] hosts = env.getProperty(MONGOHOSTS).replace('[', ' ')
+						.replace("]", " ").split(",");
+				String mongoHost = "mongodb.host=";
+				String mongoPort = "mongodb.port=";
+				for (String host : hosts) {
+					mongoHost = mongoHost + host.split(":")[0].trim() + ",";
+					mongoPort = mongoPort + host.split(":")[1].trim() + ",";
+				}
+				FileUtils.writeStringToFile(europeanaProperties,
+						mongoHost.substring(0, mongoHost.length() - 1) + "\n",
+						true);
+				FileUtils.writeStringToFile(europeanaProperties,
+						mongoPort.substring(0, mongoPort.length() - 1) + "\n",
+						true);
 				FileUtils.writeStringToFile(europeanaProperties, "redis.host"
 						+ "=" + env.getProperty(REDISHOST) +"\n", true);
                 FileUtils.writeStringToFile(europeanaProperties, "redis.port"

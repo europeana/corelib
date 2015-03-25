@@ -77,4 +77,27 @@ public class ApiMongoConnector {
 		}
 		return datastore;
 	}
+	
+	public Datastore createDatastore(String label, Mongo mongo,
+			String dbName, String username, String password) {
+		Datastore datastore = null;
+		Morphia connection = new Morphia();
+		try {
+			log.info(String.format("Connecting to '%s' mongo server: %s",
+					label, dbName));
+			
+			if (StringUtils.isNotEmpty(username)
+					&& StringUtils.isNotEmpty(password)) {
+				datastore = connection.createDatastore(mongo, dbName, username,
+						password.toCharArray());
+			} else {
+				datastore = connection.createDatastore(mongo, dbName);
+			}
+			log.info(String.format(
+					"Connection to '%s' mongo server was successful", label));
+		} catch (MongoException e) {
+			log.error(e.getMessage());
+		}
+		return datastore;
+	}
 }

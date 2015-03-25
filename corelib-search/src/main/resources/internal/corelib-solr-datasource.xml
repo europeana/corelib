@@ -25,8 +25,14 @@
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-<bean id="corelib_solr_mongo" class="com.mongodb.Mongo">
-        <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-        <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int" />
-    </bean>
+<!-- <bean id="corelib_solr_mongo" class="com.mongodb.Mongo"> -->
+<!--         <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" /> -->
+<!--         <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int" /> -->
+<!--     </bean> -->
+<bean id="corelib_db_mongoProvider" class = "eu.europeana.corelib.MongoProvider">
+        <constructor-arg
+                value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.port']}" type="java.lang.String" />
+        </bean>
 </beans>
