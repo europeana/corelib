@@ -281,7 +281,7 @@ public interface WebResource extends AbstractEdmEntity {
 	 * edm:hasColorSpace
 	 * @return
 	 */
-	ColorSpace getEdmHasColorSpace();
+	String getEdmHasColorSpace();
 	
 	
 	/**
@@ -296,6 +296,6 @@ public interface WebResource extends AbstractEdmEntity {
 	 * ebucore:orientation
 	 * @return
 	 */
-	Orientation getEbucoreOrientation();
+	String getEbucoreOrientation();
 	
 }

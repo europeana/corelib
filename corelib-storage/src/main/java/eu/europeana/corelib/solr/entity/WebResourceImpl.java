@@ -290,6 +290,13 @@ public class WebResourceImpl implements WebResource {
 			return webResourceMetaInfo.getImageMetaInfo()
 					.getMimeType();
 		}
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getTextMetaInfo() != null
+				&& webResourceMetaInfo.getTextMetaInfo()
+						.getMimeType() != null) {
+			return webResourceMetaInfo.getTextMetaInfo()
+					.getMimeType();
+		}
 		return null;
 	}
 
@@ -314,6 +321,13 @@ public class WebResourceImpl implements WebResource {
 				&& webResourceMetaInfo.getImageMetaInfo()
 						.getFileSize() != null) {
 			return webResourceMetaInfo.getImageMetaInfo()
+					.getFileSize();
+		}
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getTextMetaInfo() != null
+				&& webResourceMetaInfo.getTextMetaInfo()
+						.getFileSize() != null) {
+			return webResourceMetaInfo.getTextMetaInfo()
 					.getFileSize();
 		}
 		return null;
@@ -420,16 +434,16 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public ColorSpace getEdmHasColorSpace() {
+	public String getEdmHasColorSpace() {
 		if (webResourceMetaInfo != null
 				&& webResourceMetaInfo.getImageMetaInfo() != null
 				&& webResourceMetaInfo.getImageMetaInfo()
 						.getColorSpace() != null) {
 			if (webResourceMetaInfo.getImageMetaInfo()
 					.getColorSpace().equalsIgnoreCase("grayscale")) {
-				return ColorSpace.GRAYSCALE;
+				return ColorSpace.getValue(ColorSpace.GRAYSCALE);
 			} else {
-				return ColorSpace.SRGB;
+				return ColorSpace.getValue(ColorSpace.SRGB);
 			}
 		}
 		return null;
@@ -448,7 +462,7 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	public Orientation getEbucoreOrientation() {
+	public String getEbucoreOrientation() {
 		if (webResourceMetaInfo != null
 				&& webResourceMetaInfo.getVideoMetaInfo() != null
 				&& webResourceMetaInfo.getVideoMetaInfo()
@@ -457,9 +471,9 @@ public class WebResourceImpl implements WebResource {
 			if (webResourceMetaInfo.getVideoMetaInfo()
 						.getHeight()>=webResourceMetaInfo.getVideoMetaInfo()
 						.getWidth()){
-				return Orientation.PORTRAIT;
+				return Orientation.getValue(Orientation.PORTRAIT);
 			} else {
-				return Orientation.LANDSCAPE;
+				return Orientation.getValue(Orientation.LANDSCAPE);
 			}
 		}
 		if (webResourceMetaInfo != null
@@ -470,9 +484,9 @@ public class WebResourceImpl implements WebResource {
 			if (webResourceMetaInfo.getImageMetaInfo()
 						.getHeight()>=webResourceMetaInfo.getImageMetaInfo()
 						.getWidth()){
-				return Orientation.PORTRAIT;
+				return Orientation.getValue(Orientation.PORTRAIT);
 			} else {
-				return Orientation.LANDSCAPE;
+				return Orientation.getValue(Orientation.LANDSCAPE);
 			}
 		}
 		return null;

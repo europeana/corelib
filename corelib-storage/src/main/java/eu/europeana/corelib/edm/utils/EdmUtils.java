@@ -603,7 +603,7 @@ public class EdmUtils {
                         if(wr.getEdmHasColorSpace()!=null){
                             HasColorSpace hasColorSpace = new HasColorSpace();
                             ColorSpaceType type=null;
-                            if(wr.getEdmHasColorSpace()==ColorSpace.GRAYSCALE){
+                            if(StringUtils.equals(wr.getEdmHasColorSpace(),ColorSpace.getValue(ColorSpace.GRAYSCALE))){
                                 type = ColorSpaceType.GRAYSCALE;
                             } else {
                                 type = ColorSpaceType.S_RGB;
@@ -615,7 +615,7 @@ public class EdmUtils {
                         if(wr.getEbucoreOrientation()!=null){
                             OrientationType orientation =new OrientationType();
                             
-                            if(wr.getEbucoreOrientation()==Orientation.LANDSCAPE){
+                            if(StringUtils.equals(wr.getEbucoreOrientation(),Orientation.getValue(Orientation.LANDSCAPE))){
                                 orientation.setString("landscape");
                             } else {
                                 orientation.setString("portrait");
