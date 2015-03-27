@@ -400,6 +400,13 @@ public class WebResourceImpl implements WebResource {
 			return Integer.parseInt(webResourceMetaInfo.getVideoMetaInfo()
 					.getResolution());
 		}
+		if (webResourceMetaInfo != null
+				&& webResourceMetaInfo.getTextMetaInfo() != null
+				&& webResourceMetaInfo.getTextMetaInfo()
+						.getResolution() != null) {
+			return webResourceMetaInfo.getTextMetaInfo()
+					.getResolution();
+		}
 		return null;
 	}
 
