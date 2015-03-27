@@ -251,6 +251,8 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 		}
+		((List<Aggregation>)fullBean.getAggregations()).set(0, aggregationFix);
+		
 		// Step 1 : Fill in the europeana aggregation
 		for (final WebResource webResource : fullBean.getEuropeanaAggregation()
 				.getWebResources()) {
