@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="EDM-INTERNAL.xsd" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <rdf:RDF xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM-INTERNAL.xsd"
+ xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns:dc="http://purl.org/dc/elements/1.1/"
  xmlns:edm="http://www.europeana.eu/schemas/edm/"
  xmlns:foaf="http://xmlns.com/foaf/0.1/"
@@ -183,7 +183,7 @@
     <dc:date>1793</dc:date>
     <dc:description xml:lang="de">Umfang: F1 - f3 (F1 - f4 Karteikarte?). Stoßmechanik. 2 Handhebel: geteiltes Forte und Kniedrücker (2 Kniehebel Karteikarte ?): Laute</dc:description>
     <dc:identifier>#GNM:711731</dc:identifier>
-    <dc:title xml:lang="de">Tafelklavier</dc:title>
+<!-- <dc:title xml:lang="de">Tafelklavier</dc:title> -->
     <dc:type rdf:resource="http://www.mimo-db.eu/InstrumentsKeywords/2308"/>
     <dc:type rdf:resource="http://www.mimo-db.eu/HornbostelAndSachs/6458"/>
     <edm:type>IMAGE</edm:type>
