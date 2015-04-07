@@ -115,6 +115,12 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+                
+		<repository>
+			<id>jcenter-release</id>
+			<name>jcenter</name>
+			<url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+		</repository>
 	</repositories>
 
 	<properties>
