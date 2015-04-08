@@ -784,14 +784,11 @@ public class CommonPropertyExtractor {
         mimeTypes.put(775, "image/x-ms-bmp");
     }
 
-    public static Integer getType(Integer tag) {
-        return tag>>25;
+    public static MediaTypeEncoding getType(Integer tag) {
+        return MediaTypeEncoding.valueOf(TagEncoding.MEDIA_TYPE.extractValue(tag));
     }
 
     public static String getMimeType(Integer tag) {
-        final Integer mask = ((1 << 10) - 1) << 15;
-        final Integer mimeTypeCode = (tag & mask) >> 15;
-
-        return mimeTypes.get(mimeTypeCode);
+        return mimeTypes.get(TagEncoding.MIME_TYPE.extractValue(tag));
     }
 }

@@ -148,11 +148,8 @@ public class ImagePropertyExtractor {
         hexColors.put(138, "#9ACD32");
     }
 
-   // public static final Integer mask = (1 << 25) - 1;
-
     public static String getSize(Integer tag) {
-        final Integer mask = 7 << 12;
-        final Integer sizeCode = (tag & mask)>>12;
+        final Integer sizeCode = TagEncoding.IMAGE_SIZE.extractValue(tag);
 
         switch (sizeCode) {
             case 1: return "small";
@@ -165,32 +162,20 @@ public class ImagePropertyExtractor {
     }
 
     public static String getColorSpace(Integer tag) {
-        final Integer mask = 3 << 10;
-        final Integer colorSpaceCode = (tag & mask)>>10;
+        final Integer colorSpaceCode = TagEncoding.IMAGE_COLOURSPACE.extractValue(tag);
 
-        if (1 == colorSpaceCode || 3 == colorSpaceCode) {
-            return "true";
-        }
-        else if (3 == colorSpaceCode) {
+        if (2 == colorSpaceCode) {
             return "false";
+        }
+        else if (1 == colorSpaceCode || 3 == colorSpaceCode) {
+            return "true";
         }
 
         return "";
-
-        /*
-        switch (colorSpaceCode) {
-            case 1: return "sRGB";
-            case 2: return "greyscale";
-            case 3: return "CMYK";
-
-            default: return "";
-        }
-        */
     }
 
     public static String getAspectRatio(Integer tag) {
-        final Integer mask = 3 << 8;
-        final Integer aspectRatioCode = (tag & mask)>>8;
+        final Integer aspectRatioCode = TagEncoding.IMAGE_ASPECTRATIO.extractValue(tag);
 
         switch (aspectRatioCode) {
             case 1: return "Landscape";
@@ -201,8 +186,7 @@ public class ImagePropertyExtractor {
     }
 
     public static String getColor(Integer tag) {
-        final Integer mask = (1 << 8) - 1;
-        final Integer colorCode = tag & mask;
+        final Integer colorCode = TagEncoding.IMAGE_COLOUR.extractValue(tag);
 
         return hexColors.get(colorCode)!=null?hexColors.get(colorCode):"";
     }

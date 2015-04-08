@@ -1,14 +1,11 @@
 package eu.europeana.corelib.search.service.impl;
 
-import eu.europeana.corelib.search.service.inverseLogic.CommonPropertyExtractor;
-import eu.europeana.corelib.search.service.inverseLogic.ImagePropertyExtractor;
-import eu.europeana.corelib.search.service.inverseLogic.SoundPropertyExtractor;
-import eu.europeana.corelib.search.service.inverseLogic.VideoPropertyExtractor;
+import eu.europeana.corelib.search.service.inverseLogic.*;
 
 public class FacetLabelExtractor {
 
     public static String getFacetLabel(Integer tag) {
-        final Integer mediaType = CommonPropertyExtractor.getType(tag);
+        final MediaTypeEncoding mediaType = CommonPropertyExtractor.getType(tag);
         final String  mimeType  = CommonPropertyExtractor.getMimeType(tag);
 
         if (null != mimeType && !mimeType.trim().isEmpty()) {
@@ -17,7 +14,7 @@ public class FacetLabelExtractor {
 
         String label;
         switch (mediaType) {
-            case 1:
+            case IMAGE:
                 label = ImagePropertyExtractor.getAspectRatio(tag);
                 if(!label.equals("")) {
                     return label;
@@ -32,14 +29,14 @@ public class FacetLabelExtractor {
                 }
                 label = ImagePropertyExtractor.getSize(tag);
                 return label;
-            case 2:
+            case SOUND:
                 label = SoundPropertyExtractor.getDuration(tag);
                 if(!label.equals("")) {
                     return label;
                 }
                 label = SoundPropertyExtractor.getQuality(tag);
                 return label;
-            case 3:
+            case VIDEO:
                 label = VideoPropertyExtractor.getDuration(tag);
                 if(!label.equals("")) {
                     return label;
