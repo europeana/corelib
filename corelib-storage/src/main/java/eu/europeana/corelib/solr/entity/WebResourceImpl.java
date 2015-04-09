@@ -394,18 +394,9 @@ public class WebResourceImpl implements WebResource {
 	@Override
 	public Integer getEdmSpatialResolution() {
 		if (webResourceMetaInfo != null
-				&& webResourceMetaInfo.getVideoMetaInfo() != null
-				&& webResourceMetaInfo.getVideoMetaInfo()
-						.getResolution() != null) {
-			System.out.println("Video MetaInfo webResourceMetaInfo: " + webResourceMetaInfo.getVideoMetaInfo().getResolution());
-			return Integer.parseInt(webResourceMetaInfo.getVideoMetaInfo()
-					.getResolution());
-		}
-		if (webResourceMetaInfo != null
 				&& webResourceMetaInfo.getTextMetaInfo() != null
 				&& webResourceMetaInfo.getTextMetaInfo()
 						.getResolution() != null) {
-			System.out.println("Text MetaInfo webResourceMetaInfo: " + webResourceMetaInfo.getTextMetaInfo().getResolution());
 			return webResourceMetaInfo.getTextMetaInfo()
 					.getResolution();
 		}
@@ -414,7 +405,6 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public Integer getEbucoreSampleSize() {
-		
 		return null;
 	}
 
