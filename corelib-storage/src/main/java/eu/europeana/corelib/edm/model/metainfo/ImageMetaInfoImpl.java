@@ -2,15 +2,15 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import com.google.code.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import java.io.Serializable;
 
 /**
  * A class which contains information about an IMAGE document
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("ImageMetaInfo")
+@JsonIgnoreProperties({"colorPalette"})
 public class ImageMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {
 
     /**
