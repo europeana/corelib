@@ -449,6 +449,7 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
+	@JsonIgnore
 	public List<String> getEdmComponentColor() {
 		if (webResourceMetaInfo != null
 				&& webResourceMetaInfo.getImageMetaInfo() != null
