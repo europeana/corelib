@@ -261,6 +261,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 
+
 			// Locate the technical meta data from the aggregation is shown by
 			if (webMetaInfo == null
 					&& fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
@@ -281,6 +282,17 @@ public class SearchServiceImpl implements SearchService {
 				((WebResourceImpl) webResource)
 						.setWebResourceMetaInfo(webMetaInfo);
 			}
+		}
+
+		for (final Aggregation aggregation: fullBean.getAggregations()) {
+			final List<WebResource> filteredWebResources = new ArrayList<>();
+
+			for (final WebResource webResource: aggregation.getWebResources()) {
+				if (webResource.getAbout().equals(aggregation.getEdmIsShownBy())) {
+					filteredWebResources.add(webResource);
+				}
+			}
+			aggregation.setWebResources(filteredWebResources);
 		}
 
 		// Step 2 : Fill in the aggregation
