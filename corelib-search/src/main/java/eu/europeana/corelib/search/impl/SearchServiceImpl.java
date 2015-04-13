@@ -288,16 +288,21 @@ public class SearchServiceImpl implements SearchService {
 		for (final Aggregation aggregation : fullBean.getAggregations()) {
 			final Set<String> urls = new HashSet<>();
 
-			urls.add(aggregation.getEdmIsShownBy());
+			urls.add(aggregation.getEdmIsShownBy().trim());
 			if (null != aggregation.getHasView()) {
+				for (final String x: aggregation.getHasView()) {
+					urls.add(x.trim());
+				}
 				urls.addAll(Arrays.asList(aggregation.getHasView()));
 			}
 
-			System.out.println(Arrays.deepToString(urls.toArray()));
+			if (!urls.isEmpty()) {
+				System.out.println(Arrays.deepToString(urls.toArray()));
+			}
 
 			for (final WebResource webResource : aggregation.getWebResources()) {
 				System.out.println(webResource.getAbout());
-				if (!urls.contains(webResource.getAbout())) {
+				if (!urls.contains(webResource.getAbout().trim())) {
 					continue;
 				}
 				WebResourceMetaInfoImpl webMetaInfo = null;
