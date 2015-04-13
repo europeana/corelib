@@ -293,7 +293,10 @@ public class SearchServiceImpl implements SearchService {
 				urls.addAll(Arrays.asList(aggregation.getHasView()));
 			}
 
+			System.out.println(Arrays.deepToString(urls.toArray()));
+
 			for (final WebResource webResource : aggregation.getWebResources()) {
+				System.out.println(webResource.getAbout());
 				if (!urls.contains(webResource.getAbout())) {
 					continue;
 				}
@@ -331,6 +334,7 @@ public class SearchServiceImpl implements SearchService {
 							.setWebResourceMetaInfo(webMetaInfo);
 				}
 			}
+			System.out.println("\n");
 		}
 
 	}
