@@ -284,20 +284,13 @@ public class SearchServiceImpl implements SearchService {
 			}
 		}
 
-		for (final Aggregation aggregation: fullBean.getAggregations()) {
-			final List<WebResource> filteredWebResources = new ArrayList<>();
-
-			for (final WebResource webResource: aggregation.getWebResources()) {
-				if (webResource.getAbout().equals(aggregation.getEdmIsShownBy())) {
-					filteredWebResources.add(webResource);
-				}
-			}
-			aggregation.setWebResources(filteredWebResources);
-		}
-
 		// Step 2 : Fill in the aggregation
 		for (final Aggregation aggregation : fullBean.getAggregations()) {
 			for (final WebResource webResource : aggregation.getWebResources()) {
+				if (!webResource.getAbout().equals(aggregation.getEdmIsShownBy())) {
+					continue;
+				}
+
 				WebResourceMetaInfoImpl webMetaInfo = null;
 
 				if (webResource.getAbout() != null) {
