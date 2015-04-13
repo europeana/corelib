@@ -305,6 +305,7 @@ public class SearchServiceImpl implements SearchService {
 				if (!urls.contains(webResource.getAbout().trim())) {
 					continue;
 				}
+				System.out.println("We have info about it ;)");
 				WebResourceMetaInfoImpl webMetaInfo = null;
 
 				if (webResource.getAbout() != null) {
