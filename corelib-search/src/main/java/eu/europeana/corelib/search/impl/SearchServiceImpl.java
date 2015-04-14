@@ -288,11 +288,11 @@ public class SearchServiceImpl implements SearchService {
 		for (final Aggregation aggregation : fullBean.getAggregations()) {
 			final Set<String> urls = new HashSet<>();
 
-			urls.add(aggregation.getEdmIsShownBy().trim());
+            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
+               urls.add(aggregation.getEdmIsShownBy());
+            }
+
 			if (null != aggregation.getHasView()) {
-				for (final String x: aggregation.getHasView()) {
-					urls.add(x.trim());
-				}
 				urls.addAll(Arrays.asList(aggregation.getHasView()));
 			}
 
@@ -301,11 +301,10 @@ public class SearchServiceImpl implements SearchService {
 			}
 
 			for (final WebResource webResource : aggregation.getWebResources()) {
-				System.out.println(webResource.getAbout());
 				if (!urls.contains(webResource.getAbout().trim())) {
 					continue;
 				}
-				System.out.println("We have info about it ;)");
+
 				WebResourceMetaInfoImpl webMetaInfo = null;
 
 				if (webResource.getAbout() != null) {
@@ -340,7 +339,6 @@ public class SearchServiceImpl implements SearchService {
 							.setWebResourceMetaInfo(webMetaInfo);
 				}
 			}
-			System.out.println("\n");
 		}
 
 	}
