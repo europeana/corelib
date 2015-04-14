@@ -49,6 +49,8 @@ import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
 import eu.europeana.corelib.search.service.domain.ImageOrientation;
+import eu.europeana.corelib.search.service.inverseLogic.MediaTypeEncoding;
+import eu.europeana.corelib.search.service.inverseLogic.TagEncoding;
 import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
 import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
 import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
@@ -1101,7 +1103,7 @@ public class SearchServiceImpl implements SearchService {
 			}
 		}
 
-		final Integer mediaTypeCode = 1;
+		final Integer mediaTypeCode = MediaTypeEncoding.IMAGE.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer fileSizeCode = ImageTagExtractor.getSizeCode(imageSize);
@@ -1112,26 +1114,44 @@ public class SearchServiceImpl implements SearchService {
 		final Integer colorCode = ImageTagExtractor
 				.getColorCode(imageColorPalette);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | fileSizeCode << 12
-				| colorSpaceCode << 10 | aspectRatioCode << 8 | colorCode;
+        System.out.println("mediaTypeCode: " + mediaTypeCode + " " + Integer.toBinaryString(mediaTypeCode));
+        System.out.println("mimeTypeCode: " + mimeTypeCode + " " + Integer.toBinaryString(mimeTypeCode));
+        System.out.println("fileSizeCode: " + fileSizeCode + " " + Integer.toBinaryString(fileSizeCode)) ;
+        System.out.println("colorSpaceCode: " + colorSpaceCode + " " + Integer.toBinaryString(colorSpaceCode));
+        System.out.println("aspectRatioCode: " + aspectRatioCode + " " + Integer.toBinaryString(aspectRatioCode));
+        System.out.println("colorCode: " + colorCode + " " + Integer.toBinaryString(colorCode));
+
+
+        final Integer tag =  mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               fileSizeCode << TagEncoding.IMAGE_SIZE.getBitPos() |
+               colorSpaceCode << TagEncoding.IMAGE_COLOURSPACE.getBitPos() |
+               aspectRatioCode << TagEncoding.IMAGE_ASPECTRATIO.getBitPos() |
+               colorCode << TagEncoding.IMAGE_COLOUR.getBitPos();
+
+        System.out.println("Tag is : " + tag + "   " + Integer.toBinaryString(tag));
+
+        return tag;
 	}
 
 	private Integer searchSound(final String mimeType, final Boolean soundHQ,
 			final String duration) {
-		final Integer mediaTypeCode = 2;
+		final Integer mediaTypeCode = MediaTypeEncoding.SOUND.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
 		final Integer durationCode = SoundTagExtractor
 				.getDurationCode(duration);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | qualityCode << 13
-				| durationCode << 10;
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.SOUND_QUALITY.getBitPos() |
+               durationCode << TagEncoding.SOUND_DURATION.getBitPos();
 	}
 
 	private Integer searchVideo(final String mimeType,
 			final Boolean videoQuality, final String duration) {
-		final Integer mediaTypeCode = 3;
+		final Integer mediaTypeCode = MediaTypeEncoding.VIDEO.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer qualityCode = VideoTagExtractor
@@ -1139,8 +1159,10 @@ public class SearchServiceImpl implements SearchService {
 		final Integer durationCode = VideoTagExtractor
 				.getDurationCode(duration);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | qualityCode << 13
-				| durationCode << 10;
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.VIDEO_QUALITY.getBitPos() |
+               durationCode << TagEncoding.VIDEO_DURATION.getBitPos();
 	}
 
 	private WebResourceMetaInfoImpl getMetaInfo(
