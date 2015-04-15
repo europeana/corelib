@@ -31,7 +31,7 @@ public class ContentReuseFrameworkServiceTest {
 	@Resource(name = "corelib_web_contentReuseFrameworkService")
 	private ContentReuseFrameworkService crfService;
 
-	@Test
+	@Ignore
 	public void testGetMetadata() {
 
 		List<Image> images = new ArrayList<Image>();
