@@ -42,7 +42,6 @@ import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -54,6 +53,7 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
+
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.FullBean
@@ -129,9 +129,7 @@ public class FullBeanImpl implements FullBean, IDocument {
     @Indexed
     protected State state;
 
-    /**
-     * GETTERS & SETTTERS
-     */
+    
     @Override
     public List<PlaceImpl> getPlaces() {
         return this.places;

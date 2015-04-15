@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2007-2012 The Europeana Foundation
+ 
+   Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+   by the European Commission;
+   You may not use this work except in compliance with the Licence.
+  
+   You may obtain a copy of the Licence at:
+   http://joinup.ec.europa.eu/software/page/eupl
+ 
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+   any kind, either express or implied.
+   See the Licence for the specific language governing permissions and limitations under
+   the Licence.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" elementFormDefault="qualified">
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+  <annotation>
+    <documentation>
+      EDM First Implementation Schema: EBUCORE
+    </documentation>
+  </annotation>
+  <element name="fileByteSize" type="rdf:LongType">
+    <annotation>
+      <documentation>
+       The size of a Media Resource expressed in bytes. Example:
+       <fileByteSize>39508</fileByteSize>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="hasMimeType" type="string">
+    <annotation>
+      <documentation>
+       The main MIME types as defined by IANA: e.g. audio, video, text, application, or a container MIME type. Example:
+       <hasMimeType>video/mp4</hasMimeType>
+      </documentation>
+    </annotation>
+  </element>
+  
+  <element name="duration" type="string">
+    <annotation>
+      <documentation>
+       The duration of a track or a signal expressed in ms. Example:
+       <duration>270000</duration>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="width" type="rdf:IntegerType">
+    <annotation>
+      <documentation>
+       The width of e.g. a video frame typically expressed as a number of pixels. Example:
+       <width>1024</width>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="height" type="rdf:IntegerType">
+    <annotation>
+      <documentation>
+       The height of e.g. a video frame typically expressed as a number of pixels. Example:
+       <height>768</height>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="sampleSize" type="rdf:IntegerType">
+    <annotation>
+      <documentation>
+       The size of an audio sample in bits. Also called bit depth. Example:
+       <sampleSize>16</sampleSize>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="sampleRate" type="rdf:IntegerType">
+    <annotation>
+      <documentation>
+       The frequency at which an audio is sampled per second. Also called sampling rate. Example:
+       <sampleRate>44100</sampleRate>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="bitRate" type="rdf:NonNegativeIntegerType">
+    <annotation>
+      <documentation>
+       To provide the bitrate at which the Media Resource can be played in bits per second. Example:
+       <bitRate>128000</bitRate>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="frameRate" type="rdf:DoubleType">
+    <annotation>
+      <documentation>
+       The frame rate of the video signal in frames per second. Example:
+       <frameRate>300</frameRate>
+      </documentation>
+    </annotation>
+  </element>
+   <element name="orientation" type="ebucore:OrientationType">
+    <annotation>
+      <documentation>
+       The orientation of a document or an image. Example:
+       <orientation>landscape</orientation>
+      </documentation>
+    </annotation>
+  </element>
+  <element name="audioChannelNumber" type="rdf:NonNegativeIntegerType">
+    <annotation>
+      <documentation>
+       The total number of audio channels contained in the Media Resource. Example:
+       <audioChannelNumber>2</audioChannelNumber>
+      </documentation>
+    </annotation>
+  </element>
+   <complexType name="OrientationType">
+    <simpleContent>
+   <restriction base="rdf:StringType">
+     <enumeration value="landscape"/>
+     <enumeration value="portrait"/>
+   </restriction>
+    </simpleContent>
+  </complexType>
+  
+</schema>

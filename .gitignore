@@ -4,6 +4,7 @@
 .settings/
 .externalToolBuilders/
 
+.idea/*
 # Maven
 */target/**
 
@@ -12,3 +13,4 @@
 *.bak
 .DS_Store
 /target/
+*.iml

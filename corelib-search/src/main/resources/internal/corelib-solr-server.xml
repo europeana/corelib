@@ -51,6 +51,21 @@
 			type="java.lang.String" />
 	</bean>
 
+    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
+        <constructor-arg ref="corelib_solr_mongo_metainfo"/>
+        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.password']}" type="java.lang.String"/>
+    </bean>
+
+    <bean id="corelib_thumbnail_mongoServer" class="eu.europeana.corelib.server.impl.ThumbnailMongoServerImpl">
+        <constructor-arg ref="corelib_thumbnail_mongo"/>
+        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.password']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.namespace']}" type="java.lang.String"/>
+    </bean>
+
 	<bean id="corelib_solr_idServer"
 		class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo" />

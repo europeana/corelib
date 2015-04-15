@@ -38,6 +38,8 @@ import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
+import eu.europeana.corelib.definitions.model.ColorSpace;
+import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -48,6 +50,8 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import java.awt.MultipleGradientPaint;
+import java.math.BigInteger;
 
 /**
  * Convert a FullBean to EDM
@@ -64,7 +68,13 @@ public class EdmUtils {
 	private static IBindingFactory bfact;
 	private final static String SPACE = " ";
 	private final static String PREFIX = "http://data.europeana.eu";
-
+        private final static String LONGDATATYPE ="http://www.w3.org/2001/XMLSchema#long";
+        private final static String HEXBINARYDATATYPE ="http://www.w3.org/2001/XMLSchema#hexBinary";
+        private final static String STRINGDATATYPE="http://www.w3.org/2001/XMLSchema#string";
+        private final static String INTEGERDATATYPE="http://www.w3.org/2001/XMLSchema#integer";
+        private final static String NONNEGATIVEINTEGERDATATYPE="http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+        private final static String DOUBLEDATATYPE="http://www.w3.org/2001/XMLSchema#double";
+        
 	/**
 	 * Convert a FullBean to an EDM String
 	 * 
@@ -358,7 +368,7 @@ public class EdmUtils {
 			if (pInList != null) {
 				proxy.setProxyInList(pInList);
 			}
-			Type1 type = new Type1();
+			Type2 type = new Type2();
 			type.setType(EdmType.valueOf(typeStr.replace("3D", "_3_D")));
 			proxy.setType(type);
 
@@ -519,11 +529,119 @@ public class EdmUtils {
 			addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
 			addAsList(wResource, Source.class, wr.getDcSource());
 			addAsList(wResource, SameAs.class, wr.getOwlSameAs());
+			addAsObject(wResource, Type1.class, wr.getRdfType());
+			if(wr.getEdmCodecName()!=null){
+				CodecName codecName = new CodecName();
+				codecName.setCodecName(wr.getEdmCodecName());
+				wResource.setCodecName(codecName);
+			}
+			if(wr.getEbucoreHasMimeType()!=null){
+                            HasMimeType hasMimeType = new HasMimeType();
+                            hasMimeType.setHasMimeType(wr.getEbucoreHasMimeType());
+                            wResource.setHasMimeType(hasMimeType);
+			}
+                        if(wr.getEbucoreFileByteSize()!=null){
+                            LongType fileByteSize = new LongType();
+                            fileByteSize.setLong(wr.getEbucoreFileByteSize());
+                            fileByteSize.setDatatype(LONGDATATYPE);
+                            wResource.setFileByteSize(fileByteSize);
+                        }
+                        if(wr.getEbucoreDuration()!=null){
+                            Duration duration = new Duration();
+                            duration.setDuration(wr.getEbucoreDuration());
+                            wResource.setDuration(duration);
+                        }
+                        
+                        if(wr.getEbucoreWidth()!=null){
+                            Width width = new Width();
+                            width.setLong(wr.getEbucoreWidth());
+                            width.setDatatype(INTEGERDATATYPE);
+                            wResource.setWidth(width);
+                        }
+                        
+                        if(wr.getEbucoreHeight()!=null){
+                            Height height = new Height();
+                            height.setLong(wr.getEbucoreHeight());
+                            height.setDatatype(INTEGERDATATYPE);
+                            wResource.setHeight(height);
+                        }
+                        
+                        if(wr.getEdmSpatialResolution()!=null){
+                            SpatialResolution resolution = new SpatialResolution();
+                            resolution.setDatatype(NONNEGATIVEINTEGERDATATYPE);
+                            resolution.setInteger(new BigInteger(Integer.toString(wr.getEdmSpatialResolution())));
+                            wResource.setSpatialResolution(resolution);
+                        }
+                        
+                        if(wr.getEbucoreSampleRate()!=null){
+                            SampleRate sampleRate = new SampleRate();
+                            sampleRate.setLong(wr.getEbucoreSampleRate());
+                            sampleRate.setDatatype(INTEGERDATATYPE);
+                            wResource.setSampleRate(sampleRate);
+                        }
+                        if(wr.getEbucoreSampleSize()!=null){
+                            SampleSize sampleSize = new SampleSize();
+                            sampleSize.setLong(wr.getEbucoreSampleSize());
+                            sampleSize.setDatatype(INTEGERDATATYPE);
+                            wResource.setSampleSize(sampleSize);
+                        }
+                        
+                        if(wr.getEbucoreBitRate()!=null){
+                            BitRate bitRate = new BitRate();
+                            bitRate.setInteger(new BigInteger(Integer.toString(wr.getEbucoreBitRate())));
+                            bitRate.setDatatype(NONNEGATIVEINTEGERDATATYPE);
+                            wResource.setBitRate(bitRate);
+                        }
+                        
+                        if(wr.getEbucoreFrameRate()!=null){
+                            DoubleType frameRate = new DoubleType();
+                            frameRate.setDouble(wr.getEbucoreFrameRate());
+                            frameRate.setDatatype(DOUBLEDATATYPE);
+                            wResource.setFrameRate(frameRate);
+                        }
+                        
+                        if(wr.getEdmHasColorSpace()!=null){
+                            HasColorSpace hasColorSpace = new HasColorSpace();
+                            ColorSpaceType type=null;
+                            if(StringUtils.equals(wr.getEdmHasColorSpace(),ColorSpace.getValue(ColorSpace.GRAYSCALE))){
+                                type = ColorSpaceType.GRAYSCALE;
+                            } else {
+                                type = ColorSpaceType.S_RGB;
+                            }
+                            hasColorSpace.setHasColorSpace(type);
+                            wResource.setHasColorSpace(hasColorSpace);
+                        }
+                        
+                        if(wr.getEbucoreOrientation()!=null){
+                            OrientationType orientation =new OrientationType();
+                            
+                            if(StringUtils.equals(wr.getEbucoreOrientation(),Orientation.getValue(Orientation.LANDSCAPE))){
+                                orientation.setString("landscape");
+                            } else {
+                                orientation.setString("portrait");
+                            }
+                            orientation.setDatatype(STRINGDATATYPE);
+                            wResource.setOrientation(orientation);
+                        }
+                        
+                        if(wr.getEdmComponentColor()!=null && wr.getEdmComponentColor().size()>0){
+                            List<HexBinaryType> componentColors = new ArrayList<>();
+                            for(String componentColor:wr.getEdmComponentColor()){
+                                HexBinaryType type = new HexBinaryType();
+                                type.setHexBinary(componentColor.getBytes());
+                                type.setDatatype(HEXBINARYDATATYPE);
+                                componentColors.add(type);
+                            }
+                            wResource.setComponentColorList(componentColors);
+                        }
+                       
 			webResources.add(wResource);
 		}
 
 		rdf.setWebResourceList(webResources);
 	}
+
+	
 
 	private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos) {
 		List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
