@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="EDM-INTERNAL.xsd" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <rdf:RDF xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# EDM-INTERNAL.xsd"
  xmlns:dc="http://purl.org/dc/elements/1.1/"
  xmlns:edm="http://www.europeana.eu/schemas/edm/"
  xmlns:foaf="http://xmlns.com/foaf/0.1/"
