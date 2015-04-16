@@ -1,7 +1,8 @@
 package eu.europeana.corelib.definitions.model;
 
 public enum ColorSpace {
-	SRGB,GRAYSCALE;
+	SRGB,
+    GRAYSCALE;
 	public static String getValue(ColorSpace e){
 		if (e.equals(SRGB)){
 			return "sRGB";

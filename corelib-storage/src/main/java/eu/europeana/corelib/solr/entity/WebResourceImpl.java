@@ -16,10 +16,12 @@
  */
 package eu.europeana.corelib.solr.entity;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import org.bson.types.ObjectId;
@@ -434,18 +436,19 @@ public class WebResourceImpl implements WebResource {
 
 	@Override
 	public String getEdmHasColorSpace() {
-		if (webResourceMetaInfo != null
-				&& webResourceMetaInfo.getImageMetaInfo() != null
-				&& webResourceMetaInfo.getImageMetaInfo()
-						.getColorSpace() != null) {
-			if (webResourceMetaInfo.getImageMetaInfo()
-					.getColorSpace().equalsIgnoreCase("grayscale")) {
-				return ColorSpace.getValue(ColorSpace.GRAYSCALE);
-			} else {
-				return ColorSpace.getValue(ColorSpace.SRGB);
-			}
-		}
-		return null;
+        try {
+            final String colorSpace = webResourceMetaInfo.getImageMetaInfo().getColorSpace();
+
+            if (colorSpace.equalsIgnoreCase("gray") || "grey".equalsIgnoreCase(colorSpace) ||
+                "grayscale".equalsIgnoreCase(colorSpace) || "greyscale".equalsIgnoreCase(colorSpace)) {
+                return ColorSpace.getValue(ColorSpace.GRAYSCALE);
+            }
+
+            return ColorSpace.getValue(ColorSpace.SRGB);
+        }
+        catch (NullPointerException e) {
+            return null;
+        }
 	}
 
 	@Override
