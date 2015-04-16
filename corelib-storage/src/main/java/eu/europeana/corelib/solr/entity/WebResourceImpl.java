@@ -449,8 +449,10 @@ public class WebResourceImpl implements WebResource {
 	}
 
 	@Override
-	@JsonIgnore
+	//@JsonIgnore
 	public List<String> getEdmComponentColor() {
+		return null; 
+		/*
 		if (webResourceMetaInfo != null
 				&& webResourceMetaInfo.getImageMetaInfo() != null
 				&& webResourceMetaInfo.getImageMetaInfo()
@@ -459,6 +461,7 @@ public class WebResourceImpl implements WebResource {
 						.getColorPalette());
 		}
 		return null;
+		*/
 	}
 
 	@Override
