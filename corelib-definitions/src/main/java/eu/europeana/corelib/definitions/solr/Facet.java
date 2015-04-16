@@ -33,7 +33,7 @@ public enum Facet {
 	RIGHTS("RIGHTS"),
     FACET_TAGS("facet_tags"),
     IS_FULLTEXT("is_fulltext"),
-    HAS_THUMBNAILS("has_thumbnails"),
+    //HAS_THUMBNAILS("has_thumbnails"),
     HAS_MEDIA("has_media");
 
 	private String facet;

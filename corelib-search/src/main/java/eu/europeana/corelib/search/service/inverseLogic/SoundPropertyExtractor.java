@@ -4,8 +4,7 @@ public class SoundPropertyExtractor {
     //public static final Integer mask = (1 << 25) - 1;
 
     public static String getQuality(Integer tag) {
-        final Integer mask = 3 << 13;
-        final Integer qualityCode = (tag & mask)>>13;
+        final Integer qualityCode = TagEncoding.SOUND_QUALITY.extractValue(tag);
 
         if (1 == qualityCode) {
             return "true";
@@ -15,8 +14,7 @@ public class SoundPropertyExtractor {
     }
 
     public static String getDuration(Integer tag) {
-        final Integer mask = 7 << 10;
-        final Integer durationCode = (tag & mask)>>10;
+        final Integer durationCode = TagEncoding.SOUND_DURATION.extractValue(tag);
 
         switch (durationCode) {
             case 1: return "very_short";

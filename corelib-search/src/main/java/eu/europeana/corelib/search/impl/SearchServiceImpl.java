@@ -16,19 +16,54 @@
  */
 package eu.europeana.corelib.search.impl;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import eu.europeana.corelib.definitions.edm.beans.BriefBean;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.logging.Log;
+import eu.europeana.corelib.logging.Logger;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
+import eu.europeana.corelib.neo4j.server.Neo4jServer;
+import eu.europeana.corelib.search.SearchService;
+import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.search.query.MoreLikeThis;
+import eu.europeana.corelib.search.service.domain.ImageOrientation;
+import eu.europeana.corelib.search.service.inverseLogic.MediaTypeEncoding;
+import eu.europeana.corelib.search.service.inverseLogic.TagEncoding;
+import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
+import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
+import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
+import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
+import eu.europeana.corelib.search.utils.SearchUtils;
+import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -56,53 +91,11 @@ import org.apache.solr.common.util.NamedList;
 import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.google.common.base.Charsets;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.beans.IdBean;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.solr.model.Query;
-import eu.europeana.corelib.definitions.solr.model.Term;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.neo4j.entity.Neo4jBean;
-import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
-import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
-import eu.europeana.corelib.search.SearchService;
-import eu.europeana.corelib.search.model.ResultSet;
-import eu.europeana.corelib.search.query.MoreLikeThis;
-import eu.europeana.corelib.search.service.domain.ImageOrientation;
-import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
-import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
-import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
-import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
-import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
@@ -270,6 +263,7 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 
+
 			// Locate the technical meta data from the aggregation is shown by
 			if (webMetaInfo == null
 					&& fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
@@ -294,7 +288,25 @@ public class SearchServiceImpl implements SearchService {
 
 		// Step 2 : Fill in the aggregation
 		for (final Aggregation aggregation : fullBean.getAggregations()) {
+			final Set<String> urls = new HashSet<>();
+
+            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
+               urls.add(aggregation.getEdmIsShownBy());
+            }
+
+			if (null != aggregation.getHasView()) {
+				urls.addAll(Arrays.asList(aggregation.getHasView()));
+			}
+
+			if (!urls.isEmpty()) {
+				System.out.println(Arrays.deepToString(urls.toArray()));
+			}
+
 			for (final WebResource webResource : aggregation.getWebResources()) {
+				if (!urls.contains(webResource.getAbout().trim())) {
+					continue;
+				}
+
 				WebResourceMetaInfoImpl webMetaInfo = null;
 
 				if (webResource.getAbout() != null) {
@@ -1051,6 +1063,7 @@ public class SearchServiceImpl implements SearchService {
 		if (imageAspectRatio != null) {
 			imageAspectRatio = imageAspectRatio.toLowerCase();
 		}
+
 		if (imageColorPalette != null) {
 			imageColorPalette = imageColorPalette.toUpperCase();
 		}
@@ -1090,7 +1103,7 @@ public class SearchServiceImpl implements SearchService {
 			}
 		}
 
-		final Integer mediaTypeCode = 1;
+		final Integer mediaTypeCode = MediaTypeEncoding.IMAGE.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer fileSizeCode = ImageTagExtractor.getSizeCode(imageSize);
@@ -1101,26 +1114,44 @@ public class SearchServiceImpl implements SearchService {
 		final Integer colorCode = ImageTagExtractor
 				.getColorCode(imageColorPalette);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | fileSizeCode << 12
-				| colorSpaceCode << 10 | aspectRatioCode << 8 | colorCode;
+        System.out.println("mediaTypeCode: " + mediaTypeCode + " " + Integer.toBinaryString(mediaTypeCode));
+        System.out.println("mimeTypeCode: " + mimeTypeCode + " " + Integer.toBinaryString(mimeTypeCode));
+        System.out.println("fileSizeCode: " + fileSizeCode + " " + Integer.toBinaryString(fileSizeCode)) ;
+        System.out.println("colorSpaceCode: " + colorSpaceCode + " " + Integer.toBinaryString(colorSpaceCode));
+        System.out.println("aspectRatioCode: " + aspectRatioCode + " " + Integer.toBinaryString(aspectRatioCode));
+        System.out.println("colorCode: " + colorCode + " " + Integer.toBinaryString(colorCode));
+
+
+        final Integer tag =  mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               fileSizeCode << TagEncoding.IMAGE_SIZE.getBitPos() |
+               colorSpaceCode << TagEncoding.IMAGE_COLOURSPACE.getBitPos() |
+               aspectRatioCode << TagEncoding.IMAGE_ASPECTRATIO.getBitPos() |
+               colorCode << TagEncoding.IMAGE_COLOUR.getBitPos();
+
+        System.out.println("Tag is : " + tag + "   " + Integer.toBinaryString(tag));
+
+        return tag;
 	}
 
 	private Integer searchSound(final String mimeType, final Boolean soundHQ,
 			final String duration) {
-		final Integer mediaTypeCode = 2;
+		final Integer mediaTypeCode = MediaTypeEncoding.SOUND.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
 		final Integer durationCode = SoundTagExtractor
 				.getDurationCode(duration);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | qualityCode << 13
-				| durationCode << 10;
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.SOUND_QUALITY.getBitPos() |
+               durationCode << TagEncoding.SOUND_DURATION.getBitPos();
 	}
 
 	private Integer searchVideo(final String mimeType,
 			final Boolean videoQuality, final String duration) {
-		final Integer mediaTypeCode = 3;
+		final Integer mediaTypeCode = MediaTypeEncoding.VIDEO.getEncodedValue();
 		final Integer mimeTypeCode = CommonTagExtractor
 				.getMimeTypeCode(mimeType);
 		final Integer qualityCode = VideoTagExtractor
@@ -1128,8 +1159,10 @@ public class SearchServiceImpl implements SearchService {
 		final Integer durationCode = VideoTagExtractor
 				.getDurationCode(duration);
 
-		return mediaTypeCode << 25 | mimeTypeCode << 15 | qualityCode << 13
-				| durationCode << 10;
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.VIDEO_QUALITY.getBitPos() |
+               durationCode << TagEncoding.VIDEO_DURATION.getBitPos();
 	}
 
 	private WebResourceMetaInfoImpl getMetaInfo(
