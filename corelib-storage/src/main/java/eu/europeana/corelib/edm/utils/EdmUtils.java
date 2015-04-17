@@ -311,8 +311,8 @@ public class EdmUtils {
 				}
 				sb.append(SPACE);
 			}
-
-			country.setCountry(CountryCodes.convert(sb.toString().trim()));
+                        String countryFixed = sb.toString().replace(" Of ", " of ").trim();
+			country.setCountry(CountryCodes.convert(countryFixed));
 
 			return country;
 		}
