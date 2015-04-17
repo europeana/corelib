@@ -36,45 +36,49 @@ import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
 
 /**
- *	Class that converts  a FullBean to a SolrInputDocument and saves it
+ * Class that converts a FullBean to a SolrInputDocument and saves it
+ * 
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class SolrDocumentHandler implements ICollection {
 	private HttpSolrServer solrServer;
 	/*
-	 * <field name="is_fulltext" type="boolean" indexed="true"
-	 * stored="true" multiValued="false"/> <field name="has_thumbnails"
-	 * type="boolean" indexed="true" stored="true" multiValued="false"/>
-	 * <field name="has_media" type="boolean" indexed="true"
-	 * stored="true" multiValued="false"/> <field name="filter_tags"
-	 * type="int" indexed="true" stored="true" multiValued="true"/>
-	 * <field name="facet_tags" type="int" indexed="true" stored="true"
-	 * multiValued="true"/>
+	 * <field name="is_fulltext" type="boolean" indexed="true" stored="true"
+	 * multiValued="false"/> <field name="has_thumbnails" type="boolean"
+	 * indexed="true" stored="true" multiValued="false"/> <field
+	 * name="has_media" type="boolean" indexed="true" stored="true"
+	 * multiValued="false"/> <field name="filter_tags" type="int" indexed="true"
+	 * stored="true" multiValued="true"/> <field name="facet_tags" type="int"
+	 * indexed="true" stored="true" multiValued="true"/>
 	 */
-	private final List<String> inputFields = new ArrayList<String>(){
+	private final List<String> inputFields = new ArrayList<String>() {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-	{	
+		{
 			add("is_fulltext");
 			add("has_thumbnails");
 			add("has_media");
 			add("filter_tags");
 			add("facet_tags");
-	}};
+		}
+	};
+
 	public SolrDocumentHandler(HttpSolrServer solrServer) {
 		this.solrServer = solrServer;
 	}
 
 	/**
-	 * Convert a FullBean to a SolrInputDocument and save it in a solr - Convenience method
-	 * @param fBean The FullBean to convert
+	 * Convert a FullBean to a SolrInputDocument and save it in a solr -
+	 * Convenience method
+	 * 
+	 * @param fBean
+	 *            The FullBean to convert
 	 */
 	public void save(FullBeanImpl fBean) {
 
-		
 		try {
 			solrServer.add(generate(fBean));
 		} catch (SolrServerException ex) {
@@ -87,11 +91,14 @@ public class SolrDocumentHandler implements ICollection {
 	}
 
 	/**
-	 * Convert a FullBean to a SolrInputDocument 
-	 * @param fBean The FullBean to convert to a SolrInputDocument
+	 * Convert a FullBean to a SolrInputDocument
+	 * 
+	 * @param fBean
+	 *            The FullBean to convert to a SolrInputDocument
 	 * @return The SolrInputDocument representation of the FullBean
 	 */
-	public SolrInputDocument generate(FullBeanImpl fBean) throws SolrServerException{
+	public SolrInputDocument generate(FullBeanImpl fBean)
+			throws SolrServerException {
 		SolrInputDocument doc = new SolrInputDocument();
 		List<LicenseImpl> licenses = fBean.getLicenses();
 		List<String> licIds = new ArrayList<String>();
@@ -153,22 +160,21 @@ public class SolrDocumentHandler implements ICollection {
 		extractCRFFields(doc, fBean.getProvidedCHOs().get(0).getAbout());
 		return doc;
 	}
-	
-	private void extractCRFFields(SolrInputDocument doc, String about) throws SolrServerException{
+
+	private void extractCRFFields(SolrInputDocument doc, String about)
+			throws SolrServerException {
 		ModifiableSolrParams params = new ModifiableSolrParams();
 		params.add("q", ClientUtils.escapeQueryChars(about));
-		
 
-			
-			SolrDocumentList resultList = solrServer.query(params).getResults();
+		SolrDocumentList resultList = solrServer.query(params).getResults();
+		if (resultList != null && resultList.size() > 0) {
 			SolrDocument retrievedDocument = resultList.get(0);
 			for (String field : inputFields) {
 				if (retrievedDocument.getFieldValue(field) != null) {
-					doc.addField(field,
-							retrievedDocument.getFieldValue(field));
+					doc.addField(field, retrievedDocument.getFieldValue(field));
 				}
 			}
-
+		}
 	}
 
 	@Override
