@@ -210,7 +210,7 @@ public class QueryTest {
 		query.setFacets(newFacets);
 		facetList = query.getFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(8, facetList.size());
+		assertEquals(11, facetList.size());
 
 		// test DEFAULT + something else
 		newFacets = new ArrayList<String>();
@@ -220,7 +220,7 @@ public class QueryTest {
 		facetList = query.getFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertTrue("should contain rights", facetList.contains("proxy_dc_contributor"));
-		assertEquals(9, facetList.size());
+		assertEquals(12, facetList.size());
 	}
 
 	@Test
@@ -233,7 +233,7 @@ public class QueryTest {
 		query.setFacets(newFacets);
 		facetList = query.getFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(8, facetList.size());
+		assertEquals(11, facetList.size());
 
 		query.removeFacet("RIGHTS");
 
@@ -244,6 +244,6 @@ public class QueryTest {
 		query.setFacets(newFacets);
 		facetList = query.getFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(8, facetList.size());
+		assertEquals(11, facetList.size());
 	}
 }
