@@ -9,7 +9,7 @@
   </parent>
   <groupId>eu.europeana.corelib</groupId>
   <artifactId>corelib-common-storage</artifactId>
-  <name>corelib-common-storage</name>
+  <name>Europeana Core Library Common Storage</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

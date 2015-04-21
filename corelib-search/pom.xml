@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-search</artifactId>
-	<name>corelib-search</name>
+	<name>Europeana Core Library Search</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
