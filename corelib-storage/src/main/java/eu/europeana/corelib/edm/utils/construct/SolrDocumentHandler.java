@@ -157,14 +157,16 @@ public class SolrDocumentHandler implements ICollection {
 				fBean.getEuropeanaCollectionName()[0]);
 		doc.addField("timestamp_created", fBean.getTimestampCreated());
 		doc.addField("timestamp_update", fBean.getTimestampUpdated());
-		extractCRFFields(doc, fBean.getProvidedCHOs().get(0).getAbout());
+		
+		extractCRFFields(doc, fBean.getAbout());
 		return doc;
 	}
 
 	private void extractCRFFields(SolrInputDocument doc, String about)
 			throws SolrServerException {
 		ModifiableSolrParams params = new ModifiableSolrParams();
-		params.add("q", ClientUtils.escapeQueryChars(about));
+		
+		params.add("q", "europeana_id:"+ClientUtils.escapeQueryChars(about));
 
 		SolrDocumentList resultList = solrServer.query(params).getResults();
 		if (resultList != null && resultList.size() > 0) {

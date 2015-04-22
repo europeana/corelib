@@ -18,9 +18,11 @@ package eu.europeana.corelib.edm.utils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-
+import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Concept;
@@ -129,6 +131,66 @@ public class SolrConstructor {
 				solrInputDocument = new LicenseFieldInput().createLicenseSolrFields(license, solrInputDocument,isAggregation);
 			}
 		}
+		solrInputDocument = generateWRFromAggregation(solrInputDocument,
+				rdf.getAggregationList());
+		return solrInputDocument;
+	}
+	private SolrInputDocument generateWRFromAggregation(
+			SolrInputDocument solrInputDocument,
+			List<Aggregation> aggregationList) {
+
+		if (aggregationList != null) {
+			for (Aggregation aggr : aggregationList) {
+				if (solrInputDocument.containsKey("edm_webResource")) {
+					boolean containsWr = false;
+					if (aggr.getIsShownBy() != null) {
+						String isShownBy = aggr.getIsShownBy().getResource();
+						for (Object str : solrInputDocument
+								.getFieldValues("edm_webResource")) {
+							if (StringUtils.equals(str.toString(), isShownBy)) {
+								containsWr = true;
+							}
+						}
+						if (!containsWr) {
+							solrInputDocument.addField("edm_webResource",
+									isShownBy);
+						}
+					}
+					containsWr = false;
+					if (aggr.getObject() != null) {
+						String object = aggr.getObject().getResource();
+						for (Object str : solrInputDocument
+								.getFieldValues("edm_webResource")) {
+							if (StringUtils.equals(str.toString(), object)) {
+								containsWr = true;
+							}
+						}
+						if (!containsWr) {
+							solrInputDocument.addField("edm_webResource",
+									object);
+						}
+					}
+
+					if (aggr.getHasViewList() != null) {
+						for (HasView hasView : aggr.getHasViewList()) {
+							containsWr = false;
+							String res = hasView.getResource().trim();
+							for (Object str : solrInputDocument
+									.getFieldValues("edm_webResource")) {
+								if (StringUtils.equals(str.toString(), res)) {
+									containsWr = true;
+								}
+							}
+							if (!containsWr) {
+								solrInputDocument.addField("edm_webResource",
+										res);
+							}
+						}
+					}
+				}
+			}
+		}
+
 		return solrInputDocument;
 	}
 }

@@ -751,11 +751,31 @@ public final class AggregationFieldInput {
 				(aggregation.getIsShownBy())).getResource();
 		mongoAggregation.setEdmIsShownBy(isShownBy != null ? isShownBy.trim()
 				: null);
-
+		boolean containsIsShownBy = false;
+		for(WebResourceImpl wr:webResources){
+			if(StringUtils.equals(wr.getAbout(),isShownBy)){
+				containsIsShownBy = true;
+			}
+		}
+		if(!containsIsShownBy && isShownBy!=null){
+			WebResourceImpl wr = new WebResourceImpl();
+			wr.setAbout(isShownBy);
+			webResources.add(wr);
+		}
 		String object = SolrUtils.exists(_Object.class,
 				(aggregation.getObject())).getResource();
 		mongoAggregation.setEdmObject(object != null ? object.trim() : null);
-
+		boolean containsObject = false;
+		for(WebResourceImpl wr:webResources){
+			if(StringUtils.equals(wr.getAbout(),object)){
+				containsObject = true;
+			}
+		}
+		if(!containsObject&&object!=null){
+			WebResourceImpl wr = new WebResourceImpl();
+			wr.setAbout(object);
+			webResources.add(wr);
+		}
 		Map<String, List<String>> prov = MongoUtils
 				.createResourceOrLiteralMapFromString(aggregation.getProvider());
 		mongoAggregation.setEdmProvider(prov);
@@ -782,6 +802,17 @@ public final class AggregationFieldInput {
 			List<String> hasViewList = new ArrayList<String>();
 			for (HasView hasView : aggregation.getHasViewList()) {
 				hasViewList.add(hasView.getResource().trim());
+				boolean containsHasView = false;
+				for(WebResourceImpl wr:webResources){
+					if(StringUtils.equals(wr.getAbout(),hasView.getResource().trim())){
+						containsHasView = true;
+					}
+				}
+				if(!containsHasView&&hasView.getResource().trim()!=null){
+					WebResourceImpl wr = new WebResourceImpl();
+					wr.setAbout(hasView.getResource().trim());
+					webResources.add(wr);
+				}
 			}
 			mongoAggregation.setHasView(hasViewList
 					.toArray(new String[hasViewList.size()]));
