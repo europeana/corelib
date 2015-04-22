@@ -67,7 +67,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 		
 		String tempUrl = StringUtils.substringAfter(this.aggregatedCHO, "/item/");
 		if(tempUrl==null){
-			tempUrl = StringUtils.substringAfter(this.about, "/aggregation/europeana");
+			tempUrl = StringUtils.substringAfter(this.about, "/aggregation/europeana/");
 		}
             String finalUrl = "http://europeana.eu/portal/record/"+tempUrl+".html";
 		return finalUrl;
