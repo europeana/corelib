@@ -64,7 +64,12 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public String getEdmLandingPage() {
-            String finalUrl = "http://europeana.eu/portal/record/"+StringUtils.substringAfter(this.aggregatedCHO, "/item/")+".html";
+		
+		String tempUrl = StringUtils.substringAfter(this.aggregatedCHO, "/item/");
+		if(tempUrl==null){
+			tempUrl = StringUtils.substringAfter(this.about, "/aggregation/europeana");
+		}
+            String finalUrl = "http://europeana.eu/portal/record/"+tempUrl+".html";
 		return finalUrl;
 	}
 
