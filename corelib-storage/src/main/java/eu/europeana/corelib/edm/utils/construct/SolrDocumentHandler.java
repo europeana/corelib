@@ -165,7 +165,7 @@ public class SolrDocumentHandler implements ICollection {
 	private void extractCRFFields(SolrInputDocument doc, String about)
 			throws SolrServerException {
 		ModifiableSolrParams params = new ModifiableSolrParams();
-		
+
 		params.add("q", "europeana_id:"+ClientUtils.escapeQueryChars(about));
 
 		SolrDocumentList resultList = solrServer.query(params).getResults();

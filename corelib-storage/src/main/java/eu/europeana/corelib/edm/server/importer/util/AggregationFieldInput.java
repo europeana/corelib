@@ -746,7 +746,7 @@ public final class AggregationFieldInput {
 				(aggregation.getIsShownAt())).getResource();
 		mongoAggregation.setEdmIsShownAt(isShownAt != null ? isShownAt.trim()
 				: null);
-
+		
 		String isShownBy = SolrUtils.exists(IsShownBy.class,
 				(aggregation.getIsShownBy())).getResource();
 		mongoAggregation.setEdmIsShownBy(isShownBy != null ? isShownBy.trim()
