@@ -72,7 +72,8 @@ public abstract class EmailServiceImpl implements EmailService {
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", token.getToken());
-		
+		model.put("url", url);
+
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
 		builder.setTemplate("register"); // see corelib_web_emailConfigs
