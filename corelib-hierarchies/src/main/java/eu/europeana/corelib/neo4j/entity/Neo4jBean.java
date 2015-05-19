@@ -48,7 +48,10 @@ public class Neo4jBean {
 	private Long index;
 
 	private Long childrenCount = 0L;
-
+        
+        private Boolean relBefore;
+        
+       
 	public String getId() {
 		return id;
 	}
@@ -114,6 +117,16 @@ public class Neo4jBean {
 		this.parent = parent;
 	}
 
+        public void setRelBefore(Boolean relBefore){
+            this.relBefore = relBefore;
+        }
+        
+        public Boolean isRelBefore(){
+            return this.relBefore;
+        }
+        
+        
+        
 	@Override
 	public int hashCode() {
 		final int prime = 31;

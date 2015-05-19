@@ -44,8 +44,7 @@
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-common-storage</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		
+		</dependency>		
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-lookup</artifactId>

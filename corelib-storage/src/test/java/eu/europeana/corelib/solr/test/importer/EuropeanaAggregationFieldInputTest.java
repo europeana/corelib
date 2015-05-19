@@ -49,7 +49,7 @@ import eu.europeana.corelib.definitions.jibx.Preview;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.Rights1;
-import eu.europeana.corelib.definitions.jibx.Type1;
+import eu.europeana.corelib.definitions.jibx.Type2;
 import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.EuropeanaAggregationFieldInput;
@@ -74,7 +74,7 @@ public class EuropeanaAggregationFieldInputTest {
 	public void testAggregation() {
 		EuropeanaAggregationType eAggregation = createAggregationJibx();
 		ProxyType proxy = new ProxyType();
-		Type1 type = new Type1();
+		Type2 type = new Type2();
 		type.setType(EdmType.TEXT);
 		proxy.setType(type);
 		RDF rdf = new RDF();

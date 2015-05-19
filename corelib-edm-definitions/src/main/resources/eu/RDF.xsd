@@ -13,13 +13,22 @@
 	elementFormDefault="qualified">
 	<annotation>
 		<documentation>
-			EDM First Implementation Schema: RDF resources and literals
+			EDM First Implementation Schema: RDF resources and
+			literals
 		</documentation>
 	</annotation>
 
 	<import namespace="http://www.w3.org/XML/1998/namespace"
 		schemaLocation="http://www.w3.org/2001/xml.xsd" />
 
+	<element name="type" type="rdf:ResourceType">
+
+		<annotation>
+			<documentation>
+				To indicate the type of a resource. Currently not used
+			</documentation>
+		</annotation>
+	</element>
 	<complexType name="ResourceType">
 		<annotation>
 			<appinfo>
@@ -45,7 +54,48 @@
 			</extension>
 		</simpleContent>
 	</complexType>
-
+	<complexType name="LongType">
+		<simpleContent>
+			<extension base="long">
+				<attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#long"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="IntegerType">
+        <simpleContent>
+            <extension base="long">
+                <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#integer"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+    <complexType name="NonNegativeIntegerType">
+        <simpleContent>
+            <extension base="nonNegativeInteger">
+                <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+    <complexType name="DoubleType">
+        <simpleContent>
+            <extension base="double">
+                <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#double"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+    <complexType name="StringType">
+        <simpleContent>
+            <extension base="string">
+                <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#string"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+    <complexType name="HexBinaryType">
+        <simpleContent>
+            <extension base="hexBinary">
+                <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#hexBinary"/>
+            </extension>
+        </simpleContent>
+    </complexType>
 	<complexType name="AboutType">
 		<annotation>
 			<appinfo>

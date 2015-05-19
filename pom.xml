@@ -31,6 +31,7 @@
 		<module>corelib-edm-definitions</module>
 		<module>corelib-dereference</module>
 		<module>corelib-lookup</module>
+		<module>corelib-media-storage</module>
 		<module>corelib-sugarcrm/bindings</module>
 		<module>corelib-sugarcrm/client</module>
 		<module>corelib-common-storage</module>
@@ -39,6 +40,10 @@
 	</modules>
 
 	<repositories>
+		<repository>
+		     <id>europeana-ext-release-local</id>
+             <url>http://artifactory.eanadev.org/artifactory/ext-release-local</url>
+		</repository>
 		<repository>
 			<id>releases</id>
 			<url>http://artifactory.eanadev.org/artifactory/libs-release-local</url>
