@@ -1,17 +1,18 @@
 package eu.europeana.corelib;
 
+import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
 import org.junit.Test;
 
-import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
+public class EmbeddedNeo4j extends Neo4jServerImpl {
 
-public class EmbeddedNeo4j extends Neo4jServerImpl{
-	
-	public EmbeddedNeo4j() {
-		}
-	@Test
-	public void doNothing(){
-		return;
-	}
-	
+    public EmbeddedNeo4j() {
+        // left empty on purpose
+    }
+
+    @Test
+    public void doNothing() {
+        // left empty on purpose
+    }
+
 
 }

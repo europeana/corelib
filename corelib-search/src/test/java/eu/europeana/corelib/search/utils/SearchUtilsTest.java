@@ -25,41 +25,37 @@ public class SearchUtilsTest {
 
 	@Test
 	public void translateQueryTitle() {
-		QueryTranslation qt;
-		qt = SearchUtils.translateQuery("title:paris", getLanguageList());
-		qt = SearchUtils.translateQuery("title:paris", getLanguageList(true));
+		SearchUtils.translateQuery("title:paris", getLanguageList());
+		SearchUtils.translateQuery("title:paris", getLanguageList(true));
 		assertEquals(1, 1);
 	}
 
 	@Test
 	public void translateQueryTitles() {
-		QueryTranslation qt;
-		qt = SearchUtils.translateQuery("title:paris rome berlin", getLanguageList(true));
-		qt = SearchUtils.translateQuery("title:paris rome berlin", getLanguageList());
+		SearchUtils.translateQuery("title:paris rome berlin", getLanguageList(true));
+		SearchUtils.translateQuery("title:paris rome berlin", getLanguageList());
 		assertEquals(1, 1);
 	}
 
 	@Test
 	public void translateQueryQuotedTitle() {
-		QueryTranslation qt;
-		qt = SearchUtils.translateQuery("title:\"paris\"", getLanguageList());
-		qt = SearchUtils.translateQuery("title:\"paris\"", getLanguageList(true));
+		SearchUtils.translateQuery("title:\"paris\"", getLanguageList());
+		SearchUtils.translateQuery("title:\"paris\"", getLanguageList(true));
 		assertEquals(1, 1);
 	}
 	
 	@Test
 	public void translateQueryQuotedTitles() {
-		QueryTranslation qt;
-		qt = SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList());
-		qt = SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList(true));
+		SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList());
+		SearchUtils.translateQuery("title:\"paris berlin\"", getLanguageList(true));
 		assertEquals(1, 1);
-	}	
-	
-	
-	@Test
+	}
+
+
 	/**
 	 * Tests the translateQuery function.
 	 */
+	@Test
 	public void translateQueryTest() {
 		Map<String, String> identicalQueries = new HashMap<String, String>() {
 			{
@@ -148,7 +144,7 @@ public class SearchUtilsTest {
 	}
 	
 	private ArrayList <String> getLanguageList(boolean empty){
-		ArrayList <String> languages = new ArrayList<String>();
+		ArrayList <String> languages = new ArrayList<>();
 		if(empty){
 			return languages;
 		}

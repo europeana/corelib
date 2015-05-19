@@ -21,14 +21,15 @@ import org.junit.Test;
 import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 
 /**
- * Mock for EdmMongoServeImpl to byapss sprin injection
+ * Mock for EdmMongoServeImpl to bypass spring injection
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
 public class EdmMongoServerTest extends EdmMongoServerImpl {
 	//Should be empty or else Junit complains
+
 	@Test
 	public void doNothing(){
-		return;
+		// left empty on purpose
 	}
 }

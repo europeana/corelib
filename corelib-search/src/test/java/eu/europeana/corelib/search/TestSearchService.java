@@ -7,9 +7,9 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 public interface TestSearchService extends SearchService {
 
-	public void setEdmMongoServer(EdmMongoServer mongoServer);
+	void setEdmMongoServer(EdmMongoServer mongoServer);
 	
-	public void setEuropeanaIdMongoServer(EuropeanaIdMongoServer mongoServer);
+	void setEuropeanaIdMongoServer(EuropeanaIdMongoServer mongoServer);
 	
-	public void setLogger(Logger log);
+	void setLogger(Logger log);
 }

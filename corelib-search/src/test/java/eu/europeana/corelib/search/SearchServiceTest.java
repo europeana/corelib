@@ -237,7 +237,7 @@ public class SearchServiceTest {
 	@Test
 	public void testSeeAlso() {
 		testCount++;
-		List<String> queries = new ArrayList<String>();
+		List<String> queries = new ArrayList<>();
 		queries.add("DATA_PROVIDER:*");
 		Assert.assertNotNull(searchService.seeAlso(queries));
 	}
@@ -263,7 +263,6 @@ public class SearchServiceTest {
 			
 			Assert.assertNotNull(searchService.resolve("test_id", false));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -278,11 +277,7 @@ public class SearchServiceTest {
 				dataLoaded = false;
 				solrServer.deleteByQuery("*:*");
 				solrServer.commit();
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (SolrServerException | IOException e) {
 				e.printStackTrace();
 			}
 		}
