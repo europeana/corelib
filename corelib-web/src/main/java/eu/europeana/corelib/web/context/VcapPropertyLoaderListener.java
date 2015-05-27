@@ -93,7 +93,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 						europeanaProperties,
 						"mongodb.password" + "="
 								+ env.getProperty(mongoPassword) + "\n", true);
-				//org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(MONGOHOSTS));
+				org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(mongoHosts));
 				String[] hosts = env.getProperty(mongoHosts).replace('[', ' ')
 						.replace("]", " ").split(",");
 				String mongoHost = "mongodb.host=";
