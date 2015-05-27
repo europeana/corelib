@@ -26,9 +26,9 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 //	private final static String MONGOPASSWORD = "vcap.services.europeana-object-db.credentials.password";
 //	private final static String MONGOHOSTS = "vcap.services.europeana-object-db.credentials.hosts";
         private final static String VCAP = "vcap.services.";
-        private final static String USERNAME=".username";
-        private final static String HOSTS = ".hosts";
-        private final static String PASSWORD = ".password";
+        private final static String USERNAME=".credentials.username";
+        private final static String HOSTS = ".credentials.hosts";
+        private final static String PASSWORD = ".credentials.password";
         
 	private final static String MONGOPORTS = "vcap.services.europeana-object-db.credentials.ports";
 	private final static String REDISHOST = "vcap.services.redis.credentials.host";
