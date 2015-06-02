@@ -35,11 +35,16 @@ import org.junit.Assert;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.Map;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance
@@ -56,9 +61,9 @@ public class ContentLoader {
 
     private SolrServer solrServer;
 
-    private List<File> collectionXML = new ArrayList<File>();
+    private List<Path> collectionXML = new ArrayList<>();
 
-    private List<SolrInputDocument> records = new ArrayList<SolrInputDocument>();
+    private List<SolrInputDocument> records = new ArrayList<>();
 
     private int i = 0;
     private int failed = 0;
@@ -83,29 +88,35 @@ public class ContentLoader {
             System.out.println("Parameter collectionName is not set correctly");
             System.out.println("Using default collectionName: " + collectionName);
         }
+        Path collectionPath = Paths.get(collectionName);
+
+
         if (isZipped(collectionName)) {
-            collectionXML = unzip(collectionName);
+            collectionXML = unzip(collectionPath);
         } else {
-            if (new File(collectionName).isDirectory()) {
-                for (File file : new File(collectionName).listFiles()) {
-                    if (StringUtils.endsWith(file.getName(), ".xml")) {
+            if (Files.isDirectory(collectionPath)) {
+                try (DirectoryStream<Path> stream = Files.newDirectoryStream(collectionPath, "*.xml")) {
+                    for (Path file : stream) {
                         collectionXML.add(file);
                     }
+
+                } catch (DirectoryIteratorException | IOException e) {
+                    /// TODO: report error
                 }
             } else {
-                collectionXML.add(new File(collectionName));
+                collectionXML.add(collectionPath);
             }
         }
     }
 
     public int parse() {
         MongoConstructor mongoConstructor = new MongoConstructor();
-        for (File f : collectionXML) {
+        for (Path path : collectionXML) {
             try {
                 IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
                 IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
                 i++;
-                RDF rdf = (RDF) uctx.unmarshalDocument(new FileInputStream(f), null);
+                RDF rdf = (RDF) uctx.unmarshalDocument(Files.newBufferedReader(path, StandardCharsets.UTF_8));
 
                 FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
                 FullBeanHandler handler = new FullBeanHandler(mongoDBServer);
@@ -129,7 +140,7 @@ public class ContentLoader {
 
             } catch (JiBXException e) {
                 failed++;
-                System.out.println("Error unmarshalling document " + f.getName()
+                System.out.println("Error unmarshalling document " + path.toString()
                         + " from the input file. Check for Schema changes (" + e.getMessage() + ")");
                 e.printStackTrace();
             } catch (FileNotFoundException e) {
@@ -160,8 +171,12 @@ public class ContentLoader {
 
     public void cleanFiles() {
         System.out.println("Deleting files");
-        for (File f : collectionXML) {
-            f.delete();
+        for (Path file : collectionXML) {
+            try {
+                Files.delete(file);
+            } catch (IOException e) {
+                // TODO WHAT??
+            }
         }
         System.out.println("Files deleted");
     }
@@ -169,41 +184,85 @@ public class ContentLoader {
     /**
      * Unzip a zipped collection file
      *
-     * @param collectionName The path to the collection file
-     * @return The unzipped file
+     * @param zipPath The path to the collection zip file
+     * @return List of unzipped files
      */
-    private ArrayList<File> unzip(String collectionName) {
-        BufferedOutputStream dest;
-        String fileName;
-        ArrayList<File> records = new ArrayList<>();
-        try {
-            FileInputStream fis = new FileInputStream(collectionName);
-            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
-            ZipEntry entry;
-            File workingDir = new File(TEMP_DIR);
-            workingDir.mkdirs();
-            while ((entry = zis.getNextEntry()) != null) {
-                int count;
-                byte data[] = new byte[2048];
-                fileName = workingDir.getAbsolutePath() + "/" + entry.getName();
-                records.add(new File(fileName));
-                FileOutputStream fos = new FileOutputStream(fileName);
-                dest = new BufferedOutputStream(fos, 2048);
-                while ((count = zis.read(data, 0, 2048)) != -1) {
-                    dest.write(data, 0, count);
-                }
-                dest.flush();
-                dest.close();
-
+    private List<Path> unzip(Path zipPath) {
+        final List<Path> records = new ArrayList<>();
+        // create file system for zip
+        final URI uri = URI.create("jar:file:" + zipPath.toUri().getPath());
+        final Map<String, String> env = new HashMap<>();
+        try (FileSystem zip = FileSystems.newFileSystem(uri, env)) {
+            // create destination directory
+            final Path destDir = Paths.get(TEMP_DIR);
+            if (Files.notExists(destDir)) {
+                Files.createDirectories(destDir);
             }
-            zis.close();
+            final Path root = zip.getPath("/");
 
-        } catch (Exception e) {
-            System.out.println("The zip file is damaged. Could not import records");
-            e.printStackTrace();
+            //walk the zip file tree and copy files to the destination
+            Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file,
+                                                 BasicFileAttributes attrs) throws IOException {
+                    final Path destFile = Paths.get(destDir.toString(),
+                            file.toString());
+                    System.out.printf("Extracting file %s to %s\n", file, destFile);
+                    Files.copy(file, destFile, StandardCopyOption.REPLACE_EXISTING);
+                    records.add(destFile);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir,
+                                                         BasicFileAttributes attrs) throws IOException {
+                    final Path dirToCreate = Paths.get(destDir.toString(),
+                            dir.toString());
+                    if (Files.notExists(dirToCreate)) {
+                        System.out.printf("Creating directory %s\n", dirToCreate);
+                        Files.createDirectory(dirToCreate);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            // TODO Oops What now?
         }
         return records;
     }
+
+//    private List<Path> unzip(String collectionName) {
+//        BufferedOutputStream dest;
+//        String fileName;
+//        List<File> records = new ArrayList<>();
+//        try {
+//            FileInputStream fis = new FileInputStream(collectionName);
+//            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+//            ZipEntry entry;
+//            File workingDir = new File(TEMP_DIR);
+//            workingDir.mkdirs();
+//            while ((entry = zis.getNextEntry()) != null) {
+//                int count;
+//                byte data[] = new byte[2048];
+//                fileName = workingDir.getAbsolutePath() + "/" + entry.getName();
+//                records.add(new File(fileName));
+//                FileOutputStream fos = new FileOutputStream(fileName);
+//                dest = new BufferedOutputStream(fos, 2048);
+//                while ((count = zis.read(data, 0, 2048)) != -1) {
+//                    dest.write(data, 0, count);
+//                }
+//                dest.flush();
+//                dest.close();
+//
+//            }
+//            zis.close();
+//
+//        } catch (Exception e) {
+//            System.out.println("The zip file is damaged. Could not import records");
+//            e.printStackTrace();
+//        }
+//        return records;
+//    }
 
     /**
      * Check if the collection file is zipped

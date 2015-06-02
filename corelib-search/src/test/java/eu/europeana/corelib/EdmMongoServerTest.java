@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
@@ -25,11 +26,8 @@ import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
+@Ignore
 public class EdmMongoServerTest extends EdmMongoServerImpl {
 	//Should be empty or else Junit complains
 
-	@Test
-	public void doNothing(){
-		// left empty on purpose
-	}
 }

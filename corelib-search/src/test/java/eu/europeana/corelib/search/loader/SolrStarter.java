@@ -36,13 +36,12 @@ public class SolrStarter {
 	Properties props;
 
 	public SolrStarter() {
-		this(new ClassPathXmlApplicationContext(new String[] { "corelib-solr-context.xml", "corelib-solr-test.xml",
-				"resources/solr/search/conf/solrconfig.xml" }));
+		this(new ClassPathXmlApplicationContext("corelib-solr-context.xml", "corelib-solr-test.xml",
+				"resources/solr/search/conf/solrconfig.xml"));
 	}
 
 	public SolrStarter(ApplicationContext context) {
-		context = new ClassPathXmlApplicationContext(
-				new String[] { "corelib-solr-context.xml", "corelib-solr-test.xml" });
+		context = new ClassPathXmlApplicationContext("corelib-solr-context.xml", "corelib-solr-test.xml");
 		props = context.getBean("europeanaProperties", Properties.class);
 	}
 
