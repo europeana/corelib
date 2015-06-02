@@ -46,7 +46,7 @@ public class QueryExtractor {
 		queryParser.setDefaultOperator(Operator.AND);
 	}
 
-	private List<QueryToken> queryTokens = new ArrayList<QueryToken>();
+	private List<QueryToken> queryTokens = new ArrayList<>();
 	private int group = 0;
 
 	private String rawQueryString;
@@ -60,7 +60,7 @@ public class QueryExtractor {
 	}
 
 	public List<String> extractTerms(boolean byGroups) {
-		List<String> terms = new ArrayList<String>();
+		List<String> terms = new ArrayList<>();
 		for (QueryToken token : extractInfo(byGroups)) {
 			terms.add(token.getPosition() == null ? token
 					.getNormalizedQueryTerm() : token.getPosition()
@@ -82,7 +82,7 @@ public class QueryExtractor {
 
 	public String rewrite(List<QueryModification> modifications) {
 		boolean[] mask = new boolean[rawQueryString.length()];
-		Map<Integer, String> map = new HashMap<Integer, String>();
+		Map<Integer, String> map = new HashMap<>();
 		for (int i = modifications.size() - 1; i >= 0; i--) {
 			QueryModification modification = modifications.get(i);
 			if (modification != null) {
@@ -95,10 +95,10 @@ public class QueryExtractor {
 		String rewritten = "";
 		boolean lastValue = false;
 		for (int i = 0; i < mask.length; i++) {
-			if (mask[i] == false) {
+			if (!mask[i]) {
 				rewritten += rawQueryString.substring(i, i + 1);
 			} else {
-				if (lastValue == false) {
+				if (!lastValue) {
 					rewritten += map.get(i);
 				}
 			}
@@ -115,13 +115,13 @@ public class QueryExtractor {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		Stack<QueryType> queryTypeStack = new Stack<QueryType>();
+		Stack<QueryType> queryTypeStack = new Stack<>();
 		deconstructQuery(query, queryTypeStack);
 		insertPositions(termPositions);
 	}
 
 	private List<QueryToken> getTermsByGroups() {
-		List<QueryToken> queryTerms = new ArrayList<QueryToken>();
+		List<QueryToken> queryTerms = new ArrayList<>();
 		for (QueryToken token : queryTokens) {
 			if (queryTerms.size() == 0
 					|| token.getType().equals(QueryType.TERMRANGE)) {
@@ -131,7 +131,7 @@ public class QueryExtractor {
 				QueryToken prevToken = queryTerms.get(lastIndex);
 				if (prevToken.getGroup() == token.getGroup()) {
 					try {
-						QueryToken mergedToken = (QueryToken) prevToken.clone();
+						QueryToken mergedToken = prevToken.clone();
 						mergedToken.merge(token, rawQueryString);
 						if (!mergedToken.getPosition().getOriginal()
 								.contains(" AND ")
@@ -156,14 +156,14 @@ public class QueryExtractor {
 
 	private void insertPositions(List<QueryTermPosition> termPositions) {
 		
-		int i = 0, lastFoundPosition = -1, max = termPositions.size();
+		int lastFoundPosition = -1, max = termPositions.size();
 		
 		for (QueryToken token : queryTokens) {
 			boolean isPhrase = token.getType().equals(QueryType.PHRASE);
-			List<QueryTermPosition> bag = new ArrayList<QueryTermPosition>();
+			List<QueryTermPosition> bag = new ArrayList<>();
 			String foundPart = "";
 			boolean success = false;
-			for (i = (lastFoundPosition + 1); i < max; i++) {
+			for (int i = (lastFoundPosition + 1); i < max; i++) {
 				QueryTermPosition position = termPositions.get(i);
 				if (isPhrase) {
 					String candidate = foundPart.equals("") ? position
@@ -179,7 +179,6 @@ public class QueryExtractor {
 							candidate)) {
 						bag.add(position);
 						foundPart = candidate;
-						continue;
 					}
 				} else {
 					if (token.getNormalizedQueryTerm().equals(
@@ -202,7 +201,7 @@ public class QueryExtractor {
 					}
 					else{
 						// ANDY
-						if(position.getTransformed().indexOf(":")>-1){							
+						if(position.getTransformed().contains(":")){
 							token.setPosition(position);
 							lastFoundPosition = i;
 							success = true;
@@ -274,7 +273,7 @@ public class QueryExtractor {
 		int[] positions = query.getPositions();
 		Term[] terms = query.getTerms();
 
-		List<String> words = new ArrayList<String>();
+		List<String> words = new ArrayList<>();
 		for (int i = 0, m = positions.length; i < m; i++) {
 			words.add(terms[i].text());
 		}
@@ -343,7 +342,7 @@ public class QueryExtractor {
 
 	private List<QueryTermPosition> extractTokens(String text) {
 
-		List<QueryTermPosition> queryTerms = new ArrayList<QueryTermPosition>();
+		List<QueryTermPosition> queryTerms = new ArrayList<>();
 		TokenStream ts;
 		try {
 			ts = analyzer.tokenStream("text", new StringReader(text));
@@ -360,7 +359,7 @@ public class QueryExtractor {
 				String term = charTermAttribute.toString();
 				
 				// ANDY  
-				if(term.indexOf(":") > -1){
+				if(term.contains(":")){
 					start = start + term.indexOf(":")+1;
 				}
 				// END ANDY

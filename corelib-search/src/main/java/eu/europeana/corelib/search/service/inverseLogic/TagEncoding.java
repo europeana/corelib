@@ -20,7 +20,7 @@ public enum TagEncoding {
     private final int bitPos;
     private final int numOfBits;
 
-    private TagEncoding(final int bitPos, final int numOfBits) {
+    TagEncoding(final int bitPos, final int numOfBits) {
         this.bitPos = bitPos;
         this.numOfBits = numOfBits;
     }

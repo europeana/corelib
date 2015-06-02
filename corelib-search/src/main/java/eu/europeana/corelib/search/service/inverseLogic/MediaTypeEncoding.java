@@ -9,7 +9,7 @@ public enum MediaTypeEncoding {
 
     private final int value;
 
-    private MediaTypeEncoding(final int value) {
+    MediaTypeEncoding(final int value) {
         this.value = value;
     }
 

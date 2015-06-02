@@ -1,6 +1,5 @@
 package eu.europeana.corelib.search.service.logic;
 
-import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

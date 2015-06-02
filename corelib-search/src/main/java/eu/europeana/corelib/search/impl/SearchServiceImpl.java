@@ -116,7 +116,7 @@ public class SearchServiceImpl implements SearchService {
 	 */
 	private static final int TIME_ALLOWED = 30000;
 
-	private Map<String, Long> total = new HashMap<String, Long>();
+	private Map<String, Long> total = new HashMap<>();
 
 	/**
 	 * The list of possible field input for spelling suggestions
@@ -186,7 +186,7 @@ public class SearchServiceImpl implements SearchService {
 				List<WebResource> wResources = (List<WebResource>) aggregationFix
 						.getWebResources();
 				if (wResources == null) {
-					wResources = new ArrayList<WebResource>();
+					wResources = new ArrayList<>();
 				}
 				WebResourceImpl wr = new WebResourceImpl();
 				wr.setAbout(isShownBy);
@@ -210,7 +210,7 @@ public class SearchServiceImpl implements SearchService {
 				List<WebResource> wResources = (List<WebResource>) aggregationFix
 						.getWebResources();
 				if (wResources == null) {
-					wResources = new ArrayList<WebResource>();
+					wResources = new ArrayList<>();
 				}
 				WebResourceImpl wr = new WebResourceImpl();
 				wr.setAbout(isShownBy);
@@ -235,7 +235,7 @@ public class SearchServiceImpl implements SearchService {
 					List<WebResource> wResources = (List<WebResource>) aggregationFix
 							.getWebResources();
 					if (wResources == null) {
-						wResources = new ArrayList<WebResource>();
+						wResources = new ArrayList<>();
 					}
 					WebResourceImpl wr = new WebResourceImpl();
 					wr.setAbout(hasView);
@@ -258,9 +258,7 @@ public class SearchServiceImpl implements SearchService {
 						.hash();
 
 				final String webMetaInfoId = hashCodeAbout.toString();
-				if (webMetaInfoId != null) {
-					webMetaInfo = getMetaInfo(webMetaInfoId);
-				}
+				webMetaInfo = getMetaInfo(webMetaInfoId);
 			}
 
 
@@ -275,9 +273,7 @@ public class SearchServiceImpl implements SearchService {
 						.hash();
 
 				final String webMetaInfoId = hashCodeIsShownBy.toString();
-				if (webMetaInfoId != null) {
-					webMetaInfo = getMetaInfo(webMetaInfoId);
-				}
+				webMetaInfo = getMetaInfo(webMetaInfoId);
 			}
 
 			if (webMetaInfo != null) {
@@ -314,11 +310,9 @@ public class SearchServiceImpl implements SearchService {
 							.putString(webResource.getAbout(), Charsets.UTF_8)
 							.hash();
 
-					// Locate the technical meta data from the web resurce about
+					// Locate the technical meta data from the web resource about
 					final String webMetaInfoId = hashCodeAbout.toString();
-					if (webMetaInfoId != null) {
-						webMetaInfo = getMetaInfo(webMetaInfoId);
-					}
+					webMetaInfo = getMetaInfo(webMetaInfoId);
 				}
 
 				// Locate the technical meta data from the aggregation is shown
@@ -331,9 +325,7 @@ public class SearchServiceImpl implements SearchService {
 									Charsets.UTF_8).hash();
 
 					final String webMetaInfoId = hashCodeIsShownBy.toString();
-					if (webMetaInfoId != null) {
-						webMetaInfo = getMetaInfo(webMetaInfoId);
-					}
+					webMetaInfo = getMetaInfo(webMetaInfoId);
 				}
 
 				if (webMetaInfo != null) {
@@ -383,12 +375,12 @@ public class SearchServiceImpl implements SearchService {
 	public FullBean resolve(String europeanaObjectId, boolean similarItems)
 			throws SolrTypeException {
 
-		FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
+		FullBean fullBean = resolveInternal(europeanaObjectId);
 		FullBean fullBeanNew = fullBean;
 		if (fullBean != null) {
 			while (fullBeanNew != null) {
-				fullBeanNew = resolveInternal(fullBeanNew.getAbout(),
-						similarItems);
+				fullBeanNew = resolveInternal(fullBeanNew.getAbout()
+				);
 				if (fullBeanNew != null) {
 					fullBean = fullBeanNew;
 				}
@@ -398,8 +390,7 @@ public class SearchServiceImpl implements SearchService {
 		return fullBean;
 	}
 
-	private FullBean resolveInternal(String europeanaObjectId,
-			boolean similarItems) throws SolrTypeException {
+	private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
 		long t0 = new Date().getTime();
 		if (!STARTED) {
 			idServer.createDatastore();
@@ -487,7 +478,7 @@ public class SearchServiceImpl implements SearchService {
 		solrQuery.set("mlt", true);
 
 		if (mltFields == null) {
-			List<String> fields = new ArrayList<String>();
+			List<String> fields = new ArrayList<>();
 			for (MoreLikeThis mltField : MoreLikeThis.values()) {
 				fields.add(mltField.toString());
 			}
@@ -509,7 +500,7 @@ public class SearchServiceImpl implements SearchService {
 		@SuppressWarnings("unchecked")
 		NamedList<Object> moreLikeThisList = (NamedList<Object>) response
 				.getResponse().get("moreLikeThis");
-		List<BriefBean> beans = new ArrayList<BriefBean>();
+		List<BriefBean> beans = new ArrayList<>();
 		if (moreLikeThisList.size() > 0) {
 			@SuppressWarnings("unchecked")
 			List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList
@@ -527,7 +518,7 @@ public class SearchServiceImpl implements SearchService {
 	public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
 			Query query) throws SolrTypeException {
 
-		ResultSet<T> resultSet = new ResultSet<T>();
+		ResultSet<T> resultSet = new ResultSet<>();
 		Class<? extends IdBeanImpl> beanClazz = SearchUtils
 				.getImplementationClass(beanInterface);
 
@@ -588,7 +579,7 @@ public class SearchServiceImpl implements SearchService {
 				// spellcheck is optional
 				if (query.isAllowSpellcheck()) {
 					if (solrQuery.getStart() == null
-							|| solrQuery.getStart().intValue() <= 1) {
+							|| solrQuery.getStart() <= 1) {
 						solrQuery.setParam("spellcheck", "on");
 						solrQuery.setParam("spellcheck.collate", "true");
 						solrQuery
@@ -629,22 +620,18 @@ public class SearchServiceImpl implements SearchService {
 				} catch (SolrServerException e) {
 					log.error("SolrServerException: " + e.getMessage()
 							+ " The query was: " + solrQuery);
-					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				} catch (SolrException e) {
 					log.error("SolrException: " + e.getMessage()
 							+ " The query was: " + solrQuery);
-					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
 
 			} else {
-				resultSet = null;
 				throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
 			}
 
 		} else {
-			resultSet = null;
 			ProblemType type = ProblemType.INVALIDCLASS;
 			type.appendMessage("Bean class: " + beanClazz);
 			throw new SolrTypeException(type);
@@ -686,7 +673,7 @@ public class SearchServiceImpl implements SearchService {
 				return facetField.getValues();
 			}
 		}
-		return new ArrayList<FacetField.Count>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -833,7 +820,7 @@ public class SearchServiceImpl implements SearchService {
 							// termResult.
 							if (!StringUtils.contains(termResult.toString(),
 									term)) {
-								termResult.append(term + " ");
+								termResult.append(term).append(" ");
 							}
 						}
 					}
@@ -862,7 +849,7 @@ public class SearchServiceImpl implements SearchService {
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("%s, %d, %s", query, pageSize, field));
 		}
-		List<Term> results = new ArrayList<Term>();
+		List<Term> results = new ArrayList<>();
 		long start = new Date().getTime();
 		total.put(query, 0l);
 		// if the fiels is null check on all fields else on the requested field
@@ -920,7 +907,7 @@ public class SearchServiceImpl implements SearchService {
 	public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
 		List<Node> children = neo4jServer.getChildren(getNode(nodeId), offset,
 				limit);
-		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		List<Neo4jBean> beans = new ArrayList<>();
 		for (Node child : children) {
 			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
 					getNodeId(child)));
@@ -963,7 +950,7 @@ public class SearchServiceImpl implements SearchService {
 		String title;
 		String mappedTitle;
 
-		private SuggestionTitle(String title, String mappedTitle) {
+		SuggestionTitle(String title, String mappedTitle) {
 			this.title = title;
 			this.mappedTitle = mappedTitle;
 		}
@@ -1000,7 +987,7 @@ public class SearchServiceImpl implements SearchService {
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
 		List<Node> children = neo4jServer.getPreceedingSiblings(
 				getNode(nodeId), limit);
-		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		List<Neo4jBean> beans = new ArrayList<>();
 		for (Node child : children) {
 			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
 					getNodeId(child)));
@@ -1017,7 +1004,7 @@ public class SearchServiceImpl implements SearchService {
 	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
 		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),
 				limit);
-		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
+		List<Neo4jBean> beans = new ArrayList<>();
 		for (Node child : children) {
 			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
 					getNodeId(child)));

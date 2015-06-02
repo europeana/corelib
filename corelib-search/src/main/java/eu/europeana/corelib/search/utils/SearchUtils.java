@@ -1,7 +1,6 @@
 package eu.europeana.corelib.search.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,13 +17,11 @@ import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
 import org.apache.lucene.search.TermQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.definitions.edm.beans.ApiBean;
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.beans.RichBean;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.solr.model.QueryTranslation;
 import eu.europeana.corelib.edm.utils.FieldMapping;
@@ -141,11 +138,7 @@ public class SearchUtils {
 	public static String escapeFacet(String field, String query) {
 		if (StringUtils.isNotBlank(field) && StringUtils.isNotBlank(query)) {
 			query = escapeQuery(StringUtils.trim(query));
-			StringBuilder sb = new StringBuilder(StringUtils.trim(field));
-			sb.append(":\"");
-			sb.append(query);
-			sb.append("\"");
-			return sb.toString();
+			return StringUtils.trim(field) + ":\"" + query + "\"";
 		}
 		return null;
 	}
@@ -166,7 +159,7 @@ public class SearchUtils {
 	 */
 	public static List<FacetField> extractQueryFacets(
 			Map<String, Integer> queryFacets) {
-		Map<String, FacetField> map = new HashMap<String, FacetField>();
+		Map<String, FacetField> map = new HashMap<>();
 		for (String query : queryFacets.keySet()) {
 			Matcher matcher = ID_PATTERN.matcher(query);
 			if (!matcher.find()) {
@@ -179,8 +172,7 @@ public class SearchUtils {
 			}
 			map.get(field).add(value, queryFacets.get(query));
 		}
-		List<FacetField> list = new ArrayList<FacetField>(map.values());
-		return list;
+		return new ArrayList<>(map.values());
 	}
 
 	public static QueryTranslation translateQuery(String query, List<String> languages) {
@@ -189,9 +181,8 @@ public class SearchUtils {
 			wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
 		}
 		QueryExtractor queryExtractor = new QueryExtractor(query);
-		String modifiedQuery = new String(query);
 		List<QueryToken> queryTokens = queryExtractor.extractInfo(true);
-		List<QueryModification> queryModifications = new ArrayList<QueryModification>();
+		List<QueryModification> queryModifications = new ArrayList<>();
 		for (QueryToken token : queryTokens) {
 			if (!token.getType().equals(QueryType.TERMRANGE)) {
 				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
@@ -199,7 +190,7 @@ public class SearchUtils {
 					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
 					List<String> alternatives = extractLanguageVersions(languageVersions);
 					if (alternatives.size() > 0) {
-						QueryModification queryModification = token.createModification(modifiedQuery, alternatives);
+						QueryModification queryModification = token.createModification(query, alternatives);
 						if (queryModification != null) {
 							queryModifications.add(queryModification);
 						}
@@ -213,8 +204,8 @@ public class SearchUtils {
 	}
 
 	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
-		List<String> termsList = new ArrayList<String>();
-		Set<String> terms = new HashSet<String>();
+		List<String> termsList = new ArrayList<>();
+		Set<String> terms = new HashSet<>();
 		for (LanguageVersion languageVersion : languageVersions) {
 			String text = languageVersion.getText();
 			if (StringUtils.isNotBlank(text)) {

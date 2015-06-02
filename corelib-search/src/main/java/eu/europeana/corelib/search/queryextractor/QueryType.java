@@ -15,7 +15,7 @@ public enum QueryType {
 
 	private String type;
 
-	private QueryType(String type) {
+	QueryType(String type) {
 		this.type = type;
 	}
 
