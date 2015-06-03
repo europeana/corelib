@@ -14,7 +14,7 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
-package eu.europeana.corelib;
+package eu.europeana.corelib.mocks;
 
 import org.junit.Ignore;
 import org.junit.Test;

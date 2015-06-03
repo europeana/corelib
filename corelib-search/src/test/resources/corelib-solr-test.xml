@@ -21,11 +21,9 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 	
 	<!-- INTERNAL -->
@@ -35,7 +33,10 @@
 	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrEmbedded"
 	/>
-	 <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
-	 <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EdmMongoServerTest"/>
-	 <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmbeddedNeo4j"/>
+	 <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_idServer" class="eu.europeana.corelib.mocks.EuropeanaIdMongoServerMock"/>
+	 <bean name="corelib_thumbnail_mongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+	 <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.mocks.EmbeddedNeo4j"/>
 </beans>	

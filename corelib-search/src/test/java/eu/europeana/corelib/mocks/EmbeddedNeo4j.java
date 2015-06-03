@@ -1,4 +1,4 @@
-package eu.europeana.corelib;
+package eu.europeana.corelib.mocks;
 
 import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
 import org.junit.Ignore;
