@@ -234,6 +234,9 @@ public final class MongoUtils {
 				return equals;
 			}
 		}
+                if(mapA == null && mapB==null){
+                    return true;
+                }
 		return false;
 	}
 
