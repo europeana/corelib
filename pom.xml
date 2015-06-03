@@ -138,7 +138,7 @@
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
 		<version.jibx>1.2.5</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
-		<version.mongoDriver>2.12.4</version.mongoDriver>
+		<version.mongoDriver>2.13.0</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
@@ -219,6 +219,16 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<argLine>-XX:-UseSplitVerifier</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<formats>
+						<format>xml</format>
+					</formats>
 				</configuration>
 			</plugin>
 		</plugins>

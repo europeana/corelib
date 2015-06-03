@@ -4,7 +4,10 @@
 .settings/
 .externalToolBuilders/
 
-.idea/*
+#IntelliJ project files
+.idea
+*.iml
+
 # Maven
 */target/**
 
