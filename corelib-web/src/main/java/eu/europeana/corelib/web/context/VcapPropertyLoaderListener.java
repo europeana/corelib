@@ -22,9 +22,14 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 	private final static String POSTGRESUSERNAME = "vcap.services.postgresql.credentials.user";
 	private final static String POSTGRESPASSWORD = "vcap.services.postgresql.credentials.password";
 	private final static String POSTGRESHOST = "vcap.services.postgresql.credentials.host";
-	private final static String MONGOUSERNAME = "vcap.services.europeana-object-db.credentials.username";
-	private final static String MONGOPASSWORD = "vcap.services.europeana-object-db.credentials.password";
-	private final static String MONGOHOSTS = "vcap.services.europeana-object-db.credentials.hosts";
+//	private final static String MONGOUSERNAME = "vcap.services.europeana-object-db.credentials.username";
+//	private final static String MONGOPASSWORD = "vcap.services.europeana-object-db.credentials.password";
+//	private final static String MONGOHOSTS = "vcap.services.europeana-object-db.credentials.hosts";
+        private final static String VCAP = "vcap.services.";
+        private final static String USERNAME=".credentials.username";
+        private final static String HOSTS = ".credentials.hosts";
+        private final static String PASSWORD = ".credentials.password";
+        
 	private final static String MONGOPORTS = "vcap.services.europeana-object-db.credentials.ports";
 	private final static String REDISHOST = "vcap.services.redis.credentials.host";
     private final static String REDISPORT = "vcap.services.redis.credentials.port";
@@ -41,6 +46,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 	private final static String PORTALCANONICALURL = "portal_server_canonical";
 	private final static String API2URL = "api2_url";
 	private final static String API2CANONICALURL="api2_canonical_url";
+        private final static String MONGO_SERVICE = "mongo_service"; 
 	
 	private static StandardServletEnvironment env = new StandardServletEnvironment();
 
@@ -75,16 +81,20 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 				FileUtils.writeStringToFile(europeanaProperties,
 						"postgres.host" + "=" + env.getProperty(POSTGRESHOST)
 								+ "\n", true);
+                                String mongoDb = env.getSystemEnvironment().get(MONGO_SERVICE).toString();
+                                String mongoUserName = VCAP+mongoDb+USERNAME;
+                                String mongoPassword = VCAP+mongoDb+PASSWORD;
+                                String mongoHosts = VCAP+mongoDb+HOSTS;
 				FileUtils.writeStringToFile(
 						europeanaProperties,
 						"mongodb.username" + "="
-								+ env.getProperty(MONGOUSERNAME) + "\n", true);
+								+ env.getProperty(mongoUserName) + "\n", true);
 				FileUtils.writeStringToFile(
 						europeanaProperties,
 						"mongodb.password" + "="
-								+ env.getProperty(MONGOPASSWORD) + "\n", true);
-				org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(MONGOHOSTS));
-				String[] hosts = env.getProperty(MONGOHOSTS).replace('[', ' ')
+								+ env.getProperty(mongoPassword) + "\n", true);
+				org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(mongoHosts));
+				String[] hosts = env.getProperty(mongoHosts).replace('[', ' ')
 						.replace("]", " ").split(",");
 				String mongoHost = "mongodb.host=";
 				String mongoPort = "mongodb.port=";
