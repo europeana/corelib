@@ -71,14 +71,14 @@ public class ProxyFieldInputTest {
 	private EdmMongoServer mongoServer;
 
 	@Test
-	public void testProxy() throws MalformedURLException, IOException {
+	public void testProxy() throws IOException {
 		// The fields of the proxy come from the ProvidedCHO
 		ProxyType proxy = createProxyFields();
 		testMongo(proxy);
 		testSolr(proxy);
 	}
 
-	private void testSolr(ProxyType proxy) throws MalformedURLException,
+	private void testSolr(ProxyType proxy) throws
 			IOException {
 		SolrInputDocument solrDocument = new SolrInputDocument();
 		try {

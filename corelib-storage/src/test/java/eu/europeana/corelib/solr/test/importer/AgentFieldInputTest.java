@@ -56,7 +56,7 @@ public class AgentFieldInputTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testAgent() throws MalformedURLException, IOException{
+	public void testAgent() throws IOException{
 		AgentType agentType = new AgentType();
 		agentType.setAbout("test about");
 		mongoServer = EasyMock.createMock(EdmMongoServer.class);

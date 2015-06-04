@@ -68,7 +68,7 @@ public final class ProxyFieldInput {
 	 */
 	public SolrInputDocument createProxySolrFields(ProxyType proxy,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
-			IllegalAccessException, MalformedURLException, IOException {
+			IllegalAccessException, IOException {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				proxy.getAbout());
 		solrInputDocument.addField(
@@ -301,7 +301,7 @@ public final class ProxyFieldInput {
 	 */
 	public ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
 			ProxyType proxy) throws InstantiationException,
-			IllegalAccessException, MalformedURLException, IOException {
+			IllegalAccessException, IOException {
 
 		mongoProxy.setAbout(proxy.getAbout());
 		// mongoProxy.setId(new ObjectId());

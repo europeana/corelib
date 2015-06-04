@@ -60,7 +60,7 @@ public class SoundCloud extends MediaService {
 		return DocType.SOUND;
 	}
 
-	protected String getUrlPattern() {;
+	protected String getUrlPattern() {
 		return urlPattern;
 	}
 

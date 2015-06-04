@@ -93,7 +93,7 @@ public class OrganizationFieldInput {
 	public Organization createLicenseMongoFields(
 			eu.europeana.corelib.definitions.jibx.Organization jibxOrganization,
 			MongoServer mongoServer) {
-		Organization mongoOrganization = ((EdmMongoServer) mongoServer).getDatastore()
+		Organization mongoOrganization = mongoServer.getDatastore()
 				.find(Organization.class).filter("about", jibxOrganization.getAbout())
 				.get();
 

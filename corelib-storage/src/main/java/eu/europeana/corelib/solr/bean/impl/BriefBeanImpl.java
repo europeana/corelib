@@ -323,7 +323,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public float getScore() {
-        return ((Float) this.score != null ? this.score : 0.0f);
+        return (this.score != null ? this.score : 0.0f);
     }
 
     @Override

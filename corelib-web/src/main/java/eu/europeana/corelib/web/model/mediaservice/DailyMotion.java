@@ -22,7 +22,7 @@ public class DailyMotion extends MediaService {
 		return DocType.VIDEO;
 	}
 
-	protected String getUrlPattern() {;
+	protected String getUrlPattern() {
 		return urlPattern;
 	}
 
