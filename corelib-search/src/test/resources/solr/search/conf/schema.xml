@@ -937,7 +937,6 @@
 		<field name="europeana_pt_edm_wasPresentAt" type="string"
 			indexed="true" stored="false" multiValued="true" />
 
-<<<<<<< HEAD:corelib-search/src/test/resources/solr/search/conf/schema.xml
 		<!-- Yorgos Mamakis License and Organization fields -->
 <field name="provider_aggregation_cc_license" type="string"
                         indexed="true" stored="true" multiValued="true" />
@@ -1048,113 +1047,6 @@
 
 
 
-||||||| merged common ancestors
-=======
-		<!-- Yorgos Mamakis License and Organization fields -->
-		 <field name="cc_license" type="string"
-                        indexed="true" stored="true" multiValued="false" />
-		<field name="lic_odrl_inherited_from" type="string"
-                        indexed="true" stored="false" multiValued="false" />
-		<field name="lic_cc_deprecated_on" type="date"
-                        indexed="true" stored="false" multiValued="false" />
-		<field name="foaf_organization" type="string"
-                        indexed="true" stored="true" multiValued="false" />
-<field name="org_skos_prefLabel" type="text" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="org_skos_altLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="org_skos_prefLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_skos_altLabel.*" type="text"
-			indexed="true" stored="true" multiValued="true" />
-		<field name="org_skos_hiddenLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="org_skos_hiddenLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="org_skos_note.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_edm_wasPresentAt" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_edm_hasMet" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_edm_isRelatedTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_owl_sameAs" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_foaf_name" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_dc_date" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfBirth" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfDeath" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfEstablishment" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfTermination" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_gender" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_professionOrOccupation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_rdagr2_biographicalInformation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_edm_begin" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_edm_end" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-		<dynamicField name="org_edm_hasMet.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_isRelatedTo.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_owl_sameAs.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_foaf_name.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_dc_date.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="org_dc_identifier.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfBirth.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfDeath.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfEstablishment.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfTermination.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_gender.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_professionOrOccupation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_biographicalInformation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_begin.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_end.*" type="string" indexed="true" stored="false" multiValued="true"/>		
-		<dynamicField name="org_edm_acronym.*" type="string" indexed="true" stored="false" multiValued="true"/>
-		<field name="org_edm_acronym" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="org_edm_organizationScope.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_organizationScope" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="org_edm_organizationDomain.*" type="string" indexed="true" stored="true" multiValued="false"/>
-                <field name="org_edm_organizationDomain" type="string" indexed="true" stored="true" multiValued="true"/>
-		<dynamicField name="org_edm_organizationSector.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_organizationSector" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="org_edm_geographicLevel.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_geographicLevel" type="string" indexed="true" stored="false" multiValued="true"/>
-                <field name="org_edm_country" type="string" indexed="true" stored="true" multiValued="true"/>
-		<dynamicField name="org_edm_europeanaRole.*" type="string" indexed="true" stored="true" multiValued="false"/>
-                <field name="org_edm_europeanaRole" type="string" indexed="true" stored="true" multiValued="true"/>
-		 <field name="org_foaf_homepage" type="string" indexed="true" stored="false" multiValued="false"/>
-
-
-
->>>>>>> master:corelib-solr/src/test/resources/solr/search/conf/schema.xml
 		<!-- Diego Ceccarelli <diego.ceccarelli@isti.cnr.it> 17-11-2012 -->
 		<!-- SEVERE: Unable to use updateLog: _version_ field must exist in schema -->
 		<field name="_version_" type="long" indexed="true" stored="true"
@@ -1266,12 +1158,8 @@
 		dest="DATA_PROVIDER" />
 	<copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
 	<copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
-<<<<<<< HEAD:corelib-search/src/test/resources/solr/search/conf/schema.xml
 	<copyField source="provider_aggregation_odrl_inherited_from" dest="RIGHTS" />
-||||||| merged common ancestors
-=======
-	<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />
->>>>>>> master:corelib-solr/src/test/resources/solr/search/conf/schema.xml
+	<!--<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />-->
 	<copyField source="ag_skos_prefLabel.*" dest="text" />
 	<copyField source="ag_skos_altLabel.*" dest="text" />
 	<copyField source="ag_skos_hiddenLabel.*" dest="text" />

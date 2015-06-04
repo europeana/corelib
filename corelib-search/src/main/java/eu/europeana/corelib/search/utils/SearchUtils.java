@@ -39,9 +39,11 @@ import eu.europeana.corelib.web.service.WikipediaApiService;
 import eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl;
 
 public class SearchUtils {
-	@Resource
+
 	private static WikipediaApiService wikipediaApiService;
+
 	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
+
 	/**
 	 * Checks if there is no TYPE facet with an invalid type according to EDM
 	 *

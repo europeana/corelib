@@ -557,12 +557,6 @@ public class SearchServiceImpl implements SearchService {
 					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
 							.size() > 0);
 
-					System.out.println(Arrays.deepToString(query.getFacets()
-							.toArray()));
-					System.out.println(Arrays.deepToString(query
-							.getFilteredFacets().toArray()));
-					System.out.println();
-
 					for (String facetToAdd : query.getFacets()) {
 						if (query.isProduceFacetUnion()) {
 							if (hasFacetRefinements
