@@ -115,6 +115,12 @@
 		</fieldType>
 	</types>
 	<fields>
+            <field name="is_fulltext" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="has_thumbnails" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="has_media" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="filter_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+                <field name="facet_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+
 		<field name="text" type="text" indexed="true" stored="false"
 			multiValued="true" />
 		<field name="manu_exact" type="string" indexed="true" stored="false" />
