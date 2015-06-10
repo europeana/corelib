@@ -614,7 +614,7 @@ public class SearchServiceImpl implements SearchService {
 				} catch (SolrServerException e) {
 					log.error("SolrServerException: " + e.getMessage()
 							+ " The query was: " + solrQuery);
-					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+					throw new SolrTypeException(e, ProblemType. MALFORMED_QUERY);
 				} catch (SolrException e) {
 					log.error("SolrException: " + e.getMessage()
 							+ " The query was: " + solrQuery);
