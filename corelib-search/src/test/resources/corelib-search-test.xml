@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+  Copyright 2007-2012 The Europeana Foundation
+
+  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
+  by the European Commission;
+  You may not use this work except in compliance with the Licence.
+  
+  You may obtain a copy of the Licence at:
+  http://joinup.ec.europa.eu/software/page/eupl
+
+  Unless required by applicable law or agreed to in writing, software distributed under 
+  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
+  any kind, either express or implied.
+  See the Licence for the specific language governing permissions and limitations under 
+  the Licence.
+ -->
+
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+
+    <!-- INTERNAL -->
+    <import resource="corelib-definitions-test.xml"/>
+
+    <!-- OVERRIDE FOR TESTING -->
+    <bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
+          p:solrServer-ref="corelib_solr_solrEmbedded"
+            />
+    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+    <bean name="corelib_solr_mongoServer_metainfo" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.mongo.server.EdmMongoServer"/>
+    </bean>
+    <!--<bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>-->
+    <bean name="corelib_solr_idServer" class="eu.europeana.corelib.mocks.EuropeanaIdMongoServerMock"/>
+    <bean name="corelib_thumbnail_mongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+    <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
+    <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.mocks.EmbeddedNeo4j"/>
+</beans>	
