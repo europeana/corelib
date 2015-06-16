@@ -283,7 +283,7 @@ public class ContentLoader {
      */
     public static void main(String[] args) {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("/corelib-solr-context.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("/corelib-search-context.xml");
 
         SolrServer solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
         EdmMongoServer mongoDBServer = context.getBean("corelib_solr_mongoServer", EdmMongoServer.class);

@@ -10,30 +10,29 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-	">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+	   ">
 
-	<bean id="morphiaDataStore" class="eu.europeana.harvester.db.MorphiaDataStore">
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.host']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.port']}" type="int"/>
-		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.dbname']}" type="java.lang.String"/>
-	</bean>
+    <bean id="morphiaDataStore" class="eu.europeana.harvester.db.MorphiaDataStore">
+        <constructor-arg value="#{europeanaProperties['contentreuse.mongodb.host']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['contentreuse.mongodb.port']}" type="int"/>
+        <constructor-arg value="#{europeanaProperties['contentreuse.mongodb.dbname']}" type="java.lang.String"/>
+    </bean>
 
-	<bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig" />
+    <bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig"/>
 
-	<bean id="harvesterClient" class="eu.europeana.harvester.client.HarvesterClientImpl">
-		<constructor-arg ref="morphiaDataStore" />
-		<constructor-arg ref="harvesterClientConfig" />
-	</bean>
+    <bean id="harvesterClient" class="eu.europeana.harvester.client.HarvesterClientImpl">
+        <constructor-arg ref="morphiaDataStore"/>
+        <constructor-arg ref="harvesterClientConfig"/>
+    </bean>
 
-	<bean id="corelib_web_contentReuseFrameworkService" 
-		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
+    <bean id="corelib_web_contentReuseFrameworkService"
+          class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl"/>
 
     <bean id="corelib_mediaStorageClient"
-          class="eu.europeana.corelib.service.impl.MediaStorageClientImpl" />
+          class="eu.europeana.corelib.service.impl.MediaStorageClientImpl"/>
 
 </beans>

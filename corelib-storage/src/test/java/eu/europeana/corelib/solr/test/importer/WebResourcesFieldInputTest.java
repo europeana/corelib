@@ -16,19 +16,9 @@
  */
 package eu.europeana.corelib.solr.test.importer;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Key;
 import com.google.code.morphia.query.Query;
-
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;
@@ -36,81 +26,82 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.WebResourcesFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import org.apache.solr.common.SolrInputDocument;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Web Resource Field Input
- * 
+ *
  * @author Yorgos.Mamakis@ kb.nl
- * 
  */
 public class WebResourcesFieldInputTest {
-	private EdmMongoServer mongoServer;
 
-	@Test
-	public void testWebResource() {
-		WebResourceType webResource = new WebResourceType();
-		webResource.setAbout("test about");
-		Rights1 rights = new Rights1();
-		rights.setResource("test resource");
-		webResource.setRights(rights);
-		List<Rights> rightsList = new ArrayList<Rights>();
-		Rights rights1 = new Rights();
-		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rights1Resource = new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
-		rights1Resource.setResource("test rights");
-		rights1.setResource(rights1Resource);
-		rightsList.add(rights1);
-		webResource.setRightList(rightsList);
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testWebResource() {
+        WebResourceType webResource = new WebResourceType();
+        webResource.setAbout("test about");
+        Rights1 rights = new Rights1();
+        rights.setResource("test resource");
+        webResource.setRights(rights);
+        List<Rights> rightsList = new ArrayList<>();
+        Rights rights1 = new Rights();
+        eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource rights1Resource = new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
+        rights1Resource.setResource("test rights");
+        rights1.setResource(rights1Resource);
+        rightsList.add(rights1);
+        webResource.setRightList(rightsList);
+        WebResourceImpl webResourceImpl = new WebResourceImpl();
+        webResourceImpl.setAbout(webResource.getAbout());
 
-		// create mongo
-		mongoServer = EasyMock.createMock(EdmMongoServer.class);
-		Datastore ds = EasyMock.createMock(Datastore.class);
-		Query query = EasyMock.createMock(Query.class);
-		Key<WebResourceImpl> key = EasyMock.createMock(Key.class);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
-		EasyMock.expect(ds.find(WebResourceImpl.class)).andReturn(query);
-		EasyMock.expect(query.filter("about", webResource.getAbout()))
-				.andReturn(query);
-		EasyMock.expect(query.get()).andReturn(null);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
-		WebResourceImpl webResourceImpl = new WebResourceImpl();
-		webResourceImpl.setAbout(webResource.getAbout());
-		EasyMock.expect(ds.save(webResourceImpl)).andReturn(key);
+        // create mongo
+        EdmMongoServer mongoServerMock = mock(EdmMongoServer.class);
+        Datastore datastoreMock = mock(Datastore.class);
+        Query queryMock = mock(Query.class);
+        Key<WebResourceImpl> keyMock = mock(Key.class);
 
-		EasyMock.replay(query, ds, mongoServer);
+        when(mongoServerMock.getDatastore()).thenReturn(datastoreMock);
+        when(datastoreMock.find(WebResourceImpl.class)).thenReturn(queryMock);
+        when(datastoreMock.save(webResourceImpl)).thenReturn(keyMock);
+        when(queryMock.filter("about", webResource.getAbout())).thenReturn(queryMock);
 
-		WebResourceImpl webResourceMongo = new WebResourcesFieldInput()
-				.createWebResourceMongoField(webResource, mongoServer);
-		assertEquals(webResource.getAbout(), webResourceMongo.getAbout());
-		assertEquals(webResource.getRights().getResource(),
-				webResourceMongo.getWebResourceEdmRights().values().iterator()
-						.next().get(0));
-		assertEquals(webResource.getRightList().get(0).getResource()
-				.getResource(), webResourceMongo.getWebResourceDcRights()
-				.values().iterator().next().get(0));
+        WebResourceImpl webResourceMongo = new WebResourcesFieldInput()
+                .createWebResourceMongoField(webResource, mongoServerMock);
+        assertEquals(webResource.getAbout(), webResourceMongo.getAbout());
+        assertEquals(webResource.getRights().getResource(),
+                webResourceMongo.getWebResourceEdmRights().values().iterator()
+                        .next().get(0));
+        assertEquals(webResource.getRightList().get(0).getResource()
+                .getResource(), webResourceMongo.getWebResourceDcRights()
+                .values().iterator().next().get(0));
 
-		// create solr document
-		SolrInputDocument solrDocument = new SolrInputDocument();
-		try {
-			solrDocument = new WebResourcesFieldInput()
-					.createWebResourceSolrFields(webResource, solrDocument);
-			assertEquals(webResource.getAbout(),
-					solrDocument.getFieldValue(EdmLabel.EDM_WEB_RESOURCE
-							.toString()));
-			assertEquals(webResource.getRights().getResource(),
-					solrDocument.getFieldValue(EdmLabel.WR_EDM_RIGHTS
-							.toString()));
-			assertEquals(
-					webResource.getRightList().get(0).getResource()
-							.getResource(),
-					solrDocument.getFieldValue(EdmLabel.WR_DC_RIGHTS.toString()));
+        // create solr document
+        SolrInputDocument solrDocument = new SolrInputDocument();
+        try {
+            solrDocument = new WebResourcesFieldInput()
+                    .createWebResourceSolrFields(webResource, solrDocument);
+            assertEquals(webResource.getAbout(),
+                    solrDocument.getFieldValue(EdmLabel.EDM_WEB_RESOURCE
+                            .toString()));
+            assertEquals(webResource.getRights().getResource(),
+                    solrDocument.getFieldValue(EdmLabel.WR_EDM_RIGHTS
+                            .toString()));
+            assertEquals(
+                    webResource.getRightList().get(0).getResource()
+                            .getResource(),
+                    solrDocument.getFieldValue(EdmLabel.WR_DC_RIGHTS.toString()));
 
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        } catch (InstantiationException | IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
 }

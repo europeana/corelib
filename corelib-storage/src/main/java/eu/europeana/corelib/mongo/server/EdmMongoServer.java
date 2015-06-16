@@ -16,7 +16,7 @@
  */
 package eu.europeana.corelib.mongo.server;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;

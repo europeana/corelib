@@ -2,11 +2,10 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.OrganizationImpl;
 //TODO: NOT TO BE USED
 public class OrganizationFieldInput {
