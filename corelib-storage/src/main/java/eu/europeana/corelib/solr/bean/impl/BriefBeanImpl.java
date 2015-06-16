@@ -143,6 +143,19 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     
     @Field("edm_previewNoDistribute")
     protected Boolean edmPreviewNotDistribute;
+    
+    @Field("proxy_dc_title.*")
+    protected Map<String,List<String>> dcTitleLangAware;
+    
+    @Field("proxy_dc_creator.*")
+    protected Map<String,List<String>> dcCreatorLangAware;
+    
+    @Field("proxy_dc_contriutor.*")
+    protected Map<String,List<String>>dcContributorLangAware;
+    
+    @Field("proxy_dc_language.*")
+    protected Map<String,List<String>>dcLanguageLangAware;
+    
     @Override
     public String[] getEdmPreview() {
         List<String> previews = new ArrayList<String>();
@@ -377,5 +390,60 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 	public Boolean getPreviewNoDistribute() {
 		return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
 	}
+
+    @Override
+    public Map<String, List<String>> getDcTitleLangAware() {
+         if (dcTitleLangAware != null) {
+            Map<String, List<String>> retMap = new HashMap<>();
+
+            for (String key : dcTitleLangAware.keySet()) {
+                retMap.put(StringUtils.substringAfter(key, "."), dcTitleLangAware.get(key));
+            }
+
+            return retMap;
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, List<String>> getDcCreatorLangAware() {
+         if (dcCreatorLangAware != null) {
+            Map<String, List<String>> retMap = new HashMap<>();
+
+            for (String key : dcCreatorLangAware.keySet()) {
+                retMap.put(StringUtils.substringAfter(key, "."), dcCreatorLangAware.get(key));
+            }
+
+            return retMap;
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, List<String>> getDcContributorLangAware() {
+       if (dcContributorLangAware != null) {
+            Map<String, List<String>> retMap = new HashMap<>();
+
+            for (String key : dcContributorLangAware.keySet()) {
+                retMap.put(StringUtils.substringAfter(key, "."), dcContributorLangAware.get(key));
+            }
+
+            return retMap;
+        }
+        return null;
+    }
+    @Override
+    public Map<String, List<String>> getDcLanguageLangAware() {
+       if (dcLanguageLangAware != null) {
+            Map<String, List<String>> retMap = new HashMap<>();
+
+            for (String key : dcLanguageLangAware.keySet()) {
+                retMap.put(StringUtils.substringAfter(key, "."), dcLanguageLangAware.get(key));
+            }
+
+            return retMap;
+        }
+        return null;
+    }
 
 }
