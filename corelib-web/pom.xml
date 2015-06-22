@@ -109,10 +109,10 @@
 		</dependency>
 		<!-- TESTING -->
 		<dependency>
-			<scope>test</scope>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${version.springCore}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.subethamail</groupId>

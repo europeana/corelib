@@ -22,7 +22,7 @@ import java.util.Map;
 public class MediaStorageClientImpl implements MediaStorageClient {
 
     @Resource
-    ThumbnailMongoServerImpl thumbnailMongoServer;
+    private ThumbnailMongoServerImpl thumbnailMongoServer;
 
     public MediaStorageClientImpl() {}
 

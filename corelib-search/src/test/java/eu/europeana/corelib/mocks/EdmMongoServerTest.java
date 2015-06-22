@@ -16,18 +16,26 @@
  */
 package eu.europeana.corelib.mocks;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
+import com.mongodb.Mongo;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
+import org.junit.Ignore;
 
 /**
  * Mock for EdmMongoServeImpl to bypass spring injection
- * @author Yorgos.Mamakis@ kb.nl
  *
+ * @author Yorgos.Mamakis@ kb.nl
  */
 @Ignore
 public class EdmMongoServerTest extends EdmMongoServerImpl {
-	//Should be empty or else Junit complains
+    //Should be empty or else Junit complains
 
+    public EdmMongoServerTest(Mongo mongoServer, String databaseName, String username, String password)
+            throws MongoDBException {
+        super(mongoServer, databaseName, username, password);
+    }
+
+    public EdmMongoServerTest() {
+        super();
+    }
 }

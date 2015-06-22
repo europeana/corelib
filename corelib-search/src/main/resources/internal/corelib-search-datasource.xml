@@ -26,8 +26,4 @@
         <constructor-arg value="#{europeanaProperties['metainfo.mongodb.port']}" type="int"/>
     </bean>
 
-    <bean id="corelib_thumbnail_mongo" class="com.mongodb.Mongo">
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.host']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.port']}" type="int"/>
-    </bean>
 </beans>

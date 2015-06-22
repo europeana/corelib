@@ -38,8 +38,6 @@ import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
@@ -72,6 +70,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.protocol.HttpContext;
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -133,7 +132,7 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer_metainfo")
 	protected EdmMongoServer metainfoMongoServer;
 
-	@Resource(name = "corelib_solr_idServer")
+	@Resource(name = "corelib_solr_mongoServer_id")
 	protected EuropeanaIdMongoServer idServer;
 
 	@Resource(name = "corelib_solr_neo4jServer")
@@ -154,8 +153,8 @@ public class SearchServiceImpl implements SearchService {
 
 	private String mltFields;
 
-	@Log
-	protected Logger log;
+	protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
+
 	private static final HashFunction hf = Hashing.md5();
 
 	@Override

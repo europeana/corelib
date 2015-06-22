@@ -1,30 +1,19 @@
 package eu.europeana.corelib.search.impl;
 
-import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.search.TestSearchService;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import org.apache.solr.client.solrj.SolrServer;
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.search.model.ResultSet;
 import org.junit.Ignore;
 
 @Ignore
-public class TestSearchServiceImpl extends SearchServiceImpl implements TestSearchService {
+public class TestSearchServiceImpl extends SearchServiceImpl {
 
     @Override
-    public void setEdmMongoServer(EdmMongoServer mongoServer) {
-        this.mongoServer = mongoServer;
-    }
-
-
-    @Override
-    public void setEuropeanaIdMongoServer(EuropeanaIdMongoServer mongoServer) {
-        this.idServer = mongoServer;
-    }
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
-
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
+        ResultSet<T> resultSet = super.search(beanInterface, query);
+        System.out.println("QUERY: " + query.toString() + "   RESULTSIZE: " + resultSet.getResultSize());
+        return resultSet;
     }
 
     @Override

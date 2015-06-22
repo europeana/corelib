@@ -53,14 +53,6 @@ import java.util.Map;
  */
 public class ContentLoader {
 
-    private static String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test-update.zip";
-
-    private static String TEMP_DIR = "/tmp/europeana/records";
-
-    private EdmMongoServer mongoDBServer;
-
-    private SolrServer solrServer;
-
     private List<Path> collectionXML = new ArrayList<>();
 
     private List<SolrInputDocument> records = new ArrayList<>();
@@ -71,16 +63,14 @@ public class ContentLoader {
 
     private static ContentLoader instance = null;
 
-    public static ContentLoader getInstance(EdmMongoServer mongoDBServer, SolrServer solrServer) {
+    public static ContentLoader getInstance() {
         if (instance == null) {
-            instance = new ContentLoader(mongoDBServer, solrServer);
+            instance = new ContentLoader();
         }
         return instance;
     }
 
-    private ContentLoader(EdmMongoServer mongoDBServer, SolrServer solrServer) {
-        this.mongoDBServer = mongoDBServer;
-        this.solrServer = solrServer;
+    private ContentLoader() {
     }
 
     public void readRecords(String collectionName) {
@@ -109,7 +99,7 @@ public class ContentLoader {
         }
     }
 
-    public int parse() {
+    public int parse(final EdmMongoServer mongoDBServer, final SolrServer solrServer) {
         MongoConstructor mongoConstructor = new MongoConstructor();
         for (Path path : collectionXML) {
             try {
@@ -135,6 +125,7 @@ public class ContentLoader {
                     System.out.println("Sending " + i + " records to SOLR");
                     imported += records.size();
                     solrServer.add(records);
+                    solrServer.commit();
                     records.clear();
                 }
 
@@ -153,7 +144,7 @@ public class ContentLoader {
         return failed;
     }
 
-    public void commit() {
+    public void commit(final SolrServer solrServer) {
         try {
 
             solrServer.commit();
@@ -163,7 +154,6 @@ public class ContentLoader {
             System.out.println("Records read: " + i);
             System.out.println("Records imported: " + imported);
             System.out.println("Records failed: " + failed);
-            solrServer = null;
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
@@ -194,6 +184,7 @@ public class ContentLoader {
         final Map<String, String> env = new HashMap<>();
         try (FileSystem zip = FileSystems.newFileSystem(uri, env)) {
             // create destination directory
+            String TEMP_DIR = "/tmp/europeana/records";
             final Path destDir = Paths.get(TEMP_DIR);
             if (Files.notExists(destDir)) {
                 Files.createDirectories(destDir);
@@ -291,10 +282,11 @@ public class ContentLoader {
         if ((solrServer != null) && (mongoDBServer != null)) {
             ContentLoader contentLoader = null;
             try {
-                contentLoader = ContentLoader.getInstance(mongoDBServer, solrServer);
+                contentLoader = ContentLoader.getInstance();
+                String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test-update.zip";
                 contentLoader.readRecords(COLLECTION);
-                contentLoader.parse();
-                contentLoader.commit();
+                contentLoader.parse(mongoDBServer, solrServer);
+                contentLoader.commit(solrServer);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
