@@ -122,9 +122,7 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	protected EdmMongoServer mongoServer;
 
-	@Resource(name = "corelib_solr_mongoServer_metainfo")
-	protected EdmMongoServer metainfoMongoServer;
-
+	
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
 
