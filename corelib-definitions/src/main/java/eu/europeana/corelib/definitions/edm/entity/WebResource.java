@@ -19,10 +19,6 @@ package eu.europeana.corelib.definitions.edm.entity;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.definitions.model.ColorSpace;
-import eu.europeana.corelib.definitions.model.Orientation;
-import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
-
 
 /**
  * EDM WebResource Fields implementation

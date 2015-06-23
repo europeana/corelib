@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-lookup</artifactId>
-	<name>Europeana Core Library Solr and Mongo tools</name>
+	<name>Europeana Core Library Look-Up (Solr/Mongo tools)</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>

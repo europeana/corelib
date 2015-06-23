@@ -15,9 +15,9 @@
 	<packaging>pom</packaging>
 	<version>2.1-SNAPSHOT</version>
 	<name>Europeana Core Library</name>
-	<url>http://www.europeanalabs.eu</url>
+	<url>http://www.europeana.eu</url>
 	<organization>
-		<url>http://www.europeanalabs.eu</url>
+		<url>http://www.europeana.eu</url>
 		<name>Europeana Foundation</name>
 	</organization>
 
@@ -32,7 +32,6 @@
 		<module>corelib-edm-definitions</module>
 		<module>corelib-dereference</module>
 		<module>corelib-lookup</module>
-		<module>corelib-media-storage</module>
 		<module>corelib-sugarcrm/bindings</module>
 		<module>corelib-sugarcrm/client</module>
 		<module>corelib-hierarchies</module>

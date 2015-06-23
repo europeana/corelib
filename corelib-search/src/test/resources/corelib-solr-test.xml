@@ -58,12 +58,6 @@
         <constructor-arg value="" type="java.lang.String"/>
         <constructor-arg value="" type="java.lang.String"/>
     </bean>
-    <bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mocks.EdmMongoServerTest">
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="europeana_id_test" type="java.lang.String"/>
-        <constructor-arg value="" type="java.lang.String"/>
-        <constructor-arg value="" type="java.lang.String"/>
-    </bean>
     <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
     <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.mocks.EmbeddedNeo4j"/>
 </beans>	

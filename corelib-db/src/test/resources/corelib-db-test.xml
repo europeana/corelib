@@ -41,7 +41,6 @@
           class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
 
     <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.EmptyBean"/>
     <bean name="corelib_solr_mongoServer_id" class="eu.europeana.corelib.EmptyBean"/>
 
     <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>

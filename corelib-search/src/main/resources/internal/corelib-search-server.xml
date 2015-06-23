@@ -34,13 +34,6 @@
         <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
     </bean>
 
-    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
-        <constructor-arg ref="corelib_solr_mongo_metainfo"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.password']}" type="java.lang.String"/>
-    </bean>
-
     <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="EuropeanaId"/>
