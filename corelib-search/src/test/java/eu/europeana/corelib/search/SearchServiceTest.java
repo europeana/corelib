@@ -48,7 +48,7 @@ import static org.junit.Assert.*;
  * @see eu.europeana.corelib.search.SearchService
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/corelib-solr-context.xml", "/corelib-search-test.xml"})
+@ContextConfiguration({"/corelib-solr-context.xml", "/corelib-solr-test.xml"})
 public class SearchServiceTest {
 
     private static int no_of_tests = 0;

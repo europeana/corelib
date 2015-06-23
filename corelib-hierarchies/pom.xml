@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-hierarchies</artifactId>
-	<name>corelib-hierarchies</name>
+	<name>Europeana Core Library Hierarchies</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
