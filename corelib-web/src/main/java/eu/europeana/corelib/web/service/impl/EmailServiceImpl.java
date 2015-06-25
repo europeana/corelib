@@ -70,7 +70,7 @@ public abstract class EmailServiceImpl implements EmailService {
 			|| StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("token", token.getToken());
 		model.put("url", url);
 
@@ -98,7 +98,7 @@ public abstract class EmailServiceImpl implements EmailService {
 			|| StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("token", token.getToken());
 		model.put("url", url);
 		EmailBuilder builder = createEmailBuilder();
@@ -112,17 +112,15 @@ public abstract class EmailServiceImpl implements EmailService {
 	/**
 	 * Sends a token to user as part of registration confirmation
 	 * 
-	 * @param token
-	 *   The token to send to the user
-	 * @param url
-	 *   The URL of registration confirm page
+	 * @param user
+	 *   The user to send register notifcation to
 	 */
 	@Override
 	public void sendRegisterNotify(final User user) throws EmailServiceException {
 		if (user == null) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("user", user);
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
@@ -141,7 +139,7 @@ public abstract class EmailServiceImpl implements EmailService {
 			log.error("Problem with sendRegisterApiNotifyAdmin: user is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("user", user);
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
@@ -159,7 +157,7 @@ public abstract class EmailServiceImpl implements EmailService {
 			log.error("Problem with sendRegisterApiNotifyUser: apiKey is null");
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("apiKey", apiKey);
 
 		// adding translatable message keys
@@ -213,7 +211,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	/**
 	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
 	 * 
-	 * @param user
+	 * @param email
 	 *   The user object
 	 * @param url
 	 *   The URL of the password reset page
@@ -223,7 +221,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(url)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("url", url);
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
@@ -246,7 +244,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("email", email);
 		model.put("feedback", feedback);
 
@@ -273,7 +271,7 @@ public abstract class EmailServiceImpl implements EmailService {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
 		}
 
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 		model.put("subject", subject);
 		model.put("body", body);
 

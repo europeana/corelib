@@ -18,7 +18,7 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.jibx.ConformsTo;
 import eu.europeana.corelib.definitions.jibx.Created;
 import eu.europeana.corelib.definitions.jibx.Creator;

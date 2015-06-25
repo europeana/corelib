@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.solr.entity.LicenseImpl;
 
 public class LicenseUpdater implements Updater<LicenseImpl> {

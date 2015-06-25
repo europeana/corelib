@@ -24,7 +24,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.User;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public abstract interface UserConnected<I extends Serializable> extends IdentifiedEntity<I> {
+public interface UserConnected<I extends Serializable> extends IdentifiedEntity<I> {
 
 	User getUser();
 

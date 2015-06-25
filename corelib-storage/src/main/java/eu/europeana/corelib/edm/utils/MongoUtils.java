@@ -32,7 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
@@ -234,10 +234,7 @@ public final class MongoUtils {
 				return equals;
 			}
 		}
-                if(mapA == null && mapB==null){
-                    return true;
-                }
-		return false;
+		return mapA == null && mapB == null;
 	}
 
 	/**

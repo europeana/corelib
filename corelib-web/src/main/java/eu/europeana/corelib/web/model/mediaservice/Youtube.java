@@ -17,7 +17,7 @@ public class Youtube extends MediaService {
 		return DocType.VIDEO;
 	}
 
-	protected String getUrlPattern() {;
+	protected String getUrlPattern() {
 		return urlPattern;
 	}
 

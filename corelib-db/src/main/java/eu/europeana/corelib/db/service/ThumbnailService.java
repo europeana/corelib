@@ -134,7 +134,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @param imageId Alternative Image ID when there is more then one image for this object
 	 * @return True if the image is stored in database
 	 */
-	abstract boolean exists(String objectId, String imageId);
+	boolean exists(String objectId, String imageId);
 
 	/**
 	 * Extended version of {@link #findByID(String)} with a alternative imageId
@@ -143,7 +143,7 @@ public interface ThumbnailService extends AbstractNoSqlService<ImageCache, Strin
 	 * @param imageId Alternative Image ID when there is more then one image for this object
 	 * @return Returns a ImageCache object if found
 	 */
-	abstract ImageCache findByID(String objectId, String imageId);
+	ImageCache findByID(String objectId, String imageId);
 
 	/**
 	 * Extracts the XMP info contained in the Europeana thumbnail

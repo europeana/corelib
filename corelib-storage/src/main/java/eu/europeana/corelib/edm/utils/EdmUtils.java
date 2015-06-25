@@ -1101,12 +1101,9 @@ public class EdmUtils {
 	}
 
 	private static boolean isUri(String str) {
-		if (StringUtils.startsWith(str, "http://")
+		return StringUtils.startsWith(str, "http://")
 				|| StringUtils.startsWith(str, "https://")
 				|| StringUtils.startsWith(str, "urn:")
-				|| StringUtils.startsWith(str, "#")) {
-			return true;
-		}
-		return false;
+				|| StringUtils.startsWith(str, "#");
 	}
 }

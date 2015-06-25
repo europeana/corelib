@@ -38,7 +38,7 @@ public enum Facet {
 
 	private String facet;
 
-	private Facet(String facets){
+	Facet(String facets){
 		this.facet = facets;
 	}
 

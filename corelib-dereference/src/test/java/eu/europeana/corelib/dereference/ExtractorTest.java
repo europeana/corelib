@@ -80,7 +80,7 @@ public class ExtractorTest {
 			assertEquals(1, extractor.getControlledVocabularies().size());
 			assertNotNull(mongoServer.getControlledVocabulary("URI",
 					"http://testuri/record"));
-			ControlledVocabulary retrieveVocabulary = (ControlledVocabularyImpl) mongoServer
+			ControlledVocabulary retrieveVocabulary = mongoServer
 					.getControlledVocabulary("URI", "http://testuri/record");
 			assertEquals(vocabulary.getName(), retrieveVocabulary.getName());
 			assertEquals(1, retrieveVocabulary.getElements().size());

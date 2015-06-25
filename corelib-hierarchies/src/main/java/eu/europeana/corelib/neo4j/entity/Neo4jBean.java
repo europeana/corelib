@@ -206,10 +206,7 @@ public class Neo4jBean {
 		} else if (!title.equals(other.title)) {
 			return false;
 		}
-		if (type != other.type) {
-			return false;
-		}
-		return true;
+		return type == other.type;
 	}
 
 }

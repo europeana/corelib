@@ -37,7 +37,7 @@ public enum MoreLikeThis {
 
 	private String mlt;
 
-	private MoreLikeThis(String mlt) {
+	MoreLikeThis(String mlt) {
 		this.mlt = mlt;
 	}
 

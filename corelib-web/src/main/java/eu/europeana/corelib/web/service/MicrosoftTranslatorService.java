@@ -2,5 +2,5 @@ package eu.europeana.corelib.web.service;
 
 public interface MicrosoftTranslatorService {
 
-	public String translate(String text, String languageCode);
+	String translate(String text, String languageCode);
 }
