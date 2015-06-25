@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,21 +26,27 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  * europeana.properties file (found on the classpath), and will inject and CF environment variables
  * to make them accessible to the application.
  * 
- * The following VCAP properties will be injected, unless these already exist in the
- * europeana.properties file (in which case they will remain untouched):
+ * The following properties will be replaced, or added if they don't exist yet, using values from
+ * the system-provided environment variables, if they are listed as user-provided variables.
  * 
  * <pre class="code">
  * postgres.*
  * mongodb.*
  * </pre>
  * 
- * The following VCAP properties will _always_ be injected:
+ * In other words, adding 'mongo_service: europeana-object-db-blue-2' to the env section of the
+ * manifest.yaml, will replace/add all mongodb.* values found in the europeana properties with the
+ * CF system provided ones. To use the Postgres values, use 'postgres_service: default'
+ * 
+ * The following system-provided properties will _always_ be injected, if it exists in the system
+ * environment:
  * 
  * <pre class="code">
  * redis.*
  * </pre>
  * 
- * The following ENV properties will _always_ be injected, if they exist in the manifest file:
+ * And the following user-provided properties, if they exist, will also be added to the
+ * europeana.properties:
  * 
  * <pre class="code">
  * api2_url
@@ -45,37 +55,34 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  * portal_server_canonical
  * </pre>
  * 
- * @author bram
+ * @author Yorgos, Bram
  * 
  */
 public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
-  private final static String HTTP = "http://";
   private final static String VCAP = "vcap.services.";
   private final static String USERNAME = ".credentials.username";
   private final static String HOSTS = ".credentials.hosts";
   private final static String PASSWORD = ".credentials.password";
-
-  private final static String MONGO_SERVICE = "mongo_service";
-  private final static String MONGO_DBNAME = "mongodb.dbname";
-  private final static String MONGO_DBNAME_VALUE = "europeana";
 
   private final static String POSTGRESDB = "vcap.services.postgresql.credentials.db";
   private final static String POSTGRESUSERNAME = "vcap.services.postgresql.credentials.user";
   private final static String POSTGRESPASSWORD = "vcap.services.postgresql.credentials.password";
   private final static String POSTGRESHOST = "vcap.services.postgresql.credentials.host";
 
+  private final static String MONGO_SERVICE = "mongo_service";
+  private final static String MONGO_DBNAME = "mongodb.dbname";
+  private final static String MONGO_DBNAME_VALUE = "europeana";
+
   private final static String REDISHOST = "vcap.services.redis.credentials.host";
   private final static String REDISPORT = "vcap.services.redis.credentials.port";
   private final static String REDISPASSWORD = "vcap.services.redis.credentials.password";
 
   /*
-   * # no trailing slash
-   * api2.url=http://hostname.domain/api
+   * # no trailing slash api2.url=http://hostname.domain/api
    * api2.canonical.url=http://hostname.domain/api
    * 
-   * portal.server = http://hostname.domain/portal
-   * portal.server.canonical=http://hostname.domain
+   * portal.server = http://hostname.domain/portal portal.server.canonical=http://hostname.domain
    */
   private final static String API2URL = "api2_url";
   private final static String API2CANONICALURL = "api2_canonical_url";
@@ -101,77 +108,103 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
       props.load(new FileInputStream(europeanaProperties));
 
       // PostgreSQL db, username, password, host
-      if (!props.containsKey("postgres.db")) {
-        FileUtils.writeStringToFile(europeanaProperties,
-            "\n" + "postgres.db" + "=" + env.getProperty(POSTGRESDB) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            "postgres.username" + "=" + env.getProperty(POSTGRESUSERNAME) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            "postgres.password" + "=" + env.getProperty(POSTGRESPASSWORD) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            "postgres.host" + "=" + env.getProperty(POSTGRESHOST) + "\n", true);
+      if (env.getProperty(POSTGRESHOST) != null) {
+        props.setProperty("postgres.db", env.getProperty(POSTGRESDB));
+        props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME));
+        props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD));
+        props.setProperty("postgres.host", env.getProperty(POSTGRESHOST));
       }
 
       // MongoDB username, password, host, port
-      if (!props.containsKey("mongodb.host")) {
+      // The actual Mongo db depends on the user-provided "mongo_service" value
+      if (env.getSystemEnvironment().containsKey(MONGO_SERVICE)) {
         String mongoDb = env.getSystemEnvironment().get(MONGO_SERVICE).toString();
         String mongoUserName = VCAP + mongoDb + USERNAME;
         String mongoPassword = VCAP + mongoDb + PASSWORD;
         String mongoHosts = VCAP + mongoDb + HOSTS;
-        FileUtils.writeStringToFile(europeanaProperties,
-            "mongodb.username" + "=" + env.getProperty(mongoUserName) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            "mongodb.password" + "=" + env.getProperty(mongoPassword) + "\n", true);
+
+        props.setProperty("mongodb.username", env.getProperty(mongoUserName));
+        props.setProperty("mongodb.password", env.getProperty(mongoPassword));
+
+        // FileUtils.writeStringToFile(europeanaProperties,
+        // "mongodb.username" + "=" + env.getProperty(mongoUserName) + "\n", true);
+        // FileUtils.writeStringToFile(europeanaProperties,
+        // "mongodb.password" + "=" + env.getProperty(mongoPassword) + "\n", true);
         org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(mongoHosts));
         String[] hosts = env.getProperty(mongoHosts).replace('[', ' ').replace("]", " ").split(",");
-        String mongoHost = "mongodb.host=";
-        String mongoPort = "mongodb.port=";
+        String mongoHost = new String();
+        String mongoPort = new String();
         for (String host : hosts) {
           mongoHost = mongoHost + host.split(":")[0].trim() + ",";
           mongoPort = mongoPort + host.split(":")[1].trim() + ",";
         }
-        FileUtils.writeStringToFile(europeanaProperties,
-            mongoHost.substring(0, mongoHost.length() - 1) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            mongoPort.substring(0, mongoPort.length() - 1) + "\n", true);
-        FileUtils.writeStringToFile(europeanaProperties,
-            MONGO_DBNAME + "=" + MONGO_DBNAME_VALUE + "\n", true);
+        props.setProperty("mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
+        props.setProperty("mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
+
+        // FileUtils.writeStringToFile(europeanaProperties,
+        // mongoHost.substring(0, mongoHost.length() - 1) + "\n", true);
+        // FileUtils.writeStringToFile(europeanaProperties,
+        // mongoPort.substring(0, mongoPort.length() - 1) + "\n", true);
+
+        props.setProperty(MONGO_DBNAME, MONGO_DBNAME_VALUE);
+        // FileUtils.writeStringToFile(europeanaProperties, MONGO_DBNAME + "=" + MONGO_DBNAME_VALUE
+        // + "\n", true);
       }
 
       // Redis host, port, password
-      FileUtils.writeStringToFile(europeanaProperties,
-          "redis.host" + "=" + env.getProperty(REDISHOST) + "\n", true);
-      FileUtils.writeStringToFile(europeanaProperties,
-          "redis.port" + "=" + env.getProperty(REDISPORT) + "\n", true);
-      FileUtils.writeStringToFile(europeanaProperties,
-          "redis.password" + "=" + env.getProperty(REDISPASSWORD) + "\n", true);
+      if (env.getProperty(REDISHOST) != null) {
+        props.setProperty("redis.host", env.getProperty(REDISHOST));
+        props.setProperty("redis.port", env.getProperty(REDISPORT));
+        props.setProperty("redis.password", env.getProperty(REDISPASSWORD));
+      }
 
       // API and Portal canonical URLs, server
-      if (env.containsProperty(API2CANONICALURL)) {
-        FileUtils.writeStringToFile(europeanaProperties,
-            StringUtils.replaceChars(API2CANONICALURL, "_", ".") + "=" + HTTP
-                + env.getSystemEnvironment().get(API2CANONICALURL) + "\n", true);
+      setHTTPProperty(props, API2URL);
+      setHTTPProperty(props, API2CANONICALURL);
+      setHTTPProperty(props, PORTALCANONICALURL);
+      setHTTPProperty(props, PORTALSERVER);
+
+      // Write the Properties into the europeana.properties
+      // Using the built-in store() method escapes certain characters (e.g. '=' and ':'), which is
+      // not what we want to do
+      // While we're doing manual stuff, might as well sort the list alphabetically...
+      List<String> sortedKeys = new ArrayList<String>();
+      for (Object key : props.keySet()) {
+        sortedKeys.add(key.toString());
       }
-      if (env.containsProperty(API2URL)) {
-        FileUtils.writeStringToFile(europeanaProperties,
-            StringUtils.replaceChars(API2URL, "_", ".") + "=" + HTTP
-                + env.getSystemEnvironment().get(API2URL) + "\n", true);
+      Collections.sort(sortedKeys);
+
+      StringBuilder sb = new StringBuilder();
+      sb.append("#Generated by the VCAPPropertyLoaderListener" + "\n");
+      sb.append("#" + new Date().toString() + "\n");
+      for (String key : sortedKeys) {
+        sb.append(key + "=" + props.getProperty(key).toString() + "\n");
       }
-      if (env.containsProperty(PORTALCANONICALURL)) {
-        FileUtils.writeStringToFile(europeanaProperties,
-            StringUtils.replaceChars(PORTALCANONICALURL, "_", ".") + "=" + HTTP
-                + env.getSystemEnvironment().get(PORTALCANONICALURL) + "\n", true);
-      }
-      if (env.containsProperty(PORTALSERVER)) {
-        FileUtils.writeStringToFile(europeanaProperties,
-            StringUtils.replaceChars(PORTALSERVER, "_", ".") + "=" + HTTP
-                + env.getSystemEnvironment().get(PORTALSERVER) + "\n", true);
-      }
+      // Overwriting the original file
+      FileUtils.writeStringToFile(europeanaProperties, sb + "\n", false);
+      // props.store(new FileOutputStream(europeanaProperties),
+      // "Generated by the VCAPPropertyLoaderListener");
 
     } catch (IOException e1) {
       e1.printStackTrace();
       Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e1.getMessage(), e1.getCause());
     }
 
+  }
+
+  /**
+   * Checks if a user-defined variable exists, and adds it to the properties file if it does
+   * 
+   * @param props
+   * @param key
+   * @throws IOException
+   */
+  private void setHTTPProperty(Properties props, String key) throws IOException {
+    String HTTP = "http://";
+
+    if (env.containsProperty(key)) {
+      props.setProperty(StringUtils.replaceChars(key, "_", "."), HTTP
+          + env.getSystemEnvironment().get(key));
+    }
   }
 }
