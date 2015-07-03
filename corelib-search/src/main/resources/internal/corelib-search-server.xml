@@ -19,13 +19,21 @@
     <!-- LAZY INIT: the next beans has lazy init, to prevent them from being
         started when not used... -->
 
-    <bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
-        <property name="followRedirects" value="false"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
+    <bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.CloudSolrServer"
+          lazy-init="true" init-method="connect">
+        <constructor-arg value="#{europeanaProperties['zookeeper.url']}" />
+        <constructor-arg>
+            <bean class="org.apache.solr.client.solrj.impl.LBHttpSolrServer">
+                <constructor-arg type="java.lang.String[]" value="#{europeanaProperties['solr.url']}"></constructor-arg>
+            </bean>
+        </constructor-arg>
+        <!--         <property name="followRedirects" value="false" /> -->
+        <!--         <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}" /> -->
+        <!--         <property name="defaultMaxConnectionsPerHost" value="64" /> -->
+        <!--         <property name="maxTotalConnections" value="125" /> -->
+        <property name="defaultCollection" value="#{europeanaProperties['solr.core']}" />
     </bean>
+
 
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>

@@ -73,7 +73,7 @@ public class ProxySolrCreator {
          SolrUtils.addFromMap(doc, EdmLabel.PROXY_EDM_ISRELATEDTO, proxy.getEdmIsRelatedTo());
          SolrUtils.addFromMap(doc, EdmLabel.PROXY_EDM_RIGHTS, proxy.getEdmRights()); 
          if(proxy.getEdmType()!=null){
-             doc.addField(EdmLabel.TYPE.toString(), proxy.getEdmType());
+             doc.addField(EdmLabel.PROVIDER_EDM_TYPE.toString(), proxy.getEdmType());
          }
          
         doc.addField(EdmLabel.EDM_ISEUROPEANA_PROXY.toString(), proxy.isEuropeanaProxy());
