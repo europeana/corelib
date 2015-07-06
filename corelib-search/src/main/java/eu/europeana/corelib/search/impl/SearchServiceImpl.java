@@ -16,18 +16,54 @@
  */
 package eu.europeana.corelib.search.impl;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import eu.europeana.corelib.definitions.edm.beans.BriefBean;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.logging.Log;
+import eu.europeana.corelib.logging.Logger;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.neo4j.entity.Neo4jBean;
+import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
+import eu.europeana.corelib.neo4j.server.Neo4jServer;
+import eu.europeana.corelib.search.SearchService;
+import eu.europeana.corelib.search.model.ResultSet;
+import eu.europeana.corelib.search.query.MoreLikeThis;
+import eu.europeana.corelib.search.service.domain.ImageOrientation;
+import eu.europeana.corelib.search.service.inverseLogic.MediaTypeEncoding;
+import eu.europeana.corelib.search.service.inverseLogic.TagEncoding;
+import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
+import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
+import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
+import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
+import eu.europeana.corelib.search.utils.SearchUtils;
+import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -55,40 +91,15 @@ import org.apache.solr.common.util.NamedList;
 import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Value;
 
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.beans.IdBean;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.solr.model.Query;
-import eu.europeana.corelib.definitions.solr.model.Term;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.neo4j.entity.Neo4jBean;
-import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
-import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
-import eu.europeana.corelib.search.SearchService;
-import eu.europeana.corelib.search.model.ResultSet;
-import eu.europeana.corelib.search.query.MoreLikeThis;
-import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
- * @see eu.europeana.corelib.search.SearchService
- * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceImpl implements SearchService {
 
@@ -110,9 +121,8 @@ public class SearchServiceImpl implements SearchService {
 	/**
 	 * The list of possible field input for spelling suggestions
 	 */
-	private static final List<String> SPELL_FIELDS = Arrays.asList(
-		"who", "what", "where", "when", "title"
-	);
+	private static final List<String> SPELL_FIELDS = Arrays.asList("who",
+			"what", "where", "when", "title");
 
 	// provided by setter
 	private SolrServer solrServer;
@@ -120,11 +130,14 @@ public class SearchServiceImpl implements SearchService {
 	@Resource(name = "corelib_solr_mongoServer")
 	protected EdmMongoServer mongoServer;
 
+	@Resource(name = "corelib_solr_mongoServer_metainfo")
+	protected EdmMongoServer metainfoMongoServer;
+
 	@Resource(name = "corelib_solr_idServer")
 	protected EuropeanaIdMongoServer idServer;
-        
-        @Resource(name = "corelib_solr_neo4jServer")
-        protected Neo4jServer neo4jServer;
+
+	@Resource(name = "corelib_solr_neo4jServer")
+	protected Neo4jServer neo4jServer;
 
 	@Value("#{europeanaProperties['solr.facetLimit']}")
 	private int facetLimit;
@@ -143,24 +156,211 @@ public class SearchServiceImpl implements SearchService {
 
 	@Log
 	protected Logger log;
+	private static final HashFunction hf = Hashing.md5();
 
 	@Override
-	public FullBean findById(String collectionId, String recordId, boolean similarItems)
-			throws MongoDBException {
-		return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
+	public FullBean findById(String collectionId, String recordId,
+			boolean similarItems) throws MongoDBException {
+		return findById(
+				EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
+				similarItems);
+	}
+
+	private void injectWebMetaInfo(final FullBean fullBean) {
+
+		// Temp fix for missing web resources
+		Aggregation aggregationFix = fullBean.getAggregations().get(0);
+		if (aggregationFix.getEdmIsShownBy() != null) {
+			String isShownBy = fullBean.getAggregations().get(0)
+					.getEdmIsShownBy();
+			boolean containsWr = false;
+
+			if (aggregationFix.getWebResources() != null) {
+				for (WebResource wr : aggregationFix.getWebResources()) {
+					if (StringUtils.equals(isShownBy, wr.getAbout())) {
+						containsWr = true;
+					}
+				}
+			}
+			if (!containsWr) {
+				List<WebResource> wResources = (List<WebResource>) aggregationFix
+						.getWebResources();
+				if (wResources == null) {
+					wResources = new ArrayList<WebResource>();
+				}
+				WebResourceImpl wr = new WebResourceImpl();
+				wr.setAbout(isShownBy);
+				wResources.add(wr);
+				aggregationFix.setWebResources(wResources);
+			}
+		}
+
+		if (aggregationFix.getEdmObject() != null) {
+			String isShownBy = fullBean.getAggregations().get(0).getEdmObject();
+			boolean containsWr = false;
+
+			if (aggregationFix.getWebResources() != null) {
+				for (WebResource wr : aggregationFix.getWebResources()) {
+					if (StringUtils.equals(isShownBy, wr.getAbout())) {
+						containsWr = true;
+					}
+				}
+			}
+			if (!containsWr) {
+				List<WebResource> wResources = (List<WebResource>) aggregationFix
+						.getWebResources();
+				if (wResources == null) {
+					wResources = new ArrayList<WebResource>();
+				}
+				WebResourceImpl wr = new WebResourceImpl();
+				wr.setAbout(isShownBy);
+				wResources.add(wr);
+				aggregationFix.setWebResources(wResources);
+			}
+		}
+
+		if (aggregationFix.getHasView() != null) {
+			for (String hasView : aggregationFix.getHasView()) {
+
+				boolean containsWr = false;
+
+				if (aggregationFix.getWebResources() != null) {
+					for (WebResource wr : aggregationFix.getWebResources()) {
+						if (StringUtils.equals(hasView, wr.getAbout())) {
+							containsWr = true;
+						}
+					}
+				}
+				if (!containsWr) {
+					List<WebResource> wResources = (List<WebResource>) aggregationFix
+							.getWebResources();
+					if (wResources == null) {
+						wResources = new ArrayList<WebResource>();
+					}
+					WebResourceImpl wr = new WebResourceImpl();
+					wr.setAbout(hasView);
+					wResources.add(wr);
+					aggregationFix.setWebResources(wResources);
+				}
+			}
+		}
+		((List<Aggregation>)fullBean.getAggregations()).set(0, aggregationFix);
+		
+		// Step 1 : Fill in the europeana aggregation
+		for (final WebResource webResource : fullBean.getEuropeanaAggregation()
+				.getWebResources()) {
+			WebResourceMetaInfoImpl webMetaInfo = null;
+
+			// Locate the technical meta data from the web resource about
+			if (webResource.getAbout() != null) {
+				final HashCode hashCodeAbout = hf.newHasher()
+						.putString(webResource.getAbout(), Charsets.UTF_8)
+						.hash();
+
+				final String webMetaInfoId = hashCodeAbout.toString();
+				if (webMetaInfoId != null) {
+					webMetaInfo = getMetaInfo(webMetaInfoId);
+				}
+			}
+
+
+			// Locate the technical meta data from the aggregation is shown by
+			if (webMetaInfo == null
+					&& fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
+				final HashCode hashCodeIsShownBy = hf
+						.newHasher()
+						.putString(
+								fullBean.getEuropeanaAggregation()
+										.getEdmIsShownBy(), Charsets.UTF_8)
+						.hash();
+
+				final String webMetaInfoId = hashCodeIsShownBy.toString();
+				if (webMetaInfoId != null) {
+					webMetaInfo = getMetaInfo(webMetaInfoId);
+				}
+			}
+
+			if (webMetaInfo != null) {
+				((WebResourceImpl) webResource)
+						.setWebResourceMetaInfo(webMetaInfo);
+			}
+		}
+
+		// Step 2 : Fill in the aggregation
+		for (final Aggregation aggregation : fullBean.getAggregations()) {
+			final Set<String> urls = new HashSet<>();
+
+            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
+               urls.add(aggregation.getEdmIsShownBy());
+            }
+
+			if (null != aggregation.getHasView()) {
+				urls.addAll(Arrays.asList(aggregation.getHasView()));
+			}
+
+			if (!urls.isEmpty()) {
+				System.out.println(Arrays.deepToString(urls.toArray()));
+			}
+
+			for (final WebResource webResource : aggregation.getWebResources()) {
+				if (!urls.contains(webResource.getAbout().trim())) {
+					continue;
+				}
+
+				WebResourceMetaInfoImpl webMetaInfo = null;
+
+				if (webResource.getAbout() != null) {
+					final HashCode hashCodeAbout = hf.newHasher()
+							.putString(webResource.getAbout(), Charsets.UTF_8)
+							.hash();
+
+					// Locate the technical meta data from the web resurce about
+					final String webMetaInfoId = hashCodeAbout.toString();
+					if (webMetaInfoId != null) {
+						webMetaInfo = getMetaInfo(webMetaInfoId);
+					}
+				}
+
+				// Locate the technical meta data from the aggregation is shown
+				// by
+				if (webMetaInfo == null
+						&& aggregation.getEdmIsShownBy() != null) {
+					final HashCode hashCodeIsShownBy = hf
+							.newHasher()
+							.putString(aggregation.getEdmIsShownBy(),
+									Charsets.UTF_8).hash();
+
+					final String webMetaInfoId = hashCodeIsShownBy.toString();
+					if (webMetaInfoId != null) {
+						webMetaInfo = getMetaInfo(webMetaInfoId);
+					}
+				}
+
+				if (webMetaInfo != null) {
+					((WebResourceImpl) webResource)
+							.setWebResourceMetaInfo(webMetaInfo);
+				}
+			}
+		}
+
 	}
 
 	@Override
-	public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoDBException {
+	public FullBean findById(String europeanaObjectId, boolean similarItems)
+			throws MongoDBException {
 		long t0 = new Date().getTime();
 
 		FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-		if(fullBean !=null && isHierarchy(fullBean.getAbout())){
-			for(Proxy prx : fullBean.getProxies()){
+		injectWebMetaInfo(fullBean);
+
+		if (fullBean != null && isHierarchy(fullBean.getAbout())) {
+			for (Proxy prx : fullBean.getProxies()) {
 				prx.setDctermsHasPart(null);
 			}
+
 		}
 		logTime("mongo findById", (new Date().getTime() - t0));
+
 		if (fullBean != null && similarItems) {
 			try {
 				fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
@@ -173,21 +373,23 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public FullBean resolve(String collectionId, String recordId, boolean similarItems)
-			throws SolrTypeException {
+	public FullBean resolve(String collectionId, String recordId,
+			boolean similarItems) throws SolrTypeException {
 		return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
 				recordId), similarItems);
 	}
 
 	@Override
-	public FullBean resolve(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
+	public FullBean resolve(String europeanaObjectId, boolean similarItems)
+			throws SolrTypeException {
 
 		FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
 		FullBean fullBeanNew = fullBean;
-		if(fullBean!=null){
-			while(fullBeanNew!=null){
-				fullBeanNew = resolveInternal(fullBeanNew.getAbout(), similarItems);
-				if(fullBeanNew!=null){
+		if (fullBean != null) {
+			while (fullBeanNew != null) {
+				fullBeanNew = resolveInternal(fullBeanNew.getAbout(),
+						similarItems);
+				if (fullBeanNew != null) {
 					fullBean = fullBeanNew;
 				}
 			}
@@ -196,14 +398,16 @@ public class SearchServiceImpl implements SearchService {
 		return fullBean;
 	}
 
-	private FullBean resolveInternal(String europeanaObjectId, boolean similarItems) throws SolrTypeException{
+	private FullBean resolveInternal(String europeanaObjectId,
+			boolean similarItems) throws SolrTypeException {
 		long t0 = new Date().getTime();
-		if(!STARTED){
+		if (!STARTED) {
 			idServer.createDatastore();
-			STARTED=true;
+			STARTED = true;
 		}
 		mongoServer.setEuropeanaIdMongoServer(idServer);
 		FullBean fullBean = mongoServer.resolve(europeanaObjectId);
+		injectWebMetaInfo(fullBean);
 		logTime("mongo resolve", (new Date().getTime() - t0));
 		if (fullBean != null) {
 			try {
@@ -219,10 +423,10 @@ public class SearchServiceImpl implements SearchService {
 	public String resolveId(String europeanaObjectId) {
 		String lastId = resolveIdInternal(europeanaObjectId);
 		String newId = lastId;
-		if(lastId!=null){
-			while(newId!=null){
+		if (lastId != null) {
+			while (newId != null) {
 				newId = resolveIdInternal(newId);
-				if(newId!=null){
+				if (newId != null) {
 					lastId = newId;
 				}
 			}
@@ -232,32 +436,36 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public String resolveId(String collectionId, String recordId) {
-		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
-				recordId));
+		return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(
+				collectionId, recordId));
 	}
 
-	private String resolveIdInternal(String europeanaObjectId){
-		if(!STARTED){
+	private String resolveIdInternal(String europeanaObjectId) {
+		if (!STARTED) {
 			idServer.createDatastore();
-			STARTED= true;
+			STARTED = true;
 		}
-		EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(europeanaObjectId);
+		EuropeanaId newId = idServer
+				.retrieveEuropeanaIdFromOld(europeanaObjectId);
 		if (newId != null) {
 			idServer.updateTime(newId.getNewId(), europeanaObjectId);
 			return newId.getNewId();
 		}
 
-		newId = idServer
-				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + europeanaObjectId);
+		newId = idServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX
+				+ europeanaObjectId);
 		if (newId != null) {
-			idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX +europeanaObjectId);
+			idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX
+					+ europeanaObjectId);
 			return newId.getNewId();
 		}
 
-		newId = idServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX+europeanaObjectId);
+		newId = idServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX
+				+ europeanaObjectId);
 
 		if (newId != null) {
-			idServer.updateTime(newId.getNewId(), PORTAL_PREFIX +europeanaObjectId);
+			idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
+					+ europeanaObjectId);
 			return newId.getNewId();
 		}
 		return null;
@@ -299,13 +507,16 @@ public class SearchServiceImpl implements SearchService {
 		logTime("MoreLikeThis", response.getElapsedTime());
 
 		@SuppressWarnings("unchecked")
-		NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
+		NamedList<Object> moreLikeThisList = (NamedList<Object>) response
+				.getResponse().get("moreLikeThis");
 		List<BriefBean> beans = new ArrayList<BriefBean>();
 		if (moreLikeThisList.size() > 0) {
 			@SuppressWarnings("unchecked")
-			List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList.getVal(0);
+			List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList
+					.getVal(0);
 			for (SolrDocument doc : docs) {
-				beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class, doc));
+				beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class,
+						doc));
 			}
 		}
 		return beans;
@@ -317,12 +528,14 @@ public class SearchServiceImpl implements SearchService {
 			Query query) throws SolrTypeException {
 
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SearchUtils.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SearchUtils
+				.getImplementationClass(beanInterface);
 
 		if (isValidBeanClass(beanClazz)) {
 			String[] refinements = query.getRefinements(true);
 			if (SearchUtils.checkTypeFacet(refinements)) {
-				SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
+				SolrQuery solrQuery = new SolrQuery().setQuery(query
+						.getQuery(true));
 
 				if (refinements != null) {
 					solrQuery.addFilterQuery(refinements);
@@ -350,11 +563,21 @@ public class SearchServiceImpl implements SearchService {
 				if (query.isAllowFacets()) {
 					solrQuery.setFacet(true);
 					List<String> filteredFacets = query.getFilteredFacets();
-					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets.size() > 0);
+					boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
+							.size() > 0);
+
+					System.out.println(Arrays.deepToString(query.getFacets()
+							.toArray()));
+					System.out.println(Arrays.deepToString(query
+							.getFilteredFacets().toArray()));
+					System.out.println();
+
 					for (String facetToAdd : query.getFacets()) {
 						if (query.isProduceFacetUnion()) {
-							if (hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
-								facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
+							if (hasFacetRefinements
+									&& filteredFacets.contains(facetToAdd)) {
+								facetToAdd = MessageFormat.format(
+										UNION_FACETS_FORMAT, facetToAdd);
 							}
 						}
 						solrQuery.addFacetField(facetToAdd);
@@ -368,8 +591,10 @@ public class SearchServiceImpl implements SearchService {
 							|| solrQuery.getStart().intValue() <= 1) {
 						solrQuery.setParam("spellcheck", "on");
 						solrQuery.setParam("spellcheck.collate", "true");
-						solrQuery.setParam("spellcheck.extendedResults", "true");
-						solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+						solrQuery
+								.setParam("spellcheck.extendedResults", "true");
+						solrQuery
+								.setParam("spellcheck.onlyMorePopular", "true");
 						solrQuery.setParam("spellcheck.q", query.getQuery());
 					}
 				}
@@ -377,6 +602,7 @@ public class SearchServiceImpl implements SearchService {
 				if (query.getFacetQueries() != null) {
 					for (String facetQuery : query.getFacetQueries()) {
 						solrQuery.addFacetQuery(facetQuery);
+						System.out.println("Facet Query: " + facetQuery);
 					}
 				}
 
@@ -385,23 +611,29 @@ public class SearchServiceImpl implements SearchService {
 						log.debug("Solr query is: " + solrQuery);
 					}
 					query.setExecutedQuery(solrQuery.toString());
+					System.out.println("Solr query: " + solrQuery);
 					QueryResponse queryResponse = solrServer.query(solrQuery);
 					logTime("search", queryResponse.getElapsedTime());
 
-					resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+					resultSet.setResults((List<T>) queryResponse
+							.getBeans(beanClazz));
 					resultSet.setFacetFields(queryResponse.getFacetFields());
-					resultSet.setResultSize(queryResponse.getResults().getNumFound());
+					resultSet.setResultSize(queryResponse.getResults()
+							.getNumFound());
 					resultSet.setSearchTime(queryResponse.getElapsedTime());
-					resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+					resultSet.setSpellcheck(queryResponse
+							.getSpellCheckResponse());
 					if (queryResponse.getFacetQuery() != null) {
 						resultSet.setQueryFacets(queryResponse.getFacetQuery());
 					}
 				} catch (SolrServerException e) {
-					log.error("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
+					log.error("SolrServerException: " + e.getMessage()
+							+ " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				} catch (SolrException e) {
-					log.error("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
+					log.error("SolrException: " + e.getMessage()
+							+ " The query was: " + solrQuery);
 					resultSet = null;
 					throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
 				}
@@ -422,13 +654,14 @@ public class SearchServiceImpl implements SearchService {
 
 	/**
 	 * Flag whether the bean class is one of the allowable ones.
+	 *
 	 * @param beanClazz
 	 * @return
 	 */
 	private boolean isValidBeanClass(Class<? extends IdBeanImpl> beanClazz) {
 		return beanClazz == BriefBeanImpl.class
-			|| beanClazz == ApiBeanImpl.class
-			|| beanClazz == RichBeanImpl.class;
+				|| beanClazz == ApiBeanImpl.class
+				|| beanClazz == RichBeanImpl.class;
 	}
 
 	@Override
@@ -439,16 +672,12 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public List<Count> createCollections(String facetFieldName,
-			String queryString, String... refinements)
-				throws SolrTypeException {
+			String queryString, String... refinements) throws SolrTypeException {
 
-		Query query = new Query(queryString)
-				.setParameter("rows", "0")
-				.setParameter("facet", "true")
-				.setRefinements(refinements)
+		Query query = new Query(queryString).setParameter("rows", "0")
+				.setParameter("facet", "true").setRefinements(refinements)
 				.setParameter("facet.mincount", "1")
-				.setParameter("facet.limit", "750")
-				.setAllowSpellcheck(false);
+				.setParameter("facet.limit", "750").setAllowSpellcheck(false);
 		query.setFacet(facetFieldName);
 
 		final ResultSet<BriefBean> response = search(BriefBean.class, query);
@@ -466,7 +695,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public Map<String, Integer> queryFacetSearch(String query, String[] qf, List<String> queries) {
+	public Map<String, Integer> queryFacetSearch(String query, String[] qf,
+			List<String> queries) {
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery(query);
 		if (qf != null) {
@@ -488,11 +718,12 @@ public class SearchServiceImpl implements SearchService {
 			logTime("queryFacetSearch", response.getElapsedTime());
 			queryFacets = response.getFacetQuery();
 		} catch (SolrServerException e) {
-			log.error("SolrServerException: " + e.getMessage() + " for query " + solrQuery.toString());
+			log.error("SolrServerException: " + e.getMessage() + " for query "
+					+ solrQuery.toString());
 			e.printStackTrace();
 		} catch (Exception e) {
-			log.error("Exception: " + e.getClass().getCanonicalName() + " " + e.getMessage() + " for query " 
-					+ solrQuery.toString());
+			log.error("Exception: " + e.getClass().getCanonicalName() + " "
+					+ e.getMessage() + " for query " + solrQuery.toString());
 			e.printStackTrace();
 		}
 
@@ -501,10 +732,12 @@ public class SearchServiceImpl implements SearchService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query) throws SolrTypeException {
+	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
+			Query query) throws SolrTypeException {
 
 		ResultSet<T> resultSet = new ResultSet<T>();
-		Class<? extends IdBeanImpl> beanClazz = SearchUtils.getImplementationClass(beanInterface);
+		Class<? extends IdBeanImpl> beanClazz = SearchUtils
+				.getImplementationClass(beanInterface);
 
 		String[] refinements = query.getRefinements(true);
 		if (SearchUtils.checkTypeFacet(refinements)) {
@@ -536,8 +769,10 @@ public class SearchServiceImpl implements SearchService {
 				QueryResponse queryResponse = solrServer.query(solrQuery);
 				logTime("search", queryResponse.getElapsedTime());
 
-				resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
-				resultSet.setResultSize(queryResponse.getResults().getNumFound());
+				resultSet.setResults((List<T>) queryResponse
+						.getBeans(beanClazz));
+				resultSet.setResultSize(queryResponse.getResults()
+						.getNumFound());
 				resultSet.setSearchTime(queryResponse.getElapsedTime());
 				if (solrQuery.getBool("facet", false)) {
 					resultSet.setFacetFields(queryResponse.getFacetFields());
@@ -556,7 +791,7 @@ public class SearchServiceImpl implements SearchService {
 
 	/**
 	 * Get Suggestions from Solr Suggester
-	 * 
+	 *
 	 * @param query
 	 *            The query term
 	 * @param field
@@ -565,7 +800,8 @@ public class SearchServiceImpl implements SearchService {
 	 *            The ReqestHandler to use
 	 * @return A list of Terms for the specific term from the SolrSuggester
 	 */
-	private List<Term> getSuggestions(String query, String field, String rHandler) {
+	private List<Term> getSuggestions(String query, String field,
+			String rHandler) {
 		List<Term> results = new ArrayList<Term>();
 		try {
 			ModifiableSolrParams params = new ModifiableSolrParams();
@@ -576,31 +812,38 @@ public class SearchServiceImpl implements SearchService {
 
 			// get the query response
 			QueryResponse queryResponse = solrServer.query(params);
-			SpellCheckResponse spellcheckResponse = queryResponse.getSpellCheckResponse();
-			//if the suggestions are not empty and there are collated results
+			SpellCheckResponse spellcheckResponse = queryResponse
+					.getSpellCheckResponse();
+			// if the suggestions are not empty and there are collated results
 			if (spellcheckResponse != null
-				&& !spellcheckResponse.getSuggestions().isEmpty()
-				&& spellcheckResponse.getCollatedResults() != null) {
-				for (Collation collation : spellcheckResponse.getCollatedResults()) {
+					&& !spellcheckResponse.getSuggestions().isEmpty()
+					&& spellcheckResponse.getCollatedResults() != null) {
+				for (Collation collation : spellcheckResponse
+						.getCollatedResults()) {
 					StringBuilder termResult = new StringBuilder();
-					for (Correction cor : collation.getMisspellingsAndCorrections()) {
-						//pickup the corrections, remove duplicates
-						String[] terms = cor.getCorrection().trim().replaceAll("  ", " ").split(" ");
+					for (Correction cor : collation
+							.getMisspellingsAndCorrections()) {
+						// pickup the corrections, remove duplicates
+						String[] terms = cor.getCorrection().trim()
+								.replaceAll("  ", " ").split(" ");
 						for (String term : terms) {
 							if (StringUtils.isBlank(term)) {
 								continue;
 							}
 							// termResult.
-							if (!StringUtils.contains(termResult.toString(), term)) {
+							if (!StringUtils.contains(termResult.toString(),
+									term)) {
 								termResult.append(term + " ");
 							}
 						}
 					}
-					//return the term, the number of hits for each collation and the field that it should be mapped to
+					// return the term, the number of hits for each collation
+					// and the field that it should be mapped to
 					Term term = new Term(termResult.toString().trim(),
 							collation.getNumberOfHits(),
 							SuggestionTitle.getMappedTitle(field),
-							SearchUtils.escapeFacet(field, termResult.toString()));
+							SearchUtils.escapeFacet(field,
+									termResult.toString()));
 					results.add(term);
 				}
 			}
@@ -612,7 +855,7 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	/**
-	 * Get the suggestions 
+	 * Get the suggestions
 	 */
 	@Override
 	public List<Term> suggestions(String query, int pageSize, String field) {
@@ -648,8 +891,8 @@ public class SearchServiceImpl implements SearchService {
 
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("Returned %d results in %d ms",
-				results.size() > pageSize ? pageSize : results.size(),
-				new Date().getTime() - start));
+					results.size() > pageSize ? pageSize : results.size(),
+					new Date().getTime() - start));
 		}
 		return results.size() > pageSize ? results.subList(0, pageSize)
 				: results;
@@ -663,7 +906,8 @@ public class SearchServiceImpl implements SearchService {
 		if (solrServer instanceof HttpSolrServer) {
 			HttpSolrServer server = new HttpSolrServer(
 					((HttpSolrServer) solrServer).getBaseURL());
-			AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
+			AbstractHttpClient client = (AbstractHttpClient) server
+					.getHttpClient();
 			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
 					username, password));
 			return server;
@@ -674,18 +918,21 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
-		List<Node> children = neo4jServer.getChildren(getNode(nodeId), offset, limit);
+		List<Node> children = neo4jServer.getChildren(getNode(nodeId), offset,
+				limit);
 		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
 		for (Node child : children) {
-			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
+					getNodeId(child)));
 		}
 		return beans;
 	}
 
 	@Override
-	public boolean isHierarchy (String nodeId){
+	public boolean isHierarchy(String nodeId) {
 		return neo4jServer.isHierarchy(nodeId);
 	}
+
 	@Override
 	public List<Neo4jBean> getChildren(String nodeId, int offset) {
 		return getChildren(nodeId, offset, 10);
@@ -710,11 +957,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private enum SuggestionTitle {
-		TITLE("title", "Title"),
-		DATE("when", "Time/Period"),
-		PLACE("where", "Place"),
-		PERSON("who", "Creator"),
-		SUBJECT("what", "Subject");
+		TITLE("title", "Title"), DATE("when", "Time/Period"), PLACE("where",
+				"Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
 
 		String title;
 		String mappedTitle;
@@ -752,14 +996,14 @@ public class SearchServiceImpl implements SearchService {
 		}
 	}
 
-	
-
 	@Override
 	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId), limit);
+		List<Node> children = neo4jServer.getPreceedingSiblings(
+				getNode(nodeId), limit);
 		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
 		for (Node child : children) {
-			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
+					getNodeId(child)));
 		}
 		return beans;
 	}
@@ -771,10 +1015,12 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
-		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId), limit);
+		List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),
+				limit);
 		List<Neo4jBean> beans = new ArrayList<Neo4jBean>();
 		for (Node child : children) {
-			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, getNodeId(child)));
+			beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
+					getNodeId(child)));
 		}
 		return beans;
 	}
@@ -789,14 +1035,159 @@ public class SearchServiceImpl implements SearchService {
 		return neo4jServer.getChildrenCount(getNode(nodeId));
 	}
 
-	private long getNodeId(Node nodeId){
+	private long getNodeId(Node nodeId) {
 		return neo4jServer.getNodeIndex(nodeId);
 	}
 
 	@Override
 	public Neo4jStructBean getInitialStruct(String nodeId) {
-		return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
+		return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer
+				.getInitialStruct(nodeId));
 	}
+
+	// Filter tag generation
+
+	@Override
+	public Integer search(Integer mediaType, String mimeType, String imageSize,
+			Boolean imageColor, Boolean imageGrayScale,
+			String imageAspectRatio, String imageColorPalette, Boolean soundHQ,
+			String soundDuration, Boolean videoHQ, String videoDuration) {
+		Integer tag = 0;
+
+		if (mimeType != null) {
+			mimeType = mimeType.toLowerCase();
+		}
+		if (imageSize != null) {
+			imageSize = imageSize.toLowerCase();
+		}
+		if (imageAspectRatio != null) {
+			imageAspectRatio = imageAspectRatio.toLowerCase();
+		}
+
+		if (imageColorPalette != null) {
+			imageColorPalette = imageColorPalette.toUpperCase();
+		}
+		if (soundDuration != null) {
+			soundDuration = soundDuration.toLowerCase();
+		}
+		if (videoDuration != null) {
+			videoDuration = videoDuration.toLowerCase();
+		}
+
+		switch (mediaType) {
+		case 1:
+			tag = searchImage(mimeType, imageSize, imageColor, imageGrayScale,
+					imageAspectRatio, imageColorPalette);
+			break;
+		case 2:
+			tag = searchSound(mimeType, soundHQ, soundDuration);
+			break;
+		case 3:
+			tag = searchVideo(mimeType, videoHQ, videoDuration);
+			break;
+		}
+
+		return tag;
+	}
+
+	private Integer searchImage(final String mimeType, final String imageSize,
+			final Boolean imageColor, final Boolean imageGrayScale,
+			final String imageAspectRatio, final String imageColorPalette) {
+		ImageOrientation imageOrientation = null;
+		if (imageAspectRatio != null) {
+			if (imageAspectRatio.equals("portrait")) {
+				imageOrientation = ImageOrientation.PORTRAIT;
+			}
+			if (imageAspectRatio.equals("landscape")) {
+				imageOrientation = ImageOrientation.LANDSCAPE;
+			}
+		}
+
+		final Integer mediaTypeCode = MediaTypeEncoding.IMAGE.getEncodedValue();
+		final Integer mimeTypeCode = CommonTagExtractor
+				.getMimeTypeCode(mimeType);
+		final Integer fileSizeCode = ImageTagExtractor.getSizeCode(imageSize);
+		final Integer colorSpaceCode = ImageTagExtractor.getColorSpaceCode(
+				imageColor, imageGrayScale);
+		final Integer aspectRatioCode = ImageTagExtractor
+				.getAspectRatioCode(imageOrientation);
+		final Integer colorCode = ImageTagExtractor
+				.getColorCode(imageColorPalette);
+
+        System.out.println("mediaTypeCode: " + mediaTypeCode + " " + Integer.toBinaryString(mediaTypeCode));
+        System.out.println("mimeTypeCode: " + mimeTypeCode + " " + Integer.toBinaryString(mimeTypeCode));
+        System.out.println("fileSizeCode: " + fileSizeCode + " " + Integer.toBinaryString(fileSizeCode)) ;
+        System.out.println("colorSpaceCode: " + colorSpaceCode + " " + Integer.toBinaryString(colorSpaceCode));
+        System.out.println("aspectRatioCode: " + aspectRatioCode + " " + Integer.toBinaryString(aspectRatioCode));
+        System.out.println("colorCode: " + colorCode + " " + Integer.toBinaryString(colorCode));
+
+
+        final Integer tag =  mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               fileSizeCode << TagEncoding.IMAGE_SIZE.getBitPos() |
+               colorSpaceCode << TagEncoding.IMAGE_COLOURSPACE.getBitPos() |
+               aspectRatioCode << TagEncoding.IMAGE_ASPECTRATIO.getBitPos() |
+               colorCode << TagEncoding.IMAGE_COLOUR.getBitPos();
+
+        System.out.println("Tag is : " + tag + "   " + Integer.toBinaryString(tag));
+
+        return tag;
+	}
+
+	private Integer searchSound(final String mimeType, final Boolean soundHQ,
+			final String duration) {
+		final Integer mediaTypeCode = MediaTypeEncoding.SOUND.getEncodedValue();
+		final Integer mimeTypeCode = CommonTagExtractor
+				.getMimeTypeCode(mimeType);
+		final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
+		final Integer durationCode = SoundTagExtractor
+				.getDurationCode(duration);
+
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.SOUND_QUALITY.getBitPos() |
+               durationCode << TagEncoding.SOUND_DURATION.getBitPos();
+	}
+
+	private Integer searchVideo(final String mimeType,
+			final Boolean videoQuality, final String duration) {
+		final Integer mediaTypeCode = MediaTypeEncoding.VIDEO.getEncodedValue();
+		final Integer mimeTypeCode = CommonTagExtractor
+				.getMimeTypeCode(mimeType);
+		final Integer qualityCode = VideoTagExtractor
+				.getQualityCode(videoQuality);
+		final Integer durationCode = VideoTagExtractor
+				.getDurationCode(duration);
+
+		return mediaTypeCode |
+               mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
+               qualityCode << TagEncoding.VIDEO_QUALITY.getBitPos() |
+               durationCode << TagEncoding.VIDEO_DURATION.getBitPos();
+	}
+
+	private WebResourceMetaInfoImpl getMetaInfo(
+			final String webResourceMetaInfoId) {
+		System.out.println("Meta-Info for: " + webResourceMetaInfoId);
+		final DB db = metainfoMongoServer.getDatastore().getDB();
+		final DBCollection webResourceMetaInfoColl = db
+				.getCollection("WebResourceMetaInfo");
+
+		final BasicDBObject query = new BasicDBObject("_id",
+				webResourceMetaInfoId);
+		final DBCursor cursor = webResourceMetaInfoColl.find(query);
+
+		System.out.println("Found: " + cursor.count());
+
+		final Type type = new TypeToken<WebResourceMetaInfoImpl>() {
+		}.getType();
+
+		if (cursor.hasNext()) {
+			return new Gson().fromJson(cursor.next().toString(), type);
+		}
+
+		return null;
+	}
+
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
@@ -809,6 +1200,7 @@ class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
 	@Override
 	public void process(HttpRequest request, HttpContext context)
 			throws HttpException, IOException {
-		request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
+		request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII",
+				false));
 	}
 }

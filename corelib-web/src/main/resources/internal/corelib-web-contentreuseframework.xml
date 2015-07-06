@@ -33,4 +33,7 @@
 	<bean id="corelib_web_contentReuseFrameworkService" 
 		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
 
+    <bean id="corelib_mediaStorageClient"
+          class="eu.europeana.corelib.service.impl.MediaStorageClientImpl" />
+
 </beans>

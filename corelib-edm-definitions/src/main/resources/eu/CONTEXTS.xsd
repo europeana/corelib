@@ -27,6 +27,7 @@
   xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   elementFormDefault="qualified">
 
@@ -44,6 +45,7 @@
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
   <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
   <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
+  <import namespace="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" schemaLocation="EBUCORE.xsd" />
   <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
   
   <complexType name="AgentType">
@@ -164,6 +166,22 @@
           <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="rdf:type" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:codecName" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:hasMimeType" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:fileByteSize" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:duration" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:width" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:height" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:spatialResolution" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:sampleSize" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:sampleRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:bitRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:frameRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:hasColorSpace" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:componentColor" maxOccurs="6" minOccurs="0"/>
+          <element ref="ebucore:orientation" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:audioChannelNumber" maxOccurs="1" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>

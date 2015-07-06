@@ -230,4 +230,28 @@ public interface BriefBean extends IdBean {
 	 * @return
 	 */
 	Boolean getPreviewNoDistribute();
+        
+        /**
+         * Language aware dc:title
+         * @return 
+         */
+        Map<String, List<String>> getDcTitleLangAware();
+        
+        /**
+         * Language aware dc:creator
+         * @return 
+         */
+        Map<String, List<String>> getDcCreatorLangAware();
+        
+        /**
+         * Language aware dc:contributor
+         * @return 
+         */
+        Map<String, List<String>> getDcContributorLangAware();
+        
+        /**
+         * Language aware dc:language
+         * @return 
+         */
+        Map<String, List<String>> getDcLanguageLangAware();
 }

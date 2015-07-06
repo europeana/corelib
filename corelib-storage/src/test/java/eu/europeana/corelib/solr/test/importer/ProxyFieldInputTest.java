@@ -60,7 +60,7 @@ import eu.europeana.corelib.definitions.jibx.TableOfContents;
 import eu.europeana.corelib.definitions.jibx.Temporal;
 import eu.europeana.corelib.definitions.jibx.Title;
 import eu.europeana.corelib.definitions.jibx.Type;
-import eu.europeana.corelib.definitions.jibx.Type1;
+import eu.europeana.corelib.definitions.jibx.Type2;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -519,7 +519,7 @@ public class ProxyFieldInputTest {
 		europeanaProxy.setEuropeanaProxy(true);
 		proxy.setEuropeanaProxy(europeanaProxy);
 		proxy.setCurrentLocation(currentLocation);
-		Type1 type = new Type1();
+		Type2 type = new Type2();
 		type.setType(EdmType.IMAGE);
 		proxy.setType(type);
 		proxy.setChoiceList(createEuropeanaTermsList());

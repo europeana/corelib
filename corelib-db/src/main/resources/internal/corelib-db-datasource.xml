@@ -33,22 +33,23 @@
 				value="#{europeanaProperties['postgres.password']}" />
 		</bean>
 
-		<bean id="corelib_db_mongo" class="com.mongodb.Mongo">
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
-				
-		</bean>
+<!-- 		<bean id="corelib_db_mongo" class="com.mongodb.Mongo"> -->
+<!-- 			<constructor-arg -->
+<!-- 				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" /> -->
+<!-- 			<constructor-arg -->
+<!-- 				value="#{europeanaProperties['mongodb.port']}" type="int" /> -->
+<!-- 		</bean> -->
+        <bean id="corelib_db_mongoProvider" class = "eu.europeana.corelib.MongoProvider">
+        <constructor-arg
+                value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
+            <constructor-arg
+                value="#{europeanaProperties['mongodb.port']}" type="java.lang.String" />
+        </bean>
 
 		<bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
 			factory-method="createDatastore">
 			<constructor-arg value="API log" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
 			<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}"
 				type="java.lang.String" />
 			<constructor-arg
@@ -62,12 +63,8 @@
 		<bean id="corelib_db_morphia_datastore_oauth2"
 			factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
 			<constructor-arg value="OAuth2" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
-			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
-				type="java.lang.String" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
+			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String" />
 			<constructor-arg
 				value="#{europeanaProperties['mongodb.username']}"
 				type="java.lang.String" />
@@ -79,10 +76,7 @@
 		<bean id="corelib_db_morphia_datastore_sugarcrmcache"
             factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
             <constructor-arg value="SugarCRM cache" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.port']}" type="int" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
             <constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"
                 type="java.lang.String" />
             <constructor-arg
@@ -115,7 +109,7 @@
 
 		<bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia"
 			factory-method="createDatastore">
-			<constructor-arg ref="corelib_db_mongo" />
+			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
 			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
 				type="java.lang.String" />
 		</bean>

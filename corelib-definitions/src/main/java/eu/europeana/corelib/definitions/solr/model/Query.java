@@ -132,16 +132,16 @@ public class Query implements Cloneable {
 	}
 
 	public String[] getRefinements(boolean useDividedRefinements) {
-		if (!useDividedRefinements) {
-			return refinements;
-		} else {
-			divideRefinements();
-			return (String[])ArrayUtils.addAll(
-				searchRefinements.toArray(new String[searchRefinements.size()]), 
-				facetRefinements.toArray(new String[facetRefinements.size()])
-			);
-		}
-	}
+            if (!useDividedRefinements) {
+                return refinements;
+            } else {
+                divideRefinements();
+                return (String[]) ArrayUtils.addAll(
+                        searchRefinements.toArray(new String[searchRefinements.size()]),
+                        facetRefinements.toArray(new String[facetRefinements.size()])
+                );
+            }
+    }
 
 	public List<String> getFilteredFacets() {
 		return filteredFacets;
