@@ -494,10 +494,10 @@ public class Configuration {
 	
 
 	@Value("#{europeanaProperties['nof.enabled']}")
-	private boolean isNofEnabled;
+	private boolean nofEnabled;
 
 	public boolean isNofEnabled(){
-		return this.isNofEnabled;
+		return this.nofEnabled;
 	}
 	
 	public boolean useAutomatedFrontendTranslation() {
