@@ -19,7 +19,7 @@ public enum MediaServiceType {
 
 	private MediaServiceFactory factory = MediaServiceFactory.getFactory();
 
-	private MediaServiceType(String urnPatternString, Class<? extends MediaService> clazz) {
+	MediaServiceType(String urnPatternString, Class<? extends MediaService> clazz) {
 		this.urnPattern = Pattern.compile(urnPatternString);
 		this.clazz = clazz;
 	}

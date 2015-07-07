@@ -4,11 +4,14 @@
 .settings/
 .externalToolBuilders/
 
+#IntelliJ project files
+.idea
+*.iml
+
 # Maven
-*/target/**
+target/
 
 # Temp files
 *~
 *.bak
 .DS_Store
-/target/

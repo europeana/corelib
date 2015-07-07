@@ -27,7 +27,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;

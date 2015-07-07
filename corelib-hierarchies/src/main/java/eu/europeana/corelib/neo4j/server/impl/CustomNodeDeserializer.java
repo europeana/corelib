@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 
@@ -39,11 +38,11 @@ public class CustomNodeDeserializer extends JsonDeserializer<CustomNode> {
 	
 	@Override
 	public CustomNode deserialize(JsonParser jp, DeserializationContext arg1)
-			throws IOException, JsonProcessingException {
+			throws IOException {
 		CustomNode node = new CustomNode();
 		 JsonNode json = jp.getCodec().readTree(jp);
 		 Iterator<String> iterator = json.getFieldNames();
-		 Map<String,Object> properties = new HashMap<String,Object>();
+		 Map<String,Object> properties = new HashMap<>();
 		 while(iterator.hasNext()){
 			 String iteratorKey = iterator.next();
 			 properties.put(iteratorKey, json.get(iteratorKey));

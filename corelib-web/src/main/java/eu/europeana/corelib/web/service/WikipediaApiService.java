@@ -7,7 +7,7 @@ import eu.europeana.corelib.utils.model.LanguageVersion;
 
 public interface WikipediaApiService {
 
-	public List<LanguageVersion> getVersionsInMultiLanguage(String title, List<String> languages);
+	List<LanguageVersion> getVersionsInMultiLanguage(String title, List<String> languages);
 
-	public Map<String, String> getVersionsInLanguage(String title, String languageCode);
+	Map<String, String> getVersionsInLanguage(String title, String languageCode);
 }

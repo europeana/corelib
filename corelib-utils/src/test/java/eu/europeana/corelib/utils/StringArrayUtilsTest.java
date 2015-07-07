@@ -48,9 +48,9 @@ public class StringArrayUtilsTest {
 
 	@Test
 	public void isNotBlankLinkTest() {
-		Assert.assertTrue(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { "test" })));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { " " })));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] { "" })));
+		Assert.assertTrue(StringArrayUtils.isNotBlankList(Arrays.asList("test")));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(" ")));
+		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList("")));
 		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] {})));
 		Assert.assertFalse(StringArrayUtils.isNotBlankList(null));
 	}

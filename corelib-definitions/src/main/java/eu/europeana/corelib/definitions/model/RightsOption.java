@@ -138,14 +138,14 @@ public enum RightsOption {
 	 * @param rightsIcon
 	 *            Icon associated with the rights
 	 */
-	private RightsOption(String url, String rightsText, String rightsIcon, boolean showExternalIconIn) {
+	RightsOption(String url, String rightsText, String rightsIcon, boolean showExternalIconIn) {
 		this.url = url;
 		this.rightsText = rightsText;
 		this.rightsIcon = rightsIcon;
 		this.showExternalIcon = showExternalIconIn;
 	}
 
-	private RightsOption(String url, String rightsText, String rightsIcon, boolean showExternalIconIn, boolean isRelativeUrl) {
+	RightsOption(String url, String rightsText, String rightsIcon, boolean showExternalIconIn, boolean isRelativeUrl) {
 		this(url, rightsText, rightsIcon, showExternalIconIn);
 		this.isRelativeUrl = isRelativeUrl;
 	}

@@ -33,4 +33,7 @@
 		p:host="localhost"
 		p:port="2500"
 	/>
+	
+	 <bean name="corelib_mediaStorageClient" class="eu.europeana.corelib.web.MediaStorageClientTest"/>
+	
 </beans>

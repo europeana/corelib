@@ -15,7 +15,7 @@ public interface CollectionMongoServer {
 	 *            The old Collection ID
 	 * @return
 	 */
-	public abstract String findNewCollectionId(String oldCollectionId);
+	String findNewCollectionId(String oldCollectionId);
 
 	/**
 	 * Retrieve the old CollectionId based on the new CollectionID. This is a
@@ -24,7 +24,7 @@ public interface CollectionMongoServer {
 	 * @param newCollectionId
 	 * @return
 	 */
-	public abstract String findOldCollectionId(String newCollectionId);
+	String findOldCollectionId(String newCollectionId);
 
 	/**
 	 * Save a Collection
@@ -32,15 +32,15 @@ public interface CollectionMongoServer {
 	 * @param collection
 	 *            The collection to save
 	 */
-	public abstract void saveCollection(Collection collection);
+	void saveCollection(Collection collection);
 
 	/**
 	 * Retrieve all stored collections
 	 * 
 	 * @return
 	 */
-	public abstract List<Collection> retrieveAllCollections();
+	List<Collection> retrieveAllCollections();
 
-	public abstract void setDatastore(Datastore datastore);
+	void setDatastore(Datastore datastore);
 
 }

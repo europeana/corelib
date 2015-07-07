@@ -19,14 +19,14 @@ package eu.europeana.corelib.solr.test.importer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.google.code.morphia.Datastore;
@@ -52,30 +52,27 @@ import eu.europeana.corelib.solr.entity.AgentImpl;
  */
 public class AgentFieldInputTest {
 
-	private EdmMongoServer mongoServer;
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testAgent() throws MalformedURLException, IOException{
+	public void testAgent() throws IOException{
 		AgentType agentType = new AgentType();
 		agentType.setAbout("test about");
-		mongoServer = EasyMock.createMock(EdmMongoServer.class);
-		Datastore ds = EasyMock.createMock(Datastore.class);
-		Query query = EasyMock.createMock(Query.class);
-		Key<AgentImpl> key = EasyMock.createMock(Key.class);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
-		EasyMock.expect(ds.find(AgentImpl.class)).andReturn(query);
-		EasyMock.expect(query.filter("about", agentType.getAbout())).andReturn(query);
-		EasyMock.expect(query.get()).andReturn(null);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
+
 		AgentImpl agentImpl = new AgentImpl();
 		agentImpl.setAbout(agentType.getAbout());
-		EasyMock.expect(ds.save(agentImpl)).andReturn(key);
-		
-		EasyMock.replay(query,ds,mongoServer);
-		assertNotNull(mongoServer);
-	
-		List<AltLabel> altLabelList = new ArrayList<AltLabel>();
+
+		EdmMongoServer mongoServerMock = mock(EdmMongoServer.class);
+		Datastore datastoreMock = mock(Datastore.class);
+		Query queryMock = mock(Query.class);
+		Key<AgentImpl> keyMock = mock(Key.class);
+
+		when(mongoServerMock.getDatastore()).thenReturn(datastoreMock);
+		when(mongoServerMock.getDatastore()).thenReturn(datastoreMock);
+		when(datastoreMock.find(AgentImpl.class)).thenReturn(queryMock);
+		when(datastoreMock.save(agentImpl)).thenReturn(keyMock);
+		when(queryMock.filter("about", agentType.getAbout())).thenReturn(queryMock);
+
+		List<AltLabel> altLabelList = new ArrayList<>();
 		AltLabel altLabel = new AltLabel();
 		Lang lang = new Lang();
 		lang.setLang("en");
@@ -90,13 +87,13 @@ public class AgentFieldInputTest {
 		End end = new End();
 		end.setString("test end");
 		agentType.setEnd(end);
-		List<Note> noteList = new ArrayList<Note>();
+		List<Note> noteList = new ArrayList<>();
 		Note note = new Note();
 		note.setString("test note");
 		assertNotNull(note);
 		noteList.add(note);
 		agentType.setNoteList(noteList);
-		List<PrefLabel> prefLabelList = new ArrayList<PrefLabel>();
+		List<PrefLabel> prefLabelList = new ArrayList<>();
 		PrefLabel prefLabel = new PrefLabel();
 		prefLabel.setLang(lang);
 		prefLabel.setString("test pred label");
@@ -106,7 +103,7 @@ public class AgentFieldInputTest {
 
 		//store in mongo
 		AgentImpl agent = new AgentFieldInput().createNewAgent(agentType);
-		mongoServer.getDatastore().save(agent);
+		mongoServerMock.getDatastore().save(agent);
 		assertEquals(agentType.getAbout(), agent.getAbout());
 		assertEquals(agentType.getBegin().getString(), agent.getBegin().values().iterator().next().get(0));
 		assertEquals(agentType.getEnd().getString(), agent.getEnd().values().iterator().next().get(0));

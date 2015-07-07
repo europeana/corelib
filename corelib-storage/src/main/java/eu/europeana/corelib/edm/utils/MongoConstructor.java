@@ -68,7 +68,7 @@ public class MongoConstructor {
 
 	public FullBeanImpl constructFullBean(RDF record)
 			throws InstantiationException, IllegalAccessException,
-			MalformedURLException, IOException {
+			IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
 		List<AgentImpl> agents = new ArrayList<AgentImpl>();
 		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();

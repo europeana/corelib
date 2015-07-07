@@ -1,13 +1,2 @@
-/_1999_02_22rdfsyntaxnsBinding.xml
-/_2002_07_owlBinding.xml
-/_2003_01_geo_wgs84posBinding.xml
-/_2004_02_skos_coreBinding.xml
-/binding.xml
-/dc_elements_11Binding.xml
-/dc_termsBinding.xml
-/ElementsGr2Binding.xml
-/foaf_01Binding.xml
-/ore_termsBinding.xml
-/schemas_edm_enrichmentBinding.xml
-/schemas_edmBinding.xml
-/XML_1998_namespaceBinding.xml
+/*.xml
+/eu/europeana/corelib/definitions/jibx/

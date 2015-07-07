@@ -65,7 +65,7 @@ public class QueryTermPosition {
 
 	@Override
 	protected QueryTermPosition clone() throws CloneNotSupportedException {
-		return new QueryTermPosition(start, end, new String(transformed), new String(original), position);
+		return new QueryTermPosition(start, end, transformed, original, position);
 	}
 
 }
