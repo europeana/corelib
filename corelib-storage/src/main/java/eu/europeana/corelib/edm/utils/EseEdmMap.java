@@ -140,7 +140,7 @@ public enum EseEdmMap {
 	;
 	private String field;
 
-	private EseEdmMap(String field) {
+	EseEdmMap(String field) {
 		this.field = field;
 	}
 

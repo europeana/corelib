@@ -18,15 +18,12 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.solr.common.SolrInputDocument;
 
-import eu.europeana.corelib.MongoServer;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasMet;
@@ -39,7 +36,6 @@ import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 
 /**
@@ -68,7 +64,7 @@ public final class ProxyFieldInput {
 	 */
 	public SolrInputDocument createProxySolrFields(ProxyType proxy,
 			SolrInputDocument solrInputDocument) throws InstantiationException,
-			IllegalAccessException, MalformedURLException, IOException {
+			IllegalAccessException, IOException {
 		solrInputDocument.addField(EdmLabel.ORE_PROXY.toString(),
 				proxy.getAbout());
 		solrInputDocument.addField(
@@ -301,7 +297,7 @@ public final class ProxyFieldInput {
 	 */
 	public ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
 			ProxyType proxy) throws InstantiationException,
-			IllegalAccessException, MalformedURLException, IOException {
+			IllegalAccessException, IOException {
 
 		mongoProxy.setAbout(proxy.getAbout());
 		// mongoProxy.setId(new ObjectId());

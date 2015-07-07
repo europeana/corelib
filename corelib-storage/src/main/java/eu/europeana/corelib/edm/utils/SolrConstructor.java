@@ -67,7 +67,7 @@ public class SolrConstructor {
 	 */
 	public SolrInputDocument constructSolrDocument(RDF rdf)
 			throws InstantiationException, IllegalAccessException,
-			MalformedURLException, IOException {
+			IOException {
 		SolrInputDocument solrInputDocument = new SolrInputDocument();
 
 		if (rdf.getAgentList() != null) {

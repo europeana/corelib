@@ -9,11 +9,9 @@
 *.iml
 
 # Maven
-*/target/**
+target/
 
 # Temp files
 *~
 *.bak
 .DS_Store
-/target/
-*.iml

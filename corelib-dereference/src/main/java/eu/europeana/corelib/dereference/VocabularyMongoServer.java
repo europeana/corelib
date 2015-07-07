@@ -1,6 +1,6 @@
 package eu.europeana.corelib.dereference;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.dereference.impl.ControlledVocabularyImpl;
 
 /**

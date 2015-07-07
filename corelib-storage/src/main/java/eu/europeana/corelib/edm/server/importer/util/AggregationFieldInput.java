@@ -187,7 +187,6 @@ public final class AggregationFieldInput {
 									hasPartMap)) {
 						ups.set("isFormatOf", isFormatOfMap);
 						retWebResource.setDctermsIsFormatOf(isFormatOfMap);
-						;
 						update = true;
 					}
 					webResource.setDctermsIsFormatOf(isFormatOfMap);

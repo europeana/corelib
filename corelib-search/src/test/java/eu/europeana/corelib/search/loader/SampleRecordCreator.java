@@ -93,12 +93,9 @@ public class SampleRecordCreator {
                             records++;
                         }
                         if (!StringUtils.equals("rdf:RDF", xml.getName().getPrefix() + ":" + xml.getName().getLocalPart())) {
-                            xmlString.append("<" + xml.getName().getPrefix() + ":"
-                                    + xml.getName().getLocalPart() + "");
+                            xmlString.append("<").append(xml.getName().getPrefix()).append(":").append(xml.getName().getLocalPart()).append("");
                             if (xml.getAttributeCount() > 0) {
-                                xmlString.append(" " + xml.getAttributePrefix(0)
-                                        + ":" + xml.getAttributeLocalName(0)
-                                        + "=\"" + xml.getAttributeValue(0) + "\">");
+                                xmlString.append(" ").append(xml.getAttributePrefix(0)).append(":").append(xml.getAttributeLocalName(0)).append("=\"").append(xml.getAttributeValue(0)).append("\">");
                             } else {
                                 xmlString.append(">");
                             }
@@ -115,8 +112,7 @@ public class SampleRecordCreator {
                         break;
                     case XMLStreamConstants.END_ELEMENT:
 
-                        xmlString.append("</" + xml.getName().getPrefix() + ":"
-                                + xml.getName().getLocalPart() + ">");
+                        xmlString.append("</").append(xml.getName().getPrefix()).append(":").append(xml.getName().getLocalPart()).append(">");
                         if (StringUtils.equals("ore:Aggregation", xml.getName().getPrefix() + ":" + xml.getName().getLocalPart())) {
                             xmlString.append("</rdf:RDF>");
                             saveFile(recordFile, xmlString);
@@ -131,13 +127,7 @@ public class SampleRecordCreator {
             }
             System.out.println("Finished parsing documents...");
             System.out.println("Found " + records + " records");
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XMLStreamException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

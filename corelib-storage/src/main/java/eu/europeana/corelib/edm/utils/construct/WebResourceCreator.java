@@ -8,7 +8,7 @@ package eu.europeana.corelib.edm.utils.construct;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;

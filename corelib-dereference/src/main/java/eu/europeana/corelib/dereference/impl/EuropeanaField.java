@@ -68,7 +68,7 @@ public class EuropeanaField {
 		;
 		private String uriField;
 
-		private UriField(String uriField) {
+		UriField(String uriField) {
 			this.uriField = uriField;
 		}
 

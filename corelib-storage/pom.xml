@@ -18,7 +18,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-storage</artifactId>
-	<name>Europeana Core Library Solr and Mongo functionality</name>
+	<name>Europeana Core Library Storage (Solr/Mongo functionality)</name>
 	<url>http://www.europeanalabs.eu</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -143,9 +143,9 @@
 			<version>${version.codehausJackson}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>${version.easymock}</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${version.mockito}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

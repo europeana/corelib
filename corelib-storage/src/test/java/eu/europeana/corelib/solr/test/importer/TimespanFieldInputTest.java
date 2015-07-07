@@ -19,12 +19,13 @@ package eu.europeana.corelib.solr.test.importer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.google.code.morphia.Datastore;
@@ -51,13 +52,12 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
  */
 public class TimespanFieldInputTest {
 
-	private EdmMongoServer mongoServer;
-
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testTimespan() {
 		TimeSpanType timespan = new TimeSpanType();
 		timespan.setAbout("test about");
-		List<AltLabel> altLabelList = new ArrayList<AltLabel>();
+		List<AltLabel> altLabelList = new ArrayList<>();
 		AltLabel altLabel = new AltLabel();
 		Lang lang = new Lang();
 		lang.setLang("en");
@@ -72,20 +72,20 @@ public class TimespanFieldInputTest {
 		End end = new End();
 		end.setString("test end");
 		timespan.setEnd(end);
-		List<Note> noteList = new ArrayList<Note>();
+		List<Note> noteList = new ArrayList<>();
 		Note note = new Note();
 		note.setString("test note");
 		assertNotNull(note);
 		noteList.add(note);
 		timespan.setNoteList(noteList);
-		List<PrefLabel> prefLabelList = new ArrayList<PrefLabel>();
+		List<PrefLabel> prefLabelList = new ArrayList<>();
 		PrefLabel prefLabel = new PrefLabel();
 		prefLabel.setLang(lang);
 		prefLabel.setString("test pred label");
 		assertNotNull(prefLabel);
 		prefLabelList.add(prefLabel);
 		timespan.setPrefLabelList(prefLabelList);
-		List<IsPartOf> isPartOfList = new ArrayList<IsPartOf>();
+		List<IsPartOf> isPartOfList = new ArrayList<>();
 		IsPartOf isPartOf = new IsPartOf();
 		eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource isPartOfResource = 
 				new eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource();
@@ -94,24 +94,23 @@ public class TimespanFieldInputTest {
 		isPartOfList.add(isPartOf);
 		timespan.setIsPartOfList(isPartOfList);
 
-		// create mongo
-		mongoServer = EasyMock.createMock(EdmMongoServer.class);
-		Datastore ds = EasyMock.createMock(Datastore.class);
-		Query query = EasyMock.createMock(Query.class);
-		Key<TimespanImpl> key = EasyMock.createMock(Key.class);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
-		EasyMock.expect(ds.find(TimespanImpl.class)).andReturn(query);
-		EasyMock.expect(query.filter("about", timespan.getAbout())).andReturn(query);
-		EasyMock.expect(query.get()).andReturn(null);
-		EasyMock.expect(mongoServer.getDatastore()).andReturn(ds);
 		TimespanImpl timespanImpl = new TimespanImpl();
 		timespanImpl.setAbout(timespan.getAbout());
-		EasyMock.expect(ds.save(timespanImpl)).andReturn(key);
+	
+		// create mongo
+		EdmMongoServer mongoServerMock = mock(EdmMongoServer.class);
+		Datastore datastoreMock = mock(Datastore.class);
+		Query queryMock = mock(Query.class);
+		Key<TimespanImpl> keyMock = mock(Key.class);
 		
-		EasyMock.replay(query,ds,mongoServer);
+		when(mongoServerMock.getDatastore()).thenReturn(datastoreMock);
+		when(datastoreMock.find(TimespanImpl.class)).thenReturn(queryMock);
+		when(datastoreMock.save(timespanImpl)).thenReturn(keyMock);
+		when(queryMock.filter("about", timespan.getAbout())).thenReturn(queryMock);
+
 		TimespanImpl timespanMongo = new TimespanFieldInput()
 				.createNewTimespan(timespan);
-		mongoServer.getDatastore().save(timespanMongo);
+		mongoServerMock.getDatastore().save(timespanMongo);
 		assertEquals(timespan.getAbout(), timespanMongo.getAbout());
 		assertEquals(timespan.getBegin().getString(), timespanMongo.getBegin().values().iterator().next().get(0));
 		assertEquals(timespan.getEnd().getString(), timespanMongo.getEnd().values().iterator().next().get(0));

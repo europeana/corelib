@@ -115,6 +115,12 @@
 		</fieldType>
 	</types>
 	<fields>
+            <field name="is_fulltext" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="has_thumbnails" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="has_media" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <field name="filter_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+                <field name="facet_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+
 		<field name="text" type="text" indexed="true" stored="false"
 			multiValued="true" />
 		<field name="manu_exact" type="string" indexed="true" stored="false" />
@@ -1158,12 +1164,8 @@
 		dest="DATA_PROVIDER" />
 	<copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
 	<copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
-<<<<<<< HEAD:corelib-search/src/test/resources/solr/search/conf/schema.xml
 	<copyField source="provider_aggregation_odrl_inherited_from" dest="RIGHTS" />
-||||||| merged common ancestors
-=======
-	<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />
->>>>>>> master:corelib-solr/src/test/resources/solr/search/conf/schema.xml
+	<!--<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />-->
 	<copyField source="ag_skos_prefLabel.*" dest="text" />
 	<copyField source="ag_skos_altLabel.*" dest="text" />
 	<copyField source="ag_skos_hiddenLabel.*" dest="text" />

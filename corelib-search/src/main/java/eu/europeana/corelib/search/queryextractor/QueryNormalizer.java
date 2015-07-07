@@ -22,12 +22,9 @@ public class QueryNormalizer {
 	}
 
 	private static boolean isSimpleBoolean(String query) {
-		if (StringUtils.contains(query, " OR ")
-			&& !StringUtils.contains(query, "(")
-			&& !StringUtils.contains(query, ")")
-			&& !StringUtils.contains(query, " AND ")) {
-			return true;
-		}
-		return false;
+		return StringUtils.contains(query, " OR ")
+				&& !StringUtils.contains(query, "(")
+				&& !StringUtils.contains(query, ")")
+				&& !StringUtils.contains(query, " AND ");
 	}
 }

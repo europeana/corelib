@@ -152,7 +152,7 @@ public class QueryTest {
 		Query query = new Query("*:*");
 		List<String> facetList;
 
-		query.setFacets(new String[]{"RIGHTS"});
+		query.setFacets("RIGHTS");
 		facetList = query.getFacets();
 		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
 		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
@@ -171,7 +171,7 @@ public class QueryTest {
 		assertTrue(facetList.contains("RIGHTS"));
 		assertEquals(Facet.values().length, facetList.size());
 
-		query.setFacets(new String[]{"RIGHTS", "YEAR"});
+		query.setFacets("RIGHTS", "YEAR");
 		facetList = query.getFacets();
 		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
 		assertTrue("should not contain YEAR", facetList.contains("YEAR"));

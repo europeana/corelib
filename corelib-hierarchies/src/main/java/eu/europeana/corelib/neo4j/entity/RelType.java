@@ -32,7 +32,7 @@ public enum RelType {
 
 	private String relType;
 
-	private RelType(String relType) {
+	RelType(String relType) {
 		this.relType = relType;
 	}
 

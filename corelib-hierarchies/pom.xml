@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-hierarchies</artifactId>
-	<name>corelib-hierarchies</name>
+	<name>Europeana Core Library Hierarchies</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -79,11 +79,6 @@
 			<artifactId>hamcrest-all</artifactId>
 			<version>1.3</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.10.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.plexus</groupId>

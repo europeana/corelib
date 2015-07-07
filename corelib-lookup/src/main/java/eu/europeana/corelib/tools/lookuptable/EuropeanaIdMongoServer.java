@@ -8,7 +8,7 @@ import eu.europeana.publication.common.ICollection;
 
 public interface EuropeanaIdMongoServer extends ICollection{
 
-	public abstract void createDatastore();
+	void createDatastore();
 
 	/**
 	 * Find the EuropeanaId records based on the oldId
@@ -17,7 +17,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 *            The id to search for
 	 * @return
 	 */
-	public abstract EuropeanaId retrieveEuropeanaIdFromOld(String oldId);
+	EuropeanaId retrieveEuropeanaIdFromOld(String oldId);
 
 	/**
 	 * Find the EuropeanaId records based on the newId
@@ -26,7 +26,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 *            The id to search for
 	 * @return
 	 */
-	public abstract List<EuropeanaId> retrieveEuropeanaIdFromNew(String newId);
+	List<EuropeanaId> retrieveEuropeanaIdFromNew(String newId);
 
 	/**
 	 * Check if the record has oldIDs based on the newID
@@ -35,7 +35,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 *            the newID
 	 * @return true if oldIDs are present false otherwise
 	 */
-	public abstract boolean oldIdExists(String newId);
+	boolean oldIdExists(String newId);
 
 	/**
 	 * Check if the record has newID based on the oldID
@@ -44,7 +44,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 *            the oldID
 	 * @return true if newIDs are present false otherwise
 	 */
-	public abstract boolean newIdExists(String oldId);
+	boolean newIdExists(String oldId);
 
 	/**
 	 * Set the last accessed field on the record
@@ -54,7 +54,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 * @param newId
 	 *            The newId
 	 */
-	public abstract void setLastAccessed(String oldId);
+	void setLastAccessed(String oldId);
 
 	/**
 	 * Save the europeanaId a update any references to it
@@ -62,7 +62,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 * @param europeanaId
 	 *            The europeanaId to save
 	 */
-	public abstract void saveEuropeanaId(EuropeanaId europeanaId);
+	void saveEuropeanaId(EuropeanaId europeanaId);
 
 	/**
 	 * Delete a specific EuropeanaID record
@@ -72,7 +72,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 * @param newId
 	 *            The newId to search for
 	 */
-	public abstract void deleteEuropeanaId(String oldId, String newId);
+	void deleteEuropeanaId(String oldId, String newId);
 
 	/**
 	 * Delete all the records based on the oldID
@@ -80,7 +80,7 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 * @param oldId
 	 *            The id to search for
 	 */
-	public abstract void deleteEuropeanaIdFromOld(String oldId);
+	void deleteEuropeanaIdFromOld(String oldId);
 
 	/**
 	 * Delete all the records based on the newID
@@ -88,14 +88,14 @@ public interface EuropeanaIdMongoServer extends ICollection{
 	 * @param newId
 	 *            The id to search for
 	 */
-	public abstract void deleteEuropeanaIdFromNew(String newId);
+	void deleteEuropeanaIdFromNew(String newId);
 
-	public abstract void updateTime(String newId, String oldId);
+	void updateTime(String newId, String oldId);
 
-	public abstract void setDatastore(Datastore datastore);
+	void setDatastore(Datastore datastore);
 
-	public abstract EuropeanaId find();
+	EuropeanaId find();
 
-	public abstract EuropeanaId findOne(String oldId);
+	EuropeanaId findOne(String oldId);
 
 }
