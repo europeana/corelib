@@ -90,11 +90,6 @@
 			<artifactId>guava</artifactId>
 			<version>${version.guava}</version>
 		</dependency>
-		<dependency>
-			<groupId>eu.europeana</groupId>
-			<artifactId>harvester-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
