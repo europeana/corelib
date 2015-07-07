@@ -37,6 +37,7 @@
 
 	<!-- SERVICES -->
 	<bean id="corelib_web_europeanaUrlService" class="eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl" />
+
 	<bean id="corelib_web_emailService" class="eu.europeana.corelib.web.service.impl.EmailServiceImpl">
 		<lookup-method name="createEmailBuilder" bean="corelib_web_emailBuilder"/>
 	</bean>
