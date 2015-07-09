@@ -119,17 +119,18 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-                
-<!-- v. 1.02		<repository>
-			<id>jcenter-release</id>
+
+		<!--<repository>-->
+			<!--<id>jcenter-snapshots</id>-->
+			<!--<name>jcenter</name>-->
+			<!--<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>-->
+		<!--</repository>-->
+
+		<repository>
+			<id>jcenter-snapshots</id>
 			<name>jcenter</name>
-			<url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
-		</repository>-->
-                <repository>
-                        <id>jcenter-snapshots</id>
-                        <name>jcenter</name>
-                        <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-                </repository>
+			<url>https://jcenter.bintray.com/</url>
+		</repository>
                 
                 
 	</repositories>

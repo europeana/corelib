@@ -33,6 +33,7 @@
 				<value>file:${EUROPEANA_PROPERTIES}</value>
 			</list>
 		</property>
+		<property name="fileEncoding" value="UTF-8"/>
 	</bean> 
 
 	<!-- INTERNAL DEFINITIONS -->
