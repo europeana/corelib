@@ -9,7 +9,7 @@ public interface MediaStorageClient {
      * @param id the if of the file, it's the MD5 of the URL
      * @return a boolean which indicates the presence of the file
      */
-    public Boolean checkIfExists(String id);
+    Boolean checkIfExists(String id);
 
     /**
      * Retrieves a file with or without the content.
@@ -18,17 +18,17 @@ public interface MediaStorageClient {
      * @param withContent boolean which indicates the intent of the user (retrieve with or without the content)
      * @return an object which contains all the metainfos and optionally the actual content
      */
-    public MediaFile retrieve(String id, Boolean withContent);
+    MediaFile retrieve(String id, Boolean withContent);
 
     /**
      * If the file does not exists in the DB it creates it, otherwise it will be updated.
      * @param mediaFile the new/modified MediaFile
      */
-    public void createOrModify(MediaFile mediaFile);
+    void createOrModify(MediaFile mediaFile);
 
     /**
      * Deletes a file with a given id.
      * @param id the if of the file, it's the MD5 of the URL
      */
-    public void delete(String id);
+    void delete(String id);
 }

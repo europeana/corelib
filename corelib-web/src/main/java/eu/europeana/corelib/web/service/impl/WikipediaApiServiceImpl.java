@@ -2,11 +2,7 @@ package eu.europeana.corelib.web.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -23,13 +19,11 @@ import eu.europeana.corelib.web.service.WikipediaApiService;
 public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements WikipediaApiService {
 
 	private static final String LANGLINKS = ".wikipedia.org/w/api.php?action=query&prop=langlinks&lllimit=200&redirects=&format=json";
-	private static Map<String, List<String>> removableParts = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> removableParts = new HashMap<>();
 	static {
-		removableParts.put("de", Arrays.asList(new String[]{
-				"(Film)", "(Biologie)"}));
-		removableParts.put("en", Arrays.asList(new String[]{
-				"(disambiguation)", "(film)"}));
-		removableParts.put("nl", Arrays.asList(new String[]{"(film)"}));
+		removableParts.put("de", Arrays.asList("(Film)", "(Biologie)"));
+		removableParts.put("en", Arrays.asList("(disambiguation)", "(film)"));
+		removableParts.put("nl", Collections.singletonList("(film)"));
 	}
 
 	public static WikipediaApiService getBeanInstance() {
@@ -48,8 +42,8 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 	 */
 	@Override
 	public List<LanguageVersion> getVersionsInMultiLanguage(String title, List<String> languages) {
-		List<LanguageVersion> translations = new ArrayList<LanguageVersion>();
-		List<String> smallCaseTranslations = new ArrayList<String>();
+		List<LanguageVersion> translations = new ArrayList<>();
+		List<String> smallCaseTranslations = new ArrayList<>();
 		for (String languageCode : languages) {
 			if (StringUtils.isBlank(languageCode)) {
 				continue;
@@ -82,11 +76,8 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 	}
 
 	private Map<String, String> extractLanguageVersions(WikipediaQuery query, String languageCode) {
-		Map<String, String> languageVersions = new HashMap<String, String>();
-		if (query != null 
-				&& query.getQuery() != null 
-				&& query.getQuery().getPages() != null
-				&& query.getQuery().getPages().values() != null) {
+		Map<String, String> languageVersions = new HashMap<>();
+		if (query != null && query.getQuery() != null && query.getQuery().getPages() != null) {
 			Page page = query.getQuery().getPages().values().iterator().next();
 			if (page != null && page.getPageid() != 0) {
 				if (page.getLanglinks() != null && page.getLanglinks().size() > 0) {
@@ -119,7 +110,7 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 	}
 
 	private String buildLanguageLinksUrl(String titles, String languageCode) {
-		StringBuffer url = new StringBuffer("http://");
+		StringBuilder url = new StringBuilder("http://");
 		url.append(checkLanguageCode(languageCode, "en"));
 		url.append(LANGLINKS);
 		try {

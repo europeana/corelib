@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface ApiResult {
 
-	public int getHttpStatusCode();
+	int getHttpStatusCode();
 
-	public String getContent();
+	String getContent();
 
-	public List<String> getRequestHeaders();
+	List<String> getRequestHeaders();
 
-	public List<String> getResponseHeaders();
+	List<String> getResponseHeaders();
 }

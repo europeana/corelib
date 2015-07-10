@@ -627,7 +627,7 @@ public enum RdfMethod {
 	private String methodName;
 	private Class<?> clazz;
 
-	private RdfMethod(String solrField, String methodName, Class<?> clazz) {
+	RdfMethod(String solrField, String methodName, Class<?> clazz) {
 		this.solrField = solrField;
 		this.methodName = methodName;
 		this.clazz = clazz;

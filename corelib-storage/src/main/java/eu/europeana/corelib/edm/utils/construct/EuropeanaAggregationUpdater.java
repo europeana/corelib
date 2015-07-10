@@ -3,11 +3,10 @@ package eu.europeana.corelib.edm.utils.construct;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

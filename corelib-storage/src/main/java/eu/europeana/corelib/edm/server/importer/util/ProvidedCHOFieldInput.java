@@ -123,7 +123,7 @@ public final class ProvidedCHOFieldInput {
 			}
 
 		}
-		return (ProvidedCHOImpl) mongoProvidedCHO;
+		return mongoProvidedCHO;
 	}
 
 	/**
@@ -159,6 +159,6 @@ public final class ProvidedCHOFieldInput {
 
 			mongoProvidedCHO.setOwlSameAs(SolrUtils
 					.resourceListToArray(providedCHO.getSameAList()));
-		return (ProvidedCHOImpl) mongoProvidedCHO;
+		return mongoProvidedCHO;
 	}
 }

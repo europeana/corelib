@@ -199,7 +199,7 @@ public final class AgentFieldInput {
 	 * @throws MalformedURLException
 	 */
 	public AgentImpl createNewAgent(AgentType agentType)
-			throws MalformedURLException, IOException {
+			throws IOException {
 		AgentImpl agent = new AgentImpl();
 		agent.setAbout(agentType.getAbout());
 

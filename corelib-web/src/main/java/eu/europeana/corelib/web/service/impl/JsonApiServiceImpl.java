@@ -40,7 +40,7 @@ public class JsonApiServiceImpl implements JsonApiService {
 			result.setContent(writer.toString());
 
 			Header[] headers;
-			List<String> requestHeaders = new ArrayList<String>();
+			List<String> requestHeaders = new ArrayList<>();
 			requestHeaders.add(String.format("%s %s %s", method.getName(), method.getPath(), method.getEffectiveVersion()));
 			headers = method.getRequestHeaders();
 			for (Header header : headers) {
@@ -48,7 +48,7 @@ public class JsonApiServiceImpl implements JsonApiService {
 			}
 			result.setRequestHeaders(requestHeaders);
 
-			List<String> responseHeaders = new ArrayList<String>();
+			List<String> responseHeaders = new ArrayList<>();
 			responseHeaders.add(method.getStatusLine().toString());
 			headers = method.getResponseHeaders();
 			for (Header header : headers) {

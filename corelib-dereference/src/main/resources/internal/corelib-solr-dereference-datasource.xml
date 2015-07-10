@@ -10,26 +10,18 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:cloud="http://www.springframework.org/schema/cloud"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-		<bean id="corelib_solr_mongo" class="com.mongodb.Mongo">
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}"
-				type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
-		</bean>
+    <bean id="corelib_solr_mongo" class="com.mongodb.Mongo">
+        <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>
+    </bean>
 
-		<bean id="corelib_solr_mongo_apilog" class="com.mongodb.Mongo">
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.host']}"
-				type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.port']}" type="int" />
-		</bean>
+    <bean id="corelib_solr_mongo_apilog" class="com.mongodb.Mongo">
+        <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>
+    </bean>
 </beans>

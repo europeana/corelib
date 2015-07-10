@@ -90,11 +90,6 @@
 			<artifactId>guava</artifactId>
 			<version>${version.guava}</version>
 		</dependency>
-		<dependency>
-			<groupId>eu.europeana</groupId>
-			<artifactId>harvester-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,10 +104,10 @@
 		</dependency>
 		<!-- TESTING -->
 		<dependency>
-			<scope>test</scope>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${version.springCore}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.subethamail</groupId>

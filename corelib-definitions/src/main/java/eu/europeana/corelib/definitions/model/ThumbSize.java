@@ -10,7 +10,7 @@ public enum ThumbSize {
 
 	private int maxHeight;
 
-	private ThumbSize(int width, int height) {
+	ThumbSize(int width, int height) {
 		maxWidth = width;
 		maxHeight = height;
 	}

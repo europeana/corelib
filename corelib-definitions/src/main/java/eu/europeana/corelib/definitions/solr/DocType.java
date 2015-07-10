@@ -35,7 +35,7 @@ public enum DocType {
 
 	private String[] extentions;
 
-	private DocType(String... extentions) {
+	DocType(String... extentions) {
 		this.extentions = extentions;
 	}
 
