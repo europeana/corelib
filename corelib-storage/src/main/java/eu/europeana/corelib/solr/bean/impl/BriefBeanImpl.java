@@ -316,6 +316,22 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public List<Map<String, String>> getEdmAgentLabel() {
+
+        if (edmAgentLabel != null
+                && edmAgentLabel.size() > 0) {
+            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+            for (int i = 0, max = edmAgentLabel.size(); i < max; i++) {
+                Object label = edmAgentLabel.get(i);
+                if (label.getClass().getName() == "java.lang.String") {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("def", (String) label);
+                    list.add(map);
+                } else {
+                    list.add((Map<String, String>) label);
+                }
+            }
+            return list;
+        }
         return this.edmAgentLabel;
     }
 
