@@ -331,4 +331,8 @@ public interface SearchService {
 	Neo4jStructBean getInitialStruct(String nodeId);
 
 	boolean isHierarchy(String nodeId);
+
+				Integer search (Integer mediaType, String mimeType, String imageSize, Boolean imageColor,	Boolean imageGrayScale,
+																				String imageAspectRatio, String imageColorPalette, Boolean soundHQ,	String soundDuration,
+																				Boolean videoHQ, String videoDuration);
 }

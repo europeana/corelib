@@ -30,6 +30,7 @@
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-web-email.xml" />
+	<import resource="internal/corelib-web-contentreuseframework.xml" />
 	
 
 	<!-- CONFIGURATION -->
