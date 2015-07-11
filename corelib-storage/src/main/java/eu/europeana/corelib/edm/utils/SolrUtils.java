@@ -371,9 +371,9 @@ public final class SolrUtils {
 				if(val.get(key)!=null){
 				for(String str:lst){
                                    
-					if(str.getBytes().length>32600){
+					if(str.getBytes().length>32000){
 						
-						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32600);
+						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32000);
                                                 str = new String(btCopy);
 					}
                                          
