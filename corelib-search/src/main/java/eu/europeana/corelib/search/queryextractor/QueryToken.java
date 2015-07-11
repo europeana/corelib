@@ -57,10 +57,10 @@ public class QueryToken {
 	@Override
 	protected QueryToken clone() throws CloneNotSupportedException {
 		QueryToken cloned = new QueryToken();
-		cloned.position = (this.getPosition() == null) ? null : (QueryTermPosition) this.getPosition().clone();
-		cloned.normalizedQueryTerm = new String(this.normalizedQueryTerm);
+		cloned.position = (this.getPosition() == null) ? null : this.getPosition().clone();
+		cloned.normalizedQueryTerm = this.normalizedQueryTerm;
 		cloned.typeStack = (Stack<QueryType>) this.typeStack.clone();
-		cloned.group = new Integer(this.group);
+		cloned.group = this.group;
 		
 		return cloned;
 	}

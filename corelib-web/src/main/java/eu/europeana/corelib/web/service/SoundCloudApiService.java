@@ -4,7 +4,7 @@ import eu.europeana.corelib.web.model.mediaservice.soundcloud.Track;
 
 public interface SoundCloudApiService {
 
-	public Track resolvePath(String path);
-	public Track getTrackInfo(String trackId);
+	Track resolvePath(String path);
+	Track getTrackInfo(String trackId);
 
 }

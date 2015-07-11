@@ -29,9 +29,9 @@ import eu.europeana.corelib.definitions.users.Role;
  */
 public interface User extends IdentifiedEntity<Long> {
 
-	public static final String QUERY_FINDBY_EMAIL = "User.findByEmail";
-	public static final String QUERY_FINDBY_APIKEY = "User.findByApiKey";
-	public static final String QUERY_FINDBY_NAME = "User.findByName";
+	String QUERY_FINDBY_EMAIL = "User.findByEmail";
+	String QUERY_FINDBY_APIKEY = "User.findByApiKey";
+	String QUERY_FINDBY_NAME = "User.findByName";
 
 	void setEmail(String email);
 

@@ -29,7 +29,7 @@ public enum QueryType {
 
 	private String queryType;
 
-	private QueryType(String queryType) {
+	QueryType(String queryType) {
 		this.queryType = queryType;
 	}
 

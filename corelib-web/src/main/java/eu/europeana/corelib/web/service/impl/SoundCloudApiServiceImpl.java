@@ -21,16 +21,14 @@ public class SoundCloudApiServiceImpl extends JsonApiServiceImpl implements Soun
 	public Track resolvePath(String path) {
 		String apiUrl = buildResolverUrl(path);
 		ApiResult apiResponse = getJsonResponse(apiUrl);
-		Track response = parseResolverJson(apiResponse);
-		return response;
+		return parseResolverJson(apiResponse);
 	}
 
 	@Override
 	public Track getTrackInfo(String id) {
 		String apiUrl = buildTrackInfoUrl(id);
 		ApiResult apiResponse = getJsonResponse(apiUrl);
-		Track response = parseResolverJson(apiResponse);
-		return response;
+		return parseResolverJson(apiResponse);
 	}
 
 	private String buildResolverUrl(String path) {

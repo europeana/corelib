@@ -1,35 +1,21 @@
 /*
  * Copyright 2007-2012 The Europeana Foundation
  *
- *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved 
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- *  
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
- *  Unless required by applicable law or agreed to in writing, software distributed under 
- *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of 
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
  *  any kind, either express or implied.
- *  See the Licence for the specific language governing permissions and limitations under 
+ *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
 
 package eu.europeana.corelib.solr.service.mock;
-
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
@@ -47,203 +33,188 @@ import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField.Count;
+
+import java.io.IOException;
+import java.util.*;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
  * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceMock implements SearchService {
 
-	public static final String[] TITLE = new String[]{"Mock Title"};
-	public static final String[] AUTHOR = new String[]{"Mock Author"};
-	public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
-	public static final List<? extends Aggregation> aggregations2 = new ArrayList<AggregationImpl>();
+    public static final String[] TITLE = new String[]{"Mock Title"};
+    public static final String[] AUTHOR = new String[]{"Mock Author"};
+    public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public FullBean findById(String europeanaObjectId,boolean similarItems) {
-		FullBean mockBean = createMock(FullBean.class);
-		Proxy proxy =createMock(Proxy.class);
-		Map<String,List<String>> dcPublisher = new HashMap<String,List<String>>();
-		List<String> vals = new ArrayList<String>();
-		vals.add(AUTHOR[0]);
-		dcPublisher.put("def",vals);
-		proxy.setDcPublisher(dcPublisher);
-		Aggregation aggregation =createMock(AggregationImpl.class);
-		FullBean bean2 = new FullBeanImpl();
-		List<Aggregation> aggregations = new ArrayList<Aggregation>();
-		aggregation.setEdmObject(THUMBNAIL[0]);
-		aggregations.add(aggregation);
-		List<Proxy> proxies = new ArrayList<Proxy>();
-		proxies.add(proxy);
-		bean2.setProxies(proxies);
-		mockBean.setAggregations(aggregations);
-		expect(mockBean.getTitle()).andStubReturn(TITLE);
-		
-		expect(bean2.getProxies().get(0).getDcPublisher()).andStubReturn(dcPublisher);
-		expect(mockBean.getId()).andStubReturn(europeanaObjectId);
-		expect((List<Aggregation>)mockBean.getAggregations()).andStubReturn(aggregations);
-		expect(aggregation.getEdmObject()).andStubReturn(THUMBNAIL[0]);
-		expect((List<Proxy>)mockBean.getProxies()).andStubReturn(proxies);
-		expect(mockBean.getType()).andStubReturn(DocType.TEXT);
-		expect(mockBean.getAbout()).andStubReturn(europeanaObjectId);
-		replay(aggregation);
-		replay(proxy);
-		replay(mockBean);
-		return mockBean;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems) {
+        FullBean mockBean = mock(FullBean.class);
+        Proxy proxy = mock(Proxy.class);
+        Aggregation aggregation = mock(Aggregation.class);
 
-	@Override
-	public FullBean findById(String collectionId, String recordId,boolean similarItems) throws MongoDBException {
+        Map<String, List<String>> dcPublisher = new HashMap<>();
+        dcPublisher.put("def", Collections.singletonList(AUTHOR[0]));
 
-		// not needed in this mock...
-		return null;
-	}
+        when(mockBean.getTitle()).thenReturn(TITLE);
+        when(mockBean.getId()).thenReturn(europeanaObjectId);
+        when(mockBean.getType()).thenReturn(DocType.TEXT);
+        when(mockBean.getAbout()).thenReturn(europeanaObjectId);
+        when((List<Aggregation>) mockBean.getAggregations()).thenReturn(Collections.singletonList(aggregation));
+        when((List<Proxy>) mockBean.getProxies()).thenReturn(Collections.singletonList(proxy));
 
-	@Override
-	public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) {
-		// not needed in this mock...
-		return null;
-	}
+        when(proxy.getDcPublisher()).thenReturn(dcPublisher);
+        when(aggregation.getEdmObject()).thenReturn(THUMBNAIL[0]);
+        return mockBean;
+    }
 
-	@Override
-	public List<Term> suggestions(String query, int pageSize) {
-		return null;
-	}
-	
-	@Override
-	public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
-			throws SolrTypeException {
-		return null;
-	}
+    @Override
+    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoDBException {
 
-	@Override
-	public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
-			throws SolrServerException {
-		return null;
-	}
+        // not needed in this mock...
+        return null;
+    }
 
-	@Override
-	public List<Term> suggestions(String query, int pageSize, String field)
-			throws SolrTypeException {
-		return null;
-	}
+    @Override
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanClazz, Query query) {
+        // not needed in this mock...
+        return null;
+    }
 
-	@Override
-	public Map<String, Integer> seeAlso(List<String> params) {
-		return null;
-	}
+    @Override
+    public List<Term> suggestions(String query, int pageSize) {
+        return null;
+    }
 
-	@Override
-	public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
-			throws SolrServerException {
-		return null;
-	}
+    @Override
+    public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
+            throws SolrTypeException {
+        return null;
+    }
 
-	@Override
-	public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
-			Query query) throws SolrTypeException {
-		return null;
-	}
+    @Override
+    public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
+            throws SolrServerException {
+        return null;
+    }
 
-	@Override
-	public Date getLastSolrUpdate() throws SolrServerException, IOException {
-		return null;
-	}
+    @Override
+    public List<Term> suggestions(String query, int pageSize, String field)
+            throws SolrTypeException {
+        return null;
+    }
 
-	@Override
-	public FullBean resolve(String europeanaObjectId, boolean similarItems)
-			throws SolrTypeException {
-		return null;
-	}
+    @Override
+    public Map<String, Integer> seeAlso(List<String> params) {
+        return null;
+    }
 
-	@Override
-	public FullBean resolve(String collectionId, String recordId,
-			boolean similarItems) throws SolrTypeException {
-		return null;
-	}
+    @Override
+    public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
+            throws SolrServerException {
+        return null;
+    }
 
-	@Override
-	public String resolveId(String europeanaObjectId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
+                                                   Query query) throws SolrTypeException {
+        return null;
+    }
 
-	@Override
-	public String resolveId(String collectionId, String recordId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Date getLastSolrUpdate() throws SolrServerException, IOException {
+        return null;
+    }
 
-	@Override
-	public Map<String, Integer> queryFacetSearch(String query, String[] qf,
-			List<String> queries) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public FullBean resolve(String europeanaObjectId, boolean similarItems)
+            throws SolrTypeException {
+        return null;
+    }
 
-	@Override
-	public Neo4jBean getHierarchicalBean(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public FullBean resolve(String collectionId, String recordId,
+                            boolean similarItems) throws SolrTypeException {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String resolveId(String europeanaObjectId) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getChildren(String nodeId, int offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String resolveId(String collectionId, String recordId) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getChildren(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, Integer> queryFacetSearch(String query, String[] qf,
+                                                 List<String> queries) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Neo4jBean getHierarchicalBean(String nodeId) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId, int offset) {
+        return null;
+    }
 
-	@Override
-	public List<Neo4jBean> getFollowingSiblings(String nodeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Neo4jBean> getChildren(String nodeId) {
+        return null;
+    }
 
-	@Override
-	public long getChildrenCount(String nodeId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
+        return null;
+    }
 
-	@Override
-	public Neo4jStructBean getInitialStruct(String nodeId) {
-		return new Neo4jStructBean();
-	}
+    @Override
+    public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
+        return null;
+    }
 
-	@Override
-	public boolean isHierarchy(String nodeId) {
-		return false;
-	}
+    @Override
+    public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<Neo4jBean> getFollowingSiblings(String nodeId) {
+        return null;
+    }
+
+    @Override
+    public long getChildrenCount(String nodeId) {
+        return 0;
+    }
+
+    @Override
+    public Neo4jStructBean getInitialStruct(String nodeId) {
+        return new Neo4jStructBean();
+    }
+
+    @Override
+    public boolean isHierarchy(String nodeId) {
+        return false;
+    }
+
+    
 }

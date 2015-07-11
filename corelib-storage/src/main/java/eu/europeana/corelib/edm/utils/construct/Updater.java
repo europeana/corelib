@@ -1,6 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 
 import java.lang.reflect.InvocationTargetException;
 

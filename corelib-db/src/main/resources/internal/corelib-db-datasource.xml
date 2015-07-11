@@ -10,109 +10,80 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/tx
-		http://www.springframework.org/schema/tx/spring-tx.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
 	">
-		<bean id="corelib_db_dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-			destroy-method="close">
-			<property name="driverClassName" value="#{europeanaProperties['db.driverClass']}" />
-			<property name="url" value="jdbc:postgresql://#{europeanaProperties['postgres.host']}:5432/#{europeanaProperties['postgres.db']}" 
-				/>
-<!-- 			<property name="url" -->
-<!-- 				value="jdbc:postgresql://${cloud.services.postgresql.connection.host}:${cloud.services.postgresql.connection.port}/${cloud.services.postgresql.connection.db}" /> -->
-			<!-- <property name="url" value="#{europeanaProperties['db.jdbcUrl']}" 
-				/> -->
-			<property name="username"
-				value="#{europeanaProperties['postgres.username']}" />
-			<property name="password"
-				value="#{europeanaProperties['postgres.password']}" />
-		</bean>
 
-<!-- 		<bean id="corelib_db_mongo" class="com.mongodb.Mongo"> -->
-<!-- 			<constructor-arg -->
-<!-- 				value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" /> -->
-<!-- 			<constructor-arg -->
-<!-- 				value="#{europeanaProperties['mongodb.port']}" type="int" /> -->
-<!-- 		</bean> -->
-        <bean id="corelib_db_mongoProvider" class = "eu.europeana.corelib.MongoProvider">
-        <constructor-arg
-                value="#{europeanaProperties['mongodb.host']}" type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.port']}" type="java.lang.String" />
-        </bean>
+    <bean id="corelib_db_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="#{europeanaProperties['db.driverClass']}"/>
+        <property
+                name="url"
+                value="jdbc:postgresql://#{europeanaProperties['postgres.host']}:5432/#{europeanaProperties['postgres.db']}"
+                />
+        <property name="username" value="#{europeanaProperties['postgres.username']}"/>
+        <property name="password" value="#{europeanaProperties['postgres.password']}"/>
+    </bean>
 
-		<bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
-			factory-method="createDatastore">
-			<constructor-arg value="API log" />
-			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-			<constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}"
-				type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.username']}"
-				type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.password']}"
-				type="java.lang.String" />
-		</bean>
+    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl">
+        <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>
+    </bean>
 
-		<bean id="corelib_db_morphia_datastore_oauth2"
-			factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
-			<constructor-arg value="OAuth2" />
-			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.username']}"
-				type="java.lang.String" />
-			<constructor-arg
-				value="#{europeanaProperties['mongodb.password']}"
-				type="java.lang.String" />
-		</bean>
-		
-		<bean id="corelib_db_morphia_datastore_sugarcrmcache"
-            factory-bean="corelib_db_mongo_apilog" factory-method="createDatastore">
-            <constructor-arg value="SugarCRM cache" />
-			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-            <constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}"
-                type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.username']}"
-                type="java.lang.String" />
-            <constructor-arg
-                value="#{europeanaProperties['mongodb.password']}"
-                type="java.lang.String" />
-        </bean>
+    <bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
+          factory-method="createDatastore">
+        <constructor-arg value="API log"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
+    </bean>
 
-		<bean id="corelib_db_entityManagerFactory"
-			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-			p:dataSource-ref="corelib_db_dataSource">
-			<property name="jpaVendorAdapter">
-				<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-					p:showSql="false" p:generateDdl="true"
-					p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect" />
-			</property>
-		</bean>
+    <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_apilog"
+          factory-method="createDatastore">
+        <constructor-arg value="OAuth2"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
+    </bean>
 
-		<bean id="corelib_db_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
-			p:entityManagerFactory-ref="corelib_db_entityManagerFactory"
-			p:dataSource-ref="corelib_db_dataSource" />
+    <bean id="corelib_db_morphia_datastore_sugarcrmcache" factory-bean="corelib_db_mongo_apilog"
+          factory-method="createDatastore">
+        <constructor-arg value="SugarCRM cache"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['cachemongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
+    </bean>
 
-		<tx:annotation-driven transaction-manager="corelib_db_transactionManager" />
+    <bean id="corelib_db_entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:dataSource-ref="corelib_db_dataSource">
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" p:showSql="false"
+                  p:generateDdl="true" p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"/>
+        </property>
+    </bean>
 
-		<bean
-			class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-		<bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia" />
+    <bean id="corelib_db_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+          p:entityManagerFactory-ref="corelib_db_entityManagerFactory"
+          p:dataSource-ref="corelib_db_dataSource"/>
 
-		<bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia"
-			factory-method="createDatastore">
-			<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-			<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
-				type="java.lang.String" />
-		</bean>
+    <tx:annotation-driven transaction-manager="corelib_db_transactionManager"/>
 
-		<bean id="corelib_db_mongo_apilog" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector" />
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+    <bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia"/>
+
+    <bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia" factory-method="createDatastore">
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
+    </bean>
+
+    <bean id="corelib_db_mongo_apilog" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
 </beans>

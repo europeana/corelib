@@ -9,8 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import com.google.code.morphia.query.Query;
@@ -47,7 +47,7 @@ public class FullBeanHandler implements ICollection {
         this.mongoServer = mongoServer;
     }
 
-    public boolean removeRecord(HttpSolrServer solrServer, RDF rdf) {
+    public boolean removeRecord(SolrServer solrServer, RDF rdf) {
         try {
             solrServer.deleteByQuery("europeana_id:"
                     + ClientUtils.escapeQueryChars(rdf.getProvidedCHOList()

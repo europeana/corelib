@@ -41,7 +41,7 @@
 					described within the ORE interoperability framework by a Resource Map.
 				</documentation>
 				<appinfo>
-					<sch:pattern name="Either Is shownby or is shownat should be present">
+					<sch:pattern >
 						<sch:rule context="ore:Aggregation">
 							<sch:assert
 								test="(edm:isShownAt and exists(edm:isShownAt/@rdf:resource)) or (edm:isShownBy and exists(edm:isShownBy/@rdf:resource))">
@@ -149,14 +149,14 @@
 								dc:subject or dc:type or dc:coverage or dct:temporal or
 								dct:spatial.
 							</sch:assert>
-							<sch:assert test="dc:title or dc:description">
+							<!--<sch:assert test="dc:title or dc:description">
 								id:
 								<sch:value-of select="@rdf:about" />
 								- A Proxy must have a dc:title or
 								dc:description.
-							</sch:assert>
+							</sch:assert> -->
 							<sch:assert
-								test="(dc:title and normalize-space(dc:title)!='') or (dc:description and (exists(dc:description/@rdf:resource) or normalize-space(dc:decription)!=''))">A Proxy must have a non empty dc:title or a non empty
+								test="(dc:title and normalize-space(dc:title)!='') or (dc:description and (exists(dc:description/@rdf:resource) or normalize-space(dc:description)!=''))">A Proxy must have a non empty dc:title or a non empty
 								dc:description</sch:assert>
 							<sch:assert
 								test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">

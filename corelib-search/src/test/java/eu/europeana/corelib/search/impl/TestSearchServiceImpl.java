@@ -1,46 +1,23 @@
 package eu.europeana.corelib.search.impl;
 
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.edm.exceptions.SolrTypeException;
+import eu.europeana.corelib.search.model.ResultSet;
 import org.junit.Ignore;
-import org.junit.Test;
-
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.search.TestSearchService;
-import eu.europeana.corelib.search.impl.SearchServiceImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 @Ignore
-public class TestSearchServiceImpl extends SearchServiceImpl implements
-		TestSearchService {
+public class TestSearchServiceImpl extends SearchServiceImpl {
 
-	
-	
-	@Override
-	public void setEdmMongoServer(EdmMongoServer mongoServer) {
-		this.mongoServer = mongoServer;
+    @Override
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
+        ResultSet<T> resultSet = super.search(beanInterface, query);
+        System.out.println("QUERY: " + query.toString() + "   RESULTSIZE: " + resultSet.getResultSize());
+        return resultSet;
+    }
 
-	}
-
-
-
-	@Override
-	public void setEuropeanaIdMongoServer(EuropeanaIdMongoServer mongoServer) {
-		this.idServer = mongoServer;
-	}
-
-
-
-
-
-	@Override
-	public void setLogger(Logger log) {
-		this.log = log;
-		
-	}
-	
-	@Override
-	public boolean isHierarchy(String nodeId){
-		return true;
-	}
+    @Override
+    public boolean isHierarchy(String nodeId) {
+        return true;
+    }
 }

@@ -200,7 +200,6 @@ public class Configuration {
 		this.bingTranslateClientSecret = bingTranslateClientSecret;
 	}
 
-
 	
 	
 	
@@ -491,6 +490,14 @@ public class Configuration {
 			return false;
 		}
 		return Boolean.parseBoolean(useBackendItemTranslationString);
+	}
+	
+
+	@Value("#{europeanaProperties['nof.enabled']}")
+	private boolean nofEnabled;
+
+	public boolean isNofEnabled(){
+		return this.nofEnabled;
 	}
 	
 	public boolean useAutomatedFrontendTranslation() {

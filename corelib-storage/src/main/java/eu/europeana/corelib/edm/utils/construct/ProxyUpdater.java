@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
-import eu.europeana.corelib.MongoServer;
+import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 

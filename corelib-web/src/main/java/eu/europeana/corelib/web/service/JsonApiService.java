@@ -4,5 +4,6 @@ import eu.europeana.corelib.web.model.ApiResult;
 
 public interface JsonApiService {
 
-	public ApiResult getJsonResponse(String url);
+	ApiResult getJsonResponse(String url);
+
 }
