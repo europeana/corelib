@@ -285,7 +285,7 @@ public final class SolrUtils {
 			if (obj.getString() != null) {
 				if (obj.getLang() != null) {
 					String str = StringUtils.trim(obj.getString());
-					if(str.length()>32767){
+					if(str.length()>32000){
 						str = StringUtils.substring(str, 0,32000);
 					}
 					solrInputDocument.addField(label.toString() + "."
@@ -371,9 +371,9 @@ public final class SolrUtils {
 				if(val.get(key)!=null){
 				for(String str:lst){
                                    
-					if(str.getBytes().length>32766){
+					if(str.getBytes().length>32600){
 						
-						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32766);
+						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 32600);
                                                 str = new String(btCopy);
 					}
                                          
