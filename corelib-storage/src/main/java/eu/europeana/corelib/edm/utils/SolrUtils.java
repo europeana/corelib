@@ -370,13 +370,13 @@ public final class SolrUtils {
 				List<String>normalized = new ArrayList<>();
 				if(val.get(key)!=null){
 				for(String str:lst){
-                                   
-					if(str.getBytes().length>31000){
-						
-						byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 31000);
-                                                str = new String(btCopy);
+                    if(str!=null && str.getBytes()!=null) {
+						if (str.getBytes().length > 31000) {
+
+							byte[] btCopy = ArrayUtils.subarray(str.getBytes(), 0, 31000);
+							str = new String(btCopy);
+						}
 					}
-                                         
 					normalized.add(str);
 				}
 				}
