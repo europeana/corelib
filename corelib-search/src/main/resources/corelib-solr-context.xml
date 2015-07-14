@@ -36,6 +36,8 @@
 	<!-- INTERNAL -->
 	<import resource="internal/corelib-search-datasource.xml" />
 	<import resource="internal/corelib-search-server.xml" />
+    <import resource="internal/corelib-solr-server.xml" />
+    <import resource="internal/corelib-solr-datasource.xml" />
 
     <context:annotation-config/>
 

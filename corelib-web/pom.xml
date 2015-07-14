@@ -26,6 +26,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${version.guava}</version>
+        </dependency>
 		<dependency>
 			<groupId>eu.europeana</groupId>
 			<artifactId>harvester-client</artifactId>
@@ -47,11 +52,23 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${version.springCore}</version>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>google-collections</artifactId>
+                            <groupId>com.google.collections</groupId>
+                        </exclusion>
+                    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${version.springCore}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>google-collections</artifactId>
+                    <groupId>com.google.collections</groupId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<!-- Other -->
 		<dependency>
@@ -105,6 +122,10 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
+                    <exclusion>
+                        <artifactId>google-collections</artifactId>
+                        <groupId>com.google.collections</groupId>
+                    </exclusion>
 			</exclusions>
 		</dependency>
 		<!-- TESTING -->
@@ -113,6 +134,12 @@
 			<artifactId>spring-test</artifactId>
 			<version>${version.springCore}</version>
 			<scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>google-collections</artifactId>
+                    <groupId>com.google.collections</groupId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.subethamail</groupId>

@@ -40,6 +40,15 @@
 		<constructor-arg value="search" />
 	</bean>
 
+	<bean id="corelib_solr_mongo" class="com.mongodb.Mongo">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>
+	</bean>
+
+	<bean id="corelib_solr_mongo_apilog" class="com.mongodb.Mongo">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>
+	</bean>
 	<bean id="corelib_solr_mongoServer"
 		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo" />

@@ -41,6 +41,25 @@ public class MongoProvider {
 		}
 	}
 
+				public MongoProvider(final String host, final String port) {
+								try {
+												IMongodConfig conf = new MongodConfigBuilder()
+																																									.version(Version.Main.PRODUCTION)
+																																									.net(new Net(Integer.getInteger(port), Network.localhostIsIPv6())).build();
+												MongodStarter runtime = MongodStarter.getDefaultInstance();
+												MongodExecutable mongodExecutable = runtime.prepare(conf);
+												mongodExecutable.start();
+												Mongo mongo = new Mongo("localhost", Integer.getInteger(port));
+												mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test", "",
+																																																			"");
+												mongoDBServer.getDatastore().getDB().dropDatabase();
+								} catch (IOException e) {
+												e.printStackTrace();
+								} catch (MongoDBException e) {
+												e.printStackTrace();
+								}
+				}
+
 	@Test
 	public void doNothing() {
 		return;

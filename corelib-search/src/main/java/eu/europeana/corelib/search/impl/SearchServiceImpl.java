@@ -140,7 +140,7 @@ public class SearchServiceImpl implements SearchService {
     private String mltFields;
 
     @Resource(name = "corelib_solr_mongoServer_metainfo")
-    private EdmMongoServer metainfoMongoServer;
+    protected EdmMongoServer metainfoMongoServer;
 
     @Override
     public FullBean findById(String collectionId, String recordId,

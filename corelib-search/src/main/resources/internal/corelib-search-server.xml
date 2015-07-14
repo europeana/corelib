@@ -16,17 +16,6 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-    <!-- LAZY INIT: the next beans has lazy init, to prevent them from being
-        started when not used... -->
-
-    <bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
-        <property name="followRedirects" value="false"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-    </bean>
-
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
@@ -46,4 +35,15 @@
         <constructor-arg value="#{europeanaProperties['neo4j.index']}"/>
         <constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
     </bean>
+
+    <bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
+        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
+        <property name="followRedirects" value="false"/>
+        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
+        <property name="defaultMaxConnectionsPerHost" value="64"/>
+        <property name="maxTotalConnections" value="125"/>
+    </bean>
+
+
+
 </beans>
