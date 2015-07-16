@@ -13,8 +13,9 @@ import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
-public class ReportingReloadableMessageSource extends ReloadableResourceBundleMessageSource {
+public class ReportingMessageSource extends ResourceBundleMessageSource {
 	
 	@Log
 	private Logger log;
@@ -27,11 +28,11 @@ public class ReportingReloadableMessageSource extends ReloadableResourceBundleMe
 	private String portalServer;
 	
 	// contains lowercase values of earlier reported codes
-	private static List<String> reportedBefore = new ArrayList<String>();
+	private static List<String> reportedBefore = new ArrayList<>();
 
 	// static list of locale tags to ignore completely
-	private static List<String> ignoreList = new ArrayList<String>();
-	
+	private static List<String> ignoreList = new ArrayList<>();
+
 	static {
 		ignoreList.add("notranslate_carousel-item");
 		ignoreList.add("notranslate_featured-partner");
