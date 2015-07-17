@@ -17,11 +17,7 @@
 	">
 
 	<bean id="corelib_solr_mongo_metainfo" class="com.mongodb.Mongo">
-	    <constructor-arg value="#{europeanaProperties['metainfo.mongodb.host']}" type="java.lang.String" />
-	    <constructor-arg value="#{europeanaProperties['metainfo.mongodb.port']}" type="int" />
-	</bean>
-	<bean id="corelib_thumbnail_mongo" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['thumbnail.mongodb.host']}" type="java.lang.String" />
-		<constructor-arg value="#{europeanaProperties['thumbnail.mongodb.port']}" type="int" />
+	    <constructor-arg value="testenv-solr.eanadev.org" type="java.lang.String" />
+	    <constructor-arg value="27017" type="int" />
 	</bean>
 </beans>

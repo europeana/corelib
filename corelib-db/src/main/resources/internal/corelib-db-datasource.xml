@@ -33,14 +33,6 @@
         <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
         <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>
     </bean>
-    <bean id="corelib_solr_mongo_metainfo" class="com.mongodb.Mongo">
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.host']}" type="java.lang.String" />
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.port']}" type="int" />
-    </bean>
-    <bean id="corelib_thumbnail_mongo" class="com.mongodb.Mongo">
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.host']}" type="java.lang.String" />
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.port']}" type="int" />
-    </bean>
 
     <bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_apilog"
           factory-method="createDatastore">

@@ -19,9 +19,8 @@
 	<!-- LAZY INIT: the next beans has lazy init, to prevent them from being 
 		started when not used... -->
 
-	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer"
-		lazy-init="true">
-		<constructor-arg value="#{europeanaProperties['solr.url']}" />
+	<bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
+		<constructor-arg value="http://5.22.148.151:8080/solr/search/" />
 		<property name="followRedirects" value="false" />
 		<property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}" />
 		<property name="defaultMaxConnectionsPerHost" value="64" />
@@ -49,8 +48,7 @@
 		<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
 		<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>
 	</bean>
-	<bean id="corelib_solr_mongoServer"
-		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
+	<bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo" />
 		<constructor-arg value="#{europeanaProperties['mongodb.dbname']}"
 			type="java.lang.String" />
@@ -62,17 +60,9 @@
 
     <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
         <constructor-arg ref="corelib_solr_mongo_metainfo"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['metainfo.mongodb.password']}" type="java.lang.String"/>
-    </bean>
-
-    <bean id="corelib_thumbnail_mongoServer" class="eu.europeana.corelib.server.impl.ThumbnailMongoServerImpl">
-        <constructor-arg ref="corelib_thumbnail_mongo"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.password']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.namespace']}" type="java.lang.String"/>
+        <constructor-arg value="europeana" type="java.lang.String"/>
+        <constructor-arg value="" type="java.lang.String"/>
+        <constructor-arg value="" type="java.lang.String"/>
     </bean>
 
 	<bean id="corelib_solr_idServer"

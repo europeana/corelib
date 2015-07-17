@@ -38,6 +38,8 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.model.ColorSpace;
 import eu.europeana.corelib.definitions.model.Orientation;
 
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
  *
@@ -452,19 +454,15 @@ public class WebResourceImpl implements WebResource {
     }
 
     @Override
-    //@JsonIgnore
     public List<String> getEdmComponentColor() {
-        return null;
-		/*
-		if (webResourceMetaInfo != null
-				&& webResourceMetaInfo.getImageMetaInfo() != null
-				&& webResourceMetaInfo.getImageMetaInfo()
-						.getColorPalette() != null) {
-			return Arrays.asList(webResourceMetaInfo.getImageMetaInfo()
-						.getColorPalette());
-		}
-		return null;
-		*/
+      if (webResourceMetaInfo != null
+        && webResourceMetaInfo.getImageMetaInfo() != null
+        && webResourceMetaInfo.getImageMetaInfo()
+          .getColorPalette() != null) {
+       return Arrays.asList(webResourceMetaInfo.getImageMetaInfo()
+          .getColorPalette());
+      }
+      return null;
     }
 
     @Override

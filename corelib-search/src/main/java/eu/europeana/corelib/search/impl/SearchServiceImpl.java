@@ -145,9 +145,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String collectionId, String recordId,
                              boolean similarItems) throws MongoDBException {
-        return findById(
-                EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
-                similarItems);
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
+                        similarItems
+                       );
     }
 
     private void injectWebMetaInfo(final FullBean fullBean) {
@@ -224,13 +224,20 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
+
+        System.out.println ("adding the metainfo");
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
             WebResourceMetaInfoImpl webMetaInfo = null;
 
+            System.out.println ("Record Id is: " + fullBean.getAbout() + " Id:" + fullBean.getId());
+
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
-                final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8).hash();
+                final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
+                                                             .putString("-", Charsets.UTF_8)
+                                                             .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+
 
                 final String webMetaInfoId = hashCodeAbout.toString();
                 if (webMetaInfoId != null) {
@@ -242,8 +249,9 @@ public class SearchServiceImpl implements SearchService {
             // Locate the technical meta data from the aggregation is shown by
             if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
                 final HashCode hashCodeIsShownBy = hf.newHasher()
-                                                     .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(),
-                                                                Charsets.UTF_8).hash();
+                                                     .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
+                                                     .putString("-", Charsets.UTF_8)
+                                                     .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
                 final String webMetaInfoId = hashCodeIsShownBy.toString();
                 if (webMetaInfoId != null) {
@@ -272,6 +280,7 @@ public class SearchServiceImpl implements SearchService {
                 System.out.println(Arrays.deepToString(urls.toArray()));
             }
 
+            System.out.println ("Getting metainfo from about aggregation");
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
@@ -279,9 +288,13 @@ public class SearchServiceImpl implements SearchService {
 
                 WebResourceMetaInfoImpl webMetaInfo = null;
 
+                System.out.println ("Record Id: " + aggregation.getAbout() + " " + " Id: " + aggregation.getId());
+                System.out.println ("Full Bean Record Id: " + fullBean.getAbout());
+
                 if (webResource.getAbout() != null) {
                     final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
-                                                     .hash();
+                                                     .putString("-", Charsets.UTF_8)
+                                                     .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
                     // Locate the technical meta data from the web resurce about
                     final String webMetaInfoId = hashCodeAbout.toString();
@@ -293,9 +306,9 @@ public class SearchServiceImpl implements SearchService {
                 // Locate the technical meta data from the aggregation is shown
                 // by
                 if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    final HashCode hashCodeIsShownBy = hf.newHasher()
-                                                         .putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
-                                                         .hash();
+                    final HashCode hashCodeIsShownBy = hf.newHasher().putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                                                                     .putString("-", Charsets.UTF_8)
+                                                                     .putString(aggregation.getAbout(), Charsets.UTF_8).hash();
 
                     final String webMetaInfoId = hashCodeIsShownBy.toString();
                     if (webMetaInfoId != null) {
@@ -316,7 +329,9 @@ public class SearchServiceImpl implements SearchService {
         long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        System.out.println ("Injecting metainfo: ");
         injectWebMetaInfo(fullBean);
+        System.out.println ("Injected metainfo");
 
         if (fullBean != null && isHierarchy(fullBean.getAbout())) {
             for (Proxy prx : fullBean.getProxies()) {
@@ -570,6 +585,9 @@ public class SearchServiceImpl implements SearchService {
                     query.setExecutedQuery(solrQuery.toString());
                     System.out.println("Solr query: " + solrQuery);
                     QueryResponse queryResponse = solrServer.query(solrQuery);
+
+                    log.error("Solr Url: " + solrServer.toString());
+
                     logTime("search", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse
