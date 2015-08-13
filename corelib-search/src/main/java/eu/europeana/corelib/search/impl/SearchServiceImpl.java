@@ -408,13 +408,15 @@ public class SearchServiceImpl implements SearchService {
 
                 solrQuery.setRows(query.getPageSize());
                 solrQuery.setStart(query.getStart());
+                solrQuery.setSort(query.getSort(),
+                        (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
 
                 // These are going to change when we import ASSETS as well
                 // solrQuery.setQueryType(QueryType.ADVANCED.toString());
                 // query.setQueryType(solrQuery.getQueryType());
 
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-                solrQuery.setSortField("score", ORDER.desc);
+//                solrQuery.setSortField("score", ORDER.desc);
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
                 if (query.getParameters() != null) {
