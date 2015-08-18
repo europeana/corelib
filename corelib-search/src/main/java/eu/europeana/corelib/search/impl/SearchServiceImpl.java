@@ -416,7 +416,7 @@ public class SearchServiceImpl implements SearchService {
                 // query.setQueryType(solrQuery.getQueryType());
 
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-                solrQuery.setSortField("score", ORDER.desc);
+                solrQuery.setSortField("score", (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
                 if (query.getParameters() != null) {

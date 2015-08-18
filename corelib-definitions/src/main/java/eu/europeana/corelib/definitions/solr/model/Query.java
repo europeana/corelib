@@ -228,7 +228,9 @@ public class Query implements Cloneable {
 
 	public Query setSort(String sort) {
 		String[] parts;
-		if (!sort.matches(".*\\s.*") && sort.length() > 0) {
+		if (sort == null || sort.isEmpty()) {
+			this.sort = "";
+		} else if (!sort.matches(".*\\s.*") && sort.length() > 0) {
 			this.sort = sort;
 		} else if (sort.matches(".+\\s(asc|ASC|desc|DESC)(ending|ENDING)?")) {
 			parts = sort.split("\\s");
