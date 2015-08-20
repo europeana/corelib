@@ -408,6 +408,8 @@ public class SearchServiceImpl implements SearchService {
 
                 solrQuery.setRows(query.getPageSize());
                 solrQuery.setStart(query.getStart());
+
+                // setSortField is DEPRECATED, replaced it with setSort
                 if (!query.getSort().equals("")) {
                     solrQuery.setSort(query.getSort(),
                             (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
@@ -418,8 +420,6 @@ public class SearchServiceImpl implements SearchService {
                 // solrQuery.setQueryType(QueryType.ADVANCED.toString());
                 // query.setQueryType(solrQuery.getQueryType());
 
-                // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-//                solrQuery.setSortField("score", (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
                 if (query.getParameters() != null) {
