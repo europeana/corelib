@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.service.inverseLogic;
+package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
 import java.util.HashMap;
 import java.util.Map;

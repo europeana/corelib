@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.ImagePropertyExtractor;
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.MediaTypeEncoding;
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.TagEncoding;
+import eu.europeana.corelib.definitions.model.facets.logic.ImageTagExtractor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -251,20 +255,106 @@ public class Query implements Cloneable {
 	 * because it is a special query facet
 	 */
 	private void replaceSpecialFacets() {
-		List<String> additionalFacets = new ArrayList<String>();
-		for (String facet : facets) {
-			if (StringUtils.equals("DEFAULT", facet)) {
-				additionalFacets.addAll(new ArrayList<String>(defaultFacets));
-			} else if (StringUtils.equals("REUSABILITY", facet)) {
-				// skip it
-			} else {
-				additionalFacets.add(facet);
-			}
-		}
-		facets = additionalFacets;
+    boolean ok = false;
+		  List<String> additionalFacets = new ArrayList<String>();
+				for (String facet: facets) {
+        if (StringUtils.equalsIgnoreCase("DEFAULT", facet)) {
+            additionalFacets.addAll(defaultFacets);
+        }
+        else if (StringUtils.equalsIgnoreCase("MEDIA", facet)) {
+            additionalFacets.add("has_media");
+        }
+        else if (StringUtils.equalsIgnoreCase("THUMBNAIL", facet)) {
+            additionalFacets.add("has_thumbnails");
+        }
+        else if (StringUtils.equalsIgnoreCase("TEXT_FULLTEXT", facet)) {
+            additionalFacets.add("is_fulltext");
+        }
+        else if (StringUtils.equalsIgnoreCase("REUSABILITY", facet)) {
+            continue;
+        }
+        /*
+        else if (StringUtils.equalsIgnoreCase("MIME_TYPE", facet)) {
+           ok = true;
+           for (final MediaTypeEncoding mediaTypeEncoding: MediaTypeEncoding.values()) {
+               addFacetQuery(new QueryFacet("filter_tags:" + mediaTypeEncoding.getEncodedValue(), "filter_tags"));
+           }
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_SIZE", facet)) {
+           ok = true;
+           final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+           generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (2 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (3 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (4 << TagEncoding.IMAGE_SIZE.getBitPos())
+                                 );
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_COLOUR", facet) ||
+                 StringUtils.equalsIgnoreCase("IMAGE_COLOR", facet)) {
+          ok = true;
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_GREYSCALE", facet) ||
+                 StringUtils.equalsIgnoreCase("IMAGE_GRAYSCALE", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
+                                 tag | (2 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
+                                 tag | (3 << TagEncoding.IMAGE_COLOURSPACE.getBitPos())
+                                );
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_ASPECTRATIO", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos()),
+                                 tag | (2 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos())
+                                );
+        }
+        else if (StringUtils.equalsIgnoreCase("VIODE_HD", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_QUALITY.getBitPos()),
+                                   tag | (0 << TagEncoding.VIDEO_QUALITY.getBitPos())
+                                  );
+        }
+        else if (StringUtils.equalsIgnoreCase("VIDEO_DURATION", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_DURATION.getBitPos()),
+                                   tag | (2 << TagEncoding.VIDEO_DURATION.getBitPos()),
+                                   tag | (3 << TagEncoding.VIDEO_DURATION.getBitPos())
+                                  );
+        }
+        else if (StringUtils.equalsIgnoreCase("SOUND_DURATION", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
+                                 tag | (0 << TagEncoding.SOUND_DURATION.getBitPos())
+                                 );
+        }
+        else if (StringUtils.equalsIgnoreCase("SOUND_HQ", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
+                                   tag | (2 << TagEncoding.SOUND_DURATION.getBitPos())
+                                  );
+        }
+        */
+        else additionalFacets.add(facet);
+    }
+		  facets = additionalFacets;
 	}
 
-	public boolean isApiQuery() {
+    private void generateFacetTagQuery (int ... tags) {
+        if (null == tags || 0 == tags.length) {
+            return ;
+        }
+
+        for (final int tag: tags) {
+            addFacetQuery(new QueryFacet("facet_tags:" + tag, "facet_tags"));
+        }
+    }
+
+    public boolean isApiQuery() {
 		return apiQuery;
 	}
 

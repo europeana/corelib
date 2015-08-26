@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.service.domain;
+package eu.europeana.corelib.definitions.model.facets.logic;
 
 /**
  * An enum of possible image orientations.

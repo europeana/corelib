@@ -26,7 +26,7 @@
 	<bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig" />
 
 	<bean id="harvesterClient" class="eu.europeana.harvester.client.HarvesterClientImpl">
-		<constructor-arg ref="morphiaDataStore" />
+		<constructor-arg value="#{morphiaDataStore.getDatastore()}" />
 		<constructor-arg ref="harvesterClientConfig" />
 	</bean>
 

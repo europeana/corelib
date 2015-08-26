@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.service.logic;
+package eu.europeana.corelib.definitions.model.facets.logic;
 
 /**
  * Extracts the pure tags from an audio resource and generates the fake tags.

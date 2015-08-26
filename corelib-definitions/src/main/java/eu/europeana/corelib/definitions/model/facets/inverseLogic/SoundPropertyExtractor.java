@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.service.inverseLogic;
+package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
 public class SoundPropertyExtractor {
     //public static final Integer mask = (1 << 25) - 1;

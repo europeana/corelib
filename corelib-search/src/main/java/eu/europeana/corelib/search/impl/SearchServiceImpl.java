@@ -46,13 +46,13 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
-import eu.europeana.corelib.search.service.domain.ImageOrientation;
-import eu.europeana.corelib.search.service.inverseLogic.MediaTypeEncoding;
-import eu.europeana.corelib.search.service.inverseLogic.TagEncoding;
-import eu.europeana.corelib.search.service.logic.CommonTagExtractor;
-import eu.europeana.corelib.search.service.logic.ImageTagExtractor;
-import eu.europeana.corelib.search.service.logic.SoundTagExtractor;
-import eu.europeana.corelib.search.service.logic.VideoTagExtractor;
+import eu.europeana.corelib.definitions.model.facets.logic.ImageOrientation;
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.MediaTypeEncoding;
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.TagEncoding;
+import eu.europeana.corelib.definitions.model.facets.logic.CommonTagExtractor;
+import eu.europeana.corelib.definitions.model.facets.logic.ImageTagExtractor;
+import eu.europeana.corelib.definitions.model.facets.logic.SoundTagExtractor;
+import eu.europeana.corelib.definitions.model.facets.logic.VideoTagExtractor;
 import eu.europeana.corelib.search.utils.SearchUtils;
 import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
@@ -151,6 +151,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private void injectWebMetaInfo(final FullBean fullBean) {
+        if (null == fullBean) {
+            log.error("FullBean is null when injecting web meta info");
+            return ;
+        }
+
+        if (null == fullBean.getAggregations() || fullBean.getAggregations().isEmpty()) {
+            log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+            return ;
+        }
 
         // Temp fix for missing web resources
         Aggregation aggregationFix = fullBean.getAggregations().get(0);

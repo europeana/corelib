@@ -1,6 +1,6 @@
 package eu.europeana.corelib.search.service.impl;
 
-import eu.europeana.corelib.search.service.inverseLogic.*;
+import eu.europeana.corelib.definitions.model.facets.inverseLogic.*;
 
 public class FacetLabelExtractor {
 

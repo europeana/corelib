@@ -1,6 +1,5 @@
-package eu.europeana.corelib.search.service.logic;
+package eu.europeana.corelib.definitions.model.facets.logic;
 
-import eu.europeana.corelib.search.service.domain.ImageOrientation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

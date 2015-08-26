@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.service.inverseLogic;
+package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
 public enum TagEncoding {
     TAG_TYPE(28, 3),
