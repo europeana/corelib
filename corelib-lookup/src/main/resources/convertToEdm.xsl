@@ -704,10 +704,10 @@
 							</xsl:choose>
 						</xsl:element>
 					</xsl:if>
-					<xsl:if test="//*/europeana_aggregation_ore_aggregatedCHO">
+					<xsl:if test="//*/europeana_aggregation_edm_aggregatedCHO">
 						<xsl:element name="edm:aggregatedCHO">
 							<xsl:attribute name="rdf:resource">
-						<xsl:value-of select="europeana_aggregation_ore_aggregatedCHO" />
+						<xsl:value-of select="europeana_aggregation_edm_aggregatedCHO" />
 					</xsl:attribute>
 						</xsl:element>
 					</xsl:if>
