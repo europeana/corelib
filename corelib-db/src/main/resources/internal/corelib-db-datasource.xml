@@ -39,8 +39,8 @@
         <constructor-arg value="API log"/>
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.apilog.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.apilog.password']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_apilog"
