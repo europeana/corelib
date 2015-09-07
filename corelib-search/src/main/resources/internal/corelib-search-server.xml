@@ -44,6 +44,13 @@
         <property name="maxTotalConnections" value="125"/>
     </bean>
 
+	<bean id="corelib_solr_mongoServer_metainfo"
+		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
+		<constructor-arg ref="corelib_solr_mongo_metainfo" />
+		<constructor-arg value="europeana" type="java.lang.String" />
+        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
+	</bean>
 
 
 </beans>
