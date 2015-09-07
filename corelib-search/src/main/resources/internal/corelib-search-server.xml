@@ -54,14 +54,6 @@
         <constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
     </bean>
 
-    <bean id="corelib_solr_solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true">
-        <constructor-arg value="#{europeanaProperties['solr.url']}"/>
-        <property name="followRedirects" value="false"/>
-        <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}"/>
-        <property name="defaultMaxConnectionsPerHost" value="64"/>
-        <property name="maxTotalConnections" value="125"/>
-    </bean>
-
 	<bean id="corelib_solr_mongoServer_metainfo"
 		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
 		<constructor-arg ref="corelib_solr_mongo_metainfo" />
