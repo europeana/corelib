@@ -494,7 +494,7 @@ public class EdmUtils {
 			addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
 			addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
 
-			if (aggr.getEdmUgc() != null) {
+			if (aggr.getEdmUgc() != null && !aggr.getEdmUgc().equalsIgnoreCase("false")) {
 				Ugc ugc = new Ugc();
 
 				ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr
