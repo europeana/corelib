@@ -23,6 +23,7 @@
 			type="java.lang.String" />
 	</bean>
 
+    <!-- FIXME: Remove hardcoded values! -->
 	<bean id="corelib_solr_mongo_metainfo" class="com.mongodb.Mongo">
 		<constructor-arg value="testenv-solr.eanadev.org"
 			type="java.lang.String" />
