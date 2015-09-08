@@ -46,6 +46,12 @@
 			<artifactId>corelib-logging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>eu.europeana.corelib</groupId>
+            <artifactId>corelib-media-storage</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
