@@ -34,12 +34,12 @@
 		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
 
 	<bean id = "SwiftConfiguration" class = "eu.europeana.corelib.service.impl.swift.SwiftConfiguration">
-		<constructor-arg value="https://auth.hydranodes.de:5000/v2.0" type="java.lang.String"/> <!-- auth url -->
-		<constructor-arg value="d35f3a21-cf35-48a0-a035-99bfc2252528.swift.tenant@a9s.eu" type="java.lang.String"/> <!-- tenant name -->
-		<constructor-arg value="c9b9ddb5-4f64-4e08-9237-1d6848973ee1.swift.user@a9s.eu" type="java.lang.String"/> <!-- user name -->
-		<constructor-arg value="78ae7i9XO3O7CcdkDa87" type="java.lang.String"/> <!-- pass -->
-		<constructor-arg value="crf-test" type="java.lang.String"/> <!-- container -->
-		<constructor-arg value="hydranodes" type="java.lang.String"/> <!-- region -->
+		<constructor-arg value= "#{europeanaProperties['contentreuse.swift.authUrl']}" type="java.lang.String"/> <!-- auth url -->
+		<constructor-arg value="#{europeanaProperties['contentreuse.swift.tenantName']}" type="java.lang.String"/> <!-- tenant name -->
+		<constructor-arg value="#{europeanaProperties['contentreuse.swift.userName']}" type="java.lang.String"/> <!-- user name -->
+		<constructor-arg value="#{europeanaProperties['contentreuse.swift.password']}" type="java.lang.String"/> <!-- pass -->
+		<constructor-arg value="#{europeanaProperties['contentreuse.swift.container']}" type="java.lang.String"/> <!-- container -->
+		<constructor-arg value="#{europeanaProperties['contentreuse.swift.region']}" type="java.lang.String"/> <!-- region -->
 	</bean>
     <bean id="corelib_mediaStorageClient"
           class="eu.europeana.corelib.service.impl.swift.SwiftMediaStorageClientImpl" >
