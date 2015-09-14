@@ -40,6 +40,8 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 	private Mongo mongoServer;
 	private String databaseName;
 	private Datastore datastore;
+	private String username;
+	private String password;
 
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getDatastore()
@@ -68,6 +70,16 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		createDatastore();
 	}
 
+	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName,String username,String password) {
+		log.info("VocabularyMongoServer is instantiated");
+		this.mongoServer = mongoServer;
+
+		this.databaseName = databaseName;
+		this.username = username;
+		this.password = password;
+		createDatastoreWithCredentials();
+	}
+
 	public VocabularyMongoServerImpl() {
 		
 	}
@@ -80,12 +92,17 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
 		datastore = morphia.createDatastore(mongoServer, databaseName);
-		System.out.println(mongoServer.getAddress().getHost());
-		System.out.println(mongoServer.getAddress().getPort());
 		datastore.ensureIndexes();
 		log.info("VocabularyMongoServer datastore is created");
 	}
+	private void createDatastoreWithCredentials() {
+		Morphia morphia = new Morphia();
+		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
+		datastore = morphia.createDatastore(mongoServer, databaseName,username, password.toCharArray());
+		datastore.ensureIndexes();
+		log.info("VocabularyMongoServer datastore is created");
+	}
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getControlledVocabulary(java.lang.String, java.lang.String)
 	 */
