@@ -49,7 +49,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     @Field("cc_skos_broader")
     private String[] edmConceptBroaderTerm;
 
-    @Field("cc_skos_broader")
+
     private List<Map<String, String>> edmConceptBroaderLabel;
 
     @Field("cc_skos_broader.*")
@@ -152,7 +152,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Override
     public List<Map<String, String>> getEdmConceptBroaderLabel() {
-        return edmConceptBroaderLabel;
+        return null;
     }
 
     @Override
