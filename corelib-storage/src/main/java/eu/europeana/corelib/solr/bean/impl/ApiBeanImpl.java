@@ -59,7 +59,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     private String[] edmTimespanBroaderTerm;
 
     @Field("ts_dcterms_isPartOf")
-    private List<Map<String, String>> edmTimespanBroaderLabel;
+    private List<Map<String,String>> edmTimespanBroaderLabel;
 
     @Field("europeana_recordHashFirstSix")
     private String[] recordHashFirstSix;
@@ -86,7 +86,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     private String[] edmPlaceBroaderTerm;
 
     @Field("pl_skos_altLabel")
-    private List<Map<String, String>> edmPlaceAltLabel;
+    private List<Map<String,String>> edmPlaceAltLabel;
 
     @Field("pl_skos_altLabel.*")
     private Map<String, List<String>> edmPlaceAltLabelLangAware;
@@ -106,7 +106,21 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     }
 
     @Override
-    public List<Map<String, String>> getEdmPlaceAltLabel() {
+    public List<Map<String,String>> getEdmPlaceAltLabel() {
+        if (edmPlaceAltLabel != null && edmPlaceAltLabel.size() > 0) {
+            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+            for (int i = 0, max = edmPlaceAltLabel.size(); i < max; i++) {
+                Object label = edmPlaceAltLabel.get(i);
+                if (label.getClass().getName() == "java.lang.String") {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("def", (String) label);
+                    list.add(map);
+                } else {
+                    list.add((Map<String, String>) label);
+                }
+            }
+            return list;
+        }
         return edmPlaceAltLabel;
     }
 
