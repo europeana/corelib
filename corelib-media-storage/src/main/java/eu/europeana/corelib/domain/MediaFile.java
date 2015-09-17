@@ -183,17 +183,4 @@ public class MediaFile {
         return size;
     }
 
-    public MediaFile withMetaInfo(String[] colorPalette) {
-        final Map<String, String> newMetaData = new HashMap<>();
-        int i = 0;
-        for(String color : colorPalette) {
-            newMetaData.put("color"+i, color);
-            i++;
-        }
-        newMetaData.put("size", String.valueOf(this.size));
-
-        return new MediaFile(this.id, this.source, this.name, this.aliases, this.contentMd5, this.originalUrl,
-                this.createdAt, this.content, this.versionNumber, this.contentType, newMetaData, this.size);
-    }
-
 }
