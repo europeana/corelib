@@ -230,12 +230,9 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
-        System.out.println("adding the metainfo");
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
             WebResourceMetaInfoImpl webMetaInfo = null;
-
-            System.out.println("Record Id is: " + fullBean.getAbout() + " Id:" + fullBean.getId());
 
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
@@ -285,16 +282,12 @@ public class SearchServiceImpl implements SearchService {
                 System.out.println(Arrays.deepToString(urls.toArray()));
             }
 
-            System.out.println("Getting metainfo from about aggregation");
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
                 }
 
                 WebResourceMetaInfoImpl webMetaInfo = null;
-
-                System.out.println("Record Id: " + aggregation.getAbout() + " " + " Id: " + aggregation.getId());
-                System.out.println("Full Bean Record Id: " + fullBean.getAbout());
 
                 if (webResource.getAbout() != null) {
                     final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
@@ -334,9 +327,7 @@ public class SearchServiceImpl implements SearchService {
         long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-        System.out.println("Injecting metainfo: ");
         injectWebMetaInfo(fullBean);
-        System.out.println("Injected metainfo");
 
         if (fullBean != null && isHierarchy(fullBean.getAbout())) {
             for (Proxy prx : fullBean.getProxies()) {
@@ -588,12 +579,11 @@ public class SearchServiceImpl implements SearchService {
                         log.debug("Solr query is: " + solrQuery);
                     }
                     query.setExecutedQuery(solrQuery.toString());
-                    System.out.println("Solr query: " + solrQuery);
                     QueryResponse queryResponse = solrServer.query(solrQuery);
 
                     log.error("Solr Url: " + solrServer.toString());
 
-                    logTime("search", queryResponse.getElapsedTime());
+                    logTime("calculateTag", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse
                             .getBeans(beanClazz));
@@ -743,7 +733,7 @@ public class SearchServiceImpl implements SearchService {
                     log.debug("Solr query is: " + solrQuery);
                 }
                 QueryResponse queryResponse = solrServer.query(solrQuery);
-                logTime("search", queryResponse.getElapsedTime());
+                logTime("calculateTag", queryResponse.getElapsedTime());
 
                 resultSet.setResults((List<T>) queryResponse
                         .getBeans(beanClazz));
@@ -1019,11 +1009,10 @@ public class SearchServiceImpl implements SearchService {
     // Filter tag generation
 
     @Override
-    // TODO : PS - rename to "calculate*"
-    public Integer search(Integer mediaType, String mimeType, String imageSize,
-                          Boolean imageColor, Boolean imageGrayScale,
-                          String imageAspectRatio, String imageColorPalette, Boolean soundHQ,
-                          String soundDuration, Boolean videoHQ, String videoDuration) {
+    public Integer calculateTag(Integer mediaType, String mimeType, String imageSize,
+                                Boolean imageColor, Boolean imageGrayScale,
+                                String imageAspectRatio, String imageColorPalette, Boolean soundHQ,
+                                String soundDuration, Boolean videoHQ, String videoDuration) {
         Integer tag = 0;
 
         if (mimeType != null) {
@@ -1048,24 +1037,23 @@ public class SearchServiceImpl implements SearchService {
 
         switch (mediaType) {
             case 1:
-                tag = searchImage(mimeType, imageSize, imageColor, imageGrayScale,
+                tag = calculateImageTag(mimeType, imageSize, imageColor, imageGrayScale,
                         imageAspectRatio, imageColorPalette);
                 break;
             case 2:
-                tag = searchSound(mimeType, soundHQ, soundDuration);
+                tag = calculateSoundTag(mimeType, soundHQ, soundDuration);
                 break;
             case 3:
-                tag = searchVideo(mimeType, videoHQ, videoDuration);
+                tag = calculateVideoTag(mimeType, videoHQ, videoDuration);
                 break;
         }
 
         return tag;
     }
 
-    // TODO : PS - rename to "calculate*"
-    private Integer searchImage(final String mimeType, final String imageSize,
-                                final Boolean imageColor, final Boolean imageGrayScale,
-                                final String imageAspectRatio, final String imageColorPalette) {
+    private Integer calculateImageTag(final String mimeType, final String imageSize,
+                                      final Boolean imageColor, final Boolean imageGrayScale,
+                                      final String imageAspectRatio, final String imageColorPalette) {
         ImageOrientation imageOrientation = null;
         if (imageAspectRatio != null) {
             if (imageAspectRatio.equals("portrait")) {
@@ -1083,16 +1071,6 @@ public class SearchServiceImpl implements SearchService {
         final Integer aspectRatioCode = ImageTagExtractor.getAspectRatioCode(imageOrientation);
         final Integer colorCode = ImageTagExtractor.getColorCode(imageColorPalette);
 
-        System.out.println("mediaTypeCode: " + mediaTypeCode + " " + Integer.toBinaryString(mediaTypeCode));
-        System.out.println("mimeTypeCode: " + mimeTypeCode + " " + Integer.toBinaryString(mimeTypeCode));
-        System.out.println("fileSizeCode: " + fileSizeCode + " " + Integer.toBinaryString(fileSizeCode));
-        System.out.println("colorSpaceCode: " + colorSpaceCode + " " + Integer.toBinaryString(colorSpaceCode));
-        System.out
-                .println("aspectRatioCode: " + aspectRatioCode + " " + Integer.toBinaryString(aspectRatioCode));
-
-        System.out.println("colorCode: " + colorCode + " " + Integer.toBinaryString(colorCode));
-
-
         final Integer tag = mediaTypeCode |
                 mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
                 fileSizeCode << TagEncoding.IMAGE_SIZE.getBitPos() |
@@ -1100,14 +1078,11 @@ public class SearchServiceImpl implements SearchService {
                 aspectRatioCode << TagEncoding.IMAGE_ASPECTRATIO.getBitPos() |
                 colorCode << TagEncoding.IMAGE_COLOUR.getBitPos();
 
-        System.out.println("Tag is : " + tag + "   " + Integer.toBinaryString(tag));
-
         return tag;
     }
 
-    // TODO : PS - rename to "calculate*"
-    private Integer searchSound(final String mimeType, final Boolean soundHQ,
-                                final String duration) {
+    private Integer calculateSoundTag(final String mimeType, final Boolean soundHQ,
+                                      final String duration) {
         final Integer mediaTypeCode = MediaTypeEncoding.SOUND.getEncodedValue();
         final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
         final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
@@ -1119,9 +1094,8 @@ public class SearchServiceImpl implements SearchService {
                 durationCode << TagEncoding.SOUND_DURATION.getBitPos();
     }
 
-    // TODO : PS - rename to "calculate*"
-    private Integer searchVideo(final String mimeType,
-                                final Boolean videoQuality, final String duration) {
+    private Integer calculateVideoTag(final String mimeType,
+                                      final Boolean videoQuality, final String duration) {
         final Integer mediaTypeCode = MediaTypeEncoding.VIDEO.getEncodedValue();
         final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
         final Integer qualityCode = VideoTagExtractor.getQualityCode(videoQuality);
@@ -1134,14 +1108,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
-        System.out.println("Meta-Info for: " + webResourceMetaInfoId);
         final DB db = metainfoMongoServer.getDatastore().getDB();
         final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
 
         final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);
         final DBCursor cursor = webResourceMetaInfoColl.find(query);
-
-        System.out.println("Found: " + cursor.count());
 
         final Type type = new TypeToken<WebResourceMetaInfoImpl>() {
         }.getType();
