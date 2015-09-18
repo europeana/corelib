@@ -33,9 +33,6 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.definitions.model.facets.inverseLogic.MediaTypeEncoding;
-import eu.europeana.corelib.definitions.model.facets.inverseLogic.TagEncoding;
-import eu.europeana.corelib.definitions.model.facets.logic.*;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -1006,106 +1003,6 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
-    // Filter tag generation
-
-    @Override
-    public Integer calculateTag(Integer mediaType, String mimeType, String imageSize,
-                                Boolean imageColor, Boolean imageGrayScale,
-                                String imageAspectRatio, String imageColorPalette, Boolean soundHQ,
-                                String soundDuration, Boolean videoHQ, String videoDuration) {
-        Integer tag = 0;
-
-        if (mimeType != null) {
-            mimeType = mimeType.toLowerCase();
-        }
-        if (imageSize != null) {
-            imageSize = imageSize.toLowerCase();
-        }
-        if (imageAspectRatio != null) {
-            imageAspectRatio = imageAspectRatio.toLowerCase();
-        }
-
-        if (imageColorPalette != null) {
-            imageColorPalette = imageColorPalette.toUpperCase();
-        }
-        if (soundDuration != null) {
-            soundDuration = soundDuration.toLowerCase();
-        }
-        if (videoDuration != null) {
-            videoDuration = videoDuration.toLowerCase();
-        }
-
-        switch (mediaType) {
-            case 1:
-                tag = calculateImageTag(mimeType, imageSize, imageColor, imageGrayScale,
-                        imageAspectRatio, imageColorPalette);
-                break;
-            case 2:
-                tag = calculateSoundTag(mimeType, soundHQ, soundDuration);
-                break;
-            case 3:
-                tag = calculateVideoTag(mimeType, videoHQ, videoDuration);
-                break;
-        }
-
-        return tag;
-    }
-
-    private Integer calculateImageTag(final String mimeType, final String imageSize,
-                                      final Boolean imageColor, final Boolean imageGrayScale,
-                                      final String imageAspectRatio, final String imageColorPalette) {
-        ImageOrientation imageOrientation = null;
-        if (imageAspectRatio != null) {
-            if (imageAspectRatio.equals("portrait")) {
-                imageOrientation = ImageOrientation.PORTRAIT;
-            }
-            if (imageAspectRatio.equals("landscape")) {
-                imageOrientation = ImageOrientation.LANDSCAPE;
-            }
-        }
-
-        final Integer mediaTypeCode = MediaTypeEncoding.IMAGE.getEncodedValue();
-        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
-        final Integer fileSizeCode = ImageTagExtractor.getSizeCode(imageSize);
-        final Integer colorSpaceCode = ImageTagExtractor.getColorSpaceCode(imageColor, imageGrayScale);
-        final Integer aspectRatioCode = ImageTagExtractor.getAspectRatioCode(imageOrientation);
-        final Integer colorCode = ImageTagExtractor.getColorCode(imageColorPalette);
-
-        final Integer tag = mediaTypeCode |
-                mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
-                fileSizeCode << TagEncoding.IMAGE_SIZE.getBitPos() |
-                colorSpaceCode << TagEncoding.IMAGE_COLOURSPACE.getBitPos() |
-                aspectRatioCode << TagEncoding.IMAGE_ASPECTRATIO.getBitPos() |
-                colorCode << TagEncoding.IMAGE_COLOUR.getBitPos();
-
-        return tag;
-    }
-
-    private Integer calculateSoundTag(final String mimeType, final Boolean soundHQ,
-                                      final String duration) {
-        final Integer mediaTypeCode = MediaTypeEncoding.SOUND.getEncodedValue();
-        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
-        final Integer qualityCode = SoundTagExtractor.getQualityCode(soundHQ);
-        final Integer durationCode = SoundTagExtractor.getDurationCode(duration);
-
-        return mediaTypeCode |
-                mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
-                qualityCode << TagEncoding.SOUND_QUALITY.getBitPos() |
-                durationCode << TagEncoding.SOUND_DURATION.getBitPos();
-    }
-
-    private Integer calculateVideoTag(final String mimeType,
-                                      final Boolean videoQuality, final String duration) {
-        final Integer mediaTypeCode = MediaTypeEncoding.VIDEO.getEncodedValue();
-        final Integer mimeTypeCode = CommonTagExtractor.getMimeTypeCode(mimeType);
-        final Integer qualityCode = VideoTagExtractor.getQualityCode(videoQuality);
-        final Integer durationCode = VideoTagExtractor.getDurationCode(duration);
-
-        return mediaTypeCode |
-                mimeTypeCode << TagEncoding.MIME_TYPE.getBitPos() |
-                qualityCode << TagEncoding.VIDEO_QUALITY.getBitPos() |
-                durationCode << TagEncoding.VIDEO_DURATION.getBitPos();
-    }
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
         final DB db = metainfoMongoServer.getDatastore().getDB();

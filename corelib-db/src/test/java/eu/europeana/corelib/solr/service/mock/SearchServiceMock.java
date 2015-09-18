@@ -216,12 +216,4 @@ public class SearchServiceMock implements SearchService {
         return false;
     }
 
-    @Override
-    public Integer calculateTag(Integer mediaType, String mimeType, String imageSize, Boolean imageColor,
-                                Boolean imageGrayScale, String imageAspectRatio, String imageColorPalette, Boolean soundHQ,
-                                String soundDuration, Boolean videoHQ, String videoDuration) {
-          throw new NotImplementedException();
-    }
-
-
 }

@@ -49,6 +49,8 @@
 
 	<bean id="corelib_web_SoundCloudApiService" class="eu.europeana.corelib.web.service.impl.SoundCloudApiServiceImpl" />
 
+    <bean id="corelib_web_MediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" />
+
 	<!-- INTERCEPTORS -->
 	<bean id="corelib_web_configInterceptor" class="eu.europeana.corelib.web.interceptor.ConfigInterceptor" />
 
