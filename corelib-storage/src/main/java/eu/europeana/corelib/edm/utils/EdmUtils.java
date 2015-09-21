@@ -627,7 +627,7 @@ public class EdmUtils {
                 List<HexBinaryType> componentColors = new ArrayList<>();
                 for (String componentColor : wr.getEdmComponentColor()) {
                     HexBinaryType type = new HexBinaryType();
-                    type.setHexBinary(componentColor.getBytes());
+                    type.setString(componentColor);
                     type.setDatatype(HEXBINARYDATATYPE);
                     componentColors.add(type);
                 }
