@@ -99,10 +99,10 @@
             </extension>
         </simpleContent>
     </complexType>
-	<
+
 	<simpleType name="hexBinaryString">
 		<restriction base="string">
-			<pattern value="[0-9A-Z]{6}"/>
+			<pattern value="[0-9A-Fa-f]{6}"/>
 		</restriction>
 	</simpleType>
 	<complexType name="AboutType">
