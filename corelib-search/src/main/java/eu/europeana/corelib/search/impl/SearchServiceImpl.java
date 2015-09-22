@@ -520,7 +520,11 @@ public class SearchServiceImpl implements SearchService {
                 // query.setQueryType(solrQuery.getQueryType());
 
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-                solrQuery.setSortField("score", ORDER.desc);
+                solrQuery.addSort("score",ORDER.desc);
+                if(isFieldQuery(solrQuery.getQuery())){
+                    solrQuery.addSort("europeana_id",ORDER.asc);
+                }
+
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
                 if (query.getParameters() != null) {
@@ -613,6 +617,18 @@ public class SearchServiceImpl implements SearchService {
             throw new SolrTypeException(type);
         }
         return resultSet;
+    }
+
+    private boolean isFieldQuery(String query){
+        if(!StringUtils.contains(query,"who:")||!StringUtils.contains(query,"what:")
+                ||!StringUtils.contains(query,"where:")||!StringUtils.contains(query,"when:")
+                ||!StringUtils.contains(query,"title:")){
+            return false;
+        }
+        if(StringUtils.contains(query,":") && !(StringUtils.contains(query," ") && StringUtils.contains(query,"\""))){
+            return true;
+        }
+        return false;
     }
 
     /**
