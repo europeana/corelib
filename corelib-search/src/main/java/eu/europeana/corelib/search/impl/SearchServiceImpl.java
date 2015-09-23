@@ -621,10 +621,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private boolean isFieldQuery(String query){
+        //TODO fix
         String subquery = StringUtils.substringBefore(query,"filter_tags");
-        if(!StringUtils.contains(subquery,"who:")||!StringUtils.contains(subquery,"what:")
-                ||!StringUtils.contains(subquery,"where:")||!StringUtils.contains(subquery,"when:")
-                ||!StringUtils.contains(subquery,"title:")){
+        if(StringUtils.contains(subquery,"who:")||StringUtils.contains(subquery,"what:")
+                ||StringUtils.contains(subquery,"where:")||StringUtils.contains(subquery,"when:")
+                ||StringUtils.contains(subquery,"title:")){
             return false;
         }
         if(StringUtils.contains(subquery,":") && !(StringUtils.contains(subquery.trim()," ") && StringUtils.contains(subquery.trim(),"\""))){
