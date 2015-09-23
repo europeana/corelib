@@ -520,9 +520,11 @@ public class SearchServiceImpl implements SearchService {
                 // query.setQueryType(solrQuery.getQueryType());
 
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-                solrQuery.addSort("score",ORDER.desc);
+
                 if(isFieldQuery(solrQuery.getQuery())){
                     solrQuery.addSort("europeana_id",ORDER.asc);
+                } else {
+                    solrQuery.addSort("score",ORDER.desc);
                 }
 
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
@@ -623,12 +625,13 @@ public class SearchServiceImpl implements SearchService {
     private boolean isFieldQuery(String query){
         //TODO fix
         String subquery = StringUtils.substringBefore(query,"filter_tags");
-        if(StringUtils.contains(subquery,"who:")||StringUtils.contains(subquery,"what:")
-                ||StringUtils.contains(subquery,"where:")||StringUtils.contains(subquery,"when:")
-                ||StringUtils.contains(subquery,"title:")){
+        String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
+        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
+                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
+                ||StringUtils.contains(queryWithoutTags,"title:")){
             return false;
         }
-        if(StringUtils.contains(subquery,":") && !(StringUtils.contains(subquery.trim()," ") && StringUtils.contains(subquery.trim(),"\""))){
+        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
             return true;
         }
         return false;
