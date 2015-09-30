@@ -410,7 +410,7 @@ public class SearchServiceImpl implements SearchService {
                 solrQuery.setStart(query.getStart());
 
                 // setSortField is DEPRECATED, replaced it with setSort
-                if (!query.getSort().equals("")) {
+                if (query.getSort() != null && !query.getSort().equals("")) {
                     solrQuery.setSort(query.getSort(),
                             (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 } else {
