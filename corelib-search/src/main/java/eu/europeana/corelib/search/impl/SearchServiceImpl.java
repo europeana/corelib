@@ -104,6 +104,7 @@ public class SearchServiceImpl implements SearchService {
     private static final HashFunction hf = Hashing.md5();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
     private static boolean STARTED = false;
+
     @Resource(name = "corelib_solr_mongoServer")
     protected EdmMongoServer mongoServer;
     @Resource(name = "corelib_solr_mongoServer_id")
@@ -124,9 +125,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String collectionId, String recordId,
                              boolean similarItems) throws MongoDBException {
-        return findById(
-                EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
-                similarItems);
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
+                similarItems
+        );
     }
 
     private void injectWebMetaInfo(final FullBean fullBean) {
@@ -134,8 +135,7 @@ public class SearchServiceImpl implements SearchService {
         // Temp fix for missing web resources
         Aggregation aggregationFix = fullBean.getAggregations().get(0);
         if (aggregationFix.getEdmIsShownBy() != null) {
-            String isShownBy = fullBean.getAggregations().get(0)
-                    .getEdmIsShownBy();
+            String isShownBy = fullBean.getAggregations().get(0).getEdmIsShownBy();
             boolean containsWr = false;
 
             if (aggregationFix.getWebResources() != null) {
@@ -146,8 +146,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
             if (!containsWr) {
-                List<WebResource> wResources = (List<WebResource>) aggregationFix
-                        .getWebResources();
+                List<WebResource> wResources = (List<WebResource>) aggregationFix.getWebResources();
                 if (wResources == null) {
                     wResources = new ArrayList<>();
                 }
@@ -170,8 +169,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
             if (!containsWr) {
-                List<WebResource> wResources = (List<WebResource>) aggregationFix
-                        .getWebResources();
+                List<WebResource> wResources = (List<WebResource>) aggregationFix.getWebResources();
                 if (wResources == null) {
                     wResources = new ArrayList<>();
                 }
@@ -195,8 +193,7 @@ public class SearchServiceImpl implements SearchService {
                     }
                 }
                 if (!containsWr) {
-                    List<WebResource> wResources = (List<WebResource>) aggregationFix
-                            .getWebResources();
+                    List<WebResource> wResources = (List<WebResource>) aggregationFix.getWebResources();
                     if (wResources == null) {
                         wResources = new ArrayList<>();
                     }
@@ -241,8 +238,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean resolve(String collectionId, String recordId,
                             boolean similarItems) throws SolrTypeException {
-        return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId,
-                recordId), similarItems);
+        return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId, recordId), similarItems);
     }
 
     @Override
@@ -409,16 +405,22 @@ public class SearchServiceImpl implements SearchService {
                 solrQuery.setRows(query.getPageSize());
                 solrQuery.setStart(query.getStart());
 
-                // setSortField is DEPRECATED, replaced it with setSort
-                if (query.getSort() != null && !query.getSort().equals("")) {
-                    solrQuery.setSort(query.getSort(),
-                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
-                } else {
-                    solrQuery.setSort("score", ORDER.desc);
-                }
                 // These are going to change when we import ASSETS as well
                 // solrQuery.setQueryType(QueryType.ADVANCED.toString());
                 // query.setQueryType(solrQuery.getQueryType());
+                // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+
+                // my changes
+                if (query.getSort() != null && !query.getSort().equals("")) {
+                    solrQuery.addSort(query.getSort(),
+                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                }
+                // Yorgos' changes, taken from busymachines branch
+                if (isFieldQuery(solrQuery.getQuery())){
+                    solrQuery.addSort("europeana_id", ORDER.asc);
+                } else {
+                    solrQuery.addSort("score", ORDER.desc);
+                }
 
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
@@ -475,7 +477,7 @@ public class SearchServiceImpl implements SearchService {
                         log.debug("Solr query is: " + solrQuery);
                     }
                     query.setExecutedQuery(solrQuery.toString());
-                    System.out.println("Solr query: " + solrQuery);
+
                     QueryResponse queryResponse = solrServer.query(solrQuery);
                     logTime("search", queryResponse.getElapsedTime());
 
@@ -510,6 +512,21 @@ public class SearchServiceImpl implements SearchService {
             throw new SolrTypeException(type);
         }
         return resultSet;
+    }
+
+    private boolean isFieldQuery(String query){
+        //TODO fix
+        String subquery = StringUtils.substringBefore(query,"filter_tags");
+        String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
+        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
+                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
+                ||StringUtils.contains(queryWithoutTags,"title:")){
+            return false;
+        }
+        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -790,6 +807,7 @@ public class SearchServiceImpl implements SearchService {
         return neo4jServer.isHierarchy(nodeId);
     }
 
+
     @Override
     public List<Neo4jBean> getChildren(String nodeId, int offset) {
         return getChildren(nodeId, offset, 10);
@@ -833,8 +851,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
-        List<Node> children = neo4jServer.getPreceedingSiblings(
-                getNode(nodeId), limit);
+        List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId), limit);
         List<Neo4jBean> beans = new ArrayList<>();
         for (Node child : children) {
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
@@ -850,8 +867,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
-        List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId),
-                limit);
+        List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId), limit);
         List<Neo4jBean> beans = new ArrayList<>();
         for (Node child : children) {
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
@@ -876,8 +892,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Neo4jStructBean getInitialStruct(String nodeId) {
-        return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer
-                .getInitialStruct(nodeId));
+        return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
     }
 
     private enum SuggestionTitle {
