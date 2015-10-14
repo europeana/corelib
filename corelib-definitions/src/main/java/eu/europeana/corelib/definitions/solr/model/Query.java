@@ -44,6 +44,8 @@ import eu.europeana.corelib.utils.model.LanguageVersion;
  */
 public class Query implements Cloneable {
 
+	private String currentCursorMark;
+
 	private final static String OR = " OR ";
 
 	/**
@@ -103,6 +105,7 @@ public class Query implements Cloneable {
 
 	public Query(String query) {
 		this.query = query;
+
 		start = DEFAULT_START;
 		pageSize = DEFAULT_PAGE_SIZE;
 		createAllFacetList();
@@ -158,6 +161,13 @@ public class Query implements Cloneable {
 			this.refinements = StringArrayUtils.EMPTY_ARRAY;
 		}
 		return this;
+	}
+	public String getCurrentCursorMark(){
+		return this.currentCursorMark;
+	}
+
+	public void setCurrentCursorMark(String currentCursorMark){
+		this.currentCursorMark = currentCursorMark;
 	}
 
 	public Query addRefinement(String refinement) {

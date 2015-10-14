@@ -68,6 +68,18 @@ public class ResultSet<T> {
 	private long searchTime;
 
 	/**
+	 * The current pagination cursor
+	 */
+	private String currentCursorMark;
+
+	/**
+	 * The next pagination cursor
+	 */
+	private String nextCursorMark;
+
+
+
+	/**
 	 * GETTERS & SETTTERS
 	 */
 
@@ -137,7 +149,21 @@ public class ResultSet<T> {
 		this.queryFacets = queryFacets;
 		return this;
 	}
+	public String getCurrentCursorMark() {
+		return currentCursorMark;
+	}
 
+	public void setCurrentCursorMark(String currentCursorMark) {
+		this.currentCursorMark = currentCursorMark;
+	}
+
+	public String getNextCursorMark() {
+		return nextCursorMark;
+	}
+
+	public void setNextCursorMark(String nextCursorMark) {
+		this.nextCursorMark = nextCursorMark;
+	}
 	@Override
 	public String toString() {
 		return "ResultSet [query=" + query + ", results=" + results

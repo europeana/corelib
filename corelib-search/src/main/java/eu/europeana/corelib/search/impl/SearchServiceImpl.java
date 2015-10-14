@@ -78,6 +78,7 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.neo4j.graphdb.Node;
@@ -130,6 +131,8 @@ public class SearchServiceImpl implements SearchService {
     private String username;
     @Value("#{europeanaProperties['solr.password']}")
     private String password;
+    @Value("#{europeanaProperties['solr.searchLimit']}")
+    private int searchLimit;
     private String mltFields;
 
     @Resource(name = "corelib_solr_mongoServer_metainfo")
@@ -497,7 +500,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
                                                   Query query) throws SolrTypeException {
-
+        if(query.getStart()!=null && (query.getStart()>searchLimit || query.getPageSize()>searchLimit)){
+            throw new SolrTypeException(ProblemType.SEARCH_LIMIT_REACHED);
+        }
         ResultSet<T> resultSet = new ResultSet<>();
         Class<? extends IdBeanImpl> beanClazz = SearchUtils
                 .getImplementationClass(beanInterface);
@@ -521,10 +526,10 @@ public class SearchServiceImpl implements SearchService {
 
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 
-                if(isFieldQuery(solrQuery.getQuery())){
-                    solrQuery.addSort("europeana_id",ORDER.asc);
+                if (isFieldQuery(solrQuery.getQuery())) {
+                    solrQuery.addSort("europeana_id", ORDER.asc);
                 } else {
-                    solrQuery.addSort("score",ORDER.desc);
+                    solrQuery.addSort("score", ORDER.desc);
                 }
 
                 solrQuery.setTimeAllowed(TIME_ALLOWED);
@@ -622,16 +627,149 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
-    private boolean isFieldQuery(String query){
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IdBean> ResultSet<T> paginate(Class<T> beanInterface,
+                                                    Query query) throws SolrTypeException {
+
+
+        ResultSet<T> resultSet = new ResultSet<>();
+        Class<? extends IdBeanImpl> beanClazz = SearchUtils
+                .getImplementationClass(beanInterface);
+
+        if (isValidBeanClass(beanClazz)) {
+            String[] refinements = query.getRefinements(true);
+            if (SearchUtils.checkTypeFacet(refinements)) {
+                SolrQuery solrQuery = new SolrQuery().setQuery(query
+                        .getQuery(true));
+
+                if (refinements != null) {
+                    solrQuery.addFilterQuery(refinements);
+                }
+
+                solrQuery.setRows(query.getPageSize());
+
+                // These are going to change when we import ASSETS as well
+                // solrQuery.setQueryType(QueryType.ADVANCED.toString());
+                // query.setQueryType(solrQuery.getQueryType());
+
+                // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+
+
+                solrQuery.addSort("europeana_id", ORDER.asc);
+                solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
+
+                solrQuery.setTimeAllowed(TIME_ALLOWED);
+                // add extra parameters if any
+                if (query.getParameters() != null) {
+                    Map<String, String> parameters = query.getParameters();
+                    for (String key : parameters.keySet()) {
+                        solrQuery.setParam(key, parameters.get(key));
+                    }
+                }
+
+                // facets are optional
+                if (query.isAllowFacets()) {
+                    solrQuery.setFacet(true);
+                    List<String> filteredFacets = query.getFilteredFacets();
+                    boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
+                            .size() > 0);
+
+                    for (String facetToAdd : query.getFacets()) {
+                        if (query.isProduceFacetUnion()) {
+                            if (hasFacetRefinements
+                                    && filteredFacets.contains(facetToAdd)) {
+                                facetToAdd = MessageFormat.format(
+                                        UNION_FACETS_FORMAT, facetToAdd);
+                            }
+                        }
+                        solrQuery.addFacetField(facetToAdd);
+                    }
+                    solrQuery.setFacetLimit(facetLimit);
+                }
+
+                // spellcheck is optional
+                if (query.isAllowSpellcheck()) {
+                    if (solrQuery.getStart() == null
+                            || solrQuery.getStart() <= 1) {
+                        solrQuery.setParam("spellcheck", "on");
+                        solrQuery.setParam("spellcheck.collate", "true");
+                        solrQuery
+                                .setParam("spellcheck.extendedResults", "true");
+                        solrQuery
+                                .setParam("spellcheck.onlyMorePopular", "true");
+                        solrQuery.setParam("spellcheck.q", query.getQuery());
+                    }
+                }
+
+                if (query.getFacetQueries() != null) {
+                    for (String facetQuery : query.getFacetQueries()) {
+                        solrQuery.addFacetQuery(facetQuery);
+                        System.out.println("Facet Query: " + facetQuery);
+                    }
+                }
+
+                try {
+                    if (log.isDebugEnabled()) {
+                        log.error("Solr query is: " + solrQuery);
+                    }
+                    log.error("Solr query is: " + solrQuery);
+                    query.setExecutedQuery(solrQuery.toString());
+                    QueryResponse queryResponse = solrServer.query(solrQuery);
+
+                    log.error("Solr Url: " + solrServer.toString());
+
+                    logTime("calculateTag", queryResponse.getElapsedTime());
+
+                    resultSet.setResults((List<T>) queryResponse
+                            .getBeans(beanClazz));
+                    resultSet.setFacetFields(queryResponse.getFacetFields());
+                    resultSet.setResultSize(queryResponse.getResults()
+                            .getNumFound());
+                    resultSet.setSearchTime(queryResponse.getElapsedTime());
+                    resultSet.setSpellcheck(queryResponse
+                            .getSpellCheckResponse());
+                    if (queryResponse.getFacetQuery() != null) {
+                        resultSet.setQueryFacets(queryResponse.getFacetQuery());
+                    }
+                    if(query.getCurrentCursorMark()!=null){
+                        resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
+                        resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
+                    }
+
+                } catch (SolrServerException e) {
+                    log.error("SolrServerException: " + e.getMessage()
+                            + " The query was: " + solrQuery);
+                    throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                } catch (SolrException e) {
+                    log.error("SolrException: " + e.getMessage()
+                            + " The query was: " + solrQuery);
+                    throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                }
+
+            } else {
+                throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+            }
+
+        } else {
+            ProblemType type = ProblemType.INVALIDCLASS;
+            type.appendMessage("Bean class: " + beanClazz);
+            throw new SolrTypeException(type);
+        }
+        return resultSet;
+    }
+
+
+    private boolean isFieldQuery(String query) {
         //TODO fix
-        String subquery = StringUtils.substringBefore(query,"filter_tags");
+        String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
-        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
-                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
-                ||StringUtils.contains(queryWithoutTags,"title:")){
+        if (StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:")
+                || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
+                || StringUtils.contains(queryWithoutTags, "title:")) {
             return false;
         }
-        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
+        if (StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""))) {
             return true;
         }
         return false;

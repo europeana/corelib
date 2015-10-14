@@ -48,7 +48,8 @@ public enum ProblemType {
 	NO_USER("User does not exist.", ProblemResponseAction.IGNORE),
 	DUPLICATE("Record already exists.", ProblemResponseAction.IGNORE),
 	RECORD_RETRIEVAL_ERROR("Record retrieval error", ProblemResponseAction.LOG),
-	INVALID_URL("Url is invalid", ProblemResponseAction.LOG)
+	INVALID_URL("Url is invalid", ProblemResponseAction.LOG),
+	SEARCH_LIMIT_REACHED("Search limit reached",ProblemResponseAction.LOG)
 	;
 
 	private String message;
