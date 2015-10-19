@@ -56,6 +56,12 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		createDatastore();
 	}
 
+	public CollectionMongoServerImpl(Datastore datastore){
+		this.datastore = datastore;
+		this.mongoServer = datastore.getMongo();
+		this.databaseName = datastore.getCollection(Collection.class).getName();
+
+	}
 	public CollectionMongoServerImpl(Mongo mongoServer, String databaseName, String username, String password) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
