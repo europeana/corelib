@@ -77,7 +77,6 @@ public class SearchServiceMock implements SearchService {
 
     @Override
     public FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoDBException {
-
         // not needed in this mock...
         return null;
     }
@@ -96,6 +95,12 @@ public class SearchServiceMock implements SearchService {
     @Override
     public List<Count> createCollections(String facetFieldName, String queryString, String... refinements)
             throws SolrTypeException {
+        return null;
+    }
+
+    @Override
+    public <T extends IdBean> ResultSet<T> paginate(Class<T> beanInterface, Query query) throws SolrTypeException {
+        // not needed in this mock...
         return null;
     }
 
