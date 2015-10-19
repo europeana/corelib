@@ -10,11 +10,9 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
 	<bean id="morphiaDataStore" class="eu.europeana.harvester.db.MorphiaDataStore">
@@ -33,7 +31,7 @@
 	<bean id="corelib_web_contentReuseFrameworkService" 
 		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
 
-	<bean id = "SwiftConfiguration" class = "eu.europeana.corelib.service.impl.swift.SwiftConfiguration">
+	<bean id = "swiftConfiguration" class = "eu.europeana.corelib.service.impl.swift.SwiftConfiguration">
 		<constructor-arg value= "#{europeanaProperties['contentreuse.swift.authUrl']}" type="java.lang.String"/> <!-- auth url -->
 		<constructor-arg value="#{europeanaProperties['contentreuse.swift.tenantName']}" type="java.lang.String"/> <!-- tenant name -->
 		<constructor-arg value="#{europeanaProperties['contentreuse.swift.userName']}" type="java.lang.String"/> <!-- user name -->
@@ -41,9 +39,10 @@
 		<constructor-arg value="#{europeanaProperties['contentreuse.swift.container']}" type="java.lang.String"/> <!-- container -->
 		<constructor-arg value="#{europeanaProperties['contentreuse.swift.region']}" type="java.lang.String"/> <!-- region -->
 	</bean>
+
     <bean id="corelib_mediaStorageClient"
           class="eu.europeana.corelib.service.impl.swift.SwiftMediaStorageClientImpl" >
-		<constructor-arg ref="SwiftConfiguration" />
+		<constructor-arg ref="swiftConfiguration" />
 	</bean>
 
 </beans>

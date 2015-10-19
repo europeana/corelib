@@ -3,13 +3,13 @@ package eu.europeana.corelib.web.service.impl;
 import javax.annotation.Resource;
 
 import eu.europeana.corelib.web.service.ContentReuseFrameworkService;
+import eu.europeana.harvester.client.HarvesterClient;
 import eu.europeana.harvester.domain.SourceDocumentReferenceMetaInfo;
-import eu.europeana.harvester.client.HarvesterClientImpl;
 
 public class ContentReuseFrameworkServiceImpl implements ContentReuseFrameworkService {
 
 	@Resource
-	HarvesterClientImpl harvesterClient;
+	private HarvesterClient harvesterClient;
 
 	public ContentReuseFrameworkServiceImpl() {}
 
