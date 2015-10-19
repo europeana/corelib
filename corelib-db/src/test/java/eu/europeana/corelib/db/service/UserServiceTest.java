@@ -22,9 +22,13 @@ import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.*;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
-import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.search.SearchService;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +38,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -44,8 +56,15 @@ import static org.junit.Assert.*;
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class UserServiceTest {
 
+    public static final String[] TITLE = new String[]{"Mock Title"};
+    public static final String[] AUTHOR = new String[]{"Mock Author"};
+    public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
+
     @Resource
     private UserService userService;
+
+    @Resource
+    private SearchService searchService;
 
     @Resource
     private TokenService tokenService;
@@ -260,12 +279,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSavedItem() throws DatabaseException {
+    public void testCreateSavedItem() throws DatabaseException, MongoDBException {
         final String EMAIL = "testCreateSavedItem@europeana.eu";
         final String USERNAME = "testCreateSavedItem";
         final String PASSWORD = "test";
         final String EUROPEANA_ID = "testCreateSavedItem";
 
+        setupSeachServiceMock(EUROPEANA_ID);
         Token token = tokenService.create(EMAIL);
         assertNotNull("Unable to create token", token);
 
@@ -286,9 +306,9 @@ public class UserServiceTest {
 
         SavedItem item = user.getSavedItems().iterator().next();
         assertEquals(EUROPEANA_ID, item.getEuropeanaUri());
-        assertEquals(SearchServiceMock.THUMBNAIL[0], item.getEuropeanaObject());
-        assertEquals(SearchServiceMock.TITLE[0], item.getTitle());
-        assertEquals(SearchServiceMock.AUTHOR[0], item.getAuthor());
+        assertEquals(THUMBNAIL[0], item.getEuropeanaObject());
+        assertEquals(TITLE[0], item.getTitle());
+        assertEquals(AUTHOR[0], item.getAuthor());
         assertEquals(DocType.TEXT, item.getDocType());
         assertNotNull("No creation date set", item.getDateSaved());
 
@@ -298,13 +318,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSocialTag() throws DatabaseException {
+    public void testCreateSocialTag() throws DatabaseException, MongoDBException {
         final String EMAIL = "testCreateSocialTag@europeana.eu";
         final String USERNAME = "testCreateSocialTag";
         final String PASSWORD = "test";
         final String EUROPEANA_ID = "testCreateSocialTag";
         final String TAG = "testCreateSocialTag";
 
+        setupSeachServiceMock(EUROPEANA_ID);
         Token token = tokenService.create(EMAIL);
         assertNotNull("Unable to create token", token);
 
@@ -325,9 +346,9 @@ public class UserServiceTest {
 
         SocialTag tag = user.getSocialTags().iterator().next();
         assertEquals(EUROPEANA_ID, tag.getEuropeanaUri());
-        assertEquals(SearchServiceMock.THUMBNAIL[0], tag.getEuropeanaObject());
+        assertEquals(THUMBNAIL[0], tag.getEuropeanaObject());
         assertEquals(StringUtils.lowerCase(TAG), tag.getTag());
-        assertEquals(SearchServiceMock.TITLE[0], tag.getTitle());
+        assertEquals(TITLE[0], tag.getTitle());
         assertNotNull("No creation date set", tag.getDateSaved());
 
         userService.removeSocialTag(user.getId(), tag.getId());
@@ -382,5 +403,27 @@ public class UserServiceTest {
 
     private String hashPassword(String password) {
         return new ShaPasswordEncoder().encodePassword(password, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupSeachServiceMock(String europeanaObjectId) throws MongoDBException {
+        FullBean mockBean = mock(FullBean.class);
+        Proxy proxy = mock(Proxy.class);
+        Aggregation aggregation = mock(Aggregation.class);
+
+        Map<String, List<String>> dcPublisher = new HashMap<>();
+        dcPublisher.put("def", Collections.singletonList(AUTHOR[0]));
+
+        when(mockBean.getTitle()).thenReturn(TITLE);
+        when(mockBean.getId()).thenReturn(europeanaObjectId);
+        when(mockBean.getType()).thenReturn(DocType.TEXT);
+        when(mockBean.getAbout()).thenReturn(europeanaObjectId);
+        when((List<Aggregation>) mockBean.getAggregations()).thenReturn(Collections.singletonList(aggregation));
+        when((List<Proxy>) mockBean.getProxies()).thenReturn(Collections.singletonList(proxy));
+
+        when(proxy.getDcPublisher()).thenReturn(dcPublisher);
+        when(aggregation.getEdmObject()).thenReturn(THUMBNAIL[0]);
+
+        when(searchService.findById(anyString(), anyBoolean())).thenReturn(mockBean);
     }
 }
