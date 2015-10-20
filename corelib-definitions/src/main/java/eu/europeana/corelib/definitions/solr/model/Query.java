@@ -58,6 +58,14 @@ public class Query implements Cloneable {
 	 */
 	private static final int DEFAULT_PAGE_SIZE = 12;
 
+	/**
+	 * Use these instead of the ones provided in the apache Solr package
+	 * in order to avoid introducing a dependency to that package in all modules
+	 * they're public because they are read from SearchServiceImpl
+	 */
+	public static final int ORDER_DESC = 0;
+	public static final int ORDER_ASC = 1;
+
 	private String query;
 
 	private String[] refinements;
@@ -69,6 +77,10 @@ public class Query implements Cloneable {
 	private int start;
 
 	private int pageSize;
+
+	private String sort;
+
+	private int sortOrder = ORDER_DESC ;
 
 	private static List<String> defaultFacets;
 	static {
@@ -113,7 +125,7 @@ public class Query implements Cloneable {
 	}
 
 	/**
-	 * GETTERS & SETTTERS
+	 * GETTERS & SETTERS
 	 */
 
 	public String getQuery() {
@@ -166,8 +178,9 @@ public class Query implements Cloneable {
 		return this.currentCursorMark;
 	}
 
-	public void setCurrentCursorMark(String currentCursorMark){
+	public Query setCurrentCursorMark(String currentCursorMark){
 		this.currentCursorMark = currentCursorMark;
+		return this;
 	}
 
 	public Query addRefinement(String refinement) {
@@ -222,6 +235,36 @@ public class Query implements Cloneable {
 	public Query setStart(int start) {
 		this.start = start;
 		return this;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public Query setSort(String sort) {
+		String[] parts;
+		if (sort == null || sort.isEmpty()) {
+			this.sort = "";
+		} else if (!sort.matches(".*\\s.*") && sort.length() > 0) {
+			this.sort = sort;
+		} else if (sort.matches(".+\\s(asc|ASC|desc|DESC)(ending|ENDING)?")) {
+			parts = sort.split("\\s");
+			this.sort = parts[0];
+			if (parts[1].matches("(asc|ASC).*")){
+				this.sortOrder = ORDER_ASC;
+			}
+		} else {
+			this.sort = "";
+		}
+		return this;
+	}
+
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public int getPageSize() {
@@ -407,6 +450,10 @@ public class Query implements Cloneable {
 		params.add("q=" + query);
 		params.add("start=" + start);
 		params.add("rows=" + pageSize);
+
+		if (sort != null && sort.length() > 0){
+			params.add("sort=" + sort + " " + (sortOrder == ORDER_DESC ? "desc" : "asc"));
+		}
 
 		if (refinements != null) {
 			for (String refinement : refinements) {

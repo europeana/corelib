@@ -523,16 +523,28 @@ public class SearchServiceImpl implements SearchService {
                 // These are going to change when we import ASSETS as well
                 // solrQuery.setQueryType(QueryType.ADVANCED.toString());
                 // query.setQueryType(solrQuery.getQueryType());
-
                 // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
 
-                if (isFieldQuery(solrQuery.getQuery())) {
-                    solrQuery.addSort("europeana_id", ORDER.asc);
+                // If currentCursorMark has been set, sort on europeana_id desc & disable all other sorting.
+                // In all other cases, proceed as usual
+                if (query.getCurrentCursorMark() != null){
+                    solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
+                    solrQuery.setSort("europeana_id", ORDER.desc);
                 } else {
-                    solrQuery.addSort("score", ORDER.desc);
+                    if (query.getSort() != null && !query.getSort().equals("")) {
+                        solrQuery.addSort(query.getSort(),
+                                (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                    }
+                    // Yorgos' changes, taken from busymachines branch
+                    if (isFieldQuery(solrQuery.getQuery())) {
+                        solrQuery.addSort("europeana_id", ORDER.asc);
+                    } else {
+                        solrQuery.addSort("score", ORDER.desc);
+                    }
+                    // timeallowed and cursormark are not allowed together in a query
+                    solrQuery.setTimeAllowed(TIME_ALLOWED);
                 }
 
-                solrQuery.setTimeAllowed(TIME_ALLOWED);
                 // add extra parameters if any
                 if (query.getParameters() != null) {
                     Map<String, String> parameters = query.getParameters();
@@ -563,14 +575,11 @@ public class SearchServiceImpl implements SearchService {
 
                 // spellcheck is optional
                 if (query.isAllowSpellcheck()) {
-                    if (solrQuery.getStart() == null
-                            || solrQuery.getStart() <= 1) {
+                    if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
                         solrQuery.setParam("spellcheck", "on");
                         solrQuery.setParam("spellcheck.collate", "true");
-                        solrQuery
-                                .setParam("spellcheck.extendedResults", "true");
-                        solrQuery
-                                .setParam("spellcheck.onlyMorePopular", "true");
+                        solrQuery.setParam("spellcheck.extendedResults", "true");
+                        solrQuery.setParam("spellcheck.onlyMorePopular", "true");
                         solrQuery.setParam("spellcheck.q", query.getQuery());
                     }
                 }
@@ -594,14 +603,13 @@ public class SearchServiceImpl implements SearchService {
 
                     logTime("calculateTag", queryResponse.getElapsedTime());
 
-                    resultSet.setResults((List<T>) queryResponse
-                            .getBeans(beanClazz));
+                    resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
-                    resultSet.setResultSize(queryResponse.getResults()
-                            .getNumFound());
+                    resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
-                    resultSet.setSpellcheck(queryResponse
-                            .getSpellCheckResponse());
+                    resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+                    resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
+                    resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
