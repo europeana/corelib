@@ -500,7 +500,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
                                                   Query query) throws SolrTypeException {
-        if(query.getStart()!=null && (query.getStart()+query.getPageSize()>searchLimit ){
+        if(query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)){
             throw new SolrTypeException(ProblemType.SEARCH_LIMIT_REACHED);
         }
         ResultSet<T> resultSet = new ResultSet<>();
@@ -529,7 +529,8 @@ public class SearchServiceImpl implements SearchService {
                 // In all other cases, proceed as usual
                 if (query.getCurrentCursorMark() != null){
                     solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
-                    solrQuery.setSort("europeana_id", ORDER.desc);
+                    solrQuery.setSort(query.getSort(),
+                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 } else {
                     if (query.getSort() != null && !query.getSort().equals("")) {
                         solrQuery.addSort(query.getSort(),
