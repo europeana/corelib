@@ -1,6 +1,7 @@
 package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
 public class VideoPropertyExtractor {
+
     public static String getQuality(Integer tag) {
         final Integer qualityCode = TagEncoding.VIDEO_QUALITY.extractValue(tag);
 
@@ -15,11 +16,15 @@ public class VideoPropertyExtractor {
         final Integer durationCode = TagEncoding.VIDEO_DURATION.extractValue(tag);
 
         switch (durationCode) {
-            case 1: return "short";
-            case 2: return "medium";
-            case 3: return "long";
+            case 1:
+                return "short";
+            case 2:
+                return "medium";
+            case 3:
+                return "long";
 
-            default: return "";
+            default:
+                return "";
         }
     }
 }

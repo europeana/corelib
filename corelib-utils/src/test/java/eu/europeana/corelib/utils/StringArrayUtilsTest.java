@@ -16,18 +16,13 @@
  */
 package eu.europeana.corelib.utils;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * String array util classes
@@ -39,29 +34,29 @@ public class StringArrayUtilsTest {
 
 	@Test
 	public void isNotBlankTest() {
-		Assert.assertTrue(StringArrayUtils.isNotBlank(new String[] { "test" }));
-		Assert.assertFalse(StringArrayUtils.isNotBlank(new String[] { " " }));
-		Assert.assertFalse(StringArrayUtils.isNotBlank(new String[] { "" }));
-		Assert.assertFalse(StringArrayUtils.isNotBlank(new String[] {}));
-		Assert.assertFalse(StringArrayUtils.isNotBlank(null));
+		assertTrue(StringArrayUtils.isNotBlank(new String[]{"test"}));
+		assertFalse(StringArrayUtils.isNotBlank(new String[]{" "}));
+		assertFalse(StringArrayUtils.isNotBlank(new String[]{""}));
+		assertFalse(StringArrayUtils.isNotBlank(new String[]{}));
+		assertFalse(StringArrayUtils.isNotBlank(null));
 	}
 
 	@Test
 	public void isNotBlankLinkTest() {
-		Assert.assertTrue(StringArrayUtils.isNotBlankList(Arrays.asList("test")));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(" ")));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList("")));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[] {})));
-		Assert.assertFalse(StringArrayUtils.isNotBlankList(null));
+		assertTrue(StringArrayUtils.isNotBlankList(Collections.singletonList("test")));
+		assertFalse(StringArrayUtils.isNotBlankList(Collections.singletonList(" ")));
+		assertFalse(StringArrayUtils.isNotBlankList(Collections.singletonList("")));
+		assertFalse(StringArrayUtils.isNotBlankList(Arrays.asList(new String[]{})));
+		assertFalse(StringArrayUtils.isNotBlankList(null));
 	}
 
 	@Test
 	public void isBlankTest() {
-		Assert.assertFalse(StringArrayUtils.isBlank(new String[] { "test" }));
-		Assert.assertTrue(StringArrayUtils.isBlank(new String[] { " " }));
-		Assert.assertTrue(StringArrayUtils.isBlank(new String[] { "" }));
-		Assert.assertTrue(StringArrayUtils.isBlank(new String[] {}));
-		Assert.assertTrue(StringArrayUtils.isBlank(null));
+		assertFalse(StringArrayUtils.isBlank(new String[]{"test"}));
+		assertTrue(StringArrayUtils.isBlank(new String[]{" "}));
+		assertTrue(StringArrayUtils.isBlank(new String[]{""}));
+		assertTrue(StringArrayUtils.isBlank(new String[]{}));
+		assertTrue(StringArrayUtils.isBlank(null));
 	}
 
 	@Test
@@ -70,7 +65,7 @@ public class StringArrayUtilsTest {
 		Assert.assertEquals(0,
 				StringArrayUtils.toArray((List<String>) null).length);
 
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		Assert.assertEquals(0, StringArrayUtils.toArray(list).length);
 
 		list.add("1");

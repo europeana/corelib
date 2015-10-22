@@ -24,12 +24,7 @@ public class SoundTagExtractor {
         if(soundHQ == null) {
             return 0;
         }
-
-        if(soundHQ) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return soundHQ ? 1 : 0;
     }
 
     public static Integer getDurationCode(Long duration) {
@@ -55,16 +50,16 @@ public class SoundTagExtractor {
             return 0;
         }
 
-        if(duration.equals("very_short")) {
+        if("very_short".equals(duration)) {
             return 1;
         }
-        if(duration.equals("short")) {
+        if("short".equals(duration)) {
             return 2;
         }
-        if(duration.equals("medium")) {
+        if("medium".equals(duration)) {
             return 3;
         }
-        if(duration.equals("long")) {
+        if("long".equals(duration)) {
             return 4;
         }
 

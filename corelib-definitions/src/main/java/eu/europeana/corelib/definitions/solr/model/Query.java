@@ -27,10 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import eu.europeana.corelib.definitions.model.facets.inverseLogic.ImagePropertyExtractor;
-import eu.europeana.corelib.definitions.model.facets.inverseLogic.MediaTypeEncoding;
-import eu.europeana.corelib.definitions.model.facets.inverseLogic.TagEncoding;
-import eu.europeana.corelib.definitions.model.facets.logic.ImageTagExtractor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -84,17 +80,17 @@ public class Query implements Cloneable {
 
 	private static List<String> defaultFacets;
 	static {
-		defaultFacets = new ArrayList<String>();
+		defaultFacets = new ArrayList<>();
 		for (Facet facet : Facet.values()) {
 			defaultFacets.add(facet.toString());
 		}
 	}
 
-	private List<String> facets = new ArrayList<String>(defaultFacets);
+	private List<String> facets = new ArrayList<>(defaultFacets);
 
 	private List<String> allFacetList;
 
-	private Map<String, String> parameters = new HashMap<String, String>();
+	private Map<String, String> parameters = new HashMap<>();
 
 	private String queryType;
 	private String executedQuery;
@@ -133,7 +129,7 @@ public class Query implements Cloneable {
 	}
 
 	public String getQuery(boolean withTranslations) {
-		if (withTranslations == true
+		if (withTranslations
 			&& queryTranslation != null
 			&& StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
 			return queryTranslation.getModifiedQuery();
@@ -207,7 +203,7 @@ public class Query implements Cloneable {
 
 	public Query addFacetQuery(QueryFacet queryFacet) {
 		if (facetQueries == null) {
-			facetQueries = new ArrayList<QueryFacet>();
+			facetQueries = new ArrayList<>();
 		}
 		facetQueries.add(queryFacet);
 		return this;
@@ -219,7 +215,7 @@ public class Query implements Cloneable {
 	}
 
 	public List<String> getFacetQueries() {
-		List<String> queries = new ArrayList<String>();
+		List<String> queries = new ArrayList<>();
 		if (facetQueries != null) {
 			for (QueryFacet queryFacet : facetQueries) {
 				queries.add(queryFacet.getQueryFacetString());
@@ -309,7 +305,7 @@ public class Query implements Cloneable {
 	 */
 	private void replaceSpecialFacets() {
     boolean ok = false;
-		  List<String> additionalFacets = new ArrayList<String>();
+		  List<String> additionalFacets = new ArrayList<>();
 				for (String facet: facets) {
         if (StringUtils.equalsIgnoreCase("DEFAULT", facet)) {
             additionalFacets.addAll(defaultFacets);
@@ -446,7 +442,7 @@ public class Query implements Cloneable {
 
 	@Override
 	public String toString() {
-		List<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<>();
 		params.add("q=" + query);
 		params.add("start=" + start);
 		params.add("rows=" + pageSize);
@@ -518,7 +514,7 @@ public class Query implements Cloneable {
 	}
 
 	private void createAllFacetList() {
-		allFacetList = new ArrayList<String>();
+		allFacetList = new ArrayList<>();
 		allFacetList.addAll(facets);
 	}
 
@@ -533,7 +529,7 @@ public class Query implements Cloneable {
 	}
 
 	public void setFacet(String facet) {
-		facets = new ArrayList<String>();
+		facets = new ArrayList<>();
 		facets.add(facet);
 	}
 
@@ -551,14 +547,14 @@ public class Query implements Cloneable {
 	}
 
 	public void divideRefinements() {
-		searchRefinements = new ArrayList<String>();
-		facetRefinements = new ArrayList<String>();
+		searchRefinements = new ArrayList<>();
+		facetRefinements = new ArrayList<>();
 
 		if (refinements == null) {
 			return;
 		}
 
-		Map<String, FacetCollector> register = new LinkedHashMap<String, FacetCollector>();
+		Map<String, FacetCollector> register = new LinkedHashMap<>();
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
 				boolean replaced = false;
@@ -611,7 +607,7 @@ public class Query implements Cloneable {
 	}
 
 	public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
-		List<String> queryTranslationTerms = new ArrayList<String>();
+		List<String> queryTranslationTerms = new ArrayList<>();
 		for (LanguageVersion term : languageVersions) {
 			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
 			if (!queryTranslationTerms.contains(phrase)) {
@@ -625,8 +621,8 @@ public class Query implements Cloneable {
 		private boolean isTagged = true;
 		private String name;
 		private String tagName;
-		private List<String> values = new ArrayList<String>();
-		private List<String> replacedValues = new ArrayList<String>();
+		private List<String> values = new ArrayList<>();
+		private List<String> replacedValues = new ArrayList<>();
 		private boolean isApiQuery = false;
 		private boolean replaced = false;
 
@@ -670,7 +666,7 @@ public class Query implements Cloneable {
 			} else if (name.equals(Facet.TYPE.name())) {
 				value = value.toUpperCase().replace("\"", "");
 			} else {
-				if (!isApiQuery && (value.indexOf(" ") > -1 || value.indexOf("!") > -1)) {
+				if (!isApiQuery && (value.contains(" ") || value.contains("!"))) {
 					if (!value.startsWith("\"")) {
 						value = '"' + value;
 					}

@@ -20,13 +20,20 @@ public enum TagEncoding {
     private final int bitPos;
     private final int numOfBits;
 
-    private TagEncoding(final int bitPos, final int numOfBits) {
+    TagEncoding(final int bitPos, final int numOfBits) {
         this.bitPos = bitPos;
         this.numOfBits = numOfBits;
     }
 
-    public int getBitPos()           {return bitPos;}
-    public int getNumOfBits()        {return numOfBits;}
-    public int getMask()             {return ((1 << numOfBits) - 1) << bitPos;}
-    public int extractValue(int tag) {return (tag & getMask()) >> bitPos;}
+    public int getBitPos() {
+        return bitPos;
+    }
+
+    public int getMask() {
+        return ((1 << numOfBits) - 1) << bitPos;
+    }
+
+    public int extractValue(int tag) {
+        return (tag & getMask()) >> bitPos;
+    }
 }

@@ -3,6 +3,7 @@ package eu.europeana.corelib.service.impl.swift;
 import eu.europeana.corelib.domain.MediaFile;
 import eu.europeana.corelib.service.MediaStorageClient;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jclouds.ContextBuilder;
 import org.jclouds.io.Payload;
 import org.jclouds.openstack.swift.v1.SwiftApi;
@@ -20,40 +21,25 @@ import java.util.Map;
 
 import static org.jclouds.io.Payloads.newByteArrayPayload;
 
-
-/**
- * Created by salexandru on 03.06.2015.
- */
 public class SwiftMediaStorageClientImpl implements MediaStorageClient {
+
     private final ObjectApi objectApi;
 
     public SwiftMediaStorageClientImpl(SwiftConfiguration config) {
-        if (null == config) {
+        if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
         }
 
-        System.out.println("============================================");
-        System.out.println("Configuration parameter: ");
-        System.out.println(config.getAuthUrl());
-        System.out.println(config.getContainerName());
-        System.out.println(config.getIdentity());
-        System.out.println(config.getPassword());
-        System.out.println(config.getRegionName());
-        System.out.println(config.getTenantName());
-        System.out.println(config.getUserName());
-        System.out.println("============================================");
-
-
         final SwiftApi swiftApi = ContextBuilder.newBuilder("openstack-swift")
-                                 .credentials(config.getIdentity(), config.getPassword())
-                                 .endpoint(config.getAuthUrl())
-                                 .buildApi(SwiftApi.class);
+                .credentials(config.getIdentity(), config.getPassword())
+                .endpoint(config.getAuthUrl())
+                .buildApi(SwiftApi.class);
 
         final ContainerApi containerApi = swiftApi.getContainerApi(config.getRegionName());
 
-        if (null == containerApi.get(config.getContainerName())) {
+        if (containerApi.get(config.getContainerName()) == null) {
             if (!containerApi.create(config.getContainerName())) {
-                throw new RuntimeException ("swift cannot create container: " + config.getContainerName());
+                throw new RuntimeException("swift cannot create container: " + config.getContainerName());
             }
         }
 
@@ -63,12 +49,12 @@ public class SwiftMediaStorageClientImpl implements MediaStorageClient {
 
 
     @Override
-    public Boolean checkIfExists (String id) {
-        return null != objectApi.getWithoutBody(id);
+    public Boolean checkIfExists(String id) {
+        return objectApi.getWithoutBody(id) != null;
     }
 
     @Override
-    public MediaFile retrieve (String id, Boolean withContent) {
+    public MediaFile retrieve(String id, Boolean withContent) {
 
         final SwiftObject swiftObject = withContent ? objectApi.get(id) : objectApi.getWithoutBody(id);
 
@@ -88,7 +74,7 @@ public class SwiftMediaStorageClientImpl implements MediaStorageClient {
 
 
         final String swiftObjectMd5 = swiftObject.getPayload().getContentMetadata().getContentMD5AsHashCode().toString();
-        if (withContent && !contentMd5.equals(swiftObjectMd5)) {
+        if (withContent && !StringUtils.equals(contentMd5, swiftObjectMd5)) {
             /*
              *  something wrong has happened to the data;
              *  security breach ?
@@ -97,22 +83,22 @@ public class SwiftMediaStorageClientImpl implements MediaStorageClient {
         }
 
         return new MediaFile(id,
-                             null,
-                             swiftObject.getName(),
-                             null,
-                             contentMd5,
-                             null,
-                             null,
-                             content,
-                             null,
-                             swiftObject.getMetadata().get("content-type"),
-                             null,
-                             Integer.parseInt(swiftObject.getMetadata().get("size"))
-                           );
+                null,
+                swiftObject.getName(),
+                null,
+                contentMd5,
+                null,
+                null,
+                content,
+                null,
+                swiftObject.getMetadata().get("content-type"),
+                null,
+                Integer.parseInt(swiftObject.getMetadata().get("size"))
+        );
     }
 
     @Override
-    public void createOrModify (MediaFile mediaFile) {
+    public void createOrModify(MediaFile mediaFile) {
         delete(mediaFile.getId());
 
         final Payload payload = newByteArrayPayload(mediaFile.getContent());
@@ -130,20 +116,19 @@ public class SwiftMediaStorageClientImpl implements MediaStorageClient {
     }
 
     @Override
-    public void delete (String id) {
+    public void delete(String id) {
         objectApi.delete(id);
     }
 
     private String computeMd5(final byte[] content) {
         try {
             final byte[] array = MessageDigest.getInstance("MD5").digest(content);
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+            StringBuilder sb = new StringBuilder();
+            for (byte anArray : array) {
+                sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
-        }
-        catch (NoSuchAlgorithmException e ) {
+        } catch (NoSuchAlgorithmException e) {
             return null;
         }
     }

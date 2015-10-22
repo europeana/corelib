@@ -1,19 +1,20 @@
 package eu.europeana.corelib.definitions.edm.model.metainfo;
 
 public interface ImageMetaInfo {
-    public Integer getWidth();
 
-    public Integer getHeight();
+    Integer getWidth();
 
-    public String getMimeType();
+    Integer getHeight();
 
-    public String getFileFormat();
+    String getMimeType();
 
-    public String getColorSpace();
+    String getFileFormat();
 
-    public Long getFileSize();
+    String getColorSpace();
 
-    public String[] getColorPalette();
+    Long getFileSize();
 
-    public ImageOrientation getOrientation();
+    String[] getColorPalette();
+
+    ImageOrientation getOrientation();
 }

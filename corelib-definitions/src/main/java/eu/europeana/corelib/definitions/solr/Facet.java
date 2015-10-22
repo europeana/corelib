@@ -19,31 +19,32 @@ package eu.europeana.corelib.definitions.solr;
 
 /**
  * Check if needed
+ *
  * @author Yorgos.Mamakis@ kb.nl
  */
 public enum Facet {
 
-	UGC("UGC"),
-	LANGUAGE("LANGUAGE"),
-	TYPE("TYPE"),
-	YEAR("YEAR"),
-	PROVIDER("PROVIDER"),
-	DATA_PROVIDER("DATA_PROVIDER"),
-	COUNTRY("COUNTRY"),
-	RIGHTS("RIGHTS"),
- FACET_TAGS("facet_tags"),
- IS_FULLTEXT("is_fulltext"),
- //HAS_THUMBNAILS("has_thumbnails"),
- HAS_MEDIA("has_media");
+    UGC("UGC"),
+    LANGUAGE("LANGUAGE"),
+    TYPE("TYPE"),
+    YEAR("YEAR"),
+    PROVIDER("PROVIDER"),
+    DATA_PROVIDER("DATA_PROVIDER"),
+    COUNTRY("COUNTRY"),
+    RIGHTS("RIGHTS"),
+    FACET_TAGS("facet_tags"),
+    IS_FULLTEXT("is_fulltext"),
+    //HAS_THUMBNAILS("has_thumbnails"),
+    HAS_MEDIA("has_media");
 
-	private String facet;
+    private String facet;
 
-	Facet(String facets){
-		this.facet = facets;
-	}
+    Facet(String facets) {
+        this.facet = facets;
+    }
 
-	@Override
-	public String toString(){
-		return facet;
-	}
+    @Override
+    public String toString() {
+        return facet;
+    }
 }

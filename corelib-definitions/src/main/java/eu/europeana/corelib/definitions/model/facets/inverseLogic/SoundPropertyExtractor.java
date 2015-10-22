@@ -17,12 +17,17 @@ public class SoundPropertyExtractor {
         final Integer durationCode = TagEncoding.SOUND_DURATION.extractValue(tag);
 
         switch (durationCode) {
-            case 1: return "very_short";
-            case 2: return "short";
-            case 3: return "medium";
-            case 4: return "long";
+            case 1:
+                return "very_short";
+            case 2:
+                return "short";
+            case 3:
+                return "medium";
+            case 4:
+                return "long";
 
-            default: return "";
+            default:
+                return "";
         }
     }
 }
