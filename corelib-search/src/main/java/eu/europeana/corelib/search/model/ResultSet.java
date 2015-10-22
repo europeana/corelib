@@ -77,10 +77,15 @@ public class ResultSet<T> {
 	 */
 	private String nextCursorMark;
 
+	/**
+	 * To store the concatenated actual sort fields
+	 */
+	private String sortField;
+
 
 
 	/**
-	 * GETTERS & SETTTERS
+	 * GETTERS & SETTERS
 	 */
 
 	public List<T> getResults() {
@@ -164,6 +169,11 @@ public class ResultSet<T> {
 	public void setNextCursorMark(String nextCursorMark) {
 		this.nextCursorMark = nextCursorMark;
 	}
+
+	public String getSortField() { return sortField; }
+
+	public void setSortField(String sortField) { this.sortField = sortField; }
+
 	@Override
 	public String toString() {
 		return "ResultSet [query=" + query + ", results=" + results

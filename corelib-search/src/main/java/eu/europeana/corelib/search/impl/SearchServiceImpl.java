@@ -520,31 +520,31 @@ public class SearchServiceImpl implements SearchService {
                 solrQuery.setRows(query.getPageSize());
                 solrQuery.setStart(query.getStart());
 
-                // These are going to change when we import ASSETS as well
-                // solrQuery.setQueryType(QueryType.ADVANCED.toString());
-                // query.setQueryType(solrQuery.getQueryType());
-                // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
+                // In case of a paginated query or a numbered field query:
+                // => SORT = [OPTIONAL_EXPLICIT_SORT asc|desc, ] EUR_ID desc
+                // and in case of a numbered non-field query:
+                // => SORT = SCORE desc, EUR_ID desc
+                // Note: timeallowed and cursormark are not allowed together in a query
 
-                // If currentCursorMark has been set, sort on europeana_id desc & disable all other sorting.
-                // In all other cases, proceed as usual
                 if (query.getCurrentCursorMark() != null){
                     solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
-                    solrQuery.setSort(query.getSort(),
-                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
-                } else {
-                    if (query.getSort() != null && !query.getSort().equals("")) {
+                    if (!StringUtils.isBlank(query.getSort())){
                         solrQuery.addSort(query.getSort(),
                                 (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                     }
-                    // Yorgos' changes, taken from busymachines branch
+                } else {
                     if (isFieldQuery(solrQuery.getQuery())) {
-                        solrQuery.addSort("europeana_id", ORDER.asc);
+                        if (!StringUtils.isBlank(query.getSort())){
+                            solrQuery.addSort(query.getSort(),
+                                    (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                        }
                     } else {
                         solrQuery.addSort("score", ORDER.desc);
                     }
-                    // timeallowed and cursormark are not allowed together in a query
                     solrQuery.setTimeAllowed(TIME_ALLOWED);
                 }
+                solrQuery.addSort("europeana_id", ORDER.desc);
+                resultSet.setSortField(solrQuery.getSortField());
 
                 // add extra parameters if any
                 if (query.getParameters() != null) {
