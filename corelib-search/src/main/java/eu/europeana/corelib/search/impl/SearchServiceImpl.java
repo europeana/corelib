@@ -528,20 +528,16 @@ public class SearchServiceImpl implements SearchService {
 
                 if (query.getCurrentCursorMark() != null){
                     solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
-                    if (!StringUtils.isBlank(query.getSort())){
-                        solrQuery.addSort(query.getSort(),
-                                (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
-                    }
                 } else {
-                    if (isFieldQuery(solrQuery.getQuery())) {
-                        if (!StringUtils.isBlank(query.getSort())){
-                            solrQuery.addSort(query.getSort(),
-                                    (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
-                        }
-                    } else {
-                        solrQuery.addSort("score", ORDER.desc);
+                    if (!isFieldQuery(solrQuery.getQuery())) {
+                        solrQuery.setSort("score", ORDER.desc);
                     }
                     solrQuery.setTimeAllowed(TIME_ALLOWED);
+                }
+                // will replace sort on score if available
+                if (!StringUtils.isBlank(query.getSort())){
+                    solrQuery.setSort(query.getSort(),
+                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 }
                 solrQuery.addSort("europeana_id", ORDER.desc);
                 resultSet.setSortField(solrQuery.getSortField());
