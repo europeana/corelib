@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.2</version>
+			<version>${version.jodatime}</version>
 		</dependency>
 		<!-- ehcache, see http://ehcache.org -->
 		<dependency>
@@ -81,10 +81,10 @@
 
 		<!-- TESTING PURPOSES -->
 		<dependency>
-			<scope>test</scope>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${version.springCore}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<organization>
