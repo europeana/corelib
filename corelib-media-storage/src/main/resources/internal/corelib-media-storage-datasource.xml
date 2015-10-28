@@ -16,9 +16,13 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="corelib_mediastorage_mongo_thumbnail" class="com.mongodb.Mongo">
-		<constructor-arg value="#{europeanaProperties['thumbnail.mongodb.host']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['thumbnail.mongodb.port']}" type="int"/>
-	</bean>
+    <bean id="corelib_mediastorage_swiftConfiguration" class="eu.europeana.corelib.service.impl.swift.SwiftConfiguration">
+        <constructor-arg value="#{europeanaProperties['contentreuse.swift.authUrl']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['contentreuse.swift.tenantName']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['swift.userName']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['swift.password']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['swift.container']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['swift.region']}" type="java.lang.String"/>
+    </bean>
 
 </beans>

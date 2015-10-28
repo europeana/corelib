@@ -28,7 +28,6 @@
 
 	<dependencies>
 
-
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-sugarcrm-bindings</artifactId>
@@ -40,7 +39,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.1</version>
 		</dependency>
-
 
 		<!-- ================================================ -->
 		<!-- Spring Dependencies -->
@@ -56,7 +54,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring.maven.artifact.version}</version>
-
 		</dependency>
 
 		<dependency>
@@ -103,7 +100,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<!-- test scoped dependencies -->
 		<dependency>
 			<groupId>org.junit</groupId>
@@ -119,23 +115,13 @@
 			<scope>test</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.opensymphony.quartz</groupId>
 			<artifactId>com.springsource.org.quartz</artifactId>
 			<version>${spring.quartz.version}</version>
 		</dependency>
 
-		<!-- JUnit dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Equinox OSGi platform -->
-
 
 		<dependency>
 			<groupId>org.apache.log4j</groupId>
@@ -143,11 +129,8 @@
 			<version>1.2.15</version>
 		</dependency>
 
-
-
-
-
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>Artifactory release </id>
@@ -157,4 +140,5 @@
 			</releases>
 		</repository>
 	</repositories>
+
 </project>

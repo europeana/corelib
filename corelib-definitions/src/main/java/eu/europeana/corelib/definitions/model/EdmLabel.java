@@ -50,7 +50,7 @@ public enum EdmLabel {
 	PROVIDER_AGGREGATION_CC_DEPRECATED_ON("provider_aggregation_cc_deprecated_on",SolrType.INDEXED),
 	// EUROPEANA AGGREGATION
 	EDM_EUROPEANA_AGGREGATION("edm_europeana_aggregation", SolrType.INDEXED), 
-	EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO("europeana_aggregation_ore_aggregatedCHO", SolrType.INDEXED), 
+	EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO("europeana_aggregation_edm_aggregatedCHO", SolrType.INDEXED),
 	EUROPEANA_AGGREGATION_ORE_AGGREGATES("europeana_aggregation_ore_aggregates", SolrType.NOT_STORED), 
 	EUROPEANA_AGGREGATION_DC_CREATOR("europeana_aggregation_dc_creator", SolrType.NOT_STORED), 
 	EUROPEANA_AGGREGATION_EDM_LANDINGPAGE("europeana_aggregation_edm_landingPage", SolrType.INDEXED), 

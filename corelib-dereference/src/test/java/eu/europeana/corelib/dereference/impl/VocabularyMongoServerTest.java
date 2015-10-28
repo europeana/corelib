@@ -17,16 +17,15 @@
 package eu.europeana.corelib.dereference.impl;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mongodb.MongoClient;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
@@ -63,14 +62,14 @@ public class VocabularyMongoServerTest {
 
 			mongodExecutable.start();
 			server = new VocabularyMongoServerImpl(
-					new Mongo("localhost", port), "vocTest");
+					new MongoClient("localhost", port), "vocTest");
 			ControlledVocabularyImpl voc = new ControlledVocabularyImpl();
 			voc.setName("name");
 			voc.setLocation("location");
 			voc.setSuffix("rdf");
 			voc.setURI("http://test_uri/");
-			Map<String, List<EdmMappedField>> elements = new HashMap<String, List<EdmMappedField>>();
-			List<EdmMappedField> lst = new ArrayList<EdmMappedField>();
+			Map<String, List<EdmMappedField>> elements = new HashMap<>();
+			List<EdmMappedField> lst = new ArrayList<>();
 			EdmMappedField dateField = new EdmMappedField();
 			dateField.setLabel(EdmLabel.AG_DC_DATE.toString());
 			lst.add(dateField);
@@ -87,13 +86,7 @@ public class VocabularyMongoServerTest {
 				server.getDatastore().getDB().dropDatabase();
 			}
 			mongodExecutable.stop();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MongoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (MongoException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

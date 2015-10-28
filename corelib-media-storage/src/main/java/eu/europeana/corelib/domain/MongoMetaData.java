@@ -1,8 +1,9 @@
 package eu.europeana.corelib.domain;
 
 import com.mongodb.DBObject;
+
+import org.apache.commons.lang.NotImplementedException;
 import org.bson.BSONObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.HashSet;
