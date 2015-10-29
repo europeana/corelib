@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>2.1-SNAPSHOT</version>
+		<version>2.2-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
@@ -29,7 +28,6 @@
 
 	<dependencies>
 
-
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-sugarcrm-bindings</artifactId>
@@ -41,7 +39,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.1</version>
 		</dependency>
-
 
 		<!-- ================================================ -->
 		<!-- Spring Dependencies -->
@@ -57,7 +54,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring.maven.artifact.version}</version>
-
 		</dependency>
 
 		<dependency>
@@ -104,7 +100,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<!-- test scoped dependencies -->
 		<dependency>
 			<groupId>org.junit</groupId>
@@ -120,23 +115,13 @@
 			<scope>test</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.opensymphony.quartz</groupId>
 			<artifactId>com.springsource.org.quartz</artifactId>
 			<version>${spring.quartz.version}</version>
 		</dependency>
 
-		<!-- JUnit dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Equinox OSGi platform -->
-
 
 		<dependency>
 			<groupId>org.apache.log4j</groupId>
@@ -144,11 +129,8 @@
 			<version>1.2.15</version>
 		</dependency>
 
-
-
-
-
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>Artifactory release </id>
@@ -158,4 +140,5 @@
 			</releases>
 		</repository>
 	</repositories>
+
 </project>

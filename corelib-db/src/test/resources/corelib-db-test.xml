@@ -33,15 +33,17 @@
         </property>
     </bean>
 
-    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.db.MongoProviderTest"/>
+    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.db.EmbeddedMongoProvider"/>
 
     <!-- Mocking services from other modules and overruling their configuration -->
 
-    <bean name="corelib_solr_searchService"
-          class="eu.europeana.corelib.solr.service.mock.SearchServiceMock"/>
+    <bean name="corelib_solr_searchService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.search.SearchService" />
+    </bean>
 
     <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
     <bean name="corelib_solr_mongoServer_id" class="eu.europeana.corelib.EmptyBean"/>
+    <bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.EmptyBean"/>
 
     <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
 

@@ -150,7 +150,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("proxy_dc_creator.*")
     protected Map<String,List<String>> dcCreatorLangAware;
     
-    @Field("proxy_dc_contriutor.*")
+    @Field("proxy_dc_contributor.*")
     protected Map<String,List<String>>dcContributorLangAware;
     
     @Field("proxy_dc_language.*")

@@ -100,6 +100,57 @@ public class FullBeanHandler implements ICollection {
         }
         return false;
     }
+    public boolean removeRecordById(SolrServer solrServer, String id) {
+        try {
+            solrServer.deleteByQuery("europeana_id:"
+                    + ClientUtils.escapeQueryChars(id));
+
+            DBCollection records = mongoServer.getDatastore().getDB()
+                    .getCollection("record");
+            DBCollection proxies = mongoServer.getDatastore().getDB()
+                    .getCollection("Proxy");
+            DBCollection providedCHOs = mongoServer.getDatastore().getDB()
+                    .getCollection("ProvidedCHO");
+            DBCollection aggregations = mongoServer.getDatastore().getDB()
+                    .getCollection("Aggregation");
+            DBCollection europeanaAggregations = mongoServer.getDatastore()
+                    .getDB().getCollection("EuropeanaAggregation");
+            DBCollection physicalThing = mongoServer.getDatastore().getDB()
+                    .getCollection("PhysicalThing");
+            DBObject query = new BasicDBObject("about", id);
+            DBObject proxyQuery = new BasicDBObject("about", "/proxy/provider"
+                    +id);
+            DBObject europeanaProxyQuery = new BasicDBObject("about",
+                    "/proxy/europeana"
+                            + id);
+
+            DBObject providedCHOQuery = new BasicDBObject("about", "/item"
+                    + id);
+            DBObject aggregationQuery = new BasicDBObject("about",
+                    "/aggregation/provider"
+                            + id);
+            DBObject europeanaAggregationQuery = new BasicDBObject("about",
+                    "/aggregation/europeana"
+                            + id);
+            europeanaAggregations.remove(europeanaAggregationQuery,
+                    WriteConcern.FSYNC_SAFE);
+            records.remove(query, WriteConcern.FSYNC_SAFE);
+            proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
+            proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
+            physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
+            physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
+            providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
+            aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
+            return true;
+        } catch (SolrServerException e) {
+            log.log(Level.SEVERE, e.getMessage());
+
+        } catch (IOException e) {
+            log.log(Level.SEVERE, e.getMessage());
+
+        }
+        return false;
+    }
 
     public void clearData(String collection) {
         DBCollection records = mongoServer.getDatastore().getDB()

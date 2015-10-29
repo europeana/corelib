@@ -21,11 +21,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
+import com.mongodb.MongoClient;
 import org.junit.Test;
-
-import com.mongodb.Mongo;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
@@ -63,7 +61,7 @@ public class ExtractorTest {
 
 
 			mongodExecutable.start();
-			mongoServer = new VocabularyMongoServerImpl(new Mongo("localhost",port),"vocabulary_test");
+			mongoServer = new VocabularyMongoServerImpl(new MongoClient("localhost",port),"vocabulary_test");
 			assertNotNull(mongoServer);
 			ControlledVocabularyImpl vocabulary = new ControlledVocabularyImpl(
 					"testVocabulary");

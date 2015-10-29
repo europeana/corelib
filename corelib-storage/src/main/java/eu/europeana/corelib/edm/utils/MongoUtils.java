@@ -269,6 +269,11 @@ public final class MongoUtils {
 	 * @return
 	 */
 	public static boolean arrayEquals(String[] arrA, String[] arrB) {
+            if(arrA==null && arrB==null){
+                return true;
+            } else if (arrA == null || arrB==null) {
+                return false;
+            }
 		if (arrA.length == arrB.length) {
 			List<String> listA = new ArrayList<String>(Arrays.asList(arrA));
 			List<String> listB = new ArrayList<String>(Arrays.asList(arrB));
