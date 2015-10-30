@@ -66,7 +66,7 @@ public class SwiftMediaStorageClientImpl implements MediaStorageClient {
         try {
             content = withContent ? IOUtils.toByteArray(swiftObject.getPayload().openStream()) : new byte[0];
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             throw new RuntimeException(e);
         }
 
