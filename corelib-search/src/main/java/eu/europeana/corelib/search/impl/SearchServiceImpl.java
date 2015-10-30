@@ -19,6 +19,7 @@ package eu.europeana.corelib.search.impl;
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -112,7 +113,7 @@ public class SearchServiceImpl implements SearchService {
             "what", "where", "when", "title");
     private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-    private static final HashFunction hf = Hashing.md5();
+    private static final Hasher hf = Hashing.md5().newHasher();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
     private static boolean STARTED = false;
 
@@ -236,7 +237,7 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
-                final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
+                final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
                         .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
@@ -248,7 +249,7 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the aggregation is shown by
             if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                final HashCode hashCodeIsShownBy = hf.newHasher()
+                final HashCode hashCodeIsShownBy = hf
                         .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
                         .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
@@ -286,7 +287,7 @@ public class SearchServiceImpl implements SearchService {
                 WebResourceMetaInfoImpl webMetaInfo = null;
 
                 if (webResource.getAbout() != null) {
-                    final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
+                    final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
                             .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
@@ -298,7 +299,7 @@ public class SearchServiceImpl implements SearchService {
                 // Locate the technical meta data from the aggregation is shown
                 // by
                 if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    final HashCode hashCodeIsShownBy = hf.newHasher().putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                    final HashCode hashCodeIsShownBy = hf.putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
                             .putString(aggregation.getAbout(), Charsets.UTF_8).hash();
 
