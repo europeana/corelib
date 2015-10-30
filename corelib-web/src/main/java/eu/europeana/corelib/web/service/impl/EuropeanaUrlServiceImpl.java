@@ -163,7 +163,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
 					if (null == configuration.getImageCacheUrl()) {
-							System.out.println ("configuration.getImageChacheUrl is null");
+
 									return new UrlBuilder("");
 					}
 

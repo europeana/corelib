@@ -148,12 +148,12 @@ public class SearchServiceImpl implements SearchService {
     @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
         if (fullBean == null) {
-            log.error("FullBean is null when injecting web meta info");
+         //   log.error("FullBean is null when injecting web meta info");
             return;
         }
 
         if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
-            log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+       //     log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
             return;
         }
 
@@ -316,7 +316,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems)
             throws MongoDBException {
-        long t0 = new Date().getTime();
+       // long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         injectWebMetaInfo(fullBean);
@@ -327,7 +327,7 @@ public class SearchServiceImpl implements SearchService {
             }
 
         }
-        logTime("mongo findById", (new Date().getTime() - t0));
+        //logTime("mongo findById", (new Date().getTime() - t0));
 
         if (fullBean != null && similarItems) {
             try {
@@ -366,7 +366,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-        long t0 = new Date().getTime();
+      //  long t0 = new Date().getTime();
         if (!STARTED) {
             idServer.createDatastore();
             STARTED = true;
@@ -374,7 +374,7 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         injectWebMetaInfo(fullBean);
-        logTime("mongo resolve", (new Date().getTime() - t0));
+      //  logTime("mongo resolve", (new Date().getTime() - t0));
         if (fullBean != null) {
             try {
                 fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
@@ -470,7 +470,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         QueryResponse response = solrServer.query(solrQuery);
-        logTime("MoreLikeThis", response.getElapsedTime());
+        //logTime("MoreLikeThis", response.getElapsedTime());
 
         @SuppressWarnings("unchecked")
         NamedList<Object> moreLikeThisList = (NamedList<Object>) response
@@ -576,7 +576,7 @@ public class SearchServiceImpl implements SearchService {
                 if (query.getFacetQueries() != null) {
                     for (String facetQuery : query.getFacetQueries()) {
                         solrQuery.addFacetQuery(facetQuery);
-                        System.out.println("Facet Query: " + facetQuery);
+                      //  System.out.println("Facet Query: " + facetQuery);
                     }
                 }
 
@@ -587,10 +587,8 @@ public class SearchServiceImpl implements SearchService {
                     query.setExecutedQuery(solrQuery.toString());
                     QueryResponse queryResponse = solrServer.query(solrQuery);
 
-                    if (log.isDebugEnabled()) {
-                        log.debug("Solr Url: " + solrServer.toString());
-                    }
-                    logTime("calculateTag", queryResponse.getElapsedTime());
+
+                   // logTime("calculateTag", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
@@ -702,7 +700,7 @@ public class SearchServiceImpl implements SearchService {
                 if (query.getFacetQueries() != null) {
                     for (String facetQuery : query.getFacetQueries()) {
                         solrQuery.addFacetQuery(facetQuery);
-                        System.out.println("Facet Query: " + facetQuery);
+                      //  System.out.println("Facet Query: " + facetQuery);
                     }
                 }
 
@@ -710,13 +708,13 @@ public class SearchServiceImpl implements SearchService {
                     if (log.isDebugEnabled()) {
                         log.error("Solr query is: " + solrQuery);
                     }
-                    log.error("Solr query is: " + solrQuery);
+                   // log.error("Solr query is: " + solrQuery);
                     query.setExecutedQuery(solrQuery.toString());
                     QueryResponse queryResponse = solrServer.query(solrQuery);
 
-                    log.error("Solr Url: " + solrServer.toString());
+                   // log.error("Solr Url: " + solrServer.toString());
 
-                    logTime("calculateTag", queryResponse.getElapsedTime());
+                 //   logTime("calculateTag", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse
                             .getBeans(beanClazz));
@@ -758,7 +756,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     private boolean isFieldQuery(String query) {
-        //TODO fix
+
         String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
         return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:") || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:") || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
@@ -824,7 +822,7 @@ public class SearchServiceImpl implements SearchService {
                 log.debug("Solr query is: " + solrQuery.toString());
             }
             response = solrServer.query(solrQuery);
-            logTime("queryFacetSearch", response.getElapsedTime());
+          //  logTime("queryFacetSearch", response.getElapsedTime());
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
             log.error("SolrServerException: " + e.getMessage() + " for query "
@@ -876,7 +874,7 @@ public class SearchServiceImpl implements SearchService {
                     log.debug("Solr query is: " + solrQuery);
                 }
                 QueryResponse queryResponse = solrServer.query(solrQuery);
-                logTime("calculateTag", queryResponse.getElapsedTime());
+               // logTime("calculateTag", queryResponse.getElapsedTime());
 
                 resultSet.setResults((List<T>) queryResponse
                         .getBeans(beanClazz));

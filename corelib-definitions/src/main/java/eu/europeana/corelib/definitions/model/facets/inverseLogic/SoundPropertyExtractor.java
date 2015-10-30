@@ -1,7 +1,6 @@
 package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
 public class SoundPropertyExtractor {
-    //public static final Integer mask = (1 << 25) - 1;
 
     public static String getQuality(Integer tag) {
         final Integer qualityCode = TagEncoding.SOUND_QUALITY.extractValue(tag);

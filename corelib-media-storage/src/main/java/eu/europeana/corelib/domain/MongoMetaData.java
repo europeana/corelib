@@ -70,7 +70,7 @@ public class MongoMetaData implements DBObject {
     @Override
     public Set<String> keySet() {
         final Set<MetaDataFields> metaDataFieldsList = map.keySet();
-        final Set<String> metaDataFieldsStringList = new HashSet<String>();
+        final Set<String> metaDataFieldsStringList = new HashSet<>();
         for(MetaDataFields metaDataFields : metaDataFieldsList) {
             metaDataFieldsStringList.add(String.valueOf(metaDataFields));
         }
