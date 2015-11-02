@@ -115,9 +115,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 			
 			return id;
 		} catch (Exception e) {
-			System.out.println(e);
 
-			e.printStackTrace();
 		}
 		return null;
 	}

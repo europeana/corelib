@@ -229,7 +229,7 @@ public class SearchUtils {
 		try {
 			query = queryParserHelper.parse(queryTerm, "text");
 		} catch (QueryNodeException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return (query != null && query instanceof TermQuery);
 	}

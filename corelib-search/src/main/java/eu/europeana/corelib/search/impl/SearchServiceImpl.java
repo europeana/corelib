@@ -18,7 +18,7 @@ package eu.europeana.corelib.search.impl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -112,7 +112,7 @@ public class SearchServiceImpl implements SearchService {
             "what", "where", "when", "title");
     private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-    private static final HashFunction hf = Hashing.md5();
+    private static final Hasher hf = Hashing.md5().newHasher();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
     private static boolean STARTED = false;
 
@@ -148,12 +148,12 @@ public class SearchServiceImpl implements SearchService {
     @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
         if (fullBean == null) {
-            log.error("FullBean is null when injecting web meta info");
+         //   log.error("FullBean is null when injecting web meta info");
             return;
         }
 
         if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
-            log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+       //     log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
             return;
         }
 
@@ -236,7 +236,7 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
-                final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
+                final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
                         .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
@@ -248,7 +248,7 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the aggregation is shown by
             if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                final HashCode hashCodeIsShownBy = hf.newHasher()
+                final HashCode hashCodeIsShownBy = hf
                         .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
                         .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
@@ -286,7 +286,7 @@ public class SearchServiceImpl implements SearchService {
                 WebResourceMetaInfoImpl webMetaInfo = null;
 
                 if (webResource.getAbout() != null) {
-                    final HashCode hashCodeAbout = hf.newHasher().putString(webResource.getAbout(), Charsets.UTF_8)
+                    final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
                             .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
 
@@ -298,7 +298,7 @@ public class SearchServiceImpl implements SearchService {
                 // Locate the technical meta data from the aggregation is shown
                 // by
                 if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    final HashCode hashCodeIsShownBy = hf.newHasher().putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                    final HashCode hashCodeIsShownBy = hf.putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
                             .putString(aggregation.getAbout(), Charsets.UTF_8).hash();
 
@@ -316,7 +316,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems)
             throws MongoDBException {
-        long t0 = new Date().getTime();
+       // long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         injectWebMetaInfo(fullBean);
@@ -327,7 +327,7 @@ public class SearchServiceImpl implements SearchService {
             }
 
         }
-        logTime("mongo findById", (new Date().getTime() - t0));
+        //logTime("mongo findById", (new Date().getTime() - t0));
 
         if (fullBean != null && similarItems) {
             try {
@@ -366,7 +366,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-        long t0 = new Date().getTime();
+      //  long t0 = new Date().getTime();
         if (!STARTED) {
             idServer.createDatastore();
             STARTED = true;
@@ -374,7 +374,7 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         injectWebMetaInfo(fullBean);
-        logTime("mongo resolve", (new Date().getTime() - t0));
+      //  logTime("mongo resolve", (new Date().getTime() - t0));
         if (fullBean != null) {
             try {
                 fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
@@ -470,7 +470,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         QueryResponse response = solrServer.query(solrQuery);
-        logTime("MoreLikeThis", response.getElapsedTime());
+        //logTime("MoreLikeThis", response.getElapsedTime());
 
         @SuppressWarnings("unchecked")
         NamedList<Object> moreLikeThisList = (NamedList<Object>) response
@@ -576,7 +576,7 @@ public class SearchServiceImpl implements SearchService {
                 if (query.getFacetQueries() != null) {
                     for (String facetQuery : query.getFacetQueries()) {
                         solrQuery.addFacetQuery(facetQuery);
-                        System.out.println("Facet Query: " + facetQuery);
+                      //  System.out.println("Facet Query: " + facetQuery);
                     }
                 }
 
@@ -587,10 +587,8 @@ public class SearchServiceImpl implements SearchService {
                     query.setExecutedQuery(solrQuery.toString());
                     QueryResponse queryResponse = solrServer.query(solrQuery);
 
-                    if (log.isDebugEnabled()) {
-                        log.debug("Solr Url: " + solrServer.toString());
-                    }
-                    logTime("calculateTag", queryResponse.getElapsedTime());
+
+                   // logTime("calculateTag", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
@@ -624,141 +622,9 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends IdBean> ResultSet<T> paginate(Class<T> beanInterface,
-                                                    Query query) throws SolrTypeException {
-
-
-        ResultSet<T> resultSet = new ResultSet<>();
-        Class<? extends IdBeanImpl> beanClazz = SearchUtils
-                .getImplementationClass(beanInterface);
-
-        if (isValidBeanClass(beanClazz)) {
-            String[] refinements = query.getRefinements(true);
-            if (SearchUtils.checkTypeFacet(refinements)) {
-                SolrQuery solrQuery = new SolrQuery().setQuery(query
-                        .getQuery(true));
-
-                if (refinements != null) {
-                    solrQuery.addFilterQuery(refinements);
-                }
-
-                solrQuery.setRows(query.getPageSize());
-
-                // These are going to change when we import ASSETS as well
-                // solrQuery.setQueryType(QueryType.ADVANCED.toString());
-                // query.setQueryType(solrQuery.getQueryType());
-
-                // solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-
-
-                solrQuery.addSort("europeana_id", ORDER.asc);
-                solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
-
-                solrQuery.setTimeAllowed(TIME_ALLOWED);
-                // add extra parameters if any
-                if (query.getParameters() != null) {
-                    Map<String, String> parameters = query.getParameters();
-                    for (String key : parameters.keySet()) {
-                        solrQuery.setParam(key, parameters.get(key));
-                    }
-                }
-
-                // facets are optional
-                if (query.isAllowFacets()) {
-                    solrQuery.setFacet(true);
-                    List<String> filteredFacets = query.getFilteredFacets();
-                    boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
-                            .size() > 0);
-
-                    for (String facetToAdd : query.getFacets()) {
-                        if (query.isProduceFacetUnion()) {
-                            if (hasFacetRefinements
-                                    && filteredFacets.contains(facetToAdd)) {
-                                facetToAdd = MessageFormat.format(
-                                        UNION_FACETS_FORMAT, facetToAdd);
-                            }
-                        }
-                        solrQuery.addFacetField(facetToAdd);
-                    }
-                    solrQuery.setFacetLimit(facetLimit);
-                }
-
-                // spellcheck is optional
-                if (query.isAllowSpellcheck()) {
-                    if (solrQuery.getStart() == null
-                            || solrQuery.getStart() <= 1) {
-                        solrQuery.setParam("spellcheck", "on");
-                        solrQuery.setParam("spellcheck.collate", "true");
-                        solrQuery
-                                .setParam("spellcheck.extendedResults", "true");
-                        solrQuery
-                                .setParam("spellcheck.onlyMorePopular", "true");
-                        solrQuery.setParam("spellcheck.q", query.getQuery());
-                    }
-                }
-
-                if (query.getFacetQueries() != null) {
-                    for (String facetQuery : query.getFacetQueries()) {
-                        solrQuery.addFacetQuery(facetQuery);
-                        System.out.println("Facet Query: " + facetQuery);
-                    }
-                }
-
-                try {
-                    if (log.isDebugEnabled()) {
-                        log.error("Solr query is: " + solrQuery);
-                    }
-                    log.error("Solr query is: " + solrQuery);
-                    query.setExecutedQuery(solrQuery.toString());
-                    QueryResponse queryResponse = solrServer.query(solrQuery);
-
-                    log.error("Solr Url: " + solrServer.toString());
-
-                    logTime("calculateTag", queryResponse.getElapsedTime());
-
-                    resultSet.setResults((List<T>) queryResponse
-                            .getBeans(beanClazz));
-                    resultSet.setFacetFields(queryResponse.getFacetFields());
-                    resultSet.setResultSize(queryResponse.getResults()
-                            .getNumFound());
-                    resultSet.setSearchTime(queryResponse.getElapsedTime());
-                    resultSet.setSpellcheck(queryResponse
-                            .getSpellCheckResponse());
-                    if (queryResponse.getFacetQuery() != null) {
-                        resultSet.setQueryFacets(queryResponse.getFacetQuery());
-                    }
-                    if (query.getCurrentCursorMark() != null) {
-                        resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
-                        resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
-                    }
-
-                } catch (SolrServerException e) {
-                    log.error("SolrServerException: " + e.getMessage()
-                            + " The query was: " + solrQuery);
-                    throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-                } catch (SolrException e) {
-                    log.error("SolrException: " + e.getMessage()
-                            + " The query was: " + solrQuery);
-                    throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-                }
-
-            } else {
-                throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
-            }
-
-        } else {
-            ProblemType type = ProblemType.INVALIDCLASS;
-            type.appendMessage("Bean class: " + beanClazz);
-            throw new SolrTypeException(type);
-        }
-        return resultSet;
-    }
-
 
     private boolean isFieldQuery(String query) {
-        //TODO fix
+
         String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
         return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:") || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:") || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
@@ -824,7 +690,7 @@ public class SearchServiceImpl implements SearchService {
                 log.debug("Solr query is: " + solrQuery.toString());
             }
             response = solrServer.query(solrQuery);
-            logTime("queryFacetSearch", response.getElapsedTime());
+          //  logTime("queryFacetSearch", response.getElapsedTime());
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
             log.error("SolrServerException: " + e.getMessage() + " for query "
@@ -876,7 +742,7 @@ public class SearchServiceImpl implements SearchService {
                     log.debug("Solr query is: " + solrQuery);
                 }
                 QueryResponse queryResponse = solrServer.query(solrQuery);
-                logTime("calculateTag", queryResponse.getElapsedTime());
+               // logTime("calculateTag", queryResponse.getElapsedTime());
 
                 resultSet.setResults((List<T>) queryResponse
                         .getBeans(beanClazz));

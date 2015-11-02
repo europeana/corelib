@@ -41,7 +41,6 @@ public class ApiMongoConnector {
 	 * Default constructor
 	 */
 	public ApiMongoConnector() {
-		log.info("new ApiMongoConnector");
 	}
 
 	/**
