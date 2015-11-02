@@ -162,20 +162,6 @@ public interface SearchService {
 			String queryString, String... refinements) throws SolrTypeException;
 
 	/**
-	 * Provide a pagination mechanism implementing the Solr cursors
-	 * @param beanInterface
-	 * 		The resulting class
-	 * @param query
-	 * 		The query to use for paginating
-	 * @param <T>
-	 *     	The bean type for the result
-	 * @return A List of paginated beans
-	 * @throws SolrTypeException
-	 */
-	<T extends IdBean> ResultSet<T> paginate(Class<T> beanInterface,
-											 Query query) throws SolrTypeException;
-
-	/**
 	 * returns a list of calculateTag suggestions and frequencies
 	 * 
 	 * @param query
