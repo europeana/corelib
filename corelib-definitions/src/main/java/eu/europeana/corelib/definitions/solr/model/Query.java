@@ -272,6 +272,8 @@ public class Query implements Cloneable {
 		return this;
 	}
 
+
+
 	public List<String> getFacets() {
 		return facets;
 	}
