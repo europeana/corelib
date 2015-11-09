@@ -739,10 +739,11 @@
     </element>
     <element name="componentColor" type="rdf:HexBinaryType">
         <annotation>
-            <documentation>A significant color present in an image. The colors must be taken from the CSS3 standard color palette 
-            and are expressed as a hexadecimal binary value. Example:
-            <spatialResolution>FF0000</spatialResolution>
+            <documentation>A significant color present in an image. The colors must be taken from the CSS3 standard color palette
+                and are expressed as a hexadecimal binary value. Example:
+                <spatialResolution>FF0000</spatialResolution>
             </documentation>
         </annotation>
+
     </element>
 </schema>

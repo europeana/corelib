@@ -180,14 +180,14 @@ public class FullBeanHandler implements ICollection {
         DBObject europeanaAggregationQuery = new BasicDBObject("about",
                 Pattern.compile("^/aggregation/europeana/" + collection + "/"));
         europeanaAggregations.remove(europeanaAggregationQuery,
-                WriteConcern.FSYNC_SAFE);
-        records.remove(query, WriteConcern.FSYNC_SAFE);
-        proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-        proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-        physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-        physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-        providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
-        aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
+                WriteConcern.REPLICAS_SAFE);
+        records.remove(query, WriteConcern.REPLICAS_SAFE);
+        proxies.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
+        proxies.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
+        physicalThing.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
+        physicalThing.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
+        providedCHOs.remove(providedCHOQuery, WriteConcern.REPLICAS_SAFE);
+        aggregations.remove(aggregationQuery, WriteConcern.REPLICAS_SAFE);
     }
 
     public void saveEdmClasses(FullBeanImpl fullBean, boolean isFirstSave) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
