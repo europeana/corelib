@@ -18,6 +18,7 @@ package eu.europeana.corelib.db.wrapper;
 
 import java.net.UnknownHostException;
 
+import com.mongodb.MongoClient;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.code.morphia.Morphia;
@@ -40,7 +41,6 @@ public class ApiMongoConnector {
 	 * Default constructor
 	 */
 	public ApiMongoConnector() {
-		log.info("new ApiMongoConnector");
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ApiMongoConnector {
 		try {
 			log.info(String.format("Connecting to '%s' mongo server: %s:%d/%s",
 					label, host, port, dbName));
-			Mongo mongo = new Mongo(host, port);
+			Mongo mongo = new MongoClient(host, port);
 			if (StringUtils.isNotEmpty(username)
 					&& StringUtils.isNotEmpty(password)) {
 				datastore = connection.createDatastore(mongo, dbName, username,
@@ -70,9 +70,7 @@ public class ApiMongoConnector {
 			}
 			log.info(String.format(
 					"Connection to '%s' mongo server was successful", label));
-		} catch (UnknownHostException e) {
-			log.error(e.getMessage());
-		} catch (MongoException e) {
+		} catch (UnknownHostException | MongoException e) {
 			log.error(e.getMessage());
 		}
 		return datastore;

@@ -1,6 +1,7 @@
 package eu.europeana.corelib.db;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
@@ -15,22 +16,21 @@ import eu.europeana.corelib.storage.MongoProvider;
 
 import java.io.IOException;
 
-public class MongoProviderTest implements MongoProvider {
+public class EmbeddedMongoProvider implements MongoProvider {
 
     private Mongo mongo;
 
-    public MongoProviderTest() {
+    public EmbeddedMongoProvider() {
         int port = 10000;
         try {
             IMongodConfig conf = new MongodConfigBuilder()
                     .version(Version.Main.PRODUCTION)
                     .net(new Net(port, Network.localhostIsIPv6())).build();
-            MongodStarter runtime = MongodStarter.getDefaultInstance();
-            MongodExecutable mongodExecutable = runtime.prepare(conf);
+            MongodStarter starter = MongodStarter.getDefaultInstance();
+            MongodExecutable mongodExecutable = starter.prepare(conf);
             mongodExecutable.start();
-            mongo = new Mongo("localhost", port);
-            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test", "",
-                    "");
+            mongo = new MongoClient("localhost", port);
+            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test", "", "");
             mongoDBServer.getDatastore().getDB().dropDatabase();
         } catch (IOException | MongoDBException e) {
             e.printStackTrace();

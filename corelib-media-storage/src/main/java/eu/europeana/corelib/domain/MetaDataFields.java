@@ -9,6 +9,4 @@ public enum MetaDataFields {
     VERSIONNUMBER,
     TECHNICAL_METADATA,
     ALIASES,
-    //TODO: why I need this?
-    _transientFields
 }

@@ -107,6 +107,10 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
     try {
       props.load(new FileInputStream(europeanaProperties));
 
+      final String[] swiftProp = new String[] { "authUrl", "userName", "password", "containerName", "regionName", "tenantName"};
+
+
+
       // PostgreSQL db, username, password, host
       if (env.getProperty(POSTGRESHOST) != null) {
         props.setProperty("postgres.db", env.getProperty(POSTGRESDB));
@@ -125,6 +129,8 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
         props.setProperty("mongodb.username", env.getProperty(mongoUserName));
         props.setProperty("mongodb.password", env.getProperty(mongoPassword));
+        props.setProperty("metainfo.mongodb.username", env.getProperty(mongoUserName));
+        props.setProperty("metainfo.mongodb.password", env.getProperty(mongoPassword));
 
         org.apache.log4j.Logger.getLogger(this.getClass()).error(env.getProperty(mongoHosts));
         String[] hosts = env.getProperty(mongoHosts).replace('[', ' ').replace("]", " ").split(",");
@@ -136,6 +142,8 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
         }
         props.setProperty("mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
         props.setProperty("mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
+        props.setProperty("metainfo.mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
+        props.setProperty("metainfo.mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
 
         props.setProperty(MONGO_DBNAME, MONGO_DBNAME_VALUE);
       }

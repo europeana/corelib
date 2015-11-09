@@ -168,7 +168,7 @@ public class SearchServiceTest {
 	public void findAllTest() throws SolrTypeException {
 		testCount++;
 		Assert.assertTrue("Data not loaded succesfull...", dataLoaded);
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+		ResultSet<BriefBean> results = searchService.calculateTag(BriefBean.class,
 				new Query("*:*"));
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "
@@ -183,7 +183,7 @@ public class SearchServiceTest {
 		Query query = new Query("*:*");
 
 		query.setRefinements(new String[] { "text:mus*" });
-		ResultSet<BriefBean> results = searchService.search(BriefBean.class,
+		ResultSet<BriefBean> results = searchService.calculateTag(BriefBean.class,
 				query);
 		Assert.assertNotNull("Did not got any results", results);
 		Assert.assertTrue("Did not return expected amount of results: "

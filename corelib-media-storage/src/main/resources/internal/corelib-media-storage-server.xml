@@ -16,12 +16,8 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-    <bean id="corelib_mediastorage_mongoServer_thumbnail" class="eu.europeana.corelib.server.impl.ThumbnailMongoServerImpl">
-        <constructor-arg ref="corelib_mediastorage_mongo_thumbnail"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.password']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['thumbnail.mongodb.namespace']}" type="java.lang.String"/>
+    <bean id="corelib_mediastorage_swiftStorageClient" class="eu.europeana.corelib.service.impl.swift.SwiftMediaStorageClientImpl">
+        <constructor-arg ref="corelib_mediastorage_swiftConfiguration"/>
     </bean>
 
 </beans>

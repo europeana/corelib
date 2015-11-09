@@ -19,7 +19,6 @@ public class MongoProviderImpl implements MongoProvider {
     private Mongo mongo;
 
     public MongoProviderImpl(String hosts, String ports) {
-        logger.error("MongoProvider got " + hosts + ":" + ports);
         String[] hostList = StringUtils.split(hosts, ",");
         String[] portList = StringUtils.split(ports,",");
         List<ServerAddress> serverAddresses = new ArrayList<>();
@@ -41,10 +40,7 @@ public class MongoProviderImpl implements MongoProvider {
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
         mongo = new MongoClient(serverAddresses, builder.build());
 
-        for (ServerAddress s : mongo.getAllAddress()) {
-            logger.error("Client: " + s.getHost());
         }
-    }
 
     @Override public Mongo getMongo() {
         return mongo;

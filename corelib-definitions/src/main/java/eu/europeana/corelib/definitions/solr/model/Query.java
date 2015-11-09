@@ -40,6 +40,8 @@ import eu.europeana.corelib.utils.model.LanguageVersion;
  */
 public class Query implements Cloneable {
 
+	private String currentCursorMark;
+
 	private final static String OR = " OR ";
 
 	/**
@@ -78,17 +80,17 @@ public class Query implements Cloneable {
 
 	private static List<String> defaultFacets;
 	static {
-		defaultFacets = new ArrayList<String>();
+		defaultFacets = new ArrayList<>();
 		for (Facet facet : Facet.values()) {
 			defaultFacets.add(facet.toString());
 		}
 	}
 
-	private List<String> facets = new ArrayList<String>(defaultFacets);
+	private List<String> facets = new ArrayList<>(defaultFacets);
 
 	private List<String> allFacetList;
 
-	private Map<String, String> parameters = new HashMap<String, String>();
+	private Map<String, String> parameters = new HashMap<>();
 
 	private String queryType;
 	private String executedQuery;
@@ -111,6 +113,7 @@ public class Query implements Cloneable {
 
 	public Query(String query) {
 		this.query = query;
+
 		start = DEFAULT_START;
 		pageSize = DEFAULT_PAGE_SIZE;
 		createAllFacetList();
@@ -126,7 +129,7 @@ public class Query implements Cloneable {
 	}
 
 	public String getQuery(boolean withTranslations) {
-		if (withTranslations == true
+		if (withTranslations
 			&& queryTranslation != null
 			&& StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
 			return queryTranslation.getModifiedQuery();
@@ -167,6 +170,14 @@ public class Query implements Cloneable {
 		}
 		return this;
 	}
+	public String getCurrentCursorMark(){
+		return this.currentCursorMark;
+	}
+
+	public Query setCurrentCursorMark(String currentCursorMark){
+		this.currentCursorMark = currentCursorMark;
+		return this;
+	}
 
 	public Query addRefinement(String refinement) {
 		if (this.refinements == null) {
@@ -192,7 +203,7 @@ public class Query implements Cloneable {
 
 	public Query addFacetQuery(QueryFacet queryFacet) {
 		if (facetQueries == null) {
-			facetQueries = new ArrayList<QueryFacet>();
+			facetQueries = new ArrayList<>();
 		}
 		facetQueries.add(queryFacet);
 		return this;
@@ -204,7 +215,7 @@ public class Query implements Cloneable {
 	}
 
 	public List<String> getFacetQueries() {
-		List<String> queries = new ArrayList<String>();
+		List<String> queries = new ArrayList<>();
 		if (facetQueries != null) {
 			for (QueryFacet queryFacet : facetQueries) {
 				queries.add(queryFacet.getQueryFacetString());
@@ -295,20 +306,106 @@ public class Query implements Cloneable {
 	 * because it is a special query facet
 	 */
 	private void replaceSpecialFacets() {
-		List<String> additionalFacets = new ArrayList<String>();
-		for (String facet : facets) {
-			if (StringUtils.equals("DEFAULT", facet)) {
-				additionalFacets.addAll(new ArrayList<String>(defaultFacets));
-			} else if (StringUtils.equals("REUSABILITY", facet)) {
-				// skip it
-			} else {
-				additionalFacets.add(facet);
-			}
-		}
-		facets = additionalFacets;
+    boolean ok = false;
+		  List<String> additionalFacets = new ArrayList<>();
+				for (String facet: facets) {
+        if (StringUtils.equalsIgnoreCase("DEFAULT", facet)) {
+            additionalFacets.addAll(defaultFacets);
+        }
+        else if (StringUtils.equalsIgnoreCase("MEDIA", facet)) {
+            additionalFacets.add("has_media");
+        }
+        else if (StringUtils.equalsIgnoreCase("THUMBNAIL", facet)) {
+            additionalFacets.add("has_thumbnails");
+        }
+        else if (StringUtils.equalsIgnoreCase("TEXT_FULLTEXT", facet)) {
+            additionalFacets.add("is_fulltext");
+        }
+        else if (StringUtils.equalsIgnoreCase("REUSABILITY", facet)) {
+            continue;
+        }
+        /*
+        else if (StringUtils.equalsIgnoreCase("MIME_TYPE", facet)) {
+           ok = true;
+           for (final MediaTypeEncoding mediaTypeEncoding: MediaTypeEncoding.values()) {
+               addFacetQuery(new QueryFacet("filter_tags:" + mediaTypeEncoding.getEncodedValue(), "filter_tags"));
+           }
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_SIZE", facet)) {
+           ok = true;
+           final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+           generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (2 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (3 << TagEncoding.IMAGE_SIZE.getBitPos()),
+                                  tag | (4 << TagEncoding.IMAGE_SIZE.getBitPos())
+                                 );
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_COLOUR", facet) ||
+                 StringUtils.equalsIgnoreCase("IMAGE_COLOR", facet)) {
+          ok = true;
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_GREYSCALE", facet) ||
+                 StringUtils.equalsIgnoreCase("IMAGE_GRAYSCALE", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
+                                 tag | (2 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
+                                 tag | (3 << TagEncoding.IMAGE_COLOURSPACE.getBitPos())
+                                );
+        }
+        else if (StringUtils.equalsIgnoreCase("IMAGE_ASPECTRATIO", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos()),
+                                 tag | (2 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos())
+                                );
+        }
+        else if (StringUtils.equalsIgnoreCase("VIODE_HD", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_QUALITY.getBitPos()),
+                                   tag | (0 << TagEncoding.VIDEO_QUALITY.getBitPos())
+                                  );
+        }
+        else if (StringUtils.equalsIgnoreCase("VIDEO_DURATION", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_DURATION.getBitPos()),
+                                   tag | (2 << TagEncoding.VIDEO_DURATION.getBitPos()),
+                                   tag | (3 << TagEncoding.VIDEO_DURATION.getBitPos())
+                                  );
+        }
+        else if (StringUtils.equalsIgnoreCase("SOUND_DURATION", facet)) {
+          ok = true;
+          final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
+          generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
+                                 tag | (0 << TagEncoding.SOUND_DURATION.getBitPos())
+                                 );
+        }
+        else if (StringUtils.equalsIgnoreCase("SOUND_HQ", facet)) {
+          ok = true;
+            final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
+            generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
+                                   tag | (2 << TagEncoding.SOUND_DURATION.getBitPos())
+                                  );
+        }
+        */
+        else additionalFacets.add(facet);
+    }
+		  facets = additionalFacets;
 	}
 
-	public boolean isApiQuery() {
+    private void generateFacetTagQuery (int ... tags) {
+        if (null == tags || 0 == tags.length) {
+            return ;
+        }
+
+        for (final int tag: tags) {
+            addFacetQuery(new QueryFacet("facet_tags:" + tag, "facet_tags"));
+        }
+    }
+
+    public boolean isApiQuery() {
 		return apiQuery;
 	}
 
@@ -347,7 +444,7 @@ public class Query implements Cloneable {
 
 	@Override
 	public String toString() {
-		List<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<>();
 		params.add("q=" + query);
 		params.add("start=" + start);
 		params.add("rows=" + pageSize);
@@ -419,7 +516,7 @@ public class Query implements Cloneable {
 	}
 
 	private void createAllFacetList() {
-		allFacetList = new ArrayList<String>();
+		allFacetList = new ArrayList<>();
 		allFacetList.addAll(facets);
 	}
 
@@ -434,7 +531,7 @@ public class Query implements Cloneable {
 	}
 
 	public void setFacet(String facet) {
-		facets = new ArrayList<String>();
+		facets = new ArrayList<>();
 		facets.add(facet);
 	}
 
@@ -452,14 +549,14 @@ public class Query implements Cloneable {
 	}
 
 	public void divideRefinements() {
-		searchRefinements = new ArrayList<String>();
-		facetRefinements = new ArrayList<String>();
+		searchRefinements = new ArrayList<>();
+		facetRefinements = new ArrayList<>();
 
 		if (refinements == null) {
 			return;
 		}
 
-		Map<String, FacetCollector> register = new LinkedHashMap<String, FacetCollector>();
+		Map<String, FacetCollector> register = new LinkedHashMap<>();
 		for (String facetTerm : refinements) {
 			if (facetTerm.contains(":")) {
 				boolean replaced = false;
@@ -512,7 +609,7 @@ public class Query implements Cloneable {
 	}
 
 	public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
-		List<String> queryTranslationTerms = new ArrayList<String>();
+		List<String> queryTranslationTerms = new ArrayList<>();
 		for (LanguageVersion term : languageVersions) {
 			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
 			if (!queryTranslationTerms.contains(phrase)) {
@@ -526,8 +623,8 @@ public class Query implements Cloneable {
 		private boolean isTagged = true;
 		private String name;
 		private String tagName;
-		private List<String> values = new ArrayList<String>();
-		private List<String> replacedValues = new ArrayList<String>();
+		private List<String> values = new ArrayList<>();
+		private List<String> replacedValues = new ArrayList<>();
 		private boolean isApiQuery = false;
 		private boolean replaced = false;
 
@@ -571,7 +668,7 @@ public class Query implements Cloneable {
 			} else if (name.equals(Facet.TYPE.name())) {
 				value = value.toUpperCase().replace("\"", "");
 			} else {
-				if (!isApiQuery && (value.indexOf(" ") > -1 || value.indexOf("!") > -1)) {
+				if (!isApiQuery && (value.contains(" ") || value.contains("!"))) {
 					if (!value.startsWith("\"")) {
 						value = '"' + value;
 					}

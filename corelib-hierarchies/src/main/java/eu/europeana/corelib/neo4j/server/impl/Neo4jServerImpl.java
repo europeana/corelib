@@ -280,7 +280,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		} finally {
 			method.releaseConnection();
 		}
-		return 0;
+		return 1;
 	}
 
 	@Override

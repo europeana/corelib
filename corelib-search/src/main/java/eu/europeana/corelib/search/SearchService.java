@@ -38,7 +38,7 @@ import eu.europeana.corelib.search.model.ResultSet;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query
- * search or a FullBean in the case of a user selection. Currently the
+ * calculateTag or a FullBean in the case of a user selection. Currently the
  * implementation uses SOLR for Brief/APIBeans and MongoDB for FullBean
  * retrieval.
  * 
@@ -120,14 +120,14 @@ public interface SearchService {
 	String resolveId(String collectionId, String recordId);
 
 	/**
-	 * Perform a search in SOLR based on the given query and return the results
+	 * Perform a calculateTag in SOLR based on the given query and return the results
 	 * in the format of the given class.
 	 * 
 	 * @param beanInterface
 	 *            The required bean type, should be ApiBean or BriefBean
 	 * @param query
-	 *            Model class containing the search specification.
-	 * @return The search results, including facets, breadcrumb and original
+	 *            Model class containing the calculateTag specification.
+	 * @return The calculateTag results, including facets, breadcrumb and original
 	 *         query.
 	 * @throws SolrTypeException
 	 */
@@ -162,25 +162,25 @@ public interface SearchService {
 			String queryString, String... refinements) throws SolrTypeException;
 
 	/**
-	 * returns a list of search suggestions and frequencies
+	 * returns a list of calculateTag suggestions and frequencies
 	 * 
 	 * @param query
-	 *            The search term to find suggestions for
+	 *            The calculateTag term to find suggestions for
 	 * @param pageSize
 	 *            Amount of requested suggestions
-	 * @return List of search suggestions
+	 * @return List of calculateTag suggestions
 	 * @throws SolrTypeException
 	 */
 	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
 
 	/**
-	 * returns a list of search suggestions and frequencies
+	 * returns a list of calculateTag suggestions and frequencies
 	 * 
 	 * @param query
-	 *            The search term to find suggestions for
+	 *            The calculateTag term to find suggestions for
 	 * @param pageSize
 	 *            Amount of requested suggestions
-	 * @return List of search suggestions
+	 * @return List of calculateTag suggestions
 	 * @throws SolrTypeException
 	 */
 	List<Term> suggestions(String query, int pageSize, String field)

@@ -162,14 +162,19 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 
 	@Override
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
-		UrlBuilder url = new UrlBuilder(configuration.getImageCacheUrl());
+					if (null == configuration.getImageCacheUrl()) {
+
+									return new UrlBuilder("");
+					}
+
+					UrlBuilder url = new UrlBuilder(configuration.getImageCacheUrl());
         if(thumbnail != null) {
             url.addParam("uri", thumbnail.trim());
         }
-		url.addParam("size", ThumbSize.LARGE.toString());
-		if(type != null) {
+					url.addParam("size", ThumbSize.LARGE.toString());
+					if(type != null) {
             url.addParam("type", type.toString());
-        }
+     }
 		return url;
 	}
 
