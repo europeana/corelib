@@ -18,6 +18,7 @@ package eu.europeana.corelib.search.impl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
@@ -112,7 +113,7 @@ public class SearchServiceImpl implements SearchService {
             "what", "where", "when", "title");
     private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-    private static final Hasher hf = Hashing.md5().newHasher();
+    private static final HashFunction hf = Hashing.md5();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
     private static boolean STARTED = false;
 
@@ -236,9 +237,11 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
-                final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
+                final HashCode hashCodeAbout = hf.newHasher()
+                        .putString(webResource.getAbout(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
-                        .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                        .putString(fullBean.getAbout(), Charsets.UTF_8)
+                        .hash();
 
 
                 final String webMetaInfoId = hashCodeAbout.toString();
@@ -248,10 +251,11 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the aggregation is shown by
             if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                final HashCode hashCodeIsShownBy = hf
+                final HashCode hashCodeIsShownBy = hf.newHasher()
                         .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
-                        .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                        .putString(fullBean.getAbout(), Charsets.UTF_8)
+                        .hash();
 
                 final String webMetaInfoId = hashCodeIsShownBy.toString();
                 webMetaInfo = getMetaInfo(webMetaInfoId);
@@ -274,10 +278,6 @@ public class SearchServiceImpl implements SearchService {
                 urls.addAll(Arrays.asList(aggregation.getHasView()));
             }
 
-            if (!urls.isEmpty()) {
-                System.out.println(Arrays.deepToString(urls.toArray()));
-            }
-
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
@@ -286,9 +286,11 @@ public class SearchServiceImpl implements SearchService {
                 WebResourceMetaInfoImpl webMetaInfo = null;
 
                 if (webResource.getAbout() != null) {
-                    final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
+                    final HashCode hashCodeAbout = hf.newHasher()
+                            .putString(webResource.getAbout(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
-                            .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                            .putString(fullBean.getAbout(), Charsets.UTF_8)
+                            .hash();
 
                     // Locate the technical meta data from the web resource about
                     final String webMetaInfoId = hashCodeAbout.toString();
@@ -298,9 +300,11 @@ public class SearchServiceImpl implements SearchService {
                 // Locate the technical meta data from the aggregation is shown
                 // by
                 if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    final HashCode hashCodeIsShownBy = hf.putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                    final HashCode hashCodeIsShownBy = hf.newHasher()
+                            .putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
-                            .putString(aggregation.getAbout(), Charsets.UTF_8).hash();
+                            .putString(aggregation.getAbout(), Charsets.UTF_8)
+                            .hash();
 
                     final String webMetaInfoId = hashCodeIsShownBy.toString();
                     webMetaInfo = getMetaInfo(webMetaInfoId);
