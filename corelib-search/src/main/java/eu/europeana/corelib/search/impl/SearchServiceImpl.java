@@ -131,7 +131,17 @@ public class SearchServiceImpl implements SearchService {
         );
     }
 
+    @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
+        if (fullBean == null) {
+         //   log.error("FullBean is null when injecting web meta info");
+            return;
+        }
+
+        if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
+       //     log.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+            return;
+        }
 
         // Temp fix for missing web resources
         Aggregation aggregationFix = fullBean.getAggregations().get(0);
@@ -215,6 +225,7 @@ public class SearchServiceImpl implements SearchService {
         long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+
         injectWebMetaInfo(fullBean);
 
         if (fullBean != null && isHierarchy(fullBean.getAbout())) {
