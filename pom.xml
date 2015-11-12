@@ -172,6 +172,16 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.5.1</version>
 				</plugin>
+				<plugin>
+				  <groupId>org.codehaus.mojo</groupId>
+				  <artifactId>cobertura-maven-plugin</artifactId>
+				  <version>2.7</version>
+				  <configuration>
+					  <formats>
+						  <format>xml</format>
+					  </formats>
+				  </configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
