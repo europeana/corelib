@@ -89,6 +89,12 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
   private final static String PORTALSERVER = "portal_server";
   private final static String PORTALCANONICALURL = "portal_server_canonical";
 
+  private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-test.credentials.authentication_uri";
+  private final static String SWIFT_AUTHENTICATION_AV_ZONE="vcap.services.swift-test.credentials.availability_zone";
+  private final static String SWIFT_AUTHENTICATION_TENANT_NAME="vcap.services.swift-test.credentials.tenant_name";
+  private final static String SWIFT_AUTHENTICATION_USER_NAME="vcap.services.swift-test.credentials.user_name";
+  private final static String SWIFT_AUTHENTICATION_PASSWORD="vcap.services.swift-test.credentials.password";
+
   private static StandardServletEnvironment env = new StandardServletEnvironment();
 
   public VcapPropertyLoaderListener() {
@@ -107,7 +113,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
     try {
       props.load(new FileInputStream(europeanaProperties));
 
-      final String[] swiftProp = new String[] { "authUrl", "userName", "password", "containerName", "regionName", "tenantName"};
+
 
 
 
@@ -155,6 +161,14 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
         props.setProperty("redis.password", env.getProperty(REDISPASSWORD));
       }
 
+      if (env.getProperty(SWIFT_AUTHENTICATION_URL) != null) {
+        props.setProperty("swift.authUrl", env.getProperty(SWIFT_AUTHENTICATION_URL));
+        props.setProperty("swift.password", env.getProperty(SWIFT_AUTHENTICATION_PASSWORD));
+        props.setProperty("swift.username", env.getProperty(SWIFT_AUTHENTICATION_USER_NAME));
+        props.setProperty("swift.regionName", env.getProperty(SWIFT_AUTHENTICATION_AV_ZONE));
+        props.setProperty("swift.tenantName", env.getProperty(SWIFT_AUTHENTICATION_TENANT_NAME));
+        props.setProperty("swift.containerName", "sitemap");
+      }
       // API and Portal canonical URLs, server
       setHTTPProperty(props, API2URL);
       setHTTPProperty(props, API2CANONICALURL);
