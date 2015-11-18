@@ -43,7 +43,7 @@ public interface UserService extends AbstractService<User> {
 	 * @return Created user entity.
 	 * @throws DatabaseException When the Token is invalid
 	 */
-	User create(String tokenString, String username, String password) throws DatabaseException;
+	User create(String token, String username, String password) throws DatabaseException;
 
 	/**
 	 * Creates a new User, based on a existing token, and given params
@@ -63,7 +63,7 @@ public interface UserService extends AbstractService<User> {
 	/**
 	 * Returns a User if there is a valid user name provided.
 	 *
-	 * @param username Name of user, case sensitive
+	 * @param userName Name of user, case sensitive
 	 * @return A user with given user name, null if not found.
 	 */
 	User findByName(String userName);
@@ -103,7 +103,7 @@ public interface UserService extends AbstractService<User> {
 	 * Creates and add a SavedItem to an existing User
 	 *
 	 * @param userId   The id of the excising user to add the new SavedSearch to
-	 * @param objectId EuropeanaObjectId
+	 * @param europeanaObjectId EuropeanaObjectId
 	 * @return The User including the new saved item
 	 * @throws DatabaseException Thrown when no valid user or object id is provided
 	 */
@@ -113,7 +113,7 @@ public interface UserService extends AbstractService<User> {
 	 * Creates and add a SocialTag to an existing user
 	 *
 	 * @param userId   The id of the excising user to add the new SavedSearch to
-	 * @param objectId EuropeanaObjectId
+	 * @param europeanaObjectId EuropeanaObjectId
 	 * @param tag
 	 * @return The User including the new social tag
 	 * @throws DatabaseException Thrown when no valid user, object id or tag is provided

@@ -71,6 +71,7 @@
     </bean>
 
     <bean id="corelib_db_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+          primary="true"
           p:entityManagerFactory-ref="corelib_db_entityManagerFactory"
           p:dataSource-ref="corelib_db_dataSource"/>
 

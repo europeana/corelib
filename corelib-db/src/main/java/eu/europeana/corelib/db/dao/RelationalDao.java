@@ -17,11 +17,11 @@
 
 package eu.europeana.corelib.db.dao;
 
-import java.io.Serializable;
-import java.util.List;
-
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Generic DAO service layer. Used in combination with a DAO instance for every type
@@ -112,7 +112,6 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * @param clazz  The class of the Entity type to retrieve
      * @param qName  Name of the Named Query
      * @param params Parameters in order as marked in Named Query
-     * @return
      */
     <T> List<T> findByNamedQuery(Class<T> clazz, String qName, Object... params);
 
@@ -125,7 +124,6 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * @param clazz  The class of the Entity type to retrieve
      * @param qName  Name of the Named Query
      * @param params Parameters in order as marked in Named Query
-     * @return
      */
     <T> List<T> findByNamedQueryCustom(Class<T> clazz, String qName, Object... params);
 
@@ -143,7 +141,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * Given params will be inserted into query in order of params.
      *
      * @param clazz  The class of the Entity type to retrieve
-     * @param query  Name of the Named Query
+     * @param qName  Name of the Named Query
      * @param params Params in order as marked in Named Query
      * @return First matching entity, null if no matches are found
      */
@@ -151,7 +149,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
 
 
 	/*
-	 * MODIFIERS
+     * MODIFIERS
 	 */
 
     /**
@@ -159,7 +157,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * <p/>
      * (This method is generic and can be used for other entities as well.)
      *
-     * @param object Existing object to update
+     * @param entity Existing object to update
      */
     <T extends IdentifiedEntity<?>> T insert(T entity);
 
@@ -168,7 +166,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * <p/>
      * (This method is generic and can be used for other entities as well.)
      *
-     * @param object Existing object to update
+     * @param entity Existing object to update
      */
     <T extends IdentifiedEntity<?>> T update(T entity);
 
@@ -177,7 +175,7 @@ public interface RelationalDao<E extends IdentifiedEntity<?>> {
      * <p/>
      * (This method is generic and can be used for other entities as well.)
      *
-     * @param object The existing row to delete
+     * @param entity The existing row to delete
      */
     void delete(IdentifiedEntity<?> entity);
 
