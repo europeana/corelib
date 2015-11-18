@@ -89,11 +89,11 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
   private final static String PORTALSERVER = "portal_server";
   private final static String PORTALCANONICALURL = "portal_server_canonical";
 
-  private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-test.credentials.authentication_uri";
-  private final static String SWIFT_AUTHENTICATION_AV_ZONE="vcap.services.swift-test.credentials.availability_zone";
-  private final static String SWIFT_AUTHENTICATION_TENANT_NAME="vcap.services.swift-test.credentials.tenant_name";
-  private final static String SWIFT_AUTHENTICATION_USER_NAME="vcap.services.swift-test.credentials.user_name";
-  private final static String SWIFT_AUTHENTICATION_PASSWORD="vcap.services.swift-test.credentials.password";
+  private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-sitemap.credentials.authentication_uri";
+  private final static String SWIFT_AUTHENTICATION_AV_ZONE="vcap.services.swift-sitemap.credentials.availability_zone";
+  private final static String SWIFT_AUTHENTICATION_TENANT_NAME="vcap.services.swift-sitemap.credentials.tenant_name";
+  private final static String SWIFT_AUTHENTICATION_USER_NAME="vcap.services.swift-sitemap.credentials.user_name";
+  private final static String SWIFT_AUTHENTICATION_PASSWORD="vcap.services.swift-sitemap.credentials.password";
 
   private static StandardServletEnvironment env = new StandardServletEnvironment();
 
