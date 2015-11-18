@@ -17,16 +17,15 @@
 package eu.europeana.corelib.neo4j.server;
 
 import java.util.List;
-
 import org.neo4j.graphdb.Node;
-
 import eu.europeana.corelib.neo4j.entity.Hierarchy;
+import eu.europeana.corelib.neo4j.entity.CustomNode;
 
 /**
  * Neo4j server connection interface
  * 
  * @author Yorgos.Mamakis@ europeana.eu
- *
+ * @author Maike.Dulk@ europeana.eu
  */
 public interface Neo4jServer {
 
@@ -42,51 +41,79 @@ public interface Neo4jServer {
 	/**
 	 * Retrieve the children nodes of a parent node (parent-child relation
 	 * dcterms:hasPart). Returns null if null is present
-	 * 
-	 * @param id
-	 *            The node for which to retrieve the children
-	 * @param offset
-	 *            from which child to start receiving from
-	 * @param limit
-	 *            how many children to receive
+	 * @param node The node for which to retrieve the children
+	 * @param offset from which child to start receiving from
+	 * @param limit  how many children to receive
 	 * @return A list of children nodes with size <= to the specified limit
+	 * and from the specified offset
 	 */
-	List<Node> getChildren(Node id, int offset, int limit);
+	List<CustomNode> getChildren(Node node, int offset, int limit);
+
+        /**
+         * Convenience override
+         * @param rdfAbout The node with this rdf:about to start from
+         * @param offset from which child to start receiving from
+         * @param limit  how many children to receive
+         * @return A list of children nodes with size  <= to the specified limit
+         * and from the specified offset
+         */
+	List<CustomNode> getChildren(String rdfAbout, int offset, int limit);
 
 	/**
 	 * Retrieve the parent node of a node (parent relation dcterms:isPartOf)
 	 * 
-	 * @param id
-	 *            The node for which to retrieve the parent
+	 * @param node The node for which to retrieve the parent
 	 * @return The parent node
 	 */
-	Node getParent(Node id);
+	Node getParent(Node node);
 
 	/**
-	 * Retrieve ordered list of children using a specific node as a child
-	 * following outbound edm:isNextInSequence relations
+	 * Retrieve ordered list of siblings using a specific node as a start
+	 * following outbound edm:isNextInSequence or isFakeOrder relations
 	 * 
-	 * @param id The node to start from
+	 * @param node The node to start from
 	 * @param limit the number of nodes to retrieve
-	 * @return A list of children nodes with size <= to the specified limit
+	 * @return A list of sibling nodes with size <= to the specified limit
 	 */
-	List<Node> getFollowingSiblings(Node id, int limit);
+	List<CustomNode> getFollowingSiblings(Node node, int limit);
+
 	/**
-	 * Retrieve ordered list of children using a specific node as a child
-	 * following inbound edm:isNextInSequence relations
+	 * Retrieve ordered list of siblings using a specific node as a start
+	 * following outbound edm:isNextInSequence or isFakeOrder relations
 	 * 
-	 * @param id The node to start from
-	 * @param limit the number of nodes to retrieve
-	 * @return A list of children nodes with size <= to the specified limit
+	 * @param rdfAbout The node with this rdf:about to start from
+	 * @param limit the number of siblings to retrieve
+	 * @return A list of sibling nodes with size <= to the specified limit
 	 */
-	List<Node> getPreceedingSiblings(Node id, int limit);
+	List<CustomNode> getFollowingSiblings(String rdfAbout, int limit);
+
+	/**
+         * Convenience override
+	 * Retrieve ordered list of siblings using a specific node as a start
+	 * following inbound edm:isNextInSequence or isFakeOrder relations
+	 *
+	 * @param node The node to start from
+	 * @param limit the number of nodes to retrieve
+	 * @return A list of sibling nodes with size <= to the specified limit
+	 */
+	List<CustomNode> getPrecedingSiblings(Node node, int limit);
+
+	/**
+	 * Retrieve ordered list of siblings using a specific node as a start
+	 * following inbound edm:isNextInSequence or isFakeOrder relations
+	 *
+	 * @param rdfAbout The node with this rdf:about to start from
+	 * @param limit the number of nodes to retrieve
+	 * @return A list of sibling nodes with size <= to the specified limit
+	 */
+	List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit);
 	
 	/**
 	 * Retrieve the number of children for a specific node
-	 * @param id The node to search on
+	 * @param node The node to search on
 	 * @return The number of children for the specific node
 	 */
-	long getChildrenCount(Node id);
+	long getChildrenCount(Node node);
 
 	/**
 	 * Get the order of the node within its hierarchy (local index)
@@ -94,6 +121,20 @@ public interface Neo4jServer {
 	 * @return The index number of the node
 	 */
 	long getNodeIndex(Node node);
+
+	/**
+         * Get the order of the node within its hierarchy (local index)
+	 * @param nodeId the numerical id of the node
+	 * @return The index number of the node
+	 */
+	long getNodeIndex(String nodeId);
+
+        /**
+         * Get the order of the node within its hierarchy (local index)
+	 * @param rdfAbout the rdf:about string of a specific neo4j node
+	 * @return The index number of the node
+	 */
+	long getNodeIndexByRdfAbout(String rdfAbout);
 
 	/**
 	 * Get the initial hierachy for a specific Europeana id
