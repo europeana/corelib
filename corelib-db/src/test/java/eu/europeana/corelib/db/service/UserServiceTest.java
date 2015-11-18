@@ -142,6 +142,9 @@ public class UserServiceTest {
         User user = userService.create(token.getToken(), USERNAME, PASSWORD);
         assertNotNull("Unable to create user", user);
 
+        assertEquals("Count doesn't match", 1, userDao.count());
+        assertEquals("FindAll doesn't match", 1, userDao.findAll().size());
+
         user = userService.findByEmail(EMAIL);
         assertNotNull("Unable to retrieve user by email adres", user);
         assertEquals("Password not correctly encoded.", user.getPassword(),

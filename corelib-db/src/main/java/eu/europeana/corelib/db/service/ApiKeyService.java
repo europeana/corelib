@@ -37,7 +37,6 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * Find all API keys sorted by registration date
      *
      * @param asc Sort direction (true = ascending, false = descending)
-     * @return
      */
     List<ApiKey> findAllSortByDate(boolean asc);
 
@@ -48,7 +47,6 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * @param asc    Sort direction (true = ascending, false = descending)
      * @param offset The first item to retrieve
      * @param limit  The number of items to retrieve
-     * @return
      */
     List<ApiKey> findAllSortByDate(boolean asc, int offset, int limit);
 

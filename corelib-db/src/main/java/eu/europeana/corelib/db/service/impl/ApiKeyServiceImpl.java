@@ -91,6 +91,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
     }
 
     @Override
+    @Deprecated
     public ApiKey createApiKey(String token, String email, String apiKey,
                                String privateKey, Long limit, String appName, String username,
                                String company, String country, String firstName, String lastName,

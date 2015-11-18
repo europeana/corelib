@@ -132,7 +132,7 @@
 		<version.apacheVelocity>1.7</version.apacheVelocity>
 		<version.springCore>4.0.9.RELEASE</version.springCore>
 		<version.springWebService>2.2.1.RELEASE</version.springWebService>
-		<version.springSecurity>3.2.7.RELEASE</version.springSecurity>
+		<version.springSecurity>3.2.8.RELEASE</version.springSecurity>
 		<version.springSecurityOauth>2.0.7.RELEASE</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsLang3>3.4</version.commonsLang3>

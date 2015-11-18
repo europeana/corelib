@@ -217,7 +217,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		}
 
 		SavedItem savedItem = new SavedItemImpl();
-		FullBean bean = null;
+		FullBean bean;
 
 		bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
 
