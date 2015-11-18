@@ -17,26 +17,15 @@
 
 package eu.europeana.corelib.db.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-
 import eu.europeana.corelib.db.entity.relational.SavedItemImpl;
 import eu.europeana.corelib.db.entity.relational.SavedSearchImpl;
 import eu.europeana.corelib.db.entity.relational.SocialTagImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.entity.relational.custom.TagCloudItem;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.service.ApiKeyService;
 import eu.europeana.corelib.db.service.TokenService;
 import eu.europeana.corelib.db.service.UserService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
-import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
@@ -49,10 +38,16 @@ import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.search.SearchService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
- * 
  * @see eu.europeana.corelib.db.service.UserService
  * @see eu.europeana.corelib.db.entity.relational.UserImpl
  */
@@ -66,9 +61,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	@Resource(type = SearchService.class)
 	private SearchService searchService;
 
-	@Resource
-	private ApiKeyService apiKeyService;
-
 	@Override
 	public User create(String tokenString, String username, String password)
 			throws DatabaseException {
@@ -77,9 +69,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 	@Override
 	public User create(String tokenString, String username, String password,
-			boolean isApiRegistration, String company, String country,
-			String firstName, String lastName, String website, String address, 
-			String phone, String fieldOfWork)
+					   boolean isApiRegistration, String company, String country,
+					   String firstName, String lastName, String website, String address,
+					   String phone, String fieldOfWork)
 			throws DatabaseException {
 
 		if (StringUtils.isBlank(tokenString)) {
@@ -134,15 +126,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 
 	@Override
-	public User findByApiKey(String apiKey) {
-		if (StringUtils.isNotBlank(apiKey)) {
-			return getDao().findOneByNamedQuery(User.QUERY_FINDBY_APIKEY,
-					apiKey);
-		}
-		return null;
-	}
-
-	@Override
 	public User findByName(String userName) {
 		if (StringUtils.isNotBlank(userName)) {
 			return getDao().findOneByNamedQuery(User.QUERY_FINDBY_NAME,
@@ -156,35 +139,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		User user = findByEmail(email);
 		if ((user != null)
 				&& StringUtils.equals(user.getPassword(),
-						hashPassword(password))) {
+				hashPassword(password))) {
 			return user;
 		}
 		return null;
-	}
-
-	@Override
-	public User registerApiUserForMyEuropeana(Long userId, String userName, String password) throws DatabaseException {
-		if (userId == null) {
-			throw new DatabaseException(ProblemType.NO_USER_ID);
-		}
-
-		User user = getDao().findByPK(userId);
-		if (user == null) {
-			throw new DatabaseException(ProblemType.NO_USER);
-		}
-
-		if (StringUtils.isBlank(userName)) {
-			throw new DatabaseException(ProblemType.NO_USERNAME);
-		}
-
-		if (StringUtils.isBlank(password)) {
-			throw new DatabaseException(ProblemType.NO_PASSWORD);
-		}
-
-		user.setUserName(userName);
-		user.setPassword(hashPassword(password));
-
-		return user;
 	}
 
 	@Override
@@ -253,11 +211,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		if (user == null) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
-		
+
 		if (findSavedItemByEuropeanaId(userId, europeanaObjectId) != null) {
 			throw new DatabaseException(ProblemType.DUPLICATE);
 		}
-		
+
 		SavedItem savedItem = new SavedItemImpl();
 		FullBean bean = null;
 
@@ -268,7 +226,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			Proxy proxy = proxies.get(0);
 			if (proxy != null && proxy.getDcPublisher() != null) {
 				savedItem.setAuthor(StringUtils.abbreviate(proxy
-						.getDcPublisher().values().iterator().next().get(0),
+								.getDcPublisher().values().iterator().next().get(0),
 						RelationalDatabase.FIELDSIZE_AUTHOR));
 			}
 		}
@@ -277,7 +235,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 	@Override
 	public User createSocialTag(Long userId, String europeanaObjectId,
-			String tag) throws DatabaseException {
+								String tag) throws DatabaseException {
 
 		if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
 				|| StringUtils.isBlank(tag)) {
@@ -319,10 +277,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
 	}
-	
+
 	@Override
 	public void removeSavedItem(Long userId, String europeanaId) throws DatabaseException {
-		SavedItem savedItem = findSavedItemByEuropeanaId(userId, europeanaId); 
+		SavedItem savedItem = findSavedItemByEuropeanaId(userId, europeanaId);
 		if (savedItem != null) {
 			savedItem.getUser().getSavedItems().remove(savedItem);
 		}
@@ -337,24 +295,24 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			socialTag.getUser().getSocialTags().remove(socialTag);
 		}
 	}
-	
+
 	@Override
 	public void removeSocialTag(Long userId, String europeanaId, String tag) throws DatabaseException {
 		List<SocialTag> results = null;
 		if (StringUtils.isNotBlank(europeanaId) && StringUtils.isNotBlank(tag)) {
 			results = getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG_EUROPEANAID, userId, StringUtils.lowerCase(tag), europeanaId);
-			
+
 		} else if (StringUtils.isNotBlank(tag)) {
 			results = findSocialTagsByTag(userId, tag);
 		} else if (StringUtils.isNotBlank(europeanaId)) {
 			results = findSocialTagsByEuropeanaId(userId, europeanaId);
 		}
-		if ( (results != null) && !results.isEmpty()) {
+		if ((results != null) && !results.isEmpty()) {
 			results.get(0).getUser().getSocialTags().removeAll(results);
 		}
-		
+
 	}
-	
+
 	@Override
 	public List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException {
 		if (userId == null) {
@@ -362,26 +320,26 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 		}
 		return getDao().findByNamedQueryCustom(TagCloudItem.class, SocialTag.QUERY_CREATECLOUD_BYUSER, userId);
 	}
-	
+
 	@Override
 	public List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException {
-		if ( (userId == null) || StringUtils.isBlank(tag)) {
+		if ((userId == null) || StringUtils.isBlank(tag)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG, userId, StringUtils.lowerCase(tag));
 	}
-	
+
 	@Override
 	public List<SocialTag> findSocialTagsByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
-		if ( (userId == null) || StringUtils.isBlank(europeanaId)) {
+		if ((userId == null) || StringUtils.isBlank(europeanaId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_EUROPEANAID, userId, europeanaId);
 	}
-	
+
 	@Override
 	public SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
-		if ( (userId == null) || StringUtils.isBlank(europeanaId)) {
+		if ((userId == null) || StringUtils.isBlank(europeanaId)) {
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		return getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, europeanaId);
@@ -423,10 +381,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		user.setLanguageSearch(languageCodes);
-		updateUserLanguageSearchApplied(userId, languageCodes.length > 0 );
+		updateUserLanguageSearchApplied(userId, languageCodes.length > 0);
 		return user;
 	}
-	
+
 	@Override
 	public User updateUserLanguageSearchApplied(Long userId, Boolean languageSearchApplied) throws DatabaseException {
 		if (userId == null) {
@@ -441,12 +399,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 	}
 
 	private FullBean populateEuropeanaUserObject(User user,
-			String europeanaObjectId, EuropeanaUserObject instance)
+												 String europeanaObjectId, EuropeanaUserObject instance)
 			throws DatabaseException {
 
 		FullBean bean;
 		try {
-			bean = searchService.findById(europeanaObjectId,false);
+			bean = searchService.findById(europeanaObjectId, false);
 		} catch (MongoDBException e) {
 			throw new DatabaseException(e, ProblemType.UNKNOWN);
 		}
@@ -519,9 +477,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
 	/**
 	 * Hashing password using ShaPasswordEncoder.
-	 * 
-	 * @param password
-	 *            The password in initial form.
+	 *
+	 * @param password The password in initial form.
 	 * @return Hashed password as to be stored in database
 	 */
 	private String hashPassword(String password) {

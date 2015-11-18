@@ -17,12 +17,12 @@
 
 package eu.europeana.corelib.definitions.db.entity.relational;
 
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.users.Role;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
-import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.definitions.users.Role;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -30,7 +30,6 @@ import eu.europeana.corelib.definitions.users.Role;
 public interface User extends IdentifiedEntity<Long> {
 
 	String QUERY_FINDBY_EMAIL = "User.findByEmail";
-	String QUERY_FINDBY_APIKEY = "User.findByApiKey";
 	String QUERY_FINDBY_NAME = "User.findByName";
 
 	void setEmail(String email);
@@ -40,10 +39,6 @@ public interface User extends IdentifiedEntity<Long> {
 	String getPassword();
 
 	void setPassword(String password);
-
-	String getApiKey();
-
-	void setApiKey(String apiKey);
 
 	Date getRegistrationDate();
 
@@ -67,9 +62,7 @@ public interface User extends IdentifiedEntity<Long> {
 
 	Set<SocialTag> getSocialTags();
 
-    List<SocialTag> getSocialTagsOrdered();
-
-	Set<ApiKey> getApiKeys();
+	List<SocialTag> getSocialTagsOrdered();
 
 	String getFirstName();
 
@@ -114,7 +107,7 @@ public interface User extends IdentifiedEntity<Long> {
 	String[] getLanguageSearch();
 
 	void setLanguageSearch(String... languageCodes);
-	
+
 	Boolean getLanguageSearchApplied();
 
 	void setLanguageSearchApplied(Boolean languageSearchApplied);

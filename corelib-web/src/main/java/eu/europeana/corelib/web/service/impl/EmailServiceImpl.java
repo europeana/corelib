@@ -185,9 +185,9 @@ public abstract class EmailServiceImpl implements EmailService {
 		EmailBuilder builder = createEmailBuilder();
 		builder.setModel(model);
 		builder.setTemplate("registerApiNotifyUser"); // see corelib_web_emailConfigs
-		builder.setEmailTo(apiKey.getUser().getEmail());
+		builder.setEmailTo(apiKey.getEmail());
 		mailSender.send(builder);
-		log.info(String.format("Sent API details to %s", apiKey.getUser().getEmail()));
+		log.info(String.format("Sent API details to %s", apiKey.getEmail()));
 	}
 
 	/**
