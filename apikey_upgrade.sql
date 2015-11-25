@@ -18,7 +18,7 @@ CREATE INDEX apikey_email_index ON public.apikey (email);
 
 UPDATE apikey
 SET
-  registrationDate = u.registrationDate,
+  registrationDate = COALESCE(u.registrationDate,now()),
   email = u.email,
   level = 'CLIENT',
   firstname = u.firstname,
