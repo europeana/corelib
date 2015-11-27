@@ -155,30 +155,35 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 
 		
 		// If it is not then save and return a new collectionID
-		if (retrievedeuropeanaID == null) {
-
-		
+		if (retrievedeuropeanaID == null) {		
 			retrievedeuropeanaID = checkForChangedCollection(constructedeuropeanaId);
-
 			if (retrievedeuropeanaID == null) {
 				datastore.save(constructedeuropeanaId);
 				lookupresult.setState(LookupState.ID_REGISTERED);
 				lookupresult.setEuropeanaID(europeanaIDString);
 				return lookupresult;
+			} else  if (retrievedeuropeanaID.isDeleted()) {
+				updateops.set(EID, constructedeuropeanaId.getEid());
+				updateops.set(CID, collectionID);
+				updateops.set(ISDELETED, false);
+				return processlookupresult(retrievedeuropeanaID, updateops, lookupresult, sessionID);
 			} else {
 				updateops.set(EID, constructedeuropeanaId.getEid());
 				updateops.set(CID, collectionID);
 				return processlookupresult(retrievedeuropeanaID, updateops, lookupresult, sessionID);
 			}
-
 		} else if (retrievedeuropeanaID.isDeleted()) {
 			EuropeanaIdRegistry fromOtherCollection = checkForChangedCollection(constructedeuropeanaId);
 			if (fromOtherCollection == null) {
 				updateops.set(XMLCHECKSUM, xmlChecksum);
 				updateops.set(ISDELETED, false);
-				lookupresult.setState(LookupState.ID_REGISTERED);
 				lookupresult.setEuropeanaID(europeanaIDString);
 				return processlookupresult(retrievedeuropeanaID, updateops, lookupresult, sessionID);
+			} else if (fromOtherCollection.isDeleted()) {
+				updateops.set(EID, constructedeuropeanaId.getEid());
+				updateops.set(CID, collectionID);
+				updateops.set(ISDELETED, false);
+				return processlookupresult(fromOtherCollection, updateops, lookupresult, sessionID);
 			} else {
 				updateops.set(EID, constructedeuropeanaId.getEid());
 				updateops.set(CID, collectionID);
