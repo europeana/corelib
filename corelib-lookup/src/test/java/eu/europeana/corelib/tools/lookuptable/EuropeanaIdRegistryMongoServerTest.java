@@ -114,25 +114,6 @@ public class EuropeanaIdRegistryMongoServerTest {
 	}
 
 	@Test
-	public void testDuplicateIdAcross() {
-		if (server == null)
-			return;
-
-		saveRecord(sid);
-		Assert.assertEquals(server.lookupUiniqueId(oid, "12345a", xml_checksum+"new", sid).getState(), LookupState.DUPLICATE_IDENTIFIER_ACROSS_COLLECTIONS);
-		server.getDatastore().getDB().dropDatabase();
-	}
-
-	@Test
-	public void testDuplicateRecAcross() {
-		Assert.assertNotNull("Server should be initialized", server);
-
-		saveRecord(sid);
-		Assert.assertEquals(server.lookupUiniqueId(oid, "12345a", xml_checksum, sid).getState(),LookupState.DUPLICATE_RECORD_ACROSS_COLLECTIONS);
-		server.getDatastore().getDB().dropDatabase();
-	}
-
-	@Test
 	public void testUpdate() {
 		Assert.assertNotNull("Server should be initialized", server);
 
