@@ -179,9 +179,6 @@ public class FullBeanImpl implements FullBean, IDocument {
 
     @Override
     public List<AggregationImpl> getAggregations() {
-        for (AggregationImpl agg : this.aggregations){
-            agg.setParentBean(this);
-        }
         return this.aggregations;
     }
 
@@ -404,10 +401,12 @@ public class FullBeanImpl implements FullBean, IDocument {
 		this.licenses = (List<LicenseImpl>)licenses;
 	}
 
-//    public void setAggregationsParentBean() {
-//        for (AggregationImpl agg : this.aggregations){
-//            agg.setParentBean(this);
-//        }
-//    }
-	
+    public void setAsParent(){
+        if (!this.aggregations.isEmpty()) {
+            for (AggregationImpl agg : this.aggregations) {
+                agg.setParentBean(this);
+            }
+        }
+    }
+
 }
