@@ -17,8 +17,6 @@
 
 package eu.europeana.corelib.definitions.edm.entity;
 
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-
 import java.util.List;
 import java.util.Map;
 
