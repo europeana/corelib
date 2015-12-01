@@ -112,4 +112,7 @@ public interface User extends IdentifiedEntity<Long> {
 
 	void setLanguageSearchApplied(Boolean languageSearchApplied);
 
+	Date getActivationDate();
+
+	void setActivationDate(Date activationDate);
 }

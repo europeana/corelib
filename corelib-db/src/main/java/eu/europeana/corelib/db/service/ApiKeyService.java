@@ -22,6 +22,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
+import eu.europeana.corelib.web.exception.EmailServiceException;
 
 public interface ApiKeyService extends AbstractService<ApiKey> {
 
@@ -91,5 +92,5 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * Creates an API Key
      */
     ApiKey createApiKey(String email, Long limit, String appName, String company, String firstName,
-                        String lastName, String website, String description) throws DatabaseException;
+                        String lastName, String website, String description) throws DatabaseException, EmailServiceException;
 }

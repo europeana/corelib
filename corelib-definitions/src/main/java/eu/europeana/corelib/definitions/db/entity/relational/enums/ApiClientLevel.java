@@ -5,6 +5,6 @@ package eu.europeana.corelib.definitions.db.entity.relational.enums;
  */
 public enum ApiClientLevel {
 
-    CLIENT, TRUSTED;
+    CLIENT, ADMIN;
 
 }

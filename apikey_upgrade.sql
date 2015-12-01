@@ -10,9 +10,13 @@ ALTER TABLE apikey ADD company VARCHAR(100) NULL;
 ALTER TABLE apikey ADD website VARCHAR(100) NULL;
 ALTER TABLE apikey ADD description VARCHAR(255) NULL;
 
+-- ADD extra column to user
+
+ALTER TABLE users ADD activationDate DATE NULL;
+
 -- ADD index to email column
 
-CREATE INDEX apikey_email_index ON public.apikey (email);
+CREATE INDEX apikey_email_index ON apikey (email);
 
 -- copy data from user to apikey
 

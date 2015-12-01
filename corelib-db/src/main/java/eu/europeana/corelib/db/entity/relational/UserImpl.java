@@ -18,10 +18,7 @@
 package eu.europeana.corelib.db.entity.relational;
 
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
-import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
-import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
-import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
-import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.definitions.db.entity.relational.*;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.utils.DateUtils;
@@ -64,6 +61,9 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column
 	@Temporal(TemporalType.DATE)
 	private Date registrationDate;
+
+	@Column
+	private Date activationDate;
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -354,4 +354,13 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 		this.languageSearchApplied = languageSearchApplied;
 	}
 
+	@Override
+	public Date getActivationDate() {
+		return activationDate;
+	}
+
+	@Override
+	public void setActivationDate(Date activationDate) {
+		this.activationDate = activationDate;
+	}
 }

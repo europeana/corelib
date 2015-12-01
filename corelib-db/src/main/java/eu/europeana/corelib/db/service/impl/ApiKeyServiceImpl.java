@@ -25,6 +25,8 @@ import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.utils.DateIntervalUtils;
+import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 
@@ -32,6 +34,7 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Implementation of the {@link ApiKeyService}
@@ -40,6 +43,9 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 
     @Resource
     private ApiLogService apiLogService;
+
+    @Resource(name = "corelib_web_emailService")
+    private EmailService emailService;
 
     @Override
     public ApiKey findByID(Serializable id) throws DatabaseException {
@@ -109,17 +115,19 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         api.setApplicationName(appName);
         api.setDescription(null);
         getDao().insert(api);
+
         return api;
     }
 
     @Override
     public ApiKey createApiKey(String email, Long limit, String appName, String company, String firstName,
-                               String lastName, String website, String description) throws DatabaseException {
+                               String lastName, String website, String description) throws DatabaseException, EmailServiceException {
 
         String apiKey;
         do {
             apiKey = generatePassPhrase(9);
         } while (findByID(apiKey) != null);
+
         ApiKey api = new ApiKeyImpl();
         api.setEmail(email);
         api.setApiKey(apiKey);
@@ -132,6 +140,9 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         api.setApplicationName(appName);
         api.setDescription(description);
         getDao().insert(api);
+
+        emailService.sendRegisterApiNotifyUser(api, Locale.ENGLISH);
+
         return api;
     }
 

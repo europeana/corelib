@@ -23,6 +23,7 @@ import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
+import eu.europeana.corelib.web.exception.EmailServiceException;
 
 import java.util.List;
 
@@ -43,14 +44,33 @@ public interface UserService extends AbstractService<User> {
      * @return Created user entity.
      * @throws DatabaseException When the Token is invalid
      */
+    @Deprecated
     User create(String token, String username, String password) throws DatabaseException;
 
     /**
      * Creates a new User, based on a existing token, and given params
      */
+    @Deprecated
     User create(String tokenString, String username, String password, boolean isApiRegistration, String company,
                 String country, String firstName, String lastName, String website, String address, String phone,
                 String fieldOfWork) throws DatabaseException;
+
+    /**
+     * Creates a new User, based on a existing token, and given params
+     */
+    User create(
+            String email, String username, String password, String company, String country, String firstName,
+            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+    ) throws DatabaseException, EmailServiceException;
+
+    /**
+     * Activate a user account
+     *
+     * @param email email address identifying the account
+     * @param token token emailed to user
+     * @return The activated user account
+     */
+    User activate(String email, String token) throws DatabaseException;
 
     /**
      * Returns a User if there is a valid email provided.
