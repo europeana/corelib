@@ -48,10 +48,7 @@ import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
 import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.*;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
@@ -336,6 +333,17 @@ public class SearchServiceImpl implements SearchService {
                 fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
             } catch (SolrServerException e) {
                 log.error("SolrServerException: " + e.getMessage());
+            }
+        }
+
+        if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()){
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
+                        wRes.initAttributionSnippet();
+                    }
+                }
             }
         }
 

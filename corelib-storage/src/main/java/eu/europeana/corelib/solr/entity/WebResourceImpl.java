@@ -21,9 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.solr.derived.AttributionSnippet;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -41,7 +43,7 @@ import eu.europeana.corelib.definitions.model.Orientation;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * @see eu.europeana.corelib.definitions.solr.entity.corelid.definitions.model.WebResource
+ * @see eu.europeana.corelib.definitions.edm.entity.WebResource
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
@@ -67,8 +69,15 @@ public class WebResourceImpl implements WebResource {
     private Map<String, List<String>> dctermsIsFormatOf;
     private Map<String, List<String>> dctermsHasPart;
     private Map<String, List<String>> dcCreator;
-    private String isNextInSequence;
-    private String[] owlSameAs;
+    private String                    isNextInSequence;
+    private String[]                  owlSameAs;
+    private AttributionSnippet        attributionSnippet;
+    private String                    textAttributionSnippet;
+    private String                    htmlAttributionSnippet;
+
+    @Transient
+    @JsonIgnore
+    private AggregationImpl           parentAggregation;
 
     @Transient
     @JsonIgnore
@@ -514,5 +523,36 @@ public class WebResourceImpl implements WebResource {
                                       .getFrameRate();
         }
         return null;
+    }
+
+
+    public void initAttributionSnippet(){
+        attributionSnippet = new AttributionSnippet(this);
+    }
+
+    public String getTextAttributionSnippet(){
+        return attributionSnippet.getTextSnippet();
+    }
+
+    public String getHtmlAttributionSnippet(){
+        return  attributionSnippet.getHtmlSnippet();
+    }
+
+    /**
+     * Sets encapsulating aggregation of this webresource (not made available through the interface bean);
+     * used in the Attributionsnippet alone
+     * @param parentAggregation
+     */
+    public void setParentAggregation(AggregationImpl parentAggregation) {
+        this.parentAggregation = parentAggregation;
+    }
+
+    /**
+     * Encapsulating aggregation of this webresource (not made available through the interface bean);
+     * used in the Attributionsnippet alone
+     * @return parentAggregation
+     */
+    public Aggregation getParentAggregation() {
+        return this.parentAggregation;
     }
 }
