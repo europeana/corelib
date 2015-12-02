@@ -191,9 +191,6 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public List<? extends WebResource> getWebResources() {
-		for (WebResourceImpl webRes : this.webResources){
-			webRes.setParentAggregation(this);
-		}
 		return this.webResources;
 	}
 
@@ -264,8 +261,8 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	 */
 	public void setParentBean(FullBean parentBean){
 		this.parentBean = parentBean;
-		for (WebResourceImpl wres : (List<WebResourceImpl>) getWebResources()){
-			wres.setParentAggregation(this);
+		for (WebResourceImpl webRes : this.webResources){
+			webRes.setParentAggregation(this);
 		}
 	}
 }

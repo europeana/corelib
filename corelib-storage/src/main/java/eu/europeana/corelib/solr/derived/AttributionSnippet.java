@@ -95,7 +95,7 @@ public class AttributionSnippet {
         textSnippet += (titleMap.size() > 0) || StringUtils.isNotBlank(landingPage) ? ". " : "";
         if (creatorMap.size() > 0){
             textSnippet += flattenThisMap(creatorMap);
-            textSnippet += ".";
+            textSnippet += ". ";
         }
         if (dataProviderMap.size() > 0) {
             textSnippet += flattenThisMap(dataProviderMap);
@@ -103,7 +103,7 @@ public class AttributionSnippet {
         }
         textSnippet += shownAt;
         textSnippet += (dataProviderMap.size() > 0 || StringUtils.isNotBlank(shownAt)) ? ". " : "";
-        textSnippet += StringUtils.isNotBlank(rights) ? getRightsLabel(rights) + " - " + rights : "";
+        textSnippet += StringUtils.isNotBlank(rights) ? getRightsLabel(rights) + " - " + rights : ".";
     }
 
     private void assembleHtmlSnippet(){
@@ -124,7 +124,7 @@ public class AttributionSnippet {
         }
         if (creatorMap.size() > 0){
             for (Map.Entry<String, String> creatorEntry : creatorMap.entrySet()){
-                htmlSnippet += spannify("property", "dc:creator", creatorEntry.getKey(), "") + creatorEntry.getValue() + span;
+                htmlSnippet += spannify("property", "dc:creator", creatorEntry.getKey(), "") + creatorEntry.getValue() + ". " + span;
             }
         }
         if (dataProviderMap.size() > 0){
@@ -134,7 +134,7 @@ public class AttributionSnippet {
         }
         if (StringUtils.isNotBlank(rights)){
             htmlSnippet += aHreficate(rights, getRightsLabel(rights), "", rightsPage);
-            htmlSnippet += spannify("rel", "cc:useGuidelines", "", resPdUsgGd) + span;
+            htmlSnippet += spannify("rel", "cc:useGuidelines", "", resPdUsgGd) + "." + span;
         }
         if (StringUtils.isNotBlank(landingPage)) {
             htmlSnippet += span; // close opening <span about ...>
