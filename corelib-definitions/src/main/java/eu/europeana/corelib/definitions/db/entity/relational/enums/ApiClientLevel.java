@@ -5,6 +5,16 @@ package eu.europeana.corelib.definitions.db.entity.relational.enums;
  */
 public enum ApiClientLevel {
 
-    CLIENT, ADMIN;
+    CLIENT("ROLE_CLIENT"), ADMIN("ROLE_CLIENT,ROLE_ADMIN_CLIENT");
 
+    private final String roles;
+
+    ApiClientLevel(String roles) {
+        this.roles = roles;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
 }
+

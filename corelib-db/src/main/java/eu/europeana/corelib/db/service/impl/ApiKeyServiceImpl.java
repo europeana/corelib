@@ -141,7 +141,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         api.setDescription(description);
         getDao().insert(api);
 
-        emailService.sendRegisterApiNotifyUser(api, Locale.ENGLISH);
+        emailService.sendApiKeys(api);
 
         return api;
     }

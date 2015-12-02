@@ -9,7 +9,10 @@ import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.service.EmailService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +24,11 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
@@ -40,6 +48,9 @@ public class ApiKeyServiceTest {
     @Resource(name = "corelib_db_userDao")
     private RelationalDao<UserImpl> userDao;
 
+    @Resource
+    private EmailService emailServiceMock;
+
 
     /**
      * Initialise the testing session
@@ -49,6 +60,7 @@ public class ApiKeyServiceTest {
     @Before
     public void setup() throws IOException {
         apiLogDao.getCollection().drop();
+        reset(emailServiceMock);
     }
 
     /**
@@ -63,7 +75,7 @@ public class ApiKeyServiceTest {
     }
 
     @Test
-    public void createApiKeyTest() throws DatabaseException {
+    public void createApiKeyTest() throws DatabaseException, EmailServiceException {
         String email = "test@kb.nl";
         String appName = "test";
         String company = "test_company";
@@ -78,6 +90,8 @@ public class ApiKeyServiceTest {
         assertNotNull(createdApiKey.getPrivateKey());
         assertEquals(appName, createdApiKey.getApplicationName());
         assertEquals(email, createdApiKey.getEmail());
+
+        verify(emailServiceMock, times(1)).sendApiKeys((ApiKey) anyObject());
 
         apiKeyService.remove(createdApiKey);
     }

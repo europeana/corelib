@@ -162,7 +162,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendToken(tokenService.create(email), activationUrl);
+        emailService.sendActivationToken(tokenService.create(email), activationUrl);
 
         return user;
     }
@@ -179,6 +179,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             throw new DatabaseException(ProblemType.NO_USER);
         }
         user.setActivationDate(new Date());
+
+        tokenService.remove(token);
 
         return user;
     }

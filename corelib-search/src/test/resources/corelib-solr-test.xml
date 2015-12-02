@@ -46,7 +46,7 @@
     <bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
           p:solrServer-ref="corelib_solr_solrEmbedded"
             />
-    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest">
+    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="europeana_test" type="java.lang.String"/>
         <constructor-arg value="" type="java.lang.String"/>
@@ -58,6 +58,9 @@
         <constructor-arg value="" type="java.lang.String"/>
         <constructor-arg value="" type="java.lang.String"/>
     </bean>
-    <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.mocks.EdmMongoServerTest"/>
-    <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.mocks.EmbeddedNeo4j"/>
+    <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
+    <bean name="corelib_solr_neo4jServer" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.neo4j.server.Neo4jServer"/>
+    </bean>
+
 </beans>	

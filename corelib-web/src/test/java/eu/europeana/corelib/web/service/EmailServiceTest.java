@@ -84,18 +84,6 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
-    public void testSendToken() throws EmailServiceException {
-        Token token = createFakeToken("testSendToken", "testSendToken@testSendToken.eu");
-        emailService.sendToken(token, "testSendToken.eu/test.html");
-        assertEquals(1, wiser.getMessages().size());
-    }
-
-    @Test(expected = EmailServiceException.class)
-    public void testSendTokenException() throws EmailServiceException {
-        emailService.sendToken(null, "testSendToken.eu/test.html");
-    }
-
-    @Test
     public void testSendForgotPassword() throws EmailServiceException {
         User user = createFakeUser("testSendToken", "testSendForgotPassword@testSendForgotPassword.eu");
         emailService.sendForgotPassword(user, "testSendToken.eu/test.html");

@@ -54,14 +54,7 @@ public abstract class EmailServiceImpl implements EmailService {
 	@Resource
 	private MessageSource messageSource;
 
-	/**
-	 * Sends a token to user as part of registration confirmation
-	 * 
-	 * @param token
-	 *   The token to send to the user
-	 * @param url
-	 *   The URL of registration confirm page
-	 */
+	@Deprecated
 	@Override
 	public void sendToken(final Token token, final String url) throws EmailServiceException {
 		if ( (token == null)
@@ -80,15 +73,8 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
 	}
 
-	/**
-	 * Sends a token to user as part of registration confirmation
-	 * 
-	 * @param token
-	 *   The token to send to the user
-	 * @param url
-	 *   The URL of registration confirm page
-	 */
 	@Override
+	@Deprecated
 	public void sendApiToken(final Token token, final String url) throws EmailServiceException {
 		if ( (token == null)
 			|| StringUtils.isBlank(token.getToken())
@@ -107,12 +93,41 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
 	}
 
-	/**
-	 * Sends a token to user as part of registration confirmation
-	 * 
-	 * @param user
-	 *   The user to send register notifcation to
-	 */
+	@Override
+	public void sendActivationToken(Token token, String apiHost) throws EmailServiceException {
+		if ( (token == null)
+				|| StringUtils.isBlank(token.getToken())
+				|| StringUtils.isBlank(token.getEmail())
+				|| StringUtils.isBlank(apiHost)) {
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		String url = apiHost + "/user/activate/"+token.getEmail()+"/"+token.getToken();
+		Map<String, Object> model = new HashMap<>();
+		model.put("url", url);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("activate"); // see corelib_web_emailConfigs
+		builder.setEmailTo(token.getEmail());
+		mailSender.send(builder);
+		log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
+	}
+
+	@Override
+	public void sendApiKeys(ApiKey apiKey) throws EmailServiceException {
+		if (apiKey == null) {
+			log.error("Problem with sendApiKeys: apiKey is null");
+			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+		}
+		Map<String, Object> model = new HashMap<>();
+		model.put("apiKey", apiKey);
+		EmailBuilder builder = createEmailBuilder();
+		builder.setModel(model);
+		builder.setTemplate("apikeys"); // see corelib_web_emailConfigs
+		builder.setEmailTo(apiKey.getEmail());
+		mailSender.send(builder);
+		log.info(String.format("Sent API details to %s", apiKey.getEmail()));
+	}
+
 	@Override
 	public void sendRegisterNotify(final User user) throws EmailServiceException {
 		if (user == null) {
@@ -128,9 +143,6 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent user registratiom (%s)", user.getEmail()));
 	}
 
-	/**
-	 * Sends email to the site administrator about an API registration
-	 */
 	@Override
 	public void sendRegisterApiNotifyAdmin(final User user) throws EmailServiceException {
 		if (user == null) {
@@ -146,10 +158,8 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent notification of API registratiom (%s)", user.getEmail()));
 	}
 
-	/**
-	 * Sends email to the user about the details of API registration
-	 */
 	@Override
+	@Deprecated
 	public void sendRegisterApiNotifyUser(final ApiKey apiKey, Locale locale) throws EmailServiceException {
 		if (apiKey == null) {
 			log.error("Problem with sendRegisterApiNotifyUser: apiKey is null");
@@ -190,14 +200,6 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent API details to %s", apiKey.getEmail()));
 	}
 
-	/**
-	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
-	 * 
-	 * @param user
-	 *   The user object
-	 * @param url
-	 *   The URL of the password reset page
-	 */
 	@Override
 	public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
 		if ((user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
@@ -206,14 +208,7 @@ public abstract class EmailServiceImpl implements EmailService {
 		sendForgotPassword(user.getEmail(), url);
 	}
 
-	/**
-	 * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
-	 * 
-	 * @param email
-	 *   The user object
-	 * @param url
-	 *   The URL of the password reset page
-	 */
+
 	@Override
 	public void sendForgotPassword(final String email, final String url) throws EmailServiceException {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(url)) {
@@ -229,14 +224,6 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent forgot password (URL=%s) to %s", url, email));
 	}
 
-	/**
-	 * Sends the user's feedback to the site admin, and sends an thanking email to the user
-	 * 
-	 * @param email
-	 *   The user's email address
-	 * @param feedback
-	 *   The user's feedback
-	 */
 	@Override
 	public void sendFeedback(String email, String feedback) throws EmailServiceException {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(feedback)) {
@@ -259,9 +246,6 @@ public abstract class EmailServiceImpl implements EmailService {
 		log.info(String.format("Sent feedback of %s", email));
 	}
 
-	/**
-	 * Sends exception to the site admin
-	 */
 	@Override
 	public void sendException(String subject, String body)
 			throws EmailServiceException {
