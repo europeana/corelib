@@ -32,6 +32,11 @@ SET
 FROM users u
 WHERE u.id = apikey.userid;
 
+-- update activationDate for existing users
+UPDATE users
+SET
+  activationDate = '1980-01-01';
+
 -- drop userid column in apikey incl constraints
 
 ALTER TABLE apikey DROP userid;
