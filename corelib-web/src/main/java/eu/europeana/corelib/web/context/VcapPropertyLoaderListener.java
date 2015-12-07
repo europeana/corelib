@@ -65,11 +65,15 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
   private final static String HOSTS = ".credentials.hosts";
   private final static String PASSWORD = ".credentials.password";
 
-  private final static String POSTGRESDB = "vcap.services.postgresql.credentials.db";
-  private final static String POSTGRESUSERNAME = "vcap.services.postgresql.credentials.user";
-  private final static String POSTGRESPASSWORD = "vcap.services.postgresql.credentials.password";
-  private final static String POSTGRESHOST = "vcap.services.postgresql.credentials.host";
+  private final static String POSTGRESDB = "vcap.services.";
+  private final static String CREDENTIALS_DB=".credentials.db";
 
+  private final static String POSTGRESUSERNAME = "vcap.services." ;
+  private final static String CREDENTIALS_USER =".credentials.user";
+  private final static String POSTGRESPASSWORD = "vcap.services.";
+  private final static String CREDENTIALS_PASSWORD =".credentials.password";
+  private final static String POSTGRESHOST = "vcap.services.";
+  private final static String CREDENTIALS_HOST=".credentials.host";
   private final static String MONGO_SERVICE = "mongo_service";
   private final static String MONGO_DBNAME = "mongodb.dbname";
   private final static String MONGO_DBNAME_VALUE = "europeana";
@@ -88,12 +92,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
   private final static String API2CANONICALURL = "api2_canonical_url";
   private final static String PORTALSERVER = "portal_server";
   private final static String PORTALCANONICALURL = "portal_server_canonical";
-
-  private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-sitemap.credentials.authentication_uri";
-  private final static String SWIFT_AUTHENTICATION_AV_ZONE="vcap.services.swift-sitemap.credentials.availability_zone";
-  private final static String SWIFT_AUTHENTICATION_TENANT_NAME="vcap.services.swift-sitemap.credentials.tenant_name";
-  private final static String SWIFT_AUTHENTICATION_USER_NAME="vcap.services.swift-sitemap.credentials.user_name";
-  private final static String SWIFT_AUTHENTICATION_PASSWORD="vcap.services.swift-sitemap.credentials.password";
+  private final static String POSTGRES = "postgres";
 
   private static StandardServletEnvironment env = new StandardServletEnvironment();
 
@@ -113,16 +112,16 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
     try {
       props.load(new FileInputStream(europeanaProperties));
 
-
+      final String[] swiftProp = new String[] { "authUrl", "userName", "password", "containerName", "regionName", "tenantName"};
 
 
 
       // PostgreSQL db, username, password, host
       if (env.getProperty(POSTGRESHOST) != null) {
-        props.setProperty("postgres.db", env.getProperty(POSTGRESDB));
-        props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME));
-        props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD));
-        props.setProperty("postgres.host", env.getProperty(POSTGRESHOST));
+        props.setProperty("postgres.db", env.getProperty(POSTGRESDB+env.getProperty(POSTGRES)+CREDENTIALS_DB));
+        props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME+env.getProperty(POSTGRES)+CREDENTIALS_USER));
+        props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD)+env.getProperty(POSTGRES)+CREDENTIALS_PASSWORD);
+        props.setProperty("postgres.host", env.getProperty(POSTGRESHOST)+env.getProperty(POSTGRES)+CREDENTIALS_HOST);
       }
 
       // MongoDB username, password, host, port
