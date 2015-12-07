@@ -122,11 +122,11 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
 
       // PostgreSQL db, username, password, host
-      if (env.getProperty(POSTGRESHOST) != null) {
+      if (env.getProperty(POSTGRESHOST+env.getProperty(POSTGRES)+CREDENTIALS_HOST) != null) {
         props.setProperty("postgres.db", env.getProperty(POSTGRESDB+env.getProperty(POSTGRES)+CREDENTIALS_DB));
         props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME+env.getProperty(POSTGRES)+CREDENTIALS_USER));
-        props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD)+env.getProperty(POSTGRES)+CREDENTIALS_PASSWORD);
-        props.setProperty("postgres.host", env.getProperty(POSTGRESHOST)+env.getProperty(POSTGRES)+CREDENTIALS_HOST);
+        props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD+env.getProperty(POSTGRES)+CREDENTIALS_PASSWORD));
+        props.setProperty("postgres.host", env.getProperty(POSTGRESHOST+env.getProperty(POSTGRES)+CREDENTIALS_HOST));
       }
 
       // MongoDB username, password, host, port
