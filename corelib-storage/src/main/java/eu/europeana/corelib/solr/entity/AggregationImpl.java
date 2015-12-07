@@ -21,6 +21,9 @@ package eu.europeana.corelib.solr.entity;
 import java.util.List;
 import java.util.Map;
 
+import com.google.code.morphia.annotations.Transient;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -80,6 +83,10 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;
+
+	@Transient
+	@JsonIgnore
+	private FullBean parentBean;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -182,8 +189,6 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 		return this.edmRights;
 	}
 
-
-
 	@Override
 	public List<? extends WebResource> getWebResources() {
 		return this.webResources;
@@ -239,5 +244,25 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored.clone();
+	}
+
+	/**
+	 * Used to maintain a reference to the encapsulating Record which is referred to in the AttributionSnippet
+	 * Not made available through the interface bean, used in the Attributionsnippet alone
+	 * @return the encapsulating FullBean
+	 */
+	public FullBean getParentBean(){
+		return this.parentBean;
+	}
+	/**
+	 * parentBean is the encapsulating Record which is referred to by the AttributionSnippet
+	 * Not made available through the interface bean, used in the Attributionsnippet alone
+	 * @param parentBean
+	 */
+	public void setParentBean(FullBean parentBean){
+		this.parentBean = parentBean;
+		for (WebResourceImpl webRes : this.webResources){
+			webRes.setParentAggregation(this);
+		}
 	}
 }

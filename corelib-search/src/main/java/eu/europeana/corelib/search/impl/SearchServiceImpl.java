@@ -48,10 +48,7 @@ import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
 import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.*;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
@@ -77,6 +74,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CursorMarkParams;
@@ -339,6 +337,17 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
+        if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()){
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
+                        wRes.initAttributionSnippet();
+                    }
+                }
+            }
+        }
+
         return fullBean;
     }
 
@@ -457,7 +466,7 @@ public class SearchServiceImpl implements SearchService {
             for (MoreLikeThis mltField : MoreLikeThis.values()) {
                 fields.add(mltField.toString());
             }
-            mltFields = StringUtils.join(fields, ",");
+            mltFields = ClientUtils.escapeQueryChars(StringUtils.join(fields, ","));
         }
         solrQuery.set("mlt.fl", mltFields);
         solrQuery.set("mlt.mintf", 1);
