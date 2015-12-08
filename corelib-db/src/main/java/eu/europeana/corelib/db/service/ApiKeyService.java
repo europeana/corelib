@@ -16,13 +16,13 @@
  */
 package eu.europeana.corelib.db.service;
 
-import java.util.List;
-
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.web.exception.EmailServiceException;
+
+import java.util.List;
 
 public interface ApiKeyService extends AbstractService<ApiKey> {
 
@@ -77,6 +77,7 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * @param applicationName Application name, null value is acceptable to clear the value.
      * @throws DatabaseException
      */
+    @Deprecated
     void updateApplicationName(String apiKey, String applicationName) throws DatabaseException;
 
     /**
@@ -91,6 +92,23 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
     /**
      * Creates an API Key
      */
-    ApiKey createApiKey(String email, Long limit, String appName, String company, String firstName,
-                        String lastName, String website, String description) throws DatabaseException, EmailServiceException;
+    ApiKey createApiKey(
+            String email, Long limit, String appName, String company, String firstName,
+            String lastName, String website, String description
+    ) throws DatabaseException, EmailServiceException;
+
+    /**
+     * Updates an existing api key
+     *
+     * @throws DatabaseException When key doesn't exists or couldn't be updated with the new data.
+     */
+    ApiKey updateApiKey(
+            String apiKey, String email, long defaultUsageLimit, String application, String company,
+            String firstName, String lastName, String website, String description
+    ) throws DatabaseException;
+
+    /**
+     * Changes the api key usage limit
+     */
+    ApiKey changeLimit(String apiKey, long limit) throws DatabaseException;
 }

@@ -34,7 +34,6 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Implementation of the {@link ApiKeyService}
@@ -89,6 +88,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
     }
 
     @Override
+    @Deprecated
     public void updateApplicationName(String apiKey, String applicationName) throws DatabaseException {
         ApiKey key = getDao().findByPK(apiKey);
         if (key != null) {
@@ -120,30 +120,62 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
     }
 
     @Override
-    public ApiKey createApiKey(String email, Long limit, String appName, String company, String firstName,
-                               String lastName, String website, String description) throws DatabaseException, EmailServiceException {
+    public ApiKey createApiKey(
+            String email, Long limit, String appName, String company, String firstName,
+            String lastName, String website, String description
+    ) throws DatabaseException, EmailServiceException {
 
         String apiKey;
         do {
             apiKey = generatePassPhrase(9);
         } while (findByID(apiKey) != null);
 
-        ApiKey api = new ApiKeyImpl();
-        api.setEmail(email);
-        api.setApiKey(apiKey);
-        api.setPrivateKey(generatePassPhrase(9));
-        api.setUsageLimit(limit);
-        api.setFirstName(firstName);
-        api.setLastName(lastName);
-        api.setCompany(company);
-        api.setWebsite(website);
-        api.setApplicationName(appName);
-        api.setDescription(description);
-        getDao().insert(api);
+        ApiKey key = new ApiKeyImpl();
+        key.setEmail(email);
+        key.setApiKey(apiKey);
+        key.setPrivateKey(generatePassPhrase(9));
+        key.setUsageLimit(limit);
+        key.setFirstName(StringUtils.trimToNull(firstName));
+        key.setLastName(StringUtils.trimToNull(lastName));
+        key.setCompany(StringUtils.trimToNull(company));
+        key.setWebsite(StringUtils.trimToNull(website));
+        key.setApplicationName(StringUtils.trimToNull(appName));
+        key.setDescription(StringUtils.trimToNull(description));
+        getDao().insert(key);
 
-        emailService.sendApiKeys(api);
+        emailService.sendApiKeys(key);
 
-        return api;
+        return key;
+    }
+
+    @Override
+    public ApiKey updateApiKey(
+            String apiKey, String email, long limit, String application, String company, String firstName,
+            String lastName, String website, String description
+    ) throws DatabaseException {
+        ApiKey key = getDao().findByPK(apiKey);
+        if (key != null) {
+            key.setEmail(email);
+            key.setUsageLimit(limit);
+            key.setFirstName(StringUtils.trimToNull(firstName));
+            key.setLastName(StringUtils.trimToNull(lastName));
+            key.setCompany(StringUtils.trimToNull(company));
+            key.setWebsite(StringUtils.trimToNull(website));
+            key.setApplicationName(StringUtils.trimToNull(application));
+            key.setDescription(StringUtils.trimToNull(description));
+        return key;
+        }
+        throw new DatabaseException(ProblemType.NOT_FOUND);
+    }
+
+    @Override
+    public ApiKey changeLimit(String apiKey, long limit) throws DatabaseException {
+        ApiKey key = getDao().findByPK(apiKey);
+        if (key != null) {
+            key.setUsageLimit(limit);
+            return key;
+        }
+        throw new DatabaseException(ProblemType.NOT_FOUND);
     }
 
     @Override
@@ -151,6 +183,8 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         ApiKey apiKey = getDao().findByPK(apiKeyId);
         if (apiKey != null) {
             getDao().delete(apiKey);
+        } else {
+            throw new DatabaseException(ProblemType.NOT_FOUND);
         }
     }
 
