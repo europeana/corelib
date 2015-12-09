@@ -103,7 +103,7 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * @throws DatabaseException When key doesn't exists or couldn't be updated with the new data.
      */
     ApiKey updateApiKey(
-            String apiKey, String email, long defaultUsageLimit, String application, String company,
+            String apiKey, String email, Long defaultUsageLimit, String application, String company,
             String firstName, String lastName, String website, String description
     ) throws DatabaseException;
 

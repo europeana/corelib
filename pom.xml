@@ -144,6 +144,7 @@
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
+		<version.jackson>2.6.4</version.jackson>
 		<version.slf4j>1.7.5</version.slf4j>
 		<version.mockito>1.10.19</version.mockito>
 		<version.gson>2.2.4</version.gson>

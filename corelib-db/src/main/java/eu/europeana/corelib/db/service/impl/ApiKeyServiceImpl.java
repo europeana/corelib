@@ -150,20 +150,20 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 
     @Override
     public ApiKey updateApiKey(
-            String apiKey, String email, long limit, String application, String company, String firstName,
+            String apiKey, String email, Long limit, String application, String company, String firstName,
             String lastName, String website, String description
     ) throws DatabaseException {
         ApiKey key = getDao().findByPK(apiKey);
         if (key != null) {
-            key.setEmail(email);
-            key.setUsageLimit(limit);
-            key.setFirstName(StringUtils.trimToNull(firstName));
-            key.setLastName(StringUtils.trimToNull(lastName));
-            key.setCompany(StringUtils.trimToNull(company));
-            key.setWebsite(StringUtils.trimToNull(website));
-            key.setApplicationName(StringUtils.trimToNull(application));
-            key.setDescription(StringUtils.trimToNull(description));
-        return key;
+            key.setEmail(StringUtils.defaultIfBlank(email, key.getEmail()));
+            key.setUsageLimit(limit != null ? limit : key.getUsageLimit());
+            key.setFirstName(StringUtils.defaultIfBlank(firstName, key.getFirstName()));
+            key.setLastName(StringUtils.defaultIfBlank(lastName, key.getLastName()));
+            key.setCompany(StringUtils.defaultIfBlank(company, key.getCompany()));
+            key.setWebsite(StringUtils.defaultIfBlank(website, key.getWebsite()));
+            key.setApplicationName(StringUtils.defaultIfBlank(application, key.getApplicationName()));
+            key.setDescription(StringUtils.defaultIfBlank(description, key.getDescription()));
+            return key;
         }
         throw new DatabaseException(ProblemType.NOT_FOUND);
     }
