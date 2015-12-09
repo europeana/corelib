@@ -46,8 +46,6 @@
 		p:dao-ref="corelib_db_userDao"/>
 	<bean name="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
 		p:dao-ref="corelib_db_apiKeyDao"/>
-	<bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"
-		p:dao-ref="corelib_db_imageDao"/>
 	<bean name="corelib_db_apiLogService" class="eu.europeana.corelib.db.service.impl.ApiLogServiceImpl"
 		p:dao-ref="corelib_db_apiLogDao"/>
 	<bean name="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"

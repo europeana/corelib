@@ -3,13 +3,12 @@ package eu.europeana.corelib.db.service;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
-import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.entity.nosql.ApiLog;
 import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
@@ -25,10 +24,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
@@ -43,7 +39,7 @@ public class ApiKeyServiceTest {
     private ApiLogService apiLogService;
 
     @Resource(name = "corelib_db_apiLogDao")
-    private NosqlDao<ImageCache, String> apiLogDao;
+    private NosqlDao<ApiLog, String> apiLogDao;
 
     @Resource(name = "corelib_db_userDao")
     private RelationalDao<UserImpl> userDao;
