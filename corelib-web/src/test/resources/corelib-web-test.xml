@@ -34,8 +34,10 @@
           p:port="2500"
             />
 
-    <bean name="corelib_mediaStorageClient" class="org.mockito.Mockito" factory-method="mock">
+    <bean id="corelib_mediaStorageClient" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.service.MediaStorageClient"/>
     </bean>
+
+    <bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.EmptyBean"/>
 
 </beans>

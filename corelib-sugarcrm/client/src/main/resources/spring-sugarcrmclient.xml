@@ -34,7 +34,7 @@
 	</bean>
 
 	<!-- Quartz Scheduler Bean -->
-	<bean name="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<bean id="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="eu.europeana.uim.sugarcrmclient.ws.quartz.PollingBean" />
 		<property name="jobDataAsMap">
 			<map>
