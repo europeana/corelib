@@ -1,8 +1,0 @@
-Welcome to the new Europeana API
-
-Please click on the following link to confirm your registration:
-
-${url}?token=${token}
-
-Best regards,
-The Europeana API Team

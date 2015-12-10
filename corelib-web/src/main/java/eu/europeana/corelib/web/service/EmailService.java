@@ -32,8 +32,8 @@ public interface EmailService {
     /**
      * Send an activation link to a new user account
      *
-     * @param token The token to send to the user
-     * @param url   The api host url for the activation method in API
+     * @param token   The token to send to the user
+     * @param apiHost The api host url for the activation method in API
      */
     void sendActivationToken(Token token, String apiHost) throws EmailServiceException;
 
@@ -43,13 +43,6 @@ public interface EmailService {
      * @param apiKey ApiKey object containing the new keys and email address
      */
     void sendApiKeys(ApiKey apiKey) throws EmailServiceException;
-
-    /**
-     * Sends a token to user as part of registration confirmation
-     *
-     * @param user The user to send register notifcation to
-     */
-    void sendRegisterNotify(User user) throws EmailServiceException;
 
     /**
      * Sends and email to user in case of forgotting password. It contains a link where the user can reset his password.
@@ -79,38 +72,5 @@ public interface EmailService {
      * Sends exception to the site admin
      */
     void sendException(String subject, String body) throws EmailServiceException;
-
-    /**
-     * Sends email to the site administrator about an API registration
-     *
-     * @param user The user object
-     */
-    void sendRegisterApiNotifyAdmin(User user) throws EmailServiceException;
-
-    // TODO remove methods after portal removal....
-
-    /**
-     * Sends email to the user about the details of API registration
-     */
-    @Deprecated
-    void sendRegisterApiNotifyUser(ApiKey apiKey, Locale locale) throws EmailServiceException;
-
-    /**
-     * Sends a token to user as part of registration confirmation
-     *
-     * @param token The token to send to the user
-     * @param url   The URL of registration confirm page
-     */
-    @Deprecated
-    void sendToken(Token token, String url) throws EmailServiceException;
-
-    /**
-     * Sends a token to user as part of registration confirmation
-     *
-     * @param token The token to send to the user
-     * @param url   The URL of registration confirm page
-     */
-    @Deprecated
-    void sendApiToken(Token token, String url) throws EmailServiceException;
 
 }

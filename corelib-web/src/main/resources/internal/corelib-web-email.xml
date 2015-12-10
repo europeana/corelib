@@ -56,6 +56,7 @@
             <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
                   p:template="/email/apikeys"
                   p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:emailCc="#{europeanaProperties['register-api.to']}"
                   p:subject="Your Europeana API keys"
             />
         </entry>
@@ -81,50 +82,12 @@
                   p:subject="User Feedback"
             />
         </entry>
-        <entry key="registerNotify">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/register-notify"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:emailTo="#{europeanaProperties['register.to']}"
-                  p:subject="Someone registered just now"
-            />
-        </entry>
-        <entry key="registerApiNotifyAdmin">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/register-api-notify-admin"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:emailTo="#{europeanaProperties['register-api.to']}"
-                  p:subject="Someone registered for the API just now"
-            />
-        </entry>
         <entry key="exception">
             <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
                   p:template="/email/exception"
                   p:emailFrom="#{europeanaProperties['system.from']}"
                   p:emailTo="#{europeanaProperties['exception.to']}"
                   p:subject="Exception in portal"
-            />
-        </entry>
-        <!-- DEPRECATED email templates -->
-        <entry key="register">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/deprecated/confirmation"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="My Europeana email confirmation"
-            />
-        </entry>
-        <entry key="registerApi">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/deprecated/confirmation-api"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="Europeana API email confirmation"
-            />
-        </entry>
-        <entry key="registerApiNotifyUser">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/deprecated/register-api-notify-user-multilang"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="Thank you for registering for the new Europeana API"
             />
         </entry>
     </util:map>
