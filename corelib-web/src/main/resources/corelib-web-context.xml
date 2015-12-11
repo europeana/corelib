@@ -57,12 +57,12 @@
 	<!-- OTHERS -->
 	<bean id="corelib_web_MediaServiceFactory" class="eu.europeana.corelib.web.model.mediaservice.MediaServiceFactory" />
 
-	<bean class="eu.europeana.corelib.web.swift.SwiftProvider" id="corelib_web_swiftProvider">
-		<constructor-arg value="#{europeanaProperties['swift.authUrl']}"/>
-		<constructor-arg value="#{europeanaProperties['swift.username']}"/>
-		<constructor-arg value="#{europeanaProperties['swift.password']}"/>
-		<constructor-arg value="#{europeanaProperties['swift.containerName']}"/>
-		<constructor-arg value="#{europeanaProperties['swift.regionName']}"/>
-		<constructor-arg value="#{europeanaProperties['swift.tenantName']}"/>
+	<bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.web.swift.SwiftProvider">
+		<constructor-arg value="#{europeanaProperties['swift.authUrl']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['swift.username']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['swift.password']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['swift.containerName']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['swift.regionName']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['swift.tenantName']}" type="java.lang.String"/>
 	</bean>
 </beans>
