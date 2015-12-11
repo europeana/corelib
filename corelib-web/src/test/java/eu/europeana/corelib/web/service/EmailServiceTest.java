@@ -17,7 +17,6 @@
 
 package eu.europeana.corelib.web.service;
 
-import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.web.email.EmailBuilder;
@@ -114,15 +113,6 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
         builder.setSubject("doesNotExists");
         // next line will trigger an EmailServiceException as it must be a valid template tag
         builder.setTemplate("doesNotExists");
-    }
-
-    private Token createFakeToken(final String tokenString, final String emailAddress) {
-        Token tokenMock = mock(Token.class);
-        when(tokenMock.getId()).thenReturn(tokenString);
-        when(tokenMock.getToken()).thenReturn(tokenString);
-        when(tokenMock.getEmail()).thenReturn(emailAddress);
-        when(tokenMock.getCreated()).thenReturn(new Date().getTime());
-        return tokenMock;
     }
 
     private User createFakeUser(final String username, final String email) {
