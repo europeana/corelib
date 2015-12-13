@@ -38,6 +38,8 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	private Mongo mongoServer;
 	private String databaseName;
 	private Datastore datastore;
+	private String username;
+	private String password;
 
 	/**
 	 * Constructor for the CollectionMongoServer to ensure that everything has
@@ -54,6 +56,20 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		createDatastore();
 	}
 
+	public CollectionMongoServerImpl(Datastore datastore){
+		this.datastore = datastore;
+		this.mongoServer = datastore.getMongo();
+		this.databaseName = datastore.getCollection(Collection.class).getName();
+
+	}
+	public CollectionMongoServerImpl(Mongo mongoServer, String databaseName, String username, String password) {
+		this.mongoServer = mongoServer;
+		this.databaseName = databaseName;
+		this.username = username;
+		this.password = password;
+		createDatastoreWithCredentials();
+	}
+
 	public CollectionMongoServerImpl() {
 
 	}
@@ -64,7 +80,12 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
 	}
-
+	private void createDatastoreWithCredentials() {
+		Morphia morphia = new Morphia();
+		morphia.map(Collection.class);
+		datastore = morphia.createDatastore(mongoServer, databaseName,username,password.toCharArray());
+		datastore.ensureIndexes();
+	}
 	/**
 	 * Return the datastore. Useful for exposing surplus functionality
 	 */

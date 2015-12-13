@@ -89,13 +89,22 @@
             </extension>
         </simpleContent>
     </complexType>
+	<!-- Because of jibx incompatibility in the generation og the HexBinarytype (byte array) that leads to Marshalling issues this needs to be maintained as String
+	For as long as Jibx does not properly support it
+	-->
     <complexType name="HexBinaryType">
         <simpleContent>
-            <extension base="hexBinary">
+            <extension base="rdf:hexBinaryString">
                 <attribute ref="rdf:datatype" use="required" fixed="http://www.w3.org/2001/XMLSchema#hexBinary"/>
             </extension>
         </simpleContent>
     </complexType>
+
+	<simpleType name="hexBinaryString">
+		<restriction base="string">
+			<pattern value="[0-9A-Fa-f]{6}"/>
+		</restriction>
+	</simpleType>
 	<complexType name="AboutType">
 		<annotation>
 			<appinfo>

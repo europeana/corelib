@@ -184,16 +184,17 @@ public interface WebResource extends AbstractEdmEntity {
 	 * @return
 	 */
 	Map<String, List<String>> getDcCreator();
+
 	/**
 	 * dc:creator for edm:WebResource
 	 */
 	
 	void setDcCreator(Map<String, List<String>> dcCreator);
+
 	/**
 	 * owl:sameAs for edm:WebResource
 	 */
 	void setOwlSameAs(String[] owlSameAs);
-
 
 	/**
 	 * owl:sameAs for edm:WebResource
@@ -248,15 +249,13 @@ public interface WebResource extends AbstractEdmEntity {
 	 * @return
 	 */
 	Integer getEdmSpatialResolution();
-	
-	
+
 	/**
 	 * ebucore:sampleSize
 	 * @return
 	 */
 	Integer getEbucoreSampleSize();
-	
-	
+
 	/**
 	 * ebucore:sampleRate
 	 * @return
@@ -264,9 +263,10 @@ public interface WebResource extends AbstractEdmEntity {
 	Integer getEbucoreSampleRate();
 	
 	/**
-         * ebucore:frameRate
-         */
-        Double getEbucoreFrameRate();
+	 * ebucore:frameRate
+	 */
+	Double getEbucoreFrameRate();
+
 	/**
 	 * ebucore:bitRate
 	 * @return
@@ -279,19 +279,16 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	String getEdmHasColorSpace();
 	
-	
 	/**
 	 * edm:componentColor
 	 * @return
 	 */
 	List<String> getEdmComponentColor();
-	
-	
-	
+
 	/**
 	 * ebucore:orientation
 	 * @return
 	 */
 	String getEbucoreOrientation();
-	
+
 }

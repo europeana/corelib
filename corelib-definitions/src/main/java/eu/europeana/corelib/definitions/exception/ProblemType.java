@@ -25,7 +25,7 @@ public enum ProblemType {
 	PAGE_NOT_FOUND("Requested Europeana page not found.", ProblemResponseAction.IGNORE),
 	RECORD_REVOKED("Europeana record is revoked by the content provider.", ProblemResponseAction.IGNORE),
 	MALFORMED_URL("Required parameters are missing from the request.", ProblemResponseAction.LOG),
-	MALFORMED_QUERY("Query to Search Engine is malformed.", ProblemResponseAction.LOG),
+	MALFORMED_QUERY("Invalid query parameter.", ProblemResponseAction.LOG),
 	UNKNOWN("unknown", ProblemResponseAction.IGNORE),
 	UNABLE_TO_CHANGE_LANGUAGE("We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
 	TOKEN_INVALID("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),

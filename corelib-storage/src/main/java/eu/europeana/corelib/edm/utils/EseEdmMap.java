@@ -103,7 +103,6 @@ public enum EseEdmMap {
 		@Override
 		public String getEdmValue(FullBean bean) {
 			try {
-				System.out.println("in 1914 1918");
 				return bean.getAggregations().get(0).getHasView()[0];
 			} catch (NullPointerException e) {
 				throw e;

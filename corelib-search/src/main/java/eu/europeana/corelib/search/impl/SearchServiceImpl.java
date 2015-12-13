@@ -18,7 +18,7 @@ package eu.europeana.corelib.search.impl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
-import com.google.common.hash.Hasher;
+import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +39,7 @@ import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
@@ -47,10 +48,7 @@ import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
 import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.*;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
@@ -76,6 +74,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Collation;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Correction;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CursorMarkParams;
@@ -112,7 +111,7 @@ public class SearchServiceImpl implements SearchService {
             "what", "where", "when", "title");
     private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-    private static final Hasher hf = Hashing.md5().newHasher();
+    private static final HashFunction hf = Hashing.md5();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
     private static boolean STARTED = false;
 
@@ -236,9 +235,11 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
-                final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
+                final HashCode hashCodeAbout = hf.newHasher()
+                        .putString(webResource.getAbout(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
-                        .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                        .putString(fullBean.getAbout(), Charsets.UTF_8)
+                        .hash();
 
 
                 final String webMetaInfoId = hashCodeAbout.toString();
@@ -248,10 +249,11 @@ public class SearchServiceImpl implements SearchService {
 
             // Locate the technical meta data from the aggregation is shown by
             if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                final HashCode hashCodeIsShownBy = hf
+                final HashCode hashCodeIsShownBy = hf.newHasher()
                         .putString(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), Charsets.UTF_8)
                         .putString("-", Charsets.UTF_8)
-                        .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                        .putString(fullBean.getAbout(), Charsets.UTF_8)
+                        .hash();
 
                 final String webMetaInfoId = hashCodeIsShownBy.toString();
                 webMetaInfo = getMetaInfo(webMetaInfoId);
@@ -274,10 +276,6 @@ public class SearchServiceImpl implements SearchService {
                 urls.addAll(Arrays.asList(aggregation.getHasView()));
             }
 
-            if (!urls.isEmpty()) {
-                System.out.println(Arrays.deepToString(urls.toArray()));
-            }
-
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
@@ -286,9 +284,11 @@ public class SearchServiceImpl implements SearchService {
                 WebResourceMetaInfoImpl webMetaInfo = null;
 
                 if (webResource.getAbout() != null) {
-                    final HashCode hashCodeAbout = hf.putString(webResource.getAbout(), Charsets.UTF_8)
+                    final HashCode hashCodeAbout = hf.newHasher()
+                            .putString(webResource.getAbout(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
-                            .putString(fullBean.getAbout(), Charsets.UTF_8).hash();
+                            .putString(fullBean.getAbout(), Charsets.UTF_8)
+                            .hash();
 
                     // Locate the technical meta data from the web resource about
                     final String webMetaInfoId = hashCodeAbout.toString();
@@ -298,9 +298,11 @@ public class SearchServiceImpl implements SearchService {
                 // Locate the technical meta data from the aggregation is shown
                 // by
                 if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    final HashCode hashCodeIsShownBy = hf.putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
+                    final HashCode hashCodeIsShownBy = hf.newHasher()
+                            .putString(aggregation.getEdmIsShownBy(), Charsets.UTF_8)
                             .putString("-", Charsets.UTF_8)
-                            .putString(aggregation.getAbout(), Charsets.UTF_8).hash();
+                            .putString(aggregation.getAbout(), Charsets.UTF_8)
+                            .hash();
 
                     final String webMetaInfoId = hashCodeIsShownBy.toString();
                     webMetaInfo = getMetaInfo(webMetaInfoId);
@@ -316,7 +318,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems)
             throws MongoDBException {
-       // long t0 = new Date().getTime();
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         injectWebMetaInfo(fullBean);
@@ -327,13 +328,23 @@ public class SearchServiceImpl implements SearchService {
             }
 
         }
-        //logTime("mongo findById", (new Date().getTime() - t0));
 
         if (fullBean != null && similarItems) {
             try {
                 fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
             } catch (SolrServerException e) {
                 log.error("SolrServerException: " + e.getMessage());
+            }
+        }
+
+        if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()){
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
+                        wRes.initAttributionSnippet();
+                    }
+                }
             }
         }
 
@@ -366,7 +377,6 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-      //  long t0 = new Date().getTime();
         if (!STARTED) {
             idServer.createDatastore();
             STARTED = true;
@@ -374,7 +384,6 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         injectWebMetaInfo(fullBean);
-      //  logTime("mongo resolve", (new Date().getTime() - t0));
         if (fullBean != null) {
             try {
                 fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
@@ -457,7 +466,7 @@ public class SearchServiceImpl implements SearchService {
             for (MoreLikeThis mltField : MoreLikeThis.values()) {
                 fields.add(mltField.toString());
             }
-            mltFields = StringUtils.join(fields, ",");
+            mltFields = ClientUtils.escapeQueryChars(StringUtils.join(fields, ","));
         }
         solrQuery.set("mlt.fl", mltFields);
         solrQuery.set("mlt.mintf", 1);
@@ -470,7 +479,6 @@ public class SearchServiceImpl implements SearchService {
         }
 
         QueryResponse response = solrServer.query(solrQuery);
-        //logTime("MoreLikeThis", response.getElapsedTime());
 
         @SuppressWarnings("unchecked")
         NamedList<Object> moreLikeThisList = (NamedList<Object>) response
@@ -576,7 +584,6 @@ public class SearchServiceImpl implements SearchService {
                 if (query.getFacetQueries() != null) {
                     for (String facetQuery : query.getFacetQueries()) {
                         solrQuery.addFacetQuery(facetQuery);
-                      //  System.out.println("Facet Query: " + facetQuery);
                     }
                 }
 
@@ -585,10 +592,9 @@ public class SearchServiceImpl implements SearchService {
                         log.debug("Solr query is: " + solrQuery);
                     }
                     query.setExecutedQuery(solrQuery.toString());
+
                     QueryResponse queryResponse = solrServer.query(solrQuery);
 
-
-                   // logTime("calculateTag", queryResponse.getElapsedTime());
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
@@ -622,12 +628,19 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
-
-    private boolean isFieldQuery(String query) {
-
-        String subquery = StringUtils.substringBefore(query, "filter_tags");
+    private boolean isFieldQuery(String query){
+        //TODO fix
+        String subquery = StringUtils.substringBefore(query,"filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
-        return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:") || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:") || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
+        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
+                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
+                ||StringUtils.contains(queryWithoutTags,"title:")){
+            return false;
+        }
+        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -690,7 +703,6 @@ public class SearchServiceImpl implements SearchService {
                 log.debug("Solr query is: " + solrQuery.toString());
             }
             response = solrServer.query(solrQuery);
-          //  logTime("queryFacetSearch", response.getElapsedTime());
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
             log.error("SolrServerException: " + e.getMessage() + " for query "
@@ -742,7 +754,6 @@ public class SearchServiceImpl implements SearchService {
                     log.debug("Solr query is: " + solrQuery);
                 }
                 QueryResponse queryResponse = solrServer.query(solrQuery);
-               // logTime("calculateTag", queryResponse.getElapsedTime());
 
                 resultSet.setResults((List<T>) queryResponse
                         .getBeans(beanClazz));
@@ -887,108 +898,43 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Neo4jBean> getChildren(String nodeId, int offset, int limit) {
-        List<Node> children = neo4jServer.getChildren(getNode(nodeId), offset,
-                limit);
+    public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
-        for (Node child : children) {
-            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
-                    getNodeId(child)));
+        long startIndex = offset;
+        List<CustomNode> children = neo4jServer.getChildren(rdfAbout, offset, limit);
+        for (CustomNode child : children) {
+            startIndex += 1l;
+            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, startIndex));
         }
         return beans;
     }
 
     @Override
-    public boolean isHierarchy(String nodeId) {
-        return neo4jServer.isHierarchy(nodeId);
-    }
-
-
-    @Override
-    public List<Neo4jBean> getChildren(String nodeId, int offset) {
-        return getChildren(nodeId, offset, 10);
+    public boolean isHierarchy(String rdfAbout) {
+        return neo4jServer.isHierarchy(rdfAbout);
     }
 
     @Override
-    public List<Neo4jBean> getChildren(String nodeId) {
-        return getChildren(nodeId, 0, 10);
-    }
-
-    private Node getNode(String id) {
-        return neo4jServer.getNode(id);
+    public List<Neo4jBean> getChildren(String rdfAbout, int offset) {
+        return getChildren(rdfAbout, offset, 10);
     }
 
     @Override
-    public Neo4jBean getHierarchicalBean(String nodeId) {
-        Node node = getNode(nodeId);
+    public List<Neo4jBean> getChildren(String rdfAbout) {
+        return getChildren(rdfAbout, 0, 10);
+    }
+
+    private Node getNode(String rdfAbout) {
+        return neo4jServer.getNode(rdfAbout);
+    }
+
+    @Override
+    public Neo4jBean getHierarchicalBean(String rdfAbout) {
+        Node node = getNode(rdfAbout);
         if (node != null) {
-            return Node2Neo4jBeanConverter.toNeo4jBean(node, getNodeId(node));
+            return Node2Neo4jBeanConverter.toNeo4jBean(node, neo4jServer.getNodeIndex(node));
         }
         return null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Date getLastSolrUpdate() throws SolrServerException, IOException {
-        long t0 = new Date().getTime();
-        NamedList<Object> namedList = solrServer.request(new LukeRequest());
-        NamedList<Object> index = (NamedList<Object>) namedList.get("index");
-        if (log.isInfoEnabled()) {
-            log.info("spent: " + (new Date().getTime() - t0));
-        }
-        return (Date) index.get("lastModified");
-    }
-
-    public void logTime(String type, long time) {
-        if (log.isDebugEnabled()) {
-            log.debug(String.format("elapsed time (%s): %d", type, time));
-        }
-    }
-
-    @Override
-    public List<Neo4jBean> getPreceedingSiblings(String nodeId, int limit) {
-        List<Node> children = neo4jServer.getPreceedingSiblings(getNode(nodeId), limit);
-        List<Neo4jBean> beans = new ArrayList<>();
-        for (Node child : children) {
-            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
-                    getNodeId(child)));
-        }
-        return beans;
-    }
-
-    @Override
-    public List<Neo4jBean> getPreceedingSiblings(String nodeId) {
-        return getPreceedingSiblings(nodeId, 10);
-    }
-
-    @Override
-    public List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) {
-        List<Node> children = neo4jServer.getFollowingSiblings(getNode(nodeId), limit);
-        List<Neo4jBean> beans = new ArrayList<>();
-        for (Node child : children) {
-            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child,
-                    getNodeId(child)));
-        }
-        return beans;
-    }
-
-    @Override
-    public List<Neo4jBean> getFollowingSiblings(String nodeId) {
-        return getFollowingSiblings(nodeId, 10);
-    }
-
-    @Override
-    public long getChildrenCount(String nodeId) {
-        return neo4jServer.getChildrenCount(getNode(nodeId));
-    }
-
-    private long getNodeId(Node nodeId) {
-        return neo4jServer.getNodeIndex(nodeId);
-    }
-
-    @Override
-    public Neo4jStructBean getInitialStruct(String nodeId) {
-        return Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId));
     }
 
     private enum SuggestionTitle {
@@ -1013,6 +959,79 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public Date getLastSolrUpdate() throws SolrServerException, IOException {
+        long t0 = new Date().getTime();
+        NamedList<Object> namedList = solrServer.request(new LukeRequest());
+        NamedList<Object> index = (NamedList<Object>) namedList.get("index");
+        if (log.isInfoEnabled()) {
+            log.info("spent: " + (new Date().getTime() - t0));
+        }
+        return (Date) index.get("lastModified");
+    }
+
+    public void logTime(String type, long time) {
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("elapsed time (%s): %d", type, time));
+        }
+    }
+
+    @Override
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) {
+        List<Neo4jBean> beans = new ArrayList<>();
+        List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        for (CustomNode precedingSibling : precedingSiblings) {
+            startIndex -= 1l;
+            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(precedingSibling, startIndex));
+        }
+        return beans;
+    }
+
+    @Override
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) {
+        return getPrecedingSiblings(rdfAbout, 10);
+    }
+
+    @Override
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) {
+        List<Neo4jBean> beans = new ArrayList<>();
+        List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        for (CustomNode followingSibling : followingSiblings) {
+            startIndex += 1l;
+            beans.add(Node2Neo4jBeanConverter.toNeo4jBean(followingSibling, startIndex));
+        }
+        return beans;
+    }
+
+    @Override
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout) {
+        return getFollowingSiblings(rdfAbout, 10);
+    }
+
+    @Override
+    public long getChildrenCount(String rdfAbout) {
+        return neo4jServer.getChildrenCount(getNode(rdfAbout));
+    }
+
+    // note that parents don't have their node indexes set in getInitialStruct
+    // because they have to be fetched separately; therefore this is done afterwards
+    @Override
+    public Neo4jStructBean getInitialStruct(String nodeId) {
+        return addParentNodeIndex(Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId), neo4jServer.getNodeIndex(getNode(nodeId))));
+    }
+
+    private Neo4jStructBean addParentNodeIndex(Neo4jStructBean struct) {
+        if (!struct.getParents().isEmpty()) {
+            for (Neo4jBean parent : struct.getParents()) {
+                parent.setIndex(neo4jServer.getNodeIndex(getNode(parent.getId())));
+            }
+        }
+        return struct;
+    }
+
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
         final DB db = metainfoMongoServer.getDatastore().getDB();
@@ -1027,9 +1046,11 @@ public class SearchServiceImpl implements SearchService {
         if (cursor.hasNext()) {
             return new Gson().fromJson(cursor.next().toString(), type);
         }
-
         return null;
     }
+
+    // Filter tag generation
+
 }
 
 class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
