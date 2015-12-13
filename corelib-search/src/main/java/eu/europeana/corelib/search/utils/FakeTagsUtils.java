@@ -44,11 +44,12 @@ public class FakeTagsUtils {
                             if (imageAspectRatios.size() != 0) {
                                 imageAspectRatio = imageAspectRatios.get(m);
                             }
-
-                            final Integer filterTag =
-                                    calculateTag(1, mimeType, imageSize, imageColor, imageGrayScale,
-                                            imageAspectRatio, null, null, null, null, null);
-                            filterTags.add(filterTag);
+                            if (CommonTagExtractor.isImageMimeType(mimeType)) {
+                                final Integer filterTag =
+                                        calculateTag(1, mimeType, imageSize, imageColor, imageGrayScale,
+                                                imageAspectRatio, null, null, null, null, null);
+                                filterTags.add(filterTag);
+                            }
 
                             m += 1;
                         } while (m < imageAspectRatios.size());
@@ -92,10 +93,13 @@ public class FakeTagsUtils {
                         soundDuration = soundDurations.get(k);
                     }
 
-                    final Integer filterTag =
-                            calculateTag(2, mimeType, null, null, null, null, null, soundHQ,
-                                    soundDuration, null, null);
-                    filterTags.add(filterTag);
+                    if (CommonTagExtractor.isSoundMimeType(mimeType)) {
+
+                        final Integer filterTag =
+                                calculateTag(2, mimeType, null, null, null, null, null, soundHQ,
+                                        soundDuration, null, null);
+                        filterTags.add(filterTag);
+                    }
 
                     k += 1;
                 } while (k < soundDurations.size());
@@ -133,10 +137,13 @@ public class FakeTagsUtils {
                         videoDuration = videoDurations.get(k);
                     }
 
-                    final Integer filterTag =
-                            calculateTag(3, mimeType, null, null, null, null, null, null, null, videoHQ,
-                                    videoDuration);
-                    filterTags.add(filterTag);
+                    if (CommonTagExtractor.isVideoMimeType(mimeType)) {
+
+                        final Integer filterTag =
+                                calculateTag(3, mimeType, null, null, null, null, null, null, null, videoHQ,
+                                        videoDuration);
+                        filterTags.add(filterTag);
+                    }
 
                     k += 1;
                 } while (k < videoDurations.size());
@@ -196,6 +203,9 @@ public class FakeTagsUtils {
     static public Integer calculateImageTag(final String mimeType, final String imageSize,
                                             final Boolean imageColor, final Boolean imageGrayScale,
                                             final String imageAspectRatio, final String imageColorPalette) {
+
+        if (!CommonTagExtractor.isImageMimeType(mimeType)) throw IllegalArgumentException("Cannot compute the image tag for a non-image mimetype "+mimeType);
+
         ImageOrientation imageOrientation = null;
         if (imageAspectRatio != null) {
             if (imageAspectRatio.equals("portrait")) {
