@@ -79,13 +79,6 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>ibiblio</id>
-			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>
 			<url>http://repo.spring.io/snapshot</url>
