@@ -1,25 +1,20 @@
 package eu.europeana.corelib.web.context;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.cloudfoundry.VcapApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.StandardServletEnvironment;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Bridge between the VCAP (a.k.a. Cloud Foundry) metadata (specifically, the VCAP_APPLICATION and
@@ -59,7 +54,6 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  * @author Yorgos, Bram
  * 
  */
-@Component
 public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
   private final static String VCAP = "vcap.services.";
