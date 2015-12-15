@@ -16,23 +16,17 @@
  */
 package eu.europeana.corelib.neo4j.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
+import eu.europeana.corelib.definitions.solr.DocType;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.BooleanNode;
 import org.codehaus.jackson.node.IntNode;
 import org.codehaus.jackson.node.TextNode;
-import org.codehaus.jackson.node.BooleanNode;
-import org.neo4j.graphdb.Node;
-
-import eu.europeana.corelib.definitions.solr.DocType;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.Node;
+
+import java.util.*;
 
 /**
  * Converter from a Neo4j Node to Neo4jBean
@@ -226,7 +220,7 @@ public class Node2Neo4jBeanConverter {
             if (i == 0) {
                 struct.setSelf(toNeo4jBean(parentNode, index));
             } else {
-                parentBeans.add(toNeo4jBean(parentNode, 1l));
+                parentBeans.add(toNeo4jBean(parentNode, 1L));
             }
             i++;
         }
@@ -236,7 +230,7 @@ public class Node2Neo4jBeanConverter {
             previousIndex--;
             pSiblingBeans.add(toNeo4jBean(pSiblingNode, previousIndex));
             if (psChildNodes.size() > j && pSiblingNode.hasProperty("hasChildren") && ((BooleanNode) pSiblingNode.getProperty("hasChildren")).asBoolean()) {
-                psChildBeans.add(toNeo4jBean(psChildNodes.get(j), 1l));
+                psChildBeans.add(toNeo4jBean(psChildNodes.get(j), 1L));
                 j++;
             } else {
                 psChildBeans.add(createEmptyNeo4JBean());
@@ -248,7 +242,7 @@ public class Node2Neo4jBeanConverter {
             followingIndex++;
             fSiblingBeans.add(toNeo4jBean(fSiblingNode, followingIndex));
             if (fsChildNodes.size() > k && fSiblingNode.hasProperty("hasChildren") && ((BooleanNode) fSiblingNode.getProperty("hasChildren")).asBoolean()) {
-                fsChildBeans.add(toNeo4jBean(fsChildNodes.get(k), 1l));
+                fsChildBeans.add(toNeo4jBean(fsChildNodes.get(k), 1L));
                 k++;
             } else {
                 fsChildBeans.add(createEmptyNeo4JBean());
@@ -363,10 +357,10 @@ public class Node2Neo4jBeanConverter {
         neo4jBean.setType(DocType.safeValueOf("(null)"));
         neo4jBean.setTitle(titles);
         neo4jBean.setHasChildren(Boolean.FALSE);
-        neo4jBean.setIndex(0l);
+        neo4jBean.setIndex(0L);
         neo4jBean.setParent("(null)");
         neo4jBean.setRelBefore(Boolean.FALSE);
-        neo4jBean.setChildrenCount(0l);
+        neo4jBean.setChildrenCount(0L);
         return neo4jBean;
     }
 

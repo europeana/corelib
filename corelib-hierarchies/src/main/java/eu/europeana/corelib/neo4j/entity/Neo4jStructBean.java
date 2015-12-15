@@ -17,13 +17,18 @@
 package eu.europeana.corelib.neo4j.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * A complex Neo4j response structure, to contains self, parents, preceding siblings and following siblings.
  * @author gmamakis
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 public class Neo4jStructBean {
 
 	/**

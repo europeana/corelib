@@ -215,7 +215,7 @@ public class Neo4jTest {
 		Assert.assertNotNull(bean);
 
 		Assert.assertEquals(bean.getParent(), "uri0");
-		Assert.assertEquals(bean.getChildrenCount().longValue(), 0l);
+		Assert.assertEquals(bean.getChildrenCount().longValue(), 0L);
 		Assert.assertEquals(bean.getType(), DocType.safeValueOf("TEXT"));
 		Map<String, List<String>> title = new HashMap<>();
 		List<String> titleList = new ArrayList<>();
@@ -232,7 +232,7 @@ public class Neo4jTest {
 
 		Hierarchy hierarchy = server.getInitialStruct(bean.getId());
 		Assert.assertNotNull(hierarchy);
-		Neo4jStructBean structBean = Node2Neo4jBeanConverter.toNeo4jStruct(hierarchy, bean.getIndex().longValue());
+		Neo4jStructBean structBean = Node2Neo4jBeanConverter.toNeo4jStruct(hierarchy, bean.getIndex());
 		Assert.assertNotNull(structBean);
 
 		Assert.assertEquals(structBean.getSelf().getId(), bean.getId());
@@ -353,7 +353,6 @@ public class Neo4jTest {
 		
 		/**
 		 * Set the relation type between 2 nodes
-		 * @param relType
 		 */
 		public void setRelType(DynamicRelationshipType relType) {
 			this.relType = relType;
