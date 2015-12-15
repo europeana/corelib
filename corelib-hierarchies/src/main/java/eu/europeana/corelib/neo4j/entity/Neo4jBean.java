@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.neo4j.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.europeana.corelib.definitions.solr.DocType;
 
 import java.util.List;
@@ -25,12 +26,15 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 /**
  * Neo4jBean
  * 
  * @author Yorgos.Mamakis@ europeana.eu
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 public class Neo4jBean {
 
 	private String id;
@@ -132,6 +136,7 @@ public class Neo4jBean {
      * @return children Boolean
      */
 	@JsonProperty("hasChildren")
+	@com.fasterxml.jackson.annotation.JsonProperty("hasChildren")
 	public Boolean hasChildren() {
 		return children;
 	}

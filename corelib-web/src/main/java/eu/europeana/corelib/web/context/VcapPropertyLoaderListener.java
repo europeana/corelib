@@ -119,10 +119,6 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
     try {
       props.load(new FileInputStream(europeanaProperties));
 
-      final String[] swiftProp = new String[] { "authUrl", "userName", "password", "containerName", "regionName", "tenantName"};
-
-
-
       // PostgreSQL db, username, password, host
       if (env.getProperty(POSTGRESHOST+env.getProperty(POSTGRES)+CREDENTIALS_HOST) != null) {
         props.setProperty("postgres.db", env.getProperty(POSTGRESDB+env.getProperty(POSTGRES)+CREDENTIALS_DB));
