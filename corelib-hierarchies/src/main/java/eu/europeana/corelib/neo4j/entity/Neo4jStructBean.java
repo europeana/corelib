@@ -44,7 +44,7 @@ public class Neo4jStructBean {
 	/**
 	 * Self's preceding siblings
 	 */
-	private List<Neo4jBean> precedingSiblings;
+	private List<Neo4jBean> preceedingSiblings;
 
 	/**
 	 * Self's following siblings
@@ -54,7 +54,7 @@ public class Neo4jStructBean {
 	/**
 	 * Preceding siblings' first children
 	 */
-	private List<Neo4jBean> precedingSiblingChildren;
+	private List<Neo4jBean> preceedingSiblingChildren;
 
 	/**
 	 * following siblings' first children
@@ -69,12 +69,12 @@ public class Neo4jStructBean {
 		this.self = self;
 	}
 
-	public List<Neo4jBean> getPrecedingSiblings() {
-		return precedingSiblings;
+	public List<Neo4jBean> getPreceedingSiblings() {
+		return preceedingSiblings;
 	}
 
 	public void setPrecedingSiblings(List<Neo4jBean> precedingSiblings) {
-		this.precedingSiblings = precedingSiblings;
+		this.preceedingSiblings = precedingSiblings;
 	}
 
 	public List<Neo4jBean> getFollowingSiblings() {
@@ -86,11 +86,11 @@ public class Neo4jStructBean {
 	}
 
 	public List<Neo4jBean> getPrecedingSiblingChildren() {
-		return precedingSiblingChildren;
+		return preceedingSiblingChildren;
 	}
 
 	public void setPrecedingSiblingChildren(List<Neo4jBean> precedingSiblingChildren) {
-		this.precedingSiblingChildren = precedingSiblingChildren;
+		this.preceedingSiblingChildren = precedingSiblingChildren;
 	}
 
 	public List<Neo4jBean> getFollowingSiblingChildren() {

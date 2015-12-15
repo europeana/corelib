@@ -28,7 +28,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class Hierarchy {
 	private List<CustomNode> parents = new ArrayList<CustomNode>();
 	private List<CustomNode> siblings = new ArrayList<CustomNode>();
-	private List<CustomNode> precedingSiblings = new ArrayList<CustomNode>();
+	private List<CustomNode> preceedingSiblings = new ArrayList<CustomNode>();
 	private List<CustomNode> followingSiblings = new ArrayList<CustomNode>();
 	private List<CustomNode> precedingSiblingChildren = new ArrayList<CustomNode>();
 	private List<CustomNode> followingSiblingChildren = new ArrayList<CustomNode>();
@@ -50,11 +50,11 @@ public class Hierarchy {
 	}
 
 	public List<CustomNode> getPrecedingSiblings() {
-		return precedingSiblings;
+		return preceedingSiblings;
 	}
 
-	public void setPrecedingSiblings(List<CustomNode> previousSiblings) {
-		this.precedingSiblings = previousSiblings;
+	public void setPreceedingSiblings(List<CustomNode> previousSiblings) {
+		this.preceedingSiblings = previousSiblings;
 	}
 
 	public List<CustomNode> getFollowingSiblings() {
