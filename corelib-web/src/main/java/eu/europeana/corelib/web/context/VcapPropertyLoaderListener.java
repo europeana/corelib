@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.cloudfoundry.VcapApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
 /**
@@ -58,6 +59,7 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  * @author Yorgos, Bram
  * 
  */
+@Component
 public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
   private final static String VCAP = "vcap.services.";
