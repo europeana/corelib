@@ -4,7 +4,7 @@
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- * 
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
@@ -44,8 +44,6 @@ import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
 import eu.europeana.corelib.logging.Logger;
-import eu.europeana.corelib.neo4j.entity.Siblington;
-import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.CustomResponse;
 import eu.europeana.corelib.neo4j.entity.Hierarchy;
 import eu.europeana.corelib.neo4j.entity.IndexObject;
@@ -56,74 +54,221 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 /**
  * @see eu.europeana.corelib.neo4j.server.Neo4jServer
  * @author Yorgos.Mamakis@ europeana.eu
- * @author Maike.Dulk@ europeana.eu
  */
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class
-			.getCanonicalName());
+    private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class
+            .getCanonicalName());
 
-	private RestGraphDatabase graphDb;
-	private RestIndex<Node> index;
-	private org.apache.http.client.HttpClient client;
-	private String customPath;
-	private String serverPath;
+    private RestGraphDatabase graphDb;
+    private RestIndex<Node> index;
+    private org.apache.http.client.HttpClient client;
+    private String customPath;
+    private String serverPath;
 
-	private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(
-			RelType.EDM_ISNEXTINSEQUENCE.getRelType());
-	private static final Relation ISFIRSTINSEQUENCERELATION = new Relation(
-			RelType.ISFIRSTINSEQUENCE.getRelType());
-	private static final Relation DCTERMSISPARTOFRELATION = new Relation(
-			RelType.DCTERMS_ISPARTOF.getRelType());
-	private static final Relation DCTERMSHASPARTRELATION = new Relation(
-			RelType.DCTERMS_HASPART.getRelType());
-    private static final Relation ISFAKEORDERRELATION = new Relation(
-            RelType.ISFAKEORDER.getRelType());
+    private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(
+            RelType.EDM_ISNEXTINSEQUENCE.getRelType());
+    private static final Relation ISFIRSTINSEQUENCERELATION = new Relation(
+            RelType.ISFIRSTINSEQUENCE.getRelType());
+    private static final Relation DCTERMSISPARTOFRELATION = new Relation(
+            RelType.DCTERMS_ISPARTOF.getRelType());
+    private static final Relation DCTERMSHASPARTRELATION = new Relation(
+            RelType.DCTERMS_HASPART.getRelType());
 
-	/**
-	 * Neo4j contructor
-	 * 
-     * @param serverPath The path of the Neo4j server
-     * @param index The name of the index to search on
-     * @param customPath The path of the custom Europeana Neo4j plugins
-	 */
-	public Neo4jServerImpl(String serverPath, String index, String customPath) {
-		this.graphDb = new RestGraphDatabase(serverPath);
-		this.index = this.graphDb.getRestAPI().getIndex(index);
-		this.client = HttpClientBuilder.create()
-				.setConnectionManager(new PoolingHttpClientConnectionManager())
-				.build();
-		this.customPath = customPath;
-		this.serverPath = serverPath;
-	}
+    /**
+     * Neo4j contructor
+     *
+     * @param serverPath
+     *            The path of the Neo4j server
+     * @param index
+     *            The name of the index to search on
+     * @param customPath
+     *            The path of the custom Europeana Neo4j plugins
+     */
+    public Neo4jServerImpl(String serverPath, String index, String customPath) {
+        this.graphDb = new RestGraphDatabase(serverPath);
+        this.index = this.graphDb.getRestAPI().getIndex(index);
+        this.client = HttpClientBuilder.create()
+                .setConnectionManager(new PoolingHttpClientConnectionManager())
+                .build();
+        this.customPath = customPath;
+        this.serverPath = serverPath;
+    }
 
-	/**
-     * Node.Index = relative index of node in its hierarchical sequence
-     * Node.Id = Neo4j numerical Id
-     * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
-	 */
-	public Neo4jServerImpl() {
-	}
-
-	@Override
-    public Node getNode(String rdfAbout) {
-        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
-		if (nodes.size() > 0 && hasRelationships(nodes)) {
-			return nodes.getSingle();
-		}
-		return null;
-	}
-
-    @Override
-    public long getNodeIndex(Node node) {
-        return getNodeIndex(node.getId() + "");
+    /**
+     */
+    public Neo4jServerImpl() {
     }
 
     @Override
-    public long getNodeIndex(String nodeId){
+    public Node getNode(String id) {
+        IndexHits<Node> nodes = index.get("rdf_about", id);
+        if (nodes.size() > 0 && hasRelationships(nodes)) {
+            return nodes.getSingle();
+        }
+        return null;
+    }
+
+    private boolean hasRelationships(IndexHits<Node> nodes) {
+        return nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION)
+                || nodes.getSingle().hasRelationship(DCTERMSHASPARTRELATION);
+    }
+
+    @Override
+    public boolean isHierarchy(String id) {
+        return getNode(id) != null;
+    }
+
+    @Override
+    public List<Node> getChildren(Node id, int offset, int limit) {
+
+        List<Node> children = new ArrayList<Node>();
+        RestTraversal traversal = (RestTraversal) graphDb
+                .traversalDescription();
+
+        traversal.evaluator(Evaluators.excludeStartPosition());
+
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(1);
+
+        traversal.relationships(ISFIRSTINSEQUENCERELATION, Direction.INCOMING);
+
+        Traverser tr = traversal.traverse(id);
+        Iterator<Node> resIter = tr.nodes().iterator();
+
+        while (resIter.hasNext()) {
+            Node node = resIter.next();
+
+            if (node != null) {
+                if (offset == 0) {
+                    children.add(node);
+                    children.addAll(getFollowingSiblings(node, limit - 1, 0));
+                } else {
+                    children.addAll(getFollowingSiblings(node, limit, offset));
+                }
+            }
+        }
+
+        return children;
+    }
+
+    @Override
+    public Node getParent(Node id) {
+        List<Node> nodes = getRelatedNodes(id, 1, 0, Direction.OUTGOING,
+                DCTERMSISPARTOFRELATION);
+        if (nodes.size() > 0) {
+            return nodes.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Node> getFollowingSiblings(Node id, int limit) {
+        return getFollowingSiblings(id, limit, 0);
+    }
+
+    private List<Node> getFollowingSiblings(Node id, int limit, int offset) {
+        return getRelatedNodes(id, limit, offset, Direction.INCOMING,
+                EDMISNEXTINSEQUENCERELATION);
+    }
+
+    @Override
+    public List<Node> getPreceedingSiblings(Node id, int limit) {
+        return getPreceedingSiblings(id, limit, 0);
+    }
+
+    private List<Node> getPreceedingSiblings(Node id, int limit, int offset) {
+        return getRelatedNodes(id, limit, offset, Direction.OUTGOING,
+                EDMISNEXTINSEQUENCERELATION);
+    }
+
+    private List<Node> getRelatedNodes(Node id, int limit, int offset,
+                                       Direction direction, Relation relType) {
+        List<Node> children = new ArrayList<Node>();
+        Transaction tx = graphDb.beginTx();
+        RestTraversal traversal = (RestTraversal) graphDb
+                .traversalDescription();
+
+        traversal.evaluator(Evaluators.excludeStartPosition());
+
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(offset + limit);
+
+        traversal.relationships(relType, direction);
+        Traverser tr = traversal.traverse(id);
+        Iterator<Node> resIter = tr.nodes().iterator();
+
+        int i = 1;
+        while (resIter.hasNext()) {
+            Node node = resIter.next();
+            if (i >= offset) {
+                if (children.size() <= limit) {
+                    children.add(node);
+                }
+                if (children.size() == limit) {
+                    break;
+                }
+            }
+            i++;
+        }
+
+        tx.success();
+        tx.finish();
+        return children;
+    }
+
+    @Override
+    public long getChildrenCount(Node id) {
+
+        // start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part)
+        // as children
+        ObjectNode obj = JsonNodeFactory.instance.objectNode();
+        ArrayNode statements = JsonNodeFactory.instance.arrayNode();
+        obj.put("statements", statements);
+        ObjectNode statement = JsonNodeFactory.instance.objectNode();
+        statement
+                .put("statement",
+                        "start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
+        ObjectNode parameters = statement.with("parameters");
+        statements.add(statement);
+        parameters.put("from", (String) id.getProperty("rdf:about"));
+        HttpPost httpMethod = new HttpPost(serverPath + "transaction/commit");
+        try {
+            String str = new ObjectMapper().writeValueAsString(obj);
+            httpMethod.setEntity(new StringEntity(str));
+            httpMethod.setHeader("content-type", "application/json");
+            HttpResponse resp = client.execute(httpMethod);
+
+            CustomResponse cr = new ObjectMapper().readValue(resp.getEntity()
+                    .getContent(), CustomResponse.class);
+
+            if (cr.getResults() != null
+                    && !cr.getResults().isEmpty()
+                    && cr.getResults().get(0) != null
+                    && cr.getResults().get(0).getData() != null
+                    && !cr.getResults().get(0).getData().isEmpty()
+                    && cr.getResults().get(0).getData().get(0).get("row") != null
+                    && !cr.getResults().get(0).getData().get(0).get("row")
+                    .isEmpty()) {
+                return Long.parseLong(cr.getResults().get(0).getData().get(0)
+                        .get("row").get(0));
+            }
+        } catch (IllegalStateException|IOException e) {
+            LOG.error(e.getMessage());
+        }   finally {
+            httpMethod.releaseConnection();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public long getNodeIndex(Node node) {
         HttpGet method = new HttpGet(customPath
-                + "/europeana/hierarchycount/nodeId/" + nodeId);
+                + "/europeana/hierarchycount/nodeId/" + node.getId());
         try {
             HttpResponse resp = client.execute(method);
 
@@ -135,226 +280,34 @@ public class Neo4jServerImpl implements Neo4jServer {
         } finally {
             method.releaseConnection();
         }
-        return 0;
+        return 1;
     }
 
-    public long getNodeIndexByRdfAbout(String rdfAbout){
-         return getNodeIndex(getNode(rdfAbout));
-     }
-
-	private boolean hasRelationships(IndexHits<Node> nodes) {
-		return nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION)
-				|| nodes.getSingle().hasRelationship(DCTERMSHASPARTRELATION);
-	}
-
-	@Override
-    public boolean isHierarchy(String rdfAbout) {
-        return getNode(rdfAbout) != null;
-	}
-
-	@Override
-    public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/children/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?offset=" + offset + "&limit=" + limit);
+    @Override
+    public Hierarchy getInitialStruct(String id) {
+        if (!isHierarchy(id)) {
+            return null;
+        }
+        HttpGet method = new HttpGet(customPath + "/initial/startup/nodeId/"
+                + StringUtils.replace(id, "/", "%2F"));
+        LOG.info("path: " + method.getURI());
         try {
             HttpResponse resp = client.execute(method);
+
             ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
-            return siblington.getSiblings();
+            Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),
+                    Hierarchy.class);
+            return obj;
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
             method.releaseConnection();
-				}
+        }
         return null;
-	}
-
-	@Override
-    public List<CustomNode> getChildren(Node node, int offset, int limit) {
-        return getChildren(node.getProperty("rdf:about") + "", offset, limit);
     }
 
     @Override
-    public Node getParent(Node node) {
-        List<Node> nodes = getRelatedNodes(node, 1, 0, Direction.OUTGOING,
-				DCTERMSISPARTOFRELATION);
-		if (nodes.size() > 0) {
-			return nodes.get(0);
-		}
-		return null;
-	}
-
-	@Override
-    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/following/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?limit=" + limit);
-        try {
-            HttpResponse resp = client.execute(method);
-            ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
-            return siblington.getSiblings();
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        } finally {
-            method.releaseConnection();
-	}
-        return null;
-	}
-
-    @Override
-    public List<CustomNode> getFollowingSiblings(Node node, int limit) {
-        return getFollowingSiblings(node.getProperty("rdf:about") + "", limit);
+    public String getCustomPath() {
+        return customPath;
     }
-
-    // REMOVEME?
-    private List<Node> getFollowingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.INCOMING,
-				EDMISNEXTINSEQUENCERELATION);
-	}
-
-	@Override
-    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/preceding/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?limit=" + limit);
-        try {
-            HttpResponse resp = client.execute(method);
-            ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
-            return siblington.getSiblings();
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        } finally {
-            method.releaseConnection();
-	}
-        return null;
-	}
-
-    @Override
-    public List<CustomNode> getPrecedingSiblings(Node node, int limit) {
-        return getPrecedingSiblings(node.getProperty("rdf:about") + "", limit);
-    }
-
-    // REMOVEME?
-    private List<Node> getPrecedingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.OUTGOING,
-				EDMISNEXTINSEQUENCERELATION);
-	}
-
-    // TODO REMOVEME (?)
-    private List<Node> getRelatedNodes(Node node, int limit, int offset,
-			Direction direction, Relation relType) {
-		List<Node> children = new ArrayList<Node>();
-		Transaction tx = graphDb.beginTx();
-		RestTraversal traversal = (RestTraversal) graphDb
-				.traversalDescription();
-
-		traversal.evaluator(Evaluators.excludeStartPosition());
-
-		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-		traversal.breadthFirst();
-		traversal.maxDepth(offset + limit);
-
-		traversal.relationships(relType, direction);
-        Traverser tr = traversal.traverse(node);
-		Iterator<Node> resIter = tr.nodes().iterator();
-
-		int i = 1;
-		while (resIter.hasNext()) {
-            Node relatedNode = resIter.next();
-			if (i >= offset) {
-				if (children.size() <= limit) {
-                    children.add(relatedNode);
-				}
-				if (children.size() == limit) {
-					break;
-				}
-			}
-			i++;
-		}
-
-		tx.success();
-		tx.finish();
-		return children;
-	}
-
-	@Override
-    public long getChildrenCount(Node node) {
-
-		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part)
-		// as children
-		ObjectNode obj = JsonNodeFactory.instance.objectNode();
-		ArrayNode statements = JsonNodeFactory.instance.arrayNode();
-		obj.put("statements", statements);
-		ObjectNode statement = JsonNodeFactory.instance.objectNode();
-		statement.put("statement",
-						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
-		ObjectNode parameters = statement.with("parameters");
-		statements.add(statement);
-        parameters.put("from", (String) node.getProperty("rdf:about"));
-		HttpPost httpMethod = new HttpPost(serverPath + "transaction/commit");
-		try {
-			String str = new ObjectMapper().writeValueAsString(obj);
-			httpMethod.setEntity(new StringEntity(str));
-			httpMethod.setHeader("content-type", "application/json");
-			HttpResponse resp = client.execute(httpMethod);
-
-			CustomResponse cr = new ObjectMapper().readValue(resp.getEntity()
-					.getContent(), CustomResponse.class);
-
-			if (cr.getResults() != null
-					&& !cr.getResults().isEmpty()
-					&& cr.getResults().get(0) != null
-					&& cr.getResults().get(0).getData() != null
-					&& !cr.getResults().get(0).getData().isEmpty()
-					&& cr.getResults().get(0).getData().get(0).get("row") != null
-					&& !cr.getResults().get(0).getData().get(0).get("row")
-							.isEmpty()) {
-				return Long.parseLong(cr.getResults().get(0).getData().get(0)
-						.get("row").get(0));
-			}
-		} catch (IllegalStateException|IOException e) {
-			LOG.error(e.getMessage());
-		}   finally {
-			httpMethod.releaseConnection();
-		}
-
-		return 0;
-	}
-
-	@Override
-    public Hierarchy getInitialStruct(String rdfAbout) {
-        if (!isHierarchy(rdfAbout)) {
-			return null;
-		}
-		HttpGet method = new HttpGet(customPath + "/initial/startup/nodeId/"
-                + StringUtils.replace(rdfAbout, "/", "%2F"));
-		LOG.info("path: " + method.getURI());
-		try {
-			HttpResponse resp = client.execute(method);
-
-			ObjectMapper mapper = new ObjectMapper();
-			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),
-					Hierarchy.class);
-			return obj;
-		} catch (IOException e) {
-			LOG.error(e.getMessage());
-		} finally {
-			method.releaseConnection();
-		}
-		return null;
-	}
-
-	@Override
-	public String getCustomPath() {
-		return customPath;
-	}
 }
