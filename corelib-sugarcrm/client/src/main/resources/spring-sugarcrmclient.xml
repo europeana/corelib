@@ -13,9 +13,9 @@
 
 	<bean id="sugarWsClient" factory-bean="sugarWsClientFactory"
 		factory-method="createInstance">
-		<constructor-arg value="http://europeana-crm.isti.cnr.it/soap.php" />
-		<constructor-arg value="webservice" />
-		<constructor-arg value="g2Q64wV" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.host']" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.user']" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.password']" />
 	</bean>
 
 	<bean id="messageFactory"
