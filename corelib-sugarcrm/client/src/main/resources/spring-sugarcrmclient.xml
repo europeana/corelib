@@ -13,9 +13,9 @@
 
 	<bean id="sugarWsClient" factory-bean="sugarWsClientFactory"
 		factory-method="createInstance">
-		<constructor-arg value="#{europeanaProperties['sugarcrm.host']" />
-		<constructor-arg value="#{europeanaProperties['sugarcrm.user']" />
-		<constructor-arg value="#{europeanaProperties['sugarcrm.password']" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.host']}" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.user']}" />
+		<constructor-arg value="#{europeanaProperties['sugarcrm.password']}" />
 	</bean>
 
 	<bean id="messageFactory"
