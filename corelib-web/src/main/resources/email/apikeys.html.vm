@@ -12,7 +12,7 @@
 
 <p>
 Please keep a safe record of these keys.<br/>
-The API key is used in all API calls, inclduing the core search and record methods. This key does not need to be kept confidential.<br/>
+The API key is used in all API calls, including the core search and record methods. This key does not need to be kept confidential.<br/>
 The private key is used for specific methods that require additional user authentication. It must be kept confidential and must not be exposed in user interfaces or in markup.
 <p>
 
