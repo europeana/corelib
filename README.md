@@ -19,6 +19,9 @@ or
 ## Build
 ``mvn clean install`` (add ``-DskipTests``) to skip the unit tests during build
 
+## Create empty database
+``mvn hibernate4:export`` in corelib-db module to create a database schema script
+
 ### Known issues
 Note: there are a number of older/outdated libraries still being referenced as dependencies, some of which may not 
 be provided anymore by the central repositories. The Europeana artifactory has a copy of these dependencies; add this 
