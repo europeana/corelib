@@ -741,7 +741,21 @@
         <annotation>
             <documentation>A significant color present in an image. The colors must be taken from the CSS3 standard color palette
                 and are expressed as a hexadecimal binary value. Example:
-                <spatialResolution>FF0000</spatialResolution>
+                &lt;spatialResolution&gt;FF0000&lt;/spatialResolution&gt;
+            </documentation>
+        </annotation>
+
+    </element>
+    <element name="intermediateProvider" type="rdf:ResourceOrLiteralType">
+
+        <annotation>
+            <documentation>The name or identifier of the intermediate organization that selects, collates, or curates data
+                from a Data Provider that is then aggregated by a Provider from which Europeana harvests.
+                The Intermedatiate Provider must be distinct from both the Data Provider and the Provider
+                in the data supply chain.
+                Example:
+                &lt;edm:intermediateProvider&lt; Erfgoedplus.be&lt;/edm:intermediateProvider&lt;
+                &lt;edm:intermediateProvider rdf:resource=”www.erfgoedplus.be/”/&lt;
             </documentation>
         </annotation>
 

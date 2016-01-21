@@ -41,6 +41,7 @@ import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
+import eu.europeana.corelib.definitions.edm.entity.Service;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -50,6 +51,7 @@ import eu.europeana.corelib.solr.entity.LicenseImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
@@ -118,6 +120,9 @@ public class FullBeanImpl implements FullBean, IDocument {
     
     @Reference
     protected List<LicenseImpl> licenses;
+
+    @Reference
+    protected List<ServiceImpl> services;
 
 	protected String[] country;
     protected String[] userTags;
@@ -407,6 +412,16 @@ public class FullBeanImpl implements FullBean, IDocument {
                 agg.setParentBean(this);
             }
         }
+    }
+
+    @Override
+    public void setServices(List<? extends Service> services){
+        this.services = (List<ServiceImpl>) services;
+    }
+
+    @Override
+    public List<ServiceImpl> getServices(){
+        return services;
     }
 
 }

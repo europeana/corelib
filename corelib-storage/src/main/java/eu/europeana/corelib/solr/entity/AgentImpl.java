@@ -31,7 +31,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.Agent
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity ("Agent")

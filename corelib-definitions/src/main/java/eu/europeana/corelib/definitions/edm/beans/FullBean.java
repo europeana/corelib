@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
+import eu.europeana.corelib.definitions.edm.entity.Service;
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
@@ -311,4 +312,15 @@ public interface FullBean extends IdBean {
 	 * Set the cc:License for the record
 	 */
 	void setLicenses(List<? extends License> licenses);
+
+	/**
+	 * Get the associated list of svcs:Service for the record
+	 */
+	List<? extends Service> getServices();
+
+	/**
+	 * Set the list of svcs:Service for the record
+	 * @param services
+     */
+	void setServices(List<? extends Service> services);
 }

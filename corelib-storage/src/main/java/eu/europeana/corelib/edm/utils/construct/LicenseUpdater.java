@@ -22,7 +22,7 @@ public class LicenseUpdater implements Updater<LicenseImpl> {
 		UpdateOperations<LicenseImpl> ops = mongoServer.getDatastore()
 				.createUpdateOperations(LicenseImpl.class);
 		boolean update = false;
-		if(mongoEntity.getCcDeprecatedOn()== newEntity.getCcDeprecatedOn()){
+		if(mongoEntity.getCcDeprecatedOn()!= newEntity.getCcDeprecatedOn()){
 			if(mongoEntity.getCcDeprecatedOn()==null){
 				newEntity.setCcDeprecatedOn(null);
 				ops.unset("ccDeprecatedOn");
