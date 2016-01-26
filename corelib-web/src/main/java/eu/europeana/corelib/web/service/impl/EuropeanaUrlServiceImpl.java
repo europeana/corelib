@@ -84,9 +84,9 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	}
 
 	@Override
-	public UrlBuilder getApi2Redirect(long uid, String shownAt, String provider, String europeanaId, String profile) {
+	public UrlBuilder getApi2Redirect(String apikey, String shownAt, String provider, String europeanaId, String profile) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
-		url.addPath(String.valueOf(uid), PATH_API_REDIRECT).disableTrailingSlash();
+		url.addPath(String.valueOf(apikey), PATH_API_REDIRECT).disableTrailingSlash();
 		url.addParam("shownAt", shownAt);
 		url.addParam("provider", provider);
 		url.addParam("id", getPortalResolve(europeanaId));

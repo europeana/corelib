@@ -17,129 +17,78 @@
   the Licence.
  -->
 
-<beans 
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
-	<bean id="corelib_web_mailSender"
-	 class="org.springframework.mail.javamail.JavaMailSenderImpl"
-	 p:host="#{europeanaProperties['smtp.host']}"
-	 p:username="#{europeanaProperties['smtp.username']}"
-	 p:password="#{europeanaProperties['smtp.password']}"/>
-<!-- 
-	<bean id="corelib_web_mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-	
-	    <property name="host"><value>smtp.gmail.com</value></property>
-        <property name="port"><value>587</value></property>
-        <property name="protocol"><value>smtp</value></property>
-   
-	    <property name="username"><value>#{europeanaProperties['smtp.username']}</value></property>
-	    <property name="password"><value>#{europeanaProperties['smtp.password']}</value></property>
-	    
-	    <property name="javaMailProperties">
-    	    <props>
-		        <prop key="mail.smtp.auth">true</prop>
-		        <prop key="mail.smtp.starttls.enable">true</prop>
-	            <prop key="mail.smtp.quitwait">false</prop>
+    <bean id="corelib_web_mailSender"
+          class="org.springframework.mail.javamail.JavaMailSenderImpl"
+          p:host="#{europeanaProperties['smtp.host']}"
+          p:username="#{europeanaProperties['smtp.username']}"
+          p:password="#{europeanaProperties['smtp.password']}"/>
 
+    <bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="velocityProperties">
+            <value>
+                resource.loader=class
+                class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+            </value>
+        </property>
+    </bean>
 
-	   			<prop key="mail.smtp.user">#{europeanaProperties['smtp.username']}</prop>
-	   			<prop key="mail.smtp.password">#{europeanaProperties['smtp.password']}</prop>
-				<prop key="mail.smtp.port">587</prop>
-        		<prop key="mail.smtp.auth">true</prop>
-        
-				<prop key="mail.debug">true</prop>
-		    </props>
-	    </property>
-	</bean>
- --> 
+    <bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype"/>
 
-
-
-	<bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="velocityProperties">
-			<value>
-				resource.loader=class
-				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-			</value>
-		</property>
-	</bean>
-
-	<bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype" />
-
-	<util:map id="corelib_web_emailConfigs">
-		<entry key="register">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/confirmation" 
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="My Europeana email confirmation"
-			/>
-		</entry>
-		<entry key="registerApi">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/confirmation-api" 
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="Europeana API email confirmation"
-			/>
-		</entry>
-		<entry key="forgotPassword">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/forgot-password" 
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="My Europeana reset password"
-			/>
-		</entry>
-		<entry key="userFeedback">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/feedback"
-				p:emailFrom="#{europeanaProperties['feedback.from']}"
-				p:emailTo="#{europeanaProperties['feedback.to']}"
-				p:subject="User Feedback"
-			/>
-		</entry>
-		<entry key="userFeedbackConfirm">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/feedback-confirmation"
-				p:emailFrom="#{europeanaProperties['feedback.from']}"
-				p:subject="User Feedback"
-			/>
-		</entry>
-		<entry key="registerNotify">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-notify"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['register.to']}"
-				p:subject="Someone registered just now"
-			/>
-		</entry>
-		<entry key="registerApiNotifyAdmin">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-api-notify-admin"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['register-api.to']}"
-				p:subject="Someone registered for the API just now"
-			/>
-		</entry>
-		<entry key="registerApiNotifyUser">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-api-notify-user-multilang"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="Thank you for registering for the new Europeana API"
-			/>
-		</entry>
-		<entry key="exception">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/exception"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['exception.to']}"
-				p:subject="Exception in portal"
-			/>
-		</entry>
-	</util:map>
+    <util:map id="corelib_web_emailConfigs">
+        <entry key="activation">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/activation"
+                  p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:subject="My Europeana activation"
+            />
+        </entry>
+        <entry key="apikeys">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/apikeys"
+                  p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:emailCc="#{europeanaProperties['register-api.to']}"
+                  p:subject="Your Europeana API keys"
+            />
+        </entry>
+        <entry key="forgotPassword">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/forgot-password"
+                  p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:subject="My Europeana reset password"
+            />
+        </entry>
+        <entry key="userFeedback">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/feedback"
+                  p:emailFrom="#{europeanaProperties['feedback.from']}"
+                  p:emailTo="#{europeanaProperties['feedback.to']}"
+                  p:subject="User Feedback"
+            />
+        </entry>
+        <entry key="userFeedbackConfirm">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/feedback-confirmation"
+                  p:emailFrom="#{europeanaProperties['feedback.from']}"
+                  p:subject="User Feedback"
+            />
+        </entry>
+        <entry key="exception">
+            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                  p:template="/email/exception"
+                  p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:emailTo="#{europeanaProperties['exception.to']}"
+                  p:subject="Exception in portal"
+            />
+        </entry>
+    </util:map>
 </beans>

@@ -10,7 +10,8 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -37,18 +38,22 @@
 
     <!-- Mocking services from other modules and overruling their configuration -->
 
-    <bean name="corelib_solr_searchService" class="org.mockito.Mockito" factory-method="mock">
+    <bean id="corelib_solr_searchService" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.search.SearchService" />
     </bean>
 
-    <bean name="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_mongoServer_id" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_mongoProvider" class="eu.europeana.corelib.EmptyBean"/>
-    <bean name="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmbeddedNeo4j"/>
+    <bean id="corelib_web_emailService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.web.service.EmailService"/>
+    </bean>
+
+    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_mongoProvider" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmptyBean"/>
     <bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.EmptyBean"/>
 
 </beans>

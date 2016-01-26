@@ -17,55 +17,27 @@
 
 package eu.europeana.corelib.db.entity.relational;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.*;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.users.Role;
+import eu.europeana.corelib.utils.DateUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 
-import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
-import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
-import eu.europeana.corelib.definitions.db.entity.relational.SavedSearch;
-import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
-import eu.europeana.corelib.definitions.db.entity.relational.User;
-import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.definitions.users.Role;
-import eu.europeana.corelib.utils.DateUtils;
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=User.QUERY_FINDBY_EMAIL, query="select u from UserImpl u where u.email = ?"),
-	@NamedQuery(name=User.QUERY_FINDBY_APIKEY, query="select u from UserImpl u where u.apiKey = ?"),
-	@NamedQuery(name=User.QUERY_FINDBY_NAME, query="select u from UserImpl u where u.userName = ?")
+		@NamedQuery(name = User.QUERY_FINDBY_EMAIL, query = "select u from UserImpl u where u.email = ?"),
+		@NamedQuery(name = User.QUERY_FINDBY_NAME, query = "select u from UserImpl u where u.userName = ?")
 })
 @Table(name = RelationalDatabase.TABLENAME_USER)
 public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
@@ -86,13 +58,12 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Column(length = FIELDSIZE_PASSWORD)
 	private String password;
 
-	@Column(length = FIELDSIZE_APIKEY)
-	@Index(name = "apikey_index")
-	private String apiKey;
-
 	@Column
 	@Temporal(TemporalType.DATE)
 	private Date registrationDate;
+
+	@Column
+	private Date activationDate;
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -123,40 +94,35 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
 
-	@Column(length=FIELDSIZE_FIELDOFWORK)
+	@Column(length = FIELDSIZE_FIELDOFWORK)
 	private String fieldOfWork;
 
-	@Column(length=FIELDSIZE_LANGUAGEPORTAL)
+	@Column(length = FIELDSIZE_LANGUAGEPORTAL)
 	private String languagePortal;
 
-	@Column(length=FIELDSIZE_LANGUAGEITEM)
+	@Column(length = FIELDSIZE_LANGUAGEITEM)
 	private String languageItem;
 
-	@Column(length=FIELDSIZE_LANGUAGESEARCH)
+	@Column(length = FIELDSIZE_LANGUAGESEARCH)
 	private String languageSearch;
 
-	@Column (columnDefinition="boolean default true")
+	@Column(columnDefinition = "boolean default true")
 	private Boolean languageSearchApplied;
 
-	@OneToMany(targetEntity=SavedItemImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(targetEntity = SavedItemImpl.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "userid", nullable = false)
 	@Fetch(FetchMode.SELECT)
-	private Set<SavedItem> savedItems = new HashSet<SavedItem>();
+	private Set<SavedItem> savedItems = new HashSet<>();
 
-	@OneToMany(targetEntity=SavedSearchImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(targetEntity = SavedSearchImpl.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "userid", nullable = false)
 	@Fetch(FetchMode.SELECT)
-	private Set<SavedSearch> savedSearches = new HashSet<SavedSearch>();
+	private Set<SavedSearch> savedSearches = new HashSet<>();
 
-	@OneToMany(targetEntity=SocialTagImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(targetEntity = SocialTagImpl.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "userid", nullable = false)
 	@Fetch(FetchMode.SELECT)
-	private Set<SocialTag> socialTags = new HashSet<SocialTag>();
-
-	@OneToMany(targetEntity=ApiKeyImpl.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-	@JoinColumn(name = "userid", nullable = false)
-	@Fetch(FetchMode.SELECT)
-	private Set<ApiKey> apiKeys = new HashSet<ApiKey>();
+	private Set<SocialTag> socialTags = new HashSet<>();
 
 	/**
 	 * GETTERS & SETTTERS
@@ -168,13 +134,13 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	}
 
 	@Override
-	public void setEmail(String email) {
-		this.email = StringUtils.lowerCase(email);
+	public String getEmail() {
+		return email;
 	}
 
 	@Override
-	public String getEmail() {
-		return email;
+	public void setEmail(String email) {
+		this.email = StringUtils.lowerCase(email);
 	}
 
 	@Override
@@ -185,16 +151,6 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	@Override
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@Override
-	public String getApiKey() {
-		return apiKey;
-	}
-
-	@Override
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
 	}
 
 	@Override
@@ -252,22 +208,17 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 		return socialTags;
 	}
 
-    @Override       
-    public List<SocialTag> getSocialTagsOrdered() {
-      List<SocialTag> list = new ArrayList<SocialTag>(socialTags);
-
-      Comparator<SocialTag> alphabetical =  new Comparator<SocialTag>() {
-            public int compare(SocialTag s1, SocialTag s2) {
-                    return s1.getTag().compareTo(s2.getTag());
-            }
-        };
-        Collections.sort(list, alphabetical);
-        return list;
-    }
-
 	@Override
-	public Set<ApiKey> getApiKeys() {
-		return apiKeys;
+	public List<SocialTag> getSocialTagsOrdered() {
+		List<SocialTag> list = new ArrayList<>(socialTags);
+
+		Comparator<SocialTag> alphabetical = new Comparator<SocialTag>() {
+			public int compare(SocialTag s1, SocialTag s2) {
+				return s1.getTag().compareTo(s2.getTag());
+			}
+		};
+		Collections.sort(list, alphabetical);
+		return list;
 	}
 
 	@Override
@@ -362,37 +313,37 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 	public void setLanguageSearch(String... languageCodes) {
 		if (languageCodes != null) {
 			if ((languageCodes.length == 1) &&
-				StringUtils.contains(languageCodes[0], SEARCH_LANGUAGES_SEPARATOR)) {
+					StringUtils.contains(languageCodes[0], SEARCH_LANGUAGES_SEPARATOR)) {
 				languageSearch = StringUtils.trimToNull(
 						StringUtils.lowerCase(languageCodes[0]));
 			} else {
 				languageSearch = StringUtils.trimToNull(
 						StringUtils.lowerCase(
-							StringUtils.join(languageCodes, SEARCH_LANGUAGES_SEPARATOR)));
+								StringUtils.join(languageCodes, SEARCH_LANGUAGES_SEPARATOR)));
 			}
 		}
 	}
-	
+
 	@Override
 	public String getLanguageItem() {
 		return languageItem;
 	}
-	
-	@Override
-	public String getLanguagePortal() {
-		return languagePortal;
-	}
-	
+
 	@Override
 	public void setLanguageItem(String languageCode) {
 		languageItem = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
 	}
-	
+
+	@Override
+	public String getLanguagePortal() {
+		return languagePortal;
+	}
+
 	@Override
 	public void setLanguagePortal(String languageCode) {
 		languagePortal = StringUtils.trimToNull(StringUtils.lowerCase(languageCode));
 	}
-	
+
 	@Override
 	public Boolean getLanguageSearchApplied() {
 		return languageSearchApplied;
@@ -403,4 +354,13 @@ public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, Use
 		this.languageSearchApplied = languageSearchApplied;
 	}
 
+	@Override
+	public Date getActivationDate() {
+		return activationDate;
+	}
+
+	@Override
+	public void setActivationDate(Date activationDate) {
+		this.activationDate = activationDate;
+	}
 }

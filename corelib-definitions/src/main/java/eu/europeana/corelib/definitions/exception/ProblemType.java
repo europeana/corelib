@@ -18,6 +18,7 @@
 package eu.europeana.corelib.definitions.exception;
 
 public enum ProblemType {
+	NOT_FOUND("Entity doesn't exists", ProblemResponseAction.IGNORE),
 	MATCH_ALL_DOCS("org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
 	UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),
 	RECORD_NOT_INDEXED("Requested Europeana record not indexed.", ProblemResponseAction.IGNORE),

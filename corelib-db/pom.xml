@@ -158,6 +158,27 @@
                     <argLine>-XX:-UseSplitVerifier</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>de.juplo</groupId>
+                <artifactId>hibernate4-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <envers>true</envers>
+                    <format>true</format>
+                    <delimiter>;</delimiter>
+                    <force>true</force>
+                    <type>CREATE</type>
+                    <target>SCRIPT</target>
+                    <hibernateDialect>org.hibernate.dialect.PostgreSQL9Dialect</hibernateDialect>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

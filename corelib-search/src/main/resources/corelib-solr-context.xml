@@ -40,7 +40,7 @@
     <context:annotation-config/>
 
 	<!-- SERVICES -->
-	<bean name="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
+	<bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
 		p:solrServer-ref="corelib_solr_solrServer"
 	/>
 

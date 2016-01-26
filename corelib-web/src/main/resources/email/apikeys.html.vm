@@ -1,0 +1,29 @@
+<html>
+<body>
+
+<p>Dear ${apiKey.firstName} ${apiKey.lastName},</p>
+
+<p>Thank you for registering for the new Europeana API. These are your Europeana API keys:</p>
+
+<p style="font-family:Courier,Courier New">==========<br/>
+    API key      : ${apiKey.id}<br/>
+    Private key  : ${apiKey.privateKey}<br/>
+    ==========</p>
+
+<p>
+Please keep a safe record of these keys.<br/>
+The API key is used in all API calls, including the core search and record methods. This key does not need to be kept confidential.<br/>
+The private key is used for specific methods that require additional user authentication. It must be kept confidential and must not be exposed in user interfaces or in markup.
+<p>
+
+<p>Our technical documentation is available at http://labs.europeana.eu/api/ including an API-console for testing the API and community developed libraries for a variety of programming languages.</p>
+
+<p>Please join us in the Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi - to ask questions to us and other developers and to give us your feedback on our new API. You can also contact us directly by mailing api@europeana.eu and we'd be especially grateful if you would let us know about your implementation so that we can feature it in our application gallery on Europeana Labs - http://labs.europeana.eu/apps</p>
+
+<p>Best regards,<br/>
+    The Europeana API Team</p>
+
+<p>More about the Europeana API services - http://labs.europeana.eu/</p>
+
+</body>
+</html>

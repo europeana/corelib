@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.entity;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -27,12 +28,15 @@ import com.google.code.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.Proxy
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 @Entity("Proxy")
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 

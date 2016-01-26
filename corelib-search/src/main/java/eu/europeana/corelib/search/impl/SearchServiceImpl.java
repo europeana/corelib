@@ -628,19 +628,13 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
-    private boolean isFieldQuery(String query){
+    private boolean isFieldQuery(String query) {
         //TODO fix
-        String subquery = StringUtils.substringBefore(query,"filter_tags");
+        String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
-        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
-                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
-                ||StringUtils.contains(queryWithoutTags,"title:")){
-            return false;
-        }
-        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
-            return true;
-        }
-        return false;
+        return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:")
+                || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
+                || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
     }
 
     /**
@@ -901,10 +895,9 @@ public class SearchServiceImpl implements SearchService {
     public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
         long startIndex = offset;
-        Node node = neo4jServer.getNode(rdfAbout);
-        List<Node> children = neo4jServer.getChildren(node, offset, limit);
-        for (Node child : children) {
-            startIndex += 1l;
+        List<CustomNode> children = neo4jServer.getChildren(rdfAbout, offset, limit);
+        for (CustomNode child : children) {
+            startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, startIndex));
         }
         return beans;
@@ -981,11 +974,10 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
-        Node node = neo4jServer.getNode(rdfAbout);
-        List<Node> precedingSiblings = neo4jServer.getPreceedingSiblings(node, limit);
-        long startIndex = neo4jServer.getNodeIndex(node);
-        for (Node precedingSibling : precedingSiblings) {
-            startIndex -= 1l;
+        List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        for (CustomNode precedingSibling : precedingSiblings) {
+            startIndex -= 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(precedingSibling, startIndex));
         }
         return beans;
@@ -999,11 +991,10 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
-        Node node = neo4jServer.getNode(rdfAbout);
-        List<Node> followingSiblings = neo4jServer.getFollowingSiblings(node, limit);
-        long startIndex = neo4jServer.getNodeIndex(node);
-        for (Node followingSibling : followingSiblings) {
-            startIndex += 1l;
+        List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        for (CustomNode followingSibling : followingSiblings) {
+            startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(followingSibling, startIndex));
         }
         return beans;
