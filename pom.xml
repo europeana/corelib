@@ -125,7 +125,7 @@
 	<properties>
 		<version.europeanaApi2>2.2.0</version.europeanaApi2>
 		<version.log4j>1.2.15</version.log4j>
-		<version.jdk>1.7</version.jdk>
+		<version.jdk>1.8</version.jdk>
 		<version.junit>4.12</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
@@ -138,7 +138,7 @@
 		<version.commonsLang3>3.4</version.commonsLang3>
 		<version.commonsIO>2.4</version.commonsIO>
 		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
-		<version.jibx>1.2.5</version.jibx>
+		<version.jibx>1.2.6</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.13.0</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>

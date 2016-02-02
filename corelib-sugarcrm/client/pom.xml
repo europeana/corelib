@@ -21,7 +21,7 @@
 		<spring.ws.version>2.2.0.RELEASE</spring.ws.version>
 		<spring.quartz.version>1.6.2</spring.quartz.version>
 		<equinox.ver>3.2.2</equinox.ver>
-		<jibx.version>1.2.5</jibx.version>
+		<jibx.version>1.2.6</jibx.version>
 		<junit-version>4.5</junit-version>
 		<pax-exam-version>1.2.4</pax-exam-version>
 	</properties>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--DRAFT -->
 <schema name="europeana" version="1.4">
-  <similarity class="eu.europeana.ranking.bm25f.similarity.BM25FSimilarityFactory" /> 
-	<types>
+    <!--<similarity class="eu.europeana.ranking.bm25f.similarity.BM25FSimilarityFactory" /> -->
+
+<!-- Field types -->
+<types>
 		<!-- ASSETS TRAINING FIELDTYPES -->
 		<fieldType name="int" class="solr.TrieIntField"
 			precisionStep="0" positionIncrementGap="0" />
@@ -36,6 +37,7 @@
 				<filter class="solr.WordDelimiterFilterFactory"
 					generateWordParts="1" generateNumberParts="1" catenateWords="1"
 					catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" />
+                                <filter class="solr.ASCIIFoldingFilterFactory"/>
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.SnowballPorterFilterFactory" language="English"
 					protected="protwords.txt" />
@@ -49,10 +51,12 @@
 				<filter class="solr.WordDelimiterFilterFactory"
 					generateWordParts="1" generateNumberParts="1" catenateWords="0"
 					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
+                                <filter class="solr.ASCIIFoldingFilterFactory"/>
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.SnowballPorterFilterFactory" language="English"
 					protected="protwords.txt" />
 			</analyzer>
+
 		</fieldType>
 		<fieldType name="textSpell" class="solr.TextField">
 			<analyzer>
@@ -114,61 +118,40 @@
 			</analyzer>
 		</fieldType>
 	</types>
-	<fields>
-            <field name="is_fulltext" type="boolean" indexed="true" stored="true" multiValued="false"/>
-                <field name="has_thumbnails" type="boolean" indexed="true" stored="true" multiValued="false"/>
-                <field name="has_media" type="boolean" indexed="true" stored="true" multiValued="false"/>
-                <field name="filter_tags" type="int" indexed="true" stored="true" multiValued="true"/>
-                <field name="facet_tags" type="int" indexed="true" stored="true" multiValued="true"/>
 
-		<field name="text" type="text" indexed="true" stored="false"
+
+<!-- fields-->
+        <fields>
+        <!-- CRF Fields-->
+        <field name="is_fulltext" type="boolean" indexed="true" stored="true" multiValued="false"/>
+		<field name="has_thumbnails" type="boolean" indexed="true" stored="true" multiValued="false"/>
+		<field name="has_media" type="boolean" indexed="true" stored="true" multiValued="false"/>
+		<field name="filter_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+		<field name="facet_tags" type="int" indexed="true" stored="true" multiValued="true"/>
+                <field name="has_landingpage" type="boolean" indexed="true" stored="true" multiValued="false"/>
+                <!-- Default search field-->
+                <field name="text" type="text" indexed="true" stored="false"
 			multiValued="true" />
-		<field name="manu_exact" type="string" indexed="true" stored="false" />
-		<!--<field name="payloads" type="payloads" indexed="true" stored="true"/> -->
-		<field name="timestamp" type="date" indexed="true" stored="true"
+                <field name="timestamp" type="date" indexed="true" stored="true"
 			default="NOW" multiValued="false" />
-		<field name="spell" type="textSpell" indexed="true" stored="true"
+                
+                
+                <!-- Spell fields-->
+              
+                <field name="spell" type="textSpell" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
-		<field name="titleSpell" type="textSpell" indexed="true" stored="true"
+		<dynamicField name="*Spell" type="textSpell" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
-		<field name="whoSpell" type="textSpell" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="whereSpell" type="textSpell" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="whenSpell" type="textSpell" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="whatSpell" type="textSpell" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
+                <field name="date" type="date" indexed="true" stored="true" multiValued="true"/>
+                 <field name="description" type="text" indexed="true" stored="true" multiValued="true"/>
+
+                <!-- Generic Fields -->
 		<field name="europeana_id" type="string" indexed="true"
 			required="true" multiValued="false" stored="true" />
 		<field name="europeana_collectionName" type="string" indexed="true"
 			required="false" multiValued="true" stored="true" />
-		<field name="description" type="text" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="location" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="date" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="format" type="text" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="publisher" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="subject" type="text" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="contributor" type="title" indexed="true" stored="true"
-			multiValued="true" termVectors="true" />
-		<field name="source" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="language" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="rights" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="identifier" type="string" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="relation" type="text" indexed="true" stored="true"
-			multiValued="true" />
-		<field name="country" type="text" indexed="true" stored="true"
-			multiValued="true" />
+                <field name="edm_datasetName" type="string" indexed="true"
+			required="false" multiValued="true" stored="true" />
 		<field name="title" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
 		<field name="who" type="text" indexed="true" stored="true"
@@ -179,8 +162,11 @@
 			multiValued="true" termVectors="true" />
 		<field name="where" type="text" indexed="true" stored="true"
 			multiValued="true" termVectors="true" />
-		<field name="CONTRIBUTOR" type="string" indexed="true" stored="true"
-			multiValued="true" />
+                <field name="europeana_completeness" type="tint" indexed="true"
+			stored="true" multiValued="false" />
+                <!-- Facet fields-->
+                <field name="CREATOR" type="string" indexed="true" stored="true" multiValued="true"/>
+                <field name="CONTRIBUTOR" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="UGC" type="string" indexed="true" stored="true"
 			multiValued="false" />
 		<field name="LANGUAGE" type="string" indexed="true" stored="true"
@@ -206,7 +192,31 @@
 		<field name="COMPLETENESS" type="string" indexed="true" stored="true"
 			multiValued="false" />
 		<field name="edm_previewNoDistribute" type="boolean" indexed="true"
-			stored="false" multiValued="false" />
+			stored="true" multiValued="false" />
+               
+		<field name="location" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		
+		<field name="format" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="publisher" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="subject" type="text" indexed="true" stored="true"
+			multiValued="true" termVectors="true" />
+		<field name="contributor" type="text" indexed="true" stored="true"
+			multiValued="true" termVectors="true" />
+		<field name="source" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="language" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="rights" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="identifier" type="string" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="relation" type="text" indexed="true" stored="true"
+			multiValued="true" />
+		<field name="country" type="text" indexed="true" stored="true"
+			multiValued="true" />
 		<!-- SITEMAP fields -->
 		<field name="id2hash" type="text_2gram" indexed="true" stored="true"
 			multiValued="false" />
@@ -214,13 +224,8 @@
 			multiValued="false" />
 		<field name="id6hash" type="text_6gram" indexed="true" stored="true"
 			multiValued="false" />
-		<!-- PROVIDER AGGREGATION RELATED -->
-		<field name="provider_aggregation_ore_aggregation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="provider_aggregation_ore_aggregates" type="string"
-			indexed="true" stored="false" multiValued="false" />
-		<field name="provider_aggregation_edm_aggregatedCHO" type="string"
-			indexed="true" stored="false" multiValued="false" />
+                
+                <!-- PROVIDER AGGREGATION RELATED -->
 		<field name="provider_aggregation_edm_dataProvider" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="provider_aggregation_edm_dataProvider.*"
@@ -243,21 +248,22 @@
 			type="string" indexed="true" stored="true" multiValued="true" />
 		<field name="provider_aggregation_edm_rights" type="string"
 			indexed="true" stored="true" multiValued="true" />
+                <field name="provider_aggregation_edm_aggregatedCHO" type="string"
+			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="provider_aggregation_edm_rights.*"
 			type="string" indexed="true" stored="true" multiValued="false" />
-		<field name="provider_aggregation_edm_unstored" type="string"
+		<dynamicField name="provider_aggregation_*" type="string"
 			indexed="true" stored="false" multiValued="true" />
-		<!-- EUROPEANA AGGREGATION -->
+		<field name="provider_aggregation_edm_intermediateProvider" type="string"
+			indexed="true" stored="true" multiValued="true"/>                
+		
+                <!-- EUROPEANA AGGREGATION -->
 		<field name="edm_europeana_aggregation" type="string" indexed="true"
 			stored="true" multiValued="false" />
-		<field name="europeana_aggregation_edm_aggregatedCHO" type="string"
-			indexed="true" stored="true" multiValued="false" />
-		<field name="europeana_aggregation_ore_aggregates" type="string"
+		<dynamicField name="europeana_aggregation_*" type="string"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_aggregation_dc_creator" type="string"
-			indexed="true" stored="false" multiValued="false" default="Europeana" />
-		<dynamicField name="europeana_aggregation_dc_creator.*"
-			type="string" indexed="true" stored="false" multiValued="false" />
+                <field name="europeana_aggregation_edm_aggregatedCHO" type="string"
+			indexed="true" stored="true" multiValued="false" />
 		<field name="europeana_aggregation_edm_landingPage" type="string"
 			indexed="true" stored="true" multiValued="false" />
 		<field name="europeana_aggregation_edm_isShownBy" type="string"
@@ -272,84 +278,71 @@
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="europeana_aggregation_edm_language.*"
 			type="string" indexed="true" stored="true" multiValued="true" />
-		<field name="europeana_aggregation_edm_rights" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="europeana_aggregation_edm_rights.*"
-			type="string" indexed="true" stored="false" multiValued="false" />
 		<field name="europeana_aggregation_edm_preview" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<!-- WEB RESOURCE -->
+                <field name="europeana_aggregation_dc_creator" type="string"
+			indexed="true" stored="true" multiValued="true" default="Europeana"/>
+                <!-- WEB RESOURCE -->
 		<field name="edm_webResource" type="string" indexed="true"
-			stored="false" multiValued="true" />
+			stored="true" multiValued="true" />
 		<field name="wr_dc_rights" type="string" indexed="true" stored="true"
 			multiValued="true" />
 		<dynamicField name="wr_dc_rights.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<field name="wr_edm_rights" type="string" indexed="true" stored="true"
 			multiValued="true" />
+                <field name="wr_dcterms_hasPart" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="wr_dcterms_isPartOf" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="wr_edm_isNextInSequence" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="wr_dcterms_extent" type="string" indexed="true" stored="true"
+			multiValued="true" />
 		<dynamicField name="wr_edm_rights.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<field name="wr_dc_description" type="string" indexed="true"
+		<dynamicField name="wr_*" type="string" indexed="true"
 			stored="false" multiValued="true" />
-		<dynamicField name="wr_dc_description.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="wr_dc_format" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="wr_dc_format.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="wr_dc_source" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="wr_dc_source.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="wr_dc_creator" type="string" indexed="true" stored="true"
-                        multiValued="true" />
-                <dynamicField name="wr_dc_creator.*" type="string"
+		<dynamicField name="wr_dc_creator.*" type="string"
                         indexed="true" stored="true" multiValued="true" />
-
-		<field name="wr_dcterms_extent" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="wr_dcterms_extent.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="wr_dcterms_issued" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="wr_dcterms_issued.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="wr_dcterms_conformsTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="wr_dcterms_conformsTo.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="wr_dcterms_created" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="wr_dcterms_isFormatOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="wr_dcterms_hasPart" type="string" indexed="true"
-			stored="false" multiValued="true" />
+		<dynamicField name="wr_dc_description.*" type="text"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dc_format.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dc_source.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="wr_dcterms_created.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dcterms_extent.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="wr_dcterms_isFormatOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="wr_dcterms_hasPart.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="wr_edm_isNextInSequence" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="wr_owl_sameAs" type="string" indexed="true"
-                        stored="false" multiValued="true" />
-		
-		<!--PROVIDER PROXY RELATED -->
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dcterms_isPartOf.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dcterms_conformsTo.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="wr_dcterms_issued.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<field name="wr_svcs_hasservice" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<field name="wr_edm_preview" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<field name="wr_wdrs_described_by" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+                <!--PROVIDER PROXY RELATED -->
 		<field name="proxy_ore_proxy" type="string" indexed="true"
-			stored="false" multiValued="true" />
+			stored="true" multiValued="true" />
 		<field name="edm_europeana_proxy" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <dynamicField name="proxy_*" type="string" indexed="true"
 			stored="false" multiValued="true" />
-
+                
 		<field name="proxy_owl_sameAs" type="string" indexed="true"
 			stored="true" multiValued="true" />
-		<field name="proxy_ore_proxyFor" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_ore_proxyIn" type="string" indexed="true"
-			stored="false" multiValued="true" />
 		<field name="proxy_dc_contributor" type="string" indexed="true"
 			stored="true" multiValued="true" />
-
 		<field name="proxy_dc_coverage" type="string" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="proxy_dc_creator" type="string" indexed="true"
@@ -358,593 +351,314 @@
 			multiValued="true" />
 		<field name="proxy_dc_description" type="string" indexed="true"
 			stored="true" multiValued="true" />
-		<field name="proxy_dc_format" type="string" indexed="true"
-			stored="false" multiValued="true" />
 		<field name="proxy_dc_language" type="string" indexed="true"
 			stored="true" multiValued="true" />
-		<field name="proxy_dc_publisher" type="string" indexed="true"
-			stored="false" multiValued="true" />
 		<field name="proxy_dc_subject" type="string" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="proxy_dc_title" type="string" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="proxy_dc_type" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="proxy_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dc_relation" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dc_source" type="string" indexed="true"
-			stored="false" multiValued="true" />
+                <field name="proxy_dc_source" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dc_relation" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dc_rights" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dc_identifier" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                 <field name="proxy_dcterms_created" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                 <field name="proxy_dcterms_issued" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                  <field name="proxy_dcterms_spatial" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                   <field name="proxy_dcterms_temporal" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                 <field name="proxy_dc_publisher" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dcterms_hasPart" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dcterms_isPartOf" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <field name="proxy_dcterms_provenance" type="string" indexed="true" stored="true"
+			multiValued="true" />
+		 <field name="proxy_dcterms_tableOfContents" type="string" indexed="true" stored="true"
+                        multiValued="true" />
 
-		<field name="proxy_dc_rights" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_rights" type="string" indexed="true"
-			stored="false" multiValued="true" />
-
+                <field name="proxy_edm_isNextInSequence" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                <!--<field name="proxy_edm_year" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                -->
+                <dynamicField name="proxy_edm_year.*" type="string" indexed="true" stored="true"
+			multiValued="true" />
+                
 		<dynamicField name="proxy_dc_contributor.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
+
 		<dynamicField name="proxy_dc_coverage.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dc_creator.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_dc_format.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dc_date.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dc_description.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<dynamicField name="proxy_dc_format.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+		<dynamicField name="proxy_dc_relation.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+
 		<dynamicField name="proxy_dc_language.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<dynamicField name="proxy_dc_publisher.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
 		<dynamicField name="proxy_dc_subject.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dc_title.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dc_type.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<dynamicField name="proxy_dc_identifier.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dc_relation.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dc_source.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-
-		<dynamicField name="proxy_dc_rights.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_edm_rights.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-
-		<field name="proxy_dcterms_alternative" type="text" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="proxy_dcterms_conformsTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_created" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_extent" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_hasFormat" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_hasPart" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isFormatOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isPartOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isReferencedBy" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isReplacedBy" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isRequiredBy" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_isVersionOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_hasVersion" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_issued" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_medium" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_provenance" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_references" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_replaces" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_requires" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_spatial" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_dcterms_tableOfContents" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_dcterms_temporal" type="string" indexed="true"
-			stored="true" multiValued="true" />
-
-
-		<dynamicField name="proxy_dcterms_alternative.*" type="text"
+                <dynamicField name="proxy_dc_source.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dc_rights.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dc_identifier.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_isPartOf.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_spatial.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_temporal.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_hasPart.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_created.*" type="string"
 			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_conformsTo.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_created.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_extent.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_extent.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_hasFormat.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_edm_isDerivativeOf.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_edm_incorporates.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_isFormatOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_isPartOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_isReferencedBy.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_isReplacedBy.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_isRequiredBy.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_isVersionOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_hasVersion.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_issued.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_medium.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_provenance.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_references.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_replaces.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="proxy_dcterms_requires.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_spatial.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_tableOfContents.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_temporal.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_dcterms_hasPart.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_dcterms_issued.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_edm_hasMet.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_edm_hasType.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_edm_isRelatedTo.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dcterms_medium.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="proxy_dc_publisher.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<field name="proxy_dcterms_alternative" type="text" indexed="true"
+			stored="true" multiValued="true" />
+		<dynamicField name="proxy_dcterms_alternative.*" type="text"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_dcterms_provenance.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="proxy_dcterms_tableOfContents.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<field name="proxy_edm_type" type="string" indexed="true"
 			stored="true" multiValued="true" />
-		<field name="proxy_edm_unstored" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_currentLocation_lat" type="tfloat"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_currentLocation_lon" type="tfloat"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_currentLocation" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_isNextInSequence" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_hasMet" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_hasType" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="proxy_edm_hasMet.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="proxy_edm_hasType.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_incorporates" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_isDerivativeOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_isRelatedTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="proxy_edm_isRelatedTo.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_isRepresentationOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_isSimilarTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_isSuccessorOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_realizes" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_wasPresentAt" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="proxy_edm_year" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="proxy_edm_year.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="proxy_edm_userTags" type="string" indexed="false"
-			stored="false" multiValued="true" />
 		<field name="europeana_previewNoDistribute" type="boolean"
 			indexed="true" stored="true" multiValued="true" />
 		<field name="edm_UGC" type="boolean" indexed="true" stored="true"
 			multiValued="false" default="false" />
-
-
-
-
-
-
-		<field name="europeana_completeness" type="tint" indexed="true"
-			stored="false" multiValued="false" />
-
-		<!-- AGENT -->
+                
+                <!-- AGENT -->
 		<field name="edm_agent" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="ag_skos_prefLabel" type="text" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="ag_skos_altLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="ag_skos_prefLabel.*" type="text"
+                <dynamicField name="ag_*" type="string"
 			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_skos_altLabel.*" type="text"
+                <field name="ag_label_facet" type="string"
 			indexed="true" stored="true" multiValued="true" />
+                
+		<dynamicField name="ag_skos_prefLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_skos_altLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <field name="ag_skos_prefLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="ag_skos_note" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="ag_skos_altLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
 		<field name="ag_skos_hiddenLabel" type="text" indexed="true"
 			stored="false" multiValued="true" />
+                <field name="ag_owl_sameAs" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="ag_foaf_name" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <dynamicField name="ag_owl_sameAs.*" type="text" indexed="true"
+			stored="true" multiValued="true" />
+                <dynamicField name="ag_foaf_name.*" type="text" indexed="true"
+			stored="true" multiValued="true" />
+                 <dynamicField name="ag_skos_note.*" type="text" indexed="true"
+			stored="true" multiValued="true" />
 		<dynamicField name="ag_skos_hiddenLabel.*" type="text"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="ag_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="ag_skos_note.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="ag_edm_wasPresentAt" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_edm_hasMet" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ag_edm_isRelatedTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_owl_sameAs" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ag_foaf_name" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ag_dc_date" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ag_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_rdagr2_dateOfBirth" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_rdagr2_dateOfDeath" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_rdagr2_placeOfBirth" type="string" indexed="true"
-                        stored="false" multiValued="true" />
-                <field name="ag_rdagr2_placeOfDeath" type="string" indexed="true"
-                        stored="false" multiValued="true" />
-		<field name="ag_rdagr2_dateOfEstablishment" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="ag_rdagr2_dateOfTermination" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_rdagr2_gender" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ag_rdagr2_professionOrOccupation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="ag_rdagr2_biographicalInformation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="ag_edm_begin" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ag_edm_end" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-		<dynamicField name="ag_edm_hasMet.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_edm_isRelatedTo.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_owl_sameAs.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_foaf_name.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_dc_date.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="ag_dc_identifier.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_rdagr2_dateOfBirth.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+		 <dynamicField name="ag_edm_hasMet.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		 <dynamicField name="ag_skos_isRelatedTo.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		 <dynamicField name="ag_dc_date.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		 <dynamicField name="ag_dc_identifier.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />	
+		 <dynamicField name="ag_rdagr2_dateOfBirth.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="ag_rdagr2_dateOfDeath.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="ag_rdagr2_placeOfBirth.*" type="string"
-                        indexed="true" stored="false" multiValued="true" />
-                <dynamicField name="ag_rdagr2_placeOfDeath.*" type="string"
-                        indexed="true" stored="false" multiValued="true" />
-
-		<dynamicField name="ag_rdagr2_dateOfEstablishment.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_rdagr2_placeOfDeath.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_rdagr2_professionOrOccupation.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="ag_rdagr2_dateOfTermination.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="ag_rdagr2_gender.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_rdagr2_professionOrOccupation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_rdagr2_biographicalInformation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_rdagr2_biographicalInformation.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="ag_edm_begin.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ag_edm_end.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<!-- TIMESPAN -->
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_edm_end.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_dcterms_isPartOf.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ag_dcterms_hasPart.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		
+		
+                
+                <!-- TIMESPAN -->
 		<field name="edm_timespan" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="ts_skos_prefLabel" type="text" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="ts_skos_altLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="ts_skos_prefLabel.*" type="text"
-			indexed="true" stored="true" multiValued="true" />
-		<dynamicField name="ts_skos_altLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="ts_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-<dynamicField name="ts_skos_note.*" type="string" indexed="true" stored="false"
+                <dynamicField name="ts_*" type="string" indexed="true" stored="false"
                         multiValued="true" />
-		<field name="ts_skos_hiddenLabel" type="string" indexed="true"
+		
+		<dynamicField name="ts_skos_prefLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ts_skos_altLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <field name="ts_skos_prefLabel" type="string" indexed="string"
+			stored="true" multiValued="true" />
+                 <field name="ts_skos_note" type="text" indexed="text"
+			stored="true" multiValued="true" />
+		<field name="ts_skos_altLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="ts_label_facet" type="string"
+			indexed="true" stored="true" multiValued="true" />
+		<field name="ts_skos_hiddenLabel" type="text" indexed="true"
 			stored="false" multiValued="true" />
-		<dynamicField name="ts_skos_hiddenLabel.*" type="string"
+		<dynamicField name="ts_skos_hiddenLabel.*" type="text"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="ts_dcterms_hasPart" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ts_dcterms_isPartOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ts_dcterms_isPartOf_label" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="ts_owl_sameAs" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ts_edm_begin" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="ts_edm_end" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-		<dynamicField name="ts_dcterms_hasPart.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ts_dcterms_isPartOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ts_dcterms_isPartOf_label.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ts_edm_begin.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="ts_edm_end.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<!-- PLACE -->
+                <dynamicField name="ts_skos_note.*" type="text"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="ts_dcterms_hasPart.*" type="string" indexed="true" 
+			stored="true" multiValued="true" />                
+		<dynamicField name="ts_dcterms_isPartOf.*" type="string" indexed="true" 
+			stored="true" multiValued="true" />
+		<dynamicField name="ts_edm_begin.*" type="string" indexed="true" 
+			stored="true"  multiValued="true" />
+		<dynamicField name="ts_edm_end.*" type="string" indexed="true" 
+                        stored="true"  multiValued="true" />
+		<dynamicField name="ts_owl_sameAs.*" type="string" indexed="true" 
+                        stored="true"  multiValued="true" />
+                <!-- PLACE -->
 		<field name="edm_place" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="pl_skos_prefLabel" type="text" indexed="true"
+                <dynamicField name="pl_*" type="string"
+			indexed="true" stored="false" multiValued="true" />
+		
+		<dynamicField name="pl_skos_prefLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="pl_skos_note.*" type="text"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="pl_skos_altLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <field name="pl_skos_prefLabel" type="string" indexed="true"
 			stored="true" multiValued="true" />
-		<field name="pl_skos_altLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="pl_skos_prefLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="pl_skos_altLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="pl_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="pl_dcterms_isPartOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="pl_dcterms_isPartOf_label" type="string" indexed="true"
-			stored="false" multiValued="true" />
+		<field name="pl_skos_altLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="pl_skos_note" type="text" 
+			indexed="true" stored="true" multiValued="true" />
+                <field name="pl_label_facet" type="string"
+			indexed="true" stored="true" multiValued="true" />
 		<field name="pl_wgs84_pos_lat" type="string" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="pl_wgs84_pos_long" type="string" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="pl_wgs84_pos_alt" type="string" indexed="true"
-			stored="false" multiValued="true" />
+			stored="true" multiValued="true" />
 		<field name="pl_wgs84_pos_lat_long" type="string" indexed="true"
 			stored="false" multiValued="true" /> <!-- copyfield -->
-		<field name="pl_skos_hiddenLabel" type="string" indexed="true"
+		<field name="pl_skos_hiddenLabel" type="text" indexed="true"
 			stored="false" multiValued="true" />
-		<dynamicField name="pl_skos_hiddenLabel.*" type="string"
+		<dynamicField name="pl_skos_hiddenLabel.*" type="text"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="pl_dcterms_hasPart" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="pl_owl_sameAs" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-
-		<dynamicField name="pl_skos_note.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="pl_dcterms_isPartOf.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="pl_dcterms_isPartOf_label.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="pl_dcterms_hasPart.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-
-		<!-- CONCEPT -->
+		<dynamicField name="pl_skos_isPartOf.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="pl_skos_hasPart.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="pl_owl_sameAs.*" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+                <!-- CONCEPT -->
 		<field name="skos_concept" type="string" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="cc_skos_prefLabel" type="text" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="cc_skos_altLabel" type="text" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="cc_skos_prefLabel.*" type="text"
+                <dynamicField name="cc_*" type="string"
 			indexed="true" stored="true" multiValued="true" />
-		<dynamicField name="cc_skos_altLabel.*" type="text"
+		
+		<dynamicField name="cc_skos_prefLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <dynamicField name="cc_skos_note.*" type="text"
+			indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="cc_skos_altLabel.*" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <field name="cc_label_facet" type="string"
+			indexed="true" stored="true" multiValued="true" />
+                <field name="cc_skos_prefLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
+                <field name="cc_skos_note" type="text" indexed="true"
+			stored="true" multiValued="true" />
+		<field name="cc_skos_altLabel" type="string" indexed="true"
+			stored="true" multiValued="true" />
+		<field name="cc_skos_hiddenLabel" type="text" indexed="true"
+			stored="false" multiValued="true" />
+		<dynamicField name="cc_skos_hiddenLabel.*" type="text"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="cc_skos_note.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_broader" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_broaderLabel" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="cc_skos_broaderLabel.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_hiddenLabel" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="cc_skos_hiddenLabel.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_narrower" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_related" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_broadMatch" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_narrowMatch" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_relatedMatch" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_exactMatch" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_closeMatch" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cc_skos_notation" type="string" indexed="true"
-			stored="false" multiValued="true" />
+                 <field name="cc_skos_exactMatch" type="string" indexed="string"
+			stored="true" multiValued="true" />
 		<dynamicField name="cc_skos_notation.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="cc_skos_inScheme" type="string" indexed="true"
-			stored="false" multiValued="true" />
-
-		<!-- CONCEPTSCHEME -->
-		<field name="skos_conceptScheme" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cs_dc_title" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="cs_dc_creator" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="cs_skos_hasTopConcept" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="cs_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-		<!-- EVENT -->
-		<field name="edm_event" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="evt_edm_happenedAt" type="string" indexed="true"
-			stored="false" multiValued="true" /> <!-- connected to edm:place -->
-		<field name="evt_edm_occuredAt" type="string" indexed="true"
-			stored="false" multiValued="true" /> <!-- connected to edm:timespan -->
-		<field name="evt_owl_sameAs" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="evt_skos_prefLabel" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="evt_skos_prefLabel.*" type="string"
-			indexed="true" stored="true" multiValued="true" />
-		<field name="evt_skos_altLabel" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="evt_skos_altLabel.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="evt_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="evt_skos_hiddenLabel" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="evt_skos_hiddenLabel.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="evt_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="evt_dcterms_hasPart" type="string" indexed="true"
-			stored="false" multiValued="true" /> <!-- edm:Event -->
-		<field name="evt_dcterms_isPartOf" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="evt_crmP120F_occurs_before" type="string" indexed="true"
-			stored="false" multiValued="true" /> <!-- edm:Event -->
-		<field name="evt_edm_hasType" type="string" indexed="true"
-			stored="false" multiValued="true" /><!-- edm:Concept -->
-		<field name="evt_edm_isRelatedTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-
-		<!-- PHYSICAL THING -->
-		<field name="edm_physicalThing" type="string" indexed="true"
-			stored="true" multiValued="false" />
-		<field name="europeana_pt_owl_sameAs" type="string" indexed="true"
-			stored="true" multiValued="true" />
-
-		<field name="europeana_pt_dc_contributor" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_coverage" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_creator" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_date" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_description" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dc_format" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dc_language" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_publisher" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dc_subject" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_title" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_type" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<field name="europeana_pt_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dc_relation" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dc_source" type="string" indexed="true"
-			stored="false" multiValued="true" />
-
-		<field name="europeana_pt_dc_rights" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_rights" type="string" indexed="true"
-			stored="false" multiValued="true" />
-
-
-		<field name="europeana_pt_dcterms_alternative" type="text"
-			indexed="true" stored="true" multiValued="true" />
-		<field name="europeana_pt_dcterms_conformsTo" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_created" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_extent" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_hasFormat" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_isPartOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_isReferencedBy" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_isReplacedBy" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_isRequiredBy" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_isVersionOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_hasVersion" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_issued" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_medium" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_provenance" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_references" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_replaces" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_requires" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_spatial" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_tableOfContents" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_dcterms_temporal" type="string"
-			indexed="true" stored="true" multiValued="true" />
-		<field name="europeana_pt_edm_type" type="string" indexed="true"
-			stored="true" multiValued="false" />
-		<field name="europeana_pt_edm_currentLocation_lat" type="tfloat"
-			indexed="true" stored="false" multiValued="false" />
-		<field name="europeana_pt_edm_currentLocation_lon" type="tfloat"
-			indexed="true" stored="false" multiValued="false" />
-		<field name="europeana_pt_edm_isNextInSequence" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_hasMet" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_incorporates" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_isDerivativeOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_isRelatedTo" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_isRepresentationOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_isSimilarTo" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_isSuccessorOf" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_realizes" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="europeana_pt_edm_wasPresentAt" type="string"
-			indexed="true" stored="false" multiValued="true" />
-
-		<!-- Yorgos Mamakis License and Organization fields -->
-<field name="provider_aggregation_cc_license" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		
+                <!-- Yorgos Mamakis License and Organization fields -->
+                <field name="provider_aggregation_cc_license" type="string"
                         indexed="true" stored="true" multiValued="true" />
                 <field name="provider_aggregation_odrl_inherited_from" type="string"
                         indexed="true" stored="true" multiValued="true" />
@@ -958,99 +672,25 @@
                         indexed="true" stored="true" multiValued="true" />
 		<field name="foaf_organization" type="string"
                         indexed="true" stored="true" multiValued="false" />
-<field name="org_skos_prefLabel" type="text" indexed="true"
+                <field name="org_skos_prefLabel" type="text" indexed="true"
 			stored="true" multiValued="true" />
 		<field name="org_skos_altLabel" type="text" indexed="true"
 			stored="false" multiValued="true" />
 		<dynamicField name="org_skos_prefLabel.*" type="text"
-			indexed="true" stored="false" multiValued="true" />
+			indexed="true" stored="true" multiValued="true" />
 		<dynamicField name="org_skos_altLabel.*" type="text"
 			indexed="true" stored="true" multiValued="true" />
 		<field name="org_skos_hiddenLabel" type="text" indexed="true"
 			stored="false" multiValued="true" />
 		<dynamicField name="org_skos_hiddenLabel.*" type="text"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="org_skos_note" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<dynamicField name="org_skos_note.*" type="string"
+		<dynamicField name="org_*" type="string"
 			indexed="true" stored="false" multiValued="true" />
-		<field name="org_edm_wasPresentAt" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_edm_hasMet" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_edm_isRelatedTo" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_owl_sameAs" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_foaf_name" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_dc_date" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_dc_identifier" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfBirth" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfDeath" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfEstablishment" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_rdagr2_dateOfTermination" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_gender" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<field name="org_rdagr2_professionOrOccupation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_rdagr2_biographicalInformation" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<field name="org_edm_begin" type="string" indexed="true" stored="false"
-			multiValued="true" />
-		<field name="org_edm_end" type="string" indexed="true" stored="false"
-			multiValued="true" />
-
-		<dynamicField name="org_edm_hasMet.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_isRelatedTo.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_owl_sameAs.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_foaf_name.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_dc_date.*" type="string" indexed="true"
-			stored="false" multiValued="true" />
-		<dynamicField name="org_dc_identifier.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfBirth.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfDeath.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfEstablishment.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_dateOfTermination.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_gender.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_professionOrOccupation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_rdagr2_biographicalInformation.*"
-			type="string" indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_begin.*" type="string"
-			indexed="true" stored="false" multiValued="true" />
-		<dynamicField name="org_edm_end.*" type="string" indexed="true" stored="false" multiValued="true"/>		
-		<dynamicField name="org_edm_acronym.*" type="string" indexed="true" stored="false" multiValued="true"/>
-		<field name="org_edm_acronym" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="org_edm_organizationScope.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_organizationScope" type="string" indexed="true" stored="false" multiValued="true"/>
 		<dynamicField name="org_edm_organizationDomain.*" type="string" indexed="true" stored="true" multiValued="false"/>
                 <field name="org_edm_organizationDomain" type="string" indexed="true" stored="true" multiValued="true"/>
-		<dynamicField name="org_edm_organizationSector.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_organizationSector" type="string" indexed="true" stored="false" multiValued="true"/>
-		<dynamicField name="org_edm_geographicLevel.*" type="string" indexed="true" stored="false" multiValued="false"/>
-                <field name="org_edm_geographicLevel" type="string" indexed="true" stored="false" multiValued="true"/>
                 <field name="org_edm_country" type="string" indexed="true" stored="true" multiValued="true"/>
 		<dynamicField name="org_edm_europeanaRole.*" type="string" indexed="true" stored="true" multiValued="false"/>
                 <field name="org_edm_europeanaRole" type="string" indexed="true" stored="true" multiValued="true"/>
-		 <field name="org_foaf_homepage" type="string" indexed="true" stored="false" multiValued="false"/>
-
 
 
 		<!-- Diego Ceccarelli <diego.ceccarelli@isti.cnr.it> 17-11-2012 -->
@@ -1062,10 +702,13 @@
 		
 		<!-- Yorgos Mamakis 12/11/2013  -->
 		<dynamicField name="timestamp_*" type="date" indexed="true" stored="true" multiValued="false"/>
-
-
-
-	</fields>
+		<!-- SERVICE FIELDS-->
+		<field name="svcs_service" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+		<field name="sv_dcterms_conformsTo" type="string"
+                        indexed="true" stored="true" multiValued="true" />
+                
+                </fields>
 	<uniqueKey>europeana_id</uniqueKey>
 	<defaultSearchField>text</defaultSearchField>
 	<solrQueryParser defaultOperator="AND" />
@@ -1093,30 +736,34 @@
 	<copyField source="proxy_dc_publisher" dest="text" />
 	<copyField source="proxy_dc_rights.*" dest="text" />
 	<copyField source="provider_aggregation_dc_rights.*" dest="text" />
-	<copyField source="proxy_edm_rights.*" dest="text" />
-	<copyField source="provider_aggregation_edm_rights.*" dest="text" />
+	<copyField source="provider_aggregation_edm_dataProvider" dest="text" />
+        <copyField source="provider_aggregation_edm_provider" dest="text" />
+        <copyField source="provider_aggregation_edm_dataProvider.*" dest="text" />
+        <copyField source="provider_aggregation_edm_provider.*" dest="text" />
 	<copyField source="proxy_dc_source.*" dest="text" />
 	<copyField source="proxy_dcterms_spatial.*" dest="text" />
 	<copyField source="proxy_dc_subject.*" dest="text" />
 	<copyField source="proxy_dcterms_temporal.*" dest="text" />
 	<copyField source="proxy_dc_title.*" dest="text" />
 	<copyField source="proxy_dc_type.*" dest="text" />
-	<copyField source="proxy_edm_type.*" dest="text" />
+
 	<copyField source="proxy_dc_rights" dest="text" />
 	<copyField source="provider_aggregation_dc_rights" dest="text" />
-	<copyField source="proxy_edm_rights" dest="text" />
-	<copyField source="provider_aggregation_edm_rights" dest="text" />
 	<copyField source="proxy_dc_source" dest="text" />
 	<copyField source="proxy_dcterms_spatial" dest="text" />
 	<copyField source="proxy_dc_subject" dest="text" />
 	<copyField source="proxy_dcterms_temporal" dest="text" />
+        <copyField source="proxy_dc_format" dest="text" />
+        <copyField source="proxy_dc_format.*" dest="text" />
+        <copyField source="proxy_dcterms_medium" dest="text" />
+        <copyField source="proxy_dcterms_medium.*" dest="text" />
+          <copyField source="wr_dc_creator" dest="text" />
+            <copyField source="wr_dc_creator.*" dest="text" />
+              <copyField source="wr_dc_description" dest="text" />
+            <copyField source="wr_dc_description.*" dest="text" />
 	<copyField source="proxy_dc_title" dest="text" />
 	<copyField source="proxy_dc_type" dest="text" />
 	<copyField source="proxy_edm_type" dest="text" />
-
-
-
-
 	<copyField source="proxy_dc_contributor.*" dest="spell" />
 	<copyField source="proxy_dc_creator.*" dest="spell" />
 	<copyField source="proxy_dc_subject.*" dest="spell" />
@@ -1133,6 +780,8 @@
 	<copyField source="proxy_dc_description" dest="description" />
 	<copyField source="proxy_dc_description.*" dest="description" />
 	<copyField source="proxy_dcterms_tableOfContents" dest="description" />
+        <copyField source="proxy_dcterms_tableOfContents.*" dest="proxy_dcterms_tableOfContents" />
+        <copyField source="proxy_dc_source.*" dest="source" />
 	<copyField source="proxy_dc_identifier" dest="identifier" />
 	<copyField source="proxy_dcterms_spatial" dest="location" />
 	<copyField source="proxy_dc_subject" dest="subject" />
@@ -1144,7 +793,6 @@
 	<copyField source="proxy_dcterms_spatial.*" dest="subject" />
 	<copyField source="proxy_dcterms_temporal.*" dest="subject" />
 	<copyField source="proxy_dc_source" dest="source" />
-
 	<copyField source="proxy_edm_type" dest="TYPE" />
 	<copyField source="europeana_aggregation_edm_language.*"
 		dest="LANGUAGE" />
@@ -1152,86 +800,77 @@
 	<copyField source="proxy_edm_year.*" dest="YEAR" />
 	<copyField source="provider_aggregation_edm_dataProvider.*"
 		dest="DATA_PROVIDER" />
+        <copyField source="proxy_dc_contributor.*" dest="CONTRIBUTOR" />
+        <copyField source="proxy_dc_creator.*" dest="CREATOR" />
+         <copyField source="proxy_dc_contributor" dest="CONTRIBUTOR" />
+        <copyField source="proxy_dc_creator" dest="CREATOR" />
 	<copyField source="provider_aggregation_edm_provider.*" dest="PROVIDER" />
 	<copyField source="provider_aggregation_edm_rights.*" dest="RIGHTS" />
+        <copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
 <copyField source="provider_aggregation_odrl_inherited_from" dest="RIGHTS" />
 	<copyField source="europeana_completeness" dest="COMPLETENESS" />
 	<copyField source="edm_UGC" dest="UGC" />
 	<copyField source="europeana_aggregation_edm_language" dest="LANGUAGE" />
 	<copyField source="europeana_aggregation_edm_country" dest="COUNTRY" />
-	<copyField source="proxy_edm_year" dest="YEAR" />
+	<!--
+        <copyField source="proxy_edm_year.*" dest="proxy_edm_year" />
+        -->
 	<copyField source="provider_aggregation_edm_dataProvider"
 		dest="DATA_PROVIDER" />
 	<copyField source="provider_aggregation_edm_provider" dest="PROVIDER" />
-	<copyField source="provider_aggregation_edm_rights" dest="RIGHTS" />
-	<copyField source="provider_aggregation_odrl_inherited_from" dest="RIGHTS" />
-	<!--<copyField source="lic_odrl_inherited_from" dest="RIGHTS" />-->
-	<copyField source="ag_skos_prefLabel.*" dest="text" />
-	<copyField source="ag_skos_altLabel.*" dest="text" />
-	<copyField source="ag_skos_hiddenLabel.*" dest="text" />
-	<copyField source="ag_skos_prefLabel" dest="text" />
-	<copyField source="ag_skos_altLabel" dest="text" />
-	<copyField source="ag_skos_hiddenLabel" dest="text" />
+
 	<copyField source="ag_skos_prefLabel.*" dest="ag_skos_prefLabel" />
+        <copyField source="ag_skos_prefLabel.*" dest="ag_label_facet" />
 	<copyField source="ag_skos_altLabel.*" dest="ag_skos_altLabel" />
-	<copyField source="ag_skos_hiddenLabel.*" dest="ag_skos_hiddenLabel" />
+
+
+
+        <copyField source="ag_skos_hiddenLabel.*" dest="ag_skos_hiddenLabel" />
+        <copyField source="ag_skos_prefLabel.*" dest="text" />
+	<copyField source="ag_skos_altLabel.*" dest="text" />
 	<copyField source="org_skos_prefLabel.*" dest="text" />
         <copyField source="org_skos_altLabel.*" dest="text" />
-        <copyField source="org_skos_hiddenLabel.*" dest="text" />
+   
         <copyField source="org_skos_prefLabel" dest="text" />
         <copyField source="org_skos_altLabel" dest="text" />
-        <copyField source="org_skos_hiddenLabel" dest="text" />
+  
         <copyField source="org_skos_prefLabel.*" dest="org_skos_prefLabel" />
         <copyField source="org_skos_altLabel.*" dest="org_skos_altLabel" />
-        <copyField source="org_skos_hiddenLabel.*" dest="org_skos_hiddenLabel" />
-
-	<copyField source="pl_skos_prefLabel.*" dest="text" />
-	<copyField source="pl_skos_altLabel.*" dest="text" />
-	<copyField source="pl_skos_hiddenLabel.*" dest="text" />
-	<copyField source="pl_skos_prefLabel" dest="text" />
-	<copyField source="pl_skos_altLabel" dest="text" />
-	<copyField source="pl_skos_hiddenLabel" dest="text" />
+	
 	<copyField source="pl_skos_prefLabel.*" dest="pl_skos_prefLabel" />
 	<copyField source="pl_skos_altLabel.*" dest="pl_skos_altLabel" />
-	<copyField source="pl_skos_hiddenLabel.*" dest="pl_skos_hiddenLabel" />
-	<copyField source="cc_skos_prefLabel.*" dest="text" />
-	<copyField source="cc_skos_altLabel.*" dest="text" />
-	<copyField source="cc_skos_hiddenLabel.*" dest="text" />
-	<copyField source="cc_skos_prefLabel" dest="text" />
-	<copyField source="cc_skos_altLabel" dest="text" />
-	<copyField source="cc_skos_hiddenLabel" dest="text" />
+
+        
+        <copyField source="pl_skos_hiddenLabel.*" dest="pl_skos_hiddenLabel" />
+
+	<copyField source="pl_skos_prefLabel.*" dest="pl_label_facet" />
+	
 	<copyField source="cc_skos_prefLabel.*" dest="cc_skos_prefLabel" />
 	<copyField source="cc_skos_altLabel.*" dest="cc_skos_altLabel" />
-	<copyField source="cc_skos_hiddenLabel.*" dest="cc_skos_hiddenLabel" />
-	<copyField source="ts_skos_prefLabel.*" dest="text" />
-	<copyField source="ts_skos_altLabel.*" dest="text" />
-	<copyField source="ts_skos_hiddenLabel.*" dest="text" />
-	<copyField source="ts_skos_prefLabel" dest="text" />
-	<copyField source="ts_skos_altLabel" dest="text" />
-	<copyField source="ts_skos_hiddenLabel" dest="text" />
+	<copyField source="cc_skos_prefLabel.*" dest="text" />
+	<copyField source="cc_skos_altLabel.*" dest="text" />
+        
+        <copyField source="cc_skos_hiddenLabel.*" dest="cc_skos_hiddenLabel" />
+	
+
+
+        <copyField source="cc_skos_prefLabel.*" dest="cc_label_facet" />
 	<copyField source="ts_skos_prefLabel.*" dest="ts_skos_prefLabel" />
 	<copyField source="ts_skos_altLabel.*" dest="ts_skos_altLabel" />
-	<copyField source="ts_skos_hiddenLabel.*" dest="ts_skos_hiddenLabel" />
-	<copyField source="evt_skos_prefLabel.*" dest="text" />
-	<copyField source="evt_skos_altLabel.*" dest="text" />
-	<copyField source="evt_skos_hiddenLabel.*" dest="text" />
-	<copyField source="evt_skos_prefLabel.*" dest="evt_skos_prefLabel" />
-	<copyField source="evt_skos_altLabel.*" dest="evt_skos_altLabel" />
-	<copyField source="evt_skos_hiddenLabel.*" dest="evt_skos_hiddenLabel" />
+	<copyField source="ts_skos_prefLabel.*" dest="text" />
+	<copyField source="ts_skos_altLabel.*" dest="text" />
+        <copyField source="ts_skos_prefLabel.*" dest="ts_label_facet" />
+        <copyField source="ts_skos_hiddenLabel.*" dest="ts_skos_hiddenLabel" />
+
 	<copyField source="ts_skos_note" dest="text" />
 	<copyField source="ag_skos_note" dest="text" />
 	<copyField source="pl_skos_note" dest="text" />
 	<copyField source="cc_skos_note" dest="text" />
-	<copyField source="evt_skos_note" dest="text" />
-
-
-
 	<copyField source="provider_aggregation_edm_dataProvider.*"
 		dest="provider_aggregation_edm_dataProvider" />
 	<copyField source="provider_aggregation_edm_provider.*" dest="provider_aggregation_edm_provider" />
 	<copyField source="provider_aggregation_dc_rights.*" dest="provider_aggregation_dc_rights" />
 	<copyField source="provider_aggregation_edm_rights.*" dest="provider_aggregation_edm_rights" />
-	<copyField source="europeana_aggregation_dc_creator.*" dest="europeana_aggregation_dc_creator" />
 	<copyField source="europeana_aggregation_edm_country.*" dest="europeana_aggregation_edm_country" />
 	<copyField source="europeana_aggregation_edm_language.*"
 		dest="europeana_aggregation_edm_language" />
@@ -1247,6 +886,9 @@
 	<copyField source="wr_dcterms_hasPart.*" dest="wr_dcterms_hasPart" />
 	<copyField source="wr_dcterms_conformsTo.*" dest="wr_dcterms_conformsTo" />
 	<copyField source="wr_dcterms_issued.*" dest="wr_dcterms_issued" />
+	
+	<copyField source="wr_dcterms_isPartOf.*" dest="wr_dcterms_isPartOf" />
+	
 	<copyField source="proxy_dc_contributor.*" dest="proxy_dc_contributor" />
 	<copyField source="proxy_dc_coverage.*" dest="proxy_dc_coverage" />
 	<copyField source="proxy_dc_creator.*" dest="proxy_dc_creator" />
@@ -1273,13 +915,15 @@
 	<copyField source="proxy_dcterms_isReplacedBy.*" dest="proxy_dcterms_isReplacedBy" />
 	<copyField source="proxy_dcterms_isRequiredby.*" dest="proxy_dcterms_isRequiredBy" />
 	<copyField source="proxy_dcterms_isVersionOf.*" dest="proxy_dcterms_isVersionOf" />
-	<copyField source="proxy_dcterms_isFormatOf.*" dest="proxy_dcterms_isVersionOf" />
 	<copyField source="proxy_dcterms_hasVersion.*" dest="proxy_dcterms_hasVersion" />
 	<copyField source="proxy_dcterms_issued.*" dest="proxy_dcterms_issued" />
 	<copyField source="proxy_dcterms_medium.*" dest="proxy_dcterms_medium" />
 	<copyField source="proxy_dcterms_provenance.*" dest="proxy_dcterms_provenance" />
 	<copyField source="proxy_dcterms_references.*" dest="proxy_dcterms_references" />
 	<copyField source="proxy_dcterms_replaces.*" dest="proxy_dcterms_replaces" />
+	<copyField source="proxy_dcterms_requires.*" dest="proxy_dcterms_requires" />
+		<copyField source="proxy_edm_incorporates.*" dest="proxy_edm_incorporates" />
+                <copyField source="proxy_edm_isDerivativeOf.*" dest="proxy_edm_isDerivativeOf" />
 	<copyField source="proxy_dcterms_spatial.*" dest="proxy_dcterms_spatial" />
 	<copyField source="proxy_dcterms_tableOfContents.*" dest="proxy_dcterms_tableOfContents" />
 	<copyField source="proxy_dcterms_temporal.*" dest="proxy_dcterms_temporal" />
@@ -1304,7 +948,9 @@
 	<copyField source="ag_rdagr2_biographicalInformation.*" dest="ag_rdagr2_biographicalInformation" />
 	<copyField source="ag_edm_begin.*" dest="ag_edm_begin" />
 	<copyField source="ag_edm_end.*" dest="ag_edm_end" />
-	
+	<copyField source="ag_dcterms_isPartOf.*" dest="ag_dcterms_isPartOf" />
+	<copyField source="ag_dcterms_hasPart.*" dest="ag_dcterms_hasPart" />
+	<copyField source="ag_dc_identifier.*" dest="ag_dc_identifier" />
 	<copyField source="org_skos_note.*" dest="org_skos_note" />
         <copyField source="org_edm_hasMet.*" dest="org_edm_hasMet" />
         <copyField source="org_edm_isRelatedTo.*" dest="org_edm_isRelatedTo" />
@@ -1329,17 +975,14 @@
 	<copyField source="org_edm_europeanaRole.*" dest="org_edm_europeanaRole" />
 	<copyField source="ts_dcterms_hasPart.*" dest="ts_dcterms_hasPart" />
 	<copyField source="ts_dcterms_isPartOf.*" dest="ts_dcterms_isPartOf" />
-	<copyField source="ts_dcterms_isPartOf_label.*" dest="ts_dcterms_isPartOf_label" />
 	<copyField source="ts_edm_begin.*" dest="ts_edm_begin" />
 	<copyField source="ts_edm_end.*" dest="ts_edm_end" />
 	<copyField source="ts_skos_note.*" dest="ts_skos_note" />
 	<copyField source="pl_skos_note.*" dest="pl_skos_note" />
 	<copyField source="pl_dcterms_isPartOf.*" dest="pl_dcterms_isPartOf" />
-	<copyField source="pl_dcterms_isPartOf_label.*" dest="pl_dcterms_isPartOf_label" />
 	<copyField source="pl_dcterms_hasPart.*" dest="pl_dcterms_hasPart" />
 	<copyField source="cc_skos_note.*" dest="cc_skos_note" />
 	<copyField source="cc_skos_notation.*" dest="cc_skos_notation" />
-	<copyField source="cc_skos_broaderLabel.*" dest="cc_skos_broaderLabel" />
 	<copyField source="europeana_id" dest="id2hash" />
 	<copyField source="europeana_id" dest="id3hash" />
 	<copyField source="europeana_id" dest="id6hash" />
@@ -1347,24 +990,16 @@
 	<!-- WHAT and WHATSPELL copyfields -->
 	<copyField source="proxy_dc_type.*" dest="what" />
 	<copyField source="proxy_dc_subject.*" dest="what" />
-	<copyField source="proxy_dc_type" dest="what" />
-	<copyField source="proxy_dc_subject" dest="what" />
+	
 	<copyField source="cc_skos_prefLabel.*" dest="what" />
-	<copyField source="cc_skos_broaderLabel.*" dest="what" />
-	<copyField source="cc_skos_prefLabel" dest="what" />
-	<copyField source="cc_skos_broaderLabel" dest="what" />
+
 	<copyField source="cc_skos_altLabel.*" dest="what" />
-	<copyField source="cc_skos_altLabel" dest="what" />
 	<copyField source="proxy_dc_type.*" dest="whatSpell" />
 	<copyField source="proxy_dc_subject.*" dest="whatSpell" />
-	<copyField source="proxy_dc_type" dest="whatSpell" />
-	<copyField source="proxy_dc_subject" dest="whatSpell" />
+
 	<copyField source="cc_skos_prefLabel.*" dest="whatSpell" />
-	<copyField source="cc_skos_broaderLabel.*" dest="whatSpell" />
-	<copyField source="cc_skos_prefLabel" dest="whatSpell" />
-	<copyField source="cc_skos_broaderLabel" dest="whatSpell" />
+
 	<copyField source="cc_skos_altLabel.*" dest="whatSpell" />
-	<copyField source="cc_skos_altLabel" dest="whatSpell" />
 
 	<!-- WHEN and WHENSPELL copyfields -->
 	<copyField source="proxy_dcterms_created.*" dest="when" />
@@ -1372,81 +1007,48 @@
 	<copyField source="proxy_dc_date.*" dest="when" />
 	<copyField source="ts_skos_prefLabel.*" dest="when" />
 	<copyField source="ts_skos_altLabel.*" dest="when" />
-	<copyField source="ts_edm_begin.*" dest="when" />
-	<copyField source="ts_edm_end.*" dest="when" />
+
 	<copyField source="proxy_edm_year.*" dest="when" />
 	<copyField source="proxy_dcterms_issued.*" dest="when" />
-	<copyField source="proxy_dcterms_created" dest="when" />
-	<copyField source="proxy_dcterms_temporal" dest="when" />
-	<copyField source="proxy_dc_date" dest="when" />
-	<copyField source="ts_skos_prefLabel" dest="when" />
-	<copyField source="ts_skos_altLabel" dest="when" />
-	<copyField source="ts_edm_begin" dest="when" />
-	<copyField source="ts_edm_end" dest="when" />
-	<copyField source="proxy_edm_year" dest="when" />
-	<copyField source="proxy_dcterms_issued" dest="when" />
-	<copyField source="proxy_dcterms_created.*" dest="whenSpell" />
+        <copyField source="proxy_dcterms_created.*" dest="whenSpell" />
 	<copyField source="proxy_dcterms_temporal.*" dest="whenSpell" />
 	<copyField source="proxy_dc_date.*" dest="whenSpell" />
-	<copyField source="ts_skos_prefLabel.*" dest="whenSpell" />
-	<copyField source="ts_skos_altLabel.*" dest="whenSpell" />
-	<copyField source="ts_edm_begin.*" dest="whenSpell" />
-	<copyField source="ts_edm_end.*" dest="whenSpell" />
+
 	<copyField source="proxy_edm_year.*" dest="whenSpell" />
 	<copyField source="proxy_dcterms_issued.*" dest="whenSpell" />
-	<copyField source="proxy_dcterms_created" dest="whenSpell" />
-	<copyField source="proxy_dcterms_temporal" dest="whenSpell" />
-	<copyField source="proxy_dc_date" dest="whenSpell" />
-	<copyField source="ts_skos_prefLabel" dest="whenSpell" />
-	<copyField source="ts_skos_altLabel" dest="whenSpell" />
-	<copyField source="ts_edm_begin" dest="whenSpell" />
-	<copyField source="ts_edm_end" dest="whenSpell" />
-	<copyField source="proxy_edm_year" dest="whenSpell" />
-	<copyField source="proxy_dcterms_issued" dest="whenSpell" />
+	<copyField source="ts_skos_prefLabel.*" dest="whenSpell" />
+	<copyField source="ts_skos_altLabel.*" dest="whenSpell" />
 
 	<!-- TITLE and TITLESPELL copyFields -->
 	<copyField source="proxy_dc_title.*" dest="title" />
-	<copyField source="proxy_dc_title" dest="title" />
+
 	<copyField source="proxy_dcterms_alternative.*" dest="title" />
-	<copyField source="proxy_dcterms_alternative" dest="title" />
-	<copyField source="proxy_dc_title" dest="titleSpell" />
+
+
 	<copyField source="proxy_dc_title.*" dest="titleSpell" />
 	<copyField source="proxy_dcterms_alternative.*" dest="titleSpell" />
-	<copyField source="proxy_dcterms_alternative" dest="titleSpell" />
+
 
 	<!-- WHERE and WHERESPELL copyFields -->
 	<copyField source="proxy_dcterms_spatial.*" dest="where" />
-	<copyField source="proxy_dcterms_spatial" dest="where" />
-	<copyField source="pl_skos_prefLabel" dest="where" />
 	<copyField source="pl_skos_prefLabel.*" dest="where" />
-	<copyField source="pl_skos_altLabel" dest="where" />
 	<copyField source="pl_skos_altLabel.*" dest="where" />
 	<copyField source="proxy_dcterms_spatial.*" dest="whereSpell" />
 	<copyField source="pl_skos_prefLabel.*" dest="whereSpell" />
-	<copyField source="proxy_dcterms_spatial" dest="whereSpell" />
-	<copyField source="pl_skos_prefLabel" dest="whereSpell" />
-	<copyField source="pl_skos_altLabel" dest="whereSpell" />
 	<copyField source="pl_skos_altLabel.*" dest="whereSpell" />
+
 
 	<!-- WHO and WHOSPELL copyFields -->
 	<copyField source="proxy_dc_contributor.*" dest="who" />
 	<copyField source="proxy_dc_creator.*" dest="who" />
-	<copyField source="proxy_dc_contributor" dest="who" />
-	<copyField source="proxy_dc_creator" dest="who" />
 	<copyField source="ag_skos_prefLabel.*" dest="who" />
-	<copyField source="ag_skos_prefLabel" dest="who" />
-	<copyField source="ag_skos_altLabel.*" dest="who" />
-	<copyField source="ag_skos_altLabel" dest="who" />
+        <copyField source="ag_skos_altLabel.*" dest="who" />
 	<copyField source="ag_foaf_name.*" dest="who" />
-	<copyField source="ag_foaf_name" dest="who" />
 	<copyField source="proxy_dc_contributor.*" dest="whoSpell" />
 	<copyField source="proxy_dc_creator.*" dest="whoSpell" />
 	<copyField source="ag_skos_prefLabel.*" dest="whoSpell" />
-	<copyField source="proxy_dc_contributor" dest="whoSpell" />
-	<copyField source="proxy_dc_creator" dest="whoSpell" />
-	<copyField source="ag_skos_prefLabel" dest="whoSpell" />
-	<copyField source="ag_skos_altLabel.*" dest="whoSpell" />
-	<copyField source="ag_skos_altLabel" dest="whoSpell" />
+        <copyField source="ag_skos_altLabel.*" dest="whoSpell" />
 	<copyField source="ag_foaf_name.*" dest="whoSpell" />
-	<copyField source="ag_foaf_name" dest="whoSpell" />
+        
+        <copyField source="europeana_collectionName" dest="edm_datasetName"/>
 </schema>
