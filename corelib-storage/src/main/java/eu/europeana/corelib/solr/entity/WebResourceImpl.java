@@ -16,14 +16,16 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Indexed;
+import com.google.code.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
+import eu.europeana.corelib.definitions.model.ColorSpace;
+import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
 import org.bson.types.ObjectId;
@@ -31,16 +33,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
-import com.google.code.morphia.annotations.Transient;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.model.ColorSpace;
-import eu.europeana.corelib.definitions.model.Orientation;
-
-import javax.xml.bind.annotation.XmlElement;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.WebResource
@@ -48,6 +45,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 @Entity("WebResource")
 public class WebResourceImpl implements WebResource {
 
@@ -76,11 +74,11 @@ public class WebResourceImpl implements WebResource {
     private String                    htmlAttributionSnippet;
 
     @Transient
-    @JsonIgnore
+    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
     private AggregationImpl           parentAggregation;
 
     @Transient
-    @JsonIgnore
+    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
     private WebResourceMetaInfoImpl webResourceMetaInfo;
 
     @Override

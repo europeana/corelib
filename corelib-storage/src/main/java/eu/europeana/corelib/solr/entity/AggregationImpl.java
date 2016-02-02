@@ -18,24 +18,22 @@
 package eu.europeana.corelib.solr.entity;
 
 
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.utils.StringArrayUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-//import org.springframework.data.neo4j.annotation.GraphProperty;
-//import org.springframework.data.neo4j.annotation.NodeEntity;
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Reference;
+import java.util.List;
+import java.util.Map;
 
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.utils.StringArrayUtils;
-//import javax.persistence.Transient;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
@@ -43,6 +41,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * 
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 //@NodeEntity(partial = true)
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
@@ -85,7 +84,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	private Boolean edmPreviewNoDistribute;
 
 	@Transient
-	@JsonIgnore
+	@JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
 	private FullBean parentBean;
 
 	@Override

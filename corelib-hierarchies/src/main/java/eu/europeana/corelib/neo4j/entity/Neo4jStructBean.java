@@ -17,13 +17,18 @@
 package eu.europeana.corelib.neo4j.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * A complex Neo4j response structure, to contains self, parents, preceding siblings and following siblings.
  * @author gmamakis
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 public class Neo4jStructBean {
 
 	/**
@@ -39,7 +44,7 @@ public class Neo4jStructBean {
 	/**
 	 * Self's preceding siblings
 	 */
-	private List<Neo4jBean> preceedingSiblings;
+	private List<Neo4jBean> precedingSiblings;
 
 	/**
 	 * Self's following siblings
@@ -49,7 +54,7 @@ public class Neo4jStructBean {
 	/**
 	 * Preceding siblings' first children
 	 */
-	private List<Neo4jBean> preceedingSiblingChildren;
+	private List<Neo4jBean> precedingSiblingChildren;
 
 	/**
 	 * following siblings' first children
@@ -64,12 +69,12 @@ public class Neo4jStructBean {
 		this.self = self;
 	}
 
-	public List<Neo4jBean> getPreceedingSiblings() {
-		return preceedingSiblings;
+	public List<Neo4jBean> getPrecedingSiblings() {
+		return precedingSiblings;
 	}
 
 	public void setPrecedingSiblings(List<Neo4jBean> precedingSiblings) {
-		this.preceedingSiblings = precedingSiblings;
+		this.precedingSiblings = precedingSiblings;
 	}
 
 	public List<Neo4jBean> getFollowingSiblings() {
@@ -81,11 +86,11 @@ public class Neo4jStructBean {
 	}
 
 	public List<Neo4jBean> getPrecedingSiblingChildren() {
-		return preceedingSiblingChildren;
+		return precedingSiblingChildren;
 	}
 
 	public void setPrecedingSiblingChildren(List<Neo4jBean> precedingSiblingChildren) {
-		this.preceedingSiblingChildren = precedingSiblingChildren;
+		this.precedingSiblingChildren = precedingSiblingChildren;
 	}
 
 	public List<Neo4jBean> getFollowingSiblingChildren() {

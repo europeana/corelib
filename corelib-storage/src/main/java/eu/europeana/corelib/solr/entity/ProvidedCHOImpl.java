@@ -17,12 +17,16 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.google.code.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 /**
  * ProvidedCHO (edm:ProvidedCHO) means provided cultural heritage object
  * 
@@ -31,6 +35,7 @@ import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 

@@ -15,3 +15,6 @@ target/
 *~
 *.bak
 .DS_Store
+
+# Don't checkin property file:
+resources/europeana.properties

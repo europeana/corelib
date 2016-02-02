@@ -46,7 +46,11 @@
 			<version>${version.mongoDriver}</version>
 			<scope>compile</scope>
 		</dependency>
-
+        <dependency>
+            <groupId>eu.europeana</groupId>
+            <artifactId>crf-fake-tags</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
 		<dependency>
 			<groupId>eu.europeana</groupId>
 			<artifactId>harvester-persistence</artifactId>

@@ -22,7 +22,7 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void getApi2RedirectTest() {
 		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=http%3A%2F%2Fwww.europeana.eu%2Fresolve%2Frecord%2Fkb%2Frecord&profile=full";
-		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getApi2Redirect(123, "http://www.kb.nl", "example", "/kb/record", "full").toString());
+		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getApi2Redirect("123", "http://www.kb.nl", "example", "/kb/record", "full").toString());
 	}
 
 	@Test

@@ -1,6 +1,7 @@
 package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
-import eu.europeana.corelib.definitions.model.facets.logic.ImageTagExtractor;
+import eu.europeana.crf_faketags.extractor.ImageTagExtractor;
+import eu.europeana.crf_faketags.extractor.TagEncoding;
 import org.apache.commons.lang.StringUtils;
 
 public class ImagePropertyExtractor {

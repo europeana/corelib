@@ -3,7 +3,6 @@ package eu.europeana.corelib.db.service;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
 import eu.europeana.corelib.db.entity.nosql.ApiLog;
-import eu.europeana.corelib.db.entity.nosql.ImageCache;
 import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.utils.model.DateInterval;
 import org.joda.time.DateTime;
@@ -32,7 +31,7 @@ public class ApiLogServiceTest {
     private ApiLogService apiLogService;
 
     @Resource(name = "corelib_db_apiLogDao")
-    NosqlDao<ImageCache, String> apiLogDao;
+    NosqlDao<ApiLog, String> apiLogDao;
 
     /**
      * Initialise the testing session

@@ -35,10 +35,6 @@
 		<constructor-arg ref="corelib_db_morphia_datastore_oauth2"/>
 	</bean>
 
-	<bean id="corelib_db_imageDao" parent="corelib_db_nosql_dao">
-		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.ImageCache" />
-	</bean>
-
 	<!-- TODO: change it!!! -->
 	<bean id="corelib_db_oAuth2AccessTokenDao" parent="corelib_db_nosql_dao">
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.AccessToken" />

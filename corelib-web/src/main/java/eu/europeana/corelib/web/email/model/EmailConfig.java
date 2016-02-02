@@ -30,6 +30,8 @@ public class EmailConfig {
 
 	private String emailTo;
 
+	private String emailCc;
+
 	private String subject;
 
 	/**
@@ -66,5 +68,13 @@ public class EmailConfig {
 
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public String getEmailCc() {
+		return emailCc;
+	}
+
+	public void setEmailCc(String emailCc) {
+		this.emailCc = emailCc;
 	}
 }
