@@ -27,12 +27,6 @@ public interface IdBean {
 	 * @return The Europeana object UniqueID
 	 */
 	String getId();
-
-//	/**
-//	 *
-//	 * @return if the provider has opted out for this record
-//	 */
-//	Boolean isOptedOut();
 	
 	/**
 	 * The date the record was created
