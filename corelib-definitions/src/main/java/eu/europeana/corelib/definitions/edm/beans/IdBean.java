@@ -28,11 +28,11 @@ public interface IdBean {
 	 */
 	String getId();
 
-	/**
-	 * 
-	 * @return if the provider has opted out for this record
-	 */
-	Boolean isOptedOut();
+//	/**
+//	 *
+//	 * @return if the provider has opted out for this record
+//	 */
+//	Boolean isOptedOut();
 	
 	/**
 	 * The date the record was created
