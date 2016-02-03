@@ -65,10 +65,11 @@ public interface OAuth2TokenService {
 	
 	/**
 	 * Find the list of access tokens by username
+	 * @param clientId The client id to search on
 	 * @param userName The username to search on
 	 * @return A list of access tokens
 	 */
-	List<AccessToken> findByUserName(String userName);
+	List<AccessToken> findByClientIdAndUserName(String clientId, String userName);
 
 	/**
 	 * Find the list of access tokens associated to a client id

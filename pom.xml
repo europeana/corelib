@@ -38,6 +38,114 @@
 		<module>corelib-search</module>
 	</modules>
 
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-common-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-db</artifactId>
+                <version>${version.europeana.corelib}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-definitions</artifactId>
+                <version>${version.europeana.corelib}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-dereference</artifactId>
+				<version>${version.europeana.corelib}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>google-collections</artifactId>
+						<groupId>com.google.collections</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-edm-definitions</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-hierarchies</artifactId>
+				<version>${version.europeana.corelib}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>google-collections</artifactId>
+						<groupId>com.google.collections</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-logging</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-lookup</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-media-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-search</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-sugarcrm-bindings</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-sugarcrm-client</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-utils</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-web</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
 	<repositories>
 		<repository>
 		     <id>europeana-ext-release-local</id>
@@ -116,11 +224,12 @@
 	</repositories>
 
 	<properties>
-		<version.europeanaApi2>2.2.0</version.europeanaApi2>
+		<version.europeana.corelib>2.3-SNAPSHOT</version.europeana.corelib>
 		<version.log4j>1.2.15</version.log4j>
 		<version.jdk>1.7</version.jdk>
 		<version.junit>4.12</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
+		<version.apacheLucene>4.10.1</version.apacheLucene>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
 		<version.springCore>4.0.9.RELEASE</version.springCore>
@@ -144,7 +253,7 @@
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.ehcache>2.8.3</version.ehcache>
 		<version.guava>18.0</version.guava>
-		<version.jodatime>2.9</version.jodatime>
+		<version.jodatime>2.9.2</version.jodatime>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

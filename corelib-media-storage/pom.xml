@@ -17,6 +17,18 @@
     </properties>
 
     <dependencies>
+        <!-- CORELIB -->
+        <dependency>
+            <groupId>eu.europeana.corelib</groupId>
+            <artifactId>corelib-dereference</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>google-collections</artifactId>
+                    <groupId>com.google.collections</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- OTHER -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -37,18 +49,6 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${version.jodatime}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-dereference</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>google-collections</artifactId>
-                    <groupId>com.google.collections</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
 		<dependency>

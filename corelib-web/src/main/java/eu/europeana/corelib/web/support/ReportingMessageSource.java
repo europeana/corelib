@@ -1,19 +1,16 @@
 package eu.europeana.corelib.web.support;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
 import eu.europeana.corelib.logging.Log;
 import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportingMessageSource extends ResourceBundleMessageSource {
 	
