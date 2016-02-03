@@ -211,7 +211,7 @@ public class Neo4jTest {
 		testCount++;
 		Node node = server.getNode("uri2");
 		Assert.assertNotNull(node);
-		Neo4jBean bean = Node2Neo4jBeanConverter.toNeo4jBean(node, (server.getNodeIndex(node)-1)); // 1 was added
+		Neo4jBean bean = Node2Neo4jBeanConverter.toNeo4jBean(node, (server.getNodeIndex(node)));
 		Assert.assertNotNull(bean);
 
 		Assert.assertEquals(bean.getParent(), "uri0");
@@ -250,42 +250,42 @@ public class Neo4jTest {
 				Node2Neo4jBeanConverter.toNeo4jBean(parent, server.getNodeIndex(parent)));
 		Neo4jBean child1 = Node2Neo4jBeanConverter.toNeo4jBean(
 				server.getNode("uri1"),
-				server.getNodeIndexByRdfAbout("uri1")-1);
+				server.getNodeIndexByRdfAbout("uri1"));
 		Neo4jBean child2 = Node2Neo4jBeanConverter.toNeo4jBean(
 				server.getNode("uri3"),
-				server.getNodeIndexByRdfAbout("uri3")-1);
+				server.getNodeIndexByRdfAbout("uri3"));
 		Neo4jBean child3 = Node2Neo4jBeanConverter.toNeo4jBean(
 				server.getNode("uri4"),
-				server.getNodeIndexByRdfAbout("uri4")-1);
+				server.getNodeIndexByRdfAbout("uri4"));
 
-		Assert.assertEquals(structBean.getFollowingSiblings().size(), 1);
-		Assert.assertEquals(structBean.getFollowingSiblings().get(0), child1);
-		Assert.assertEquals(structBean.getPrecedingSiblings().size(), 2);
-		Assert.assertEquals(structBean.getPrecedingSiblings().get(0), child2);
-		Assert.assertEquals(structBean.getPrecedingSiblings().get(1), child3);
+		Assert.assertEquals(structBean.getPrecedingSiblings().size(), 1);
+		Assert.assertEquals(structBean.getPrecedingSiblings().get(0), child1);
+		Assert.assertEquals(structBean.getFollowingSiblings().size(), 2);
+		Assert.assertEquals(structBean.getFollowingSiblings().get(0), child2);
+		Assert.assertEquals(structBean.getFollowingSiblings().get(1), child3);
 		Assert.assertEquals(server.getChildrenCount(parent), 4);
 		Assert.assertNotEquals(bean, child1);
 
-		List<CustomNode> node1 = server.getFollowingSiblings(node, 10);
-		Assert.assertEquals(node1.size(), 1);
-		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(node1.get(0), getIndex(node1.get(0))));
-		List<CustomNode> node2 = server.getPrecedingSiblings(node, 10);
-		Assert.assertEquals(node2.size(), 2);
-		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(node2.get(0), getIndex(node2.get(0))));
-		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(node2.get(1), getIndex(node2.get(1))));
+		List<CustomNode> nodePSList = server.getPrecedingSiblings(node, 10);
+		Assert.assertEquals(nodePSList.size(), 1);
+		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(nodePSList.get(0), getCustomNodeIndex(nodePSList.get(0))));
+		List<CustomNode> nodeFSList = server.getFollowingSiblings(node, 10);
+		Assert.assertEquals(nodeFSList.size(), 2);
+		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(nodeFSList.get(0), getCustomNodeIndex(nodeFSList.get(0))));
+		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(nodeFSList.get(1), getCustomNodeIndex(nodeFSList.get(1))));
 		Assert.assertNotEquals(bean,child2);
 		
 		List<CustomNode> children = server.getChildren(parent, 0, 10);
 		Assert.assertEquals(children.size(),server.getChildrenCount(parent));
 		// the order of the retrieved children is reversed
-		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(children.get(3), getIndex(children.get(3))));
-		Assert.assertEquals(bean, Node2Neo4jBeanConverter.toNeo4jBean(children.get(2), getIndex(children.get(2))));
-		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(children.get(1), getIndex(children.get(1))));
-		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children.get(0), getIndex(children.get(0))));
+		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(children.get(0), getCustomNodeIndex(children.get(0))));
+		Assert.assertEquals(bean, Node2Neo4jBeanConverter.toNeo4jBean(children.get(1), getCustomNodeIndex(children.get(1))));
+		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(children.get(2), getCustomNodeIndex(children.get(2))));
+		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children.get(3), getCustomNodeIndex(children.get(3))));
 		
 		List<CustomNode> children2 = server.getChildren(parent, 3, 10);
-		Assert.assertEquals(children2.size(),1);
-		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(children2.get(0), getIndex(children2.get(0))));
+		Assert.assertEquals(children2.size(), 1);
+		Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children2.get(0), getCustomNodeIndex(children2.get(0))));
 
 		
 		Assert.assertEquals("http://localhost:7474", server.getCustomPath());
@@ -337,8 +337,8 @@ public class Neo4jTest {
 		}
 	}
 
-	private Long getIndex(CustomNode node){
-		return server.getNodeIndexByRdfAbout(((TextNode) node.getProperty("rdf:about")).asText()) -1 ;
+	private Long getCustomNodeIndex(CustomNode node){
+		return server.getNodeIndexByRdfAbout(((TextNode) node.getProperty("rdf:about")).asText()) ;
 	}
 
 	/**
