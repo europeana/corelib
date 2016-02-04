@@ -1,6 +1,9 @@
 package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
-import eu.europeana.corelib.definitions.model.facets.logic.CommonTagExtractor;
+
+import eu.europeana.crf_faketags.extractor.CommonTagExtractor;
+import eu.europeana.crf_faketags.extractor.MediaTypeEncoding;
+import eu.europeana.crf_faketags.extractor.TagEncoding;
 
 public class CommonPropertyExtractor {
 
