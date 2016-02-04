@@ -182,7 +182,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
         String[] _ugc = this.ugc.clone();
         boolean[] retVal = new boolean[_ugc.length];
         for (int i = 0, len = _ugc.length; i < len; i++) {
-            retVal[i] = Boolean.getBoolean(_ugc[i]);
+            retVal[i] = Boolean.valueOf(_ugc[i]);
         }
         return retVal;
     }

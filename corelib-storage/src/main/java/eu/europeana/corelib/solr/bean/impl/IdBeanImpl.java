@@ -33,9 +33,6 @@ public class IdBeanImpl implements IdBean {
     @Field("europeana_id")
     protected String id;
 
-    @Field("edm_previewNoDistribute")
-    protected boolean optOut;
-
     @Field("timestamp_created")
     protected Date timestampCreated;
 
@@ -45,11 +42,6 @@ public class IdBeanImpl implements IdBean {
     @Override
     public String getId() {
         return this.id;
-    }
-
-    @Override
-    public Boolean isOptedOut() {
-        return this.optOut;
     }
 
     @Override
