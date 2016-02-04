@@ -277,7 +277,7 @@ public class Neo4jTest {
 		
 		List<CustomNode> children = server.getChildren(parent, 0, 10);
 		Assert.assertEquals(children.size(),server.getChildrenCount(parent));
-		
+
 		Assert.assertEquals(child1, Node2Neo4jBeanConverter.toNeo4jBean(children.get(0), getCustomNodeIndex(children.get(0))));
 		Assert.assertEquals(bean, Node2Neo4jBeanConverter.toNeo4jBean(children.get(1), getCustomNodeIndex(children.get(1))));
 		Assert.assertEquals(child2, Node2Neo4jBeanConverter.toNeo4jBean(children.get(2), getCustomNodeIndex(children.get(2))));
