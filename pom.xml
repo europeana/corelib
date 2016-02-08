@@ -232,10 +232,13 @@
 		<version.apacheLucene>4.10.1</version.apacheLucene>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springCore>4.0.9.RELEASE</version.springCore>
-		<version.springWebService>2.2.1.RELEASE</version.springWebService>
-		<version.springSecurity>3.2.8.RELEASE</version.springSecurity>
-		<version.springSecurityOauth>2.0.7.RELEASE</version.springSecurityOauth>
+		<version.springBoot>1.2.8.RELEASE</version.springBoot>
+		<!--<version.springCore>4.0.9.RELEASE</version.springCore>-->
+		<version.springCore>4.2.4.RELEASE</version.springCore>
+		<version.springWebService>2.2.4.RELEASE</version.springWebService>
+		<version.springSecurity>3.2.9.RELEASE</version.springSecurity>
+		<!--<version.springSecurity>4.0.3.RELEASE</version.springSecurity>-->
+		<version.springSecurityOauth>2.0.8.RELEASE</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsLang3>3.4</version.commonsLang3>
 		<version.commonsIO>2.4</version.commonsIO>
@@ -246,7 +249,7 @@
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
-		<version.jackson>2.6.4</version.jackson>
+		<version.jackson>2.7.1</version.jackson>
 		<version.slf4j>1.7.5</version.slf4j>
 		<version.mockito>1.10.19</version.mockito>
 		<version.gson>2.2.4</version.gson>
