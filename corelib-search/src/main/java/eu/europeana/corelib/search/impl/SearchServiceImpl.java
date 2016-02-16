@@ -613,7 +613,11 @@ public class SearchServiceImpl implements SearchService {
                 } catch (SolrException e) {
                     log.error("SolrException: " + e.getMessage()
                             + " The query was: " + solrQuery);
+                    if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
+                        throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
+                    } else{
                     throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                    }
                 }
 
             } else {
