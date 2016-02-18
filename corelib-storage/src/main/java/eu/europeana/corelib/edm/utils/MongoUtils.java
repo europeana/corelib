@@ -527,10 +527,9 @@ public final class MongoUtils {
 						}
 						if(StringUtils.isNotBlank(StringUtils.trimToNull(obj.getResource()
 								.getResource()))) {
-							val.add(obj.getString());
+							val.add(obj.getResource().getResource());
 							retMap.put(lang, val);
 						}
-
 					} else {
 						List<String> val = retMap.get("def");
 						if (val == null) {
@@ -538,7 +537,7 @@ public final class MongoUtils {
 						}
 						if(StringUtils.isNotBlank(StringUtils.trimToNull(obj.getResource()
 								.getResource()))) {
-							val.add(obj.getString());
+							val.add(obj.getResource().getResource());
 							retMap.put("def", val);
 						}
 					}
