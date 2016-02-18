@@ -30,14 +30,13 @@ public class FacetLabelExtractor {
                 }
                 label = ImagePropertyExtractor.getSize(tag);
                 return label;
-// FIXME: no such enum in crf-fake-tags                
-//            case SOUND:
-//                label = SoundPropertyExtractor.getDuration(tag);
-//                if(!label.equals("")) {
-//                    return label;
-//                }
-//                label = SoundPropertyExtractor.getQuality(tag);
-//                return label;
+            case AUDIO:
+                label = SoundPropertyExtractor.getDuration(tag);
+                if(!label.equals("")) {
+                    return label;
+                }
+                label = SoundPropertyExtractor.getQuality(tag);
+                return label;
             case VIDEO:
                 label = VideoPropertyExtractor.getDuration(tag);
                 if(!label.equals("")) {
