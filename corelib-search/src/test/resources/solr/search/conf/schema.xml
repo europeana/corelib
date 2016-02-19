@@ -774,9 +774,9 @@
 	<copyField source="proxy_dc_creator" dest="spell" />
 	<copyField source="proxy_dc_subject" dest="spell" />
 	<copyField source="proxy_dc_description" dest="spell" />
-	<copyField source="proxy_dc_date" dest="date" />
+	<!--<copyField source="proxy_dc_date" dest="date" />
 	<copyField source="proxy_dcterms_created" dest="date" />
-	<copyField source="proxy_dcterms_issued" dest="date" />
+	<copyField source="proxy_dcterms_issued" dest="date" />-->
 	<copyField source="proxy_dc_description" dest="description" />
 	<copyField source="proxy_dc_description.*" dest="description" />
 	<copyField source="proxy_dcterms_tableOfContents" dest="description" />
