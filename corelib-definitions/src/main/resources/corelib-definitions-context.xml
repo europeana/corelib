@@ -30,7 +30,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:cloud_config.properties</value>
-				<value>file:${EUROPEANA_PROPERTIES}</value>
+				<value>classpath:europeana.properties</value>
 			</list>
 		</property>
 		<property name="fileEncoding" value="UTF-8"/>

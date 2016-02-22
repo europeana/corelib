@@ -279,11 +279,6 @@ public interface FullBean extends IdBean {
 	void setEuropeanaCollectionName(String[] europeanaCollectionName);
 
 	/**
-	 * Sets if the provider has opted out for this record
-	 * @param optOut
-	 */
-	void setOptOut(boolean optOut);
-	/**
 	 * The date the record was created
 	 * @return 
 	 */

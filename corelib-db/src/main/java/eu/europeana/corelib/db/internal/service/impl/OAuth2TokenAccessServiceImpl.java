@@ -34,28 +34,28 @@ public class OAuth2TokenAccessServiceImpl extends AbstractNoSqlServiceImpl<Acces
 	@Override
 	public List<AccessToken> findByClientId(String clientId) {
 		Query<AccessToken> query = getDao().createQuery();
-		query.field("clientId").toString().equals(clientId);
+		query.field("clientId").equal(clientId);
 		return query.asList();
 	}
 
 	@Override
 	public List<AccessToken> findByUserName(String userName) {
 		Query<AccessToken> query = getDao().createQuery();
-		query.field("userName").toString().equals(userName);
+		query.field("userName").equal(userName);
 		return query.asList();
 	}
 	
 	@Override
 	public AccessToken findByAuthenticationId(String authId) {
 		Query<AccessToken> query = getDao().createQuery();
-		query.field("authenticationId").toString().equals(authId);
+		query.field("authenticationId").equal(authId);
 		return query.get();
 	}
 	
 	@Override
 	public void removeByRefreshTokenId(String refreshTokenId) {
 		Query<AccessToken> query = getDao().createQuery();
-		query.field("refreshToken").toString().equals(refreshTokenId);
+		query.field("refreshToken").equal(refreshTokenId);
 		getDao().deleteByQuery(query);
 	}
 	

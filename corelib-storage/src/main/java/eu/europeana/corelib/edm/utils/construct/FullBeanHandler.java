@@ -370,7 +370,6 @@ public class FullBeanHandler implements ICollection {
         ops.set("type", fullBean.getType() != null ? fullBean.getType()
                 : DocType.IMAGE);
         ops.set("europeanaCompleteness", fullBean.getEuropeanaCompleteness());
-        ops.set("optOut", fullBean.isOptedOut());
         ops.set("places", fullBean.getPlaces() != null ? fullBean.getPlaces()
                 : new ArrayList<PlaceImpl>());
         ops.set("agents", fullBean.getAgents() != null ? fullBean.getAgents()

@@ -66,11 +66,12 @@
           p:dataSource-ref="corelib_db_dataSource">
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" p:showSql="false"
-                  p:generateDdl="true" p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"/>
+                  p:generateDdl="false" p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"/>
         </property>
     </bean>
 
     <bean id="corelib_db_transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+          primary="true"
           p:entityManagerFactory-ref="corelib_db_entityManagerFactory"
           p:dataSource-ref="corelib_db_dataSource"/>
 

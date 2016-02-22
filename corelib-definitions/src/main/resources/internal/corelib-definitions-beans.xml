@@ -24,6 +24,6 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean name="corelib_definitions_contextcontainer" class="eu.europeana.corelib.definitions.ApplicationContextContainer"/>
+	<bean id="corelib_definitions_contextcontainer" class="eu.europeana.corelib.definitions.ApplicationContextContainer"/>
 
 </beans>

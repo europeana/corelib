@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>eu.europeana</groupId>
 		<artifactId>corelib</artifactId>
-		<version>2.2</version>
+		<version>2.3-SNAPSHOT</version>
 	</parent>
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-hierarchies</artifactId>
@@ -83,6 +83,11 @@
 			<artifactId>plexus-slf4j-logging</artifactId>
 			<version>1.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${version.jackson}</version>
 		</dependency>
 	</dependencies>
 </project>

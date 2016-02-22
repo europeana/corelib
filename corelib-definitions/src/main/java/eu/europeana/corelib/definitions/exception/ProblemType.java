@@ -18,6 +18,7 @@
 package eu.europeana.corelib.definitions.exception;
 
 public enum ProblemType {
+	NOT_FOUND("Entity doesn't exists", ProblemResponseAction.IGNORE),
 	MATCH_ALL_DOCS("org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
 	UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),
 	RECORD_NOT_INDEXED("Requested Europeana record not indexed.", ProblemResponseAction.IGNORE),
@@ -33,6 +34,7 @@ public enum ProblemType {
 	UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
 	TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
 	SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),
+	UNABLE_TO_PARSE_CURSORMARK("The provided cursor value is invalid, please make sure you encode the value before passing back on to the API.", ProblemResponseAction.LOG),
 	UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
 	MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
 	NONE("An exception occurred", ProblemResponseAction.MAIL),

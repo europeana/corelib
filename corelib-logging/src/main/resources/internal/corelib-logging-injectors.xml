@@ -25,7 +25,7 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean name="corelib_logging_internal_logInjector" 
+	<bean id="corelib_logging_internal_logInjector"
 		class="eu.europeana.corelib.logging.injector.LogInjector"/>
 
 </beans>

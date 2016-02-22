@@ -613,7 +613,11 @@ public class SearchServiceImpl implements SearchService {
                 } catch (SolrException e) {
                     log.error("SolrException: " + e.getMessage()
                             + " The query was: " + solrQuery);
-                    throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                    if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
+                        throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
+                    } else{
+                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                    }
                 }
 
             } else {
@@ -628,19 +632,13 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
-    private boolean isFieldQuery(String query){
+    private boolean isFieldQuery(String query) {
         //TODO fix
-        String subquery = StringUtils.substringBefore(query,"filter_tags");
+        String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
-        if(StringUtils.contains(queryWithoutTags,"who:")||StringUtils.contains(queryWithoutTags,"what:")
-                ||StringUtils.contains(queryWithoutTags,"where:")||StringUtils.contains(queryWithoutTags,"when:")
-                ||StringUtils.contains(queryWithoutTags,"title:")){
-            return false;
-        }
-        if(StringUtils.contains(queryWithoutTags,":") && !(StringUtils.contains(queryWithoutTags.trim()," ") && StringUtils.contains(queryWithoutTags.trim(),"\""))){
-            return true;
-        }
-        return false;
+        return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:")
+                || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
+                || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
     }
 
     /**
@@ -903,7 +901,7 @@ public class SearchServiceImpl implements SearchService {
         long startIndex = offset;
         List<CustomNode> children = neo4jServer.getChildren(rdfAbout, offset, limit);
         for (CustomNode child : children) {
-            startIndex += 1l;
+            startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, startIndex));
         }
         return beans;
@@ -983,7 +981,7 @@ public class SearchServiceImpl implements SearchService {
         List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, limit);
         long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
         for (CustomNode precedingSibling : precedingSiblings) {
-            startIndex -= 1l;
+            startIndex -= 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(precedingSibling, startIndex));
         }
         return beans;
@@ -1000,7 +998,7 @@ public class SearchServiceImpl implements SearchService {
         List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, limit);
         long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
         for (CustomNode followingSibling : followingSiblings) {
-            startIndex += 1l;
+            startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(followingSibling, startIndex));
         }
         return beans;
