@@ -125,9 +125,6 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.responsive.cache.checkFrequencyInMinute']}")
 	private Integer responsiveCacheCheckFrequencyInMinute;
 
-	@Value("#{europeanaProperties['api.optOutList']}")
-	private String optOutList;
-
 	@Value("#{europeanaProperties['api.rowLimit']}")
 	private int apiRowLimit = 96;
 
@@ -435,10 +432,6 @@ public class Configuration {
 			}
 		}
 		return hierarchyRoots;
-	}
-
-	public String getOptOutList() {
-		return optOutList;
 	}
 
 	public String getSitemapCache() {

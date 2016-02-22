@@ -25,11 +25,6 @@
 		    http://www.springframework.org/schema/beans/spring-beans.xsd
 		">
 
-    <!-- Override to use test list -->
-    <bean id="corelib_utils_optOutService" class="eu.europeana.corelib.utils.service.impl.OptOutServiceImpl">
-        <constructor-arg value="classpath:./testdata/opt-out-list.txt"/>
-    </bean>
-
     <bean id="corelib_utils_mltStopwordsService"
           class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
         <constructor-arg value="classpath:./testdata/mlt_stopwords.txt"/>

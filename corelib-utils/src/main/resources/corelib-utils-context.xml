@@ -30,10 +30,6 @@
 
 	<context:annotation-config/>
 
-	<bean id="corelib_utils_optOutService" class="eu.europeana.corelib.utils.service.impl.OptOutServiceImpl">
-		<constructor-arg value="#{europeanaProperties['api.optOutList']}"/>
-	</bean>
-
 	<bean id="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
 		<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>
 	</bean>
