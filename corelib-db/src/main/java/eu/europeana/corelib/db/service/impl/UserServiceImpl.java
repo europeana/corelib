@@ -127,7 +127,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException {
 
         if (StringUtils.isBlank(email)) {
@@ -162,13 +162,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendActivationToken(tokenService.create(email), activationUrl);
+        emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
 
         return user;
     }
 
     @Override
-    public User activate(String email, String tokenString) throws DatabaseException {
+    public Token activate(String email, String tokenString) throws DatabaseException {
         Token token = tokenService.findByID(tokenString);
         if (token == null) {
             throw new DatabaseException(ProblemType.TOKEN_INVALID);
@@ -182,7 +182,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         tokenService.remove(token);
 
-        return user;
+        return token;
     }
 
     @Override

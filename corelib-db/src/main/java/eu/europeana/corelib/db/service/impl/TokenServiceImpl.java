@@ -69,7 +69,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	}
 
 	@Override
-	public Token create(String email) throws DatabaseException {
+	public Token create(String email, String redirect) throws DatabaseException {
 		if (StringUtils.isBlank(email)) {
 			log.severe("DatabaseException: empty email for create token. " + ProblemType.INVALIDARGUMENTS);
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
@@ -77,6 +77,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenImpl token = new TokenImpl();
 		token.setCreated(new Date());
 		token.setEmail(email);
+		token.setRedirect(redirect);
 		token.setToken(createRandomToken());
 		return getDao().insert(token);
 	}

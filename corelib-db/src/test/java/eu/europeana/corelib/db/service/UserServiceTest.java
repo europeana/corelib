@@ -91,7 +91,7 @@ public class UserServiceTest {
         final String PASSWORD = "test";
         final String HASH = hashPassword(PASSWORD);
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
 
         verify(emailServiceMock, times(1)).sendActivationToken((Token) anyObject(), anyString());
@@ -114,7 +114,7 @@ public class UserServiceTest {
         assertEquals("Email address not stored correctly in token.", EMAIL.toLowerCase(), token.getEmail());
         assertNotNull("No token generated", token.getToken());
 
-        user = userService.activate(EMAIL, token.getToken());
+        Token token2 = userService.activate(EMAIL, token.getToken());
         assertNotNull("User activation date should have value", user.getActivationDate());
         assertEquals("Token should be removed", 0, tokenDao.findAll().size());
     }
@@ -126,7 +126,7 @@ public class UserServiceTest {
         final String PASSWORD = "test";
         final String HASH = hashPassword(PASSWORD);
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
 
         assertEquals("Count doesn't match", 1, userDao.count());
@@ -148,7 +148,7 @@ public class UserServiceTest {
         final String HASH1 = hashPassword(PASSWORD1);
         final String HASH2 = hashPassword(PASSWORD2);
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD1, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD1, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertEquals("Password not correctly encoded.", user.getPassword(), HASH1);
 
@@ -191,7 +191,7 @@ public class UserServiceTest {
         final String USERNAME = "testAuthenticateUser";
         final String PASSWORD = "test";
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
 
         user = userService.authenticateUser(EMAIL, "invalidPassword");
@@ -209,7 +209,7 @@ public class UserServiceTest {
         final String EMAIL = "testCreateSavedSearch@europeana.eu";
         final String USERNAME = "testCreateSavedSearch";
         final String PASSWORD = "test";
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
 
@@ -267,7 +267,7 @@ public class UserServiceTest {
 
         setupSeachServiceMock(EUROPEANA_ID);
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 
@@ -304,7 +304,7 @@ public class UserServiceTest {
         final String TAG = "testCreateSocialTag";
 
         setupSeachServiceMock(EUROPEANA_ID);
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 
@@ -341,7 +341,7 @@ public class UserServiceTest {
         final String[] LANGCODES_ARRAY = {"nl", "en", "de"};
         final String LANGCODES = "fi|es|it|fr";
 
-        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertNull("By default the value should be empty", user.getLanguagePortal());
         assertNull("By default the value should be empty", user.getLanguageItem());

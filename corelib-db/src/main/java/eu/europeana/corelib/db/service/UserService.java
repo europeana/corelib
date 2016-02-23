@@ -22,6 +22,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
@@ -60,7 +61,7 @@ public interface UserService extends AbstractService<User> {
      */
     User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException;
 
     /**
@@ -70,7 +71,7 @@ public interface UserService extends AbstractService<User> {
      * @param token token emailed to user
      * @return The activated user account
      */
-    User activate(String email, String token) throws DatabaseException;
+    Token activate(String email, String token) throws DatabaseException;
 
     /**
      * Returns a User if there is a valid email provided.
