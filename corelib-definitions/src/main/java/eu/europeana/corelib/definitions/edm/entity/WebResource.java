@@ -291,4 +291,29 @@ public interface WebResource extends AbstractEdmEntity {
 	 */
 	String getEbucoreOrientation();
 
+	/**
+	 * edm:preview
+	 * @return
+     */
+	String getEdmPreview();
+
+	/**
+	 * edm:preview
+	 */
+	void setEdmPreview(String edmPreview);
+
+	/**
+	 * svcs:has_service
+	 */
+	String[] getSvcsHasService();
+
+	/**
+	 * svcs:has_service
+	 * @param svcsHasService
+     */
+	void setSvcsHasService(String[] svcsHasService);
+
+	String getWdrsDescribedBy();
+
+	void setWdrsDescribedBy(String wdrsDescribedBy);
 }

@@ -241,4 +241,15 @@ public interface Aggregation extends AbstractEdmEntity {
 	 */
 	void setEdmUnstored(String[] edmUnstored);
 
+	/**
+	 * edm:intermediateProvider
+ 	 * @return
+     */
+	Map<String,List<String>> getEdmIntermediateProvider();
+
+	/**
+	 * edm:intermediateProvider
+	 */
+
+	void setEdmIntermediateProvider(Map<String,List<String>> edmIntermediateProvider);
 }

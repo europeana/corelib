@@ -28,6 +28,8 @@
   xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
   xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#"
+        xmlns:wdrs="http://www.w3.org/2007/05/powder-s#"
+        xmlns:svcs="http://rdfs.org/sioc/services#"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   elementFormDefault="qualified">
 
@@ -46,6 +48,8 @@
   <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
   <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
   <import namespace="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" schemaLocation="EBUCORE.xsd" />
+  <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
+  <import namespace="http://www.w3.org/2007/05/powder-s#" schemaLocation="WDRS.xsd"/>
   <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
   
   <complexType name="AgentType">
@@ -182,6 +186,9 @@
           <element ref="edm:componentColor" maxOccurs="6" minOccurs="0"/>
           <element ref="ebucore:orientation" maxOccurs="1" minOccurs="0"/>
           <element ref="ebucore:audioChannelNumber" maxOccurs="1" minOccurs="0"/>
+          <element ref="wdrs:describedby" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
+          <element ref="svcs:has_service" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>

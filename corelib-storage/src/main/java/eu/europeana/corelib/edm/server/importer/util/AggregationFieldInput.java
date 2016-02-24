@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.jibx.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -27,15 +28,6 @@ import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
-import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.HasView;
-import eu.europeana.corelib.definitions.jibx.IsShownAt;
-import eu.europeana.corelib.definitions.jibx.IsShownBy;
-import eu.europeana.corelib.definitions.jibx.License;
-import eu.europeana.corelib.definitions.jibx.Rights;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
-import eu.europeana.corelib.definitions.jibx._Object;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
@@ -233,6 +225,9 @@ public final class AggregationFieldInput {
 					}
 					webResource.setWebResourceEdmRights(edmRightsMap);
 				}
+
+
+
 				if (wResourceType.getIsNextInSequence() != null) {
 					webResource.setIsNextInSequence(wResourceType
 							.getIsNextInSequence().getResource());
@@ -350,6 +345,15 @@ public final class AggregationFieldInput {
 				webResource.setDcCreator(MongoUtils
 						.createResourceOrLiteralMapFromList(wResourceType
 								.getCreatorList()));
+                if(wResourceType.getDescribedby()!=null){
+                    webResource.setWdrsDescribedBy(wResourceType.getDescribedby().getResource());
+                }
+                if(wResourceType.getHasServiceList()!=null){
+                    webResource.setSvcsHasService(SolrUtils.resourceListToArray(wResourceType.getHasServiceList()));
+                }
+                if(wResourceType.getPreview()!=null){
+                    webResource.setEdmPreview(wResourceType.getPreview().getResource());
+                }
 				webResources.add(webResource);
 			}
 		}
@@ -407,6 +411,12 @@ public final class AggregationFieldInput {
 				EdmLabel.PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY.toString(),
 				SolrUtils.exists(IsShownBy.class, (aggregation.getIsShownBy()))
 						.getResource());
+        if(aggregation.getIntermediateProviderList()!=null){
+            for(IntermediateProvider prov:aggregation.getIntermediateProviderList()){
+                solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(solrInputDocument,prov,
+                        EdmLabel.PROVIDER_AGGREGATION_EDM_INTERMEDIATE_PROVIDER);
+            }
+        }
 		boolean saveRights = true;
 		if(licenses!=null){
 			String rights = aggregation.getRights().getResource();
@@ -667,6 +677,15 @@ public final class AggregationFieldInput {
 		} else {
 			ups.unset("dcRights");
 		}
+
+        Map<String,List<String>> providers = MongoUtils.
+                createResourceOrLiteralMapFromList(aggregation.getIntermediateProviderList());
+        if(providers!=null){
+            ups.set("edmIntermediateProvider", providers);
+        } else {
+            ups.unset("edmIntermediateProvider");
+        }
+        mongoAggregation.setEdmIntermediateProvider(providers);
 		if (aggregation.getHasViewList() != null) {
 			List<String> hasViewList = new ArrayList<String>();
 			for (HasView hasView : aggregation.getHasViewList()) {
@@ -740,7 +759,11 @@ public final class AggregationFieldInput {
 				.createResourceOrLiteralMapFromString(aggregation
 						.getDataProvider());
 		mongoAggregation.setEdmDataProvider(dp);
-
+        if(aggregation.getIntermediateProviderList()!=null) {
+            Map<String, List<String>> providers = MongoUtils.
+                    createResourceOrLiteralMapFromList(aggregation.getIntermediateProviderList());
+            mongoAggregation.setEdmIntermediateProvider(providers);
+        }
 		String isShownAt = SolrUtils.exists(IsShownAt.class,
 				(aggregation.getIsShownAt())).getResource();
 		mongoAggregation.setEdmIsShownAt(isShownAt != null ? isShownAt.trim()

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+import eu.europeana.corelib.solr.entity.*;
 import org.apache.commons.lang.StringUtils;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
@@ -41,14 +42,6 @@ import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.model.ColorSpace;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 import java.awt.MultipleGradientPaint;
@@ -94,6 +87,7 @@ public class EdmUtils {
         appendPlaces(rdf, fullBean.getPlaces());
         appendTimespans(rdf, fullBean.getTimespans());
         appendLicenses(rdf, fullBean.getLicenses());
+        appendServices(rdf,fullBean.getServices());
         IMarshallingContext marshallingContext;
         try {
             if (bfact == null) {
@@ -108,6 +102,26 @@ public class EdmUtils {
             log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
         }
         return null;
+    }
+
+    private static void appendServices(RDF rdf, List<ServiceImpl> services) {
+        if(services!=null){
+            List<Service> serviceList = new ArrayList<>();
+            for(ServiceImpl serv:services){
+                Service service = new Service();
+                service.setAbout(serv.getAbout());
+                if(serv.getDctermsConformsTo()!=null) {
+                    ConformsTo conformsTo = new ConformsTo();
+                    Resource res = new Resource();
+                    res.setResource(serv.getDctermsConformsTo());
+                    conformsTo.setResource(res);
+                    conformsTo.setString("");
+                    service.setConformsTo(conformsTo);
+                }
+                serviceList.add(service);
+            }
+            rdf.setServiceList(serviceList);
+        }
     }
 
     private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses) {
@@ -492,6 +506,7 @@ public class EdmUtils {
             addAsObject(aggregation, _Object.class, aggr.getEdmObject());
             addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
             addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
+            addAsList(aggregation,IntermediateProvider.class,aggr.getEdmIntermediateProvider());
 
             if (aggr.getEdmUgc() != null && !aggr.getEdmUgc().equalsIgnoreCase("false")) {
                 Ugc ugc = new Ugc();
@@ -529,6 +544,7 @@ public class EdmUtils {
             addAsList(wResource, Source.class, wr.getDcSource());
             addAsList(wResource, SameAs.class, wr.getOwlSameAs());
             addAsObject(wResource, Type1.class, wr.getRdfType());
+
             if (wr.getEdmCodecName() != null) {
                 CodecName codecName = new CodecName();
                 codecName.setCodecName(wr.getEdmCodecName());
@@ -633,7 +649,19 @@ public class EdmUtils {
                 }
                 wResource.setComponentColorList(componentColors);
             }
+            if(wr.getSvcsHasService()!=null){
+                List<HasService> hsList = new ArrayList<>();
+                for(String hasService:wr.getSvcsHasService()){
+                    HasService hs = new HasService();
+                    hs.setResource(hasService);
+                    hsList.add(hs);
 
+                }
+                wResource.setHasServiceList(hsList);
+            }
+
+            addAsObject(wResource,Preview.class,wr.getEdmPreview());
+            addAsObject(wResource,Describedby.class,wr.getWdrsDescribedBy());
             webResources.add(wResource);
         }
 

@@ -4,5 +4,7 @@ notifications:
     secure: XaEDRvwiOYrJF1B0fK1/QUXOOoPnYshUWdJ3XhRZfULhlrQS7M++yCJBcXbILYtFU9WO651t/Od4efeJaSL2UR60IrEaaH7cr5QH6I1jh/LsNro7aMRMNjgBISYBazDSPDULk4Czye5lD1hx3SnwIVJ0DFtQIW7P4A/sY1miqvU=
 sudo: false
 language: java
+jdk:
+  - oraclejdk8
 after_success:
   - mvn clean cobertura:cobertura coveralls:report

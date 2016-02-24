@@ -72,6 +72,9 @@ public class WebResourceImpl implements WebResource {
     private AttributionSnippet        attributionSnippet;
     private String                    textAttributionSnippet;
     private String                    htmlAttributionSnippet;
+    private String[]                  svcsHasService;
+    private String                    edmPreview;
+    private String                    wdrsDescribedBy;
 
     @Transient
     @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
@@ -501,6 +504,36 @@ public class WebResourceImpl implements WebResource {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getEdmPreview() {
+        return edmPreview;
+    }
+
+    @Override
+    public void setEdmPreview(String edmPreview) {
+        this.edmPreview = edmPreview;
+    }
+
+    @Override
+    public String[] getSvcsHasService() {
+        return svcsHasService;
+    }
+
+    @Override
+    public void setSvcsHasService(String[] svcsHasService) {
+        this.svcsHasService = svcsHasService;
+    }
+
+    @Override
+    public String getWdrsDescribedBy() {
+        return wdrsDescribedBy;
+    }
+
+    @Override
+    public void setWdrsDescribedBy(String wdrsDescribedBy) {
+        this.wdrsDescribedBy = wdrsDescribedBy;
     }
 
     public void setWebResourceMetaInfo(WebResourceMetaInfoImpl webResourceMetaInfo) {

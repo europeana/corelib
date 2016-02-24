@@ -34,7 +34,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.Agent
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @JsonInclude(NON_EMPTY)
