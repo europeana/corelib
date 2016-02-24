@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import eu.europeana.corelib.solr.entity.ServiceImpl;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -148,6 +149,11 @@ public class SolrDocumentHandler implements ICollection {
 					}
 				}
 				new LicenseSolrCreator().create(doc, lic, isAggregation);
+			}
+		}
+		if(fBean.getServices()!=null){
+			for(ServiceImpl service:fBean.getServices()) {
+				new ServiceSolrCreator().create(doc, service);
 			}
 		}
 		doc.addField(EdmLabel.EUROPEANA_COMPLETENESS.toString(),

@@ -37,6 +37,9 @@ public class AggregationSolrCreator {
 		SolrUtils.addFromMap(doc,
 				EdmLabel.PROVIDER_AGGREGATION_EDM_DATA_PROVIDER,
 				aggr.getEdmDataProvider());
+		SolrUtils.addFromMap(doc,
+				EdmLabel.PROVIDER_AGGREGATION_EDM_INTERMEDIATE_PROVIDER,
+				aggr.getEdmIntermediateProvider());
 		SolrUtils.addFromMap(doc, EdmLabel.PROVIDER_AGGREGATION_EDM_PROVIDER,
 				aggr.getEdmProvider());
 		SolrUtils.addFromStringArray(doc,

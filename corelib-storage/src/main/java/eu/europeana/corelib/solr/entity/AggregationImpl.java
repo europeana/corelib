@@ -36,7 +36,7 @@ import java.util.Map;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
- * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
+ * @see eu.europeana.corelib.definitions.edm.entity.Aggregation
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
@@ -82,6 +82,8 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;
+
+	private Map<String,List<String>> edmIntermediateProvider;
 
 	@Transient
 	@JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
@@ -243,6 +245,16 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored.clone();
+	}
+
+	@Override
+	public Map<String, List<String>> getEdmIntermediateProvider() {
+		return this.edmIntermediateProvider;
+	}
+
+	@Override
+	public void setEdmIntermediateProvider(Map<String, List<String>> edmIntermediateProvider) {
+		this.edmIntermediateProvider = edmIntermediateProvider;
 	}
 
 	/**
