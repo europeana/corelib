@@ -58,7 +58,7 @@ public abstract class EmailServiceImpl implements EmailService {
         model.put("url", url);
         EmailBuilder builder = createEmailBuilder();
         builder.setModel(model);
-        builder.setTemplate("activate"); // see corelib_web_emailConfigs
+        builder.setTemplate("activation"); // see corelib_web_emailConfigs
         builder.setEmailTo(token.getEmail());
         mailSender.send(builder);
         log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
