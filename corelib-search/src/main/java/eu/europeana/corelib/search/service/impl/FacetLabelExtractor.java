@@ -1,6 +1,7 @@
 package eu.europeana.corelib.search.service.impl;
 
 import eu.europeana.corelib.definitions.model.facets.inverseLogic.*;
+import eu.europeana.crf_faketags.extractor.MediaTypeEncoding;
 
 public class FacetLabelExtractor {
 
@@ -29,7 +30,7 @@ public class FacetLabelExtractor {
                 }
                 label = ImagePropertyExtractor.getSize(tag);
                 return label;
-            case SOUND:
+            case AUDIO:
                 label = SoundPropertyExtractor.getDuration(tag);
                 if(!label.equals("")) {
                     return label;

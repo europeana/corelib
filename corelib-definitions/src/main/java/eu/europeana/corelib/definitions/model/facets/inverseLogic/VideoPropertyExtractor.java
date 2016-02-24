@@ -1,5 +1,7 @@
 package eu.europeana.corelib.definitions.model.facets.inverseLogic;
 
+import eu.europeana.crf_faketags.extractor.TagEncoding;
+
 public class VideoPropertyExtractor {
 
     public static String getQuality(Integer tag) {
