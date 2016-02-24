@@ -61,7 +61,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private String username;
 	private String password;
 	private Datastore datastore;
-	private Morphia morphia;
 	EuropeanaIdMongoServer europeanaIdMongoServer;
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
@@ -92,7 +91,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	private void createDatastore() {
-		morphia = new Morphia();
+		Morphia morphia = new Morphia();
 
 		morphia.map(FullBeanImpl.class);
 		morphia.map(ProvidedCHOImpl.class);
@@ -147,9 +146,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
 			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			FullBeanImpl fBean = datastore.find(FullBeanImpl.class)
+			return datastore.find(FullBeanImpl.class)
 					.field("about").equal(newId.getNewId()).get();
-			return fBean;
 		}
 
 		newId = europeanaIdMongoServer
@@ -176,7 +174,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public String toString() {
-		System.out.println(databaseName);
 		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
 				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
 				+ "[DB: " + databaseName + "]\n";

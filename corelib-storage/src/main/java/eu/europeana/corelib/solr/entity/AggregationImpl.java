@@ -18,21 +18,22 @@
 package eu.europeana.corelib.solr.entity;
 
 
-import java.util.List;
-import java.util.Map;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
-//import org.springframework.data.neo4j.annotation.GraphProperty;
-//import org.springframework.data.neo4j.annotation.NodeEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
-
+import com.google.code.morphia.annotations.Transient;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
-//import javax.persistence.Transient;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @see eu.europeana.corelib.definitions.solr.entity.model.definitions.Aggregation
@@ -40,6 +41,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * 
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 //@NodeEntity(partial = true)
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
@@ -80,6 +82,10 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;
+
+	@Transient
+	@JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+	private FullBean parentBean;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -182,8 +188,6 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 		return this.edmRights;
 	}
 
-
-
 	@Override
 	public List<? extends WebResource> getWebResources() {
 		return this.webResources;
@@ -239,5 +243,25 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Override
 	public void setEdmUnstored(String[] edmUnstored) {
 		this.edmUnstored = edmUnstored.clone();
+	}
+
+	/**
+	 * Used to maintain a reference to the encapsulating Record which is referred to in the AttributionSnippet
+	 * Not made available through the interface bean, used in the Attributionsnippet alone
+	 * @return the encapsulating FullBean
+	 */
+	public FullBean getParentBean(){
+		return this.parentBean;
+	}
+	/**
+	 * parentBean is the encapsulating Record which is referred to by the AttributionSnippet
+	 * Not made available through the interface bean, used in the Attributionsnippet alone
+	 * @param parentBean
+	 */
+	public void setParentBean(FullBean parentBean){
+		this.parentBean = parentBean;
+		for (WebResourceImpl webRes : this.webResources){
+			webRes.setParentAggregation(this);
+		}
 	}
 }

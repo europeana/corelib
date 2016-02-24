@@ -18,6 +18,7 @@
 package eu.europeana.corelib.definitions.exception;
 
 public enum ProblemType {
+	NOT_FOUND("Entity doesn't exists", ProblemResponseAction.IGNORE),
 	MATCH_ALL_DOCS("org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
 	UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),
 	RECORD_NOT_INDEXED("Requested Europeana record not indexed.", ProblemResponseAction.IGNORE),
@@ -25,7 +26,7 @@ public enum ProblemType {
 	PAGE_NOT_FOUND("Requested Europeana page not found.", ProblemResponseAction.IGNORE),
 	RECORD_REVOKED("Europeana record is revoked by the content provider.", ProblemResponseAction.IGNORE),
 	MALFORMED_URL("Required parameters are missing from the request.", ProblemResponseAction.LOG),
-	MALFORMED_QUERY("Query to Search Engine is malformed.", ProblemResponseAction.LOG),
+	MALFORMED_QUERY("Invalid query parameter.", ProblemResponseAction.LOG),
 	UNKNOWN("unknown", ProblemResponseAction.IGNORE),
 	UNABLE_TO_CHANGE_LANGUAGE("We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
 	TOKEN_INVALID("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
@@ -33,6 +34,7 @@ public enum ProblemType {
 	UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
 	TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
 	SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),
+	UNABLE_TO_PARSE_CURSORMARK("The provided cursor value is invalid, please make sure you encode the value before passing back on to the API.", ProblemResponseAction.LOG),
 	UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
 	MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
 	NONE("An exception occurred", ProblemResponseAction.MAIL),
@@ -48,7 +50,8 @@ public enum ProblemType {
 	NO_USER("User does not exist.", ProblemResponseAction.IGNORE),
 	DUPLICATE("Record already exists.", ProblemResponseAction.IGNORE),
 	RECORD_RETRIEVAL_ERROR("Record retrieval error", ProblemResponseAction.LOG),
-	INVALID_URL("Url is invalid", ProblemResponseAction.LOG)
+	INVALID_URL("Url is invalid", ProblemResponseAction.LOG),
+	SEARCH_LIMIT_REACHED("Sorry! It is not possible to paginate beyond the first 1000 search results. Please use the cursor-based pagination to paginate beyond the first 1000 search results.", ProblemResponseAction.LOG)
 	;
 
 	private String message;

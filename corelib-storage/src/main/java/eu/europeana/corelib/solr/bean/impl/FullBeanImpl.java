@@ -87,8 +87,6 @@ public class FullBeanImpl implements FullBean, IDocument {
 
     protected int europeanaCompleteness;
 
-    protected boolean optOut;
-
     @Transient
     protected List<BriefBeanImpl> similarItems;
 
@@ -119,11 +117,8 @@ public class FullBeanImpl implements FullBean, IDocument {
     @Reference
     protected List<LicenseImpl> licenses;
 
-   
-
 	protected String[] country;
     protected String[] userTags;
-
     protected String[] europeanaCollectionName;
 
     @Indexed
@@ -192,7 +187,6 @@ public class FullBeanImpl implements FullBean, IDocument {
 
     @Override
     public EuropeanaAggregation getEuropeanaAggregation() {
-
         return this.europeanaAggregation;
     }
 
@@ -356,16 +350,6 @@ public class FullBeanImpl implements FullBean, IDocument {
     }
 
     @Override
-    public Boolean isOptedOut() {
-        return this.optOut;
-    }
-
-    @Override
-    public void setOptOut(boolean optOut) {
-        this.optOut = optOut;
-    }
-
-    @Override
     public Date getTimestamp() {
         return null;
     }
@@ -373,7 +357,6 @@ public class FullBeanImpl implements FullBean, IDocument {
     @Override
     public void setTimestampCreated(Date timestampCreated) {
         this.timestampCreated = timestampCreated;
-
     }
 
     @Override
@@ -406,5 +389,12 @@ public class FullBeanImpl implements FullBean, IDocument {
 		this.licenses = (List<LicenseImpl>)licenses;
 	}
 
-	
+    public void setAsParent(){
+        if (!this.aggregations.isEmpty()) {
+            for (AggregationImpl agg : this.aggregations) {
+                agg.setParentBean(this);
+            }
+        }
+    }
+
 }

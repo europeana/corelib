@@ -147,7 +147,6 @@ public class SolrDocumentHandler implements ICollection {
 						break;
 					}
 				}
-				System.out.println(isAggregation);
 				new LicenseSolrCreator().create(doc, lic, isAggregation);
 			}
 		}

@@ -125,9 +125,6 @@ public class Configuration {
 	@Value("#{europeanaProperties['portal.responsive.cache.checkFrequencyInMinute']}")
 	private Integer responsiveCacheCheckFrequencyInMinute;
 
-	@Value("#{europeanaProperties['api.optOutList']}")
-	private String optOutList;
-
 	@Value("#{europeanaProperties['api.rowLimit']}")
 	private int apiRowLimit = 96;
 
@@ -437,10 +434,6 @@ public class Configuration {
 		return hierarchyRoots;
 	}
 
-	public String getOptOutList() {
-		return optOutList;
-	}
-
 	public String getSitemapCache() {
 		return sitemapCache;
 	}
@@ -494,10 +487,10 @@ public class Configuration {
 	
 
 	@Value("#{europeanaProperties['nof.enabled']}")
-	private boolean nofEnabled;
+	private Boolean nofEnabled;
 
 	public boolean isNofEnabled(){
-		return this.nofEnabled;
+		return null != this.nofEnabled && this.nofEnabled;
 	}
 	
 	public boolean useAutomatedFrontendTranslation() {

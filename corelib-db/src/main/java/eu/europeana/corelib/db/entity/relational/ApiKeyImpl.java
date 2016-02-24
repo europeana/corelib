@@ -17,96 +17,193 @@
 
 package eu.europeana.corelib.db.entity.relational;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
-import eu.europeana.corelib.db.entity.relational.abstracts.UserConnectedImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
+import eu.europeana.corelib.definitions.db.entity.relational.enums.ApiClientLevel;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name=ApiKey.QUERY_SORT_BY_DATE_DESC,
-		query="SELECT a FROM ApiKeyImpl AS a, UserImpl AS u WHERE a.user = u.id "
-				+ "ORDER BY (CASE WHEN u.registrationDate IS NULL THEN 1 ELSE 0 END), u.registrationDate DESC, u.id DESC"
-	),
-	@NamedQuery(name=ApiKey.QUERY_SORT_BY_DATE_ASC,
-		query="SELECT a FROM ApiKeyImpl AS a, UserImpl AS u WHERE a.user = u.id "
-				+ "ORDER BY (CASE WHEN u.registrationDate IS NULL THEN 0 ELSE 1 END), u.registrationDate ASC, u.id ASC"
-	)
-})
 @Table(name = RelationalDatabase.TABLENAME_APIKEY)
-public class ApiKeyImpl extends UserConnectedImpl<String> implements RelationalDatabase, ApiKey {
-	private static final long serialVersionUID = -1717717883751281497L;
+@NamedQuery(name = ApiKey.QUERY_FINDBY_EMAIL, query = "select a from ApiKeyImpl a where a.email = ?")
+public class ApiKeyImpl implements RelationalDatabase, ApiKey {
+    private static final long serialVersionUID = -1717717883751281497L;
 
-	@Id
-	@Column(length = FIELDSIZE_APIKEY, nullable=false)
-	private String apiKey;
+    @Id
+    @Column(length = FIELDSIZE_APIKEY, nullable = false)
+    private String apiKey;
 
-	@Column(length = FIELDSIZE_APIKEY, nullable=false)
-	private String privateKey;
+    @Column(length = FIELDSIZE_APIKEY, nullable = false)
+    private String privateKey;
 
-	@Column
-	private long usageLimit;
-	
-	@Column(name="appName", nullable=true)
-	private String applicationName;
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date registrationDate = new Date();
 
-	/**
-	 * GETTERS & SETTTERS
-	 */
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date activationDate;
 
-	@Override
-	public String getId() {
-		return apiKey;
-	}
+    @Column(length = FIELDSIZE_PERSONAL, nullable = false)
+    @Index(name = "apikey_email_index")
+    private String email;
 
-	@Override
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private ApiClientLevel level = ApiClientLevel.CLIENT;
 
-	@Override
-	public String getPrivateKey() {
-		return privateKey;
-	}
+    @Column
+    private Long usageLimit;
 
-	@Override
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-	}
+    @Column(length = FIELDSIZE_NAME, nullable = true)
+    private String firstName;
 
-	@Override
-	public long getUsageLimit() {
-		return usageLimit;
-	}
+    @Column(length = FIELDSIZE_SURNAME, nullable = true)
+    private String lastName;
 
-	@Override
-	public void setUsageLimit(long usageLimit) {
-		this.usageLimit = usageLimit;
-	}
+    @Column(length = FIELDSIZE_COMPANY, nullable = true)
+    private String company;
 
-	@Override
-	public String toString() {
-		return "ApiKeyImpl [apiKey=" + apiKey + ", privateKey=" + privateKey
-				+ ", usageLimit=" + usageLimit + ", user=" + getUser()
-				+ "]";
-	}
+    @Column(length = FIELDSIZE_WEBSITE, nullable = true)
+    private String website;
 
-	@Override
-	public String getApplicationName() {
-		return applicationName;
-	}
+    @Column(name = "appName", nullable = true)
+    private String applicationName;
 
-	@Override
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    @Column(nullable = true)
+    private String description;
+
+    /**
+     * GETTERS & SETTTERS
+     */
+
+    @Override
+    public String getId() {
+        return apiKey;
+    }
+
+    @Override
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    @Override
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    @Override
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    @Override
+    public Long getUsageLimit() {
+        return usageLimit;
+    }
+
+    @Override
+    public void setUsageLimit(Long usageLimit) {
+        this.usageLimit = usageLimit;
+    }
+
+    @Override
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    @Override
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public ApiClientLevel getLevel() {
+        return level;
+    }
+
+    @Override
+    public void setLevel(ApiClientLevel level) {
+        this.level = level;
+    }
+
+    @Override
+    public String getCompany() {
+        return company;
+    }
+
+    @Override
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @Override
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Override
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getWebsite() {
+        return website;
+    }
+
+    @Override
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    @Override
+    public Date getActivationDate() {
+        return activationDate;
+    }
+
+    @Override
+    public void setActivationDate(Date activationDate) {
+        this.activationDate = activationDate;
+    }
 }

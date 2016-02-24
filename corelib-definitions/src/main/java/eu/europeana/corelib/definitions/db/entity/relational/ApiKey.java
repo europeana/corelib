@@ -17,27 +17,63 @@
 
 package eu.europeana.corelib.definitions.db.entity.relational;
 
-import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConnected;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
+import eu.europeana.corelib.definitions.db.entity.relational.enums.ApiClientLevel;
+
+import java.util.Date;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public interface ApiKey extends UserConnected<String> {
-	
-	String QUERY_SORT_BY_DATE_DESC = "ApiKey.sortByDateDesc";
-	String QUERY_SORT_BY_DATE_ASC = "ApiKey.sortByDateAsc";
+public interface ApiKey extends IdentifiedEntity<String> {
 
-	void setApiKey(String apiKey);
+    String QUERY_FINDBY_EMAIL = "ApiKey.findByEmail";
 
-	String getPrivateKey();
+    void setApiKey(String apiKey);
 
-	void setPrivateKey(String privateKey);
+    String getPrivateKey();
 
-	String getApplicationName();
+    void setPrivateKey(String privateKey);
 
-	void setApplicationName(String applicationName);
+    String getApplicationName();
 
-	long getUsageLimit();
+    void setApplicationName(String applicationName);
 
-	void setUsageLimit(long usageLimit);
+    Long getUsageLimit();
+
+    void setUsageLimit(Long usageLimit);
+
+    String getEmail();
+
+    void setEmail(String email);
+
+    ApiClientLevel getLevel();
+
+    void setLevel(ApiClientLevel level);
+
+    String getCompany();
+
+    void setCompany(String company);
+
+    String getFirstName();
+
+    void setFirstName(String firstName);
+
+    String getLastName();
+
+    void setLastName(String lastName);
+
+    Date getRegistrationDate();
+
+    String getDescription();
+
+    void setDescription(String description);
+
+    String getWebsite();
+
+    void setWebsite(String website);
+
+    Date getActivationDate();
+
+    void setActivationDate(Date activationDate);
 }

@@ -3,6 +3,7 @@ package eu.europeana.corelib.solr.entity;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -14,7 +15,10 @@ import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(NON_EMPTY)
 @Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
@@ -64,7 +68,12 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public String getEdmLandingPage() {
-            String finalUrl = "http://europeana.eu/portal/record/"+StringUtils.substringAfter(this.aggregatedCHO, "/item/")+".html";
+
+		String tempUrl = StringUtils.substringAfter(this.aggregatedCHO, "/item/");
+		if(tempUrl==null){
+			tempUrl = StringUtils.substringAfter(this.about, "/aggregation/europeana/");
+		}
+            String finalUrl = "http://europeana.eu/portal/record/"+tempUrl+".html";
 		return finalUrl;
 	}
 

@@ -1,8 +1,9 @@
 package eu.europeana.corelib.domain;
 
 import com.mongodb.DBObject;
+
+import org.apache.commons.lang.NotImplementedException;
 import org.bson.BSONObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class MongoMetaData implements DBObject {
     @Override
     public Set<String> keySet() {
         final Set<MetaDataFields> metaDataFieldsList = map.keySet();
-        final Set<String> metaDataFieldsStringList = new HashSet<String>();
+        final Set<String> metaDataFieldsStringList = new HashSet<>();
         for(MetaDataFields metaDataFields : metaDataFieldsList) {
             metaDataFieldsStringList.add(String.valueOf(metaDataFields));
         }

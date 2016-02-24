@@ -250,7 +250,7 @@
 		<!-- EUROPEANA AGGREGATION -->
 		<field name="edm_europeana_aggregation" type="string" indexed="true"
 			stored="true" multiValued="false" />
-		<field name="europeana_aggregation_ore_aggregatedCHO" type="string"
+		<field name="europeana_aggregation_edm_aggregatedCHO" type="string"
 			indexed="true" stored="true" multiValued="false" />
 		<field name="europeana_aggregation_ore_aggregates" type="string"
 			indexed="true" stored="false" multiValued="true" />

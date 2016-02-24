@@ -12,11 +12,11 @@ import java.lang.annotation.Target;
 * 
 * The injected logger is an appropriate implementation 
 * of org.slf4j.Logger. 
-*/ 
+*/
 
-@Retention(RetentionPolicy.RUNTIME)  
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)  
-@Documented  
 public @interface Log {
 	
 	String value() default "";

@@ -1,5 +1,7 @@
 # Europeana CoreLib
 
+[![Build Status](https://travis-ci.org/europeana/corelib.svg?branch=master)](https://travis-ci.org/europeana/corelib)[![Coverage Status](https://coveralls.io/repos/europeana/corelib/badge.svg?branch=master&service=github)](https://coveralls.io/github/europeana/corelib?branch=master)
+
 The CoreLib repository contains the libraries that provide the underlying functionality (i.e. search and ingestion) 
 for both the [Portal](https://github.com/europeana/portal/) and [API](https://github.com/europeana/api2/).
 
@@ -16,6 +18,9 @@ or
 
 ## Build
 ``mvn clean install`` (add ``-DskipTests``) to skip the unit tests during build
+
+## Create empty database
+``mvn hibernate4:export`` in corelib-db module to create a database schema script
 
 ### Known issues
 Note: there are a number of older/outdated libraries still being referenced as dependencies, some of which may not 

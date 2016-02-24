@@ -100,6 +100,57 @@ public class FullBeanHandler implements ICollection {
         }
         return false;
     }
+    public boolean removeRecordById(SolrServer solrServer, String id) {
+        try {
+            solrServer.deleteByQuery("europeana_id:"
+                    + ClientUtils.escapeQueryChars(id));
+
+            DBCollection records = mongoServer.getDatastore().getDB()
+                    .getCollection("record");
+            DBCollection proxies = mongoServer.getDatastore().getDB()
+                    .getCollection("Proxy");
+            DBCollection providedCHOs = mongoServer.getDatastore().getDB()
+                    .getCollection("ProvidedCHO");
+            DBCollection aggregations = mongoServer.getDatastore().getDB()
+                    .getCollection("Aggregation");
+            DBCollection europeanaAggregations = mongoServer.getDatastore()
+                    .getDB().getCollection("EuropeanaAggregation");
+            DBCollection physicalThing = mongoServer.getDatastore().getDB()
+                    .getCollection("PhysicalThing");
+            DBObject query = new BasicDBObject("about", id);
+            DBObject proxyQuery = new BasicDBObject("about", "/proxy/provider"
+                    +id);
+            DBObject europeanaProxyQuery = new BasicDBObject("about",
+                    "/proxy/europeana"
+                            + id);
+
+            DBObject providedCHOQuery = new BasicDBObject("about", "/item"
+                    + id);
+            DBObject aggregationQuery = new BasicDBObject("about",
+                    "/aggregation/provider"
+                            + id);
+            DBObject europeanaAggregationQuery = new BasicDBObject("about",
+                    "/aggregation/europeana"
+                            + id);
+            europeanaAggregations.remove(europeanaAggregationQuery,
+                    WriteConcern.FSYNC_SAFE);
+            records.remove(query, WriteConcern.FSYNC_SAFE);
+            proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
+            proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
+            physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
+            physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
+            providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
+            aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
+            return true;
+        } catch (SolrServerException e) {
+            log.log(Level.SEVERE, e.getMessage());
+
+        } catch (IOException e) {
+            log.log(Level.SEVERE, e.getMessage());
+
+        }
+        return false;
+    }
 
     public void clearData(String collection) {
         DBCollection records = mongoServer.getDatastore().getDB()
@@ -129,14 +180,14 @@ public class FullBeanHandler implements ICollection {
         DBObject europeanaAggregationQuery = new BasicDBObject("about",
                 Pattern.compile("^/aggregation/europeana/" + collection + "/"));
         europeanaAggregations.remove(europeanaAggregationQuery,
-                WriteConcern.FSYNC_SAFE);
-        records.remove(query, WriteConcern.FSYNC_SAFE);
-        proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-        proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-        physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-        physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-        providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
-        aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
+                WriteConcern.REPLICAS_SAFE);
+        records.remove(query, WriteConcern.REPLICAS_SAFE);
+        proxies.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
+        proxies.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
+        physicalThing.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
+        physicalThing.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
+        providedCHOs.remove(providedCHOQuery, WriteConcern.REPLICAS_SAFE);
+        aggregations.remove(aggregationQuery, WriteConcern.REPLICAS_SAFE);
     }
 
     public void saveEdmClasses(FullBeanImpl fullBean, boolean isFirstSave) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
@@ -309,7 +360,6 @@ public class FullBeanHandler implements ICollection {
         ops.set("type", fullBean.getType() != null ? fullBean.getType()
                 : DocType.IMAGE);
         ops.set("europeanaCompleteness", fullBean.getEuropeanaCompleteness());
-        ops.set("optOut", fullBean.isOptedOut());
         ops.set("places", fullBean.getPlaces() != null ? fullBean.getPlaces()
                 : new ArrayList<PlaceImpl>());
         ops.set("agents", fullBean.getAgents() != null ? fullBean.getAgents()

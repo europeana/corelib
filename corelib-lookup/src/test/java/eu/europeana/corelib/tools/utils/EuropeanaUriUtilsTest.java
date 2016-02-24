@@ -24,6 +24,8 @@ public class EuropeanaUriUtilsTest {
 		assertEquals("/92001/test____x", collectionIDtest);
 		collectionIDtest =  EuropeanaUriUtils.createEuropeanaId(COLLECTION_WITHOUT_LETTER,RECORD_WITH_HTTP);
 		assertEquals("/92001/test____x", collectionIDtest);
+
+		System.out.println(EuropeanaUriUtils.createEuropeanaId("202020","http://www.receptite.com/рецепта/селска-салата"));
 	}
 	
 }

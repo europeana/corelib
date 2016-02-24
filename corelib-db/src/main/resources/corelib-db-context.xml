@@ -40,17 +40,15 @@
 
 	<context:annotation-config/>
 
-	<bean name="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
+	<bean id="corelib_db_tokenService" class="eu.europeana.corelib.db.service.impl.TokenServiceImpl"
 		p:dao-ref="corelib_db_tokenDao"/>
-	<bean name="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
+	<bean id="corelib_db_userService" class="eu.europeana.corelib.db.service.impl.UserServiceImpl"
 		p:dao-ref="corelib_db_userDao"/>
-	<bean name="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
+	<bean id="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
 		p:dao-ref="corelib_db_apiKeyDao"/>
-	<bean name="corelib_db_thumbnailService" class="eu.europeana.corelib.db.service.impl.ThumbnailServiceImpl"
-		p:dao-ref="corelib_db_imageDao"/>
-	<bean name="corelib_db_apiLogService" class="eu.europeana.corelib.db.service.impl.ApiLogServiceImpl"
+	<bean id="corelib_db_apiLogService" class="eu.europeana.corelib.db.service.impl.ApiLogServiceImpl"
 		p:dao-ref="corelib_db_apiLogDao"/>
-	<bean name="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
+	<bean id="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
 		/>
 
 </beans>

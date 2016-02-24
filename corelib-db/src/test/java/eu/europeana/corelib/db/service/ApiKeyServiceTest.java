@@ -1,16 +1,17 @@
 package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.dao.NosqlDao;
+import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.entity.enums.RecordType;
-import eu.europeana.corelib.db.entity.nosql.ImageCache;
+import eu.europeana.corelib.db.entity.nosql.ApiLog;
 import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
+import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.definitions.db.entity.relational.Token;
-import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import org.apache.commons.lang.math.RandomUtils;
+import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.service.EmailService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +22,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
@@ -31,19 +33,20 @@ public class ApiKeyServiceTest {
     private static final long DEFAULT_USAGE_LIMIT = 10000;
 
     @Resource
-    private UserService userService;
-
-    @Resource
     private ApiKeyService apiKeyService;
-
-    @Resource
-    private TokenService tokenService;
 
     @Resource
     private ApiLogService apiLogService;
 
     @Resource(name = "corelib_db_apiLogDao")
-    NosqlDao<ImageCache, String> apiLogDao;
+    private NosqlDao<ApiLog, String> apiLogDao;
+
+    @Resource(name = "corelib_db_userDao")
+    private RelationalDao<UserImpl> userDao;
+
+    @Resource
+    private EmailService emailServiceMock;
+
 
     /**
      * Initialise the testing session
@@ -53,6 +56,7 @@ public class ApiKeyServiceTest {
     @Before
     public void setup() throws IOException {
         apiLogDao.getCollection().drop();
+        reset(emailServiceMock);
     }
 
     /**
@@ -63,37 +67,29 @@ public class ApiKeyServiceTest {
     @After
     public void tearDown() throws IOException {
         apiLogDao.getCollection().drop();
+        userDao.deleteAll();
     }
 
     @Test
-    public void createApiKeyTest() throws DatabaseException {
+    public void createApiKeyTest() throws DatabaseException, EmailServiceException {
         String email = "test@kb.nl";
-        String apiKey = generatePassPhrase(9);
-        String privateKey = generatePassPhrase(9);
         String appName = "test";
-        String tokenString = "test_token_new";
-        String username = "test";
         String company = "test_company";
-        String country = "europe";
         String firstName = "testName";
         String lastName = "testLastName";
         String website = "test_website";
-        String address = "test_address";
-        String phone = "test_phone";
-        String fieldOfWork = "test_fieldOfWork";
+        String description = "test_description";
 
-        Token token = tokenService.create(email);
-        token.setToken(tokenString);
-        tokenService.store(token);
-        ApiKey createdApiKey = apiKeyService.createApiKey(tokenString, email, apiKey, privateKey,
-                DEFAULT_USAGE_LIMIT, appName, username, company, country, firstName,
-                lastName, website, address, phone, fieldOfWork);
-        User user = createdApiKey.getUser();
-        assertEquals(apiKey, createdApiKey.getId());
+        ApiKey createdApiKey = apiKeyService.createApiKey(email, DEFAULT_USAGE_LIMIT, appName,
+                company, firstName, lastName, website, description);
+        assertNotNull(createdApiKey.getId());
+        assertNotNull(createdApiKey.getPrivateKey());
         assertEquals(appName, createdApiKey.getApplicationName());
-        assertEquals(user.getId(), createdApiKey.getUser().getId());
+        assertEquals(email, createdApiKey.getEmail());
 
-        userService.remove(user);
+        verify(emailServiceMock, times(1)).sendApiKeys((ApiKey) anyObject());
+
+        apiKeyService.remove(createdApiKey);
     }
 
     @Test
@@ -101,7 +97,7 @@ public class ApiKeyServiceTest {
         ApiKey apiKey = new ApiKeyImpl();
         apiKey.setApiKey("testKey");
         apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2);
+        apiKey.setUsageLimit(2L);
 
         apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
@@ -114,7 +110,7 @@ public class ApiKeyServiceTest {
         ApiKey apiKey = new ApiKeyImpl();
         apiKey.setApiKey("testKey");
         apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2);
+        apiKey.setUsageLimit(2L);
 
         apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
@@ -131,7 +127,7 @@ public class ApiKeyServiceTest {
         ApiKey apiKey = new ApiKeyImpl();
         apiKey.setApiKey("testKey");
         apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2);
+        apiKey.setUsageLimit(2L);
 
         apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
         apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
@@ -145,26 +141,4 @@ public class ApiKeyServiceTest {
         }
     }
 
-    private String generatePassPhrase(int length) {
-        // This variable contains the list of allowable characters for the
-        // pass phrase. Note that the number 0 and the letter 'O' have been
-        // removed to avoid confusion between the two. The same is true
-        // of 'I', 1, and 'l'.
-        final char[] allowableCharacters = new char[]{'a', 'b', 'c', 'd',
-                'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q',
-                'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C',
-                'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q',
-                'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4',
-                '5', '6', '7', '8', '9'};
-
-        final int max = allowableCharacters.length - 1;
-
-        StringBuilder pass = new StringBuilder();
-
-        for (int i = 0; i < length; i++) {
-            pass.append(allowableCharacters[RandomUtils.nextInt(max)]);
-        }
-
-        return pass.toString();
-    }
 }

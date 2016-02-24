@@ -47,6 +47,8 @@ public class EmailBuilderImpl implements EmailBuilder {
 
 	private String emailFrom;
 
+	private String emailCc;
+
 	private String subject;
 
 	private Map<String, Object> model;
@@ -68,6 +70,9 @@ public class EmailBuilderImpl implements EmailBuilder {
 			message.setTo(StringUtils.split(emailTo, ","));
 		} else {
 			message.setTo(emailTo);
+		}
+		if (StringUtils.isNotBlank(emailCc)) {
+			message.addCc(emailCc);
 		}
 		message.setFrom(emailFrom);
 		message.setSubject(subject);
@@ -108,12 +113,18 @@ public class EmailBuilderImpl implements EmailBuilder {
 		this.emailFrom = emailFrom;
 	}
 
+
+	public void setEmailCc(String emailCc) {
+		this.emailCc = emailCc;
+	}
+
 	@Override
 	public void setTemplate(String template) throws EmailServiceException {
 		if (configs.containsKey(template)) {
 			this.config = configs.get(template);
 			this.emailTo = config.getEmailTo();
 			this.emailFrom = config.getEmailFrom();
+			this.emailCc = config.getEmailCc();
 			this.subject = config.getSubject();
 		} else {
 			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);

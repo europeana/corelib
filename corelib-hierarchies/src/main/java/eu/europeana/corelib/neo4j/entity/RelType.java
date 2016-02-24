@@ -28,7 +28,8 @@ public enum RelType {
 	DCTERMS_ISPARTOF("dcterms:isPartOf"),
 	DCTERMS_HASPART("dcterms:hasPart"),
 	ISFIRSTINSEQUENCE("isFirstInSequence"),
-	ISLASTINSEQUENCE("isLastInSequence");
+	ISLASTINSEQUENCE("isLastInSequence"),
+	ISFAKEORDER("isFakeOrder");
 
 	private String relType;
 

@@ -68,7 +68,24 @@ public class ResultSet<T> {
 	private long searchTime;
 
 	/**
-	 * GETTERS & SETTTERS
+	 * The current pagination cursor
+	 */
+	private String currentCursorMark;
+
+	/**
+	 * The next pagination cursor
+	 */
+	private String nextCursorMark;
+
+	/**
+	 * To store the concatenated actual sort fields
+	 */
+	private String sortField;
+
+
+
+	/**
+	 * GETTERS & SETTERS
 	 */
 
 	public List<T> getResults() {
@@ -137,6 +154,25 @@ public class ResultSet<T> {
 		this.queryFacets = queryFacets;
 		return this;
 	}
+	public String getCurrentCursorMark() {
+		return currentCursorMark;
+	}
+
+	public void setCurrentCursorMark(String currentCursorMark) {
+		this.currentCursorMark = currentCursorMark;
+	}
+
+	public String getNextCursorMark() {
+		return nextCursorMark;
+	}
+
+	public void setNextCursorMark(String nextCursorMark) {
+		this.nextCursorMark = nextCursorMark;
+	}
+
+	public String getSortField() { return sortField; }
+
+	public void setSortField(String sortField) { this.sortField = sortField; }
 
 	@Override
 	public String toString() {

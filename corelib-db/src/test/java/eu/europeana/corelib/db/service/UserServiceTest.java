@@ -22,20 +22,34 @@ import eu.europeana.corelib.db.entity.relational.TokenImpl;
 import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.*;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
-import eu.europeana.corelib.solr.service.mock.SearchServiceMock;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.search.SearchService;
+import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static eu.europeana.corelib.db.util.UserUtils.hashPassword;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -44,11 +58,18 @@ import static org.junit.Assert.*;
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
 public class UserServiceTest {
 
+    public static final String[] TITLE = new String[]{"Mock Title"};
+    public static final String[] AUTHOR = new String[]{"Mock Author"};
+    public static final String[] THUMBNAIL = new String[]{"MockThumbnail.jpg"};
+
     @Resource
     private UserService userService;
 
     @Resource
-    private TokenService tokenService;
+    private SearchService searchService;
+
+    @Resource
+    private EmailService emailServiceMock;
 
     @Resource(name = "corelib_db_tokenDao")
     private RelationalDao<TokenImpl> tokenDao;
@@ -60,79 +81,66 @@ public class UserServiceTest {
     public void prepareDatabase() {
         userDao.deleteAll();
         tokenDao.deleteAll();
+        reset(emailServiceMock);
     }
 
     @Test
-    public void testCreate() throws DatabaseException {
+    public void testCreate() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testCreate@europeana.eu";
         final String USERNAME = "testCreate";
         final String PASSWORD = "test";
         final String HASH = hashPassword(PASSWORD);
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
+
+        verify(emailServiceMock, times(1)).sendActivationToken((Token) anyObject(), anyString());
 
         user = userService.findByID(user.getId());
         assertNotNull("Unable to retrieve user", user);
-        assertEquals("Email address not copied from token.", user.getEmail(),
-                token.getEmail());
-        assertEquals("Username not stored correctly.", user.getUserName(),
-                USERNAME);
-        assertFalse("Password not encoded at all.",
-                StringUtils.equals(user.getPassword(), PASSWORD));
-        assertEquals("Password not correctly encoded.", user.getPassword(),
-                HASH);
+        assertEquals("Email address not stored correctly.", EMAIL.toLowerCase(), user.getEmail());
+        assertEquals("Username not stored correctly.", USERNAME.toLowerCase(), user.getUserName());
+        assertFalse("Password not encoded at all.", StringUtils.equals(PASSWORD, user.getPassword()));
+        assertEquals("Password not correctly encoded.", HASH, user.getPassword());
         assertNotNull("No User ID generated", user.getId());
-        assertNotNull("User registration date should have value",
-                user.getRegistrationDate());
-        assertNull("User last login should by null for new user",
-                user.getLastLogin());
-        assertEquals("User should have USER role by default", user.getRole(),
-                Role.ROLE_USER);
-        // create does not delete the token anymore
-        // assertNull("Token not removed from database",
-        // tokenService.findByID(token.getToken()));
-        tokenService.remove(token);
-    }
+        assertNotNull("User registration date should have value", user.getRegistrationDate());
+        assertNull("User activation date should have no value", user.getActivationDate());
+        assertNull("User last login should by null for new user", user.getLastLogin());
+        assertEquals("User should have USER role by default", Role.ROLE_USER, user.getRole());
+        assertEquals("No token generated", 1, tokenDao.findAll().size());
 
-    @Test(expected = DatabaseException.class)
-    public void testCreateWithoutToken() throws DatabaseException {
-        userService.create(null, "ignore", "ignore");
-        fail("This line should never be reached!!!");
-    }
+        // activate account
+        Token token = tokenDao.findAll().get(0);
+        assertEquals("Email address not stored correctly in token.", EMAIL.toLowerCase(), token.getEmail());
+        assertNotNull("No token generated", token.getToken());
 
-    @Test(expected = DatabaseException.class)
-    public void testCreateWithInvalidToken() throws DatabaseException {
-        userService.create("invalidToken", "ignore", "ignore");
-        fail("This line should never be reached!!!");
+        user = userService.activate(EMAIL, token.getToken());
+        assertNotNull("User activation date should have value", user.getActivationDate());
+        assertEquals("Token should be removed", 0, tokenDao.findAll().size());
     }
 
     @Test
-    public void testFindByEmail() throws DatabaseException {
+    public void testFindByEmail() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testFindByEmail@europeana.eu";
         final String USERNAME = "testFindByEmail";
         final String PASSWORD = "test";
         final String HASH = hashPassword(PASSWORD);
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
+
+        assertEquals("Count doesn't match", 1, userDao.count());
+        assertEquals("FindAll doesn't match", 1, userDao.findAll().size());
 
         user = userService.findByEmail(EMAIL);
         assertNotNull("Unable to retrieve user by email adres", user);
-        assertEquals("Password not correctly encoded.", user.getPassword(),
-                HASH);
+        assertEquals("Password not correctly encoded.", HASH, user.getPassword());
         assertNotNull("No User ID generated", user.getId());
 
     }
 
     @Test
-    public void testChangePassword() throws DatabaseException {
+    public void testChangePassword() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testChangePassword@europeana.eu";
         final String USERNAME = "testChangePassword";
         final String PASSWORD1 = "test";
@@ -140,10 +148,7 @@ public class UserServiceTest {
         final String HASH1 = hashPassword(PASSWORD1);
         final String HASH2 = hashPassword(PASSWORD2);
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD1);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD1, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertEquals("Password not correctly encoded.", user.getPassword(), HASH1);
 
@@ -155,7 +160,7 @@ public class UserServiceTest {
             // try changing with wrong password
             userService.changePassword(user.getId(), PASSWORD1, PASSWORD2);
             fail("This line should never be reached!!!");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException ignore) {
             // expecting this
         }
 
@@ -163,7 +168,7 @@ public class UserServiceTest {
             // try changing with wrong new password
             userService.changePassword(user.getId(), PASSWORD2, "");
             fail("This line should never be reached!!!");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException ignore) {
             // expecting this
         }
 
@@ -171,7 +176,7 @@ public class UserServiceTest {
             // try changing with wrong user id
             userService.changePassword(Long.MAX_VALUE, PASSWORD1, PASSWORD2);
             fail("This line should never be reached!!!");
-        } catch (DatabaseException e) {
+        } catch (DatabaseException ignore) {
             // expecting this
         }
 
@@ -181,15 +186,12 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testAuthenticateUser() throws DatabaseException {
+    public void testAuthenticateUser() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testAuthenticateUser@europeana.eu";
         final String USERNAME = "testAuthenticateUser";
         final String PASSWORD = "test";
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
 
         user = userService.authenticateUser(EMAIL, "invalidPassword");
@@ -203,14 +205,11 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSavedSearch() throws DatabaseException {
+    public void testCreateSavedSearch() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testCreateSavedSearch@europeana.eu";
         final String USERNAME = "testCreateSavedSearch";
         final String PASSWORD = "test";
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("Saved Searches list should be empty!", user.getSavedSearches().size() == 0);
 
@@ -260,16 +259,15 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSavedItem() throws DatabaseException {
+    public void testCreateSavedItem() throws DatabaseException, MongoDBException, EmailServiceException {
         final String EMAIL = "testCreateSavedItem@europeana.eu";
         final String USERNAME = "testCreateSavedItem";
         final String PASSWORD = "test";
         final String EUROPEANA_ID = "testCreateSavedItem";
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
+        setupSeachServiceMock(EUROPEANA_ID);
 
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("Saved Items list should be empty!", user.getSavedItems().size() == 0);
 
@@ -286,9 +284,9 @@ public class UserServiceTest {
 
         SavedItem item = user.getSavedItems().iterator().next();
         assertEquals(EUROPEANA_ID, item.getEuropeanaUri());
-        assertEquals(SearchServiceMock.THUMBNAIL[0], item.getEuropeanaObject());
-        assertEquals(SearchServiceMock.TITLE[0], item.getTitle());
-        assertEquals(SearchServiceMock.AUTHOR[0], item.getAuthor());
+        assertEquals(THUMBNAIL[0], item.getEuropeanaObject());
+        assertEquals(TITLE[0], item.getTitle());
+        assertEquals(AUTHOR[0], item.getAuthor());
         assertEquals(DocType.TEXT, item.getDocType());
         assertNotNull("No creation date set", item.getDateSaved());
 
@@ -298,17 +296,15 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSocialTag() throws DatabaseException {
+    public void testCreateSocialTag() throws DatabaseException, MongoDBException, EmailServiceException {
         final String EMAIL = "testCreateSocialTag@europeana.eu";
         final String USERNAME = "testCreateSocialTag";
         final String PASSWORD = "test";
         final String EUROPEANA_ID = "testCreateSocialTag";
         final String TAG = "testCreateSocialTag";
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        setupSeachServiceMock(EUROPEANA_ID);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertTrue("SocialTag list should be empty!", user.getSocialTags().size() == 0);
 
@@ -325,9 +321,9 @@ public class UserServiceTest {
 
         SocialTag tag = user.getSocialTags().iterator().next();
         assertEquals(EUROPEANA_ID, tag.getEuropeanaUri());
-        assertEquals(SearchServiceMock.THUMBNAIL[0], tag.getEuropeanaObject());
+        assertEquals(THUMBNAIL[0], tag.getEuropeanaObject());
         assertEquals(StringUtils.lowerCase(TAG), tag.getTag());
-        assertEquals(SearchServiceMock.TITLE[0], tag.getTitle());
+        assertEquals(TITLE[0], tag.getTitle());
         assertNotNull("No creation date set", tag.getDateSaved());
 
         userService.removeSocialTag(user.getId(), tag.getId());
@@ -336,7 +332,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUserLanguageSettings() throws DatabaseException {
+    public void testUserLanguageSettings() throws DatabaseException, EmailServiceException {
         final String EMAIL = "testCreateSocialTag@europeana.eu";
         final String USERNAME = "testCreateSocialTag";
         final String PASSWORD = "test";
@@ -345,10 +341,7 @@ public class UserServiceTest {
         final String[] LANGCODES_ARRAY = {"nl", "en", "de"};
         final String LANGCODES = "fi|es|it|fr";
 
-        Token token = tokenService.create(EMAIL);
-        assertNotNull("Unable to create token", token);
-
-        User user = userService.create(token.getToken(), USERNAME, PASSWORD);
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "");
         assertNotNull("Unable to create user", user);
         assertNull("By default the value should be empty", user.getLanguagePortal());
         assertNull("By default the value should be empty", user.getLanguageItem());
@@ -380,7 +373,25 @@ public class UserServiceTest {
         assertTrue("By default it should return an empty array", user.getLanguageSearch().length == 0);
     }
 
-    private String hashPassword(String password) {
-        return new ShaPasswordEncoder().encodePassword(password, null);
+    @SuppressWarnings("unchecked")
+    private void setupSeachServiceMock(String europeanaObjectId) throws MongoDBException {
+        FullBean mockBean = mock(FullBean.class);
+        Proxy proxy = mock(Proxy.class);
+        Aggregation aggregation = mock(Aggregation.class);
+
+        Map<String, List<String>> dcPublisher = new HashMap<>();
+        dcPublisher.put("def", Collections.singletonList(AUTHOR[0]));
+
+        when(mockBean.getTitle()).thenReturn(TITLE);
+        when(mockBean.getId()).thenReturn(europeanaObjectId);
+        when(mockBean.getType()).thenReturn(DocType.TEXT);
+        when(mockBean.getAbout()).thenReturn(europeanaObjectId);
+        when((List<Aggregation>) mockBean.getAggregations()).thenReturn(Collections.singletonList(aggregation));
+        when((List<Proxy>) mockBean.getProxies()).thenReturn(Collections.singletonList(proxy));
+
+        when(proxy.getDcPublisher()).thenReturn(dcPublisher);
+        when(aggregation.getEdmObject()).thenReturn(THUMBNAIL[0]);
+
+        when(searchService.findById(anyString(), anyBoolean())).thenReturn(mockBean);
     }
 }

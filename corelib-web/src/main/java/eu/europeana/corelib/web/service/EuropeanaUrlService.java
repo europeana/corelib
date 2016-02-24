@@ -65,7 +65,7 @@ public interface EuropeanaUrlService {
 
 	UrlBuilder getApi2Record(String apikey, String europeanaId, String extention);
 
-	UrlBuilder getApi2Redirect(long uid, String showAt, String provider, String europeanaId, String profile);
+	UrlBuilder getApi2Redirect(String apikey, String showAt, String provider, String europeanaId, String profile);
 
 	UrlBuilder getPortalHome(boolean relative);
 

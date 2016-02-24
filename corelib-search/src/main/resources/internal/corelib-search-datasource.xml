@@ -10,15 +10,17 @@
 	the specific language governing permissions and limitations under the Licence. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl">
-        <constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>
-    </bean>
+	<bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}"
+			type="java.lang.String" />
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}"
+			type="java.lang.String" />
+	</bean>
 
 </beans>
