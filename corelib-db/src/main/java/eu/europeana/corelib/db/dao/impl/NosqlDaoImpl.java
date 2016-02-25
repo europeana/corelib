@@ -49,7 +49,7 @@ public class NosqlDaoImpl<E extends NoSqlEntity, T extends Serializable> extends
 	public void deleteAll() {
 		try {
 			delete(clazz.newInstance());
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 

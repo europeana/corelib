@@ -38,26 +38,6 @@ public interface UserService extends AbstractService<User> {
 
     /**
      * Creates a new User, based on a existing token, and given params
-     *
-     * @param token    A Token string, existing in the database
-     * @param username The username for this user profile
-     * @param password The login password (case sensitive)
-     * @return Created user entity.
-     * @throws DatabaseException When the Token is invalid
-     */
-    @Deprecated
-    User create(String token, String username, String password) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
-     */
-    @Deprecated
-    User create(String tokenString, String username, String password, boolean isApiRegistration, String company,
-                String country, String firstName, String lastName, String website, String address, String phone,
-                String fieldOfWork) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
      */
     User create(
             String email, String username, String password, String company, String country, String firstName,
@@ -135,7 +115,7 @@ public interface UserService extends AbstractService<User> {
      *
      * @param userId            The id of the excising user to add the new SavedSearch to
      * @param europeanaObjectId EuropeanaObjectId
-     * @param tag
+     * @param tag               Tag to create
      * @return The User including the new social tag
      * @throws DatabaseException Thrown when no valid user, object id or tag is provided
      */

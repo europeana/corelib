@@ -31,17 +31,16 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.web.exception.InvalidUrlException;
+import org.apache.log4j.Logger;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class UrlBuilder {
 
-	private static Logger log = Logger.getLogger(UrlBuilder.class
-			.getCanonicalName());
+	private static Logger log = Logger.getLogger(UrlBuilder.class);
 
 	public static final String PATH_SEPERATOR = "/";
 

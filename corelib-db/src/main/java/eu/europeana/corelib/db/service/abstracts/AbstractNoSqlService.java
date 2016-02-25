@@ -26,18 +26,8 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
  */
 public interface AbstractNoSqlService<E extends NoSqlEntity, T extends Serializable> {
 
-	/**
-	 * 
-	 * 
-	 * @param object
-	 */
 	E store(E object);
 
-	/**
-	 * 
-	 * 
-	 * @param object
-	 */
 	void remove(final T id);
 
 	/*
@@ -58,19 +48,11 @@ public interface AbstractNoSqlService<E extends NoSqlEntity, T extends Serializa
 	 */
 	 Iterable<E> findAll();
 
-	/**
-	 * 
-	 * 
-	 * @param id
-	 * @return
-	 */
 	E findByID(final T id);
 
 	/**
 	 * Checks if a entity with the given ID exists.
-	 * 
-	 * @param id
-	 * @return
+	 *
 	 */
 	boolean exists(final T id);
 

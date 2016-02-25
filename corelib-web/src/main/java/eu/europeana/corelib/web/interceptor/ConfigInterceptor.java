@@ -20,17 +20,14 @@ package eu.europeana.corelib.web.interceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.exception.WebConfigurationException;
 import eu.europeana.corelib.web.model.PageData;
 import eu.europeana.corelib.web.support.Configuration;
@@ -43,8 +40,7 @@ import eu.europeana.corelib.web.support.Configuration;
  */
 public class ConfigInterceptor extends HandlerInterceptorAdapter {
 
-	@Log
-	private Logger log;
+	private final Logger log = Logger.getLogger(ConfigInterceptor.class);
 	
 	@Resource
 	private Configuration config;
@@ -89,7 +85,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			model.setCurrentUrl(currentUrl.toString().replace("portal/portal/", "portal/"));
 			
 			// BOOLEANS
-			model.setDebug(Boolean.valueOf(config.getDebugMode()));
+			model.setDebug(config.getDebugMode());
 			model.setIndexable(indexable);
 			// is minify=true is set, force minify anyway, ignoring debug settings!
 			if (request.getParameterMap().containsKey("minify")) {

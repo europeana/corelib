@@ -21,12 +21,11 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.annotation.Resource;
@@ -39,8 +38,7 @@ import java.util.Map;
  */
 public abstract class EmailServiceImpl implements EmailService {
 
-    @Log
-    private Logger log;
+    private final Logger log = Logger.getLogger(EmailServiceImpl.class);
 
     @Resource
     private JavaMailSender mailSender;

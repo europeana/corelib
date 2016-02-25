@@ -5,18 +5,16 @@ import javax.annotation.Resource;
 import com.google.gson.Gson;
 
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.model.ApiResult;
 import eu.europeana.corelib.web.service.MicrosoftTranslatorService;
 import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
+import org.apache.log4j.Logger;
 
 public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implements
 		MicrosoftTranslatorService {
 
-	@Log
-	Logger log;
+	private final Logger log = Logger.getLogger(MicrosoftTranslatorServiceImpl.class);
 
 	@Resource
 	private Configuration config;

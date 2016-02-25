@@ -10,16 +10,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.model.ApiResult;
 import eu.europeana.corelib.web.model.ApiResultImpl;
 import eu.europeana.corelib.web.service.JsonApiService;
+import org.apache.log4j.Logger;
 
 public class JsonApiServiceImpl implements JsonApiService {
 
 	private static final String USER_AGENT = "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)";
 
-	private Logger log = Logger.getLogger(JsonApiServiceImpl.class.getCanonicalName());
+	private Logger log = Logger.getLogger(JsonApiServiceImpl.class);
 
 	private String lastUrl;
 

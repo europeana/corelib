@@ -24,7 +24,6 @@
 		<module>corelib-common-storage</module>
 		<module>corelib-db</module>
 		<module>corelib-definitions</module>
-		<module>corelib-logging</module>
 		<module>corelib-storage</module>
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
@@ -87,12 +86,6 @@
 						<groupId>com.google.collections</groupId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>eu.europeana.corelib</groupId>
-				<artifactId>corelib-logging</artifactId>
-				<version>${version.europeana.corelib}</version>
 			</dependency>
 
 			<dependency>
