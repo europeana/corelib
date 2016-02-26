@@ -233,16 +233,14 @@
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
 		<version.springBoot>1.2.8.RELEASE</version.springBoot>
-		<!--<version.springCore>4.0.9.RELEASE</version.springCore>-->
 		<version.springCore>4.2.4.RELEASE</version.springCore>
 		<version.springWebService>2.2.4.RELEASE</version.springWebService>
 		<version.springSecurity>3.2.9.RELEASE</version.springSecurity>
-		<!--<version.springSecurity>4.0.3.RELEASE</version.springSecurity>-->
 		<version.springSecurityOauth>2.0.8.RELEASE</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsLang3>3.4</version.commonsLang3>
 		<version.commonsIO>2.4</version.commonsIO>
-		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
+		<version.hibernateCore>5.1.0.Final</version.hibernateCore>
 		<version.jibx>1.2.6</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.13.0</version.mongoDriver>
@@ -259,6 +257,7 @@
 		<version.jodatime>2.9.2</version.jodatime>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<version.maven-compiler-plugin>3.3</version.maven-compiler-plugin>
 	</properties>
 
 	<build>
@@ -267,6 +266,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.maven-compiler-plugin}</version>
 					<!-- best lock down version of the plugin too -->
 					<configuration>
 						<source>${version.jdk}</source>
