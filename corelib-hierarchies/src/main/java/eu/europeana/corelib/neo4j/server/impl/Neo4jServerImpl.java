@@ -27,6 +27,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -43,7 +44,6 @@ import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.neo4j.entity.Siblington;
 import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.CustomResponse;
@@ -61,8 +61,7 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class
-			.getCanonicalName());
+	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class);
 
 	private RestGraphDatabase graphDb;
 	private RestIndex<Node> index;

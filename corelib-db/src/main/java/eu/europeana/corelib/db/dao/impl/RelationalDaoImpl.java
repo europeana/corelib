@@ -185,9 +185,6 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
     @Override
     @Transactional
     public void deleteAll() {
-        List<E> list = findAll();
-        for (E e : list) {
-            delete(e);
-        }
+        findAll().forEach(this::delete);
     }
 }

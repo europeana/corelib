@@ -28,20 +28,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
  */
 public interface AbstractService<E extends IdentifiedEntity<?>> {
 
-	/**
-	 * 
-	 * 
-	 * @param object
-	 * @throws DatabaseException 
-	 */
 	E store(E object) throws DatabaseException;
 
-	/**
-	 * 
-	 * 
-	 * @param object
-	 * @throws DatabaseException 
-	 */
 	void remove(E object) throws DatabaseException;
 
 	/*
@@ -62,13 +50,6 @@ public interface AbstractService<E extends IdentifiedEntity<?>> {
 	 */
 	List<E> findAll();
 
-	/**
-	 * 
-	 * 
-	 * @param id
-	 * @return
-	 * @throws DatabaseException 
-	 */
 	E findByID(final Serializable id) throws DatabaseException;
 
 

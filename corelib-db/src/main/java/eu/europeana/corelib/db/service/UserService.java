@@ -22,6 +22,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
@@ -37,30 +38,10 @@ public interface UserService extends AbstractService<User> {
 
     /**
      * Creates a new User, based on a existing token, and given params
-     *
-     * @param token    A Token string, existing in the database
-     * @param username The username for this user profile
-     * @param password The login password (case sensitive)
-     * @return Created user entity.
-     * @throws DatabaseException When the Token is invalid
-     */
-    @Deprecated
-    User create(String token, String username, String password) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
-     */
-    @Deprecated
-    User create(String tokenString, String username, String password, boolean isApiRegistration, String company,
-                String country, String firstName, String lastName, String website, String address, String phone,
-                String fieldOfWork) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
      */
     User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException;
 
     /**
@@ -70,7 +51,7 @@ public interface UserService extends AbstractService<User> {
      * @param token token emailed to user
      * @return The activated user account
      */
-    User activate(String email, String token) throws DatabaseException;
+    Token activate(String email, String token) throws DatabaseException;
 
     /**
      * Returns a User if there is a valid email provided.
@@ -134,7 +115,7 @@ public interface UserService extends AbstractService<User> {
      *
      * @param userId            The id of the excising user to add the new SavedSearch to
      * @param europeanaObjectId EuropeanaObjectId
-     * @param tag
+     * @param tag               Tag to create
      * @return The User including the new social tag
      * @throws DatabaseException Thrown when no valid user, object id or tag is provided
      */

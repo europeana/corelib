@@ -1,6 +1,5 @@
 package eu.europeana.corelib.storage.impl;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
@@ -16,11 +15,11 @@ public class MongoProviderImpl implements MongoProvider {
 
     private static final Logger logger = Logger.getLogger(MongoProviderImpl.class);
 
-    private Mongo mongo;
+    private MongoClient mongo;
 
     public MongoProviderImpl(String hosts, String ports) {
         String[] hostList = StringUtils.split(hosts, ",");
-        String[] portList = StringUtils.split(ports,",");
+        String[] portList = StringUtils.split(ports, ",");
         List<ServerAddress> serverAddresses = new ArrayList<>();
         int i = 0;
         for (String host : hostList) {
@@ -40,9 +39,10 @@ public class MongoProviderImpl implements MongoProvider {
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
         mongo = new MongoClient(serverAddresses, builder.build());
 
-        }
+    }
 
-    @Override public Mongo getMongo() {
+    @Override
+    public MongoClient getMongo() {
         return mongo;
     }
 }

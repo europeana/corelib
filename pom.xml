@@ -24,7 +24,6 @@
 		<module>corelib-common-storage</module>
 		<module>corelib-db</module>
 		<module>corelib-definitions</module>
-		<module>corelib-logging</module>
 		<module>corelib-storage</module>
 		<module>corelib-utils</module>
 		<module>corelib-web</module>
@@ -37,6 +36,108 @@
 		<module>corelib-hierarchies</module>
 		<module>corelib-search</module>
 	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-common-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-db</artifactId>
+                <version>${version.europeana.corelib}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-definitions</artifactId>
+                <version>${version.europeana.corelib}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-dereference</artifactId>
+				<version>${version.europeana.corelib}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>google-collections</artifactId>
+						<groupId>com.google.collections</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-edm-definitions</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-hierarchies</artifactId>
+				<version>${version.europeana.corelib}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>google-collections</artifactId>
+						<groupId>com.google.collections</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-lookup</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-media-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-search</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-sugarcrm-bindings</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-storage</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-sugarcrm-client</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-utils</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>eu.europeana.corelib</groupId>
+				<artifactId>corelib-web</artifactId>
+				<version>${version.europeana.corelib}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
 
 	<repositories>
 		<repository>
@@ -123,37 +224,40 @@
 	</repositories>
 
 	<properties>
-		<version.europeanaApi2>2.2.0</version.europeanaApi2>
+		<version.europeana.corelib>2.3-SNAPSHOT</version.europeana.corelib>
 		<version.log4j>1.2.15</version.log4j>
 		<version.jdk>1.8</version.jdk>
 		<version.junit>4.12</version.junit>
 		<version.servletJstl>1.2</version.servletJstl>
+		<version.apacheLucene>4.10.1</version.apacheLucene>
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springCore>4.0.9.RELEASE</version.springCore>
-		<version.springWebService>2.2.1.RELEASE</version.springWebService>
-		<version.springSecurity>3.2.8.RELEASE</version.springSecurity>
-		<version.springSecurityOauth>2.0.7.RELEASE</version.springSecurityOauth>
+		<version.springBoot>1.2.8.RELEASE</version.springBoot>
+		<version.springCore>4.2.4.RELEASE</version.springCore>
+		<version.springWebService>2.2.4.RELEASE</version.springWebService>
+		<version.springSecurity>3.2.9.RELEASE</version.springSecurity>
+		<version.springSecurityOauth>2.0.8.RELEASE</version.springSecurityOauth>
 		<version.commonsLang>2.6</version.commonsLang>
 		<version.commonsLang3>3.4</version.commonsLang3>
 		<version.commonsIO>2.4</version.commonsIO>
-		<version.hibernateCore>3.6.8.Final</version.hibernateCore>
+		<version.hibernateCore>5.1.0.Final</version.hibernateCore>
 		<version.jibx>1.2.6</version.jibx>
 		<version.mortbayJetty>6.1.26</version.mortbayJetty>
 		<version.mongoDriver>2.13.0</version.mongoDriver>
 		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
 		<version.woodstox>3.2.9</version.woodstox>
 		<version.codehausJackson>1.9.9</version.codehausJackson>
-		<version.jackson>2.6.4</version.jackson>
+		<version.jackson>2.6.5</version.jackson>
 		<version.slf4j>1.7.5</version.slf4j>
 		<version.mockito>1.10.19</version.mockito>
 		<version.gson>2.2.4</version.gson>
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.ehcache>2.8.3</version.ehcache>
 		<version.guava>18.0</version.guava>
-		<version.jodatime>2.9</version.jodatime>
+		<version.jodatime>2.9.2</version.jodatime>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<version.maven-compiler-plugin>3.3</version.maven-compiler-plugin>
 	</properties>
 
 	<build>
@@ -162,6 +266,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.maven-compiler-plugin}</version>
 					<!-- best lock down version of the plugin too -->
 					<configuration>
 						<source>${version.jdk}</source>

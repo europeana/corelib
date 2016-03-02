@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -28,8 +29,6 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-
-import eu.europeana.corelib.logging.Logger;
 
 public class QueryExtractor {
 
@@ -260,7 +259,7 @@ public class QueryExtractor {
 			deconstructMatchAllDocsQuery((MatchAllDocsQuery) query,
 					queryTypeStack);
 		} else {
-			log.warning("Unhandled query class: " + query.getClass());
+			log.trace("Unhandled query class: " + query.getClass());
 		}
 		if (queryTypeStack.size() > 0) {
 			queryTypeStack.pop();

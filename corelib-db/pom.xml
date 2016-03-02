@@ -29,27 +29,22 @@
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-definitions</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-common-storage</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-edm-definitions</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-utils</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-search</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- Spring -->
         <dependency>

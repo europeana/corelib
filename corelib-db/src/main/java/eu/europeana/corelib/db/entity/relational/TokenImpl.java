@@ -54,6 +54,12 @@ public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, 
 	private String token;
 
 	/**
+	 * The identifier
+	 */
+	@Column(length = FIELDSIZE_REDIRECT, nullable = false)
+	private String redirect;
+
+	/**
 	 * Email address
 	 */
 	@Column(length = FIELDSIZE_PERSONAL, nullable = false)
@@ -102,5 +108,15 @@ public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, 
 	@Override
 	public void setCreated(Date created) {
 		this.created = created.getTime();
+	}
+
+	@Override
+	public String getRedirect() {
+		return redirect;
+	}
+
+	@Override
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
 	}
 }

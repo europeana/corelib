@@ -67,67 +67,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
 
-    @Deprecated
-    @Override
-    public User create(String tokenString, String username, String password)
-            throws DatabaseException {
-        return create(tokenString, username, password, false, null, null, null, null, null, null, null, null);
-    }
-
-    @Deprecated
-    @Override
-    public User create(String tokenString, String username, String password,
-                       boolean isApiRegistration, String company, String country,
-                       String firstName, String lastName, String website, String address,
-                       String phone, String fieldOfWork)
-            throws DatabaseException {
-
-        if (StringUtils.isBlank(tokenString)) {
-            throw new DatabaseException(ProblemType.UNKNOWN_TOKEN);
-        }
-
-        if (StringUtils.isBlank(username)) {
-            throw new DatabaseException(ProblemType.NO_USERNAME);
-        }
-
-        if (!isApiRegistration && StringUtils.isBlank(password)) {
-            throw new DatabaseException(ProblemType.NO_PASSWORD);
-        }
-
-        if (StringUtils.isBlank(tokenString)
-                || StringUtils.isBlank(username)
-                || (!isApiRegistration && StringUtils.isBlank(password))) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
-        }
-
-        Token token = tokenService.findByID(tokenString);
-        if (token == null) {
-            throw new DatabaseException(ProblemType.TOKEN_INVALID);
-        }
-
-        User user = new UserImpl();
-        user.setEmail(token.getEmail());
-        user.setUserName(username);
-        user.setPassword(StringUtils.isEmpty(password) ? null : hashPassword(password));
-        user.setRegistrationDate(new Date());
-        user.setCompany(company);
-        user.setCountry(country);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setWebsite(website);
-        user.setAddress(address);
-        user.setPhone(phone);
-        user.setFieldOfWork(fieldOfWork);
-
-        user = getDao().insert(user);
-
-        return user;
-    }
-
     @Override
     public User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException {
 
         if (StringUtils.isBlank(email)) {
@@ -162,13 +105,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendActivationToken(tokenService.create(email), activationUrl);
+        emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
 
         return user;
     }
 
     @Override
-    public User activate(String email, String tokenString) throws DatabaseException {
+    public Token activate(String email, String tokenString) throws DatabaseException {
         Token token = tokenService.findByID(tokenString);
         if (token == null) {
             throw new DatabaseException(ProblemType.TOKEN_INVALID);
@@ -182,7 +125,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         tokenService.remove(token);
 
-        return user;
+        return token;
     }
 
     @Override

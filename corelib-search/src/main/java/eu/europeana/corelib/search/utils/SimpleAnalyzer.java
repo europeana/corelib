@@ -1,13 +1,13 @@
 package eu.europeana.corelib.search.utils;
 
-import java.io.Reader;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.LetterTokenizer;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.util.Version;
+
+import java.io.Reader;
 
 public class SimpleAnalyzer extends Analyzer {
 
