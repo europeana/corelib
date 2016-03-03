@@ -54,6 +54,34 @@ public interface UserService extends AbstractService<User> {
     Token activate(String email, String token) throws DatabaseException;
 
     /**
+     *
+     * @param email email address identifying the account
+     * @param redirect  token emailed to user
+     * @return user with given email adres, null if not found.
+     * @throws DatabaseException
+     * @throws EmailServiceException
+     */
+    User sendResetPasswordToken(String email, String redirect, String activationUrl) throws DatabaseException, EmailServiceException;
+
+    /**
+     *
+     * @param email       The email address associated which the token
+     * @param tokenString The token string
+     * @return the redirect URL associated with the token
+     * @throws DatabaseException
+     */
+    String getRedirectFromToken(String email, String tokenString) throws DatabaseException;
+
+    /**
+     *
+     * @param email    The email address identifying the user
+     * @param password the newly submitted password
+     * @return user identified by the supplied email adres, null if not found or if password reset failed
+     * @throws DatabaseException
+     */
+    User resetPassword(String email, String tokenString, String password) throws DatabaseException, EmailServiceException;
+
+    /**
      * Returns a User if there is a valid email provided.
      *
      * @param email Email address of user, not case sensitive
@@ -78,6 +106,7 @@ public interface UserService extends AbstractService<User> {
      */
     User authenticateUser(String email, String password);
 
+    //TODO - remove because this is implemented by sendResetPasswordToken and following
     /**
      * Changes the existing password of an existing password
      *
@@ -115,7 +144,7 @@ public interface UserService extends AbstractService<User> {
      *
      * @param userId            The id of the excising user to add the new SavedSearch to
      * @param europeanaObjectId EuropeanaObjectId
-     * @param tag               Tag to create
+     * @param tag
      * @return The User including the new social tag
      * @throws DatabaseException Thrown when no valid user, object id or tag is provided
      */

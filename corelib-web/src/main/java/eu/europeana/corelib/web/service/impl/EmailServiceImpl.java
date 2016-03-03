@@ -79,6 +79,42 @@ public abstract class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendNewPasswordToken(Token token, String apiHost, String salutation) throws EmailServiceException {
+        if ((token == null)
+                || StringUtils.isBlank(token.getToken())
+                || StringUtils.isBlank(token.getEmail())
+                || StringUtils.isBlank(apiHost)) {
+            throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+        }
+        String url = apiHost + "/user/password/" + token.getEmail() + "/" + token.getToken();
+        Map<String, Object> model = new HashMap<>();
+        model.put("url", url);
+        model.put("salutation", salutation);
+        EmailBuilder builder = createEmailBuilder();
+        builder.setModel(model);
+        builder.setTemplate("forgotPassword"); // see corelib_web_emailConfigs
+        builder.setEmailTo(token.getEmail());
+        mailSender.send(builder);
+        log.info(String.format("Sent password reset url (%s) to %s", url, token.getEmail()));
+    }
+
+    @Override
+    public void sendPasswordResetConfirmation(User user, String salutation) throws EmailServiceException {
+        if ((user == null) || (user.getId() == null)) {
+            throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+        }
+        Map<String, Object> model = new HashMap<>();
+        model.put("salutation", salutation);
+        EmailBuilder builder = createEmailBuilder();
+        builder.setModel(model);
+        builder.setTemplate("resetPasswordConfirm"); // see corelib_web_emailConfigs
+        builder.setEmailTo(user.getEmail());
+        mailSender.send(builder);
+        log.info(String.format("Sent password reset confirmation email to (%s)", user.getEmail()));
+    }
+
+    //TODO: remove because it's implemented in sedNewPasswordToken ?
+    @Override
     public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
         if ((user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
             throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
@@ -87,6 +123,7 @@ public abstract class EmailServiceImpl implements EmailService {
     }
 
 
+    //TODO: remove because it's implemented in sedNewPasswordToken ?
     @Override
     public void sendForgotPassword(final String email, final String url) throws EmailServiceException {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(url)) {

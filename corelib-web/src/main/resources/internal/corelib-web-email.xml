@@ -89,6 +89,13 @@
                   p:emailTo="#{europeanaProperties['exception.to']}"
                   p:subject="Exception in portal"
             />
+            </entry>
+            <entry key="resetPasswordConfirm">
+                <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
+                      p:template="/email/reset-password-confirmation"
+                      p:emailFrom="#{europeanaProperties['system.from']}"
+                      p:subject="Your password has been reset"
+                />
         </entry>
     </util:map>
 </beans>

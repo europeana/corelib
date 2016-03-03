@@ -77,6 +77,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
         }
 
+        if (StringUtils.isBlank(redirect)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+
         if (StringUtils.isBlank(username)) {
             throw new DatabaseException(ProblemType.NO_USERNAME);
         }
@@ -115,6 +119,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         Token token = tokenService.findByID(tokenString);
         if (token == null) {
             throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
         }
 
         User user = findByEmail(email);
@@ -126,6 +132,52 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         tokenService.remove(token);
 
         return token;
+    }
+
+    @Override
+    public User sendResetPasswordToken(String email, String redirect, String activationUrl) throws DatabaseException, EmailServiceException {
+        if (StringUtils.isBlank(email)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+        emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
+        return user;
+    }
+
+    @Override
+    public String getRedirectFromToken(String email, String tokenString) throws DatabaseException {
+        Token token = tokenService.findByID(tokenString);
+        if (token == null) {
+            throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
+        }
+        return token.getRedirect();
+    }
+
+    @Override
+    public User resetPassword(String email, String tokenString, String newPassword) throws DatabaseException, EmailServiceException  {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(tokenString) || StringUtils.isBlank(newPassword)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+        Token token = tokenService.findByID(tokenString);
+        if (token == null) {
+            throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
+        }
+        // user exists; token exists and matches on email address: go ahead
+        user.setPassword(hashPassword(newPassword));
+        tokenService.remove(token);
+        emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
+        return user;
     }
 
     @Override
@@ -155,6 +207,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         return null;
     }
 
+    //TODO - remove because this is implemented by sendResetPasswordToken and following
     @Override
     public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
 
@@ -483,5 +536,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             user.getSocialTags().add((SocialTag) instance);
         }
         return bean;
+    }
+
+    private String friendlyUserName(User user){
+        if (StringUtils.isBlank(user.getFirstName()) && StringUtils.isBlank(user.getLastName()) && StringUtils.isBlank(user.getUserName())){
+            return "Sir / Madam";
+        } else if (StringUtils.isBlank(user.getFirstName()) && StringUtils.isBlank(user.getLastName())) {
+            return user.getUserName();
+        } else if (StringUtils.isBlank(user.getFirstName())){
+            return "Mr / Ms " + user.getLastName();
+        } else if (StringUtils.isBlank(user.getLastName())) {
+            return user.getFirstName();
+        } else {
+            return user.getFirstName() + " " + user.getLastName();
+        }
     }
 }
