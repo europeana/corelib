@@ -7,4 +7,5 @@ language: java
 jdk:
   - oraclejdk8
 after_success:
-  - mvn clean cobertura:cobertura coveralls:report
+  - echo "<settings><mirrors><mirror><id>sonatype-mirror</id><url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url><mirrorOf>sonatype-nexus-snapshots</mirrorOf></mirror></mirrors></settings>" > ~/settings.xml
+  - mvn --settings ~/settings.xml clean cobertura:cobertura coveralls:report
