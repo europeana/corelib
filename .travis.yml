@@ -6,6 +6,9 @@ sudo: false
 language: java
 jdk:
   - oraclejdk8
-after_success:
+before_script:
   - echo "<settings><mirrors><mirror><id>sonatype-mirror</id><url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url><mirrorOf>sonatype-nexus-snapshots</mirrorOf></mirror></mirrors></settings>" > ~/settings.xml
-  - mvn --settings ~/settings.xml clean cobertura:cobertura coveralls:report
+script:
+  - mvn --settings ~/settings.xml install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn --settings ~/settings.xml test -B
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report
