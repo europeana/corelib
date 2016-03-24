@@ -81,7 +81,9 @@ public class AttributionSnippet {
         if (StringUtils.containsIgnoreCase(rights, "out-of-copyright")){
             for (License license : ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getLicenses()){
                 if (license.getCcDeprecatedOn() != null){
-                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//                    In order to make things less confusing. Or maybe more.
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     ccDeprecatedOn = df.format(license.getCcDeprecatedOn());
                     break;
                 }
