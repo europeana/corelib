@@ -190,7 +190,9 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
       }
       // Overwriting the original file
       FileUtils.writeStringToFile(europeanaProperties, sb + "\n", false);
+      Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Properties:\n" + sb.toString());
 
+      
     } catch (IOException e1) {
       Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e1.getMessage(), e1.getCause());
     }
