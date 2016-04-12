@@ -89,12 +89,12 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
   private final static String PORTALSERVER = "portal_server";
   private final static String PORTALCANONICALURL = "portal_server_canonical";
   private final static String POSTGRES = "postgres";
-  private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-sitemap.credentials.authentication_uri";
+  /*private final static String SWIFT_AUTHENTICATION_URL="vcap.services.swift-sitemap.credentials.authentication_uri";
   private final static String SWIFT_AUTHENTICATION_AV_ZONE="vcap.services.swift-sitemap.credentials.availability_zone";
   private final static String SWIFT_AUTHENTICATION_TENANT_NAME="vcap.services.swift-sitemap.credentials.tenant_name";
   private final static String SWIFT_AUTHENTICATION_USER_NAME="vcap.services.swift-sitemap.credentials.user_name";
   private final static String SWIFT_AUTHENTICATION_PASSWORD="vcap.services.swift-sitemap.credentials.password";
-
+*/
   private static StandardServletEnvironment env = new StandardServletEnvironment();
 
   public VcapPropertyLoaderListener() {
@@ -156,7 +156,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
         props.setProperty("redis.port", env.getProperty(REDISPORT));
         props.setProperty("redis.password", env.getProperty(REDISPASSWORD));
       }
-
+/*
       if (env.getProperty(SWIFT_AUTHENTICATION_URL) != null) {
         props.setProperty("swift.authUrl", env.getProperty(SWIFT_AUTHENTICATION_URL));
         props.setProperty("swift.password", env.getProperty(SWIFT_AUTHENTICATION_PASSWORD));
@@ -165,6 +165,7 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
         props.setProperty("swift.tenantName", env.getProperty(SWIFT_AUTHENTICATION_TENANT_NAME));
         props.setProperty("swift.containerName", "sitemap");
       }
+      */
       // API and Portal canonical URLs, server
       setHTTPProperty(props, API2URL);
       setHTTPProperty(props, API2CANONICALURL);
