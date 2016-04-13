@@ -543,8 +543,8 @@ public class SearchServiceImpl implements SearchService {
                 resultSet.setSortField(solrQuery.getSortField());
 
                 // add extra parameters if any
-                if (query.getParameters() != null) {
-                    Map<String, String> parameters = query.getParameters();
+                if (query.getParameterMap() != null) {
+                    Map<String, String> parameters = query.getParameterMap();
                     for (String key : parameters.keySet()) {
                         solrQuery.setParam(key, parameters.get(key));
                     }
@@ -580,9 +580,9 @@ public class SearchServiceImpl implements SearchService {
                         solrQuery.setParam("spellcheck.q", query.getQuery());
                     }
                 }
-
-                if (query.getFacetQueries() != null) {
-                    for (String facetQuery : query.getFacetQueries()) {
+                // change this to *isblank / empty
+                if (query.getQueryFacets() != null) {
+                    for (String facetQuery : query.getQueryFacets()) {
                         solrQuery.addFacetQuery(facetQuery);
                     }
                 }
@@ -740,8 +740,8 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.setSortField("score", ORDER.desc);
             solrQuery.setTimeAllowed(TIME_ALLOWED);
             // add extra parameters if any
-            if (query.getParameters() != null) {
-                Map<String, String> parameters = query.getParameters();
+            if (query.getParameterMap() != null) {
+                Map<String, String> parameters = query.getParameterMap();
                 for (String key : parameters.keySet()) {
                     solrQuery.setParam(key, parameters.get(key));
                 }

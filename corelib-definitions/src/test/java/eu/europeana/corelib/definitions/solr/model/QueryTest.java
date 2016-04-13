@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import org.junit.Test;
-
-import eu.europeana.corelib.definitions.solr.Facet;
 
 public class QueryTest {
 
@@ -125,23 +124,23 @@ public class QueryTest {
 	public void testRemoveFacet() {
 		Query query = new Query("*:*");
 		List<String> facetList = query.getFacets();
-		assertTrue(facetList.contains(Facet.RIGHTS.name()));
-		assertEquals(Facet.values().length, facetList.size());
+		assertTrue(facetList.contains(SolrFacetType.RIGHTS.name()));
+		assertEquals(SolrFacetType.values().length, facetList.size());
 
-		query.removeFacet(Facet.RIGHTS);
+		query.removeFacet(SolrFacetType.RIGHTS);
 		facetList = query.getFacets();
-		assertFalse(facetList.contains(Facet.RIGHTS.toString()));
-		assertEquals(Facet.values().length - 1, facetList.size());
+		assertFalse(facetList.contains(SolrFacetType.RIGHTS.toString()));
+		assertEquals(SolrFacetType.values().length - 1, facetList.size());
 
 		query = new Query("*:*");
 		facetList = query.getFacets();
 		assertTrue(facetList.contains("RIGHTS"));
-		assertEquals(Facet.values().length, facetList.size());
+		assertEquals(SolrFacetType.values().length, facetList.size());
 
 		query.removeFacet("RIGHTS");
 		facetList = query.getFacets();
 		assertFalse(facetList.contains("RIGHTS"));
-		assertEquals(Facet.values().length - 1, facetList.size());
+		assertEquals(SolrFacetType.values().length - 1, facetList.size());
 	}
 
 	/**
@@ -169,7 +168,7 @@ public class QueryTest {
 
 		facetList = query.getFacets();
 		assertTrue(facetList.contains("RIGHTS"));
-		assertEquals(Facet.values().length, facetList.size());
+		assertEquals(SolrFacetType.values().length, facetList.size());
 
 		query.setFacets("RIGHTS", "YEAR");
 		facetList = query.getFacets();

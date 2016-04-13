@@ -164,7 +164,7 @@
 			multiValued="true" termVectors="true" />
                 <field name="europeana_completeness" type="tint" indexed="true"
 			stored="true" multiValued="false" />
-                <!-- Facet fields-->
+                <!-- SolrFacetType fields-->
                 <field name="CREATOR" type="string" indexed="true" stored="true" multiValued="true"/>
                 <field name="CONTRIBUTOR" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="UGC" type="string" indexed="true" stored="true"
