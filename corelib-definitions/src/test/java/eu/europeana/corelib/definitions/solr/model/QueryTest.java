@@ -123,22 +123,22 @@ public class QueryTest {
 	@Test
 	public void testRemoveFacet() {
 		Query query = new Query("*:*");
-		List<String> facetList = query.getFacets();
+		List<String> facetList = query.getSolrFacets();
 		assertTrue(facetList.contains(SolrFacetType.RIGHTS.name()));
 		assertEquals(SolrFacetType.values().length, facetList.size());
 
 		query.removeFacet(SolrFacetType.RIGHTS);
-		facetList = query.getFacets();
+		facetList = query.getSolrFacets();
 		assertFalse(facetList.contains(SolrFacetType.RIGHTS.toString()));
 		assertEquals(SolrFacetType.values().length - 1, facetList.size());
 
 		query = new Query("*:*");
-		facetList = query.getFacets();
+		facetList = query.getSolrFacets();
 		assertTrue(facetList.contains("RIGHTS"));
 		assertEquals(SolrFacetType.values().length, facetList.size());
 
 		query.removeFacet("RIGHTS");
-		facetList = query.getFacets();
+		facetList = query.getSolrFacets();
 		assertFalse(facetList.contains("RIGHTS"));
 		assertEquals(SolrFacetType.values().length - 1, facetList.size());
 	}
@@ -151,8 +151,8 @@ public class QueryTest {
 		Query query = new Query("*:*");
 		List<String> facetList;
 
-		query.setFacets("RIGHTS");
-		facetList = query.getFacets();
+		query.setSolrFacets("RIGHTS");
+		facetList = query.getSolrFacets();
 		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
 		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
 		assertEquals(1, facetList.size());
@@ -166,12 +166,12 @@ public class QueryTest {
 		Query query = new Query("*:*");
 		List<String> facetList;
 
-		facetList = query.getFacets();
+		facetList = query.getSolrFacets();
 		assertTrue(facetList.contains("RIGHTS"));
 		assertEquals(SolrFacetType.values().length, facetList.size());
 
-		query.setFacets("RIGHTS", "YEAR");
-		facetList = query.getFacets();
+		query.setSolrFacets("RIGHTS", "YEAR");
+		facetList = query.getSolrFacets();
 		assertTrue("should contain RIGHTS", facetList.contains("RIGHTS"));
 		assertTrue("should not contain YEAR", facetList.contains("YEAR"));
 		assertFalse("should not contain UGC", facetList.contains("UGC"));
@@ -179,8 +179,8 @@ public class QueryTest {
 
 		List<String> newFacets = new ArrayList<String>();
 		newFacets.add("RIGHTS");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
 		assertEquals(1, facetList.size());
@@ -188,8 +188,8 @@ public class QueryTest {
 		newFacets = new ArrayList<String>();
 		newFacets.add("RIGHTS");
 		newFacets.add("YEAR");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertTrue("should not contain YEAR", facetList.contains("YEAR"));
 		assertFalse("should not contain UGC", facetList.contains("UGC"));
@@ -206,8 +206,8 @@ public class QueryTest {
 		// test DEFAULT
 		newFacets = new ArrayList<String>();
 		newFacets.add("DEFAULT");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(11, facetList.size());
 
@@ -215,8 +215,8 @@ public class QueryTest {
 		newFacets = new ArrayList<String>();
 		newFacets.add("DEFAULT");
 		newFacets.add("proxy_dc_contributor");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertTrue("should contain rights", facetList.contains("proxy_dc_contributor"));
 		assertEquals(12, facetList.size());
@@ -229,8 +229,8 @@ public class QueryTest {
 
 		List<String> newFacets = new ArrayList<String>();
 		newFacets.add("DEFAULT");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(11, facetList.size());
 
@@ -240,8 +240,8 @@ public class QueryTest {
 
 		newFacets = new ArrayList<String>();
 		newFacets.add("DEFAULT");
-		query.setFacets(newFacets);
-		facetList = query.getFacets();
+		query.setSolrFacets(newFacets);
+		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(11, facetList.size());
 	}

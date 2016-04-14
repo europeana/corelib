@@ -557,7 +557,7 @@ public class SearchServiceImpl implements SearchService {
                     boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
                             .size() > 0);
 
-                    for (String facetToAdd : query.getFacets()) {
+                    for (String facetToAdd : query.getSolrFacets()) {
                         if (query.isProduceFacetUnion()) {
                             if (hasFacetRefinements
                                     && filteredFacets.contains(facetToAdd)) {

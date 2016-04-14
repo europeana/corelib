@@ -19,19 +19,13 @@ package eu.europeana.corelib.definitions.solr.model;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.collections.CollectionUtils;
 
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -87,22 +81,21 @@ public class Query implements Cloneable {
     private Map<String, String> parameterMap = new HashMap<>();
 
     private        String[]     refinementArray;
-    private static List<String> defaultFacetList;
-    private static List<String> allTechnicalFacetsList;
+    private static List<String> defaultSolrFacetList;
+    private static List<String> defaultTechnicalFacetList;
     static {
-        defaultFacetList = new ArrayList<>();
-        for (SolrFacetType facet : SolrFacetType.values()) {
-            defaultFacetList.add(facet.toString());
+        defaultSolrFacetList = new ArrayList<>();
+        for (SolrFacetType solrFacet : SolrFacetType.values()) {
+            defaultSolrFacetList.add(solrFacet.toString());
         }
-        allTechnicalFacetsList = new ArrayList<>();
+        defaultTechnicalFacetList = new ArrayList<>();
         for (TechnicalFacetType technicalFacet : TechnicalFacetType.values()) {
-            allTechnicalFacetsList.add(technicalFacet.getRealName());
+            defaultTechnicalFacetList.add(technicalFacet.toString());
         }
     }
-    private List<String>     facetList = new ArrayList<>(defaultFacetList);
-
+    private List<String>     solrFacetList = new ArrayList<>(defaultSolrFacetList);
     private List<String>     requestedTechnicalFacetsList;
-    private List<String>     allFacetsList;
+    private List<String>     allSolrFacetsList;
     private List<String>     searchRefinementList;
     private List<String>     facetRefinementList;
     private List<String>     filteredFacetList;
@@ -267,21 +260,29 @@ public class Query implements Cloneable {
         return this;
     }
 
-    public List<String> getFacets() {
-        return facetList;
+    public List<String> getSolrFacets() {
+        return solrFacetList;
     }
 
-    public Query setFacets(String... facets) {
-        return setFacets(Arrays.asList(facets));
+    public Query setSolrFacets(String... solrFacets) {
+        return setSolrFacets(Arrays.asList(solrFacets));
     }
 
-    public Query setFacets(List<String> mixedFacetList) {
-        if (mixedFacetList != null) {
-            requestedTechnicalFacetsList = (List<String>)CollectionUtils.intersection(allTechnicalFacetsList, mixedFacetList);
-            replaceSpecialFacets((List<String>)CollectionUtils.subtract(mixedFacetList, allTechnicalFacetsList));
+    public Query setSolrFacets(List<String> solrFacetList) {
+        if (solrFacetList != null) {
+            replaceSpecialSolrFacets(solrFacetList);
         } else {
-            this.facetList = defaultFacetList;
+            this.solrFacetList = defaultSolrFacetList;
         }
+        return this;
+    }
+
+    public Query setRequestedTechnicalFacets(String... requestedTechnicalFacets) {
+        return setRequestedTechnicalFacets(Arrays.asList(requestedTechnicalFacets));
+    }
+
+    public Query setRequestedTechnicalFacets(List<String> requestedTechnicalFacetsList) {
+        this.requestedTechnicalFacetsList = requestedTechnicalFacetsList;
         return this;
     }
 
@@ -299,30 +300,30 @@ public class Query implements Cloneable {
     }
 
     /**
-     * Replace special facetList.
+     * Replace special (solr)facets.
      * <p>
-     * Right now there are two special facetList: DEFAULT and REUSABILITY. DEFAULT
+     * Right now there are two special Solr facets: DEFAULT and REUSABILITY. DEFAULT
      * is replaced to the portal's default facet list. REUSABILITY will be skipped,
      * because it is a special query facet
      */
-    private void replaceSpecialFacets(List<String> SolrFacetList) {
-        List<String> replacedFacetList = new ArrayList<>();
-        for (String solrFacet : SolrFacetList) {
-            if (StringUtils.equalsIgnoreCase("DEFAULT", solrFacet)) {
-                replacedFacetList.addAll(defaultFacetList);
+    private void replaceSpecialSolrFacets(List<String> solrFacetList) {
+        Set<String> replacedFacetSet = new HashSet<>();
+        for (String solrFacet : solrFacetList) {
+            if (defaultFacetsRequested) {
+                replacedFacetSet.addAll(defaultSolrFacetList);
             } else if (StringUtils.equalsIgnoreCase("MEDIA", solrFacet)) {
-                replacedFacetList.add("has_media");
+                replacedFacetSet.add("has_media");
             } else if (StringUtils.equalsIgnoreCase("THUMBNAIL", solrFacet)) {
-                replacedFacetList.add("has_thumbnails");
+                replacedFacetSet.add("has_thumbnails");
             } else if (StringUtils.equalsIgnoreCase("TEXT_FULLTEXT", solrFacet)) {
-                replacedFacetList.add("is_fulltext");
+                replacedFacetSet.add("is_fulltext");
             } else if (StringUtils.equalsIgnoreCase("REUSABILITY", solrFacet)) {
                 continue;
             } else {
-                replacedFacetList.add(solrFacet);
+                replacedFacetSet.add(solrFacet);
             }
         }
-        this.facetList = replacedFacetList;
+        this.solrFacetList = new ArrayList<>(replacedFacetSet);
     }
 
     private void generateFacetTagQuery(int... tags) {
@@ -386,8 +387,8 @@ public class Query implements Cloneable {
             }
         }
 
-        if (facetList != null) {
-            for (String facet : facetList) {
+        if (solrFacetList != null) {
+            for (String facet : solrFacetList) {
                 params.add("facet.field=" + facet);
             }
         }
@@ -434,6 +435,10 @@ public class Query implements Cloneable {
 
     public Query setAllowFacets(boolean allowFacets) {
         this.allowFacets = allowFacets;
+        // check if there are technical facets requested. If so, make sure FACET_TAGS is on the list
+        // of Solr facets, because only then will the encoded technical metadata be added to the Solr output
+        if (allowFacets && null != requestedTechnicalFacetsList && requestedTechnicalFacetsList.size() > 0 &&
+                !solrFacetList.contains(SolrFacetType.FACET_TAGS)) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
     }
 
@@ -443,8 +448,8 @@ public class Query implements Cloneable {
     }
     //refactor to make it clear these are Solr facets only
     private void createAllFacetList() {
-        allFacetsList = new ArrayList<>();
-        allFacetsList.addAll(facetList);
+        allSolrFacetsList = new ArrayList<>();
+        allSolrFacetsList.addAll(solrFacetList);
     }
 
     public void removeFacet(SolrFacetType facetToRemove) {
@@ -452,14 +457,14 @@ public class Query implements Cloneable {
     }
 
     public void removeFacet(String facetToRemove) {
-        if (facetList.contains(facetToRemove)) {
-            facetList.remove(facetToRemove);
+        if (solrFacetList.contains(facetToRemove)) {
+            solrFacetList.remove(facetToRemove);
         }
     }
 
     public void setFacet(String facet) {
-        facetList = new ArrayList<>();
-        facetList.add(facet);
+        solrFacetList = new ArrayList<>();
+        solrFacetList.add(facet);
     }
 
     public String getExecutedQuery() {
@@ -505,7 +510,7 @@ public class Query implements Cloneable {
                     isTagged = true;
                 }
 
-                if (allFacetsList.contains(facetName)) {
+                if (allSolrFacetsList.contains(facetName)) {
                     String         key = pseudoFacetName == null ? facetName : pseudoFacetName;
                     FacetCollector collector;
                     if (register.containsKey(key)) {
