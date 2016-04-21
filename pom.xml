@@ -162,7 +162,7 @@
 			<id>snapshots</id>
 			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot-local</url>
 			<releases>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</releases>
 		</repository>
 		<repository>
