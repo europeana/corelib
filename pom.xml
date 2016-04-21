@@ -135,9 +135,18 @@
 				<artifactId>corelib-web</artifactId>
 				<version>${version.europeana.corelib}</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ext-snapshots</id>
+			<url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<repositories>
 		<repository>
