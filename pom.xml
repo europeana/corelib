@@ -152,9 +152,6 @@
 		<repository>
 		     <id>europeana-ext-release-local</id>
              <url>http://artifactory.eanadev.org/artifactory/ext-release-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 		</repository>
 		<repository>
 			<id>releases</id>
