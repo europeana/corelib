@@ -137,7 +137,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>ext-snapshots</id>
@@ -147,7 +146,6 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<repositories>
 		<repository>
 		     <id>europeana-ext-release-local</id>
