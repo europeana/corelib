@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
@@ -59,11 +60,11 @@ public class Query implements Cloneable {
     public static final int ORDER_ASC  = 1;
 
 
-    private boolean produceFacetUnion        = true;
-    private boolean allowSpellcheck          = true;
-    private boolean allowFacets              = true;
-    private boolean apiQuery                 = false;
-    private boolean defaultFacetsRequested   = false;
+    private boolean produceFacetUnion      = true;
+    private boolean spellcheckAllowed      = true;
+    private boolean allowFacets            = true;
+    private boolean apiQuery               = false;
+    private boolean defaultFacetsRequested = false;
 
 
     private int start;
@@ -79,6 +80,8 @@ public class Query implements Cloneable {
 
     private Map<String, String> valueReplacementMap;
     private Map<String, String> parameterMap = new HashMap<>();
+    private Map<String, Integer> technicalFacetOffsetMap = new HashMap<>();
+    private Map<String, Integer> technicalFacetLimitMap = new HashMap<>();
 
     private        String[]     refinementArray;
     private static List<String> defaultSolrFacetList;
@@ -101,6 +104,7 @@ public class Query implements Cloneable {
     private List<String>     filteredFacetList;
     private List<QueryFacet> queryFacetList;
 
+
     /**
      * CONSTRUCTORS
      */
@@ -109,7 +113,7 @@ public class Query implements Cloneable {
         this.query = query;
         start = DEFAULT_START;
         pageSize = DEFAULT_PAGE_SIZE;
-        createAllFacetList();
+        createAllSolrFacetList();
     }
 
     /**
@@ -264,8 +268,23 @@ public class Query implements Cloneable {
         return solrFacetList;
     }
 
+    public Query setSolrFacets(boolean defaultFacetsRequested, String... solrFacets) {
+        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
+        else if (defaultFacetsRequested){
+            this.solrFacetList = defaultSolrFacetList;
+            return this;
+        } else {
+            this.solrFacetList.clear();
+            return this;
+        }
+    }
+
     public Query setSolrFacets(String... solrFacets) {
-        return setSolrFacets(Arrays.asList(solrFacets));
+        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
+        else {
+            this.solrFacetList = defaultSolrFacetList;
+            return this;
+        }
     }
 
     public Query setSolrFacets(List<String> solrFacetList) {
@@ -283,6 +302,12 @@ public class Query implements Cloneable {
 
     public Query setRequestedTechnicalFacets(List<String> requestedTechnicalFacetsList) {
         this.requestedTechnicalFacetsList = requestedTechnicalFacetsList;
+        return this;
+    }
+
+    public Query setRequestedTechnicalFacets(boolean defaultFacetsRequested, String... requestedTechnicalFacets) {
+        if (defaultFacetsRequested) this.requestedTechnicalFacetsList = defaultTechnicalFacetList;
+        else if (ArrayUtils.isNotEmpty(requestedTechnicalFacets)) setRequestedTechnicalFacets(requestedTechnicalFacets);
         return this;
     }
 
@@ -365,6 +390,61 @@ public class Query implements Cloneable {
         return this;
     }
 
+    /**
+     * Adds Solr parameterMap to the Query object
+     *
+     * @param parameters Map containing parameter key-value pairs to be added
+     * @return The Query object
+     */
+    public Query setParameters(Map<String, String> parameters) {
+        parameterMap.putAll(parameters);
+        return this;
+    }
+
+    // funky java 8 stuff yippee
+    public Query convertAndSetSolrParameters(Map<String, Integer> parameters) {
+        if (parameters != null && !parameters.isEmpty()) {
+            parameterMap.putAll(parameters.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue()))));
+        }
+        return this;
+    }
+
+    /**
+     * Adds technical facet offsets to the Query object
+     * @param technicalFacetOffsetMap  Map of String, Integer containing technical facet names + offsets
+     * @return The Query object
+     */
+    public Query setTechnicalFacetOffsets(Map<String, Integer> technicalFacetOffsetMap) {
+        if (technicalFacetOffsetMap != null && !technicalFacetOffsetMap.isEmpty()) this.technicalFacetOffsetMap = technicalFacetOffsetMap;
+        return this;
+    }
+
+    /**
+     * Retrieves technical facet offsets
+     * @return   Map of String, Integer containing technical facet names + offsets
+     */
+    public Map<String, Integer> getTechnicalFacetOffsets() {
+        return this.technicalFacetOffsetMap;
+    }
+
+    /**
+     * Adds technical facet limits to the Query object
+     * @param technicalFacetLimitMap  Map of String, Integer containing technical facet names + limits
+     * @return The Query object
+     */
+    public Query setTechnicalFacetLimits(Map<String, Integer> technicalFacetLimitMap) {
+        if (technicalFacetLimitMap != null && !technicalFacetLimitMap.isEmpty()) this.technicalFacetLimitMap = technicalFacetLimitMap;
+        return this;
+    }
+
+    /**
+     * Retrieves technical facet limit
+     * @return   Map of String, Integer containing technical facet names + limits
+     */
+    public Map<String, Integer> getTechnicalFacetLimits() {
+        return this.technicalFacetLimitMap;
+    }
+
     @Override
     public Query clone() throws CloneNotSupportedException {
         return (Query) super.clone();
@@ -420,23 +500,29 @@ public class Query implements Cloneable {
         return produceFacetUnion;
     }
 
-    public boolean isAllowSpellcheck() {
-        return allowSpellcheck;
+    public boolean isSpellcheckAllowed() {
+        return spellcheckAllowed;
     }
 
-    public Query setAllowSpellcheck(boolean allowSpellcheck) {
-        this.allowSpellcheck = allowSpellcheck;
+    public Query setSpellcheckAllowed(boolean allowSpellcheck) {
+        this.spellcheckAllowed = allowSpellcheck;
         return this;
     }
 
-    public boolean isAllowFacets() {
+    public boolean isFacetsAllowed() {
         return allowFacets;
     }
 
-    public Query setAllowFacets(boolean allowFacets) {
+
+    /**
+     * Checks if there are any technical facets requested. If so, add FACET_TAGS to the list of Solr Facets,
+     * because the technical facet values are contained therein
+     *
+     * @param allowFacets boolean
+     * @return the Query object
+     */
+    public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        // check if there are technical facets requested. If so, make sure FACET_TAGS is on the list
-        // of Solr facets, because only then will the encoded technical metadata be added to the Solr output
         if (allowFacets && null != requestedTechnicalFacetsList && requestedTechnicalFacetsList.size() > 0 &&
                 !solrFacetList.contains(SolrFacetType.FACET_TAGS)) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
@@ -446,23 +532,23 @@ public class Query implements Cloneable {
         this.produceFacetUnion = produceFacetUnion;
         return this;
     }
-    //refactor to make it clear these are Solr facets only
-    private void createAllFacetList() {
+
+    private void createAllSolrFacetList() {
         allSolrFacetsList = new ArrayList<>();
         allSolrFacetsList.addAll(solrFacetList);
     }
 
-    public void removeFacet(SolrFacetType facetToRemove) {
-        removeFacet(facetToRemove.toString());
+    public void removeSolrFacet(SolrFacetType facetToRemove) {
+        removeSolrFacet(facetToRemove.toString());
     }
 
-    public void removeFacet(String facetToRemove) {
+    public void removeSolrFacet(String facetToRemove) {
         if (solrFacetList.contains(facetToRemove)) {
             solrFacetList.remove(facetToRemove);
         }
     }
 
-    public void setFacet(String facet) {
+    public void setSolrFacet(String facet) {
         solrFacetList = new ArrayList<>();
         solrFacetList.add(facet);
     }

@@ -55,7 +55,7 @@ public class QueryTest {
 			.setParameter("facet.mincount", "1")
 			.setParameter("sort", "relevance")
 			.setProduceFacetUnion(true)
-			.setAllowSpellcheck(false)
+			.setSpellcheckAllowed(false)
 		;
 		
 		assertEquals(refinements[0], query.getRefinements()[0]);
@@ -118,7 +118,7 @@ public class QueryTest {
 	}
 
 	/**
-	 * Testing removeFacet()
+	 * Testing removeSolrFacet()
 	 */
 	@Test
 	public void testRemoveFacet() {
@@ -127,7 +127,7 @@ public class QueryTest {
 		assertTrue(facetList.contains(SolrFacetType.RIGHTS.name()));
 		assertEquals(SolrFacetType.values().length, facetList.size());
 
-		query.removeFacet(SolrFacetType.RIGHTS);
+		query.removeSolrFacet(SolrFacetType.RIGHTS);
 		facetList = query.getSolrFacets();
 		assertFalse(facetList.contains(SolrFacetType.RIGHTS.toString()));
 		assertEquals(SolrFacetType.values().length - 1, facetList.size());
@@ -137,14 +137,14 @@ public class QueryTest {
 		assertTrue(facetList.contains("RIGHTS"));
 		assertEquals(SolrFacetType.values().length, facetList.size());
 
-		query.removeFacet("RIGHTS");
+		query.removeSolrFacet("RIGHTS");
 		facetList = query.getSolrFacets();
 		assertFalse(facetList.contains("RIGHTS"));
 		assertEquals(SolrFacetType.values().length - 1, facetList.size());
 	}
 
 	/**
-	 * Testing setFacet()
+	 * Testing setSolrFacet()
 	 */
 	@Test
 	public void testSetFacet1() {
@@ -159,7 +159,7 @@ public class QueryTest {
 	}
 
 	/**
-	 * Testing setFacet()
+	 * Testing setSolrFacet()
 	 */
 	@Test
 	public void testSetFacet() {
@@ -234,7 +234,7 @@ public class QueryTest {
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(11, facetList.size());
 
-		query.removeFacet("RIGHTS");
+		query.removeSolrFacet("RIGHTS");
 
 		query = new Query("*:*");
 

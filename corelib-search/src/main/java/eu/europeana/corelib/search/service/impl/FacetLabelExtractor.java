@@ -3,6 +3,8 @@ package eu.europeana.corelib.search.service.impl;
 import eu.europeana.corelib.definitions.model.facets.inverseLogic.*;
 import eu.europeana.crf_faketags.extractor.MediaTypeEncoding;
 
+
+// TODO I think this class is never used anymore. The code is also (and better) available in ModelUtils in api-war
 public class FacetLabelExtractor {
 
     public static String getFacetLabel(Integer tag) {

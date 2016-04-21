@@ -551,7 +551,7 @@ public class SearchServiceImpl implements SearchService {
                 }
 
                 // facets are optional
-                if (query.isAllowFacets()) {
+                if (query.isFacetsAllowed()) {
                     solrQuery.setFacet(true);
                     List<String> filteredFacets = query.getFilteredFacets();
                     boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
@@ -571,7 +571,7 @@ public class SearchServiceImpl implements SearchService {
                 }
 
                 // spellcheck is optional
-                if (query.isAllowSpellcheck()) {
+                if (query.isSpellcheckAllowed()) {
                     if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
                         solrQuery.setParam("spellcheck", "on");
                         solrQuery.setParam("spellcheck.collate", "true");
@@ -663,8 +663,8 @@ public class SearchServiceImpl implements SearchService {
         Query query = new Query(queryString).setParameter("rows", "0")
                 .setParameter("facet", "true").setRefinements(refinements)
                 .setParameter("facet.mincount", "1")
-                .setParameter("facet.limit", "750").setAllowSpellcheck(false);
-        query.setFacet(facetFieldName);
+                .setParameter("facet.limit", "750").setSpellcheckAllowed(false);
+        query.setSolrFacet(facetFieldName);
 
         final ResultSet<BriefBean> response = search(BriefBean.class, query);
         for (FacetField facetField : response.getFacetFields()) {
