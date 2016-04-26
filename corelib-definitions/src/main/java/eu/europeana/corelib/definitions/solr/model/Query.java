@@ -19,18 +19,15 @@ package eu.europeana.corelib.definitions.solr.model;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import eu.europeana.corelib.definitions.solr.SolrFacetType;
+import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
-import eu.europeana.corelib.definitions.solr.Facet;
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.utils.model.LanguageVersion;
@@ -40,691 +37,712 @@ import eu.europeana.corelib.utils.model.LanguageVersion;
  */
 public class Query implements Cloneable {
 
-	private String currentCursorMark;
+    private String currentCursorMark;
 
-	private final static String OR = " OR ";
+    private final static String OR = " OR ";
 
-	/**
-	 * Default start parameter for Solr
-	 */
-	private static final int DEFAULT_START = 0;
+    /**
+     * Default start parameter for Solr
+     */
+    private static final int DEFAULT_START = 0;
 
-	/**
-	 * Default number of items in the SERP
-	 */
-	private static final int DEFAULT_PAGE_SIZE = 12;
+    /**
+     * Default number of items in the SERP
+     */
+    private static final int DEFAULT_PAGE_SIZE = 12;
 
-	/**
-	 * Use these instead of the ones provided in the apache Solr package
-	 * in order to avoid introducing a dependency to that package in all modules
-	 * they're public because they are read from SearchServiceImpl
-	 */
-	public static final int ORDER_DESC = 0;
-	public static final int ORDER_ASC = 1;
+    /**
+     * Use these instead of the ones provided in the apache Solr package
+     * in order to avoid introducing a dependency to that package in all modules
+     * they're public because they are read from SearchServiceImpl
+     */
+    public static final int ORDER_DESC = 0;
+    public static final int ORDER_ASC  = 1;
 
-	private String query;
 
-	private String[] refinements;
+    private boolean produceFacetUnion      = true;
+    private boolean spellcheckAllowed      = true;
+    private boolean allowFacets            = true;
+    private boolean apiQuery               = false;
+    private boolean defaultFacetsRequested = false;
 
-	private QueryTranslation queryTranslation;
 
-	private Map<String, String> valueReplacements;
+    private int start;
+    private int pageSize;
+    private int sortOrder = ORDER_DESC;
 
-	private int start;
+    private String query;
+    private String queryType;
+    private String executedQuery;
+    private String sort;
 
-	private int pageSize;
+    private QueryTranslation queryTranslation;
 
-	private String sort;
+    private Map<String, String> valueReplacementMap;
+    private Map<String, String> parameterMap = new HashMap<>();
+    private Map<String, Integer> technicalFacetOffsetMap = new HashMap<>();
+    private Map<String, Integer> technicalFacetLimitMap = new HashMap<>();
 
-	private int sortOrder = ORDER_DESC ;
+    private        String[]     refinementArray;
+    private static List<String> defaultSolrFacetList;
+    private static List<String> defaultTechnicalFacetList;
+    static {
+        defaultSolrFacetList = new ArrayList<>();
+        for (SolrFacetType solrFacet : SolrFacetType.values()) {
+            defaultSolrFacetList.add(solrFacet.toString());
+        }
+        defaultTechnicalFacetList = new ArrayList<>();
+        for (TechnicalFacetType technicalFacet : TechnicalFacetType.values()) {
+            defaultTechnicalFacetList.add(technicalFacet.toString());
+        }
+    }
+    private List<String>     solrFacetList = new ArrayList<>(defaultSolrFacetList);
+    private List<String>     requestedTechnicalFacetsList;
+    private List<String>     allSolrFacetsList;
+    private List<String>     searchRefinementList;
+    private List<String>     facetRefinementList;
+    private List<String>     filteredFacetList;
+    private List<QueryFacet> queryFacetList;
 
-	private static List<String> defaultFacets;
-	static {
-		defaultFacets = new ArrayList<>();
-		for (Facet facet : Facet.values()) {
-			defaultFacets.add(facet.toString());
-		}
-	}
 
-	private List<String> facets = new ArrayList<>(defaultFacets);
+    /**
+     * CONSTRUCTORS
+     */
 
-	private List<String> allFacetList;
+    public Query(String query) {
+        this.query = query;
+        start = DEFAULT_START;
+        pageSize = DEFAULT_PAGE_SIZE;
+        createAllSolrFacetList();
+    }
 
-	private Map<String, String> parameters = new HashMap<>();
+    /**
+     * GETTERS & SETTERS
+     */
 
-	private String queryType;
-	private String executedQuery;
+    public String getQuery() {
+        return query;
+    }
 
-	private List<String> searchRefinements;
-	private List<String> facetRefinements;
-	private List<String> filteredFacets;
-	private List<QueryFacet> facetQueries;
+    public String getQuery(boolean withTranslations) {
+        if (withTranslations && queryTranslation != null && StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
+            return queryTranslation.getModifiedQuery();
+        }
+        return query;
+    }
 
-	private boolean produceFacetUnion = true;
+    public Query setQuery(String query) {
+        this.query = query;
+        return this;
+    }
 
-	private boolean allowSpellcheck = true;
-	private boolean allowFacets = true;
+    public String[] getRefinements() {
+        return getRefinements(false);
+    }
 
-	private boolean apiQuery = false;
+    public String[] getRefinements(boolean useDividedRefinements) {
+        if (!useDividedRefinements) {
+            return refinementArray;
+        } else {
+            divideRefinements();
+            return (String[]) ArrayUtils.addAll(searchRefinementList.toArray(new String[searchRefinementList.size()]), facetRefinementList.toArray(new String[facetRefinementList.size()]));
+        }
+    }
 
-	/**
-	 * CONSTRUCTORS
-	 */
+    public List<String> getFilteredFacets() {
+        return filteredFacetList;
+    }
 
-	public Query(String query) {
-		this.query = query;
+    public Query setRefinements(String... refinementArray) {
+        if (refinementArray != null) {
+            this.refinementArray = refinementArray.clone();
+        } else {
+            this.refinementArray = StringArrayUtils.EMPTY_ARRAY;
+        }
+        return this;
+    }
 
-		start = DEFAULT_START;
-		pageSize = DEFAULT_PAGE_SIZE;
-		createAllFacetList();
-		// facets.type.method = enum
-	}
+    public String getCurrentCursorMark() {
+        return this.currentCursorMark;
+    }
 
-	/**
-	 * GETTERS & SETTERS
-	 */
+    public Query setCurrentCursorMark(String currentCursorMark) {
+        this.currentCursorMark = currentCursorMark;
+        return this;
+    }
 
-	public String getQuery() {
-		return query;
-	}
+    public Query addRefinement(String refinement) {
+        if (this.refinementArray == null) {
+            this.refinementArray = StringArrayUtils.EMPTY_ARRAY;
+        }
+        this.refinementArray = (String[]) ArrayUtils.add(this.refinementArray, refinement);
+        return this;
+    }
 
-	public String getQuery(boolean withTranslations) {
-		if (withTranslations
-			&& queryTranslation != null
-			&& StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
-			return queryTranslation.getModifiedQuery();
-		}
-		return query;
-	}
+    public Query setValueReplacements(Map<String, String> valueReplacementMap) {
+        this.valueReplacementMap = valueReplacementMap;
+        return this;
+    }
 
-	public Query setQuery(String query) {
-		this.query = query;
-		return this;
-	}
+    public Query setQueryTranslation(QueryTranslation queryTranslation) {
+        this.queryTranslation = queryTranslation;
+        return this;
+    }
 
-	public String[] getRefinements() {
-		return getRefinements(false);
-	}
+    public QueryTranslation getQueryTranslation() {
+        return queryTranslation;
+    }
 
-	public String[] getRefinements(boolean useDividedRefinements) {
-            if (!useDividedRefinements) {
-                return refinements;
-            } else {
-                divideRefinements();
-                return (String[]) ArrayUtils.addAll(
-                        searchRefinements.toArray(new String[searchRefinements.size()]),
-                        facetRefinements.toArray(new String[facetRefinements.size()])
-                );
+    public Query addFacetQuery(QueryFacet queryFacet) {
+        if (queryFacetList == null) {
+            queryFacetList = new ArrayList<>();
+        }
+        queryFacetList.add(queryFacet);
+        return this;
+    }
+
+    public Query setQueryFacets(List<QueryFacet> queryFacets) {
+        this.queryFacetList = queryFacets;
+        return this;
+    }
+
+    public List<String> getQueryFacets() {
+        List<String> queries = new ArrayList<>();
+        if (queryFacetList != null) {
+            for (QueryFacet queryFacet : queryFacetList) {
+                queries.add(queryFacet.getQueryFacetString());
             }
+        }
+        return queries;
     }
 
-	public List<String> getFilteredFacets() {
-		return filteredFacets;
-	}
-
-	public Query setRefinements(String... refinements) {
-		if (refinements != null) {
-			this.refinements = refinements.clone();
-		} else {
-			this.refinements = StringArrayUtils.EMPTY_ARRAY;
-		}
-		return this;
-	}
-	public String getCurrentCursorMark(){
-		return this.currentCursorMark;
-	}
-
-	public Query setCurrentCursorMark(String currentCursorMark){
-		this.currentCursorMark = currentCursorMark;
-		return this;
-	}
-
-	public Query addRefinement(String refinement) {
-		if (this.refinements == null) {
-			this.refinements = StringArrayUtils.EMPTY_ARRAY;
-		}
-		this.refinements = (String[]) ArrayUtils.add(this.refinements, refinement);
-		return this;
-	}
-
-	public Query setValueReplacements(Map<String, String> valueReplacements) {
-		this.valueReplacements = valueReplacements;
-		return this;
-	}
-
-	public Query setQueryTranslation(QueryTranslation queryTranslation) {
-		this.queryTranslation = queryTranslation;
-		return this;
-	}
-
-	public QueryTranslation getQueryTranslation() {
-		return queryTranslation;
-	}
-
-	public Query addFacetQuery(QueryFacet queryFacet) {
-		if (facetQueries == null) {
-			facetQueries = new ArrayList<>();
-		}
-		facetQueries.add(queryFacet);
-		return this;
-	}
-
-	public Query setFacetQueries(List<QueryFacet> queryFacets) {
-		this.facetQueries = queryFacets;
-		return this;
-	}
-
-	public List<String> getFacetQueries() {
-		List<String> queries = new ArrayList<>();
-		if (facetQueries != null) {
-			for (QueryFacet queryFacet : facetQueries) {
-				queries.add(queryFacet.getQueryFacetString());
-			}
-		}
-		return queries;
-	}
-
-	public Integer getStart() {
-		return start;
-	}
-
-	public Query setStart(int start) {
-		this.start = start;
-		return this;
-	}
-
-	public String getSort() {
-		return sort;
-	}
-
-	public Query setSort(String sort) {
-		String[] parts;
-		if (sort == null || sort.isEmpty()) {
-			this.sort = "";
-		} else if (!sort.matches(".*\\s.*") && sort.length() > 0) {
-			this.sort = sort;
-		} else if (sort.matches(".+\\s(asc|ASC|desc|DESC)(ending|ENDING)?")) {
-			parts = sort.split("\\s");
-			this.sort = parts[0];
-			if (parts[1].matches("(asc|ASC).*")){
-				this.sortOrder = ORDER_ASC;
-			}
-		} else {
-			this.sort = "";
-		}
-		return this;
-	}
-
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public Query setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-		return this;
-	}
-
-
-
-	public List<String> getFacets() {
-		return facets;
-	}
-
-	public Query setFacets(String... facets) {
-		if (facets != null) {
-			this.facets = Arrays.asList(facets);
-			replaceSpecialFacets();
-		} else {
-			this.facets = defaultFacets;
-		}
-		return this;
-	}
-
-	public Query setFacets(List<String> facets) {
-		if (facets != null) {
-			this.facets = facets;
-			replaceSpecialFacets();
-		} else {
-			this.facets = defaultFacets;
-		}
-		return this;
-	}
-
-	/**
-	 * Replace special facets.
-	 * 
-	 * Right now there are two special facets: DEFAULT and REUSABILITY. DEFAULT
-	 * is replaced to the portal's default facet list. REUSABILITY will be skipped,
-	 * because it is a special query facet
-	 */
-	private void replaceSpecialFacets() {
-    boolean ok = false;
-		  List<String> additionalFacets = new ArrayList<>();
-				for (String facet: facets) {
-        if (StringUtils.equalsIgnoreCase("DEFAULT", facet)) {
-            additionalFacets.addAll(defaultFacets);
-        }
-        else if (StringUtils.equalsIgnoreCase("MEDIA", facet)) {
-            additionalFacets.add("has_media");
-        }
-        else if (StringUtils.equalsIgnoreCase("THUMBNAIL", facet)) {
-            additionalFacets.add("has_thumbnails");
-        }
-        else if (StringUtils.equalsIgnoreCase("TEXT_FULLTEXT", facet)) {
-            additionalFacets.add("is_fulltext");
-        }
-        else if (StringUtils.equalsIgnoreCase("REUSABILITY", facet)) {
-            continue;
-        }
-        /*
-        else if (StringUtils.equalsIgnoreCase("MIME_TYPE", facet)) {
-           ok = true;
-           for (final MediaTypeEncoding mediaTypeEncoding: MediaTypeEncoding.values()) {
-               addFacetQuery(new QueryFacet("filter_tags:" + mediaTypeEncoding.getEncodedValue(), "filter_tags"));
-           }
-        }
-        else if (StringUtils.equalsIgnoreCase("IMAGE_SIZE", facet)) {
-           ok = true;
-           final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
-           generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_SIZE.getBitPos()),
-                                  tag | (2 << TagEncoding.IMAGE_SIZE.getBitPos()),
-                                  tag | (3 << TagEncoding.IMAGE_SIZE.getBitPos()),
-                                  tag | (4 << TagEncoding.IMAGE_SIZE.getBitPos())
-                                 );
-        }
-        else if (StringUtils.equalsIgnoreCase("IMAGE_COLOUR", facet) ||
-                 StringUtils.equalsIgnoreCase("IMAGE_COLOR", facet)) {
-          ok = true;
-        }
-        else if (StringUtils.equalsIgnoreCase("IMAGE_GREYSCALE", facet) ||
-                 StringUtils.equalsIgnoreCase("IMAGE_GRAYSCALE", facet)) {
-          ok = true;
-          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
-          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
-                                 tag | (2 << TagEncoding.IMAGE_COLOURSPACE.getBitPos()),
-                                 tag | (3 << TagEncoding.IMAGE_COLOURSPACE.getBitPos())
-                                );
-        }
-        else if (StringUtils.equalsIgnoreCase("IMAGE_ASPECTRATIO", facet)) {
-          ok = true;
-          final int tag = MediaTypeEncoding.IMAGE.getEncodedValue();
-          generateFacetTagQuery (tag | (1 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos()),
-                                 tag | (2 << TagEncoding.IMAGE_ASPECTRATIO.getBitPos())
-                                );
-        }
-        else if (StringUtils.equalsIgnoreCase("VIODE_HD", facet)) {
-          ok = true;
-            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
-            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_QUALITY.getBitPos()),
-                                   tag | (0 << TagEncoding.VIDEO_QUALITY.getBitPos())
-                                  );
-        }
-        else if (StringUtils.equalsIgnoreCase("VIDEO_DURATION", facet)) {
-          ok = true;
-            final int tag = MediaTypeEncoding.VIDEO.getEncodedValue();
-            generateFacetTagQuery (tag | (1 << TagEncoding.VIDEO_DURATION.getBitPos()),
-                                   tag | (2 << TagEncoding.VIDEO_DURATION.getBitPos()),
-                                   tag | (3 << TagEncoding.VIDEO_DURATION.getBitPos())
-                                  );
-        }
-        else if (StringUtils.equalsIgnoreCase("SOUND_DURATION", facet)) {
-          ok = true;
-          final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
-          generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
-                                 tag | (0 << TagEncoding.SOUND_DURATION.getBitPos())
-                                 );
-        }
-        else if (StringUtils.equalsIgnoreCase("SOUND_HQ", facet)) {
-          ok = true;
-            final int tag = MediaTypeEncoding.SOUND.getEncodedValue();
-            generateFacetTagQuery (tag | (1 << TagEncoding.SOUND_DURATION.getBitPos()),
-                                   tag | (2 << TagEncoding.SOUND_DURATION.getBitPos())
-                                  );
-        }
-        */
-        else additionalFacets.add(facet);
+    public Integer getStart() {
+        return start;
     }
-		  facets = additionalFacets;
-	}
 
-    private void generateFacetTagQuery (int ... tags) {
+    public Query setStart(int start) {
+        this.start = start;
+        return this;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public Query setSort(String sort) {
+        String[] parts;
+        if (sort == null || sort.isEmpty()) {
+            this.sort = "";
+        } else if (!sort.matches(".*\\s.*") && sort.length() > 0) {
+            this.sort = sort;
+        } else if (sort.matches(".+\\s(asc|ASC|desc|DESC)(ending|ENDING)?")) {
+            parts = sort.split("\\s");
+            this.sort = parts[0];
+            if (parts[1].matches("(asc|ASC).*")) {
+                this.sortOrder = ORDER_ASC;
+            }
+        } else {
+            this.sort = "";
+        }
+        return this;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public Query setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+        return this;
+    }
+
+    public List<String> getSolrFacets() {
+        return solrFacetList;
+    }
+
+    public Query setSolrFacets(boolean defaultFacetsRequested, String... solrFacets) {
+        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
+        else if (defaultFacetsRequested){
+            this.solrFacetList = defaultSolrFacetList;
+            return this;
+        } else {
+            this.solrFacetList.clear();
+            return this;
+        }
+    }
+
+    public Query setSolrFacets(String... solrFacets) {
+        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
+        else {
+            this.solrFacetList = defaultSolrFacetList;
+            return this;
+        }
+    }
+
+    public Query setSolrFacets(List<String> solrFacetList) {
+        if (solrFacetList != null) {
+            replaceSpecialSolrFacets(solrFacetList);
+        } else {
+            this.solrFacetList = defaultSolrFacetList;
+        }
+        return this;
+    }
+
+    public Query setRequestedTechnicalFacets(String... requestedTechnicalFacets) {
+        return setRequestedTechnicalFacets(Arrays.asList(requestedTechnicalFacets));
+    }
+
+    public Query setRequestedTechnicalFacets(List<String> requestedTechnicalFacetsList) {
+        this.requestedTechnicalFacetsList = requestedTechnicalFacetsList;
+        return this;
+    }
+
+    public Query setRequestedTechnicalFacets(boolean defaultFacetsRequested, String... requestedTechnicalFacets) {
+        if (defaultFacetsRequested) this.requestedTechnicalFacetsList = defaultTechnicalFacetList;
+        else if (ArrayUtils.isNotEmpty(requestedTechnicalFacets)) setRequestedTechnicalFacets(requestedTechnicalFacets);
+        return this;
+    }
+
+    public List<String> getRequestedTechnicalFacets() {
+        return requestedTechnicalFacetsList;
+    }
+
+    public boolean isDefaultFacetsRequested() {
+        return this.defaultFacetsRequested;
+    }
+
+    public Query setDefaultFacetsRequested(boolean defaultFacetsRequested) {
+        this.defaultFacetsRequested = defaultFacetsRequested;
+        return this;
+    }
+
+    /**
+     * Replace special (solr)facets.
+     * <p>
+     * Right now there are two special Solr facets: DEFAULT and REUSABILITY. DEFAULT
+     * is replaced to the portal's default facet list. REUSABILITY will be skipped,
+     * because it is a special query facet
+     */
+    private void replaceSpecialSolrFacets(List<String> solrFacetList) {
+        Set<String> replacedFacetSet = new HashSet<>();
+        for (String solrFacet : solrFacetList) {
+            if (defaultFacetsRequested) {
+                replacedFacetSet.addAll(defaultSolrFacetList);
+            } else if (StringUtils.equalsIgnoreCase("MEDIA", solrFacet)) {
+                replacedFacetSet.add("has_media");
+            } else if (StringUtils.equalsIgnoreCase("THUMBNAIL", solrFacet)) {
+                replacedFacetSet.add("has_thumbnails");
+            } else if (StringUtils.equalsIgnoreCase("TEXT_FULLTEXT", solrFacet)) {
+                replacedFacetSet.add("is_fulltext");
+            } else if (StringUtils.equalsIgnoreCase("REUSABILITY", solrFacet)) {
+                continue;
+            } else {
+                replacedFacetSet.add(solrFacet);
+            }
+        }
+        this.solrFacetList = new ArrayList<>(replacedFacetSet);
+    }
+
+    private void generateFacetTagQuery(int... tags) {
         if (null == tags || 0 == tags.length) {
-            return ;
+            return;
         }
 
-        for (final int tag: tags) {
+        for (final int tag : tags) {
             addFacetQuery(new QueryFacet("facet_tags:" + tag, "facet_tags"));
         }
     }
 
     public boolean isApiQuery() {
-		return apiQuery;
-	}
+        return apiQuery;
+    }
 
-	public Query setApiQuery(boolean apiQuery) {
-		this.apiQuery = apiQuery;
-		return this;
-	}
+    public Query setApiQuery(boolean apiQuery) {
+        this.apiQuery = apiQuery;
+        return this;
+    }
 
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
+    public Map<String, String> getParameterMap() {
+        return parameterMap;
+    }
 
-	public boolean hasParameter(String key) {
-		return parameters.containsKey(key);
-	}
+    public boolean hasParameter(String key) {
+        return parameterMap.containsKey(key);
+    }
 
-	/**
-	 * Adds Solr parameters to the Query object
-	 *
-	 * @param key
-	 *   The parameter name
-	 * @param value
-	 *   The value of the parameter
-	 * @return 
-	 *   The Query object
-	 */
-	public Query setParameter(String key, String value) {
-		parameters.put(key, value);
-		return this;
-	}
+    /**
+     * Adds Solr parameterMap to the Query object
+     *
+     * @param key   The parameter name
+     * @param value The value of the parameter
+     * @return The Query object
+     */
+    public Query setParameter(String key, String value) {
+        parameterMap.put(key, value);
+        return this;
+    }
 
-	@Override
-	public Query clone() throws CloneNotSupportedException {
-		return (Query) super.clone();
-	}
+    /**
+     * Adds Solr parameterMap to the Query object
+     *
+     * @param parameters Map containing parameter key-value pairs to be added
+     * @return The Query object
+     */
+    public Query setParameters(Map<String, String> parameters) {
+        parameterMap.putAll(parameters);
+        return this;
+    }
 
-	@Override
-	public String toString() {
-		List<String> params = new ArrayList<>();
-		params.add("q=" + query);
-		params.add("start=" + start);
-		params.add("rows=" + pageSize);
+    // funky java 8 stuff yippee
+    public Query convertAndSetSolrParameters(Map<String, Integer> parameters) {
+        if (parameters != null && !parameters.isEmpty()) {
+            parameterMap.putAll(parameters.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue()))));
+        }
+        return this;
+    }
 
-		if (sort != null && sort.length() > 0){
-			params.add("sort=" + sort + " " + (sortOrder == ORDER_DESC ? "desc" : "asc"));
-		}
+    /**
+     * Adds technical facet offsets to the Query object
+     * @param technicalFacetOffsetMap  Map of String, Integer containing technical facet names + offsets
+     * @return The Query object
+     */
+    public Query setTechnicalFacetOffsets(Map<String, Integer> technicalFacetOffsetMap) {
+        if (technicalFacetOffsetMap != null && !technicalFacetOffsetMap.isEmpty()) this.technicalFacetOffsetMap = technicalFacetOffsetMap;
+        return this;
+    }
 
-		if (refinements != null) {
-			for (String refinement : refinements) {
-				params.add("qf=" + refinement);
-			}
-		}
+    /**
+     * Retrieves technical facet offsets
+     * @return   Map of String, Integer containing technical facet names + offsets
+     */
+    public Map<String, Integer> getTechnicalFacetOffsets() {
+        return this.technicalFacetOffsetMap;
+    }
 
-		if (facets != null) {
-			for (String facet : facets) {
-				params.add("facet.field=" + facet);
-			}
-		}
+    /**
+     * Adds technical facet limits to the Query object
+     * @param technicalFacetLimitMap  Map of String, Integer containing technical facet names + limits
+     * @return The Query object
+     */
+    public Query setTechnicalFacetLimits(Map<String, Integer> technicalFacetLimitMap) {
+        if (technicalFacetLimitMap != null && !technicalFacetLimitMap.isEmpty()) this.technicalFacetLimitMap = technicalFacetLimitMap;
+        return this;
+    }
 
-		if (parameters != null) {
-			for (Entry<String, String> parameter : parameters.entrySet()) {
-				params.add(parameter.getKey() + "=" + parameter.getValue());
-			}
-		}
+    /**
+     * Retrieves technical facet limit
+     * @return   Map of String, Integer containing technical facet names + limits
+     */
+    public Map<String, Integer> getTechnicalFacetLimits() {
+        return this.technicalFacetLimitMap;
+    }
 
-		if (getFacetQueries() != null) {
-			for (String query : getFacetQueries()) {
-				params.add("facet.query=" + query);
-			}
-		}
+    @Override
+    public Query clone() throws CloneNotSupportedException {
+        return (Query) super.clone();
+    }
 
-		return StringUtils.join(params, "&");
-	}
+    @Override
+    public String toString() {
+        List<String> params = new ArrayList<>();
+        params.add("q=" + query);
+        params.add("start=" + start);
+        params.add("rows=" + pageSize);
 
-	public String getQueryType() {
-		return queryType;
-	}
+        if (sort != null && sort.length() > 0) {
+            params.add("sort=" + sort + " " + (sortOrder == ORDER_DESC ? "desc" : "asc"));
+        }
 
-	public void setQueryType(String queryType) {
-		this.queryType = queryType;
-	}
+        if (refinementArray != null) {
+            for (String refinement : refinementArray) {
+                params.add("qf=" + refinement);
+            }
+        }
 
-	public boolean isProduceFacetUnion() {
-		return produceFacetUnion;
-	}
+        if (solrFacetList != null) {
+            for (String facet : solrFacetList) {
+                params.add("facet.field=" + facet);
+            }
+        }
 
-	public boolean isAllowSpellcheck() {
-		return allowSpellcheck;
-	}
+        if (parameterMap != null) {
+            for (Entry<String, String> parameter : parameterMap.entrySet()) {
+                params.add(parameter.getKey() + "=" + parameter.getValue());
+            }
+        }
 
-	public Query setAllowSpellcheck(boolean allowSpellcheck) {
-		this.allowSpellcheck = allowSpellcheck;
-		return this;
-	}
+        if (getQueryFacets() != null) {
+            for (String query : getQueryFacets()) {
+                params.add("facet.query=" + query);
+            }
+        }
 
-	public boolean isAllowFacets() {
-		return allowFacets;
-	}
+        return StringUtils.join(params, "&");
+    }
 
-	public Query setAllowFacets(boolean allowFacets) {
-		this.allowFacets = allowFacets;
-		return this;
-	}
+    public String getQueryType() {
+        return queryType;
+    }
 
-	public Query setProduceFacetUnion(boolean produceFacetUnion) {
-		this.produceFacetUnion = produceFacetUnion;
-		return this;
-	}
+    public void setQueryType(String queryType) {
+        this.queryType = queryType;
+    }
 
-	private void createAllFacetList() {
-		allFacetList = new ArrayList<>();
-		allFacetList.addAll(facets);
-	}
+    public boolean isProduceFacetUnion() {
+        return produceFacetUnion;
+    }
 
-	public void removeFacet(Facet facetToRemove) {
-		removeFacet(facetToRemove.toString());
-	}
+    public boolean isSpellcheckAllowed() {
+        return spellcheckAllowed;
+    }
 
-	public void removeFacet(String facetToRemove) {
-		if (facets.contains(facetToRemove)) {
-			facets.remove(facetToRemove);
-		}
-	}
+    public Query setSpellcheckAllowed(boolean allowSpellcheck) {
+        this.spellcheckAllowed = allowSpellcheck;
+        return this;
+    }
 
-	public void setFacet(String facet) {
-		facets = new ArrayList<>();
-		facets.add(facet);
-	}
+    public boolean isFacetsAllowed() {
+        return allowFacets;
+    }
 
-	public String getExecutedQuery() {
-		return executedQuery;
-	}
 
-	public void setExecutedQuery(String executedQuery) {
-		try {
-			this.executedQuery = URLDecoder.decode(executedQuery, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.executedQuery = executedQuery;
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Checks if there are any technical facets requested. If so, add FACET_TAGS to the list of Solr Facets,
+     * because the technical facet values are contained therein
+     *
+     * @param allowFacets boolean
+     * @return the Query object
+     */
+    public Query setFacetsAllowed(boolean allowFacets) {
+        this.allowFacets = allowFacets;
+        if (allowFacets && null != requestedTechnicalFacetsList && requestedTechnicalFacetsList.size() > 0 &&
+                !solrFacetList.contains(SolrFacetType.FACET_TAGS)) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        return this;
+    }
 
-	public void divideRefinements() {
-		searchRefinements = new ArrayList<>();
-		facetRefinements = new ArrayList<>();
+    public Query setProduceFacetUnion(boolean produceFacetUnion) {
+        this.produceFacetUnion = produceFacetUnion;
+        return this;
+    }
 
-		if (refinements == null) {
-			return;
-		}
+    private void createAllSolrFacetList() {
+        allSolrFacetsList = new ArrayList<>();
+        allSolrFacetsList.addAll(solrFacetList);
+    }
 
-		Map<String, FacetCollector> register = new LinkedHashMap<>();
-		for (String facetTerm : refinements) {
-			if (facetTerm.contains(":")) {
-				boolean replaced = false;
-				String pseudoFacetName = null;
-				if (valueReplacements != null && valueReplacements.containsKey(facetTerm)) {
-					pseudoFacetName = facetTerm.substring(0, facetTerm.indexOf(":"));
-					facetTerm = valueReplacements.get(facetTerm);
-					replaced = true;
-					if (StringUtils.isBlank(facetTerm)) {
-						continue;
-					}
-				}
+    public void removeSolrFacet(SolrFacetType facetToRemove) {
+        removeSolrFacet(facetToRemove.toString());
+    }
 
-				int colon = facetTerm.indexOf(":");
-				String facetName = facetTerm.substring(0, colon);
-				boolean isTagged = false;
-				if (facetName.contains("!tag")) {
-					facetName = facetName.replaceFirst("\\{!tag=.*?\\}", "");
-					isTagged = true;
-				}
+    public void removeSolrFacet(String facetToRemove) {
+        if (solrFacetList.contains(facetToRemove)) {
+            solrFacetList.remove(facetToRemove);
+        }
+    }
 
-				if (allFacetList.contains(facetName)) {
-					String key = pseudoFacetName == null ? facetName : pseudoFacetName;
-					FacetCollector collector;
-					if (register.containsKey(key)) {
-						collector = register.get(key);
-					} else {
-						collector = new FacetCollector(facetName, isApiQuery());
-						if (pseudoFacetName != null) {
-							collector.setTagName(pseudoFacetName);
-						}
-						register.put(key, collector);
-					}
-					if (isTagged && !collector.isTagged()) {
-						collector.setTagged(true);
-					}
-					collector.addValue(facetTerm.substring(colon + 1), replaced);
-				} else {
-					searchRefinements.add(facetTerm);
-				}
-			} else {
-				searchRefinements.add(facetTerm);
-			}
-		}
+    public void setSolrFacet(String facet) {
+        solrFacetList = new ArrayList<>();
+        solrFacetList.add(facet);
+    }
 
-		filteredFacets = new ArrayList<String>(register.keySet());
-		for (FacetCollector collector : register.values()) {
-			facetRefinements.add(collector.toString());
-		}
-	}
+    public String getExecutedQuery() {
+        return executedQuery;
+    }
 
-	public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
-		List<String> queryTranslationTerms = new ArrayList<>();
-		for (LanguageVersion term : languageVersions) {
-			String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
-			if (!queryTranslationTerms.contains(phrase)) {
-				queryTranslationTerms.add(phrase);
-			}
-		}
-		return StringUtils.join(queryTranslationTerms, " OR ");
-	}
+    public void setExecutedQuery(String executedQuery) {
+        try {
+            this.executedQuery = URLDecoder.decode(executedQuery, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            this.executedQuery = executedQuery;
+            e.printStackTrace();
+        }
+    }
 
-	private class FacetCollector {
-		private boolean isTagged = true;
-		private String name;
-		private String tagName;
-		private List<String> values = new ArrayList<>();
-		private List<String> replacedValues = new ArrayList<>();
-		private boolean isApiQuery = false;
-		private boolean replaced = false;
+    public void divideRefinements() {
+        searchRefinementList = new ArrayList<>();
+        facetRefinementList = new ArrayList<>();
 
-		public FacetCollector(String name) {
-			this.name = name;
-			this.tagName = name;
-		}
+        if (refinementArray == null) {
+            return;
+        }
 
-		public FacetCollector(String name, boolean isApiQuery) {
-			this(name);
-			this.isApiQuery = isApiQuery;
-		}
+        Map<String, FacetCollector> register = new LinkedHashMap<>();
+        for (String facetTerm : refinementArray) {
+            if (facetTerm.contains(":")) {
+                boolean replaced        = false;
+                String  pseudoFacetName = null;
+                if (valueReplacementMap != null && valueReplacementMap.containsKey(facetTerm)) {
+                    pseudoFacetName = facetTerm.substring(0, facetTerm.indexOf(":"));
+                    facetTerm = valueReplacementMap.get(facetTerm);
+                    replaced = true;
+                    if (StringUtils.isBlank(facetTerm)) {
+                        continue;
+                    }
+                }
 
-		public boolean isTagged() {
-			return isTagged;
-		}
+                int     colon     = facetTerm.indexOf(":");
+                String  facetName = facetTerm.substring(0, colon);
+                boolean isTagged  = false;
+                if (facetName.contains("!tag")) {
+                    facetName = facetName.replaceFirst("\\{!tag=.*?\\}", "");
+                    isTagged = true;
+                }
 
-		public void setTagged(boolean isTagged) {
-			this.isTagged = isTagged;
-		}
+                if (allSolrFacetsList.contains(facetName)) {
+                    String         key = pseudoFacetName == null ? facetName : pseudoFacetName;
+                    FacetCollector collector;
+                    if (register.containsKey(key)) {
+                        collector = register.get(key);
+                    } else {
+                        collector = new FacetCollector(facetName, isApiQuery());
+                        if (pseudoFacetName != null) {
+                            collector.setTagName(pseudoFacetName);
+                        }
+                        register.put(key, collector);
+                    }
+                    if (isTagged && !collector.isTagged()) {
+                        collector.setTagged(true);
+                    }
+                    collector.addValue(facetTerm.substring(colon + 1), replaced);
+                } else {
+                    searchRefinementList.add(facetTerm);
+                }
+            } else {
+                searchRefinementList.add(facetTerm);
+            }
+        }
 
-		public void setTagName(String tagName) {
-			this.tagName = tagName;
-		}
+        filteredFacetList = new ArrayList<String>(register.keySet());
+        for (FacetCollector collector : register.values()) {
+            facetRefinementList.add(collector.toString());
+        }
+    }
 
-		private boolean isAlreadyQuoted(String value) {
-			return value.startsWith("\"") && value.endsWith("\"");
-		}
+    public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
+        List<String> queryTranslationTerms = new ArrayList<>();
+        for (LanguageVersion term : languageVersions) {
+            String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
+            if (!queryTranslationTerms.contains(phrase)) {
+                queryTranslationTerms.add(phrase);
+            }
+        }
+        return StringUtils.join(queryTranslationTerms, " OR ");
+    }
 
-		private boolean hasOr(String value) {
-			return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
-		}
+    private class FacetCollector {
+        private boolean isTagged = true;
+        private String name;
+        private String tagName;
+        private List<String> values         = new ArrayList<>();
+        private List<String> replacedValues = new ArrayList<>();
+        private boolean      isApiQuery     = false;
+        private boolean      replaced       = false;
 
-		public void addValue(String value, boolean isReplaced) {
-			if (name.equals(Facet.RIGHTS.name())) {
-				if (value.endsWith("*")) {
-					value = value.replace(":", "\\:").replace("/", "\\/");
-				} else if (!isAlreadyQuoted(value) && !hasOr(value)) {
-					value = '"' + value + '"';
-				}
-			} else if (name.equals(Facet.TYPE.name())) {
-				value = value.toUpperCase().replace("\"", "");
-			} else {
-				if (!isApiQuery && (value.contains(" ") || value.contains("!"))) {
-					if (!value.startsWith("\"")) {
-						value = '"' + value;
-					}
-					if (!value.endsWith("\"")) {
-						value += '"';
-					}
-				}
-			}
-			if (isReplaced) {
-				replacedValues.add(value);
-			} else {
-				values.add(value);
-			}
-		}
+        public FacetCollector(String name) {
+            this.name = name;
+            this.tagName = name;
+        }
 
-		private String join(List<String> valueList, String booleanOperator) {
-			if (valueList.size() == 0) {
-				return null;
-			}
-			StringBuilder sb = new StringBuilder();
-			if (valueList.size() > 1) {
-				sb.append("(");
-				sb.append(StringUtils.join(valueList, booleanOperator));
-				sb.append(")");
-			} else {
-				sb.append(valueList.get(0));
-			}
+        public FacetCollector(String name, boolean isApiQuery) {
+            this(name);
+            this.isApiQuery = isApiQuery;
+        }
 
-			return sb.toString();
-		}
+        public boolean isTagged() {
+            return isTagged;
+        }
 
-		@Override
-		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			if (isTagged && !replaced) {
-				sb.append("{!tag=").append(tagName).append("}");
-			}
-			sb.append(name);
-			sb.append(":");
+        public void setTagged(boolean isTagged) {
+            this.isTagged = isTagged;
+        }
 
-			String valuesString = join(values, OR);
-			String replacedValuesString = join(replacedValues, OR);
+        public void setTagName(String tagName) {
+            this.tagName = tagName;
+        }
 
-			if (StringUtils.isNotBlank(valuesString)) {
-				if (StringUtils.isNotBlank(replacedValuesString)) {
-					sb.append(String.format("(%s AND %s)", valuesString, replacedValuesString));
-				} else {
-					sb.append(valuesString);
-				}
-			} else {
-				if (StringUtils.isNotBlank(replacedValuesString)) {
-					sb.append(replacedValuesString);
-				}
-			}
+        private boolean isAlreadyQuoted(String value) {
+            return value.startsWith("\"") && value.endsWith("\"");
+        }
 
-			return sb.toString();
-		}
-	}
+        private boolean hasOr(String value) {
+            return value.startsWith("(") && value.endsWith(")") && value.contains(" OR ");
+        }
+
+        public void addValue(String value, boolean isReplaced) {
+            if (name.equals(SolrFacetType.RIGHTS.name())) {
+                if (value.endsWith("*")) {
+                    value = value.replace(":", "\\:").replace("/", "\\/");
+                } else if (!isAlreadyQuoted(value) && !hasOr(value)) {
+                    value = '"' + value + '"';
+                }
+            } else if (name.equals(SolrFacetType.TYPE.name())) {
+                value = value.toUpperCase().replace("\"", "");
+            } else {
+                if (!isApiQuery && (value.contains(" ") || value.contains("!"))) {
+                    if (!value.startsWith("\"")) {
+                        value = '"' + value;
+                    }
+                    if (!value.endsWith("\"")) {
+                        value += '"';
+                    }
+                }
+            }
+            if (isReplaced) {
+                replacedValues.add(value);
+            } else {
+                values.add(value);
+            }
+        }
+
+        private String join(List<String> valueList, String booleanOperator) {
+            if (valueList.size() == 0) {
+                return null;
+            }
+            StringBuilder sb = new StringBuilder();
+            if (valueList.size() > 1) {
+                sb.append("(");
+                sb.append(StringUtils.join(valueList, booleanOperator));
+                sb.append(")");
+            } else {
+                sb.append(valueList.get(0));
+            }
+
+            return sb.toString();
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            if (isTagged && !replaced) {
+                sb.append("{!tag=").append(tagName).append("}");
+            }
+            sb.append(name);
+            sb.append(":");
+
+            String valuesString         = join(values, OR);
+            String replacedValuesString = join(replacedValues, OR);
+
+            if (StringUtils.isNotBlank(valuesString)) {
+                if (StringUtils.isNotBlank(replacedValuesString)) {
+                    sb.append(String.format("(%s AND %s)", valuesString, replacedValuesString));
+                } else {
+                    sb.append(valuesString);
+                }
+            } else {
+                if (StringUtils.isNotBlank(replacedValuesString)) {
+                    sb.append(replacedValuesString);
+                }
+            }
+
+            return sb.toString();
+        }
+    }
 }

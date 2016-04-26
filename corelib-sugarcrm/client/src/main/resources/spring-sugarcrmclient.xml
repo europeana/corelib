@@ -34,7 +34,7 @@
 	</bean>
 
 	<!-- Quartz Scheduler Bean -->
-	<bean id="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<bean id="sugarCRMPollingJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="eu.europeana.uim.sugarcrmclient.ws.quartz.PollingBean" />
 		<property name="jobDataAsMap">
 			<map>
@@ -43,7 +43,7 @@
 		</property>
 	</bean>
 
-	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail" ref="sugarCRMPollingJob" />
 		<property name="startDelay" value="10000" />
 		<property name="repeatInterval" value="150000" />

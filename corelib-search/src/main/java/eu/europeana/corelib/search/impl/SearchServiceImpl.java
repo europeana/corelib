@@ -543,21 +543,21 @@ public class SearchServiceImpl implements SearchService {
                 resultSet.setSortField(solrQuery.getSortField());
 
                 // add extra parameters if any
-                if (query.getParameters() != null) {
-                    Map<String, String> parameters = query.getParameters();
+                if (query.getParameterMap() != null) {
+                    Map<String, String> parameters = query.getParameterMap();
                     for (String key : parameters.keySet()) {
                         solrQuery.setParam(key, parameters.get(key));
                     }
                 }
 
                 // facets are optional
-                if (query.isAllowFacets()) {
+                if (query.isFacetsAllowed()) {
                     solrQuery.setFacet(true);
                     List<String> filteredFacets = query.getFilteredFacets();
                     boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
                             .size() > 0);
 
-                    for (String facetToAdd : query.getFacets()) {
+                    for (String facetToAdd : query.getSolrFacets()) {
                         if (query.isProduceFacetUnion()) {
                             if (hasFacetRefinements
                                     && filteredFacets.contains(facetToAdd)) {
@@ -571,7 +571,7 @@ public class SearchServiceImpl implements SearchService {
                 }
 
                 // spellcheck is optional
-                if (query.isAllowSpellcheck()) {
+                if (query.isSpellcheckAllowed()) {
                     if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
                         solrQuery.setParam("spellcheck", "on");
                         solrQuery.setParam("spellcheck.collate", "true");
@@ -580,9 +580,9 @@ public class SearchServiceImpl implements SearchService {
                         solrQuery.setParam("spellcheck.q", query.getQuery());
                     }
                 }
-
-                if (query.getFacetQueries() != null) {
-                    for (String facetQuery : query.getFacetQueries()) {
+                // change this to *isblank / empty
+                if (query.getQueryFacets() != null) {
+                    for (String facetQuery : query.getQueryFacets()) {
                         solrQuery.addFacetQuery(facetQuery);
                     }
                 }
@@ -663,8 +663,8 @@ public class SearchServiceImpl implements SearchService {
         Query query = new Query(queryString).setParameter("rows", "0")
                 .setParameter("facet", "true").setRefinements(refinements)
                 .setParameter("facet.mincount", "1")
-                .setParameter("facet.limit", "750").setAllowSpellcheck(false);
-        query.setFacet(facetFieldName);
+                .setParameter("facet.limit", "750").setSpellcheckAllowed(false);
+        query.setSolrFacet(facetFieldName);
 
         final ResultSet<BriefBean> response = search(BriefBean.class, query);
         for (FacetField facetField : response.getFacetFields()) {
@@ -740,8 +740,8 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.setSortField("score", ORDER.desc);
             solrQuery.setTimeAllowed(TIME_ALLOWED);
             // add extra parameters if any
-            if (query.getParameters() != null) {
-                Map<String, String> parameters = query.getParameters();
+            if (query.getParameterMap() != null) {
+                Map<String, String> parameters = query.getParameterMap();
                 for (String key : parameters.keySet()) {
                     solrQuery.setParam(key, parameters.get(key));
                 }

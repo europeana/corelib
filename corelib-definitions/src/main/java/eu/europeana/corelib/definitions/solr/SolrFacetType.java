@@ -22,7 +22,7 @@ package eu.europeana.corelib.definitions.solr;
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
-public enum Facet {
+public enum SolrFacetType {
 
     UGC("UGC"),
     LANGUAGE("LANGUAGE"),
@@ -39,7 +39,7 @@ public enum Facet {
 
     private String facet;
 
-    Facet(String facets) {
+    SolrFacetType(String facets) {
         this.facet = facets;
     }
 
