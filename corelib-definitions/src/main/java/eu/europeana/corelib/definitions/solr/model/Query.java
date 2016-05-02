@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.EnumUtils;
 
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -301,7 +302,10 @@ public class Query implements Cloneable {
     }
 
     public Query setRequestedTechnicalFacets(List<String> requestedTechnicalFacetsList) {
-        this.requestedTechnicalFacetsList = requestedTechnicalFacetsList;
+        this.requestedTechnicalFacetsList = new ArrayList<>();
+        requestedTechnicalFacetsList.forEach((technicalFacet) -> {
+            if (EnumUtils.isValidEnum(TechnicalFacetType.class, technicalFacet))
+                this.requestedTechnicalFacetsList.add(technicalFacet);});
         return this;
     }
 
@@ -330,11 +334,12 @@ public class Query implements Cloneable {
      * Right now there are two special Solr facets: DEFAULT and REUSABILITY. DEFAULT
      * is replaced to the portal's default facet list. REUSABILITY will be skipped,
      * because it is a special query facet
+     * NOTE retained the check for "DEFAULT" for backwards compatibility
      */
     private void replaceSpecialSolrFacets(List<String> solrFacetList) {
         Set<String> replacedFacetSet = new HashSet<>();
         for (String solrFacet : solrFacetList) {
-            if (defaultFacetsRequested) {
+            if (defaultFacetsRequested || StringUtils.equalsIgnoreCase("DEFAULT", solrFacet)) {
                 replacedFacetSet.addAll(defaultSolrFacetList);
             } else if (StringUtils.equalsIgnoreCase("MEDIA", solrFacet)) {
                 replacedFacetSet.add("has_media");
@@ -576,7 +581,7 @@ public class Query implements Cloneable {
 
         Map<String, FacetCollector> register = new LinkedHashMap<>();
         for (String facetTerm : refinementArray) {
-            if (facetTerm.contains(":")) {
+            if (facetTerm.contains(":")) { // NOTE this shouldn't happen anymore, see SearchController
                 boolean replaced        = false;
                 String  pseudoFacetName = null;
                 if (valueReplacementMap != null && valueReplacementMap.containsKey(facetTerm)) {

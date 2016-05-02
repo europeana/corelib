@@ -32,9 +32,9 @@ public enum SolrFacetType {
     DATA_PROVIDER("DATA_PROVIDER"),
     COUNTRY("COUNTRY"),
     RIGHTS("RIGHTS"),
-    FACET_TAGS("facet_tags"),
+    FACET_TAGS("facet_tags"), //SOLR eats 'm lowercase
     IS_FULLTEXT("is_fulltext"),
-    //HAS_THUMBNAILS("has_thumbnails"),
+    HAS_THUMBNAILS("has_thumbnails"),
     HAS_MEDIA("has_media");
 
     private String facet;

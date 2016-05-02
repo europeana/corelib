@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.solr.SolrFacetType;
+import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
 import org.junit.Test;
 
 public class QueryTest {
@@ -168,7 +169,7 @@ public class QueryTest {
 
 		facetList = query.getSolrFacets();
 		assertTrue(facetList.contains("RIGHTS"));
-		assertEquals(SolrFacetType.values().length, facetList.size());
+		assertEquals(SolrFacetType.values().length + TechnicalFacetType.values().length, facetList.size());
 
 		query.setSolrFacets("RIGHTS", "YEAR");
 		facetList = query.getSolrFacets();
@@ -177,7 +178,7 @@ public class QueryTest {
 		assertFalse("should not contain UGC", facetList.contains("UGC"));
 		assertEquals(2, facetList.size());
 
-		List<String> newFacets = new ArrayList<String>();
+		List<String> newFacets = new ArrayList<>();
 		newFacets.add("RIGHTS");
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
@@ -185,15 +186,56 @@ public class QueryTest {
 		assertFalse("should not contain YEAR", facetList.contains("YEAR"));
 		assertEquals(1, facetList.size());
 
-		newFacets = new ArrayList<String>();
+		newFacets = new ArrayList<>();
 		newFacets.add("RIGHTS");
 		newFacets.add("YEAR");
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertTrue("should not contain YEAR", facetList.contains("YEAR"));
+		assertTrue("should not contain YEAR", facetList.contains("YEAR")); // <- Huh? But it does.
 		assertFalse("should not contain UGC", facetList.contains("UGC"));
 		assertEquals(2, facetList.size());
+
+		// technical facets
+		newFacets = new ArrayList<>();
+		newFacets.add("SOUND_HQ");
+		newFacets.add("IMAGE_COLOUR");
+		newFacets.add("MEDIA"); // heh heh heh heh
+		query.setRequestedTechnicalFacets(newFacets);
+		facetList = query.getRequestedTechnicalFacets();
+		assertFalse("should NOT contain mimetype", facetList.contains("MIME_TYPE"));
+		assertFalse("should NOT contain is_fulltext", facetList.contains("TEXT_FULLTEXT"));
+		assertFalse("should NOT contain language", facetList.contains("LANGUAGE"));
+		assertFalse("should NOT contain has-media", facetList.contains("HAS_MEDIA")); // instinker!
+		assertTrue("should contain image colour", facetList.contains("IMAGE_COLOUR"));
+		assertTrue("should contain sound HQ", facetList.contains("SOUND_HQ"));
+		assertFalse("should NOT contain video duration", facetList.contains("VIDEO_DURATION"));
+		assertFalse("should NOT contain proxy_dc_contributor", facetList.contains("proxy_dc_contributor"));
+		assertEquals(2, facetList.size());
+
+
+		// mixed case
+		newFacets = new ArrayList<>();
+		newFacets.add("LANGUAGE");
+		newFacets.add("TYPE");
+		newFacets.add("MEDIA");
+		query.setSolrFacets(newFacets);
+		newFacets = new ArrayList<>();
+		newFacets.add("VIDEO_DURATION");
+		newFacets.add("THUMBNAIL"); // nogmaals: heh heh heh ...
+		query.setRequestedTechnicalFacets(newFacets);
+		facetList = query.getSolrFacets();
+		facetList.addAll(query.getRequestedTechnicalFacets());
+		assertTrue("should contain language", facetList.contains("LANGUAGE"));
+		assertFalse("should NOT contain data provider", facetList.contains("DATA_PROVIDER"));
+		assertTrue("should contain has_media", facetList.contains("has_media")); // yes, bc it's added as SOLR facet
+		assertFalse("should NOT contain has_thumbnails", facetList.contains("has_thumbnails")); // instinker!
+		assertFalse("should NOT contain mimetype", facetList.contains("MIME_TYPE"));
+		assertFalse("should NOT contain is_fulltext", facetList.contains("is_fulltext"));
+		assertTrue("should contain video duration", facetList.contains("VIDEO_DURATION"));
+		assertTrue("should contain type", facetList.contains("TYPE"));
+		assertEquals(4, facetList.size());
+
 	}
 
 	@Test
@@ -203,23 +245,80 @@ public class QueryTest {
 
 		List<String> newFacets;
 
-		// test DEFAULT
-		newFacets = new ArrayList<String>();
+		// test DEFAULT - NOTE that specifying the DEFAULT facet via the API SearchController will now also cause the
+		// technical facets to be included using the setRequestedTechnicalFacets(boolean defaultFacetsRequested ..) method
+		// setting the Solr facets directly here will just add the default SOLR facets
+		newFacets = new ArrayList<>();
 		newFacets.add("DEFAULT");
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(11, facetList.size());
+		assertEquals(12, facetList.size());
 
-		// test DEFAULT + something else
-		newFacets = new ArrayList<String>();
+		// test DEFAULT + something else (see note about technical facets above)
+		newFacets = new ArrayList<>();
 		newFacets.add("DEFAULT");
 		newFacets.add("proxy_dc_contributor");
+		newFacets.add("pl_skos_altLabel");
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertTrue("should contain rights", facetList.contains("proxy_dc_contributor"));
-		assertEquals(12, facetList.size());
+		assertTrue("should contain proxy_dc_contributor", facetList.contains("proxy_dc_contributor"));
+		assertTrue("should contain pl_skos_altLabel", facetList.contains("pl_skos_altLabel"));
+		assertEquals(14, facetList.size());
+
+		// test adding technical facets
+		newFacets = new ArrayList<>();
+		newFacets.add("VIDEO_DURATION");
+		newFacets.add("COLOURPALETTE");
+		query.setRequestedTechnicalFacets(newFacets);
+		facetList = query.getRequestedTechnicalFacets();
+		assertTrue("should contain video duration", facetList.contains("VIDEO_DURATION"));
+		assertTrue("should contain colour palette", facetList.contains("COLOURPALETTE"));
+		assertEquals(2, facetList.size());
+
+		// test adding default technical facets with boolean flag & empty array
+		String[] techFacetArray = new String[0];
+		query.setRequestedTechnicalFacets(true, techFacetArray);
+		facetList = query.getRequestedTechnicalFacets();
+		assertTrue("should contain mimetype", facetList.contains("MIME_TYPE"));
+		assertTrue("should contain image size", facetList.contains("IMAGE_SIZE"));
+		assertTrue("should contain image aspectratio", facetList.contains("IMAGE_ASPECTRATIO"));
+		assertTrue("should contain image colour", facetList.contains("IMAGE_COLOUR"));
+		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
+		assertTrue("should contain colour palette", facetList.contains("COLOURPALETTE"));
+		assertTrue("should contain video duration", facetList.contains("VIDEO_DURATION"));
+		assertTrue("should contain video HD", facetList.contains("VIDEO_HD"));
+		assertTrue("should contain sound HQ", facetList.contains("SOUND_HQ"));
+		assertTrue("should contain sound duration", facetList.contains("SOUND_DURATION"));
+		assertEquals(10, facetList.size());
+
+		// test mixed facets
+		newFacets = new ArrayList<>();
+		newFacets.add("LANGUAGE");
+		newFacets.add("RIGHTS");
+		newFacets.add("proxy_dc_contributor");
+		query.setSolrFacets(newFacets);
+		newFacets = new ArrayList<>();
+		newFacets.add("SOUND_HQ");
+		newFacets.add("IMAGE_GREYSCALE");
+		query.setRequestedTechnicalFacets(newFacets);
+		facetList = query.getSolrFacets();
+		facetList.addAll(query.getRequestedTechnicalFacets());
+		assertTrue("should contain language", facetList.contains("LANGUAGE"));
+		assertTrue("should contain sound HQ", facetList.contains("SOUND_HQ"));
+		assertTrue("should contain rights", facetList.contains("RIGHTS"));
+		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
+		assertTrue("should contain proxy_dc_contributor", facetList.contains("proxy_dc_contributor"));
+		assertEquals(5, facetList.size());
+
+		// test The Works
+		String[] emptyFacetArray = new String[0];
+		query.setSolrFacets(true, emptyFacetArray);
+		query.setRequestedTechnicalFacets(true, emptyFacetArray);
+		facetList = query.getSolrFacets();
+		facetList.addAll(query.getRequestedTechnicalFacets());
+		assertEquals(22, facetList.size());
 	}
 
 	@Test
@@ -232,17 +331,17 @@ public class QueryTest {
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(11, facetList.size());
+		assertEquals(12, facetList.size());
 
 		query.removeSolrFacet("RIGHTS");
 
 		query = new Query("*:*");
 
-		newFacets = new ArrayList<String>();
+		newFacets = new ArrayList<>();
 		newFacets.add("DEFAULT");
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(11, facetList.size());
+		assertEquals(12, facetList.size());
 	}
 }
