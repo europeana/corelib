@@ -33,9 +33,9 @@ public enum SolrFacetType {
     COUNTRY("COUNTRY"),
     RIGHTS("RIGHTS"),
     FACET_TAGS("facet_tags"), //SOLR eats 'm lowercase
-    IS_FULLTEXT("is_fulltext"),
-    HAS_THUMBNAILS("has_thumbnails"),
-    HAS_MEDIA("has_media");
+    TEXT_FULLTEXT("is_fulltext"),
+    THUMBNAILS("has_thumbnails"),
+    MEDIA("has_media");
 
     private String facet;
 
