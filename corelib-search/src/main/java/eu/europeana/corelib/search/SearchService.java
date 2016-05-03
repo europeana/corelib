@@ -135,7 +135,7 @@ public interface SearchService {
 	/**
 	 * Create collection list for a given query and facet field
 	 * 
-     * @param facetFieldName The Facet field to create the collection for
+     * @param facetFieldName The SolrFacetType field to create the collection for
      * @param queryString    The Query to use for creating the collection
      * @param refinements    Optional refinements
 	 * @return               A List of FacetField.Count objects containing the collection

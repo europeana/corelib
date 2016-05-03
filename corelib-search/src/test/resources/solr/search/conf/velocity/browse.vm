@@ -9,7 +9,7 @@
 #end
 
 <div class="navigators">
-  #parse("facets.vm")
+  #parse("facetList.vm")
 </div>
 
 <div class="pagination">
