@@ -20,16 +20,14 @@ package eu.europeana.corelib.db.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.transaction.annotation.Transactional;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
@@ -39,9 +37,10 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.dao.RelationalDao
  */
+@Transactional
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
-    @PersistenceContext(name = "corelib_db_entityManagerFactory")
+    @PersistenceContext(type = PersistenceContextType.EXTENDED, name = "corelib_db_entityManagerFactory")
     private EntityManager entityManager;
 
     private Class<E> domainClazz = null;
