@@ -26,7 +26,7 @@ import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public abstract class EmailServiceImpl implements EmailService {
     private final Logger log = Logger.getLogger(EmailServiceImpl.class);
 
     @Resource
-    private JavaMailSender mailSender;
+    private JavaMailSenderImpl mailSender;
 
     @Override
     public void sendActivationToken(Token token, String apiHost) throws EmailServiceException {
