@@ -39,8 +39,9 @@ public class OAuth2TokenAccessServiceImpl extends AbstractNoSqlServiceImpl<Acces
 	}
 
 	@Override
-	public List<AccessToken> findByUserName(String userName) {
+	public List<AccessToken> findByClientIdAndUsername(String clientId, String userName) {
 		Query<AccessToken> query = getDao().createQuery();
+		query.field("clientId").equal(clientId);
 		query.field("userName").equal(userName);
 		return query.asList();
 	}

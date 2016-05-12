@@ -17,45 +17,20 @@
 
 package eu.europeana.corelib.edm.utils;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.jibx.AgentType;
-import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
+import eu.europeana.corelib.definitions.edm.entity.*;
+import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.Concept;
-import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.License;
-import eu.europeana.corelib.definitions.jibx.PlaceType;
-import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
-import eu.europeana.corelib.definitions.jibx.ProxyFor;
-import eu.europeana.corelib.definitions.jibx.ProxyIn;
-import eu.europeana.corelib.definitions.jibx.ProxyType;
-import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-import eu.europeana.corelib.edm.server.importer.util.AgentFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.AggregationFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ConceptFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.EuropeanaAggregationFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.LicenseFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.PlaceFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ProvidedCHOFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.TimespanFieldInput;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.definitions.jibx.Service;
+import eu.europeana.corelib.edm.server.importer.util.*;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.solr.entity.*;
+import org.apache.commons.lang.StringUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A FullBean Constructor from an EDM XML
@@ -79,6 +54,7 @@ public class MongoConstructor {
 		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
 		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
 		List<LicenseImpl> licenses = new ArrayList<LicenseImpl>();
+		List<ServiceImpl> services = new ArrayList<>();
 		String aggregationAbout = "/aggregation/provider";
 		String europeanaAggregationAbout = "/aggregation/europeana";
 		String proxyAbout = "/proxy/provider";
@@ -201,10 +177,15 @@ public class MongoConstructor {
 								SolrUtils.getPreviewUrl(record)));
 			}
 		}
-
+		if(record.getServiceList()!=null){
+			for (Service service:record.getServiceList()){
+				services.add(new ServiceFieldInput().createServiceMongoFields(service));
+			}
+		}
 		fullBean.setProvidedCHOs(providedCHOs);
 
 		fullBean.setAggregations(aggregations);
+		fullBean.setServices(services);
 		try {
 			if (agents.size() > 0) {
 				fullBean.setAgents(agents);

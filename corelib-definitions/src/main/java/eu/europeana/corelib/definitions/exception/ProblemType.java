@@ -31,6 +31,7 @@ public enum ProblemType {
 	UNABLE_TO_CHANGE_LANGUAGE("We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
 	TOKEN_INVALID("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
 	TOKEN_EXPIRED("Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
+	TOKEN_MISMATCH("This Europeana token is not associated with the supplied email address.", ProblemResponseAction.LOG),
 	UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
 	TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
 	SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),

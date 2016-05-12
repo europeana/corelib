@@ -69,7 +69,7 @@ public class TokenServiceTest {
 
 	@Test
 	public void testCreate() throws DatabaseException {
-		Token token = tokenService.create("test@europeana.eu");
+		Token token = tokenService.create("test@europeana.eu", "http://europeana.eu/");
 		assertNotNull("Unable to create token", token);
 		token = tokenService.findByID(token.getToken());
 		assertNotNull("Unable to retrieve created token", token);
@@ -79,7 +79,7 @@ public class TokenServiceTest {
 
 	@Test(expected=DatabaseException.class)
 	public void testCreateInvalidEmail() throws DatabaseException {
-		tokenService.create(" ");
+		tokenService.create(" ", " ");
 		fail("This line should never be reached!!!");
 	}
 	
@@ -88,7 +88,7 @@ public class TokenServiceTest {
 		Calendar expired = Calendar.getInstance();
 		expired.add(Calendar.MILLISECOND, -TokenService.MAX_TOKEN_AGE);
 		
-		Token token = tokenService.create("test@europeana.eu");
+		Token token = tokenService.create("test@europeana.eu", "http://europeana.eu/");
 		assertNotNull("Unable to create token", token);
 		// change date to expired date
 		token.setCreated(expired.getTime());

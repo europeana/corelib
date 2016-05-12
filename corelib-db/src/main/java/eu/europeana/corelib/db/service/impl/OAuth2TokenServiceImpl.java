@@ -57,15 +57,15 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	public AccessToken findAccessTokenByID(String id) {
 		return accessTokenService.findByID(id);
 	}
-	
+
+	@Override
+	public List<AccessToken> findByClientIdAndUserName(String clientId, String userName) {
+		return accessTokenService.findByClientIdAndUsername(clientId, userName);
+	}
+
 	@Override
 	public List<AccessToken> findByClientId(String clientId) {
 		return accessTokenService.findByClientId(clientId);
-	}
-	
-	@Override
-	public List<AccessToken> findByUserName(String userName) {
-		return accessTokenService.findByUserName(userName);
 	}
 	
 	@Override

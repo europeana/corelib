@@ -25,8 +25,7 @@ import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.google.code.morphia.Datastore;
-
-import eu.europeana.corelib.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Api Mongo connector
@@ -34,8 +33,7 @@ import eu.europeana.corelib.logging.Logger;
  */
 public class ApiMongoConnector {
 
-	private static Logger log = Logger.getLogger(ApiMongoConnector.class
-			.getCanonicalName());
+	private static Logger log = Logger.getLogger(ApiMongoConnector.class);
 
 	/**
 	 * Default constructor

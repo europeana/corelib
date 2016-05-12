@@ -16,22 +16,10 @@
  */
 package eu.europeana.corelib.edm.server.importer.util;
 
+import eu.europeana.corelib.definitions.jibx.*;
 import org.apache.solr.common.SolrInputDocument;
 
 import eu.europeana.corelib.storage.MongoServer;
-import eu.europeana.corelib.definitions.jibx.ConformsTo;
-import eu.europeana.corelib.definitions.jibx.Created;
-import eu.europeana.corelib.definitions.jibx.Creator;
-import eu.europeana.corelib.definitions.jibx.Description;
-import eu.europeana.corelib.definitions.jibx.Extent;
-import eu.europeana.corelib.definitions.jibx.Format;
-import eu.europeana.corelib.definitions.jibx.HasPart;
-import eu.europeana.corelib.definitions.jibx.IsFormatOf;
-import eu.europeana.corelib.definitions.jibx.Issued;
-import eu.europeana.corelib.definitions.jibx.Rights;
-import eu.europeana.corelib.definitions.jibx.SameAs;
-import eu.europeana.corelib.definitions.jibx.Source;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
@@ -155,6 +143,21 @@ public final class WebResourcesFieldInput {
 						solrInputDocument, sameAs, EdmLabel.WR_OWL_SAMEAS);
 			}
 		}
+		if(webResource.getPreview()!=null){
+            solrInputDocument.addField(EdmLabel.WR_EDM_PREVIEW.toString(),webResource.getPreview().getResource());
+        }
+
+        if(webResource.getHasServiceList()!=null){
+            for(HasService service : webResource.getHasServiceList()){
+                solrInputDocument = SolrUtils.addFieldFromResource(
+                        solrInputDocument,service,EdmLabel.WR_SVCS_HAS_SERVICE);
+            }
+        }
+
+        if(webResource.getDescribedby()!=null){
+            solrInputDocument.addField(EdmLabel.WR_WDRS_DESCRIBEDBY.toString(),
+                    webResource.getDescribedby().getResource());
+        }
 		return solrInputDocument;
 	}
 
@@ -217,6 +220,16 @@ public final class WebResourcesFieldInput {
 		}
 		mongoWebResource.setOwlSameAs(SolrUtils.resourceListToArray(webResource
 				.getSameAList()));
+
+        if(webResource.getDescribedby()!=null){
+            mongoWebResource.setWdrsDescribedBy(SolrUtils.getResourceString(webResource.getDescribedby()));
+        }
+        if(webResource.getPreview()!=null){
+            mongoWebResource.setEdmPreview(SolrUtils.getResourceString(webResource.getPreview()));
+        }
+        if(webResource.getHasServiceList()!=null){
+            mongoWebResource.setSvcsHasService(SolrUtils.resourceListToArray(webResource.getHasServiceList()));
+        }
 		return mongoWebResource;
 	}
 

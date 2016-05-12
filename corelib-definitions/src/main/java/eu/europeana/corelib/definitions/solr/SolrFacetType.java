@@ -22,7 +22,7 @@ package eu.europeana.corelib.definitions.solr;
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
-public enum Facet {
+public enum SolrFacetType {
 
     UGC("UGC"),
     LANGUAGE("LANGUAGE"),
@@ -32,14 +32,15 @@ public enum Facet {
     DATA_PROVIDER("DATA_PROVIDER"),
     COUNTRY("COUNTRY"),
     RIGHTS("RIGHTS"),
-    FACET_TAGS("facet_tags"),
-    IS_FULLTEXT("is_fulltext"),
-    //HAS_THUMBNAILS("has_thumbnails"),
-    HAS_MEDIA("has_media");
+    FACET_TAGS("facet_tags"), //SOLR eats 'm lowercase
+    TEXT_FULLTEXT("is_fulltext"),
+    THUMBNAILS("has_thumbnails"),
+    MEDIA("has_media"),
+    LANDINGPAGE("has_landingpage");
 
     private String facet;
 
-    Facet(String facets) {
+    SolrFacetType(String facets) {
         this.facet = facets;
     }
 

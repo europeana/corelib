@@ -67,70 +67,17 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
 
-    @Deprecated
-    @Override
-    public User create(String tokenString, String username, String password)
-            throws DatabaseException {
-        return create(tokenString, username, password, false, null, null, null, null, null, null, null, null);
-    }
-
-    @Deprecated
-    @Override
-    public User create(String tokenString, String username, String password,
-                       boolean isApiRegistration, String company, String country,
-                       String firstName, String lastName, String website, String address,
-                       String phone, String fieldOfWork)
-            throws DatabaseException {
-
-        if (StringUtils.isBlank(tokenString)) {
-            throw new DatabaseException(ProblemType.UNKNOWN_TOKEN);
-        }
-
-        if (StringUtils.isBlank(username)) {
-            throw new DatabaseException(ProblemType.NO_USERNAME);
-        }
-
-        if (!isApiRegistration && StringUtils.isBlank(password)) {
-            throw new DatabaseException(ProblemType.NO_PASSWORD);
-        }
-
-        if (StringUtils.isBlank(tokenString)
-                || StringUtils.isBlank(username)
-                || (!isApiRegistration && StringUtils.isBlank(password))) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
-        }
-
-        Token token = tokenService.findByID(tokenString);
-        if (token == null) {
-            throw new DatabaseException(ProblemType.TOKEN_INVALID);
-        }
-
-        User user = new UserImpl();
-        user.setEmail(token.getEmail());
-        user.setUserName(username);
-        user.setPassword(StringUtils.isEmpty(password) ? null : hashPassword(password));
-        user.setRegistrationDate(new Date());
-        user.setCompany(company);
-        user.setCountry(country);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setWebsite(website);
-        user.setAddress(address);
-        user.setPhone(phone);
-        user.setFieldOfWork(fieldOfWork);
-
-        user = getDao().insert(user);
-
-        return user;
-    }
-
     @Override
     public User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException {
 
         if (StringUtils.isBlank(email)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+
+        if (StringUtils.isBlank(redirect)) {
             throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
         }
 
@@ -162,16 +109,18 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendActivationToken(tokenService.create(email), activationUrl);
+        emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
 
         return user;
     }
 
     @Override
-    public User activate(String email, String tokenString) throws DatabaseException {
+    public Token activate(String email, String tokenString) throws DatabaseException {
         Token token = tokenService.findByID(tokenString);
         if (token == null) {
             throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
         }
 
         User user = findByEmail(email);
@@ -182,6 +131,52 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         tokenService.remove(token);
 
+        return token;
+    }
+
+    @Override
+    public User sendResetPasswordToken(String email, String redirect, String activationUrl) throws DatabaseException, EmailServiceException {
+        if (StringUtils.isBlank(email)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+        emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
+        return user;
+    }
+
+    @Override
+    public String getRedirectFromToken(String email, String tokenString) throws DatabaseException {
+        Token token = tokenService.findByID(tokenString);
+        if (token == null) {
+            throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
+        }
+        return token.getRedirect();
+    }
+
+    @Override
+    public User resetPassword(String email, String tokenString, String newPassword) throws DatabaseException, EmailServiceException  {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(tokenString) || StringUtils.isBlank(newPassword)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+        Token token = tokenService.findByID(tokenString);
+        if (token == null) {
+            throw new DatabaseException(ProblemType.TOKEN_INVALID);
+        } else if (!StringUtils.equalsIgnoreCase(token.getEmail(), email)) {
+            throw new DatabaseException(ProblemType.TOKEN_MISMATCH);
+        }
+        // user exists; token exists and matches on email address: go ahead
+        user.setPassword(hashPassword(newPassword));
+        tokenService.remove(token);
+        emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
         return user;
     }
 
@@ -212,6 +207,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         return null;
     }
 
+    //TODO - remove because this is implemented by sendResetPasswordToken and following
     @Override
     public User changePassword(Long userId, String oldPassword, String newPassword) throws DatabaseException {
 
@@ -540,5 +536,19 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             user.getSocialTags().add((SocialTag) instance);
         }
         return bean;
+    }
+
+    private String friendlyUserName(User user){
+        if (StringUtils.isBlank(user.getFirstName()) && StringUtils.isBlank(user.getLastName()) && StringUtils.isBlank(user.getUserName())){
+            return "Sir / Madam";
+        } else if (StringUtils.isBlank(user.getFirstName()) && StringUtils.isBlank(user.getLastName())) {
+            return user.getUserName();
+        } else if (StringUtils.isBlank(user.getFirstName())){
+            return "Mr / Ms " + user.getLastName();
+        } else if (StringUtils.isBlank(user.getLastName())) {
+            return user.getFirstName();
+        } else {
+            return user.getFirstName() + " " + user.getLastName();
+        }
     }
 }

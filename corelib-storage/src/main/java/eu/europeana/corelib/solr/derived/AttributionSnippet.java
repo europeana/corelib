@@ -18,12 +18,15 @@ package eu.europeana.corelib.solr.derived;
  */
 
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +39,7 @@ public class AttributionSnippet {
 
     private String textSnippet = "";
     private String htmlSnippet = "";
-    String landingPage = "", shownAt = "", rights = "";
+    String landingPage = "", shownAt = "", rights = "", ccDeprecatedOn = "";
     Map <String, String> creatorMap      = new HashMap<>();
     Map <String, String> titleMap        = new HashMap<>();
     Map <String, String> dataProviderMap = new HashMap<>();
@@ -73,6 +76,18 @@ public class AttributionSnippet {
         // if there was no title found in the proxy, get it from the record object itself
         if (titleMap.size() == 0 && ArrayUtils.isNotEmpty(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle())) {
             titleMap.put("", collectListLines(Arrays.asList(stripEmptyStrings(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle()))));
+        }
+        // if the record has a copyright value of 'out of copyright - no commercial re-use', fetch end date
+        if (StringUtils.containsIgnoreCase(rights, "out-of-copyright")){
+            for (License license : ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getLicenses()){
+                if (license.getCcDeprecatedOn() != null){
+//                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//                    In order to make things less confusing. Or maybe more.
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    ccDeprecatedOn = df.format(license.getCcDeprecatedOn());
+                    break;
+                }
+            }
         }
         assembleTextSnippet();
         assembleHtmlSnippet();
@@ -185,7 +200,8 @@ public class AttributionSnippet {
                 case "orphan": rightsLabel = "Orphan Work"; break;
                 case "rr-p": rightsLabel = "Rights Reserved - Paid Access"; break;
                 case "rr-f": rightsLabel = "Rights Reserved - Free Access"; break;
-                case "out-of-copyright": rightsLabel = "Out of copyright - non commercial re-use"; break;
+                case "out-of-copyright": rightsLabel = "Out of copyright - non commercial re-use" +
+                        (StringUtils.isNotBlank(ccDeprecatedOn) ? " until " + ccDeprecatedOn : ""); break;
                 case "unknown": rightsLabel = "Unknown"; break;
             }
         return rightsLabel;

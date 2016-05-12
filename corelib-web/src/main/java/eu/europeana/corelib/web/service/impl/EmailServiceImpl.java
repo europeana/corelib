@@ -21,13 +21,12 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.definitions.exception.ProblemType;
-import eu.europeana.corelib.logging.Log;
-import eu.europeana.corelib.logging.Logger;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.apache.log4j.Logger;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -39,11 +38,10 @@ import java.util.Map;
  */
 public abstract class EmailServiceImpl implements EmailService {
 
-    @Log
-    private Logger log;
+    private final Logger log = Logger.getLogger(EmailServiceImpl.class);
 
     @Resource
-    private JavaMailSender mailSender;
+    private JavaMailSenderImpl mailSender;
 
     @Override
     public void sendActivationToken(Token token, String apiHost) throws EmailServiceException {
@@ -58,7 +56,7 @@ public abstract class EmailServiceImpl implements EmailService {
         model.put("url", url);
         EmailBuilder builder = createEmailBuilder();
         builder.setModel(model);
-        builder.setTemplate("activate"); // see corelib_web_emailConfigs
+        builder.setTemplate("activation"); // see corelib_web_emailConfigs
         builder.setEmailTo(token.getEmail());
         mailSender.send(builder);
         log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
@@ -81,6 +79,42 @@ public abstract class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendNewPasswordToken(Token token, String apiHost, String salutation) throws EmailServiceException {
+        if ((token == null)
+                || StringUtils.isBlank(token.getToken())
+                || StringUtils.isBlank(token.getEmail())
+                || StringUtils.isBlank(apiHost)) {
+            throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+        }
+        String url = apiHost + "/user/password/" + token.getEmail() + "/" + token.getToken();
+        Map<String, Object> model = new HashMap<>();
+        model.put("url", url);
+        model.put("salutation", salutation);
+        EmailBuilder builder = createEmailBuilder();
+        builder.setModel(model);
+        builder.setTemplate("forgotPassword"); // see corelib_web_emailConfigs
+        builder.setEmailTo(token.getEmail());
+        mailSender.send(builder);
+        log.info(String.format("Sent password reset url (%s) to %s", url, token.getEmail()));
+    }
+
+    @Override
+    public void sendPasswordResetConfirmation(User user, String salutation) throws EmailServiceException {
+        if ((user == null) || (user.getId() == null)) {
+            throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+        }
+        Map<String, Object> model = new HashMap<>();
+        model.put("salutation", salutation);
+        EmailBuilder builder = createEmailBuilder();
+        builder.setModel(model);
+        builder.setTemplate("resetPasswordConfirm"); // see corelib_web_emailConfigs
+        builder.setEmailTo(user.getEmail());
+        mailSender.send(builder);
+        log.info(String.format("Sent password reset confirmation email to (%s)", user.getEmail()));
+    }
+
+    //TODO: remove because it's implemented in sedNewPasswordToken ?
+    @Override
     public void sendForgotPassword(final User user, final String url) throws EmailServiceException {
         if ((user == null) || (user.getId() == null) || StringUtils.isBlank(url)) {
             throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
@@ -89,6 +123,7 @@ public abstract class EmailServiceImpl implements EmailService {
     }
 
 
+    //TODO: remove because it's implemented in sedNewPasswordToken ?
     @Override
     public void sendForgotPassword(final String email, final String url) throws EmailServiceException {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(url)) {

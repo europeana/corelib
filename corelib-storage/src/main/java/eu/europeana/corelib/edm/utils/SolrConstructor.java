@@ -20,31 +20,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import eu.europeana.corelib.definitions.jibx.*;
+import eu.europeana.corelib.edm.server.importer.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 import eu.europeana.corelib.definitions.jibx.HasView;
-import eu.europeana.corelib.definitions.jibx.AgentType;
-import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.Concept;
-import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
-import eu.europeana.corelib.definitions.jibx.HasView;
-import eu.europeana.corelib.definitions.jibx.License;
-import eu.europeana.corelib.definitions.jibx.PlaceType;
-import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
-import eu.europeana.corelib.definitions.jibx.ProxyType;
-import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
-import eu.europeana.corelib.edm.server.importer.util.AgentFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.AggregationFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ConceptFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.EuropeanaAggregationFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.LicenseFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.PlaceFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ProvidedCHOFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.TimespanFieldInput;
-import eu.europeana.corelib.edm.server.importer.util.WebResourcesFieldInput;
 
 /**
  * Construct a SolrInputDocument from a JiBX RDF Entity
@@ -147,6 +127,11 @@ public class SolrConstructor {
 				solrInputDocument = new LicenseFieldInput()
 						.createLicenseSolrFields(license, solrInputDocument,
 								isAggregation);
+			}
+		}
+		if(rdf.getServiceList()!=null){
+			for (Service service:rdf.getServiceList()){
+				solrInputDocument = new ServiceFieldInput().createServiceSolrFields(service,solrInputDocument);
 			}
 		}
 		solrInputDocument = generateWRFromAggregation(solrInputDocument,

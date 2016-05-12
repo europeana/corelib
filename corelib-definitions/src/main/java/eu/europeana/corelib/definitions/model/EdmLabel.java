@@ -41,7 +41,8 @@ public enum EdmLabel {
 	PROVIDER_AGGREGATION_EDM_IS_SHOWN_BY("provider_aggregation_edm_isShownBy", SolrType.INDEXED), 
 	PROVIDER_AGGREGATION_EDM_IS_SHOWN_AT("provider_aggregation_edm_isShownAt", SolrType.INDEXED), 
 	PROVIDER_AGGREGATION_EDM_OBJECT("provider_aggregation_edm_object", SolrType.INDEXED), 
-	PROVIDER_AGGREGATION_EDM_PROVIDER("provider_aggregation_edm_provider", SolrType.NOT_STORED), 
+	PROVIDER_AGGREGATION_EDM_PROVIDER("provider_aggregation_edm_provider", SolrType.INDEXED),
+	PROVIDER_AGGREGATION_EDM_INTERMEDIATE_PROVIDER("provider_aggregation_edm_intermediateProvider",SolrType.NOT_STORED),
 	PROVIDER_AGGREGATION_DC_RIGHTS("provider_aggregation_dc_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_RIGHTS("provider_aggregation_edm_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_UNSTORED("provider_aggregation_edm_unstored", SolrType.NOT_STORED),
@@ -79,10 +80,18 @@ public enum EdmLabel {
         WR_CC_LICENSE("wr_cc_license", SolrType.INDEXED),
 	WR_ODRL_INHERITED_FROM("wr_odrl_inherited_from",SolrType.INDEXED),
 	WR_CC_DEPRECATED_ON("wr_cc_deprecated_on",SolrType.INDEXED),
-        
+    WR_SVCS_HAS_SERVICE("wr_svcs_hasservice",SolrType.NOT_STORED),
+	WR_EDM_PREVIEW("wr_edm_preview",SolrType.INDEXED),
+	WR_WDRS_DESCRIBEDBY("wr_wdrs_described_by",SolrType.INDEXED),
+
+
         LIC_RDF_ABOUT("cc_license", SolrType.INDEXED),
 	LIC_ODRL_INHERITED_FROM("odrl_inherited_from",SolrType.INDEXED),
 	LIC_CC_DEPRECATED_ON("cc_deprecated_on",SolrType.INDEXED),
+	//SERVICE
+	SV_RDF_ABOUT("svcs_service",SolrType.INDEXED),
+	SV_DCTERMS_CONFORMS_TO("sv_dcterms_conformsTo",SolrType.INDEXED),
+
 	// PROVIDER PROXY
 	ORE_PROXY("proxy_ore_proxy", SolrType.INDEXED), 
 	EDM_ISEUROPEANA_PROXY("edm_europeana_proxy",SolrType.NOT_STORED),

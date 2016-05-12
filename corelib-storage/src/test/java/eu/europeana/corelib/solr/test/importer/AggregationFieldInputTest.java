@@ -108,6 +108,9 @@ public class AggregationFieldInputTest {
                     solrDocument.getFieldValues(
                             EdmLabel.PROVIDER_AGGREGATION_DC_RIGHTS.toString())
                             .toArray()[0].toString());
+            assertEquals(aggregation.getIntermediateProviderList().get(0).getResource().getResource(),
+                    solrDocument.getFieldValues(EdmLabel.PROVIDER_AGGREGATION_EDM_INTERMEDIATE_PROVIDER.toString()).
+                            toArray()[0].toString());
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -215,6 +218,14 @@ public class AggregationFieldInputTest {
         rights1.setString("test rights 1");
         rightsList.add(rights1);
         aggregation.setRightList(rightsList);
+        IntermediateProvider prov = new IntermediateProvider();
+
+        ResourceOrLiteralType.Resource res = new ResourceOrLiteralType.Resource();
+        res.setResource("http://test");
+        prov.setResource(res);
+        List<IntermediateProvider> provs = new ArrayList<>();
+        provs.add(prov);
+        aggregation.setIntermediateProviderList(provs);
         return aggregation;
     }
 

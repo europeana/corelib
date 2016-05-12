@@ -32851,9 +32851,9 @@
          in either the query, the "defaults", or the "appends" params.
 
          In this example, the facet.field and facet.query params would
-         be fixed, limiting the facets clients can use.  Faceting is
+         be fixed, limiting the facetList clients can use.  Faceting is
          not turned on by default - but if the client does specify
-         facet=true in the request, these are the only facets they
+         facet=true in the request, these are the only facetList they
          will be able to see counts for; regardless of what other
          facet.field or facet.query params they may specify.
 

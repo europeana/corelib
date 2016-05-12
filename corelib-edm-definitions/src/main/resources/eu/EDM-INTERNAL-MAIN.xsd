@@ -30,6 +30,7 @@
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:dcat="http://www.w3.org/ns/dcat#"
     xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:svcs="http://rdfs.org/sioc/services#"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
@@ -44,6 +45,7 @@
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
     <import namespace="http://www.w3.org/ns/dcat#" schemaLocation="DCAT.xsd"/>
    	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
+    <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
     
@@ -76,6 +78,7 @@
             <element ref="cc:License" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="foaf:Organization" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="dcat:Dataset" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="svcs:Service" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
 

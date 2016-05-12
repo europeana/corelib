@@ -22,6 +22,7 @@ import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
+import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
@@ -37,30 +38,10 @@ public interface UserService extends AbstractService<User> {
 
     /**
      * Creates a new User, based on a existing token, and given params
-     *
-     * @param token    A Token string, existing in the database
-     * @param username The username for this user profile
-     * @param password The login password (case sensitive)
-     * @return Created user entity.
-     * @throws DatabaseException When the Token is invalid
-     */
-    @Deprecated
-    User create(String token, String username, String password) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
-     */
-    @Deprecated
-    User create(String tokenString, String username, String password, boolean isApiRegistration, String company,
-                String country, String firstName, String lastName, String website, String address, String phone,
-                String fieldOfWork) throws DatabaseException;
-
-    /**
-     * Creates a new User, based on a existing token, and given params
      */
     User create(
             String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String activationUrl
+            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
     ) throws DatabaseException, EmailServiceException;
 
     /**
@@ -70,7 +51,35 @@ public interface UserService extends AbstractService<User> {
      * @param token token emailed to user
      * @return The activated user account
      */
-    User activate(String email, String token) throws DatabaseException;
+    Token activate(String email, String token) throws DatabaseException;
+
+    /**
+     *
+     * @param email email address identifying the account
+     * @param redirect  token emailed to user
+     * @return user with given email adres, null if not found.
+     * @throws DatabaseException
+     * @throws EmailServiceException
+     */
+    User sendResetPasswordToken(String email, String redirect, String activationUrl) throws DatabaseException, EmailServiceException;
+
+    /**
+     *
+     * @param email       The email address associated which the token
+     * @param tokenString The token string
+     * @return the redirect URL associated with the token
+     * @throws DatabaseException
+     */
+    String getRedirectFromToken(String email, String tokenString) throws DatabaseException;
+
+    /**
+     *
+     * @param email    The email address identifying the user
+     * @param password the newly submitted password
+     * @return user identified by the supplied email adres, null if not found or if password reset failed
+     * @throws DatabaseException
+     */
+    User resetPassword(String email, String tokenString, String password) throws DatabaseException, EmailServiceException;
 
     /**
      * Returns a User if there is a valid email provided.
@@ -97,6 +106,7 @@ public interface UserService extends AbstractService<User> {
      */
     User authenticateUser(String email, String password);
 
+    //TODO - remove because this is implemented by sendResetPasswordToken and following
     /**
      * Changes the existing password of an existing password
      *

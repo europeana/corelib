@@ -28,6 +28,8 @@ public interface Token extends IdentifiedEntity<String> {
 
 	String getToken();
 
+	String getRedirect();
+
 	String getEmail();
 
 	long getCreated();
@@ -37,4 +39,6 @@ public interface Token extends IdentifiedEntity<String> {
 	void setEmail(String email);
 
 	void setToken(String token);
+
+	void setRedirect(String redirect);
 }

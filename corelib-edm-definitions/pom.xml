@@ -18,11 +18,29 @@
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-run</artifactId>
 			<version>${version.jibx}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>bcel</artifactId>
+					<groupId>bcel</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-extras</artifactId>
 			<version>${version.jibx}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>bcel</artifactId>
+					<groupId>bcel</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.bcel</groupId>
+			<artifactId>bcel</artifactId>
+			<version>6.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -37,6 +55,27 @@
 				<groupId>org.jibx</groupId>
 				<artifactId>maven-jibx-plugin</artifactId>
 				<version>${version.jibx}</version>
+				<dependencies>
+
+
+				<dependency>
+					<groupId>org.jibx</groupId>
+					<artifactId>jibx-bind</artifactId>
+					<version>${version.jibx}</version>
+					<exclusions>
+						<exclusion>
+							<artifactId>bcel</artifactId>
+							<groupId>bcel</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+					<dependency>
+					<groupId>org.apache.bcel</groupId>
+					<artifactId>bcel</artifactId>
+					<version>6.0-SNAPSHOT</version>
+
+				</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<id>generate-java-code-from-schema (EDM)</id>
@@ -65,6 +104,7 @@
 							<validate>true</validate>
 							<verify>false</verify>
 						</configuration>
+
 					</execution>
 					<!-- -->
 				</executions>
@@ -74,6 +114,7 @@
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.maven-compiler-plugin}</version>
 				<configuration>
 					<source>${version.jdk}</source>
 					<target>${version.jdk}</target>
@@ -100,7 +141,7 @@
 											maven-jibx-plugin
 										</artifactId>
 										<versionRange>
-											[1.2.5,)
+											[1.2.6,)
 										</versionRange>
 										<goals>
 											<goal>bind</goal>
@@ -113,7 +154,29 @@
 								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
+
 					</configuration>
+					<dependencies>
+
+
+						<dependency>
+							<groupId>org.jibx</groupId>
+							<artifactId>jibx-bind</artifactId>
+							<version>${version.jibx}</version>
+							<exclusions>
+								<exclusion>
+									<artifactId>bcel</artifactId>
+									<groupId>bcel</groupId>
+								</exclusion>
+							</exclusions>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.bcel</groupId>
+							<artifactId>bcel</artifactId>
+							<version>6.0-SNAPSHOT</version>
+
+						</dependency>
+					</dependencies>
 				</plugin>
 <!-- 				<plugin> -->
 <!-- 					<groupId>org.apache.maven.plugins</groupId> -->
@@ -127,6 +190,22 @@
 		
 		
 	</build>
+
+	<repositories>
+			<repository>
+				<id>apache.snapshots</id>
+				<url>https://repository.apache.org/content/repositories/snapshots</url>
+				<snapshots>
+					<enabled>true</enabled>
+					<updatePolicy>always</updatePolicy>
+				</snapshots>
+				<releases>
+					<enabled>false</enabled>
+				</releases>
+			</repository>
+
+	</repositories>
+
 	<profiles>
             <profile>
                 <id>

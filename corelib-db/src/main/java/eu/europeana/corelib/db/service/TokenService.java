@@ -41,7 +41,7 @@ public interface TokenService extends AbstractService<Token> {
 	 * @throws DatabaseException
 	 *             When there is no valid email address provided
 	 */
-	Token create(String email) throws DatabaseException;
+	Token create(String email, String redirect) throws DatabaseException;
 
 	/**
 	 * Create a random Token String with 32 characters

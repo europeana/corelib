@@ -35,11 +35,12 @@ public interface OAuth2AccessTokenService extends AbstractNoSqlService<AccessTok
 	List<AccessToken> findByClientId(String clientId);
 
 	/**
-	 * Find list of access tokens by username
+	 * Find list of access tokens by clientid and username
+	 * @param clientId The client id to search on
 	 * @param userName The username to search on
 	 * @return A list of access tokens associated with the username
 	 */
-	List<AccessToken> findByUserName(String userName);
+	List<AccessToken> findByClientIdAndUsername(String clientId, String userName);
 
 	/**
 	 * Find list of access tokens by OAuth2 id

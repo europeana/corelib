@@ -12,7 +12,7 @@
 	xmlns:ore="http://www.openarchives.org/ore/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:enrichment="http://www.europeana.eu/schemas/edm/enrichment/"
-	xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+		xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:sch="http://purl.oclc.org/dsdl/schematron"
 	elementFormDefault="qualified">
 
 	<annotation>
@@ -112,6 +112,7 @@
 						<element ref="dc:rights" maxOccurs="unbounded" minOccurs="0" />
 						<element ref="edm:rights" maxOccurs="1" minOccurs="0" />
 						<element ref="edm:ugc" maxOccurs="1" minOccurs="0" />
+						<element ref="edm:intermediateProvider" maxOccurs="unbounded" minOccurs="0"/>
 					</sequence>
 				</extension>
 			</complexContent>

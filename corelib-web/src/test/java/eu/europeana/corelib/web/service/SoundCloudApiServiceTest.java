@@ -29,7 +29,8 @@ public class SoundCloudApiServiceTest {
 		pairs = new ArrayList<TrackData>();
 		pairs.add(new TrackData("dick-1952/geluid-diverse-elektrische", "150424305"));
 		pairs.add(new TrackData("dick-1952/geluid-van-een-vertrekkende", "137927336"));
-		pairs.add(new TrackData("classicsandjazz/01-hungarian-dance-no-5", "114360389"));
+//		pairs.add(new TrackData("classicsandjazz/01-hungarian-dance-no-5", "114360389"));
+        pairs.add(new TrackData("matas/hobnotropic", "49931"));
 	}
 
 	@Test

@@ -45,7 +45,8 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 
 	/**
 	 * Overriding the findByID() method to handle expiration
-	 * @throws DatabaseException 
+	 * NB implemented missing ELSE branch of the token age IF - luthien
+	 * @throws DatabaseException
 	 */
 	@Override
 	public Token findByID(Serializable id) throws DatabaseException {
@@ -60,23 +61,25 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 			long age = System.currentTimeMillis() - token.getCreated();
 			if (age <= MAX_TOKEN_AGE) {
 				return token;
-			}
+			} else {
 			getDao().delete(token);
 			log.severe("Token is outdated, so deleted: " + id);
 			throw new DatabaseException(ProblemType.TOKEN_OUTDATED);
+		}
 		}
 		return null;
 	}
 
 	@Override
-	public Token create(String email) throws DatabaseException {
-		if (StringUtils.isBlank(email)) {
-			log.severe("DatabaseException: empty email for create token. " + ProblemType.INVALIDARGUMENTS);
+	public Token create(String email, String redirect) throws DatabaseException {
+		if (StringUtils.isBlank(email) || StringUtils.isBlank(redirect)) {
+			log.severe("DatabaseException: email or redirect URL cannot be null [create token]. " + ProblemType.INVALIDARGUMENTS);
 			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
 		}
 		TokenImpl token = new TokenImpl();
 		token.setCreated(new Date());
 		token.setEmail(email);
+		token.setRedirect(redirect);
 		token.setToken(createRandomToken());
 		return getDao().insert(token);
 	}

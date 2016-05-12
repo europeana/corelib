@@ -20,6 +20,7 @@
 	xmlns:ore="http://www.openarchives.org/ore/terms/" 
 	xmlns:sch="http://purl.oclc.org/dsdl/schematron"
 	xmlns:cc="http://creativecommons.org/ns#"
+		xmlns:svcs="http://rdfs.org/sioc/services#"
 	elementFormDefault="qualified">
 
 	<import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
@@ -27,6 +28,7 @@
 	<import namespace="http://www.w3.org/2002/07/owl#" schemaLocation="OWL.xsd" />
 	<import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd" />
 	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
+	<import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
 	<include schemaLocation="EDM-COMMON-MAIN.xsd" />
 	<include schemaLocation="CONTEXTS.xsd"/>	
 	
@@ -44,6 +46,7 @@
 				<sch:ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
 				<sch:ns prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#" />
 				<sch:ns prefix="skos" uri="http://www.w3.org/2004/02/skos/core#" />
+				<sch:ns prefix="svcs" uri="http://rdfs.org/sioc/services#"/>
 			</appinfo>
 		</annotation>
 		<sequence minOccurs="0" maxOccurs="unbounded">
@@ -56,6 +59,7 @@
 				<element ref="skos:Concept" />
 				<element ref="ore:Aggregation" />
 				<element ref="cc:License" />
+				<element ref="svcs:Service"/>
 			</choice>
 		</sequence>
 	</complexType>

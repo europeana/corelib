@@ -29,90 +29,90 @@ import java.util.Set;
  */
 public interface User extends IdentifiedEntity<Long> {
 
-	String QUERY_FINDBY_EMAIL = "User.findByEmail";
-	String QUERY_FINDBY_NAME = "User.findByName";
+    String QUERY_FINDBY_EMAIL = "User.findByEmail";
+    String QUERY_FINDBY_NAME = "User.findByName";
 
-	void setEmail(String email);
+    void setEmail(String email);
 
-	String getEmail();
+    String getEmail();
 
-	String getPassword();
+    String getPassword();
 
-	void setPassword(String password);
+    void setPassword(String password);
 
-	Date getRegistrationDate();
+    Date getRegistrationDate();
 
-	void setRegistrationDate(Date registrationDate);
+    void setRegistrationDate(Date registrationDate);
 
-	Date getLastLogin();
+    Date getLastLogin();
 
-	void setLastLogin(Date lastLogin);
+    void setLastLogin(Date lastLogin);
 
-	Role getRole();
+    Role getRole();
 
-	void setRole(Role role);
+    void setRole(Role role);
 
-	String getUserName();
+    String getUserName();
 
-	void setUserName(String userName);
+    void setUserName(String userName);
 
-	Set<SavedItem> getSavedItems();
+    Set<SavedItem> getSavedItems();
 
-	Set<SavedSearch> getSavedSearches();
+    Set<SavedSearch> getSavedSearches();
 
-	Set<SocialTag> getSocialTags();
+    Set<SocialTag> getSocialTags();
 
-	List<SocialTag> getSocialTagsOrdered();
+    List<SocialTag> getSocialTagsOrdered();
 
-	String getFirstName();
+    String getFirstName();
 
-	void setFirstName(String firstName);
+    void setFirstName(String firstName);
 
-	String getLastName();
+    String getLastName();
 
-	void setLastName(String lastName);
+    void setLastName(String lastName);
 
-	String getCompany();
+    String getCompany();
 
-	String getCountry();
+    String getCountry();
 
-	void setCompany(String company);
+    void setCompany(String company);
 
-	void setCountry(String country);
+    void setCountry(String country);
 
-	String getPhone();
+    String getPhone();
 
-	void setPhone(String phone);
+    void setPhone(String phone);
 
-	String getAddress();
+    String getAddress();
 
-	void setAddress(String address);
+    void setAddress(String address);
 
-	String getWebsite();
+    String getWebsite();
 
-	void setWebsite(String website);
+    void setWebsite(String website);
 
-	String getFieldOfWork();
+    String getFieldOfWork();
 
-	void setFieldOfWork(String fieldOfWork);
+    void setFieldOfWork(String fieldOfWork);
 
-	String getLanguagePortal();
+    String getLanguagePortal();
 
-	void setLanguagePortal(String languageCode);
+    void setLanguagePortal(String languageCode);
 
-	String getLanguageItem();
+    String getLanguageItem();
 
-	void setLanguageItem(String languageCode);
+    void setLanguageItem(String languageCode);
 
-	String[] getLanguageSearch();
+    String[] getLanguageSearch();
 
-	void setLanguageSearch(String... languageCodes);
+    void setLanguageSearch(String... languageCodes);
 
-	Boolean getLanguageSearchApplied();
+    Boolean getLanguageSearchApplied();
 
-	void setLanguageSearchApplied(Boolean languageSearchApplied);
+    void setLanguageSearchApplied(Boolean languageSearchApplied);
 
-	Date getActivationDate();
+    Date getActivationDate();
 
-	void setActivationDate(Date activationDate);
+    void setActivationDate(Date activationDate);
 }

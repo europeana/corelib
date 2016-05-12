@@ -114,9 +114,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	public List<UserStatistics> getStatisticsForUser() {
 		DBObject result = groupByApiKey(null);
 
-		List<UserStatistics> statistics = createUserStatisticsList(result);
-
-		return statistics;
+		return createUserStatisticsList(result);
 	}
 
 	/**
@@ -135,9 +133,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 
 		DBObject result = groupBy(keys, null);
 
-		List<TypeStatistics> statistics = createTypeStatistics(result);
-
-		return statistics;
+		return createTypeStatistics(result);
 	}
 
 	/**
@@ -162,18 +158,17 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	 */
 	@Override
 	public List<UserStatistics> getStatisticsForUsersByInterval(DateInterval interval) {
-		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(
-			Arrays.asList(
-				new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
-				new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
-			)
+		List<BasicDBObject> timestampConditions = new ArrayList<>(
+				Arrays.asList(
+						new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
+						new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
+				)
 		);
 		DBObject condition = new BasicDBObject("$and", timestampConditions);
 
 		DBObject result = groupByApiKey(condition);
-		List<UserStatistics> statistics = createUserStatisticsList(result);
 
-		return statistics;
+		return createUserStatisticsList(result);
 	}
 
 	@Override
@@ -181,9 +176,8 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		DBObject condition = new BasicDBObject("recordType", recordType);
 
 		DBObject result = groupByApiKey(condition);
-		List<UserStatistics> statistics = createUserStatisticsList(result);
 
-		return statistics;
+		return createUserStatisticsList(result);
 	}
 
 	@Override
@@ -201,11 +195,11 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 		DBObject keys = new BasicDBObject("recordType", true);
 		keys.put("profile", true);
 
-		List<BasicDBObject> timestampConditions = new ArrayList<BasicDBObject>(
-			Arrays.asList(
-				new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
-				new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
-			)
+		List<BasicDBObject> timestampConditions = new ArrayList<>(
+				Arrays.asList(
+						new BasicDBObject("timestamp", new BasicDBObject("$gte", interval.getBegin())),
+						new BasicDBObject("timestamp", new BasicDBObject("$lt", interval.getEnd()))
+				)
 		);
 		DBObject condition = new BasicDBObject("$and", timestampConditions);
 
@@ -213,7 +207,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	private List<TypeStatistics> createTypeStatistics(DBObject result) {
-		List<TypeStatistics> statistics = new ArrayList<TypeStatistics>();
+		List<TypeStatistics> statistics = new ArrayList<>();
 		for (String key : result.keySet()) {
 			BasicDBObject item = (BasicDBObject) result.get(key);
 			statistics.add(new TypeStatistics(
@@ -226,7 +220,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	}
 
 	private List<UserStatistics> createUserStatisticsList(DBObject result) {
-		List<UserStatistics> statistics = new ArrayList<UserStatistics>();
+		List<UserStatistics> statistics = new ArrayList<>();
 		for (String key : result.keySet()) {
 			BasicDBObject item = (BasicDBObject) result.get(key);
 			statistics.add(new UserStatistics(null, item.getString("apiKey"), item.getLong("count")));
@@ -247,7 +241,6 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 	 *   The keys to group by
 	 * @param condition
 	 *   Search conditions
-	 * @return
 	 */
 	private DBObject groupBy(DBObject keys, DBObject condition) {
 		GroupCommand groupCommand = new GroupCommand(
@@ -259,8 +252,7 @@ public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> 
 			null // reduce
 		);
 
-		DBObject result = getDao().getCollection().group(groupCommand);
-		return result;
+		return getDao().getCollection().group(groupCommand);
 	}
 
 }

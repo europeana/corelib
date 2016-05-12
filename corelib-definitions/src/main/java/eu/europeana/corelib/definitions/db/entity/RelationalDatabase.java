@@ -49,6 +49,7 @@ public interface RelationalDatabase {
 	// token
 	String TABLENAME_TOKEN = "token";
 	int FIELDSIZE_TOKEN = 32;
+	int FIELDSIZE_REDIRECT = 256;
 
 	// saved search
 	String TABLENAME_SAVEDSEARCH = "SavedSearch";
