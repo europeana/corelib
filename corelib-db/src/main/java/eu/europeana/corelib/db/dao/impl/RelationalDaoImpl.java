@@ -37,7 +37,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.dao.RelationalDao
  */
-@Transactional
+//@Transactional
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
     @PersistenceContext(type = PersistenceContextType.EXTENDED, name = "corelib_db_entityManagerFactory")
