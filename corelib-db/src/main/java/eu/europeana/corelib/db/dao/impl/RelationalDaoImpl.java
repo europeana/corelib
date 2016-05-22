@@ -40,7 +40,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 //@Transactional
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED, name = "corelib_db_entityManagerFactory")
+    @PersistenceContext(name = "corelib_db_entityManagerFactory")
     private EntityManager entityManager;
 
     private Class<E> domainClazz = null;
