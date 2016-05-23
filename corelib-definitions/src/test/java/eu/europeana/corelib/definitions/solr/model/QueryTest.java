@@ -253,7 +253,7 @@ public class QueryTest {
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(12, facetList.size());
+		assertEquals(13, facetList.size());
 
 		// test DEFAULT + something else (see note about technical facets above)
 		newFacets = new ArrayList<>();
@@ -265,7 +265,7 @@ public class QueryTest {
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertTrue("should contain proxy_dc_contributor", facetList.contains("proxy_dc_contributor"));
 		assertTrue("should contain pl_skos_altLabel", facetList.contains("pl_skos_altLabel"));
-		assertEquals(14, facetList.size());
+		assertEquals(15, facetList.size());
 
 		// test adding technical facets
 		newFacets = new ArrayList<>();
@@ -318,7 +318,7 @@ public class QueryTest {
 		query.setRequestedTechnicalFacets(true, emptyFacetArray);
 		facetList = query.getSolrFacets();
 		facetList.addAll(query.getRequestedTechnicalFacets());
-		assertEquals(22, facetList.size());
+		assertEquals(23, facetList.size());
 	}
 
 	@Test
@@ -331,7 +331,7 @@ public class QueryTest {
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(12, facetList.size());
+		assertEquals(13, facetList.size());
 
 		query.removeSolrFacet("RIGHTS");
 
@@ -342,6 +342,6 @@ public class QueryTest {
 		query.setSolrFacets(newFacets);
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertEquals(12, facetList.size());
+		assertEquals(13, facetList.size());
 	}
 }
