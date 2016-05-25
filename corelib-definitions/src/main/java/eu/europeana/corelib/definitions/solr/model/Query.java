@@ -322,7 +322,7 @@ public class Query implements Cloneable {
     public boolean isDefaultFacetsRequested() {
         return this.defaultFacetsRequested;
     }
-
+    // TODO removeme
     public Query setDefaultFacetsRequested(boolean defaultFacetsRequested) {
         this.defaultFacetsRequested = defaultFacetsRequested;
         return this;
@@ -520,16 +520,16 @@ public class Query implements Cloneable {
 
 
     /**
-     * Checks if there are any technical facets requested. If so, add FACET_TAGS to the list of Solr Facets,
-     * because the technical facet values are contained therein
+     * Checks if there are any technical facets requested. If so, add FACET_TAGS to the list of Solr Facets, if not
+     * already in there, because the technical facet values are contained therein
      *
      * @param allowFacets boolean
      * @return the Query object
      */
     public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        if (allowFacets && null != requestedTechnicalFacetsList && requestedTechnicalFacetsList.size() > 0 &&
-                !solrFacetList.contains(SolrFacetType.FACET_TAGS)) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        if (this.allowFacets && null != requestedTechnicalFacetsList && requestedTechnicalFacetsList.size() > 0 &&
+                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
     }
 
