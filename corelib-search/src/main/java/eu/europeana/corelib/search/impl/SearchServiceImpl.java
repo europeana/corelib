@@ -588,9 +588,9 @@ public class SearchServiceImpl implements SearchService {
                 }
 
                 try {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Solr query is: " + solrQuery);
-                    }
+//                    if (log.isDebugEnabled()) {
+                        log.info("Solr query is: " + solrQuery);
+//                    }
                     query.setExecutedQuery(solrQuery.toString());
 
                     QueryResponse queryResponse = solrServer.query(solrQuery);
