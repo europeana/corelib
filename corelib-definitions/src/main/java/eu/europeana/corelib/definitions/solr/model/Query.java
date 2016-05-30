@@ -269,31 +269,29 @@ public class Query implements Cloneable {
         return solrFacetList;
     }
 
-    public Query setSolrFacets(boolean defaultFacetsRequested, String... solrFacets) {
-        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
-        else if (defaultFacetsRequested){
-            this.solrFacetList = defaultSolrFacetList;
-            return this;
-        } else {
-            this.solrFacetList.clear();
-            return this;
-        }
+//    public Query setSolrFacets(boolean defaultFacetsRequested, String... solrFacets) {
+//        if (defaultFacetsRequested) this.defaultFacetsRequested = true;
+//        if (ArrayUtils.isNotEmpty(solrFacets)) setSolrFacets(Arrays.asList(solrFacets));
+//        return this;
+//    }
+
+    public Query setDefaultSolrFacets(){
+        this.solrFacetList = this.defaultSolrFacetList;
+        return this;
     }
 
     public Query setSolrFacets(String... solrFacets) {
-        if (ArrayUtils.isNotEmpty(solrFacets)) return setSolrFacets(Arrays.asList(solrFacets));
-        else {
-            this.solrFacetList = defaultSolrFacetList;
-            return this;
-        }
+        if (ArrayUtils.isNotEmpty(solrFacets)) setSolrFacets(Arrays.asList(solrFacets));
+        return this;
     }
 
     public Query setSolrFacets(List<String> solrFacetList) {
-        if (solrFacetList != null) {
-            replaceSpecialSolrFacets(solrFacetList);
-        } else {
-            this.solrFacetList = defaultSolrFacetList;
-        }
+        if (solrFacetList != null) return replaceSpecialSolrFacets(solrFacetList);
+        return this;
+    }
+
+    public Query setDefaultTechnicalFacets(){
+        this.requestedTechnicalFacetsList = this.defaultTechnicalFacetList;
         return this;
     }
 
@@ -302,46 +300,31 @@ public class Query implements Cloneable {
     }
 
     public Query setRequestedTechnicalFacets(List<String> requestedTechnicalFacetsList) {
-        this.requestedTechnicalFacetsList = new ArrayList<>();
-        requestedTechnicalFacetsList.forEach((technicalFacet) -> {
-            if (EnumUtils.isValidEnum(TechnicalFacetType.class, technicalFacet))
-                this.requestedTechnicalFacetsList.add(technicalFacet);});
+        this.requestedTechnicalFacetsList = requestedTechnicalFacetsList;
         return this;
     }
 
-    public Query setRequestedTechnicalFacets(boolean defaultFacetsRequested, String... requestedTechnicalFacets) {
-        if (defaultFacetsRequested) this.requestedTechnicalFacetsList = defaultTechnicalFacetList;
-        else if (ArrayUtils.isNotEmpty(requestedTechnicalFacets)) setRequestedTechnicalFacets(requestedTechnicalFacets);
-        return this;
-    }
+//    public Query setRequestedTechnicalFacets(boolean defaultFacetsRequested, String... requestedTechnicalFacets) {
+//        if (defaultFacetsRequested) this.requestedTechnicalFacetsList = defaultTechnicalFacetList;
+//        else if (ArrayUtils.isNotEmpty(requestedTechnicalFacets)) setRequestedTechnicalFacets(requestedTechnicalFacets);
+//        return this;
+//    }
 
     public List<String> getRequestedTechnicalFacets() {
         return requestedTechnicalFacetsList;
-    }
-
-    public boolean isDefaultFacetsRequested() {
-        return this.defaultFacetsRequested;
-    }
-    // TODO removeme
-    public Query setDefaultFacetsRequested(boolean defaultFacetsRequested) {
-        this.defaultFacetsRequested = defaultFacetsRequested;
-        return this;
     }
 
     /**
      * Replace special (solr)facets.
      * <p>
      * Right now there are two special Solr facets: DEFAULT and REUSABILITY. DEFAULT
-     * is replaced to the portal's default facet list. REUSABILITY will be skipped,
+     * is handled now in the API. REUSABILITY will be skipped,
      * because it is a special query facet
-     * NOTE retained the check for "DEFAULT" for backwards compatibility
      */
-    private void replaceSpecialSolrFacets(List<String> solrFacetList) {
+    private Query replaceSpecialSolrFacets(List<String> solrFacetList) {
         Set<String> replacedFacetSet = new HashSet<>();
         for (String solrFacet : solrFacetList) {
-            if (defaultFacetsRequested || StringUtils.equalsIgnoreCase("DEFAULT", solrFacet)) {
-                replacedFacetSet.addAll(defaultSolrFacetList);
-            } else if (StringUtils.equalsIgnoreCase("MEDIA", solrFacet)) {
+            if (StringUtils.equalsIgnoreCase("MEDIA", solrFacet)) {
                 replacedFacetSet.add("has_media");
             } else if (StringUtils.equalsIgnoreCase("THUMBNAIL", solrFacet)) {
                 replacedFacetSet.add("has_thumbnails");
@@ -354,6 +337,16 @@ public class Query implements Cloneable {
             }
         }
         this.solrFacetList = new ArrayList<>(replacedFacetSet);
+        return this;
+    }
+
+    public boolean isDefaultFacetsRequested() {
+        return this.defaultFacetsRequested;
+    }
+
+    public Query setDefaultFacetsRequested(boolean defaultFacetsRequested) {
+        this.defaultFacetsRequested = defaultFacetsRequested;
+        return this;
     }
 
     private void generateFacetTagQuery(int... tags) {
@@ -538,6 +531,7 @@ public class Query implements Cloneable {
         return this;
     }
 
+    // TODO this smells funny
     private void createAllSolrFacetList() {
         allSolrFacetsList = new ArrayList<>();
         allSolrFacetsList.addAll(solrFacetList);

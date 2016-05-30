@@ -278,8 +278,7 @@ public class QueryTest {
 		assertEquals(2, facetList.size());
 
 		// test adding default technical facets with boolean flag & empty array
-		String[] techFacetArray = new String[0];
-		query.setRequestedTechnicalFacets(true, techFacetArray);
+		query.setDefaultTechnicalFacets();
 		facetList = query.getRequestedTechnicalFacets();
 		assertTrue("should contain mimetype", facetList.contains("MIME_TYPE"));
 		assertTrue("should contain image size", facetList.contains("IMAGE_SIZE"));
@@ -313,9 +312,8 @@ public class QueryTest {
 		assertEquals(5, facetList.size());
 
 		// test The Works
-		String[] emptyFacetArray = new String[0];
-		query.setSolrFacets(true, emptyFacetArray);
-		query.setRequestedTechnicalFacets(true, emptyFacetArray);
+		query.setDefaultSolrFacets();
+		query.setDefaultTechnicalFacets();
 		facetList = query.getSolrFacets();
 		facetList.addAll(query.getRequestedTechnicalFacets());
 		assertEquals(23, facetList.size());

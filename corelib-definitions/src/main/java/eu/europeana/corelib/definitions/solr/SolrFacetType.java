@@ -31,10 +31,10 @@ public enum SolrFacetType {
     PROVIDER("PROVIDER"),
     DATA_PROVIDER("DATA_PROVIDER"),
     COUNTRY("COUNTRY"),
-    RIGHTS("RIGHTS"),
+    RIGHTS("RIGHTS"),  // DEFAULT set stops here
     FACET_TAGS("facet_tags"), //SOLR eats 'm lowercase
     TEXT_FULLTEXT("is_fulltext"),
-    THUMBNAILS("has_thumbnails"),
+    THUMBNAIL("has_thumbnails"),
     MEDIA("has_media"),
     LANDINGPAGE("has_landingpage");
 
