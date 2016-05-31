@@ -147,6 +147,7 @@ public class SearchServiceTest {
         System.out.println("TEST testSpellCheck");
         testCount++;
         Query query = new Query("musi");
+        query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         Assert.assertNull(results.getSpellcheck());
     }
@@ -197,6 +198,7 @@ public class SearchServiceTest {
         System.out.println("TEST testFindById");
         testCount++;
         Query query = new Query("*:*");
+        query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
         FullBean fBean = searchService.findById(results.getResults().get(0).getId(), true);
@@ -208,6 +210,7 @@ public class SearchServiceTest {
         System.out.println("TEST testFindMoreLikeThis");
         testCount++;
         Query query = new Query("*:*");
+        query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
         List<BriefBean> mlt = searchService.findMoreLikeThis(results.getResults().get(0).getId());
