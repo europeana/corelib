@@ -108,8 +108,13 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
     public Node getNode(String rdfAbout) {
         IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
+		long t1 = System.currentTimeMillis();
 		if (nodes.size() > 0 && hasRelationships(nodes)) {
-			return nodes.getSingle();
+			LOG.info("neo4jserverimpl getNode hasRelationships ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+			t1 = System.currentTimeMillis();
+			Node node = nodes.getSingle();
+			LOG.info("neo4jserverimpl nodes.getSingle() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+			return node;
 		}
 		return null;
 	}
