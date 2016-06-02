@@ -319,8 +319,14 @@ public class SearchServiceImpl implements SearchService {
     public FullBean findById(String europeanaObjectId, boolean similarItems)
             throws MongoDBException {
 
+        long t1 = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        log.info("mongoserver.getFullBean took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+        t1 = System.currentTimeMillis();
         injectWebMetaInfo(fullBean);
+        log.info("injectWebMetaInfo took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+
+        t1 = System.currentTimeMillis();
 
         if (fullBean != null && isHierarchy(fullBean.getAbout())) {
             for (Proxy prx : fullBean.getProxies()) {
@@ -348,6 +354,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
+        log.info("rest of searchServiceImpl.findById took: " + (System.currentTimeMillis() - t1) + " milliseconds");
         return fullBean;
     }
 
