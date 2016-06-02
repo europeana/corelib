@@ -332,8 +332,9 @@ public class SearchServiceImpl implements SearchService {
             for (Proxy prx : fullBean.getProxies()) {
                 prx.setDctermsHasPart(null);
             }
-
         }
+        log.info("prx.setDctermsHasPart(null) ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+        t1 = System.currentTimeMillis();
 
         if (fullBean != null && similarItems) {
             try {
@@ -342,6 +343,8 @@ public class SearchServiceImpl implements SearchService {
                 log.error("SolrServerException: " + e.getMessage());
             }
         }
+        log.info("fullBean.setSimilarItems ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+        t1 = System.currentTimeMillis();
 
         if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
             ((FullBeanImpl) fullBean).setAsParent();
@@ -354,7 +357,8 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
-        log.info("rest of searchServiceImpl.findById took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+        log.info("wRes.initAttributionSnippet() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+
         return fullBean;
     }
 
