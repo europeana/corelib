@@ -96,8 +96,8 @@ public class Query implements Cloneable {
             defaultTechnicalFacetList.add(technicalFacet.toString());
         }
     }
-    private List<String>     solrFacetList;
-    private List<String>     technicalFacetList;
+    private List<String>     solrFacetList = new ArrayList<>();
+    private List<String>     technicalFacetList = new ArrayList<>();
     private List<String>     searchRefinementList;
     private List<String>     facetRefinementList;
     private List<String>     filteredFacetList;
@@ -273,7 +273,7 @@ public class Query implements Cloneable {
 //    }
 
     public Query setDefaultSolrFacets(){
-        this.solrFacetList = new ArrayList<>(this.defaultSolrFacetList);
+        this.solrFacetList = this.defaultSolrFacetList;
         return this;
     }
 
@@ -309,12 +309,11 @@ public class Query implements Cloneable {
     }
 
     public void setSolrFacet(String facet) {
-        solrFacetList = new ArrayList<>();
         solrFacetList.add(facet);
     }
 
     public Query setDefaultTechnicalFacets(){
-        this.technicalFacetList = new ArrayList<>(this.defaultTechnicalFacetList);
+        this.technicalFacetList = this.defaultTechnicalFacetList;
         return this;
     }
 
@@ -324,7 +323,6 @@ public class Query implements Cloneable {
 
     // extra check against enum type
     public Query setTechnicalFacets(List<String> technicalFacets) {
-        this.technicalFacetList = new ArrayList<>();
         for (String technicalFacet : technicalFacets) {
             if (defaultTechnicalFacetList.contains(technicalFacet)) this.technicalFacetList.add(technicalFacet);
         }
@@ -355,8 +353,14 @@ public class Query implements Cloneable {
      */
     public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        if (this.allowFacets && null != technicalFacetList && technicalFacetList.size() > 0 &&
-                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        if (this.allowFacets &&
+            null != technicalFacetList &&
+            technicalFacetList.size() > 0 && (
+                null == solrFacetList ||
+                solrFacetList.size() == 0 ||
+                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())
+            )
+        ) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
     }
 
