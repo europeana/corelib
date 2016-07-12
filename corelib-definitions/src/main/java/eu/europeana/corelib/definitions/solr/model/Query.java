@@ -274,13 +274,13 @@ public class Query implements Cloneable {
 
     public Query setDefaultSolrFacets(){
         this.solrFacetList = new ArrayList<>(this.defaultSolrFacetList);
-            return this;
+        return this;
     }
 
     public Query setSolrFacets(String... solrFacets) {
         if (ArrayUtils.isNotEmpty(solrFacets)) setSolrFacets(Arrays.asList(solrFacets));
-            return this;
-        }
+        return this;
+    }
 
     public Query setSolrFacets(List<String> solrFacets) {
         if (solrFacets != null) return replaceSpecialSolrFacets(solrFacets);
@@ -309,7 +309,6 @@ public class Query implements Cloneable {
     }
 
     public void setSolrFacet(String facet) {
-        solrFacetList = new ArrayList<>();
         solrFacetList.add(facet);
     }
 
@@ -355,8 +354,14 @@ public class Query implements Cloneable {
      */
     public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        if (this.allowFacets && null != technicalFacetList && technicalFacetList.size() > 0 &&
-                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        if (this.allowFacets &&
+            null != technicalFacetList &&
+            technicalFacetList.size() > 0 && (
+                null == solrFacetList ||
+                solrFacetList.size() == 0 ||
+                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())
+            )
+        ) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
     }
 

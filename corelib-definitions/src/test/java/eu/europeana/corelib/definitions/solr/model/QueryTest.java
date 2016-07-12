@@ -28,7 +28,7 @@ public class QueryTest {
 	public void testMinimalQuery() {
 
 		String[] refinements = new String[] {
-				"RIGHTS:" + rights
+			"RIGHTS:" + rights
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements);
@@ -44,19 +44,19 @@ public class QueryTest {
 	public void testQueryWithSetters() {
 
 		String[] refinements = new String[] {
-				"RIGHTS:" + rights
+			"RIGHTS:" + rights
 		};
 
 		// Testing the full Query object
 		Query query = new Query("*:*")
-				.setRefinements(refinements)
-				.setPageSize(10)
-				.setStart(0)
-				.setParameter("facet.mincount", "1")
-				.setParameter("sort", "relevance")
-				.setProduceFacetUnion(true)
-				.setSpellcheckAllowed(false)
-				;
+			.setRefinements(refinements)
+			.setPageSize(10)
+			.setStart(0)
+			.setParameter("facet.mincount", "1")
+			.setParameter("sort", "relevance")
+			.setProduceFacetUnion(true)
+			.setSpellcheckAllowed(false)
+		;
 
 		assertEquals(refinements[0], query.getRefinements()[0]);
 		assertEquals("{!tag=RIGHTS}" + refinements[0], query.getRefinements(true)[0]);
@@ -68,8 +68,8 @@ public class QueryTest {
 	@Test
 	public void testMultipleRights() {
 		String[] refinements = new String[] {
-				"RIGHTS:" + singleRight,
-				"RIGHTS:" + rights
+			"RIGHTS:" + singleRight,
+			"RIGHTS:" + rights
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements);
@@ -86,8 +86,8 @@ public class QueryTest {
 		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + rights);
 
 		String[] refinements = new String[] {
-				"RIGHTS:" + singleRight,
-				"REUSABILITY:Free"
+			"RIGHTS:" + singleRight,
+			"REUSABILITY:Free"
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
@@ -104,9 +104,9 @@ public class QueryTest {
 		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + rights);
 
 		String[] refinements = new String[] {
-				"RIGHTS:" + singleRight,
-				"RIGHTS:" + anotherRight,
-				"REUSABILITY:Free"
+			"RIGHTS:" + singleRight,
+			"RIGHTS:" + anotherRight,
+			"REUSABILITY:Free"
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
@@ -231,6 +231,7 @@ public class QueryTest {
 	@Test
 	public void testDefaultFacet() {
 		List<String> facetList;
+
 		List<String> newFacets;
 
 		// test DEFAULT
@@ -313,6 +314,7 @@ public class QueryTest {
 		facetList = query.getSolrFacets();
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
 		assertEquals(13, facetList.size());
+
 		query.removeSolrFacet("RIGHTS");
 		assertFalse("should NOT contain rights", facetList.contains("RIGHTS"));
 		assertEquals(12, facetList.size());
