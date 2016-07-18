@@ -41,9 +41,9 @@ The workaround is to add a mirror to your Maven settings.xml:
 ``mvn hibernate4:export`` in corelib-db module to create a database schema script
 
 
-## Thank you Jetbrains!
+## Thank you JetBrains!
 
-We've been granted an open source license to use [Jetbrains'](https://www.jetbrains.com) IDE's for our work on the Europeana code base:
+We've been granted an open source license to use [JetBrains'](https://www.jetbrains.com) IDE's for our work on the Europeana code base:
 
 ![](https://raw.githubusercontent.com/Luthien-in-edhil/jetbrainsicons/master/icon_IntelliJIDEA.png) [IntelliJ](https://www.jetbrains.com/idea/) Java IDE
 
