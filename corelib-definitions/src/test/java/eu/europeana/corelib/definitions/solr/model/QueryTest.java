@@ -57,7 +57,7 @@ public class QueryTest {
 			.setProduceFacetUnion(true)
 			.setSpellcheckAllowed(false)
 		;
-		
+
 		assertEquals(refinements[0], query.getRefinements()[0]);
 		assertEquals("{!tag=RIGHTS}" + refinements[0], query.getRefinements(true)[0]);
 	}

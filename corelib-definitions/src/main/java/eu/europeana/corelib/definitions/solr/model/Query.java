@@ -97,7 +97,7 @@ public class Query implements Cloneable {
         }
     }
     private List<String>     solrFacetList = new ArrayList<>();
-    private List<String>     technicalFacetList = new ArrayList<>();
+    private List<String>     technicalFacetList;
     private List<String>     searchRefinementList;
     private List<String>     facetRefinementList;
     private List<String>     filteredFacetList;
@@ -273,7 +273,7 @@ public class Query implements Cloneable {
 //    }
 
     public Query setDefaultSolrFacets(){
-        this.solrFacetList = this.defaultSolrFacetList;
+        this.solrFacetList = new ArrayList<>(this.defaultSolrFacetList);
         return this;
     }
 
@@ -313,7 +313,7 @@ public class Query implements Cloneable {
     }
 
     public Query setDefaultTechnicalFacets(){
-        this.technicalFacetList = this.defaultTechnicalFacetList;
+        this.technicalFacetList = new ArrayList<>(this.defaultTechnicalFacetList);
         return this;
     }
 
@@ -323,6 +323,7 @@ public class Query implements Cloneable {
 
     // extra check against enum type
     public Query setTechnicalFacets(List<String> technicalFacets) {
+        this.technicalFacetList = new ArrayList<>();
         for (String technicalFacet : technicalFacets) {
             if (defaultTechnicalFacetList.contains(technicalFacet)) this.technicalFacetList.add(technicalFacet);
         }
