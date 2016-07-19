@@ -27,7 +27,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
@@ -38,7 +37,6 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.dao.RelationalDao
  */
-//@Repository
 //@Transactional
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
