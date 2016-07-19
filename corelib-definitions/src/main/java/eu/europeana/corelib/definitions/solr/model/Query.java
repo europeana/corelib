@@ -96,7 +96,7 @@ public class Query implements Cloneable {
             defaultTechnicalFacetList.add(technicalFacet.toString());
         }
     }
-    private List<String>     solrFacetList;
+    private List<String>     solrFacetList = new ArrayList<>();
     private List<String>     technicalFacetList;
     private List<String>     searchRefinementList;
     private List<String>     facetRefinementList;
