@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -53,10 +54,10 @@ public interface SearchService {
 	 * @param europeanaObjectId The unique europeana id * @param similarItems
 	 *                          = whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  SolrTypeException
+	 * @throws                  MongoRuntimeException, SolrTypeException
 	 */
 	FullBean findById(String collectionId, String recordId, boolean similarItems)
-			throws MongoDBException;
+			throws MongoRuntimeException, MongoDBException;
 
 	/**
 	 * Retrieve a record by id.
@@ -64,10 +65,10 @@ public interface SearchService {
      * @param europeanaObjectId The unique europeana id
      * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  SolrTypeException
+	 * @throws                  MongoRuntimeException, MongoDBException
 	 */
 	FullBean findById(String europeanaObjectId, boolean similarItems)
-			throws MongoDBException;
+			throws MongoRuntimeException, MongoDBException;
 
 	/**
 	 * Retrieve a record by id.

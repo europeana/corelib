@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.solr.entity.*;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -395,6 +396,8 @@ public class FullBeanHandler implements ICollection {
             return (FullBeanImpl) mongoServer.getFullBean(fullBean.getAbout());
         } catch (MongoDBException e) {
             log.log(Level.SEVERE, e.getMessage());
+        }catch (MongoRuntimeException re) {
+            log.log(Level.SEVERE, re.getMessage());
         }
         return fullBean;
     }

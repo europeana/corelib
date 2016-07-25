@@ -29,6 +29,7 @@ import com.mongodb.Mongo;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -125,7 +126,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public FullBean getFullBean(String id) throws MongoDBException {
+	public FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException {
 		try {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id)
 					.get();
@@ -134,8 +135,10 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				&& re.getCause() instanceof MappingException) {
 				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
 				
+			} else {
+				throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE);
 			}
-			throw re;
+
 		}
 	}
 

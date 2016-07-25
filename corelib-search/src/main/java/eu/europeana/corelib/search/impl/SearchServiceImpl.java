@@ -36,6 +36,7 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -138,7 +139,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String collectionId, String recordId,
-                             boolean similarItems) throws MongoDBException {
+                             boolean similarItems) throws MongoRuntimeException, MongoDBException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
                 similarItems
         );
@@ -317,7 +318,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems)
-            throws MongoDBException {
+            throws MongoRuntimeException, MongoDBException {
 
         long t1 = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
