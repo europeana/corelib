@@ -17,6 +17,8 @@
 package eu.europeana.corelib.neo4j.server;
 
 import java.util.List;
+
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 import org.neo4j.graphdb.Node;
 import eu.europeana.corelib.neo4j.entity.Hierarchy;
 import eu.europeana.corelib.neo4j.entity.CustomNode;
@@ -30,13 +32,13 @@ import eu.europeana.corelib.neo4j.entity.CustomNode;
 public interface Neo4jServer {
 
 	/**
-	 * Get node by its id
+	 * get node by its rdfAbout
 	 * 
-	 * @param id
-	 *            The id to search for
-	 * @return A Neo4j node
+	 * @param rdfAbout the rdfAbout (id) to search on
+	 * @return         a Neo4j node
+	 * @throws         Neo4JException
 	 */
-	Node getNode(String id);
+	Node getNode(String rdfAbout) throws Neo4JException;
 
 	/**
 	 * Retrieve the children nodes of a parent node (parent-child relation
@@ -134,14 +136,14 @@ public interface Neo4jServer {
 	 * @param rdfAbout the rdf:about string of a specific neo4j node
 	 * @return The index number of the node
 	 */
-	long getNodeIndexByRdfAbout(String rdfAbout);
+	long getNodeIndexByRdfAbout(String rdfAbout) throws Neo4JException;
 
 	/**
 	 * Get the initial hierachy for a specific Europeana id
 	 * @param id The id to search on
 	 * @return A full Hierarchy consisting of parents- parents of parents- and nodes
 	 */
-	Hierarchy getInitialStruct(String id);
+	Hierarchy getInitialStruct(String id) throws Neo4JException;
 
 	/**
 	 * The URI path for the REST cal to initial structure
@@ -154,5 +156,5 @@ public interface Neo4jServer {
 	 * @param id The Europeana id
 	 * @return true if it belongs to a hierarchy
 	 */
-	boolean isHierarchy(String id);
+	boolean isHierarchy(String id) throws Neo4JException;
 }

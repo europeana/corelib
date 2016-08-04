@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import eu.europeana.corelib.definitions.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -52,6 +53,8 @@ import eu.europeana.corelib.neo4j.entity.IndexObject;
 import eu.europeana.corelib.neo4j.entity.RelType;
 import eu.europeana.corelib.neo4j.entity.Relation;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
+
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 
 /**
  * @see eu.europeana.corelib.neo4j.server.Neo4jServer
@@ -106,17 +109,21 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	@Override
-    public Node getNode(String rdfAbout) {
-        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
-		long t1 = System.currentTimeMillis();
-		if (nodes.size() > 0 && hasRelationships(nodes)) {
-			LOG.info("neo4jserverimpl getNode hasRelationships ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-			t1 = System.currentTimeMillis();
-			Node node = nodes.getSingle();
-			LOG.info("neo4jserverimpl nodes.getSingle() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-			return node;
+    public Node getNode(String rdfAbout) throws Neo4JException {
+		Node node = null;
+		try {
+			IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
+			long t1 = System.currentTimeMillis();
+			if (nodes.size() > 0 && hasRelationships(nodes)) {
+                LOG.info("neo4jserverimpl getNode hasRelationships ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+                t1 = System.currentTimeMillis();
+                node = nodes.getSingle();
+                LOG.info("neo4jserverimpl nodes.getSingle() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+            }
+		} catch (Exception e) {
+			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
 		}
-		return null;
+		return node;
 	}
 
     @Override
@@ -142,7 +149,7 @@ public class Neo4jServerImpl implements Neo4jServer {
         return 0;
     }
 
-    public long getNodeIndexByRdfAbout(String rdfAbout){
+    public long getNodeIndexByRdfAbout(String rdfAbout) throws Neo4JException {
          return getNodeIndex(getNode(rdfAbout));
      }
 
@@ -152,7 +159,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	@Override
-    public boolean isHierarchy(String rdfAbout) {
+    public boolean isHierarchy(String rdfAbout) throws Neo4JException {
         return getNode(rdfAbout) != null;
 	}
 
@@ -335,7 +342,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 	}
 
 	@Override
-    public Hierarchy getInitialStruct(String rdfAbout) {
+    public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
         if (!isHierarchy(rdfAbout)) {
 			return null;
 		}

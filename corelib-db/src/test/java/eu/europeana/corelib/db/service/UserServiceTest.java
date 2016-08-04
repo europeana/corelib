@@ -25,6 +25,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.*;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -261,7 +262,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSavedItem() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException {
+    public void testCreateSavedItem() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException, Neo4JException {
         final String EMAIL = "testCreateSavedItem@europeana.eu";
         final String USERNAME = "testCreateSavedItem";
         final String PASSWORD = "test";
@@ -298,7 +299,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSocialTag() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException {
+    public void testCreateSocialTag() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException, Neo4JException {
         final String EMAIL = "testCreateSocialTag@europeana.eu";
         final String USERNAME = "testCreateSocialTag";
         final String PASSWORD = "test";
@@ -376,7 +377,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void setupSeachServiceMock(String europeanaObjectId) throws MongoRuntimeException, MongoDBException {
+    private void setupSeachServiceMock(String europeanaObjectId) throws MongoRuntimeException, MongoDBException, Neo4JException {
         FullBean mockBean = mock(FullBean.class);
         Proxy proxy = mock(Proxy.class);
         Aggregation aggregation = mock(Aggregation.class);

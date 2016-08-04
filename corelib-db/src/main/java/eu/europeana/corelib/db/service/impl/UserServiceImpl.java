@@ -35,6 +35,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
@@ -264,8 +265,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
-    public User createSavedItem(Long userId, String europeanaObjectId)
-            throws DatabaseException {
+    public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, Neo4JException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
             throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
@@ -299,7 +299,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
     @Override
     public User createSocialTag(Long userId, String europeanaObjectId,
-                                String tag) throws DatabaseException {
+                                String tag) throws DatabaseException, Neo4JException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
                 || StringUtils.isBlank(tag)) {
@@ -463,8 +463,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     private FullBean populateEuropeanaUserObject(User user,
-                                                 String europeanaObjectId, EuropeanaUserObject instance)
-            throws DatabaseException {
+                                                 String europeanaObjectId, EuropeanaUserObject instance) throws DatabaseException, Neo4JException {
 
         FullBean bean;
         try {

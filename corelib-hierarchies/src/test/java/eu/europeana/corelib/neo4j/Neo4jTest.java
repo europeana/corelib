@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.node.TextNode;
@@ -196,7 +197,7 @@ public class Neo4jTest {
 	 * Test Null object
 	 */
 	@Test
-	public void testNull() {
+	public void testNull() throws Neo4JException {
 		testCount++;
 		Node node = server.getNode("test");
 		Assert.assertNull(node);
@@ -207,7 +208,7 @@ public class Neo4jTest {
 	 * Test non null object
 	 */
 	@Test
-	public void testNotNull() {
+	public void testNotNull() throws Neo4JException {
 		testCount++;
 		Node node = server.getNode("uri2");
 		Assert.assertNotNull(node);
@@ -296,7 +297,7 @@ public class Neo4jTest {
 	 * Test that an object belongs to hierarchy
 	 */
 	@Test
-	public void assertHierarchy() {
+	public void assertHierarchy() throws Neo4JException {
 		testCount++;
 		Assert.assertTrue(server.isHierarchy("uri4"));
 	}
@@ -304,7 +305,7 @@ public class Neo4jTest {
 	 * Test that an object does not belong to hierarchy
 	 */
 	@Test
-	public void assertNotHierarchy() {
+	public void assertNotHierarchy() throws Neo4JException {
 		testCount++;
 		Assert.assertFalse(server.isHierarchy("test"));
 	}
@@ -313,7 +314,7 @@ public class Neo4jTest {
 	 * Test null hierarchy
 	 */
 	@Test
-	public void assertNullHierarchy() {
+	public void assertNullHierarchy() throws Neo4JException {
 		testCount++;
 		Assert.assertNull(server.getInitialStruct("test"));
 	}
@@ -337,7 +338,7 @@ public class Neo4jTest {
 		}
 	}
 
-	private Long getCustomNodeIndex(CustomNode node){
+	private Long getCustomNodeIndex(CustomNode node) throws Neo4JException {
 		return server.getNodeIndexByRdfAbout(((TextNode) node.getProperty("rdf:about")).asText()) ;
 	}
 
