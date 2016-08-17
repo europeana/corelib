@@ -67,7 +67,7 @@
           p:dataSource-ref="corelib_db_dataSource">
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" p:showSql="false"
-                  p:generateDdl="false" p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"/>
+                  p:generateDdl="true" p:databasePlatform="org.hibernate.dialect.PostgreSQLDialect"/>
         </property>
     </bean>
 
