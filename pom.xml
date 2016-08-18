@@ -243,7 +243,7 @@
 		<version.apacheSolr>4.10.1</version.apacheSolr>
 		<version.apacheVelocity>1.7</version.apacheVelocity>
 		<version.springBoot>1.2.8.RELEASE</version.springBoot>
-		<version.springCore>4.2.4.RELEASE</version.springCore>
+		<version.springCore>4.2.5.RELEASE</version.springCore>
 		<version.springWebService>2.2.4.RELEASE</version.springWebService>
 		<version.springSecurity>3.2.9.RELEASE</version.springSecurity>
 		<version.springSecurityOauth>2.0.8.RELEASE</version.springSecurityOauth>

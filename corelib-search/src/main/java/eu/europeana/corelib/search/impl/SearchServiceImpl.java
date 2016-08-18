@@ -32,10 +32,12 @@ import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.definitions.exception.Neo4JException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -138,7 +140,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String collectionId, String recordId,
-                             boolean similarItems) throws MongoDBException {
+                             boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
                 similarItems
         );
@@ -316,13 +318,20 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems)
-            throws MongoDBException {
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         injectWebMetaInfo(fullBean);
 
-        if (fullBean != null && isHierarchy(fullBean.getAbout())) {
+        boolean isHierarchy = false;
+        try {
+            isHierarchy = isHierarchy(fullBean.getAbout());
+        } catch (Neo4JException e) {
+            log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId
+            + ", reason: " + e.getMessage());
+        }
+
+        if (fullBean != null && isHierarchy) {
             for (Proxy prx : fullBean.getProxies()) {
                 prx.setDctermsHasPart(null);
             }
@@ -513,7 +522,7 @@ public class SearchServiceImpl implements SearchService {
                 SolrQuery solrQuery = new SolrQuery().setQuery(query
                         .getQuery(true));
 
-                if (refinements != null) {
+                if (refinements != null) { // TODO add length 0 check!!
                     solrQuery.addFilterQuery(refinements);
                 }
 
@@ -908,7 +917,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean isHierarchy(String rdfAbout) {
+    public boolean isHierarchy(String rdfAbout) throws Neo4JException {
         return neo4jServer.isHierarchy(rdfAbout);
     }
 
@@ -922,12 +931,12 @@ public class SearchServiceImpl implements SearchService {
         return getChildren(rdfAbout, 0, 10);
     }
 
-    private Node getNode(String rdfAbout) {
+    private Node getNode(String rdfAbout) throws Neo4JException {
         return neo4jServer.getNode(rdfAbout);
     }
 
     @Override
-    public Neo4jBean getHierarchicalBean(String rdfAbout) {
+    public Neo4jBean getHierarchicalBean(String rdfAbout) throws Neo4JException {
         Node node = getNode(rdfAbout);
         if (node != null) {
             return Node2Neo4jBeanConverter.toNeo4jBean(node, neo4jServer.getNodeIndex(node));
@@ -976,7 +985,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
         List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, limit);
         long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
@@ -988,12 +997,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) throws Neo4JException {
         return getPrecedingSiblings(rdfAbout, 10);
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
         List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, limit);
         long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
@@ -1005,23 +1014,23 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout) {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout) throws Neo4JException {
         return getFollowingSiblings(rdfAbout, 10);
     }
 
     @Override
-    public long getChildrenCount(String rdfAbout) {
+    public long getChildrenCount(String rdfAbout) throws Neo4JException {
         return neo4jServer.getChildrenCount(getNode(rdfAbout));
     }
 
     // note that parents don't have their node indexes set in getInitialStruct
     // because they have to be fetched separately; therefore this is done afterwards
     @Override
-    public Neo4jStructBean getInitialStruct(String nodeId) {
+    public Neo4jStructBean getInitialStruct(String nodeId) throws Neo4JException {
         return addParentNodeIndex(Node2Neo4jBeanConverter.toNeo4jStruct(neo4jServer.getInitialStruct(nodeId), neo4jServer.getNodeIndex(getNode(nodeId))));
     }
 
-    private Neo4jStructBean addParentNodeIndex(Neo4jStructBean struct) {
+    private Neo4jStructBean addParentNodeIndex(Neo4jStructBean struct) throws Neo4JException {
         if (!struct.getParents().isEmpty()) {
             for (Neo4jBean parent : struct.getParents()) {
                 parent.setIndex(neo4jServer.getNodeIndex(getNode(parent.getId())));

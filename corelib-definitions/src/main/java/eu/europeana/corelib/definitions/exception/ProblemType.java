@@ -42,6 +42,8 @@ public enum ProblemType {
 	INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
 	INVALIDCLASS("Service is called with invalid bean class.", ProblemResponseAction.MAIL),
 	UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL),
+	MONGO_UNREACHABLE("Cannot connect to MongoDB host", ProblemResponseAction.MAIL),
+	NEO4J_CANNOTGETNODE("Cannot get node from Neo4J host", ProblemResponseAction.LOG),
 	XMPMETADATACREATION("Unable to crate XMP metadata for thumbnail", ProblemResponseAction.IGNORE),
 	XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail", ProblemResponseAction.IGNORE),
 	NO_USERNAME("User name does not exist.", ProblemResponseAction.IGNORE),

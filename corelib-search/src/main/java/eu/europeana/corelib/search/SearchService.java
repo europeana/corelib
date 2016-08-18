@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 
@@ -53,10 +55,9 @@ public interface SearchService {
 	 * @param europeanaObjectId The unique europeana id * @param similarItems
 	 *                          = whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  SolrTypeException
+	 * @throws                  MongoRuntimeException, SolrTypeException
 	 */
-	FullBean findById(String collectionId, String recordId, boolean similarItems)
-			throws MongoDBException;
+	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
 
 	/**
 	 * Retrieve a record by id.
@@ -64,10 +65,9 @@ public interface SearchService {
      * @param europeanaObjectId The unique europeana id
      * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  SolrTypeException
+	 * @throws                  MongoRuntimeException, MongoDBException
 	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems)
-			throws MongoDBException;
+	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
 
 	/**
 	 * Retrieve a record by id.
@@ -213,7 +213,7 @@ public interface SearchService {
 	 * @param  nodeId The ID of the record
 	 * @return node object
 	 */
-	Neo4jBean getHierarchicalBean(String nodeId);
+	Neo4jBean getHierarchicalBean(String nodeId) throws Neo4JException;
 
 	/**
 	 * Get the children of the node (max 10)
@@ -249,7 +249,7 @@ public interface SearchService {
      * @param  limit  How many siblings to retrieve
 	 * @return node's preceding siblings
 	 */
-    List<Neo4jBean> getPrecedingSiblings(String nodeId, int limit);
+    List<Neo4jBean> getPrecedingSiblings(String nodeId, int limit) throws Neo4JException;
 
     /**
      * Get the nodes preceding siblings (max 10)
@@ -257,7 +257,7 @@ public interface SearchService {
      * @param  nodeId The ID of the record
      * @return node's preceding siblings
      */
-    List<Neo4jBean> getPrecedingSiblings(String nodeId);
+    List<Neo4jBean> getPrecedingSiblings(String nodeId) throws Neo4JException;
 
 	/**
 	 * Get the nodes following siblings
@@ -266,14 +266,14 @@ public interface SearchService {
      * @param  limit  How many siblings to retrieve
 	 * @return node's following siblings
 	 */
-	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit);
+	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) throws Neo4JException;
 
 	/**
 	 * Get the node's 10 following siblings
 	 * @param  nodeId The ID of the record
 	 * @return node's following siblings
 	 */
-	List<Neo4jBean> getFollowingSiblings(String nodeId);
+	List<Neo4jBean> getFollowingSiblings(String nodeId) throws Neo4JException;
 
 	/**
 	 * Get the number of children this node has
@@ -281,7 +281,7 @@ public interface SearchService {
 	 * @param  nodeId
 	 * @return the number of children
 	 */
-	long getChildrenCount(String nodeId);
+	long getChildrenCount(String nodeId) throws Neo4JException;
 
 	/**
 	 * Get the initial structure, which contains self, the ancestors, 
@@ -290,7 +290,7 @@ public interface SearchService {
      * @param  nodeId The ID of the record
      * @return The hierarchical structure
 	 */
-	Neo4jStructBean getInitialStruct(String nodeId);
+	Neo4jStructBean getInitialStruct(String nodeId) throws Neo4JException;
 
-	boolean isHierarchy(String nodeId);
+	boolean isHierarchy(String nodeId) throws Neo4JException;
 }
