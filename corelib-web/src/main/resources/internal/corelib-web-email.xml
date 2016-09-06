@@ -37,6 +37,7 @@
                 <prop key="mail.smtp.auth">true</prop>
                 <prop key="mail.smtps.ssl.checkserveridentity">true</prop>
                 <prop key="mail.smtps.ssl.trust">*</prop>
+                <prop key="mail.smtp.ssl.trust">*</prop>
             </props>
         </property>
         <property name="host" value="#{europeanaProperties['smtp.host']}"/>
@@ -71,7 +72,7 @@
         <entry key="apikeys">
             <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
                   p:template="/email/apikeys"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
+                  p:emailFrom="#{europeanaProperties['register-api.from']}"
                   p:emailCc="#{europeanaProperties['register-api.to']}"
                   p:subject="Your Europeana API keys"
             />
