@@ -321,42 +321,44 @@ public class SearchServiceImpl implements SearchService {
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-        injectWebMetaInfo(fullBean);
+        if(fullBean!=null) {
+            injectWebMetaInfo(fullBean);
 
-        boolean isHierarchy = false;
-        try {
-            isHierarchy = isHierarchy(fullBean.getAbout());
-        } catch (Neo4JException e) {
-            log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId
-            + ", reason: " + e.getMessage());
-        }
+            boolean isHierarchy = false;
 
-        if (fullBean != null && isHierarchy) {
-            for (Proxy prx : fullBean.getProxies()) {
-                prx.setDctermsHasPart(null);
-            }
-
-        }
-
-        if (fullBean != null && similarItems) {
             try {
-                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-            } catch (SolrServerException e) {
-                log.error("SolrServerException: " + e.getMessage());
+                isHierarchy = isHierarchy(fullBean.getAbout());
+            } catch (Neo4JException e) {
+                log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId
+                        + ", reason: " + e.getMessage());
             }
-        }
 
-        if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
-            ((FullBeanImpl) fullBean).setAsParent();
-            for (Aggregation agg : fullBean.getAggregations()){
-                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
-                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
-                        wRes.initAttributionSnippet();
+            if (isHierarchy) {
+                for (Proxy prx : fullBean.getProxies()) {
+                    prx.setDctermsHasPart(null);
+                }
+
+            }
+
+            if (similarItems) {
+                try {
+                    fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+                } catch (SolrServerException e) {
+                    log.error("SolrServerException: " + e.getMessage());
+                }
+            }
+
+            if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
+                ((FullBeanImpl) fullBean).setAsParent();
+                for (Aggregation agg : fullBean.getAggregations()) {
+                    if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                        for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                            wRes.initAttributionSnippet();
+                        }
                     }
                 }
             }
         }
-
         return fullBean;
     }
 
