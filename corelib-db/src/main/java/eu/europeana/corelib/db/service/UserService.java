@@ -131,6 +131,18 @@ public interface UserService extends AbstractService<User> {
     User createSavedSearch(Long userId, String query, String queryString) throws DatabaseException;
 
     /**
+     * Updates an existing SavedSearch from an existing User
+     *
+     * @param userId            The id of the excising user to add the new SavedSearch to
+     * @param savedSearchId     The id of the saved search made bij the user
+     * @param query       query contains the query as shown in searchbox
+     * @param queryString contains the complete query string including facets
+     * @return The User including the new saved search
+     * @throws DatabaseException Thrown when no valid user or savedSearch or query(string) is provided
+     */
+    User updateSavedSearch(Long userId,Long savedSearchId, String query, String queryString) throws DatabaseException;
+
+    /**
      * Creates and add a SavedItem to an existing User
      *
      * @param userId            The id of the excising user to add the new SavedSearch to

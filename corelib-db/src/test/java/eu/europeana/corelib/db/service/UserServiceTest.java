@@ -262,6 +262,31 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testUpdateSavedSearch() throws DatabaseException, EmailServiceException {
+        final String EMAIL = "testCreateSavedSearch@europeana.eu";
+        final String USERNAME = "testCreateSavedSearch";
+        final String PASSWORD = "test";
+        User user = userService.create(EMAIL, USERNAME, PASSWORD, null, null, null, null, null, null, null, null, "http://europeana.eu", null);
+
+        userService.createSavedSearch(user.getId(), "query1", "queryString1");
+
+        user = userService.findByEmail(EMAIL);
+        SavedSearch savedSearch = user.getSavedSearches().iterator().next();
+        assertEquals("query1", savedSearch.getQuery());
+        assertEquals("queryString1", savedSearch.getQueryString());
+        assertNotNull("No creation date set", savedSearch.getDateSaved());
+
+
+        userService.updateSavedSearch(user.getId(),savedSearch.getId(),"updatedQuery","updatedQueryString");
+
+        user = userService.findByEmail(EMAIL);
+        SavedSearch updatedSavedSearch = user.getSavedSearches().iterator().next();
+        assertEquals("updatedQuery", updatedSavedSearch.getQuery());
+        assertEquals("updatedQueryString", updatedSavedSearch.getQueryString());
+        assertNotNull("No creation date set", updatedSavedSearch.getDateSaved());
+    }
+
+    @Test
     public void testCreateSavedItem() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException, Neo4JException {
         final String EMAIL = "testCreateSavedItem@europeana.eu";
         final String USERNAME = "testCreateSavedItem";
