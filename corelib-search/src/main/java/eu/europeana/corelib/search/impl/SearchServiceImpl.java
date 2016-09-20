@@ -101,8 +101,7 @@ public class SearchServiceImpl implements SearchService {
      * Default number of documents retrieved by MoreLikeThis
      */
     private static final int DEFAULT_MLT_COUNT = 10;
-//    private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
-    private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{1}";
+    private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
     /**
      * Number of milliseconds before the query is aborted by SOLR
      */
@@ -323,8 +322,7 @@ public class SearchServiceImpl implements SearchService {
 
         long t1 = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-        log.info("mongoserver.getFullBean took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-        t1 = System.currentTimeMillis();
+        if(fullBean!=null) {
         injectWebMetaInfo(fullBean);
         log.info("injectWebMetaInfo took: " + (System.currentTimeMillis() - t1) + " milliseconds");
 
@@ -338,7 +336,7 @@ public class SearchServiceImpl implements SearchService {
             + ", reason: " + e.getMessage());
         }
 
-        if (fullBean != null && isHierarchy) {
+            if (isHierarchy) {
             for (Proxy prx : fullBean.getProxies()) {
                 prx.setDctermsHasPart(null);
             }
@@ -346,7 +344,7 @@ public class SearchServiceImpl implements SearchService {
         log.info("prx.setDctermsHasPart(null) ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
         t1 = System.currentTimeMillis();
 
-        if (fullBean != null && similarItems) {
+            if (similarItems) {
             try {
                 fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
             } catch (SolrServerException e) {
@@ -356,7 +354,7 @@ public class SearchServiceImpl implements SearchService {
         log.info("fullBean.setSimilarItems ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
         t1 = System.currentTimeMillis();
 
-        if (fullBean != null && (fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())){
+            if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
             for (Aggregation agg : fullBean.getAggregations()){
                 if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
@@ -366,9 +364,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
-
-        log.info("wRes.initAttributionSnippet() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-
+        }
         return fullBean;
     }
 
@@ -571,30 +567,23 @@ public class SearchServiceImpl implements SearchService {
                     }
                 }
 
-                // if a facet is also used in a refinement query, prevent it from filtering the facet output
-                // by applying the !ex exclude tag, matching the !tag tag prefixed to the refinement Facet
-                // note: SOLRfacets includes custom facets
-                if (query.areFacetsAllowed()) {
-                    String facetsFromRefinements = "";
+                // facets are optional
+                if (query.isFacetsAllowed()) {
                     solrQuery.setFacet(true);
-                    List<String> facetsUsedInRefinements = query.getFacetsUsedInRefinements();
-                    if (null != facetsUsedInRefinements && facetsUsedInRefinements.size() > 0){
-                        for(String facetUsedInRefinement : facetsUsedInRefinements){
-                            facetsFromRefinements += facetUsedInRefinement + ",";
+                    List<String> filteredFacets = query.getFilteredFacets();
+                    boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
+                            .size() > 0);
+
+                    for (String facetToAdd : query.getSolrFacets()) {
+                        if (query.isProduceFacetUnion()) {
+                            if (hasFacetRefinements
+                                    && filteredFacets.contains(facetToAdd)) {
+                                facetToAdd = MessageFormat.format(
+                                        UNION_FACETS_FORMAT, facetToAdd);
                         }
-                        facetsFromRefinements = facetsFromRefinements.substring(0, facetsFromRefinements.length()-1);
                     }
-                    List<String> solrFacets = query.getSolrFacets();
-                    if (null != solrFacets && solrFacets.size() > 0){
-                        for (String facetToAdd : solrFacets) {
-                            if (facetsFromRefinements.length() > 0) {
-                                solrQuery.addFacetField(MessageFormat.format(UNION_FACETS_FORMAT,
-                                        facetsFromRefinements, facetToAdd));
-                            } else {
                                 solrQuery.addFacetField(facetToAdd);
                             }
-                        }
-                    }
                     solrQuery.setFacetLimit(facetLimit);
                 }
 

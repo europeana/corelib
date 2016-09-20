@@ -98,9 +98,9 @@ public class Query implements Cloneable {
     }
     private List<String>     solrFacetList = new ArrayList<>();
     private List<String>     technicalFacetList;
-    private List<String>     searchRefinementsList;
-    private List<String>     facetedRefinementsList;
-    private List<String>     facetsUsedInRefinementsList;
+    private List<String>     searchRefinementList;
+    private List<String>     facetRefinementList;
+    private List<String>     filteredFacetList;
     private List<QueryFacet> queryFacetList;
 
 
@@ -143,13 +143,12 @@ public class Query implements Cloneable {
             return refinementArray;
         } else {
             divideRefinements();
-            return (String[]) ArrayUtils.addAll(searchRefinementsList.toArray(new String[searchRefinementsList.size()]),
-                    facetedRefinementsList.toArray(new String[facetedRefinementsList.size()]));
+            return (String[]) ArrayUtils.addAll(searchRefinementList.toArray(new String[searchRefinementList.size()]), facetRefinementList.toArray(new String[facetRefinementList.size()]));
         }
     }
 
-    public List<String> getFacetsUsedInRefinements() {
-        return facetsUsedInRefinementsList;
+    public List<String> getFilteredFacets() {
+        return filteredFacetList;
     }
 
     public Query setRefinements(String... refinementArray) {
@@ -271,6 +270,7 @@ public class Query implements Cloneable {
 //        if (defaultFacetsRequested) this.defaultFacetsRequested = true;
 //        if (ArrayUtils.isNotEmpty(solrFacets)) setSolrFacets(Arrays.asList(solrFacets));
 //        return this;
+//    }
 
     public Query setDefaultSolrFacets(){
         this.solrFacetList = new ArrayList<>(this.defaultSolrFacetList);
@@ -340,7 +340,7 @@ public class Query implements Cloneable {
         return technicalFacetList;
     }
 
-    public boolean areFacetsAllowed() {
+    public boolean isFacetsAllowed() {
         return allowFacets;
     }
 
@@ -364,8 +364,7 @@ public class Query implements Cloneable {
         ) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
         return this;
     }
-    // TODO this method is ONLY ever called in the QueryTest unittest, and only for it TRUE
-    // TODO I suggest we remove this variable altogether
+
     public Query setProduceFacetUnion(boolean produceFacetUnion) {
         this.produceFacetUnion = produceFacetUnion;
         return this;
@@ -551,7 +550,7 @@ public class Query implements Cloneable {
         this.queryType = queryType;
     }
 
-    public boolean doProduceFacetUnion() {
+    public boolean isProduceFacetUnion() {
         return produceFacetUnion;
     }
 
@@ -578,10 +577,10 @@ public class Query implements Cloneable {
     }
 
     public void divideRefinements() {
-        searchRefinementsList = new ArrayList<>();
-        facetedRefinementsList = new ArrayList<>();
+        searchRefinementList = new ArrayList<>();
+        facetRefinementList = new ArrayList<>();
 
-        if (null == refinementArray || refinementArray.length == 0) {
+        if (refinementArray == null) {
             return;
         }
 
@@ -606,8 +605,8 @@ public class Query implements Cloneable {
                     facetName = facetName.replaceFirst("\\{!tag=.*?\\}", "");
                     isTagged = true;
                 }
-                // only if it is NOT a technical facet; custom facets are OK (not just the default)
-                if (!defaultTechnicalFacetList.contains(facetName)) {
+
+                if (defaultSolrFacetList.contains(facetName)) {
                     String         key = pseudoFacetName == null ? facetName : pseudoFacetName;
                     FacetCollector collector;
                     if (register.containsKey(key)) {
@@ -624,16 +623,16 @@ public class Query implements Cloneable {
                     }
                     collector.addValue(facetTerm.substring(colon + 1), replaced);
                 } else {
-                    searchRefinementsList.add(facetTerm);
+                    searchRefinementList.add(facetTerm);
                 }
             } else {
-                searchRefinementsList.add(facetTerm);
+                searchRefinementList.add(facetTerm);
             }
         }
 
-        facetsUsedInRefinementsList = new ArrayList<String>(register.keySet());
+        filteredFacetList = new ArrayList<String>(register.keySet());
         for (FacetCollector collector : register.values()) {
-            facetedRefinementsList.add(collector.toString());
+            facetRefinementList.add(collector.toString());
         }
     }
 
