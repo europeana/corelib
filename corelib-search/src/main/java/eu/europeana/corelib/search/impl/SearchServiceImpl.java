@@ -321,23 +321,20 @@ public class SearchServiceImpl implements SearchService {
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-        if(fullBean!=null) {
+        if (fullBean != null) {
             injectWebMetaInfo(fullBean);
 
             boolean isHierarchy = false;
-
             try {
                 isHierarchy = isHierarchy(fullBean.getAbout());
             } catch (Neo4JException e) {
-                log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId
-                        + ", reason: " + e.getMessage());
+                log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
 
-            if (isHierarchy) {
+            if (fullBean != null && isHierarchy) {
                 for (Proxy prx : fullBean.getProxies()) {
                     prx.setDctermsHasPart(null);
                 }
-
             }
 
             if (similarItems) {
@@ -574,10 +571,10 @@ public class SearchServiceImpl implements SearchService {
                                     && filteredFacets.contains(facetToAdd)) {
                                 facetToAdd = MessageFormat.format(
                                         UNION_FACETS_FORMAT, facetToAdd);
-                            }
                         }
-                        solrQuery.addFacetField(facetToAdd);
                     }
+                                solrQuery.addFacetField(facetToAdd);
+                            }
                     solrQuery.setFacetLimit(facetLimit);
                 }
 

@@ -265,6 +265,32 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
+    public User updateSavedSearch(Long userId, Long savedSearchId, String query, String queryString)
+            throws DatabaseException {
+
+        if ((userId == null) || (savedSearchId==null) || StringUtils.isBlank(query)
+                || StringUtils.isBlank(queryString)) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+
+        User user = getDao().findByPK(userId);
+        if (user == null) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+        }
+
+        SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class,
+                savedSearchId);
+        if ((savedSearch != null)
+                && savedSearch.getUser().getId().equals(userId)) {
+            savedSearch.setUser(user);
+            savedSearch.setDateSaved(new Date());
+            savedSearch.setQuery(query);
+            savedSearch.setQueryString(queryString);
+        }
+        return user;
+    }
+
+    @Override
     public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, Neo4JException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {

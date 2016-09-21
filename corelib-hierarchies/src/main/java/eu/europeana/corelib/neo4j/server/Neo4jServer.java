@@ -17,6 +17,7 @@
 package eu.europeana.corelib.neo4j.server;
 
 import java.util.List;
+
 import eu.europeana.corelib.definitions.exception.Neo4JException;
 import org.neo4j.graphdb.Node;
 import eu.europeana.corelib.neo4j.entity.Hierarchy;

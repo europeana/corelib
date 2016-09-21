@@ -4,7 +4,6 @@
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
@@ -28,13 +27,13 @@ import eu.europeana.corelib.definitions.exception.ProblemType;
  */
 public class Neo4JException extends EuropeanaException {
 
-    private static final long serialVersionUID = 662625433933164897L;
+	private static final long serialVersionUID = 662625433933164897L;
 
-    public Neo4JException(ProblemType problem) {
-        super(problem);
-    }
+	public Neo4JException(ProblemType problem) {
+		super(problem);
+	}
 
-    public Neo4JException(Throwable causedBy, ProblemType problem) {
-        super(causedBy,problem);
-    }
+	public Neo4JException(Throwable causedBy, ProblemType problem) {
+		super(causedBy,problem);
+	}
 }
