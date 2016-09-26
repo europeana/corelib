@@ -356,13 +356,13 @@ public class SearchServiceImpl implements SearchService {
 
             if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
-            for (Aggregation agg : fullBean.getAggregations()){
-                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
-                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
-                        wRes.initAttributionSnippet();
-                    }
-                }
-            }
+//            for (Aggregation agg : fullBean.getAggregations()){
+//                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
+//                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
+//                        wRes.initAttributionSnippet();
+//                    }
+//                }
+//            }
         }
         }
         return fullBean;
