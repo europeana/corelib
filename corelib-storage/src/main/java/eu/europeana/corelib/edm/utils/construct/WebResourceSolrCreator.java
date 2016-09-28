@@ -52,7 +52,7 @@ public class WebResourceSolrCreator {
 		SolrUtils.addFromStringArray(doc, EdmLabel.WR_OWL_SAMEAS,
 				wr.getOwlSameAs());
 		SolrUtils.addFromStringArray(doc,EdmLabel.WR_SVCS_HAS_SERVICE,wr.getSvcsHasService());
-		SolrUtils.addFromString(doc,EdmLabel.WR_WDRS_DESCRIBEDBY,wr.getWdrsDescribedBy());
+		SolrUtils.addFromStringArray(doc,EdmLabel.WR_DCTERMS_ISREFERENCEDBY,wr.getDctermsIsReferencedBy());
 		SolrUtils.addFromString(doc,EdmLabel.WR_EDM_PREVIEW,wr.getEdmPreview());
 	}
 

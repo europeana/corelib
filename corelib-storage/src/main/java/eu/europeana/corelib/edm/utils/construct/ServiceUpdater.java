@@ -2,7 +2,7 @@ package eu.europeana.corelib.edm.utils.construct;
 
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
-import eu.europeana.corelib.definitions.edm.entity.Service;
+import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.storage.MongoServer;
 import org.apache.commons.lang.StringUtils;
@@ -21,13 +21,24 @@ public class ServiceUpdater implements Updater<ServiceImpl> {
         UpdateOperations<ServiceImpl> ops = mongoServer.getDatastore()
                 .createUpdateOperations(ServiceImpl.class);
         boolean update = false;
-        if(!StringUtils.equals(mongoEntity.getDctermsConformsTo(),newEntity.getDctermsConformsTo())){
+
+        if(!MongoUtils.arrayEquals(mongoEntity.getDctermsConformsTo(),newEntity.getDctermsConformsTo())){
             if(mongoEntity.getDctermsConformsTo()==null){
                 newEntity.setDcTermsConformsTo(null);
                 ops.unset("dctermsConformsTo");
             } else {
                 newEntity.setDcTermsConformsTo(mongoEntity.getDctermsConformsTo());
-                ops.set("odrlInheritedFrom", mongoEntity.getDctermsConformsTo());
+                ops.set("dctermsConformsTo", mongoEntity.getDctermsConformsTo());
+            }
+            update=true;
+        }
+        if(!StringUtils.equals(mongoEntity.getDoapImplements(),newEntity.getDoapImplements())){
+            if(mongoEntity.getDoapImplements()==null){
+                newEntity.setDoapImplements(null);
+                ops.unset("doapImplements");
+            } else {
+                newEntity.setDoapImplements(mongoEntity.getDoapImplements());
+                ops.set("doapImplements", mongoEntity.getDoapImplements());
             }
             update=true;
         }

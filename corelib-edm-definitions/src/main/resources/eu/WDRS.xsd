@@ -15,8 +15,16 @@
    See the Licence for the specific language governing permissions and limitations under
    the Licence.
 -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3.org/2007/05/powder-s#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns:wdrs="http://www.w3.org/2007/05/powder-s#" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://usefulinc.com/ns/doap#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:doap="http://usefulinc.com/ns/doap#" elementFormDefault="qualified">
     <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
-    <element name="describedby" type="rdf:ResourceType"/>
+    <element name="implements" type="rdf:ResourceType">
+        <annotation>
+            <documentation>A specification that a project implements. Could be a standard, API or legally defined level of conformance.
+                In IIIF doap:implements refers to the the general protocol without specific version.
+                &lt;doap:implements rdf:resource=”http://iiif.io/api/image” /&gt;
+            </documentation>
+        </annotation>
+
+    </element>
 </schema>

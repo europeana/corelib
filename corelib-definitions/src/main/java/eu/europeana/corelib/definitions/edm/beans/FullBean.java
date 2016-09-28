@@ -277,7 +277,6 @@ public interface FullBean extends IdBean {
 	 * @param europeanaCollectionName
 	 */
 	void setEuropeanaCollectionName(String[] europeanaCollectionName);
-
 	/**
 	 * The date the record was created
 	 * @return 

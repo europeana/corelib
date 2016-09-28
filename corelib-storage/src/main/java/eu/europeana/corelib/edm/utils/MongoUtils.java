@@ -16,27 +16,20 @@
  */
 package eu.europeana.corelib.edm.utils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
-
-import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.storage.MongoServer;
+import org.apache.commons.lang.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class with util methods for Mongo objects
@@ -669,7 +662,9 @@ public final class MongoUtils {
 				if (savedValues == null
 						|| !MongoUtils.arrayEquals(updatedValues, savedValues)) {
 					for(int i=0;i<updatedValues.length;i++){
-						updatedValues[i]=updatedValues[i].trim();
+						if(StringUtils.isNotBlank(updatedValues[i])) {
+							updatedValues[i] = updatedValues[i].trim();
+						}
 					}
 					ops.set(updateField, updatedValues);
 					setter.invoke(saved, new Object[] { updatedValues });
