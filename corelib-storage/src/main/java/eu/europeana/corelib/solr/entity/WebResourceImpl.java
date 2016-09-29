@@ -70,8 +70,8 @@ public class WebResourceImpl implements WebResource {
     private String                    isNextInSequence;
     private String[]                  owlSameAs;
     private AttributionSnippet        attributionSnippet;
-//    private String                    textAttributionSnippet;
-//    private String                    htmlAttributionSnippet;
+    private String                    textAttributionSnippet;
+    private String                    htmlAttributionSnippet;
     private String[]                  svcsHasService;
     private String[]                  dctermsIsReferencedBy;
     private String                    edmPreview;
@@ -562,13 +562,13 @@ public class WebResourceImpl implements WebResource {
         attributionSnippet = new AttributionSnippet(this);
     }
 
-//    public String getTextAttributionSnippet(){
-//        return attributionSnippet.getTextSnippet();
-//    }
-//
-//    public String getHtmlAttributionSnippet(){
-//        return  attributionSnippet.getHtmlSnippet();
-//    }
+    public String getTextAttributionSnippet(){
+        return attributionSnippet.getTextSnippet();
+    }
+
+    public String getHtmlAttributionSnippet(){
+        return  attributionSnippet.getHtmlSnippet();
+    }
 
     /**
      * Sets encapsulating aggregation of this webresource (not made available through the interface bean);

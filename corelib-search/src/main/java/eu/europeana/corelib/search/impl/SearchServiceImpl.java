@@ -320,50 +320,49 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
 
-        long t1 = System.currentTimeMillis();
+        long     t1       = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
-        if(fullBean!=null) {
-        injectWebMetaInfo(fullBean);
-        log.info("injectWebMetaInfo took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+        if (fullBean != null) {
+            injectWebMetaInfo(fullBean);
+            log.info("injectWebMetaInfo took: " + (System.currentTimeMillis() - t1) + " milliseconds");
 
-        t1 = System.currentTimeMillis();
+            t1 = System.currentTimeMillis();
 
-        boolean isHierarchy = false;
-        try {
-            isHierarchy = isHierarchy(fullBean.getAbout());
-        } catch (Neo4JException e) {
-            log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId
-            + ", reason: " + e.getMessage());
-        }
+            boolean isHierarchy = false;
+            try {
+                isHierarchy = isHierarchy(fullBean.getAbout());
+            } catch (Neo4JException e) {
+                log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
+            }
 
             if (isHierarchy) {
-            for (Proxy prx : fullBean.getProxies()) {
-                prx.setDctermsHasPart(null);
+                for (Proxy prx : fullBean.getProxies()) {
+                    prx.setDctermsHasPart(null);
+                }
             }
-        }
-        log.info("prx.setDctermsHasPart(null) ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-        t1 = System.currentTimeMillis();
+            log.info("prx.setDctermsHasPart(null) ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+            t1 = System.currentTimeMillis();
 
             if (similarItems) {
-            try {
-                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-            } catch (SolrServerException e) {
-                log.error("SolrServerException: " + e.getMessage());
+                try {
+                    fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+                } catch (SolrServerException e) {
+                    log.error("SolrServerException: " + e.getMessage());
+                }
             }
-        }
-        log.info("fullBean.setSimilarItems ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-        t1 = System.currentTimeMillis();
+            log.info("fullBean.setSimilarItems ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
+            t1 = System.currentTimeMillis();
 
             if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-            ((FullBeanImpl) fullBean).setAsParent();
-//            for (Aggregation agg : fullBean.getAggregations()){
-//                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()){
-//                    for (WebResourceImpl wRes : (List<WebResourceImpl>)agg.getWebResources()){
-//                        wRes.initAttributionSnippet();
-//                    }
-//                }
-//            }
-        }
+                ((FullBeanImpl) fullBean).setAsParent();
+                for (Aggregation agg : fullBean.getAggregations()) {
+                    if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                        for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                            wRes.initAttributionSnippet();
+                        }
+                    }
+                }
+            }
         }
         return fullBean;
     }
