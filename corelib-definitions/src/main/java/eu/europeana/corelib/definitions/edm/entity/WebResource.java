@@ -313,7 +313,7 @@ public interface WebResource extends AbstractEdmEntity {
      */
 	void setSvcsHasService(String[] svcsHasService);
 
-	String getWdrsDescribedBy();
+	String[] getDctermsIsReferencedBy();
 
-	void setWdrsDescribedBy(String wdrsDescribedBy);
+	void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
 }

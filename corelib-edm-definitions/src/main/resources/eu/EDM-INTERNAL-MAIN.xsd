@@ -31,6 +31,7 @@
     xmlns:dcat="http://www.w3.org/ns/dcat#"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:svcs="http://rdfs.org/sioc/services#"
+        xmlns:doap="http://usefulinc.com/ns/doap#"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
@@ -46,6 +47,7 @@
     <import namespace="http://www.w3.org/ns/dcat#" schemaLocation="DCAT.xsd"/>
    	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
     <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
+    <import namespace="http://usefulinc.com/ns/doap#" schemaLocation="DOAP.xsd"/>
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
     

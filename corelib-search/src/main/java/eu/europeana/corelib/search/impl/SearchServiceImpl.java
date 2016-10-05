@@ -331,7 +331,7 @@ public class SearchServiceImpl implements SearchService {
                 log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
 
-            if (fullBean != null && isHierarchy) {
+            if (isHierarchy) {
                 for (Proxy prx : fullBean.getProxies()) {
                     prx.setDctermsHasPart(null);
                 }
@@ -559,22 +559,22 @@ public class SearchServiceImpl implements SearchService {
                 }
 
                 // facets are optional
-                if (query.isFacetsAllowed()) {
+                if (query.areFacetsAllowed()) {
                     solrQuery.setFacet(true);
-                    List<String> filteredFacets = query.getFilteredFacets();
+                    List<String> filteredFacets = query.getFacetsUsedInRefinements();
                     boolean hasFacetRefinements = (filteredFacets != null && filteredFacets
                             .size() > 0);
 
                     for (String facetToAdd : query.getSolrFacets()) {
-                        if (query.isProduceFacetUnion()) {
+                        if (query.doProduceFacetUnion()) {
                             if (hasFacetRefinements
                                     && filteredFacets.contains(facetToAdd)) {
                                 facetToAdd = MessageFormat.format(
                                         UNION_FACETS_FORMAT, facetToAdd);
-                        }
-                    }
-                                solrQuery.addFacetField(facetToAdd);
                             }
+                        }
+                        solrQuery.addFacetField(facetToAdd);
+                    }
                     solrQuery.setFacetLimit(facetLimit);
                 }
 

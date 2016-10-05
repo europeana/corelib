@@ -7,6 +7,9 @@ package eu.europeana.corelib.definitions.edm.entity;
  */
 public interface Service extends AbstractEdmEntity{
 
-    String getDctermsConformsTo();
-    void setDcTermsConformsTo(String dcTermsConformsTo);
+    String[] getDctermsConformsTo();
+    void setDcTermsConformsTo(String[] dcTermsConformsTo);
+
+    String getDoapImplements();
+    void setDoapImplements(String doapImplements);
 }

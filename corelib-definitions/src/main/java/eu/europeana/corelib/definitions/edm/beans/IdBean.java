@@ -27,7 +27,7 @@ public interface IdBean {
 	 * @return The Europeana object UniqueID
 	 */
 	String getId();
-	
+
 	/**
 	 * The date the record was created
 	 * @return 
