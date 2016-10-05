@@ -153,10 +153,11 @@ public final class WebResourcesFieldInput {
                         solrInputDocument,service,EdmLabel.WR_SVCS_HAS_SERVICE);
             }
         }
-
-        if(webResource.getDescribedby()!=null){
-            solrInputDocument.addField(EdmLabel.WR_WDRS_DESCRIBEDBY.toString(),
-                    webResource.getDescribedby().getResource());
+		if(webResource.getIsReferencedByList()!=null){
+			for(IsReferencedBy isReferencedBy : webResource.getIsReferencedByList()){
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument,isReferencedBy,EdmLabel.WR_DCTERMS_ISREFERENCEDBY);
+			}
         }
 		return solrInputDocument;
 	}
@@ -200,6 +201,9 @@ public final class WebResourcesFieldInput {
 		mongoWebResource.setDctermsCreated(MongoUtils
 				.createResourceOrLiteralMapFromList(webResource
 						.getCreatedList()));
+		mongoWebResource.setDctermsIsReferencedBy(SolrUtils
+				.resourceOrLiteralListToArray(webResource
+						.getIsReferencedByList()));
 		mongoWebResource
 				.setDctermsExtent(MongoUtils
 						.createResourceOrLiteralMapFromList(webResource
@@ -221,9 +225,6 @@ public final class WebResourcesFieldInput {
 		mongoWebResource.setOwlSameAs(SolrUtils.resourceListToArray(webResource
 				.getSameAList()));
 
-        if(webResource.getDescribedby()!=null){
-            mongoWebResource.setWdrsDescribedBy(SolrUtils.getResourceString(webResource.getDescribedby()));
-        }
         if(webResource.getPreview()!=null){
             mongoWebResource.setEdmPreview(SolrUtils.getResourceString(webResource.getPreview()));
         }

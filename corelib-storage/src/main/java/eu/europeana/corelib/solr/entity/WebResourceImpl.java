@@ -73,8 +73,9 @@ public class WebResourceImpl implements WebResource {
     private String                    textAttributionSnippet;
     private String                    htmlAttributionSnippet;
     private String[]                  svcsHasService;
+    private String[]                  dctermsIsReferencedBy;
     private String                    edmPreview;
-    private String                    wdrsDescribedBy;
+//    private String                    wdrsDescribedBy;
 
     @Transient
     @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
@@ -527,13 +528,13 @@ public class WebResourceImpl implements WebResource {
     }
 
     @Override
-    public String getWdrsDescribedBy() {
-        return wdrsDescribedBy;
+    public String[] getDctermsIsReferencedBy(){
+        return dctermsIsReferencedBy;
     }
 
     @Override
-    public void setWdrsDescribedBy(String wdrsDescribedBy) {
-        this.wdrsDescribedBy = wdrsDescribedBy;
+    public void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy){
+        this.dctermsIsReferencedBy= dctermsIsReferencedBy;
     }
 
     public void setWebResourceMetaInfo(WebResourceMetaInfoImpl webResourceMetaInfo) {

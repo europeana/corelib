@@ -47,7 +47,7 @@ public class RightReusabilityCategorizer {
 
 	private static List<String> openUrls = new ArrayList<String>();
 	static {
-		openUrls.add(RightsOption.NOC.getUrl());
+		openUrls.add(RightsOption.CC_NOC.getUrl());
 		openUrls.add(RightsOption.CC_ZERO.getUrl() + "/1.0/");
 		openUrls.add(RightsOption.CC_BY.getUrl());
 		openUrls.add(RightsOption.CC_BY_SA.getUrl());
@@ -61,17 +61,24 @@ public class RightReusabilityCategorizer {
 		restrictedUrls.add(RightsOption.CC_BY_NC_SA.getUrl());
 		restrictedUrls.add(RightsOption.CC_BY_NC_ND.getUrl());
 		restrictedUrls.add(RightsOption.CC_BY_ND.getUrl());
-		restrictedUrls.add(RightsOption.OOC_NC.getUrl());
+		restrictedUrls.add(RightsOption.EU_OOC_NC.getUrl());
+		restrictedUrls.add(RightsOption.RS_INC_EDU.getUrl());
+		restrictedUrls.add(RightsOption.RS_NOC_NC.getUrl());
+		restrictedUrls.add(RightsOption.RS_NOC_OKLR.getUrl());
 	}
 	private static String restrictedRightsQuery;
 	private static String noRestrictedRightsQuery;
 
 	private static List<String> permissionUrls = new ArrayList<String>();
 	static {
-		permissionUrls.add("http://www.europeana.eu/rights/rr-f/");
-		permissionUrls.add("http://www.europeana.eu/rights/rr-p/");
-		permissionUrls.add("http://www.europeana.eu/rights/rr-r/");
-		permissionUrls.add("http://www.europeana.eu/rights/unknown/");
+		permissionUrls.add(RightsOption.EU_RR_F.getUrl());
+		permissionUrls.add(RightsOption.EU_RR_P.getUrl());
+		permissionUrls.add(RightsOption.EU_RR_R.getUrl());
+		permissionUrls.add(RightsOption.EU_U.getUrl());
+		permissionUrls.add(RightsOption.EU_ORPHAN.getUrl());
+		permissionUrls.add(RightsOption.RS_INC.getUrl());
+		permissionUrls.add(RightsOption.RS_INC_OW_EU.getUrl());
+		permissionUrls.add(RightsOption.RS_CNE.getUrl());
 	}
 	private static String permissionRightsQuery;
 

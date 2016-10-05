@@ -16,22 +16,16 @@
  */
 package eu.europeana.corelib.edm.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrInputDocument;
-
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.model.EdmLabel;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.solr.common.SolrInputDocument;
+
+import java.util.*;
 
 /**
  * Set of utils for SOLR queries
@@ -107,7 +101,7 @@ public final class SolrUtils {
 				if (obj.getResource() != null) {
 					lst.add(obj.getResource().getResource());
 				}
-				if (obj.getString() != null) {
+				if (obj.getString() != null && StringUtils.isNotEmpty(obj.getString())) {
 					lst.add(obj.getString());
 				}
 			}

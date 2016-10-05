@@ -21,6 +21,7 @@
 	xmlns:sch="http://purl.oclc.org/dsdl/schematron"
 	xmlns:cc="http://creativecommons.org/ns#"
 		xmlns:svcs="http://rdfs.org/sioc/services#"
+		xmlns:doap="http://usefulinc.com/ns/doap#"
 	elementFormDefault="qualified">
 
 	<import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
@@ -29,6 +30,8 @@
 	<import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd" />
 	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
 	<import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
+
+	<import namespace="http://usefulinc.com/ns/doap#" schemaLocation="DOAP.xsd"/>
 	<include schemaLocation="EDM-COMMON-MAIN.xsd" />
 	<include schemaLocation="CONTEXTS.xsd"/>	
 	

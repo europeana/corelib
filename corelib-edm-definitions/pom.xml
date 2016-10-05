@@ -56,25 +56,22 @@
 				<artifactId>maven-jibx-plugin</artifactId>
 				<version>${version.jibx}</version>
 				<dependencies>
-
-
-				<dependency>
-					<groupId>org.jibx</groupId>
-					<artifactId>jibx-bind</artifactId>
-					<version>${version.jibx}</version>
-					<exclusions>
-						<exclusion>
-							<artifactId>bcel</artifactId>
-							<groupId>bcel</groupId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-					<dependency>
-					<groupId>org.apache.bcel</groupId>
-					<artifactId>bcel</artifactId>
-					<version>6.0-SNAPSHOT</version>
-
-				</dependency>
+                    <dependency>
+                        <groupId>org.jibx</groupId>
+                        <artifactId>jibx-bind</artifactId>
+                        <version>${version.jibx}</version>
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>bcel</artifactId>
+                                <groupId>bcel</groupId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.bcel</groupId>
+                        <artifactId>bcel</artifactId>
+                        <version>6.0-SNAPSHOT</version>
+                    </dependency>
 				</dependencies>
 				<executions>
 					<execution>
@@ -157,8 +154,6 @@
 
 					</configuration>
 					<dependencies>
-
-
 						<dependency>
 							<groupId>org.jibx</groupId>
 							<artifactId>jibx-bind</artifactId>
@@ -174,7 +169,6 @@
 							<groupId>org.apache.bcel</groupId>
 							<artifactId>bcel</artifactId>
 							<version>6.0-SNAPSHOT</version>
-
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -187,8 +181,6 @@
 <!-- 				</plugin> -->
 			</plugins>
 		</pluginManagement>
-		
-		
 	</build>
 
 	<repositories>
@@ -203,7 +195,11 @@
 					<enabled>false</enabled>
 				</releases>
 			</repository>
+        <repository>
+            <id>BCEL</id>
+            <url>https://maven.alfresco.com/nexus/content/repositories/public</url>
 
+        </repository>
 	</repositories>
 
 	<profiles>

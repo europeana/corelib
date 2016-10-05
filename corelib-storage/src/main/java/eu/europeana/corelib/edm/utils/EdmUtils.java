@@ -16,23 +16,6 @@
  */
 package eu.europeana.corelib.edm.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Logger;
-
-import eu.europeana.corelib.solr.entity.*;
-import org.apache.commons.lang.StringUtils;
-import org.jibx.runtime.BindingDirectory;
-import org.jibx.runtime.IBindingFactory;
-import org.jibx.runtime.IMarshallingContext;
-import org.jibx.runtime.JiBXException;
-
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
@@ -42,10 +25,24 @@ import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.model.ColorSpace;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jibx.runtime.BindingDirectory;
+import org.jibx.runtime.IBindingFactory;
+import org.jibx.runtime.IMarshallingContext;
+import org.jibx.runtime.JiBXException;
 
-import java.awt.MultipleGradientPaint;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * Convert a FullBean to EDM
@@ -87,7 +84,7 @@ public class EdmUtils {
         appendPlaces(rdf, fullBean.getPlaces());
         appendTimespans(rdf, fullBean.getTimespans());
         appendLicenses(rdf, fullBean.getLicenses());
-        appendServices(rdf,fullBean.getServices());
+        appendServices(rdf, fullBean.getServices());
         IMarshallingContext marshallingContext;
         try {
             if (bfact == null) {
@@ -105,19 +102,33 @@ public class EdmUtils {
     }
 
     private static void appendServices(RDF rdf, List<ServiceImpl> services) {
-        if(services!=null){
+        if (services != null) {
             List<Service> serviceList = new ArrayList<>();
-            for(ServiceImpl serv:services){
+            for (ServiceImpl serv : services) {
                 Service service = new Service();
                 service.setAbout(serv.getAbout());
-                if(serv.getDctermsConformsTo()!=null) {
-                    ConformsTo conformsTo = new ConformsTo();
-                    Resource res = new Resource();
-                    res.setResource(serv.getDctermsConformsTo());
-                    conformsTo.setResource(res);
-                    conformsTo.setString("");
-                    service.setConformsTo(conformsTo);
+                //addAsList(service, ConformsTo.class, serv.getDctermsConformsTo());
+                if(serv.getDctermsConformsTo()!=null && serv.getDctermsConformsTo().length>0){
+                    List<ConformsTo> conformsToList = new ArrayList<>();
+
+                    for(String conformsTo:serv.getDctermsConformsTo()){
+                        if(StringUtils.isNotEmpty(conformsTo)) {
+                            ConformsTo cTo = new ConformsTo();
+                            ResourceOrLiteralType.Resource res = new Resource();
+                            res.setResource(conformsTo);
+                            cTo.setString("");
+                            cTo.setLang(null);
+                            cTo.setResource(res);
+                            conformsToList.add(cTo);
+                        }
+                    }
+                    if(conformsToList.size()>0){
+                        service.setConformsToList(conformsToList);
+                    }
                 }
+
+
+                addAsObject(service, Implements.class, serv.getDoapImplements());
                 serviceList.add(service);
             }
             rdf.setServiceList(serviceList);
@@ -506,7 +517,7 @@ public class EdmUtils {
             addAsObject(aggregation, _Object.class, aggr.getEdmObject());
             addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
             addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
-            addAsList(aggregation,IntermediateProvider.class,aggr.getEdmIntermediateProvider());
+            addAsList(aggregation, IntermediateProvider.class, aggr.getEdmIntermediateProvider());
 
             if (aggr.getEdmUgc() != null && !aggr.getEdmUgc().equalsIgnoreCase("false")) {
                 Ugc ugc = new Ugc();
@@ -661,7 +672,21 @@ public class EdmUtils {
             }
 
             addAsObject(wResource,Preview.class,wr.getEdmPreview());
-            addAsObject(wResource,Describedby.class,wr.getWdrsDescribedBy());
+            //addAsList(wResource, IsReferencedBy.class, wr.getDctermsIsReferencedBy());
+            if (wr.getDctermsIsReferencedBy() != null) {
+                List<IsReferencedBy> hsList = new ArrayList<>();
+                for (String isRef : wr.getDctermsIsReferencedBy()) {
+                    IsReferencedBy hs = new IsReferencedBy();
+                    ResourceOrLiteralType.Resource res= new ResourceOrLiteralType.Resource();
+                    res.setResource(isRef);
+                    hs.setResource(res);
+                    hs.setString("");
+                    hs.setLang(null);
+                    hsList.add(hs);
+
+                }
+                wResource.setIsReferencedByList(hsList);
+            }
             webResources.add(wResource);
         }
 
@@ -974,7 +999,9 @@ public class EdmUtils {
             if (vals != null) {
                 for (String str : vals) {
                     T obj = clazz.newInstance();
+                    if (obj.getClass().isAssignableFrom(ResourceType.class)) {
                     ((ResourceType) obj).setResource(str);
+                    }
                     tList.add(obj);
                 }
                 return tList;

@@ -72,7 +72,7 @@ public class WebResourceCreator {
 				|| update;
 		update = MongoUtils.updateString(wrMongo,wr,"edmPreview",ops)||update;
 		update = MongoUtils.updateArray(wrMongo,wr,"svcsHasService",ops)||update;
-		update = MongoUtils.updateString(wrMongo,wr,"wdrsDescribedBy",ops)||update;
+		update = MongoUtils.updateArray(wrMongo,wr,"dctermsIsReferencedBy",ops)||update;
 		if (update) {
 			mongoServer.getDatastore().update(updateQuery, ops);
 		}

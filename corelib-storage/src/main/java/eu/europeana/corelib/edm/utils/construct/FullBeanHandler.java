@@ -396,7 +396,7 @@ public class FullBeanHandler implements ICollection {
             return (FullBeanImpl) mongoServer.getFullBean(fullBean.getAbout());
         } catch (MongoDBException e) {
             log.log(Level.SEVERE, e.getMessage());
-        }catch (MongoRuntimeException re) {
+        } catch (MongoRuntimeException re) {
             log.log(Level.SEVERE, re.getMessage());
         }
         return fullBean;
