@@ -65,7 +65,7 @@ public enum RightsOption {
     /**
      * http://creativecommons.org/publicdomain/mark/
      */
-    NOC("http://creativecommons.org/publicdomain/mark/", "Public Domain marked", "icon-pd", true),
+    CC_NOC("http://creativecommons.org/publicdomain/mark/", "Public Domain marked", "icon-pd", true),
 
     /**
      * http://www.europeana.eu/rights/rr-f/
@@ -95,7 +95,7 @@ public enum RightsOption {
     /**
      * http://www.europeana.eu/rights/out-of-copyright-non-commercial/
      */
-    OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
+    EU_OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
             "Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false, true),
 
     // #309 new rightsstatement.org licenses

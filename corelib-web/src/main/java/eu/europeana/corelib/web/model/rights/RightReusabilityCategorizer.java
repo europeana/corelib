@@ -47,7 +47,7 @@ public class RightReusabilityCategorizer {
 
 	private static List<String> openUrls = new ArrayList<String>();
 	static {
-		openUrls.add(RightsOption.NOC.getUrl());
+		openUrls.add(RightsOption.CC_NOC.getUrl());
 		openUrls.add(RightsOption.CC_ZERO.getUrl() + "/1.0/");
 		openUrls.add(RightsOption.CC_BY.getUrl());
 		openUrls.add(RightsOption.CC_BY_SA.getUrl());
@@ -61,7 +61,7 @@ public class RightReusabilityCategorizer {
 		restrictedUrls.add(RightsOption.CC_BY_NC_SA.getUrl());
 		restrictedUrls.add(RightsOption.CC_BY_NC_ND.getUrl());
 		restrictedUrls.add(RightsOption.CC_BY_ND.getUrl());
-		restrictedUrls.add(RightsOption.OOC_NC.getUrl());
+		restrictedUrls.add(RightsOption.EU_OOC_NC.getUrl());
 		restrictedUrls.add(RightsOption.RS_INC_EDU.getUrl());
 		restrictedUrls.add(RightsOption.RS_NOC_NC.getUrl());
 		restrictedUrls.add(RightsOption.RS_NOC_OKLR.getUrl());
