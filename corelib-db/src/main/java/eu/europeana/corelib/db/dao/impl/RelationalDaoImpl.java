@@ -111,11 +111,12 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 
 
     private <T> TypedQuery<T> createNamedQuery(Class<T> clazz, String qName, Object... params) {
-        int parnr = 1;
+        int i = 1;
         TypedQuery<T> query = entityManager.createNamedQuery(qName, clazz);
         if ((params != null) && (params.length > 0)) {
-            for (Object object : params) {
-                query.setParameter(parnr++, object);
+            for (Object param : params) {
+                query.setParameter(i, param);
+                i++;
             }
         }
         return query;

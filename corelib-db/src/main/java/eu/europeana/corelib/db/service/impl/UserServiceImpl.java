@@ -117,6 +117,63 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
+    public User update(User user, String email, String username, String password, String company, String country,
+                       String firstName, String lastName, String website, String address, String phone,
+                       String fieldOfWork) throws DatabaseException {
+
+        if (null == user) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+
+        if (!user.getEmail().equalsIgnoreCase(email)){
+            user.setEmail(email);
+        }
+
+        if (!user.getUserName().equalsIgnoreCase(username)){
+            user.setUserName(username.toLowerCase());
+        }
+
+        if (!user.getPassword().equals(hashPassword(password))){
+            user.setPassword(hashPassword(password));
+        }
+
+        if (StringUtils.isNotBlank(company)) {
+            user.setCompany(company);
+        }
+
+        if (StringUtils.isNotBlank(country)) {
+            user.setCountry(country);
+        }
+
+        if (StringUtils.isNotBlank(firstName)) {
+            user.setFirstName(firstName);
+        }
+
+        if (StringUtils.isNotBlank(lastName)) {
+            user.setLastName(lastName);
+        }
+
+        if (StringUtils.isNotBlank(website)) {
+            user.setWebsite(website);
+        }
+
+        if (StringUtils.isNotBlank(address)) {
+            user.setAddress(address);
+        }
+
+        if (StringUtils.isNotBlank(phone)) {
+            user.setPhone(phone);
+        }
+
+        if (StringUtils.isNotBlank(fieldOfWork)) {
+            user.setFieldOfWork(fieldOfWork);
+        }
+
+        user = getDao().update(user);
+        return user;
+    }
+
+    @Override
     public Token activate(String email, String tokenString) throws DatabaseException {
         Token token = tokenService.findByID(tokenString);
         if (token == null) {
