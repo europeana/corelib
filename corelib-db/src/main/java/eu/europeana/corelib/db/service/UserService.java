@@ -52,6 +52,11 @@ public interface UserService extends AbstractService<User> {
             throws DatabaseException;
 
     /**
+     * deletes an existing User
+     */
+    void delete(User user) throws DatabaseException;
+
+    /**
      * Activate a user account
      *
      * @param email email address identifying the account

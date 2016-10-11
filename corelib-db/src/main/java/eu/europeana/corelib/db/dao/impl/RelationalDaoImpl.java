@@ -179,7 +179,7 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 
     @Override
     public void delete(IdentifiedEntity<?> entity) {
-        entityManager.remove(entity);
+        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
 
     @Override

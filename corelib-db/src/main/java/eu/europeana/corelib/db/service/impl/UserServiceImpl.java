@@ -121,9 +121,6 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
                        String firstName, String lastName, String website, String address, String phone,
                        String fieldOfWork) throws DatabaseException {
 
-        if (null == user) {
-            throw new DatabaseException(ProblemType.NO_USER);
-        }
 
         if (!user.getEmail().equalsIgnoreCase(email)){
             user.setEmail(email);
@@ -171,6 +168,14 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().update(user);
         return user;
+    }
+
+    @Override
+    public void delete(User user) throws DatabaseException {
+        if (null == user) {
+            throw new DatabaseException(ProblemType.NO_USER);
+        }
+        getDao().delete(user);
     }
 
     @Override
