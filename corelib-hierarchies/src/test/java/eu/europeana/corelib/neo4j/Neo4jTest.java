@@ -77,9 +77,9 @@ public class Neo4jTest {
 			try {
 
 				unzip.extract(
-						"src/test/resources/neo4j-community-2.1.2-unix.tar.gz",
+						"src/test/resources/neo4j-community-2.1.5-unix.tar.gz",
 						new File("src/test/resources"));
-				neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
+				neo4j = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j",
 						"start").start();
 				System.out.println(new String(IOUtils.toByteArray(neo4j
 						.getInputStream())));
@@ -326,11 +326,11 @@ public class Neo4jTest {
 	public void destroy() {
 		if (testCount == no_of_tests) {
 			try {
-				neo4j = new ProcessBuilder("neo4j-community-2.1.2/bin/neo4j",
+				neo4j = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j",
 						"stop").start();
 				System.out.println(new String(IOUtils.toByteArray(neo4j
 						.getInputStream())));
-				FileUtils.deleteDirectory(new File("neo4j-community-2.1.2"));
+				FileUtils.deleteDirectory(new File("neo4j-community-2.1.5"));
 
 			} catch (IOException e) {
 				e.printStackTrace();

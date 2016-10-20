@@ -271,13 +271,13 @@ public class QueryTest {
 		assertTrue("should contain image size", facetList.contains("IMAGE_SIZE"));
 		assertTrue("should contain image aspectratio", facetList.contains("IMAGE_ASPECTRATIO"));
 		assertTrue("should contain image colour", facetList.contains("IMAGE_COLOUR"));
-		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
+//		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
 		assertTrue("should contain colour palette", facetList.contains("COLOURPALETTE"));
 		assertTrue("should contain video duration", facetList.contains("VIDEO_DURATION"));
 		assertTrue("should contain video HD", facetList.contains("VIDEO_HD"));
 		assertTrue("should contain sound HQ", facetList.contains("SOUND_HQ"));
 		assertTrue("should contain sound duration", facetList.contains("SOUND_DURATION"));
-		assertEquals(10, facetList.size());
+		assertEquals(9, facetList.size());
 
 		// test mixed facets
 		newFacets = new ArrayList<>();
@@ -287,23 +287,23 @@ public class QueryTest {
 		query.setSolrFacets(newFacets);
 		newFacets = new ArrayList<>();
 		newFacets.add("SOUND_HQ");
-		newFacets.add("IMAGE_GREYSCALE");
+//		newFacets.add("IMAGE_GREYSCALE");
 		query.setTechnicalFacets(newFacets);
 		facetList = query.getSolrFacets();
 		facetList.addAll(query.getTechnicalFacets());
 		assertTrue("should contain language", facetList.contains("LANGUAGE"));
 		assertTrue("should contain sound HQ", facetList.contains("SOUND_HQ"));
 		assertTrue("should contain rights", facetList.contains("RIGHTS"));
-		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
+//		assertTrue("should contain image grayscale", facetList.contains("IMAGE_GREYSCALE"));
 		assertTrue("should contain proxy_dc_contributor", facetList.contains("proxy_dc_contributor"));
-		assertEquals(5, facetList.size());
+		assertEquals(4, facetList.size());
 
 		// test The Works
 		query.setDefaultSolrFacets();
 		query.setDefaultTechnicalFacets();
 		facetList = query.getSolrFacets();
 		facetList.addAll(query.getTechnicalFacets());
-		assertEquals(23, facetList.size());
+		assertEquals(22, facetList.size());
 	}
 
 	@Test
