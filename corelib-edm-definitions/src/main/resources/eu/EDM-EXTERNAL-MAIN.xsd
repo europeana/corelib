@@ -77,15 +77,36 @@
 				<appinfo>
 					<sch:pattern>
 						<sch:rule context="edm:ProvidedCHO">
-							<sch:assert	test="dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial">
-								id: <sch:value-of select="@rdf:about" />
-								- A ProvidedCHO must have a dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial.
+							<sch:assert
+									test="dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial">
+								id:
+								<sch:value-of select="@rdf:about" />
+								- A Proxy must have a
+								dc:subject or dc:type or dc:coverage or dct:temporal or
+								dct:spatial.
 							</sch:assert>
-							<sch:assert test="dc:title or dc:description">
-								id: <sch:value-of select="@rdf:about" /> - A ProvidedCHO must have a dc:title or dc:description.
+							<sch:assert
+									test="((dc:subject and (exists(dc:subject/@rdf:resource) or normalize-space(dc:subject)!='')) or (dc:type and (exists(dc:type/@rdf:resource) or 								normalize-space(dc:type)!='')) or (dc:coverage and (exists(dc:coverage/@rdf:resource) or normalize-space(dc:coverage)!='')) or (dct:temporal and 									(exists(dct:temporal/@rdf:resource) or normalize-space(dct:temporal)!=''))  or (dct:spatial and (exists(dct:spatial/@rdf:resource) or normalize-space							(dct:spatial)!='')))">
+								A Proxy must have a non empty
+								dc:subject or dc:type or dc:coverage or dct:temporal or
+								dct:spatial.
 							</sch:assert>
-							<sch:assert test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">
-								id:	<sch:value-of select="@rdf:about" /> - dc:language is mandatory for TEXT objects.
+							<!--<sch:assert test="dc:title or dc:description">
+								id:
+								<sch:value-of select="@rdf:about" />
+								- A Proxy must have a dc:title or
+								dc:description.
+							</sch:assert> -->
+							<sch:assert
+									test="(dc:title and normalize-space(dc:title)!='') or (dc:description and (exists(dc:description/@rdf:resource) or normalize-space(dc:description)!=''))">A Proxy must have a non empty dc:title or a non empty
+								dc:description</sch:assert>
+							<sch:assert
+									test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">
+								id:
+								<sch:value-of select="@rdf:about" />
+								- Within a Proxy
+								context, dc:language is mandatory when dc:language has the value
+								'TEXT'.
 							</sch:assert>
 						</sch:rule>
 					</sch:pattern>
