@@ -66,6 +66,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -486,7 +487,7 @@ public class SearchServiceImpl implements SearchService {
             log.debug(solrQuery.toString());
         }
 
-        QueryResponse response = solrServer.query(solrQuery);
+        QueryResponse response = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
 
         @SuppressWarnings("unchecked")
         NamedList<Object> moreLikeThisList = (NamedList<Object>) response
@@ -601,7 +602,7 @@ public class SearchServiceImpl implements SearchService {
                     }
                     query.setExecutedQuery(solrQuery.toString());
 
-                    QueryResponse queryResponse = solrServer.query(solrQuery);
+                    QueryResponse queryResponse = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
 
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
@@ -708,7 +709,7 @@ public class SearchServiceImpl implements SearchService {
             if (log.isDebugEnabled()) {
                 log.debug("Solr query is: " + solrQuery.toString());
             }
-            response = solrServer.query(solrQuery);
+            response = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
             log.error("SolrServerException: " + e.getMessage() + " for query "
@@ -759,7 +760,7 @@ public class SearchServiceImpl implements SearchService {
                 if (log.isDebugEnabled()) {
                     log.debug("Solr query is: " + solrQuery);
                 }
-                QueryResponse queryResponse = solrServer.query(solrQuery);
+                QueryResponse queryResponse = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
 
                 resultSet.setResults((List<T>) queryResponse
                         .getBeans(beanClazz));
@@ -800,7 +801,7 @@ public class SearchServiceImpl implements SearchService {
             params.set("timeAllowed", TIME_ALLOWED);
 
             // get the query response
-            QueryResponse queryResponse = solrServer.query(params);
+            QueryResponse queryResponse = solrServer.query(params, SolrRequest.METHOD.POST);
             SpellCheckResponse spellcheckResponse = queryResponse
                     .getSpellCheckResponse();
             // if the suggestions are not empty and there are collated results
