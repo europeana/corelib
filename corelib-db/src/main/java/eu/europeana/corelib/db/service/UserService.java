@@ -40,10 +40,21 @@ public interface UserService extends AbstractService<User> {
     /**
      * Creates a new User, based on a existing token, and given params
      */
-    User create(
-            String email, String username, String password, String company, String country, String firstName,
-            String lastName, String website, String address, String phone, String fieldOfWork, String redirect, String activationUrl
-    ) throws DatabaseException, EmailServiceException;
+    User create(String email, String username, String password, String company, String country, String firstName,
+                String lastName, String website, String address, String phone, String fieldOfWork, String redirect,
+                String activationUrl) throws DatabaseException, EmailServiceException;
+
+    /**
+     * updates an existing User
+     */
+    User update(User user, String email, String username, String password, String company, String country, String firstName,
+                String lastName, String website, String address, String phone, String fieldOfWork)
+            throws DatabaseException;
+
+    /**
+     * deletes an existing User
+     */
+    void delete(User user) throws DatabaseException;
 
     /**
      * Activate a user account
