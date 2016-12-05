@@ -74,12 +74,17 @@ public class Neo4jTest {
             TarGZipUnArchiver unzip = new TarGZipUnArchiver();
             unzip.enableLogging(new ConsoleLogger(org.codehaus.plexus.logging.Logger.LEVEL_INFO, "UnArchiver"));
             try {
+                System.out.println("Extracting...");
                 unzip.extract("src/test/resources/neo4j-community-2.1.5-unix.tar.gz", new File("src/test/resources"));
+                System.out.println("Starting new process...");
                 neo4j = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").start();
-                System.out.println(new String(IOUtils.toByteArray(neo4j.getInputStream())));
+                System.out.println("Result = "+new String(IOUtils.toByteArray(neo4j.getInputStream())));
                 db = new RestGraphDatabase("http://localhost:7474/db/data/");
+                System.out.println("Accessing REST API...");
                 db.getRestAPI().index().forNodes("edmsearch2");
+                System.out.println("Preparing data...");
                 prepareData();
+                System.out.println("Starting server...");
                 server = new Neo4jServerImpl("http://localhost:7474/db/data/", "edmsearch2", "http://localhost:7474");
                 for (Method method : this.getClass().getMethods()) {
                     for (Annotation annotation : method.getAnnotations()) {
@@ -89,6 +94,7 @@ public class Neo4jTest {
                     }
                 }
                 dataLoaded = true;
+                System.out.println("All done with prepare.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -117,9 +123,12 @@ public class Neo4jTest {
             props.put("dc:description_xml:lang_en", description);
             Transaction tx = db.beginTx();
 
+            System.out.println("Create new node...");
             Node node = db.getRestAPI().createNode(props);
             tx.success();
+
             tx = db.beginTx();
+            System.out.println("Adding node to index...");
             db.getRestAPI().addToIndex(node, db.getRestAPI().index().forNodes("edmsearch2"), "rdf_about", record.getRdfAbout());
             nodes.put(record.getRdfAbout(), node);
 
@@ -167,6 +176,7 @@ public class Neo4jTest {
             }
             tx.success();
         }
+        System.out.println("Done adding records");
 
         for (RelType rel : relationships) {
             Node        from = nodes.get(rel.fromNode);
@@ -175,6 +185,7 @@ public class Neo4jTest {
             db.getRestAPI().createRelationship(from, to, rel.relType, null);
             tx.success();
         }
+        System.out.println("Done adding relationships");
     }
 
     /**
