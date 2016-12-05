@@ -18,8 +18,6 @@ package eu.europeana.corelib.neo4j;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,9 +65,6 @@ public class Neo4jTest {
     private static Process           neo4j;
     private static RestGraphDatabase db;
     private static Neo4jServer       server;
-    private static int               no_of_tests;
-    private static int               testCount;
-    private static boolean dataLoaded = false;
 
     /**
      * Run once at start of test. We want to make sure log4j is initiated
@@ -78,50 +73,50 @@ public class Neo4jTest {
     public static void setup() {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
-    }
 
-
-    /**
-     * Unzip neo4j server, load and index data. This should happen only once
-     */
-    @Before
-    public void prepare() {
-        if (!dataLoaded) {
+        try {
             TarGZipUnArchiver unzip = new TarGZipUnArchiver();
             unzip.enableLogging(new ConsoleLogger(org.codehaus.plexus.logging.Logger.LEVEL_INFO, "UnArchiver"));
-            try {
-                LOG.info("Extracting neo4j server...");
-                unzip.extract("src/test/resources/neo4j-community-2.1.5-unix.tar.gz", new File("src/test/resources"));
+            unzip.extract("src/test/resources/neo4j-community-2.1.5-unix.tar.gz", new File("src/test/resources"));
 
-                LOG.info("Starting neo4j...");
-                // redirect error stream to prevent process from hanging in case of problems, see also http://stackoverflow.com/a/3285479/741249
-                ProcessBuilder pBuilder = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").redirectErrorStream(true);
-                neo4j = pBuilder.start();
-                LOG.info(new String(IOUtils.toByteArray(neo4j.getInputStream())));
+            LOG.info("Creating neo4j process...");
+            // redirect error stream to prevent process from hanging in case of problems, see also http://stackoverflow.com/a/3285479/741249
+            ProcessBuilder pBuilder = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").redirectErrorStream(true);
+            neo4j = pBuilder.start();
+            LOG.info(new String(IOUtils.toByteArray(neo4j.getInputStream())));
 
-                db = new RestGraphDatabase(DB_SERVER_ADDRESS + DB_FOLDER);
-                LOG.info("Accessing Rest API...");
-                db.getRestAPI().index().forNodes("edmsearch2");
-                LOG.info("Preparing data...");
-                prepareData();
-                LOG.info("Starting server...");
-                server = new Neo4jServerImpl(DB_SERVER_ADDRESS + DB_FOLDER, "edmsearch2", DB_SERVER_ADDRESS);
-                for (Method method : this.getClass().getMethods()) {
-                    for (Annotation annotation : method.getAnnotations()) {
-                        if (annotation.annotationType().equals(org.junit.Test.class)) {
-                            no_of_tests++;
-                        }
-                    }
-                }
-                dataLoaded = true;
-                LOG.info("All done with prepare.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            db = new RestGraphDatabase(DB_SERVER_ADDRESS + DB_FOLDER);
+            LOG.info("Accessing Rest API...");
+            db.getRestAPI().index().forNodes("edmsearch2");
+            LOG.info("Preparing data...");
+            prepareData();
+
+            LOG.info("Starting server...");
+            server = new Neo4jServerImpl(DB_SERVER_ADDRESS + DB_FOLDER, "edmsearch2", DB_SERVER_ADDRESS);
+
+            LOG.info("Test is now prepared");
+        } catch (IOException e) {
+            LOG.error("Error starting neo4j", e);
         }
     }
 
-    private void prepareData() {
+    /**
+     * Shutdown neo4j and remove the temp folder
+     */
+    @AfterClass
+    public static void destroy() {
+        try {
+            ProcessBuilder pBuilder = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "stop").redirectErrorStream(true);
+            neo4j = pBuilder.start();
+            LOG.info(new String(IOUtils.toByteArray(neo4j.getInputStream())));
+
+            FileUtils.deleteDirectory(new File("neo4j-community-2.1.5"));
+        } catch (IOException e) {
+            LOG.error("Error stopping neo4j", e);
+        }
+    }
+
+    private static void prepareData() {
         List<Record>      records       = JsonReader.loadRecords();
         Map<String, Node> nodes         = new HashMap<>();
         Set<RelType>      relationships = new HashSet<>();
@@ -209,7 +204,6 @@ public class Neo4jTest {
      */
     @Test
     public void testNull() throws Neo4JException {
-        testCount++;
         Node node = server.getNode("test");
         Assert.assertNull(node);
         Assert.assertNull(Node2Neo4jBeanConverter.toNeo4jBean(node, 1));
@@ -220,7 +214,6 @@ public class Neo4jTest {
      */
     @Test
     public void testNotNull() throws Neo4JException {
-        testCount++;
         Node node = server.getNode("uri2");
         Assert.assertNotNull(node);
         Neo4jBean bean = Node2Neo4jBeanConverter.toNeo4jBean(node, (server.getNodeIndex(node)));
@@ -301,7 +294,6 @@ public class Neo4jTest {
      */
     @Test
     public void assertHierarchy() throws Neo4JException {
-        testCount++;
         Assert.assertTrue(server.isHierarchy("uri4"));
     }
 
@@ -310,7 +302,6 @@ public class Neo4jTest {
      */
     @Test
     public void assertNotHierarchy() throws Neo4JException {
-        testCount++;
         Assert.assertFalse(server.isHierarchy("test"));
     }
 
@@ -319,25 +310,7 @@ public class Neo4jTest {
      */
     @Test
     public void assertNullHierarchy() throws Neo4JException {
-        testCount++;
         Assert.assertNull(server.getInitialStruct("test"));
-    }
-
-    /**
-     * Shutdown neo4j and remove the temp folder
-     */
-    @After
-    public void destroy() {
-        if (testCount == no_of_tests) {
-            try {
-                neo4j = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "stop").start();
-                System.out.println(new String(IOUtils.toByteArray(neo4j.getInputStream())));
-                FileUtils.deleteDirectory(new File("neo4j-community-2.1.5"));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private Long getCustomNodeIndex(CustomNode node) throws Neo4JException {
@@ -349,7 +322,7 @@ public class Neo4jTest {
      *
      * @author Yorgos.Mamakis@ europeana.eu
      */
-    private class RelType {
+    private static class RelType {
         private String                  fromNode;
         private String                  toNode;
         private DynamicRelationshipType relType;
