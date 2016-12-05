@@ -77,7 +77,9 @@ public class Neo4jTest {
                 System.out.println("Extracting...");
                 unzip.extract("src/test/resources/neo4j-community-2.1.5-unix.tar.gz", new File("src/test/resources"));
                 System.out.println("Starting new process...");
-                neo4j = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").start();
+                // redirect error stream to prevent process from hanging in case of problems, see also http://stackoverflow.com/a/3285479/741249
+                ProcessBuilder pBuilder = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").redirectErrorStream(true);
+                neo4j = pBuilder.start();
                 System.out.println("Result = "+new String(IOUtils.toByteArray(neo4j.getInputStream())));
                 db = new RestGraphDatabase("http://localhost:7474/db/data/");
                 System.out.println("Accessing REST API...");
