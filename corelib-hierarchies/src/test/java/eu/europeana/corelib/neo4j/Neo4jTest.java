@@ -27,17 +27,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import eu.europeana.corelib.definitions.exception.Neo4JException;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.TextNode;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.util.StringUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
@@ -58,12 +59,27 @@ import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class Neo4jTest {
+
+    private static final Logger LOG = Logger.getLogger(Neo4jTest.class);
+    private static final String DB_SERVER_ADDRESS = "http://localhost:7474";
+    private static final String DB_FOLDER = "/db/data/";
+
     private static Process           neo4j;
     private static RestGraphDatabase db;
     private static Neo4jServer       server;
     private static int               no_of_tests;
     private static int               testCount;
     private static boolean dataLoaded = false;
+
+    /**
+     * Run once at start of test. We want to make sure log4j is initiated
+     */
+    @BeforeClass
+    public static void setup() {
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.INFO);
+    }
+
 
     /**
      * Unzip neo4j server, load and index data. This should happen only once
@@ -74,20 +90,22 @@ public class Neo4jTest {
             TarGZipUnArchiver unzip = new TarGZipUnArchiver();
             unzip.enableLogging(new ConsoleLogger(org.codehaus.plexus.logging.Logger.LEVEL_INFO, "UnArchiver"));
             try {
-                System.out.println("Extracting...");
+                LOG.info("Extracting neo4j server...");
                 unzip.extract("src/test/resources/neo4j-community-2.1.5-unix.tar.gz", new File("src/test/resources"));
-                System.out.println("Starting new process...");
+
+                LOG.info("Starting neo4j...");
                 // redirect error stream to prevent process from hanging in case of problems, see also http://stackoverflow.com/a/3285479/741249
                 ProcessBuilder pBuilder = new ProcessBuilder("neo4j-community-2.1.5/bin/neo4j", "start").redirectErrorStream(true);
                 neo4j = pBuilder.start();
-                System.out.println("Result = "+new String(IOUtils.toByteArray(neo4j.getInputStream())));
-                db = new RestGraphDatabase("http://localhost:7474/db/data/");
-                System.out.println("Accessing REST API...");
+                LOG.info(new String(IOUtils.toByteArray(neo4j.getInputStream())));
+
+                db = new RestGraphDatabase(DB_SERVER_ADDRESS + DB_FOLDER);
+                LOG.info("Accessing Rest API...");
                 db.getRestAPI().index().forNodes("edmsearch2");
-                System.out.println("Preparing data...");
+                LOG.info("Preparing data...");
                 prepareData();
-                System.out.println("Starting server...");
-                server = new Neo4jServerImpl("http://localhost:7474/db/data/", "edmsearch2", "http://localhost:7474");
+                LOG.info("Starting server...");
+                server = new Neo4jServerImpl(DB_SERVER_ADDRESS + DB_FOLDER, "edmsearch2", DB_SERVER_ADDRESS);
                 for (Method method : this.getClass().getMethods()) {
                     for (Annotation annotation : method.getAnnotations()) {
                         if (annotation.annotationType().equals(org.junit.Test.class)) {
@@ -96,7 +114,7 @@ public class Neo4jTest {
                     }
                 }
                 dataLoaded = true;
-                System.out.println("All done with prepare.");
+                LOG.info("All done with prepare.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -125,12 +143,10 @@ public class Neo4jTest {
             props.put("dc:description_xml:lang_en", description);
             Transaction tx = db.beginTx();
 
-            System.out.println("Create new node...");
             Node node = db.getRestAPI().createNode(props);
             tx.success();
 
             tx = db.beginTx();
-            System.out.println("Adding node to index...");
             db.getRestAPI().addToIndex(node, db.getRestAPI().index().forNodes("edmsearch2"), "rdf_about", record.getRdfAbout());
             nodes.put(record.getRdfAbout(), node);
 
@@ -178,7 +194,6 @@ public class Neo4jTest {
             }
             tx.success();
         }
-        System.out.println("Done adding records");
 
         for (RelType rel : relationships) {
             Node        from = nodes.get(rel.fromNode);
@@ -187,7 +202,6 @@ public class Neo4jTest {
             db.getRestAPI().createRelationship(from, to, rel.relType, null);
             tx.success();
         }
-        System.out.println("Done adding relationships");
     }
 
     /**
@@ -278,7 +292,7 @@ public class Neo4jTest {
         Assert.assertEquals(child3, Node2Neo4jBeanConverter.toNeo4jBean(children2.get(0), getCustomNodeIndex(children2.get(0))));
 
 
-        Assert.assertEquals("http://localhost:7474", server.getCustomPath());
+        Assert.assertEquals(DB_SERVER_ADDRESS, server.getCustomPath());
         Assert.assertNull(server.getParent(parent));
     }
 
