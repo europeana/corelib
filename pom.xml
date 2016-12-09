@@ -182,6 +182,24 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
+
+		<!-- libs-release and libs-snapshot temporarily added as quick fix for dependencies problems -->
+		<repository>
+			<id>libs-release</id>
+			<name>libs-release</name>
+			<url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>libs-snapshot</id>
+			<name>libs-snapshot</name>
+			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+			<snapshots />
+		</repository>
+
+
 		<repository>
 			<id>repo1</id>
 			<url>http://repo1.maven.org/maven2</url>
@@ -189,13 +207,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>ibiblio</id>
-			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+
 		<repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>
@@ -204,17 +216,13 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>springbyexample.org</id>
-			<name>Spring by Example</name>
-			<url>http://www.springbyexample.org/maven/repo</url>
-		</repository>
 
 		<repository>
 			<id>com.springsource.repository.bundles.release</id>
 			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
 			<url>http://repository.springsource.com/maven/bundles/release</url>
 		</repository>
+
 		<repository>
 			<id>com.springsource.repository.bundles.external</id>
 			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
