@@ -432,15 +432,15 @@ public class SearchServiceImpl implements SearchService {
         EuropeanaId newId = idServer
                 .retrieveEuropeanaIdFromOld(europeanaObjectId);
         if (newId != null) {
-            idServer.updateTime(newId.getNewId(), europeanaObjectId);
+         //   idServer.updateTime(newId.getNewId(), europeanaObjectId);
             return newId.getNewId();
         }
 
         newId = idServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX
                 + europeanaObjectId);
         if (newId != null) {
-            idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX
-                    + europeanaObjectId);
+        //    idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX
+        //            + europeanaObjectId);
             return newId.getNewId();
         }
 
@@ -448,8 +448,8 @@ public class SearchServiceImpl implements SearchService {
                 + europeanaObjectId);
 
         if (newId != null) {
-            idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
-                    + europeanaObjectId);
+           // idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
+           //         + europeanaObjectId);
             return newId.getNewId();
         }
         return null;
