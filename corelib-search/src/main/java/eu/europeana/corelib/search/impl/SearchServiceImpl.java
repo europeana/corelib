@@ -321,13 +321,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
 
-        long     t1       = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
-            log.info("injectWebMetaInfo took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-
-            t1 = System.currentTimeMillis();
 
             boolean isHierarchy = false;
             try {
@@ -341,8 +337,6 @@ public class SearchServiceImpl implements SearchService {
                     prx.setDctermsHasPart(null);
                 }
             }
-            log.info("prx.setDctermsHasPart(null) ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-            t1 = System.currentTimeMillis();
 
             if (similarItems) {
                 try {
@@ -351,8 +345,6 @@ public class SearchServiceImpl implements SearchService {
                     log.error("SolrServerException: " + e.getMessage());
                 }
             }
-            log.info("fullBean.setSimilarItems ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-            t1 = System.currentTimeMillis();
 
             if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
                 ((FullBeanImpl) fullBean).setAsParent();
@@ -394,10 +386,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-        if (!STARTED) {
-            idServer.createDatastore();
-            STARTED = true;
-        }
+
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         injectWebMetaInfo(fullBean);
@@ -433,31 +422,17 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private String resolveIdInternal(String europeanaObjectId) {
-        if (!STARTED) {
-            idServer.createDatastore();
-            STARTED = true;
-        }
-        EuropeanaId newId = idServer
-                .retrieveEuropeanaIdFromOld(europeanaObjectId);
-        if (newId != null) {
-            idServer.updateTime(newId.getNewId(), europeanaObjectId);
-            return newId.getNewId();
-        }
 
-        newId = idServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX
+        List<String> ids = new ArrayList<>();
+        ids.add(europeanaObjectId);
+        ids.add(RESOLVE_PREFIX
                 + europeanaObjectId);
-        if (newId != null) {
-            idServer.updateTime(newId.getNewId(), RESOLVE_PREFIX
-                    + europeanaObjectId);
-            return newId.getNewId();
-        }
-
-        newId = idServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX
+        ids.add(PORTAL_PREFIX
                 + europeanaObjectId);
-
+       EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(ids);
         if (newId != null) {
-            idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
-                    + europeanaObjectId);
+           // idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
+           //         + europeanaObjectId);
             return newId.getNewId();
         }
         return null;

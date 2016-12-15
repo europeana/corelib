@@ -1,19 +1,17 @@
 package eu.europeana.corelib.web.service;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import eu.europeana.corelib.web.model.mediaservice.soundcloud.Track;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.web.model.mediaservice.soundcloud.Track;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml" })
@@ -39,7 +37,7 @@ public class SoundCloudApiServiceTest {
 			Track track = service.resolvePath(pair.getPath());
 			assertEquals(pair.getPath(), track.getPath());
 			assertEquals(pair.getTrackId(), track.getId());
-			assertEquals("http://soundcloud.com/" + pair.getPath(), track.getPermalink_url());
+			assertEquals("https://soundcloud.com/" + pair.getPath(), track.getPermalink_url());
 		}
 	}
 
@@ -49,7 +47,7 @@ public class SoundCloudApiServiceTest {
 			Track track = service.getTrackInfo(pair.getTrackId());
 			assertEquals(pair.getPath(), track.getPath());
 			assertEquals(pair.getTrackId(), track.getId());
-			assertEquals("http://soundcloud.com/" + pair.getPath(), track.getPermalink_url());
+			assertEquals("https://soundcloud.com/" + pair.getPath(), track.getPermalink_url());
 		}
 	}
 
