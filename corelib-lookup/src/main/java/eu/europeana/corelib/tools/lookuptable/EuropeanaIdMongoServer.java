@@ -12,13 +12,20 @@ public interface EuropeanaIdMongoServer extends ICollection{
 
 	/**
 	 * Find the EuropeanaId records based on the oldId
-	 * 
+	 * @deprecated Use the retrieveEuropeanaIdFromOld(List<String>) instead
 	 * @param oldId
 	 *            The id to search for
 	 * @return
 	 */
+	@Deprecated
 	EuropeanaId retrieveEuropeanaIdFromOld(String oldId);
-
+	/**
+	 * Find the EuropeanaId records based on the oldIds
+	 * @param oldIds
+	 *            The ids to search for
+	 * @return
+	 */
+	EuropeanaId retrieveEuropeanaIdFromOld(List<String> oldIds);
 	/**
 	 * Find the EuropeanaId records based on the newId
 	 * 
