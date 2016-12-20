@@ -56,12 +56,19 @@
 	<!-- OTHERS -->
 	<bean id="corelib_web_MediaServiceFactory" class="eu.europeana.corelib.web.model.mediaservice.MediaServiceFactory" />
 
-	<bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.web.swift.SwiftProvider">
-		<constructor-arg value="#{europeanaProperties['swift.authUrl']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['swift.username']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['swift.password']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['swift.containerName']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['swift.regionName']}" type="java.lang.String"/>
-		<constructor-arg value="#{europeanaProperties['swift.tenantName']}" type="java.lang.String"/>
+	<!--<bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.web.swift.SwiftProvider">-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.authUrl']}" type="java.lang.String"/>-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.username']}" type="java.lang.String"/>-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.password']}" type="java.lang.String"/>-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.containerName']}" type="java.lang.String"/>-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.regionName']}" type="java.lang.String"/>-->
+		<!--<constructor-arg value="#{europeanaProperties['swift.tenantName']}" type="java.lang.String"/>-->
+	<!--</bean>-->
+
+	<bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.features.S3ObjectStorageClient">
+		<constructor-arg value="#{europeanaProperties['s3.key']}"/>
+		<constructor-arg value="#{europeanaProperties['s3.secret']}"/>
+		<constructor-arg value="#{europeanaProperties['s3.region']}"/>
+		<constructor-arg value="#{europeanaProperties['s3.bucket']}"/>
 	</bean>
 </beans>

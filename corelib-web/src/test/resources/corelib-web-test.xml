@@ -38,6 +38,6 @@
         <constructor-arg value="eu.europeana.corelib.service.MediaStorageClient"/>
     </bean>
 
-    <bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.EmptyBean"/>
 
 </beans>
