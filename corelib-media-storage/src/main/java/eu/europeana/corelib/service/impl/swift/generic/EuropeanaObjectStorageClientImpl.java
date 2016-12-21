@@ -31,12 +31,12 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
     @Override
     public MediaFile retrieve(String id, Boolean withContent) {
         final Optional<StorageObject> storageObject = withContent ? objectApi.get(id) : objectApi.getWithoutBody(id);
-        final StorageObject storageObjectValue = storageObject.get();
+
 
         if (!storageObject.isPresent()) {
             return null;
         }
-
+        final StorageObject storageObjectValue = storageObject.get();
         final byte[] content;
         try {
             content = withContent ? IOUtils.toByteArray(storageObjectValue.getPayload().openStream()) : new byte[0];
