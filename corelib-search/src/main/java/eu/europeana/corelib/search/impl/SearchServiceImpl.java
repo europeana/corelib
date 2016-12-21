@@ -407,7 +407,7 @@ public class SearchServiceImpl implements SearchService {
         if (lastId != null) {
             while (newId != null) {
                 newId = resolveIdInternal(newId);
-                if (newId != null) {
+                if (newId != null) {//TODO Take into account possible cirular data in dataset while resolving id's
                     lastId = newId;
                 }
             }
