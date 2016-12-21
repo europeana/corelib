@@ -65,10 +65,4 @@
 		<!--<constructor-arg value="#{europeanaProperties['swift.tenantName']}" type="java.lang.String"/>-->
 	<!--</bean>-->
 
-	<bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.features.S3ObjectStorageClient">
-		<constructor-arg value="#{europeanaProperties['s3.key']}"/>
-		<constructor-arg value="#{europeanaProperties['s3.secret']}"/>
-		<constructor-arg value="#{europeanaProperties['s3.region']}"/>
-		<constructor-arg value="#{europeanaProperties['s3.bucket']}"/>
-	</bean>
 </beans>

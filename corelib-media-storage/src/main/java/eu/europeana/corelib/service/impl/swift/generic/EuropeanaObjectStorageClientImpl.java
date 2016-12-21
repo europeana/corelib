@@ -5,6 +5,7 @@ import eu.europeana.corelib.service.MediaStorageClient;
 import eu.europeana.domain.ObjectMetadata;
 import eu.europeana.domain.StorageObject;
 import eu.europeana.features.ObjectStorageClient;
+import eu.europeana.features.S3ObjectStorageClient;
 import org.apache.commons.io.IOUtils;
 import org.jclouds.io.Payload;
 import org.testcontainers.shaded.javax.annotation.Resource;
@@ -17,6 +18,10 @@ import static org.jclouds.io.Payloads.newByteArrayPayload;
 public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
     @Resource(name = "corelib_web_S3ObjectStorageClient")
     ObjectStorageClient objectApi;
+
+    public EuropeanaObjectStorageClientImpl(S3ObjectStorageClient s3ObjectStorageClient) {
+        this.objectApi = s3ObjectStorageClient;
+    }
 
     @Override
     public Boolean checkIfExists(String id) {
@@ -40,13 +45,11 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
             throw new RuntimeException(e);
         }
 
-        final String swiftObjectMd5 = storageObjectValue.getPayload().getContentMetadata().getContentMD5AsHashCode().toString();
-
         return new MediaFile(id,
                 null,
                 storageObjectValue.getName(),
                 null,
-                storageObjectValue.getMetadata().getContentMD5(),
+                storageObjectValue.getMetadata().getETag(),
                 null,
                 null,
                 content,
