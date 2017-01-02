@@ -24,7 +24,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- INTERNAL -->
-    <import resource="internal/corelib-media-storage-datasource.xml"/>
+    <!--<import resource="internal/corelib-media-storage-datasource.xml"/>-->
     <import resource="internal/corelib-media-storage-server.xml"/>
 
 </beans>

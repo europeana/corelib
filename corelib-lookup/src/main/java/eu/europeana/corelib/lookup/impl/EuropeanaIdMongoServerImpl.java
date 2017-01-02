@@ -16,23 +16,21 @@
  */
 package eu.europeana.corelib.lookup.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
-
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.publication.common.IDocument;
 import eu.europeana.publication.common.State;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class for setting and accessing the EuropeanaID Lookup Table
@@ -105,9 +103,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public EuropeanaId retrieveEuropeanaIdFromOld(String oldId) {
-		if (datastore==null){
-			createDatastore();
-		}
+
 		try {
 			
 			EuropeanaId id = datastore.find(EuropeanaId.class)
@@ -118,6 +114,11 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 
 		}
 		return null;
+	}
+
+	@Override
+	public EuropeanaId retrieveEuropeanaIdFromOld(List<String> oldIds) {
+		return datastore.find(EuropeanaId.class).field("oldId").hasAnyOf(oldIds).get();
 	}
 
 	/* (non-Javadoc)
@@ -135,7 +136,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	@Override
 	public boolean oldIdExists(String newId) {
 		return datastore.find(EuropeanaId.class).field("newId").equal(newId)
-				.get() != null ? true : false;
+				.get() != null;
 	}
 
 	/* (non-Javadoc)
@@ -143,8 +144,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public boolean newIdExists(String oldId) {
-		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).get() != null ? true
-				: false;
+		return datastore.find(EuropeanaId.class).field("oldId").equal(oldId).get() != null;
 	}
 
 	/* (non-Javadoc)
