@@ -54,6 +54,6 @@
     <bean id="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
     <bean id="corelib_solr_mongoProvider" class="eu.europeana.corelib.EmptyBean"/>
     <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.EmptyBean"/>
 
 </beans>

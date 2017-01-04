@@ -17,36 +17,22 @@
 
 package eu.europeana.corelib.mongo.server.impl;
 
-import java.util.logging.Logger;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.mapping.MappingException;
 import com.mongodb.Mongo;
-
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.BasicProxyImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.ConceptSchemeImpl;
-import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
-import eu.europeana.corelib.solr.entity.EventImpl;
-import eu.europeana.corelib.solr.entity.PhysicalThingImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.logging.Logger;
 
 /**
  * @see eu.europeana.corelib.mongo.server.EdmMongoServer
@@ -148,7 +134,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		EuropeanaId newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
-			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
+			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
 			return datastore.find(FullBeanImpl.class)
 					.field("about").equal(newId.getNewId()).get();
 		}
@@ -157,7 +144,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
 
 		if (newId != null) {
-			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
 			return datastore.find(FullBeanImpl.class).field("about")
 					.equal(newId.getNewId()).get();
 		}
@@ -166,7 +153,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 				+ id);
 
 		if (newId != null) {
-			europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
 			return datastore.find(FullBeanImpl.class).field("about")
 					.equal(newId.getNewId()).get();
 		}

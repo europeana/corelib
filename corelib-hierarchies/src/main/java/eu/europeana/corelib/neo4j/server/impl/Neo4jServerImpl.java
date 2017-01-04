@@ -112,14 +112,10 @@ public class Neo4jServerImpl implements Neo4jServer {
     public Node getNode(String rdfAbout) throws Neo4JException {
 		Node node = null;
 		try {
-			IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
-			long t1 = System.currentTimeMillis();
-			if (nodes.size() > 0 && hasRelationships(nodes)) {
-                LOG.info("neo4jserverimpl getNode hasRelationships ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-                t1 = System.currentTimeMillis();
+        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
+		if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
-                LOG.info("neo4jserverimpl nodes.getSingle() ... took: " + (System.currentTimeMillis() - t1) + " milliseconds");
-            }
+		}
 		} catch (Exception e) {
 			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
 		}
