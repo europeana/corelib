@@ -66,7 +66,7 @@ public class ApiLogServiceTest {
 
         // Give the system some time to process the requests;
         // rather than force the system to sleep, use a time in the future
-        DateTime dt = new DateTime().plusMillis(50);
+        DateTime dt = new DateTime().plusMillis(100);
 
         // the interval contains the end date, which was before insertions, so we have to refresh it.
         interval.setEnd(dt.toDate());
@@ -114,7 +114,8 @@ public class ApiLogServiceTest {
         apiLogService.logApiRequest(apiKey, "paris", RecordType.SEARCH, "standard");
         apiLogService.logApiRequest(apiKey, "berlin", RecordType.SEARCH, "standard");
 
-        interval.setEnd(new Date());
+        DateTime dt = new DateTime().plusMillis(100); // add some time to avoid racing condition problems
+        interval.setEnd(dt.toDate());
         long count2 = apiLogService.countByInterval(interval);
         assertNotNull(count2);
         assertEquals(2, count2);

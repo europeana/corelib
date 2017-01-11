@@ -185,10 +185,18 @@ public class AttributionSnippet {
 
     private String getRightsLabel(String rightsURL) {
         String        rightsLabel   = "could not determine rights label";
-        String        rightsPattern = "zero|mark|/by/|/by-sa/|/by-nd/|/by-nc/|/by-nc-sa/|/by-nc-nd/|orphan|rr-p|rr-f|out-of-copyright|unknown";
+        String        rightsPattern = "zero|mark|/by/|/by-sa/|/by-nd/|/by-nc/|/by-nc-sa/|/by-nc-nd/|" +
+                "orphan|rr-p|rr-f|out-of-copyright|unknown|vocab/InC/|vocab/InC-OW-EU/|vocab/CNE/|" +
+                "vocab/InC-EDU/|vocab/NoC-NC/|vocab/NoC-OKLR/";
         final Matcher m             = Pattern.compile(rightsPattern).matcher(rightsURL);
         if (m.find())
             switch (m.group()) {
+                case "vocab/InC/": rightsLabel = "In Copyright"; break;
+                case "vocab/InC-OW-EU/": rightsLabel = "In Copyright - EU Orphan Work"; break;
+                case "vocab/CNE/": rightsLabel = "Copyright Not Evaluated"; break;
+                case "vocab/InC-EDU/": rightsLabel = "In Copyright - Educational Use Permitted"; break;
+                case "vocab/NoC-NC/": rightsLabel = "Public Domain"; break;
+                case "vocab/NoC-OKLR/": rightsLabel = "Public Domain"; break;
                 case "zero": rightsLabel = "Public Domain"; break;
                 case "mark": rightsLabel = "Public Domain"; break;
                 case "/by/": rightsLabel = "CC BY"; break;

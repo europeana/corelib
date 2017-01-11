@@ -431,7 +431,8 @@ public class SearchServiceImpl implements SearchService {
                 + europeanaObjectId);
        EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(ids);
         if (newId != null) {
-           // idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
+            //TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
+            // idServer.updateTime(newId.getNewId(), PORTAL_PREFIX
            //         + europeanaObjectId);
             return newId.getNewId();
         }

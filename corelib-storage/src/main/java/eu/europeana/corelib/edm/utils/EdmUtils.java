@@ -939,15 +939,13 @@ public class EdmUtils {
         return false;
     }
 
-    private static <T> boolean addAsList(Object dest, Class<T> clazz,
-                                         String[] vals, String... prefix) {
+    private static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String... prefix) {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
-                Method method = dest.getClass().getMethod(
-                        getSetterMethodName(clazz, true), List.class);
+                Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
                 if (prefix.length == 1) {
                     String[] valNew = new String[vals.length];
-                    int i = 0;
+                    int      i      = 0;
                     for (String val : vals) {
                         valNew[i] = prefix + val;
                         i++;
@@ -959,9 +957,7 @@ public class EdmUtils {
                 }
                 return true;
             }
-        } catch (SecurityException | IllegalAccessException
-                | NoSuchMethodException | IllegalArgumentException
-                | InvocationTargetException e) {
+        } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
             log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
         }
         return false;
@@ -999,7 +995,7 @@ public class EdmUtils {
             if (vals != null) {
                 for (String str : vals) {
                     T obj = clazz.newInstance();
-                    if (obj.getClass().isAssignableFrom(ResourceType.class)) {
+                    if (ResourceType.class.isAssignableFrom(obj.getClass())) {
                     ((ResourceType) obj).setResource(str);
                     }
                     tList.add(obj);

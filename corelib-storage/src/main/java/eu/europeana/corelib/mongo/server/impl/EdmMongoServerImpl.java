@@ -134,6 +134,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		EuropeanaId newId = europeanaIdMongoServer
 				.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
+			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
 			return datastore.find(FullBeanImpl.class)
 					.field("about").equal(newId.getNewId()).get();
