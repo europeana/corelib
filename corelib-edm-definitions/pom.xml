@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.apache.bcel</groupId>
 			<artifactId>bcel</artifactId>
-			<version>6.0-SNAPSHOT</version>
+			<version>6.0</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -70,7 +70,7 @@
                     <dependency>
                         <groupId>org.apache.bcel</groupId>
                         <artifactId>bcel</artifactId>
-                        <version>6.0-SNAPSHOT</version>
+                        <version>6.0</version>
                     </dependency>
 				</dependencies>
 				<executions>
@@ -105,17 +105,6 @@
 					</execution>
 					<!-- -->
 				</executions>
-			</plugin>
-
-			<plugin>
-				<inherited>true</inherited>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${version.maven-compiler-plugin}</version>
-				<configuration>
-					<source>${version.jdk}</source>
-					<target>${version.jdk}</target>
-				</configuration>
 			</plugin>
 
 		</plugins>
@@ -168,7 +157,7 @@
 						<dependency>
 							<groupId>org.apache.bcel</groupId>
 							<artifactId>bcel</artifactId>
-							<version>6.0-SNAPSHOT</version>
+							<version>6.0</version>
 						</dependency>
 					</dependencies>
 				</plugin>
