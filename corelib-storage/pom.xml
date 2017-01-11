@@ -50,6 +50,7 @@
             <artifactId>corelib-utils</artifactId>
         </dependency>
         <!-- Europeana -->
+        <!--TODO release snapshot dependency-->
         <dependency>
             <groupId>eu.europeana.publication</groupId>
             <artifactId>publication-common</artifactId>
