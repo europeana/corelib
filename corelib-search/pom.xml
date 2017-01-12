@@ -52,12 +52,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--TODO release snapshot dependency-->
-        <dependency>
-            <groupId>eu.europeana.publication</groupId>
-            <artifactId>publication-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>

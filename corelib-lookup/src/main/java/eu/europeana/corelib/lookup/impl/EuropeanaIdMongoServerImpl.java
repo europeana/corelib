@@ -24,8 +24,6 @@ import com.mongodb.Mongo;
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import eu.europeana.publication.common.IDocument;
-import eu.europeana.publication.common.State;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;
@@ -262,42 +260,4 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 		return datastore.find(EuropeanaId.class, "oldId", oldId).get();
 	}
 
-   
-
-    @Override
-    public List<IDocument> getDocumentsByStatesUsingBatch(List<State> stateVlues,
-            Map<String, List<String>> queryChoices, int batchSize) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public IDocument getDocumentById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void insertDocument(IDocument document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-    @Override
-    public void updateDocumentUsingId(IDocument document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cloneDocument(IDocument originalDocument, IDocument clonedDocument) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void deleteDocument(IDocument id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void commit() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
