@@ -32,16 +32,12 @@ import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.publication.common.ICollection;
-import eu.europeana.publication.common.IDocument;
-import eu.europeana.publication.common.State;
-
 /**
  * Class that converts a FullBean to a SolrInputDocument and saves it
  * 
  * @author Yorgos.Mamakis@ europeana.eu
  */
-public class SolrDocumentHandler implements ICollection {
+public class SolrDocumentHandler {
 	private SolrServer solrServer;
 	/*
 	 * <field name="is_fulltext" type="boolean" indexed="true" stored="true"
@@ -182,106 +178,5 @@ public class SolrDocumentHandler implements ICollection {
 				}
 			}
 		}
-	}
-
-	@Override
-	public List<IDocument> getDocumentsByStatesUsingBatch(
-			List<State> stateVlues, Map<String, List<String>> queryChoices,
-			int batchSize) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public IDocument getDocumentById(String id) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public void insertDocument(IDocument document) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public void updateDocumentUsingId(IDocument document) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public void cloneDocument(IDocument originalDocument,
-			IDocument clonedDocument) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public void deleteDocument(IDocument id) {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
-	}
-
-	@Override
-	public void commit() throws Exception {
-		throw new UnsupportedOperationException("Not supported yet."); // To
-																		// change
-																		// body
-																		// of
-																		// generated
-																		// methods,
-																		// choose
-																		// Tools
-																		// |
-																		// Templates.
 	}
 }

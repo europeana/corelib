@@ -53,8 +53,7 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
-import eu.europeana.publication.common.IDocument;
-import eu.europeana.publication.common.State;
+
 
 
 /**
@@ -65,7 +64,7 @@ import eu.europeana.publication.common.State;
 @SuppressWarnings("unchecked")
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("record")
-public class FullBeanImpl implements FullBean, IDocument {
+public class FullBeanImpl implements FullBean{
 
     @Id
     protected ObjectId europeanaId;
@@ -126,10 +125,6 @@ public class FullBeanImpl implements FullBean, IDocument {
     protected String[] userTags;
     protected String[] europeanaCollectionName;
 
-    @Indexed
-    protected State state;
-
-    
     @Override
     public List<PlaceImpl> getPlaces() {
         return this.places;
@@ -367,21 +362,6 @@ public class FullBeanImpl implements FullBean, IDocument {
     @Override
     public void setTimestampUpdated(Date timestampUpdated) {
         this.timestampUpdated = timestampUpdated;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    @Override
-    public State getState() {
-        return this.state;
-    }
-
-    @Override
-    public void setId(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
