@@ -49,12 +49,7 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-utils</artifactId>
         </dependency>
-        <!-- Europeana -->
-        <dependency>
-            <groupId>eu.europeana.publication</groupId>
-            <artifactId>publication-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
         <!-- SOLR -->
         <dependency>
             <groupId>org.apache.solr</groupId>

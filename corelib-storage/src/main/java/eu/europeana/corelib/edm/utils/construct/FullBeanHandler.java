@@ -27,11 +27,9 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.publication.common.ICollection;
-import eu.europeana.publication.common.IDocument;
-import eu.europeana.publication.common.State;
 
-public class FullBeanHandler implements ICollection {
+
+public class FullBeanHandler {
 
     private EdmMongoServer mongoServer;
     Logger log = Logger.getLogger(this.getClass().getName());
@@ -400,41 +398,5 @@ public class FullBeanHandler implements ICollection {
             log.log(Level.SEVERE, re.getMessage());
         }
         return fullBean;
-    }
-
-    @Override
-    public List<IDocument> getDocumentsByStatesUsingBatch(List<State> stateVlues,
-            Map<String, List<String>> queryChoices, int batchSize) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public IDocument getDocumentById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void insertDocument(IDocument document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateDocumentUsingId(IDocument document) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cloneDocument(IDocument originalDocument, IDocument clonedDocument) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void deleteDocument(IDocument id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void commit() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
