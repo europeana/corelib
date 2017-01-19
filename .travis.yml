@@ -7,30 +7,30 @@ language: java
 jdk:
   - oraclejdk8
 install:
-  - echo "<settings> \
-              <profiles> \
-                  <profile> \
-                      <activation> \
-                          <activeByDefault>true</activeByDefault> \
-                      </activation> \
-                      <id>travis</id> \
-                      <repositories> \
-                          <repository> \
-                              <id>europeana-libs-releases</id> \
-                              <name>libs-release</name> \
-                              <url>http://artifactory.eanadev.org/artifactory/libs-release</url> \
-                              <snapshots> \
-                                  <enabled>false</enabled> \
-                              </snapshots> \
-                          </repository> \
-                          <repository> \
-                              <id>europeana-libs-snapshots</id> \
-                              <name>libs-snapshot</name> \
-                              <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url> \
-                          </repository> \
-                      </repositories> \
-                  </profile> \
-              </profiles> \
+  - echo "<settings>
+              <profiles>
+                  <profile>
+                      <activation>
+                          <activeByDefault>true</activeByDefault>
+                      </activation>
+                      <id>travis</id>
+                      <repositories>
+                          <repository>
+                              <id>europeana-libs-releases</id>
+                              <name>libs-release</name>
+                              <url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+                              <snapshots>
+                                  <enabled>false</enabled>
+                              </snapshots>
+                          </repository>
+                          <repository>
+                              <id>europeana-libs-snapshots</id>
+                              <name>libs-snapshot</name>
+                              <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+                          </repository>
+                      </repositories>
+                  </profile>
+              </profiles>
           </settings>" > ~/settings.xml
   - mvn install -s ~/settings.xml -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
