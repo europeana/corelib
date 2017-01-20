@@ -29,6 +29,16 @@ install:
                               <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
                           </repository>
                       </repositories>
+                      <pluginRepositories>
+                          <pluginRepository>
+                              <id>europeana-plugins-release</id>
+                              <name>plugins-release</name>
+                              <url>http://artifactory.eanadev.org/artifactory/plugins-release</url>
+                              <snapshots>
+                                  <enabled>false</enabled>
+                              </snapshots>
+                          </pluginRepository>
+                      <pluginRepositories>
                   </profile>
               </profiles>
           </settings>" > ~/settings.xml
