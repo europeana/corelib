@@ -38,7 +38,7 @@ install:
                                   <enabled>false</enabled>
                               </snapshots>
                           </pluginRepository>
-                      <pluginRepositories>
+                      </pluginRepositories>
                   </profile>
               </profiles>
           </settings>" > ~/settings.xml
