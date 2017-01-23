@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
+@JsonPropertyOrder(alphabetic=true)
 public class RichBeanImpl extends ApiBeanImpl implements RichBean {
 
     @Field("proxy_dc_description")

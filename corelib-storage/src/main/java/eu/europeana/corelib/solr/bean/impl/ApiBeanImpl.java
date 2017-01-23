@@ -29,12 +29,14 @@ import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.edm.beans.ApiBean;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.ApiBean
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
+@JsonPropertyOrder(alphabetic=true)
 public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Field("skos_concept")

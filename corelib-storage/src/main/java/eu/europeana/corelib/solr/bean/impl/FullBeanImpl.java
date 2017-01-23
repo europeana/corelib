@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -63,6 +64,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
  */
 @SuppressWarnings("unchecked")
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonPropertyOrder(alphabetic=true)
 @Entity("record")
 public class FullBeanImpl implements FullBean{
 
