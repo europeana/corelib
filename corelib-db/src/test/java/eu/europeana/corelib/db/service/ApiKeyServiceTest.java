@@ -133,6 +133,7 @@ public class ApiKeyServiceTest {
         apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
 
         try {
+            // TODO sometimes after updating the project this test will fail. If you run the test again it usually succeeds.
             apiKeyService.checkReachedLimit(apiKey);
             fail("This line should not be reached");
         } catch (LimitReachedException e) {

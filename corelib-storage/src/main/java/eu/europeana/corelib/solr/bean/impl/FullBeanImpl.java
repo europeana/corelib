@@ -363,7 +363,7 @@ public class FullBeanImpl implements FullBean{
     public void setTimestampUpdated(Date timestampUpdated) {
         this.timestampUpdated = timestampUpdated;
     }
-    
+
     @Override
     public List<LicenseImpl> getLicenses() {
 		return licenses;
