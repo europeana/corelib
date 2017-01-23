@@ -27,7 +27,7 @@ public interface EuropeanaIdMongoServer {
 	EuropeanaId retrieveEuropeanaIdFromOld(List<String> oldIds);
 	/**
 	 * Find the EuropeanaId records based on the newId
-	 * 
+	 *
      * @param newId The id to search for
 	 * @return
 	 */

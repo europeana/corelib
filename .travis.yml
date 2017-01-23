@@ -7,7 +7,41 @@ language: java
 jdk:
   - oraclejdk8
 install:
-  - echo "<settings><mirrors><mirror><id>sonatype-mirror</id><url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url><mirrorOf>sonatype-nexus-snapshots</mirrorOf></mirror></mirrors></settings>" > ~/settings.xml
+  - echo "<settings>
+              <profiles>
+                  <profile>
+                      <activation>
+                          <activeByDefault>true</activeByDefault>
+                      </activation>
+                      <id>travis</id>
+                      <repositories>
+                          <repository>
+                              <id>europeana-libs-releases</id>
+                              <name>libs-release</name>
+                              <url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+                              <snapshots>
+                                  <enabled>false</enabled>
+                              </snapshots>
+                          </repository>
+                          <repository>
+                              <id>europeana-libs-snapshots</id>
+                              <name>libs-snapshot</name>
+                              <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+                          </repository>
+                      </repositories>
+                      <pluginRepositories>
+                          <pluginRepository>
+                              <id>europeana-plugins-release</id>
+                              <name>plugins-release</name>
+                              <url>http://artifactory.eanadev.org/artifactory/plugins-release</url>
+                              <snapshots>
+                                  <enabled>false</enabled>
+                              </snapshots>
+                          </pluginRepository>
+                      </pluginRepositories>
+                  </profile>
+              </profiles>
+          </settings>" > ~/settings.xml
   - mvn install -s ~/settings.xml -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
   - mvn test -B -s ~/settings.xml
