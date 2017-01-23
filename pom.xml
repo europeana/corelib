@@ -9,10 +9,15 @@
 	the specific language governing permissions and limitations under the Licence. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>europeana-parent-pom</artifactId>
+        <groupId>eu.europeana</groupId>
+        <version>1.2-SNAPSHOT</version>
+    </parent>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-	<version>2.5.2-SNAPSHOT</version>
+    <version>2.6.0-SNAPSHOT</version>
 	<name>Europeana Core Library</name>
 	<url>http://www.europeana.eu</url>
 	<organization>
@@ -36,32 +41,34 @@
 		<module>corelib-hierarchies</module>
 		<module>corelib-search</module>
 	</modules>
-
+    <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+    </properties>
 	<dependencyManagement>
 		<dependencies>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-common-storage</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-db</artifactId>
-                <version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
             </dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-dereference</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>google-collections</artifactId>
@@ -73,13 +80,13 @@
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-edm-definitions</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-hierarchies</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>google-collections</artifactId>
@@ -91,210 +98,60 @@
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-lookup</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-media-storage</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-search</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-sugarcrm-bindings</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-storage</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-sugarcrm-client</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-utils</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-web</artifactId>
-				<version>${version.europeana.corelib}</version>
+                <version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>ext-snapshots</id>
-			<url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
-	<repositories>
-		<repository>
-		     <id>europeana-ext-release-local</id>
-             <url>http://artifactory.eanadev.org/artifactory/ext-release-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>releases</id>
-			<url>http://artifactory.eanadev.org/artifactory/libs-release-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ext-releases</id>
-			<url>http://artifactory.eanadev.org/artifactory/ext-release-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>snapshots</id>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot-local</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>ext-snapshots</id>
-			<url>http://artifactory.eanadev.org/artifactory/ext-snapshot-local</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-
-		<!-- libs-release and libs-snapshot temporarily added as quick fix for dependencies problems -->
-		<repository>
-			<id>libs-release</id>
-			<name>libs-release</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>libs-snapshot</id>
-			<name>libs-snapshot</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
-			<snapshots />
-		</repository>
-
-
-		<repository>
-			<id>repo1</id>
-			<url>http://repo1.maven.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>http://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>com.springsource.repository.bundles.release</id>
-			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/release</url>
-		</repository>
-
-		<repository>
-			<id>com.springsource.repository.bundles.external</id>
-			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/external</url>
-		</repository>
-
-
-		<repository>
-			<id>org.springframework.maven.milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-	</repositories>
-
-	<properties>
-		<version.europeana.corelib>2.5.2-SNAPSHOT</version.europeana.corelib>
-		<version.log4j>1.2.15</version.log4j>
-		<version.jdk>1.8</version.jdk>
-		<version.junit>4.12</version.junit>
-		<version.servletJstl>1.2</version.servletJstl>
-		<version.apacheLucene>4.10.1</version.apacheLucene>
-		<version.apacheSolr>4.10.1</version.apacheSolr>
-		<version.apacheVelocity>1.7</version.apacheVelocity>
-		<version.springBoot>1.2.8.RELEASE</version.springBoot>
-		<version.springCore>4.2.5.RELEASE</version.springCore>
-		<version.springWebService>2.2.4.RELEASE</version.springWebService>
-		<version.springSecurity>3.2.9.RELEASE</version.springSecurity>
-		<version.springSecurityOauth>2.0.8.RELEASE</version.springSecurityOauth>
-		<version.commonsLang>2.6</version.commonsLang>
-		<version.commonsLang3>3.4</version.commonsLang3>
-		<version.commonsIO>2.4</version.commonsIO>
-		<version.hibernateCore>5.1.0.Final</version.hibernateCore>
-		<version.jibx>1.2.6</version.jibx>
-		<version.mortbayJetty>6.1.26</version.mortbayJetty>
-		<version.mongoDriver>2.13.0</version.mongoDriver>
-		<version.mongoMorphia>0.99.1-patched</version.mongoMorphia>
-		<version.woodstox>3.2.9</version.woodstox>
-		<version.codehausJackson>1.9.9</version.codehausJackson>
-		<version.jackson>2.6.5</version.jackson>
-		<version.slf4j>1.7.5</version.slf4j>
-		<version.mockito>1.10.19</version.mockito>
-		<version.gson>2.2.4</version.gson>
-		<version.httpclient>4.3.3</version.httpclient>
-		<version.ehcache>2.8.3</version.ehcache>
-		<version.guava>18.0</version.guava>
-		<version.jodatime>2.9.2</version.jodatime>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<version.maven-compiler-plugin>3.3</version.maven-compiler-plugin>
-	</properties>
 
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${version.maven-compiler-plugin}</version>
-					<!-- best lock down version of the plugin too -->
-					<configuration>
-						<source>${version.jdk}</source>
-						<target>${version.jdk}</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.1</version>
+                    <version>2.5.3</version>
 				</plugin>
 				<plugin>
 				  <groupId>org.codehaus.mojo</groupId>
@@ -311,6 +168,38 @@
 				  <artifactId>coveralls-maven-plugin</artifactId>
 				  <version>4.0.0</version>
 			        </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <additionalparam>${javadoc.opts}</additionalparam>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <reportPlugins>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-javadoc-plugin</artifactId>
+                                <configuration>
+                                    <additionalparam>${javadoc.opts}</additionalparam>
+                                </configuration>
+                            </plugin>
+                        </reportPlugins>
+                    </configuration>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -319,28 +208,13 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>${version.log4j}</version>
 		</dependency>
 	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<id>artifactory.eanadev.org</id>
-			<name>artifactory.eanadev.org-releases</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-release-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>artifactory.eanadev.org</id>
-			<name>artifactory.eanadev.org-snapshots</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 	<scm>
 		<connection>scm:git:git@github.com:europeana/corelib.git</connection>
