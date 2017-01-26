@@ -104,6 +104,7 @@ public class Neo4jServerImpl implements Neo4jServer {
      * Node.Index = relative index of node in its hierarchical sequence
      * Node.Id = Neo4j numerical Id
      * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
+	 * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
 	 */
 	public Neo4jServerImpl() {
 	}
@@ -112,7 +113,7 @@ public class Neo4jServerImpl implements Neo4jServer {
     public Node getNode(String rdfAbout) throws Neo4JException {
 		Node node = null;
 		try {
-        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
+        IndexHits<Node> nodes = index.get("rdf_about", "/" + rdfAbout);
 		if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
 		}
@@ -159,6 +160,7 @@ public class Neo4jServerImpl implements Neo4jServer {
         return getNode(rdfAbout) != null;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
         HttpGet method = new HttpGet(customPath
@@ -194,6 +196,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		return null;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
         HttpGet method = new HttpGet(customPath
@@ -225,6 +228,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 				EDMISNEXTINSEQUENCERELATION);
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
         HttpGet method = new HttpGet(customPath
@@ -337,6 +341,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		return 0;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
         if (!isHierarchy(rdfAbout)) {
