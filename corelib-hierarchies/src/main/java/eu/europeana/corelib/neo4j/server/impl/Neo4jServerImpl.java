@@ -130,8 +130,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 
     @Override
     public long getNodeIndex(String nodeId){
-        HttpGet method = new HttpGet(customPath
-                + "/europeana/hierarchycount/nodeId/" + nodeId);
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "europeana/hierarchycount/nodeId/" + nodeId);
         try {
             HttpResponse resp = client.execute(method);
 
@@ -163,8 +163,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/children/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/children/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?offset=" + offset + "&limit=" + limit);
         try {
@@ -199,8 +199,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/following/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/following/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?limit=" + limit);
         try {
@@ -231,8 +231,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/preceding/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/preceding/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?limit=" + limit);
         try {
@@ -311,7 +311,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		ObjectNode parameters = statement.with("parameters");
 		statements.add(statement);
         parameters.put("from", (String) node.getProperty("rdf:about"));
-		HttpPost httpMethod = new HttpPost(serverPath + "transaction/commit");
+		HttpPost httpMethod = new HttpPost(fixTrailingSlash(serverPath) + "transaction/commit");
 		try {
 			String str = new ObjectMapper().writeValueAsString(obj);
 			httpMethod.setEntity(new StringEntity(str));
@@ -347,7 +347,7 @@ public class Neo4jServerImpl implements Neo4jServer {
         if (!isHierarchy(rdfAbout)) {
 			return null;
 		}
-		HttpGet method = new HttpGet(customPath + "/initial/startup/nodeId/"
+		HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/"
                 + StringUtils.replace(rdfAbout, "/", "%2F"));
 		LOG.info("path: " + method.getURI());
 		try {
@@ -368,5 +368,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
 	public String getCustomPath() {
 		return customPath;
+	}
+
+	private String fixTrailingSlash(String path){
+    	return path.endsWith("/") ? path : path + "/";
 	}
 }

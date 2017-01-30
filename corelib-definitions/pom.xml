@@ -27,6 +27,10 @@
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-utils</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>eu.europeana.corelib</groupId>
+			<artifactId>corelib-web</artifactId>
+		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-lang</groupId>
