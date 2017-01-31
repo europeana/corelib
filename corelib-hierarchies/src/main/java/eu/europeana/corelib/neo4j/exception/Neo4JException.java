@@ -14,10 +14,10 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.exception;
+package eu.europeana.corelib.neo4j.exception;
 
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * Basic Neo4JException

@@ -22,7 +22,7 @@ import com.google.code.morphia.Morphia;
 import com.google.code.morphia.mapping.MappingException;
 import com.mongodb.Mongo;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;

@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;

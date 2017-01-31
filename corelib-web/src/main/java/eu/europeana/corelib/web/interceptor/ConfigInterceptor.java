@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.exception.WebConfigurationException;
 import eu.europeana.corelib.web.model.PageData;
 import eu.europeana.corelib.web.support.Configuration;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -54,7 +54,7 @@ import eu.europeana.corelib.neo4j.entity.RelType;
 import eu.europeana.corelib.neo4j.entity.Relation;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 
-import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 
 /**
  * @see eu.europeana.corelib.neo4j.server.Neo4jServer

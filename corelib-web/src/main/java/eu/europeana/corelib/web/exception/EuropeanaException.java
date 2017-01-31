@@ -15,10 +15,9 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.exception;
+package eu.europeana.corelib.web.exception;
 
 
-import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 
 import javax.annotation.Resource;

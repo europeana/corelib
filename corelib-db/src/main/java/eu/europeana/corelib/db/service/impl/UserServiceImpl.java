@@ -35,8 +35,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.exception.Neo4JException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.search.SearchService;

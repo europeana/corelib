@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.BasicConfigurator;
