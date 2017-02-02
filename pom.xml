@@ -17,7 +17,7 @@
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-    <version>${corelib.version}</version>
+    <version>2.6.0-SNAPSHOT</version>
 	<name>Europeana Core Library</name>
 	<url>http://www.europeana.eu</url>
 	<organization>
@@ -43,7 +43,6 @@
 	</modules>
     <properties>
         <javadoc.opts>-Xdoclint:none</javadoc.opts>
-		<corelib.version>2.6.0-SNAPSHOT</corelib.version>
     </properties>
 	<dependencyManagement>
 		<dependencies>
