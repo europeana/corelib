@@ -113,7 +113,8 @@ public class Neo4jServerImpl implements Neo4jServer {
     public Node getNode(String rdfAbout) throws Neo4JException {
 		Node node = null;
 		try {
-        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout.startsWith("/") ? rdfAbout : "/" + rdfAbout);
+        IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") &&
+			(rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
 		if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
 		}
