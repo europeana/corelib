@@ -18,9 +18,6 @@
 package eu.europeana.corelib.web.exception;
 
 
-import eu.europeana.corelib.web.service.EmailService;
-
-import javax.annotation.Resource;
 
 /**
  * Abstract EuropeanaException, modules should define their own extension based on this one.
@@ -30,23 +27,16 @@ import javax.annotation.Resource;
  */
 public abstract class EuropeanaException extends Exception {
 	private static final long serialVersionUID = 4759945931809288624L;
-	private final String SUBJECTPREFIX = "Europeana exception email handler: ";
-	private final String NOCAUSEDBY = "No throwable root exception available";
-
-	@Resource(name = "corelib_web_emailService")
-	private EmailService emailService;
 
 	private ProblemType problem;
 
 	public EuropeanaException(ProblemType problem) {
 		this.problem = problem;
-		handleProblemResponseAction(problem, null);
 	}
 
 	public EuropeanaException(Throwable causedBy, ProblemType problem) {
 		super(causedBy);
 		this.problem = problem;
-		handleProblemResponseAction(problem, causedBy);
 	}
 
 	@Override
@@ -56,20 +46,5 @@ public abstract class EuropeanaException extends Exception {
 
 	public ProblemType getProblem() {
 		return problem;
-	}
-
-	private void handleProblemResponseAction(ProblemType problem, Throwable causedBy){
-		String newline = System.getProperty("line.separator");
-
-		if (problem.getAction().equals(ProblemResponseAction.MAIL)){
-			String header = SUBJECTPREFIX + problem.getMessage();
-			String body = (causedBy == null ? NOCAUSEDBY : causedBy.getMessage() + newline + newline
-					+ causedBy.getStackTrace());
-			try {
-				emailService.sendException(header, body);
-			} catch (EmailServiceException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

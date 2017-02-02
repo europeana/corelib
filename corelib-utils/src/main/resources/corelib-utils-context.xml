@@ -30,9 +30,9 @@
 
 	<context:annotation-config/>
 
-	<bean id="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">
-		<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>
-	</bean>
+	<!--<bean id="corelib_utils_mltStopwordsService" class="eu.europeana.corelib.utils.service.impl.MltStopwordsServiceImpl">-->
+		<!--<constructor-arg value="#{europeanaProperties['portal.mlt.stopwords']}"/>-->
+	<!--</bean>-->
 
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
 		<property name="cacheManager" ref="ehcache"/>

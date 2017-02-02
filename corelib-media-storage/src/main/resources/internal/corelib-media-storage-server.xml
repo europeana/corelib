@@ -16,8 +16,8 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-    <bean id="corelib_mediastorage_swiftStorageClient" class="eu.europeana.corelib.service.impl.swift.SwiftMediaStorageClientImpl">
-        <constructor-arg ref="corelib_mediastorage_swiftConfiguration"/>
-    </bean>
+    <!--<bean id="corelib_mediastorage_swiftStorageClient" class="eu.europeana.corelib.service.impl.swift.SwiftMediaStorageClientImpl">-->
+        <!--<constructor-arg ref="corelib_mediastorage_swiftConfiguration"/>-->
+    <!--</bean>-->
 
 </beans>

@@ -20,7 +20,6 @@ package eu.europeana.corelib.solr.bean.impl;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -29,7 +28,6 @@ import java.util.*;
  * @author Yorgos.Mamakis@ kb.nl
  * @see eu.europeana.corelib.definitions.edm.beans.IdBean
  */
-@JsonPropertyOrder(alphabetic=true)
 public class IdBeanImpl implements IdBean {
 
     @Field("europeana_id")

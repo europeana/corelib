@@ -113,7 +113,7 @@ public class Neo4jServerImpl implements Neo4jServer {
     public Node getNode(String rdfAbout) throws Neo4JException {
 		Node node = null;
 		try {
-        IndexHits<Node> nodes = index.get("rdf_about", "/" + rdfAbout);
+        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout.startsWith("/") ? rdfAbout : "/" + rdfAbout);
 		if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
 		}
@@ -307,7 +307,9 @@ public class Neo4jServerImpl implements Neo4jServer {
 		obj.put("statements", statements);
 		ObjectNode statement = JsonNodeFactory.instance.objectNode();
 		statement.put("statement",
-						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
+						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" +
+//								" WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
+								" RETURN COUNT(part) as children");
 		ObjectNode parameters = statement.with("parameters");
 		statements.add(statement);
         parameters.put("from", (String) node.getProperty("rdf:about"));
@@ -352,17 +354,22 @@ public class Neo4jServerImpl implements Neo4jServer {
 		LOG.info("path: " + method.getURI());
 		try {
 			HttpResponse resp = client.execute(method);
-
+			if (resp.getStatusLine().getStatusCode() == 502){
+				LOG.error("Neo4J plugin detected inconsistent data for node with ID: " + rdfAbout);
+				Neo4JException neo4jPluginException = new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA);
+				neo4jPluginException.getProblem().appendMessage(" by Neo4J plugin, for node with ID: " + rdfAbout);
+				throw neo4jPluginException;
+			}
 			ObjectMapper mapper = new ObjectMapper();
 			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),
 					Hierarchy.class);
 			return obj;
 		} catch (IOException e) {
 			LOG.error(e.getMessage());
+			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
 		} finally {
 			method.releaseConnection();
 		}
-		return null;
 	}
 
 	@Override
