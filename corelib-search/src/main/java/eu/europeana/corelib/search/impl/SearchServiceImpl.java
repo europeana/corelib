@@ -32,7 +32,6 @@ import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
 import eu.europeana.corelib.definitions.exception.Neo4JException;
 import eu.europeana.corelib.definitions.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.model.Query;
@@ -118,7 +117,6 @@ public class SearchServiceImpl implements SearchService {
     private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
     private static final HashFunction hf = Hashing.md5();
     protected static Logger log = Logger.getLogger(SearchServiceImpl.class);
-    private static boolean STARTED = false;
 
     @Resource(name = "corelib_solr_mongoServer")
     protected EdmMongoServer mongoServer;
@@ -721,12 +719,10 @@ public class SearchServiceImpl implements SearchService {
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
             log.error("SolrServerException: " + e.getMessage() + " for query "
-                    + solrQuery.toString());
-            e.printStackTrace();
+                    + solrQuery.toString(), e);
         } catch (Exception e) {
             log.error("Exception: " + e.getClass().getCanonicalName() + " "
-                    + e.getMessage() + " for query " + solrQuery.toString());
-            e.printStackTrace();
+                    + e.getMessage() + " for query " + solrQuery.toString(), e);
         }
 
         return queryFacets;
