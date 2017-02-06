@@ -120,12 +120,12 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	private String checkMandatoryValue(String value, String name) throws WebConfigurationException {
 		if (StringUtils.isBlank(value)) {
 			ProblemType problem = ProblemType.INVALIDARGUMENTS;
+			String message = null;
 			if (StringUtils.isNotBlank(name)) {
-				String message = "Inexisting property: " + name;
+				message = "Inexisting property: " + name;
 				log.error(message);
-				problem.appendMessage(message);
 			}
-			throw new WebConfigurationException(problem);
+			throw new WebConfigurationException(problem, message);
 		}
 		return StringUtils.trim(value);
 	}

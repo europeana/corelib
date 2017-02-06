@@ -52,7 +52,7 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl;
 
 /**
- * Unit tests for neo4j
+ * Unit tests for neo4j. This only works on linux computers
  *
  * @author Yorgos.Mamakis@ europeana.eu
  */
@@ -73,6 +73,10 @@ public class Neo4jTest {
     public static void setup() {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
+
+        // skip all Neo4j tests on Windows computers
+        String os = System.getProperty("os.name").toLowerCase();
+        Assume.assumeFalse(os.contains("win"));
 
         try {
             TarGZipUnArchiver unzip = new TarGZipUnArchiver();
