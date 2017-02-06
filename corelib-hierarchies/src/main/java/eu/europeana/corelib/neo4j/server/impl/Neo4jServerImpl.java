@@ -309,8 +309,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 		ObjectNode statement = JsonNodeFactory.instance.objectNode();
 		statement.put("statement",
 						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" +
-//								" WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
-								" RETURN COUNT(part) as children");
+								" WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
+//								" RETURN COUNT(part) as children");
 		ObjectNode parameters = statement.with("parameters");
 		statements.add(statement);
         parameters.put("from", (String) node.getProperty("rdf:about"));
