@@ -11,7 +11,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<properties>
 		<javadoc.opts>-Xdoclint:none</javadoc.opts>
-		<corelib.version>2.6.0-SNAPSHOT</corelib.version>
 	</properties>
     <parent>
         <artifactId>europeana-parent-pom</artifactId>
