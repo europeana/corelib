@@ -357,9 +357,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 			HttpResponse resp = client.execute(method);
 			if (resp.getStatusLine().getStatusCode() == 502){
 				LOG.error("Neo4J plugin detected inconsistent data for node with ID: " + rdfAbout);
-				Neo4JException neo4jPluginException = new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA);
-				neo4jPluginException.getProblem().appendMessage(" by Neo4J plugin, for node with ID: " + rdfAbout);
-				throw neo4jPluginException;
+				throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA,
+						" \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
 			}
 			ObjectMapper mapper = new ObjectMapper();
 			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),

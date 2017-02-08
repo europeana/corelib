@@ -33,6 +33,10 @@ public class Neo4JException extends EuropeanaException {
 		super(problem);
 	}
 
+	public Neo4JException(ProblemType problem, String additionalInfo) {
+		super(problem, additionalInfo);
+	}
+
 	public Neo4JException(Throwable causedBy, ProblemType problem) {
 		super(causedBy,problem);
 	}

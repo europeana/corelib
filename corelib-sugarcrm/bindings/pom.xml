@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>2.6.0-feat427-SNAPSHOT</version>
+		<version>2.6.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 

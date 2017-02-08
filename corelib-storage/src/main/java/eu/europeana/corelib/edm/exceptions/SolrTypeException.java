@@ -33,6 +33,13 @@ public class SolrTypeException extends EuropeanaException {
 		super(problemType);
 	}
 
+	/**
+	 * @see eu.europeana.corelib.definitions.exception.EuropeanaException#EuropeanaException(ProblemType, String)
+	 */
+	public SolrTypeException(ProblemType problemType, String additionalInfo) {
+		super(problemType, additionalInfo);
+	}
+
 	public SolrTypeException(Throwable causedBy, ProblemType problemType){
 		super(causedBy, problemType);
 	}

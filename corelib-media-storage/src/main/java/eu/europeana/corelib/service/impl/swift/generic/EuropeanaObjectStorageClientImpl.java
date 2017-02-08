@@ -8,7 +8,7 @@ import eu.europeana.features.ObjectStorageClient;
 import eu.europeana.features.S3ObjectStorageClient;
 import org.apache.commons.io.IOUtils;
 import org.jclouds.io.Payload;
-//import org.testcontainers.shaded.javax.annotation.Resource;
+
 
 import javax.annotation.Resource;
 import java.io.IOException;
