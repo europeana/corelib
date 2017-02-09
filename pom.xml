@@ -145,7 +145,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -164,4 +163,5 @@
 		<url>https://github.com/europeana/corelib</url>
 		<tag>HEAD</tag>
 	</scm>
+
 </project>
