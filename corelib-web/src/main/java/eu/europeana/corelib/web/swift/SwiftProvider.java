@@ -7,6 +7,7 @@ import org.jclouds.openstack.swift.v1.features.ObjectApi;
 
 /**
  * Created by ymamakis on 11/17/15.
+ * Old code, already replaced by the ObjectStorage library
  */
 public class SwiftProvider {
 
