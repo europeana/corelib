@@ -117,5 +117,5 @@ public class EuropeanaId{
 	public void setNewId(String newId) {
 		this.newId = newId;
 	}
-	
+
 }

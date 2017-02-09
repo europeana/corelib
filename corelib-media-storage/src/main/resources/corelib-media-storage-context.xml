@@ -25,6 +25,6 @@
 
     <!-- INTERNAL -->
     <!--<import resource="internal/corelib-media-storage-datasource.xml"/>-->
-    <import resource="internal/corelib-media-storage-server.xml"/>
+    <!--<import resource="internal/corelib-media-storage-server.xml"/>-->
 
 </beans>

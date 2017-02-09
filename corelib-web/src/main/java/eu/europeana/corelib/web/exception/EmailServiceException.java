@@ -17,8 +17,6 @@
 
 package eu.europeana.corelib.web.exception;
 
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

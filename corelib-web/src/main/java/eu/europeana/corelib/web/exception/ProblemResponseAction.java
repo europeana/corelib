@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.exception;
+package eu.europeana.corelib.web.exception;
 
 public enum ProblemResponseAction {
 	MAIL, LOG, IGNORE

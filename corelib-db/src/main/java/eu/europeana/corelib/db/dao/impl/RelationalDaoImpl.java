@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
