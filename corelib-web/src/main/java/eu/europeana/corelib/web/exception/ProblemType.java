@@ -15,7 +15,7 @@
  *  the Licence.
  */
 
-package eu.europeana.corelib.definitions.exception;
+package eu.europeana.corelib.web.exception;
 
 public enum ProblemType {
 	NOT_FOUND("Entity doesn't exists", ProblemResponseAction.IGNORE),
@@ -39,11 +39,13 @@ public enum ProblemType {
 	UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
 	MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
 	NONE("An exception occurred", ProblemResponseAction.MAIL),
+	INCONSISTENT_DATA("Inconsistent data", ProblemResponseAction.MAIL),
 	INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
 	INVALIDCLASS("Service is called with invalid bean class.", ProblemResponseAction.MAIL),
 	UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL),
 	MONGO_UNREACHABLE("Cannot connect to MongoDB host", ProblemResponseAction.MAIL),
-	NEO4J_CANNOTGETNODE("Cannot get node from Neo4J host", ProblemResponseAction.LOG),
+	NEO4J_CANNOTGETNODE("Cannot retrieve hierarchical node", ProblemResponseAction.LOG),
+	NEO4J_INCONSISTENT_DATA("Inconsistency detected in hierarchical data", ProblemResponseAction.MAIL),
 	XMPMETADATACREATION("Unable to crate XMP metadata for thumbnail", ProblemResponseAction.IGNORE),
 	XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail", ProblemResponseAction.IGNORE),
 	NO_USERNAME("User name does not exist.", ProblemResponseAction.IGNORE),
@@ -76,10 +78,6 @@ public enum ProblemType {
 			}
 		}
 		return UNKNOWN;
-	}
-
-	public void appendMessage(String message) {
-		this.message += " " + message;
 	}
 
 	public String getMessage() {

@@ -30,7 +30,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.email.model.EmailConfig;
 import eu.europeana.corelib.web.exception.EmailServiceException;

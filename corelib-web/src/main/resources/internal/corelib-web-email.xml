@@ -31,15 +31,15 @@
     <!-- that block can be removed again when using plain old port 25  -->
     <bean id="corelib_web_mailSender"
           class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.smtp.starttls.enable">true</prop>
-                <prop key="mail.smtp.auth">true</prop>
-                <prop key="mail.smtps.ssl.checkserveridentity">true</prop>
-                <prop key="mail.smtps.ssl.trust">*</prop>
-                <prop key="mail.smtp.ssl.trust">*</prop>
-            </props>
-        </property>
+        <!--<property name="javaMailProperties">-->
+            <!--<props>-->
+                <!--<prop key="mail.smtp.starttls.enable">true</prop>-->
+                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <!--<prop key="mail.smtps.ssl.checkserveridentity">true</prop>-->
+                <!--<prop key="mail.smtps.ssl.trust">*</prop>-->
+                <!--<prop key="mail.smtp.ssl.trust">*</prop>-->
+            <!--</props>-->
+        <!--</property>-->
         <property name="host" value="#{europeanaProperties['smtp.host']}"/>
         <property name="port" value="#{europeanaProperties['smtp.port']}"/>
         <property name="username" value="#{europeanaProperties['smtp.username']}"/>

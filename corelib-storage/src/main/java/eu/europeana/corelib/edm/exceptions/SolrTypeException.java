@@ -17,8 +17,8 @@
 
 package eu.europeana.corelib.edm.exceptions;
 
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * Exception thrown when SearchService gets a bean other than BriefBean or ApiBean
@@ -31,6 +31,13 @@ public class SolrTypeException extends EuropeanaException {
 
 	public SolrTypeException(ProblemType problemType) {
 		super(problemType);
+	}
+
+	/**
+	 * @see eu.europeana.corelib.definitions.exception.EuropeanaException#EuropeanaException(ProblemType, String)
+	 */
+	public SolrTypeException(ProblemType problemType, String additionalInfo) {
+		super(problemType, additionalInfo);
 	}
 
 	public SolrTypeException(Throwable causedBy, ProblemType problemType){

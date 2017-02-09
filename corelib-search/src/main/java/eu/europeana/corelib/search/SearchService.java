@@ -22,7 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -51,9 +52,10 @@ public interface SearchService {
 
 	/**
 	 * Retrieve a record by splitted collectionId and recordId
-	 * 
-	 * @param europeanaObjectId The unique europeana id * @param similarItems
-	 *                          = whether to retrieve similar items
+	 *
+	 * @param collectionId id of the collection to which this record belongs
+	 * @param recordId
+	 * @param similarItems  whether to retrieve similar items
 	 * @return                  A full europeana record
 	 * @throws                  MongoRuntimeException, SolrTypeException
 	 */
@@ -83,7 +85,8 @@ public interface SearchService {
 	/**
 	 * Retrieve a record by splitted collectionId and recordId
 	 * 
-     * @param europeanaObjectId The unique europeana id
+     * @param collectionId id of the collection to which this record belongs
+	 * @param recordId
      * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
 	 * @throws                  SolrTypeException
@@ -92,22 +95,23 @@ public interface SearchService {
 			throws SolrTypeException;
 
 	/**
-	 * Retrieve the new record Id for the redirect from the old record id
-	 * 
-     * @param europeanaObjectId The old record id
-	 * @return                  The new record Id
+	 * Checks if an europeanaObjectId is old and has a newId. Note that this new id may also be old so we check iteratively
+	 * and return the newest id
+	 * @param europeanaObjectId the old record id
+	 * @return a new record id, null if none was found
+	 * @throws BadDataException if a circular id reference is found
 	 */
-	String resolveId(String europeanaObjectId);
+	String resolveId(String europeanaObjectId) throws BadDataException;
 
 	/**
-	 * Retrieve the new record Id for the redirect from the old collection id
-	 * and record id
-	 * 
-     * @param collectionId The collection Id
-     * @param recordId     The record Id
-	 * @return             The new record id
-	 */
-	String resolveId(String collectionId, String recordId);
+	 *  Uses the provided collectionId and recordId to create an EuropeanaId and checks if that id is old and has a newId.
+	 * Note that this new id may also be old so we check iteratively and return the newest id
+     * @param collectionId the collection Id
+     * @param recordId     the record Id
+     * @return a new record id, null if none was found
+     * @throws BadDataException if a circular id reference is found
+     */
+	String resolveId(String collectionId, String recordId) throws BadDataException;
 
 	/**
 	 * Perform a calculateTag in SOLR based on the given query and return the results
@@ -181,7 +185,7 @@ public interface SearchService {
 	 * by fields (who, what, where, when, and title). Each suggestion contains a
 	 * field value and the number of documents it matches.
 	 * 
-     * @param  fields Map of field names, and corresponding field values.
+     * @param  queries Map of field names, and corresponding field values.
 	 * @return list of see also suggestions
 	 */
 	Map<String, Integer> seeAlso(List<String> queries);

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -39,6 +40,7 @@ import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
  *
  * @author Yorgos.Mamakis@ kb.nl
  */
+@JsonPropertyOrder(alphabetic=true)
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 

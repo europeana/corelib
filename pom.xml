@@ -9,10 +9,13 @@
 	the specific language governing permissions and limitations under the Licence. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<properties>
+		<javadoc.opts>-Xdoclint:none</javadoc.opts>
+	</properties>
     <parent>
         <artifactId>europeana-parent-pom</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.5</version>
     </parent>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
@@ -41,9 +44,6 @@
 		<module>corelib-hierarchies</module>
 		<module>corelib-search</module>
 	</modules>
-    <properties>
-        <javadoc.opts>-Xdoclint:none</javadoc.opts>
-    </properties>
 	<dependencyManagement>
 		<dependencies>
 

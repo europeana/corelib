@@ -17,8 +17,8 @@
 
 package eu.europeana.corelib.db.exception;
 
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * Exception dedicated for reporting database problems

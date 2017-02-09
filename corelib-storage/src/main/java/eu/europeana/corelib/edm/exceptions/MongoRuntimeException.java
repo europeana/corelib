@@ -16,8 +16,8 @@ package eu.europeana.corelib.edm.exceptions;
  *  the Licence.
  */
 
-import eu.europeana.corelib.definitions.exception.EuropeanaException;
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * im, luthien, hain echant na 25/07/2016.

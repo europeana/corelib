@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -54,7 +54,7 @@ import eu.europeana.corelib.neo4j.entity.RelType;
 import eu.europeana.corelib.neo4j.entity.Relation;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 
-import eu.europeana.corelib.definitions.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 
 /**
  * @see eu.europeana.corelib.neo4j.server.Neo4jServer
@@ -104,6 +104,7 @@ public class Neo4jServerImpl implements Neo4jServer {
      * Node.Index = relative index of node in its hierarchical sequence
      * Node.Id = Neo4j numerical Id
      * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
+	 * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
 	 */
 	public Neo4jServerImpl() {
 	}
@@ -112,7 +113,8 @@ public class Neo4jServerImpl implements Neo4jServer {
     public Node getNode(String rdfAbout) throws Neo4JException {
 		Node node = null;
 		try {
-        IndexHits<Node> nodes = index.get("rdf_about", rdfAbout);
+        IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") &&
+			(rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
 		if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
 		}
@@ -129,8 +131,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 
     @Override
     public long getNodeIndex(String nodeId){
-        HttpGet method = new HttpGet(customPath
-                + "/europeana/hierarchycount/nodeId/" + nodeId);
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "europeana/hierarchycount/nodeId/" + nodeId);
         try {
             HttpResponse resp = client.execute(method);
 
@@ -159,10 +161,11 @@ public class Neo4jServerImpl implements Neo4jServer {
         return getNode(rdfAbout) != null;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/children/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/children/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?offset=" + offset + "&limit=" + limit);
         try {
@@ -194,10 +197,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 		return null;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/following/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/following/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?limit=" + limit);
         try {
@@ -225,10 +229,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 				EDMISNEXTINSEQUENCERELATION);
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(customPath
-                + "/fetch/preceding/nodeId/"
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
+                + "fetch/preceding/nodeId/"
                 + StringUtils.replace(rdfAbout + "", "/", "%2F")
                 + "?limit=" + limit);
         try {
@@ -303,11 +308,13 @@ public class Neo4jServerImpl implements Neo4jServer {
 		obj.put("statements", statements);
 		ObjectNode statement = JsonNodeFactory.instance.objectNode();
 		statement.put("statement",
-						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part) RETURN COUNT(part) as children");
+						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" +
+								" WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
+//								" RETURN COUNT(part) as children");
 		ObjectNode parameters = statement.with("parameters");
 		statements.add(statement);
         parameters.put("from", (String) node.getProperty("rdf:about"));
-		HttpPost httpMethod = new HttpPost(serverPath + "transaction/commit");
+		HttpPost httpMethod = new HttpPost(fixTrailingSlash(serverPath) + "transaction/commit");
 		try {
 			String str = new ObjectMapper().writeValueAsString(obj);
 			httpMethod.setEntity(new StringEntity(str));
@@ -337,31 +344,40 @@ public class Neo4jServerImpl implements Neo4jServer {
 		return 0;
 	}
 
+	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
 	@Override
     public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
         if (!isHierarchy(rdfAbout)) {
 			return null;
 		}
-		HttpGet method = new HttpGet(customPath + "/initial/startup/nodeId/"
+		HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/"
                 + StringUtils.replace(rdfAbout, "/", "%2F"));
 		LOG.info("path: " + method.getURI());
 		try {
 			HttpResponse resp = client.execute(method);
-
+			if (resp.getStatusLine().getStatusCode() == 502){
+				LOG.error("Neo4J plugin detected inconsistent data for node with ID: " + rdfAbout);
+				throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA,
+						" \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
+			}
 			ObjectMapper mapper = new ObjectMapper();
 			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),
 					Hierarchy.class);
 			return obj;
 		} catch (IOException e) {
 			LOG.error(e.getMessage());
+			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
 		} finally {
 			method.releaseConnection();
 		}
-		return null;
 	}
 
 	@Override
 	public String getCustomPath() {
 		return customPath;
+	}
+
+	private String fixTrailingSlash(String path){
+    	return path.endsWith("/") ? path : path + "/";
 	}
 }

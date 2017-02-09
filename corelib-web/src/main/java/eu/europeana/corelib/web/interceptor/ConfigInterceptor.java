@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import eu.europeana.corelib.definitions.exception.ProblemType;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.exception.WebConfigurationException;
 import eu.europeana.corelib.web.model.PageData;
 import eu.europeana.corelib.web.support.Configuration;
@@ -45,26 +45,27 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	@Resource
 	private Configuration config;
 
-	@Value("#{europeanaProperties['portal.indexable']}")
-	private boolean indexable;
+    //	TODO consider removing, is commented out in europeana.properties
+    @Value("#{europeanaProperties['portal.bing.translate.key']}")
+    private String portalBingTranslateId;
 
-	@Value("#{europeanaProperties['portal.google.analytics.id']}")
-	private String portalGoogleAnalyticsId;
+//	@Value("#{europeanaProperties['portal.indexable']}")
+//	private boolean indexable;
 
-	@Value("#{europeanaProperties['portal.google.maps.key']}")
-	private String portalGoogleMapsId;
+//	@Value("#{europeanaProperties['portal.google.analytics.id']}")
+//	private String portalGoogleAnalyticsId;
 
-	@Value("#{europeanaProperties['portal.addthis.pubid']}")
-	private String portalAddthisId;
+//	@Value("#{europeanaProperties['portal.google.maps.key']}")
+//	private String portalGoogleMapsId;
 
-	@Value("#{europeanaProperties['portal.sharethis.pubid']}")
-	private String portalSharethisId;
-	
-	@Value("#{europeanaProperties['portal.facebook.appid']}")
-	private String portalFacebookId;
+//	@Value("#{europeanaProperties['portal.addthis.pubid']}")
+//	private String portalAddthisId;
 
-	@Value("#{europeanaProperties['portal.bing.translate.key']}")
-	private String portalBingTranslateId;
+//	@Value("#{europeanaProperties['portal.sharethis.pubid']}")
+//	private String portalSharethisId;
+
+//	@Value("#{europeanaProperties['portal.facebook.appid']}")
+//	private String portalFacebookId;
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView)
@@ -82,29 +83,29 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			if (request.getQueryString() != null) {
 				currentUrl.append("?").append(request.getQueryString());
 			}
-			model.setCurrentUrl(currentUrl.toString().replace("portal/portal/", "portal/"));
+//			model.setCurrentUrl(currentUrl.toString().replace("portal/portal/", "portal/"));
 			
 			// BOOLEANS
-			model.setDebug(config.getDebugMode());
-			model.setIndexable(indexable);
+//			model.setDebug(config.getDebugMode());
+//			model.setIndexable(indexable);
 			// is minify=true is set, force minify anyway, ignoring debug settings!
-			if (request.getParameterMap().containsKey("minify")) {
-				model.setMinify(StringUtils.equals("true", request.getParameter("minify")));
-			}
+//			if (request.getParameterMap().containsKey("minify")) {
+//				model.setMinify(StringUtils.equals("true", request.getParameter("minify")));
+//			}
 
 			// MANDATORY VALUES
 			model.setPortalServer(checkMandatoryValue(config.getPortalServer(), "portal.server"));
-			model.setMetaCanonicalUrl(config.getCannonicalPortalServer());
+//			model.setMetaCanonicalUrl(config.getCannonicalPortalServer());
 			//model.setPortalName(checkMandatoryValue(config.getPortalName(), "portal.name"));
-			model.setCacheUrl(checkMandatoryValue(config.getImageCacheUrl(), "imageCacheUrl"));
+//			model.setCacheUrl(checkMandatoryValue(config.getImageCacheUrl(), "imageCacheUrl"));
 
 			// OPTIONALS, TRIMMED TO EMPTY STRING (preventing nullpointers)
-			model.setGoogleAnalyticsId(StringUtils.trimToEmpty(portalGoogleAnalyticsId));
-			model.setGoogleMapsId(StringUtils.trimToEmpty(portalGoogleMapsId));
-			model.setAddThisId(StringUtils.trimToEmpty(portalAddthisId));
-			model.setShareThisId(StringUtils.trimToEmpty(portalSharethisId));
-			model.setFacebookId(StringUtils.trimToEmpty(portalFacebookId));
-			model.setBingTranslateId(StringUtils.trimToEmpty(portalBingTranslateId));
+            model.setBingTranslateId(StringUtils.trimToEmpty(portalBingTranslateId));
+//			model.setGoogleAnalyticsId(StringUtils.trimToEmpty(portalGoogleAnalyticsId));
+//			model.setGoogleMapsId(StringUtils.trimToEmpty(portalGoogleMapsId));
+//			model.setAddThisId(StringUtils.trimToEmpty(portalAddthisId));
+//			model.setShareThisId(StringUtils.trimToEmpty(portalSharethisId));
+//			model.setFacebookId(StringUtils.trimToEmpty(portalFacebookId));
 		}
 	}
 
@@ -120,12 +121,12 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	private String checkMandatoryValue(String value, String name) throws WebConfigurationException {
 		if (StringUtils.isBlank(value)) {
 			ProblemType problem = ProblemType.INVALIDARGUMENTS;
+			String message = null;
 			if (StringUtils.isNotBlank(name)) {
-				String message = "Inexisting property: " + name;
+				message = "Inexisting property: " + name;
 				log.error(message);
-				problem.appendMessage(message);
 			}
-			throw new WebConfigurationException(problem);
+			throw new WebConfigurationException(problem, message);
 		}
 		return StringUtils.trim(value);
 	}
