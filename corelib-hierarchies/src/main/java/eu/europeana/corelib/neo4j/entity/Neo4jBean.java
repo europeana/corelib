@@ -63,7 +63,7 @@ public class Neo4jBean {
 	 * @return id: the rdf:about identifier of the node
 	 */
 	public String getId() {
-		return fixSlashes(id, true);
+		return id;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Neo4jBean {
 	 * @param id: the rdf:about identifier of the node
 	 */
 	public void setId(String id) {
-		this.id = fixSlashes(id, false);
+		this.id = id;
 	}
 
 	/**
@@ -316,25 +316,6 @@ public class Neo4jBean {
 		}
 
 		return type == other.type;
-	}
-
-	/**
-	 * Utility to convert possible HTML-entitied slashes back to regular slashes and strip possible prefixed slashes
-	 * e.g. %2FCollectionID%2FRecordId or /CollectionID/RecordId => CollectionID/RecordId
-	 *
-	 * @param rdfAbout String
-	 * @return rdfAbout String
-	 */
-	private static String fixSlashes(String rdfAbout, boolean prefixedSlash){
-		rdfAbout = rdfAbout.replace("%2F", "/");
-		if ((prefixedSlash) && (!rdfAbout.startsWith("/"))){
-			return "/" + rdfAbout;
-		} else if ((!prefixedSlash) && (rdfAbout.startsWith("/"))){
-			return rdfAbout.substring(1);
-
-		} else {
-			return rdfAbout;
-		}
 	}
 
 }
