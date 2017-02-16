@@ -63,7 +63,7 @@ public class Neo4jBean {
      * @return id: the rdf:about identifier of the node
      */
 	public String getId() {
-		return fixSlashes(id);
+		return fixSlashes(id, true);
 	}
 
     /**
@@ -73,7 +73,7 @@ public class Neo4jBean {
      * @param id: the rdf:about identifier of the node
      */
 	public void setId(String id) {
-		this.id = fixSlashes(id);
+		this.id = fixSlashes(id, false);
 	}
 
     /**
@@ -325,12 +325,16 @@ public class Neo4jBean {
 	 * @param rdfAbout String
 	 * @return rdfAbout String
 	 */
-	private static String fixSlashes(String rdfAbout){
+	private static String fixSlashes(String rdfAbout, boolean prefixedSlash){
 		rdfAbout = rdfAbout.replace("%2F", "/");
-		if (rdfAbout.startsWith("/")){
-			rdfAbout = rdfAbout.substring(1);
+		if ((prefixedSlash) && (!rdfAbout.startsWith("/"))){
+			return "/" + rdfAbout;
+		} else if ((!prefixedSlash) && (rdfAbout.startsWith("/"))){
+			return rdfAbout.substring(1);
+
+		} else {
+			return rdfAbout;
 		}
-		return rdfAbout;
 	}
 
 }
