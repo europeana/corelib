@@ -19,8 +19,9 @@ package eu.europeana.corelib.lookup.impl;
 
 import java.util.List;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
+import com.mongodb.MongoClient;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.storage.MongoServer;
@@ -35,7 +36,7 @@ import eu.europeana.corelib.tools.lookuptable.CollectionMongoServer;
  */
 public class CollectionMongoServerImpl implements MongoServer, CollectionMongoServer {
 
-	private Mongo mongoServer;
+	private MongoClient mongoServer;
 	private String databaseName;
 	private Datastore datastore;
 	private String username;
@@ -50,7 +51,7 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	 * @param databaseName
 	 *            The database to connect to
 	 */
-	public CollectionMongoServerImpl(Mongo mongoServer, String databaseName) {
+	public CollectionMongoServerImpl(MongoClient mongoServer, String databaseName) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		createDatastore();
@@ -62,13 +63,13 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		this.databaseName = datastore.getCollection(Collection.class).getName();
 
 	}
-	public CollectionMongoServerImpl(Mongo mongoServer, String databaseName, String username, String password) {
-		this.mongoServer = mongoServer;
-		this.databaseName = databaseName;
-		this.username = username;
-		this.password = password;
-		createDatastoreWithCredentials();
-	}
+//	public CollectionMongoServerImpl(MongoClient mongoServer, String databaseName, String username, String password) {
+//		this.mongoServer = mongoServer;
+//		this.databaseName = databaseName;
+//		this.username = username;
+//		this.password = password;
+//		createDatastoreWithCredentials();
+//	}
 
 	public CollectionMongoServerImpl() {
 
@@ -80,12 +81,12 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		datastore.ensureIndexes();
 	}
-	private void createDatastoreWithCredentials() {
-		Morphia morphia = new Morphia();
-		morphia.map(Collection.class);
-		datastore = morphia.createDatastore(mongoServer, databaseName,username,password.toCharArray());
-		datastore.ensureIndexes();
-	}
+//	private void createDatastoreWithCredentials() {
+//		Morphia morphia = new Morphia();
+//		morphia.map(Collection.class);
+//		datastore = morphia.createDatastore(mongoServer, databaseName,username,password.toCharArray());
+//		datastore.ensureIndexes();
+//	}
 	/**
 	 * Return the datastore. Useful for exposing surplus functionality
 	 */
@@ -141,7 +142,7 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.tools.lookuptable.impl.CollectionMongoServer#setDatastore(com.google.code.morphia.Datastore)
+	 * @see eu.europeana.corelib.tools.lookuptable.impl.CollectionMongoServer#setDatastore(org.mongodb.morphia.Datastore)
 	 */
 	@Override
 	public void setDatastore(Datastore datastore) {

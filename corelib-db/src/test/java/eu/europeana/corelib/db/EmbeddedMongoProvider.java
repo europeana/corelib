@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class EmbeddedMongoProvider implements MongoProvider {
 
-    private Mongo mongo;
+    private MongoClient mongo;
 
     public EmbeddedMongoProvider() {
         int port = 10000;

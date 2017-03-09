@@ -16,10 +16,11 @@
  */
 package eu.europeana.corelib.lookup.impl;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import com.mongodb.MongoClient;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
@@ -38,7 +39,7 @@ import java.util.Map;
  */
 public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongoServer {
 
-	protected Mongo mongoServer;
+	protected MongoClient mongoServer;
 	protected String databaseName;
 	protected Datastore datastore;
 	protected String username;
@@ -52,7 +53,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 * @param databaseName
 	 *            The database to connect to
 	 */
-	public EuropeanaIdMongoServerImpl(Mongo mongoServer, String databaseName,
+	public EuropeanaIdMongoServerImpl(MongoClient mongoServer, String databaseName,
 			String username,String password) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
@@ -71,11 +72,11 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 		morphia.map(EuropeanaId.class);
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 		
-		if (StringUtils.isNotBlank(this.username)
-				&& StringUtils.isNotBlank(this.password)) {
-			datastore.getDB().authenticate(this.username,
-					this.password.toCharArray());
-		}
+//		if (StringUtils.isNotBlank(this.username)
+//				&& StringUtils.isNotBlank(this.password)) {
+//			datastore.getDB().authenticate(this.username,
+//					this.password.toCharArray());
+//		}
 		
 		datastore.ensureIndexes();
 	}
@@ -236,7 +237,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServer#setDatastore(com.google.code.morphia.Datastore)
+	 * @see eu.europeana.corelib.tools.lookuptable.impl.EuropeanaIdMongoServer#setDatastore(org.mongodb.morphia.Datastore)
 	 */
 	@Override
 	public void setDatastore(Datastore datastore) {

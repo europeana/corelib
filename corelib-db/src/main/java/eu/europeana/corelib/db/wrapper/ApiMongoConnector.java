@@ -16,15 +16,13 @@
  */
 package eu.europeana.corelib.db.wrapper;
 
-import java.net.UnknownHostException;
-
 import com.mongodb.MongoClient;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.code.morphia.Morphia;
+import org.mongodb.morphia.Morphia;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-import com.google.code.morphia.Datastore;
+import org.mongodb.morphia.Datastore;
 import org.apache.log4j.Logger;
 
 /**
@@ -58,23 +56,23 @@ public class ApiMongoConnector {
 		try {
 			log.info(String.format("Connecting to '%s' mongo server: %s:%d/%s",
 					label, host, port, dbName));
-			Mongo mongo = new MongoClient(host, port);
-			if (StringUtils.isNotEmpty(username)
-					&& StringUtils.isNotEmpty(password)) {
-				datastore = connection.createDatastore(mongo, dbName, username,
-						password.toCharArray());
-			} else {
-				datastore = connection.createDatastore(mongo, dbName);
-			}
+			MongoClient mongoClient = new MongoClient(host, port);
+//			if (StringUtils.isNotEmpty(username)
+//					&& StringUtils.isNotEmpty(password)) {
+//				datastore = connection.createDatastore(mongoClient, dbName, username,
+//						password.toCharArray());
+//			} else {
+				datastore = connection.createDatastore(mongoClient, dbName);
+			//}
 			log.info(String.format(
 					"Connection to '%s' mongo server was successful", label));
-		} catch (UnknownHostException | MongoException e) {
+		} catch (MongoException e) {
 			log.error(e.getMessage());
 		}
 		return datastore;
 	}
 	
-	public Datastore createDatastore(String label, Mongo mongo,
+	public Datastore createDatastore(String label, MongoClient mongoClient,
 			String dbName, String username, String password) {
 		Datastore datastore = null;
 		Morphia connection = new Morphia();
@@ -82,13 +80,13 @@ public class ApiMongoConnector {
 			log.info(String.format("Connecting to '%s' mongo server: %s",
 					label, dbName));
 			
-			if (StringUtils.isNotEmpty(username)
-					&& StringUtils.isNotEmpty(password)) {
-				datastore = connection.createDatastore(mongo, dbName, username,
-						password.toCharArray());
-			} else {
-				datastore = connection.createDatastore(mongo, dbName);
-			}
+//			if (StringUtils.isNotEmpty(username)
+//					&& StringUtils.isNotEmpty(password)) {
+//				datastore = connection.createDatastore(mongoClient, dbName, username,
+//						password.toCharArray());
+//			} else {
+				datastore = connection.createDatastore(mongoClient, dbName);
+			//}
 			log.info(String.format(
 					"Connection to '%s' mongo server was successful", label));
 		} catch (MongoException e) {

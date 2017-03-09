@@ -19,10 +19,11 @@ package eu.europeana.corelib.dereference.impl;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.mongodb.MongoClient;
 import org.apache.commons.lang.StringUtils;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.dereference.VocabularyMongoServer;
@@ -37,7 +38,7 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 
 	private final Logger log = Logger.getLogger(getClass().getName());
 
-	private Mongo mongoServer;
+	private MongoClient mongoServer;
 	private String databaseName;
 	private Datastore datastore;
 	private String username;
@@ -62,7 +63,7 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		mongoServer.close();
 	}
 
-	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName) {
+	public VocabularyMongoServerImpl(MongoClient mongoServer, String databaseName) {
 		log.info("VocabularyMongoServer is instantiated");
 		this.mongoServer = mongoServer;
 		
@@ -70,15 +71,15 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		createDatastore();
 	}
 
-	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName,String username,String password) {
-		log.info("VocabularyMongoServer is instantiated");
-		this.mongoServer = mongoServer;
-
-		this.databaseName = databaseName;
-		this.username = username;
-		this.password = password;
-		createDatastoreWithCredentials();
-	}
+//	public VocabularyMongoServerImpl(MongoClient mongoServer, String databaseName,String username,String password) {
+//		log.info("VocabularyMongoServer is instantiated");
+//		this.mongoServer = mongoServer;
+//
+//		this.databaseName = databaseName;
+//		this.username = username;
+//		this.password = password;
+//		createDatastoreWithCredentials();
+//	}
 
 	public VocabularyMongoServerImpl() {
 		
@@ -91,18 +92,18 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		Morphia morphia = new Morphia();
 		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
-		datastore = morphia.createDatastore(mongoServer, databaseName);
+		datastore = morphia.createDatastore((MongoClient) mongoServer, databaseName);
 		datastore.ensureIndexes();
 		log.info("VocabularyMongoServer datastore is created");
 	}
-	private void createDatastoreWithCredentials() {
-		Morphia morphia = new Morphia();
-		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
-
-		datastore = morphia.createDatastore(mongoServer, databaseName,username, password.toCharArray());
-		datastore.ensureIndexes();
-		log.info("VocabularyMongoServer datastore is created");
-	}
+//	private void createDatastoreWithCredentials() {
+//		Morphia morphia = new Morphia();
+//		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
+//
+//		datastore = morphia.createDatastore(mongoServer, databaseName,username, password.toCharArray());
+//		datastore.ensureIndexes();
+//		log.info("VocabularyMongoServer datastore is created");
+//	}
 	/* (non-Javadoc)
 	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getControlledVocabulary(java.lang.String, java.lang.String)
 	 */

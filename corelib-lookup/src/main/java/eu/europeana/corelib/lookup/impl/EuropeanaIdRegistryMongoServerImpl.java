@@ -22,12 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mongodb.MongoClient;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
 
 import eu.europeana.corelib.storage.MongoServer;
@@ -48,7 +49,7 @@ import eu.europeana.corelib.utils.EuropeanaUriUtils;
  */
 public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, EuropeanaIdRegistryMongoServer {
 
-	private Mongo mongoServer;
+	private MongoClient mongoServer;
 	private String databaseName;
 	private Datastore datastore;
 
@@ -69,19 +70,19 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 * @param databaseName
 	 *            The database to connect to
 	 */
-	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName) {
+	public EuropeanaIdRegistryMongoServerImpl(MongoClient mongoServer, String databaseName) {
 		this.mongoServer = mongoServer;
 		this.databaseName = databaseName;
 		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer, databaseName, "", "");
 		createDatastore();
 	}
 
-	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName, String username,
-			String password) {
-		this.mongoServer = mongoServer;
-		this.databaseName = databaseName;
-		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer, databaseName, "", "");
-	}
+//	public EuropeanaIdRegistryMongoServerImpl(MongoClient mongoServer, String databaseName, String username,
+//			String password) {
+//		this.mongoServer = mongoServer;
+//		this.databaseName = databaseName;
+//		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer, databaseName, "", "");
+//	}
 	/*
 	 * (non-Javadoc)
 	 * 

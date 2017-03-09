@@ -17,9 +17,10 @@
 
 package eu.europeana.corelib.mongo.server.impl;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.mapping.MappingException;
+import com.mongodb.MongoClient;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.mapping.MappingException;
 import com.mongodb.Mongo;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.web.exception.ProblemType;
@@ -43,7 +44,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	private final Logger log = Logger.getLogger(getClass().getName());
 
-	private Mongo mongoServer;
+	private MongoClient mongoServer;
 	private String databaseName;
 	private String username;
 	private String password;
@@ -52,12 +53,11 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
-	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
+	public EdmMongoServerImpl(MongoClient mongoServer, String databaseName,
 			String username, String password) throws MongoDBException {
 		log.info("EDMMongoServer is instantiated");
 		this.mongoServer = mongoServer;
 		this.mongoServer.getMongoOptions().socketKeepAlive = true;
-		this.mongoServer.getMongoOptions().autoConnectRetry = true;
 		this.mongoServer.getMongoOptions().connectionsPerHost = 10;
 		this.mongoServer.getMongoOptions().connectTimeout = 5000;
 		this.mongoServer.getMongoOptions().socketTimeout = 6000;
@@ -97,11 +97,11 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 		datastore = morphia.createDatastore(mongoServer, databaseName);
 
-		if (StringUtils.isNotBlank(this.username)
-				&& StringUtils.isNotBlank(this.password)) {
-			datastore.getDB().authenticate(this.username,
-					this.password.toCharArray());
-		}
+//		if (StringUtils.isNotBlank(this.username)
+//				&& StringUtils.isNotBlank(this.password)) {
+//			datastore.getDB().authenticate(this.username,
+//					this.password.toCharArray());
+//		}
 		datastore.ensureIndexes();
 		log.info("EDMMongoServer datastore is created");
 	}

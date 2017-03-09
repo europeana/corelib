@@ -1,6 +1,6 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import com.google.code.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

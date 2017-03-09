@@ -16,9 +16,9 @@
  */
 package eu.europeana.corelib.solr.test.importer;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Key;
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.query.Query;
 import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.model.EdmLabel;

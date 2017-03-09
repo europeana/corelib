@@ -80,7 +80,7 @@
 
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-    <bean id="corelib_db_morphia" class="com.google.code.morphia.Morphia"/>
+    <bean id="corelib_db_morphia" class="org.mongodb.morphia.Morphia"/>
 
     <bean id="corelib_db_morphia_datastore" factory-bean="corelib_db_morphia" factory-method="createDatastore">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>

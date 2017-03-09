@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.GroupCommand;

@@ -7,7 +7,6 @@ import eu.europeana.corelib.storage.MongoProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class MongoProviderImpl implements MongoProvider {
                     ServerAddress address = new ServerAddress(host,
                             Integer.parseInt(portList[i]));
                     serverAddresses.add(address);
-                } catch (NumberFormatException | UnknownHostException e) {
+                } catch (NumberFormatException e) {
                     logger.error(e);
                 }
             }

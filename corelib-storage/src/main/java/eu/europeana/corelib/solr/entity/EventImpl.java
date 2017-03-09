@@ -1,6 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
-import com.google.code.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.edm.entity.Event;
 import eu.europeana.corelib.utils.StringArrayUtils;

@@ -19,8 +19,8 @@ package eu.europeana.corelib.solr.entity;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
 
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
 

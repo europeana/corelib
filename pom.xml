@@ -15,7 +15,7 @@
     <parent>
         <artifactId>europeana-parent-pom</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
