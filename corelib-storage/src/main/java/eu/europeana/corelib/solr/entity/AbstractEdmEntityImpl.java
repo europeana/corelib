@@ -31,7 +31,7 @@ import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
  */
 public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
-	@Indexed(unique = true, dropDups=true)
+	@Indexed(unique = true)
 	protected String about;
 
 	@Id
