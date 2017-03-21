@@ -137,6 +137,13 @@ public final class WebResourcesFieldInput {
 			}
 		}
 
+		if (webResource.getTypeList() != null) {
+			for (Type type : webResource.getTypeList()) {
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, type, EdmLabel.WR_DC_TYPE);
+			}
+		}
+
 		if (webResource.getSameAList() != null) {
 			for (SameAs sameAs : webResource.getSameAList()) {
 				solrInputDocument = SolrUtils.addFieldFromResource(
@@ -191,6 +198,9 @@ public final class WebResourcesFieldInput {
 		mongoWebResource.setDcCreator(MongoUtils
 				.createResourceOrLiteralMapFromList(webResource
 						.getCreatorList()));
+		mongoWebResource.setDcType(MongoUtils
+				.createResourceOrLiteralMapFromList(webResource
+						.getTypeList()));
 		mongoWebResource
 				.setDcSource(MongoUtils
 						.createResourceOrLiteralMapFromList(webResource

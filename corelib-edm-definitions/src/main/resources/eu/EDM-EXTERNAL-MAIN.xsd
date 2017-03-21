@@ -77,13 +77,9 @@
 				<appinfo>
 					<sch:pattern>
 						<sch:rule context="edm:ProvidedCHO">
-							<sch:assert
-									test="dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial">
-								id:
-								<sch:value-of select="@rdf:about" />
-								- A Proxy must have a
-								dc:subject or dc:type or dc:coverage or dct:temporal or
-								dct:spatial.
+							<sch:assert	test="dc:subject or dc:type or dct:temporal or dct:spatial">
+								id: <sch:value-of select="@rdf:about" />
+								- A ProvidedCHO must have a dc:subject or dc:type or dct:temporal or dct:spatial.
 							</sch:assert>
 							<sch:assert
 									test="((dc:subject and (exists(dc:subject/@rdf:resource) or normalize-space(dc:subject)!='')) or (dc:type and (exists(dc:type/@rdf:resource) or 								normalize-space(dc:type)!='')) or (dc:coverage and (exists(dc:coverage/@rdf:resource) or normalize-space(dc:coverage)!='')) or (dct:temporal and 									(exists(dct:temporal/@rdf:resource) or normalize-space(dct:temporal)!=''))  or (dct:spatial and (exists(dct:spatial/@rdf:resource) or normalize-space							(dct:spatial)!='')))">

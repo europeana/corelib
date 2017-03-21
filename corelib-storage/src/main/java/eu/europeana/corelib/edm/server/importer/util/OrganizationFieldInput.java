@@ -84,8 +84,8 @@ public class OrganizationFieldInput {
 		mongoOrganization.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(jibxOrganization
 				.getGender()));
 		mongoOrganization.setRdaGr2ProfessionOrOccupation(MongoUtils
-				.createResourceOrLiteralMapFromString(jibxOrganization
-						.getProfessionOrOccupation()));
+				.createResourceOrLiteralMapFromList(jibxOrganization
+						.getProfessionOrOccupationList()));
 		return mongoOrganization;
 	}
 

@@ -82,7 +82,7 @@
           <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:placeOfBirth" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:placeOfDeath" maxOccurs="1" minOccurs="0"/>
-          <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:professionOrOccupation" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
@@ -160,6 +160,7 @@
           <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:source" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dc:type" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:conformsTo" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:created" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>

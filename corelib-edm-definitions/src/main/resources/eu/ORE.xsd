@@ -137,11 +137,11 @@
 					<sch:pattern>
 						<sch:rule context="ore:Proxy">
 							<sch:assert
-								test="dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial">
+								test="dc:subject or dc:type or dct:temporal or dct:spatial">
 								id:
 								<sch:value-of select="@rdf:about" />
 								- A Proxy must have a
-								dc:subject or dc:type or dc:coverage or dct:temporal or
+								dc:subject or dc:type or dct:temporal or
 								dct:spatial.
 							</sch:assert>
 							<sch:assert
