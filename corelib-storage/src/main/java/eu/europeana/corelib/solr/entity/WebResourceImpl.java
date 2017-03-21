@@ -47,13 +47,13 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @Entity("WebResource")
 public class WebResourceImpl implements WebResource {
 
-    @Id
-    private ObjectId id = new ObjectId();
-    private Map<String, List<String>> webResourceDcRights;
-    private Map<String, List<String>> webResourceEdmRights;
+  @Id
+  private ObjectId id = new ObjectId();
+  private Map<String, List<String>> webResourceDcRights;
+  private Map<String, List<String>> webResourceEdmRights;
 
-    @Indexed(unique = false)
-    private String about;
+  @Indexed(unique = false)
+  private String about;
 
   private Map<String, List<String>> dcDescription;
   private Map<String, List<String>> dcFormat;
@@ -75,13 +75,13 @@ public class WebResourceImpl implements WebResource {
   private String[] dctermsIsReferencedBy;
   private String edmPreview;
 
-    @Transient
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
-    private AggregationImpl           parentAggregation;
+  @Transient
+  @JsonIgnore
+  private AggregationImpl parentAggregation;
 
-    @Transient
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
-    private WebResourceMetaInfoImpl webResourceMetaInfo;
+  @Transient
+  @JsonIgnore
+  private WebResourceMetaInfoImpl webResourceMetaInfo;
 
   @Override
   public String getAbout() {
@@ -93,10 +93,10 @@ public class WebResourceImpl implements WebResource {
     this.about = about;
   }
 
-    @Override
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
+  @Override
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
   @Override
   public Map<String, List<String>> getDcDescription() {
@@ -577,14 +577,13 @@ public class WebResourceImpl implements WebResource {
     return attributionSnippet.getHtmlSnippet();
   }
 
-    /**
-     * Sets encapsulating aggregation of this webresource (not made available through the interface bean);
-     * used in the Attributionsnippet alone
-     * @param parentAggregation
-     */
-    public void setParentAggregation(AggregationImpl parentAggregation) {
-        this.parentAggregation = parentAggregation;
-    }
+  /**
+   * Sets encapsulating aggregation of this webresource (not made available through the interface
+   * bean); used in the Attributionsnippet alone
+   */
+  public void setParentAggregation(AggregationImpl parentAggregation) {
+    this.parentAggregation = parentAggregation;
+  }
 
   /**
    * Encapsulating aggregation of this webresource (not made available through the interface bean);
