@@ -16,82 +16,78 @@
  */
 package eu.europeana.corelib.db.wrapper;
 
-import com.mongodb.MongoClient;
-import org.apache.commons.lang3.StringUtils;
+import com.mongodb.*;
+import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 
 import org.mongodb.morphia.Morphia;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 import org.mongodb.morphia.Datastore;
 import org.apache.log4j.Logger;
 
 /**
- * Api Mongo connector
- *
+ * Let the search-api connect to a mongo database (to access the SugarCRMCache and apilog database)
+ * This class uses a basic Morphia connection without any mappings or other specific settings
  */
 public class ApiMongoConnector {
 
-	private static Logger log = Logger.getLogger(ApiMongoConnector.class);
+    private static final Logger LOG = Logger.getLogger(ApiMongoConnector.class);
 
-	/**
-	 * Default constructor
-	 */
-	public ApiMongoConnector() {
-	}
+    private MongoClient mongoClient;
+    private String label;
 
-	/**
-	 * Create a datastore for connection
-	 * @param label The label of the server to connect to
-	 * @param host The host to connect to
-	 * @param port The port to connect to
-	 * @param dbName The database to connect to
-	 * @param username Username for connection
-	 * @param password Password for connection
-	 * @return
-	 */
-	public Datastore createDatastore(String label, String host, int port,
-			String dbName, String username, String password) {
-		Datastore datastore = null;
-		Morphia connection = new Morphia();
-		try {
-			log.info(String.format("Connecting to '%s' mongo server: %s:%d/%s",
-					label, host, port, dbName));
-			MongoClient mongoClient = new MongoClient(host, port);
-//			if (StringUtils.isNotEmpty(username)
-//					&& StringUtils.isNotEmpty(password)) {
-//				datastore = connection.createDatastore(mongoClient, dbName, username,
-//						password.toCharArray());
-//			} else {
-				datastore = connection.createDatastore(mongoClient, dbName);
-			//}
-			log.info(String.format(
-					"Connection to '%s' mongo server was successful", label));
-		} catch (MongoException e) {
-			log.error(e.getMessage());
-		}
-		return datastore;
-	}
-	
-	public Datastore createDatastore(String label, MongoClient mongoClient,
-			String dbName, String username, String password) {
-		Datastore datastore = null;
-		Morphia connection = new Morphia();
-		try {
-			log.info(String.format("Connecting to '%s' mongo server: %s",
-					label, dbName));
-			
-//			if (StringUtils.isNotEmpty(username)
-//					&& StringUtils.isNotEmpty(password)) {
-//				datastore = connection.createDatastore(mongoClient, dbName, username,
-//						password.toCharArray());
-//			} else {
-				datastore = connection.createDatastore(mongoClient, dbName);
-			//}
-			log.info(String.format(
-					"Connection to '%s' mongo server was successful", label));
-		} catch (MongoException e) {
-			log.error(e.getMessage());
-		}
-		return datastore;
-	}
+    /**
+     * Create a basic connection to do get/delete/save operations on the database
+     * @param label    The label of the server to connect to
+     * @param host     The host to connect to
+     * @param port     The port to connect to
+     * @param dbName   The database to connect to
+     * @param username Username for connection
+     * @param password Password for connection
+     * @return datastore
+     */
+    public Datastore createDatastore(String label, String host, int port, String dbName, String username,
+                                     String password) {
+        LOG.info(String.format("Creating new MongoClient for '%s' mongo server: %s:%d/%s", label, host, port, dbName));
+        Datastore datastore = null;
+        Morphia connection = new Morphia();
+        try {
+            this.label = label;
+            this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), dbName, username, password).getMongo();
+            datastore = connection.createDatastore(mongoClient, dbName);
+            LOG.info(String.format("'%s' datastore is created", label));
+        } catch (MongoException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return datastore;
+    }
+
+    /**
+     * Create a basic connection to do get/delete/save operations on the database
+     * Any required login credentials should already be stored in the provided MongoClient object
+     * @param label
+     * @param mongoClient
+     * @param dbName
+     * @return datastore
+     */
+    public Datastore createDatastore(String label, MongoClient mongoClient, String dbName) {
+        LOG.info(String.format("Creating new MongoClient for '%s' mongo server: %s", label, dbName));
+        Datastore datastore = null;
+        Morphia connection = new Morphia();
+        try {
+            this.label = label;
+            this.mongoClient = mongoClient;
+            datastore = connection.createDatastore(mongoClient, dbName);
+            LOG.info(String.format("'%s' mongo datastore is created", label));
+        } catch (MongoException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return datastore;
+    }
+
+    /**
+     * Close the connection to the database
+     */
+    public void close() {
+        LOG.info(String.format("Closing MongoClient for '%s'", label));
+        mongoClient.close();
+    }
 }

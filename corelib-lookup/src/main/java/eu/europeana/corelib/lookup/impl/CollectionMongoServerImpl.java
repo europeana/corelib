@@ -18,8 +18,10 @@
 package eu.europeana.corelib.lookup.impl;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.mongodb.MongoClient;
+import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import com.mongodb.Mongo;
@@ -32,61 +34,62 @@ import eu.europeana.corelib.tools.lookuptable.CollectionMongoServer;
  * Class for creating and accessing the Collection Lookup table
  * 
  * @author yorgos.mamakis@ kb.nl
+ * @author Patrick Ehlert
  * 
  */
 public class CollectionMongoServerImpl implements MongoServer, CollectionMongoServer {
 
-	private MongoClient mongoServer;
+	private static final Logger log = Logger.getLogger(CollectionMongoServerImpl.class.getName());
+
+	private MongoClient mongoClient;
 	private String databaseName;
 	private Datastore datastore;
-	private String username;
-	private String password;
 
 	/**
-	 * Constructor for the CollectionMongoServer to ensure that everything has
-	 * been set upon initialization
+	 * Constructor for the CollectionMongoServer to ensure that everything has been set upon initialization
+	 * Any required login credentials should be present in the provided mongoClient
 	 * 
-	 * @param mongoServer
-	 *            The Mongo Server to connect to
-	 * @param databaseName
-	 *            The database to connect to
+	 * @param mongoClient the Mongo Server to connect to
+	 * @param databaseName the database to connect to
 	 */
-	public CollectionMongoServerImpl(MongoClient mongoServer, String databaseName) {
-		this.mongoServer = mongoServer;
+	public CollectionMongoServerImpl(MongoClient mongoClient, String databaseName) {
+		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
 		createDatastore();
 	}
 
+	/**
+	 * Setup a new datastore to do get/delete/save operations on the database
+	 * @param datastore
+	 */
 	public CollectionMongoServerImpl(Datastore datastore){
-		this.datastore = datastore;
-		this.mongoServer = datastore.getMongo();
+		this.mongoClient = datastore.getMongo();
 		this.databaseName = datastore.getCollection(Collection.class).getName();
-
+		this.datastore = datastore;
 	}
-//	public CollectionMongoServerImpl(MongoClient mongoServer, String databaseName, String username, String password) {
-//		this.mongoServer = mongoServer;
-//		this.databaseName = databaseName;
-//		this.username = username;
-//		this.password = password;
-//		createDatastoreWithCredentials();
-//	}
 
-	public CollectionMongoServerImpl() {
-
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database
+	 * @param host
+	 * @param port
+	 * @param databaseName
+	 * @param username
+	 * @param password
+	 */
+	public CollectionMongoServerImpl(String host, int port, String databaseName, String username, String password) {
+		this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), databaseName, username, password).getMongo();
+		this.databaseName = databaseName;
+		createDatastore();
 	}
 
 	private void createDatastore() {
 		Morphia morphia = new Morphia();
 		morphia.map(Collection.class);
-		datastore = morphia.createDatastore(mongoServer, databaseName);
+		datastore = morphia.createDatastore(mongoClient, databaseName);
 		datastore.ensureIndexes();
+		log.info("CollectionMongoServer datastore is created");
 	}
-//	private void createDatastoreWithCredentials() {
-//		Morphia morphia = new Morphia();
-//		morphia.map(Collection.class);
-//		datastore = morphia.createDatastore(mongoServer, databaseName,username,password.toCharArray());
-//		datastore.ensureIndexes();
-//	}
+
 	/**
 	 * Return the datastore. Useful for exposing surplus functionality
 	 */
@@ -100,7 +103,10 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	 */
 	@Override
 	public void close() {
-		mongoServer.close();
+		if (mongoClient != null) {
+			log.info("Closing MongoClient for CollectionMongoServer");
+			mongoClient.close();
+		}
 	}
 
 	/* (non-Javadoc)
