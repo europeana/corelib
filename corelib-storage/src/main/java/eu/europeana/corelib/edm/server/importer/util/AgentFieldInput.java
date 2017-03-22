@@ -16,6 +16,7 @@
  */
 package eu.europeana.corelib.edm.server.importer.util;
 
+import eu.europeana.corelib.definitions.jibx.ProfessionOrOccupation;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -178,10 +179,12 @@ public final class AgentFieldInput {
 					EdmLabel.AG_RDAGR2_GENDER);
 		}
 
-		if (agentType.getProfessionOrOccupation() != null) {
-			solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
-					solrInputDocument, agentType.getProfessionOrOccupation(),
-					EdmLabel.AG_RDAGR2_PROFESSIONOROCCUPATION);
+		if (agentType.getProfessionOrOccupationList() != null) {
+			for (ProfessionOrOccupation professionOrOccupation : agentType.getProfessionOrOccupationList()) {
+				solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+						solrInputDocument, professionOrOccupation,
+						EdmLabel.AG_RDAGR2_PROFESSIONOROCCUPATION);
+			}
 		}
 
 		return solrInputDocument;
@@ -232,8 +235,8 @@ public final class AgentFieldInput {
 		agent.setRdaGr2Gender(MongoUtils.createLiteralMapFromString(agentType
 				.getGender()));
 		agent.setRdaGr2ProfessionOrOccupation(MongoUtils
-				.createResourceOrLiteralMapFromString(agentType
-						.getProfessionOrOccupation()));
+				.createResourceOrLiteralMapFromList(
+						agentType.getProfessionOrOccupationList()));
 		agent.setNote(MongoUtils.createLiteralMapFromList(agentType
 				.getNoteList()));
 		agent.setPrefLabel(MongoUtils.createLiteralMapFromList(agentType

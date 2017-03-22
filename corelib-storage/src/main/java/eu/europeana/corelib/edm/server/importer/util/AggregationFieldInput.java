@@ -329,6 +329,11 @@ public final class AggregationFieldInput {
 								.getRightList());
 
 				webResource.setWebResourceDcRights(rightMap);
+
+				Map<String, List<String>> typeMap = MongoUtils
+						.createResourceOrLiteralMapFromList(wResourceType.getTypeList());
+				webResource.setDcType(typeMap);
+
 				Map<String, List<String>> edmRightsMap = MongoUtils
 						.createResourceMapFromString(wResourceType.getRights());
 
