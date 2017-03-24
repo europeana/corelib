@@ -16,9 +16,10 @@
  */
 package eu.europeana.corelib.lookup.utils;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -27,6 +28,9 @@ import java.io.IOException;
  *
  */
 public abstract class MappingParser {
+
+	private static final Logger LOG = Logger.getLogger(MappingParser.class);
+
 	protected String repository;
 	/**
 	 * Retrieve the field responsible for hash generation in SIPCreator
@@ -42,26 +46,23 @@ public abstract class MappingParser {
 	 * @return
 	 */
 	public String readFile(String mappingFile) {
-		if(mappingFile!=null){
-		StringBuffer strFileContents = new StringBuffer();
-		FileInputStream fin;
-		try {
-			fin = new FileInputStream(mappingFile);
-			BufferedInputStream bin = new BufferedInputStream(fin);
-			byte[] contents = new byte[1024];
-			int bytesRead = 0;
-			while ((bytesRead = bin.read(contents)) != -1) {
-				strFileContents.append( new String(contents, 0, bytesRead));
+		if(mappingFile != null){
+			StringBuilder strFileContents = new StringBuilder();
+			try (FileInputStream fin = new FileInputStream(mappingFile);
+				 BufferedInputStream bin = new BufferedInputStream(fin)){
+				byte[] contents = new byte[1024];
+				int bytesRead = 0;
+				while ((bytesRead = bin.read(contents)) != -1) {
+					strFileContents.append( new String(contents, 0, bytesRead));
+				}
+				fin.close();
+				bin.close();
+			} catch (IOException e) {
+				LOG.error("Error reading mapping file" +mappingFile, e);
+				return null;
 			}
-			fin.close();
-			bin.close();
-		} catch (FileNotFoundException e) {
-			return null;
-		} catch (IOException e) {
-			return null;
-		}
-		return strFileContents.toString();
-		}
+			return strFileContents.toString();
+			}
 		return null;
 	}
 	
