@@ -164,4 +164,21 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<build>
+		<plugins>
+			<!-- This adds version information to the MANIFEST.MF in the generated jars -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
