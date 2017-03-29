@@ -18,7 +18,7 @@ package eu.europeana.corelib.dereference.impl;
 
 import java.io.Serializable;
 
-import com.google.code.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 
 /**
  * Representation of an EDM mapped field

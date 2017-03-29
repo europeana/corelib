@@ -551,6 +551,7 @@ public class EdmUtils {
                     wr.getIsNextInSequence());
             addAsList(wResource, Issued.class, wr.getDctermsIssued());
             addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
+            addAsList(wResource, Type.class, wr.getDcType());
             addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
             addAsList(wResource, Source.class, wr.getDcSource());
             addAsList(wResource, SameAs.class, wr.getOwlSameAs());
@@ -740,7 +741,7 @@ public class EdmUtils {
                 addAsList(agent, Name.class, ag.getFoafName());
                 addAsList(agent, Note.class, ag.getNote());
                 addAsList(agent, PrefLabel.class, ag.getPrefLabel());
-                addAsObject(agent, ProfessionOrOccupation.class,
+                addAsList(agent, ProfessionOrOccupation.class,
                         ag.getRdaGr2ProfessionOrOccupation());
                 addAsList(agent, SameAs.class, ag.getOwlSameAs());
                 agentList.add(agent);

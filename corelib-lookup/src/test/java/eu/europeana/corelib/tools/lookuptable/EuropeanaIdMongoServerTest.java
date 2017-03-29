@@ -31,7 +31,7 @@ public class EuropeanaIdMongoServerTest {
 
         MongodExecutable mongodExecutable = runtime.prepare(conf);
         mongodExecutable.start();
-        server = new EuropeanaIdMongoServerImpl(new MongoClient("localhost", port), "europeanaId_test", "", "");
+        server = new EuropeanaIdMongoServerImpl(new MongoClient("localhost", port), "europeanaId_test");
         server.createDatastore();
         EuropeanaId eid = new EuropeanaId();
         eid.setNewId("newId");

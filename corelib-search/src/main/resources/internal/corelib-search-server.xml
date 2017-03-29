@@ -34,18 +34,14 @@
         <property name="defaultCollection" value="#{europeanaProperties['solr.core']}" />
     </bean>
 
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
+    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore" destroy-method="close">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="EuropeanaId"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl">
@@ -58,8 +54,6 @@
 		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
 		<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
 		<constructor-arg value="europeana" type="java.lang.String" />
-        <constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>
 	</bean>
 
 

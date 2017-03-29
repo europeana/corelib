@@ -15,12 +15,12 @@
     <parent>
         <artifactId>europeana-parent-pom</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-    <version>2.6.0-deploy_427-SNAPSHOT</version>
+    <version>2.6.1-SNAPSHOT</version>
 	<name>Europeana Core Library</name>
 	<url>http://www.europeana.eu</url>
 	<organization>
@@ -145,7 +145,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -164,4 +163,22 @@
 		<url>https://github.com/europeana/corelib</url>
 		<tag>HEAD</tag>
 	</scm>
+
+	<build>
+		<plugins>
+			<!-- This adds version information to the MANIFEST.MF in the generated jars -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

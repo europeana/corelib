@@ -22,298 +22,269 @@ import java.util.Map;
 
 /**
  * EDM WebResource Fields implementation
- * 
+ *
  * @author Yorgos.Mamakis@ kb.nl
- * 
  */
 public interface WebResource extends AbstractEdmEntity {
+  /**
+   * Retrieve the dc:rights fields of a WebResource
+   *
+   * @return String array representing the dc:rights fields of a WebResource
+   */
+  Map<String, List<String>> getWebResourceDcRights();
 
-	/**
-	 * Retrieve the dc:rights fields of a WebResource
-	 * 
-	 * @return String array representing the dc:rights fields of a WebResource
-	 */
-	Map<String,List<String>> getWebResourceDcRights();
+  /**
+   * Retrieve the edm:rights field of a WebResource
+   *
+   * @return String representing the edm:rights fields of a WebResource
+   */
+  Map<String, List<String>> getWebResourceEdmRights();
 
-	/**
-	 * Retrieve the edm:rights field of a WebResource
-	 * 
-	 * @return String representing the edm:rights fields of a WebResource
-	 */
-	Map<String,List<String>> getWebResourceEdmRights();
+  /**
+   * Set the dc:rights fields of a WebResource
+   *
+   * @param webResourceDcRights String array representing the dc:rights fields of a WebResource
+   */
+  void setWebResourceDcRights(Map<String, List<String>> webResourceDcRights);
 
-	/**
-	 * Set the dc:rights fields of a WebResource
-	 * 
-	 * @param webResourceDcRights
-	 *            String array representing the dc:rights fields of a
-	 *            WebResource
-	 */
-	void setWebResourceDcRights(Map<String,List<String>> webResourceDcRights);
+  /**
+   * Set the edm:rights field of a WebResource
+   *
+   * @param webResourceEdmRights String representing the edm:rights fields of a WebResource
+   */
+  void setWebResourceEdmRights(Map<String, List<String>> webResourceEdmRights);
 
-	/**
-	 * Set the edm:rights field of a WebResource
-	 * 
-	 * @param webResourceEdmRights
-	 *            String representing the edm:rights fields of a WebResource
-	 */
-	void setWebResourceEdmRights(Map<String,List<String>> webResourceEdmRights);
+  /**
+   * sets the edm:isNextInSequence for the edm:WebResource
+   */
+  void setIsNextInSequence(String isNextInSequence);
 
-	/**
-	 * sets the edm:isNextInSequence for the edm:WebResource
-	 * @param isNextInSequence
-	 */
-	void setIsNextInSequence(String isNextInSequence);
+  /**
+   * @return the edm:isNextInSequence for the edm:WebResource
+   */
+  String getIsNextInSequence();
 
-	/**
-	 * 
-	 * @return the edm:isNextInSequence for the edm:WebResource
-	 */
-	String getIsNextInSequence();
+  /**
+   * sets the dcterms:hasPart for the edm:WebResource
+   */
+  void setDctermsHasPart(Map<String, List<String>> dctermsHasPart);
 
-	/**
-	 * sets the dcterms:hasPart for the edm:WebResource
-	 * @param dctermsHasPart
-	 */
-	void setDctermsHasPart(Map<String,List<String>> dctermsHasPart);
+  /**
+   * @return the dcterms:hasPart for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsHasPart();
 
-	/**
-	 * 
-	 * @return the dcterms:hasPart for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsHasPart();
+  /**
+   * sets the dcterms:isFormatOf for the edm:WebResource
+   */
+  void setDctermsIsFormatOf(Map<String, List<String>> dctermsIsFormatOf);
 
-	/**
-	 * sets the dcterms:isFormatOf for the edm:WebResource
-	 * @param dctermsIsFormatOf
-	 */
-	void setDctermsIsFormatOf(Map<String,List<String>> dctermsIsFormatOf);
+  /**
+   * @return the dcterms:isFormatOf for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsIsFormatOf();
 
-	/**
-	 *  
-	 * @return the dcterms:isFormatOf for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsIsFormatOf();
+  /**
+   * sets the dcterms:created for the edm:WebResource
+   */
+  void setDctermsCreated(Map<String, List<String>> dctermsCreated);
 
-	/**
-	 * sets the dcterms:created for the edm:WebResource
-	 * @param dctermsCreated
-	 */
-	void setDctermsCreated(Map<String,List<String>> dctermsCreated);
+  /**
+   * @return the dcterms:created for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsCreated();
 
-	/**
-	 * 
-	 * @return the dcterms:created for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsCreated();
+  /**
+   * @return the dcterms:conformsTo for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsConformsTo();
 
-	/**
-	 * 
-	 * @return the dcterms:conformsTo for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsConformsTo();
+  /**
+   * sets the dcterms:conformsTo for the edm:WebResource
+   */
+  void setDctermsConformsTo(Map<String, List<String>> dctermsConformsTo);
 
-	/**
-	 * sets the dcterms:conformsTo for the edm:WebResource
-	 * @param dctermsConformsTo
-	 */
-	void setDctermsConformsTo(Map<String,List<String>> dctermsConformsTo);
+  /**
+   * sets the dcterms:issued for the edm:WebResource
+   */
+  void setDctermsIssued(Map<String, List<String>> dctermsIssued);
 
-	/**
-	 * sets the dcterms:issued for the edm:WebResource
-	 * @param dctermsIssued
-	 */
-	void setDctermsIssued(Map<String,List<String>> dctermsIssued);
+  /**
+   * @return the dcterms:issued for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsIssued();
 
-	/**
-	 * 
-	 * @return the dcterms:issued for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsIssued();
+  /**
+   * @return the dc:description for the edm:WebResource
+   */
+  Map<String, List<String>> getDcDescription();
 
-	/**
-	 * 
-	 * @return the dc:description for the edm:WebResource
-	 */
-	Map<String,List<String>> getDcDescription();
+  /**
+   * sets the dc:description for the edm:WebResource
+   */
+  void setDcDescription(Map<String, List<String>> dcDescription);
 
-	/**
-	 * sets the dc:description for the edm:WebResource
-	 * @param dcDescription
-	 */
-	void setDcDescription(Map<String,List<String>> dcDescription);
+  /**
+   * @return the dc:format for the edm:WebResource
+   */
+  Map<String, List<String>> getDcFormat();
 
-	/**
-	 * 
-	 * @return the dc:format for the edm:WebResource
-	 */
-	Map<String,List<String>> getDcFormat();
+  /**
+   * sets the dc:format for the edm:WebResource
+   */
+  void setDcFormat(Map<String, List<String>> dcFormat);
 
-	/**
-	 * sets the dc:format for the edm:WebResource
-	 * @param dcFormat
-	 */
-	void setDcFormat(Map<String,List<String>> dcFormat);
+  /**
+   * @return the dc:source for the edm:WebResource
+   */
+  Map<String, List<String>> getDcSource();
 
-	/**
-	 * 
-	 * @return the dc:source for the edm:WebResource
-	 */ 
-	Map<String,List<String>> getDcSource();
+  /**
+   * sets the dc:source for the edm:WebResource
+   */
+  void setDcSource(Map<String, List<String>> dcSource);
 
-	/**
-	 * sets the dc:source for the edm:WebResource
-	 * @param dcSource
-	 */
-	void setDcSource(Map<String,List<String>> dcSource);
+  /**
+   * @return the dcterms:extent for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsExtent();
 
-	/**
-	 * 
-	 * @return the dcterms:extent for the edm:WebResource
-	 */
-	Map<String,List<String>> getDctermsExtent();
+  /**
+   * sets the dcterms:extent for the edm:WebResource
+   */
+  void setDctermsExtent(Map<String, List<String>> dctermsExtent);
 
-	/**
-	 * sets the dcterms:extent for the edm:WebResource
-	 * @param dctermsExtent
-	 */
-	void setDctermsExtent(Map<String,List<String>> dctermsExtent);
+  /**
+   * dc:creator for edm:WebResource
+   */
+  Map<String, List<String>> getDcCreator();
 
-	/**
-	 * dc:creator for edm:WebResource
-	 * @return
-	 */
-	Map<String, List<String>> getDcCreator();
+  /**
+   * dc:creator for edm:WebResource
+   */
 
-	/**
-	 * dc:creator for edm:WebResource
-	 */
-	
-	void setDcCreator(Map<String, List<String>> dcCreator);
+  void setDcCreator(Map<String, List<String>> dcCreator);
 
-	/**
-	 * owl:sameAs for edm:WebResource
-	 */
-	void setOwlSameAs(String[] owlSameAs);
+  /**
+   * Retrieve the dc:type fields of a WebResource
+   *
+   * @return Map representing the dc:type fields of a WebResource
+   */
+  Map<String, List<String>> getDcType();
 
-	/**
-	 * owl:sameAs for edm:WebResource
-	 * @return
-	 */
-	String[] getOwlSameAs();
+  /**
+   * Set the dc:type fields of a WebResource
+   *
+   * @param dcType Map representing the dc:type fields of a WebResource
+   */
+  void setDcType(Map<String, List<String>> dcType);
 
-	/**
-	 * rdf:type for edm:WebResource
-	 * @return
-	 */
-	String getRdfType();
-	
-	/**
-	 * edm:codecName
-	 * @return
-	 */
-	String getEdmCodecName();
-	
-	/**
-	 * ebucore:hasMimeType
-	 * @return
-	 */
-	String getEbucoreHasMimeType();
-	
-	/**
-	 * ebucore:fileByteSize
-	 * @return
-	 */
-	Long getEbucoreFileByteSize();
-	
-	/**
-	 * ebucore:duration
-	 * @return
-	 */
-	String getEbucoreDuration();
-	
-	/**
-	 * ebucore:width
-	 * @return
-	 */
-	Integer getEbucoreWidth();
-	
-	/**
-	 * ebucore:height
-	 * @return
-	 */
-	Integer getEbucoreHeight();
-	
-	/**
-	 * edm:spatialResolution
-	 * @return
-	 */
-	Integer getEdmSpatialResolution();
+  /**
+   * owl:sameAs for edm:WebResource
+   */
+  void setOwlSameAs(String[] owlSameAs);
 
-	/**
-	 * ebucore:sampleSize
-	 * @return
-	 */
-	Integer getEbucoreSampleSize();
+  /**
+   * owl:sameAs for edm:WebResource
+   */
+  String[] getOwlSameAs();
 
-	/**
-	 * ebucore:sampleRate
-	 * @return
-	 */
-	Integer getEbucoreSampleRate();
-	
-	/**
-	 * ebucore:frameRate
-	 */
-	Double getEbucoreFrameRate();
+  /**
+   * rdf:type for edm:WebResource
+   */
+  String getRdfType();
 
-	/**
-	 * ebucore:bitRate
-	 * @return
-	 */
-	Integer getEbucoreBitRate();
-	
-	/**
-	 * edm:hasColorSpace
-	 * @return
-	 */
-	String getEdmHasColorSpace();
-	
-	/**
-	 * edm:componentColor
-	 * @return
-	 */
-	List<String> getEdmComponentColor();
+  /**
+   * edm:codecName
+   */
+  String getEdmCodecName();
 
-	/**
-	 * ebucore:orientation
-	 * @return
-	 */
-	String getEbucoreOrientation();
+  /**
+   * ebucore:hasMimeType
+   */
+  String getEbucoreHasMimeType();
 
-	/**
-	 * edm:preview
-	 * @return
-     */
-	String getEdmPreview();
+  /**
+   * ebucore:fileByteSize
+   */
+  Long getEbucoreFileByteSize();
 
-	/**
-	 * edm:preview
-	 */
-	void setEdmPreview(String edmPreview);
+  /**
+   * ebucore:duration
+   */
+  String getEbucoreDuration();
 
-	/**
-	 * svcs:has_service
-	 */
-	String[] getSvcsHasService();
+  /**
+   * ebucore:width
+   */
+  Integer getEbucoreWidth();
 
-	/**
-	 * svcs:has_service
-	 * @param svcsHasService
-     */
-	void setSvcsHasService(String[] svcsHasService);
+  /**
+   * ebucore:height
+   */
+  Integer getEbucoreHeight();
 
-	String[] getDctermsIsReferencedBy();
+  /**
+   * edm:spatialResolution
+   */
+  Integer getEdmSpatialResolution();
 
-	void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
+  /**
+   * ebucore:sampleSize
+   */
+  Integer getEbucoreSampleSize();
+
+  /**
+   * ebucore:sampleRate
+   */
+  Integer getEbucoreSampleRate();
+
+  /**
+   * ebucore:frameRate
+   */
+  Double getEbucoreFrameRate();
+
+  /**
+   * ebucore:bitRate
+   */
+  Integer getEbucoreBitRate();
+
+  /**
+   * edm:hasColorSpace
+   */
+  String getEdmHasColorSpace();
+
+  /**
+   * edm:componentColor
+   */
+  List<String> getEdmComponentColor();
+
+  /**
+   * ebucore:orientation
+   */
+  String getEbucoreOrientation();
+
+  /**
+   * edm:preview
+   */
+  String getEdmPreview();
+
+  /**
+   * edm:preview
+   */
+  void setEdmPreview(String edmPreview);
+
+  /**
+   * svcs:has_service
+   */
+  String[] getSvcsHasService();
+
+  /**
+   * svcs:has_service
+   */
+  void setSvcsHasService(String[] svcsHasService);
+
+  String[] getDctermsIsReferencedBy();
+
+  void setDctermsIsReferencedBy(String[] dctermsIsReferencedBy);
 }

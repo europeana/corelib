@@ -24,8 +24,8 @@ import eu.europeana.corelib.definitions.jibx.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.model.EdmLabel;
@@ -329,6 +329,11 @@ public final class AggregationFieldInput {
 								.getRightList());
 
 				webResource.setWebResourceDcRights(rightMap);
+
+				Map<String, List<String>> typeMap = MongoUtils
+						.createResourceOrLiteralMapFromList(wResourceType.getTypeList());
+				webResource.setDcType(typeMap);
+
 				Map<String, List<String>> edmRightsMap = MongoUtils
 						.createResourceMapFromString(wResourceType.getRights());
 

@@ -16,11 +16,9 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl">
-		<constructor-arg value="#{europeanaProperties['mongodb.host']}"
-			type="java.lang.String" />
-		<constructor-arg value="#{europeanaProperties['mongodb.port']}"
-			type="java.lang.String" />
+	<bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
+		<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>
 	</bean>
 
 </beans>

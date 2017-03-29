@@ -18,9 +18,9 @@ package eu.europeana.corelib.tools.lookuptable;
 
 import org.bson.types.ObjectId;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
 
 /**
  * Morphia Collection Entity representing the Lookup table entry between old and new collections

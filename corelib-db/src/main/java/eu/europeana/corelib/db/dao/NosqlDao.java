@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.db.dao;
 
-import com.google.code.morphia.dao.DAO;
+import org.mongodb.morphia.dao.DAO;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 import java.io.Serializable;

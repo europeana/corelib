@@ -73,7 +73,7 @@ public class MongoConstructorTest {
         MongodExecutable mongodExecutable = runtime.prepare(conf);
         mongodExecutable.start();
         EdmMongoServer mongoServer = new EdmMongoServerImpl(new MongoClient(
-                "localhost", port), "europeana_test", "", "");
+                "localhost", port), "europeana_test");
         FullBeanHandler handler = new FullBeanHandler(mongoServer);
         FullBeanImpl fBean = new MongoConstructor().constructFullBean(rdf);
         handler.saveEdmClasses(fBean, true);

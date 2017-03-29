@@ -3,7 +3,7 @@ package eu.europeana.corelib.solr.entity;
 import java.util.List;
 import java.util.Map;
 
-import com.google.code.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.edm.entity.PhysicalThing;
 import eu.europeana.corelib.utils.StringArrayUtils;

@@ -32,6 +32,8 @@ public class WebResourceSolrCreator {
 		}
 		SolrUtils.addFromMap(doc, EdmLabel.WR_DC_RIGHTS,
 				wr.getWebResourceDcRights());
+		SolrUtils.addFromMap(doc, EdmLabel.WR_DC_TYPE,
+				wr.getDcType());
 		SolrUtils.addFromMap(doc, EdmLabel.WR_DC_DESCRIPTION,
 				wr.getDcDescription());
 		SolrUtils.addFromMap(doc, EdmLabel.WR_DC_FORMAT, wr.getDcFormat());
