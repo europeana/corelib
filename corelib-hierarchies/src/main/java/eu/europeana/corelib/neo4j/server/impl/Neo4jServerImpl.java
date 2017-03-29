@@ -356,7 +356,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 		try {
 			HttpResponse resp = client.execute(method);
 			if (resp.getStatusLine().getStatusCode() == 502){
-				LOG.error("Neo4J plugin detected inconsistent data for node with ID: " + rdfAbout);
+				LOG.error(ProblemType.NEO4J_INCONSISTENT_DATA.getMessage() + " by Neo4J plugin, for node with ID: " + rdfAbout);
 				throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA,
 						" \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
 			}
@@ -365,8 +365,8 @@ public class Neo4jServerImpl implements Neo4jServer {
 					Hierarchy.class);
 			return obj;
 		} catch (IOException e) {
-			LOG.error(e.getMessage());
-			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
+			LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
+			throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);
 		} finally {
 			method.releaseConnection();
 		}
