@@ -2,7 +2,7 @@ package eu.europeana.corelib.tools.lookuptable;
 
 import java.util.List;
 
-import com.google.code.morphia.Datastore;
+import org.mongodb.morphia.Datastore;
 
 
 public interface CollectionMongoServer {

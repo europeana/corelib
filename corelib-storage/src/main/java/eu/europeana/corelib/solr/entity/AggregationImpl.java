@@ -19,9 +19,9 @@ package eu.europeana.corelib.solr.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Reference;
-import com.google.code.morphia.annotations.Transient;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;

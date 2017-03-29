@@ -28,7 +28,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.morphia</groupId>
+			<groupId>org.mongodb.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<version>${version.mongoMorphia}</version>
 			<scope>compile</scope>

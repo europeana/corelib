@@ -17,110 +17,98 @@
 package eu.europeana.corelib.dereference.impl;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+import com.mongodb.MongoClient;
+import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import org.apache.commons.lang.StringUtils;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.mongodb.Mongo;
+import org.apache.log4j.Logger;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 
 import eu.europeana.corelib.dereference.VocabularyMongoServer;
 
 /**
- * A mongo server instance for use with the controlled vocabularies
- * 
+ * A mongo server instance for use with the controlled vocabularies.
+ *
  * @author Yorgos.Mamakis@ kb.nl
+ * @author Patrick Ehlert
  * 
  */
 public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 
-	private final Logger log = Logger.getLogger(getClass().getName());
+	private static final Logger LOG = Logger.getLogger(VocabularyMongoServerImpl.class.getName());
 
-	private Mongo mongoServer;
-	private String databaseName;
+	private MongoClient mongoClient;
 	private Datastore datastore;
-	private String username;
-	private String password;
 
-	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getDatastore()
-	 */
-	@Override
 	/**
-	 * Retrieve the created datastore
+	 * Create a new datastore to do get/delete/save operations on the database
+	 * Any required login credentials should be in the provided MongoClient
+	 * @param mongoClient
+	 * @param databaseName
 	 */
-	public Datastore getDatastore() {
-		return this.datastore;
+	public VocabularyMongoServerImpl(MongoClient mongoClient, String databaseName) {
+		this.mongoClient = mongoClient;
+		initDatastore(mongoClient, databaseName);
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#close()
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database
+	 * @param host
+	 * @param port
+	 * @param databaseName
+	 * @param username
+	 * @param password
 	 */
-	@Override
-	public void close() {
-		mongoServer.close();
-	}
-
-	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName) {
-		log.info("VocabularyMongoServer is instantiated");
-		this.mongoServer = mongoServer;
-		
-		this.databaseName = databaseName;
-		createDatastore();
-	}
-
-	public VocabularyMongoServerImpl(Mongo mongoServer, String databaseName,String username,String password) {
-		log.info("VocabularyMongoServer is instantiated");
-		this.mongoServer = mongoServer;
-
-		this.databaseName = databaseName;
-		this.username = username;
-		this.password = password;
-		createDatastoreWithCredentials();
-	}
-
-	public VocabularyMongoServerImpl() {
-		
+	public VocabularyMongoServerImpl(String host, int port, String databaseName, String username, String password) {
+		this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), databaseName, username, password).getMongo();
+		initDatastore(this.mongoClient, databaseName);
 	}
 
 	/**
 	 * Create a datastore and map the required morphia entities
 	 */
-	private void createDatastore() {
+	private void initDatastore(MongoClient mongoClient, String databaseName) {
 		Morphia morphia = new Morphia();
 		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
-		datastore = morphia.createDatastore(mongoServer, databaseName);
-		datastore.ensureIndexes();
-		log.info("VocabularyMongoServer datastore is created");
+		this.datastore = morphia.createDatastore(mongoClient, databaseName);
+		this.datastore.ensureIndexes();
+		LOG.info("VocabularyMongoServer datastore is created");
 	}
-	private void createDatastoreWithCredentials() {
-		Morphia morphia = new Morphia();
-		morphia.map(ControlledVocabularyImpl.class).map(EntityImpl.class);
 
-		datastore = morphia.createDatastore(mongoServer, databaseName,username, password.toCharArray());
-		datastore.ensureIndexes();
-		log.info("VocabularyMongoServer datastore is created");
-	}
-	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getControlledVocabulary(java.lang.String, java.lang.String)
+	/**
+	 * @see eu.europeana.corelib.dereference.VocabularyMongoServer#getDatastore()
 	 */
 	@Override
-	public ControlledVocabularyImpl getControlledVocabulary(String field,
-			String filter) {
+	public Datastore getDatastore() {
+		return this.datastore;
+	}
+
+	/**
+	 * @see eu.europeana.corelib.dereference.VocabularyMongoServer#close()
+	 */
+	@Override
+	public void close() {
+		LOG.info("Closing MongoClient for VocabularyMongoServer");
+		mongoClient.close();
+	}
+
+	/**
+	 * @see eu.europeana.corelib.dereference.VocabularyMongoServer#getControlledVocabulary(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public ControlledVocabularyImpl getControlledVocabulary(String field, String filter) {
 		String[] splitName = filter.split("/");
-		String vocabularyName = splitName[0] + "/" + splitName[1] + "/"
-				+ splitName[2] + "/";
+		String vocabularyName = splitName[0] + "/" + splitName[1] + "/"	+ splitName[2] + "/";
 		List<ControlledVocabularyImpl> vocabularies = getDatastore()
 				.find(ControlledVocabularyImpl.class)
 				.filter(field, vocabularyName).asList();
 		for (ControlledVocabularyImpl vocabulary : vocabularies) {
 			boolean ruleController = true;
 			for (String rule : vocabulary.getRules()) {
-				ruleController = ruleController
-						&& (filter.contains(rule) || StringUtils.equals(rule,
-								"*"));
+				ruleController = ruleController	&& (filter.contains(rule) || StringUtils.equals(rule, "*"));
 			}
 			if (ruleController) {
 				return vocabulary;
@@ -129,8 +117,8 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getControlledVocabularyByUri(java.lang.String, java.lang.String)
+	/**
+	 * @see eu.europeana.corelib.dereference.VocabularyMongoServer#getControlledVocabularyByUri(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public ControlledVocabularyImpl getControlledVocabularyByUri(String uri,
@@ -145,8 +133,9 @@ public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 		}
 		return null;
 	}
-	/* (non-Javadoc)
-	 * @see eu.europeana.corelib.dereference.impl.VocabularyMongoServer#getControlledVocabularyByName(java.lang.String)
+
+	/**
+	 * @see eu.europeana.corelib.dereference.VocabularyMongoServer#getControlledVocabularyByName(java.lang.String)
 	 */
 	@Override
 	public ControlledVocabularyImpl getControlledVocabularyByName(String name) {

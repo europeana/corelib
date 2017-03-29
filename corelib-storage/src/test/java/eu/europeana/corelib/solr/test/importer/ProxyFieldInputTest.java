@@ -1,7 +1,7 @@
 package eu.europeana.corelib.solr.test.importer;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
 import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;

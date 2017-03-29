@@ -18,7 +18,7 @@ package eu.europeana.corelib.db.service.abstracts;
 
 import java.io.Serializable;
 
-import com.google.code.morphia.Key;
+import org.mongodb.morphia.Key;
 
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;

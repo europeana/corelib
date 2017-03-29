@@ -5,8 +5,8 @@ package eu.europeana.corelib.db.entity.nosql;
 
 import java.util.Date;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Indexed;
 
 /**
  * Class representing an OAuth2AccessToken

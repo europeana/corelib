@@ -25,7 +25,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;

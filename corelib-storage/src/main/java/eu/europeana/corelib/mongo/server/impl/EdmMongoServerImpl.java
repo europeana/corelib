@@ -17,10 +17,12 @@
 
 package eu.europeana.corelib.mongo.server.impl;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.mapping.MappingException;
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
+import eu.europeana.corelib.storage.impl.MongoProviderImpl;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.mapping.MappingException;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -30,7 +32,6 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.logging.Logger;
 
@@ -43,38 +44,50 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	private final Logger log = Logger.getLogger(getClass().getName());
 
-	private Mongo mongoServer;
+	private MongoClient mongoClient;
 	private String databaseName;
-	private String username;
-	private String password;
 	private Datastore datastore;
 	EuropeanaIdMongoServer europeanaIdMongoServer;
-	private final static String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-	private final static String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
+	private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+	private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
-	public EdmMongoServerImpl(Mongo mongoServer, String databaseName,
-			String username, String password) throws MongoDBException {
-		log.info("EDMMongoServer is instantiated");
-		this.mongoServer = mongoServer;
-		this.mongoServer.getMongoOptions().socketKeepAlive = true;
-		this.mongoServer.getMongoOptions().autoConnectRetry = true;
-		this.mongoServer.getMongoOptions().connectionsPerHost = 10;
-		this.mongoServer.getMongoOptions().connectTimeout = 5000;
-		this.mongoServer.getMongoOptions().socketTimeout = 6000;
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database
+	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
+	 * provided mongoClient
+	 * @param mongoClient
+	 * @param databaseName
+	 * @throws MongoDBException
+	 */
+	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName) throws MongoDBException {
+		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
-		this.username = username;
-		this.password = password;
 		createDatastore();
+	}
 
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database.
+	 * @param hosts comma-separated host names
+	 * @param ports comma-separated port numbers
+	 * @param databaseName
+	 * @param username
+	 * @param password
+	 */
+	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) throws MongoDBException {
+		MongoClientOptions.Builder options = MongoClientOptions.builder();
+		options.socketKeepAlive(true);
+		options.connectionsPerHost(10);
+		options.connectTimeout(5000);
+		options.socketTimeout(6000);
+		this.mongoClient = new MongoProviderImpl(hosts, ports, databaseName, username, password, options).getMongo();
+		this.databaseName = databaseName;
+		createDatastore();
 	}
 
 	@Override
 	public void setEuropeanaIdMongoServer(
 			EuropeanaIdMongoServer europeanaIdMongoServer) {
 		this.europeanaIdMongoServer = europeanaIdMongoServer;
-	}
-
-	public EdmMongoServerImpl() {
 	}
 
 	private void createDatastore() {
@@ -95,13 +108,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(ConceptSchemeImpl.class);
 		morphia.map(BasicProxyImpl.class);
 
-		datastore = morphia.createDatastore(mongoServer, databaseName);
-
-		if (StringUtils.isNotBlank(this.username)
-				&& StringUtils.isNotBlank(this.password)) {
-			datastore.getDB().authenticate(this.username,
-					this.password.toCharArray());
-		}
+		datastore = morphia.createDatastore(mongoClient, databaseName);
 		datastore.ensureIndexes();
 		log.info("EDMMongoServer datastore is created");
 	}
@@ -164,8 +171,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public String toString() {
-		return "MongoDB: [Host: " + mongoServer.getAddress().getHost() + "]\n"
-				+ "[Port: " + mongoServer.getAddress().getPort() + "]\n"
+		return "MongoDB: [Host: " + mongoClient.getAddress().getHost() + "]\n"
+				+ "[Port: " + mongoClient.getAddress().getPort() + "]\n"
 				+ "[DB: " + databaseName + "]\n";
 	}
 
@@ -177,7 +184,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public void close() {
-		log.info("EDMMongoServer is closed");
-		mongoServer.close();
+		log.info("Closing MongoClient for EDMMongoServer");
+		mongoClient.close();
 	}
 }

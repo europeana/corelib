@@ -15,21 +15,25 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
+	<!-- deprecated
 	<bean id="morphiaDataStore" class="eu.europeana.harvester.db.MorphiaDataStore">
 		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.host']}" type="java.lang.String"/>
 		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.port']}" type="int"/>
 		<constructor-arg value="#{europeanaProperties['contentreuse.mongodb.dbname']}" type="java.lang.String"/>
-	</bean>
+	</bean> -->
 
-	<bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig" />
+	<!-- deprecated
+	<bean id="harvesterClientConfig" class="eu.europeana.harvester.client.HarvesterClientConfig" /> -->
 
+	<!-- deprecated
 	<bean id="harvesterClient" class="eu.europeana.harvester.client.HarvesterClientImpl">
 		<constructor-arg value="#{morphiaDataStore.getDatastore()}" />
 		<constructor-arg ref="harvesterClientConfig" />
-	</bean>
+	</bean> -->
 
+	<!-- deprecated
 	<bean id="corelib_web_contentReuseFrameworkService" 
-		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" />
+		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" /> -->
 
 	<!--<bean id = "swiftConfiguration" class = "eu.europeana.corelib.service.impl.swift.SwiftConfiguration">-->
 		<!--<constructor-arg value= "#{europeanaProperties['contentreuse.swift.authUrl']}" type="java.lang.String"/> &lt;!&ndash; auth url &ndash;&gt;-->
