@@ -19,7 +19,7 @@ package eu.europeana.corelib.db.internal.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 
 import eu.europeana.corelib.db.entity.nosql.AccessToken;
 import eu.europeana.corelib.db.internal.service.OAuth2AccessTokenService;

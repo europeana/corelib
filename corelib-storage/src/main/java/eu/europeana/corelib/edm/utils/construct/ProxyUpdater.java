@@ -2,8 +2,8 @@ package eu.europeana.corelib.edm.utils.construct;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.edm.utils.MongoUtils;

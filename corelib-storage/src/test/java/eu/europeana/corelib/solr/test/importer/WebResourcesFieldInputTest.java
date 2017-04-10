@@ -16,9 +16,9 @@
  */
 package eu.europeana.corelib.solr.test.importer;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Key;
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.query.Query;
 import eu.europeana.corelib.definitions.jibx.Rights;
 import eu.europeana.corelib.definitions.jibx.Rights1;
 import eu.europeana.corelib.definitions.jibx.WebResourceType;

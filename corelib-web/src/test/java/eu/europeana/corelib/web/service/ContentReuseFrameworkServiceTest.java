@@ -26,6 +26,7 @@ import eu.europeana.harvester.domain.ImageMetaInfo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-web-context.xml", "/corelib-web-test.xml"})
 @Ignore
+@Deprecated
 public class ContentReuseFrameworkServiceTest {
 //TODO: Unit tests should never depend on an actual server. Refactor
 	@Resource(name = "corelib_web_contentReuseFrameworkService")

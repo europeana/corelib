@@ -37,8 +37,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang.StringUtils;
 
 import com.ctc.wstx.stax.WstxInputFactory;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.model.EdmLabel;

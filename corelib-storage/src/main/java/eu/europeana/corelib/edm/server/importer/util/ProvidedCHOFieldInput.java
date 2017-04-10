@@ -22,8 +22,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
 import eu.europeana.corelib.definitions.jibx.SameAs;

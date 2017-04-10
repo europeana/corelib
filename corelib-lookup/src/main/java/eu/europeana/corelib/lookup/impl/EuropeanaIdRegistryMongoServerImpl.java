@@ -21,14 +21,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import com.mongodb.MongoClient;
+import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.UpdateOperations;
-import com.mongodb.Mongo;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
@@ -48,40 +50,51 @@ import eu.europeana.corelib.utils.EuropeanaUriUtils;
  */
 public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, EuropeanaIdRegistryMongoServer {
 
-	private Mongo mongoServer;
+	private static final Logger LOG = Logger.getLogger(EuropeanaIdRegistryMongoServerImpl.class.getName());
+
+	private MongoClient mongoClient;
 	private String databaseName;
 	private Datastore datastore;
 
-	private final static String EID = "eid";
-	private final static String ORID = "orid";
-	private final static String DATE = "last_checked";
-	private final static String SESSION = "sessionID";
-	private final static String CID = "cid";
-	private final static String XMLCHECKSUM = "xmlchecksum";
-	private final static String ISDELETED = "deleted";
+	private static final String EID = "eid";
+	private static final String ORID = "orid";
+	private static final String DATE = "last_checked";
+	private static final String SESSION = "sessionID";
+	private static final String CID = "cid";
+	private static final String XMLCHECKSUM = "xmlchecksum";
+	private static final String ISDELETED = "deleted";
 	private EuropeanaIdMongoServer europeanaIdMongoServer;
 
 	/**
 	 * Constructor of the EuropeanaIDRegistryMongoServer
+	 * Any required login credentials should be present in the provided mongoClient
 	 *
-	 * @param mongoServer
-	 *            The server to connect to
-	 * @param databaseName
-	 *            The database to connect to
+	 * @param mongoClient the server to connect to
+	 * @param databaseName the database to connect to
 	 */
-	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName) {
-		this.mongoServer = mongoServer;
+	public EuropeanaIdRegistryMongoServerImpl(MongoClient mongoClient, String databaseName) {
+		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
-		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer, databaseName, "", "");
+		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
 		createDatastore();
 	}
 
-	public EuropeanaIdRegistryMongoServerImpl(Mongo mongoServer, String databaseName, String username,
-			String password) {
-		this.mongoServer = mongoServer;
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database
+	 * @param host
+	 * @param port
+	 * @param databaseName
+	 * @param username
+	 * @param password
+	 */
+	public EuropeanaIdRegistryMongoServerImpl(String host, int port, String databaseName, String username,
+											  String password) {
+		this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), databaseName, username, password).getMongo();
 		this.databaseName = databaseName;
-		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoServer, databaseName, "", "");
+		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
+		createDatastore();
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,9 +112,10 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 
 		morphia.map(EuropeanaIdRegistry.class);
 		morphia.map(FailedRecord.class);
-		datastore = morphia.createDatastore(mongoServer, databaseName);
+		datastore = morphia.createDatastore(mongoClient, databaseName);
 
 		datastore.ensureIndexes();
+		LOG.info("EuropeanaIdMongoServer datastore is created");
 	}
 
 	/**
@@ -117,7 +131,8 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 */
 	@Override
 	public void close() {
-		mongoServer.close();
+		LOG.info("Closing MongoClient for EuropeanaIdRegistry");
+		mongoClient.close();
 	}
 
 	/*
@@ -457,7 +472,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 */
 	@Override
 	public List<EuropeanaIdRegistry> retrieveEuropeanaIdFromOriginal(String originalId, String collectionid) {
-		List<EuropeanaIdRegistry> retlist = new ArrayList<EuropeanaIdRegistry>();
+		List<EuropeanaIdRegistry> retlist = new ArrayList<>();
 
 		List<EuropeanaIdRegistry> list = datastore.find(EuropeanaIdRegistry.class).field(ORID).equal(originalId)
 				.asList();
@@ -580,10 +595,10 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 */
 	@Override
 	public List<Map<String, String>> getFailedRecords(String collectionId) {
-		List<Map<String, String>> failedRecords = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> failedRecords = new ArrayList<>();
 		for (FailedRecord failedRecord : datastore.find(FailedRecord.class).filter("collectionId", collectionId)
 				.asList()) {
-			Map<String, String> record = new HashMap<String, String>();
+			Map<String, String> record = new HashMap<>();
 			record.put("collectionId", failedRecord.getCollectionId());
 			record.put("originalId", failedRecord.getOriginalId());
 			record.put("europeanaId", failedRecord.getEuropeanaId());
@@ -625,8 +640,8 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	@Override
 	public boolean isdeleted(String europeanaID) {
 
-		Query<EuropeanaIdRegistry> query = datastore.createQuery(EuropeanaIdRegistry.class).field("eid")
-				.equal(europeanaID);
+//		Query<EuropeanaIdRegistry> query = datastore.createQuery(EuropeanaIdRegistry.class).field("eid")
+//				.equal(europeanaID);
 
 		EuropeanaIdRegistry idr = datastore.find(EuropeanaIdRegistry.class).filter("eid", europeanaID).get();
 		return idr.isDeleted();
