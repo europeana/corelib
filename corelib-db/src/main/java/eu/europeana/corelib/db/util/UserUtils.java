@@ -18,7 +18,7 @@ public class UserUtils {
     public static String hashPassword(String password) {
         if (StringUtils.isNotBlank(password)) {
             return getPasswordEncoder().encodePassword(password, null);
-        }
+    }
         return null;
     }
 

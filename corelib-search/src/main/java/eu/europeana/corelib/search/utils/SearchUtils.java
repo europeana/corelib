@@ -44,6 +44,13 @@ public class SearchUtils {
 
 	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
 
+
+//	private static final Pattern SOLR_BUG_PATTERN =
+//			Pattern.compile("(.*?)(proxy_dc_creator|proxy_dc_contributor|who):(\"https?+:.*?\")(.*?)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern SOLR_BUG_PATTERN =
+			Pattern.compile("(proxy_dc_creator|proxy_dc_contributor|who)(:\"https?+:.*?\")", Pattern.CASE_INSENSITIVE);
+
+
 	/**
 	 * Checks if there is no TYPE facet with an invalid type according to EDM
 	 *
@@ -275,5 +282,32 @@ public class SearchUtils {
 			rewritten += rawQueryString.substring(lastPart);
 		}
 		translatedQueries.setModifiedQuery(rewritten);
+	}
+
+	public static String fixBuggySolrIndex(String queryString){
+		return fixBuggySolrIndex("", queryString);
+	}
+
+	private static String fixBuggySolrIndex(String processed, String queryString){
+		if (queryString.length() > 0){
+			Matcher bugMatcher = SOLR_BUG_PATTERN.matcher(queryString);
+			if (bugMatcher.find()) {
+				switch (bugMatcher.group(1)) {
+					case "proxy_dc_creator":
+						return fixBuggySolrIndex(processed + queryString.substring(0, bugMatcher.start()) +
+								"(proxy_dc_creator" + bugMatcher.group(2) + " AND CREATOR" +
+								bugMatcher.group(2) + ")", queryString.substring(bugMatcher.end()));
+					case "proxy_dc_contributor":
+						return fixBuggySolrIndex(processed + queryString.substring(0, bugMatcher.start()) +
+								"(proxy_dc_contributor" + bugMatcher.group(2) + " AND CONTRIBUTOR" +
+								bugMatcher.group(2) + ")", queryString.substring(bugMatcher.end()));
+					case "who":
+						return fixBuggySolrIndex(processed + queryString.substring(0, bugMatcher.start()) +
+								"(who" + bugMatcher.group(2) + " AND (CREATOR" + bugMatcher.group(2) +
+								" OR CONTRIBUTOR" + bugMatcher.group(2) + "))", queryString.substring(bugMatcher.end()));
+				}
+			}
+		}
+		return processed + queryString;
 	}
 }
