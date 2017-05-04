@@ -116,6 +116,18 @@ public interface SearchService {
 	/**
 	 * Perform a calculateTag in SOLR based on the given query and return the results
 	 * in the format of the given class.
+	 *
+	 * @param beanInterface  The required bean type, should be ApiBean or BriefBean
+	 * @param query          Model class containing the calculateTag specification.
+	 * @param debug			 includes the string representing the Solrquery in the ResultSet
+	 * @return               The calculateTag results, including facets, breadcrumb and original query.
+	 * @throws SolrTypeException
+	 */
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug)
+			throws SolrTypeException;
+	/**
+	 * Perform a calculateTag in SOLR based on the given query and return the results
+	 * in the format of the given class.
 	 * 
 	 * @param beanInterface  The required bean type, should be ApiBean or BriefBean
 	 * @param query          Model class containing the calculateTag specification.
