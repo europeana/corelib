@@ -59,13 +59,4 @@
 	<!-- EXCEPTIONS -->
 	<!--<bean id="corelib_web_europeanaException" class="eu.europeana.corelib.web.exception.EuropeanaException" />-->
 
-	<!--<bean id="corelib_web_swiftProvider" class="eu.europeana.corelib.web.swift.SwiftProvider">-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.authUrl']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.username']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.password']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.containerName']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.regionName']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['swift.tenantName']}" type="java.lang.String"/>-->
-	<!--</bean>-->
-
 </beans>
