@@ -101,6 +101,8 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
+    private final static Logger LOG = Logger.getLogger(SearchServiceImpl.class);
+
     /**
      * Default number of documents retrieved by MoreLikeThis
      */
@@ -114,7 +116,7 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the isHierachy query to NEO4J is aborted, can be overruled from the
      * objectController
      */
-    private int NEO4JTIMEOUTMILLIS = 4000;
+    private int neo4Jtimeoutmillis = 4000;
     /**
      * The list of possible field input for spelling suggestions
      */
@@ -147,7 +149,7 @@ public class SearchServiceImpl implements SearchService {
     protected EdmMongoServer metainfoMongoServer;
 
     public void setNeo4jTimeoutMillis(int neo4jTimeoutMillis) {
-        this.NEO4JTIMEOUTMILLIS = neo4jTimeoutMillis;
+        this.neo4Jtimeoutmillis = neo4jTimeoutMillis;
     }
 
     @Override
@@ -934,11 +936,17 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public boolean isHierarchy(String rdfAbout) throws Neo4JException {
 //        return neo4jServer.isHierarchy(rdfAbout);
+        boolean result = false;
+        long startTime = System.nanoTime();
         try {
-            return neo4jServer.isHierarchyTimeLimited(rdfAbout, NEO4JTIMEOUTMILLIS);
+            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, neo4Jtimeoutmillis);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            return false;
+            LOG.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
         }
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + neo4Jtimeoutmillis);
+        }
+        return result;
     }
 
     @Override
