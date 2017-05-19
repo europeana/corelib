@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.*;
 
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
@@ -159,6 +160,14 @@ public class Neo4jServerImpl implements Neo4jServer {
 	@Override
     public boolean isHierarchy(String rdfAbout) throws Neo4JException {
         return getNode(rdfAbout) != null;
+	}
+
+	public boolean isHierarchyTimeLimited(String rdfAbout, int timeOutMillis) throws Neo4JException,
+			InterruptedException, ExecutionException, TimeoutException {
+		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
+		Future<Boolean> future = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
+		LOG.info("Requesting hierarchy information, max time = "+timeOutMillis);
+		return future.get(timeOutMillis, TimeUnit.MILLISECONDS);
 	}
 
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
