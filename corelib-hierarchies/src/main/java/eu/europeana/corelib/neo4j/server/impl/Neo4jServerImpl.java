@@ -166,8 +166,11 @@ public class Neo4jServerImpl implements Neo4jServer {
 			InterruptedException, ExecutionException, TimeoutException {
 		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
 		Future<Boolean> future = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
-		LOG.info("Requesting hierarchy information, max time = "+timeOutMillis);
-		return future.get(timeOutMillis, TimeUnit.MILLISECONDS);
+
+        long startTime = System.nanoTime();
+		boolean result = future.get(timeOutMillis, TimeUnit.MILLISECONDS);
+        LOG.info("Requesting hierarchy information took "+(System.nanoTime()-startTime)/1000+"ms, max time = "+timeOutMillis);
+        return result;
 	}
 
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
