@@ -16,22 +16,38 @@ import eu.europeana.corelib.definitions.solr.model.TaggedQuery;
 
 public class RightReusabilityCategorizer {
 
-	public static final String OPEN = "open";
-	public static final String RESTRICTED = "restricted";
-	public static final String UNCATEGORIZED = "uncategorized";
-	public static final String PERMISSION = "permission";
+	private long numberOfOpen;
+	private long numberOfRestricted;
+	private long numberOfPermission;
 
-	public static final int PERMISSION_STRATEGY_NEGATIVE_ALL = 1;
-	public static final int PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS = 2;
-	public static final int PERMISSION_STRATEGY_POSITIVE = 3;
+	private static String openRightsQuery;
+	private static String noOpenRightsQuery;
+	private static String restrictedRightsQuery;
+	private static String noRestrictedRightsQuery;
+	private static String permissionRightsQuery;
+	private static String allRightsQuery;
+	private static String uncategorizedQuery;
 
-	private static int permissionStrategy = PERMISSION_STRATEGY_NEGATIVE_ALL;
+	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
+	private static List<QueryFacet> queryFacets;
+
+	private static int savedStrategy = 0;
+
+	static final int PERMISSION_STRATEGY_NEGATIVE_ALL = 1;
+	static final int PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS = 2;
+	static final int PERMISSION_STRATEGY_POSITIVE = 3;
+
+//	private static int permissionStrategy = PERMISSION_STRATEGY_NEGATIVE_ALL;
+	private static int permissionStrategy = PERMISSION_STRATEGY_POSITIVE;
 
 	private final static int SELECTED_OPEN = 1;
 	private final static int SELECTED_RESTRICTED = 2;
 	private final static int SELECTED_PERMISSION = 4;
 
-	private static int savedStrategy = 0;
+	private static final String OPEN          = "open";
+	private static final String RESTRICTED    = "restricted";
+	private static final String UNCATEGORIZED = "uncategorized";
+	private static final String PERMISSION    = "permission";
 
 	private static Map<String, String> reusabilityValueMap = new LinkedHashMap<String, String>();
 	static {
@@ -41,10 +57,6 @@ public class RightReusabilityCategorizer {
 		reusabilityValueMap = Collections.unmodifiableMap(reusabilityValueMap);
 	}
 
-	private long numberOfOpen;
-	private long numberOfRestricted;
-	private long numberOfPermission;
-
 	private static List<String> openUrls = new ArrayList<String>();
 	static {
 		openUrls.add(RightsOption.CC_NOC.getUrl());
@@ -52,8 +64,6 @@ public class RightReusabilityCategorizer {
 		openUrls.add(RightsOption.CC_BY.getUrl());
 		openUrls.add(RightsOption.CC_BY_SA.getUrl());
 	}
-	private static String openRightsQuery;
-	private static String noOpenRightsQuery;
 
 	private static List<String> restrictedUrls = new ArrayList<String>();
 	static {
@@ -66,8 +76,6 @@ public class RightReusabilityCategorizer {
 		restrictedUrls.add(RightsOption.RS_NOC_NC.getUrl());
 		restrictedUrls.add(RightsOption.RS_NOC_OKLR.getUrl());
 	}
-	private static String restrictedRightsQuery;
-	private static String noRestrictedRightsQuery;
 
 	private static List<String> permissionUrls = new ArrayList<String>();
 	static {
@@ -80,12 +88,6 @@ public class RightReusabilityCategorizer {
 		permissionUrls.add(RightsOption.RS_INC_OW_EU.getUrl());
 		permissionUrls.add(RightsOption.RS_CNE.getUrl());
 	}
-	private static String permissionRightsQuery;
-
-	private static String allRightsQuery;
-
-	private static Map<String, String> examinedUrlsMap = new HashMap<String, String>();
-	private static List<QueryFacet> queryFacets;
 
 	public RightReusabilityCategorizer() {
 		numberOfOpen = 0;
@@ -191,6 +193,17 @@ public class RightReusabilityCategorizer {
 		return permissionRightsQuery;
 	}
 
+	public static String getUncategorizedQuery() {
+		if (null == uncategorizedQuery) {
+			List<String> solarizedUrls = new ArrayList<String>();
+			solarizedUrls.addAll(solarizeUrls(openUrls));
+			solarizedUrls.addAll(solarizeUrls(restrictedUrls));
+			solarizedUrls.addAll(solarizeUrls(permissionUrls));
+			uncategorizedQuery = joinNegatives(solarizedUrls);
+		}
+		return uncategorizedQuery;
+	}
+
 	private static List<String> solarizeUrls(List<String> urls) {
 		List<String> solarizedUrls = new ArrayList<String>();
 		for (String url : urls) {
@@ -226,6 +239,7 @@ public class RightReusabilityCategorizer {
 			queryFacets.add(new QueryFacet(getOpenRightsQuery(), "REUSABILITY:" + OPEN, "REUSABILITY"));
 			queryFacets.add(new QueryFacet(getRestrictedRightsQuery(), "REUSABILITY:" + RESTRICTED, "REUSABILITY"));
 			queryFacets.add(new QueryFacet(getPermissionRightsQuery(), "REUSABILITY:" + PERMISSION, "REUSABILITY"));
+			queryFacets.add(new QueryFacet(getUncategorizedQuery(), "REUSABILITY:" + UNCATEGORIZED, "REUSABILITY"));
 		}
 		return queryFacets;
 	}

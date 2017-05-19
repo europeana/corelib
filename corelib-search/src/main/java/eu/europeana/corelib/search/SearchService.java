@@ -51,6 +51,11 @@ import eu.europeana.corelib.search.model.ResultSet;
 public interface SearchService {
 
 	/**
+	 * overrule the default isHierachy() check timeout value of 4000 millis (4 sec)
+	 */
+	void setNeo4jTimeoutMillis(int neo4jTimeoutMillis);
+
+	/**
 	 * Retrieve a record by splitted collectionId and recordId
 	 *
 	 * @param collectionId id of the collection to which this record belongs
@@ -113,6 +118,18 @@ public interface SearchService {
      */
 	String resolveId(String collectionId, String recordId) throws BadDataException;
 
+	/**
+	 * Perform a calculateTag in SOLR based on the given query and return the results
+	 * in the format of the given class.
+	 *
+	 * @param beanInterface  The required bean type, should be ApiBean or BriefBean
+	 * @param query          Model class containing the calculateTag specification.
+	 * @param debug			 includes the string representing the Solrquery in the ResultSet
+	 * @return               The calculateTag results, including facets, breadcrumb and original query.
+	 * @throws SolrTypeException
+	 */
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug)
+			throws SolrTypeException;
 	/**
 	 * Perform a calculateTag in SOLR based on the given query and return the results
 	 * in the format of the given class.

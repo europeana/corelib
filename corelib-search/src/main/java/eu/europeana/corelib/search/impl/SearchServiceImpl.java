@@ -92,6 +92,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
@@ -108,6 +110,11 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the query is aborted by SOLR
      */
     private static final int TIME_ALLOWED = 30000;
+    /**
+     * Number of milliseconds before the isHierachy query to NEO4J is aborted, can be overruled from the
+     * objectController
+     */
+    private int NEO4JTIMEOUTMILLIS = 4000;
     /**
      * The list of possible field input for spelling suggestions
      */
@@ -135,9 +142,14 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
     private String mltFields;
+    private boolean debug = false;
 
     @Resource(name = "corelib_solr_mongoServer_metainfo")
     protected EdmMongoServer metainfoMongoServer;
+
+    public void setNeo4jTimeoutMillis(int neo4jTimeoutMillis) {
+        this.NEO4JTIMEOUTMILLIS = neo4jTimeoutMillis;
+    }
 
     @Override
     public FullBean findById(String collectionId, String recordId,
@@ -516,6 +528,14 @@ public class SearchServiceImpl implements SearchService {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
+                                                  Query query, boolean debug) throws SolrTypeException {
+        this.debug = debug;
+        return search(beanInterface, query);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
                                                   Query query) throws SolrTypeException {
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrTypeException(ProblemType.SEARCH_LIMIT_REACHED);
@@ -620,6 +640,7 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
                     resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
                     resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
+                    if (debug) resultSet.setSolrQueryString(query.getExecutedQuery());
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
@@ -922,7 +943,12 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public boolean isHierarchy(String rdfAbout) throws Neo4JException {
-        return neo4jServer.isHierarchy(rdfAbout);
+//        return neo4jServer.isHierarchy(rdfAbout);
+        try {
+            return neo4jServer.isHierarchyTimeLimited(rdfAbout, NEO4JTIMEOUTMILLIS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
+        }
     }
 
     @Override
