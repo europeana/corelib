@@ -30,7 +30,7 @@
 
 	<properties>
 		<javadoc.opts>-Xdoclint:none</javadoc.opts>
-		<version.objectStorage>1.3-SNAPSHOT</version.objectStorage>
+		<version.objectStorage>1.3</version.objectStorage>
 	</properties>
 
 	<modules>
