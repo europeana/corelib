@@ -1,4 +1,4 @@
-package eu.europeana.corelib.service.impl.swift.generic;
+package eu.europeana.corelib.service.impl;
 
 import eu.europeana.corelib.domain.MediaFile;
 import eu.europeana.corelib.service.MediaStorageClient;
@@ -7,6 +7,7 @@ import eu.europeana.domain.StorageObject;
 import eu.europeana.features.ObjectStorageClient;
 import eu.europeana.features.S3ObjectStorageClient;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.jclouds.io.Payload;
 
 
@@ -17,6 +18,9 @@ import java.util.Optional;
 import static org.jclouds.io.Payloads.newByteArrayPayload;
 
 public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
+
+    private static final Logger LOG = Logger.getLogger(EuropeanaObjectStorageClientImpl.class);
+
     @Resource(name = "corelib_web_S3ObjectStorageClient")
     ObjectStorageClient objectApi;
 
@@ -24,15 +28,20 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
         this.objectApi = s3ObjectStorageClient;
     }
 
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#checkIfExists(String)
+     */
     @Override
     public Boolean checkIfExists(String id) {
         return objectApi.getWithoutBody(id).isPresent();
     }
 
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#retrieve(String, Boolean)
+     */
     @Override
     public MediaFile retrieve(String id, Boolean withContent) {
         final Optional<StorageObject> storageObject = withContent ? objectApi.get(id) : objectApi.getWithoutBody(id);
-
 
         if (!storageObject.isPresent()) {
             return null;
@@ -42,7 +51,6 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
         try {
             content = withContent ? IOUtils.toByteArray(storageObjectValue.getPayload().openStream()) : new byte[0];
         } catch (IOException e) {
-            // e.printStackTrace();
             throw new RuntimeException(e);
         }
 
@@ -61,6 +69,17 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
         );
     }
 
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#retrieveContent(String)
+     */
+    @Override
+    public byte[] retrieveContent(String id) {
+        return objectApi.getContent(id);
+    }
+
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#createOrModify(MediaFile)
+     */
     @Override
     public void createOrModify(MediaFile mediaFile) {
         delete(mediaFile.getId());
@@ -75,10 +94,12 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
         metadata.setContentType(mediaFile.getContentType());
         metadata.setContentLength(mediaFile.getSize().longValue());
 
-
         objectApi.put(mediaFile.getId(), payload);
     }
 
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#delete(String)
+     */
     @Override
     public void delete(String id) {
         objectApi.delete(id);
