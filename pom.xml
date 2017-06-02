@@ -13,7 +13,7 @@
 	<groupId>eu.europeana</groupId>
 	<artifactId>corelib</artifactId>
 	<packaging>pom</packaging>
-	<version>2.6.2-SNAPSHOT</version>
+	<version>2.6.2</version>
 	<name>Europeana Core Library</name>
 	<url>http://www.europeana.eu</url>
 	<organization>
@@ -165,7 +165,7 @@
 		<connection>scm:git:git@github.com:europeana/corelib.git</connection>
 		<developerConnection>scm:git:git@github.com:europeana/corelib.git</developerConnection>
 		<url>https://github.com/europeana/corelib</url>
-		<tag>HEAD</tag>
+		<tag>corelib-2.6.2</tag>
 	</scm>
 
 	<profiles>
