@@ -36,6 +36,11 @@ public class ResultSet<T> {
 	private Query query;
 
 	/**
+	 * The request query object
+	 */
+	private String solrQueryString;
+
+	/**
 	 * The list of result objects
 	 */
 	private List<T> results;
@@ -180,6 +185,14 @@ public class ResultSet<T> {
 				+ ", facetFields=" + facetFields + ", spellcheck=" + spellcheck
 				+ ", resultSize=" + resultSize + ", searchTime=" + searchTime
 				+ "]";
+	}
+
+	public String getSolrQueryString() {
+		return solrQueryString;
+	}
+
+	public void setSolrQueryString(String solrQueryString) {
+		this.solrQueryString = solrQueryString;
 	}
 
 }

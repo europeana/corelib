@@ -35,15 +35,6 @@
 	<bean id="corelib_web_contentReuseFrameworkService" 
 		class="eu.europeana.corelib.web.service.impl.ContentReuseFrameworkServiceImpl" /> -->
 
-	<!--<bean id = "swiftConfiguration" class = "eu.europeana.corelib.service.impl.swift.SwiftConfiguration">-->
-		<!--<constructor-arg value= "#{europeanaProperties['contentreuse.swift.authUrl']}" type="java.lang.String"/> &lt;!&ndash; auth url &ndash;&gt;-->
-		<!--<constructor-arg value="#{europeanaProperties['contentreuse.swift.tenantName']}" type="java.lang.String"/> &lt;!&ndash; tenant name &ndash;&gt;-->
-		<!--<constructor-arg value="#{europeanaProperties['contentreuse.swift.userName']}" type="java.lang.String"/> &lt;!&ndash; user name &ndash;&gt;-->
-		<!--<constructor-arg value="#{europeanaProperties['contentreuse.swift.password']}" type="java.lang.String"/> &lt;!&ndash; pass &ndash;&gt;-->
-		<!--<constructor-arg value="#{europeanaProperties['contentreuse.swift.container']}" type="java.lang.String"/> &lt;!&ndash; container &ndash;&gt;-->
-		<!--<constructor-arg value="#{europeanaProperties['contentreuse.swift.region']}" type="java.lang.String"/> &lt;!&ndash; region &ndash;&gt;-->
-	<!--</bean>-->
-
 	<bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.features.S3ObjectStorageClient">
 		<constructor-arg value="#{europeanaProperties['contentreuse.s3.key']}"/>
 		<constructor-arg value="#{europeanaProperties['contentreuse.s3.secret']}"/>
@@ -52,7 +43,7 @@
 	</bean>
 
     <bean id="corelib_mediaStorageClient"
-          class="eu.europeana.corelib.service.impl.swift.generic.EuropeanaObjectStorageClientImpl" >
+          class="eu.europeana.corelib.service.impl.EuropeanaObjectStorageClientImpl" >
 		<constructor-arg ref="corelib_web_S3ObjectStorageClient"/>
 	</bean>
 

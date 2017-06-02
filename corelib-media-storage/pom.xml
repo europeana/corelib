@@ -5,7 +5,7 @@
     <parent>
         <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>2.6.1.1</version>
+        <version>2.6.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>eu.europeana.corelib</groupId>
@@ -14,9 +14,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.objectStorage>1.3</version.objectStorage>
     </properties>
 
     <dependencies>
+        <!-- Tmp override objectstorage version to include on with timing debugging -->
+        <dependency>
+            <groupId>eu.europeana</groupId>
+            <artifactId>object-storage</artifactId>
+            <version>${version.objectStorage}</version>
+        </dependency>
+
         <!-- CORELIB -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
@@ -33,21 +41,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
-        </dependency>
-        <!-- jclouds OpenStack dependencies -->
-        <dependency>
-            <groupId>org.apache.jclouds.api</groupId>
-            <artifactId>openstack-swift</artifactId>
-            <version>1.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana</groupId>
-            <artifactId>object-storage</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jclouds</groupId>
-            <artifactId>jclouds-core</artifactId>
-            <version>1.9.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>

@@ -4,11 +4,29 @@ import eu.europeana.corelib.domain.MediaFile;
 
 
 public interface MediaStorageService {
-    Boolean checkIfExists(String var1);
 
-    MediaFile retrieve(String var1, Boolean var2);
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#checkIfExists(String)
+     */
+    Boolean checkIfExists(String id);
 
-    void createOrModify(MediaFile var1);
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#retrieve(String, Boolean)
+     */
+    MediaFile retrieve(String id, Boolean withContent);
 
-    void delete(String var1);
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#retrieveContent(String)
+     */
+    byte[] retrieveContent(String id);
+
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#createOrModify(MediaFile)
+     */
+    void createOrModify(MediaFile file);
+
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#delete(String)
+     */
+    void delete(String id);
 }

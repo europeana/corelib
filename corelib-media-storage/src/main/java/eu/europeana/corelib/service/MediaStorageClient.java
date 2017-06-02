@@ -21,6 +21,13 @@ public interface MediaStorageClient {
     MediaFile retrieve(String id, Boolean withContent);
 
     /**
+     * Retrieves only the content of a media file, thus allowing faster access compared to {@link MediaStorageClient#retrieve(String, Boolean))
+     * @param id the if of the file, it's the MD5 of the URL
+     * @return a array of bytes representing only the media content
+     */
+    byte[] retrieveContent (String id);
+
+    /**
      * If the file does not exists in the DB it creates it, otherwise it will be updated.
      * @param mediaFile the new/modified MediaFile
      */
