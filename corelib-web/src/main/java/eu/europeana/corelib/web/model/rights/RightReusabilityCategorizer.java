@@ -40,6 +40,7 @@ public class RightReusabilityCategorizer {
 //	private static int permissionStrategy = PERMISSION_STRATEGY_NEGATIVE_ALL;
 	private static int permissionStrategy = PERMISSION_STRATEGY_POSITIVE;
 
+	private final static int SELECTED_UNCATEGORIZED = 0;
 	private final static int SELECTED_OPEN = 1;
 	private final static int SELECTED_RESTRICTED = 2;
 	private final static int SELECTED_PERMISSION = 4;
@@ -294,6 +295,7 @@ public class RightReusabilityCategorizer {
 		String open = "REUSABILITY:" + OPEN;
 		String restricted = "REUSABILITY:" + RESTRICTED;
 		String permission = "REUSABILITY:" + PERMISSION;
+		String uncategorized = "REUSABILITY:" + UNCATEGORIZED;
 
 		int reusabilityFilters = 0;
 		for (String value : qf) {
@@ -309,6 +311,9 @@ public class RightReusabilityCategorizer {
 				TaggedQuery query = new TaggedQuery("REUSABILITY", getPermissionRightsQuery());
 				valueReplacements.put(permission, query.toString());
 				reusabilityFilters += SELECTED_PERMISSION;
+			} else if (fromApi && value.equalsIgnoreCase(UNCATEGORIZED)) {
+				reusabilityFilters = SELECTED_UNCATEGORIZED;
+
 			}
 		}
 
@@ -328,6 +333,9 @@ public class RightReusabilityCategorizer {
 			valueReplacements.put(open, "");
 			valueReplacements.put(restricted, "");
 			valueReplacements.put(permission, "");
+		} else if (reusabilityFilters == SELECTED_UNCATEGORIZED) {
+			TaggedQuery query = new TaggedQuery("REUSABILITY", RightReusabilityCategorizer.getUncategorizedQuery());
+			valueReplacements.put(uncategorized, query.toString());
 		}
 		return valueReplacements;
 	}
