@@ -11,7 +11,6 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:edm="http://www.europeana.eu/schemas/edm/"
-  xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
@@ -22,16 +21,11 @@
     </documentation>
   </annotation>
 
-  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    schemaLocation="RDF.xsd"/>
-  <import namespace="http://www.europeana.eu/schemas/edm/"
-    schemaLocation="EDM-COMMON-MAIN.xsd"/>
-  <import namespace="http://www.europeana.eu/schemas/edm/"
-    schemaLocation="CONTEXTS.xsd"/>
-  <import namespace="http://purl.org/dc/elements/1.1/"
-    schemaLocation="DC.xsd"/>
-  <import namespace="http://www.w3.org/2004/02/skos/core#"
-    schemaLocation="SKOS.xsd"/>
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+  <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="EDM-COMMON-MAIN.xsd"/>
+  <import namespace="http://www.europeana.eu/schemas/edm/" schemaLocation="CONTEXTS.xsd"/>
+  <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
+  <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
 
   <element name="homepage" type="rdf:ResourceType">
   </element>
@@ -41,8 +35,6 @@
 
   <element name="logo" type="rdf:ResourceType">
   </element>
-
-
 
   <element name="Organization">
     <complexType>
@@ -65,7 +57,6 @@
             <element ref="edm:country" minOccurs="1" maxOccurs="1"/>
             <element ref="edm:europeanaRole" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="foaf:homepage" minOccurs="0" maxOccurs="1"/>
-            <element ref="owl:sameAs" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="foaf:logo" minOccurs="0" maxOccurs="1"/>
           </sequence>
         </extension>
