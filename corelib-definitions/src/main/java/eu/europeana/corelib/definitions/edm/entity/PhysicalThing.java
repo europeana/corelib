@@ -303,7 +303,7 @@ public interface PhysicalThing extends AbstractEdmEntity {
 	 * 
 	 * @return String representing the edm:currentLocation fields for a Proxy
 	 */
-	String getEdmCurrentLocation();
+	Map<String, List<String>> getEdmCurrentLocation();
 
 	/**
 	 * Set the dcContributor field for a Proxy
@@ -608,7 +608,7 @@ public interface PhysicalThing extends AbstractEdmEntity {
 	 * @param edmCurrentLocation
 	 *            String array containing the edmCurrentLocation of a Proxy
 	 */
-	void setEdmCurrentLocation(String edmCurrentLocation);
+	void setEdmCurrentLocation(Map<String, List<String>> edmCurrentLocation);
 
 	/**
 	 * Retrieves the edmRights field for a Proxy

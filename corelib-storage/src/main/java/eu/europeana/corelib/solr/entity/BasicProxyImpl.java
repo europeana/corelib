@@ -1,7 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
 import org.mongodb.morphia.annotations.Entity;
-
 import eu.europeana.corelib.definitions.edm.entity.BasicProxy;
 
 @Entity("BasicProxy")
@@ -29,6 +28,7 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 	public void setProxyFor(String proxyFor) {
 		this.proxyFor = proxyFor;
 	}
+
 
 //	@Override
 //	public boolean equals(Object o) {

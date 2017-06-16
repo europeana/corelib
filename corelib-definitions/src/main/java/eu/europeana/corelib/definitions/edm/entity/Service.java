@@ -10,6 +10,6 @@ public interface Service extends AbstractEdmEntity{
     String[] getDctermsConformsTo();
     void setDcTermsConformsTo(String[] dcTermsConformsTo);
 
-    String getDoapImplements();
-    void setDoapImplements(String doapImplements);
+    String[] getDoapImplements();
+    void setDoapImplements(String[] doapImplements);
 }

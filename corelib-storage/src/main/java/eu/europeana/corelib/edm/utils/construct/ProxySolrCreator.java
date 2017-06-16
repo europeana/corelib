@@ -20,7 +20,7 @@ public class ProxySolrCreator {
     
     public void create(SolrInputDocument doc, Proxy proxy){
          SolrUtils.addFromString(doc, EdmLabel.ORE_PROXY, proxy.getAbout());
-         SolrUtils.addFromString(doc, EdmLabel.PROXY_EDM_CURRENT_LOCATION, proxy.getEdmCurrentLocation());
+         SolrUtils.addFromMap(doc, EdmLabel.PROXY_EDM_CURRENT_LOCATION, proxy.getEdmCurrentLocation());
          SolrUtils.addFromString(doc, EdmLabel.PROXY_EDM_ISREPRESENTATIONOF, proxy.getEdmIsRepresentationOf());
          SolrUtils.addFromString(doc, EdmLabel.PROXY_ORE_PROXY_FOR, proxy.getProxyFor());
          SolrUtils.addFromStringArray(doc, EdmLabel.PROXY_EDM_INCORPORATES, proxy.getEdmIncorporates());

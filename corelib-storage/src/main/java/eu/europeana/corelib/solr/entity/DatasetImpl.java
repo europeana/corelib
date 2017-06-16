@@ -1,11 +1,12 @@
 package eu.europeana.corelib.solr.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
+import java.util.Map;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import org.mongodb.morphia.annotations.Entity;
-
 import eu.europeana.corelib.definitions.edm.entity.Dataset;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -18,9 +19,15 @@ public class DatasetImpl extends AbstractEdmEntityImpl implements Dataset {
 
 	private String edmDatasetName;
 	private String edmProvider;
+	private Map<String, List<String>> edmIntermediateProvider;
+	private Map<String, List<String>> edmDataProvider;
+	private String edmCountry;
+	private String edmLanguage;
 	private String dcIdentifier;
+	private Map<String, List<String>> dcDescription;
 	private String dctermsCreated;
 	private String dctermsExtent;
+	private String dctermsModified;
 	private String admsStatus;
 	
 	@Override
@@ -45,6 +52,46 @@ public class DatasetImpl extends AbstractEdmEntityImpl implements Dataset {
 	}
 
 	@Override
+	public Map<String, List<String>> getEdmIntermediateProvider() {
+		return this.edmIntermediateProvider;
+	}
+
+	@Override
+	public void setEdmIntermediateProvider(Map<String, List<String>> edmIntermediateProvider) {
+		this.edmIntermediateProvider = edmIntermediateProvider;
+	}
+
+	@Override
+	public Map<String, List<String>> getEdmDataProvider() {
+		return this.edmDataProvider;
+	}
+
+	@Override
+	public void setEdmDataProvider(Map<String, List<String>> edmDataProvider) {
+		this.edmDataProvider = edmDataProvider;
+	}
+
+	@Override
+	public String getEdmCountry() {
+		return this.edmCountry;
+	}
+
+	@Override
+	public void setEdmCountry(String edmCountry) {
+		this.edmCountry = edmCountry;
+	}
+
+	@Override
+	public String getEdmLanguage() {
+		return this.edmLanguage;
+	}
+
+	@Override
+	public void setEdmLanguage(String edmLanguage) {
+		this.edmLanguage = edmLanguage;
+	}
+
+	@Override
 	public String getDcIdentifier() {
 		return this.dcIdentifier;
 	}
@@ -52,6 +99,16 @@ public class DatasetImpl extends AbstractEdmEntityImpl implements Dataset {
 	@Override
 	public void setDcIdentifier(String dcIdentifier) {
 		this.dcIdentifier = dcIdentifier;
+	}
+
+	@Override
+	public Map<String, List<String>> getDcDescription() {
+		return this.dcDescription;
+	}
+
+	@Override
+	public void setDcDescription(Map<String, List<String>> dcDescription) {
+		this.dcDescription = dcDescription;
 	}
 
 	@Override
@@ -72,6 +129,16 @@ public class DatasetImpl extends AbstractEdmEntityImpl implements Dataset {
 	@Override
 	public void setDctermsExtent(String dctermsExtent) {
 		this.dctermsExtent = dctermsExtent;
+	}
+
+	@Override
+	public String getDctermsModified() {
+		return this.dctermsModified;
+	}
+
+	@Override
+	public void setDctermsModified(String dctermsModified) {
+		this.dctermsModified = dctermsModified;
 	}
 
 	@Override

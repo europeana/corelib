@@ -13,6 +13,6 @@ public class ServiceSolrCreator {
     public void create(SolrInputDocument doc, Service service){
         SolrUtils.addFromString(doc, EdmLabel.SV_RDF_ABOUT,service.getAbout());
         SolrUtils.addFromStringArray(doc,EdmLabel.SV_DCTERMS_CONFORMS_TO,service.getDctermsConformsTo());
-        SolrUtils.addFromString(doc,EdmLabel.SV_DOAP_IMPLEMENTS,service.getDoapImplements());
+        SolrUtils.addFromStringArray(doc,EdmLabel.SV_DOAP_IMPLEMENTS,service.getDoapImplements());
     }
 }

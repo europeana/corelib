@@ -126,9 +126,14 @@ public class EdmUtils {
                         service.setConformsToList(conformsToList);
                     }
                 }
-
-
-                addAsObject(service, Implements.class, serv.getDoapImplements());
+                if (serv.getDoapImplements() != null && serv.getDoapImplements().length > 0){
+                    List<Implements> implementsList = new ArrayList<>();
+                    for(String doapImplements : serv.getDoapImplements()){
+                        Implements anImplements = new Implements();
+                        anImplements.setResource(doapImplements);
+                    }
+                    service.setImplementList(implementsList);
+                }
                 serviceList.add(service);
             }
             rdf.setServiceList(serviceList);
