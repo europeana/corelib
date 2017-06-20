@@ -92,6 +92,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
@@ -108,6 +110,11 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the query is aborted by SOLR
      */
     private static final int TIME_ALLOWED = 30000;
+    /**
+     * Number of milliseconds before the isHierachy query to NEO4J is aborted, can be overruled from the
+     * objectController
+     */
+    private int neo4Jtimeoutmillis = 4000;
     /**
      * The list of possible field input for spelling suggestions
      */
@@ -140,12 +147,14 @@ public class SearchServiceImpl implements SearchService {
     @Resource(name = "corelib_solr_mongoServer_metainfo")
     protected EdmMongoServer metainfoMongoServer;
 
+    public void setNeo4jTimeoutMillis(int neo4jTimeoutMillis) {
+        this.neo4Jtimeoutmillis = neo4jTimeoutMillis;
+    }
+
     @Override
     public FullBean findById(String collectionId, String recordId,
                              boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
-                similarItems
-        );
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
     @SuppressWarnings("unchecked")
@@ -932,7 +941,18 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public boolean isHierarchy(String rdfAbout) throws Neo4JException {
-        return neo4jServer.isHierarchy(rdfAbout);
+//        return neo4jServer.isHierarchy(rdfAbout);
+        boolean result = false;
+        long startTime = System.nanoTime();
+        try {
+            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, neo4Jtimeoutmillis);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            log.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
+        }
+        if (log.isInfoEnabled()) {
+            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + neo4Jtimeoutmillis);
+        }
+        return result;
     }
 
     @Override

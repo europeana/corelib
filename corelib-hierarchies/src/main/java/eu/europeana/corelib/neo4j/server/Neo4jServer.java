@@ -17,6 +17,8 @@
 package eu.europeana.corelib.neo4j.server;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import org.neo4j.graphdb.Node;
@@ -157,4 +159,13 @@ public interface Neo4jServer {
 	 * @return true if it belongs to a hierarchy
 	 */
 	boolean isHierarchy(String id) throws Neo4JException;
+
+	/**
+	 * Check if the specified id belongs to a hierarchy
+	 * @param id The Europeana id
+	 * @param timeOutMillis seconds to wait until forcing a time-out (working around Neo4j issues)
+	 * @return true if it belongs to a hierarchy
+	 */
+	boolean isHierarchyTimeLimited(String id, int timeOutMillis) throws Neo4JException, InterruptedException,
+			ExecutionException, TimeoutException;
 }
