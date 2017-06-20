@@ -9,6 +9,7 @@ import eu.europeana.features.S3ObjectStorageClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jclouds.io.Payload;
+import org.joda.time.DateTime;
 
 
 import javax.annotation.Resource;
@@ -60,7 +61,7 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
                 null,
                 storageObjectValue.getMetadata().getETag(),
                 null,
-                null,
+                new DateTime(storageObjectValue.getMetadata().getLastModified().getTime()),
                 content,
                 null,
                 storageObjectValue.getMetadata().getContentType(),
