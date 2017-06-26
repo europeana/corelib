@@ -50,11 +50,11 @@ public class EuropeanaUriUtils {
 	 * @return The Europeana compatible ID
 	 */
 
-	public static String createEuropeanaId(String collectionId, String recordId) {
+	public static String createSanitizedEuropeanaId(String collectionId, String recordId) {
 		return "/" + sanitizeCollectionId(collectionId) + "/" + sanitizeRecordId(recordId);
 	}
 
-	public static String createResolveEuropeanaId(String collectionId, String recordId){
+	public static String createEuropeanaId(String collectionId, String recordId){
 		return "/" + collectionId + "/" + recordId;
 	}
 	
