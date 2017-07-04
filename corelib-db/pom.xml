@@ -104,7 +104,7 @@
         <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4.1208-jdbc42-atlassian-hosted</version>
+            <version>9.4.1212</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
