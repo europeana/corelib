@@ -101,6 +101,11 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
+    // Note that this is also defined in the API ObjectController and HierarchicalController
+    // It's not exactly idea, but it needs to be available in case it is not supplied, e.g. by the BasicObjectController
+    // TODO Alternatively, we could turn this into a europeana.property
+    private static final int DEFAULT_HIERARCHY_TIMEOUT = 4000;
+
     /**
      * Default number of documents retrieved by MoreLikeThis
      */
@@ -110,11 +115,6 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the query is aborted by SOLR
      */
     private static final int TIME_ALLOWED = 30000;
-    /**
-     * Number of milliseconds before the isHierachy query to NEO4J is aborted, can be overruled from the
-     * objectController
-     */
-    private int neo4Jtimeoutmillis = 4000;
     /**
      * The list of possible field input for spelling suggestions
      */
@@ -146,16 +146,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Resource(name = "corelib_solr_mongoServer_metainfo")
     protected EdmMongoServer metainfoMongoServer;
-
-    public void setNeo4jTimeoutMillis(int neo4jTimeoutMillis) {
-        this.neo4Jtimeoutmillis = neo4jTimeoutMillis;
-    }
-
-    @Override
-    public FullBean findById(String collectionId, String recordId,
-                             boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
-    }
 
     @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
@@ -329,7 +319,18 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public FullBean findById(String collectionId, String recordId, boolean similarItems)
+            throws MongoRuntimeException, MongoDBException, Neo4JException {
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
+    }
+
+    @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+        return findById(europeanaObjectId, similarItems, DEFAULT_HIERARCHY_TIMEOUT);
+    }
+
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
@@ -337,7 +338,7 @@ public class SearchServiceImpl implements SearchService {
 
             boolean isHierarchy = false;
             try {
-                isHierarchy = isHierarchy(fullBean.getAbout());
+                isHierarchy = isHierarchy(fullBean.getAbout(), hierarchyTimeout);
             } catch (Neo4JException e) {
                 log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
@@ -940,17 +941,17 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean isHierarchy(String rdfAbout) throws Neo4JException {
+    public boolean isHierarchy(String rdfAbout, int hierarchyTimeout) throws Neo4JException {
 //        return neo4jServer.isHierarchy(rdfAbout);
         boolean result = false;
         long startTime = System.nanoTime();
         try {
-            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, neo4Jtimeoutmillis);
+            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, hierarchyTimeout);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             log.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
         }
         if (log.isInfoEnabled()) {
-            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + neo4Jtimeoutmillis);
+            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + hierarchyTimeout);
         }
         return result;
     }
