@@ -16,16 +16,16 @@ public class EuropeanaUriUtilsTest {
 	
 	@Test
 	public void testEuropeanaUriCreation(){
-		String collectionIDtest = EuropeanaUriUtils.createEuropeanaId(COLLECTION_WITHOUT_LETTER, RECORD_WITHOUT_HTTP);
+		String collectionIDtest = EuropeanaUriUtils.createSanitizedEuropeanaId(COLLECTION_WITHOUT_LETTER, RECORD_WITHOUT_HTTP);
 		assertEquals("/92001/GX_OTP9", collectionIDtest);
-		collectionIDtest =  EuropeanaUriUtils.createEuropeanaId(COLLECTION_WITH_LETTER,RECORD_WITHOUT_HTTP);
+		collectionIDtest =  EuropeanaUriUtils.createSanitizedEuropeanaId(COLLECTION_WITH_LETTER,RECORD_WITHOUT_HTTP);
 		assertEquals("/92001/GX_OTP9", collectionIDtest);
-		collectionIDtest =  EuropeanaUriUtils.createEuropeanaId(COLLECTION_WITH_LETTER,RECORD_WITH_HTTP);
+		collectionIDtest =  EuropeanaUriUtils.createSanitizedEuropeanaId(COLLECTION_WITH_LETTER,RECORD_WITH_HTTP);
 		assertEquals("/92001/test____x", collectionIDtest);
-		collectionIDtest =  EuropeanaUriUtils.createEuropeanaId(COLLECTION_WITHOUT_LETTER,RECORD_WITH_HTTP);
+		collectionIDtest =  EuropeanaUriUtils.createSanitizedEuropeanaId(COLLECTION_WITHOUT_LETTER,RECORD_WITH_HTTP);
 		assertEquals("/92001/test____x", collectionIDtest);
 
-		System.out.println(EuropeanaUriUtils.createEuropeanaId("202020","http://www.receptite.com/рецепта/селска-салата"));
+		System.out.println(EuropeanaUriUtils.createSanitizedEuropeanaId("202020","http://www.receptite.com/рецепта/селска-салата"));
 	}
 	
 }

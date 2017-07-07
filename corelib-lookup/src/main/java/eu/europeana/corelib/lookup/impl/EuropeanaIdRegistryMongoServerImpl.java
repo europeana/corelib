@@ -149,7 +149,7 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		LookupResult lookupresult = new LookupResult();
 
 		// Generate EuropeanaID by originalid and collectionID
-		String europeanaIDString = EuropeanaUriUtils.createEuropeanaId(collectionID, origID);
+		String europeanaIDString = EuropeanaUriUtils.createSanitizedEuropeanaId(collectionID, origID);
 
 		lookupresult.setEuropeanaID(europeanaIDString);
 

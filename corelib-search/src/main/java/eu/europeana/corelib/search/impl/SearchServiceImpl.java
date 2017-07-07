@@ -140,10 +140,12 @@ public class SearchServiceImpl implements SearchService {
     @Resource(name = "corelib_solr_mongoServer_metainfo")
     protected EdmMongoServer metainfoMongoServer;
 
+
+
     @Override
     public FullBean findById(String collectionId, String recordId,
                              boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
+        return findById(EuropeanaUriUtils.createSanitizedEuropeanaId(collectionId, recordId),
                 similarItems
         );
     }
@@ -333,6 +335,7 @@ public class SearchServiceImpl implements SearchService {
                 log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
 
+            // TODO: this is a hack to prevent hundreds of dcTermsHasParts present in some hierarchies
             if (isHierarchy) {
                 for (Proxy prx : fullBean.getProxies()) {
                     prx.setDctermsHasPart(null);
@@ -361,22 +364,27 @@ public class SearchServiceImpl implements SearchService {
         return fullBean;
     }
 
+    /**
+     * @see SearchService#resolve(String, String, boolean)
+     */
     @Override
     public FullBean resolve(String collectionId, String recordId,
                             boolean similarItems) throws SolrTypeException {
-        return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId, recordId), similarItems);
+        return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
+    /**
+     * @see SearchService#resolve(String, boolean)
+     */
     @Override
     public FullBean resolve(String europeanaObjectId, boolean similarItems)
             throws SolrTypeException {
 
-        FullBean fullBean = resolveInternal(europeanaObjectId);
+        FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
         FullBean fullBeanNew = fullBean;
         if (fullBean != null) {
             while (fullBeanNew != null) {
-                fullBeanNew = resolveInternal(fullBeanNew.getAbout()
-                );
+                fullBeanNew = resolveInternal(fullBeanNew.getAbout(), similarItems);
                 if (fullBeanNew != null) {
                     fullBean = fullBeanNew;
                 }
@@ -386,16 +394,24 @@ public class SearchServiceImpl implements SearchService {
         return fullBean;
     }
 
-    private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-
+    /**
+     * Retrieve bean via a single redirect, i.e. checks if a record has a newer Id and if so retrieves the bean via that newId.
+     *
+     * @param europeanaObjectId
+     * @return
+     * @throws SolrTypeException
+     */
+    private FullBean resolveInternal(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
-        injectWebMetaInfo(fullBean);
         if (fullBean != null) {
-            try {
-                fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
-            } catch (SolrServerException e) {
-                log.error("SolrServerException: " + e.getMessage());
+            injectWebMetaInfo(fullBean);
+            if (similarItems) {
+                try {
+                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
+                } catch (SolrServerException e) {
+                    log.error("SolrServerException", e);
+                }
             }
         }
         return fullBean;
@@ -424,7 +440,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public String resolveId(String collectionId, String recordId) throws BadDataException {
-        return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(
+        return resolveId(EuropeanaUriUtils.createEuropeanaId(
                 collectionId, recordId));
     }
 
