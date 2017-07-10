@@ -1,13 +1,11 @@
 package eu.europeana.corelib.solr.test.importer;
 
-
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
-import eu.europeana.corelib.definitions.jibx.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -33,7 +31,7 @@ public class ProxyFieldInputTest {
         try {
             solrDocument = new ProxyFieldInput().createProxySolrFields(proxy, solrDocument);
             assertEquals(proxy.getAbout(), solrDocument.getFieldValue(EdmLabel.ORE_PROXY.toString()));
-            assertEquals(proxy.getCurrentLocation().getResource(),
+            assertEquals(proxy.getCurrentLocation().getString(),
                     solrDocument.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString()));
             assertEquals(
                     proxy.getIsNextInSequenceList().get(0).getResource(),

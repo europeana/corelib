@@ -16,9 +16,7 @@
  */
 package eu.europeana.corelib.edm.server.importer.util;
 
-import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
