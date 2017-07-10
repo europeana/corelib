@@ -52,7 +52,7 @@ public final class ProxyFieldInput {
   /**
    * Create a SolrInputDocument with the Proxy fields filled in
    *
-   * @param providedCHO The JiBX ProvidedCHO Entity
+   * @param proxy
    * @param solrInputDocument The SolrInputDocument to alter
    * @return The altered SolrInputDocument with the Proxy fields filled in
    */
@@ -66,8 +66,8 @@ public final class ProxyFieldInput {
         SolrUtils.exists(String.class,
             (proxy.getType().getType().xmlValue())).toString());
 
-    if (proxy.getCurrentLocation() != null)
-    {solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+    if (proxy.getCurrentLocation() != null) {
+        solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
         solrInputDocument, proxy.getCurrentLocation(),
         EdmLabel.PROXY_EDM_CURRENT_LOCATION);
     }
@@ -275,8 +275,7 @@ public final class ProxyFieldInput {
    * instantiated when reading the ProvidedCHO
    *
    * @param mongoProxy The Proxy MongoDB Entity to save or update
-   * @param providedCHO The ProvidedCHO JiBX Entity
-   * @param mongoServer The MongoDB Server to save the entity to
+   * @param proxy
    * @return The MongoDB Proxy Entity
    */
   public ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,

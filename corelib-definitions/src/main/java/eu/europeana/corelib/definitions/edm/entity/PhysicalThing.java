@@ -589,7 +589,7 @@ public interface PhysicalThing extends AbstractEdmEntity {
 	/**
 	 * Set the dctermsTableOfContents field for a Proxy
 	 * 
-	 * @param dctermsTableOfContents
+	 * @param dctermsTOC
 	 *            String array containing the dctermsTableOfContents of a Proxy
 	 */
 	void setDctermsTOC(Map<String, List<String>> dctermsTOC);
