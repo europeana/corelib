@@ -76,11 +76,11 @@ public class WebResourceImpl implements WebResource {
   private String edmPreview;
 
   @Transient
-  @JsonIgnore
+  @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
   private AggregationImpl parentAggregation;
 
   @Transient
-  @JsonIgnore
+  @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
   private WebResourceMetaInfoImpl webResourceMetaInfo;
 
   @Override
