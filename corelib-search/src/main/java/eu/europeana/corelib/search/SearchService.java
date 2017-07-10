@@ -72,7 +72,7 @@ public interface SearchService {
 	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
 
 	/**
-	 * Retrieve a record by id.
+	 * Retrieve a record by id. If the record cannot be found, it will retry
 	 * 
      * @param europeanaObjectId The unique europeana id
      * @param similarItems      Whether to retrieve similar items

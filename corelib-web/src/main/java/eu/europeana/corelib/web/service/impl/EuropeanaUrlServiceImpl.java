@@ -185,7 +185,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 			String recordId = StringUtils.substringAfterLast(url, UrlBuilder.PATH_SEPERATOR);
 			url = StringUtils.substringBeforeLast(url, UrlBuilder.PATH_SEPERATOR);
 			String collectionId = StringUtils.substringAfterLast(url, UrlBuilder.PATH_SEPERATOR);
-			return EuropeanaUriUtils.createResolveEuropeanaId(collectionId, recordId);
+			return EuropeanaUriUtils.createEuropeanaId(collectionId, recordId);
 		}
 		return null;
 	}
