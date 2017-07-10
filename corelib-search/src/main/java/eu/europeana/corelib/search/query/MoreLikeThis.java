@@ -22,6 +22,7 @@ package eu.europeana.corelib.search.query;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
+@Deprecated
 public enum MoreLikeThis {
 
 	// CREATOR("creator"),

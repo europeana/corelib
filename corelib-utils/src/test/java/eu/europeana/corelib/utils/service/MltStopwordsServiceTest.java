@@ -30,6 +30,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * MLT Stopwords service tests
  * @author Peter.Kiraly@kb.nl
  */
+@Deprecated
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-utils-context.xml", "/corelib-utils-test.xml" })
 public class MltStopwordsServiceTest {

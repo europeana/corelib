@@ -481,12 +481,14 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    @Deprecated
     public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
             throws SolrServerException {
         return findMoreLikeThis(europeanaObjectId, DEFAULT_MLT_COUNT);
     }
 
     @Override
+    @Deprecated
     public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
             throws SolrServerException {
         String query = "europeana_id:\"" + europeanaObjectId + "\"";

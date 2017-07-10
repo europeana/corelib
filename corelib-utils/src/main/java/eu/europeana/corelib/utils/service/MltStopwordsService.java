@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.utils.service;
 
+@Deprecated
 public interface MltStopwordsService {
 
 	/**
