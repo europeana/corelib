@@ -76,11 +76,13 @@ public class WebResourceImpl implements WebResource {
   private String edmPreview;
 
   @Transient
-  @JsonIgnore
+  // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
+  @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
   private AggregationImpl parentAggregation;
 
   @Transient
-  @JsonIgnore
+  // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
+  @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
   private WebResourceMetaInfoImpl webResourceMetaInfo;
 
   @Override
