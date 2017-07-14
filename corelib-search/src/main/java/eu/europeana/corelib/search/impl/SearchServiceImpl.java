@@ -137,10 +137,6 @@ public class SearchServiceImpl implements SearchService {
     private String mltFields;
     private boolean debug = false;
 
-    @Resource(name = "corelib_solr_mongoServer_metainfo")
-    protected EdmMongoServer metainfoMongoServer;
-
-
 
     @Override
     public FullBean findById(String collectionId, String recordId,
@@ -1073,7 +1069,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
-        final DB db = metainfoMongoServer.getDatastore().getDB();
+        final DB db = mongoServer.getDatastore().getDB();
         final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
 
         final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);

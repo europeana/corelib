@@ -20,6 +20,7 @@ package eu.europeana.corelib.mongo.server.impl;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
+import org.apache.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.mapping.MappingException;
@@ -33,7 +34,6 @@ import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
-import java.util.logging.Logger;
 
 /**
  * @see eu.europeana.corelib.mongo.server.EdmMongoServer
@@ -42,17 +42,17 @@ import java.util.logging.Logger;
  */
 public class EdmMongoServerImpl implements EdmMongoServer {
 
-	private final Logger log = Logger.getLogger(getClass().getName());
+	private static final Logger LOG = Logger.getLogger(EdmMongoServerImpl.class);
 
 	private MongoClient mongoClient;
 	private String databaseName;
 	private Datastore datastore;
-	EuropeanaIdMongoServer europeanaIdMongoServer;
+	private EuropeanaIdMongoServer europeanaIdMongoServer;
 	private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
 	private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
 	/**
-	 * Create a new datastore to do get/delete/save operations on the database
+	 * Create a new Morphia datastore to do get/delete/save operations on the database
 	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
 	 * provided mongoClient
 	 * @param mongoClient
@@ -110,7 +110,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 		datastore = morphia.createDatastore(mongoClient, databaseName);
 		datastore.ensureIndexes();
-		log.info("EDMMongoServer datastore is created");
+		LOG.info("Morphia EDMMongoServer datastore is created");
 	}
 
 	@Override
@@ -124,14 +124,11 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id)
 					.get();
 		} catch (RuntimeException re) {
-			if (re.getCause() != null
-				&& re.getCause() instanceof MappingException) {
-				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR);
-				
+			if (re.getCause() != null && re.getCause() instanceof MappingException) {
+				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);
 			} else {
-				throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE);
+				throw new MongoRuntimeException(re, ProblemType.MONGO_UNREACHABLE);
 			}
-
 		}
 	}
 
@@ -165,7 +162,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.equal(newId.getNewId()).get();
 		}
 
-		log.info(String.format("Unresolvable Europeana ID: %s", id));
+		LOG.info(String.format("Unresolvable Europeana ID: %s", id));
 		return null;
 	}
 
@@ -184,7 +181,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 	@Override
 	public void close() {
-		log.info("Closing MongoClient for EDMMongoServer");
-		mongoClient.close();
+		if (mongoClient != null) {
+			LOG.info("Closing MongoClient for EDMMongoServer");
+			mongoClient.close();
+		}
 	}
 }
