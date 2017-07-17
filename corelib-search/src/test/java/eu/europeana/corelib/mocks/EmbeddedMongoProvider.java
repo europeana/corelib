@@ -22,6 +22,8 @@ public class EmbeddedMongoProvider implements MongoProvider {
 
     private static final Logger LOG = Logger.getLogger(EmbeddedMongoProvider.class);
 
+    private static final String DB_NAME = "europeana_test";
+
     private MongoClient mongo;
 
     public EmbeddedMongoProvider() {
@@ -33,9 +35,9 @@ public class EmbeddedMongoProvider implements MongoProvider {
             MongodStarter starter = MongodStarter.getDefaultInstance();
             MongodExecutable mongodExecutable = starter.prepare(conf);
             mongodExecutable.start();
-            LOG.info("Creating new MongoClient for EmbeddedMongoProvider");
+            LOG.info("Creating new test MongoClient for EmbeddedMongoProvider");
             mongo = new MongoClient("localhost", port);
-            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test");
+            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, DB_NAME);
             mongoDBServer.getDatastore().getDB().dropDatabase();
         } catch (IOException | MongoDBException e) {
             e.printStackTrace();
@@ -51,12 +53,18 @@ public class EmbeddedMongoProvider implements MongoProvider {
     }
 
     /**
+     * @see MongoProvider#getDefaultDatabase()
+     */
+    @Override
+    public String getDefaultDatabase() { return DB_NAME;}
+
+    /**
      * @see MongoProvider#close()
      */
     @Override
     public void close() {
         if (mongo != null) {
-            LOG.info("Closing MongoClient for EmbeddedMongoProvider");
+            LOG.info("Closing test MongoClient for EmbeddedMongoProvider");
             mongo.close();
         }
     }
