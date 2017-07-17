@@ -35,13 +35,14 @@
     </bean>
 
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
+        <!-- search should use the same mongo server as record -->
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getDefaultDatabase()}"/>
     </bean>
 
-    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore" destroy-method="close">
+    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="EuropeanaId"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.recordId.dbname']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl">
@@ -49,12 +50,5 @@
         <constructor-arg value="#{europeanaProperties['neo4j.index']}"/>
         <constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
     </bean>
-
-	<bean id="corelib_solr_mongoServer_metainfo"
-		class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
-		<constructor-arg value="#{corelib_db_mongoProvider.getMongo()}" />
-		<constructor-arg value="europeana" type="java.lang.String" />
-	</bean>
-
 
 </beans>

@@ -31,6 +31,7 @@ import org.apache.commons.lang.time.DateUtils;
 
 import eu.europeana.corelib.utils.service.MltStopwordsService;
 
+@Deprecated
 public class MltStopwordsServiceImpl implements MltStopwordsService {
 
 	private final File stopwordFile;
