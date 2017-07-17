@@ -13,6 +13,11 @@ public interface MongoProvider {
     public MongoClient getMongo();
 
     /**
+     * @return the default database defined for this MongoClient (null if not set)
+     */
+    public String getDefaultDatabase();
+
+    /**
      * Closes the created mongoClient
      */
     public void close();
