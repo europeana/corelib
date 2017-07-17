@@ -66,8 +66,6 @@ import eu.europeana.corelib.neo4j.exception.Neo4JException;
 public class Neo4jServerImpl implements Neo4jServer {
 
 	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class);
-	// just in case some joker gets ideas ...
-	private static final int MAX_HIERARCHY_TIMEOUT = 20000;
 
 	private RestGraphDatabase graphDb;
 	private RestIndex<Node> index;
@@ -168,7 +166,7 @@ public class Neo4jServerImpl implements Neo4jServer {
 			InterruptedException, ExecutionException, TimeoutException {
 		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
 		Future<Boolean> future = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
-		return future.get(Math.min(hierarchyTimeout, MAX_HIERARCHY_TIMEOUT), TimeUnit.MILLISECONDS);
+		return future.get(hierarchyTimeout, TimeUnit.MILLISECONDS);
 	}
 
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin

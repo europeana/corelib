@@ -56,6 +56,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.web.support.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -101,10 +102,9 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
-    // Note that this is also defined in the API ObjectController and HierarchicalController
-    // It's not exactly idea, but it needs to be available in case it is not supplied, e.g. by the BasicObjectController
-    // TODO Alternatively, we could turn this into a europeana.property
     private static final int DEFAULT_HIERARCHY_TIMEOUT = 4000;
+    private static final int MAX_HIERARCHY_TIMEOUT = 20000;
+    private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
     /**
      * Default number of documents retrieved by MoreLikeThis
@@ -331,7 +331,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
-
+        hierarchyTimeout = (hierarchyTimeout == 0 ? DEFAULT_HIERARCHY_TIMEOUT :
+                            (hierarchyTimeout < MIN_HIERARCHY_TIMEOUT ? MIN_HIERARCHY_TIMEOUT :
+                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : DEFAULT_HIERARCHY_TIMEOUT)));
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
