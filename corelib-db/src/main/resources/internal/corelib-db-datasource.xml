@@ -22,22 +22,11 @@
 
     <bean id="corelib_db_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="#{europeanaProperties['db.driverClass']}"/>
-        <property
-                name="url"
-                value="jdbc:postgresql://#{europeanaProperties['postgres.host']}:5432/#{europeanaProperties['postgres.db']}"
-                />
-        <property name="username" value="#{europeanaProperties['postgres.username']}"/>
-        <property name="password" value="#{europeanaProperties['postgres.password']}"/>
+        <property name="url" value="jdbc:#{europeanaProperties['postgres.jdbcUrl']}" />
     </bean>
 
     <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
         <constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>
-        <!-- old way of connecting to mongo -->
-        <!--<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>-->
-        <!--<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>-->
-        <!--<constructor-arg value="#{europeanaProperties['mongodb.dbname']}" type="java.lang.String"/>-->
-        <!--<constructor-arg value="#{europeanaProperties['mongodb.username']}" type="java.lang.String"/>-->
-        <!--<constructor-arg value="#{europeanaProperties['mongodb.password']}" type="java.lang.String"/>-->
     </bean>
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
