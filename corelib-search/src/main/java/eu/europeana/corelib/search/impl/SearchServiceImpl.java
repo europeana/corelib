@@ -330,7 +330,7 @@ public class SearchServiceImpl implements SearchService {
     public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
         hierarchyTimeout = (hierarchyTimeout == 0 ? DEFAULT_HIERARCHY_TIMEOUT :
                             (hierarchyTimeout < MIN_HIERARCHY_TIMEOUT ? MIN_HIERARCHY_TIMEOUT :
-                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : DEFAULT_HIERARCHY_TIMEOUT)));
+                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : hierarchyTimeout)));
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
