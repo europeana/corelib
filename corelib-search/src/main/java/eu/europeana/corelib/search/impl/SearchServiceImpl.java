@@ -102,7 +102,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
-    private static final int DEFAULT_HIERARCHY_TIMEOUT = 4000;
+    private static final int DEFAULT_HIERARCHY_TIMEOUT = 8000;
     private static final int MAX_HIERARCHY_TIMEOUT = 20000;
     private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
