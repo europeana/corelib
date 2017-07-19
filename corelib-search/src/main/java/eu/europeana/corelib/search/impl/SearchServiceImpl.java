@@ -56,6 +56,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.web.support.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -92,12 +93,18 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
  * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceImpl implements SearchService {
+
+    private static final int DEFAULT_HIERARCHY_TIMEOUT = 4000;
+    private static final int MAX_HIERARCHY_TIMEOUT = 20000;
+    private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
     /**
      * Default number of documents retrieved by MoreLikeThis
@@ -136,19 +143,6 @@ public class SearchServiceImpl implements SearchService {
     private int searchLimit;
     private String mltFields;
     private boolean debug = false;
-
-    @Resource(name = "corelib_solr_mongoServer_metainfo")
-    protected EdmMongoServer metainfoMongoServer;
-
-
-
-    @Override
-    public FullBean findById(String collectionId, String recordId,
-                             boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
-        return findById(EuropeanaUriUtils.createSanitizedEuropeanaId(collectionId, recordId),
-                similarItems
-        );
-    }
 
     @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
@@ -322,15 +316,28 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+    public FullBean findById(String collectionId, String recordId, boolean similarItems)
+            throws MongoRuntimeException, MongoDBException, Neo4JException {
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
+    }
 
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+        return findById(europeanaObjectId, similarItems, DEFAULT_HIERARCHY_TIMEOUT);
+    }
+
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
+        hierarchyTimeout = (hierarchyTimeout == 0 ? DEFAULT_HIERARCHY_TIMEOUT :
+                            (hierarchyTimeout < MIN_HIERARCHY_TIMEOUT ? MIN_HIERARCHY_TIMEOUT :
+                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : hierarchyTimeout)));
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
 
             boolean isHierarchy = false;
             try {
-                isHierarchy = isHierarchy(fullBean.getAbout());
+                isHierarchy = isHierarchy(fullBean.getAbout(), hierarchyTimeout);
             } catch (Neo4JException e) {
                 log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
@@ -949,8 +956,19 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean isHierarchy(String rdfAbout) throws Neo4JException {
-        return neo4jServer.isHierarchy(rdfAbout);
+    public boolean isHierarchy(String rdfAbout, int hierarchyTimeout) throws Neo4JException {
+//        return neo4jServer.isHierarchy(rdfAbout);
+        boolean result = false;
+        long startTime = System.nanoTime();
+        try {
+            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, hierarchyTimeout);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            log.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
+        }
+        if (log.isInfoEnabled()) {
+            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + hierarchyTimeout);
+        }
+        return result;
     }
 
     @Override
@@ -1073,7 +1091,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
-        final DB db = metainfoMongoServer.getDatastore().getDB();
+        final DB db = mongoServer.getDatastore().getDB();
         final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
 
         final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);

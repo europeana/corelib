@@ -203,7 +203,7 @@ public class SearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = searchService.findById(results.getResults().get(0).getId(), true);
+        FullBean fBean = searchService.findById(results.getResults().get(0).getId(), true, 4000);
         assertNotNull(fBean);
     }
 

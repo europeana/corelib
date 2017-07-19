@@ -12,9 +12,6 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 @JsonPropertyOrder(alphabetic=true)
 public class RichBeanImpl extends ApiBeanImpl implements RichBean {
 
-    @Field("proxy_dc_description")
-    protected String[] dcDescription;
-
     @Field("provider_aggregation_edm_isShownBy")
     protected String[] edmIsShownBy;
 
@@ -30,11 +27,6 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Field("proxy_dc_subject.*")
     protected Map<String,List<String>> dcSubjectLangAware;
     
-    @Override
-    public String[] getDcDescription() {
-        return (this.dcDescription != null ? this.dcDescription.clone() : null);
-    }
-
     @Override
     public String[] getEdmIsShownBy() {
         return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
