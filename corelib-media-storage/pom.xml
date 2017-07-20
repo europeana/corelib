@@ -17,7 +17,6 @@
     </properties>
 
     <dependencies>
-        <!-- Tmp override objectstorage version to include on with timing debugging -->
         <dependency>
             <groupId>eu.europeana</groupId>
             <artifactId>object-storage</artifactId>

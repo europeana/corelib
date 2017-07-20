@@ -51,11 +51,6 @@ import eu.europeana.corelib.search.model.ResultSet;
 public interface SearchService {
 
 	/**
-	 * overrule the default isHierachy() check timeout value of 4000 millis (4 sec)
-	 */
-	void setNeo4jTimeoutMillis(int neo4jTimeoutMillis);
-
-	/**
 	 * Retrieve a record by splitted collectionId and recordId
 	 *
 	 * @param collectionId id of the collection to which this record belongs
