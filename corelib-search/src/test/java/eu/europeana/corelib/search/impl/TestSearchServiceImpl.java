@@ -17,7 +17,7 @@ public class TestSearchServiceImpl extends SearchServiceImpl {
     }
 
     @Override
-    public boolean isHierarchy(String nodeId) {
+    public boolean isHierarchy(String nodeId, int hierarchyTimeout) {
         return true;
     }
 }

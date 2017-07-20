@@ -71,13 +71,24 @@ public interface SearchService {
 	 * 
      * @param europeanaObjectId The unique europeana id
      * @param similarItems      Whether to retrieve similar items
+	 * @param hierarchyTimeout  number of milliseconds before the hierarchical (neo4j-) query times out
+	 * @return                  A full europeana record
+	 * @throws                  MongoRuntimeException, MongoDBException
+	 */
+	FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException, Neo4JException;
+
+	/**
+	 * Retrieve a record by id.
+	 *
+	 * @param europeanaObjectId The unique europeana id
+	 * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
 	 * @throws                  MongoRuntimeException, MongoDBException
 	 */
 	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
 
 	/**
-	 * Retrieve a record by id.
+	 * Retrieve a record by id. If the record cannot be found, it will retry
 	 * 
      * @param europeanaObjectId The unique europeana id
      * @param similarItems      Whether to retrieve similar items
@@ -313,5 +324,5 @@ public interface SearchService {
 	 */
 	Neo4jStructBean getInitialStruct(String nodeId) throws Neo4JException;
 
-	boolean isHierarchy(String nodeId) throws Neo4JException;
+	boolean isHierarchy(String nodeId, int hierarchyTimeout) throws Neo4JException;
 }

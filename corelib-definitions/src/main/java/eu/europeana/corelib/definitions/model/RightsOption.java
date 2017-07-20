@@ -27,89 +27,65 @@ import org.apache.commons.lang.StringUtils;
  */
 public enum RightsOption {
 
-    /**
-     * http://creativecommons.org/publicdomain/zero
-     */
-    CC_ZERO("http://creativecommons.org/publicdomain/zero", "CC0", "icon-cczero", true),
+    /* = = = | OPEN LICENCES | = = = = = = = = = = = = = = = = = = = = = = = = = = */
 
     /**
-     * http://creativecommons.org/licenses/by/
-     */
-    CC_BY("http://creativecommons.org/licenses/by/", "CC BY", "icon-cc icon-by",  true),
-
-    /**
-     * http://creativecommons.org/licenses/by-sa/
-     */
-    CC_BY_SA("http://creativecommons.org/licenses/by-sa/", "CC BY-SA", "icon-cc icon-by icon-sa", true),
-
-    /**
-     * http://creativecommons.org/licenses/by-nc-sa/
-     */
-    CC_BY_NC_SA("http://creativecommons.org/licenses/by-nc-sa/", "CC BY-NC-SA", "icon-cc icon-by icon-nceu icon-sa", true),
-
-    /**
-     * http://creativecommons.org/licenses/by-nd/
-     */
-    CC_BY_ND("http://creativecommons.org/licenses/by-nd/", "CC BY-ND", "icon-cc icon-by icon-nd", true),
-
-    /**
-     * http://creativecommons.org/licenses/by-nc/
-     */
-    CC_BY_NC("http://creativecommons.org/licenses/by-nc/", "CC BY-NC", "icon-cc icon-by icon-nceu", true),
-
-    /**
-     * http://creativecommons.org/licenses/by-nc-nd/
-     */
-    CC_BY_NC_ND("http://creativecommons.org/licenses/by-nc-nd/", "CC BY-NC-ND", "icon-cc icon-by icon-nceu icon-nd", true),
-
-    /**
+     * open
      * http://creativecommons.org/publicdomain/mark/
      */
     CC_NOC("http://creativecommons.org/publicdomain/mark/", "Public Domain marked", "icon-pd", true),
 
     /**
-     * http://www.europeana.eu/rights/rr-f/
+     * open
+     * http://creativecommons.org/publicdomain/zero
      */
-    EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false, true),
+    CC_ZERO("http://creativecommons.org/publicdomain/zero", "CC0", "icon-cczero", true),
 
     /**
-     * http://www.europeana.eu/rights/rr-p/
+     * open
+     * http://creativecommons.org/licenses/by/
      */
-    EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Rights Reserved - Paid Access", "icon-copyright", false, true),
+    CC_BY("http://creativecommons.org/licenses/by/", "CC BY", "icon-cc icon-by",  true),
 
     /**
-     * http://www.europeana.eu/rights/rr-r/
+     * open
+     * http://creativecommons.org/licenses/by-sa/
      */
-    EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Restricted Access - Rights Reserved", "icon-copyright", false, true),
+    CC_BY_SA("http://creativecommons.org/licenses/by-sa/", "CC BY-SA", "icon-cc icon-by icon-sa", true),
+
+
+    /* = = = | RESTRICTED LICENCES | = = = = = = = = = = = = = = = = = = = = = = = */
 
     /**
-     * http://www.europeana.eu/rights/test-orphan-work-test/
+     * restricted
+     * http://creativecommons.org/licenses/by-nc/
      */
-    EU_ORPHAN("http://www.europeana.eu/rights/test-orphan-work-test/", "Orphan Work", "icon-unknown", false, true),
+    CC_BY_NC("http://creativecommons.org/licenses/by-nc/", "CC BY-NC", "icon-cc icon-by icon-nceu", true),
 
     /**
-     * http://www.europeana.eu/rights/unknown/
+     * restricted
+     * http://creativecommons.org/licenses/by-nc-sa/
      */
-    EU_U("http://www.europeana.eu/rights/unknown/", "Unknown copyright status", "icon-unknown", false, true),
+    CC_BY_NC_SA("http://creativecommons.org/licenses/by-nc-sa/", "CC BY-NC-SA", "icon-cc icon-by icon-nceu icon-sa", true),
 
     /**
+     * restricted
+     * http://creativecommons.org/licenses/by-nc-nd/
+     */
+    CC_BY_NC_ND("http://creativecommons.org/licenses/by-nc-nd/", "CC BY-NC-ND", "icon-cc icon-by icon-nceu icon-nd", true),
+
+    /**
+     * restricted
+     * http://creativecommons.org/licenses/by-nd/
+     */
+    CC_BY_ND("http://creativecommons.org/licenses/by-nd/", "CC BY-ND", "icon-cc icon-by icon-nd", true),
+
+    /**
+     * restricted
      * http://www.europeana.eu/rights/out-of-copyright-non-commercial/
      */
     EU_OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
             "Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false, true),
-
-    // #309 new rightsstatement.org licenses
-    /**
-     * permission
-     * http://rightsstatements.org/vocab/InC/1.0/
-     */
-    RS_INC("http://rightsstatements.org/vocab/InC/1.0/", "In Copyright", "", true),
-
-    /**
-     * permission
-     * http://rightsstatements.org/vocab/InC-OW-EU/1.0/
-     */
-    RS_INC_OW_EU("http://rightsstatements.org/vocab/InC-OW-EU/1.0/", "In copyright - EU orphan work", "", true),
 
     /**
      * restricted
@@ -128,6 +104,51 @@ public enum RightsOption {
      * http://rightsstatements.org/vocab/NoC-OKLR/1.0/
      */
     RS_NOC_OKLR("http://rightsstatements.org/vocab/NoC-OKLR/1.0/", "No copyright - other known legal restrictions", "", true),
+
+
+    /* = = = | PERMISSION LICENCES | = = = = = = = = = = = = = = = = = = = = = = = */
+
+    /**
+     * permission
+     * http://www.europeana.eu/rights/rr-f/
+     */
+    EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false, true),
+
+    /**
+     * permission
+     * http://www.europeana.eu/rights/rr-p/
+     */
+    EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Rights Reserved - Paid Access", "icon-copyright", false, true),
+
+    /**
+     * permission
+     * http://www.europeana.eu/rights/rr-r/
+     */
+    EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Restricted Access - Rights Reserved", "icon-copyright", false, true),
+
+    /**
+     * permission
+     * http://www.europeana.eu/rights/unknown/
+     */
+    EU_U("http://www.europeana.eu/rights/unknown/", "Unknown copyright status", "icon-unknown", false, true),
+
+    /**
+     * permission
+     * http://www.europeana.eu/rights/test-orphan-work-test/
+     */
+    EU_ORPHAN("http://www.europeana.eu/rights/test-orphan-work-test/", "Orphan Work", "icon-unknown", false, true),
+
+    /**
+     * permission
+     * http://rightsstatements.org/vocab/InC/1.0/
+     */
+    RS_INC("http://rightsstatements.org/vocab/InC/1.0/", "In Copyright", "", true),
+
+    /**
+     * permission
+     * http://rightsstatements.org/vocab/InC-OW-EU/1.0/
+     */
+    RS_INC_OW_EU("http://rightsstatements.org/vocab/InC-OW-EU/1.0/", "In copyright - EU orphan work", "", true),
 
     /**
      * permission

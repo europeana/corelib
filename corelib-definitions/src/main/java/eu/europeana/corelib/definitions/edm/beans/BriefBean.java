@@ -179,12 +179,18 @@ public interface BriefBean extends IdBean {
 	 * @return dc:contributor
 	 */
 	String[] getDcContributor();
-        
+
+	/**
+	 *
+	 * @return dc:description
+	 */
+	String[] getDcDescription();
+
 	/**
 	 * 
 	 * @return dc:language
 	 */
-        String[] getDcLanguage();
+	String[] getDcLanguage();
 
 	/**
 	 * 

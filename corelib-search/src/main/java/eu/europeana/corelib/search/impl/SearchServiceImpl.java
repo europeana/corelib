@@ -56,6 +56,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.web.support.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -101,7 +102,9 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
-    private final static Logger LOG = Logger.getLogger(SearchServiceImpl.class);
+    private static final int DEFAULT_HIERARCHY_TIMEOUT = 8000;
+    private static final int MAX_HIERARCHY_TIMEOUT = 20000;
+    private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
     /**
      * Default number of documents retrieved by MoreLikeThis
@@ -145,21 +148,6 @@ public class SearchServiceImpl implements SearchService {
     private int searchLimit;
     private String mltFields;
     private boolean debug = false;
-
-    @Resource(name = "corelib_solr_mongoServer_metainfo")
-    protected EdmMongoServer metainfoMongoServer;
-
-    public void setNeo4jTimeoutMillis(int neo4jTimeoutMillis) {
-        this.neo4Jtimeoutmillis = neo4jTimeoutMillis;
-    }
-
-    @Override
-    public FullBean findById(String collectionId, String recordId,
-                             boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId),
-                similarItems
-        );
-    }
 
     @SuppressWarnings("unchecked")
     private void injectWebMetaInfo(final FullBean fullBean) {
@@ -333,19 +321,33 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+    public FullBean findById(String collectionId, String recordId, boolean similarItems)
+            throws MongoRuntimeException, MongoDBException, Neo4JException {
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
+    }
 
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+        return findById(europeanaObjectId, similarItems, DEFAULT_HIERARCHY_TIMEOUT);
+    }
+
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
+        hierarchyTimeout = (hierarchyTimeout == 0 ? DEFAULT_HIERARCHY_TIMEOUT :
+                            (hierarchyTimeout < MIN_HIERARCHY_TIMEOUT ? MIN_HIERARCHY_TIMEOUT :
+                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : hierarchyTimeout)));
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
 
             boolean isHierarchy = false;
             try {
-                isHierarchy = isHierarchy(fullBean.getAbout());
+                isHierarchy = isHierarchy(fullBean.getAbout(), hierarchyTimeout);
             } catch (Neo4JException e) {
                 log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
             }
 
+            // TODO: this is a hack to prevent hundreds of dcTermsHasParts present in some hierarchies
             if (isHierarchy) {
                 for (Proxy prx : fullBean.getProxies()) {
                     prx.setDctermsHasPart(null);
@@ -374,22 +376,27 @@ public class SearchServiceImpl implements SearchService {
         return fullBean;
     }
 
+    /**
+     * @see SearchService#resolve(String, String, boolean)
+     */
     @Override
     public FullBean resolve(String collectionId, String recordId,
                             boolean similarItems) throws SolrTypeException {
-        return resolve(EuropeanaUriUtils.createResolveEuropeanaId(collectionId, recordId), similarItems);
+        return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
+    /**
+     * @see SearchService#resolve(String, boolean)
+     */
     @Override
     public FullBean resolve(String europeanaObjectId, boolean similarItems)
             throws SolrTypeException {
 
-        FullBean fullBean = resolveInternal(europeanaObjectId);
+        FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
         FullBean fullBeanNew = fullBean;
         if (fullBean != null) {
             while (fullBeanNew != null) {
-                fullBeanNew = resolveInternal(fullBeanNew.getAbout()
-                );
+                fullBeanNew = resolveInternal(fullBeanNew.getAbout(), similarItems);
                 if (fullBeanNew != null) {
                     fullBean = fullBeanNew;
                 }
@@ -399,16 +406,24 @@ public class SearchServiceImpl implements SearchService {
         return fullBean;
     }
 
-    private FullBean resolveInternal(String europeanaObjectId) throws SolrTypeException {
-
+    /**
+     * Retrieve bean via a single redirect, i.e. checks if a record has a newer Id and if so retrieves the bean via that newId.
+     *
+     * @param europeanaObjectId
+     * @return
+     * @throws SolrTypeException
+     */
+    private FullBean resolveInternal(String europeanaObjectId, boolean similarItems) throws SolrTypeException {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
-        injectWebMetaInfo(fullBean);
         if (fullBean != null) {
-            try {
-                fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
-            } catch (SolrServerException e) {
-                log.error("SolrServerException: " + e.getMessage());
+            injectWebMetaInfo(fullBean);
+            if (similarItems) {
+                try {
+                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
+                } catch (SolrServerException e) {
+                    log.error("SolrServerException", e);
+                }
             }
         }
         return fullBean;
@@ -437,7 +452,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public String resolveId(String collectionId, String recordId) throws BadDataException {
-        return resolveId(EuropeanaUriUtils.createResolveEuropeanaId(
+        return resolveId(EuropeanaUriUtils.createEuropeanaId(
                 collectionId, recordId));
     }
 
@@ -478,12 +493,14 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    @Deprecated
     public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
             throws SolrServerException {
         return findMoreLikeThis(europeanaObjectId, DEFAULT_MLT_COUNT);
     }
 
     @Override
+    @Deprecated
     public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
             throws SolrServerException {
         String query = "europeana_id:\"" + europeanaObjectId + "\"";
@@ -946,17 +963,17 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean isHierarchy(String rdfAbout) throws Neo4JException {
+    public boolean isHierarchy(String rdfAbout, int hierarchyTimeout) throws Neo4JException {
 //        return neo4jServer.isHierarchy(rdfAbout);
         boolean result = false;
         long startTime = System.nanoTime();
         try {
-            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, neo4Jtimeoutmillis);
+            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, hierarchyTimeout);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
+            log.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
         }
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + neo4Jtimeoutmillis);
+        if (log.isInfoEnabled()) {
+            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + hierarchyTimeout);
         }
         return result;
     }
@@ -1081,7 +1098,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     private WebResourceMetaInfoImpl getMetaInfo(final String webResourceMetaInfoId) {
-        final DB db = metainfoMongoServer.getDatastore().getDB();
+        final DB db = mongoServer.getDatastore().getDB();
         final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
 
         final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);

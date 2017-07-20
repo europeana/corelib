@@ -162,11 +162,11 @@ public class Neo4jServerImpl implements Neo4jServer {
         return getNode(rdfAbout) != null;
 	}
 
-	public boolean isHierarchyTimeLimited(String rdfAbout, int timeOutMillis) throws Neo4JException,
+	public boolean isHierarchyTimeLimited(String rdfAbout, int hierarchyTimeout) throws Neo4JException,
 			InterruptedException, ExecutionException, TimeoutException {
 		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
 		Future<Boolean> future = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
-		return future.get(timeOutMillis, TimeUnit.MILLISECONDS);
+		return future.get(hierarchyTimeout, TimeUnit.MILLISECONDS);
 	}
 
 	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
