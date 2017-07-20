@@ -14,7 +14,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.objectStorage>1.3-SNAPSHOT</version.objectStorage>
     </properties>
 
     <dependencies>
@@ -22,7 +21,7 @@
         <dependency>
             <groupId>eu.europeana</groupId>
             <artifactId>object-storage</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>${version.objectStorage}</version>
         </dependency>
 
         <!-- CORELIB -->

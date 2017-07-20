@@ -116,6 +116,11 @@ public class SearchServiceImpl implements SearchService {
      */
     private static final int TIME_ALLOWED = 30000;
     /**
+     * Number of milliseconds before the isHierachy query to NEO4J is aborted, can be overruled from the
+     * objectController
+     */
+    private int neo4Jtimeoutmillis = 4000;
+    /**
      * The list of possible field input for spelling suggestions
      */
     private static final List<String> SPELL_FIELDS = Arrays.asList("who",
@@ -654,7 +659,9 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
                     resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
                     resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
-                    if (debug) resultSet.setSolrQueryString(query.getExecutedQuery());
+                    if (debug) {
+                        resultSet.setSolrQueryString(query.getExecutedQuery());
+                    }
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
