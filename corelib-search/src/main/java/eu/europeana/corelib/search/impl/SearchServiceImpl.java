@@ -102,7 +102,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class SearchServiceImpl implements SearchService {
 
-    private static final int DEFAULT_HIERARCHY_TIMEOUT = 4000;
+    private static final int DEFAULT_HIERARCHY_TIMEOUT = 8000;
     private static final int MAX_HIERARCHY_TIMEOUT = 20000;
     private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
@@ -654,7 +654,9 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
                     resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
                     resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
-                    if (debug) resultSet.setSolrQueryString(query.getExecutedQuery());
+                    if (debug) {
+                        resultSet.setSolrQueryString(query.getExecutedQuery());
+                    }
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }

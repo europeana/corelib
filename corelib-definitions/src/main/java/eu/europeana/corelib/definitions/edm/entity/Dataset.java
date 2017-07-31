@@ -26,6 +26,11 @@ import java.util.Map;
  */
 //TODO: NOT TO BE USED
 public interface Dataset extends AbstractEdmEntity {
+
+	/**
+	 * edm:datasetName
+	 * @return
+	 */
 	String getEdmDatasetName();
 
 	/**
