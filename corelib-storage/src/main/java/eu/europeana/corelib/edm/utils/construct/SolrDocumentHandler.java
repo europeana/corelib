@@ -58,6 +58,7 @@ public class SolrDocumentHandler {
 			add("is_fulltext");
 			add("has_thumbnails");
 			add("has_media");
+			add("has_landingpage");
 			add("filter_tags");
 			add("facet_tags");
 		}

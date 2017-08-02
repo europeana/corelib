@@ -28,6 +28,7 @@ public class OrganizationImpl extends AgentImpl implements Organization {
 	private Map<String,List<String>> edmEuropeanaRole;
 	private String foafHomepage;	
 	private Map<String,List<String>> dcIdentifier;
+	private String foafLogo;
 	@Override
 
 	public Map<String, List<String>> getEdmAcronym() {
@@ -107,6 +108,16 @@ public class OrganizationImpl extends AgentImpl implements Organization {
 	@Override
 	public void setFoafHomepage(String foafHomePage) {
 		this.foafHomepage = foafHomePage;
+	}
+
+	@Override
+	public String getFoafLogo() {
+		return this.foafLogo;
+	}
+
+	@Override
+	public void setFoafLogo(String foafLogo) {
+		this.foafLogo = foafLogo;
 	}
 
 	@Override
