@@ -216,6 +216,14 @@
       </documentation>
     </annotation>
   </element>
+
+  <element name="modified" type="rdf:ResourceOrLiteralType">
+    <annotation>
+      <documentation>
+        Modified Date
+      </documentation>
+    </annotation>
+  </element>
   
   <element name="conformsTo" type="rdf:ResourceOrLiteralType">
     <annotation>

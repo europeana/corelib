@@ -17,7 +17,6 @@
 package eu.europeana.corelib.edm.server.importer.util;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,13 +43,14 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
  * @author Yorgos.Mamakis@ kb.nl
  */
 public final class ProxyFieldInput {
+
   public ProxyFieldInput() {
   }
 
   /**
    * Create a SolrInputDocument with the Proxy fields filled in
    *
-   * @param providedCHO The JiBX ProvidedCHO Entity
+   * @param proxy
    * @param solrInputDocument The SolrInputDocument to alter
    * @return The altered SolrInputDocument with the Proxy fields filled in
    */
@@ -63,10 +63,12 @@ public final class ProxyFieldInput {
         EdmLabel.PROVIDER_EDM_TYPE.toString(),
         SolrUtils.exists(String.class,
             (proxy.getType().getType().xmlValue())).toString());
-    solrInputDocument.addField(
-        EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString(),
-        SolrUtils.exists(ResourceType.class,
-            (proxy.getCurrentLocation())).getResource());
+
+    if (proxy.getCurrentLocation() != null) {
+        solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+        solrInputDocument, proxy.getCurrentLocation(),
+        EdmLabel.PROXY_EDM_CURRENT_LOCATION);
+    }
 
     List<IsNextInSequence> seqList = proxy.getIsNextInSequenceList();
     if (seqList != null) {
@@ -103,6 +105,13 @@ public final class ProxyFieldInput {
             solrInputDocument, ht, EdmLabel.PROXY_EDM_HAS_MET);
       }
     }
+    if (proxy.getHasTypeList() != null) {
+      for (HasType ht : proxy.getHasTypeList()) {
+        solrInputDocument = SolrUtils.addFieldFromResourceOrLiteral(
+            solrInputDocument, ht, EdmLabel.PROXY_EDM_HAS_TYPE);
+      }
+    }
+
     // Retrieve the dcterms and dc namespace fields
     List<eu.europeana.corelib.definitions.jibx.EuropeanaType.Choice> europeanaTypeList = proxy
         .getChoiceList();
@@ -264,8 +273,7 @@ public final class ProxyFieldInput {
    * instantiated when reading the ProvidedCHO
    *
    * @param mongoProxy The Proxy MongoDB Entity to save or update
-   * @param providedCHO The ProvidedCHO JiBX Entity
-   * @param mongoServer The MongoDB Server to save the entity to
+   * @param proxy
    * @return The MongoDB Proxy Entity
    */
   public ProxyImpl createProxyMongoFields(ProxyImpl mongoProxy,
@@ -278,8 +286,9 @@ public final class ProxyFieldInput {
       mongoProxy.setEuropeanaProxy(proxy.getEuropeanaProxy()
           .isEuropeanaProxy());
     }
-    mongoProxy.setEdmCurrentLocation(SolrUtils.exists(ResourceType.class,
-        (proxy.getCurrentLocation())).getResource());
+    mongoProxy.setEdmCurrentLocation(MongoUtils
+        .createResourceOrLiteralMapFromString(proxy
+            .getCurrentLocation()));
 
     List<IsNextInSequence> seqList = proxy.getIsNextInSequenceList();
 

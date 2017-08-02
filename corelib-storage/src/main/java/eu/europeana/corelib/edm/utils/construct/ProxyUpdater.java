@@ -69,7 +69,7 @@ public class ProxyUpdater implements Updater<ProxyImpl> {
                 update = true;
             }
         }
-        update = MongoUtils.updateString(retProxy, proxy, "edmCurrentLocation", ops) || update;
+        update = MongoUtils.updateMap(retProxy, proxy, "edmCurrentLocation", ops) || update;
         update = MongoUtils.updateMap(retProxy, proxy, "edmRights", ops) || update;
         update = MongoUtils.updateMap(retProxy, proxy, "edmHasMet", ops) || update;
         update = MongoUtils.updateMap(retProxy, proxy, "edmHasType", ops) || update;

@@ -256,6 +256,7 @@ public enum EdmLabel {
 	ORG_EDM_ORGANIZATIONSCOPE("org_edm_organizationScope",SolrType.NOT_STORED),
 	ORG_EDM_ORGANIZATIONDOMAIN("org_edm_organizationDomain",SolrType.FACET),
 	ORG_EDM_ORGANIZATIONSECTOR("org_edm_organizationSector",SolrType.NOT_STORED),
+	ORG_FOAF_LOGO("org_foaf_logo",SolrType.NOT_STORED),
 	ORG_EDM_GEORGREAPHICLEVEL("org_edm_geographicLevel",SolrType.NOT_STORED),
 	ORG_EDM_COUNTRY("org_edm_country",SolrType.FACET),
 	ORG_EDM_EUROPEANA_ROLE("org_edm_europeanaRole",SolrType.FACET),

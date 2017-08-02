@@ -63,6 +63,9 @@ public class OrganizationFieldInput {
 		if(jibxOrganization.getHomepage()!=null){
 			mongoOrganization.setFoafHomepage(jibxOrganization.getHomepage().getResource());
 		}
+		if(jibxOrganization.getLogo()!=null){
+			mongoOrganization.setFoafLogo(jibxOrganization.getLogo().getResource());
+		}
 		mongoOrganization.setFoafName(MongoUtils.createLiteralMapFromList(jibxOrganization.getNameList()));
 		mongoOrganization.setNote(MongoUtils.createLiteralMapFromList(jibxOrganization.getNoteList()));
 		mongoOrganization.setOwlSameAs(SolrUtils.resourceListToArray(jibxOrganization.getSameAList()));

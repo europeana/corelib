@@ -59,7 +59,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	private String[] edmIsSuccessorOf;
 	private String[] edmRealizes;
 	private String[] edmWasPresentAt;
-	private String edmCurrentLocation;
+	private Map<String, List<String>> edmCurrentLocation;
 	private String[] edmIsNextInSequence;
 	private Map<String,List<String>> edmRights;
 
@@ -259,7 +259,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public String getEdmCurrentLocation() {
+	public Map<String, List<String>> getEdmCurrentLocation() {
 		return this.edmCurrentLocation;
 	}
 
@@ -449,7 +449,7 @@ public class PhysicalThingImpl extends AbstractEdmEntityImpl implements Physical
 	}
 
 	@Override
-	public void setEdmCurrentLocation(String edmCurrentLocation) {
+	public void setEdmCurrentLocation(Map<String, List<String>> edmCurrentLocation) {
 		this.edmCurrentLocation = edmCurrentLocation;
 	}
 
