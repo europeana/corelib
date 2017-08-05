@@ -36,6 +36,10 @@ public interface Organization extends Agent{
 	String getFoafHomepage();
 	
 	void setFoafHomepage(String foafHomePage);
+
+	String getFoafLogo();
+
+	void setFoafLogo(String foafLogo);
 	
 	
 }

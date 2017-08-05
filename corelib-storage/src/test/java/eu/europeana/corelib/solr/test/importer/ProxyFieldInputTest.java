@@ -2,21 +2,19 @@ package eu.europeana.corelib.solr.test.importer;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
-import org.apache.solr.common.SolrInputDocument;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.apache.solr.common.SolrInputDocument;
+import org.junit.Test;
 
 public class ProxyFieldInputTest {
 
@@ -33,7 +31,7 @@ public class ProxyFieldInputTest {
         try {
             solrDocument = new ProxyFieldInput().createProxySolrFields(proxy, solrDocument);
             assertEquals(proxy.getAbout(), solrDocument.getFieldValue(EdmLabel.ORE_PROXY.toString()));
-            assertEquals(proxy.getCurrentLocation().getResource(),
+            assertEquals(proxy.getCurrentLocation().getString(),
                     solrDocument.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString()));
             assertEquals(
                     proxy.getIsNextInSequenceList().get(0).getResource(),
@@ -377,7 +375,7 @@ public class ProxyFieldInputTest {
         ProxyType proxy = new ProxyType();
         proxy.setAbout("test about");
         CurrentLocation currentLocation = new CurrentLocation();
-        currentLocation.setResource("test current location");
+        currentLocation.setString("test current location");
         IsNextInSequence isNextInSequence = new IsNextInSequence();
         isNextInSequence.setResource("test is next in sequence");
         List<IsNextInSequence> isNextInSequenceList = new ArrayList<>();

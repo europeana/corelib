@@ -5,8 +5,6 @@ import org.mongodb.morphia.query.UpdateOperations;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.storage.MongoServer;
-import org.apache.commons.lang.StringUtils;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -32,7 +30,7 @@ public class ServiceUpdater implements Updater<ServiceImpl> {
             }
             update=true;
         }
-        if(!StringUtils.equals(mongoEntity.getDoapImplements(),newEntity.getDoapImplements())){
+        if(!MongoUtils.arrayEquals(mongoEntity.getDoapImplements(),newEntity.getDoapImplements())){
             if(mongoEntity.getDoapImplements()==null){
                 newEntity.setDoapImplements(null);
                 ops.unset("doapImplements");

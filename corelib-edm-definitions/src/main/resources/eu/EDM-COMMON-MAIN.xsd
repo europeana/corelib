@@ -57,17 +57,17 @@
             <extension base="edm:EuropeanaType">
                 <sequence minOccurs="1" maxOccurs="1">
                     <!-- EDM SPECIFIC ELEMENTS -->
-                    <element ref="edm:currentLocation" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:hasType" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:incorporates" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isDerivativeOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isNextInSequence" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isRepresentationOf" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:isSimilarTo" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
-                    <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
+                    <element ref="edm:currentLocation" minOccurs="0" maxOccurs="1"/>
+                    <element ref="edm:hasMet" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:hasType" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:incorporates" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:isDerivativeOf" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:isNextInSequence" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:isRelatedTo" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:isRepresentationOf" minOccurs="0" maxOccurs="1"/>
+                    <element ref="edm:isSimilarTo" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:isSuccessorOf" minOccurs="0" maxOccurs="unbounded"/>
+                    <element ref="edm:realizes" minOccurs="0" maxOccurs="unbounded"/>
                 </sequence>
             </extension>
         </complexContent>
@@ -314,7 +314,7 @@
         </annotation>
     </element>
     
-    <element name="currentLocation" type="rdf:ResourceType">
+    <element name="currentLocation" type="rdf:ResourceOrLiteralType">
         <annotation>
             <documentation>The geographic location and/or name of the repository, building, site, or
                 other entity whose boundaries presently include the resource.</documentation>
