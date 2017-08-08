@@ -1037,10 +1037,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) throws Neo4JException {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, limit);
-        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, offset, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout) - offset;
         for (CustomNode precedingSibling : precedingSiblings) {
             startIndex -= 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(precedingSibling, startIndex));
@@ -1049,20 +1049,29 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) throws Neo4JException {
+        return getPrecedingSiblings(rdfAbout, 0, 10);
+    }
+
+    @Override
     public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) throws Neo4JException {
         return getPrecedingSiblings(rdfAbout, 10);
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) throws Neo4JException {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, limit);
-        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout);
+        List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, offset, limit);
+        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout) + offset;
         for (CustomNode followingSibling : followingSiblings) {
             startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(followingSibling, startIndex));
         }
         return beans;
+    }
+
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) throws Neo4JException {
+        return getFollowingSiblings(rdfAbout, 0, 10);
     }
 
     @Override
