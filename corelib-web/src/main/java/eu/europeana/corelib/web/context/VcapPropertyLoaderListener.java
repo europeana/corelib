@@ -1,5 +1,6 @@
 package eu.europeana.corelib.web.context;
 
+import eu.europeana.corelib.web.socks.SocksProxyConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -177,7 +178,11 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
       // Overwriting the original file
       FileUtils.writeStringToFile(europeanaProperties, sb + "\n", false);
       Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Properties:\n" + sb.toString());
-
+      initSocksProxyConfig(props.getProperty("socks.host"),
+              props.getProperty("socks.port"),
+              props.getProperty("socks.user"),
+              props.getProperty("socks.password"),
+              props.getProperty("socks.useauth"));
       
     } catch (IOException e1) {
       Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e1.getMessage(), e1.getCause());
@@ -198,4 +203,9 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
           + env.getSystemEnvironment().get(key));
     }
   }
+
+  private void initSocksProxyConfig(String host, String port, String user, String password, String useauth){
+    SocksProxyConfig socksProxyConfig = new SocksProxyConfig(host, port, user, password, useauth);
+  }
+
 }
