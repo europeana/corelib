@@ -78,6 +78,12 @@
             <artifactId>solr-core</artifactId>
             <version>${version.apacheSolr}</version>
             <scope>test</scope>
+            <exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-annotations</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
