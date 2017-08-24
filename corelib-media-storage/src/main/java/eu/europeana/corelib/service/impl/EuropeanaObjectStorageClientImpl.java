@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 import static org.jclouds.io.Payloads.newByteArrayPayload;
@@ -34,7 +35,7 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
      */
     @Override
     public Boolean checkIfExists(String id) {
-        return objectApi.getWithoutBody(id).isPresent();
+        return objectApi.isAvailable(id);
     }
 
     /**
@@ -49,10 +50,14 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
         }
         final StorageObject storageObjectValue = storageObject.get();
         final byte[] content;
-        try {
-            content = withContent ? IOUtils.toByteArray(storageObjectValue.getPayload().openStream()) : new byte[0];
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (withContent) {
+            try (InputStream in = storageObjectValue.getPayload().openStream()) {
+                content = IOUtils.toByteArray(in);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading payload data", e);
+            }
+        } else {
+            content = null;
         }
 
         return new MediaFile(id,
@@ -76,6 +81,14 @@ public class EuropeanaObjectStorageClientImpl implements MediaStorageClient {
     @Override
     public byte[] retrieveContent(String id) {
         return objectApi.getContent(id);
+    }
+
+    /**
+     * @see eu.europeana.corelib.service.MediaStorageClient#retrieveMetaData(String)
+     */
+    @Override
+    public ObjectMetadata retrieveMetaData(String id) {
+        return objectApi.getMetaData(id);
     }
 
     /**
