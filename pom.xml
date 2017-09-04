@@ -173,11 +173,7 @@
 		<connection>scm:git:git@github.com:europeana/corelib.git</connection>
 		<developerConnection>scm:git:git@github.com:europeana/corelib.git</developerConnection>
 		<url>https://github.com/europeana/corelib</url>
-<<<<<<< HEAD
-		<tag>corelib-2.6.4</tag>
-=======
 		<tag>corelib-2.6.5</tag>
->>>>>>> 6ce2d75e7d8f8188d9969040619c309dd51289c2
 	</scm>
 
 	<profiles>
