@@ -30,7 +30,7 @@
 
 	<properties>
 		<javadoc.opts>-Xdoclint:none</javadoc.opts>
-		<version.objectStorage>1.3</version.objectStorage>
+		<version.objectStorage>1.4</version.objectStorage>
 		<version.log4j>1.2.17</version.log4j>
 	</properties>
 
