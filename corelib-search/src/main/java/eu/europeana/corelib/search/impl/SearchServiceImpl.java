@@ -552,7 +552,7 @@ public class SearchServiceImpl implements SearchService {
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
                                                   Query query) throws SolrTypeException {
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
-            throw new SolrTypeException(ProblemType.SEARCH_LIMIT_REACHED);
+            throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }
         ResultSet<T> resultSet = new ResultSet<>();
         Class<? extends IdBeanImpl> beanClazz = SearchUtils
