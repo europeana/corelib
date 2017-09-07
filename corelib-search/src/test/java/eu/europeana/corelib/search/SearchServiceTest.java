@@ -59,7 +59,7 @@ public class SearchServiceTest {
 
     private static final ContentLoader contentLoader = ContentLoader.getInstance();
 
-    @Resource
+    @Resource(name = "corelib_solr_searchService")
     private SearchService searchService;
 
     @Resource(name = "corelib_solr_mongoServer")
