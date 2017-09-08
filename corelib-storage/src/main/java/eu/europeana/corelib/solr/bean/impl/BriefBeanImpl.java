@@ -18,10 +18,10 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.europeana.corelib.edm.utils.EdmUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
@@ -160,7 +160,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     
     @Override
     public String[] getEdmPreview() {
-        List<String> previews = new ArrayList<String>();
+        List<String> previews = new ArrayList<>();
         if (this.edmObject != null) {
             for (String str : edmObject) {
                 if (StringUtils.isNotBlank(str)) {
@@ -249,25 +249,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         return (this.edmPlace != null ? this.edmPlace.clone() : null);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Map<String, String>> getEdmPlaceLabel() {
-        if (edmPlacePrefLabel != null && edmPlacePrefLabel.size() > 0) {
-            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-            for (int i = 0, max = edmPlacePrefLabel.size(); i < max; i++) {
-                Object label = edmPlacePrefLabel.get(i);
-                if (label.getClass().getName() == "java.lang.String") {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("def", (String) label);
-                    list.add(map);
-                } else {
-                    list.add((Map<String, String>) label);
-                }
-            }
-            return list;
-        }
-
-        return edmPlacePrefLabel;
+        return EdmUtils.cloneList(edmPlacePrefLabel);
     }
 
     @Override
@@ -285,25 +269,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         return (this.edmTimespan != null ? this.edmTimespan.clone() : null);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Map<String, String>> getEdmTimespanLabel() {
-        if (edmTimespanLabel != null
-                && edmTimespanLabel.size() > 0) {
-            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-            for (int i = 0, max = edmTimespanLabel.size(); i < max; i++) {
-                Object label = edmTimespanLabel.get(i);
-                if (label.getClass().getName() == "java.lang.String") {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("def", (String) label);
-                    list.add(map);
-                } else {
-                    list.add((Map<String, String>) label);
-                }
-            }
-            return list;
-        }
-        return this.edmTimespanLabel;
+        return EdmUtils.cloneList(edmTimespanLabel);
     }
 
     @Override
@@ -323,23 +291,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public List<Map<String, String>> getEdmAgentLabel() {
-
-        if (edmAgentLabel != null
-                && edmAgentLabel.size() > 0) {
-            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-            for (int i = 0, max = edmAgentLabel.size(); i < max; i++) {
-                Object label = edmAgentLabel.get(i);
-                if (label.getClass().getName() == "java.lang.String") {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("def", (String) label);
-                    list.add(map);
-                } else {
-                    list.add((Map<String, String>) label);
-                }
-            }
-            return list;
-        }
-        return this.edmAgentLabel;
+        return EdmUtils.cloneList(edmAgentLabel);
     }
 
     @Override
@@ -359,7 +311,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public float getScore() {
-        return (this.score != null ? this.score : 0.0f);
+        return (this.score != null ? this.score : 0.0F);
     }
 
     @Override
@@ -369,44 +321,17 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public Map<String, List<String>> getEdmPlaceLabelLangAware() {
-        if (edmPlaceLabelLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : edmPlaceLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmPlaceLabelLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(edmPlaceLabelLangAware);
     }
 
     @Override
     public Map<String, List<String>> getEdmTimespanLabelLangAware() {
-        if (edmTimespanLabelLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : edmTimespanLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmTimespanLabelLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(edmTimespanLabelLangAware);
     }
 
     @Override
     public Map<String, List<String>> getEdmAgentLabelLangAware() {
-        if (edmAgentLabelLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : edmAgentLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmAgentLabelLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(edmAgentLabelLangAware);
     }
 
 	@Override
@@ -416,57 +341,22 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public Map<String, List<String>> getDcTitleLangAware() {
-         if (dcTitleLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcTitleLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcTitleLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcTitleLangAware);
     }
 
     @Override
     public Map<String, List<String>> getDcCreatorLangAware() {
-         if (dcCreatorLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcCreatorLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcCreatorLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcCreatorLangAware);
     }
 
     @Override
     public Map<String, List<String>> getDcContributorLangAware() {
-       if (dcContributorLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcContributorLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcContributorLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcContributorLangAware);
     }
+
     @Override
     public Map<String, List<String>> getDcLanguageLangAware() {
-       if (dcLanguageLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcLanguageLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcLanguageLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcLanguageLangAware);
     }
 
 }

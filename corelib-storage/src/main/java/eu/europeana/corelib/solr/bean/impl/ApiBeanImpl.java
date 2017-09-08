@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.europeana.corelib.edm.utils.EdmUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 
@@ -109,21 +110,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Override
     public List<Map<String,String>> getEdmPlaceAltLabel() {
-        if (edmPlaceAltLabel != null && edmPlaceAltLabel.size() > 0) {
-            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-            for (int i = 0, max = edmPlaceAltLabel.size(); i < max; i++) {
-                Object label = edmPlaceAltLabel.get(i);
-                if (label.getClass().getName() == "java.lang.String") {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("def", (String) label);
-                    list.add(map);
-                } else {
-                    list.add((Map<String, String>) label);
-                }
-            }
-            return list;
-        }
-        return edmPlaceAltLabel;
+        return EdmUtils.cloneList(edmPlaceAltLabel);
     }
 
     @Override
@@ -143,22 +130,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Override
     public List<Map<String, String>> getEdmConceptLabel() {
-
-        if (edmConceptPrefLabel != null && edmConceptPrefLabel.size() > 0) {
-            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-            for (int i = 0, max = edmConceptPrefLabel.size(); i < max; i++) {
-                Object label = edmConceptPrefLabel.get(i);
-                if (label.getClass().getName() == "java.lang.String") {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("def", (String) label);
-                    list.add(map);
-                } else {
-                    list.add((Map<String, String>) label);
-                }
-            }
-            return list;
-        }
-        return edmConceptPrefLabel;
+        return EdmUtils.cloneList(edmConceptPrefLabel);
     }
 
     @Override
@@ -193,12 +165,13 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     public void setUgc(boolean[] ugc) {
         if (ugc == null) {
             this.ugc = null;
+        } else {
+            String[] retVal = new String[ugc.length];
+            for (int i = 0, len = ugc.length; i < len; i++) {
+                retVal[i] = Boolean.toString(ugc[i]);
+            }
+            this.ugc = retVal;
         }
-        String[] retVal = new String[ugc.length];
-        for (int i = 0, len = ugc.length; i < len; i++) {
-            retVal[i] = Boolean.toString(ugc[i]);
-        }
-        this.ugc = retVal;
     }
 
     @Override
@@ -265,30 +238,12 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Override
     public Map<String, List<String>> getEdmConceptBroaderLabelLangAware() {
-         if (edmConceptBroaderLabelLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : edmConceptBroaderLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmConceptBroaderLabelLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(edmConceptBroaderLabelLangAware);
     }
 
     @Override
     public Map<String, List<String>> getEdmPlaceAltLabelLangAware() {
-        if (edmPlaceAltLabelLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : edmPlaceAltLabelLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), edmPlaceAltLabelLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(edmPlaceAltLabelLangAware);
     }
 
 }

@@ -39,6 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -56,14 +57,14 @@ public class EdmUtils {
             .getCanonicalName());
 
     private static IBindingFactory bfact;
-    private final static String SPACE = " ";
-    private final static String PREFIX = "http://data.europeana.eu";
-    private final static String LONGDATATYPE = "http://www.w3.org/2001/XMLSchema#long";
-    private final static String HEXBINARYDATATYPE = "http://www.w3.org/2001/XMLSchema#hexBinary";
-    private final static String STRINGDATATYPE = "http://www.w3.org/2001/XMLSchema#string";
-    private final static String INTEGERDATATYPE = "http://www.w3.org/2001/XMLSchema#integer";
-    private final static String NONNEGATIVEINTEGERDATATYPE = "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
-    private final static String DOUBLEDATATYPE = "http://www.w3.org/2001/XMLSchema#double";
+    private static final  String SPACE = " ";
+    private static final  String PREFIX = "http://data.europeana.eu";
+    private static final  String LONGDATATYPE = "http://www.w3.org/2001/XMLSchema#long";
+    private static final String HEXBINARYDATATYPE = "http://www.w3.org/2001/XMLSchema#hexBinary";
+    private static final String STRINGDATATYPE = "http://www.w3.org/2001/XMLSchema#string";
+    private static final String INTEGERDATATYPE = "http://www.w3.org/2001/XMLSchema#integer";
+    private static final String NONNEGATIVEINTEGERDATATYPE = "http://www.w3.org/2001/XMLSchema#nonNegativeInteger";
+    private static final String DOUBLEDATATYPE = "http://www.w3.org/2001/XMLSchema#double";
 
     /**
      * Convert a FullBean to an EDM String
@@ -142,7 +143,7 @@ public class EdmUtils {
 
     private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses) {
         if (licenses != null) {
-            List<License> licenseList = new ArrayList<License>();
+            List<License> licenseList = new ArrayList<>();
             for (LicenseImpl lic : licenses) {
                 License license = new License();
                 license.setAbout(lic.getAbout());
@@ -170,7 +171,7 @@ public class EdmUtils {
 
     private static void appendTimespans(RDF rdf, List<TimespanImpl> timespans) {
         if (timespans != null) {
-            List<TimeSpanType> timespanList = new ArrayList<TimeSpanType>();
+            List<TimeSpanType> timespanList = new ArrayList<>();
             for (Timespan ts : timespans) {
                 TimeSpanType timeSpan = new TimeSpanType();
                 timeSpan.setAbout(ts.getAbout());
@@ -190,7 +191,7 @@ public class EdmUtils {
 
     private static void appendPlaces(RDF rdf, List<PlaceImpl> places) {
         if (places != null) {
-            List<PlaceType> placeList = new ArrayList<PlaceType>();
+            List<PlaceType> placeList = new ArrayList<>();
             for (Place place : places) {
                 PlaceType pType = new PlaceType();
                 pType.setAbout(place.getAbout());
@@ -226,11 +227,11 @@ public class EdmUtils {
 
     private static void appendConcepts(RDF rdf, List<ConceptImpl> concepts) {
         if (concepts != null) {
-            List<Concept> conceptList = new ArrayList<Concept>();
+            List<Concept> conceptList = new ArrayList<>();
             for (ConceptImpl concept : concepts) {
                 Concept con = new Concept();
                 con.setAbout(concept.getAbout());
-                List<Concept.Choice> choices = new ArrayList<Concept.Choice>();
+                List<Concept.Choice> choices = new ArrayList<>();
 
                 addConceptChoice(choices, AltLabel.class, concept.getAltLabel());
                 addConceptChoice(choices, PrefLabel.class,
@@ -308,7 +309,7 @@ public class EdmUtils {
         addAsObject(aggregation, Rights1.class,
                 europeanaAggregation.getEdmRights());
 
-        List<EuropeanaAggregationType> lst = new ArrayList<EuropeanaAggregationType>();
+        List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
         rdf.setEuropeanaAggregationList(lst);
     }
@@ -350,7 +351,7 @@ public class EdmUtils {
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies,
                                     String typeStr) {
-        List<ProxyType> proxyList = new ArrayList<ProxyType>();
+        List<ProxyType> proxyList = new ArrayList<>();
         for (ProxyImpl prx : proxies) {
             ProxyType proxy = new ProxyType();
             if (isUri(prx.getAbout())) {
@@ -367,7 +368,7 @@ public class EdmUtils {
             String[] seqArray = prx.getEdmIsNextInSequence();
 
             if (seqArray != null) {
-                nis = new ArrayList<IsNextInSequence>();
+                nis = new ArrayList<>();
 
                 for (int i = 0; i < seqArray.length; i++) {
                     IsNextInSequence item = new IsNextInSequence();
@@ -383,7 +384,7 @@ public class EdmUtils {
             String[] pIn = prx.getProxyIn();
             List<ProxyIn> pInList = null;
             if (pIn != null) {
-                pInList = new ArrayList<ProxyIn>();
+                pInList = new ArrayList<>();
                 for (int i = 0; i < pIn.length; i++) {
                     ProxyIn proxyIn = new ProxyIn();
                     if (isUri(pIn[i])) {
@@ -415,7 +416,7 @@ public class EdmUtils {
             addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
             addAsList(proxy, Year.class, prx.getYear());
 
-            List<EuropeanaType.Choice> dcChoices = new ArrayList<EuropeanaType.Choice>();
+            List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
             addEuropeanaTypeChoice(dcChoices, Contributor.class,
                     prx.getDcContributor());
             addEuropeanaTypeChoice(dcChoices, Coverage.class,
@@ -493,7 +494,7 @@ public class EdmUtils {
 
     private static void appendAggregation(RDF rdf,
                                           List<AggregationImpl> aggregations) {
-        List<Aggregation> aggregationList = new ArrayList<Aggregation>();
+        List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
             Aggregation aggregation = new Aggregation();
             if (isUri(aggr.getAbout())) {
@@ -540,7 +541,7 @@ public class EdmUtils {
     }
 
     private static void createWebResources(RDF rdf, AggregationImpl aggr) {
-        List<WebResourceType> webResources = new ArrayList<WebResourceType>();
+        List<WebResourceType> webResources = new ArrayList<>();
         for (WebResource wr : aggr.getWebResources()) {
             WebResourceType wResource = new WebResourceType();
             wResource.setAbout(wr.getAbout());
@@ -701,7 +702,7 @@ public class EdmUtils {
 
 
     private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos) {
-        List<ProvidedCHOType> pChoList = new ArrayList<ProvidedCHOType>();
+        List<ProvidedCHOType> pChoList = new ArrayList<>();
         for (ProvidedCHOImpl pCho : chos) {
             ProvidedCHOType pChoJibx = new ProvidedCHOType();
             if (isUri(pCho.getAbout())) {
@@ -718,7 +719,7 @@ public class EdmUtils {
 
     private static void appendAgents(RDF rdf, List<AgentImpl> agents) {
         if (agents != null) {
-            List<AgentType> agentList = new ArrayList<AgentType>();
+            List<AgentType> agentList = new ArrayList<>();
 
             for (AgentImpl ag : agents) {
                 AgentType agent = new AgentType();
@@ -996,7 +997,7 @@ public class EdmUtils {
 
     private static <T> List<T> convertListFromArray(Class<T> clazz,
                                                     String[] vals) {
-        List<T> tList = new ArrayList<T>();
+        List<T> tList = new ArrayList<>();
         try {
             if (vals != null) {
                 for (String str : vals) {
@@ -1020,7 +1021,7 @@ public class EdmUtils {
     private static <T> List<T> convertListFromMap(Class<T> clazz,
                                                   Map<String, List<String>> map) {
         if (map != null) {
-            List<T> list = new ArrayList<T>();
+            List<T> list = new ArrayList<>();
             for (Entry<String, List<String>> entry : map.entrySet()) {
                 try {
                     if (entry.getValue() != null) {
@@ -1161,4 +1162,44 @@ public class EdmUtils {
                 || StringUtils.startsWith(str, "urn:")
                 || StringUtils.startsWith(str, "#");
     }
+
+    /**
+     * Make a clone of a list
+     * @param list
+     * @return
+     */
+    public static List<Map<String, String>> cloneList(List<Map<String, String>> list) {
+        if (list == null) {
+            return null;
+        }
+        List<Map<String, String>> result = new ArrayList<>();
+        for (int i = 0, max = list.size(); i < max; i++) {
+            Object label = list.get(i);
+            if (label.getClass().getName() == "java.lang.String") {
+                Map<String, String> map = new HashMap<>();
+                map.put("def", (String) label);
+                result.add(map);
+            } else {
+                result.add((Map<String, String>) label);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Make a clone of a map
+     * @param map
+     * @return
+     */
+    public static Map<String, List<String>> cloneMap(Map<String, List<String>> map) {
+        if (map == null) {
+            return null;
+        }
+        Map<String, List<String>> result = new HashMap<>();
+        for (String key : map.keySet()) {
+            result.put(StringUtils.substringAfter(key, "."), map.get(key));
+        }
+        return result;
+    }
+
 }
