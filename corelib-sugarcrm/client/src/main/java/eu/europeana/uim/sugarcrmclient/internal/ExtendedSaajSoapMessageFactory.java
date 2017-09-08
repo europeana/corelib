@@ -28,12 +28,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.xml.soap.MessageFactory;
-import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 
 import org.springframework.util.StringUtils;
-import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.soap.SoapMessageCreationException;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
@@ -68,6 +66,7 @@ public class ExtendedSaajSoapMessageFactory extends SaajSoapMessageFactory {
     /* (non-Javadoc)
      * @see org.springframework.ws.soap.saaj.SaajSoapMessageFactory#createWebServiceMessage(java.io.InputStream)
      */
+    @Override
     public SaajSoapMessage createWebServiceMessage(InputStream inputStream) throws IOException {
         MimeHeaders mimeHeaders = parseMimeHeaders(inputStream);
 
@@ -75,8 +74,7 @@ public class ExtendedSaajSoapMessageFactory extends SaajSoapMessageFactory {
             inputStream = checkForUtf8ByteOrderMark(inputStream);
             inputStream = decompressStream((PushbackInputStream)inputStream);
             return new SaajSoapMessage(getMessageFactory().createMessage(mimeHeaders, inputStream));
-        }
-        catch (SOAPException ex) {
+        } catch (SOAPException ex) {
             // SAAJ 1.3 RI has a issue with handling multipart XOP content types which contain "startinfo" rather than
             // "start-info", so let's try and do something about it
             String contentType = StringUtils
@@ -87,8 +85,7 @@ public class ExtendedSaajSoapMessageFactory extends SaajSoapMessageFactory {
                 try {
                     return new SaajSoapMessage(getMessageFactory().createMessage(mimeHeaders,inputStream),
                             true);
-                }
-                catch (SOAPException e) {
+                } catch (SOAPException e) {
                     // fall-through
                 }
             }
@@ -133,17 +130,22 @@ public class ExtendedSaajSoapMessageFactory extends SaajSoapMessageFactory {
     }
     
     
-    
+
+
     /**
-     * Detects if the incoming stream is Gzip encoded
+     * Detects if the incoming stream is Gzip encoded or not
      * 
      * @param pb
      * @return an InputStream/GZIPInputStream 
      * @throws IOException
      */
-    public static InputStream decompressStream(PushbackInputStream pb) throws IOException {    	
+    public static InputStream decompressStream(PushbackInputStream pb) throws IOException {
         byte [] signature = new byte[2];
-        pb.read( signature ); 
+
+        int bytesRead = pb.read( signature);
+        if (bytesRead < 2) {
+            throw new IOException("Cannot read from stream");
+        }
         pb.unread( signature );
     
         if( signature[ 0 ] == 31 && signature[ 1 ] == -117 ) 
