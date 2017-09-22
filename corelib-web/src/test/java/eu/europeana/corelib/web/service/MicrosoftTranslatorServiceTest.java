@@ -13,6 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml" })
+/**
+ * @deprecated since 2017-09-22
+ */
+@Deprecated
 public class MicrosoftTranslatorServiceTest {
 
 	@Resource

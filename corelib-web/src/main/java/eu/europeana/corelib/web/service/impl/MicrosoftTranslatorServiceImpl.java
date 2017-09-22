@@ -11,6 +11,10 @@ import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
 import org.apache.log4j.Logger;
 
+/**
+ * @deprecated since 2017-09-22
+ */
+@Deprecated
 public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implements
 		MicrosoftTranslatorService {
 
