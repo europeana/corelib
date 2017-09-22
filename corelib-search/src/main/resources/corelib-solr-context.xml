@@ -19,7 +19,6 @@
 
 <beans
 	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
@@ -38,10 +37,5 @@
 	<import resource="internal/corelib-search-server.xml" />
 
     <context:annotation-config/>
-
-	<!-- SERVICES -->
-	<bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
-		p:solrServer-ref="corelib_solr_solrServer"
-	/>
 
 </beans>
