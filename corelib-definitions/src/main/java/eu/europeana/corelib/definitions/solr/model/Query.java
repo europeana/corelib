@@ -354,16 +354,18 @@ public class Query implements Cloneable {
      */
     public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        if (this.allowFacets &&
-            null != technicalFacetList &&
-            technicalFacetList.size() > 0 && (
-                null == solrFacetList ||
-                solrFacetList.size() == 0 ||
-                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())
-            )
-        ) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        if (this.allowFacets && technicalFacetList != null && technicalFacetList.size() > 0 &&
+                (solrFacetList == null || solrFacetList.size() == 0 || !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())
+            )) {
+            // (PE) 2017-09-24: SonarQube found a nullpointer problem which is fixed by adding the line below,
+            // but I'm not sure if the rest of this code is correct. It seems to me that solrFacetList is never null so
+            // this code is never executed
+            solrFacetList = new ArrayList<>();
+            solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        }
         return this;
     }
+
     // TODO this method is ONLY ever called in the QueryTest unittest, and only for it TRUE
     // TODO I suggest we remove this variable altogether
     public Query setProduceFacetUnion(boolean produceFacetUnion) {
