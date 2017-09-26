@@ -301,10 +301,23 @@ public class FullBeanImpl implements FullBean{
         return null;
     }
 
+    /**
+     * @return either the hashcode of the about field, or otherwise a hexed hashcode of the europeanaId
+     */
     @Override
     public int hashCode() {
         return StringUtils.isNotBlank(this.about) ? this.about.hashCode()
                 : this.europeanaId.toStringMongod().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FullBeanImpl fullBean = (FullBeanImpl) o;
+        if (!europeanaId.equals(fullBean.europeanaId)) return false;
+        return about != null ? about.equals(fullBean.about) : fullBean.about == null;
     }
 
     @Override
