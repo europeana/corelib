@@ -1,7 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.lang.reflect.InvocationTargetException;
-
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -12,7 +11,7 @@ import eu.europeana.corelib.solr.entity.PlaceImpl;
 public class PlaceUpdater implements Updater<PlaceImpl> {
 
 	public PlaceImpl update(PlaceImpl place, PlaceImpl newPlace,
-			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<PlaceImpl> query = mongoServer.getDatastore()
 				.createQuery(PlaceImpl.class).field("about")
 				.equal(place.getAbout());

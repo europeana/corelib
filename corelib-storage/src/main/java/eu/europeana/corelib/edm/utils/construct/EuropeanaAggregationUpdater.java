@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -8,22 +9,19 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-public class EuropeanaAggregationUpdater implements
-		Updater<EuropeanaAggregationImpl> {
+public class EuropeanaAggregationUpdater implements	Updater<EuropeanaAggregationImpl> {
 	private static final String PORTAL_PREFIX = "http://europeana.eu/portal/record/";
     private static final String PORTAL_SUFFIX = ".html";
 	@Override
 	public EuropeanaAggregationImpl update(
 			EuropeanaAggregationImpl mongoEntity,
 			EuropeanaAggregationImpl newEntity, MongoServer mongoServer)
-			throws NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
+			throws MongoUpdateException {
 		Query<EuropeanaAggregationImpl> updateQuery = mongoServer
 				.getDatastore().createQuery(EuropeanaAggregationImpl.class)
 				.field("about").equal(mongoEntity.getAbout());

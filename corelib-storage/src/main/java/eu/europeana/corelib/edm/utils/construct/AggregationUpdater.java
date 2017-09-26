@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -8,7 +9,6 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class AggregationUpdater implements Updater<AggregationImpl> {
 
     @Override
     public AggregationImpl update(AggregationImpl mongoEntity, AggregationImpl newEntity,
-            MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
+            MongoServer mongoServer) throws MongoUpdateException {
 
         Query<AggregationImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(AggregationImpl.class).field("about")

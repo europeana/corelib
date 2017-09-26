@@ -1,15 +1,14 @@
 package eu.europeana.corelib.edm.utils.construct;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import eu.europeana.corelib.solr.entity.*;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -91,6 +90,7 @@ public class FullBeanHandler {
         }
         return false;
     }
+
     public boolean removeRecordById(SolrServer solrServer, String id) {
         try {
             solrServer.deleteByQuery("europeana_id:"
@@ -181,7 +181,7 @@ public class FullBeanHandler {
         aggregations.remove(aggregationQuery, WriteConcern.REPLICAS_SAFE);
     }
 
-    public void saveEdmClasses(FullBeanImpl fullBean, boolean isFirstSave) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
+    public void saveEdmClasses(FullBeanImpl fullBean, boolean isFirstSave) throws MongoUpdateException {
         List<AgentImpl> agents = new ArrayList<AgentImpl>();
         List<ConceptImpl> concepts = new ArrayList<ConceptImpl>();
         List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
@@ -349,7 +349,7 @@ public class FullBeanHandler {
         fullBean.setServices(services);
     }
 
-    public FullBeanImpl updateFullBean(FullBeanImpl fullBean) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
+    public FullBeanImpl updateFullBean(FullBeanImpl fullBean) throws MongoUpdateException {
         saveEdmClasses(fullBean, false);
         Query<FullBeanImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(FullBeanImpl.class).field("about")
@@ -392,10 +392,8 @@ public class FullBeanHandler {
         mongoServer.getDatastore().update(updateQuery, ops);
         try {
             return (FullBeanImpl) mongoServer.getFullBean(fullBean.getAbout());
-        } catch (MongoDBException e) {
+        } catch (MongoDBException | MongoRuntimeException e) {
             log.log(Level.SEVERE, e.getMessage());
-        } catch (MongoRuntimeException re) {
-            log.log(Level.SEVERE, re.getMessage());
         }
         return fullBean;
     }

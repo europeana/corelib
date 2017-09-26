@@ -1,18 +1,18 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.storage.MongoServer;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by ymamakis on 1/12/16.
  */
 public class ServiceUpdater implements Updater<ServiceImpl> {
     @Override
-    public ServiceImpl update(ServiceImpl mongoEntity, ServiceImpl newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public ServiceImpl update(ServiceImpl mongoEntity, ServiceImpl newEntity, MongoServer mongoServer) throws MongoUpdateException {
         Query<ServiceImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(ServiceImpl.class).field("about")
                 .equal(mongoEntity.getAbout());

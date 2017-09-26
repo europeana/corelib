@@ -29,6 +29,7 @@ import eu.europeana.corelib.definitions.jibx.EuropeanaProxy;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import eu.europeana.corelib.edm.utils.MongoConstructor;
 import eu.europeana.corelib.edm.utils.construct.FullBeanHandler;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
@@ -57,7 +58,7 @@ import static org.junit.Assert.assertTrue;
 public class MongoConstructorTest {
 
     @Test
-    public void test() throws IOException, JiBXException, MongoDBException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void test() throws IOException, JiBXException, MongoDBException, MongoUpdateException, IllegalAccessException, InstantiationException {
         IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
         IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
         RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(FileUtils.readFileToString(new File(

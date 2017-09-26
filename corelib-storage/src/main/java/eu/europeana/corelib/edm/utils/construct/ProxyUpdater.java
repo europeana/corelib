@@ -1,7 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.lang.reflect.InvocationTargetException;
-
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -12,8 +11,7 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 public class ProxyUpdater implements Updater<ProxyImpl> {
     UpdateOperations<ProxyImpl> ops;
 
-      public ProxyImpl update(ProxyImpl retProxy, ProxyImpl proxy,
-            MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
+      public ProxyImpl update(ProxyImpl retProxy, ProxyImpl proxy, MongoServer mongoServer) throws MongoUpdateException {
         Query<ProxyImpl> updateQuery = mongoServer.getDatastore()
                 .createQuery(ProxyImpl.class).field("about")
                 .equal(proxy.getAbout());
