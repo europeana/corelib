@@ -25,13 +25,11 @@
 	<parent>
 		<artifactId>europeana-parent-pom</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>1.7-SNAPSHOT</version>
+		<version>1.7</version>
 	</parent>
 
 	<properties>
 		<javadoc.opts>-Xdoclint:none</javadoc.opts>
-		<version.objectStorage>1.4</version.objectStorage>
-		<version.log4j>1.2.17</version.log4j>
 	</properties>
 
 	<modules>
