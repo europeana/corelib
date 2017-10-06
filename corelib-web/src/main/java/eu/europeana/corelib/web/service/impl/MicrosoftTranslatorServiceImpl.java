@@ -9,7 +9,8 @@ import eu.europeana.corelib.web.model.ApiResult;
 import eu.europeana.corelib.web.service.MicrosoftTranslatorService;
 import eu.europeana.corelib.web.support.Configuration;
 import eu.europeana.corelib.web.utils.UrlBuilder;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @deprecated since 2017-09-22
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
 public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implements
 		MicrosoftTranslatorService {
 
-	private final Logger log = Logger.getLogger(MicrosoftTranslatorServiceImpl.class);
+	private static final Logger LOG = LogManager.getLogger(MicrosoftTranslatorServiceImpl.class);
 
 	@Resource
 	private Configuration config;
@@ -32,7 +33,7 @@ public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implement
 	@Override
 	public String translate(String text, String languageCode) {
 		String url = buildTranslateUrl(text, languageCode);
-		log.info("Calling translate url: " + url);
+		LOG.debug("Calling translate url: {} ", url);
 		ApiResult result = getJsonResponse(url);
 		return parseJson(result);
 	}

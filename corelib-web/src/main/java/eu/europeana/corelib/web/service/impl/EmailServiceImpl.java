@@ -25,7 +25,8 @@ import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ import java.util.Map;
  */
 public abstract class EmailServiceImpl implements EmailService {
 
-    private final Logger log = Logger.getLogger(EmailServiceImpl.class);
+    private static final Logger LOG = LogManager.getLogger(EmailServiceImpl.class);
 
     @Resource
     private JavaMailSenderImpl mailSender;
@@ -59,13 +60,13 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("activation"); // see corelib_web_emailConfigs
         builder.setEmailTo(token.getEmail());
         mailSender.send(builder);
-        log.info(String.format("Sent token (%s) and URL (%s) to %s", token.getToken(), url, token.getEmail()));
+        LOG.info("Sent token ({}) and URL ({}) to {}", token.getToken(), url, token.getEmail());
     }
 
     @Override
     public void sendApiKeys(ApiKey apiKey) throws EmailServiceException {
         if (apiKey == null) {
-            log.error("Problem with sendApiKeys: apiKey is null");
+            LOG.error("Problem with sendApiKeys: apiKey is null");
             throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
         }
         Map<String, Object> model = new HashMap<>();
@@ -75,7 +76,7 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("apikeys"); // see corelib_web_emailConfigs
         builder.setEmailTo(apiKey.getEmail());
         mailSender.send(builder);
-        log.info(String.format("Sent API details to %s", apiKey.getEmail()));
+        LOG.info("Sent API details to {}", apiKey.getEmail());
     }
 
     @Override
@@ -95,7 +96,7 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("forgotPassword"); // see corelib_web_emailConfigs
         builder.setEmailTo(token.getEmail());
         mailSender.send(builder);
-        log.info(String.format("Sent password reset url (%s) to %s", url, token.getEmail()));
+        LOG.info("Sent password reset url ({}) to {}", url, token.getEmail());
     }
 
     @Override
@@ -110,7 +111,7 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("resetPasswordConfirm"); // see corelib_web_emailConfigs
         builder.setEmailTo(user.getEmail());
         mailSender.send(builder);
-        log.info(String.format("Sent password reset confirmation email to (%s)", user.getEmail()));
+        LOG.info("Sent password reset confirmation email to ({})", user.getEmail());
     }
 
     //TODO: remove because it's implemented in sedNewPasswordToken ?
@@ -136,7 +137,7 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("forgotPassword");
         builder.setEmailTo(email);
         mailSender.send(builder);
-        log.info(String.format("Sent forgot password (URL=%s) to %s", url, email));
+        LOG.info("Sent forgot password (URL={}) to {}", url, email);
     }
 
     @Override
@@ -158,7 +159,7 @@ public abstract class EmailServiceImpl implements EmailService {
         builder.setTemplate("userFeedbackConfirm");
         builder.setEmailTo(email);
         mailSender.send(builder);
-        log.info(String.format("Sent feedback of %s", email));
+        LOG.info("Sent feedback of {}", email);
     }
 
     @Override
