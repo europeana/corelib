@@ -48,10 +48,4 @@
 
     <bean id="corelib_web_MediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" />
 
-	<!-- INTERCEPTORS -->
-	<bean id="corelib_web_configInterceptor" class="eu.europeana.corelib.web.interceptor.ConfigInterceptor" />
-
-	<!-- EXCEPTIONS -->
-	<!--<bean id="corelib_web_europeanaException" class="eu.europeana.corelib.web.exception.EuropeanaException" />-->
-
 </beans>
