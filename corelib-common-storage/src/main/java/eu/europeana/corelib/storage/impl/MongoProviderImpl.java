@@ -59,24 +59,26 @@ public class MongoProviderImpl implements MongoProvider {
     }
 
     /**
-     * Create a new MongoClient with the supplied credentials and optionsBuilder
+     * Create a new MongoClient with the supplied credentials and optionsBuilder.
      * If no optionsBuilder is provided a default one will be constructed.
-     * @param hosts comma-separated host names
-     * @param ports comma-separated port numbers
+     * Hosts array should contain one or more host names. If number of the hosts is greater
+     * than 1 then the ports array should contain an entry for each host or just one port
+     * which will be used for all the hosts.
+     *
+     * @param hosts array of host names
+     * @param ports array of ports
      * @param dbName optional
      * @param username optional
      * @param password optional
      * @param optionsBuilder optional
      */
-    public MongoProviderImpl(String hosts, String ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
-        String[] hostList = StringUtils.split(hosts, ",");
-        String[] portList = StringUtils.split(ports, ",");
+    public MongoProviderImpl(String[] hosts, String[] ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
         List<ServerAddress> serverAddresses = new ArrayList<>();
         int i = 0;
-        for (String host : hostList) {
+        for (String host : hosts) {
             if (host.length() > 0) {
                 try {
-                    ServerAddress address = new ServerAddress(host, Integer.parseInt(portList[i]));
+                    ServerAddress address = new ServerAddress(host, getPort(ports, i));
                     serverAddresses.add(address);
                 } catch (NumberFormatException e) {
                     LOG.error("Error parsing port numbers", e);
@@ -102,6 +104,31 @@ public class MongoProviderImpl implements MongoProvider {
             defaultDatabase = dbName;
             mongo = new MongoClient(serverAddresses, credentials, builder.build());
         }
+    }
+
+    private int getPort(String[] ports, int index)
+        throws NumberFormatException {
+        if (ports == null || index < 0) {
+            throw new NumberFormatException("Empty port");
+        }
+        if (ports.length > 1 && index < ports.length) {
+            return Integer.parseInt(ports[index]);
+        }
+        return Integer.parseInt(ports[0]);
+    }
+
+    /**
+     * Create a new MongoClient with the supplied credentials and optionsBuilder
+     * If no optionsBuilder is provided a default one will be constructed.
+     * @param hosts comma-separated host names
+     * @param ports comma-separated port numbers
+     * @param dbName optional
+     * @param username optional
+     * @param password optional
+     * @param optionsBuilder optional
+     */
+    public MongoProviderImpl(String hosts, String ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
+        this(StringUtils.split(hosts, ","), StringUtils.split(ports, ","), dbName, username, password, optionsBuilder);
     }
 
     /**
