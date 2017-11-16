@@ -6,6 +6,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import eu.europeana.corelib.storage.MongoProvider;
+import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import java.util.ArrayList;
@@ -94,13 +95,13 @@ public class MongoProviderImpl implements MongoProvider {
         }
 
         if (StringUtils.isEmpty(dbName) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            LOG.info("Creating new MongoClient - "+hosts+" (no credentials)");
+            LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +" (no credentials)");
             defaultDatabase = null;
             mongo = new MongoClient(serverAddresses, builder.build());
         } else {
             List<MongoCredential> credentials = new ArrayList<>();
             credentials.add(MongoCredential.createCredential(username, dbName, password.toCharArray()));
-            LOG.info("Creating new MongoClient - "+hosts+", database "+dbName+" (with credentials)");
+            LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +", database "+dbName+" (with credentials)");
             defaultDatabase = dbName;
             mongo = new MongoClient(serverAddresses, credentials, builder.build());
         }
