@@ -15,9 +15,4 @@ public class TestSearchServiceImpl extends SearchServiceImpl {
         System.out.println("QUERY: " + query.toString() + "   RESULTSIZE: " + resultSet.getResultSize());
         return resultSet;
     }
-
-    @Override
-    public boolean isHierarchy(String nodeId, int hierarchyTimeout) {
-        return true;
-    }
 }
