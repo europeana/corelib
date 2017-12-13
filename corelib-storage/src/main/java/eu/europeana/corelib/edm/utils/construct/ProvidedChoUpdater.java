@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -7,13 +8,11 @@ import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class ProvidedChoUpdater implements Updater<ProvidedCHOImpl> {
 
 	@Override
 	public ProvidedCHOImpl update(ProvidedCHOImpl mongoEntity, ProvidedCHOImpl newEntity,
-			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException{
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<ProvidedCHOImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(ProvidedCHOImpl.class).field("about")
 				.equal(mongoEntity.getAbout());

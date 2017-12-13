@@ -1,12 +1,11 @@
 package eu.europeana.corelib.solr.bean.impl;
 
+import eu.europeana.corelib.edm.utils.EdmUtils;
 import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.edm.beans.RichBean;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 @JsonPropertyOrder(alphabetic=true)
@@ -32,49 +31,23 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
         return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
     }
 
+    @Override
     public String[] getEdmLandingPage() {
         return (this.edmLandingPage != null ? this.edmLandingPage.clone() : null);
     }
 
     @Override
     public Map<String, List<String>> getDcDescriptionLangAware() {
-       if (dcDescriptionLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcDescriptionLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcDescriptionLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcDescriptionLangAware);
     }
 
     @Override
     public Map<String, List<String>> getDcTypeLangAware() {
-        if (dcTypeLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcTypeLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcTypeLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcTypeLangAware);
     }
 
     @Override
     public Map<String, List<String>> getDcSubjectLangAware() {
-        if (dcSubjectLangAware != null) {
-            Map<String, List<String>> retMap = new HashMap<>();
-
-            for (String key : dcSubjectLangAware.keySet()) {
-                retMap.put(StringUtils.substringAfter(key, "."), dcSubjectLangAware.get(key));
-            }
-
-            return retMap;
-        }
-        return null;
+        return EdmUtils.cloneMap(dcSubjectLangAware);
     }
 }

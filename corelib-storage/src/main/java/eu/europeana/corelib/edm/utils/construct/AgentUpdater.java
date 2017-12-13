@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -7,13 +8,10 @@ import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class AgentUpdater implements Updater<AgentImpl> {
 
 	public AgentImpl update(AgentImpl agent, AgentImpl newAgent,
-			MongoServer mongoServer) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<AgentImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(AgentImpl.class).field("about")
 				.equal(agent.getAbout());

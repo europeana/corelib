@@ -1,7 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.lang.reflect.InvocationTargetException;
-
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -12,8 +11,7 @@ import eu.europeana.corelib.solr.entity.OrganizationImpl;
 //TODO: NOT TO BE USED
 public class OrganizationUpdater implements Updater<Organization> {
 	public Organization update(Organization mongoEntity, Organization newEntity,
-			MongoServer mongoServer) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<OrganizationImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(OrganizationImpl.class).field("about")
 				.equal(mongoEntity.getAbout());

@@ -33,14 +33,15 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.web.exception.InvalidUrlException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class UrlBuilder {
 
-	private static Logger log = Logger.getLogger(UrlBuilder.class);
+	private static final Logger LOG = LogManager.getLogger(UrlBuilder.class);
 
 	public static final String PATH_SEPERATOR = "/";
 
@@ -54,8 +55,8 @@ public class UrlBuilder {
 	private boolean disableDomain = false;
 	private boolean trailingSlash = false;
 
-	private Map<String, String> params = new LinkedHashMap<String, String>();
-	private Map<String, List<String>> multiParams = new LinkedHashMap<String, List<String>>();
+	private Map<String, String> params = new LinkedHashMap<>();
+	private Map<String, List<String>> multiParams = new LinkedHashMap<>();
 
 	public UrlBuilder(String url) {
 		setBaseUrl(StringUtils.replace(url, "&amp;", "&"));
@@ -191,8 +192,7 @@ public class UrlBuilder {
 
 	public UrlBuilder addParam(String key, String value, boolean override) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
-			if (!params.containsKey(key)
-					|| (params.containsKey(key) && override)) {
+			if (!params.containsKey(key) || (params.containsKey(key) && override)) {
 				params.put(key, value);
 			}
 		}
@@ -236,28 +236,22 @@ public class UrlBuilder {
 
 	public UrlBuilder removeDefault(String key, String value) {
 		if (StringUtils.isNotBlank(key)) {
-			if (multiParams.containsKey(key)) {
-				if (multiParams.get(key).contains(value)) {
-					multiParams.get(key).remove(value);
-				}
+			if (multiParams.containsKey(key) && multiParams.get(key).contains(value)) {
+				multiParams.get(key).remove(value);
 			}
-			if (params.containsKey(key)) {
-				if (StringUtils.equals(value, params.get(key))) {
-					params.remove(key);
-				}
+			if (params.containsKey(key) && StringUtils.equals(value, params.get(key))) {
+				params.remove(key);
 			}
 		}
 		return this;
 	}
 
 	public UrlBuilder removeStartWith(String key, String value) {
-		if (params.containsKey(key)) {
-			if (StringUtils.startsWith(params.get(key), value)) {
-				params.remove(key);
-			}
+		if (params.containsKey(key) && StringUtils.startsWith(params.get(key), value)) {
+			params.remove(key);
 		}
 		if (multiParams.containsKey(key)) {
-			List<String> toRemove = new ArrayList<String>();
+			List<String> toRemove = new ArrayList<>();
 			for (String string : multiParams.get(key)) {
 				if (StringUtils.startsWith(string, value)) {
 					toRemove.add(string);
@@ -286,11 +280,11 @@ public class UrlBuilder {
 
 	public UrlBuilder addMultiParam(String key, String value) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
-			List<String> list = null;
+			List<String> list;
 			if (multiParams.containsKey(key)) {
 				list = multiParams.get(key);
 			} else {
-				list = new ArrayList<String>();
+				list = new ArrayList<>();
 				multiParams.put(key, list);
 				if (params.containsKey(key)) {
 					// convert to Array...
@@ -365,8 +359,7 @@ public class UrlBuilder {
 		try {
 			value = URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			log.error("UnsupportedEncodingException: "
-					+ e.getLocalizedMessage());
+			LOG.error("UnsupportedEncodingException: {}", e.getLocalizedMessage(), e);
 		}
 		return value;
 	}

@@ -1,7 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.lang.reflect.InvocationTargetException;
-
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.apache.commons.lang.StringUtils;
 
 import org.mongodb.morphia.query.Query;
@@ -14,8 +13,7 @@ public class LicenseUpdater implements Updater<LicenseImpl> {
 
 	@Override
 	public LicenseImpl update(LicenseImpl mongoEntity, LicenseImpl newEntity,
-			MongoServer mongoServer) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<LicenseImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(LicenseImpl.class).field("about")
 				.equal(mongoEntity.getAbout());

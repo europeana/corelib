@@ -354,16 +354,13 @@ public class Query implements Cloneable {
      */
     public Query setFacetsAllowed(boolean allowFacets) {
         this.allowFacets = allowFacets;
-        if (this.allowFacets &&
-            null != technicalFacetList &&
-            technicalFacetList.size() > 0 && (
-                null == solrFacetList ||
-                solrFacetList.size() == 0 ||
-                !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString())
-            )
-        ) solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        if (this.allowFacets && technicalFacetList != null && technicalFacetList.size() > 0 &&
+                (solrFacetList.size() == 0 || !solrFacetList.contains(SolrFacetType.FACET_TAGS.toString()))) {
+            solrFacetList.add(SolrFacetType.FACET_TAGS.toString());
+        }
         return this;
     }
+
     // TODO this method is ONLY ever called in the QueryTest unittest, and only for it TRUE
     // TODO I suggest we remove this variable altogether
     public Query setProduceFacetUnion(boolean produceFacetUnion) {

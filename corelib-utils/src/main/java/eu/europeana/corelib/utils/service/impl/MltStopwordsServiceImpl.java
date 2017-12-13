@@ -30,7 +30,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import eu.europeana.corelib.utils.service.MltStopwordsService;
+import org.apache.log4j.Logger;
 
+/**
+ * @deprecated More like this isn't used any more
+ */
 @Deprecated
 public class MltStopwordsServiceImpl implements MltStopwordsService {
 
@@ -39,7 +43,7 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 	/**
 	 * The frequency (in minutes) of rereading the opt-out list.
 	 */
-	private final static int CHECK_FREQUENCY_IN_MINUTE = 5;
+	private static final int CHECK_FREQUENCY_IN_MINUTE = 5;
 
 	/**
 	 * The time of file last check
@@ -49,7 +53,7 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 	/**
 	 * The list of opted-out datasets
 	 */
-	private List<String> stopwords = new ArrayList<String>();
+	private List<String> stopwords = new ArrayList<>();
 
 	public MltStopwordsServiceImpl(File stopwordFile) {
 		this.stopwordFile = stopwordFile;
@@ -67,7 +71,7 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 	private void reloadStopwords() {
 		Calendar timeout = DateUtils.toCalendar(DateUtils.addMinutes(new Date(), -CHECK_FREQUENCY_IN_MINUTE));
 
-		if (stopwords == null || lastCheck == null || lastCheck.before(timeout)) {
+		if (lastCheck == null || lastCheck.before(timeout)) {
 			stopwords.clear();
 
 			LineIterator it = null;
@@ -78,7 +82,7 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 					stopwords.add(StringUtils.lowerCase(line));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getLogger(MltStopwordsServiceImpl.class).error("Error reading stopwords", e);
 			} finally {
 				LineIterator.closeQuietly(it);
 			}

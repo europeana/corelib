@@ -17,27 +17,26 @@
 
 package eu.europeana.corelib.search;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
-import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.FacetField;
-
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
+import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.search.model.ResultSet;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.FacetField;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query
@@ -60,17 +59,6 @@ public interface SearchService {
 	 * @throws                  MongoRuntimeException, SolrTypeException
 	 */
 	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
-
-	/**
-	 * Retrieve a record by id.
-	 * 
-     * @param europeanaObjectId The unique europeana id
-     * @param similarItems      Whether to retrieve similar items
-	 * @param hierarchyTimeout  number of milliseconds before the hierarchical (neo4j-) query times out
-	 * @return                  A full europeana record
-	 * @throws                  MongoRuntimeException, MongoDBException
-	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException, Neo4JException;
 
 	/**
 	 * Retrieve a record by id.
@@ -319,5 +307,5 @@ public interface SearchService {
 	 */
 	Neo4jStructBean getInitialStruct(String nodeId) throws Neo4JException;
 
-	boolean isHierarchy(String nodeId, int hierarchyTimeout) throws Neo4JException;
+//	boolean isHierarchy(String nodeId, int hierarchyTimeout) throws Neo4JException;
 }

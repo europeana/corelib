@@ -1,7 +1,6 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.lang.reflect.InvocationTargetException;
-
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -11,7 +10,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 
 public class TimespanUpdater implements Updater<TimespanImpl> {
 	public TimespanImpl update(TimespanImpl mongoTimespan, TimespanImpl timeSpan,
-			MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException {
+			MongoServer mongoServer) throws MongoUpdateException {
 		Query<TimespanImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(TimespanImpl.class).field("about")
 				.equal(mongoTimespan.getAbout());

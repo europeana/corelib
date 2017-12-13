@@ -13,18 +13,18 @@ import org.apache.commons.io.IOUtils;
 import eu.europeana.corelib.web.model.ApiResult;
 import eu.europeana.corelib.web.model.ApiResultImpl;
 import eu.europeana.corelib.web.service.JsonApiService;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JsonApiServiceImpl implements JsonApiService {
 
 	private static final String USER_AGENT = "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)";
 
-	private Logger log = Logger.getLogger(JsonApiServiceImpl.class);
+	private static final Logger LOG = LogManager.getLogger(JsonApiServiceImpl.class);
 
 	private String lastUrl;
 
-	public JsonApiServiceImpl() {}
-
+	@Override
 	public ApiResult getJsonResponse(String url) {
 		lastUrl = url;
 		ApiResultImpl result = new ApiResultImpl();
@@ -57,7 +57,7 @@ public class JsonApiServiceImpl implements JsonApiService {
 			result.setResponseHeaders(responseHeaders);
 
 		} catch (IOException e) {
-			log.error(e.getMessage(),e);
+			LOG.error(e.getMessage(),e);
 		}
 
 		return result;

@@ -5,6 +5,7 @@
  */
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
@@ -14,20 +15,15 @@ import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  *
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class WebResourceCreator {
 
-	public WebResource saveWebResource(WebResource wr, MongoServer mongo)
-			throws NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
+	public WebResource saveWebResource(WebResource wr, MongoServer mongo) throws MongoUpdateException {
 
-		WebResourceImpl wrMongo = ((EdmMongoServer) mongo).searchByAbout(
-				WebResourceImpl.class, wr.getAbout());
+		WebResourceImpl wrMongo = ((EdmMongoServer) mongo).searchByAbout(WebResourceImpl.class, wr.getAbout());
 		if (wrMongo != null) {
 			return updateWebResource(wrMongo, wr, mongo);
 		}
@@ -36,9 +32,7 @@ public class WebResourceCreator {
 		return wr;
 	}
 
-	private WebResource updateWebResource(WebResource wrMongo, WebResource wr,
-			MongoServer mongoServer) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+	private WebResource updateWebResource(WebResource wrMongo, WebResource wr, MongoServer mongoServer) throws MongoUpdateException {
 		Query<WebResourceImpl> updateQuery = mongoServer.getDatastore()
 				.createQuery(WebResourceImpl.class).field("about")
 				.equal(wr.getAbout());

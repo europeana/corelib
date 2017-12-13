@@ -30,10 +30,7 @@ import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
-import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
@@ -46,6 +43,7 @@ import eu.europeana.corelib.neo4j.entity.CustomNode;
 import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
@@ -56,7 +54,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
-import eu.europeana.corelib.web.support.Configuration;
+import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -93,18 +91,12 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
  * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceImpl implements SearchService {
-
-    private static final int DEFAULT_HIERARCHY_TIMEOUT = 8000;
-    private static final int MAX_HIERARCHY_TIMEOUT = 20000;
-    private static final int MIN_HIERARCHY_TIMEOUT = 400;
 
     /**
      * Default number of documents retrieved by MoreLikeThis
@@ -323,31 +315,10 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
-        return findById(europeanaObjectId, similarItems, DEFAULT_HIERARCHY_TIMEOUT);
-    }
 
-    @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems, int hierarchyTimeout) throws MongoRuntimeException, MongoDBException {
-        hierarchyTimeout = (hierarchyTimeout == 0 ? DEFAULT_HIERARCHY_TIMEOUT :
-                            (hierarchyTimeout < MIN_HIERARCHY_TIMEOUT ? MIN_HIERARCHY_TIMEOUT :
-                             (hierarchyTimeout > MAX_HIERARCHY_TIMEOUT ? MAX_HIERARCHY_TIMEOUT : hierarchyTimeout)));
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
             injectWebMetaInfo(fullBean);
-
-            boolean isHierarchy = false;
-            try {
-                isHierarchy = isHierarchy(fullBean.getAbout(), hierarchyTimeout);
-            } catch (Neo4JException e) {
-                log.error("Neo4JException: Could not establish Hierarchical status for object with Europeana ID: " + europeanaObjectId + ", reason: " + e.getMessage());
-            }
-
-            // TODO: this is a hack to prevent hundreds of dcTermsHasParts present in some hierarchies
-            if (isHierarchy) {
-                for (Proxy prx : fullBean.getProxies()) {
-                    prx.setDctermsHasPart(null);
-                }
-            }
 
             if (similarItems) {
                 try {
@@ -552,7 +523,7 @@ public class SearchServiceImpl implements SearchService {
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
                                                   Query query) throws SolrTypeException {
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
-            throw new SolrTypeException(ProblemType.SEARCH_LIMIT_REACHED);
+            throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }
         ResultSet<T> resultSet = new ResultSet<>();
         Class<? extends IdBeanImpl> beanClazz = SearchUtils
@@ -955,22 +926,6 @@ public class SearchServiceImpl implements SearchService {
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, startIndex));
         }
         return beans;
-    }
-
-    @Override
-    public boolean isHierarchy(String rdfAbout, int hierarchyTimeout) throws Neo4JException {
-//        return neo4jServer.isHierarchy(rdfAbout);
-        boolean result = false;
-        long startTime = System.nanoTime();
-        try {
-            result = neo4jServer.isHierarchyTimeLimited(rdfAbout, hierarchyTimeout);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            log.warn(e.getClass().getSimpleName() +" retrieving isHierarchy information");
-        }
-        if (log.isInfoEnabled()) {
-            log.info("Requesting hierarchy information took " + (System.nanoTime() - startTime) / 1000000 + "ms, max time = " + hierarchyTimeout);
-        }
-        return result;
     }
 
     @Override

@@ -1,10 +1,9 @@
 package eu.europeana.corelib.web.utils;
 
-import static org.junit.Assert.assertEquals;
-
+import eu.europeana.corelib.web.exception.InvalidUrlException;
 import org.junit.Test;
 
-import eu.europeana.corelib.web.exception.InvalidUrlException;
+import static org.junit.Assert.assertEquals;
 
 public class UrlBuilderTest {
 
@@ -104,14 +103,13 @@ public class UrlBuilderTest {
 	}
 
 	/**
-	 * Testing addParamsFromURL() method
+	 * Testing addParamsFromURL() method (fix for ticket #1335)
 	 */
 	@Test
 	public void testAddParamsFromURL() {
 		UrlBuilder url = new UrlBuilder("http://www.europeana.eu");
-		url.addParamsFromURL("query=*%3A*&qf=DATA_PROVIDER:\"Musik & Teatermuseet\"&qf=paris");
-		assertEquals("Adding path and page containing unneeded slashes failed",
-				"http://www.europeana.eu?query=*%3A*&qf=DATA_PROVIDER%3A%22Musik+%26+Teatermuseet%22&qf=paris",
+		url.addParamsFromURL("query=*%3A*&qf=DATA_PROVIDER:%22Musik%20%26%20Teatermuseet%22&qf=paris");
+		assertEquals("http://www.europeana.eu?query=*%3A*&qf=DATA_PROVIDER%3A%22Musik+%26+Teatermuseet%22&qf=paris",
 				url.toString());
 	}
 }

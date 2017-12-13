@@ -1,8 +1,7 @@
 package eu.europeana.corelib.edm.utils.construct;
 
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import eu.europeana.corelib.storage.MongoServer;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Updater of EDM contextual classes
@@ -12,5 +11,5 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface Updater<T> {
 
-	T update(T mongoEntity, T newEntity, MongoServer mongoServer) throws NoSuchMethodException, IllegalAccessException,InvocationTargetException;
+	T update(T mongoEntity, T newEntity, MongoServer mongoServer) throws MongoUpdateException;
 }
