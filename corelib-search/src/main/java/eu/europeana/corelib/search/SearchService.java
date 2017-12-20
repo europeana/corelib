@@ -259,6 +259,16 @@ public interface SearchService {
 
 	/**
 	 * Get the nodes preceeding siblings
+	 *
+	 * @param  nodeId The ID of the record
+	 * @param  offset  How many siblings to skip
+	 * @param  limit  How many siblings to retrieve
+	 * @return node's preceding siblings
+	 */
+	List<Neo4jBean> getPrecedingSiblings(String nodeId, int offset, int limit) throws Neo4JException;
+
+	/**
+	 * Get the nodes preceeding siblings
 	 * 
      * @param  nodeId The ID of the record
      * @param  limit  How many siblings to retrieve
@@ -273,6 +283,16 @@ public interface SearchService {
      * @return node's preceding siblings
      */
     List<Neo4jBean> getPrecedingSiblings(String nodeId) throws Neo4JException;
+
+	/**
+	 * Get the nodes following siblings
+	 *
+	 * @param  nodeId The ID of the record
+	 * @param  limit  How many siblings to retrieve
+	 * @param  offset  How many siblings to skip
+	 * @return node's following siblings
+	 */
+	List<Neo4jBean> getFollowingSiblings(String nodeId, int offset, int limit) throws Neo4JException;
 
 	/**
 	 * Get the nodes following siblings
