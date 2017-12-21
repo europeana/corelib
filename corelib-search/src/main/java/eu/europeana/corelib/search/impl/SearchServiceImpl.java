@@ -1025,6 +1025,7 @@ public class SearchServiceImpl implements SearchService {
         return beans;
     }
 
+    @Override
     public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) throws Neo4JException {
         return getFollowingSiblings(rdfAbout, 0, 10);
     }

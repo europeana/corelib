@@ -16,12 +16,9 @@
  */
 package eu.europeana.corelib.neo4j.server.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.*;
-
+import eu.europeana.corelib.neo4j.entity.*;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -46,16 +43,11 @@ import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
-import eu.europeana.corelib.neo4j.entity.Siblington;
-import eu.europeana.corelib.neo4j.entity.CustomNode;
-import eu.europeana.corelib.neo4j.entity.CustomResponse;
-import eu.europeana.corelib.neo4j.entity.Hierarchy;
-import eu.europeana.corelib.neo4j.entity.IndexObject;
-import eu.europeana.corelib.neo4j.entity.RelType;
-import eu.europeana.corelib.neo4j.entity.Relation;
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
-
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * @author Yorgos.Mamakis@ europeana.eu
@@ -188,6 +180,12 @@ public class Neo4jServerImpl implements Neo4jServer {
         return null;
     }
 
+
+    @Override
+    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
+        return getFollowingSiblings(rdfAbout, 0, limit);
+    }
+
     // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
     @Override
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit) {
@@ -206,18 +204,20 @@ public class Neo4jServerImpl implements Neo4jServer {
     }
 
 
-    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        return getFollowingSiblings(rdfAbout, 0, limit);
-    }
-
+    // REMOVE? - only ever used in a test class
     @Override
     public List<CustomNode> getFollowingSiblings(Node node, int limit) {
         return getFollowingSiblings(node.getProperty("rdf:about") + "", limit);
     }
 
-    // REMOVEME?
-    private List<Node> getFollowingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.INCOMING, EDMISNEXTINSEQUENCERELATION);
+//    REMOVE - never used
+//    private List<Node> getFollowingSiblings(Node node, int limit, int offset) {
+//        return getRelatedNodes(node, limit, offset, Direction.INCOMING, EDMISNEXTINSEQUENCERELATION);
+//    }
+
+    @Override
+    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
+        return getPrecedingSiblings(rdfAbout, 0, limit);
     }
 
     // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
@@ -237,20 +237,16 @@ public class Neo4jServerImpl implements Neo4jServer {
         return null;
     }
 
-    @Override
-    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        return getPrecedingSiblings(rdfAbout, 0, limit);
-    }
-
+    // REMOVE? - only ever used in a test class
     @Override
     public List<CustomNode> getPrecedingSiblings(Node node, int limit) {
         return getPrecedingSiblings(node.getProperty("rdf:about") + "", limit);
     }
 
-    // REMOVEME?
-    private List<Node> getPrecedingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.OUTGOING, EDMISNEXTINSEQUENCERELATION);
-    }
+//    REMOVE - never used
+//    private List<Node> getPrecedingSiblings(Node node, int limit, int offset) {
+//        return getRelatedNodes(node, limit, offset, Direction.OUTGOING, EDMISNEXTINSEQUENCERELATION);
+//    }
 
     // TODO REMOVEME (?)
     private List<Node> getRelatedNodes(Node node, int limit, int offset, Direction direction, Relation relType) {

@@ -16,14 +16,14 @@
  */
 package eu.europeana.corelib.neo4j.server;
 
+import eu.europeana.corelib.neo4j.entity.CustomNode;
+import eu.europeana.corelib.neo4j.entity.Hierarchy;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import org.neo4j.graphdb.Node;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
-import org.neo4j.graphdb.Node;
-import eu.europeana.corelib.neo4j.entity.Hierarchy;
-import eu.europeana.corelib.neo4j.entity.CustomNode;
 
 /**
  * Neo4j server connection interface
@@ -72,6 +72,7 @@ public interface Neo4jServer {
 	Node getParent(Node node);
 
 	/**
+	 * todo check if deprecated
 	 * Retrieve ordered list of siblings using a specific node as a start
 	 * following outbound edm:isNextInSequence or isFakeOrder relations
 	 * 
@@ -103,7 +104,8 @@ public interface Neo4jServer {
 	List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit);
 
 	/**
-         * Convenience override
+	 * todo check if deprecated
+     * Convenience override
 	 * Retrieve ordered list of siblings using a specific node as a start
 	 * following inbound edm:isNextInSequence or isFakeOrder relations
 	 *
