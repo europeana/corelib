@@ -31,7 +31,9 @@ import eu.europeana.corelib.web.utils.UrlBuilder;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 only used for BingTranslateService that is was deprecated earlier
  */
+@Deprecated
 public abstract class PageData {
 
 	public static final String PARAM_MODEL = "model";

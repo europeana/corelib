@@ -208,6 +208,7 @@ public class SearchServiceTest {
     }
 
     @Test
+    @Deprecated
     public void testFindMoreLikeThis() throws SolrTypeException, SolrServerException {
         System.out.println("TEST testFindMoreLikeThis");
         testCount++;

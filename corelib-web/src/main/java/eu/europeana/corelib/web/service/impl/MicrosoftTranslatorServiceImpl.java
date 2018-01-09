@@ -45,7 +45,7 @@ public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implement
 
 	private String buildTranslateUrl(String text, String languageCode) {
 		UrlBuilder url = new UrlBuilder(TRANSLATOR_URL);
-		url.addParam("appId", config.getBingTranslateId());
+		//url.addParam("appId", config.getBingTranslateId());
 		url.addParam("text", text);
 		url.addParam("to", languageCode);
 		return url.toString();

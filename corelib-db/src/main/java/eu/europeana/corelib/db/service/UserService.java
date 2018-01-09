@@ -34,7 +34,9 @@ import java.util.List;
  *
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.entity.relational.UserImpl
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
+@Deprecated
 public interface UserService extends AbstractService<User> {
 
     /**

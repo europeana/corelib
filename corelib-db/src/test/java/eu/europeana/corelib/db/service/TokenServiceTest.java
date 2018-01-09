@@ -40,9 +40,11 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-db-context.xml", "/corelib-db-test.xml"})
+@Deprecated
 public class TokenServiceTest {
 
 	@Resource(name = "corelib_db_tokenDao")

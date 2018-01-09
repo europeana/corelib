@@ -41,8 +41,10 @@ import eu.europeana.corelib.definitions.solr.DocType;
  * Super class Saved europeana objects in my Europeana
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @MappedSuperclass
+@Deprecated
 public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> implements RelationalDatabase, EuropeanaUserObject {
 	private static final long serialVersionUID = 1L;
 

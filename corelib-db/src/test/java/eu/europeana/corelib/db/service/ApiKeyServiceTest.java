@@ -41,8 +41,8 @@ public class ApiKeyServiceTest {
     @Resource(name = "corelib_db_apiLogDao")
     private NosqlDao<ApiLog, String> apiLogDao;
 
-    @Resource(name = "corelib_db_userDao")
-    private RelationalDao<UserImpl> userDao;
+    //@Resource(name = "corelib_db_userDao")
+    //private RelationalDao<UserImpl> userDao;
 
     @Resource
     private EmailService emailServiceMock;
@@ -67,7 +67,7 @@ public class ApiKeyServiceTest {
     @After
     public void tearDown() throws IOException {
         apiLogDao.getCollection().drop();
-        userDao.deleteAll();
+        //userDao.deleteAll();
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ApiKeyServiceTest {
         apiKey.setPrivateKey("testKey");
         apiKey.setUsageLimit(2L);
 
-        apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
+        //apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
 
         try {
             apiKeyService.checkReachedLimit(null);

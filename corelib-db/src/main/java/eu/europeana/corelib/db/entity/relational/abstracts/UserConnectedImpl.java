@@ -36,8 +36,10 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConne
  * 
  * @param <I>
  *            A Serializable type used as primary key, like a Long or String
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @MappedSuperclass
+@Deprecated
 public abstract class UserConnectedImpl<I extends Serializable> implements IdentifiedEntity<I>, UserConnected<I> {
 	private static final long serialVersionUID = 1L;
 

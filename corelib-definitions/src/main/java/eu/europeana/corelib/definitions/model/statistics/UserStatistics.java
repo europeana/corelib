@@ -4,7 +4,9 @@ package eu.europeana.corelib.definitions.model.statistics;
  * User statistics contains user name (name) API key (apiKey) and count (count).
  *
  * @author peter.kiraly@kb.nl
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
+@Deprecated
 public class UserStatistics {
 
 	private String name;

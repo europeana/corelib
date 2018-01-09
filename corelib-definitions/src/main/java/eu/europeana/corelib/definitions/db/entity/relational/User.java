@@ -26,7 +26,9 @@ import java.util.Set;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
+@Deprecated
 public interface User extends IdentifiedEntity<Long> {
 
     String QUERY_FINDBY_EMAIL = "User.findByEmail";

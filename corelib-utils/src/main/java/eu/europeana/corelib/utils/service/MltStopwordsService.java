@@ -17,6 +17,9 @@
 
 package eu.europeana.corelib.utils.service;
 
+/**
+ * @deprecated July 2017 MoreLikeThis / SimilarItems for records is no longer being used (and doesn't work properly)
+ */
 @Deprecated
 public interface MltStopwordsService {
 

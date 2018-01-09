@@ -21,6 +21,10 @@ import java.util.List;
 import eu.europeana.corelib.db.entity.nosql.AccessToken;
 import eu.europeana.corelib.db.entity.nosql.RefreshToken;
 
+/**
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
+ */
+@Deprecated
 public interface OAuth2TokenService {
 	
 	/**

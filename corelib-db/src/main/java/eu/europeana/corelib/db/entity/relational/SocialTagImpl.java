@@ -31,6 +31,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SOCIALTAGS)
@@ -41,6 +42,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_EUROPEANAID, query="SELECT e FROM SocialTagImpl e WHERE e.user.id = ? AND e.europeanaUri = ?"),
 	@NamedQuery(name=SocialTag.QUERY_FINDBY_USER_TAG_EUROPEANAID, query="SELECT e FROM SocialTagImpl e WHERE e.user.id = ? AND lower(e.tag) = ? AND e.europeanaUri = ?")
 })
+@Deprecated
 public class SocialTagImpl extends EuropeanaUserObjectImpl implements SocialTag {
 	private static final long serialVersionUID = -3635227115883742004L;
 

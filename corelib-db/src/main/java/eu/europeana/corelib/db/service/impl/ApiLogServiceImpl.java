@@ -39,7 +39,9 @@ import eu.europeana.corelib.utils.model.DateInterval;
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @author Yorgos.Mamakis@ kb.nl
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public class ApiLogServiceImpl extends AbstractNoSqlServiceImpl<ApiLog, String> implements ApiLogService {
 
 	@Override

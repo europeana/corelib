@@ -23,8 +23,9 @@ import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlService;
 
 /**
  * Interface for the OAuth2Access token service
- *
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public interface OAuth2AccessTokenService extends AbstractNoSqlService<AccessToken, String> {
 
 	/**
