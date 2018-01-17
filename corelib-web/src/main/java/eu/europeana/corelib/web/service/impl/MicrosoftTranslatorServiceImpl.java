@@ -13,7 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * @deprecated since 2017-09-22
+ *
+ * @deprecated since 2017-09-22 (BUT THIS IS NOT TO BE REMOVED YET!)
  */
 @Deprecated
 public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implements
