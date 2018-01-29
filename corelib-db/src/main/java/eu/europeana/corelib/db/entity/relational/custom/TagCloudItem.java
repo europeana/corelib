@@ -21,8 +21,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 /**
  * Tag Cloud item
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @JsonSerialize(include = Inclusion.NON_EMPTY)
+@Deprecated
 public class TagCloudItem {
 	
 	private String label;

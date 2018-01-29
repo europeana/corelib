@@ -33,6 +33,7 @@ import java.util.*;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @Entity
 @NamedQueries({
@@ -40,6 +41,7 @@ import java.util.*;
 		@NamedQuery(name = User.QUERY_FINDBY_NAME, query = "select u from UserImpl u where u.userName = ?")
 })
 @Table(name = RelationalDatabase.TABLENAME_USER)
+@Deprecated
 public class UserImpl implements IdentifiedEntity<Long>, RelationalDatabase, User {
 	private static final long serialVersionUID = 3830841148649674534L;
 

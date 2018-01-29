@@ -10,7 +10,9 @@ import org.mongodb.morphia.annotations.Indexed;
 
 /**
  * Class representing an OAuth2AccessToken
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 @Entity("OAuth2AccesssToken")
 public class AccessToken extends RefreshToken {
 

@@ -32,6 +32,7 @@ import eu.europeana.corelib.utils.model.DateInterval;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @author Yorgos.Mamakis@ kb.nl
  */
+@Deprecated
 public interface ApiLogService extends AbstractNoSqlService<ApiLog, String> {
 
 	/**

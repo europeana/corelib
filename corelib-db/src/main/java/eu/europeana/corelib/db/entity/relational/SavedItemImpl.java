@@ -29,12 +29,14 @@ import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDITEM)
 @NamedQueries ({
 	@NamedQuery(name=SavedItem.QUERY_FINDBY_OBJECTID, query="select e from SavedItemImpl e where e.user.id = ? and e.europeanaUri = ?")
 })
+@Deprecated
 public class SavedItemImpl extends EuropeanaUserObjectImpl implements SavedItem {
 	private static final long serialVersionUID = -7059004310525816113L;
 

@@ -133,6 +133,7 @@ public class SearchServiceImpl implements SearchService {
     private String password;
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
+    @Deprecated
     private String mltFields;
     private boolean debug = false;
 

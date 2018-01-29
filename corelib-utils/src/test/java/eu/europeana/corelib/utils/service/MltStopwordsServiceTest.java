@@ -29,6 +29,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  * MLT Stopwords service tests
  * @author Peter.Kiraly@kb.nl
+ *
+ * @deprecated July 2017 MoreLikeThis / SimilarItems for records is no longer being used (and doesn't work properly)
  */
 @Deprecated
 @RunWith(SpringJUnit4ClassRunner.class)

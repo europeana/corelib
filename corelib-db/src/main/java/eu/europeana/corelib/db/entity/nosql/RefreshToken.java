@@ -24,9 +24,10 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 /**
  * A refresh token for OAuth2
- *
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @Entity("OAuth2RefreshToken")
+@Deprecated
 public class RefreshToken implements NoSqlEntity {
 
 	@Id

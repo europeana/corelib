@@ -27,8 +27,9 @@ import eu.europeana.corelib.db.service.abstracts.AbstractNoSqlServiceImpl;
 
 /**
  * Implementation of the OAuth2TokenAccessService
- *
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public class OAuth2TokenAccessServiceImpl extends AbstractNoSqlServiceImpl<AccessToken, String> implements OAuth2AccessTokenService {
 	
 	@Override

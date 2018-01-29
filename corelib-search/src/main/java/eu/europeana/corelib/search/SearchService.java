@@ -187,7 +187,9 @@ public interface SearchService {
 	 * @param  europeanaObjectId
 	 * @return moreLikeThis List of BriefBeans
 	 * @throws SolrServerException
+	 * deprectated January 2018 - FMLT isn't used anymore
 	 */
+	@Deprecated
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 
@@ -208,7 +210,9 @@ public interface SearchService {
 	 * @param  count
 	 * @return a specified number of moreLikeThis objects
 	 * @throws SolrServerException
+	 * deprectated January 2018 - FMLT isn't used anymore
 	 */
+	@Deprecated
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException;
 

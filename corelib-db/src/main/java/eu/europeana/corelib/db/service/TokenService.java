@@ -27,7 +27,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.Token;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.entity.relational.TokenImpl
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public interface TokenService extends AbstractService<Token> {
 
 	// 6 hours
