@@ -59,6 +59,7 @@ public enum ProblemType {
 	DUPLICATE("Record already exists.", ProblemResponseAction.IGNORE),
 	RECORD_RETRIEVAL_ERROR("Record retrieval error", ProblemResponseAction.LOG),
 	INVALID_URL("Url is invalid", ProblemResponseAction.LOG),
+	INVALID_THEME("Theme does not exist", ProblemResponseAction.LOG),
 	PAGINATION_LIMIT_REACHED("Sorry! It is not possible to paginate beyond the first 1000 search results. Please use the cursor-based pagination to paginate beyond the first 1000 search results.", ProblemResponseAction.LOG);
 
 	private String message;
