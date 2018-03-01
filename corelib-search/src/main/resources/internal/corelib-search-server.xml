@@ -33,6 +33,8 @@
         <constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
     </bean>
 
+    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.search.impl.Neo4jSearchServiceImpl" />
+
     <!-- default profile, multiple solr instances, connecting via Zookeeper -->
     <beans profile="default">
         <bean id="corelib_solr_zookeeper" class="org.apache.solr.client.solrj.impl.CloudSolrServer" lazy-init="true" init-method="connect">
