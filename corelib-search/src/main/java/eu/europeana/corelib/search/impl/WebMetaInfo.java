@@ -215,23 +215,19 @@ public class WebMetaInfo {
     }
 
     /**
-     * Check if the record is a newspaper record (there is a dcTermsIsPartOf that starts with http://data.theeuropeanalibrary.org)
+     * Check if the record is a newspaper record (there is a dcType value called 'http://schema.org/PublicationIssue')
      * @param bean
      * @return true if it's a newspaper record, otherwise false
      */
     public static boolean isNewsPaperRecord(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()){
-                Map<String, List<String>> langMap = proxy.getDctermsIsPartOf();
+                Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
-                    for (List<String> values : langMap.values()) {
-                        for(String value : values) {
-                            if (value.startsWith("http://data.theeuropeanlibrary.org") || value.startsWith("https://data.theeuropeanlibrary.org")) {
-                                LOG.debug("isNewsPaperRecord = true");
-                                return true;
-                            }
-                        }
-                    }
+                    boolean result = langMap.values().contains("http://schema.org/PublicationIssue") ||
+                                     langMap.values().contains("https://schema.org/PublicationIssue");
+                    LOG.debug("isNewsPaperRecord = {}", result);
+                    return result;
                 }
             }
         }
