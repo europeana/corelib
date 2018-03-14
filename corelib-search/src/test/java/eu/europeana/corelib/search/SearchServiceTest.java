@@ -229,6 +229,7 @@ public class SearchServiceTest {
     }
 
     @Test
+    @Deprecated
     public void testSitemap() throws SolrTypeException {
         System.out.println("TEST testSitemap");
         testCount++;

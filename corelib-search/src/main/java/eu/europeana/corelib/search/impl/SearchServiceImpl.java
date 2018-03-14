@@ -739,6 +739,7 @@ public class SearchServiceImpl implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
+    @Deprecated
     public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
                                                    Query query) throws SolrTypeException {
 
