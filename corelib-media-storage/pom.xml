@@ -20,7 +20,10 @@
         <dependency>
             <groupId>eu.europeana</groupId>
             <artifactId>object-storage</artifactId>
+            <!-- temporary fix for the pom file until the parent pom re-enables the property
             <version>${version.objectStorage}</version>
+            -->
+            <version>1.6-SNAPSHOT</version>
         </dependency>
 
         <!-- CORELIB -->
