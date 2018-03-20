@@ -11,6 +11,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.mongodb.morphia.annotations.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import eu.europeana.corelib.definitions.edm.entity.Address;
 import eu.europeana.corelib.definitions.edm.entity.Organization;
@@ -37,6 +41,8 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	private Map<String,String> edmGeographicLevel;
 	private Map<String,String> edmCountry;
 	
+	@JsonTypeInfo(use=Id.NAME, include=As.WRAPPER_OBJECT)
+	@JsonSubTypes(@JsonSubTypes.Type(value = AddressImpl.class))
 	private Address address;
 	
 	private Date created;
