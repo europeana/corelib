@@ -40,6 +40,7 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	private Map<String,String> edmOrganizationScope;
 	private Map<String,String> edmGeographicLevel;
 	private Map<String,String> edmCountry;
+	private String[] owlSameAs;
 	
 	@JsonTypeInfo(use=Id.NAME, include=As.WRAPPER_OBJECT)
 	@JsonSubTypes(@JsonSubTypes.Type(value = AddressImpl.class))
@@ -218,6 +219,14 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	@Override
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public String[] getOwlSameAs() {
+		return owlSameAs;
+	}
+
+	public void setOwlSameAs(String[] owlSameAs) {
+		this.owlSameAs = owlSameAs;
 	}
 
 	

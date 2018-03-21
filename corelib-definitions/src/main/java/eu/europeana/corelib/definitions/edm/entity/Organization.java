@@ -78,5 +78,9 @@ public interface Organization extends AbstractEdmEntity{
 
 	Address getAddress();
 	
+	//TODO: SG - move the setters/getters for OwlSameAs to the parent interface for all entity types
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
 	
 }
