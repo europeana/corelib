@@ -46,10 +46,6 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	@JsonSubTypes(@JsonSubTypes.Type(value = AddressImpl.class))
 	private Address address;
 	
-	private Date created;
-	private Date modified;
-
-	
 	@Override
 	public Map<String, List<String>> getEdmAcronym() {
 		return this.edmAcronym;
@@ -190,26 +186,7 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	public void setFoafMbox(List<String> foafMbox) {
 		this.foafMbox = foafMbox;
 	}
-
-	@Override
-	public Date getModified() {
-		return modified;
-	}
-
-	@Override
-	public void setModified(Date modified) {
-		this.modified = modified;
-	}
-
-	@Override
-	public Date getCreated() {
-		return created;
-	}
-
-	@Override
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+	
 
 	@Override
 	public Address getAddress() {
