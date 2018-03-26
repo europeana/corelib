@@ -34,7 +34,7 @@ import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -73,7 +73,28 @@ public class EdmUtils {
      * @return The resulting EDM string in RDF-XML
      */
     public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
+        RDF rdf = toRDF(fullBean);
+        IMarshallingContext marshallingContext;
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()){
+            if (bfact == null) {
+                bfact = BindingDirectory.getFactory(RDF.class);
+            }
+            marshallingContext = bfact.createMarshallingContext();
+            marshallingContext.setOutput(out, null);
+            marshallingContext.marshalDocument(rdf, "UTF-8", true);
+            return out.toString("UTF-8");
+        } catch (JiBXException | IOException e) {
+            log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
+        }
+        return null;
+    }
 
+    /**
+     * Convert a FullBean to an RDF object
+     * @param fullBean the fullbean to convert
+     * @return RDF object
+     */
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -86,20 +107,7 @@ public class EdmUtils {
         appendTimespans(rdf, fullBean.getTimespans());
         appendLicenses(rdf, fullBean.getLicenses());
         appendServices(rdf, fullBean.getServices());
-        IMarshallingContext marshallingContext;
-        try {
-            if (bfact == null) {
-                bfact = BindingDirectory.getFactory(RDF.class);
-            }
-            marshallingContext = bfact.createMarshallingContext();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            marshallingContext.setOutput(out, null);
-            marshallingContext.marshalDocument(rdf, "UTF-8", true);
-            return out.toString("UTF-8");
-        } catch (JiBXException | UnsupportedEncodingException e) {
-            log.severe(e.getClass().getSimpleName() + "  " + e.getMessage());
-        }
-        return null;
+        return rdf;
     }
 
     private static void appendServices(RDF rdf, List<ServiceImpl> services) {
