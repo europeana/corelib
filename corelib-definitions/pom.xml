@@ -11,16 +11,21 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
+		<artifactId>corelib</artifactId>
 		<version>2.6.7-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-definitions</artifactId>
 	<name>Europeana Core Library Definitions</name>
-	<url>http://www.europeanalabs.eu</url>
+
+	<organization><name>Europeana Foundation</name></organization>
+	<url>http://www.europeana.eu</url>
+
 	<dependencies>
 		<!-- Corelib -->
 		<dependency>
@@ -31,18 +36,18 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>${version.commonsLang}</version>
+			<version>${commonsLang.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb.morphia</groupId>
 			<artifactId>morphia</artifactId>
-			<version>${version.mongoMorphia}</version>
+			<version>${morphia.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>${version.mongoDriver}</version>
+			<version>${mongoDriver.version}</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
@@ -62,7 +67,4 @@
 		</dependency>
 	</dependencies>
 
-	<organization>
-		<name>Europeana Foundation</name>
-	</organization>
 </project>

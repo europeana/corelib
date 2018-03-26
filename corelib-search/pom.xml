@@ -1,18 +1,25 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>eu.europeana</groupId>
         <artifactId>corelib</artifactId>
         <version>2.6.7-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-search</artifactId>
     <name>Europeana Core Library Search</name>
-    <url>http://maven.apache.org</url>
+
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <apacheLucene.version>4.10.1</apacheLucene.version>
     </properties>
+
     <dependencies>
         <!-- CORELIB -->
         <dependency>
@@ -55,7 +62,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -65,18 +72,18 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
-            <version>${version.apacheLucene}</version>
+            <version>${apacheLucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers-common</artifactId>
-            <version>${version.apacheLucene}</version>
+            <version>${apacheLucene.version}</version>
         </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>
-            <version>${version.apacheSolr}</version>
+            <version>${apacheSolr.version}</version>
             <scope>test</scope>
             <exclusions>
 				<exclusion>
@@ -88,13 +95,13 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>${version.mockito}</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
