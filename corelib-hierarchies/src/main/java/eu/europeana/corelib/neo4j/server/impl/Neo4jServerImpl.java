@@ -26,7 +26,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -57,7 +58,7 @@ import java.util.concurrent.*;
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-    private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class);
+    private final static Logger LOG = LogManager.getLogger(Neo4jServerImpl.class);
 
     private RestGraphDatabase                 graphDb;
     private RestIndex<Node>                   index;
@@ -325,7 +326,7 @@ public class Neo4jServerImpl implements Neo4jServer {
             return null;
         }
         HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/" + StringUtils.replace(rdfAbout, "/", "%2F"));
-        LOG.info("path: " + method.getURI());
+        LOG.debug("path: {}", method.getURI());
         try {
             HttpResponse resp = client.execute(method);
             if (resp.getStatusLine().getStatusCode() == 502) {
