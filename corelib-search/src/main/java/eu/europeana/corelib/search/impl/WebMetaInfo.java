@@ -224,10 +224,12 @@ public class WebMetaInfo {
             for (Proxy proxy : bean.getProxies()){
                 Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
-                    boolean result = langMap.values().contains("http://schema.org/PublicationIssue") ||
-                                     langMap.values().contains("https://schema.org/PublicationIssue");
-                    LOG.debug("isNewsPaperRecord = {}", result);
-                    return result;
+                    for (List<String> langValues : langMap.values()) {
+                        boolean result = langValues.contains("http://schema.org/PublicationIssue") ||
+                                         langValues.contains("https://schema.org/PublicationIssue");
+                        LOG.debug("isNewsPaperRecord = {}", result);
+                        return result;
+                    }
                 }
             }
         }
