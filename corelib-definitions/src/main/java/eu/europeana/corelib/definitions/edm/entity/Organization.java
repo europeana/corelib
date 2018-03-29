@@ -62,14 +62,6 @@ public interface Organization extends AbstractEdmEntity{
 
 	String getFoafHomepage();
 
-	void setCreated(Date created);
-
-	Date getCreated();
-
-	void setModified(Date modified);
-
-	Date getModified();
-
 	void setEdmEuropeanaRole(Map<String,List<String>> edmEuropeanaRole);
 
 	Map<String, List<String>> getEdmEuropeanaRole();

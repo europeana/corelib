@@ -44,8 +44,8 @@
     </bean>
 
     <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
-          p:solrServer-ref="corelib_solr_solrEmbedded"
-            />
+          p:solrServer-ref="corelib_solr_solrEmbedded" />
+
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="europeana_test" type="java.lang.String"/>
