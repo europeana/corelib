@@ -367,27 +367,7 @@ public class SearchServiceImpl implements SearchService {
                 solrQuery.setRows(query.getPageSize());
                 solrQuery.setStart(query.getStart());
 
-                // In case of a paginated query or a numbered field query:
-                // => SORT = [OPTIONAL_EXPLICIT_SORT asc|desc, ] EUR_ID desc
-                // and in case of a numbered non-field query:
-                // => SORT = SCORE desc, EUR_ID desc
-                // Note: timeallowed and cursormark are not allowed together in a query
-
-                if (query.getCurrentCursorMark() != null) {
-                    solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
-                } else {
-                    if (!isFieldQuery(solrQuery.getQuery())) {
-                        solrQuery.setSort("score", ORDER.desc);
-                    }
-                    solrQuery.setTimeAllowed(TIME_ALLOWED);
-                }
-                // will replace sort on score if available
-                if (!StringUtils.isBlank(query.getSort())) {
-                    solrQuery.setSort(query.getSort(),
-                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
-                }
-                solrQuery.addSort("europeana_id", ORDER.desc);
-                resultSet.setSortField(solrQuery.getSortField());
+                setSortAndCursor(query, resultSet, solrQuery);
 
                 // add extra parameters if any
                 if (query.getParameterMap() != null) {
@@ -447,7 +427,7 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
-                    resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
+
                     resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
                     if (debug) {
                         resultSet.setSolrQueryString(query.getExecutedQuery());
@@ -456,16 +436,14 @@ public class SearchServiceImpl implements SearchService {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
                 } catch (SolrServerException e) {
-                    LOG.error("SolrServerException: " + e.getMessage()
-                            + " The query was: " + solrQuery);
+                    LOG.error("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
                     if (StringUtils.contains(e.getCause().toString(), "Collection")){
                         throw new SolrTypeException(e, ProblemType.INVALID_THEME);
                     } else {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 } catch (SolrException e) {
-                    LOG.error("SolrException: " + e.getMessage()
-                            + " The query was: " + solrQuery);
+                    LOG.error("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
                     if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
                     } else{
@@ -483,6 +461,42 @@ public class SearchServiceImpl implements SearchService {
         return resultSet;
     }
 
+    private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
+        boolean defaultSort = StringUtils.isBlank(query.getSort());
+        LOG.error("query getSort = {}, defaultSort = {}", query.getSort(), defaultSort);
+        if (defaultSort) {
+            solrQuery.setSort("score", ORDER.desc);
+            solrQuery.addSort("timestamp_create", ORDER.desc);
+            // completeness is added last because many records have incorrect value 0
+            solrQuery.addSort("europeana_completeness", ORDER.desc);
+        } else {
+            // User set sort
+            solrQuery.setSort(query.getSort(), (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+        }
+
+        // Check if user defined a cursor (we need to adjust sort based on it's requirements)
+        if (query.getCurrentCursorMark() != null) {
+            solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
+
+            if (defaultSort) {
+                // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087)
+                solrQuery.removeSort("score");
+                // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id.
+                if (!solrQuery.getSortField().contains("europeana_id")) {
+                    solrQuery.addSort("europeana_id", ORDER.asc);
+                }
+            }
+
+        } else {
+            // TimeAllowed and cursormark are not allowed together in a query
+            solrQuery.setTimeAllowed(TIME_ALLOWED);
+        }
+
+        resultSet.setSortField(solrQuery.getSortField());
+        resultSet.setCurrentCursorMark(query.getCurrentCursorMark());
+    }
+
+    @Deprecated // since april 2018, we don't change sorting beased on type of query anymore
     private boolean isFieldQuery(String query) {
         //TODO fix
         String subquery = StringUtils.substringBefore(query, "filter_tags");
@@ -562,65 +576,6 @@ public class SearchServiceImpl implements SearchService {
         }
 
         return queryFacets;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    @Deprecated
-    public <T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface,
-                                                   Query query) throws SolrTypeException {
-
-        ResultSet<T> resultSet = new ResultSet<>();
-        Class<? extends IdBeanImpl> beanClazz = SearchUtils
-                .getImplementationClass(beanInterface);
-
-        String[] refinements = query.getRefinements(true);
-        if (SearchUtils.checkTypeFacet(refinements)) {
-            SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
-
-            if (refinements != null) {
-                solrQuery.addFilterQuery(refinements);
-            }
-
-            solrQuery.setFacet(false);
-            solrQuery.setRows(query.getPageSize());
-            solrQuery.setStart(query.getStart());
-
-            solrQuery.setSortField("COMPLETENESS", ORDER.desc);
-            solrQuery.setSortField("score", ORDER.desc);
-            solrQuery.setTimeAllowed(TIME_ALLOWED);
-            // add extra parameters if any
-            if (query.getParameterMap() != null) {
-                Map<String, String> parameters = query.getParameterMap();
-                for (String key : parameters.keySet()) {
-                    solrQuery.setParam(key, parameters.get(key));
-                }
-            }
-
-            try {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Solr query is: " + solrQuery);
-                }
-                QueryResponse queryResponse = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
-
-                resultSet.setResults((List<T>) queryResponse
-                        .getBeans(beanClazz));
-                resultSet.setResultSize(queryResponse.getResults()
-                        .getNumFound());
-                resultSet.setSearchTime(queryResponse.getElapsedTime());
-                if (solrQuery.getBool("facet", false)) {
-                    resultSet.setFacetFields(queryResponse.getFacetFields());
-                }
-            } catch (SolrServerException e) {
-                LOG.error("SolrServerException: " + e.getMessage());
-                throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-            } catch (SolrException e) {
-                LOG.error("SolrException: " + e.getMessage());
-                throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-            }
-        }
-
-        return resultSet;
     }
 
     /**

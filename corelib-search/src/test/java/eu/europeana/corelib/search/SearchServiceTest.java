@@ -229,14 +229,6 @@ public class SearchServiceTest {
     }
 
     @Test
-    @Deprecated
-    public void testSitemap() throws SolrTypeException {
-        System.out.println("TEST testSitemap");
-        testCount++;
-        assertNotNull(searchService.sitemap(BriefBean.class, new Query("*:*")));
-    }
-
-    @Test
     public void testSeeAlso() {
         System.out.println("TEST testSeeAlso");
         testCount++;
