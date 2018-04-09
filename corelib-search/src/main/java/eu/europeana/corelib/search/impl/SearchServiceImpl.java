@@ -463,7 +463,6 @@ public class SearchServiceImpl implements SearchService {
 
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
         boolean defaultSort = StringUtils.isBlank(query.getSort());
-        LOG.error("query getSort = {}, defaultSort = {}", query.getSort(), defaultSort);
         if (defaultSort) {
             solrQuery.setSort("score", ORDER.desc);
             solrQuery.addSort("timestamp_create", ORDER.desc);
