@@ -1,10 +1,9 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface Organization extends AbstractEdmEntity{
+public interface Organization extends ContextualClass{
 	
 	Map<String, List<String>> getPrefLabel();
 	
