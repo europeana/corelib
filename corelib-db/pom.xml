@@ -11,19 +11,26 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
+        <artifactId>corelib</artifactId>
         <version>2.6.7-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-db</artifactId>
     <name>Europeana Core Library Database</name>
-    <url>http://www.europeanalabs.eu</url>
-    <organization>
-        <name>Europeana Foundation</name>
-    </organization>
+
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
+
+    <properties>
+        <springSecurity.version>3.2.9.RELEASE</springSecurity.version>
+        <hibernateCore.version>5.1.0.Final</hibernateCore.version>
+    </properties>
+
     <dependencies>
         <!-- Corelib -->
         <dependency>
@@ -50,17 +57,17 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${version.springSecurity}</version>
+            <version>${springSecurity.version}</version>
             <exclusions>
                 <!-- EXCLUDE THIS TO FORCE NEWEST RELEASES -->
                 <exclusion>
@@ -81,7 +88,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>${version.hibernateCore}</version>
+            <version>${hibernateCore.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>cglib</artifactId>
@@ -94,7 +101,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${version.commonsLang3}</version>
+            <version>${commonsLang3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -109,14 +116,14 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>${version.mongoDriver}</version>
+            <version>${mongoDriver.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- TESTING PURPOSES -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -128,7 +135,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>${version.mockito}</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -145,7 +152,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.2.4.RELEASE</version>
+            <version>${springCore.version}</version>
         </dependency>
     </dependencies>
     <build>

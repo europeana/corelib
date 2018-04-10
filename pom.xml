@@ -7,36 +7,55 @@
 	under the Licence is distributed on an "AS IS" basis, without warranties 
 	or conditions of any kind, either express or implied. See the Licence for 
 	the specific language governing permissions and limitations under the Licence. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>europeana-parent-pom</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>1.7</version>
+		<artifactId>europeana-parent-pom</artifactId>
+		<version>2.0</version>
 	</parent>
 
 	<artifactId>corelib</artifactId>
-	<packaging>pom</packaging>
 	<version>2.6.7-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
 	<name>Europeana Core Library</name>
-	<url>http://www.europeana.eu</url>
 	<organization>
 		<url>http://www.europeana.eu</url>
 		<name>Europeana Foundation</name>
 	</organization>
 
 	<properties>
-		<javadoc.opts>-Xdoclint:none</javadoc.opts>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<apacheSolr.version>4.10.1</apacheSolr.version>
+		<commonsIO.version>2.4</commonsIO.version>
+		<commonsLang.version>2.6</commonsLang.version>
+		<commonsLang3.version>3.4</commonsLang3.version>
+		<httpclient.version>4.5.2</httpclient.version>
+		<jackson.version>2.6.5</jackson.version>
+		<jibx.version>1.2.6</jibx.version>
+		<jodatime.version>2.9.2</jodatime.version>
+		<junit.version>4.12</junit.version>
 		<log4j2.version>2.9.1</log4j2.version>
+		<mockito.version>1.10.19</mockito.version>
+		<mongoDriver.version>3.4.1</mongoDriver.version>
+		<morphia.version>1.3.2</morphia.version>
+		<objectStorage.version>1.6-SNAPSHOT</objectStorage.version>
+		<springCore.version>4.2.5.RELEASE</springCore.version>
 	</properties>
 
 	<modules>
+		<module>corelib-utils</module>
+		<module>corelib-definitions</module>
 		<module>corelib-common-storage</module>
 		<module>corelib-db</module>
-		<module>corelib-definitions</module>
 		<module>corelib-storage</module>
-		<module>corelib-utils</module>
 		<module>corelib-web</module>
 		<module>corelib-edm-definitions</module>
 		<module>corelib-dereference</module>
@@ -152,6 +171,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
