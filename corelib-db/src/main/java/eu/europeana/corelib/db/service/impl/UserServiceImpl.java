@@ -55,8 +55,10 @@ import static eu.europeana.corelib.db.util.UserUtils.hashPassword;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.service.UserService
  * @see eu.europeana.corelib.db.entity.relational.UserImpl
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Transactional
+@Deprecated
 public class UserServiceImpl extends AbstractServiceImpl<User> implements
         UserService {
 

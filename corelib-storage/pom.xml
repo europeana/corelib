@@ -10,19 +10,21 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>2.6.6</version>
+        <artifactId>corelib</artifactId>
+        <version>2.6.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-storage</artifactId>
     <name>Europeana Core Library Storage (Solr/Mongo functionality)</name>
-    <url>http://www.europeanalabs.eu</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
+
     <dependencies>
         <!-- Corelib -->
         <dependency>
@@ -54,45 +56,45 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>${version.apacheSolr}</version>
+            <version>${apacheSolr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>${version.woodstox}</version>
+            <version>3.2.9</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>${version.apacheSolr}</version>
+            <version>${apacheSolr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>
-            <version>${version.mongoMorphia}</version>
+            <version>${morphia.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
         </dependency>
         <!-- Jackson for JSON serialization -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-xc</artifactId>
-            <version>${version.codehausJackson}</version>
+            <version>1.9.9</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${version.jackson}</version>
+            <version>${jackson.version}</version>
         </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>
-            <version>${version.apacheSolr}</version>
+            <version>${apacheSolr.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -108,7 +110,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-test-framework</artifactId>
-            <version>${version.apacheSolr}</version>
+            <version>${apacheSolr.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -130,13 +132,13 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>${version.mockito}</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -171,7 +173,5 @@
         </dependency>
 
     </dependencies>
-    <organization>
-        <name>Europeana Foundation</name>
-    </organization>
+
 </project>

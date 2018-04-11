@@ -23,7 +23,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.UserConne
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
+@Deprecated
 public interface SavedSearch extends UserConnected<Long>, Comparable<SavedSearch> {
 
 	String getQuery();

@@ -19,46 +19,48 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>2.6.6</version>
+		<artifactId>corelib</artifactId>
+		<version>2.6.7</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-utils</artifactId>
 	<name>Europeana Core Library General Utilities</name>
-	<url>http://www.europeanalabs.eu</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+
+	<organization><name>Europeana Foundation</name></organization>
+	<url>http://www.europeana.eu</url>
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${version.springCore}</version>
+			<version>${springCore.version}</version>
 		</dependency>
 		<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${version.springCore}</version>
+			<version>${springCore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${version.springCore}</version>
+			<version>${springCore.version}</version>
         </dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>${version.commonsLang}</version>
+			<version>${commonsLang.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${version.commonsIO}</version>
+			<version>${commonsIO.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
@@ -70,24 +72,22 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>${version.jodatime}</version>
+			<version>${jodatime.version}</version>
 		</dependency>
 		<!-- ehcache, see http://ehcache.org -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>${version.ehcache}</version>
+			<version>2.8.3</version>
 		</dependency>
 
 		<!-- TESTING PURPOSES -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${version.springCore}</version>
+			<version>${springCore.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<organization>
-		<name>Europeana Foundation</name>
-	</organization>
+
 </project>

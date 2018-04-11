@@ -1,0 +1,62 @@
+package eu.europeana.corelib.solr.entity;
+
+import eu.europeana.corelib.definitions.edm.entity.Address;
+
+public class AddressImpl implements Address {
+
+	private String about;
+	private String vcardStreetAddress;
+	private String vcardLocality;
+	private String vcardPostalCode;
+	private String vcardCountryName;
+	private String vcardPostOfficeBox;
+	
+	@Override
+	public String getAbout() {
+		return about;
+	}
+	@Override
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	@Override
+	public String getVcardStreetAddress() {
+		return vcardStreetAddress;
+	}
+	@Override
+	public void setVcardStreetAddress(String vcardStreetAddress) {
+		this.vcardStreetAddress = vcardStreetAddress;
+	}
+	@Override
+	public String getVcardLocality() {
+		return vcardLocality;
+	}
+	@Override
+	public void setVcardLocality(String vcardLocality) {
+		this.vcardLocality = vcardLocality;
+	}
+	@Override
+	public String getVcardPostalCode() {
+		return vcardPostalCode;
+	}
+	@Override
+	public void setVcardPostalCode(String vcardPostalCode) {
+		this.vcardPostalCode = vcardPostalCode;
+	}
+	@Override
+	public String getVcardCountryName() {
+		return vcardCountryName;
+	}
+	@Override
+	public void setVcardCountryName(String vcardCountryName) {
+		this.vcardCountryName = vcardCountryName;
+	}
+	@Override
+	public String getVcardPostOfficeBox() {
+		return vcardPostOfficeBox;
+	}
+	@Override
+	public void setVcardPostOfficeBox(String vcardPostOfficeBox) {
+		this.vcardPostOfficeBox = vcardPostOfficeBox;
+	}
+}

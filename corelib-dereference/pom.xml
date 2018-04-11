@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>2.6.6</version>
+        <artifactId>corelib</artifactId>
+        <version>2.6.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-dereference</artifactId>
-    <url>http://maven.apache.org</url>
     <name>Europeana Core Library Dereferencing Toolkit</name>
+
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
 
     <dependencies>
         <!-- corelib -->
@@ -30,29 +34,29 @@
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>${version.woodstox}</version>
+            <version>3.2.9</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>${version.commonsLang}</version>
+            <version>${commonsLang.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>${version.mongoDriver}</version>
+            <version>${mongoDriver.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>
-            <version>${version.mongoMorphia}</version>
+            <version>${morphia.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>google-collections</artifactId>
@@ -70,7 +74,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

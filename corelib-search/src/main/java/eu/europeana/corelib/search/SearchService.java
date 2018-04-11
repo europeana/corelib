@@ -26,9 +26,6 @@ import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.neo4j.entity.Neo4jBean;
-import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.search.model.ResultSet;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -58,7 +55,7 @@ public interface SearchService {
 	 * @return                  A full europeana record
 	 * @throws                  MongoRuntimeException, SolrTypeException
 	 */
-	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
+	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
 
 	/**
 	 * Retrieve a record by id.
@@ -68,7 +65,7 @@ public interface SearchService {
 	 * @return                  A full europeana record
 	 * @throws                  MongoRuntimeException, MongoDBException
 	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException, Neo4JException;
+	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
 
 	/**
 	 * Retrieve a record by id. If the record cannot be found, it will retry
@@ -187,7 +184,9 @@ public interface SearchService {
 	 * @param  europeanaObjectId
 	 * @return moreLikeThis List of BriefBeans
 	 * @throws SolrServerException
+	 * @deprectated January 2018 - FMLT isn't used anymore
 	 */
+	@Deprecated
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
 			throws SolrServerException;
 
@@ -208,7 +207,9 @@ public interface SearchService {
 	 * @param  count
 	 * @return a specified number of moreLikeThis objects
 	 * @throws SolrServerException
+	 * @deprectated January 2018 - FMLT isn't used anymore
 	 */
+	@Deprecated
 	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
 			throws SolrServerException;
 
@@ -221,91 +222,4 @@ public interface SearchService {
 
 	Map<String, Integer> queryFacetSearch(String query, String[] qf,
 			List<String> queries);
-
-	/**
-	 * Get a node object
-	 * 
-	 * @param  nodeId The ID of the record
-	 * @return node object
-	 */
-	Neo4jBean getHierarchicalBean(String nodeId) throws Neo4JException;
-
-	/**
-	 * Get the children of the node (max 10)
-	 * 
-     * @param  nodeId The ID of the record
-     * @param  offset The offset of the first child
-     * @param  limit  The number of records to retrieve
-	 * @return node's children
-	 */
-	List<Neo4jBean> getChildren(String nodeId, int offset, int limit);
-
-	/**
-	 * Get the children of the node (max 10)
-	 * 
-     * @param  nodeId The ID of the record
-     * @param  offset The offset of the first child
-	 * @return node's children
-	 */
-	List<Neo4jBean> getChildren(String nodeId, int offset);
-
-	/**
-	 * Get the children of the node (max 10)
-	 * 
-     * @param  nodeId The ID of the record
-	 * @return node's children
-	 */
-	List<Neo4jBean> getChildren(String nodeId);
-
-	/**
-	 * Get the nodes preceeding siblings
-	 * 
-     * @param  nodeId The ID of the record
-     * @param  limit  How many siblings to retrieve
-	 * @return node's preceding siblings
-	 */
-    List<Neo4jBean> getPrecedingSiblings(String nodeId, int limit) throws Neo4JException;
-
-    /**
-     * Get the nodes preceding siblings (max 10)
-     *
-     * @param  nodeId The ID of the record
-     * @return node's preceding siblings
-     */
-    List<Neo4jBean> getPrecedingSiblings(String nodeId) throws Neo4JException;
-
-	/**
-	 * Get the nodes following siblings
-	 * 
-     * @param  nodeId The ID of the record
-     * @param  limit  How many siblings to retrieve
-	 * @return node's following siblings
-	 */
-	List<Neo4jBean> getFollowingSiblings(String nodeId, int limit) throws Neo4JException;
-
-	/**
-	 * Get the node's 10 following siblings
-	 * @param  nodeId The ID of the record
-	 * @return node's following siblings
-	 */
-	List<Neo4jBean> getFollowingSiblings(String nodeId) throws Neo4JException;
-
-	/**
-	 * Get the number of children this node has
-	 * 
-	 * @param  nodeId
-	 * @return the number of children
-	 */
-	long getChildrenCount(String nodeId) throws Neo4JException;
-
-	/**
-	 * Get the initial structure, which contains self, the ancestors, 
-     * preceding and following siblings
-	 * 
-     * @param  nodeId The ID of the record
-     * @return The hierarchical structure
-	 */
-	Neo4jStructBean getInitialStruct(String nodeId) throws Neo4JException;
-
-//	boolean isHierarchy(String nodeId, int hierarchyTimeout) throws Neo4JException;
 }

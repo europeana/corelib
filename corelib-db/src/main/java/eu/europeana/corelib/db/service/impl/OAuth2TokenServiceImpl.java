@@ -27,9 +27,10 @@ import eu.europeana.corelib.db.internal.service.OAuth2RefreshTokenService;
 import eu.europeana.corelib.db.service.OAuth2TokenService;
 
 /**
- * Implementation of the {@link OAuth2TokenService} 
- *
+ * Implementation of the {@link OAuth2TokenService}
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 	
 	@Resource

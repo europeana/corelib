@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   
 	<parent>
-		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>2.6.6</version>
+		<artifactId>corelib</artifactId>
+		<version>2.6.7</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
@@ -14,24 +14,27 @@
 
   <name>Europeana Core Library JIBX Bindings for SugarCRM Client</name>
 
+	<organization><name>Europeana Foundation</name></organization>
+	<url>http://www.europeana.eu</url>
+
 	<dependencies>
 		<!-- This fixed a problem with importing an old spring-web version -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${version.springCore}</version>
+			<version>${springCore.version}</version>
 		</dependency>
 
 		<!-- JIBX dependencies -->
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-run</artifactId>
-			<version>${version.jibx}</version>
+			<version>${jibx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-extras</artifactId>
-			<version>${version.jibx}</version>
+			<version>${jibx.version}</version>
 		</dependency>
 	</dependencies>
   
@@ -46,7 +49,7 @@
 			<plugin>
 				<groupId>org.jibx</groupId>
 				<artifactId>maven-jibx-plugin</artifactId>
-				<version>${version.jibx}</version>
+				<version>${jibx.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.bcel</groupId>
@@ -57,7 +60,7 @@
 					<dependency>
 						<groupId>org.jibx</groupId>
 						<artifactId>jibx-bind</artifactId>
-						<version>${version.jibx}</version>
+						<version>${jibx.version}</version>
 						<exclusions>
 							<exclusion>
 								<artifactId>bcel</artifactId>

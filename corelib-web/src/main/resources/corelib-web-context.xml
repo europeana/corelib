@@ -44,7 +44,9 @@
 
 	<bean id="corelib_web_wikipediaApiService" class="eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl" />
 
+	<!-- Deprecated
 	<bean id="corelib_web_MicrosoftTranslatorService" class="eu.europeana.corelib.web.service.impl.MicrosoftTranslatorServiceImpl" />
+	-->
 
     <bean id="corelib_web_MediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" />
 

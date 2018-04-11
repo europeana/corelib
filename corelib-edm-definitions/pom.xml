@@ -1,23 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<artifactId>corelib</artifactId>
 		<groupId>eu.europeana</groupId>
-		<version>2.6.6</version>
+		<artifactId>corelib</artifactId>
+		<version>2.6.7</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 	<groupId>eu.europeana.corelib</groupId>
 	<artifactId>corelib-edm-definitions</artifactId>
 	<name>Europeana Core Library EDM Schema definitions</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+
+	<organization><name>Europeana Foundation</name></organization>
+	<url>http://www.europeana.eu</url>
+
 	<dependencies>
 		<!-- JIBX dependencies -->
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-run</artifactId>
-			<version>${version.jibx}</version>
+			<version>${jibx.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>bcel</artifactId>
@@ -28,7 +31,7 @@
 		<dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-extras</artifactId>
-			<version>${version.jibx}</version>
+			<version>${jibx.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>bcel</artifactId>
@@ -54,12 +57,12 @@
 			<plugin>
 				<groupId>org.jibx</groupId>
 				<artifactId>maven-jibx-plugin</artifactId>
-				<version>${version.jibx}</version>
+				<version>${jibx.version}</version>
 				<dependencies>
                     <dependency>
                         <groupId>org.jibx</groupId>
                         <artifactId>jibx-bind</artifactId>
-                        <version>${version.jibx}</version>
+                        <version>${jibx.version}</version>
                         <exclusions>
                             <exclusion>
                                 <artifactId>bcel</artifactId>
@@ -146,7 +149,7 @@
 						<dependency>
 							<groupId>org.jibx</groupId>
 							<artifactId>jibx-bind</artifactId>
-							<version>${version.jibx}</version>
+							<version>${jibx.version}</version>
 							<exclusions>
 								<exclusion>
 									<artifactId>bcel</artifactId>
@@ -214,8 +217,5 @@
                 </properties>
             </profile>
         </profiles>
-	<organization>
-		<name>Europeana Foundation</name>
-	</organization>
-	<url>http://www.europeanalabs.eu</url>
+
 </project>

@@ -28,9 +28,10 @@ import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 /**
  * Class representing API log entry
- *
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
 @Entity("logEntries")
+@Deprecated
 public class ApiLog implements NoSqlEntity {
 
 	@Id

@@ -13,7 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * @deprecated since 2017-09-22
+ *
+ * @deprecated since 2017-09-22 (BUT THIS IS NOT TO BE REMOVED YET!)
  */
 @Deprecated
 public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implements
@@ -45,7 +46,7 @@ public class MicrosoftTranslatorServiceImpl extends JsonApiServiceImpl implement
 
 	private String buildTranslateUrl(String text, String languageCode) {
 		UrlBuilder url = new UrlBuilder(TRANSLATOR_URL);
-		url.addParam("appId", config.getBingTranslateId());
+		//url.addParam("appId", config.getBingTranslateId());
 		url.addParam("text", text);
 		url.addParam("to", languageCode);
 		return url.toString();

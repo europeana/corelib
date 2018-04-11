@@ -11,24 +11,30 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>2.6.6</version>
+        <artifactId>corelib</artifactId>
+        <version>2.6.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-web</artifactId>
     <name>Europeana Core Library Web Functionality</name>
-    <url>http://www.europeanalabs.eu</url>
+
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>1.2.8.RELEASE</spring-boot.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${version.guava}</version>
+            <version>18.0</version>
         </dependency>
         <!--TODO release snapshot dependency-->
         <dependency>
@@ -56,7 +62,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>google-collections</artifactId>
@@ -67,7 +73,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>google-collections</artifactId>
@@ -79,7 +85,7 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>${version.apacheVelocity}</version>
+            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
@@ -100,12 +106,12 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>${version.gson}</version>
+            <version>2.2.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${version.httpclient}</version>
+            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -115,13 +121,13 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${version.commonsIO}</version>
+            <version>${commonsIO.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>${version.springBoot}</version>
+            <version>${spring-boot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -137,7 +143,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.springCore}</version>
+            <version>${springCore.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -155,10 +161,11 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>${version.mockito}</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -171,7 +178,5 @@
             </plugin>
         </plugins>
     </build>
-    <organization>
-        <name>Europeana Foundation</name>
-    </organization>
+
 </project>

@@ -35,9 +35,11 @@ import eu.europeana.corelib.utils.DateUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_SAVEDSEARCH)
+@Deprecated
 public class SavedSearchImpl extends UserConnectedImpl<Long> implements
 		RelationalDatabase, SavedSearch {
 	private static final long serialVersionUID = 667805541628354454L;

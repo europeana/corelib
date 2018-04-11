@@ -36,8 +36,10 @@ import eu.europeana.corelib.web.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * 
  * @see eu.europeana.corelib.db.service.TokenService
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Transactional
+@Deprecated
 public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenService {
 

@@ -2,44 +2,76 @@ package eu.europeana.corelib.definitions.edm.entity;
 
 import java.util.List;
 import java.util.Map;
-//TODO: NOT TO BE USED
-public interface Organization extends Agent{
+
+public interface Organization extends ContextualClass{
+	
+	Map<String, List<String>> getPrefLabel();
+	
+	void setPrefLabel(Map<String, List<String>> prefLabel);
 	
 	Map<String,List<String>> getEdmAcronym();
 	
 	void setEdmAcronym(Map<String,List<String>> edmAcronym);
 	
-	Map<String,String> getEdmOrganizationScope();
+	Map<String, String> getEdmOrganizationScope();
 	
-	void setEdmOrganizationScope(Map<String,String> edmOrganizationScope);
+	void setEdmOrganizationScope(Map<String, String> edmOrganizationScope);
 	
-	Map<String,String> getEdmOrganizationDomain();
+	Map<String, String> getEdmOrganizationDomain();
 	
-	void setEdmOrganizationDomain(Map<String,String> edmOrganizationDomain);
+	void setEdmOrganizationDomain(Map<String, String> edmOrganizationDomain);
 	
-	Map<String,String> getEdmOrganizationSector();
+	Map<String, String> getEdmOrganizationSector();
 	
-	void setEdmOrganizationSector(Map<String,String> edmOrganizationSector);
+	void setEdmOrganizationSector(Map<String, String> edmOrganizationSector);
 	
-	Map<String,String> getEdmGeographicLevel();
+	Map<String, String> getEdmGeographicLevel();
 	
-	void setEdmGeorgraphicLevel(Map<String,String> edmGeographicLevel);
+	void setEdmGeorgraphicLevel(Map<String, String> edmGeographicLevel);
 	
-	String getEdmCountry();
+	Map<String, String> getEdmCountry();
 	
-	void setEdmCountry(String edmCountry);
+	void setEdmCountry(Map<String, String> edmCountry);
 	
-	Map<String,List<String>> getEdmEuropeanaRole();
-	
-	void setEdmEuropeanaRole(Map<String,List<String>> edmEuropeanaRole);
-	
-	String getFoafHomepage();
-	
-	void setFoafHomepage(String foafHomePage);
+	void setFoafMbox(List<String> foafMbox);
+
+	List<String> getFoafMbox();
+
+	void setFoafPhone(List<String> foafPhone);
+
+	List<String> getFoafPhone();
+
+	void setDcDescription(Map<String, String> dcDescription);
+
+	Map<String, String> getDcDescription();
+
+	void setRdfType(String rdfType);
+
+	String getRdfType();
+
+	void setDcIdentifier(Map<String,List<String>> dcIdentifier);
+
+	Map<String, List<String>> getDcIdentifier();
+
+	void setFoafLogo(String foafLogo);
 
 	String getFoafLogo();
 
-	void setFoafLogo(String foafLogo);
+	void setFoafHomepage(String foafHomePage);
+
+	String getFoafHomepage();
+
+	void setEdmEuropeanaRole(Map<String,List<String>> edmEuropeanaRole);
+
+	Map<String, List<String>> getEdmEuropeanaRole();
+
+	void setAddress(Address address);
+
+	Address getAddress();
 	
+	//TODO: SG - move the setters/getters for OwlSameAs to the parent interface for all entity types
+	void setOwlSameAs(String[] owlSameAs);
+	
+	String[] getOwlSameAs();
 	
 }

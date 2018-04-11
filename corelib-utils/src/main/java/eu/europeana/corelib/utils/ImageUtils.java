@@ -52,14 +52,12 @@ public class ImageUtils {
 		if (org != null) {
 				BufferedImage resized = Scalr.resize(org, Scalr.Method.QUALITY, Scalr.Mode.AUTOMATIC,
 						width, height, Scalr.OP_ANTIALIAS);
-				
 				if(resized.getHeight() > height || resized.getWidth() > width ){
 					return Scalr.crop(resized, width, height);
 				}
 				else{
 					return resized;
 				}
-
 		}
 		return null;
 	}
@@ -73,12 +71,11 @@ public class ImageUtils {
 	 */
 	public static byte[] toByteArray(BufferedImage org) throws IOException {
 		if (org != null) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(org, "jpg", baos);
-			baos.flush();
-			byte[] imageInByte = baos.toByteArray();
-			baos.close();
-			return imageInByte;
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+				ImageIO.write(org, "jpg", baos);
+				baos.flush();
+				return baos.toByteArray();
+			}
 		}
 		return null;
 	}
@@ -94,7 +91,8 @@ public class ImageUtils {
 		if ((org == null) || (org.length == 0)) {
 			return null;
 		}
-		InputStream in = new ByteArrayInputStream(org);
-		return ImageIO.read(in);
+		try (InputStream in = new ByteArrayInputStream(org)) {
+			return ImageIO.read(in);
+		}
 	}
 }

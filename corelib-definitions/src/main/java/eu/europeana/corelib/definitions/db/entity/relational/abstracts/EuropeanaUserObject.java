@@ -23,7 +23,9 @@ import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
+@Deprecated
 public interface EuropeanaUserObject extends UserConnected<Long> {
 
 	Date getDateSaved();

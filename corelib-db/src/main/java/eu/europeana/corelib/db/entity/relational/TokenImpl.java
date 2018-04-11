@@ -40,9 +40,11 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
  *   ${url}?token=${token}
  * 
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @deprecated January 2018 OAuth and MyEuropeana are no longer being used*
  */
 @Entity
 @Table(name = RelationalDatabase.TABLENAME_TOKEN)
+@Deprecated
 public class TokenImpl implements IdentifiedEntity<String>, RelationalDatabase, Token {
 	private static final long serialVersionUID = -9185878608713327601L;
 

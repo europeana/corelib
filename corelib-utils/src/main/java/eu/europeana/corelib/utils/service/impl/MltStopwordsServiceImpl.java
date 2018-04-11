@@ -33,7 +33,7 @@ import eu.europeana.corelib.utils.service.MltStopwordsService;
 import org.apache.log4j.Logger;
 
 /**
- * @deprecated More like this isn't used any more
+ * @deprecated July 2017 MoreLikeThis / SimilarItems for records is no longer being used (and doesn't work properly)
  */
 @Deprecated
 public class MltStopwordsServiceImpl implements MltStopwordsService {

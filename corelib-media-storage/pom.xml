@@ -3,24 +3,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>2.6.6</version>
+        <artifactId>corelib</artifactId>
+        <version>2.6.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>eu.europeana.corelib</groupId>
     <artifactId>corelib-media-storage</artifactId>
     <name>Europeana Core Library Media Storage</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <organization><name>Europeana Foundation</name></organization>
+    <url>http://www.europeana.eu</url>
 
     <dependencies>
         <dependency>
             <groupId>eu.europeana</groupId>
             <artifactId>object-storage</artifactId>
-            <version>${version.objectStorage}</version>
+            <version>${objectStorage.version}</version>
         </dependency>
 
         <!-- CORELIB -->
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>${version.jodatime}</version>
+            <version>${jodatime.version}</version>
         </dependency>
 
 		<dependency>

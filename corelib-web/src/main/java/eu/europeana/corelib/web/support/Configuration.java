@@ -26,8 +26,8 @@ public class Configuration {
 	private int apiRowLimit;
 
 	//	TODO consider removing, is ONLY available in europeana-test.properties
-	@Value("#{europeanaProperties['portal.bing.translate.key']}")
-	private String bingTranslateId;
+//	@Value("#{europeanaProperties['portal.bing.translate.key']}")
+//	private String bingTranslateId;
 
 	// Google Field Trip channel attributes
 	private Map<String, String> gftChannelAttributes;
@@ -61,8 +61,9 @@ public class Configuration {
 	}
 
 	// TODO only ever called via test
-	public String getBingTranslateId() {
-		return bingTranslateId;
-	}
+//	@Deprecated
+//	public String getBingTranslateId() {
+//		return bingTranslateId;
+//	}
 
 }

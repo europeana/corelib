@@ -16,12 +16,9 @@
  */
 package eu.europeana.corelib.neo4j.server.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.*;
-
+import eu.europeana.corelib.neo4j.entity.*;
+import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -29,7 +26,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
@@ -46,84 +44,71 @@ import org.neo4j.rest.graphdb.index.RestIndex;
 import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
-import eu.europeana.corelib.neo4j.entity.Siblington;
-import eu.europeana.corelib.neo4j.entity.CustomNode;
-import eu.europeana.corelib.neo4j.entity.CustomResponse;
-import eu.europeana.corelib.neo4j.entity.Hierarchy;
-import eu.europeana.corelib.neo4j.entity.IndexObject;
-import eu.europeana.corelib.neo4j.entity.RelType;
-import eu.europeana.corelib.neo4j.entity.Relation;
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
-
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
- * @see eu.europeana.corelib.neo4j.server.Neo4jServer
  * @author Yorgos.Mamakis@ europeana.eu
  * @author Maike.Dulk@ europeana.eu
+ * @see eu.europeana.corelib.neo4j.server.Neo4jServer
  */
 @SuppressWarnings("deprecation")
 public class Neo4jServerImpl implements Neo4jServer {
 
-	private final static Logger LOG = Logger.getLogger(Neo4jServerImpl.class);
+    private final static Logger LOG = LogManager.getLogger(Neo4jServerImpl.class);
 
-	private RestGraphDatabase graphDb;
-	private RestIndex<Node> index;
-	private org.apache.http.client.HttpClient client;
-	private String customPath;
-	private String serverPath;
+    private RestGraphDatabase                 graphDb;
+    private RestIndex<Node>                   index;
+    private org.apache.http.client.HttpClient client;
+    private String                            customPath;
+    private String                            serverPath;
 
-	private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(
-			RelType.EDM_ISNEXTINSEQUENCE.getRelType());
-	private static final Relation ISFIRSTINSEQUENCERELATION = new Relation(
-			RelType.ISFIRSTINSEQUENCE.getRelType());
-	private static final Relation DCTERMSISPARTOFRELATION = new Relation(
-			RelType.DCTERMS_ISPARTOF.getRelType());
-	private static final Relation DCTERMSHASPARTRELATION = new Relation(
-			RelType.DCTERMS_HASPART.getRelType());
-    private static final Relation ISFAKEORDERRELATION = new Relation(
-            RelType.ISFAKEORDER.getRelType());
+    private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType());
+    private static final Relation ISFIRSTINSEQUENCERELATION   = new Relation(RelType.ISFIRSTINSEQUENCE.getRelType());
+    private static final Relation DCTERMSISPARTOFRELATION     = new Relation(RelType.DCTERMS_ISPARTOF.getRelType());
+    private static final Relation DCTERMSHASPARTRELATION      = new Relation(RelType.DCTERMS_HASPART.getRelType());
+    private static final Relation ISFAKEORDERRELATION         = new Relation(RelType.ISFAKEORDER.getRelType());
 
-	/**
-	 * Neo4j contructor
-	 * 
+    /**
+     * Neo4j contructor
+     *
      * @param serverPath The path of the Neo4j server
-     * @param index The name of the index to search on
+     * @param index      The name of the index to search on
      * @param customPath The path of the custom Europeana Neo4j plugins
-	 */
-	public Neo4jServerImpl(String serverPath, String index, String customPath) {
-		this.graphDb = new RestGraphDatabase(serverPath);
-		this.index = this.graphDb.getRestAPI().getIndex(index);
-		this.client = HttpClientBuilder.create()
-				.setConnectionManager(new PoolingHttpClientConnectionManager())
-				.build();
-		this.customPath = customPath;
-		this.serverPath = serverPath;
-	}
+     */
+    public Neo4jServerImpl(String serverPath, String index, String customPath) {
+        this.graphDb = new RestGraphDatabase(serverPath);
+        this.index = this.graphDb.getRestAPI().getIndex(index);
+        this.client = HttpClientBuilder.create().setConnectionManager(new PoolingHttpClientConnectionManager()).build();
+        this.customPath = customPath;
+        this.serverPath = serverPath;
+    }
 
-	/**
+    /**
      * Node.Index = relative index of node in its hierarchical sequence
      * Node.Id = Neo4j numerical Id
      * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
-	 * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
-	 */
-	public Neo4jServerImpl() {
-	}
+     * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
+     */
+    public Neo4jServerImpl() {
+    }
 
-	@Override
+    @Override
     public Node getNode(String rdfAbout) throws Neo4JException {
-		Node node = null;
-		try {
-        IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") &&
-			(rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
-		if (nodes.size() > 0 && hasRelationships(nodes)) {
+        Node node = null;
+        try {
+            IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") && (rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
+            if (nodes.size() > 0 && hasRelationships(nodes)) {
                 node = nodes.getSingle();
-		}
-		} catch (Exception e) {
-			throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
-		}
-		return node;
-	}
+            }
+        } catch (Exception e) {
+            throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
+        }
+        return node;
+    }
 
     @Override
     public long getNodeIndex(Node node) {
@@ -131,14 +116,12 @@ public class Neo4jServerImpl implements Neo4jServer {
     }
 
     @Override
-    public long getNodeIndex(String nodeId){
-        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
-                + "europeana/hierarchycount/nodeId/" + nodeId);
+    public long getNodeIndex(String nodeId) {
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "europeana/hierarchycount/nodeId/" + nodeId);
         try {
             HttpResponse resp = client.execute(method);
 
-            IndexObject obj = new ObjectMapper().readValue(resp.getEntity()
-                    .getContent(), IndexObject.class);
+            IndexObject obj = new ObjectMapper().readValue(resp.getEntity().getContent(), IndexObject.class);
             return obj.getLength();
         } catch (IOException e) {
             LOG.error(e.getMessage());
@@ -149,243 +132,224 @@ public class Neo4jServerImpl implements Neo4jServer {
     }
 
     public long getNodeIndexByRdfAbout(String rdfAbout) throws Neo4JException {
-         return getNodeIndex(getNode(rdfAbout));
-     }
+        return getNodeIndex(getNode(rdfAbout));
+    }
 
-	private boolean hasRelationships(IndexHits<Node> nodes) {
-		return nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION)
-				|| nodes.getSingle().hasRelationship(DCTERMSHASPARTRELATION);
-	}
+    private boolean hasRelationships(IndexHits<Node> nodes) {
+        return nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION) || nodes.getSingle().hasRelationship(DCTERMSHASPARTRELATION);
+    }
 
-	@Override
+    @Override
     public boolean isHierarchy(String rdfAbout) throws Neo4JException {
         return getNode(rdfAbout) != null;
-	}
+    }
 
-	public boolean isHierarchyTimeLimited(String rdfAbout, int hierarchyTimeout) throws Neo4JException,
-			InterruptedException, ExecutionException, TimeoutException {
-		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
-		Future<Boolean> future = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
-		return future.get(hierarchyTimeout, TimeUnit.MILLISECONDS);
-	}
+    public boolean isHierarchyTimeLimited(String rdfAbout, int hierarchyTimeout) throws Neo4JException, InterruptedException, ExecutionException, TimeoutException {
+        final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
+        Future<Boolean>       future                 = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
+        return future.get(hierarchyTimeout, TimeUnit.MILLISECONDS);
+    }
 
-	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
-	@Override
+    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
+    @Override
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
-                + "fetch/children/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?offset=" + offset + "&limit=" + limit);
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "fetch/children/nodeId/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
         try {
-            HttpResponse resp = client.execute(method);
+            HttpResponse resp   = client.execute(method);
             ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
             return siblington.getSiblings();
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
             method.releaseConnection();
-				}
+        }
         return null;
-	}
+    }
 
-	@Override
+    @Override
     public List<CustomNode> getChildren(Node node, int offset, int limit) {
         return getChildren(node.getProperty("rdf:about") + "", offset, limit);
     }
 
     @Override
     public Node getParent(Node node) {
-        List<Node> nodes = getRelatedNodes(node, 1, 0, Direction.OUTGOING,
-				DCTERMSISPARTOFRELATION);
-		if (nodes.size() > 0) {
-			return nodes.get(0);
-		}
-		return null;
-	}
+        List<Node> nodes = getRelatedNodes(node, 1, 0, Direction.OUTGOING, DCTERMSISPARTOFRELATION);
+        if (nodes.size() > 0) {
+            return nodes.get(0);
+        }
+        return null;
+    }
 
-	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
-	@Override
+
+    @Override
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
-                + "fetch/following/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?limit=" + limit);
+        return getFollowingSiblings(rdfAbout, 0, limit);
+    }
+
+    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
+    @Override
+    public List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit) {
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "fetch/following/nodeId/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
         try {
-            HttpResponse resp = client.execute(method);
+            HttpResponse resp   = client.execute(method);
             ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
             return siblington.getSiblings();
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
             method.releaseConnection();
-	}
+        }
         return null;
-	}
+    }
 
+
+    // REMOVE? - only ever used in a test class
     @Override
     public List<CustomNode> getFollowingSiblings(Node node, int limit) {
         return getFollowingSiblings(node.getProperty("rdf:about") + "", limit);
     }
 
-    // REMOVEME?
-    private List<Node> getFollowingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.INCOMING,
-				EDMISNEXTINSEQUENCERELATION);
-	}
+//    REMOVE - never used
+//    private List<Node> getFollowingSiblings(Node node, int limit, int offset) {
+//        return getRelatedNodes(node, limit, offset, Direction.INCOMING, EDMISNEXTINSEQUENCERELATION);
+//    }
 
-	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
-	@Override
+    @Override
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(customPath)
-                + "fetch/preceding/nodeId/"
-                + StringUtils.replace(rdfAbout + "", "/", "%2F")
-                + "?limit=" + limit);
+        return getPrecedingSiblings(rdfAbout, 0, limit);
+    }
+
+    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
+    @Override
+    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int offset, int limit) {
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "fetch/preceding/nodeId/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
         try {
-            HttpResponse resp = client.execute(method);
+            HttpResponse resp   = client.execute(method);
             ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(),
-                    Siblington.class);
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
             return siblington.getSiblings();
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
             method.releaseConnection();
-	}
+        }
         return null;
-	}
+    }
 
+    // REMOVE? - only ever used in a test class
     @Override
     public List<CustomNode> getPrecedingSiblings(Node node, int limit) {
         return getPrecedingSiblings(node.getProperty("rdf:about") + "", limit);
     }
 
-    // REMOVEME?
-    private List<Node> getPrecedingSiblings(Node node, int limit, int offset) {
-        return getRelatedNodes(node, limit, offset, Direction.OUTGOING,
-				EDMISNEXTINSEQUENCERELATION);
-	}
+//    REMOVE - never used
+//    private List<Node> getPrecedingSiblings(Node node, int limit, int offset) {
+//        return getRelatedNodes(node, limit, offset, Direction.OUTGOING, EDMISNEXTINSEQUENCERELATION);
+//    }
 
     // TODO REMOVEME (?)
-    private List<Node> getRelatedNodes(Node node, int limit, int offset,
-			Direction direction, Relation relType) {
-		List<Node> children = new ArrayList<Node>();
-		Transaction tx = graphDb.beginTx();
-		RestTraversal traversal = (RestTraversal) graphDb
-				.traversalDescription();
+    private List<Node> getRelatedNodes(Node node, int limit, int offset, Direction direction, Relation relType) {
+        List<Node>  children = new ArrayList<Node>();
+        Transaction tx       = graphDb.beginTx();
+        RestTraversal traversal = (RestTraversal) graphDb.traversalDescription();
 
-		traversal.evaluator(Evaluators.excludeStartPosition());
+        traversal.evaluator(Evaluators.excludeStartPosition());
 
-		traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-		traversal.breadthFirst();
-		traversal.maxDepth(offset + limit);
+        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+        traversal.breadthFirst();
+        traversal.maxDepth(offset + limit);
 
-		traversal.relationships(relType, direction);
-        Traverser tr = traversal.traverse(node);
-		Iterator<Node> resIter = tr.nodes().iterator();
+        traversal.relationships(relType, direction);
+        Traverser      tr      = traversal.traverse(node);
+        Iterator<Node> resIter = tr.nodes().iterator();
 
-		int i = 1;
-		while (resIter.hasNext()) {
+        int i = 1;
+        while (resIter.hasNext()) {
             Node relatedNode = resIter.next();
-			if (i >= offset) {
-				if (children.size() <= limit) {
+            if (i >= offset) {
+                if (children.size() <= limit) {
                     children.add(relatedNode);
-				}
-				if (children.size() == limit) {
-					break;
-				}
-			}
-			i++;
-		}
+                }
+                if (children.size() == limit) {
+                    break;
+                }
+            }
+            i++;
+        }
 
-		tx.success();
-		tx.finish();
-		return children;
-	}
+        tx.success();
+        tx.finish();
+        return children;
+    }
 
-	@Override
+    @Override
     public long getChildrenCount(Node node) {
 
-		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part)
-		// as children
-		ObjectNode obj = JsonNodeFactory.instance.objectNode();
-		ArrayNode statements = JsonNodeFactory.instance.arrayNode();
-		obj.put("statements", statements);
-		ObjectNode statement = JsonNodeFactory.instance.objectNode();
-		statement.put("statement",
-						"start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" +
-								" WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
+        // start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part)
+        // as children
+        ObjectNode obj        = JsonNodeFactory.instance.objectNode();
+        ArrayNode  statements = JsonNodeFactory.instance.arrayNode();
+        obj.put("statements", statements);
+        ObjectNode statement = JsonNodeFactory.instance.objectNode();
+        statement.put("statement", "start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" + " WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
 //								" RETURN COUNT(part) as children");
-		ObjectNode parameters = statement.with("parameters");
-		statements.add(statement);
+        ObjectNode parameters = statement.with("parameters");
+        statements.add(statement);
         parameters.put("from", (String) node.getProperty("rdf:about"));
-		HttpPost httpMethod = new HttpPost(fixTrailingSlash(serverPath) + "transaction/commit");
-		try {
-			String str = new ObjectMapper().writeValueAsString(obj);
-			httpMethod.setEntity(new StringEntity(str));
-			httpMethod.setHeader("content-type", "application/json");
-			HttpResponse resp = client.execute(httpMethod);
+        HttpPost httpMethod = new HttpPost(fixTrailingSlash(serverPath) + "transaction/commit");
+        try {
+            String str = new ObjectMapper().writeValueAsString(obj);
+            httpMethod.setEntity(new StringEntity(str));
+            httpMethod.setHeader("content-type", "application/json");
+            HttpResponse resp = client.execute(httpMethod);
 
-			CustomResponse cr = new ObjectMapper().readValue(resp.getEntity()
-					.getContent(), CustomResponse.class);
+            CustomResponse cr = new ObjectMapper().readValue(resp.getEntity().getContent(), CustomResponse.class);
 
-			if (cr.getResults() != null
-					&& !cr.getResults().isEmpty()
-					&& cr.getResults().get(0) != null
-					&& cr.getResults().get(0).getData() != null
-					&& !cr.getResults().get(0).getData().isEmpty()
-					&& cr.getResults().get(0).getData().get(0).get("row") != null
-					&& !cr.getResults().get(0).getData().get(0).get("row")
-							.isEmpty()) {
-				return Long.parseLong(cr.getResults().get(0).getData().get(0)
-						.get("row").get(0));
-			}
-		} catch (IllegalStateException|IOException e) {
-			LOG.error(e.getMessage());
-		}   finally {
-			httpMethod.releaseConnection();
-		}
+            if (cr.getResults() != null && !cr.getResults().isEmpty() && cr.getResults().get(0) != null && cr.getResults().get(0).getData() != null && !cr.getResults().get(0).getData().isEmpty() && cr.getResults().get(0).getData().get(0).get("row") != null && !cr.getResults().get(0).getData().get(0).get("row").isEmpty()) {
+                return Long.parseLong(cr.getResults().get(0).getData().get(0).get("row").get(0));
+            }
+        } catch (IllegalStateException | IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            httpMethod.releaseConnection();
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	// note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
-	@Override
+    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
+    @Override
     public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
         if (!isHierarchy(rdfAbout)) {
-			return null;
-		}
-		HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/"
-                + StringUtils.replace(rdfAbout, "/", "%2F"));
-		LOG.info("path: " + method.getURI());
-		try {
-			HttpResponse resp = client.execute(method);
-			if (resp.getStatusLine().getStatusCode() == 502){
-				LOG.error(ProblemType.NEO4J_INCONSISTENT_DATA.getMessage() + " by Neo4J plugin, for node with ID: " + rdfAbout);
-				throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA,
-						" \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
-			}
-			ObjectMapper mapper = new ObjectMapper();
-			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(),
-					Hierarchy.class);
-			return obj;
-		} catch (IOException e) {
-			LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
-			throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);
-		} finally {
-			method.releaseConnection();
-		}
-	}
+            return null;
+        }
+        HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/" + StringUtils.replace(rdfAbout, "/", "%2F"));
+        LOG.debug("path: {}", method.getURI());
+        try {
+            HttpResponse resp = client.execute(method);
+            if (resp.getStatusLine().getStatusCode() == 502) {
+                LOG.error(ProblemType.NEO4J_INCONSISTENT_DATA.getMessage() + " by Neo4J plugin, for node with ID: " + rdfAbout);
+                throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA, " \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            Hierarchy obj = mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
+            return obj;
+        } catch (IOException e) {
+            LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
+            throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);
+        } finally {
+            method.releaseConnection();
+        }
+    }
 
-	@Override
-	public String getCustomPath() {
-		return customPath;
-	}
+    @Override
+    public String getCustomPath() {
+        return customPath;
+    }
 
-	private String fixTrailingSlash(String path){
-    	return path.endsWith("/") ? path : path + "/";
-	}
+    private String fixTrailingSlash(String path) {
+        return path.endsWith("/") ? path : path + "/";
+    }
 }
