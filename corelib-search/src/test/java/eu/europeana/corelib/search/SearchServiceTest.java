@@ -29,6 +29,8 @@ import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.junit.*;
@@ -53,11 +55,15 @@ import static org.junit.Assert.*;
 @ContextConfiguration({"/corelib-solr-context.xml", "/corelib-solr-test.xml"})
 public class SearchServiceTest {
 
+    private static final Logger LOG = LogManager.getLogger(SearchServiceTest.class);
+
+    private static final ContentLoader CONTENT_LOADER = ContentLoader.getInstance();
+
+    private enum LoadingStatus {NOT_LOADED, LOADING, LOADED}
+
     private static int no_of_tests = 0;
     private static LoadingStatus dataLoaded = LoadingStatus.NOT_LOADED;
     private static int testCount = 0;
-
-    private static final ContentLoader contentLoader = ContentLoader.getInstance();
 
     @Resource(name = "corelib_solr_searchService")
     private SearchService searchService;
@@ -81,14 +87,14 @@ public class SearchServiceTest {
             }
         }
         String COLLECTION = "src/test/resources/records.zip";
-        contentLoader.readRecords(COLLECTION);
+        CONTENT_LOADER.readRecords(COLLECTION);
     }
 
     @Before
     public void loadTestData() {
         if (dataLoaded == LoadingStatus.NOT_LOADED) {
             dataLoaded = LoadingStatus.LOADING;
-            System.out.println("LOADING TEST DATA...");
+            LOG.info("LOADING TEST DATA...");
             try {
 //                    IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
 //                            .net(new Net(port, Network.localhostIsIPv6()))
@@ -110,30 +116,29 @@ public class SearchServiceTest {
 
 
                 try {
-                    Assert.assertTrue("records failed to load...", contentLoader.parse(mongoServer, solrServer) == 0);
-                    contentLoader.commit(solrServer);
+                    Assert.assertTrue("records failed to load...", CONTENT_LOADER.parse(mongoServer, solrServer) == 0);
+                    CONTENT_LOADER.commit(solrServer);
 //                        Thread.sleep(5000);
                     dataLoaded = LoadingStatus.LOADED;
                 } catch (Exception e) {
-
-                    e.printStackTrace();
+                    LOG.error("Error loading records", e);
                 } finally {
-                    if (contentLoader != null) {
-                        contentLoader.cleanFiles();
+                    if (CONTENT_LOADER != null) {
+                        CONTENT_LOADER.cleanFiles();
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("TEST DATA LOADED...");
+            LOG.info("TEST DATA LOADED...");
         }
     }
 
     @After
     public void removeTestData() throws InterruptedException {
-        System.out.println("@AFTER "+testCount+" OF "+no_of_tests);
+        LOG.info("@AFTER "+testCount+" OF "+no_of_tests);
         if (testCount == no_of_tests) {
-            System.out.println("CLEANING TEST DATA...");
+            LOG.info("CLEANING TEST DATA...");
             try {
 //                dataLoaded = false;
                 solrServer.deleteByQuery("*:*");
@@ -146,7 +151,7 @@ public class SearchServiceTest {
 
     @Test
     public void testSpellCheck() throws SolrTypeException {
-        System.out.println("TEST testSpellCheck");
+        LOG.info("TEST testSpellCheck");
         testCount++;
         Query query = new Query("musi");
         query.setDefaultSolrFacets();
@@ -197,7 +202,7 @@ public class SearchServiceTest {
 
     @Test
     public void testFindById() throws MongoDBException, MongoRuntimeException, SolrTypeException, Neo4JException {
-        System.out.println("TEST testFindById");
+        LOG.info("TEST testFindById");
         testCount++;
         Query query = new Query("*:*");
         query.setDefaultSolrFacets();
@@ -210,7 +215,7 @@ public class SearchServiceTest {
     @Test
     @Deprecated
     public void testFindMoreLikeThis() throws SolrTypeException, SolrServerException {
-        System.out.println("TEST testFindMoreLikeThis");
+        LOG.info("TEST testFindMoreLikeThis");
         testCount++;
         Query query = new Query("*:*");
         query.setDefaultSolrFacets();
@@ -223,7 +228,7 @@ public class SearchServiceTest {
 
     @Test
     public void testGestLastSolrUpdate() throws SolrServerException, IOException {
-        System.out.println("TEST testGestLastSolrUpdate");
+        LOG.info("TEST testGestLastSolrUpdate");
         testCount++;
         assertNotNull(searchService.getLastSolrUpdate());
     }
@@ -231,46 +236,56 @@ public class SearchServiceTest {
     @Test
     @Deprecated
     public void testSitemap() throws SolrTypeException {
-        System.out.println("TEST testSitemap");
+        LOG.info("TEST testSitemap");
         testCount++;
         assertNotNull(searchService.sitemap(BriefBean.class, new Query("*:*")));
     }
 
     @Test
     public void testSeeAlso() {
-        System.out.println("TEST testSeeAlso");
+        LOG.info("TEST testSeeAlso");
         testCount++;
         List<String> queries = new ArrayList<>();
         queries.add("DATA_PROVIDER:*");
         assertNotNull(searchService.seeAlso(queries));
     }
 
+    /**
+     * Tests whether setting a sort returns in a valid query
+     * @throws SolrTypeException
+     */
+    @Test
+    public void testSort() throws SolrTypeException {
+        LOG.info("TEST testSort");
+        testCount++;
+        Query query = new Query("keyboard");
+
+        query.setSorts("score desc+timestamp_created asc");
+        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        assertNotNull(results);
+        assertTrue(results.getResultSize() > 0);
+    }
+
 //    @Test TODO: fix this test...
-    public void testResolve() {
-        System.out.println("TEST testResolve");
+    public void testResolve() throws SolrTypeException {
+        LOG.info("TEST testResolve");
         testCount++;
         Query query = new Query("*:*");
         ResultSet<BriefBean> results;
-        try {
-            results = searchService.search(BriefBean.class, query);
-            String newId = results.getResults().get(0).getId();
-            String oldId = "test_id";
-            EuropeanaId eId = new EuropeanaId();
-            eId.setNewId(newId);
-            eId.setOldId(oldId);
+        results = searchService.search(BriefBean.class, query);
+        String newId = results.getResults().get(0).getId();
+        String oldId = "test_id";
+        EuropeanaId eId = new EuropeanaId();
+        eId.setNewId(newId);
+        eId.setOldId(oldId);
 //            Mongo mongo = new Mongo("localhost", port);
 //            idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
 //            idServer.createDatastore();
-            idServer.saveEuropeanaId(eId);
+        idServer.saveEuropeanaId(eId);
 //            searchService.setEuropeanaIdMongoServer(idServer);
-            assertNotNull(searchService.resolve("test_id", false));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Should never happen:" + e.getMessage());
-        }
-
+        assertNotNull(searchService.resolve("test_id", false));
     }
 
-    enum LoadingStatus {NOT_LOADED, LOADING, LOADED}
+
 
 }

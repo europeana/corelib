@@ -12,14 +12,14 @@ import org.junit.Test;
 
 public class QueryTest {
 
-	private String rights = "(\"http://creativecommons.org/publicdomain/mark/\""
+	private static final String RIGHTS = "(\"http://creativecommons.org/publicdomain/mark/\""
 			+ " OR \"http://creativecommons.org/publicdomain/zero\""
 			+ " OR \"http://creativecommons.org/licenses/by/\""
 			+ " OR \"http://creativecommons.org/licenses/by-sa/\")";
-	private String singleRight = "\"http://creativecommons.org/publicdomain/mark/1.0/\"";
-	private String anotherRight = "\"http://www.europeana.eu/rights/rr-f/\"";
+	private static final String SINGLE_RIGHT = "\"http://creativecommons.org/publicdomain/mark/1.0/\"";
+	private static final String ANOTHER_RIGHT = "\"http://www.europeana.eu/rights/rr-f/\"";
 
-	private Map<String, String> valueReplacements = new HashMap<String, String>();
+	private Map<String, String> valueReplacements = new HashMap<>();
 
 	/**
 	 * Testing refinements with Query having minimal number of setters
@@ -28,7 +28,7 @@ public class QueryTest {
 	public void testMinimalQuery() {
 
 		String[] refinements = new String[] {
-			"RIGHTS:" + rights
+			"RIGHTS:" + RIGHTS
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements);
@@ -44,7 +44,7 @@ public class QueryTest {
 	public void testQueryWithSetters() {
 
 		String[] refinements = new String[] {
-			"RIGHTS:" + rights
+			"RIGHTS:" + RIGHTS
 		};
 
 		// Testing the full Query object
@@ -63,37 +63,37 @@ public class QueryTest {
 	}
 
 	/**
-	 * Tesing multiple rights refinements
+	 * Testing multiple rights refinements
 	 */
 	@Test
 	public void testMultipleRights() {
 		String[] refinements = new String[] {
-			"RIGHTS:" + singleRight,
-			"RIGHTS:" + rights
+			"RIGHTS:" + SINGLE_RIGHT,
+			"RIGHTS:" + RIGHTS
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements);
 
-		String expected = "RIGHTS:(" + singleRight + " OR " + rights + ")";
+		String expected = "RIGHTS:(" + SINGLE_RIGHT + " OR " + RIGHTS + ")";
 		assertEquals("{!tag=RIGHTS}" + expected, query.getRefinements(true)[0]);
 	}
 
 	/**
-	 * Tesing refinements containing single right + REUSABILITY:Free
+	 * Testing refinements containing single right + REUSABILITY:Free
 	 */
 	@Test
 	public void testSingleRightWithReusability() {
-		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + rights);
+		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + RIGHTS);
 
 		String[] refinements = new String[] {
-			"RIGHTS:" + singleRight,
+			"RIGHTS:" + SINGLE_RIGHT,
 			"REUSABILITY:Free"
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
 		String[] results = query.getRefinements(true);
-		assertEquals("{!tag=RIGHTS}RIGHTS:" + singleRight, results[0]);
-		assertEquals("{!tag=REUSABILITY}RIGHTS:" + rights, results[1]);
+		assertEquals("{!tag=RIGHTS}RIGHTS:" + SINGLE_RIGHT, results[0]);
+		assertEquals("{!tag=REUSABILITY}RIGHTS:" + RIGHTS, results[1]);
 	}
 
 	/**
@@ -101,20 +101,20 @@ public class QueryTest {
 	 */
 	@Test
 	public void testMultipleRightsWithReusability() {
-		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + rights);
+		valueReplacements.put("REUSABILITY:Free", "RIGHTS:" + RIGHTS);
 
 		String[] refinements = new String[] {
-			"RIGHTS:" + singleRight,
-			"RIGHTS:" + anotherRight,
+			"RIGHTS:" + SINGLE_RIGHT,
+			"RIGHTS:" + ANOTHER_RIGHT,
 			"REUSABILITY:Free"
 		};
 
 		Query query = new Query("*:*").setRefinements(refinements).setValueReplacements(valueReplacements);
 
-		String expected = "RIGHTS:(" + singleRight + " OR " + anotherRight + ")";
+		String expected = "RIGHTS:(" + SINGLE_RIGHT + " OR " + ANOTHER_RIGHT + ")";
 		String[] results = query.getRefinements(true);
 		assertEquals("{!tag=RIGHTS}" + expected, query.getRefinements(true)[0]);
-		assertEquals("{!tag=REUSABILITY}RIGHTS:" + rights, results[1]);
+		assertEquals("{!tag=REUSABILITY}RIGHTS:" + RIGHTS, results[1]);
 	}
 
 	/**
@@ -318,4 +318,33 @@ public class QueryTest {
 		assertFalse("should NOT contain rights", facetList.contains("RIGHTS"));
 		assertEquals(12, facetList.size());
 	}
+
+	@Test
+	public void testSorts() {
+		// single field
+		Query q = new Query("*");
+		String sort = "score asc";
+		q.setSorts("score asc");
+		List<QuerySort> sorts = q.getSorts();
+		assertEquals(1, sorts.size());
+		assertTrue(q.toString().contains(sort));
+
+		// multiple sort fields (you can use either + or , as separator)
+		q.setSorts("score ascending,timestamp_update+europeana_completeness desc");
+		sorts = q.getSorts();
+		assertEquals(3, sorts.size());
+
+		assertEquals("score", sorts.get(0).getSortField());
+		assertEquals(QuerySort.ORDER_ASC, sorts.get(0).getSortOrder());
+		assertEquals("timestamp_update", sorts.get(1).getSortField());
+		assertEquals(QuerySort.ORDER_DESC, sorts.get(1).getSortOrder());
+		assertEquals("europeana_completeness", sorts.get(2).getSortField());
+		assertEquals(QuerySort.ORDER_DESC, sorts.get(2).getSortOrder());
+		assertTrue(q.toString().contains("score asc,timestamp_update desc,europeana_completeness desc"));
+
+		// clear sorts
+		q.setSorts("");
+		assertEquals(0, q.getSorts().size());
+	}
+
 }

@@ -21,6 +21,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.model.Query;
+import eu.europeana.corelib.definitions.solr.model.QuerySort;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -382,9 +383,8 @@ public class SearchServiceImpl implements SearchService {
                     solrQuery.setTimeAllowed(TIME_ALLOWED);
                 }
                 // will replace sort on score if available
-                if (!StringUtils.isBlank(query.getSort())) {
-                    solrQuery.setSort(query.getSort(),
-                            (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                for (QuerySort sort : query.getSorts()) {
+                    solrQuery.setSort(sort.getSortField(), (sort.getSortOrder() == QuerySort.ORDER_ASC ? ORDER.asc : ORDER.desc));
                 }
                 solrQuery.addSort("europeana_id", ORDER.desc);
                 resultSet.setSortField(solrQuery.getSortField());
