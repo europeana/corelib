@@ -31,8 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.utils.model.LanguageVersion;
-
-import static eu.europeana.corelib.definitions.solr.model.QuerySort.ORDER_DESC;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -225,18 +224,39 @@ public class Query implements Cloneable {
 
     /**
      * Generate a new list of user-defined sort fields, based on the sort=<value> parameter specified by the user
-     * @param sort
+     * Sort fields may be separated by a plus, comma, or space character
+     *
+     * @param sort string containing user-defined sorting fields and sort order, if null or empty it will reset the
+     *             current user sort for this query.
      * @return this query object
      */
-    public Query setSorts(String sort) {
+    public Query setSort(String sort) {
         sorts.clear();
-        String[] sortFields = sort.split(QuerySort.SEPARATOR_MATCH);
-        for (String sortField : sortFields) {
-            if (!sortField.isEmpty()) {
-                sorts.add(new QuerySort(sortField));
-            }
+        if (!StringUtils.isEmpty(sort)) {
+            processSortFields(sort.trim().split("\\+|,|\\s+"));
         }
         return this;
+    }
+
+    private void processSortFields(String[] sortFields) {
+        for (int i = 0; i < sortFields.length; i++) {
+            String sortField = sortFields[i];
+            if (!StringUtils.isEmpty(sortField.trim())) {
+
+                // check if next field is sort order
+                if (i < sortFields.length - 1) {
+                    String nextSortField = sortFields[i + 1];
+                    if (QuerySort.isSortOrder(nextSortField)) {
+                        sorts.add(new QuerySort(sortField, nextSortField));
+                        i++;
+                    } else {
+                        sorts.add(new QuerySort(sortField));
+                    }
+                } else {
+                    sorts.add(new QuerySort(sortField));
+                }
+            }
+        }
     }
 
     public int getPageSize() {
@@ -564,7 +584,7 @@ public class Query implements Cloneable {
             this.executedQuery = URLDecoder.decode(executedQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             this.executedQuery = executedQuery;
-            e.printStackTrace();
+            LogManager.getLogger(Query.class).error(e.getMessage());
         }
     }
 

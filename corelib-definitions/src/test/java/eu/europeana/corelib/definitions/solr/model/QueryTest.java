@@ -323,27 +323,28 @@ public class QueryTest {
 	public void testSorts() {
 		// single field
 		Query q = new Query("*");
-		String sort = "score asc";
-		q.setSorts("score asc");
+		q.setSort("score ascending");
 		List<QuerySort> sorts = q.getSorts();
 		assertEquals(1, sorts.size());
-		assertTrue(q.toString().contains(sort));
+		assertTrue(q.toString().contains("sorts=score asc"));
 
-		// multiple sort fields (you can use either + or , as separator)
-		q.setSorts("score ascending,timestamp_update+europeana_completeness desc");
+		// multiple sort fields with different separators and extra spaces
+		q.setSort(" id  ascending+timestamp_update , europeana_id asc  COMPLETENESS DESC ");
 		sorts = q.getSorts();
-		assertEquals(3, sorts.size());
+		assertEquals(4, sorts.size());
 
-		assertEquals("score", sorts.get(0).getSortField());
+		assertEquals("id", sorts.get(0).getSortField());
 		assertEquals(QuerySort.ORDER_ASC, sorts.get(0).getSortOrder());
 		assertEquals("timestamp_update", sorts.get(1).getSortField());
 		assertEquals(QuerySort.ORDER_DESC, sorts.get(1).getSortOrder());
-		assertEquals("europeana_completeness", sorts.get(2).getSortField());
-		assertEquals(QuerySort.ORDER_DESC, sorts.get(2).getSortOrder());
-		assertTrue(q.toString().contains("score asc,timestamp_update desc,europeana_completeness desc"));
+		assertEquals("europeana_id", sorts.get(2).getSortField());
+		assertEquals(QuerySort.ORDER_ASC, sorts.get(2).getSortOrder());
+		assertEquals("COMPLETENESS", sorts.get(3).getSortField());
+		assertEquals(QuerySort.ORDER_DESC, sorts.get(3).getSortOrder());
+		assertTrue(q.toString().contains("id asc,timestamp_update desc,europeana_id asc,COMPLETENESS desc"));
 
 		// clear sorts
-		q.setSorts("");
+		q.setSort("");
 		assertEquals(0, q.getSorts().size());
 	}
 

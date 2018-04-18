@@ -260,7 +260,7 @@ public class SearchServiceTest {
         testCount++;
         Query query = new Query("keyboard");
 
-        query.setSorts("score desc+timestamp_created asc");
+        query.setSort("score descending timestamp_created asc+timestamp_update,COMPLETENESS");
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         assertNotNull(results);
         assertTrue(results.getResultSize() > 0);

@@ -383,8 +383,15 @@ public class SearchServiceImpl implements SearchService {
                     solrQuery.setTimeAllowed(TIME_ALLOWED);
                 }
                 // will replace sort on score if available
-                for (QuerySort sort : query.getSorts()) {
+                if (query.getSorts().size() > 0) {
+                    QuerySort sort = query.getSorts().get(0);
                     solrQuery.setSort(sort.getSortField(), (sort.getSortOrder() == QuerySort.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                    int i = 1;
+                    while (i < query.getSorts().size()) {
+                        sort = query.getSorts().get(i);
+                        solrQuery.addSort(sort.getSortField(), (sort.getSortOrder() == QuerySort.ORDER_ASC ? ORDER.asc : ORDER.desc));
+                        i++;
+                    }
                 }
                 solrQuery.addSort("europeana_id", ORDER.desc);
                 resultSet.setSortField(solrQuery.getSortField());
