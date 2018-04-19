@@ -150,7 +150,7 @@ public class SearchServiceImpl implements SearchService {
                 try {
                     fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
                 } catch (SolrServerException e) {
-                    LOG.error("SolrServerException: " + e.getMessage());
+                    LOG.error("SolrServerException: {}", e.getMessage());
                 }
             }
 
@@ -172,8 +172,7 @@ public class SearchServiceImpl implements SearchService {
      * @see SearchService#resolve(String, String, boolean)
      */
     @Override
-    public FullBean resolve(String collectionId, String recordId,
-                            boolean similarItems) throws SolrTypeException {
+    public FullBean resolve(String collectionId, String recordId, boolean similarItems) throws SolrTypeException {
         return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
@@ -263,7 +262,7 @@ public class SearchServiceImpl implements SearchService {
         idsToCheck.add(europeanaObjectId);
         idsToCheck.add(RESOLVE_PREFIX + europeanaObjectId);
         idsToCheck.add(PORTAL_PREFIX + europeanaObjectId);
-        if (LOG.isDebugEnabled()) { LOG.debug("Trying to resolve ids " + idsToCheck); }
+        if (LOG.isDebugEnabled()) { LOG.debug("Trying to resolve ids {}", idsToCheck); }
         EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(idsToCheck);
         if (newId != null) {
             String result = newId.getNewId();
@@ -338,16 +337,14 @@ public class SearchServiceImpl implements SearchService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
-                                                  Query query, boolean debug) throws SolrTypeException {
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws SolrTypeException {
         this.debug = debug;
         return search(beanInterface, query);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface,
-                                                  Query query) throws SolrTypeException {
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }
@@ -358,8 +355,7 @@ public class SearchServiceImpl implements SearchService {
         if (isValidBeanClass(beanClazz)) {
             String[] refinements = query.getRefinements(true);
             if (SearchUtils.checkTypeFacet(refinements)) {
-                SolrQuery solrQuery = new SolrQuery().setQuery(query
-                        .getQuery(true));
+                SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
                 if (refinements != null) { // TODO add length 0 check!!
                     solrQuery.addFilterQuery(refinements);
@@ -428,7 +424,6 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
-
                     resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
                     if (debug) {
                         resultSet.setSolrQueryString(query.getExecutedQuery());
@@ -463,25 +458,28 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
-        boolean defaultSort = StringUtils.isBlank(query.getSort());
+        boolean defaultSort = query.getSorts().size() == 0;
         if (defaultSort) {
             solrQuery.setSort("score", ORDER.desc);
-            solrQuery.addSort("timestamp_create", ORDER.desc);
+            solrQuery.addSort("timestamp_update", ORDER.desc);
             // completeness is added last because many records have incorrect value 0
             solrQuery.addSort("europeana_completeness", ORDER.desc);
         } else {
             // User set sort
-            solrQuery.setSort(query.getSort(), (query.getSortOrder() == Query.ORDER_ASC ? ORDER.asc : ORDER.desc));
+            solrQuery.clearSorts();
+            for (QuerySort userSort : query.getSorts()) {
+                solrQuery.addSort(userSort.getSortField(), (userSort.getSortOrder() == QuerySort.ORDER_ASC ? ORDER.asc : ORDER.desc));
+            }
         }
 
-        // Check if user defined a cursor (we need to adjust sort based on it's requirements)
+        // Check if user defined a cursor (because we need to adjust sort based on it's requirements)
         if (query.getCurrentCursorMark() != null) {
             solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
 
             if (defaultSort) {
                 // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087)
                 solrQuery.removeSort("score");
-                // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id.
+                // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
                 if (!solrQuery.getSortField().contains("europeana_id")) {
                     solrQuery.addSort("europeana_id", ORDER.asc);
                 }
@@ -516,14 +514,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Term> suggestions(String query, int pageSize)
-            throws SolrTypeException {
+    public List<Term> suggestions(String query, int pageSize) throws SolrTypeException {
         return suggestions(query, pageSize, null);
     }
 
     @Override
-    public List<Count> createCollections(String facetFieldName,
-                                         String queryString, String... refinements) throws SolrTypeException {
+    public List<Count> createCollections(String facetFieldName, String queryString, String... refinements) throws SolrTypeException {
 
         Query query = new Query(queryString).setParameter("rows", "0")
                 .setParameter("facet", "true").setRefinements(refinements)
@@ -586,8 +582,7 @@ public class SearchServiceImpl implements SearchService {
      * @param rHandler The ReqestHandler to use
      * @return A list of Terms for the specific term from the SolrSuggester
      */
-    private List<Term> getSuggestions(String query, String field,
-                                      String rHandler) {
+    private List<Term> getSuggestions(String query, String field, String rHandler) {
         List<Term> results = new ArrayList<>();
         try {
             ModifiableSolrParams params = new ModifiableSolrParams();
@@ -688,12 +683,9 @@ public class SearchServiceImpl implements SearchService {
 
     private SolrServer setServer(SolrServer solrServer) {
         if (solrServer instanceof HttpSolrServer) {
-            HttpSolrServer server = new HttpSolrServer(
-                    ((HttpSolrServer) solrServer).getBaseURL());
-            AbstractHttpClient client = (AbstractHttpClient) server
-                    .getHttpClient();
-            client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(
-                    username, password));
+            HttpSolrServer server = new HttpSolrServer(((HttpSolrServer) solrServer).getBaseURL());
+            AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
+            client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
             return server;
         } else {
             return solrServer;
