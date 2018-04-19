@@ -134,17 +134,6 @@ public interface SearchService {
 			throws SolrTypeException;
 
 	/**
-	 * Create a sitemap
-	 * 
-	 * @param beanInterface
-	 * @param query
-	 * @return
-	 * @throws SolrTypeException
-	 */
-	<T extends IdBean> ResultSet<T> sitemap(Class<T> beanInterface, Query query)
-			throws SolrTypeException;
-
-	/**
 	 * Create collection list for a given query and facet field
 	 * 
      * @param facetFieldName The SolrFacetType field to create the collection for
