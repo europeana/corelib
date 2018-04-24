@@ -74,6 +74,23 @@ public class EdmUtils {
      */
     public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
         RDF rdf = toRDF(fullBean);
+        return marshallToEDM(rdf);
+    }
+
+    /**
+     * Convert an RDF object to an EDM String
+     *
+     * @param rdf The RDF to convert
+     * @return The resulting EDM string in RDF-XML
+     */
+    public static synchronized String toEDM(RDF rdf) {
+        if (rdf == null) {
+            return null;
+        }
+        return marshallToEDM(rdf);
+    }
+
+    private static String marshallToEDM(RDF rdf) {
         IMarshallingContext marshallingContext;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()){
             if (bfact == null) {
