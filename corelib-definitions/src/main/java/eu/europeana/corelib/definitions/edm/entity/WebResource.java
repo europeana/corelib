@@ -199,28 +199,46 @@ public interface WebResource extends AbstractEdmEntity {
    */
   String getEdmCodecName();
 
+
+  /**
+   * File format is not used in EDM, so no need to serialize!
+   */
+  String getFileFormat();
+
+
   /**
    * ebucore:hasMimeType
+   * @return The main MIME types as defined by IANA: e.g. audio, video, text, application, or a container MIME type.
    */
   String getEbucoreHasMimeType();
 
   /**
    * ebucore:fileByteSize
+   * @return The size of a Media Resource file expressed in bytes.
    */
   Long getEbucoreFileByteSize();
 
   /**
    * ebucore:duration
+   * @return The duration of a track or a signal expressed in ms.
    */
   String getEbucoreDuration();
 
+/**
+ * ebucore:audioChannelNumber
+ * @return The total number of audio channels contained in the Media Resource (non-negative integer)
+ */
+  Integer getEbucoreAudioChannelNumber();
+
   /**
    * ebucore:width
+   * @return The width of e.g. an image or video frame typically expressed as a number of pixels.
    */
   Integer getEbucoreWidth();
 
   /**
    * ebucore:height
+   * @return The height of e.g. an image or video frame typically expressed as a number of pixels.
    */
   Integer getEbucoreHeight();
 
@@ -231,21 +249,25 @@ public interface WebResource extends AbstractEdmEntity {
 
   /**
    * ebucore:sampleSize
+   * @return The size of an audio sample in bits. Also called bit depth.
    */
   Integer getEbucoreSampleSize();
 
   /**
    * ebucore:sampleRate
+   * @return The frequency at which an audio is sampled per second. Also called sampling rate.
    */
   Integer getEbucoreSampleRate();
 
   /**
    * ebucore:frameRate
+   * @return The frame rate of the video signal in frames per second.
    */
   Double getEbucoreFrameRate();
 
   /**
    * ebucore:bitRate
+   * @return The bitrate at which the Media Resource can be played in bits per second (non-negative integer)
    */
   Integer getEbucoreBitRate();
 
@@ -261,6 +283,7 @@ public interface WebResource extends AbstractEdmEntity {
 
   /**
    * ebucore:orientation
+   * @return The orientation of a document or an image (portrait or landscape)
    */
   String getEbucoreOrientation();
 
