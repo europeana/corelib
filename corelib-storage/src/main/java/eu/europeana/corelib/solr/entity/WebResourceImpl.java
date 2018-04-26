@@ -278,7 +278,7 @@ public class WebResourceImpl implements WebResource {
                 && webResourceMetaInfo.getTextMetaInfo().getIsSearchable() != null
                 && webResourceMetaInfo.getTextMetaInfo().getIsSearchable()) {
             // TODO set proper value once we defined edm:FullTextResource
-            return "edm:FullTextResource";
+            //return "edm:FullTextResource";
         }
         return null;
     }
@@ -397,14 +397,8 @@ public class WebResourceImpl implements WebResource {
 
     @Override
     public Integer getEdmSpatialResolution() {
-        if (webResourceMetaInfo != null) {
-            if (webResourceMetaInfo.getTextMetaInfo() != null) {
-                return webResourceMetaInfo.getTextMetaInfo().getResolution();
-            }
-            // TODO we should set spatial resolution for videos as well, but it's currently a text (e.g. 720x576)
-            //if (webResourceMetaInfo.getVideoMetaInfo() != null) {
-            // return webResourceMetaInfo.getVideoMetaInfo().getResolution();
-            //}
+        if (webResourceMetaInfo != null && webResourceMetaInfo.getTextMetaInfo() != null) {
+            return webResourceMetaInfo.getTextMetaInfo().getResolution();
         }
         return null;
     }

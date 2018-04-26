@@ -50,7 +50,8 @@ public class VideoMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
     private String codec;
 
     /**
-     * Width x Height
+     * Width x Height.
+     * Note that we do not publish this f since we already have width and height
      */
     private String resolution;
 
@@ -113,6 +114,11 @@ public class VideoMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
         return codec;
     }
 
+    /**
+     * String containing width and height.
+     * At the moment it is not used (not published) because we already have width and height.
+     * @return
+     */
     public String getResolution() {
         return resolution;
     }
