@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Service;
 
@@ -11,6 +12,12 @@ public class ServiceImpl extends AbstractEdmEntityImpl implements Service {
 
     private String[] dctermsConformsTo;
     private String[] doapImplements;
+
+
+    @Override
+    public ObjectId getId() {
+        return null;
+    }
 
     @Override
     public String[] getDctermsConformsTo() {
