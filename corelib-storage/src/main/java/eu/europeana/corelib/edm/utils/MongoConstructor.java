@@ -166,6 +166,7 @@ public class MongoConstructor {
 			}
 		}
 		if (record.getEuropeanaAggregationList() != null) {
+			List<String> collectionName = new ArrayList<>();
 			for (EuropeanaAggregationType eaggregation : record
 					.getEuropeanaAggregationList()) {
 				AggregatedCHO aggregatedCho = new AggregatedCHO();
@@ -175,6 +176,14 @@ public class MongoConstructor {
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
 						.createAggregationMongoFields(eaggregation,
 								SolrUtils.getPreviewUrl(record)));
+				if (eaggregation.getDatasetName() != null) {
+					collectionName.add(eaggregation.getDatasetName().getString());
+				} else if (eaggregation.getCollectionName() != null) {
+					collectionName.add(eaggregation.getCollectionName().getString());
+				}
+			}
+			if (!collectionName.isEmpty()) {
+				fullBean.setEuropeanaCollectionName(collectionName.toArray(new String[collectionName.size()]));
 			}
 		}
 		if(record.getServiceList()!=null){
