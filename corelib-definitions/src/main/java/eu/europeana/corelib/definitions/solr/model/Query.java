@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.utils.model.LanguageVersion;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -51,30 +52,18 @@ public class Query implements Cloneable {
      */
     private static final int DEFAULT_PAGE_SIZE = 12;
 
-    /**
-     * Use these instead of the ones provided in the apache Solr package
-     * in order to avoid introducing a dependency to that package in all modules
-     * they're public because they are read from SearchServiceImpl
-     */
-    public static final int ORDER_DESC = 0;
-    public static final int ORDER_ASC  = 1;
-
-
     private boolean produceFacetUnion      = true;
     private boolean spellcheckAllowed      = true;
     private boolean allowFacets            = true;
     private boolean apiQuery               = false;
     private boolean defaultFacetsRequested = false;
 
-
     private int start;
     private int pageSize;
-    private int sortOrder = ORDER_DESC;
 
     private String query;
     private String queryType;
     private String executedQuery;
-    private String sort;
 
     private QueryTranslation queryTranslation;
 
@@ -102,6 +91,7 @@ public class Query implements Cloneable {
     private List<String>     facetedRefinementsList;
     private List<String>     facetsUsedInRefinementsList;
     private List<QueryFacet> queryFacetList;
+    private List<QuerySort>  sorts = new ArrayList<>();
 
 
     /**
@@ -224,34 +214,49 @@ public class Query implements Cloneable {
         return this;
     }
 
-    public String getSort() {
-        return sort;
+    /**
+     *
+     * @return list of all user-defined sort fields
+     */
+    public List<QuerySort> getSorts() {
+        return sorts;
     }
 
+    /**
+     * Generate a new list of user-defined sort fields, based on the sort=<value> parameter specified by the user
+     * Sort fields may be separated by a plus, comma, or space character
+     *
+     * @param sort string containing user-defined sorting fields and sort order, if null or empty it will reset the
+     *             current user sort for this query.
+     * @return this query object
+     */
     public Query setSort(String sort) {
-        String[] parts;
-        if (sort == null || sort.isEmpty()) {
-            this.sort = "";
-        } else if (!sort.matches(".*\\s.*") && sort.length() > 0) {
-            this.sort = sort;
-        } else if (sort.matches(".+\\s(asc|ASC|desc|DESC)(ending|ENDING)?")) {
-            parts = sort.split("\\s");
-            this.sort = parts[0];
-            if (parts[1].matches("(asc|ASC).*")) {
-                this.sortOrder = ORDER_ASC;
-            }
-        } else {
-            this.sort = "";
+        sorts.clear();
+        if (!StringUtils.isEmpty(sort)) {
+            processSortFields(sort.trim().split("\\+|,|\\s+"));
         }
         return this;
     }
 
-    public int getSortOrder() {
-        return sortOrder;
-    }
+    private void processSortFields(String[] sortFields) {
+        for (int i = 0; i < sortFields.length; i++) {
+            String sortField = sortFields[i];
+            if (!StringUtils.isEmpty(sortField.trim())) {
 
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
+                // check if next field is sort order
+                if (i < sortFields.length - 1) {
+                    String nextSortField = sortFields[i + 1];
+                    if (QuerySort.isSortOrder(nextSortField)) {
+                        sorts.add(new QuerySort(sortField, nextSortField));
+                        i++;
+                    } else {
+                        sorts.add(new QuerySort(sortField));
+                    }
+                } else {
+                    sorts.add(new QuerySort(sortField));
+                }
+            }
+        }
     }
 
     public int getPageSize() {
@@ -456,7 +461,7 @@ public class Query implements Cloneable {
     // funky java 8 stuff yippee
     public Query convertAndSetSolrParameters(Map<String, Integer> parameters) {
         if (parameters != null && !parameters.isEmpty()) {
-            parameterMap.putAll(parameters.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue()))));
+            parameterMap.putAll(parameters.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> String.valueOf(e.getValue()))));
         }
         return this;
     }
@@ -509,8 +514,17 @@ public class Query implements Cloneable {
         params.add("start=" + start);
         params.add("rows=" + pageSize);
 
-        if (sort != null && sort.length() > 0) {
-            params.add("sort=" + sort + " " + (sortOrder == ORDER_DESC ? "desc" : "asc"));
+        if (sorts.size() > 0) {
+            StringBuilder sortsText = new StringBuilder();
+            for (QuerySort sort : sorts) {
+                if (sortsText.length() > 0) {
+                    // use , as separator as that's what solr is using
+                    sortsText.append(',');
+                }
+                sortsText.append(sort.toString());
+            }
+            sortsText.insert(0, "sorts=");
+            params.add(sortsText.toString());
         }
 
         if (refinementArray != null) {
@@ -570,7 +584,7 @@ public class Query implements Cloneable {
             this.executedQuery = URLDecoder.decode(executedQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             this.executedQuery = executedQuery;
-            e.printStackTrace();
+            LogManager.getLogger(Query.class).error(e.getMessage());
         }
     }
 
