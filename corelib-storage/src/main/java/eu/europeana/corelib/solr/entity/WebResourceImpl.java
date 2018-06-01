@@ -350,7 +350,7 @@ public class WebResourceImpl implements WebResource {
     @Override
     public Integer getEbucoreAudioChannelNumber() {
         if (webResourceMetaInfo != null && webResourceMetaInfo.getAudioMetaInfo() != null) {
-            return webResourceMetaInfo.getAudioMetaInfo().getBitDepth();
+            return webResourceMetaInfo.getAudioMetaInfo().getChannels();
         }
         return null;
     }
