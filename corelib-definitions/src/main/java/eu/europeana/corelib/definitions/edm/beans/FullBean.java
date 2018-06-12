@@ -249,10 +249,16 @@ public interface FullBean extends IdBean {
 	int getEuropeanaCompleteness();
 
 	/**
-	 * 
+	 *
 	 * @return the europeana collection name for this record
 	 */
 	String[] getEuropeanaCollectionName();
+
+//	/**
+//	 *
+//	 * @return the dataset name (same as europeana collection name) for this record
+//	 */
+//	String[] getEdmDatasetName();
 
 	/**
 	 * 
@@ -277,6 +283,13 @@ public interface FullBean extends IdBean {
 	 * @param europeanaCollectionName
 	 */
 	void setEuropeanaCollectionName(String[] europeanaCollectionName);
+
+//	/**
+//	 * Sets the Europeana collection name for this record
+//	 * @param edmDatasetName
+//	 */
+//	void setEdmDatasetName(String[] edmDatasetName);
+
 	/**
 	 * The date the record was created
 	 * @return 
