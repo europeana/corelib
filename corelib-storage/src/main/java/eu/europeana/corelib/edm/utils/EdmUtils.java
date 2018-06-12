@@ -297,9 +297,9 @@ public class EdmUtils {
             aggregation.setAggregatedCHO(agCHO);
         }
         addAsList(aggregation, Aggregates.class, europeanaAggregation.getAggregates());
-//        CollectionName collectionName = new CollectionName();
-//        collectionName.setString(fBean.getEuropeanaCollectionName()[0]);
-//        aggregation.setCollectionName(collectionName);
+        DatasetName datasetName = new DatasetName();
+        datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
+        aggregation.setDatasetName(datasetName);
         Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
         if (country != null) {
             aggregation.setCountry(country);
