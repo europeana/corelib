@@ -80,6 +80,7 @@ public class Neo4jServerImpl implements Neo4jServer {
      * @param customPath The path of the custom Europeana Neo4j plugins
      */
     public Neo4jServerImpl(String serverPath, String index, String customPath) {
+        this.serverPath = serverPath;
         this.graphDb = new RestGraphDatabase(serverPath);
         this.index = this.graphDb.getRestAPI().getIndex(index);
         this.client = HttpClientBuilder.create().setConnectionManager(new PoolingHttpClientConnectionManager()).build();
@@ -94,6 +95,13 @@ public class Neo4jServerImpl implements Neo4jServer {
      * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
      */
     public Neo4jServerImpl() {
+    }
+
+    /**
+     * @return the server path set during initialization
+     */
+    public String getServerPath() {
+        return serverPath;
     }
 
     @Override

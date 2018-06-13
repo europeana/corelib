@@ -34,6 +34,11 @@ import java.util.concurrent.TimeoutException;
 public interface Neo4jServer {
 
 	/**
+	 * @return the server path set during initialization
+	 */
+	public String getServerPath();
+
+	/**
 	 * get node by its rdfAbout
 	 * 
 	 * @param rdfAbout the rdfAbout (id) to search on
