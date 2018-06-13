@@ -125,10 +125,11 @@ public class EdmUtils {
                 Service service = new Service();
                 service.setAbout(serv.getAbout());
                 //addAsList(service, ConformsTo.class, serv.getDctermsConformsTo());
-                if(serv.getDctermsConformsTo()!=null && serv.getDctermsConformsTo().length>0){
+
+                if(serv.getDctermsConformsTo() !=null && serv.getDctermsConformsTo().length>0){
                     List<ConformsTo> conformsToList = new ArrayList<>();
 
-                    for(String conformsTo:serv.getDctermsConformsTo()){
+                    for(String conformsTo : serv.getDctermsConformsTo()){
                         if(StringUtils.isNotEmpty(conformsTo)) {
                             ConformsTo cTo = new ConformsTo();
                             ResourceOrLiteralType.Resource res = new Resource();
@@ -139,18 +140,26 @@ public class EdmUtils {
                             conformsToList.add(cTo);
                         }
                     }
-                    if(conformsToList.size()>0){
+                    if(!conformsToList.isEmpty()){
                         service.setConformsToList(conformsToList);
                     }
                 }
+
                 if (serv.getDoapImplements() != null && serv.getDoapImplements().length > 0){
                     List<Implements> implementsList = new ArrayList<>();
+
                     for(String doapImplements : serv.getDoapImplements()){
-                        Implements anImplements = new Implements();
-                        anImplements.setResource(doapImplements);
+                        if(StringUtils.isNotEmpty(doapImplements)) {
+                            Implements anImplements = new Implements();
+                            anImplements.setResource(doapImplements);
+                            implementsList.add(anImplements);
+                        }
                     }
-                    service.setImplementList(implementsList);
+                    if(!implementsList.isEmpty()){
+                        service.setImplementList(implementsList);
+                    }
                 }
+
                 serviceList.add(service);
             }
             rdf.setServiceList(serviceList);
@@ -288,9 +297,9 @@ public class EdmUtils {
             aggregation.setAggregatedCHO(agCHO);
         }
         addAsList(aggregation, Aggregates.class, europeanaAggregation.getAggregates());
-        CollectionName collectionName = new CollectionName();
-        collectionName.setString(fBean.getEuropeanaCollectionName()[0]);
-        aggregation.setCollectionName(collectionName);
+        DatasetName datasetName = new DatasetName();
+        datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
+        aggregation.setDatasetName(datasetName);
         Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
         if (country != null) {
             aggregation.setCountry(country);
