@@ -41,12 +41,13 @@ import eu.europeana.corelib.dereference.impl.VocabularyMongoServerImpl;
  * Extract test
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public class ExtractorTest {
 	VocabularyMongoServerImpl mongoServer;
 
-	@Test
+	//@Test
 	public void testExtractor() {
 		int port = 10000;
 		IMongodConfig conf;
@@ -103,7 +104,7 @@ public class ExtractorTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testReadFromFile(){
 		assertNotNull(new Extractor(new ControlledVocabularyImpl(),mongoServer).readSchema("src/test/resources/rdf.xml").keySet());
 	}

@@ -33,8 +33,9 @@ import eu.europeana.corelib.dereference.VocabularyMongoServer;
  *
  * @author Yorgos.Mamakis@ kb.nl
  * @author Patrick Ehlert
- * 
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public class VocabularyMongoServerImpl implements VocabularyMongoServer {
 
 	private static final Logger LOG = Logger.getLogger(VocabularyMongoServerImpl.class.getName());

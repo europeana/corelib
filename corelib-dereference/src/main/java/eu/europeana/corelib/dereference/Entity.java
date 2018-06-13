@@ -21,8 +21,9 @@ import org.bson.types.ObjectId;
 /**
  * Resource fetched from the web for the dereference library. Used for caching
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * @deprecated june 2018 moved to Metis project
  */
+@Deprecated
 public interface Entity {
 
 	/**

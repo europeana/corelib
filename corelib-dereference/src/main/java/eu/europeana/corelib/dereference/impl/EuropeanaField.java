@@ -25,8 +25,9 @@ import org.apache.commons.lang.StringUtils;
  * Class holding the mappable Europeana Fields for denormalization
  * 
  * @author yorgos.mamakis@ kb.nl
- * 
+ * @deprecated june 2018 moved to Metis project
  */
+@Deprecated
 public class EuropeanaField {
 	/**
 	 * Enumeration holding the fields that should be checked for normalization

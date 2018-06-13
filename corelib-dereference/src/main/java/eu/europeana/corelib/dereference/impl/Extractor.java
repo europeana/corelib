@@ -51,8 +51,9 @@ import eu.europeana.corelib.dereference.exceptions.VocabularyNotFoundException;
  * according to the stored mappings
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public class Extractor {
 
 	protected VocabularyMongoServer mongoServer;

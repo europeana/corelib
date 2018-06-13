@@ -61,8 +61,9 @@ import eu.europeana.corelib.definitions.jibx._Long;
 /**
  * An enumeration with the fields of the contextual entities that might be used in EDM
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public enum RdfMethod {
 	SKOS_CONCEPT("skos_concept", "", Concept.class) {
 

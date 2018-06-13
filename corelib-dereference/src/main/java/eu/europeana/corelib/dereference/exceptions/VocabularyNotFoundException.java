@@ -3,8 +3,9 @@ package eu.europeana.corelib.dereference.exceptions;
 /**
  * Exception thrown when a Vocabulary is not found
  * @author Yorgos.Mamakis@ europeana.eu
- *
+ * @deprecated June 2018
  */
+@Deprecated
 public class VocabularyNotFoundException extends RuntimeException {
 
 	/**
