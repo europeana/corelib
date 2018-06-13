@@ -20,12 +20,10 @@ import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.db.service.ApiKeyService;
-import eu.europeana.corelib.db.service.ApiLogService;
 import eu.europeana.corelib.db.service.abstracts.AbstractServiceImpl;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.corelib.utils.DateIntervalUtils;
 import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -40,8 +38,8 @@ import java.util.List;
  */
 public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements ApiKeyService {
 
-    @Resource
-    private ApiLogService apiLogService;
+    //@Resource
+    //private ApiLogService apiLogService;
 
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
@@ -75,16 +73,24 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
     }
 
     @Override
+    @Deprecated
     public long checkReachedLimit(ApiKey apiKey) throws DatabaseException, LimitReachedException {
         if (apiKey == null) {
             throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
         }
 
-        long requestNumber = apiLogService.countByIntervalAndApiKey(DateIntervalUtils.getLast24Hours(), apiKey.getId());
-        if (apiKey.getUsageLimit() <= requestNumber) {
-            throw new LimitReachedException(apiKey.getUsageLimit(), requestNumber);
+//        //long requestNumber = apiLogService.countByIntervalAndApiKey(DateIntervalUtils.getLast24Hours(), apiKey.getId());
+//        if (apiKey.getUsageLimit() <= requestNumber) {
+//            throw new LimitReachedException(apiKey.getUsageLimit(), requestNumber);
+//        }
+//        return requestNumber;
+        return 999;
+    }
+
+    public void checkNotEmpty(ApiKey apiKey) throws DatabaseException {
+        if (apiKey == null) {
+            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
         }
-        return requestNumber;
     }
 
     @Override
