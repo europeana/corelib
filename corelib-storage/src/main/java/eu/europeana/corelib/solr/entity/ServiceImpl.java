@@ -14,12 +14,6 @@ public class ServiceImpl extends AbstractEdmEntityImpl implements Service {
     private String[] dctermsConformsTo;
     private String[] doapImplements;
 
-    @JsonIgnore
-    @Override
-    public ObjectId getId() {
-        return this.id;
-    }
-
     @Override
     public String[] getDctermsConformsTo() {
         return dctermsConformsTo;
