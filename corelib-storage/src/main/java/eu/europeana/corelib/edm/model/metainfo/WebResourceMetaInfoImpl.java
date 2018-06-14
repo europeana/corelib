@@ -3,14 +3,10 @@ package eu.europeana.corelib.edm.model.metainfo;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
-import eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo;
-import eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo;
-import eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo;
-import eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * An object which wraps all types of metainfo. It will have always maximum one field which is not null.
+ * An object which wraps all types of metainfo. It will have always maximum one info field which is not null.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("WebResourceMetaInfo")

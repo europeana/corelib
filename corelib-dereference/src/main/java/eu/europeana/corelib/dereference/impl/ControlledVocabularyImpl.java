@@ -33,7 +33,9 @@ import eu.europeana.corelib.dereference.ControlledVocabulary;
  * @see eu.europeana.corelib.dereference.ControlledVocabulary.java
  *
  * @author Yorgos.Mamakis@ kb.nl
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 @Entity("ControlledVocabulary")
 public class ControlledVocabularyImpl implements ControlledVocabulary {
 	/**

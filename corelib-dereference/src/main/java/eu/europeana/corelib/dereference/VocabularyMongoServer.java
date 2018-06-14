@@ -7,8 +7,9 @@ import eu.europeana.corelib.dereference.impl.ControlledVocabularyImpl;
  * Vocabulary Mapping mongo server
  * 
  * @author Yorgos.Mamakis@ KB.nl
- *
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public interface VocabularyMongoServer extends MongoServer {
 
 	/**

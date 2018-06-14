@@ -249,10 +249,11 @@ public interface FullBean extends IdBean {
 	int getEuropeanaCompleteness();
 
 	/**
-	 * 
+	 *
 	 * @return the europeana collection name for this record
 	 */
 	String[] getEuropeanaCollectionName();
+
 
 	/**
 	 * 

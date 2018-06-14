@@ -26,10 +26,11 @@
 	">
 
 	<!-- MONGO DB -->
+	<!-- deprecated
 	<bean id="corelib_db_apiLogDao" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
 		<constructor-arg ref="corelib_db_morphia_datastore_apilog" />
 		<constructor-arg type="java.lang.Class" value="eu.europeana.corelib.db.entity.nosql.ApiLog" />
-	</bean>
+	</bean> -->
 
 	<bean id="corelib_db_nosql_dao" abstract="true" class="eu.europeana.corelib.db.dao.impl.NosqlDaoImpl">
 		<constructor-arg ref="corelib_db_morphia_datastore_oauth2"/>

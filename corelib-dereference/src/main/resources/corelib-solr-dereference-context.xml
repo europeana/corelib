@@ -25,11 +25,11 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
     ">
     
-	<!-- USING OTHER MODULES -->
-	<import resource="corelib-definitions-context.xml" />
-    
-	<!-- INTERNAL -->
-	<import resource="internal/corelib-solr-dereference-datasource.xml" />
-	<import resource="internal/corelib-solr-dereference-server.xml" />
+	<!--&lt;!&ndash; USING OTHER MODULES &ndash;&gt;-->
+	<!--<import resource="corelib-definitions-context.xml" />-->
+    <!---->
+	<!--&lt;!&ndash; INTERNAL &ndash;&gt;-->
+	<!--<import resource="internal/corelib-solr-dereference-datasource.xml" />-->
+	<!--<import resource="internal/corelib-solr-dereference-server.xml" />-->
 	
 </beans>

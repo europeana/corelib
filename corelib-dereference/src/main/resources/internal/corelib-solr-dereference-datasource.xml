@@ -15,17 +15,17 @@
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-    <bean id="corelib_solr_mongo" class="com.mongodb.MongoClient">
-        <constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>
+    <!--<bean id="corelib_solr_mongo" class="com.mongodb.MongoClient">-->
+        <!--<constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>-->
         <!-- old way of connecting to mongo -->
         <!--<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>-->
         <!--<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>-->
-    </bean>
+    <!--</bean>-->
 
-    <bean id="corelib_solr_mongo_apilog" class="com.mongodb.MongoClient">
-        <constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>
+    <!--<bean id="corelib_solr_mongo_apilog" class="com.mongodb.MongoClient">-->
+        <!--<constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>-->
         <!-- old way of connecting to mongo -->
         <!--<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>-->
         <!--<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="int"/>-->
-    </bean>
+    <!--</bean>-->
 </beans>

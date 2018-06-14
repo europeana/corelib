@@ -26,6 +26,6 @@
 	">
 	
 	<!-- INTERNAL -->
-	<import resource="corelib-definitions-test.xml" />
+	<!--<import resource="corelib-definitions-test.xml" />-->
 
 </beans>	

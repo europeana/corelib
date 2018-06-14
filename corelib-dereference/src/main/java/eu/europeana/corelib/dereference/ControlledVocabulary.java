@@ -31,8 +31,9 @@ import eu.europeana.corelib.dereference.impl.EdmMappedField;
  * to map and retrieve mapped fields.
  * 
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ * @deprecated June 2018 moved to metis project
  */
+@Deprecated
 public interface ControlledVocabulary extends Serializable{
 
 	/**

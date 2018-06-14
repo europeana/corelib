@@ -17,6 +17,7 @@
 
 package eu.europeana.corelib.solr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 
 import org.mongodb.morphia.annotations.Id;
@@ -37,6 +38,7 @@ public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 	@Id
 	protected ObjectId id = new ObjectId();
 
+	@JsonIgnore
 	@Override
 	public ObjectId getId() {
 		return this.id;

@@ -26,8 +26,10 @@ import eu.europeana.corelib.dereference.Entity;
 /**
  * @see Entity
  * @author Yorgos.Mamakis@ kb.nl
+ * @deprecated june 2018 moved to Metis project
  *
  */
+@Deprecated
 @org.mongodb.morphia.annotations.Entity("entity")
 public class EntityImpl implements Entity {
 

@@ -42,13 +42,14 @@ import eu.europeana.corelib.dereference.VocabularyMongoServer;
  * Vocabulary Mongo Test
  * 
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * @deprecated June 2017
  */
+@Deprecated
 public class VocabularyMongoServerTest {
 
 	VocabularyMongoServer server;
 
-	@Test
+	//@Test
 	public void test() {
 		int port = 10000;
 		try {

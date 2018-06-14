@@ -31,11 +31,12 @@
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
 
+    <!-- Deprecated
     <bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
         <constructor-arg value="API log"/>
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}" type="java.lang.String"/>
-    </bean>
+    </bean> -->
 
     <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
         <constructor-arg value="OAuth2"/>

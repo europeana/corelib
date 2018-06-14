@@ -28,7 +28,7 @@ public class Neo4jSearchServiceImpl implements Neo4jSearchService {
 
     @PostConstruct
     private void init() {
-        LogManager.getLogger(Neo4jSearchServiceImpl.class).error("neo4jserver = {}"+neo4jServer);
+        LogManager.getLogger(Neo4jSearchServiceImpl.class).info("Connected to {}", neo4jServer.getServerPath());
     }
 
     @Override

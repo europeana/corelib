@@ -59,8 +59,17 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * Return the number of requests so far if limit is not reached
      * @throws DatabaseException     if the API key is null
      * @throws LimitReachedException if the limit is reached
+     * @deprecated June 2018
      */
+    @Deprecated
     long checkReachedLimit(ApiKey apiKey) throws DatabaseException, LimitReachedException;
+
+    /**
+     * Checks if the provided database key is not empty
+     * @param apiKey
+     * @throws DatabaseException
+     */
+    void checkNotEmpty(ApiKey apiKey) throws DatabaseException;
 
     /**
      * Removes an ApiKey from database and User.

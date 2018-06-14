@@ -121,8 +121,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException {
 		try {
-			return datastore.find(FullBeanImpl.class).field("about").equal(id)
-					.get();
+			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 		} catch (RuntimeException re) {
 			if (re.getCause() != null && re.getCause() instanceof MappingException) {
 				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);

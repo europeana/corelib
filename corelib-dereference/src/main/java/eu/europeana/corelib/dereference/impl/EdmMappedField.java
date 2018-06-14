@@ -23,9 +23,10 @@ import org.mongodb.morphia.annotations.Entity;
 /**
  * Representation of an EDM mapped field
  * @author Yorgos.Mamakis@ europeana.eu
- *
+ * @deprecated june 2018 moved to Metis project
  */
 @Entity
+@Deprecated
 public class EdmMappedField implements Serializable {
 
 	/**
