@@ -1,31 +1,27 @@
 package eu.europeana.corelib.edm.utils.construct;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
-import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
-import eu.europeana.corelib.solr.entity.*;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.util.ClientUtils;
-
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.WriteConcern;
-
-import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
+import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.ServiceImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
 
 
 public class FullBeanHandler {
@@ -35,150 +31,6 @@ public class FullBeanHandler {
 
     public FullBeanHandler(EdmMongoServer mongoServer) {
         this.mongoServer = mongoServer;
-    }
-
-    public boolean removeRecord(SolrServer solrServer, RDF rdf) {
-        try {
-            solrServer.deleteByQuery("europeana_id:"
-                    + ClientUtils.escapeQueryChars(rdf.getProvidedCHOList()
-                            .get(0).getAbout()));
-
-            DBCollection records = mongoServer.getDatastore().getDB()
-                    .getCollection("record");
-            DBCollection proxies = mongoServer.getDatastore().getDB()
-                    .getCollection("Proxy");
-            DBCollection providedCHOs = mongoServer.getDatastore().getDB()
-                    .getCollection("ProvidedCHO");
-            DBCollection aggregations = mongoServer.getDatastore().getDB()
-                    .getCollection("Aggregation");
-            DBCollection europeanaAggregations = mongoServer.getDatastore()
-                    .getDB().getCollection("EuropeanaAggregation");
-            DBCollection physicalThing = mongoServer.getDatastore().getDB()
-                    .getCollection("PhysicalThing");
-            DBObject query = new BasicDBObject("about", rdf
-                    .getProvidedCHOList().get(0).getAbout());
-            DBObject proxyQuery = new BasicDBObject("about", "/proxy/provider"
-                    + rdf.getProvidedCHOList().get(0).getAbout());
-            DBObject europeanaProxyQuery = new BasicDBObject("about",
-                    "/proxy/europeana"
-                    + rdf.getProvidedCHOList().get(0).getAbout());
-
-            DBObject providedCHOQuery = new BasicDBObject("about", "/item"
-                    + rdf.getProvidedCHOList().get(0).getAbout());
-            DBObject aggregationQuery = new BasicDBObject("about",
-                    "/aggregation/provider"
-                    + rdf.getProvidedCHOList().get(0).getAbout());
-            DBObject europeanaAggregationQuery = new BasicDBObject("about",
-                    "/aggregation/europeana"
-                    + rdf.getProvidedCHOList().get(0).getAbout());
-            europeanaAggregations.remove(europeanaAggregationQuery,
-                    WriteConcern.FSYNC_SAFE);
-            records.remove(query, WriteConcern.FSYNC_SAFE);
-            proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-            proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-            physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-            physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-            providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
-            aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
-            return true;
-        } catch (SolrServerException e) {
-            log.log(Level.SEVERE, e.getMessage());
-
-        } catch (IOException e) {
-            log.log(Level.SEVERE, e.getMessage());
-
-        }
-        return false;
-    }
-
-    public boolean removeRecordById(SolrServer solrServer, String id) {
-        try {
-            solrServer.deleteByQuery("europeana_id:"
-                    + ClientUtils.escapeQueryChars(id));
-
-            DBCollection records = mongoServer.getDatastore().getDB()
-                    .getCollection("record");
-            DBCollection proxies = mongoServer.getDatastore().getDB()
-                    .getCollection("Proxy");
-            DBCollection providedCHOs = mongoServer.getDatastore().getDB()
-                    .getCollection("ProvidedCHO");
-            DBCollection aggregations = mongoServer.getDatastore().getDB()
-                    .getCollection("Aggregation");
-            DBCollection europeanaAggregations = mongoServer.getDatastore()
-                    .getDB().getCollection("EuropeanaAggregation");
-            DBCollection physicalThing = mongoServer.getDatastore().getDB()
-                    .getCollection("PhysicalThing");
-            DBObject query = new BasicDBObject("about", id);
-            DBObject proxyQuery = new BasicDBObject("about", "/proxy/provider"
-                    +id);
-            DBObject europeanaProxyQuery = new BasicDBObject("about",
-                    "/proxy/europeana"
-                            + id);
-
-            DBObject providedCHOQuery = new BasicDBObject("about", "/item"
-                    + id);
-            DBObject aggregationQuery = new BasicDBObject("about",
-                    "/aggregation/provider"
-                            + id);
-            DBObject europeanaAggregationQuery = new BasicDBObject("about",
-                    "/aggregation/europeana"
-                            + id);
-            europeanaAggregations.remove(europeanaAggregationQuery,
-                    WriteConcern.FSYNC_SAFE);
-            records.remove(query, WriteConcern.FSYNC_SAFE);
-            proxies.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-            proxies.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-            physicalThing.remove(europeanaProxyQuery, WriteConcern.FSYNC_SAFE);
-            physicalThing.remove(proxyQuery, WriteConcern.FSYNC_SAFE);
-            providedCHOs.remove(providedCHOQuery, WriteConcern.FSYNC_SAFE);
-            aggregations.remove(aggregationQuery, WriteConcern.FSYNC_SAFE);
-            return true;
-        } catch (SolrServerException e) {
-            log.log(Level.SEVERE, e.getMessage());
-
-        } catch (IOException e) {
-            log.log(Level.SEVERE, e.getMessage());
-
-        }
-        return false;
-    }
-
-    public void clearData(String collection) {
-        DBCollection records = mongoServer.getDatastore().getDB()
-                .getCollection("record");
-        DBCollection proxies = mongoServer.getDatastore().getDB()
-                .getCollection("Proxy");
-        DBCollection physicalThing = mongoServer.getDatastore().getDB()
-                .getCollection("PhysicalThing");
-        DBCollection providedCHOs = mongoServer.getDatastore().getDB()
-                .getCollection("ProvidedCHO");
-        DBCollection aggregations = mongoServer.getDatastore().getDB()
-                .getCollection("Aggregation");
-        DBCollection europeanaAggregations = mongoServer.getDatastore()
-                .getDB().getCollection("EuropeanaAggregation");
-
-        DBObject query = new BasicDBObject("about", Pattern.compile("^/"
-                + collection + "/"));
-        DBObject proxyQuery = new BasicDBObject("about",
-                Pattern.compile("^/proxy/provider/" + collection + "/"));
-        DBObject europeanaProxyQuery = new BasicDBObject("about",
-                Pattern.compile("^/proxy/europeana/" + collection + "/"));
-
-        DBObject providedCHOQuery = new BasicDBObject("about",
-                Pattern.compile("^/item/" + collection + "/"));
-        DBObject aggregationQuery = new BasicDBObject("about",
-                Pattern.compile("^/aggregation/provider/" + collection + "/"));
-        DBObject europeanaAggregationQuery = new BasicDBObject("about",
-                Pattern.compile("^/aggregation/europeana/" + collection + "/"));
-        europeanaAggregations.remove(europeanaAggregationQuery,
-                WriteConcern.REPLICAS_SAFE);
-        records.remove(query, WriteConcern.REPLICAS_SAFE);
-        proxies.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
-        proxies.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
-        physicalThing.remove(proxyQuery, WriteConcern.REPLICAS_SAFE);
-        physicalThing.remove(europeanaProxyQuery, WriteConcern.REPLICAS_SAFE);
-        providedCHOs.remove(providedCHOQuery, WriteConcern.REPLICAS_SAFE);
-        aggregations.remove(aggregationQuery, WriteConcern.REPLICAS_SAFE);
     }
 
     public void saveEdmClasses(FullBeanImpl fullBean, boolean isFirstSave) throws MongoUpdateException {

@@ -45,7 +45,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -62,7 +61,7 @@ public class MongoConstructorTest {
         IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
         IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
         RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(FileUtils.readFileToString(new File(
-                "../corelib-search/src/test/resources/test_files/edm_new.xml"))));
+                "src/test/resources/edm_new.xml"))));
         int port = 10000;
         IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
                 .net(new Net(port, Network.localhostIsIPv6()))
