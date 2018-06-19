@@ -204,8 +204,7 @@ public class FullBeanHandler {
     public FullBeanImpl updateFullBean(FullBeanImpl fullBean) throws MongoUpdateException {
         saveEdmClasses(fullBean, false);
         Query<FullBeanImpl> updateQuery = mongoServer.getDatastore()
-                .createQuery(FullBeanImpl.class).field("about")
-                .equal(fullBean.getAbout().replace("/item", ""));
+                .createQuery(FullBeanImpl.class).field("about").equal(fullBean.getAbout());
         UpdateOperations<FullBeanImpl> ops = mongoServer.getDatastore()
                 .createUpdateOperations(FullBeanImpl.class);
         ops.set("title", fullBean.getTitle() != null ? fullBean.getTitle()

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -65,9 +66,15 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 		this.dcCreator = dcCreator;
 	}
 
-	public void setEdmLandingPageFromAggregatedCHO() {
-	  this.setEdmLandingPage("http://europeana.eu/portal/record/" + this.aggregatedCHO + ".html");
-	}
+    public void setEdmLandingPageFromAggregatedCHO() {
+        final String landingPage;
+        if (StringUtils.isNotBlank(this.aggregatedCHO)) {
+            landingPage = "http://europeana.eu/portal/record/" + this.aggregatedCHO + ".html";
+        } else {
+            landingPage = null;
+        }
+        this.setEdmLandingPage(landingPage);
+    }
 	
     @Override
     public String getEdmLandingPage() {

@@ -57,9 +57,9 @@ public class ProvidedCHOFieldInputTest {
 
         when(mongoServerMock.getDatastore()).thenReturn(datastoreMock);
         when(datastoreMock.find(ProvidedCHOImpl.class)).thenReturn(queryMock);
-        when(queryMock.filter("about", "/item" + providedCHO.getAbout())).thenReturn(queryMock);
+        when(queryMock.filter("about", providedCHO.getAbout())).thenReturn(queryMock);
 
-        providedCHOImpl.setAbout("/itemtest about"); // TODO What happens here...
+        providedCHOImpl.setAbout("test about"); // TODO What happens here...
         when(datastoreMock.save(providedCHOImpl)).thenReturn(keyMock);
 
         List<SameAs> sameAsList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class ProvidedCHOFieldInputTest {
         try {
             ProvidedCHOImpl providedCHOMongo = new ProvidedCHOFieldInput()
                     .createProvidedCHOMongoFields(providedCHO, mongoServerMock);
-            assertEquals("/item" + providedCHO.getAbout(),
+            assertEquals(providedCHO.getAbout(),
                     providedCHOMongo.getAbout());
             assertEquals(providedCHO.getSameAList().get(0).getResource(),
                     providedCHOMongo.getOwlSameAs()[0]);

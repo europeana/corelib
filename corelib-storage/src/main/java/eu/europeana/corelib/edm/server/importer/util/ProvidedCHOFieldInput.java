@@ -94,12 +94,12 @@ public final class ProvidedCHOFieldInput {
 			throws InstantiationException, IllegalAccessException {
 		ProvidedCHOImpl mongoProvidedCHO = mongoServer.getDatastore()
 				.find(ProvidedCHOImpl.class)
-				.filter("about", "/item" + providedCHO.getAbout()).get();
+				.filter("about", providedCHO.getAbout()).get();
 		// If the ProvidedCHO does not exist create it
 		if (mongoProvidedCHO == null) {
 			mongoProvidedCHO = new ProvidedCHOImpl();
 			// mongoProvidedCHO.setId(new ObjectId());
-			mongoProvidedCHO.setAbout("/item" + providedCHO.getAbout());
+			mongoProvidedCHO.setAbout(providedCHO.getAbout());
 
 			mongoProvidedCHO.setOwlSameAs(SolrUtils
 					.resourceListToArray(providedCHO.getSameAList()));
@@ -155,7 +155,7 @@ public final class ProvidedCHOFieldInput {
 			ProvidedCHOType providedCHO)
 			throws InstantiationException, IllegalAccessException {
 		ProvidedCHOImpl mongoProvidedCHO = new ProvidedCHOImpl();
-			mongoProvidedCHO.setAbout("/item" + providedCHO.getAbout());
+			mongoProvidedCHO.setAbout(providedCHO.getAbout());
 
 			mongoProvidedCHO.setOwlSameAs(SolrUtils
 					.resourceListToArray(providedCHO.getSameAList()));
