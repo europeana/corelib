@@ -61,7 +61,7 @@ public class MongoConstructorTest {
         IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
         IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
         RDF rdf = (RDF) uctx.unmarshalDocument(new StringReader(FileUtils.readFileToString(new File(
-                "src/test/resources/edm_new.xml"))));
+                "../corelib-search/src/test/resources/test_files/edm_new.xml"))));
         int port = 10000;
         IMongodConfig conf = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
                 .net(new Net(port, Network.localhostIsIPv6()))

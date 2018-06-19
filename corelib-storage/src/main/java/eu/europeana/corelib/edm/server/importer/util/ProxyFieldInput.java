@@ -28,6 +28,7 @@ import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasMet;
 import eu.europeana.corelib.definitions.jibx.HasType;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
+import eu.europeana.corelib.definitions.jibx.ProxyFor;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx.Year;
@@ -305,8 +306,8 @@ public final class ProxyFieldInput {
 
     mongoProxy.setEdmType(DocType.safeValueOf(docType));
 
-    mongoProxy.setProxyFor(SolrUtils.exists(String.class, proxy
-        .getProxyFor().getResource()));
+    mongoProxy.setProxyFor(SolrUtils.exists(ProxyFor.class, proxy
+        .getProxyFor()).getResource());
     mongoProxy.setProxyIn(SolrUtils.resourceListToArray(proxy
         .getProxyInList()));
     mongoProxy.setEdmHasMet(MongoUtils.createResourceMapFromList(proxy
