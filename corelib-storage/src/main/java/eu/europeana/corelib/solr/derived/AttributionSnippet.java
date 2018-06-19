@@ -322,7 +322,7 @@ public class AttributionSnippet {
     }
 
     private String portal2Data(String url){
-        String retval = url.replaceAll("\\://europeana\\.eu/portal/record/", "://data.europeana.eu/item/");
+        String retval = url.replaceAll("\\://europeana\\.eu/portal/record/", "://data.europeana.eu/");
         return retval.replaceAll("\\.html$", "");
     }
 }

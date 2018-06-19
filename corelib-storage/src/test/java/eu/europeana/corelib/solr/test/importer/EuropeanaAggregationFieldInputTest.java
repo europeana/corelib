@@ -171,7 +171,8 @@ public class EuropeanaAggregationFieldInputTest {
                             .get(0));
             assertEquals(aggregation.getIsShownBy().getResource(),
                     aggregationMongo.getEdmIsShownBy());
-            assertEquals("http://europeana.eu/portal/record/.html",
+            assertEquals("http://europeana.eu/portal/record/"
+                    + aggregation.getAggregatedCHO().getResource() + ".html",
                     aggregationMongo.getEdmLandingPage());
             assertEquals(aggregation.getLanguage().getLanguage().xmlValue(),
                     aggregationMongo.getEdmLanguage().values().iterator()
