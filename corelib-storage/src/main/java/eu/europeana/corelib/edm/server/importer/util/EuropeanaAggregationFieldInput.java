@@ -21,13 +21,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
-
 import org.mongodb.morphia.query.UpdateOperations;
-
-import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.jibx.AggregatedCHO;
@@ -35,12 +31,12 @@ import eu.europeana.corelib.definitions.jibx.Aggregates;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasView;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
-import eu.europeana.corelib.definitions.jibx.LandingPage;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.storage.MongoServer;
 
 /**
  * Constructor of a Europeana Aggregation
@@ -255,15 +251,7 @@ public final class EuropeanaAggregationFieldInput {
 		} else {
 			ops.unset("edmIsShownBy");
 		}
-		String landingPage = SolrUtils.exists(LandingPage.class,
-				aggregation.getLandingPage()).getResource();
-	
-			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource()+".html");
-			ops.set("edmLandingPage", EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource()+".html");
 		
-
 		Map<String, List<String>> language = MongoUtils
 				.createLiteralMapFromString(aggregation.getLanguage()
 						.getLanguage().xmlValue().toLowerCase());
@@ -274,8 +262,10 @@ public final class EuropeanaAggregationFieldInput {
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource();
 		mongoAggregation.setAggregatedCHO(agCHO);
+        mongoAggregation.setEdmLandingPageFromAggregatedCHO();
 		ops.set("aggregatedCHO", agCHO);
-
+        ops.set("edmLandingPage", mongoAggregation.getEdmLandingPage());
+		
 		Map<String, List<String>> edmRights = MongoUtils
 				.createResourceMapFromString(aggregation.getRights());
 		if (edmRights != null) {
@@ -403,9 +393,6 @@ public final class EuropeanaAggregationFieldInput {
 				aggregation.getIsShownBy()).getResource();
 			mongoAggregation.setEdmIsShownBy(isShownBy);
 		
-			mongoAggregation.setEdmLandingPage(EUROPEANA_URI
-					+ aggregation.getAggregatedCHO().getResource()+".html");
-
 		Map<String, List<String>> language = MongoUtils
 				.createLiteralMapFromString(aggregation.getLanguage()
 						.getLanguage().xmlValue().toLowerCase());
@@ -415,6 +402,7 @@ public final class EuropeanaAggregationFieldInput {
 		String agCHO = SolrUtils.exists(AggregatedCHO.class,
 				aggregation.getAggregatedCHO()).getResource();
 		mongoAggregation.setAggregatedCHO(agCHO);
+		mongoAggregation.setEdmLandingPageFromAggregatedCHO();
 
 		Map<String, List<String>> edmRights = MongoUtils
 				.createResourceMapFromString(aggregation.getRights());

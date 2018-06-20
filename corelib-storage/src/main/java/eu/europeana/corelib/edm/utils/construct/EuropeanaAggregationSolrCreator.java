@@ -5,26 +5,18 @@
  */
 package eu.europeana.corelib.edm.utils.construct;
 
-
+import java.util.ArrayList;
 import org.apache.solr.common.SolrInputDocument;
-
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.SolrUtils;
-
-import java.util.ArrayList;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
  * @author Yorgos.Mamakis@ europeana.eu
  */
 public class EuropeanaAggregationSolrCreator {
-
-    private static final String PORTAL_PREFIX = "http://europeana.eu/portal/record/";
-    private static final String PORTAL_SUFFIX = ".html";
 
     public void create(SolrInputDocument doc, EuropeanaAggregation aggr) {
         SolrUtils.addFromString(doc, EdmLabel.EDM_EUROPEANA_AGGREGATION, aggr.getAbout());
@@ -34,8 +26,7 @@ public class EuropeanaAggregationSolrCreator {
         SolrUtils.addFromStringArray(doc, EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATES, aggr.getAggregates());
         SolrUtils.addFromStringArray(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_HASVIEW, aggr.getEdmHasView());
         SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO, aggr.getAggregatedCHO());
-        SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE, PORTAL_PREFIX + StringUtils.
-                substringAfter(aggr.getAggregatedCHO(), "/item/") + PORTAL_SUFFIX);
+        SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_LANDINGPAGE, aggr.getEdmLandingPage());
         SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_ISSHOWNBY, aggr.getEdmIsShownBy());
         SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_AGGREGATION_EDM_PREVIEW, aggr.getEdmPreview());
         if (aggr.getWebResources() != null) {
@@ -44,6 +35,4 @@ public class EuropeanaAggregationSolrCreator {
             }
         }
     }
-
-
 }
