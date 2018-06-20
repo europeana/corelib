@@ -154,6 +154,11 @@
             <artifactId>spring-context</artifactId>
             <version>${springCore.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>9.0.5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
