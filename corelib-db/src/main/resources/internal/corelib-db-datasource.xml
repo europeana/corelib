@@ -23,8 +23,11 @@
     <bean id="corelib_db_dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="#{europeanaProperties['db.driverClass']}"/>
         <property name="url" value="jdbc:#{europeanaProperties['postgres.jdbcUrl']}" />
-        <property name="maxIdle" value="40" />
-        <property name="maxActive" value="40" />
+        <!-- Setting properties here won't work when deploying on Cloud Foundry because the Spring Auto-reconfiguration
+             framework will ignore all original datasource properties and reset maxIdle and maxActive to 4, see also
+             https://community.pivotal.io/s/article/Connection-pool-warning-message-maxIdle-is-larger-than-maxActive-setting-maxIdle-to-4-seen-in-PCF-deployed-Spring-app -->
+        <property name="maxIdle" value="20" />
+        <property name="maxActive" value="20" />
     </bean>
 
     <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
