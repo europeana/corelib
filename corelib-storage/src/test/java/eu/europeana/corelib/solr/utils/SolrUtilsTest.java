@@ -20,24 +20,17 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
-
 import eu.europeana.corelib.definitions.jibx.Aggregation;
 import eu.europeana.corelib.definitions.jibx.IsShownBy;
-import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
 import eu.europeana.corelib.definitions.jibx._Object;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 
 /**
@@ -65,43 +58,6 @@ public class SolrUtilsTest {
 	}
 
 	@Test
-	public void testAddResourceOrLiteralType() {
-		SolrInputDocument doc = new SolrInputDocument();
-		ResourceOrLiteralType rlt = prepareRLT();
-		SolrUtils.addFieldFromResourceOrLiteral(doc, rlt,
-				EdmLabel.PROXY_DC_DESCRIPTION);
-		assertTrue(doc.containsKey(EdmLabel.PROXY_DC_DESCRIPTION.toString()));
-		assertTrue(doc.containsKey(EdmLabel.PROXY_DC_DESCRIPTION.toString()
-				+ ".en"));
-		assertEquals(doc
-				.getFieldValue(EdmLabel.PROXY_DC_DESCRIPTION.toString())
-				.toString(), "test resource");
-		assertEquals(
-				doc.getFieldValue(
-						EdmLabel.PROXY_DC_DESCRIPTION.toString() + ".en")
-						.toString(), "test string");
-	}
-
-	@Test
-	public void testResourceOrLiteralToArray() {
-		ResourceOrLiteralType rlt = prepareRLT();
-		String[] rltArray = SolrUtils.resourceOrLiteralToArray(rlt);
-		assertNotNull(rltArray);
-		String[] arr = new String[] { "test resource", "test string" };
-		assertArrayEquals(arr, rltArray);
-	}
-
-	@Test
-	public void testGetResourceOrLiteralString() {
-		ResourceOrLiteralType rlt = prepareRLT();
-		assertEquals("test resource", SolrUtils.getResourceOrLiteralString(rlt));
-		rlt.setResource(null);
-		assertEquals("test string", SolrUtils.getResourceOrLiteralString(rlt));
-		rlt.setString(null);
-		assertNull(SolrUtils.getResourceOrLiteralString(rlt));
-	}
-	
-	@Test
 	public void testResourceOrLiteralListToArray(){
 		List<ResourceOrLiteralType> rltList = new ArrayList<ResourceOrLiteralType>();
 		rltList.add(prepareRLT());
@@ -110,17 +66,6 @@ public class SolrUtilsTest {
 		assertArrayEquals(arr, rltArray);
 		assertNotNull(SolrUtils.resourceOrLiteralListToArray(null));
 	}
-
-	@Test
-	public void testLiteralListToArray(){
-		List<LiteralType> ltList = new ArrayList<LiteralType>();
-		ltList.add(prepareLT());
-		String[] ltArray = SolrUtils.literalListToArray(ltList);
-		String[] arr = new String[] { "test string" };
-		assertArrayEquals(arr, ltArray);
-		assertNotNull(SolrUtils.literalListToArray(null));
-	}
-	
 
 	@Test
 	public void testResourceListToArray(){
@@ -133,42 +78,9 @@ public class SolrUtilsTest {
 	}
 	
 	@Test
-	public void testGetLiteralString(){
-		assertEquals("test string", SolrUtils.getLiteralString(prepareLT()));
-	}
-	
-	@Test
 	public void testGetResourceString(){
 		assertEquals("test resource", SolrUtils.getResourceString(prepareRT()));
 	}
-	
-	@Test
-	public void testAddFieldFromLiteral(){
-		SolrInputDocument doc = new SolrInputDocument();
-		LiteralType lt = prepareLT();
-		SolrUtils.addFieldFromLiteral(doc, lt,
-				EdmLabel.PROXY_DC_DESCRIPTION);
-		assertTrue(doc.containsKey(EdmLabel.PROXY_DC_DESCRIPTION.toString()
-				+ ".en"));
-		assertEquals(
-				doc.getFieldValue(
-						EdmLabel.PROXY_DC_DESCRIPTION.toString() + ".en")
-						.toString(), "test string");
-	}
-	
-	@Test
-	public void testAddFieldFromEnum(){
-		SolrInputDocument doc = new SolrInputDocument();
-		SolrUtils.addFieldFromEnum(doc, "EN",
-				EdmLabel.PROXY_DC_DESCRIPTION);
-		assertTrue(doc.containsKey(EdmLabel.PROXY_DC_DESCRIPTION.toString()));
-		assertEquals(
-				doc.getFieldValue(
-						EdmLabel.PROXY_DC_DESCRIPTION.toString())
-						.toString(), "en");
-	}
-	
-	
 	
 	@Test
 	public void testGetPreviewURl(){
@@ -212,14 +124,5 @@ public class SolrUtilsTest {
 		ResourceType rt = new ResourceType();
 		rt.setResource("test resource");
 		return rt;
-	}
-
-	private LiteralType prepareLT(){
-		LiteralType lt = new LiteralType();
-		LiteralType.Lang lang = new LiteralType.Lang();
-		lang.setLang("en");
-		lt.setLang(lang);
-		lt.setString("test string");
-		return lt;
 	}
 }

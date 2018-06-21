@@ -1,20 +1,63 @@
 package eu.europeana.corelib.solr.test.importer;
 
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.Query;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import eu.europeana.corelib.definitions.jibx.*;
-import eu.europeana.corelib.definitions.model.EdmLabel;
-import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
+import eu.europeana.corelib.definitions.jibx.Alternative;
+import eu.europeana.corelib.definitions.jibx.ConformsTo;
+import eu.europeana.corelib.definitions.jibx.Contributor;
+import eu.europeana.corelib.definitions.jibx.Coverage;
+import eu.europeana.corelib.definitions.jibx.Created;
+import eu.europeana.corelib.definitions.jibx.Creator;
+import eu.europeana.corelib.definitions.jibx.CurrentLocation;
+import eu.europeana.corelib.definitions.jibx.Date;
+import eu.europeana.corelib.definitions.jibx.Description;
+import eu.europeana.corelib.definitions.jibx.EdmType;
+import eu.europeana.corelib.definitions.jibx.EuropeanaProxy;
+import eu.europeana.corelib.definitions.jibx.EuropeanaType;
+import eu.europeana.corelib.definitions.jibx.Extent;
+import eu.europeana.corelib.definitions.jibx.Format;
+import eu.europeana.corelib.definitions.jibx.HasFormat;
+import eu.europeana.corelib.definitions.jibx.HasPart;
+import eu.europeana.corelib.definitions.jibx.HasVersion;
+import eu.europeana.corelib.definitions.jibx.Identifier;
+import eu.europeana.corelib.definitions.jibx.IsFormatOf;
+import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
+import eu.europeana.corelib.definitions.jibx.IsPartOf;
+import eu.europeana.corelib.definitions.jibx.IsReferencedBy;
+import eu.europeana.corelib.definitions.jibx.IsReplacedBy;
+import eu.europeana.corelib.definitions.jibx.IsRequiredBy;
+import eu.europeana.corelib.definitions.jibx.IsVersionOf;
+import eu.europeana.corelib.definitions.jibx.Issued;
+import eu.europeana.corelib.definitions.jibx.Language;
+import eu.europeana.corelib.definitions.jibx.Medium;
+import eu.europeana.corelib.definitions.jibx.Provenance;
+import eu.europeana.corelib.definitions.jibx.ProxyFor;
+import eu.europeana.corelib.definitions.jibx.ProxyIn;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
+import eu.europeana.corelib.definitions.jibx.Publisher;
+import eu.europeana.corelib.definitions.jibx.References;
+import eu.europeana.corelib.definitions.jibx.Relation;
+import eu.europeana.corelib.definitions.jibx.Replaces;
+import eu.europeana.corelib.definitions.jibx.Requires;
+import eu.europeana.corelib.definitions.jibx.Rights;
+import eu.europeana.corelib.definitions.jibx.Source;
+import eu.europeana.corelib.definitions.jibx.Spatial;
+import eu.europeana.corelib.definitions.jibx.Subject;
+import eu.europeana.corelib.definitions.jibx.TableOfContents;
+import eu.europeana.corelib.definitions.jibx.Temporal;
+import eu.europeana.corelib.definitions.jibx.Title;
+import eu.europeana.corelib.definitions.jibx.Type;
+import eu.europeana.corelib.definitions.jibx.Type2;
+import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
 
 public class ProxyFieldInputTest {
 
@@ -23,154 +66,6 @@ public class ProxyFieldInputTest {
         // The fields of the proxy come from the ProvidedCHO
         ProxyType proxy = createProxyFields();
         testMongo(proxy);
-        testSolr(proxy);
-    }
-
-    private void testSolr(ProxyType proxy) throws IOException {
-        SolrInputDocument solrDocument = new SolrInputDocument();
-        try {
-            solrDocument = new ProxyFieldInput().createProxySolrFields(proxy, solrDocument);
-            assertEquals(proxy.getAbout(), solrDocument.getFieldValue(EdmLabel.ORE_PROXY.toString()));
-            assertEquals(proxy.getCurrentLocation().getString(),
-                    solrDocument.getFieldValue(EdmLabel.PROXY_EDM_CURRENT_LOCATION.toString()));
-            assertEquals(
-                    proxy.getIsNextInSequenceList().get(0).getResource(),
-                    solrDocument.getFieldValue(EdmLabel.PROXY_EDM_IS_NEXT_IN_SEQUENCE.toString()));
-            assertEquals(proxy.getType().getType().toString(),
-                    solrDocument.getFieldValue(EdmLabel.PROVIDER_EDM_TYPE.toString()));
-            List<EuropeanaType.Choice> dcterms = proxy.getChoiceList();
-            for (EuropeanaType.Choice choice : dcterms) {
-                if (choice.ifAlternative())
-                    assertEquals(
-                            choice.getAlternative().getString(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_ALTERNATIVE.toString()));
-                if (choice.ifConformsTo())
-                    assertEquals(
-                            choice.getConformsTo().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_CONFORMS_TO.toString()));
-                if (choice.ifCreated())
-                    assertEquals(choice.getCreated().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_CREATED.toString()));
-                if (choice.ifExtent())
-                    assertEquals(choice.getExtent().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_EXTENT.toString()));
-                if (choice.ifHasFormat())
-                    assertEquals(
-                            choice.getHasFormat().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_FORMAT.toString()));
-                if (choice.ifHasPart())
-                    assertEquals(choice.getHasPart().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_PART.toString()));
-                if (choice.ifHasVersion())
-                    assertEquals(
-                            choice.getHasVersion().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_HAS_VERSION.toString()));
-                if (choice.ifIsFormatOf())
-                    assertEquals(
-                            choice.getIsFormatOf().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_FORMAT_OF.toString()));
-                if (choice.ifIsPartOf())
-                    assertEquals(
-                            choice.getIsPartOf().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_PART_OF.toString()));
-                if (choice.ifIsReferencedBy())
-                    assertEquals(
-                            choice.getIsReferencedBy().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REFERENCED_BY.toString()));
-                if (choice.ifIsReplacedBy())
-                    assertEquals(
-                            choice.getIsReplacedBy().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REPLACED_BY.toString()));
-                if (choice.ifIsRequiredBy())
-                    assertEquals(
-                            choice.getIsRequiredBy().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_REQUIRED_BY.toString()));
-                if (choice.ifIssued())
-                    assertEquals(choice.getIssued().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_ISSUED.toString()));
-                if (choice.ifIsVersionOf())
-                    assertEquals(
-                            choice.getIsVersionOf().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_IS_VERSION_OF
-                                    .toString()));
-                if (choice.ifMedium())
-                    assertEquals(choice.getMedium().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_MEDIUM.toString()));
-                if (choice.ifProvenance())
-                    assertEquals(
-                            choice.getProvenance().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_PROVENANCE.toString()));
-                if (choice.ifReferences())
-                    assertEquals(
-                            choice.getReferences().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_REFERENCES.toString()));
-                if (choice.ifReplaces())
-                    assertEquals(choice.getReplaces().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_REPLACES.toString()));
-                if (choice.ifRequires())
-                    assertEquals(choice.getRequires().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_REQUIRES.toString()));
-                if (choice.ifSpatial())
-                    assertEquals(choice.getSpatial().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_SPATIAL.toString()));
-                if (choice.ifTableOfContents())
-                    assertEquals(
-                            choice.getTableOfContents().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_TABLE_OF_CONTENTS.toString()));
-                if (choice.ifTemporal())
-                    assertEquals(choice.getTemporal().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DCTERMS_TEMPORAL.toString()));
-                if (choice.ifContributor())
-                    assertEquals(choice.getContributor().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_CONTRIBUTOR.toString()));
-                if (choice.ifCoverage())
-                    assertEquals(choice.getCoverage().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_COVERAGE.toString()));
-                if (choice.ifCreator())
-                    assertEquals(choice.getCreator().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_CREATOR.toString()));
-                if (choice.ifDate())
-                    assertEquals(choice.getDate().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_DATE.toString()));
-                if (choice.ifDescription())
-                    assertEquals(choice.getDescription().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_DESCRIPTION.toString()));
-                if (choice.ifFormat())
-                    assertEquals(choice.getFormat().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_FORMAT.toString()));
-                if (choice.ifIdentifier())
-                    assertEquals(choice.getIdentifier().getString(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_IDENTIFIER.toString()));
-                if (choice.ifLanguage())
-                    assertEquals(choice.getLanguage().getString(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_LANGUAGE.toString()));
-                if (choice.ifPublisher())
-                    assertEquals(choice.getPublisher().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_PUBLISHER.toString()));
-                if (choice.ifRelation())
-                    assertEquals(choice.getRelation().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_RELATION.toString()));
-                if (choice.ifRights())
-                    assertEquals(choice.getRights().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_RIGHTS.toString()));
-                if (choice.ifSource())
-                    assertEquals(choice.getSource().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_SOURCE.toString()));
-                if (choice.ifSubject())
-                    assertEquals(choice.getSubject().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_SUBJECT.toString()));
-                if (choice.ifTitle())
-                    assertEquals(choice.getTitle().getString(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_TITLE.toString()));
-                if (choice.ifType())
-                    assertEquals(choice.getType().getResource().getResource(),
-                            solrDocument.getFieldValue(EdmLabel.PROXY_DC_TYPE.toString()));
-
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @SuppressWarnings("unchecked")

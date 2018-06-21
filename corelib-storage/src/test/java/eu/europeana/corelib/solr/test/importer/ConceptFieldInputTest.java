@@ -16,6 +16,14 @@
  */
 package eu.europeana.corelib.solr.test.importer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
@@ -24,19 +32,9 @@ import eu.europeana.corelib.definitions.jibx.Concept;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.ConceptFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
-import org.apache.solr.common.SolrInputDocument;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for Concepts field input creator
@@ -113,41 +111,5 @@ public class ConceptFieldInputTest {
                         .getPrefLabel().values().iterator().next().get(0));
             }
         }
-        // create solr document
-        SolrInputDocument solrDocument = new SolrInputDocument();
-        solrDocument = new ConceptFieldInput().createConceptSolrFields(concept,
-                solrDocument);
-        assertEquals(concept.getAbout(),
-                solrDocument.getFieldValue(EdmLabel.SKOS_CONCEPT.toString())
-                        .toString());
-        for (Concept.Choice choice3 : concept.getChoiceList()) {
-            if (choice3.ifNote()) {
-                assertEquals(choice3.getNote().getString(), solrDocument
-                        .getFieldValues(EdmLabel.CC_SKOS_NOTE.toString())
-                        .toArray()[0].toString());
-            }
-            if (choice3.ifAltLabel()) {
-                assertEquals(
-                        choice3.getAltLabel().getString(),
-                        solrDocument.getFieldValues(
-                                EdmLabel.CC_SKOS_ALT_LABEL.toString()
-                                        + "."
-                                        + choice3.getAltLabel().getLang()
-                                        .getLang()).toArray()[0]
-                                .toString());
-            }
-
-            if (choice3.ifPrefLabel()) {
-                assertEquals(
-                        choice3.getPrefLabel().getString(),
-                        solrDocument.getFieldValues(
-                                EdmLabel.CC_SKOS_PREF_LABEL.toString()
-                                        + "."
-                                        + choice3.getPrefLabel().getLang()
-                                        .getLang()).toArray()[0]
-                                .toString());
-            }
-        }
     }
-
 }

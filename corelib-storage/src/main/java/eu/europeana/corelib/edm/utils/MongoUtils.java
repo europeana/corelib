@@ -16,21 +16,14 @@
  */
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.edm.exceptions.MongoUpdateException;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.storage.MongoServer;
-import org.apache.commons.lang.StringUtils;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class with util methods for Mongo objects
@@ -41,94 +34,6 @@ public final class MongoUtils {
 
     private MongoUtils() {
         // Constructor must be private
-    }
-
-    /**
-     * Checks if a string is contained in a string array
-     *
-     * @param str1 A string array
-     * @param str2 The string to be checked
-     * @return true if it is contained false otherwise
-     */
-    public static boolean contains(String[] str1, String str2) {
-        if (str1 != null) {
-            for (String str : str1) {
-                if (StringUtils.equals(str, str2)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Method that checks whether a specific key contains a specific value in a
-     * Map
-     *
-     * @param map The map to search on
-     * @param key The key field
-     * @param val The value
-     * @return true if the specified key has the value, false otherwise
-     */
-    public static boolean contains(Map<String, List<String>> map, String key, String val) {
-        if (map.keySet().contains(key)) {
-            for (String str : map.get(key)) {
-                if (StringUtils.equals(str, val)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Method that deletes a class from the Mongo storage
-     *
-     * @param clazz       The class to delete
-     * @param about       The about field
-     * @param mongoServer The mongo server to use
-     */
-    public static void delete(Class<?> clazz, String about,
-                              EdmMongoServer mongoServer) {
-        mongoServer.getDatastore().delete(
-                mongoServer.getDatastore().createQuery(clazz)
-                        .filter("about", about));
-    }
-
-    /**
-     * Method that updates an entity in MongoDB storage
-     *
-     * @param clazz       The class type of the object
-     * @param about       The search field
-     * @param mongoServer The server to be used
-     * @param field       The field to update
-     * @param value       The value
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> void update(Class<T> clazz, String about, MongoServer mongoServer, String field, Object value) {
-        if (value != null) {
-            Query<T> updateQuery = mongoServer.getDatastore()
-                    .createQuery(clazz).field("about").equal(about);
-            UpdateOperations<T> ops;
-
-			/*
-             * If the value is an ArrayList it must be converted to String Array
-			 * unless it refers to Web Resources
-			 */
-            if (value instanceof List && !(StringUtils.equals("webResources", field))) {
-                ops = mongoServer
-                        .getDatastore()
-                        .createUpdateOperations(clazz)
-                        .set(field,
-                                ((List<String>) value)
-                                        .toArray(new String[((List<String>) value)
-                                                .size()]));
-            } else {
-                ops = mongoServer.getDatastore().createUpdateOperations(clazz)
-                        .set(field, value);
-            }
-            mongoServer.getDatastore().update(updateQuery, ops);
-        }
     }
 
     /**
@@ -185,73 +90,6 @@ public final class MongoUtils {
     }
 
     /**
-     * Checks whether two maps contain exactly the same key,value combinations
-     *
-     * @param mapA
-     * @param mapB
-     * @return
-     */
-    public static boolean mapEquals(Map<String, List<String>> mapA,
-                                    Map<String, List<String>> mapB) {
-        if (mapA != null && mapB != null && mapA.keySet().equals(mapB.keySet())) {
-            boolean equals = true;
-            for (String keyA : mapA.keySet()) {
-                List<String> listA = mapA.get(keyA);
-                List<String> listB = mapB.get(keyA);
-                if (listA != null && listB != null) {
-                    Collections.sort(listA);
-                    Collections.sort(listB);
-                    equals = equals && listA.equals(listB);
-                }
-            }
-            return equals;
-        }
-        return mapA == null && mapB == null;
-    }
-
-    /**
-     * Checks whether two maps contain exactly the same key,value combinations
-     *
-     * @param mapA
-     * @param mapB
-     * @return
-     */
-    public static boolean mapRefEquals(Map<String, String> mapA,
-                                       Map<String, String> mapB) {
-        if (mapA != null && mapB != null && mapA.keySet().equals(mapB.keySet())) {
-            for (String keyA : mapA.keySet()) {
-                String strA = mapA.get(keyA);
-                String strB = mapB.get(keyA);
-                return StringUtils.equals(strA, strB);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if two arrays contain the same values
-     *
-     * @param arrA
-     * @param arrB
-     * @return
-     */
-    public static boolean arrayEquals(String[] arrA, String[] arrB) {
-        if (arrA == null && arrB == null) {
-            return true;
-        } else if (arrA == null || arrB == null) {
-            return false;
-        }
-        if (arrA.length == arrB.length) {
-            List<String> listA = new ArrayList<>(Arrays.asList(arrA));
-            List<String> listB = new ArrayList<>(Arrays.asList(arrB));
-            Collections.sort(listA);
-            Collections.sort(listB);
-            return listA.equals(listB);
-        }
-        return false;
-    }
-
-    /**
      * Method that converts a ResourceOrLiteralType.class object to a
      * multilingual map of strings
      *
@@ -303,48 +141,6 @@ public final class MongoUtils {
 
         return null;
     }
-
-    /**
-     * Method that converts a ResourceOrLiteralType.class object to a
-     * multilingual map of strings
-     *
-     * @param obj The ResourceOrLiteralType object
-     * @return A Map of strings. The keys are the languages and the values are
-     * lists of strings for the corresponding language. If the object is
-     * null, the method returns null. In case a language is missing the
-     * def notation is used as key
-     */
-    public static <T extends ResourceOrLiteralType> Map<String, String> createResourceOrLiteralRefFromString(T obj) {
-        Map<String, String> retMap = new HashMap<>();
-        if (obj != null) {
-            if (obj.getLang() != null
-                    && StringUtils.isNotEmpty(obj.getLang().getLang())) {
-                if (obj.getString() != null
-                        && StringUtils.trimToNull(obj.getString()) != null) {
-                    String val = StringUtils.trim(obj.getString());
-                    retMap.put(obj.getLang().getLang(), val);
-                }
-                if (obj.getResource() != null) {
-                    String val = obj.getResource().getResource();
-                    retMap.put(obj.getLang().getLang(), val);
-                }
-            } else {
-                if (obj.getString() != null
-                        && StringUtils.trimToNull(obj.getString()) != null) {
-                    String val = StringUtils.trim(obj.getString());
-                    retMap.put("def", val);
-                }
-                if (obj.getResource() != null) {
-                    String val = obj.getResource().getResource();
-                    retMap.put("def", val);
-                }
-            }
-            return retMap;
-        }
-
-        return null;
-    }
-
 
     public static <T extends ResourceType> Map<String, List<String>> createResourceMapFromString(T obj) {
         Map<String, List<String>> retMap = new HashMap<>();
@@ -497,118 +293,5 @@ public final class MongoUtils {
             }
         }
         return null;
-    }
-
-    public static <T> boolean updateMapRef(T saved, T updated, String updateField, UpdateOperations ops) throws MongoUpdateException {
-        try {
-            Method getter = saved.getClass().getMethod("get" + StringUtils.capitalize(updateField));
-            Method setter = saved.getClass().getMethod("set" + StringUtils.capitalize(updateField), Map.class);
-            Map<String, String> savedValues = (Map<String, String>) getter.invoke(saved);
-            Map<String, String> updatedValues = (Map<String, String>) getter.invoke(updated);
-
-            if (updatedValues != null) {
-                if (savedValues == null || !MongoUtils.mapRefEquals(updatedValues, savedValues)) {
-                    ops.set(updateField, updatedValues);
-                    setter.invoke(saved, updatedValues);
-                    return true;
-                }
-            } else {
-                if (saved != null) {
-                    ops.unset(updateField);
-                    setter.invoke(saved, (Object) null);
-                    return true;
-                }
-            }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-            throw new MongoUpdateException("Error doing " + ops + " on field " +updateField, ex);
-        }
-        return false;
-    }
-
-    public static <T> boolean updateMap(T saved, T updated, String updateField, UpdateOperations ops) throws MongoUpdateException {
-        try {
-            Method getter = saved.getClass().getMethod("get" + StringUtils.capitalize(updateField));
-            Method setter = saved.getClass().getMethod("set" + StringUtils.capitalize(updateField), Map.class);
-            Map<String, List<String>> savedValues = (Map<String, List<String>>) getter.invoke(saved);
-            Map<String, List<String>> updatedValues = (Map<String, List<String>>) getter.invoke(updated);
-
-            if (updatedValues != null) {
-                if (savedValues == null || !MongoUtils.mapEquals(updatedValues, savedValues)) {
-                    ops.set(updateField, updatedValues);
-                    setter.invoke(saved, updatedValues);
-                    return true;
-                }
-            } else {
-                if (saved != null) {
-                    ops.unset(updateField);
-                    setter.invoke(saved, (Object) null);
-                    return true;
-                }
-            }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-            throw new MongoUpdateException("Error doing " + ops + " on field " +updateField, ex);
-        }
-        return false;
-    }
-
-    public static <T> boolean updateArray(T saved, T updated, String updateField, UpdateOperations ops) throws MongoUpdateException {
-        try {
-            Method getter = saved.getClass().getMethod("get" + StringUtils.capitalize(updateField));
-            Method setter = saved.getClass().getMethod("set" + StringUtils.capitalize(updateField), String[].class);
-            String[] savedValues = (String[]) getter.invoke(saved);
-            String[] updatedValues = (String[]) getter.invoke(updated);
-
-            if (updatedValues != null) {
-                if (savedValues == null || !MongoUtils.arrayEquals(updatedValues, savedValues)) {
-                    for (int i = 0; i < updatedValues.length; i++) {
-                        if (StringUtils.isNotBlank(updatedValues[i])) {
-                            updatedValues[i] = updatedValues[i].trim();
-                        }
-                    }
-                    ops.set(updateField, updatedValues);
-                    setter.invoke(saved, new Object[]{updatedValues});
-                    return true;
-                }
-            } else {
-                if (saved != null) {
-                    ops.unset(updateField);
-                    setter.invoke(saved, (Object) null);
-                    return true;
-                }
-            }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-            throw new MongoUpdateException("Error doing " + ops + " on field " +updateField, ex);
-        }
-        return false;
-    }
-
-    public static <T> boolean updateString(T saved, T updated, String updateField, UpdateOperations ops) throws MongoUpdateException {
-        try {
-            Method getter = saved.getClass().getMethod("get" + StringUtils.capitalize(updateField));
-            Method setter = saved.getClass().getMethod("set" + StringUtils.capitalize(updateField), String.class);
-            String savedValues = (String) getter.invoke(saved);
-            String updatedValues = (String) getter.invoke(updated);
-
-            if (updatedValues != null) {
-                if (savedValues == null || !StringUtils.equals(updatedValues, savedValues)) {
-                    ops.set(updateField, updatedValues.trim());
-                    setter.invoke(saved, updatedValues.trim());
-                    return true;
-                }
-            } else {
-                if (saved != null) {
-                    ops.unset(updateField);
-                    setter.invoke(saved, (Object) null);
-                    return true;
-                }
-            }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(MongoUtils.class.getName()).log(Level.SEVERE, null, ex);
-            throw new MongoUpdateException("Error doing " + ops + " on field " +updateField, ex);
-        }
-        return false;
     }
 }

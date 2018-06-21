@@ -16,24 +16,28 @@
  */
 package eu.europeana.corelib.solr.test.importer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
-import eu.europeana.corelib.definitions.jibx.*;
+import eu.europeana.corelib.definitions.jibx.AltLabel;
+import eu.europeana.corelib.definitions.jibx.IsPartOf;
+import eu.europeana.corelib.definitions.jibx.Lat;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
-import eu.europeana.corelib.definitions.model.EdmLabel;
+import eu.europeana.corelib.definitions.jibx.Note;
+import eu.europeana.corelib.definitions.jibx.PlaceType;
+import eu.europeana.corelib.definitions.jibx.PrefLabel;
+import eu.europeana.corelib.definitions.jibx._Long;
 import eu.europeana.corelib.edm.server.importer.util.PlaceFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
-import org.apache.solr.common.SolrInputDocument;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Place Field Input Field creator
@@ -113,42 +117,5 @@ public class PlaceFieldInputTest {
                 Float.toString(placeMongo.getLatitude()));
         assertEquals(Float.toString(place.getLong().getLong()),
                 Float.toString(placeMongo.getLongitude()));
-        // create solr document
-        SolrInputDocument solrDocument = new SolrInputDocument();
-        solrDocument = new PlaceFieldInput().createPlaceSolrFields(place,
-                solrDocument);
-        assertEquals(place.getAbout(),
-                solrDocument.getFieldValue(EdmLabel.EDM_PLACE.toString())
-                        .toString());
-        assertEquals(place.getNoteList().get(0).getString(),
-                solrDocument.getFieldValues(EdmLabel.PL_SKOS_NOTE.toString())
-                        .toArray()[0].toString());
-        assertEquals(
-                place.getAltLabelList().get(0).getString(),
-                solrDocument.getFieldValues(
-                        EdmLabel.PL_SKOS_ALT_LABEL.toString()
-                                + "."
-                                + place.getAltLabelList().get(0).getLang()
-                                .getLang()).toArray()[0].toString());
-
-        assertEquals(
-                place.getPrefLabelList().get(0).getString(),
-                solrDocument.getFieldValues(
-                        EdmLabel.PL_SKOS_PREF_LABEL.toString()
-                                + "."
-                                + place.getAltLabelList().get(0).getLang()
-                                .getLang()).toArray()[0].toString());
-
-        assertEquals(
-                place.getLat().getLat(),
-                solrDocument.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
-        assertEquals(
-                place.getLong().getLong(),
-                solrDocument.getFieldValue(EdmLabel.PL_WGS84_POS_LAT.toString()));
-
-        assertEquals(place.getIsPartOfList().get(0).getString(), solrDocument
-                .getFieldValue(EdmLabel.PL_DCTERMS_ISPART_OF.toString())
-                .toString());
     }
-
 }

@@ -21,18 +21,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
-
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
-
 import eu.europeana.corelib.definitions.jibx.AgentType;
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Begin;
@@ -40,7 +35,6 @@ import eu.europeana.corelib.definitions.jibx.End;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.AgentFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -117,40 +111,5 @@ public class AgentFieldInputTest {
 				agent.getAltLabel().values().iterator().next().get(0));
 		assertEquals(agentType.getPrefLabelList().get(0).getString(),
 						agent.getPrefLabel().values().iterator().next().get(0));
-
-		//create solr document
-		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = new AgentFieldInput().createAgentSolrFields(agentType,
-				solrDocument);
-		assertEquals(agentType.getAbout(),
-				solrDocument.getFieldValue(EdmLabel.EDM_AGENT.toString())
-						.toString());
-		assertEquals(agentType.getBegin().getString(),
-				solrDocument.getFieldValues(EdmLabel.AG_EDM_BEGIN.toString())
-						.toArray()[0].toString());
-		assertEquals(agentType.getEnd().getString(),
-				solrDocument.getFieldValues(EdmLabel.AG_EDM_END.toString())
-						.toArray()[0].toString());
-		assertEquals(agentType.getNoteList().get(0).getString(),
-				solrDocument.getFieldValues(EdmLabel.AG_SKOS_NOTE.toString())
-						.toArray()[0].toString());
-		assertEquals(
-				agentType.getAltLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.AG_SKOS_ALT_LABEL.toString()
-								+ "."
-								+ agentType.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
-
-		assertEquals(
-				agentType.getPrefLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.AG_SKOS_PREF_LABEL.toString()
-								+ "."
-								+ agentType.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
-
 	}
-
-	
 }

@@ -19,22 +19,7 @@ package eu.europeana.corelib.edm.server.importer.util;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.solr.common.SolrInputDocument;
-
-import eu.europeana.corelib.definitions.jibx.AltLabel;
-import eu.europeana.corelib.definitions.jibx.BroadMatch;
-import eu.europeana.corelib.definitions.jibx.Broader;
-import eu.europeana.corelib.definitions.jibx.CloseMatch;
 import eu.europeana.corelib.definitions.jibx.Concept;
-import eu.europeana.corelib.definitions.jibx.ExactMatch;
-import eu.europeana.corelib.definitions.jibx.NarrowMatch;
-import eu.europeana.corelib.definitions.jibx.Narrower;
-import eu.europeana.corelib.definitions.jibx.Notation;
-import eu.europeana.corelib.definitions.jibx.PrefLabel;
-import eu.europeana.corelib.definitions.jibx.Related;
-import eu.europeana.corelib.definitions.jibx.RelatedMatch;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -51,104 +36,6 @@ public final class ConceptFieldInput {
 	public ConceptFieldInput() {
 
 	}
-
-	/**
-	 * Return a SolrInputDocument with the Concept fields filled in
-	 * 
-	 * @param concept
-	 *            The JiBX Entity holding the Concept field values
-	 * @param solrInputDocument
-	 *            The SolrInputDocument to alter
-	 * @return The SolrInputDocument with the filled in values for a Concept
-	 */
-	public SolrInputDocument createConceptSolrFields(Concept concept,
-			SolrInputDocument solrInputDocument) {
-		solrInputDocument.addField(EdmLabel.SKOS_CONCEPT.toString(),
-				concept.getAbout());
-		if(concept.getChoiceList()!=null){
-		for (Concept.Choice choice : concept.getChoiceList()) {
-			if (choice.ifAltLabel()) {
-				AltLabel altLabel = choice.getAltLabel();
-				solrInputDocument = SolrUtils
-						.addFieldFromLiteral(solrInputDocument, altLabel,
-								EdmLabel.CC_SKOS_ALT_LABEL);
-			}
-			if (choice.ifPrefLabel()) {
-
-				PrefLabel prefLabel = choice.getPrefLabel();
-				solrInputDocument = SolrUtils.addFieldFromLiteral(
-						solrInputDocument, prefLabel,
-						EdmLabel.CC_SKOS_PREF_LABEL);
-			}
-
-			if (choice.ifBroader()) {
-				Broader broader = choice.getBroader();
-				solrInputDocument.addField(EdmLabel.CC_SKOS_BROADER.toString(),
-						broader.getResource());
-			}
-			if (choice.ifNote()) {
-				solrInputDocument = SolrUtils.addFieldFromLiteral(
-						solrInputDocument, choice.getNote(),
-						EdmLabel.CC_SKOS_NOTE);
-			}
-			if (choice.ifBroadMatch()) {
-				BroadMatch broadMatch = choice.getBroadMatch();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_BROADMATCH.toString(),
-						broadMatch.getResource());
-			}
-			if (choice.ifCloseMatch()) {
-				CloseMatch closeMatch = choice.getCloseMatch();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_CLOSEMATCH.toString(),
-						closeMatch.getResource());
-			}
-			if (choice.ifExactMatch()) {
-				ExactMatch exactMatch = choice.getExactMatch();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_EXACTMATCH.toString(),
-						exactMatch.getResource());
-			}
-			if (choice.ifNarrower()) {
-				Narrower narrower = choice.getNarrower();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_NARROWER.toString(),
-						narrower.getResource());
-			}
-			if (choice.ifNarrowMatch()) {
-				NarrowMatch narrowMatch = choice.getNarrowMatch();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_NARROWMATCH.toString(),
-						narrowMatch.getResource());
-			}
-			if (choice.ifRelatedMatch()) {
-				RelatedMatch relatedMatch = choice.getRelatedMatch();
-				solrInputDocument.addField(
-						EdmLabel.CC_SKOS_RELATEDMATCH.toString(),
-						relatedMatch.getResource());
-			}
-			if (choice.ifRelated()) {
-				Related related = choice.getRelated();
-
-				solrInputDocument.addField(EdmLabel.CC_SKOS_RELATED.toString(),
-						related.getResource());
-			}
-			if (choice.ifNotation()) {
-				Notation notation = choice.getNotation();
-				solrInputDocument = SolrUtils
-						.addFieldFromLiteral(solrInputDocument, notation,
-								EdmLabel.CC_SKOS_NOTATIONS);
-			}
-		}
-		}
-		return solrInputDocument;
-	}
-
-	
-
-
-
-	
 
 	public ConceptImpl createNewConcept(Concept concept) {
 		ConceptImpl conceptMongo = new ConceptImpl();

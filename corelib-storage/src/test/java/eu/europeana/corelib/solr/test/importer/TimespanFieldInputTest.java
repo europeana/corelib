@@ -21,17 +21,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
-
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
-
 import eu.europeana.corelib.definitions.jibx.AltLabel;
 import eu.europeana.corelib.definitions.jibx.Begin;
 import eu.europeana.corelib.definitions.jibx.End;
@@ -40,7 +35,6 @@ import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.Note;
 import eu.europeana.corelib.definitions.jibx.PrefLabel;
 import eu.europeana.corelib.definitions.jibx.TimeSpanType;
-import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.edm.server.importer.util.TimespanFieldInput;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
@@ -126,42 +120,5 @@ public class TimespanFieldInputTest {
 				timespanMongo.getPrefLabel().values().iterator().next().get(0));
 		assertEquals(timespan.getIsPartOfList().get(0).getResource().getResource(),
 				timespanMongo.getIsPartOf().values().iterator().next().get(0));
-		// create solr document
-		SolrInputDocument solrDocument = new SolrInputDocument();
-		solrDocument = new TimespanFieldInput().createTimespanSolrFields(timespan,
-				solrDocument);
-		assertEquals(timespan.getAbout(),
-				solrDocument.getFieldValue(EdmLabel.EDM_TIMESPAN.toString())
-						.toString());
-		assertEquals(timespan.getBegin().getString(),
-				solrDocument.getFieldValues(EdmLabel.TS_EDM_BEGIN.toString())
-						.toArray()[0].toString());
-		assertEquals(timespan.getEnd().getString(),
-				solrDocument.getFieldValues(EdmLabel.TS_EDM_END.toString())
-						.toArray()[0].toString());
-		assertEquals(timespan.getNoteList().get(0).getString(),
-				solrDocument.getFieldValues(EdmLabel.TS_SKOS_NOTE.toString())
-						.toArray()[0].toString());
-		assertEquals(
-				timespan.getAltLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.TS_SKOS_ALT_LABEL.toString()
-								+ "."
-								+ timespan.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
-
-		assertEquals(
-				timespan.getPrefLabelList().get(0).getString(),
-				solrDocument.getFieldValues(
-						EdmLabel.TS_SKOS_PREF_LABEL.toString()
-								+ "."
-								+ timespan.getAltLabelList().get(0).getLang()
-										.getLang()).toArray()[0].toString());
-
-		assertEquals(timespan.getIsPartOfList().get(0).getResource().getResource(), solrDocument
-				.getFieldValue(EdmLabel.TS_DCTERMS_ISPART_OF.toString())
-				.toString());
 	}
-
-
 }

@@ -17,13 +17,10 @@
 package eu.europeana.corelib.solr.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
-
 import eu.europeana.corelib.definitions.jibx.LiteralType;
 import eu.europeana.corelib.definitions.jibx.LiteralType.Lang;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
@@ -38,29 +35,6 @@ import eu.europeana.corelib.edm.utils.MongoUtils;
  */
 public class MongoUtilsTest {
 	
-	@Test
-	public void testContainsStringArray() {
-		String[] arr = new String[] { "1", "2", "3" };
-		Assert.assertTrue(MongoUtils.contains(arr, "2"));
-		Assert.assertFalse(MongoUtils.contains(arr, "$"));
-	}
-
-	@Test
-	public void testContainsMap() {
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		List<String> listA = new ArrayList<String>();
-		List<String> listB = new ArrayList<String>();
-		listA.add("1");
-		listA.add("2");
-		listB.add("3");
-		map.put("keyA", listA);
-		map.put("keyB", listB);
-		Assert.assertTrue(MongoUtils.contains(map, "keyA", "2"));
-		Assert.assertFalse(MongoUtils.contains(map, "keyC", "2"));
-		Assert.assertFalse(MongoUtils.contains(map, "keyA", "3"));
-		Assert.assertFalse(MongoUtils.contains(map, "keyA", "4"));
-	}
-
 	@Test
 	public void testCreateLiteralMapFromObject() {
 		LiteralType obj = new LiteralType();
@@ -82,51 +56,6 @@ public class MongoUtilsTest {
 		Assert.assertEquals(1, testMap.size());
 		Assert.assertEquals(testMap.keySet().iterator().next(), "def");
 		Assert.assertEquals(testMap.get("def").get(0), "str");
-	}
-
-	@Test
-	public void testMapEquals() {
-		Map<String,List<String>> mapA = new HashMap<String, List<String>>();
-		Map<String,List<String>> mapB = new HashMap<String, List<String>>();
-		Map<String,List<String>> mapC = new HashMap<String, List<String>>();
-		Map<String,List<String>> mapD = new HashMap<String, List<String>>();
-		Map<String,List<String>> mapE = new HashMap<String, List<String>>();
-		List<String> listA = new ArrayList<String>();
-		List<String> listB = new ArrayList<String>();
-		List<String> listC = new ArrayList<String>();
-		List<String> listD = new ArrayList<String>();
-		listA.add("1");
-		listA.add("2");
-		listB.add("3");
-		listB.add("4");
-		listC.add("1");
-		listC.add("2");
-		listD.add("4");
-		listD.add("3");
-		mapA.put("1",listA);
-		mapA.put("2", listB);
-		mapB.put("1", listC);
-		mapB.put("2", listD);
-		mapC.put("1",listA);
-		mapC.put("2", listA);
-		mapD.put("1",listA);
-		mapE.put("1", listA);
-		mapE.put("3", listB);
-		Assert.assertTrue(MongoUtils.mapEquals(mapA, mapB));
-		Assert.assertFalse(MongoUtils.mapEquals(mapA, mapC));
-		Assert.assertFalse(MongoUtils.mapEquals(mapA, mapD));
-		Assert.assertFalse(MongoUtils.mapEquals(mapA, mapE));
-	}
-
-	@Test
-	public void testArrayEquals() {
-		String[] arrA = new String[]{"1","2","3"};
-		String[] arrB = new String[]{"1","3","2"};
-		String[] arrC = new String[]{"1","2"};
-		String[] arrD = new String[]{"1","2","4"};
-		Assert.assertTrue(MongoUtils.arrayEquals(arrA, arrB));
-		Assert.assertFalse(MongoUtils.arrayEquals(arrA, arrC));
-		Assert.assertFalse(MongoUtils.arrayEquals(arrA, arrD));
 	}
 
 	@Test
