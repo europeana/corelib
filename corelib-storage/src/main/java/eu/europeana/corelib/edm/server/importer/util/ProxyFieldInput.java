@@ -16,14 +16,8 @@
  */
 package eu.europeana.corelib.edm.server.importer.util;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.solr.common.SolrInputDocument;
-
 import eu.europeana.corelib.definitions.jibx.Aggregation;
+import eu.europeana.corelib.definitions.jibx.EdmType;
 import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
 import eu.europeana.corelib.definitions.jibx.HasMet;
 import eu.europeana.corelib.definitions.jibx.HasType;
@@ -31,12 +25,19 @@ import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
 import eu.europeana.corelib.definitions.jibx.ProxyFor;
 import eu.europeana.corelib.definitions.jibx.ProxyType;
 import eu.europeana.corelib.definitions.jibx.ResourceType;
+import eu.europeana.corelib.definitions.jibx.Type2;
 import eu.europeana.corelib.definitions.jibx.Year;
 import eu.europeana.corelib.definitions.model.EdmLabel;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.MongoUtils;
 import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import org.apache.solr.common.SolrInputDocument;
 
 /**
  * Constructor for the Proxy Entity
@@ -301,9 +302,8 @@ public final class ProxyFieldInput {
       }
       mongoProxy.setEdmIsNextInSequence(seqarray);
     }
-    String docType = SolrUtils.exists(String.class,
-        (proxy.getType().getType().xmlValue())).toString();
-
+    final String docType = Optional.ofNullable(proxy.getType()).map(Type2::getType)
+        .map(EdmType::xmlValue).orElse(null);
     mongoProxy.setEdmType(DocType.safeValueOf(docType));
 
     mongoProxy.setProxyFor(SolrUtils.exists(ProxyFor.class, proxy
