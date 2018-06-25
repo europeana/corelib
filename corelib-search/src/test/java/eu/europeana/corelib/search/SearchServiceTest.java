@@ -51,6 +51,9 @@ import static org.junit.Assert.*;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.search.SearchService
  */
+// TODO JV this test is ignored until the Mongo and Solar versions are updated. Then the Metis
+// indexing library should be used to save the required test records (see ContentLoader class).
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-solr-context.xml", "/corelib-solr-test.xml"})
 public class SearchServiceTest {

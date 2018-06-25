@@ -104,6 +104,12 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+	    <dependency>
+	      	<groupId>eu.europeana.metis</groupId>
+	      	<artifactId>metis-indexing</artifactId>
+	      	<version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+	    </dependency>
     </dependencies>
     <build>
         <plugins>
