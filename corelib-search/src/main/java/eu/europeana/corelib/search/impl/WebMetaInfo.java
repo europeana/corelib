@@ -114,6 +114,11 @@ public class WebMetaInfo {
                 urls.addAll(Arrays.asList(aggregation.getHasView()));
             }
 
+            // if the fix adds a web resource for edmObject it also has to be added here in order to be processed
+            if (null != aggregation.getEdmObject()) {
+                urls.add(aggregation.getEdmObject());
+            }
+
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
