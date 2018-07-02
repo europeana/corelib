@@ -27,6 +27,8 @@
     <url>http://www.europeana.eu</url>
 
     <properties>
+        <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
+        <sonar.projectKey>eu.europeana.corelib-metis.web</sonar.projectKey>
         <spring-boot.version>1.2.8.RELEASE</spring-boot.version>
     </properties>
 

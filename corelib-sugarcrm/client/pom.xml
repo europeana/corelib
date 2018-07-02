@@ -18,6 +18,9 @@
     <url>http://www.europeana.eu</url>
 
     <properties>
+        <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
+        <sonar.projectKey>eu.europeana.corelib-metis.sugarcrm-client</sonar.projectKey>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.6.1</slf4j.version>
         <spring.maven.artifact.version>4.2.4.RELEASE</spring.maven.artifact.version>
