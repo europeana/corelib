@@ -26,7 +26,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.transaction.annotation.Transactional;
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
@@ -37,8 +38,9 @@ import eu.europeana.corelib.web.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.dao.RelationalDao
  */
-//@Transactional
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
+
+    private static final Logger LOG = LogManager.getLogger(RelationalDaoImpl.class);
 
     @PersistenceContext(name = "corelib_db_entityManagerFactory")
     private EntityManager entityManager;
@@ -56,7 +58,7 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
 
     @Override
     public E findByPK(Serializable id) throws DatabaseException {
-        return findByPK(domainClazz, id);
+        return this.findByPK(domainClazz, id);
     }
 
     @Override
@@ -157,8 +159,9 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
         try {
             return createNamedQuery(clazz, qName, params).getSingleResult();
         } catch (NoResultException e) {
-            return null;
+            LOG.error("Error creating named query", e);
         }
+        return null;
     }
 
     @Override
@@ -167,23 +170,26 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
     }
 
     @Override
+    @Transactional(readOnly = false)
     public <T extends IdentifiedEntity<?>> T insert(T entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public <T extends IdentifiedEntity<?>> T update(T entity) {
         return entityManager.merge(entity);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void delete(IdentifiedEntity<?> entity) {
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public void deleteAll() {
         findAll().forEach(this::delete);
     }
