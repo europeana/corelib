@@ -31,6 +31,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
+		<sonar.projectKey>eu.europeana.corelib-metis</sonar.projectKey>
+		<sonar.projectName>Europeana Core Library (for Metis)</sonar.projectName>
+
 		<apacheSolr.version>4.10.1</apacheSolr.version>
 		<commonsIO.version>2.4</commonsIO.version>
 		<commonsLang.version>2.6</commonsLang.version>
