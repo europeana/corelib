@@ -11,7 +11,6 @@ import eu.europeana.corelib.edm.utils.SolrUtils;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.springframework.util.StringUtils;
 
 /**
  *
@@ -19,7 +18,7 @@ import org.springframework.util.StringUtils;
  */
 public class ProvidedChoSolrCreator {
     public void create(SolrInputDocument doc, ProvidedCHOImpl pCho){
-        SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_ID, StringUtils.replace(pCho.getAbout(), "/item/", "/"));
+        SolrUtils.addFromString(doc, EdmLabel.EUROPEANA_ID, pCho.getAbout());
         SolrUtils.addFromStringArray(doc, EdmLabel.PROXY_OWL_SAMEAS, pCho.getOwlSameAs());
     }
 }

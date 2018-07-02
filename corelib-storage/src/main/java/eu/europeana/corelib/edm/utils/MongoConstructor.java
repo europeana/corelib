@@ -17,20 +17,44 @@
 
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.definitions.edm.entity.*;
-import eu.europeana.corelib.definitions.jibx.*;
-import eu.europeana.corelib.definitions.jibx.Aggregation;
-import eu.europeana.corelib.definitions.jibx.Concept;
-import eu.europeana.corelib.definitions.jibx.License;
-import eu.europeana.corelib.definitions.jibx.Service;
-import eu.europeana.corelib.edm.server.importer.util.*;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.*;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import eu.europeana.corelib.definitions.jibx.AgentType;
+import eu.europeana.corelib.definitions.jibx.Aggregation;
+import eu.europeana.corelib.definitions.jibx.CollectionName;
+import eu.europeana.corelib.definitions.jibx.Concept;
+import eu.europeana.corelib.definitions.jibx.DatasetName;
+import eu.europeana.corelib.definitions.jibx.EuropeanaAggregationType;
+import eu.europeana.corelib.definitions.jibx.License;
+import eu.europeana.corelib.definitions.jibx.PlaceType;
+import eu.europeana.corelib.definitions.jibx.ProvidedCHOType;
+import eu.europeana.corelib.definitions.jibx.ProxyType;
+import eu.europeana.corelib.definitions.jibx.RDF;
+import eu.europeana.corelib.definitions.jibx.Service;
+import eu.europeana.corelib.definitions.jibx.TimeSpanType;
+import eu.europeana.corelib.edm.server.importer.util.AgentFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.AggregationFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.ConceptFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.EuropeanaAggregationFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.LicenseFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.PlaceFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.ProvidedCHOFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.ProxyFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.ServiceFieldInput;
+import eu.europeana.corelib.edm.server.importer.util.TimespanFieldInput;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.LicenseImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.ServiceImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 
 /**
  * A FullBean Constructor from an EDM XML
@@ -39,101 +63,35 @@ import java.util.List;
  */
 public class MongoConstructor {
 
-	
-
 	public FullBeanImpl constructFullBean(RDF record)
 			throws InstantiationException, IllegalAccessException,
 			IOException {
 		FullBeanImpl fullBean = new FullBeanImpl();
-		List<AgentImpl> agents = new ArrayList<AgentImpl>();
-		List<AggregationImpl> aggregations = new ArrayList<AggregationImpl>();
-		List<ConceptImpl> concepts = new ArrayList<ConceptImpl>();
-		List<PlaceImpl> places = new ArrayList<PlaceImpl>();
-		List<WebResource> webResources = new ArrayList<WebResource>();
-		List<TimespanImpl> timespans = new ArrayList<TimespanImpl>();
-		List<ProxyImpl> proxies = new ArrayList<ProxyImpl>();
-		List<ProvidedCHOImpl> providedCHOs = new ArrayList<ProvidedCHOImpl>();
-		List<LicenseImpl> licenses = new ArrayList<LicenseImpl>();
+		List<AgentImpl> agents = new ArrayList<>();
+		List<AggregationImpl> aggregations = new ArrayList<>();
+		List<ConceptImpl> concepts = new ArrayList<>();
+		List<PlaceImpl> places = new ArrayList<>();
+		List<TimespanImpl> timespans = new ArrayList<>();
+		List<ProxyImpl> proxies = new ArrayList<>();
+		List<ProvidedCHOImpl> providedCHOs = new ArrayList<>();
+		List<LicenseImpl> licenses = new ArrayList<>();
 		List<ServiceImpl> services = new ArrayList<>();
-		String aggregationAbout = "/aggregation/provider";
-		String europeanaAggregationAbout = "/aggregation/europeana";
-		String proxyAbout = "/proxy/provider";
-		String europeanaProxy = "/proxy/europeana";
-		String providedCHO = "/item";
 
 		for (ProvidedCHOType pcho : record.getProvidedCHOList()) {
 			fullBean.setAbout(pcho.getAbout());
-			aggregationAbout = aggregationAbout + pcho.getAbout();
-			europeanaAggregationAbout = europeanaAggregationAbout
-					+ pcho.getAbout();
-			proxyAbout = proxyAbout + pcho.getAbout();
-			europeanaProxy = europeanaProxy + pcho.getAbout();
-
-			providedCHOs.add(new ProvidedCHOFieldInput()
-					.createProvidedCHOMongoFields(pcho));
-
+			providedCHOs.add(new ProvidedCHOFieldInput().createProvidedCHOMongoFields(pcho));
 		}
 		for (ProxyType proxytype : record.getProxyList()) {
-
-			boolean isEuropeanaProxy = false;
-			if (proxytype.getEuropeanaProxy() != null) {
-				if (!proxytype.getEuropeanaProxy().isEuropeanaProxy()) {
-					proxytype.setAbout(proxyAbout);
-					isEuropeanaProxy = false;
-				} else {
-					proxytype.setAbout(europeanaProxy);
-					isEuropeanaProxy = true;
-
-				}
-			}
-			if (!isEuropeanaProxy) {
-				for (Aggregation aggr : record.getAggregationList()) {
-					List<ProxyIn> proxyInList = new ArrayList<ProxyIn>();
-					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(aggregationAbout);
-					proxyInList.add(proxyIn);
-					proxytype.setProxyInList(proxyInList);
-
-				}
-			} else {
-				for (EuropeanaAggregationType aggr : record
-						.getEuropeanaAggregationList()) {
-					List<ProxyIn> proxyInList = new ArrayList<ProxyIn>();
-					ProxyIn proxyIn = new ProxyIn();
-					proxyIn.setResource(europeanaAggregationAbout);
-					proxyInList.add(proxyIn);
-					proxytype.setProxyInList(proxyInList);
-				}
-			}
-
-			for (ProvidedCHOType pCho : record.getProvidedCHOList()) {
-
-				ProxyFor pFor = new ProxyFor();
-				pFor.setResource(providedCHO + pCho.getAbout());
-				proxytype.setProxyFor(pFor);
-
-			}
-
-			proxies.add(new ProxyFieldInput().createProxyMongoFields(
-					new ProxyImpl(), proxytype));
+			proxies.add(new ProxyFieldInput().createProxyMongoFields(new ProxyImpl(), proxytype));
 		}
 		for (Aggregation aggregation : record.getAggregationList()) {
-			AggregatedCHO ag = new AggregatedCHO();
-			ag.setResource(providedCHO + fullBean.getAbout());
-			aggregation.setAggregatedCHO(ag);
-			aggregation.setAbout(aggregationAbout);
-			List<WebResourceImpl> webResourcesMongo = new ArrayList<WebResourceImpl>();
-			if (record.getWebResourceList() != null
-					&& record.getWebResourceList().size() > 0) {
+			List<WebResourceImpl> webResourcesMongo = new ArrayList<>();
+			if (record.getWebResourceList() != null && !record.getWebResourceList().isEmpty()) {
 				webResourcesMongo = new AggregationFieldInput()
 						.createWebResources(record.getWebResourceList());
-
 			}
-
 			aggregations.add(new AggregationFieldInput()
-					.createAggregationMongoFields(aggregation,
-							webResourcesMongo));
-
+					.createAggregationMongoFields(aggregation, webResourcesMongo));
 		}
 
 		if (record.getConceptList() != null) {
@@ -150,8 +108,7 @@ public class MongoConstructor {
 
 		if (record.getTimeSpanList() != null) {
 			for (TimeSpanType tspan : record.getTimeSpanList()) {
-				timespans
-						.add(new TimespanFieldInput().createNewTimespan(tspan));
+				timespans.add(new TimespanFieldInput().createNewTimespan(tspan));
 			}
 		}
 		if (record.getAgentList() != null) {
@@ -166,24 +123,9 @@ public class MongoConstructor {
 			}
 		}
 		if (record.getEuropeanaAggregationList() != null) {
-			List<String> collectionName = new ArrayList<>();
-			for (EuropeanaAggregationType eaggregation : record
-					.getEuropeanaAggregationList()) {
-				AggregatedCHO aggregatedCho = new AggregatedCHO();
-				aggregatedCho.setResource(providedCHO
-						+ record.getProvidedCHOList().get(0).getAbout());
-				eaggregation.setAbout(europeanaAggregationAbout);
+			for (EuropeanaAggregationType eaggregation : record.getEuropeanaAggregationList()) {
 				fullBean.setEuropeanaAggregation(new EuropeanaAggregationFieldInput()
-						.createAggregationMongoFields(eaggregation,
-								SolrUtils.getPreviewUrl(record)));
-				if (eaggregation.getDatasetName() != null) {
-					collectionName.add(eaggregation.getDatasetName().getString());
-				} else if (eaggregation.getCollectionName() != null) {
-					collectionName.add(eaggregation.getCollectionName().getString());
-				}
-			}
-			if (!collectionName.isEmpty()) {
-				fullBean.setEuropeanaCollectionName(collectionName.toArray(new String[collectionName.size()]));
+						.createAggregationMongoFields(eaggregation, SolrUtils.getPreviewUrl(record)));
 			}
 		}
 		if(record.getServiceList()!=null){
@@ -195,29 +137,55 @@ public class MongoConstructor {
 
 		fullBean.setAggregations(aggregations);
 		fullBean.setServices(services);
-		try {
-			if (agents.size() > 0) {
-				fullBean.setAgents(agents);
-			}
-			if (concepts.size() > 0) {
-				fullBean.setConcepts(concepts);
-			}
-			if (places.size() > 0) {
-				fullBean.setPlaces(places);
-			}
-			if (timespans.size() > 0) {
-				fullBean.setTimespans(timespans);
-			}
-			if (proxies.size() > 0) {
-				fullBean.setProxies(proxies);
-			}
-			if (licenses.size() > 0) {
-				fullBean.setLicenses(licenses);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		if (agents.size() > 0) {
+			fullBean.setAgents(agents);
 		}
+		if (concepts.size() > 0) {
+			fullBean.setConcepts(concepts);
+		}
+		if (places.size() > 0) {
+			fullBean.setPlaces(places);
+		}
+		if (timespans.size() > 0) {
+			fullBean.setTimespans(timespans);
+		}
+		if (proxies.size() > 0) {
+			fullBean.setProxies(proxies);
+		}
+		if (licenses.size() > 0) {
+			fullBean.setLicenses(licenses);
+		}
+
+		fullBean.setEuropeanaCollectionName(new String[] {getDatasetNameFromRdf(record)});
+	    
 		return fullBean;
 	}
 
+	private static String getDatasetNameFromRdf(RDF rdf) {
+
+	    // Try to find the europeana aggregation
+	    final EuropeanaAggregationType aggregation;
+	    if (rdf.getEuropeanaAggregationList() == null || rdf.getEuropeanaAggregationList().isEmpty()) {
+	      aggregation = null;
+	    } else {
+	      aggregation = rdf.getEuropeanaAggregationList().get(0);
+	    }
+	    if (aggregation == null) {
+	      return "";
+	    }
+
+	    // Try the dataset name property from the aggregation.
+	    final DatasetName datasetNameObject = aggregation.getDatasetName();
+	    final String datasetName = datasetNameObject == null ? null : datasetNameObject.getString();
+	    if (StringUtils.isNotBlank(datasetName)) {
+	      return datasetName;
+	    }
+
+	    // If that fails, try the collection name property from the aggregation.
+	    final CollectionName collectionNameObject = aggregation.getCollectionName();
+	    final String collectionName =
+	        collectionNameObject == null ? null : collectionNameObject.getString();
+	    return StringUtils.isNotBlank(collectionName) ? collectionName : "";
+	}
 }

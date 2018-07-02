@@ -528,8 +528,8 @@ public class WebResourceImpl implements WebResource {
     }
 
     public void initAttributionSnippet() {
-    attributionSnippet = new AttributionSnippet(this);
-  }
+        attributionSnippet = new AttributionSnippet(this);
+    }
 
     public String getTextAttributionSnippet() {
         return attributionSnippet.getTextSnippet();

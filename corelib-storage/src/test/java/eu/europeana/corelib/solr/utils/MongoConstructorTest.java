@@ -45,7 +45,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
