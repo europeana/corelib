@@ -19,8 +19,6 @@
     <properties>
         <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
         <sonar.projectKey>eu.europeana.corelib-metis.search</sonar.projectKey>
-
-        <apacheLucene.version>4.10.1</apacheLucene.version>
     </properties>
 
     <dependencies>
@@ -82,6 +80,7 @@
             <artifactId>lucene-analyzers-common</artifactId>
             <version>${apacheLucene.version}</version>
         </dependency>
+
         <!-- TEST -->
         <dependency>
             <groupId>org.apache.solr</groupId>

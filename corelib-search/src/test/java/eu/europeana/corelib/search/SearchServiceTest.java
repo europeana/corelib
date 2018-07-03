@@ -19,16 +19,14 @@ package eu.europeana.corelib.search;
 
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.definitions.solr.model.Query;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -153,7 +151,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void testSpellCheck() throws SolrTypeException {
+    public void testSpellCheck() throws EuropeanaException {
         LOG.info("TEST testSpellCheck");
         testCount++;
         Query query = new Query("musi");
@@ -204,7 +202,7 @@ public class SearchServiceTest {
 	 */
 
     @Test
-    public void testFindById() throws MongoDBException, MongoRuntimeException, SolrTypeException, Neo4JException {
+    public void testFindById() throws EuropeanaException {
         LOG.info("TEST testFindById");
         testCount++;
         Query query = new Query("*:*");
@@ -217,7 +215,7 @@ public class SearchServiceTest {
 
     @Test
     @Deprecated
-    public void testFindMoreLikeThis() throws SolrTypeException, SolrServerException {
+    public void testFindMoreLikeThis() throws EuropeanaException {
         LOG.info("TEST testFindMoreLikeThis");
         testCount++;
         Query query = new Query("*:*");
@@ -230,7 +228,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void testGestLastSolrUpdate() throws SolrServerException, IOException {
+    public void testGestLastSolrUpdate() throws EuropeanaException {
         LOG.info("TEST testGestLastSolrUpdate");
         testCount++;
         assertNotNull(searchService.getLastSolrUpdate());
@@ -250,7 +248,7 @@ public class SearchServiceTest {
      * @throws SolrTypeException
      */
     @Test
-    public void testSort() throws SolrTypeException {
+    public void testSort() throws EuropeanaException {
         LOG.info("TEST testSort");
         testCount++;
         Query query = new Query("keyboard");
@@ -262,7 +260,7 @@ public class SearchServiceTest {
     }
 
 //    @Test TODO: fix this test...
-    public void testResolve() throws SolrTypeException {
+    public void testResolve() throws EuropeanaException  {
         LOG.info("TEST testResolve");
         testCount++;
         Query query = new Query("*:*");

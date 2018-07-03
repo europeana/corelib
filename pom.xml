@@ -35,7 +35,13 @@
 		<sonar.projectKey>eu.europeana.corelib-metis</sonar.projectKey>
 		<sonar.projectName>Europeana Core Library (for Metis)</sonar.projectName>
 
-		<apacheSolr.version>4.10.1</apacheSolr.version>
+		<apacheSolr.version>6.6.2</apacheSolr.version>
+		<apacheLucene.version>6.6.2</apacheLucene.version>
+		<!-- be careful when upgrading the mongo driver to v3.7.x because that will
+             return Extended JSON which our GSON parser can't handle (see also EA-1181) -->
+		<mongoDriver.version>3.4.1</mongoDriver.version>
+		<morphia.version>1.3.2</morphia.version>
+
 		<commonsIO.version>2.4</commonsIO.version>
 		<commonsLang.version>2.6</commonsLang.version>
 		<commonsLang3.version>3.4</commonsLang3.version>
@@ -46,10 +52,6 @@
 		<junit.version>4.12</junit.version>
 		<log4j2.version>2.9.1</log4j2.version>
 		<mockito.version>1.10.19</mockito.version>
-		<!-- be careful when upgrading the mongo driver to v3.7.x because that will 
-                     return Extended JSON which our GSON parser can't handle (see also EA-1181) -->
-		<mongoDriver.version>3.4.1</mongoDriver.version>
-		<morphia.version>1.3.2</morphia.version>
 		<objectStorage.version>1.6</objectStorage.version>
 		<springCore.version>4.2.5.RELEASE</springCore.version>
 	</properties>

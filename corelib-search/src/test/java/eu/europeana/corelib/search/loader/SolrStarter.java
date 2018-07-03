@@ -17,19 +17,19 @@
 
 package eu.europeana.corelib.search.loader;
 
-import java.net.MalformedURLException;
-import java.util.Properties;
-
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.net.MalformedURLException;
+import java.util.Properties;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public class SolrStarter {
 
-	SolrServer server;
+	SolrClient server;
 
 	ApplicationContext context;
 

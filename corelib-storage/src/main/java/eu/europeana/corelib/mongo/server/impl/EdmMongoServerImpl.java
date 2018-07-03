@@ -59,10 +59,24 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	 * @param databaseName
 	 * @throws MongoDBException
 	 */
+	@Deprecated
 	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName) throws MongoDBException {
+        this(mongoClient, databaseName, false);
+	}
+
+	/**
+	 * Create a new Morphia datastore to do get/delete/save operations on the database
+	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
+	 * provided mongoClient
+	 * @param mongoClient
+	 * @param databaseName
+	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
+	 * @throws MongoDBException
+	 */
+	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName, boolean createIndexes) throws MongoDBException {
 		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
-		createDatastore();
+		createDatastore(createIndexes);
 	}
 
 	/**
@@ -73,7 +87,23 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	 * @param username
 	 * @param password
 	 */
-	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) throws MongoDBException {
+	@Deprecated
+	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password)
+			throws MongoDBException {
+        this(hosts, ports, databaseName, username, password, false);
+	}
+
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database.
+	 * @param hosts comma-separated host names
+	 * @param ports comma-separated port numbers
+	 * @param databaseName
+	 * @param username
+	 * @param password
+	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
+	 */
+	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password,
+							  boolean createIndexes) throws MongoDBException {
 		MongoClientOptions.Builder options = MongoClientOptions.builder();
 		options.socketKeepAlive(true);
 		options.connectionsPerHost(10);
@@ -81,7 +111,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		options.socketTimeout(6000);
 		this.mongoClient = new MongoProviderImpl(hosts, ports, databaseName, username, password, options).getMongo();
 		this.databaseName = databaseName;
-		createDatastore();
+		createDatastore(createIndexes);
 	}
 
 	@Override
@@ -90,7 +120,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.europeanaIdMongoServer = europeanaIdMongoServer;
 	}
 
-	private void createDatastore() {
+	private void createDatastore(boolean createIndexes) {
 		Morphia morphia = new Morphia();
 
 		morphia.map(FullBeanImpl.class);
@@ -109,7 +139,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(BasicProxyImpl.class);
 
 		datastore = morphia.createDatastore(mongoClient, databaseName);
-		datastore.ensureIndexes();
+		if (createIndexes) {
+			datastore.ensureIndexes();
+		}
 		LOG.info("Morphia EDMMongoServer datastore is created");
 	}
 
@@ -134,8 +166,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean resolve(String id) {
 
-		EuropeanaId newId = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(id);
+		EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
 			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
@@ -143,8 +174,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.field("about").equal(newId.getNewId()).get();
 		}
 
-		newId = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
 
 		if (newId != null) {
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
@@ -152,8 +182,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 					.equal(newId.getNewId()).get();
 		}
 
-		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX
-				+ id);
+		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
 
 		if (newId != null) {
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);

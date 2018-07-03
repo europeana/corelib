@@ -16,6 +16,12 @@
  */
 package eu.europeana.corelib.search.loader;
 
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrInputDocument;
+
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.DirectoryIteratorException;
@@ -33,11 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 
 /**
  * Sample Class for uploading content in a local Mongo and Solr Instance
@@ -92,7 +93,7 @@ public class ContentLoader {
         }
     }
 
-    public int parse(final EdmMongoServer mongoDBServer, final SolrServer solrServer) {
+    public int parse(final EdmMongoServer mongoDBServer, final SolrClient solrServer) {
         for (Path path : collectionXML) {
             // TODO JV this is where the file that is contained in the path should be indexed using the
             // Metis indexing library and the right versions for the Mongo and Solr connection.
@@ -100,7 +101,7 @@ public class ContentLoader {
         return failed;
     }
 
-    public void commit(final SolrServer solrServer) {
+    public void commit(final SolrClient solrServer) {
         try {
 
             solrServer.commit();
