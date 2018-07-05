@@ -5,7 +5,7 @@
     <parent>
         <artifactId>corelib</artifactId>
         <groupId>eu.europeana</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>2.8.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -19,7 +19,8 @@
 
     <properties>
         <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-        <sonar.projectKey>eu.europeana.corelib-metis.sugarcrm-client</sonar.projectKey>
+        <sonar.projectKey>eu.europeana.corelib-metis:corelib-sugarcrm-client</sonar.projectKey>
+        <sonar.projectName>Europeana Core Library SugarCRM SOAP Client</sonar.projectName>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.6.1</slf4j.version>
