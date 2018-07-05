@@ -40,18 +40,19 @@
                1. CloudSolrClient.Builder builder = new CloudSolrClient.Builder();
                2. builder = builder.withZkHost(zookeeperUrl);
                3. CloudSolrClient client = builder.build();
-                  client.setDefaultCollection(core); -->
-        <bean id="corelib_solr_zookeeper_builder" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder"/>
+                  client.setDefaultCollection(core);
+          The lazy-init is only set so it works in unit tests in other modules -->
+        <bean id="corelib_solr_zookeeper_builder" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder" lazy-init="true"/>
 
         <bean id="corelib_solr_zookeeper_setHost" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder"
               factory-bean="corelib_solr_zookeeper_builder"
-              factory-method="withZkHost">
+              factory-method="withZkHost" lazy-init="true">
             <constructor-arg value="#{europeanaProperties['zookeeper.url']}"/>
         </bean>
 
         <bean id="corelib_solr_zookeeper" class="org.apache.solr.client.solrj.impl.CloudSolrClient"
               factory-method="build" factory-bean="corelib_solr_zookeeper_setHost"
-              p:defaultCollection="#{europeanaProperties['solr.core']}" />
+              p:defaultCollection="#{europeanaProperties['solr.core']}" lazy-init="true" />
 
         <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
               p:solrClient-ref="corelib_solr_zookeeper" />
