@@ -683,6 +683,12 @@
         </annotation>
     </element>
 
+    <element name="completeness" type="rdf:LiteralType">
+        <annotation>
+            <documentation> The Completeness of the record</documentation>
+        </annotation>
+    </element>
+
     <element name="ugc" type="edm:UGCType">
         <annotation>
             <documentation>This element is used to identify user generated content (also called user
