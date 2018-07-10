@@ -17,7 +17,7 @@
 	</parent>
 
 	<artifactId>corelib</artifactId>
-	<version>2.7.1-SNAPSHOT</version>
+	<version>2.7.0-EA1223</version>
 	<packaging>pom</packaging>
 
 	<name>Europeana Core Library</name>

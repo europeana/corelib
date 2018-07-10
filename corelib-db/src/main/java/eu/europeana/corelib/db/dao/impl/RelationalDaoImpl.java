@@ -38,6 +38,7 @@ import eu.europeana.corelib.web.exception.ProblemType;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @see eu.europeana.corelib.db.dao.RelationalDao
  */
+@Transactional(readOnly = true)
 public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements RelationalDao<E> {
 
     private static final Logger LOG = LogManager.getLogger(RelationalDaoImpl.class);
