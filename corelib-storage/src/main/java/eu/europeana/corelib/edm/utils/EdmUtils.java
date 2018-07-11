@@ -301,6 +301,9 @@ public class EdmUtils {
         }
         addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
         addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights());
+        Completeness completeness = new Completeness();
+        completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
+        aggregation.setCompleteness(completeness);
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
@@ -515,7 +518,7 @@ public class EdmUtils {
                 addAsList(agent, AltLabel.class, ag.getAltLabel());
                 addAsObject(agent, Begin.class, ag.getBegin());
                 addAsObject(agent, End.class, ag.getEnd());
-                addAsObject(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
+                addAsList(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
