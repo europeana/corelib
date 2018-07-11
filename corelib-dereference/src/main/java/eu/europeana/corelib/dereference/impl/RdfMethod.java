@@ -617,7 +617,7 @@ public enum RdfMethod {
 			BiographicalInformation pref = new BiographicalInformation();
 			pref.setString(((LiteralType) obj).getString());
 			if (((LiteralType) obj).getLang() != null) {
-				pref.setLang(((LiteralType) obj).getLang());
+				pref.setLang(((ResourceOrLiteralType) obj).getLang());
 			}
 			return (T) pref;
 		}
