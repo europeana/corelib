@@ -63,8 +63,32 @@ public class EdmUtils {
      * @param fullBean The FullBean to convert
      * @return The resulting EDM string in RDF-XML
      */
+    @Deprecated
     public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
+        return toEDM(fullBean);
+    }
+
+    /**
+     * Convert a FullBean to an EDM String
+     *
+     * @param fullBean The FullBean to convert
+     * @return The resulting EDM string in RDF-XML
+     */
+    public static synchronized String toEDM(FullBeanImpl fullBean) {
         RDF rdf = toRDF(fullBean);
+        return marshallToEDM(rdf);
+    }
+
+    /**
+     * Convert an RDF object to an EDM String
+     *
+     * @param rdf The RDF to convert
+     * @return The resulting EDM string in RDF-XML
+     */
+    public static synchronized String toEDM(RDF rdf) {
+        if (rdf == null) {
+            return null;
+        }
         return marshallToEDM(rdf);
     }
 
