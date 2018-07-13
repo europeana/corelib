@@ -1,10 +1,11 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 
-public class MultilingualString {
+public class MultilingualString implements BaseType {
     @JsonProperty("@value")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String value;
@@ -23,5 +24,11 @@ public class MultilingualString {
 
     public String getLanguage() {
         return language;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getTypeName() {
+        return "MultilingualString";
     }
 }
