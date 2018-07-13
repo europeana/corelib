@@ -34,9 +34,18 @@ public class Thing implements BaseType {
     @JsonIgnore
     private Map<String, List<BaseType>> properties = new HashMap<>();
 
+    @JsonldProperty("name")
     private List<MultilingualString> name;
 
-    @JsonldProperty("name")
+    @JsonldProperty("description")
+    private List<MultilingualString> description;
+
+    @JsonldProperty("inLanguage")
+    private List<String> inLanguage;
+
+    @JsonldProperty("alternateName")
+    private List<MultilingualString> alternateName;
+
     public void setName(List<MultilingualString> name) {
         if (this.name == null) {
             this.name = name;
@@ -52,5 +61,41 @@ public class Thing implements BaseType {
     @Override
     public String getTypeName() {
         return "Thing";
+    }
+
+    public List<MultilingualString> getDescription() {
+        return description;
+    }
+
+    public void setDescription(List<MultilingualString> description) {
+        if (this.description == null) {
+            this.description = description;
+        } else {
+            this.description.addAll(description);
+        }
+    }
+
+    public List<String> getInLanguage() {
+        return inLanguage;
+    }
+
+    public void setInLanguage(List<String> inLanguage) {
+        if (this.inLanguage == null) {
+            this.inLanguage = inLanguage;
+        } else {
+            this.inLanguage.addAll(inLanguage);
+        }
+    }
+
+    public List<MultilingualString> getAlternateName() {
+        return alternateName;
+    }
+
+    public void setAlternateName(List<MultilingualString> alternateName) {
+        if (this.alternateName == null) {
+            this.alternateName = alternateName;
+        } else {
+            this.alternateName.addAll(alternateName);
+        }
     }
 }

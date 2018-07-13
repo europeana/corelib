@@ -9,7 +9,7 @@ import com.google.schemaorg.core.Thing;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.edm.model.schema.org.MultilingualString;
-import eu.europeana.corelib.edm.model.schema.org.MultilingualStringWithReference;
+import eu.europeana.corelib.edm.model.schema.org.Reference;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
 import java.io.IOException;
@@ -66,13 +66,13 @@ public class SchemaOrgUtils {
         return jsonld;
     }
 
-    private static List<MultilingualStringWithReference> prepareMultilingualStringsWithReference(Map<String, List<String>> map) {
-        List<MultilingualStringWithReference> values = new ArrayList<>();
+    private static List<Reference> prepareMultilingualStringsWithReference(Map<String, List<String>> map) {
+        List<Reference> values = new ArrayList<>();
         if (map != null) {
             for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                 for (String value : entry.getValue()) {
                     if (!value.isEmpty()) {
-                        MultilingualStringWithReference ls = new MultilingualStringWithReference();
+                        Reference ls = new Reference();
                         if (entry.getKey().equalsIgnoreCase(DEFAULT_LANGUAGE)) {
                             ls.setLanguage("");
                         } else {
