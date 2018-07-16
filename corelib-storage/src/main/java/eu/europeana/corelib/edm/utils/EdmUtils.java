@@ -110,6 +110,10 @@ public class EdmUtils {
         return null;
     }
 
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+        return EdmUtils.toRDF(fullBean, false);
+    }
+
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
