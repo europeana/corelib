@@ -55,17 +55,19 @@ public class EdmUtils {
     private static IBindingFactory bfact;
     private static final  String SPACE = " ";
     private static final  String PREFIX = "http://data.europeana.eu";
+    private static boolean noBaseUrl = false;
 
 
     /**
      * Convert a FullBean to an EDM String
      *
      * @param fullBean The FullBean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return The resulting EDM string in RDF-XML
      */
-    @Deprecated
-    public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
-        return toEDM(fullBean);
+    public static synchronized String toEDM(FullBeanImpl fullBean, boolean noBaseUrl) {
+        RDF rdf = toRDF(fullBean, noBaseUrl);
+        return marshallToEDM(rdf);
     }
 
     /**
@@ -75,7 +77,7 @@ public class EdmUtils {
      * @return The resulting EDM string in RDF-XML
      */
     public static synchronized String toEDM(FullBeanImpl fullBean) {
-        RDF rdf = toRDF(fullBean);
+        RDF rdf = toRDF(fullBean, false);
         return marshallToEDM(rdf);
     }
 
@@ -111,9 +113,11 @@ public class EdmUtils {
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return RDF object
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean noBaseUrl) {
+        EdmUtils.noBaseUrl = noBaseUrl;
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -295,7 +299,7 @@ public class EdmUtils {
         if (isUri(europeanaAggregation.getAbout())) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
-            aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
+            aggregation.setAbout(baseUrlAndItem(europeanaAggregation.getAbout()));
         }
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
@@ -303,7 +307,7 @@ public class EdmUtils {
             if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
-                agCHO.setResource(PREFIX + fBean.getProvidedCHOs().get(0).getAbout());
+                agCHO.setResource(baseUrlAndItem(fBean.getProvidedCHOs().get(0).getAbout()));
             }
             aggregation.setAggregatedCHO(agCHO);
         }
@@ -372,7 +376,7 @@ public class EdmUtils {
             if (isUri(prx.getAbout())) {
                 proxy.setAbout(prx.getAbout());
             } else {
-                proxy.setAbout(PREFIX + prx.getAbout());
+                proxy.setAbout(baseUrlAndItem(prx.getAbout()));
             }
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
@@ -405,7 +409,7 @@ public class EdmUtils {
                     if (isUri(pIn[i])) {
                         proxyIn.setResource(pIn[i]);
                     } else {
-                        proxyIn.setResource(PREFIX + pIn[i]);
+                        proxyIn.setResource(baseUrlAndItem(pIn[i]));
                     }
                     pInList.add(proxyIn);
                 }
@@ -426,7 +430,7 @@ public class EdmUtils {
             addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
             addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
             addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-            addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
+            addAsObject(proxy, ProxyFor.class, baseUrlAndItem(prx.getProxyFor()));
             addAsList(proxy, Year.class, prx.getYear());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
@@ -482,14 +486,14 @@ public class EdmUtils {
             if (isUri(aggr.getAbout())) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
-                aggregation.setAbout(PREFIX + aggr.getAbout());
+                aggregation.setAbout(baseUrlAndItem(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
                 AggregatedCHO cho = new AggregatedCHO();
                 if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
-                    cho.setResource(PREFIX + rdf.getProvidedCHOList().get(0).getAbout());
+                    cho.setResource(baseUrlAndItem(rdf.getProvidedCHOList().get(0).getAbout()));
                 }
                 aggregation.setAggregatedCHO(cho);
             }
@@ -523,7 +527,7 @@ public class EdmUtils {
             if (isUri(pCho.getAbout())) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
-                pChoJibx.setAbout(PREFIX + pCho.getAbout());
+                pChoJibx.setAbout(baseUrlAndItem(pCho.getAbout()));
             }
 
             addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
@@ -692,7 +696,7 @@ public class EdmUtils {
                 if (isUri(str)) {
                     ((ResourceType) obj).setResource(str);
                 } else {
-                    ((ResourceType) obj).setResource(PREFIX + str);
+                    ((ResourceType) obj).setResource(baseUrlAndItem(str));
                 }
                 method.invoke(dest, obj);
                 return true;
@@ -969,4 +973,12 @@ public class EdmUtils {
         return result;
     }
 
+    private static String baseUrlAndItem(String url){
+        if (noBaseUrl){
+            return StringUtils.removeStartIgnoreCase(url, "/item");
+        } else {
+            return PREFIX + url;
+        }
+
+    }
 }
