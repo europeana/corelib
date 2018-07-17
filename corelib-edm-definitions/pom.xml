@@ -19,6 +19,30 @@
 		<!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
 		<sonar.projectKey>eu.europeana.corelib-metis:edm-definitions</sonar.projectKey>
 		<sonar.projectName>Europeana Core Library EDM Schema definitions</sonar.projectName>
+		<binding.replace><![CDATA[ $1
+  <namespace uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" prefix="rdf"/>
+  <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml"/>
+  <namespace uri="http://purl.org/dc/elements/1.1/" prefix="dc"/>
+  <namespace uri="http://purl.org/dc/terms/" prefix="dcterms"/>
+  <namespace uri="http://www.europeana.eu/schemas/edm/" prefix="edm"/>
+  <namespace uri="http://www.w3.org/2002/07/owl#" prefix="owl"/>
+  <namespace uri="http://www.w3.org/2003/01/geo/wgs84_pos#" prefix="wgs84"/>
+  <namespace uri="http://www.w3.org/2004/02/skos/core#" prefix="skos"/>
+  <namespace uri="http://rdvocab.info/ElementsGr2/" prefix="rdaGr2"/>
+  <namespace uri="http://xmlns.com/foaf/0.1/" prefix="foaf"/>
+  <namespace uri="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" prefix="ebucore"/>
+  <namespace uri="http://www.w3.org/ns/adms#" prefix="adms"/>
+  <namespace uri="http://www.w3.org/ns/dcat#" prefix="dcat"/>
+  <namespace uri="http://usefulinc.com/ns/doap#" prefix="doap"/>
+  <namespace uri="http://www.w3.org/ns/odrl/2/" prefix="odrl"/>
+  <namespace uri="http://creativecommons.org/ns#" prefix="cc"/>
+  <namespace uri="http://www.openarchives.org/ore/terms/" prefix="ore"/>
+  <namespace uri="http://www.europeana.eu/schemas/edm/enrichment/" prefix="enrichment"/>
+  <namespace uri="http://rdfs.org/sioc/services#" prefix="svcs"/>
+  <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml"/>
+            ]]>
+		</binding.replace>
+		<token.regex><![CDATA[ (<binding.*>) ]]></token.regex>
 	</properties>
 
 	<dependencies>
@@ -61,6 +85,29 @@
 		<defaultGoal>install</defaultGoal>
 		<plugins>
 			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<file>${project.basedir}/src/main/java/binding.xml</file>
+					<replacements>
+						<replacement>
+							<token>${token.regex}</token>
+							<value>${binding.replace}</value>
+						</replacement>
+					</replacements>
+				</configuration>
+		    </plugin>
+		    <plugin>
 				<groupId>org.jibx</groupId>
 				<artifactId>maven-jibx-plugin</artifactId>
 				<version>${jibx.version}</version>
@@ -85,6 +132,7 @@
 				<executions>
 					<execution>
 						<id>generate-java-code-from-schema (EDM)</id>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>schema-codegen</goal>
 						</goals>
@@ -101,6 +149,7 @@
 					</execution>
 					<execution>
 						<id>compile-binding (EDM)</id>
+						<phase>process-classes</phase>
 						<goals>
 							<goal>bind</goal>
 						</goals>
