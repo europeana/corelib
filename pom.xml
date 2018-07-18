@@ -64,7 +64,6 @@
 		<module>corelib-storage</module>
 		<module>corelib-web</module>
 		<module>corelib-edm-definitions</module>
-		<module>corelib-dereference</module>
 		<module>corelib-lookup</module>
 		<module>corelib-media-storage</module>
 		<module>corelib-sugarcrm/bindings</module>
