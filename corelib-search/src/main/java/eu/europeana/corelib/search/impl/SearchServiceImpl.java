@@ -147,7 +147,7 @@ public class SearchServiceImpl implements SearchService {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfo(fullBean, mongoServer);
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
 
             if (similarItems) {
                 try {
@@ -211,7 +211,7 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfo(fullBean, mongoServer);
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
             if (similarItems) {
                 try {
                     fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
