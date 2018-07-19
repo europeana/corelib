@@ -26,6 +26,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -92,6 +93,11 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public String getAggregatedCHO() {
+		// 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
+		// but it's added for now in case we want to test this version with our UIM Mongo cluster
+		if (!aggregatedCHO.toLowerCase(Locale.getDefault()).startsWith("/item")) {
+			return ("/item" + aggregatedCHO);
+		}
 		return this.aggregatedCHO;
 	}
 

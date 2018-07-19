@@ -54,7 +54,7 @@ public class EdmUtils {
 
     private static IBindingFactory bfact;
     private static final  String SPACE = " ";
-    private static final  String PREFIX = "http://data.europeana.eu";
+    private static final  String BASE_URL = "http://data.europeana.eu";
     private static boolean noBaseUrl = false;
 
 
@@ -979,10 +979,11 @@ public class EdmUtils {
 
     private static String baseUrlAndItem(String url){
         if (noBaseUrl){
+            // the noBaseUrl situation is temporary for Metis migration and will be removed after the POC
             return StringUtils.removeStartIgnoreCase(url, "/item");
         } else {
-            return PREFIX + url;
+            return BASE_URL + url;
         }
-
     }
+
 }

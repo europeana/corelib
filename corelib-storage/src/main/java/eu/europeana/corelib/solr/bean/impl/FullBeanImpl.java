@@ -186,7 +186,7 @@ public class FullBeanImpl implements FullBean {
 
     @Override
     public void setAggregations(List<? extends Aggregation> aggregations) {
-    this.aggregations = (List<AggregationImpl>) aggregations;
+        this.aggregations = (List<AggregationImpl>) aggregations;
     }
 
     @Override
@@ -211,9 +211,10 @@ public class FullBeanImpl implements FullBean {
 
     @Override
     public List<ProvidedCHOImpl> getProvidedCHOs() {
-      // Temporary fix for Metis, we need to make sure the about fields start with "/item" (see EA-1235)
-      // Since the setter isn't used when population the providedCHOs, we need to do this in the getter
+      // Since Morphia doesn't use the setter when populating the providedCHOs, we do all adjustments in the getter
       for (ProvidedCHO item : this.providedCHOs) {
+          // 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
+          // but it's added for now in case we want to test this version with our UIM Mongo cluster
           if (!item.getAbout().toLowerCase(Locale.getDefault()).startsWith("/item")) {
               item.setAbout("/item" + item.getAbout());
           }
