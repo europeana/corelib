@@ -18,9 +18,10 @@ package eu.europeana.uim.sugarcrmclient.enums;
 
 /**
  * @author Georgios Markakis (gwarkx@hotmail.com)
- *
  * Nov 13, 2013
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public enum EuropeanaOrgRole {
 
 	Data_Aggregator("D", "Data Aggregator"),

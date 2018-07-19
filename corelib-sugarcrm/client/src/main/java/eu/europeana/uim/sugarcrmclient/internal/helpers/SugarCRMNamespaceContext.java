@@ -31,7 +31,9 @@ import javax.xml.namespace.NamespaceContext;
  * statements in SOAP responses delivered by SugarCRM 
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class SugarCRMNamespaceContext implements NamespaceContext {
 
 

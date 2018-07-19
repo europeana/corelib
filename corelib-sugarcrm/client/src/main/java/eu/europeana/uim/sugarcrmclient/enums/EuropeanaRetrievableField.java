@@ -24,7 +24,9 @@ package eu.europeana.uim.sugarcrmclient.enums;
  *  This enumeration indicates the Fields that should be just retrieved
  *  by the SugarCRM client. 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public enum EuropeanaRetrievableField {
 
 	ID("id", "id", "ID"),

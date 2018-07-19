@@ -12,7 +12,9 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.ErrorValue;
  * in the search process.
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class JIXBQueryResultException extends Exception {
 
 	private static final long serialVersionUID = 1L;

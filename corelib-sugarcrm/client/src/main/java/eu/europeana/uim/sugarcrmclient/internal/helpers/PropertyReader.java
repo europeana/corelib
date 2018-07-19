@@ -13,8 +13,9 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Property Reader Utility for UIM
  * @author Yorgos.Mamakis@ kb.nl
- *
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public final class PropertyReader {
 	/**
 	 * The UIM property fields

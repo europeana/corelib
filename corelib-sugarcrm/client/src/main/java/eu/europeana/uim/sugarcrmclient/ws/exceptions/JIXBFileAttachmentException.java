@@ -26,8 +26,9 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.ErrorValue;
 /**
  * Exception thrown for File Attachment Errors
  * @author Georgios Markakis
- *
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class JIXBFileAttachmentException extends Exception {
 
 	private static final long serialVersionUID = 1L;

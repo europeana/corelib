@@ -11,7 +11,9 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.JIXBLoginFailureException;
  * Class used by Spring to instantiate a client
  *  
  * @author Georgios Markakis
+ * @deprecated July 2018 replaced by Metis
  */
+@Deprecated
 public class ClientFactory {
 
 	private WebServiceTemplate webServiceTemplate;

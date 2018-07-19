@@ -54,7 +54,9 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.*;
  * The core class for performing SOAP based sugarCRM operations
  * 
  * @author Georgios Markakis
+ * @deprecated July 2018 replaced by Metis
  */
+@Deprecated
 public class SugarWsClientImpl implements SugarWsClient {
 
 	private WebServiceTemplate webServiceTemplate;

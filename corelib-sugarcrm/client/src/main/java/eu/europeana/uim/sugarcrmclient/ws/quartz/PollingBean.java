@@ -33,7 +33,9 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.JIXBLoginFailureException;
  * order to keep the client connection alive.
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class PollingBean extends QuartzJobBean {
 
 	private SugarWsClient sugarWsClient;

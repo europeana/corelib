@@ -55,7 +55,9 @@ import eu.europeana.uim.sugarcrmclient.ws.exceptions.JIXBQueryResultException;
  * Interface describing the available SOAP based sugarCRM operations
  * 
  * @author Georgios Markakis
+ * @deprecated July 2018 replaced by Metis
  */
+@Deprecated
 public interface SugarWsClient {
 
 	/**

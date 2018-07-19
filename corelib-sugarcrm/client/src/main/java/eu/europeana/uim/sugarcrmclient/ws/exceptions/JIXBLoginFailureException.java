@@ -26,7 +26,9 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.ErrorValue;
  * Exception thrown in case of Authentication Error.
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class JIXBLoginFailureException extends Exception {
 
 	private static final long serialVersionUID = 1L;

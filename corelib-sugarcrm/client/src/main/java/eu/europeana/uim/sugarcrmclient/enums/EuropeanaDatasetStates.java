@@ -23,7 +23,9 @@ package eu.europeana.uim.sugarcrmclient.enums;
 /**
  * This enumeration holds the State Descriptions for EuropeanaDatasets in Sugar CRM
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public enum EuropeanaDatasetStates {
 
 	OAI_PMH_TESTING("Prospecting", "OAI-PHM testing"),

@@ -6,7 +6,9 @@ import eu.europeana.uim.sugarcrmclient.jibxbindings.ErrorValue;
  * 
  * @author Rene Wiermer (rene.wiermer@kb.nl)
  * @date Aug 12, 2011
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class JIXBUtil {
 	
 	/**

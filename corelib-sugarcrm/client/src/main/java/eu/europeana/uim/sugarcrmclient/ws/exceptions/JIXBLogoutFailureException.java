@@ -9,7 +9,9 @@ package eu.europeana.uim.sugarcrmclient.ws.exceptions;
  * Exception thrown in case of a Logout Error
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class JIXBLogoutFailureException extends Exception{
 
 	private static final long serialVersionUID = 1L;

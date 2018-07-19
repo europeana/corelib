@@ -71,7 +71,10 @@ import org.jibx.runtime.JiBXException;
  * examples).
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
+ *
  */
+@Deprecated
 public class ClientUtils {
 
 	private static org.apache.log4j.Logger logger = Logger

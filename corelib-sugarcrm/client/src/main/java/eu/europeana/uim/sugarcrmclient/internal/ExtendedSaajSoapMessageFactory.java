@@ -49,7 +49,9 @@ import java.util.zip.GZIPInputStream;
  * unmarshalling context.
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public class ExtendedSaajSoapMessageFactory extends SaajSoapMessageFactory {
 
     /** Default, empty constructor. */

@@ -24,7 +24,9 @@ package eu.europeana.uim.sugarcrmclient.enums;
  * Enumerations holding the names of the system modules in sugarCRM currently being used
  * 
  * @author Georgios Markakis
+ * @deprecated july 2018 replaced by Metis
  */
+@Deprecated
 public enum EuropeanaDatasets {
 
 	ORGANIZATIONS("Accounts"),
