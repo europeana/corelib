@@ -1,6 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.edm.model.schema.org.SchemaOrgConstants;
+import eu.europeana.corelib.edm.model.schema.org.Thing;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class SchemaOrgUtils {
     public static String toSchemaOrg(FullBeanImpl bean) {
         String jsonld = null;
 
-        eu.europeana.corelib.edm.model.schema.org.Thing object = new eu.europeana.corelib.edm.model.schema.org.Thing();
+        Thing object = new Thing();
         setId(object, bean);
 
         eu.europeana.corelib.edm.utils.JsonLdSerializer serializer = new eu.europeana.corelib.edm.utils.JsonLdSerializer();
