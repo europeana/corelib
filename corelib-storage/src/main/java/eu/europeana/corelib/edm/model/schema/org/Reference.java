@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
 
-public class Reference implements BaseType {
+public class Reference<T extends Thing> implements BaseType {
 
     @JsonIgnore
-    private Class<? extends Thing> type;
+    private Class<T> type;
 
     public Reference() {
         this.type = null;
     }
 
-    public Reference(Class<? extends Thing> type) {
+    public Reference(Class<T> type) {
         this.type = type;
     }
 
