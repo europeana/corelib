@@ -31,7 +31,7 @@ public class SchemaOrgUtils {
      * @param bean
      * @return
      */
-    public static String toSchemaOrgJackson(FullBeanImpl bean) {
+    public static String toSchemaOrg(FullBeanImpl bean) {
         String jsonld = null;
 
         eu.europeana.corelib.edm.model.schema.org.Thing object = new eu.europeana.corelib.edm.model.schema.org.Thing();

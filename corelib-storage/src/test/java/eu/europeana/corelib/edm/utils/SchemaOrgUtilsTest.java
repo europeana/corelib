@@ -18,9 +18,9 @@ import java.util.List;
 public class SchemaOrgUtilsTest {
 
     @Test
-    public void toSchemaOrgJacksonTest() {
+    public void toSchemaOrgTest() {
         FullBeanImpl bean = mockFullBean();
-        String output = SchemaOrgUtils.toSchemaOrgJackson(bean);
+        String output = SchemaOrgUtils.toSchemaOrg(bean);
         Assert.assertNotNull(output);
     }
 
