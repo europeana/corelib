@@ -4,192 +4,205 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
-import java.util.Date;
 import java.util.List;
 
 @JsonldType("CreativeWork")
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 public class CreativeWork extends Thing {
+
     @Override
-    public String getTypeName() { return "CreativeWork";}
+    public String getTypeName() { return SchemaOrgConstants.TYPE_CREATIVE_WORK;}
 
-    @JsonldProperty("publisher")
-    private List<BaseType> publisher;
-
-    @JsonldProperty("contributor")
-    private List<BaseType> contributor;
-
-    @JsonldProperty("about")
-    private List<BaseType> about;
-
-    @JsonldProperty("creator")
-    private List<BaseType> creator;
-
-    @JsonldProperty("dateCreated")
-    private List<Date> dateCreated;
-
-    @JsonldProperty("hasPart")
-    private List<BaseType> hasPart;
-
-    @JsonldProperty("exampleOfWork")
-    private List<BaseType> exampleOfWork;
-
-    @JsonldProperty("isPartOf")
-    private List<BaseType> isPartOf;
-
-    @JsonldProperty("datePublished")
-    private List<Date> datePublished;
-
-    @JsonldProperty("mentions")
-    private List<BaseType> mentions;
-
-    @JsonldProperty("spatialCoverage")
-    private List<BaseType> spatialCoverage;
-
-    @JsonldProperty("temporalCoverage")
-    private List<String> temporalCoverage;
-
-    public void setPublisher(List<BaseType> publisher) {
-        if (this.publisher == null) {
-            this.publisher = publisher;
-        } else {
-            this.publisher.addAll(publisher);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_PUBLISHER)
     public List<BaseType> getPublisher() {
-        return publisher;
+        return getProperty(SchemaOrgConstants.PROPERTY_PUBLISHER);
     }
 
-    public void setContributor(List<BaseType> contributor) {
-        if (this.contributor == null) {
-            this.contributor = contributor;
-        } else {
-            this.contributor.addAll(contributor);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
     public List<BaseType> getContributor() {
-        return contributor;
+        return getProperty(SchemaOrgConstants.PROPERTY_CONTRIBUTOR);
     }
 
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_ABOUT)
     public List<BaseType> getAbout() {
-        return about;
+        return getProperty(SchemaOrgConstants.PROPERTY_ABOUT);
     }
 
-    public void setAbout(List<BaseType> about) {
-        if (this.about == null) {
-            this.about = about;
-        } else {
-            this.about.addAll(about);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_CREATOR)
     public List<BaseType> getCreator() {
-        return creator;
+        return getProperty(SchemaOrgConstants.PROPERTY_CREATOR);
     }
 
-    public void setCreator(List<BaseType> creator) {
-        if (this.creator == null) {
-            this.creator = creator;
-        } else {
-            this.creator.addAll(creator);
-        }
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_DATE_CREATED)
+    public List<BaseType> getDateCreated() {
+        return getProperty(SchemaOrgConstants.PROPERTY_DATE_CREATED);
     }
 
-    public List<Date> getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(List<Date> dateCreated) {
-        if (this.dateCreated == null) {
-            this.dateCreated = dateCreated;
-        } else {
-            this.dateCreated.addAll(dateCreated);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_HAS_PART)
     public List<BaseType> getHasPart() {
-        return hasPart;
+        return getProperty(SchemaOrgConstants.PROPERTY_HAS_PART);
     }
 
-    public void setHasPart(List<BaseType> hasPart) {
-        if (this.hasPart == null) {
-            this.hasPart = hasPart;
-        } else {
-            this.hasPart.addAll(hasPart);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK)
     public List<BaseType> getExampleOfWork() {
-        return exampleOfWork;
+        return getProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK);
     }
 
-    public void setExampleOfWork(List<BaseType> exampleOfWork) {
-        if (this.exampleOfWork == null) {
-            this.exampleOfWork = exampleOfWork;
-        } else {
-            this.exampleOfWork.addAll(exampleOfWork);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_IS_PART_OF)
     public List<BaseType> getIsPartOf() {
-        return isPartOf;
+        return getProperty(SchemaOrgConstants.PROPERTY_IS_PART_OF);
     }
 
-    public void setIsPartOf(List<BaseType> isPartOf) {
-        if (this.isPartOf == null) {
-            this.isPartOf = isPartOf;
-        } else {
-            this.isPartOf.addAll(isPartOf);
-        }
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_DATE_PUBLISHED)
+    public List<BaseType> getDatePublished() {
+        return getProperty(SchemaOrgConstants.PROPERTY_DATE_PUBLISHED);
     }
 
-    public List<Date> getDatePublished() {
-        return datePublished;
-    }
-
-    public void setDatePublished(List<Date> datePublished) {
-        if (this.datePublished == null) {
-            this.datePublished = datePublished;
-        } else {
-            this.datePublished.addAll(datePublished);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_MENTIONS)
     public List<BaseType> getMentions() {
-        return mentions;
+        return getProperty(SchemaOrgConstants.PROPERTY_MENTIONS);
     }
 
-    public void setMentions(List<BaseType> mentions) {
-        if (this.mentions == null) {
-            this.mentions = mentions;
-        } else {
-            this.mentions.addAll(mentions);
-        }
-    }
-
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE)
     public List<BaseType> getSpatialCoverage() {
-        return spatialCoverage;
+        return getProperty(SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE);
     }
 
-    public void setSpatialCoverage(List<BaseType> spatialCoverage) {
-        if (this.spatialCoverage == null) {
-            this.spatialCoverage = spatialCoverage;
-        } else {
-            this.spatialCoverage.addAll(spatialCoverage);
-        }
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE)
+    public List<BaseType> getTemporalCoverage() {
+        return getProperty(SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE);
     }
 
-    public List<String> getTemporalCoverage() {
-        return temporalCoverage;
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_IS_BASED_ON)
+    public List<BaseType> getIsBasedOn() {
+        return getProperty(SchemaOrgConstants.PROPERTY_IS_BASED_ON);
     }
 
-    public void setTemporalCoverage(List<String> temporalCoverage) {
-        if (this.temporalCoverage == null) {
-            this.temporalCoverage = temporalCoverage;
-        } else {
-            this.temporalCoverage.addAll(temporalCoverage);
-        }
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_PROVIDER)
+    public List<BaseType> getProvider() {
+        return getProperty(SchemaOrgConstants.PROPERTY_PROVIDER);
+    }
+
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA)
+    public List<BaseType> getAssociatedMedia() {
+        return getProperty(SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA);
+    }
+
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_THUMBNAIL_URL)
+    public List<BaseType> getThumbnailUrl() {
+        return getProperty(SchemaOrgConstants.PROPERTY_THUMBNAIL_URL);
+    }
+
+    @JsonldProperty(SchemaOrgConstants.PROPERTY_LICENSE)
+    public List<BaseType> getLicense() {
+        return getProperty(SchemaOrgConstants.PROPERTY_LICENSE);
+    }
+
+    public void addPublisher(MultilingualString publisher) {
+        addProperty(SchemaOrgConstants.PROPERTY_PUBLISHER, publisher);
+    }
+
+    public void addPublisher(Reference publisher) {
+        addProperty(SchemaOrgConstants.PROPERTY_PUBLISHER, publisher);
+    }
+
+    public void addContributor(MultilingualString contributor) {
+        addProperty(SchemaOrgConstants.PROPERTY_CONTRIBUTOR, contributor);
+    }
+
+    public void addContributor(Reference contributor) {
+        addProperty(SchemaOrgConstants.PROPERTY_CONTRIBUTOR, contributor);
+    }
+
+    public void addAbout(MultilingualString about) {
+        addProperty(SchemaOrgConstants.PROPERTY_ABOUT, about);
+    }
+
+    public void addAbout(Reference about) {
+        addProperty(SchemaOrgConstants.PROPERTY_ABOUT, about);
+    }
+
+    public void addCreator(MultilingualString creator) {
+        addProperty(SchemaOrgConstants.PROPERTY_CREATOR, creator);
+    }
+
+    public void addCreator(Reference creator) {
+        addProperty(SchemaOrgConstants.PROPERTY_CREATOR, creator);
+    }
+
+    public void addDateCreated(Text dateCreated) {
+        addProperty(SchemaOrgConstants.PROPERTY_DATE_CREATED, dateCreated);
+    }
+
+    public void addHasPart(MultilingualString hasPart) {
+        addProperty(SchemaOrgConstants.PROPERTY_HAS_PART, hasPart);
+    }
+
+    public void addHasPart(Reference hasPart) {
+        addProperty(SchemaOrgConstants.PROPERTY_HAS_PART, hasPart);
+    }
+
+    public void addExampleOfWork(MultilingualString exampleOfWork) {
+        addProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, exampleOfWork);
+    }
+
+    public void addExampleOfWork(Reference exampleOfWork) {
+        addProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, exampleOfWork);
+    }
+
+    public void addIsPartOf(MultilingualString isPartOf) {
+        addProperty(SchemaOrgConstants.PROPERTY_IS_PART_OF, isPartOf);
+    }
+
+    public void addIsPartOf(Reference isPartOf) {
+        addProperty(SchemaOrgConstants.PROPERTY_IS_PART_OF, isPartOf);
+    }
+
+    public void addDatePublished(Text datePublished) {
+        addProperty(SchemaOrgConstants.PROPERTY_DATE_PUBLISHED, datePublished);
+    }
+
+    public void addMentions(MultilingualString mentions) {
+        addProperty(SchemaOrgConstants.PROPERTY_MENTIONS, mentions);
+    }
+
+    public void addMentions(Reference mentions) {
+        addProperty(SchemaOrgConstants.PROPERTY_MENTIONS, mentions);
+    }
+
+    public void addSpatialCoverage(MultilingualString spatialCoverage) {
+        addProperty(SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, spatialCoverage);
+    }
+
+    public void addSpatialCoverage(Reference spatialCoverage) {
+        addProperty(SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, spatialCoverage);
+    }
+
+    public void addTemporalCoverage(Text temporalCoverage) {
+        addProperty(SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, temporalCoverage);
+    }
+
+    public void addIsBasedOn(Reference<CreativeWork> isBasedOn) {
+        addProperty(SchemaOrgConstants.PROPERTY_IS_BASED_ON, isBasedOn);
+    }
+
+    public void addProvider(Text provider) {
+        addProperty(SchemaOrgConstants.PROPERTY_PROVIDER, provider);
+    }
+
+    public void addProvider(Reference<Organization> provider) {
+        addProperty(SchemaOrgConstants.PROPERTY_PROVIDER, provider);
+    }
+
+    public void addAssociatedMedia(Reference<MediaObject> associatedMedia) {
+        addProperty(SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA, associatedMedia);
+    }
+
+    public void addThumbnailUrl(Text thumbnailUrl) {
+        addProperty(SchemaOrgConstants.PROPERTY_THUMBNAIL_URL, thumbnailUrl);
+    }
+
+    public void addLicense(Text license) {
+        addProperty(SchemaOrgConstants.PROPERTY_LICENSE, license);
     }
 }
