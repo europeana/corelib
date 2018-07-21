@@ -29,17 +29,6 @@
             <version>${objectStorage.version}</version>
         </dependency>
 
-        <!-- CORELIB -->
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-dereference</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>google-collections</artifactId>
-                    <groupId>com.google.collections</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- OTHER -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -57,6 +46,21 @@
 		    <artifactId>config</artifactId>
 		    <version>1.2.0</version>
 		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commonsIO.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongoDriver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commonsLang.version}</version>
+        </dependency>
 
     </dependencies>
 

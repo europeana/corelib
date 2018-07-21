@@ -26,7 +26,7 @@
 		<!-- CORELIB -->
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-dereference</artifactId>
+			<artifactId>corelib-utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
