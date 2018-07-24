@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
@@ -26,6 +27,7 @@ public class VisualArtwork extends CreativeWork {
         addProperty(SchemaOrgConstants.PROPERTY_ART_MEDIUM, artMedium);
     }
 
+    @JsonIgnore
     @Override
     public String getTypeName() {
         return SchemaOrgConstants.TYPE_VISUAL_ARTWORK;

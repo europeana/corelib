@@ -14,7 +14,7 @@ import java.util.Map;
 
 @JsonldType("Thing")
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({"@id", "name", "alternateName", "description", "inLanguage", "sameAs", "url"})
+@JsonPropertyOrder({"@type", "@id", "name", "alternateName", "description", "inLanguage", "sameAs", "url"})
 public class Thing implements BaseType {
     private String id;
 
@@ -87,6 +87,7 @@ public class Thing implements BaseType {
         addProperty(SchemaOrgConstants.PROPERTY_URL, url);
     }
 
+    @JsonIgnore
     @Override
     public String getTypeName() {
         return SchemaOrgConstants.TYPE_THING;

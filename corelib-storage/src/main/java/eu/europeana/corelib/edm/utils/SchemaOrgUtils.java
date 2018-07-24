@@ -1,29 +1,16 @@
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.edm.model.schema.org.SchemaOrgConstants;
 import eu.europeana.corelib.edm.model.schema.org.Thing;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SchemaOrgUtils {
+    private static final Logger LOG = LogManager.getLogger(SchemaOrgUtils.class);
 
     private static final String URL_PREFIX = "http://data.europeana.eu";
-
-    private static final Map<String, String> conceptTypes;
-
-    static {
-        conceptTypes = new HashMap<>();
-        conceptTypes.put("http://data.europeana.eu/concept/base/6", SchemaOrgConstants.TYPE_BOOK);
-        conceptTypes.put("http://data.europeana.eu/concept/base/43", SchemaOrgConstants.TYPE_MAP);
-        conceptTypes.put("http://data.europeana.eu/concept/base/47", SchemaOrgConstants.TYPE_PAINTING);
-        conceptTypes.put("http://data.europeana.eu/concept/base/48", SchemaOrgConstants.TYPE_PHOTOGRAPH);
-        conceptTypes.put("http://data.europeana.eu/concept/base/51", SchemaOrgConstants.TYPE_SCULPTURE);
-        conceptTypes.put("http://data.europeana.eu/concept/base/190", SchemaOrgConstants.TYPE_VISUAL_ARTWORK);
-        conceptTypes.put("http://data.europeana.eu/concept/base/18", SchemaOrgConstants.TYPE_NEWSPAPER);
-    }
 
     private SchemaOrgUtils() { }
 
@@ -35,14 +22,14 @@ public class SchemaOrgUtils {
     public static String toSchemaOrg(FullBeanImpl bean) {
         String jsonld = null;
 
-        Thing object = new Thing();
+        Thing object = SchemaOrgTypeFactory.createObject(bean);
         setId(object, bean);
 
-        eu.europeana.corelib.edm.utils.JsonLdSerializer serializer = new eu.europeana.corelib.edm.utils.JsonLdSerializer();
+        JsonLdSerializer serializer = new JsonLdSerializer();
         try {
             jsonld = serializer.serialize(object);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Serialization to schema.org failed for " + object != null ? object.getId() : bean.getAbout(), e);
         }
         return jsonld;
     }

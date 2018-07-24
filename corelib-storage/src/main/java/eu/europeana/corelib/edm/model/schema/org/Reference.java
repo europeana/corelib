@@ -1,12 +1,12 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Reference<T extends Thing> implements BaseType {
 
-    @JsonIgnore
     private Class<T> type;
 
     public Reference() {
@@ -29,11 +29,15 @@ public class Reference<T extends Thing> implements BaseType {
     }
 
     @JsonProperty("@type")
-    @Override
-    public String getTypeName() {
+    public String getType() {
         if (type != null) {
-            type.getClass().getSimpleName();
+            return type.getSimpleName();
         }
         return null;
+    }
+
+    @Override
+    public String getTypeName() {
+        return getType();
     }
 }
