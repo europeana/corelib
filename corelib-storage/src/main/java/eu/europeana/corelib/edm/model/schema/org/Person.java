@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
@@ -7,6 +8,10 @@ import java.util.List;
 
 @JsonldType(SchemaOrgConstants.TYPE_PERSON)
 public class Person extends Thing {
+
+    @JsonIgnore
+    @Override
+    public String getTypeName() { return SchemaOrgConstants.TYPE_PERSON; }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_BIRTH_DATE)
     public List<BaseType> getBirthDate() {
@@ -37,7 +42,6 @@ public class Person extends Thing {
     public List<BaseType> getDeathPlace() {
         return getProperty(SchemaOrgConstants.PROPERTY_DEATH_PLACE);
     }
-    private List<Reference<Place>> deathPlace;
 
     public void addBirthDate(Text birthDate) {
         addProperty(SchemaOrgConstants.PROPERTY_BIRTH_DATE, birthDate);

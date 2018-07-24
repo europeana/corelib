@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 
 public class MultilingualString implements BaseType {
-    @JsonProperty("@value")
+    @JsonProperty(SchemaOrgConstants.VALUE)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String value;
 
-    @JsonProperty("@language")
+    @JsonProperty(SchemaOrgConstants.LANGUAGE)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String language;
 

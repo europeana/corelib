@@ -82,6 +82,7 @@ public class SchemaOrgUtilsTest {
         proxy.setDcType(new HashMap<>());
         proxy.getDcType().put("def", new ArrayList<>());
         proxy.getDcType().get("def").add("grafiek");
+        proxy.getDcType().get("def").add("http://data.europeana.eu/concept/base/48");
 
         proxy.setAbout("/proxy/provider/2021618/internetserver_Details_kunst_25027");
 
@@ -176,6 +177,7 @@ public class SchemaOrgUtilsTest {
         ((ImageMetaInfoImpl)webResource.getWebResourceMetaInfo().getImageMetaInfo()).setOrientation(ImageOrientation.PORTRAIT);
 
         aggregation.setWebResources(webResources);
+        aggregations.add(aggregation);
         Mockito.when(bean.getAggregations()).thenReturn(aggregations);
     }
 
