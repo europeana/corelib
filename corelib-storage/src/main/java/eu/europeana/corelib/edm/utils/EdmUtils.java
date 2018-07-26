@@ -23,6 +23,7 @@ import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
+import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -336,6 +337,14 @@ public class EdmUtils {
         Completeness completeness = new Completeness();
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
+
+        Created created = new Created();
+        created.setString(DateUtils.format(fBean.getTimestampCreated()));
+        aggregation.setCreated(created);
+
+        Modified modified = new Modified();
+        modified.setString(DateUtils.format(fBean.getTimestampUpdated()));
+        aggregation.setModified(modified);
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
