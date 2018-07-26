@@ -88,18 +88,6 @@
 
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
-				<artifactId>corelib-dereference</artifactId>
-                <version>${project.version}</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>google-collections</artifactId>
-						<groupId>com.google.collections</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-edm-definitions</artifactId>
                 <version>${project.version}</version>
 			</dependency>
