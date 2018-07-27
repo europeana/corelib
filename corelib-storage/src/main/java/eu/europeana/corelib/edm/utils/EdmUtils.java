@@ -23,6 +23,7 @@ import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
+import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -95,6 +96,10 @@ public class EdmUtils {
             LOG.error("Error converting fullbean to EDM: "+ e.getClass().getSimpleName() + "  " + e.getMessage());
         }
         return null;
+    }
+
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+        return EdmUtils.toRDF(fullBean, false);
     }
 
     /**
@@ -314,6 +319,17 @@ public class EdmUtils {
         }
         addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
         addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights());
+        Completeness completeness = new Completeness();
+        completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
+        aggregation.setCompleteness(completeness);
+
+        Created created = new Created();
+        created.setString(DateUtils.format(fBean.getTimestampCreated()));
+        aggregation.setCreated(created);
+
+        Modified modified = new Modified();
+        modified.setString(DateUtils.format(fBean.getTimestampUpdated()));
+        aggregation.setModified(modified);
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
@@ -528,7 +544,7 @@ public class EdmUtils {
                 addAsList(agent, AltLabel.class, ag.getAltLabel());
                 addAsObject(agent, Begin.class, ag.getBegin());
                 addAsObject(agent, End.class, ag.getEnd());
-                addAsObject(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
+                addAsList(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());

@@ -49,6 +49,6 @@
     </element>
     
     <element name="gender" type="rdf:LiteralType"/>
-    <element name="biographicalInformation" type="rdf:LiteralType"/>
+    <element name="biographicalInformation" type="rdf:ResourceOrLiteralType"/>
 
 </schema>

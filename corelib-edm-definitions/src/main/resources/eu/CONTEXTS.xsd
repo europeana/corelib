@@ -74,7 +74,7 @@
           <element ref="edm:hasMet" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="edm:isRelatedTo" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="foaf:name" maxOccurs="unbounded" minOccurs="0"/>
-          <element ref="rdaGr2:biographicalInformation" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:biographicalInformation" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="rdaGr2:dateOfBirth" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfDeath" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
