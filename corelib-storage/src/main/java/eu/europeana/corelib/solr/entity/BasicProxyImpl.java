@@ -3,8 +3,6 @@ package eu.europeana.corelib.solr.entity;
 import org.mongodb.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.BasicProxy;
 
-import java.util.Locale;
-
 @Entity("BasicProxy")
 public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
@@ -23,11 +21,6 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	@Override
 	public String getProxyFor() {
-        // 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
-        // but it's added for now in case we want to test this version with our UIM Mongo cluster
-        if (!proxyFor.toLowerCase(Locale.getDefault()).startsWith("/item")) {
-            return ("/item" + proxyFor);
-        }
 		return this.proxyFor;
 	}
 

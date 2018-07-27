@@ -1,13 +1,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.utils.StringArrayUtils;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -15,6 +9,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @JsonInclude(NON_EMPTY)
@@ -38,11 +36,6 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 	@Override
 	public String getAggregatedCHO() {
-		// 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
-		// but it's added for now in case we want to test this version with our UIM Mongo cluster
-		if (!aggregatedCHO.toLowerCase(Locale.getDefault()).startsWith("/item")) {
-			return ("/item" + aggregatedCHO);
-		}
 		return this.aggregatedCHO;
 	}
 

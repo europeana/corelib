@@ -19,14 +19,7 @@ package eu.europeana.corelib.solr.entity;
 
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.utils.StringArrayUtils;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -35,6 +28,11 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.Aggregation
@@ -93,11 +91,6 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	@Override
 	public String getAggregatedCHO() {
-		// 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
-		// but it's added for now in case we want to test this version with our UIM Mongo cluster
-		if (!aggregatedCHO.toLowerCase(Locale.getDefault()).startsWith("/item")) {
-			return ("/item" + aggregatedCHO);
-		}
 		return this.aggregatedCHO;
 	}
 

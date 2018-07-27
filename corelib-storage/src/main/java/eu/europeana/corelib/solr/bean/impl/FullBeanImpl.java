@@ -18,19 +18,15 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.annotations.Transient;
-
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Agent;
@@ -41,8 +37,8 @@ import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.Service;
+import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -211,15 +207,7 @@ public class FullBeanImpl implements FullBean {
 
     @Override
     public List<ProvidedCHOImpl> getProvidedCHOs() {
-      // Since Morphia doesn't use the setter when populating the providedCHOs, we do all adjustments in the getter
-      for (ProvidedCHO item : this.providedCHOs) {
-          // 2018-07-19 PE: startsWith check can most likely be omitted for Metis,
-          // but it's added for now in case we want to test this version with our UIM Mongo cluster
-          if (!item.getAbout().toLowerCase(Locale.getDefault()).startsWith("/item")) {
-              item.setAbout("/item" + item.getAbout());
-          }
-      }
-      return this.providedCHOs;
+        return this.providedCHOs;
     }
 
     @Override
