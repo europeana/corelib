@@ -21,12 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Add extra web resource information to a fullbean. Note that some if this should actually be done at ingestion time, but for
@@ -47,18 +42,13 @@ public class WebMetaInfo {
 
     /**
      * Add webResources and fill them with metadata retrieved from Mongo
+     *
      * @param fullBean
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfo(final FullBean fullBean, final EdmMongoServer mongoServer) {
-        if (fullBean == null) {
-            //   LOG.error("FullBean is null when injecting web meta info");
-            return;
-        }
-
-        if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
-            //     LOG.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
+        if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
 
@@ -81,28 +71,80 @@ public class WebMetaInfo {
         }
 
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
-        for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
-            WebResourceMetaInfoImpl webMetaInfo = null;
+        fillAggregations(fullBean, mongoServer);
 
+        addReferencedByIIIF(fullBean);
+    }
+
+    private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
+        Map<String, WebResource> webResourceHashCodes = prepareWebResourceHashCodes(fullBean);
+        Map<String, WebResourceMetaInfoImpl> metaInfos = retrieveWebMetaInfos(mongoServer, new ArrayList<>(webResourceHashCodes.keySet()));
+
+        for (Map.Entry<String, WebResourceMetaInfoImpl> metaInfo : metaInfos.entrySet()) {
+            WebResource webResource = webResourceHashCodes.get(metaInfo.getKey());
+            if (webResource != null && metaInfo.getValue() != null) {
+                ((WebResourceImpl) webResource).setWebResourceMetaInfo(metaInfo.getValue());
+            }
+        }
+    }
+
+    /**
+     * This retrieves several WebResources in one go
+     * @param mongoServer
+     * @param hashCodes
+     * @return
+     */
+    private static Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(EdmMongoServer mongoServer, List<String> hashCodes) {
+        Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
+
+        final DB db = mongoServer.getDatastore().getDB();
+        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
+
+        final BasicDBObject query = new BasicDBObject("_id", new BasicDBObject("$in", hashCodes));
+        final DBCursor cursor = webResourceMetaInfoColl.find(query);
+
+        final Type type = new TypeToken<WebResourceMetaInfoImpl>() {}.getType();
+
+        while (cursor.hasNext()) {
+            String json = cursor.next().toString();
+            WebResourceMetaInfoImpl metaInfo = new Gson().fromJson(json, type);
+            // create object from json seems to have problem with _id field, we have to extract it from json
+            String id = extractId(json);
+            if (id != null) {
+                metaInfos.put(id, metaInfo);
+            }
+        }
+        return metaInfos;
+    }
+
+    private static String extractId(String json) {
+        int index = json.indexOf("\"_id\"");
+        if (index != -1) {
+            index = json.indexOf('\"', index + "\"_id\"".length());
+            if (index != -1) {
+                return json.substring(index + 1, json.indexOf('\"', index + 1));
+            }
+        }
+        return null;
+    }
+
+    private static Map<String, WebResource> prepareWebResourceHashCodes(FullBean fullBean) {
+        Map<String, WebResource> hashCodes = new HashMap<>();
+
+        for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
             // Locate the technical meta data from the web resource about
             if (webResource.getAbout() != null) {
                 String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                webMetaInfo = getMetaInfo(mongoServer, hashCodeAbout);
+                hashCodes.put(hashCodeAbout, webResource);
             }
-
 
             // Locate the technical meta data from the aggregation is shown by
-            if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
+            if (!hashCodes.containsValue(webResource) && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
                 String hashCodeIsShownBy = generateHashCode(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), fullBean.getAbout());
-                webMetaInfo = getMetaInfo(mongoServer, hashCodeIsShownBy);
-            }
-
-            if (webMetaInfo != null) {
-                ((WebResourceImpl) webResource).setWebResourceMetaInfo(webMetaInfo);
+                hashCodes.put(hashCodeIsShownBy, webResource);
             }
         }
 
-        // Step 2 : Fill in the aggregation
         for (final Aggregation aggregation : fullBean.getAggregations()) {
             final Set<String> urls = new HashSet<>();
 
@@ -114,31 +156,30 @@ public class WebMetaInfo {
                 urls.addAll(Arrays.asList(aggregation.getHasView()));
             }
 
+            // if the fix adds a web resource for edmObject it also has to be added here in order to be processed
+            if (null != aggregation.getEdmObject()) {
+                urls.add(aggregation.getEdmObject());
+            }
+
             for (final WebResource webResource : aggregation.getWebResources()) {
                 if (!urls.contains(webResource.getAbout().trim())) {
                     continue;
                 }
 
-                WebResourceMetaInfoImpl webMetaInfo = null;
-
                 // Locate the technical meta data from the web resource about
                 if (webResource.getAbout() != null) {
                     String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                    webMetaInfo = getMetaInfo(mongoServer, hashCodeAbout);
-                }
-                // Locate the technical meta data from the aggregation is shown by
-                if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
-                    webMetaInfo = getMetaInfo(mongoServer, hashCodeIsShownBy);
+                    hashCodes.put(hashCodeAbout, webResource);
                 }
 
-                if (webMetaInfo != null) {
-                    ((WebResourceImpl) webResource).setWebResourceMetaInfo(webMetaInfo);
+                // Locate the technical meta data from the aggregation is shown by
+                if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownBy() != null) {
+                    String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
+                    hashCodes.put(hashCodeIsShownBy, webResource);
                 }
             }
         }
-
-        addReferencedByIIIF(fullBean);
+        return hashCodes;
     }
 
     /**
@@ -177,22 +218,7 @@ public class WebMetaInfo {
                 .toString();
     }
 
-    private static WebResourceMetaInfoImpl getMetaInfo(final EdmMongoServer mongoServer, final String webResourceMetaInfoId) {
-        final DB db = mongoServer.getDatastore().getDB();
-        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
-
-        final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);
-        final DBCursor cursor = webResourceMetaInfoColl.find(query);
-
-        final Type type = new TypeToken<WebResourceMetaInfoImpl>() {}.getType();
-
-        if (cursor.hasNext()) {
-            return new Gson().fromJson(cursor.next().toString(), type);
-        }
-        return null;
-    }
-
-    /**
+       /**
      * This is temporary code: if a record is a newspaper record and doesn't have a referencedBy value, we add
      * a reference to IIIF (see ticket EA-992)
      * @param bean
@@ -220,21 +246,26 @@ public class WebMetaInfo {
      * @return true if it's a newspaper record, otherwise false
      */
     public static boolean isNewsPaperRecord(FullBean bean) {
+        boolean result = false;
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()){
                 Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
                     for (List<String> langValues : langMap.values()) {
-                        boolean result = langValues.contains("http://schema.org/PublicationIssue") ||
-                                         langValues.contains("https://schema.org/PublicationIssue");
-                        LOG.debug("isNewsPaperRecord = {}", result);
-                        return result;
+                        result = langValues.contains("http://schema.org/PublicationIssue") ||
+                                 langValues.contains("https://schema.org/PublicationIssue");
+                        if (result) {
+                            break;
+                        }
                     }
+                }
+                if (result) {
+                    break;
                 }
             }
         }
-        LOG.debug("isNewsPaperRecord = false");
-        return false;
+        LOG.debug("isNewsPaperRecord = {}", result);
+        return result;
     }
 
     /**
