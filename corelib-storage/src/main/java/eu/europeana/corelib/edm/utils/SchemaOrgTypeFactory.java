@@ -28,6 +28,23 @@ public final class SchemaOrgTypeFactory {
 
     private SchemaOrgTypeFactory() {}
 
+    public static Class<? extends MediaObject> detectMediaObjectType(String mimeType) {
+        if (mimeType == null) {
+            return MediaObject.class;
+        }
+
+        if (mimeType.startsWith("image/")) {
+            return ImageObject.class;
+        }
+        if (mimeType.startsWith("audio/") || mimeType.startsWith("sound/")) {
+            return AudioObject.class;
+        }
+        if (mimeType.startsWith("video/")) {
+            return VideoObject.class;
+        }
+        return MediaObject.class;
+    }
+
     public static Thing createObject(FullBeanImpl bean) {
         if (bean == null) {
             return null;
