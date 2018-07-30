@@ -1,11 +1,9 @@
 package eu.europeana.corelib.edm.utils;
 
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.schema.org.*;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -108,8 +106,28 @@ public class SchemaOrgUtils {
             if (aggregation.getEdmIsShownBy() != null) {
                 medias.add(aggregation.getEdmIsShownBy());
             }
-            addReferences(object, medias.toArray(new String[]{}), SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA, MediaObject.class);
+            for (String media : medias) {
+                addReference(object, media, SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA, SchemaOrgTypeFactory.detectMediaObjectType(getMimeType(media, aggregation.getWebResources())));
+            }
         }
+    }
+
+    /**
+     * Retrieve mime type from web resource corresponding to the media url
+     * @param media URL to media
+     * @param webResources web resources list
+     * @return mime type of the media resource or null if not found
+     */
+    private static String getMimeType(String media, List<? extends WebResource> webResources) {
+        if (webResources == null) {
+            return null;
+        }
+        for (WebResource resource : webResources) {
+            if (resource.getAbout().equals(media)) {
+                return resource.getEbucoreHasMimeType();
+            }
+        }
+        return null;
     }
 
     /**
