@@ -563,8 +563,8 @@ public class EdmUtils {
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-                addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
-                addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
+                addAsList(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
+                addAsList(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
                 addAsObject(agent, DateOfEstablishment.class, ag.getRdaGr2DateOfEstablishment());
                 addAsObject(agent, DateOfTermination.class, ag.getRdaGr2DateOfTermination());
                 addAsObject(agent, Gender.class, ag.getRdaGr2Gender());
