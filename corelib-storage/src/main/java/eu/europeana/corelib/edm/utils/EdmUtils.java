@@ -791,6 +791,9 @@ public class EdmUtils {
         if (StringUtils.equals("Incorporates", clazzName) && list) {
             clazzName = "Incorporate";
         }
+        if (StringUtils.equals("Realizes", clazzName) && list) {
+            clazzName = "Realize";
+        }
         clazzName = StringUtils.strip(clazzName, "_1");
         clazzName = StringUtils.strip(clazzName, "1");
 
