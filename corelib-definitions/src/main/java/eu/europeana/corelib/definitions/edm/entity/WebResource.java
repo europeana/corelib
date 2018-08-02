@@ -85,6 +85,18 @@ public interface WebResource extends AbstractEdmEntity {
   Map<String, List<String>> getDctermsIsFormatOf();
 
   /**
+   * sets the dcterms:isPartOf for the edm:WebResource
+   */
+  void setDctermsIsPartOf(Map<String, List<String>> dctermsIsPartOf);
+
+  /**
+   * @return the dcterms:isPartOf for the edm:WebResource
+   */
+  Map<String, List<String>> getDctermsIsPartOf();
+
+
+
+  /**
    * sets the dcterms:created for the edm:WebResource
    */
   void setDctermsCreated(Map<String, List<String>> dctermsCreated);
