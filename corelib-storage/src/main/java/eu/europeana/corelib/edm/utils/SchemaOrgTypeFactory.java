@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.utils;
 
+import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.edm.model.schema.org.*;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -40,6 +41,17 @@ public class SchemaOrgTypeFactory {
             return new VideoObject();
         }
         return new MediaObject();
+    }
+
+    public static Thing createAgent(Agent agent) {
+        if (agent == null) {
+            return new CreativeWork();
+        }
+
+        if (agent.getRdaGr2DateOfEstablishment() != null || agent.getRdaGr2DateOfTermination() != null) {
+            return new Organization();
+        }
+        return new Person();
     }
 
     public static Thing createObject(FullBeanImpl bean) {
