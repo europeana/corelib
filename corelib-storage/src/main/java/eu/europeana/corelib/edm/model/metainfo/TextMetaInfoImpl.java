@@ -1,9 +1,7 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.mongodb.morphia.annotations.Entity;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import java.io.Serializable;
+import org.mongodb.morphia.annotations.Entity;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Entity("TextMetaInfo")
@@ -30,12 +28,18 @@ public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.mo
      */
     private Boolean isSearchable;
 
+    /**
+     * Contains the rdf:resource attribute value of the rdf:type
+     */
+    private String rdfType;
+
     public TextMetaInfoImpl(final String mimeType, final Long fileSize,
-                            final Integer resolution, final Boolean isSearchable) {
+                            final Integer resolution, final Boolean isSearchable, final String rdfType) {
         this.mimeType = mimeType;
         this.fileSize = fileSize;
         this.resolution = resolution;
         this.isSearchable = isSearchable;
+        this.rdfType = rdfType;
     }
 
     public TextMetaInfoImpl() {
@@ -61,6 +65,10 @@ public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.mo
         return isSearchable;
     }
 
+    public String getRdfType() {
+        return rdfType;
+    }
+
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
     }
@@ -75,5 +83,9 @@ public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.mo
 
     public void setIsSearchable(Boolean isSearchable) {
         this.isSearchable = isSearchable;
+    }
+
+    public void setRdfType(String rdfType) {
+        this.rdfType = rdfType;
     }
 }
