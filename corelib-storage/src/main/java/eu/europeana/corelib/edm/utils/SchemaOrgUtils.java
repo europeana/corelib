@@ -1,13 +1,11 @@
 package eu.europeana.corelib.edm.utils;
 
+import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.schema.org.*;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +29,6 @@ public class SchemaOrgUtils {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
-    private static DateTimeFormatter elapsedTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
-
     private SchemaOrgUtils() { }
 
     /**
@@ -50,6 +46,7 @@ public class SchemaOrgUtils {
         processProvidedCHO((CreativeWork) object, bean);
         processProxies((CreativeWork) object, bean);
         objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean));
+        objectsToSerialize.addAll(processAgents(bean));
 
         JsonLdSerializer serializer = new JsonLdSerializer();
         try {
@@ -58,6 +55,85 @@ public class SchemaOrgUtils {
             LOG.error("Serialization to schema.org failed for " + object.getId(), e);
         }
         return jsonld;
+    }
+
+    private static List<Thing> processAgents(FullBeanImpl bean) {
+        List<Thing> referencedObjects = new ArrayList<>();
+
+        for (Agent agent : bean.getAgents()) {
+            Thing agentObject = SchemaOrgTypeFactory.createAgent(agent);
+            referencedObjects.add(agentObject);
+
+            processAgent(agentObject, agent);
+        }
+        return referencedObjects;
+    }
+
+    private static void processAgent(Thing agentObject, Agent agent) {
+        // @id
+        agentObject.setId(agent.getAbout());
+
+        // name
+        addMultilingualProperties(agentObject, agent.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        addMultilingualProperties(agentObject, agent.getFoafName(), SchemaOrgConstants.PROPERTY_NAME);
+
+        // alternateName
+        addMultilingualProperties(agentObject, agent.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+        // description
+        addMultilingualProperties(agentObject, agent.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        addMultilingualProperties(agentObject, agent.getRdaGr2BiographicalInformation(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+
+        if (agentObject instanceof Person) {
+            // birthDate
+            if (agent.getRdaGr2DateOfBirth() != null) {
+                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
+            } else {
+                addMultilingualProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
+            }
+
+            // deathDate
+            if (agent.getRdaGr2DateOfDeath() != null) {
+                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
+            } else {
+                addMultilingualProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
+            }
+
+            // gender
+            addMultilingualProperties(agentObject, agent.getRdaGr2Gender(), SchemaOrgConstants.PROPERTY_GENDER);
+
+            // jobTitle
+            addMultilingualProperties(agentObject, agent.getRdaGr2ProfessionOrOccupation(), SchemaOrgConstants.PROPERTY_JOB_TITLE);
+
+            // birthPlace
+            addMultilingualPropertiesWithReferences(agentObject, agent.getRdaGr2PlaceOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_PLACE, Place.class);
+
+            // deathPlace
+            addMultilingualPropertiesWithReferences(agentObject, agent.getRdaGr2PlaceOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_PLACE, Place.class);
+        }
+
+        if (agentObject instanceof Organization) {
+            // foundingDate
+            addMultilingualProperties(agentObject, agent.getRdaGr2DateOfEstablishment(), SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
+
+            // dissolutionDate
+            addMultilingualProperties(agentObject, agent.getRdaGr2DateOfTermination(), SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
+        }
+
+        // sameAs
+        addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+    }
+
+    
+    private static void addTextProperties(Thing object, List<String> values, String propertyName) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            if (notNullNorEmpty(value)) {
+                object.addProperty(propertyName, new Text(value));
+            }
+        }
     }
 
     /**
@@ -74,6 +150,12 @@ public class SchemaOrgUtils {
 
             // sameAs
             addMultilingualProperties(object, toList(providedCHO.getOwlSameAs()), "", SchemaOrgConstants.PROPERTY_SAME_AS);
+
+            // url
+            object.addUrl(new Text(bean.getEuropeanaAggregation().getEdmLandingPage()));
+
+            // thumbnailUrl
+            object.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
         }
     }
 
@@ -287,7 +369,7 @@ public class SchemaOrgUtils {
      * @param propertyName name of property
      * @param referenceClass class of reference
      */
-    private static void addMultilingualPropertiesWithReferences(CreativeWork object,
+    private static void addMultilingualPropertiesWithReferences(Thing object,
                                                                 Map<String, List<String>> map,
                                                                 String propertyName,
                                                                 Class<? extends Thing> referenceClass) {
@@ -308,7 +390,7 @@ public class SchemaOrgUtils {
      * @param propertyName name of property
      * @param referenceClass class of reference
      */
-    private static void addMultilingualPropertiesWithReferences(CreativeWork object,
+    private static void addMultilingualPropertiesWithReferences(Thing object,
                                                                 List<String> values,
                                                                 String language,
                                                                 String propertyName,
@@ -329,7 +411,7 @@ public class SchemaOrgUtils {
      * @param propertyName name of property
      * @param referenceClass class of reference
      */
-    private static void addReferences(CreativeWork object,
+    private static void addReferences(Thing object,
                                       Map<String, List<String>> map,
                                       String propertyName,
                                       Class<? extends Thing> referenceClass) {
@@ -588,7 +670,7 @@ public class SchemaOrgUtils {
      * @param propertyName name of property
      * @param referenceClass class of reference
      */
-    private static void addReferences(CreativeWork object, List<String> values, String propertyName, Class<? extends Thing> referenceClass) {
+    private static void addReferences(Thing object, List<String> values, String propertyName, Class<? extends Thing> referenceClass) {
         if (values == null) {
             return;
         }
@@ -597,7 +679,7 @@ public class SchemaOrgUtils {
         }
     }
 
-    private static void addMultilingualProperty(CreativeWork object, String value, String language, String propertyName) {
+    private static void addMultilingualProperty(Thing object, String value, String language, String propertyName) {
         MultilingualString property = new MultilingualString();
         property.setLanguage(language);
         property.setValue(value);
@@ -612,7 +694,7 @@ public class SchemaOrgUtils {
      * @param language language string, may be empty
      * @param value value to add
      */
-    private static void addProperty(CreativeWork object, String value, String language, String propertyName, Class<? extends Thing> referenceClass) {
+    private static void addProperty(Thing object, String value, String language, String propertyName, Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
             if (EdmUtils.isUri(value)) {
                 addReference(object, value, propertyName, referenceClass);
@@ -634,7 +716,7 @@ public class SchemaOrgUtils {
      * @param propertyName name of property
      * @param referenceClass class of reference that should be used for Reference object
      */
-    private static void addReference(CreativeWork object, String id, String propertyName, Class<? extends Thing> referenceClass) {
+    private static void addReference(Thing object, String id, String propertyName, Class<? extends Thing> referenceClass) {
         Reference reference = new Reference(referenceClass);
         reference.setId(id);
         object.addProperty(propertyName, reference);
@@ -646,7 +728,7 @@ public class SchemaOrgUtils {
      * @param map map of language to list of values to be added
      * @param propertyName name of property
      */
-    private static void addMultilingualProperties(CreativeWork object, Map<String, List<String>> map, String propertyName) {
+    private static void addMultilingualProperties(Thing object, Map<String, List<String>> map, String propertyName) {
         if (map == null) {
             return;
         }
@@ -664,7 +746,7 @@ public class SchemaOrgUtils {
      * @param language language used for each value
      * @param propertyName name of property
      */
-    private static void addMultilingualProperties(CreativeWork object, List<String> values, String language, String propertyName) {
+    private static void addMultilingualProperties(Thing object, List<String> values, String language, String propertyName) {
         if (values == null) {
             return;
         }
