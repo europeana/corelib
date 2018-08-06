@@ -25,7 +25,8 @@ public class SchemaOrgUtils {
     private static final String PLACE_PREFIX = "http://data.europeana.eu/place";
 
     private static final String TIMESPAN_PREFIX = "http://semium.org";
-    protected static final String UNIT_CODE_E37 = "E37";
+
+    private static final String UNIT_CODE_E37 = "E37";
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
@@ -46,7 +47,9 @@ public class SchemaOrgUtils {
         processProvidedCHO((CreativeWork) object, bean);
         processProxies((CreativeWork) object, bean);
         objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean));
-        objectsToSerialize.addAll(processAgents(bean));
+        objectsToSerialize.addAll(processAgents(bean.getAgents()));
+        objectsToSerialize.addAll(processPlaces(bean.getPlaces()));
+        objectsToSerialize.addAll(processConcepts(bean.getConcepts()));
 
         JsonLdSerializer serializer = new JsonLdSerializer();
         try {
@@ -57,19 +60,154 @@ public class SchemaOrgUtils {
         return jsonld;
     }
 
-    private static List<Thing> processAgents(FullBeanImpl bean) {
+    /**
+     * Process all concepts on the given list and create a Thing object for each.
+     *
+     * @param concepts conecpts to be processed
+     * @return list of created Thing objects for each concept
+     */
+    private static List<Thing> processConcepts(List<ConceptImpl> concepts) {
         List<Thing> referencedObjects = new ArrayList<>();
 
-        for (Agent agent : bean.getAgents()) {
-            Thing agentObject = SchemaOrgTypeFactory.createAgent(agent);
-            referencedObjects.add(agentObject);
+        for (ConceptImpl concept : concepts) {
+            Thing conceptObject = new Thing();
+            referencedObjects.add(conceptObject);
 
-            processAgent(agentObject, agent);
+            processConcept(concept, conceptObject);
         }
         return referencedObjects;
     }
 
-    private static void processAgent(Thing agentObject, Agent agent) {
+    /**
+     * Fill the properties of the Thing object for the specified concept.
+     *
+     * @param concept source concept object
+     * @param conceptObject Thing object in which the properties will be filled in
+     */
+    private static void processConcept(ConceptImpl concept, Thing conceptObject) {
+        // @id
+        conceptObject.setId(concept.getAbout());
+
+        // name
+        addMultilingualProperties(conceptObject, concept.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+
+        // alternateName
+        addMultilingualProperties(conceptObject, concept.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+        // sameAs
+        addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
+    }
+
+    /**
+     * Process list of places and create Place for each.
+     *
+     * @param places places list to process
+     * @return list of Place objects created from the input list
+     */
+    private static List<Thing> processPlaces(List<PlaceImpl> places) {
+        List<Thing> referencedObjects = new ArrayList<>();
+
+        for (PlaceImpl place : places) {
+            Place placeObject = new Place();
+            referencedObjects.add(placeObject);
+
+            processPlace(place, placeObject);
+        }
+        return referencedObjects;
+    }
+
+    /**
+     * Update the properties of the given Place object using data from PlaceImpl
+     *
+     * @param place source place object
+     * @param placeObject Place object to update
+     */
+    private static void processPlace(PlaceImpl place, Place placeObject) {
+        if (place == null) {
+            return;
+        }
+
+        // @id
+        placeObject.setId(place.getAbout());
+
+        // name
+        addMultilingualProperties(placeObject, place.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+
+        // alternateName
+        addMultilingualProperties(placeObject, place.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+        // geo
+        createGeoCoordinates(place, placeObject);
+
+        // description
+        addMultilingualProperties(placeObject, place.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+
+        // containsPlace
+        addReferences(placeObject, place.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE, Place.class);
+
+        // containedInPlace
+        addReferences(placeObject, place.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class);
+
+        // sameAs
+        addTextProperties(placeObject, toList(place.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+    }
+
+    /**
+     * Create GeoCoordinates object for the latitude, longitude and altitude taken from PlaceImpl and set the
+     * corresponding properties in Place object.
+     *
+     * @param place PlaceImpl object with necessary data
+     * @param placeObject Place object to update
+     */
+    private static void createGeoCoordinates(PlaceImpl place, Place placeObject) {
+        GeoCoordinates geoCoordinates = new GeoCoordinates();
+
+        // latitude
+        if (place.getLatitude() != null) {
+            geoCoordinates.addLatitude(new Text(String.valueOf(place.getLatitude())));
+        }
+        // TODO Try to retrieve the latitude from position if possible
+
+        // longitude
+        if (place.getLongitude() != null) {
+            geoCoordinates.addLongitude(new Text(String.valueOf(place.getLongitude())));
+        }
+        // TODO Try to retrieve the longitude from position if possible
+
+        // elevation
+        if (place.getAltitude() != null) {
+            geoCoordinates.addElevation(new Text(String.valueOf(place.getAltitude())));
+        }
+
+        // geo
+        placeObject.addGeo(geoCoordinates);
+    }
+
+    /**
+     * Process agents from the given list and create a proper schema.org object for each
+     *
+     * @param agents agents to process
+     * @return list of Person and / or Organization objects created from given agents
+     */
+    private static List<Thing> processAgents(List<AgentImpl> agents) {
+        List<Thing> referencedObjects = new ArrayList<>();
+
+        for (Agent agent : agents) {
+            Thing agentObject = SchemaOrgTypeFactory.createAgent(agent);
+            referencedObjects.add(agentObject);
+
+            processAgent(agent, agentObject);
+        }
+        return referencedObjects;
+    }
+
+    /**
+     * Update properties of the given Thing object (Person or Organization) using data from the given Agent
+     *
+     * @param agentObject Person or Organization object to update
+     * @param agent source agent
+     */
+    private static void processAgent(Agent agent, Thing agentObject) {
         // @id
         agentObject.setId(agent.getAbout());
 
@@ -124,7 +262,13 @@ public class SchemaOrgUtils {
         addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
     }
 
-    
+    /**
+     * Adds Text properties from the given values. Those are language independent
+     *
+     * @param object Thing object to update
+     * @param values string values to put under property with the given property name
+     * @param propertyName name of property
+     */
     private static void addTextProperties(Thing object, List<String> values, String propertyName) {
         if (values == null) {
             return;
@@ -324,6 +468,14 @@ public class SchemaOrgUtils {
         }
     }
 
+    /**
+     * Create QuantitativeValue object and set it in the proper media object property
+     *
+     * @param mediaObject media object to update
+     * @param value value for {@link QuantitativeValue} object
+     * @param untiCode unit code for {@link QuantitativeValue} object
+     * @param propertyName name of the property
+     */
     private static void addQuantitativeProperty(MediaObject mediaObject, String value, String untiCode, String propertyName) {
         QuantitativeValue quantitativeValue = new QuantitativeValue();
         quantitativeValue.addValue(new Text(value));
