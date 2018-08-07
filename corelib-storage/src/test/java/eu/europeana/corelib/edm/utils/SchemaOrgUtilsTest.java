@@ -38,8 +38,94 @@ public class SchemaOrgUtilsTest {
         mockAggregations(bean);
         mockEuropeanaAggregation(bean);
         mockProxies(bean);
+        mockPlaces(bean);
+        mockConcepts(bean);
+        mockTimespans(bean);
 
         return bean;
+    }
+
+    private void mockTimespans(FullBeanImpl bean) {
+        List<TimespanImpl> timespans = new ArrayList<>();
+        TimespanImpl timespan = new TimespanImpl();
+        timespans.add(timespan);
+
+        timespan.setBegin(new HashMap<>());
+        timespan.getBegin().put("def", new ArrayList<>());
+        timespan.getBegin().get("def").add("Tue Jan 01 00:19:32 CET 1901");
+
+        timespan.setEnd(new HashMap<>());
+        timespan.getEnd().put("def", new ArrayList<>());
+        timespan.getEnd().get("def").add("Sun Dec 31 01:00:00 CET 2000");
+
+        timespan.setAbout("http://semium.org/time/19xx");
+
+        Mockito.when(bean.getTimespans()).thenReturn(timespans);
+    }
+
+    private void mockConcepts(FullBeanImpl bean) {
+        List<ConceptImpl> concepts = new ArrayList<>();
+        ConceptImpl concept = new ConceptImpl();
+        concepts.add(concept);
+
+        concept.setRelated(new String[] {"http://dbpedia.org/resource/Category:Agriculture"});
+        concept.setExactMatch(new String[] { "http://bg.dbpedia.org/resource/Селско_стопанство",
+                "http://ia.dbpedia.org/resource/Agricultura",
+                "http://sl.dbpedia.org/resource/Kmetijstvo",
+                "http://pnb.dbpedia.org/resource/وائی_بیجی",
+                "http://el.dbpedia.org/resource/Γεωργία_(δραστηριότητα)"});
+
+        concept.setPrefLabel(new HashMap<>());
+        concept.getPrefLabel().put("no", new ArrayList<>());
+        concept.getPrefLabel().get("no").add("Landbruk");
+        concept.getPrefLabel().put("de", new ArrayList<>());
+        concept.getPrefLabel().get("de").add("Landwirtschaft");
+
+        concept.setNote(new HashMap<>());
+        concept.getNote().put("no", new ArrayList<>());
+        concept.getNote().get("no").add("Landbruk er en fellesbetegnelse for jordbruk og skogbruk som begge er primærnæringer, og omfatter en rekke næringsgrener der foredling av jord til kulturplanter eller beite er grunnleggende for produksjonen. Ordet har samme betydning som agrikultur, fra latin ager («åker») og cultura («dyrking»).I Norge blir 2,8 % av landarealet brukt til jordbruk (2005).");
+        concept.getNote().put("de", new ArrayList<>());
+        concept.getNote().get("de").add("Als Landwirtschaft wird der Wirtschaftsbereich der Urproduktion bezeichnet. Das Ziel der Urproduktion ist die zielgerichtete Herstellung pflanzlicher oder tierischer Erzeugnisse auf einer zu diesem Zweck bewirtschafteten Fläche. In der Wissenschaft sowie der fachlichen Praxis ist synonym der Begriff Agrarwirtschaft gebräuchlich.Die Landwirtschaft stellt einen der ältesten Wirtschaftsbereiche der Menschheit dar. Heute beläuft sich die landwirtschaftlich genutzte Fläche auf 48.827.330 km2, dies sind 9,6 % der Erdoberfläche. Somit wird etwa ein Drittel der Landfläche der Erde landwirtschaftlich genutzt.Der Wirtschaftsbereich Agrarwirtschaft wird zumeist in die beiden Sektoren Pflanzenproduktion Tierproduktioneingeteilt und dann weiter untergliedertDer Anbau von Nutzpflanzen dient zuallererst der Nahrungsmittelproduktion direkt wie indirekt. In letzterem Fall erfolgt die Herstellung von Rohstoffen zur weiteren Verarbeitung in Teilen des nachgelagerten Wirtschaftsbereichs des sogenannten Agribusiness (z. B. Weiterverarbeitung von Getreide zu Mehl für die Brotherstellung). Darüber hinaus werden landwirtschaftliche Rohstoffe (u. a. Faserpflanzen wie Baumwolle oder Leinen) auch in der Bekleidungsindustrie weiter veredelt.Die Haltung von Nutztieren dient in erster Linie der Nahrungsmittelproduktion (z. B. Milch, Eier), in zweiter Linie der Herstellung von Rohstoffen für die Herstellung von Bekleidung. Vor der Produktion von Kunstfasern schufen die Menschen noch ihre gesamte Bekleidung u. a. aus den tierischen Produkten Leder, Pelz und Wolle.Die Verwertung der durch die Agrarwirtschaft, zum Teil erst seit kürzerer Zeit, angebauten Biomasse aus nachwachsenden Rohstoffen (u. a. Holz, Mais) in Form von Vergasung, Karbonisierung und Raffinierung stellt eine erst seit kurzer Zeit mitunter stark zunehmende Form der Veredelung dar.Die Landwirtschaft ist Teilwirtschaftszweig eines größeren Gesamtsystems mit vor- und nachgelagerten Sektoren.Eine Person, die Landwirtschaft betreibt, bezeichnet man als Landwirt. Neben berufspraktischen Ausbildungen bestehen an zahlreichen Universitäten und Fachhochschulen eigene landwirtschaftliche Fachbereiche. Das dort gelehrte und erforschte Fach Agrarwissenschaft bereitet sowohl auf die Führung von landwirtschaftlichen Betrieben als auch auf Tätigkeiten in verwandten Wirtschaftsbereichen vor und ist ein ingenieurwissenschaftliches Fach.");
+
+        concept.setAbout("http://data.europeana.eu/concept/base/134");
+
+        Mockito.when(bean.getConcepts()).thenReturn(concepts);
+    }
+
+    private void mockPlaces(FullBeanImpl bean) {
+        List<PlaceImpl> places = new ArrayList<>();
+        PlaceImpl place = new PlaceImpl();
+        places.add(place);
+
+        place.setIsPartOf(new HashMap<>());
+        place.getIsPartOf().put("def", new ArrayList<>());
+        place.getIsPartOf().get("def").add("http://www.somewhere.eu/place/3");
+
+        place.setLatitude(46.0F);
+        place.setAltitude(70.0F);
+        place.setLongitude(2.0F);
+
+        place.setDcTermsHasPart(new HashMap<>());
+        place.getDcTermsHasPart().put("def", new ArrayList<>());
+        place.getDcTermsHasPart().get("def").add("http://www.somewhere.eu/place/2");
+
+        place.setOwlSameAs(new String[] { "http://www.somewhere.eu/place/5" });
+
+        place.setPrefLabel(new HashMap<>());
+        place.getPrefLabel().put("en", new ArrayList<>());
+        place.getPrefLabel().get("en").add("Paris");
+
+        place.setAltLabel(new HashMap<>());
+        place.getAltLabel().put("it", new ArrayList<>());
+        place.getAltLabel().get("it").add("Paris");
+
+        place.setNote(new HashMap<>());
+        place.getNote().put("en", new ArrayList<>());
+        place.getNote().get("en").add("Probably in Popicourt");
+
+        place.setAbout("#place_Paris");
+
+        Mockito.when(bean.getPlaces()).thenReturn(places);
     }
 
     private void mockProxies(FullBeanImpl bean) {
@@ -99,6 +185,10 @@ public class SchemaOrgUtilsTest {
         proxy.getDcCreator().get("def").add("http://data.europeana.eu/agent/base/6");
         proxy.getDcCreator().get("def").add("http://data.europeana.eu/agent/base/94182");
         proxy.getDcCreator().get("def").add("http://data.europeana.eu/agent/base/146741");
+
+        proxy.setDctermsTemporal(new HashMap<>());
+        proxy.getDctermsTemporal().put("def", new ArrayList<>());
+        proxy.getDctermsTemporal().get("def").add("http://semium.org/time/19xx");
 
         proxy.setAbout("/proxy/europeana/2021618/internetserver_Details_kunst_25027");
 

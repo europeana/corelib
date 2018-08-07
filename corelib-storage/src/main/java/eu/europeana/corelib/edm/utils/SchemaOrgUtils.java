@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Map;
@@ -293,13 +294,19 @@ public class SchemaOrgUtils {
             }
 
             // sameAs
-            addMultilingualProperties(object, toList(providedCHO.getOwlSameAs()), "", SchemaOrgConstants.PROPERTY_SAME_AS);
+            addTextProperties(object, toList(providedCHO.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
-            // url
-            object.addUrl(new Text(bean.getEuropeanaAggregation().getEdmLandingPage()));
+            if (bean.getEuropeanaAggregation() != null) {
+                // url
+                if (bean.getEuropeanaAggregation().getEdmLandingPage() != null) {
+                    object.addUrl(new Text(bean.getEuropeanaAggregation().getEdmLandingPage()));
+                }
 
-            // thumbnailUrl
-            object.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
+                // thumbnailUrl
+                if (bean.getEuropeanaAggregation().getEdmPreview() != null) {
+                    object.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
+                }
+            }
         }
     }
 
@@ -325,7 +332,9 @@ public class SchemaOrgUtils {
         List<Thing> referencedObjects = new ArrayList<>();
         for (AggregationImpl aggregation : bean.getAggregations()) {
             // sameAs
-            object.addSameAs(new Text(aggregation.getEdmIsShownAt()));
+            if (aggregation.getEdmIsShownAt() != null) {
+                object.addSameAs(new Text(aggregation.getEdmIsShownAt()));
+            }
 
             // provider
             Map<String, List<String>> providerMap = new HashMap<>();
@@ -387,11 +396,13 @@ public class SchemaOrgUtils {
         }
 
         if (mediaObject instanceof VideoObject) {
-            // thumbnailUrl (only for VideoObject)
-            addReference(mediaObject, bean.getEuropeanaAggregation().getEdmPreview(), SchemaOrgConstants.PROPERTY_THUMBNAIL_URL, null);
+            if (bean.getEuropeanaAggregation() != null && bean.getEuropeanaAggregation().getEdmPreview() != null) {
+                // thumbnailUrl (only for VideoObject)
+                addReference(mediaObject, bean.getEuropeanaAggregation().getEdmPreview(), SchemaOrgConstants.PROPERTY_THUMBNAIL_URL, null);
+            }
 
             // uploadDate (only for VideoObject)
-            addProperty(mediaObject, DateUtils.format(bean.getTimestampCreated()), "", SchemaOrgConstants.PROPERTY_UPLOAD_DATE, null);
+            mediaObject.addUploadDate(new Text(DateUtils.format(bean.getTimestampCreated())));
         }
 
         // contentUrl
@@ -804,8 +815,8 @@ public class SchemaOrgUtils {
         for (TimespanImpl timespan : timespans) {
             if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
                     && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
-                LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), formatter);
-                LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), formatter);
+                LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
+                LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
                 return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             }
         }
