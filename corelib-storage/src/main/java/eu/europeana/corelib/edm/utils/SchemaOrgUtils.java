@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class SchemaOrgUtils {
     private static final String UNIT_CODE_E37 = "E37";
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+
+    private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
     private SchemaOrgUtils() { }
 
@@ -815,9 +818,20 @@ public class SchemaOrgUtils {
         for (TimespanImpl timespan : timespans) {
             if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
                     && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
-                LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
-                LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
-                return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                try {
+                    LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
+                    LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
+                    return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                } catch (DateTimeParseException e) {
+                    try {
+                        // we can try different format
+                        LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), dateFormatter);
+                        LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), dateFormatter);
+                        return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "/" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                    } catch (DateTimeParseException e1) {
+                        LOG.warn("Could not parse dates: " + timespan.getBegin().get(language).get(0) + ", " + timespan.getEnd().get(language).get(0));
+                    }
+                }
             }
         }
         return value;

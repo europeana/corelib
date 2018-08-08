@@ -60,6 +60,19 @@ public class SchemaOrgUtilsTest {
 
         timespan.setAbout("http://semium.org/time/19xx");
 
+        timespan = new TimespanImpl();
+        timespans.add(timespan);
+
+        timespan.setBegin(new HashMap<>());
+        timespan.getBegin().put("def", new ArrayList<>());
+        timespan.getBegin().get("def").add("1901-01-01");
+
+        timespan.setEnd(new HashMap<>());
+        timespan.getEnd().put("def", new ArrayList<>());
+        timespan.getEnd().get("def").add("1902-01-01");
+
+        timespan.setAbout("http://semium.org/time/1901");
+
         Mockito.when(bean.getTimespans()).thenReturn(timespans);
     }
 
@@ -189,6 +202,7 @@ public class SchemaOrgUtilsTest {
         proxy.setDctermsTemporal(new HashMap<>());
         proxy.getDctermsTemporal().put("def", new ArrayList<>());
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/19xx");
+        proxy.getDctermsTemporal().get("def").add("http://semium.org/time/1901");
 
         proxy.setAbout("/proxy/europeana/2021618/internetserver_Details_kunst_25027");
 
