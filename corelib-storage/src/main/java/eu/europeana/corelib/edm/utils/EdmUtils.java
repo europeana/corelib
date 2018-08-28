@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -57,6 +58,9 @@ public class EdmUtils {
     private static final  String SPACE = " ";
     private static final  String PREFIX = "http://data.europeana.eu";
 
+    private EdmUtils() {
+        // empty constructor to prevent initialization
+    }
 
     /**
      * Convert a FullBean to an EDM String
@@ -93,7 +97,7 @@ public class EdmUtils {
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
             return out.toString("UTF-8");
         } catch (JiBXException | IOException e) {
-            LOG.error("Error converting fullbean to EDM: "+ e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error("Error marshalling RDF: {}", e.getClass().getSimpleName(), e);
         }
         return null;
     }
@@ -342,25 +346,46 @@ public class EdmUtils {
     }
 
     private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
-
+        // there should be only 1 country at most
         if (edmCountry != null && edmCountry.size() > 0) {
-            Country country = new Country();
+            return EdmUtils.convertToCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
+        }
+        return null;
+    }
+
+    /**
+     * JIBX uses equals function to generate a CountryCodes enum from a string, so that's why we need to match exactly
+     * to the value defined in the JIBX CountryCodes class (i.e. we need to capitalize the first letter of each word)
+     * @param country string with country name as it is in JIBX CountryCodes but without proper capitalization
+     * @return Country object with filled country code, or null if conversion failed
+     */
+    public static Country convertToCountry(String country) {
+        Country result = null;
+        if (StringUtils.isNotEmpty(country)) {
             StringBuilder sb = new StringBuilder();
-            String[] splitCountry = edmCountry.entrySet().iterator().next().getValue().get(0).split(SPACE);
+            String[] splitCountry = country.trim().toLowerCase(Locale.GERMANY).split(SPACE);
             for (String countryWord : splitCountry) {
-                if (StringUtils.equals("and", countryWord)) {
-                    sb.append(countryWord);
+                if (StringUtils.equalsIgnoreCase("and", countryWord) || StringUtils.equalsIgnoreCase("of", countryWord)) {
+                    sb.append(countryWord.toLowerCase(Locale.GERMANY));
+                } else if (countryWord.charAt(0) == '(') {
+                    sb.append('(');
+                    sb.append(StringUtils.capitalize(countryWord.substring(1)));
                 } else {
                     sb.append(StringUtils.capitalize(countryWord));
                 }
                 sb.append(SPACE);
             }
-            String countryFixed = sb.toString().replace(" Of ", " of ").trim();
-            country.setCountry(CountryCodes.convert(countryFixed));
+            String convertedCountry = sb.toString().trim();
 
-            return country;
+            CountryCodes cc = CountryCodes.convert(sb.toString().trim());
+            if (cc != null) {
+                result = new Country();
+                result.setCountry(cc);
+            } else {
+                LOG.error("Cannot convert country '{}' to JIBX country code! (converted country = {})", country, convertedCountry);
+            }
         }
-        return null;
+        return result;
     }
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
@@ -588,7 +613,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -609,7 +634,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -646,7 +671,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -677,7 +702,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -697,7 +722,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException | InstantiationException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -714,7 +739,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -728,7 +753,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -751,7 +776,7 @@ public class EdmUtils {
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -795,7 +820,7 @@ public class EdmUtils {
                 return tList;
             }
         } catch (SecurityException | InstantiationException | IllegalAccessException e) {
-            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage(), e);
         }
 
         return null;
@@ -854,7 +879,7 @@ public class EdmUtils {
                         }
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-                    LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                    LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
                 }
             }
             return list;
@@ -914,7 +939,7 @@ public class EdmUtils {
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
                     LOG.error(e.getClass().getSimpleName() + "  "
-                            + e.getMessage());
+                            + e.getMessage(), e);
                 }
             }
         }
