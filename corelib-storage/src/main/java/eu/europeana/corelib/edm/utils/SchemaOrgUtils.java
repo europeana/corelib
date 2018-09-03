@@ -3,12 +3,16 @@ package eu.europeana.corelib.edm.utils;
 import eu.europeana.corelib.edm.model.schema.org.SchemaOrgConstants;
 import eu.europeana.corelib.edm.model.schema.org.Thing;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SchemaOrgUtils {
+
+    private static final Logger LOG = LogManager.getLogger(SchemaOrgUtils.class);
 
     private static final String URL_PREFIX = "http://data.europeana.eu";
 
@@ -42,7 +46,7 @@ public class SchemaOrgUtils {
         try {
             jsonld = serializer.serialize(object);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Error serializing bean {} to schema.org", bean.getAbout());
         }
         return jsonld;
     }
