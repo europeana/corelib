@@ -301,12 +301,12 @@ public class SchemaOrgUtils {
 
             if (bean.getEuropeanaAggregation() != null) {
                 // url
-                if (bean.getEuropeanaAggregation().getEdmLandingPage() != null) {
+                if (notNullNorEmpty(bean.getEuropeanaAggregation().getEdmLandingPage())) {
                     object.addUrl(new Text(bean.getEuropeanaAggregation().getEdmLandingPage()));
                 }
 
                 // thumbnailUrl
-                if (bean.getEuropeanaAggregation().getEdmPreview() != null) {
+                if (notNullNorEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
                     object.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
                 }
             }
@@ -399,7 +399,7 @@ public class SchemaOrgUtils {
         }
 
         if (mediaObject instanceof VideoObject) {
-            if (bean.getEuropeanaAggregation() != null && bean.getEuropeanaAggregation().getEdmPreview() != null) {
+            if (bean.getEuropeanaAggregation() != null && notNullNorEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
                 // thumbnailUrl (only for VideoObject)
                 addReference(mediaObject, bean.getEuropeanaAggregation().getEdmPreview(), SchemaOrgConstants.PROPERTY_THUMBNAIL_URL, null);
             }
@@ -622,7 +622,7 @@ public class SchemaOrgUtils {
             addMultilingualProperties(object, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_NAME);
 
             // alternateName
-            addMultilingualProperties(object, proxy.getDctermsAlternative(), SchemaOrgConstants.PROPERTY_NAME);
+            addMultilingualProperties(object, proxy.getDctermsAlternative(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
             // dateCreated
             addDateProperty(object, proxy.getDctermsCreated(), SchemaOrgConstants.PROPERTY_DATE_CREATED, bean.getTimespans(), true);
