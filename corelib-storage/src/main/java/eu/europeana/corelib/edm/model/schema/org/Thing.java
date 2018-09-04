@@ -96,7 +96,9 @@ public class Thing implements BaseType {
     public void addProperty(String propertyName, BaseType propertyValue) {
         if (propertyValue != null) {
             List<BaseType> currentValue = getCurrentPropertyValue(propertyName);
-            currentValue.add(propertyValue);
+            if (!currentValue.contains(propertyValue)) {
+                currentValue.add(propertyValue);
+            }
         }
     }
 
