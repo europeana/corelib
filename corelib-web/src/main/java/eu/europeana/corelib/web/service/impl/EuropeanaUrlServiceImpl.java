@@ -23,6 +23,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		return ApplicationContextContainer.getBean(EuropeanaUrlServiceImpl.class);
 	}
 
+    /**
+     * @deprecated September 2018 not used anymore
+     */
+    @Deprecated
 	@Override
 	public UrlBuilder getApi1Home(String apikey) {
 		UrlBuilder url = new UrlBuilder(configuration.getApi2url());
@@ -39,6 +43,10 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		return url;
 	}
 
+    /**
+     * @deprecated September 2018 not used anymore
+     */
+    @Deprecated
 	@Override
 	public UrlBuilder getApi1SearchJson(String apikey, String query, int start) throws UnsupportedEncodingException {
 		UrlBuilder url = getApi1Home(apikey);
@@ -95,14 +103,8 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	}
 
 	@Override
-	public UrlBuilder getPortalHome(boolean relative) {
-		UrlBuilder url;
-		if (relative) {
-			url = new UrlBuilder("");
-		} else {
-			url = new UrlBuilder(configuration.getPortalServer());
-		}
-		return url;
+	public UrlBuilder getPortalHome() {
+		return new UrlBuilder(configuration.getPortalServer());
 	}
 
 	@Override
@@ -119,62 +121,92 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 		return url.toString();
 	}
 
+	/**
+	 * @deprecated September 2018 not used anymore
+	 */
+	@Deprecated
 	@Override
 	public UrlBuilder getPortalSearch() throws UnsupportedEncodingException {
 		return getPortalSearch(true, "search.html", null, null);
 	}
 
+	/**
+	 * @deprecated September 2018 not used anymore
+	 */
+	@Deprecated
 	@Override
 	public UrlBuilder getPortalSearch(boolean relative, String query, String rows) throws UnsupportedEncodingException {
 		return getPortalSearch(relative, "search.html", query, rows);
 	}
 
+    /**
+     * @deprecated September 2018 not used anymore
+     */
+	@Deprecated
 	@Override
 	public UrlBuilder getPortalSearch(boolean relative, String searchpage, String query, String rows)
 			throws UnsupportedEncodingException {
-		UrlBuilder url = getPortalHome(relative);
+		UrlBuilder url = getPortalHome();
 		url.addPage(searchpage);
 		url.addParam(PARAM_SEARCH_QUERY, query, true);
 		url.addParam(PARAM_SEARCH_ROWS, rows, true);
 		return url;
 	}
 
+    /**
+     * @deprecated September 2018 please use getPortalRecord(collectionid, objectid) method
+     */
+    @Deprecated
+    public UrlBuilder getPortalRecord(boolean relative, String collectionid, String objectid) {
+        return getPortalRecord(collectionid, objectid);
+    }
+
+    /**
+     * @deprecated September 2018 please use getPortalRecord(europeanaId) method
+     */
+    @Deprecated
+    public UrlBuilder getPortalRecord(boolean relative, String europeanaId) {
+        return getPortalRecord(europeanaId);
+    }
+
 	@Override
-	public UrlBuilder getPortalRecord(boolean relative, String collectionid, String objectid) {
-		UrlBuilder url = getPortalHome(relative);
-		url.addPath(PATH_RECORD, collectionid).addPage(objectid + EXT_HTML);
+	public UrlBuilder getPortalRecord(String collectionid, String objectid) {
+		UrlBuilder url = getPortalHome();
+		url.addPath(PATH_PORTAL).addPath(PATH_RECORD, collectionid).addPage(objectid + EXT_HTML);
 		return url;
 	}
 
 	@Override
-	public UrlBuilder getPortalRecord(boolean relative, String europeanaId) {
-		UrlBuilder url = getPortalHome(relative);
-		url.addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
+	public UrlBuilder getPortalRecord(String europeanaId) {
+		UrlBuilder url = getPortalHome();
+		url.addPath(PATH_PORTAL).addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
 		return url;
 	}
 
+    /**
+     * @deprecated September 2018 not used anymore
+     */
+	@Deprecated
 	@Override
 	public UrlBuilder getCanonicalPortalRecord(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(URL_EUROPEANA);
-		url.addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
+		url.addPath(PATH_PORTAL).addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
 		return url;
 	}
 
 	@Override
 	public UrlBuilder getThumbnailUrl(String thumbnail, DocType type) {
-					if (null == configuration.getImageCacheUrl()) {
-
-									return new UrlBuilder("");
-					}
-
-					UrlBuilder url = new UrlBuilder(configuration.getImageCacheUrl());
+        if (null == configuration.getImageCacheUrl()) {
+            return new UrlBuilder("");
+        }
+		UrlBuilder url = new UrlBuilder(configuration.getImageCacheUrl());
         if(thumbnail != null) {
             url.addParam("uri", thumbnail.trim());
         }
-					url.addParam("size", ThumbSize.LARGE.toString());
-					if(type != null) {
+		url.addParam("size", ThumbSize.LARGE.toString());
+		if(type != null) {
             url.addParam("type", type.toString());
-     }
+        }
 		return url;
 	}
 
