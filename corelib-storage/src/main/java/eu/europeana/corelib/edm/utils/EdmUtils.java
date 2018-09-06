@@ -976,7 +976,7 @@ public class EdmUtils {
     }
 
     /**
-     * Make a clone of a list
+     * Make a clone of a list. Note that the provided list can actually contain a single String or a Map<String, String>
      * @param list
      * @return
      */
@@ -985,8 +985,14 @@ public class EdmUtils {
             return null;
         }
         List<Map<String, String>> result = new ArrayList<>();
-        for (Map<String, String> map : list) {
-            result.add(map);
+        for (Object label : list) {
+            if (label instanceof String) {
+                Map<String, String> map = new HashMap<>();
+                map.put(DEFAULT_LANGUAGE, (String) label);
+                result.add(map);
+            } else {
+                result.add((Map<String, String>) label);
+            }
         }
         return result;
     }
