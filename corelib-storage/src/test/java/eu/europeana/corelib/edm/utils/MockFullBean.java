@@ -122,8 +122,6 @@ public final class MockFullBean {
         europeanaAggregation.getDcCreator().put("def", new ArrayList<>());
         europeanaAggregation.getDcCreator().get("def").add("Europeana");
 
-        europeanaAggregation.setEdmLandingPage("http://www.europeana.eu/portal/record/2021618/internetserver_Details_kunst_25027.html");
-
         europeanaAggregation.setEdmCountry(new HashMap<>());
         europeanaAggregation.getEdmCountry().put("def", new ArrayList<>());
         europeanaAggregation.getEdmCountry().get("def").add("netherlands");

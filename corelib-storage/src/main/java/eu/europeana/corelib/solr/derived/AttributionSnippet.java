@@ -172,7 +172,7 @@ public class AttributionSnippet {
     private void checkEuropeanaAggregration(EuropeanaAggregation euAgg){
         if (euAgg != null) {
             // get EuropeanaAggregation's edm:landingPage
-            landingPage = "".equals(euAgg.getEdmLandingPage()) ? "" : euAgg.getEdmLandingPage();
+            landingPage = euAgg.getEdmLandingPage();
             // if creatorMap is empty still, check on the Europeana aggregation
             if (creatorMap.size() == 0 && isNotBlank(euAgg.getDcCreator())) {
                 creatorMap.putAll(concatLangawareMap(euAgg.getDcCreator()));
