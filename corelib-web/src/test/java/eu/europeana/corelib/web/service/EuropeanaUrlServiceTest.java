@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml" })
+@ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml"})
 public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Resource
@@ -21,21 +21,19 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void getApi2RedirectTest() {
-		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=http%3A%2F%2Fwww.europeana.eu%2Fresolve%2Frecord%2Fkb%2Frecord&profile=full";
+		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=https%3A%2F%2Fwww.europeana.eu%2Fresolve%2Frecord%2Fkb%2Frecord&profile=full";
 		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getApi2Redirect("123", "http://www.kb.nl", "example", "/kb/record", "full").toString());
 	}
 
 	@Test
 	public void getPortalHomeTest() {
 		String expected = "http://localhost:8081";
-		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getPortalHome(false).toString());
-
-		
+		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getPortalHome().toString());
 	}
 
 	@Test
 	public void getPortalResolveTest() {
-		String expected = "http://www.europeana.eu/resolve/record/euro/testrecord";
+		String expected = "https://www.europeana.eu/resolve/record/euro/testrecord";
 		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord"));
 	}
 
@@ -56,18 +54,11 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalRecordTest() {
 		final String collectionId = "euro";
 		final String recordId = "testrecord";
-		String expected = "http://localhost:8081/record/euro/testrecord.html";
+		String expected = "http://localhost:8081/portal/record/euro/testrecord.html";
 		assertEquals("getPortalHome full url failed", expected,
-				europeanaUrlService.getPortalRecord(false, collectionId, recordId).toString());
+				europeanaUrlService.getPortalRecord(collectionId, recordId).toString());
 
-		expected = "/record/euro/testrecord.html";
-		assertEquals("getPortalHome relative url failed", expected,
-				europeanaUrlService.getPortalRecord(true, collectionId, recordId).toString());
-		
-		assertEquals("getPortalHome relative url failed", expected,
-				europeanaUrlService.getPortalRecord(true, "/euro/testrecord").toString());
-
-		expected = "http://www.europeana.eu/record/euro/testrecord.html";
+		expected = "https://www.europeana.eu/portal/record/euro/testrecord.html";
 		assertEquals("getCanonicalPortalRecord failed", expected,
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
 	}

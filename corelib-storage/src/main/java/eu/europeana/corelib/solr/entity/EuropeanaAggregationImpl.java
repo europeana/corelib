@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import eu.europeana.corelib.edm.utils.ValidateUtils;
+import eu.europeana.corelib.web.exception.InvalidUrlException;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -22,13 +26,15 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @Entity("EuropeanaAggregation")
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements EuropeanaAggregation {
 
+
 	@Reference
 	private List<WebResource> webResources;
+
+	// note that edmLandingPage is not stored in Mongo anymore, but generated
 
 	private String aggregatedCHO;
 	private String[] aggregates;
 	private Map<String,List<String>> dcCreator;
-	private String edmLandingPage;
 	private String edmIsShownBy;
 	private String[] edmHasView;
 	private Map<String,List<String>> edmCountry;
@@ -66,25 +72,36 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 		this.dcCreator = dcCreator;
 	}
 
-    public void setEdmLandingPageFromAggregatedCHO() {
-        final String landingPage;
-        if (StringUtils.isNotBlank(this.aggregatedCHO)) {
-            landingPage = "http://europeana.eu/portal/record/" + this.aggregatedCHO + ".html";
-        } else {
-            landingPage = null;
-        }
-        this.setEdmLandingPage(landingPage);
-    }
-	
+    /**
+     * @see EuropeanaAggregation#getEdmLandingPage()
+     */
     @Override
     public String getEdmLandingPage() {
-        return this.edmLandingPage;
-    }
+		String id = this.aggregatedCHO;
 
-	@Override
-	public void setEdmLandingPage(String edmLandingPage) {
-		this.edmLandingPage = edmLandingPage;
-	}
+		// note that for Metis aggregatedCHO will consist only of id, so this can be removed once Metis is live
+		if (id != null && id.startsWith("/item")) {
+			id = StringUtils.substringAfter(this.aggregatedCHO, "/item");
+		}
+		if (id == null) {
+			// use aggregation about field as fallback
+			id = StringUtils.substringAfter(this.about, "/aggregation/europeana");
+		}
+
+		// extra checks to see if we have a proper id and url
+		if (ValidateUtils.validateRecordIdFormat(id)) {
+			try {
+				return EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id).toCanonicalUrl();
+			} catch (InvalidUrlException e) {
+				LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Generated url = {}",
+						EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id));
+			}
+		} else {
+			LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Found incorrect id: {}", id);
+		}
+
+		return null;
+    }
 
 	@Override
 	public String getEdmIsShownBy() {
