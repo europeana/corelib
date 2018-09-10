@@ -137,7 +137,7 @@ public final class SchemaOrgConstants {
 
     public static final String DEFAULT_LANGUAGE = "def";
 
-    public static final String LANGUAGE = "\"@language\"";
+    public static final String LANGUAGE = "@language";
 
-    public static final String VALUE = "\"@value\"";
+    public static final String VALUE = "@value";
 }

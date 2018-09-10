@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
@@ -7,6 +8,10 @@ import java.util.List;
 
 @JsonldType(SchemaOrgConstants.TYPE_MEDIA_OBJECT)
 public class MediaObject extends CreativeWork {
+
+    @JsonIgnore
+    @Override
+    public String getTypeName() { return SchemaOrgConstants.TYPE_MEDIA_OBJECT; }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_UPLOAD_DATE)
     public List<BaseType> getUploadDate() {

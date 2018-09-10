@@ -19,8 +19,9 @@ public class Text implements BaseType {
         return value;
     }
 
+    @JsonIgnore
     @Override
     public String getTypeName() {
-        return null;
+        return "Text";
     }
 }

@@ -1,5 +1,6 @@
 package eu.europeana.corelib.edm.model.schema.org;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
@@ -10,6 +11,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 public class CreativeWork extends Thing {
 
+    @JsonIgnore
     @Override
     public String getTypeName() { return SchemaOrgConstants.TYPE_CREATIVE_WORK;}
 
