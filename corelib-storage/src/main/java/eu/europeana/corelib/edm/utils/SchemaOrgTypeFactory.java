@@ -33,7 +33,11 @@ public final class SchemaOrgTypeFactory {
             return null;
         }
 
-        String type = getType(bean);
+        String type = getTypeFromProxies(bean);
+        if (type == null) {
+            type = getTypeFromConcepts(bean);
+        }
+
         if (type == null || conceptTypes.get(type) == null) {
             return new CreativeWork();
         }
@@ -65,25 +69,30 @@ public final class SchemaOrgTypeFactory {
         return new CreativeWork();
     }
 
-    private static String getType(FullBeanImpl bean) {
+    private static String getTypeFromProxies(FullBeanImpl bean) {
         String type = null;
-        // try proxies first
-        for (ProxyImpl proxy : bean.getProxies()) {
-            // first check dc:type
-            type = getType(proxy.getDcType());
-            if (type == null) {
-                type = getType(proxy.getDcSubject());
-            }
-            if (type == null) {
-                // then check edm:hasType
-                type = getType(proxy.getEdmHasType());
-            }
-            if (type != null) {
-                break;
+        if (bean.getProxies() != null) {
+            for (ProxyImpl proxy : bean.getProxies()) {
+                // first check dc:type
+                type = getType(proxy.getDcType());
+                if (type == null) {
+                    type = getType(proxy.getDcSubject());
+                }
+                if (type == null) {
+                    // then check edm:hasType
+                    type = getType(proxy.getEdmHasType());
+                }
+                if (type != null) {
+                    break;
+                }
             }
         }
-        // when type was not found in the proxies try contextual entities
-        if (type == null) {
+        return type;
+    }
+
+    private static String getTypeFromConcepts(FullBeanImpl bean) {
+        String type = null;
+        if (bean.getConcepts() != null) {
             for (ConceptImpl concept : bean.getConcepts()) {
                 // try about
                 if (conceptTypes.containsKey(concept.getAbout())) {
