@@ -10,6 +10,8 @@ import java.io.IOException;
 public class SchemaOrgUtils {
     private static final Logger LOG = LogManager.getLogger(SchemaOrgUtils.class);
 
+    private static final Logger LOG = LogManager.getLogger(SchemaOrgUtils.class);
+
     private static final String URL_PREFIX = "http://data.europeana.eu";
 
     private SchemaOrgUtils() { }

@@ -16,30 +16,26 @@
  */
 package eu.europeana.corelib.search.loader;
 
-import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.edm.utils.MongoConstructor;
-import eu.europeana.corelib.edm.utils.SolrConstructor;
-import eu.europeana.corelib.edm.utils.construct.FullBeanHandler;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.jibx.runtime.BindingDirectory;
-import org.jibx.runtime.IBindingFactory;
-import org.jibx.runtime.IUnmarshallingContext;
-import org.jibx.runtime.JiBXException;
-import org.junit.Assert;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,46 +96,9 @@ public class ContentLoader {
     }
 
     public int parse(final EdmMongoServer mongoDBServer, final SolrServer solrServer) {
-        MongoConstructor mongoConstructor = new MongoConstructor();
         for (Path path : collectionXML) {
-            try {
-                IBindingFactory bfact = BindingDirectory.getFactory(RDF.class);
-                IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-                i++;
-                RDF rdf = (RDF) uctx.unmarshalDocument(Files.newBufferedReader(path, StandardCharsets.UTF_8));
-
-                FullBeanImpl fullBean = mongoConstructor.constructFullBean(rdf);
-                FullBeanHandler handler = new FullBeanHandler(mongoDBServer);
-                handler.saveEdmClasses(fullBean, true);
-                String about = EuropeanaUriUtils.createSanitizedEuropeanaId("00000", fullBean.getAbout());
-                fullBean.setAbout(about);
-                if (mongoDBServer.getFullBean(about) == null) {
-                    mongoDBServer.getDatastore().save(fullBean);
-                    Assert.assertNotNull("Is null", mongoDBServer.getFullBean(fullBean.getAbout()));
-                }
-                SolrInputDocument document = new SolrConstructor().constructSolrDocument(rdf);
-                document.setField("europeana_id", fullBean.getAbout());
-                records.add(document);
-
-                if (i % 1000 == 0 || i == collectionXML.size()) {
-                    System.out.println("Sending " + i + " records to SOLR");
-                    imported += records.size();
-                    solrServer.add(records);
-                    solrServer.commit();
-                    records.clear();
-                }
-
-            } catch (JiBXException e) {
-                failed++;
-                System.out.println("Error unmarshalling document " + path.toString()
-                        + " from the input file. Check for Schema changes (" + e.getMessage() + ")");
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                System.out.println("File does not exist");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // TODO JV this is where the file that is contained in the path should be indexed using the
+            // Metis indexing library and the right versions for the Mongo and Solr connection.
         }
         return failed;
     }

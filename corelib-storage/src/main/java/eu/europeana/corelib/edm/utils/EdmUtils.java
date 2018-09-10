@@ -23,6 +23,7 @@ import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
+import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -50,12 +52,18 @@ import java.util.Map.Entry;
  */
 public class EdmUtils {
 
+    public static final String DEFAULT_LANGUAGE = "def";
+
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static IBindingFactory bfact;
-    private static final  String SPACE = " ";
-    private static final  String PREFIX = "http://data.europeana.eu";
+    private static final String SPACE = " ";
+    private static final String PREFIX = "http://data.europeana.eu";
 
+    private static IBindingFactory bfact;
+
+    private EdmUtils() {
+        // empty constructor to prevent initialization
+    }
 
     /**
      * Convert a FullBean to an EDM String
@@ -92,7 +100,7 @@ public class EdmUtils {
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
             return out.toString("UTF-8");
         } catch (JiBXException | IOException e) {
-            LOG.error("Error converting fullbean to EDM: "+ e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error("Error marshalling RDF", e);
         }
         return null;
     }
@@ -233,9 +241,9 @@ public class EdmUtils {
                     lat.setLat(place.getLatitude());
                     pType.setLat(lat);
 
-                    _Long _long = new _Long();
-                    _long.setLong(place.getLongitude());
-                    pType.setLong(_long);
+                    _Long l = new _Long();
+                    l.setLong(place.getLongitude());
+                    pType.setLong(l);
                 }
                 addAsList(pType, AltLabel.class, place.getAltLabel());
                 addAsList(pType, HasPart.class, place.getDcTermsHasPart());
@@ -300,6 +308,7 @@ public class EdmUtils {
         DatasetName datasetName = new DatasetName();
         datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
         aggregation.setDatasetName(datasetName);
+        // TODO country will be removed once Organizations are fully implemented
         Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
         if (country != null) {
             aggregation.setCountry(country);
@@ -314,6 +323,17 @@ public class EdmUtils {
         }
         addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
         addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights());
+        Completeness completeness = new Completeness();
+        completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
+        aggregation.setCompleteness(completeness);
+
+        Created created = new Created();
+        created.setString(DateUtils.format(fBean.getTimestampCreated()));
+        aggregation.setCreated(created);
+
+        Modified modified = new Modified();
+        modified.setString(DateUtils.format(fBean.getTimestampUpdated()));
+        aggregation.setModified(modified);
 
         List<EuropeanaAggregationType> lst = new ArrayList<>();
         lst.add(aggregation);
@@ -330,25 +350,46 @@ public class EdmUtils {
     }
 
     private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
-
+        // there should be only 1 country at most
         if (edmCountry != null && edmCountry.size() > 0) {
-            Country country = new Country();
+            return EdmUtils.convertToCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
+        }
+        return null;
+    }
+
+    /**
+     * JIBX uses equals function to generate a CountryCodes enum from a string, so that's why we need to match exactly
+     * to the value defined in the JIBX CountryCodes class (i.e. we need to capitalize the first letter of each word)
+     * @param country string with country name as it is in JIBX CountryCodes but without proper capitalization
+     * @return Country object with filled country code, or null if conversion failed
+     */
+    public static Country convertToCountry(String country) {
+        Country result = null;
+        if (StringUtils.isNotEmpty(country)) {
             StringBuilder sb = new StringBuilder();
-            String[] splitCountry = edmCountry.entrySet().iterator().next().getValue().get(0).split(SPACE);
+            String[] splitCountry = country.trim().toLowerCase(Locale.GERMANY).split(SPACE);
             for (String countryWord : splitCountry) {
-                if (StringUtils.equals("and", countryWord)) {
-                    sb.append(countryWord);
+                if (StringUtils.equalsIgnoreCase("and", countryWord) || StringUtils.equalsIgnoreCase("of", countryWord)) {
+                    sb.append(countryWord.toLowerCase(Locale.GERMANY));
+                } else if (countryWord.charAt(0) == '(') {
+                    sb.append('(');
+                    sb.append(StringUtils.capitalize(countryWord.substring(1)));
                 } else {
                     sb.append(StringUtils.capitalize(countryWord));
                 }
                 sb.append(SPACE);
             }
-            String countryFixed = sb.toString().replace(" Of ", " of ").trim();
-            country.setCountry(CountryCodes.convert(countryFixed));
+            String convertedCountry = sb.toString().trim();
 
-            return country;
+            CountryCodes cc = CountryCodes.convert(sb.toString().trim());
+            if (cc != null) {
+                result = new Country();
+                result.setCountry(cc);
+            } else {
+                LOG.error("Cannot convert country '{}' to JIBX country code! (converted country = {})", country, convertedCountry);
+            }
         }
-        return null;
+        return result;
     }
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
@@ -489,7 +530,7 @@ public class EdmUtils {
             addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
             addAsList(aggregation, IntermediateProvider.class, aggr.getEdmIntermediateProvider());
 
-            if (aggr.getEdmUgc() != null && !aggr.getEdmUgc().equalsIgnoreCase("false")) {
+            if (aggr.getEdmUgc() != null && !"false".equalsIgnoreCase(aggr.getEdmUgc())) {
                 Ugc ugc = new Ugc();
                 ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr.getEdmUgc())));
                 aggregation.setUgc(ugc);
@@ -528,7 +569,7 @@ public class EdmUtils {
                 addAsList(agent, AltLabel.class, ag.getAltLabel());
                 addAsObject(agent, Begin.class, ag.getBegin());
                 addAsObject(agent, End.class, ag.getEnd());
-                addAsObject(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
+                addAsList(agent, BiographicalInformation.class, ag.getRdaGr2BiographicalInformation());
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
@@ -559,7 +600,7 @@ public class EdmUtils {
                     Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
                     LiteralType.Lang lang = null;
                     if (StringUtils.isNotEmpty(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new LiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -576,7 +617,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -597,7 +638,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -610,7 +651,7 @@ public class EdmUtils {
                 for (Entry<String, List<String>> entry : entries.entrySet()) {
                     ResourceOrLiteralType.Lang lang = null;
                     if (StringUtils.isNotEmpty(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new ResourceOrLiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -634,7 +675,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -648,7 +689,7 @@ public class EdmUtils {
                 for (Entry<String, List<String>> entry : entries.entrySet()) {
                     LiteralType.Lang lang = null;
                     if (StringUtils.isNotBlank(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new LiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -665,7 +706,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -685,7 +726,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException | InstantiationException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -702,7 +743,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -716,7 +757,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -739,7 +780,7 @@ public class EdmUtils {
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -783,7 +824,7 @@ public class EdmUtils {
                 return tList;
             }
         } catch (SecurityException | InstantiationException | IllegalAccessException e) {
-            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage(), e);
         }
 
         return null;
@@ -797,57 +838,84 @@ public class EdmUtils {
                 try {
                     if (entry.getValue() != null) {
                         if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
-                            for (String str : entry.getValue()) {
-                                ResourceType t = (ResourceType) clazz.newInstance();
-                                t.setResource(str);
-                                list.add((T) t);
+                            for (String value : entry.getValue()) {
+                                // null check shouldn't be necessary, but sometimes there is incorrect data
+                                if (value != null) {
+                                    ResourceType t = (ResourceType) clazz.newInstance();
+                                    t.setResource(value);
+                                    list.add((T) t);
+                                }
                             }
 
                         } else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
-                            LiteralType.Lang lang = null;
-                            if (StringUtils.isNotEmpty(entry.getKey())
-                                    && !StringUtils.equals(entry.getKey(),"def")) {
-                                lang = new LiteralType.Lang();
-                                lang.setLang(entry.getKey());
-                            }
-                            for (String str : entry.getValue()) {
-                                LiteralType t = (LiteralType) clazz.newInstance();
-                                t.setString(str);
-                                t.setLang(lang);
-                                list.add((T) t);
-                            }
-
+                            list.addAll(createLiteralLangList(clazz, entry));
                         } else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
-                            ResourceOrLiteralType.Lang lang = null;
-                            if (StringUtils.isNotEmpty(entry.getKey())
-                                    && !StringUtils.equals(entry.getKey(), "def")
-                                    && !StringUtils.equals(entry.getKey(), "eur")) {
-                                lang = new ResourceOrLiteralType.Lang();
-                                lang.setLang(entry.getKey());
-                            }
-                            for (String str : entry.getValue()) {
-                                ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
-                                Resource resource = new Resource();
-                                t.setString("");
-                                if (isUri(str)) {
-                                    resource.setResource(str);
-                                    t.setResource(resource);
-                                } else {
-                                    t.setString(str);
-                                    t.setLang(lang);
-                                }
-
-                                list.add((T) t);
-                            }
+                            list.addAll(createResourceOrLiteralLangList(clazz, entry));
                         }
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-                    LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                    LOG.error("Error converting map to list", e);
                 }
             }
             return list;
         }
         return null;
+    }
+
+    private static ResourceOrLiteralType setResourceOrLiteralLangValue(ResourceOrLiteralType rlt, Resource r, ResourceOrLiteralType.Lang lang, String value) {
+        if (isUri(value)) {
+            r.setResource(value);
+            rlt.setResource(r);
+        } else {
+            rlt.setString(value);
+            rlt.setLang(lang);
+        }
+        return rlt;
+    }
+
+    private static <T> List<T> createLiteralLangList(Class<T> clazz, Entry<String, List<String>> entry)
+            throws InstantiationException, IllegalAccessException {
+        List<T> result = new ArrayList<>();
+        LiteralType.Lang lang = null;
+        if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(),DEFAULT_LANGUAGE)) {
+            lang = new LiteralType.Lang();
+            lang.setLang(entry.getKey());
+        }
+        for (String value : entry.getValue()) {
+            // null check shouldn't be necessary, but sometimes there is incorrect data
+            if (value != null) {
+                LiteralType t = (LiteralType) clazz.newInstance();
+                t.setString(value);
+                t.setLang(lang);
+                result.add((T) t);
+            }
+        }
+        return result;
+    }
+
+    private static <T> List<T> createResourceOrLiteralLangList(Class<T> clazz, Entry<String, List<String>> entry)
+            throws InstantiationException, IllegalAccessException {
+        List<T> result = new ArrayList<>();
+        ResourceOrLiteralType.Lang lang = null;
+        // 2018-08-30 PE: not sure why the check for "eur". Looks like this is a very old definition
+        // and not used anymore, as it's the only reference to "eur" in the entire application
+        if (StringUtils.isNotEmpty(entry.getKey())
+                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)
+                && !StringUtils.equals(entry.getKey(), "eur")) {
+            lang = new ResourceOrLiteralType.Lang();
+            lang.setLang(entry.getKey());
+        }
+        for (String value : entry.getValue()) {
+            // null check shouldn't be necessary, but sometimes there is incorrect data
+            if (value != null) {
+                ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
+                Resource resource = new Resource();
+                t.setString("");
+                setResourceOrLiteralLangValue(t, resource, lang, value);
+                result.add((T) t);
+            }
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -863,46 +931,37 @@ public class EdmUtils {
                     } else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
                         ResourceOrLiteralType.Lang lang = null;
                         if (StringUtils.isNotEmpty(entry.getKey())
-                                && !StringUtils.equals(entry.getKey(), "def")) {
+                                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)) {
                             lang = new ResourceOrLiteralType.Lang();
                             lang.setLang(entry.getKey());
                         }
 
                         ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
                         Resource resource = new Resource();
-                        // resource.setResource("");
-
-                        // obj.setResource(resource);
                         obj.setString("");
-                        for (String str : entry.getValue()) {
-                            if (isUri(str)) {
-                                resource.setResource(str);
-                                obj.setResource(resource);
-                            } else {
-                                obj.setString(str);
-                                obj.setLang(lang);
-                            }
+                        for (String value : entry.getValue()) {
+                            setResourceOrLiteralLangValue(obj, resource, lang, value);
                         }
 
                         return (T) obj;
                     } else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
                         LiteralType.Lang lang = null;
                         if (StringUtils.isNotEmpty(entry.getKey())
-                                && !StringUtils.equals(entry.getKey(), "def")) {
+                                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)) {
                             lang = new LiteralType.Lang();
                             lang.setLang(entry.getKey());
                         }
                         LiteralType obj = ((LiteralType) t);
                         obj.setString("");
-                        for (String str : entry.getValue()) {
-                            obj.setString(str);
+                        for (String value : entry.getValue()) {
+                            obj.setString(value);
                         }
                         obj.setLang(lang);
                         return (T) obj;
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
                     LOG.error(e.getClass().getSimpleName() + "  "
-                            + e.getMessage());
+                            + e.getMessage(), e);
                 }
             }
         }
@@ -917,7 +976,7 @@ public class EdmUtils {
     }
 
     /**
-     * Make a clone of a list
+     * Make a clone of a list. Note that the provided list can actually contain a single String or a Map<String, String>
      * @param list
      * @return
      */
@@ -926,11 +985,10 @@ public class EdmUtils {
             return null;
         }
         List<Map<String, String>> result = new ArrayList<>();
-        for (int i = 0, max = list.size(); i < max; i++) {
-            Object label = list.get(i);
-            if (label.getClass().getName() == "java.lang.String") {
+        for (Object label : list) {
+            if (label instanceof String) {
                 Map<String, String> map = new HashMap<>();
-                map.put("def", (String) label);
+                map.put(DEFAULT_LANGUAGE, (String) label);
                 result.add(map);
             } else {
                 result.add((Map<String, String>) label);
@@ -949,8 +1007,8 @@ public class EdmUtils {
             return null;
         }
         Map<String, List<String>> result = new HashMap<>();
-        for (String key : map.keySet()) {
-            result.put(StringUtils.substringAfter(key, "."), map.get(key));
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            result.put(StringUtils.substringAfter(entry.getKey(), "."), entry.getValue());
         }
         return result;
     }

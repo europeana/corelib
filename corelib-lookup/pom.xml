@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>eu.europeana</groupId>
 		<artifactId>corelib</artifactId>
-		<version>2.7.1-SNAPSHOT</version>
+		<version>2.7.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -20,7 +20,7 @@
 		<!-- CORELIB -->
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>
-			<artifactId>corelib-dereference</artifactId>
+			<artifactId>corelib-utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>eu.europeana.corelib</groupId>

@@ -20,8 +20,6 @@ package eu.europeana.corelib.db.service.abstracts;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import eu.europeana.corelib.db.dao.RelationalDao;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.abstracts.IdentifiedEntity;
@@ -31,7 +29,6 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Identifie
  * 
  * @see eu.europeana.corelib.db.service.abstracts.AbstractService
  */
-@Transactional
 public abstract class AbstractServiceImpl<E extends IdentifiedEntity<?>> implements AbstractService<E> {
 
 	private RelationalDao<E> dao;
