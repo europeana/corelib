@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SchemaOrgTypeFactory {
+/**
+ * Factory class for creating a new schema.org object from an EDM FulLBean
+ */
+public final class SchemaOrgTypeFactory {
     private static final Map<String, String> conceptTypes;
 
     static {
@@ -69,6 +72,9 @@ public class SchemaOrgTypeFactory {
             // first check dc:type
             type = getType(proxy.getDcType());
             if (type == null) {
+                type = getType(proxy.getDcSubject());
+            }
+            if (type == null) {
                 // then check edm:hasType
                 type = getType(proxy.getEdmHasType());
             }
@@ -80,13 +86,14 @@ public class SchemaOrgTypeFactory {
         if (type == null) {
             for (ConceptImpl concept : bean.getConcepts()) {
                 // try about
-                type = concept.getAbout();
-                if (!conceptTypes.containsKey(type)) {
-                    // try skos:exactMatch
-                    type = getType(concept.getExactMatch());
-                    if (type != null) {
-                        break;
-                    }
+                if (conceptTypes.containsKey(concept.getAbout())) {
+                    type = concept.getAbout();
+                    break;
+                }
+                // try skos:exactMatch
+                type = getType(concept.getExactMatch());
+                if (type != null) {
+                    break;
                 }
             }
         }
