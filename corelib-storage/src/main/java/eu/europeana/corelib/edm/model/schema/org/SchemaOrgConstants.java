@@ -97,6 +97,10 @@ public final class SchemaOrgConstants {
 
     public static final String PROPERTY_ART_MEDIUM = "artMedium";
 
+    public static final String PROPERTY_FOUNDING_DATE = "foundingDate";
+
+    public static final String PROPERTY_DISSOLUTION_DATE = "dissolutionDate";
+
     public static final String TYPE_THING = "Thing";
 
     public static final String TYPE_VIDEO_OBJECT = "VideoObject";

@@ -71,7 +71,7 @@ public class Thing implements BaseType {
         addProperty(SchemaOrgConstants.PROPERTY_DESCRIPTION, description);
     }
 
-    public void addInLanguage(Text inLanguage) {
+    public void addInLanguage(MultilingualString inLanguage) {
         addProperty(SchemaOrgConstants.PROPERTY_IN_LANGUAGE, inLanguage);
     }
 
@@ -93,10 +93,12 @@ public class Thing implements BaseType {
         return SchemaOrgConstants.TYPE_THING;
     }
 
-    void addProperty(String propertyName, BaseType propertyValue) {
+    public void addProperty(String propertyName, BaseType propertyValue) {
         if (propertyValue != null) {
             List<BaseType> currentValue = getCurrentPropertyValue(propertyName);
-            currentValue.add(propertyValue);
+            if (!currentValue.contains(propertyValue)) {
+                currentValue.add(propertyValue);
+            }
         }
     }
 

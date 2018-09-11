@@ -968,7 +968,7 @@ public class EdmUtils {
         return null;
     }
 
-    private static boolean isUri(String str) {
+    public static boolean isUri(String str) {
         return StringUtils.startsWith(str, "http://")
                 || StringUtils.startsWith(str, "https://")
                 || StringUtils.startsWith(str, "urn:")

@@ -24,5 +24,4 @@ public class SchemaOrgUtilsTest {
         Assert.assertNotNull(output);
     }
 
-
 }

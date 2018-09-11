@@ -148,7 +148,7 @@ public class CreativeWork extends Thing {
         addProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, exampleOfWork);
     }
 
-    public void addExampleOfWork(Reference exampleOfWork) {
+    public void addExampleOfWork(Reference<CreativeWork> exampleOfWork) {
         addProperty(SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, exampleOfWork);
     }
 
