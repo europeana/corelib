@@ -144,7 +144,7 @@ public class SearchServiceImpl implements SearchService {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfo(fullBean, mongoServer);
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
 
             if (similarItems) {
                 try {
@@ -208,7 +208,7 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfo(fullBean, mongoServer);
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
             if (similarItems) {
                 try {
                     fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
@@ -460,7 +460,8 @@ public class SearchServiceImpl implements SearchService {
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
         boolean defaultSort = query.getSorts().size() == 0;
         if (defaultSort) {
-            solrQuery.setSort("score", ORDER.desc);
+            solrQuery.setSort("has_media", ORDER.desc);
+            solrQuery.addSort("score", ORDER.desc);
             solrQuery.addSort("timestamp_update", ORDER.desc);
             // completeness is added last because many records have incorrect value 0
             solrQuery.addSort("europeana_completeness", ORDER.desc);

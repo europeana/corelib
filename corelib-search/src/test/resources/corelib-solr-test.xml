@@ -54,7 +54,6 @@
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="europeana_id_test" type="java.lang.String"/>
     </bean>
-    <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
     <bean id="corelib_solr_neo4jServer" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.neo4j.server.Neo4jServer"/>
     </bean>

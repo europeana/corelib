@@ -42,119 +42,13 @@ public class WebMetaInfo {
 
     /**
      * Add webResources and fill them with metadata retrieved from Mongo
-     * @param fullBean
-     * @param mongoServer
-     */
-    @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfo(final FullBean fullBean, final EdmMongoServer mongoServer) {
-        if (fullBean == null) {
-            //   LOG.error("FullBean is null when injecting web meta info");
-            return;
-        }
-
-        if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
-            //     LOG.error("FullBean Aggregation is null or empty when trying to inject web meta info");
-            return;
-        }
-
-        // Temp fix for missing web resources
-        Aggregation aggregationFix = fullBean.getAggregations().get(0);
-        if (aggregationFix.getEdmIsShownBy() != null) {
-            String isShownBy = aggregationFix.getEdmIsShownBy();
-            generateWebResource(aggregationFix, isShownBy);
-        }
-
-        if (aggregationFix.getEdmObject() != null) {
-            String edmObject = aggregationFix.getEdmObject();
-            generateWebResource(aggregationFix, edmObject);
-        }
-
-        if (aggregationFix.getHasView() != null) {
-            for (String hasView : aggregationFix.getHasView()) {
-                generateWebResource(aggregationFix, hasView);
-            }
-        }
-
-        ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
-        for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
-            WebResourceMetaInfoImpl webMetaInfo = null;
-
-            // Locate the technical meta data from the web resource about
-            if (webResource.getAbout() != null) {
-                String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                webMetaInfo = getMetaInfo(mongoServer, hashCodeAbout);
-            }
-
-
-            // Locate the technical meta data from the aggregation is shown by
-            if (webMetaInfo == null && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                String hashCodeIsShownBy = generateHashCode(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), fullBean.getAbout());
-                webMetaInfo = getMetaInfo(mongoServer, hashCodeIsShownBy);
-            }
-
-            if (webMetaInfo != null) {
-                ((WebResourceImpl) webResource).setWebResourceMetaInfo(webMetaInfo);
-            }
-        }
-
-        // Step 2 : Fill in the aggregation
-        for (final Aggregation aggregation : fullBean.getAggregations()) {
-            final Set<String> urls = new HashSet<>();
-
-            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
-                urls.add(aggregation.getEdmIsShownBy());
-            }
-
-            if (null != aggregation.getHasView()) {
-                urls.addAll(Arrays.asList(aggregation.getHasView()));
-            }
-
-            // if the fix adds a web resource for edmObject it also has to be added here in order to be processed
-            if (null != aggregation.getEdmObject()) {
-                urls.add(aggregation.getEdmObject());
-            }
-
-            for (final WebResource webResource : aggregation.getWebResources()) {
-                if (!urls.contains(webResource.getAbout().trim())) {
-                    continue;
-                }
-
-                WebResourceMetaInfoImpl webMetaInfo = null;
-
-                // Locate the technical meta data from the web resource about
-                if (webResource.getAbout() != null) {
-                    String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                    webMetaInfo = getMetaInfo(mongoServer, hashCodeAbout);
-                }
-                // Locate the technical meta data from the aggregation is shown by
-                if (webMetaInfo == null && aggregation.getEdmIsShownBy() != null) {
-                    String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
-                    webMetaInfo = getMetaInfo(mongoServer, hashCodeIsShownBy);
-                }
-
-                if (webMetaInfo != null) {
-                    ((WebResourceImpl) webResource).setWebResourceMetaInfo(webMetaInfo);
-                }
-            }
-        }
-
-        addReferencedByIIIF(fullBean);
-    }
-
-    /**
-     * Add webResources and fill them with metadata retrieved from Mongo
+     *
      * @param fullBean
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
     public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
-        if (fullBean == null) {
-            //   LOG.error("FullBean is null when injecting web meta info");
-            return;
-        }
-
-        if (fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
-            //     LOG.error("FullBean Aggregation is null or empty when trying to inject web meta info");
+        if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
 
@@ -177,7 +71,6 @@ public class WebMetaInfo {
         }
 
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
-
         fillAggregations(fullBean, mongoServer);
 
         addReferencedByIIIF(fullBean);
@@ -195,6 +88,12 @@ public class WebMetaInfo {
         }
     }
 
+    /**
+     * This retrieves several WebResources in one go
+     * @param mongoServer
+     * @param hashCodes
+     * @return
+     */
     private static Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(EdmMongoServer mongoServer, List<String> hashCodes) {
         Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
 
@@ -221,9 +120,9 @@ public class WebMetaInfo {
     private static String extractId(String json) {
         int index = json.indexOf("\"_id\"");
         if (index != -1) {
-            index = json.indexOf("\"", index + "\"_id\"".length());
+            index = json.indexOf('\"', index + "\"_id\"".length());
             if (index != -1) {
-                return json.substring(index + 1, json.indexOf("\"", index + 1));
+                return json.substring(index + 1, json.indexOf('\"', index + 1));
             }
         }
         return null;
@@ -319,22 +218,7 @@ public class WebMetaInfo {
                 .toString();
     }
 
-    private static WebResourceMetaInfoImpl getMetaInfo(final EdmMongoServer mongoServer, final String webResourceMetaInfoId) {
-        final DB db = mongoServer.getDatastore().getDB();
-        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
-
-        final BasicDBObject query = new BasicDBObject("_id", webResourceMetaInfoId);
-        final DBCursor cursor = webResourceMetaInfoColl.find(query);
-
-        final Type type = new TypeToken<WebResourceMetaInfoImpl>() {}.getType();
-
-        if (cursor.hasNext()) {
-            return new Gson().fromJson(cursor.next().toString(), type);
-        }
-        return null;
-    }
-
-    /**
+       /**
      * This is temporary code: if a record is a newspaper record and doesn't have a referencedBy value, we add
      * a reference to IIIF (see ticket EA-992)
      * @param bean
@@ -362,21 +246,26 @@ public class WebMetaInfo {
      * @return true if it's a newspaper record, otherwise false
      */
     public static boolean isNewsPaperRecord(FullBean bean) {
+        boolean result = false;
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()){
                 Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
                     for (List<String> langValues : langMap.values()) {
-                        boolean result = langValues.contains("http://schema.org/PublicationIssue") ||
-                                         langValues.contains("https://schema.org/PublicationIssue");
-                        LOG.debug("isNewsPaperRecord = {}", result);
-                        return result;
+                        result = langValues.contains("http://schema.org/PublicationIssue") ||
+                                 langValues.contains("https://schema.org/PublicationIssue");
+                        if (result) {
+                            break;
+                        }
                     }
+                }
+                if (result) {
+                    break;
                 }
             }
         }
-        LOG.debug("isNewsPaperRecord = false");
-        return false;
+        LOG.debug("isNewsPaperRecord = {}", result);
+        return result;
     }
 
     /**

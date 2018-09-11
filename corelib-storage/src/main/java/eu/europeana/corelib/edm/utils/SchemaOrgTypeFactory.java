@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SchemaOrgTypeFactory {
+/**
+ * Factory class for creating a new schema.org object from an EDM FulLBean
+ */
+public final class SchemaOrgTypeFactory {
     private static final Map<String, String> conceptTypes;
 
     static {
@@ -59,7 +62,11 @@ public class SchemaOrgTypeFactory {
             return null;
         }
 
-        String type = getType(bean);
+        String type = getTypeFromProxies(bean);
+        if (type == null) {
+            type = getTypeFromConcepts(bean);
+        }
+
         if (type == null || conceptTypes.get(type) == null) {
             return new CreativeWork();
         }
@@ -91,31 +98,40 @@ public class SchemaOrgTypeFactory {
         return new CreativeWork();
     }
 
-    private static String getType(FullBeanImpl bean) {
+    private static String getTypeFromProxies(FullBeanImpl bean) {
         String type = null;
-        // try proxies first
-        for (ProxyImpl proxy : bean.getProxies()) {
-            // first check dc:type
-            type = getType(proxy.getDcType());
-            if (type == null) {
-                // then check edm:hasType
-                type = getType(proxy.getEdmHasType());
-            }
-            if (type != null) {
-                break;
+        if (bean.getProxies() != null) {
+            for (ProxyImpl proxy : bean.getProxies()) {
+                // first check dc:type
+                type = getType(proxy.getDcType());
+                if (type == null) {
+                    type = getType(proxy.getDcSubject());
+                }
+                if (type == null) {
+                    // then check edm:hasType
+                    type = getType(proxy.getEdmHasType());
+                }
+                if (type != null) {
+                    break;
+                }
             }
         }
-        // when type was not found in the proxies try contextual entities
-        if (type == null) {
+        return type;
+    }
+
+    private static String getTypeFromConcepts(FullBeanImpl bean) {
+        String type = null;
+        if (bean.getConcepts() != null) {
             for (ConceptImpl concept : bean.getConcepts()) {
                 // try about
-                type = concept.getAbout();
-                if (!conceptTypes.containsKey(type)) {
-                    // try skos:exactMatch
-                    type = getType(concept.getExactMatch());
-                    if (type != null) {
-                        break;
-                    }
+                if (conceptTypes.containsKey(concept.getAbout())) {
+                    type = concept.getAbout();
+                    break;
+                }
+                // try skos:exactMatch
+                type = getType(concept.getExactMatch());
+                if (type != null) {
+                    break;
                 }
             }
         }

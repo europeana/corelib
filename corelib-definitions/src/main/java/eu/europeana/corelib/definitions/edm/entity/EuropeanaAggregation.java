@@ -66,13 +66,7 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	 * @return the edm:landingPage for an edm:EuropeanaAggregation
 	 */
 	String getEdmLandingPage();
-	
-	/**
-	 * sets the edm:landingPage for an edm:EuropeanaAggregation
-	 * @param edmLandingPage
-	 */
-	void setEdmLandingPage(String edmLandingPage);
-	
+
 	/**
 	 * 
 	 * @return the edm:isShownBy for an edm:EuropeanaAggregation

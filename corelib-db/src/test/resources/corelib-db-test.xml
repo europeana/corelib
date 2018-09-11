@@ -46,15 +46,14 @@
         <constructor-arg value="eu.europeana.corelib.web.service.EmailService"/>
     </bean>
 
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_vocabularyMongoServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_solrServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_solrEmbedded" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_mongoProvider" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.EmptyBean"/>
-    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.EmptyBean"/>
+    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_solrServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_solrEmbedded" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_mongoProvider" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.definitions.EmptyBean"/>
 
 </beans>

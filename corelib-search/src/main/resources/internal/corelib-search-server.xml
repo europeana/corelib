@@ -53,8 +53,8 @@
         <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl" p:solrServer-ref="corelib_solr_zookeeper" />
     </beans>
 
-    <!-- spring profile for Metis, use a single solr instance and no Zookeeper -->
-    <beans profile="metis">
+    <!-- spring profile to use a single solr instance and no Zookeeper -->
+    <beans profile="single-solr">
         <bean id="corelib_solr_single_server" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true" >
             <constructor-arg name="baseURL" value="#{europeanaProperties['solr.url']}"/>
         </bean>
