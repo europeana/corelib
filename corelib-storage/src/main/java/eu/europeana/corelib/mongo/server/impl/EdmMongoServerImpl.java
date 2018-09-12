@@ -155,7 +155,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		try {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 		} catch (RuntimeException re) {
-			if (re.getCause() != null && re.getCause() instanceof MappingException) {
+			if (re.getCause() != null &&
+					(re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
 				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);
 			} else {
 				throw new MongoRuntimeException(re, ProblemType.MONGO_UNREACHABLE);
