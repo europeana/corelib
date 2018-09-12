@@ -96,12 +96,6 @@
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <!-- Schema.org -->
-        <dependency>
-            <groupId>com.io-informatics.oss</groupId>
-            <artifactId>jackson-jsonld</artifactId>
-            <version>0.1.1</version>
-        </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>org.apache.solr</groupId>

@@ -70,6 +70,7 @@
 		<module>corelib-sugarcrm/client</module>
 		<module>corelib-hierarchies</module>
 		<module>corelib-search</module>
+		<module>corelib-schemaorg</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -157,6 +158,12 @@
 				<artifactId>corelib-web</artifactId>
                 <version>${project.version}</version>
 			</dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-schemaorg</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
