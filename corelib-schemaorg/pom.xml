@@ -20,7 +20,7 @@
 
     <properties>
         <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-        <sonar.projectKey>eu.europeana.corelib-metis:schemaorg</sonar.projectKey>
+        <sonar.projectKey>eu.europeana.corelib-metis:corelib-schemaorg</sonar.projectKey>
         <sonar.projectName>Europeana Core Library Schema.org</sonar.projectName>
     </properties>
 

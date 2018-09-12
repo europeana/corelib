@@ -18,7 +18,7 @@
 
     <properties>
         <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-        <sonar.projectKey>eu.europeana.corelib-metis:media-storage</sonar.projectKey>
+        <sonar.projectKey>eu.europeana.corelib-metis:corelib-media-storage</sonar.projectKey>
         <sonar.projectName>Europeana Core Library Media Storage</sonar.projectName>
     </properties>
 

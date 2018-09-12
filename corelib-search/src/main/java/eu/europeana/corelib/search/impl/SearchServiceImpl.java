@@ -102,11 +102,14 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the query is aborted by SOLR
      */
     private static final int TIME_ALLOWED = 30_000;
+
     /**
      * The list of possible field input for spelling suggestions
      */
+    @Deprecated
     private static final List<String> SPELL_FIELDS = Arrays.asList("who",
             "what", "where", "when", "title");
+
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
@@ -518,7 +521,16 @@ public class SearchServiceImpl implements SearchService {
                 || beanClazz == RichBeanImpl.class;
     }
 
+    /**
+     *
+     * @param query    The calculateTag term to find suggestions for
+     * @param pageSize Amount of requested suggestions
+     * @return
+     * @throws SolrTypeException
+     * @deprecated as of September 2018 (not working properly and very little usage)
+     */
     @Override
+    @Deprecated
     public List<Term> suggestions(String query, int pageSize) throws SolrTypeException {
         return suggestions(query, pageSize, null);
     }
@@ -584,7 +596,10 @@ public class SearchServiceImpl implements SearchService {
      * @param field    The field to query on
      * @param rHandler The ReqestHandler to use
      * @return A list of Terms for the specific term from the SolrSuggester
+     *
+     * @deprecated as of September 2018 (doesn't work anyway with new Solr, see also https://stackoverflow.com/q/33498056)
      */
+    @Deprecated
     private List<Term> getSuggestions(String query, String field, String rHandler) {
         List<Term> results = new ArrayList<>();
         try {
@@ -640,8 +655,10 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * Get the suggestions
+     * @deprecated as of September 2018
      */
     @Override
+    @Deprecated
     public List<Term> suggestions(String query, int pageSize, String field) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("%s, %d, %s", query, pageSize, field));

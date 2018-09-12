@@ -17,7 +17,7 @@
 
 	<properties>
 		<!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-		<sonar.projectKey>eu.europeana.corelib-metis:edm-definitions</sonar.projectKey>
+		<sonar.projectKey>eu.europeana.corelib-metis:corelib-edm-definitions</sonar.projectKey>
 		<sonar.projectName>Europeana Core Library EDM Schema definitions</sonar.projectName>
 		<binding.replace><![CDATA[ $1
     <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml" />

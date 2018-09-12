@@ -151,7 +151,9 @@ public interface SearchService {
 	 * @param pageSize Amount of requested suggestions
 	 * @return         List of calculateTag suggestions
 	 * @throws         EuropeanaException;
+	 * @deprecated as of September 2018 (not working properly and very little usage)
 	 */
+	@Deprecated
 	List<Term> suggestions(String query, int pageSize) throws EuropeanaException;
 
 	/**
