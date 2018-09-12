@@ -53,9 +53,9 @@ public interface SearchService {
 	 * @param recordId
 	 * @param similarItems  whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  MongoRuntimeException, SolrTypeException
+	 * @throws EuropeanaException
 	 */
-	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
+	FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException;
 
 	/**
 	 * Retrieve a record by id.
@@ -63,9 +63,9 @@ public interface SearchService {
 	 * @param europeanaObjectId The unique europeana id
 	 * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  MongoRuntimeException, MongoDBException
+	 * @throws EuropeanaException
 	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
+	FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException;
 
 	/**
 	 * Retrieve a record by id. If the record cannot be found, it will retry

@@ -137,13 +137,12 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public FullBean findById(String collectionId, String recordId, boolean similarItems)
-            throws MongoRuntimeException, MongoDBException {
+    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
     @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
 
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (fullBean != null) {

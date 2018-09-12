@@ -20,6 +20,7 @@ package eu.europeana.corelib.mongo.server.impl;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -151,7 +152,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException {
+	public FullBean getFullBean(String id) throws EuropeanaException {
 		try {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 		} catch (RuntimeException re) {

@@ -36,9 +36,8 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
@@ -558,10 +557,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         FullBean bean;
         try {
             bean = searchService.findById(europeanaObjectId, false);
-        } catch (MongoDBException e) {
+        } catch (EuropeanaException e) {
             throw new DatabaseException(e, e.getProblem());
-        } catch (MongoRuntimeException re) {
-            throw new DatabaseException(re, re.getProblem());
         }
 
         if ((user == null) || (bean == null)) {
