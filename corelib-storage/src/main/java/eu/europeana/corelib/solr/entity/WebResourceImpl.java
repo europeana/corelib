@@ -462,7 +462,8 @@ public class WebResourceImpl implements WebResource {
 
     @Override
     public List<String> getEdmComponentColor() {
-        if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null) {
+        if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null
+                && webResourceMetaInfo.getImageMetaInfo().getColorPalette() != null) {
             return Arrays.asList(webResourceMetaInfo.getImageMetaInfo().getColorPalette());
         }
         return null;
