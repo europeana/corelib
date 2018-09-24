@@ -1,4 +1,4 @@
-package eu.europeana.corelib.domain;
+package eu.europeana.corelib.web.model;
 
 import org.joda.time.DateTime;
 
@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- The public language
- The domain model exposed by the media client through it's public interface.
+ * Wrapping class around a media object retrieved from object storage
  */
 public class MediaFile {
+
+    // TODO clean up: many fields are not used, so we might as well remove them
 
     /**
      *  The md5 of the original url
@@ -97,6 +98,7 @@ public class MediaFile {
         } catch (NoSuchAlgorithmException e) {
             temp = originalUrl;
         }
+        org.apache.logging.log4j.LogManager.getLogger(MediaFile.class).error("temp = "+temp);
 
         this.id = temp;
         this.source = source;
