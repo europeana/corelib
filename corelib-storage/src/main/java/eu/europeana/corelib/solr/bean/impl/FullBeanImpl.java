@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
@@ -58,6 +59,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
 @SuppressWarnings("unchecked")
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("record")
+@Converters(DocType.DocTypeConverter.class)
 public class FullBeanImpl implements FullBean {
 
     @Id
@@ -305,7 +307,7 @@ public class FullBeanImpl implements FullBean {
     */
     @Override
     public int hashCode() {
-    return StringUtils.isNotBlank(this.about) ? this.about.hashCode() : this.europeanaId.toStringMongod().hashCode();
+    return StringUtils.isNotBlank(this.about) ? this.about.hashCode() : this.europeanaId.toHexString().hashCode();
     }
 
     @Override

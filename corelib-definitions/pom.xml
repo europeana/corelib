@@ -56,7 +56,12 @@
 			<version>${mongoDriver.version}</version>
 			<scope>compile</scope>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
             <groupId>eu.europeana</groupId>
             <artifactId>crf-fake-tags</artifactId>
             <version>0.2-SNAPSHOT</version>
