@@ -17,8 +17,13 @@
 
 package eu.europeana.corelib.definitions.solr;
 
+import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
-
+import org.mongodb.morphia.converters.SimpleValueConverter;
+import org.mongodb.morphia.converters.TypeConverter;
+import org.mongodb.morphia.mapping.MappedField;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import eu.europeana.corelib.utils.StringArrayUtils;
 
 /**
@@ -27,6 +32,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
 public enum DocType {
+  
 	TEXT("TEXT", "doc", "pdf"),
 	IMAGE("IMAGE", "jpeg", "jpg", "png", "tif"),
 	SOUND("SOUND", "mp3"),
@@ -55,6 +61,7 @@ public enum DocType {
 	 * @return
 	 *   The DocType object or null
 	 */
+	@JsonCreator
 	public static DocType safeValueOf(String enumNameValue) {
 		if (StringUtils.isNotBlank(enumNameValue)) {
 			for (DocType t : values()) {
@@ -82,6 +89,7 @@ public enum DocType {
 		return null;
 	}
 
+	@JsonValue
 	public String getEnumNameValue() {
 		return enumNameValue;
 	}
@@ -90,4 +98,27 @@ public enum DocType {
 	public String toString() {
 		return this.getEnumNameValue();
 	}
+	
+    public static class DocTypeConverter extends TypeConverter implements SimpleValueConverter {
+  
+      public DocTypeConverter() {
+          super(DocType.class);
+      }
+
+      @Override
+      public DocType decode(Class<?> targetClass, Object fromDBObject, MappedField optionalExtraInfo) {
+          return Optional.ofNullable(fromDBObject)
+              .map(object -> (String) object)
+              .map(DocType::safeValueOf)
+              .orElse(null);
+      }
+  
+      @Override
+      public String encode(final Object value, final MappedField optionalExtraInfo) {
+          return Optional.ofNullable(value)
+              .map(object -> (DocType) object)
+              .map(DocType::getEnumNameValue)
+              .orElse(null);
+      }
+    }
 }
