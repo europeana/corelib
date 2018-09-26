@@ -25,10 +25,9 @@
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-	<bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl">
+	<bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl" lazy-init="true">
 		<constructor-arg value="#{europeanaProperties['neo4j.server']}"/>
 		<constructor-arg value="#{europeanaProperties['neo4j.index']}"/>
 		<constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
 	</bean>
-	
-	</beans>
+</beans>
