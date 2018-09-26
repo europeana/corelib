@@ -36,11 +36,11 @@
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
 
-    <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
+    <!-- <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
         <constructor-arg value="OAuth2"/>
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.oauth.dbname']}" type="java.lang.String"/>
-    </bean>
+    </bean> -->
 
     <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="corelib_db_dataSource">

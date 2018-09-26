@@ -26,11 +26,11 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="corelib_db_internal_oAuth2AccessTokenService"
+	<!-- <bean id="corelib_db_internal_oAuth2AccessTokenService"
 		class="eu.europeana.corelib.db.internal.service.impl.OAuth2TokenAccessServiceImpl"
 		p:dao-ref="corelib_db_oAuth2AccessTokenDao"/>
 	<bean id="corelib_db_internal_oAuth2TokenRefreshService"
 		class="eu.europeana.corelib.db.internal.service.impl.OAuth2TokenRefreshServiceImpl"
-		p:dao-ref="corelib_db_oAuth2RefreshTokenDao"/>
+		p:dao-ref="corelib_db_oAuth2RefreshTokenDao"/> -->
 		
 </beans>
