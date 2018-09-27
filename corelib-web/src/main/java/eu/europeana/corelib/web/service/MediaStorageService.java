@@ -20,16 +20,17 @@ public interface MediaStorageService {
     /**
      * Retrieves a file from media storage with or without the content.
      * @param id the id of the file
+     * @param originalUrl
      * @param withContent boolean which indicates whether the actual contents should be retrieved, or
      *                    only the metadata of the file
      * @return an object which contains all the metadata of the file and optionally the actual content
      */
-    MediaFile retrieveAsMediaFile(String id, boolean withContent);
+    MediaFile retrieveAsMediaFile(String id, String originalUrl, boolean withContent);
 
     /**
      * Retrieves a file from media storage with or without the content.
      * Note that this method is a bit faster than retrieveAsMediaFile, but does require you to process a payload to
-     * access the actual file content (@see convertPayloadToByteArray)
+     * access the actual file content (@see convertPayloadToByteArray) which makes it equally fast.
      * @param id the id of the file
      * @param withContent boolean which indicates whether the actual contents should be retrieved, or
      *                    only the metadata of the file

@@ -39,10 +39,10 @@ public class MediaStorageServiceImpl implements MediaStorageService {
     }
 
     /**
-     * @see eu.europeana.corelib.web.service.MediaStorageService#retrieveAsMediaFile(String, boolean)
+     * @see eu.europeana.corelib.web.service.MediaStorageService#retrieveAsMediaFile(String, String, boolean)
      */
     @Override
-    public MediaFile retrieveAsMediaFile(String id, boolean withContent) {
+    public MediaFile retrieveAsMediaFile(String id, String originalUrl, boolean withContent) {
         StorageObject storageObject = retrieveAsStorageObject(id, withContent);
         if (storageObject == null) {
             return null;
@@ -57,19 +57,10 @@ public class MediaStorageServiceImpl implements MediaStorageService {
             }
         }
 
-        return new MediaFile(id,
-                null,
-                storageObject.getName(),
-                null,
-                storageObject.getMetadata().getETag(),
-                null,
-                new DateTime(storageObject.getMetadata().getLastModified().getTime()),
+        return new MediaFile(storageObject.getName(),
+                originalUrl,
                 content,
-                null,
-                storageObject.getMetadata().getContentType(),
-                null,
-                (int) storageObject.getMetadata().getContentLength()
-        );
+                storageObject.getMetadata());
     }
 
     /**

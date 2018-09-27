@@ -1,188 +1,81 @@
 package eu.europeana.corelib.web.model;
 
+import eu.europeana.domain.ObjectMetadata;
 import org.joda.time.DateTime;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Wrapping class around a media object retrieved from object storage
  */
 public class MediaFile {
 
-    // TODO clean up: many fields are not used, so we might as well remove them
-
-    /**
-     *  The md5 of the original url
-     */
     private final String id;
 
-    /**
-     *  The process that created it.
-     */
-    private final String source;
-
-    /**
-     * Length of the byte array, which is the actual content of a file.
-     */
-    private final Long length;
-
-    /**
-     * File name.
-     */
-    private final String name;
-
-    /**
-     * Aliases from the metadata.
-     */
-    private final List<String> aliases;
-
-    /**
-     * The observed MD5 during transfer.
-     */
-    private final String contentMd5;
-
-    /**
-     * The source url of the file.
-     */
     private final String originalUrl;
 
-    /**
-     * Time of saving the file to the DB.
-     */
-    private final DateTime createdAt;
-
-    /**
-     * The content of the file in a byte array format.
-     */
     private final byte[] content;
 
-    /**
-     * The versionNumber of the file.
-     */
-    private final Integer versionNumber;
+    private final ObjectMetadata metaData;
 
-    /**
-     * The content type.
-     */
-    private final String contentType;
-
-    /**
-     * The thumbnails metadata: height, width, ...
-     */
-    private final Map<String,String> metaData;
-
-    /**
-     * The size of the thumbnail
-     */
-    private final Integer size;
-
-    public MediaFile(String source, String name, List<String> aliases, String contentMd5,
-                     String originalUrl, DateTime createdAt, byte[] content, Integer versionNumber, String contentType,
-                     Map<String, String> metaData, int size) {
-        final MessageDigest messageDigest;
-        String temp;
-        try {
-            messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.reset();
-            messageDigest.update((originalUrl + size).getBytes());
-            final byte[] resultByte = messageDigest.digest();
-            StringBuffer sb = new StringBuffer();
-            for (byte aResultByte : resultByte) {
-                sb.append(Integer.toString((aResultByte & 0xff) + 0x100, 16).substring(1));
-            }
-            temp = sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            temp = originalUrl;
-        }
-        org.apache.logging.log4j.LogManager.getLogger(MediaFile.class).error("temp = "+temp);
-
-        this.id = temp;
-        this.source = source;
-        this.length = (long) content.length;
-        this.name = name;
-        this.aliases = aliases;
-        this.contentMd5 = contentMd5;
-        this.originalUrl = originalUrl;
-        this.createdAt = createdAt;
-        this.content = content;
-        this.versionNumber = versionNumber;
-        this.contentType = contentType;
-        this.metaData = (null == metaData) ? new HashMap<String, String>() : metaData;
-        this.size = size;
+    public MediaFile(String id, String originalUrl, byte[] content) {
+        this(id, originalUrl, content, null);
     }
 
-    public MediaFile(String id, String source, String name, List<String> aliases, String contentMd5,
-                     String originalUrl, DateTime createdAt, byte[] content, Integer versionNumber, String contentType,
-                     Map<String, String> metaData, int size) {
+    public MediaFile(String id, String originalUrl, byte[] content, ObjectMetadata metadata) {
         this.id = id;
-        this.source = source;
-        this.length = (long) content.length;
-        this.name = name;
-        this.aliases = aliases;
-        this.contentMd5 = contentMd5;
         this.originalUrl = originalUrl;
-        this.createdAt = createdAt;
         this.content = content;
-        this.versionNumber = versionNumber;
-        this.contentType = contentType;
-        this.metaData = metaData;
-        this.size = size;
+        this.metaData = metadata;
     }
 
+    /**
+     * @return The md5 of the original url plus hyphen and size (This is how a thumbnail file is stored in S3)
+     */
     public String getId() {
         return id;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public Long getLength() {
-        return length;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getAliases() {
-        return aliases;
-    }
-
-    public String getContentMd5() {
-        return contentMd5;
-    }
-
+    /**
+     * @return the original url of where the file was stored
+     */
     public String getOriginalUrl() {
         return originalUrl;
     }
 
-    public DateTime getCreatedAt() {
-        return createdAt;
-    }
-
+    /**
+     * @return actual content as byte array
+     */
     public byte[] getContent() {
         return content;
     }
 
-    public Integer getVersionNumber() {
-        return versionNumber;
+    /**
+     * @return Length of the content in number of bytes
+     */
+    public int getContentLength() {
+        if (content == null) {
+            return 0;
+        }
+        return content.length;
     }
 
-    public String getContentType() {
-        return contentType;
+    /**
+     * @return date when the file was last modified (if available)
+     */
+    public DateTime getLastModified() {
+        if (metaData == null) {
+            return null;
+        }
+        return new DateTime(metaData.getLastModified().getTime());
     }
 
-    public Map<String, String> getMetaData() {
-        return metaData;
-    }
-
-    public Integer getSize() {
-        return size;
+    /**
+     * @return eTag of the content (if available)
+     */
+    public String getETag() {
+        if (metaData == null) {
+            return null;
+        }
+        return metaData.getETag();
     }
 
 }
