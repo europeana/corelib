@@ -46,10 +46,8 @@
 		p:dao-ref="corelib_db_userDao"/>
 	<bean id="corelib_db_apiKeyService" class="eu.europeana.corelib.db.service.impl.ApiKeyServiceImpl"
 		p:dao-ref="corelib_db_apiKeyDao"/>
-	<!-- deprecated
-	<bean id="corelib_db_apiLogService" class="eu.europeana.corelib.db.service.impl.ApiLogServiceImpl"
-		p:dao-ref="corelib_db_apiLogDao"/> -->
-	<bean id="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
-		/>
+	<!-- deprecated -->
+	<!-- <bean id="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
+		/> -->
 
 </beans>

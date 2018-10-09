@@ -65,7 +65,6 @@
 		<module>corelib-web</module>
 		<module>corelib-edm-definitions</module>
 		<module>corelib-lookup</module>
-		<module>corelib-media-storage</module>
 		<module>corelib-hierarchies</module>
 		<module>corelib-search</module>
 		<module>corelib-schemaorg</module>
@@ -112,12 +111,6 @@
 			<dependency>
 				<groupId>eu.europeana.corelib</groupId>
 				<artifactId>corelib-lookup</artifactId>
-                <version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>eu.europeana.corelib</groupId>
-				<artifactId>corelib-media-storage</artifactId>
                 <version>${project.version}</version>
 			</dependency>
 

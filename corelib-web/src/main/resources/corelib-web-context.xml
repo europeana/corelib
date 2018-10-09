@@ -29,7 +29,7 @@
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-web-email.xml" />
-	<import resource="internal/corelib-web-contentreuseframework.xml" />
+ 	<import resource="internal/corelib-web-thumbnails.xml" />
 	
 
 	<!-- CONFIGURATION -->
@@ -48,6 +48,12 @@
 	<bean id="corelib_web_MicrosoftTranslatorService" class="eu.europeana.corelib.web.service.impl.MicrosoftTranslatorServiceImpl" />
 	-->
 
-    <bean id="corelib_web_MediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" />
+	<bean id="corelib_uimMediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" >
+		<constructor-arg ref="corelib_uimObjectStorageClient"/>
+	</bean>
+
+	<bean id="corelib_metisMediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" >
+		<constructor-arg ref="corelib_metisObjectStorageClient"/>
+	</bean>
 
 </beans>

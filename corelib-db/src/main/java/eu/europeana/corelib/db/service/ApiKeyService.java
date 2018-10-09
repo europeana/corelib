@@ -17,7 +17,6 @@
 package eu.europeana.corelib.db.service;
 
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.db.service.abstracts.AbstractService;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.web.exception.EmailServiceException;
@@ -50,19 +49,6 @@ public interface ApiKeyService extends AbstractService<ApiKey> {
      * @param limit  The number of items to retrieve
      */
     List<ApiKey> findAllSortByDate(boolean asc, int offset, int limit);
-
-    /**
-     * Checks if user does not reached API limit yet.
-     *
-     * @param apiKey The existing apikey.
-     * @return long
-     * Return the number of requests so far if limit is not reached
-     * @throws DatabaseException     if the API key is null
-     * @throws LimitReachedException if the limit is reached
-     * @deprecated June 2018
-     */
-    @Deprecated
-    long checkReachedLimit(ApiKey apiKey) throws DatabaseException, LimitReachedException;
 
     /**
      * Checks if the provided database key is not empty

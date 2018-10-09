@@ -36,6 +36,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>eu.europeana</groupId>
+            <artifactId>object-storage</artifactId>
+            <version>${objectStorage.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
@@ -56,10 +61,6 @@
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-definitions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-media-storage</artifactId>
         </dependency>
 
         <!-- Spring -->
@@ -166,7 +167,8 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
+            <!-- set to compile instead of test to avoid error messages in bean .xml definitions -->
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

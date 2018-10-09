@@ -9,6 +9,7 @@ import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.search.Neo4jSearchService;
 import org.apache.logging.log4j.LogManager;
 import org.neo4j.graphdb.Node;
+import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -20,9 +21,10 @@ import java.util.List;
  * @author Patrick Ehlert
  * Created on 01-03-2018
  */
+@Lazy
 public class Neo4jSearchServiceImpl implements Neo4jSearchService {
 
-    @Resource(name = "corelib_solr_neo4jServer")
+    @Resource(name = "corelib_solr_neo4jServer" )
     protected Neo4jServer neo4jServer;
 
 
