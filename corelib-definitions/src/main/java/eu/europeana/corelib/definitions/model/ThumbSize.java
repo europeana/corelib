@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.model;
 
+@Deprecated
 public enum ThumbSize {
 
 	TINY(27,40),

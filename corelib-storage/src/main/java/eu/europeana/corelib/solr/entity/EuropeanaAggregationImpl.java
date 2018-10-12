@@ -6,8 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
-import eu.europeana.corelib.web.exception.InvalidUrlException;
-import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -89,12 +88,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 		// extra checks to see if we have a proper id and url
 		if (ValidateUtils.validateRecordIdFormat(id)) {
-			try {
-				return EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id).toCanonicalUrl();
-			} catch (InvalidUrlException e) {
-				LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Generated url = {}",
-						EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id));
-			}
+			return EuropeanaUrlBuilder.getRecordPortalUrl(id).toString();
 		} else {
 			LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Found incorrect id: {}", id);
 		}

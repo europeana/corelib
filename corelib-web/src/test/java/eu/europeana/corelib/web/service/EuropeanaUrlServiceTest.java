@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "/corelib-web-context.xml", "/corelib-web-test.xml"})
+@Deprecated
 public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Resource
@@ -37,7 +38,7 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord"));
 	}
 
-	//@Test Temporarily disabling
+	//@Test 
 	public void getPortalSearchTest() throws UnsupportedEncodingException {
 		final String query = "leerdam";
 		final String rows = "24";

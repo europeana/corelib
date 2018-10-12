@@ -59,10 +59,10 @@ public class UrlBuilder {
 	private Map<String, List<String>> multiParams = new LinkedHashMap<>();
 
 	public UrlBuilder(String url) {
-		setBaseUrl(StringUtils.replace(url, "&amp;", "&"));
+		init(StringUtils.replace(url, "&amp;", "&"));
 	}
 
-	private void setBaseUrl(String url) {
+	private void init(String url) {
 		url = StringUtils.stripEnd(url, "/?&");
 		if (StringUtils.isBlank(url)
 				|| StringUtils.startsWith(url, PATH_SEPERATOR)) {
@@ -178,6 +178,13 @@ public class UrlBuilder {
 		return this;
 	}
 
+	/**
+	 * Adds a parameter, but only if the key and value are not blank. Subsequent calls for the same parameter key will
+	 * overwrite the previous value
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public UrlBuilder addParam(String key, String value) {
 		return addParam(key, value, true);
 	}
@@ -190,6 +197,13 @@ public class UrlBuilder {
 		return addParam(key, String.valueOf(value), override);
 	}
 
+	/**
+	 * Adds a parameter, but only if the key and value are not blank
+	 * @param key
+	 * @param value
+	 * @param override if false then any existing parameter won't be changed
+	 * @return
+	 */
 	public UrlBuilder addParam(String key, String value, boolean override) {
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
 			if (!params.containsKey(key) || (params.containsKey(key) && override)) {
@@ -267,6 +281,25 @@ public class UrlBuilder {
 		return this;
 	}
 
+	/**
+	 * Sets a new protocol (e.g. http or ftp).
+	 * @param newProtocol, string containing desired protocol (can be with or without trailing "://". Anything after the
+	 *                     :// is ignored)
+	 */
+	public void setProtocol(String newProtocol) {
+		if (StringUtils.isNotBlank(newProtocol)) {
+			if (StringUtils.contains(newProtocol, "://")) {
+				protocol = StringUtils.substringBefore(newProtocol, "://");
+			} else {
+				protocol = newProtocol;
+			}
+		}
+	}
+
+	/**
+	 * Note that this only alters the urls FQDN and not the protocol!
+	 * @param newDomain
+	 */
 	public void setDomain(String newDomain) {
 		if (StringUtils.isNotBlank(newDomain)) {
 			if (StringUtils.contains(newDomain, "://")) {
