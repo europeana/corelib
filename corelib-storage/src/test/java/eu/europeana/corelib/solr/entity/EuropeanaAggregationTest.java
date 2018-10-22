@@ -23,7 +23,7 @@ public class EuropeanaAggregationTest extends AbstractJUnit4SpringContextTests {
         String testId = "/12345/abcde";
         EuropeanaAggregation ea = new EuropeanaAggregationImpl();
         ea.setAbout("/aggregation/europeana" + testId);
-        assertEquals("http://localhost:8081/portal/record"+testId+".html", ea.getEdmLandingPage());
+        assertEquals("https://www.europeana.eu/portal/record"+testId+".html", ea.getEdmLandingPage());
     }
 
     @Test
@@ -31,7 +31,18 @@ public class EuropeanaAggregationTest extends AbstractJUnit4SpringContextTests {
         String testId = "/12345/abcde";
         EuropeanaAggregation ea = new EuropeanaAggregationImpl();
         ea.setAggregatedCHO(testId);
-        assertEquals("http://localhost:8081/portal/record"+testId+".html", ea.getEdmLandingPage());
+        assertEquals("https://www.europeana.eu/portal/record"+testId+".html", ea.getEdmLandingPage());
+    }
+
+
+    @Test
+    public void testLandingPageSetExternal() {
+        String testId = "/12345/abcde";
+        EuropeanaAggregation ea = new EuropeanaAggregationImpl();
+        ea.setAggregatedCHO(testId);
+        String newValue = "https://www-test.eanadev.org/api/v2/record/1/2.json";
+        ea.setEdmLandingPage(newValue);
+        assertEquals(newValue, ea.getEdmLandingPage());
     }
 
     @Test

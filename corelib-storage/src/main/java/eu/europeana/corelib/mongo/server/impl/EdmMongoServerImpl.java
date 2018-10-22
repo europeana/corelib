@@ -21,7 +21,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.mapping.MappingException;
@@ -43,13 +44,15 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
  */
 public class EdmMongoServerImpl implements EdmMongoServer {
 
-	private static final Logger LOG = Logger.getLogger(EdmMongoServerImpl.class);
+	private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
 
 	private MongoClient mongoClient;
 	private String databaseName;
 	private Datastore datastore;
 	private EuropeanaIdMongoServer europeanaIdMongoServer;
+	/* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
 	private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+	// TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
 	private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
 	/**
@@ -170,29 +173,19 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
 		EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
 		if (newId != null) {
+			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+		}
+		if (newId != null) {
+			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
+		}
+
+		if (newId != null) {
 			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class)
-					.field("about").equal(newId.getNewId()).get();
+			return datastore.find(FullBeanImpl.class).field("about").equal(newId.getNewId()).get();
 		}
 
-		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
-
-		if (newId != null) {
-			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(newId.getNewId()).get();
-		}
-
-		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
-
-		if (newId != null) {
-			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(newId.getNewId()).get();
-		}
-
-		LOG.info(String.format("Unresolvable Europeana ID: %s", id));
+		LOG.info("Unresolvable Europeana ID: {}", id);
 		return null;
 	}
 

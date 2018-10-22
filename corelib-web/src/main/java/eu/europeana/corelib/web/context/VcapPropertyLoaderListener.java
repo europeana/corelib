@@ -3,6 +3,8 @@ package eu.europeana.corelib.web.context;
 import eu.europeana.corelib.web.socks.SocksProxy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.cloudfoundry.VcapApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -14,8 +16,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Bridge between the VCAP (a.k.a. Cloud Foundry) metadata (specifically, the VCAP_APPLICATION and
@@ -28,35 +28,25 @@ import java.util.logging.Logger;
  * <p>
  * <pre class="code">
  * postgres.*
- * mongodb.*
  * </pre>
  * <p>
- * In other words, adding 'mongo_service: europeana-object-db-blue-2' to the env section of the
- * manifest.yaml, will replace/add all mongodb.* values found in the europeana properties with the
- * CF system provided ones. To use the Postgres values, use 'postgres_service: default'
+ * In other words, adding 'postgres_service: europeana-object-db-blue-2' to the env section of the
+ * manifest.yaml, will replace/add all postgres.* values found in the europeana properties with the
+ * CF system provided ones.
  * <p>
- * The following system-provided properties will _always_ be injected, if it exists in the system
- * environment:
- * <p>
- * <pre class="code">
- * redis.*
- * </pre>
- * <p>
- * And the following user-provided properties, if they exist, will also be added to the
+ * The following user-provided properties, if they exist, will also be added to the
  * europeana.properties:
  * <p>
  * <pre class="code">
- * api2_url
- * api2_canonical_url
- * portal_server
- * portal_server_canonical
+ * api2_baseUrl
+ * portal_baseUrl
  * </pre>
  *
- * @author Yorgos, Bram
+ * @author Yorgos, Bram, Patrick
  */
 public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
-    private static final Logger LOG = Logger.getLogger(VcapPropertyLoaderListener.class.getName());
+    private static final Logger LOG = LogManager.getLogger(VcapPropertyLoaderListener.class.getName());
 
     private static final String VCAP = "vcap.services.";
     private static final String USERNAME = ".credentials.username";
@@ -72,26 +62,20 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
     private static final String CREDENTIALS_PASSWORD = ".credentials.password";
     private static final String POSTGRESHOST = "vcap.services.";
     private static final String CREDENTIALS_HOST = ".credentials.host";
-    private static final String MONGO_SERVICE = "mongo_service";
-    private static final String MONGO_DBNAME = "mongodb.dbname";
-    private static final String MONGO_DBNAME_VALUE = "europeana";
 
-    private static final String REDISHOST = "vcap.services.redis.credentials.host";
-    private static final String REDISPORT = "vcap.services.redis.credentials.port";
-    private static final String REDISPASSWORD = "vcap.services.redis.credentials.password";
+//    private static final String MONGO_SERVICE = "mongo_service";
+//    private static final String MONGO_DBNAME = "mongodb.dbname";
+//    private static final String MONGO_DBNAME_VALUE = "europeana";
+//
+//    private static final String REDISHOST = "vcap.services.redis.credentials.host";
+//    private static final String REDISPORT = "vcap.services.redis.credentials.port";
+//    private static final String REDISPASSWORD = "vcap.services.redis.credentials.password";
 
-    private static String HTTP = "http://";
+    // Note that for proper working the VCAP properties name should be the same as the key in the europeana.properties
+    // file but with dots replaced by underscores
+    private static final String VCAP_API2_BASEURL = "api2_baseUrl"; // matches api2.baseUrl in europeana.properties
+    private static final String VCAP_PORTAL_BASEURL = "portal_baseUrl"; // matches portal.baseUrl in europeana.properties
 
-    /*
-     * # no trailing slash api2.url=http://hostname.domain/api
-     * api2.canonical.url=http://hostname.domain/api
-     *
-     * portal.server = http://hostname.domain/portal portal.server.canonical=http://hostname.domain
-     */
-    private static final String API2URL = "api2_url";
-    private static final String API2CANONICALURL = "api2_canonical_url";
-    private static final String PORTALSERVER = "portal_server";
-    private static final String PORTALCANONICALURL = "portal_server_canonical";
     private static final String POSTGRES = "postgres";
 
     private static StandardServletEnvironment env = new StandardServletEnvironment();
@@ -122,44 +106,42 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
             // MongoDB username, password, host, port
             // The actual Mongo db depends on the user-provided "mongo_service" value
-            if (env.getSystemEnvironment().containsKey(MONGO_SERVICE)) {
-                String mongoDb = env.getSystemEnvironment().get(MONGO_SERVICE).toString();
-                String mongoUserName = VCAP + mongoDb + USERNAME;
-                String mongoPassword = VCAP + mongoDb + PASSWORD;
-                String mongoHosts = VCAP + mongoDb + HOSTS;
+//            if (env.getSystemEnvironment().containsKey(MONGO_SERVICE)) {
+//                String mongoDb = env.getSystemEnvironment().get(MONGO_SERVICE).toString();
+//                String mongoUserName = VCAP + mongoDb + USERNAME;
+//                String mongoPassword = VCAP + mongoDb + PASSWORD;
+//                String mongoHosts = VCAP + mongoDb + HOSTS;
+//
+//                props.setProperty("mongodb.username", env.getProperty(mongoUserName));
+//                props.setProperty("mongodb.password", env.getProperty(mongoPassword));
+//                props.setProperty("metainfo.mongodb.username", env.getProperty(mongoUserName));
+//                props.setProperty("metainfo.mongodb.password", env.getProperty(mongoPassword));
+//
+//                String[] hosts = env.getProperty(mongoHosts).replace('[', ' ').replace("]", " ").split(",");
+//                String mongoHost = "";
+//                String mongoPort = "";
+//                for (String host : hosts) {
+//                    mongoHost = mongoHost + host.split(":")[0].trim() + ",";
+//                    mongoPort = mongoPort + host.split(":")[1].trim() + ",";
+//                }
+//                props.setProperty("mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
+//                props.setProperty("mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
+//                props.setProperty("metainfo.mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
+//                props.setProperty("metainfo.mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
+//
+//                props.setProperty(MONGO_DBNAME, MONGO_DBNAME_VALUE);
+//            }
+//
+//            // Redis host, port, password
+//            if (env.getProperty(REDISHOST) != null) {
+//                props.setProperty("redis.host", env.getProperty(REDISHOST));
+//                props.setProperty("redis.port", env.getProperty(REDISPORT));
+//                props.setProperty("redis.password", env.getProperty(REDISPASSWORD));
+//            }
 
-                props.setProperty("mongodb.username", env.getProperty(mongoUserName));
-                props.setProperty("mongodb.password", env.getProperty(mongoPassword));
-                props.setProperty("metainfo.mongodb.username", env.getProperty(mongoUserName));
-                props.setProperty("metainfo.mongodb.password", env.getProperty(mongoPassword));
-
-                String[] hosts = env.getProperty(mongoHosts).replace('[', ' ').replace("]", " ").split(",");
-                String mongoHost = "";
-                String mongoPort = "";
-                for (String host : hosts) {
-                    mongoHost = mongoHost + host.split(":")[0].trim() + ",";
-                    mongoPort = mongoPort + host.split(":")[1].trim() + ",";
-                }
-                props.setProperty("mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
-                props.setProperty("mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
-                props.setProperty("metainfo.mongodb.host", mongoHost.substring(0, mongoHost.length() - 1));
-                props.setProperty("metainfo.mongodb.port", mongoPort.substring(0, mongoPort.length() - 1));
-
-                props.setProperty(MONGO_DBNAME, MONGO_DBNAME_VALUE);
-            }
-
-            // Redis host, port, password
-            if (env.getProperty(REDISHOST) != null) {
-                props.setProperty("redis.host", env.getProperty(REDISHOST));
-                props.setProperty("redis.port", env.getProperty(REDISPORT));
-                props.setProperty("redis.password", env.getProperty(REDISPASSWORD));
-            }
-
-            // API and Portal canonical URLs, server
-            setHTTPProperty(props, API2URL);
-            setHTTPProperty(props, API2CANONICALURL);
-            setHTTPProperty(props, PORTALCANONICALURL);
-            setHTTPProperty(props, PORTALSERVER);
+            // Add VCAP properties for API2 and Portal to the environment
+            setVcapUrlProperty(props, VCAP_API2_BASEURL);
+            setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
 
             // Write the Properties into the europeana.properties
             // Using the built-in store() method escapes certain characters (e.g. '=' and ':'), which is
@@ -179,18 +161,18 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
             }
             // Overwriting the original file
             FileUtils.writeStringToFile(europeanaProperties, sb + "\n", false);
-            LOG.log(Level.INFO, "Properties:\n" + sb.toString());
+            LOG.info("Properties: {}", sb.toString());
 
             // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate
             // time elsewhere in the (api) code
             String host = props.getProperty("socks.host");
             Boolean enabled = Boolean.valueOf(props.getProperty("socks.enabled"));
             if (StringUtils.isEmpty(host)) {
-                LOG.log(Level.INFO, "No socks proxy host configured");
-            } else if (enabled == null || !enabled) {
-                LOG.log(Level.INFO, "Socks proxy disabled");
+                LOG.info("No socks proxy host configured");
+            } else if (!enabled) {
+                LOG.info("Socks proxy disabled");
             } else {
-                LOG.log(Level.INFO, "Setting up proxy at " + host);
+                LOG.info("Setting up proxy at " + host);
                 initSocksProxyConfig(host,
                         props.getProperty("socks.port"),
                         props.getProperty("socks.user"),
@@ -198,20 +180,25 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
             }
 
         } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Error reading properties", e);
+            LOG.error("Error reading properties", e);
         }
 
     }
 
     /**
-     * Checks if a user-defined variable exists, and adds it to the properties file if it does
-     *
-     * @throws IOException
+     * Checks if a user-defined VCAP property exists that defines an url, and if so adds it to the application properties
+     * file (where all _ chars are replaced with . chars).
+     * If the property value doesn't start with http then we add https://
      */
-    private void setHTTPProperty(Properties props, String key) throws IOException {
-        if (env.containsProperty(key)) {
-            props.setProperty(StringUtils.replaceChars(key, "_", "."), HTTP
-                    + env.getSystemEnvironment().get(key));
+    private void setVcapUrlProperty(Properties props, String vcapKey) {
+        String value = (String) env.getSystemEnvironment().get(vcapKey);
+        if (StringUtils.isNotBlank(value)) {
+            String propKey = StringUtils.replaceChars(vcapKey, "_", ".");
+            if (!StringUtils.startsWithIgnoreCase(value, "http")) {
+                value = "https://" + value;
+            }
+            LOG.info("VCAP Url property {} with is added to application properties as {}. Value = {}", vcapKey, propKey, value);
+            props.setProperty(propKey, value);
         }
     }
 
