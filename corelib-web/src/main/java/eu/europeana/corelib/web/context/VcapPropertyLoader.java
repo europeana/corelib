@@ -6,8 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.cloudfoundry.VcapApplicationListener;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.cloud.CloudFoundryVcapEnvironmentPostProcessor;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
 import java.io.File;
@@ -44,9 +43,9 @@ import java.util.*;
  *
  * @author Yorgos, Bram, Patrick
  */
-public class VcapPropertyLoaderListener extends VcapApplicationListener {
+public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor {
 
-    private static final Logger LOG = LogManager.getLogger(VcapPropertyLoaderListener.class.getName());
+    private static final Logger LOG = LogManager.getLogger(VcapPropertyLoader.class.getName());
 
     private static final String VCAP = "vcap.services.";
     private static final String USERNAME = ".credentials.username";
@@ -80,11 +79,11 @@ public class VcapPropertyLoaderListener extends VcapApplicationListener {
 
     private static StandardServletEnvironment env = new StandardServletEnvironment();
 
-    public VcapPropertyLoaderListener() {
+    public VcapPropertyLoader() {
         super();
 
-        this.onApplicationEvent(new ApplicationEnvironmentPreparedEvent(new SpringApplication(),
-                new String[0], env));
+        this.postProcessEnvironment(env, new SpringApplication());
+
         ClassLoader c = getClass().getClassLoader();
         @SuppressWarnings("resource")
         URLClassLoader urlC = (URLClassLoader) c;

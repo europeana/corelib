@@ -53,7 +53,10 @@
 		<log4j2.version>2.9.1</log4j2.version>
 		<mockito.version>1.10.19</mockito.version>
 		<objectStorage.version>1.6</objectStorage.version>
-		<springCore.version>4.2.5.RELEASE</springCore.version>
+
+		<springCore.version>4.3.20.RELEASE</springCore.version>
+		<springBoot.version>1.5.17.RELEASE</springBoot.version>
+		<springSecurity.version>4.2.9.RELEASE</springSecurity.version>
 	</properties>
 
 	<modules>
