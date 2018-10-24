@@ -31,7 +31,6 @@
         <sonar.projectKey>eu.europeana.corelib-metis:corelib-web</sonar.projectKey>
         <sonar.projectName>Europeana Core Library Web Functionality</sonar.projectName>
 
-        <spring-boot.version>1.2.8.RELEASE</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -129,10 +128,11 @@
             <version>${commonsIO.version}</version>
         </dependency>
 
+        <!-- For VcapApplicationListener in VcapPropertyLoaderListener class -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>${spring-boot.version}</version>
+            <version>${springBoot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>

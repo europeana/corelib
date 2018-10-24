@@ -27,7 +27,6 @@
     <url>http://www.europeana.eu</url>
 
     <properties>
-        <springSecurity.version>3.2.9.RELEASE</springSecurity.version>
         <hibernateCore.version>5.1.0.Final</hibernateCore.version>
             <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
         <sonar.projectKey>eu.europeana.corelib-metis:corelib-db</sonar.projectKey>
