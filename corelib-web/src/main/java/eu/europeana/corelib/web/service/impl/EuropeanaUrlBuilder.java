@@ -55,7 +55,8 @@ public class EuropeanaUrlBuilder {
      * @param type defaults to IMAGE (optional)
      * @return UrlBuilder
      */
-    // TODO once we move the only usage of this method in BriefBeanImpl, we can move this to Api2UrlBuilder
+    // TODO for now we keep this here because it can be used by both API2 and OAI-PMH. However once OAI-PMH retrieves
+    // data from Record API (instead of directly from Corelib), then we can move this to the API2 project
     public static UrlBuilder getThumbnailUrl(String uri, String size, DocType type) {
         UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.THUMBNAIL_BASE_URL)
                 .addParam("uri", uri.trim())
