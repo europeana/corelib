@@ -16,21 +16,18 @@
  */
 package eu.europeana.corelib.solr.bean.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import eu.europeana.corelib.definitions.edm.beans.BriefBean;
+import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.EdmUtils;
-import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.solr.DocType;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.BriefBean
@@ -157,18 +154,13 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("proxy_dc_language.*")
     protected Map<String,List<String>>dcLanguageLangAware;
 
-    // TODO October 2018 It's probably better to move this functionality to the Search API
+
     @Override
     public String[] getEdmPreview() {
-        List<String> previews = new ArrayList<>();
-        if (this.edmObject != null) {
-            for (String str : edmObject) {
-                if (StringUtils.isNotBlank(str)) {
-                    previews.add(EuropeanaUrlBuilder.getThumbnailUrl(str, getType()).toString());
-                }
-            }
-        }
-        return previews.toArray(new String[previews.size()]);
+        // TODO Oct 2018 We should add an edmPreview field to Solr in the next reindex and map this method to that new Solr field.
+        // This way we know what image(s) Metis Media Service has selected and can return that in Search results.
+        // Until this is implemented we simply return an empty result
+        return new String[0];
     }
 
     @Override
