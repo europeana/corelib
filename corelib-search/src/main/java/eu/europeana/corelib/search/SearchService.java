@@ -47,7 +47,27 @@ import java.util.Map;
 public interface SearchService {
 
 	/**
-	 * Retrieve a record by splitted collectionId and recordId
+	 * Retrieve a record by europeanaObjectId (no further processing)
+	 *
+	 * @param europeanaObjectId The unique europeana id
+	 * @return                  A full europeana record
+	 * @throws EuropeanaException
+	 */
+	FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException;
+
+	/**
+	 * (optionally) adding similar items to a FullBean, etcetera
+	 *
+	 * @param fullBean 			The FullBean to be processed (injectWebMetaInfoBatch etc.)
+	 * @param europeanaObjectId The unique europeana id
+	 * @param similarItems  	whether to retrieve similar items
+	 * @return                  processed full europeana record
+	 * @throws EuropeanaException
+	 */
+	FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems);
+
+	/**
+	 * Retrieves a record by collectionId and recordId and calling processFullBean() afterwards
 	 *
 	 * @param collectionId id of the collection to which this record belongs
 	 * @param recordId
@@ -58,7 +78,7 @@ public interface SearchService {
 	FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException;
 
 	/**
-	 * Retrieve a record by id.
+	 * Retrieve a record by id and calling processFullBean() afterwards
 	 *
 	 * @param europeanaObjectId The unique europeana id
 	 * @param similarItems      Whether to retrieve similar items
