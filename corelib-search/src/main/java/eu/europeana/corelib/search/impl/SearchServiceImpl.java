@@ -74,16 +74,12 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
+import scala.annotation.meta.field;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Lookup record information from Solr or Mongo
@@ -140,7 +136,6 @@ public class SearchServiceImpl implements SearchService {
     // show solr query in output
     private boolean debug = false;
 
-
     @Override
     public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
@@ -148,26 +143,58 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
-
-        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        FullBean fullBean = fetchFullBean(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
+            return processFullBean(fullBean, europeanaObjectId, similarItems);
+        } else {
+            return null;
+        }
+    }
 
-            if (similarItems) {
-                try {
-                    fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-                } catch (EuropeanaException e) {
-                    LOG.error("Error trying to retrieve similar items", e);
+    // split up fetching and processing the Fullbean to facilitate improving performance for HTTP caching
+    // (e.g. eTag matching)
+    @Override
+    public FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException {
+        long   startTime = System.currentTimeMillis();
+        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("SearchService fetch FullBean with europeanaObjectId took " + (System.currentTimeMillis() - startTime) + " ms");
+        }
+
+        if (Objects.isNull(fullBean)) {
+            startTime = System.currentTimeMillis();
+            String newId = resolveId(europeanaObjectId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("SearchService resolve newId took " + (System.currentTimeMillis() - startTime) + " ms");
+            }
+            // (comment from ObjectController) 2017-07-06 code PE: inserted as temp workaround until we resolve #662 (see also comment below)
+            if (StringUtils.isNotBlank(newId)){
+                startTime = System.currentTimeMillis();
+                fullBean = mongoServer.getFullBean(newId);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("SearchService fetch FullBean with newid took " + (System.currentTimeMillis() - startTime) + " ms");
                 }
             }
+        }
+        return fullBean;
+    }
 
-            if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-                ((FullBeanImpl) fullBean).setAsParent();
-                for (Aggregation agg : fullBean.getAggregations()) {
-                    if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
-                        for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                            wRes.initAttributionSnippet();
-                        }
+    public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
+        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
+        if (similarItems) {
+            try {
+                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+            } catch (EuropeanaException e) {
+                LOG.error("Error trying to retrieve similar items", e);
+            }
+        }
+
+        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()) {
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                        wRes.initAttributionSnippet();
                     }
                 }
             }
@@ -189,7 +216,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean resolve(String europeanaObjectId, boolean similarItems)
             throws SolrTypeException {
-
         FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
         FullBean fullBeanNew = fullBean;
         if (fullBean != null) {
@@ -200,7 +226,6 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
-
         return fullBean;
     }
 
