@@ -56,7 +56,6 @@ public class EdmUtils {
 
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static final String SPACE = " ";
     private static final String BASE_URL = "http://data.europeana.eu";
 
     private static IBindingFactory bfact;
@@ -371,45 +370,12 @@ public class EdmUtils {
     private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
         // there should be only 1 country at most
         if (edmCountry != null && edmCountry.size() > 0) {
-            return EdmUtils.convertToCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
+            return CountryUtils.convertToJibxCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
         }
         return null;
     }
 
-    /**
-     * JIBX uses equals function to generate a CountryCodes enum from a string, so that's why we need to match exactly
-     * to the value defined in the JIBX CountryCodes class (i.e. we need to capitalize the first letter of each word)
-     * @param country string with country name as it is in JIBX CountryCodes but without proper capitalization
-     * @return Country object with filled country code, or null if conversion failed
-     */
-    public static Country convertToCountry(String country) {
-        Country result = null;
-        if (StringUtils.isNotEmpty(country)) {
-            StringBuilder sb = new StringBuilder();
-            String[] splitCountry = country.trim().toLowerCase(Locale.GERMANY).split(SPACE);
-            for (String countryWord : splitCountry) {
-                if (StringUtils.equalsIgnoreCase("and", countryWord) || StringUtils.equalsIgnoreCase("of", countryWord)) {
-                    sb.append(countryWord.toLowerCase(Locale.GERMANY));
-                } else if (countryWord.charAt(0) == '(') {
-                    sb.append('(');
-                    sb.append(StringUtils.capitalize(countryWord.substring(1)));
-                } else {
-                    sb.append(StringUtils.capitalize(countryWord));
-                }
-                sb.append(SPACE);
-            }
-            String convertedCountry = sb.toString().trim();
 
-            CountryCodes cc = CountryCodes.convert(sb.toString().trim());
-            if (cc != null) {
-                result = new Country();
-                result.setCountry(cc);
-            } else {
-                LOG.error("Cannot convert country '{}' to JIBX country code! (converted country = {})", country, convertedCountry);
-            }
-        }
-        return result;
-    }
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
         List<ProxyType> proxyList = new ArrayList<>();
