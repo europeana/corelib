@@ -511,6 +511,8 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
 
             if (defaultSort) {
+                // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087 and EA-1364)
+                solrQuery.removeSort("score");
                 // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
                 if (!solrQuery.getSortField().contains("europeana_id")) {
                     solrQuery.addSort("europeana_id", ORDER.asc);
