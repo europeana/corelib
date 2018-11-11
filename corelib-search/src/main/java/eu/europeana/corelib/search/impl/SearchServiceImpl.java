@@ -178,13 +178,14 @@ public class SearchServiceImpl implements SearchService {
 
     public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-        if (similarItems) {
-            try {
-                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-            } catch (EuropeanaException e) {
-                LOG.error("Error trying to retrieve similar items", e);
-            }
-        }
+        // November 2018: Deprecated code
+//        if (similarItems) {
+//            try {
+//                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+//            } catch (EuropeanaException e) {
+//                LOG.error("Error trying to retrieve similar items", e);
+//            }
+//        }
 
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
@@ -238,13 +239,14 @@ public class SearchServiceImpl implements SearchService {
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         if (fullBean != null) {
             WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-            if (similarItems) {
-                try {
-                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
-                } catch (EuropeanaException e) {
-                    LOG.error("SolrServerException", e);
-                }
-            }
+            // November 2018: deprecated code
+//            if (similarItems) {
+//                try {
+//                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
+//                } catch (EuropeanaException e) {
+//                    LOG.error("SolrServerException", e);
+//                }
+//            }
         }
         return fullBean;
     }
