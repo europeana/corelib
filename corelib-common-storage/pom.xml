@@ -13,12 +13,6 @@
     <artifactId>corelib-common-storage</artifactId>
     <name>Europeana Core Library Common Storage</name>
 
-    <properties>
-        <!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-        <sonar.projectKey>eu.europeana.corelib-metis:corelib-common-storage</sonar.projectKey>
-        <sonar.projectName>Europeana Core Library Common Storage</sonar.projectName>
-    </properties>
-
     <organization><name>Europeana Foundation</name></organization>
     <url>http://www.europeana.eu</url>
 

@@ -34,12 +34,6 @@
 	<organization><name>Europeana Foundation</name></organization>
 	<url>http://www.europeana.eu</url>
 
-	<properties>
-		<!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-		<sonar.projectKey>eu.europeana.corelib-metis:corelib-utils</sonar.projectKey>
-        <sonar.projectName>Europeana Core Library General Utils</sonar.projectName>
-	</properties>
-
 	<dependencies>
 		<!-- Spring -->
 		<dependency>

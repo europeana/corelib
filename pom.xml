@@ -31,10 +31,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<!-- Set different SonarQube properties so Metis branch can be distinguished from UIM version -->
-		<sonar.projectKey>eu.europeana.corelib-metis</sonar.projectKey>
-		<sonar.projectName>Europeana Core Library (for Metis)</sonar.projectName>
-
 		<apacheSolr.version>6.6.2</apacheSolr.version>
 		<apacheLucene.version>6.6.2</apacheLucene.version>
 		<!-- be careful when upgrading the mongo driver to v3.7.x because that will
