@@ -18,22 +18,21 @@
 package eu.europeana.corelib.solr.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import java.util.List;
+import java.util.Map;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.annotations.Transient;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
-import java.util.List;
-import java.util.Map;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.Aggregation
@@ -78,6 +77,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@Transient
 	@Reference
+	@Indexed
 	private List<WebResourceImpl> webResources;
 
 //	@GraphProperty

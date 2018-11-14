@@ -27,7 +27,7 @@ import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.search.model.ResultSet;
-import org.apache.solr.client.solrj.SolrServerException;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import java.io.IOException;
@@ -47,25 +47,45 @@ import java.util.Map;
 public interface SearchService {
 
 	/**
-	 * Retrieve a record by splitted collectionId and recordId
+	 * Retrieve a record by europeanaObjectId (no further processing)
+	 *
+	 * @param europeanaObjectId The unique europeana id
+	 * @return                  A full europeana record
+	 * @throws EuropeanaException
+	 */
+	FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException;
+
+	/**
+	 * (optionally) adding similar items to a FullBean, etcetera
+	 *
+	 * @param fullBean 			The FullBean to be processed (injectWebMetaInfoBatch etc.)
+	 * @param europeanaObjectId The unique europeana id
+	 * @param similarItems  	whether to retrieve similar items
+	 * @return                  processed full europeana record
+	 * @throws EuropeanaException
+	 */
+	FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems);
+
+	/**
+	 * Retrieves a record by collectionId and recordId and calling processFullBean() afterwards
 	 *
 	 * @param collectionId id of the collection to which this record belongs
 	 * @param recordId
 	 * @param similarItems  whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  MongoRuntimeException, SolrTypeException
+	 * @throws EuropeanaException
 	 */
-	FullBean findById(String collectionId, String recordId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
+	FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException;
 
 	/**
-	 * Retrieve a record by id.
+	 * Retrieve a record by id and calling processFullBean() afterwards
 	 *
 	 * @param europeanaObjectId The unique europeana id
 	 * @param similarItems      Whether to retrieve similar items
 	 * @return                  A full europeana record
-	 * @throws                  MongoRuntimeException, MongoDBException
+	 * @throws EuropeanaException
 	 */
-	FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException;
+	FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException;
 
 	/**
 	 * Retrieve a record by id. If the record cannot be found, it will retry
@@ -117,10 +137,9 @@ public interface SearchService {
 	 * @param query          Model class containing the calculateTag specification.
 	 * @param debug			 includes the string representing the Solrquery in the ResultSet
 	 * @return               The calculateTag results, including facets, breadcrumb and original query.
-	 * @throws SolrTypeException
+	 * @throws EuropeanaException
 	 */
-	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug)
-			throws SolrTypeException;
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException;
 	/**
 	 * Perform a calculateTag in SOLR based on the given query and return the results
 	 * in the format of the given class.
@@ -128,10 +147,9 @@ public interface SearchService {
 	 * @param beanInterface  The required bean type, should be ApiBean or BriefBean
 	 * @param query          Model class containing the calculateTag specification.
 	 * @return               The calculateTag results, including facets, breadcrumb and original query.
-	 * @throws SolrTypeException
+	 * @throws EuropeanaException;
 	 */
-	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query)
-			throws SolrTypeException;
+	<T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException;
 
 	/**
 	 * Create collection list for a given query and facet field
@@ -140,11 +158,11 @@ public interface SearchService {
      * @param queryString    The Query to use for creating the collection
      * @param refinements    Optional refinements
 	 * @return               A List of FacetField.Count objects containing the collection
-	 * @throws               SolrTypeException
+	 * @throws               EuropeanaException;
 	 * 
 	 */
 	List<FacetField.Count> createCollections(String facetFieldName,
-			String queryString, String... refinements) throws SolrTypeException;
+			String queryString, String... refinements) throws EuropeanaException;
 
 	/**
 	 * returns a list of calculateTag suggestions and frequencies
@@ -152,9 +170,11 @@ public interface SearchService {
 	 * @param query    The calculateTag term to find suggestions for
 	 * @param pageSize Amount of requested suggestions
 	 * @return         List of calculateTag suggestions
-	 * @throws         SolrTypeException
+	 * @throws         EuropeanaException;
+	 * @deprecated as of September 2018 (not working properly and very little usage)
 	 */
-	List<Term> suggestions(String query, int pageSize) throws SolrTypeException;
+	@Deprecated
+	List<Term> suggestions(String query, int pageSize) throws EuropeanaException;
 
 	/**
 	 * returns a list of calculateTag suggestions and frequencies
@@ -162,22 +182,20 @@ public interface SearchService {
 	 * @param query     The calculateTag term to find suggestions for
 	 * @param pageSize  Amount of requested suggestions
 	 * @return          List of calculateTag suggestions
-	 * @throws          SolrTypeException
+	 * @throws          EuropeanaException;
 	 */
-	List<Term> suggestions(String query, int pageSize, String field)
-			throws SolrTypeException;
+	List<Term> suggestions(String query, int pageSize, String field) throws EuropeanaException;
 
 	/**
 	 * Retrieves the moreLikeThis List of BriefBeans
 	 * 
 	 * @param  europeanaObjectId
 	 * @return moreLikeThis List of BriefBeans
-	 * @throws SolrServerException
+	 * @throws EuropeanaException;
 	 * @deprectated January 2018 - FMLT isn't used anymore
 	 */
 	@Deprecated
-	List<BriefBean> findMoreLikeThis(String europeanaObjectId)
-			throws SolrServerException;
+	List<BriefBean> findMoreLikeThis(String europeanaObjectId) throws EuropeanaException;;
 
 	/**
 	 * Returns a list of "see also" suggestions. The suggestions are organized
@@ -195,20 +213,19 @@ public interface SearchService {
 	 * @param  europeanaObjectId
 	 * @param  count
 	 * @return a specified number of moreLikeThis objects
-	 * @throws SolrServerException
+	 * @throws EuropeanaException;
 	 * @deprectated January 2018 - FMLT isn't used anymore
 	 */
+
 	@Deprecated
-	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
-			throws SolrServerException;
+	List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count) throws EuropeanaException;
 
 	/**
-	 * @throws SolrServerException
+	 * @throws EuropeanaException;
 	 * @throws IOException
 	 * @return last modification time of Solr index
 	 */
-	Date getLastSolrUpdate() throws SolrServerException, IOException;
+	Date getLastSolrUpdate() throws EuropeanaException;
 
-	Map<String, Integer> queryFacetSearch(String query, String[] qf,
-			List<String> queries);
+	Map<String, Integer> queryFacetSearch(String query, String[] qf, List<String> queries);
 }

@@ -136,10 +136,15 @@ public class EdmWebResourceUtils {
             List<IsReferencedBy> hsList = new ArrayList<>();
             for (String isRef : wr.getDctermsIsReferencedBy()) {
                 IsReferencedBy hs = new IsReferencedBy();
-                ResourceOrLiteralType.Resource res= new ResourceOrLiteralType.Resource();
-                res.setResource(isRef);
-                hs.setResource(res);
-                hs.setString("");
+                if (EdmUtils.isUri(isRef)) {
+                    ResourceOrLiteralType.Resource res = new ResourceOrLiteralType.Resource();
+                    res.setResource(isRef);
+                    hs.setResource(res);
+                    hs.setString("");
+                } else {
+                    hs.setString(isRef);
+                    hs.setResource(null);
+                }
                 hs.setLang(null);
                 hsList.add(hs);
 

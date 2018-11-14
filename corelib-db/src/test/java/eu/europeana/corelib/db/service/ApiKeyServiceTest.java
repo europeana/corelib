@@ -1,15 +1,7 @@
 package eu.europeana.corelib.db.service;
 
-import eu.europeana.corelib.db.dao.NosqlDao;
-import eu.europeana.corelib.db.dao.RelationalDao;
-import eu.europeana.corelib.db.entity.enums.RecordType;
-import eu.europeana.corelib.db.entity.nosql.ApiLog;
-import eu.europeana.corelib.db.entity.relational.ApiKeyImpl;
-import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
-import eu.europeana.corelib.db.exception.LimitReachedException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
-import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.junit.After;
@@ -35,12 +27,6 @@ public class ApiKeyServiceTest {
     @Resource
     private ApiKeyService apiKeyService;
 
-    //@Resource
-    //private ApiLogService apiLogService;
-
-    // @Resource(name = "corelib_db_apiLogDao")
-    // private NosqlDao<ApiLog, String> apiLogDao;
-
     //@Resource(name = "corelib_db_userDao")
     //private RelationalDao<UserImpl> userDao;
 
@@ -55,7 +41,6 @@ public class ApiKeyServiceTest {
      */
     @Before
     public void setup() throws IOException {
-        //apiLogDao.getCollection().drop();
         reset(emailServiceMock);
     }
 
@@ -66,7 +51,6 @@ public class ApiKeyServiceTest {
      */
     @After
     public void tearDown() throws IOException {
-        //apiLogDao.getCollection().drop();
         //userDao.deleteAll();
     }
 
@@ -90,57 +74,6 @@ public class ApiKeyServiceTest {
         verify(emailServiceMock, times(1)).sendApiKeys((ApiKey) anyObject());
 
         apiKeyService.remove(createdApiKey);
-    }
-
-    //@Test
-    public void checkReachedLimitSuccessTest() throws DatabaseException, LimitReachedException {
-        ApiKey apiKey = new ApiKeyImpl();
-        apiKey.setApiKey("testKey");
-        apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2L);
-
-       // apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
-
-        long requested = apiKeyService.checkReachedLimit(apiKey);
-        assertEquals(1, requested);
-    }
-
-    @Test
-    public void checkReachedLimitWithDatabaseExceptionTest() throws LimitReachedException {
-        ApiKey apiKey = new ApiKeyImpl();
-        apiKey.setApiKey("testKey");
-        apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2L);
-
-        //apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
-
-        try {
-            apiKeyService.checkNotEmpty(null);
-            fail("This line should not be reached");
-        } catch (DatabaseException e) {
-            assertEquals(ProblemType.INVALIDARGUMENTS, e.getProblem());
-        }
-    }
-
-    //@Test
-    public void checkReachedLimitWithLimitReachedExceptionTest() throws DatabaseException, InterruptedException {
-        ApiKey apiKey = new ApiKeyImpl();
-        apiKey.setApiKey("testKey");
-        apiKey.setPrivateKey("testKey");
-        apiKey.setUsageLimit(2L);
-
-//        apiLogService.logApiRequest(apiKey.getId(), "paris", RecordType.SEARCH, "standard");
-//        apiLogService.logApiRequest(apiKey.getId(), "berlin", RecordType.SEARCH, "standard");
-
-        Thread.sleep(500); // added to avoid racing conditions
-
-        try {
-            apiKeyService.checkReachedLimit(apiKey);
-            fail("This line should not be reached");
-        } catch (LimitReachedException e) {
-            assertEquals(2, e.getRequested());
-            assertEquals(2, e.getLimit());
-        }
     }
 
 }

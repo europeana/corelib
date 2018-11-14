@@ -14,10 +14,24 @@ import static org.junit.Assert.assertNull;
 
 /**
  * @author Patrick Ehlert
- * <p>
  * Created on 28-08-2018
  */
-public class EdmUtilsTest {
+public class CountryUtilsTest {
+
+    @Test
+    public void testCapitalizeCountry() {
+        String test1 = "United Kingdom of Great Britain and Northern Ireland";
+        assertEquals(test1, CountryUtils.capitalizeCountry(test1.toLowerCase(Locale.GERMANY)));
+        assertEquals(test1, CountryUtils.capitalizeCountry(test1.toUpperCase(Locale.GERMANY)));
+
+        String test2 = "Holy See (Vatican City State)";
+        assertEquals(test2, CountryUtils.capitalizeCountry(test2.toLowerCase(Locale.GERMANY)));
+        assertEquals(test2, CountryUtils.capitalizeCountry(test2.toUpperCase(Locale.GERMANY)));
+
+        String test3 = "Macedonia (the former Yugoslav Republic of)";
+        assertEquals(test3, CountryUtils.capitalizeCountry(test3.toLowerCase(Locale.GERMANY)));
+        assertEquals(test3, CountryUtils.capitalizeCountry(test3.toUpperCase(Locale.GERMANY)));
+    }
 
     /**
      * This tests the EdmUtils.convertToCountry function. The function should return the proper JIBX Country with filled
@@ -28,18 +42,18 @@ public class EdmUtilsTest {
     public void testConvertToCountryCode() {
         for (CountryCodes countryCode : CountryCodes.values()) {
             String country = countryCode.xmlValue().toLowerCase(Locale.GERMANY);
-            Country result = EdmUtils.convertToCountry(country);
+            Country result = CountryUtils.convertToJibxCountry(country);
             assertNotNull(result);
             assertNotNull(result.getCountry());
             assertEquals(countryCode, result.getCountry());
 
             country = countryCode.xmlValue().toUpperCase(Locale.GERMANY);
-            result = EdmUtils.convertToCountry(country);
+            result = CountryUtils.convertToJibxCountry(country);
             assertNotNull(result);
             assertNotNull(result.getCountry());
             assertEquals(countryCode, result.getCountry());
-
-            assertNull(EdmUtils.convertToCountry("Never never land"));
         }
+
+        assertNull(CountryUtils.convertToJibxCountry("Never never land"));
     }
 }

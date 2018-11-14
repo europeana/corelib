@@ -72,12 +72,25 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 * @param mongoClient the server to connect to
 	 * @param databaseName the database to connect to
 	 */
+	@Deprecated
 	public EuropeanaIdRegistryMongoServerImpl(MongoClient mongoClient, String databaseName) {
-		this.mongoClient = mongoClient;
-		this.databaseName = databaseName;
-		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
-		createDatastore();
+        this(mongoClient, databaseName, false);
 	}
+
+    /**
+     * Constructor of the EuropeanaIDRegistryMongoServer
+     * Any required login credentials should be present in the provided mongoClient
+     *
+     * @param mongoClient the server to connect to
+     * @param databaseName the database to connect to
+     * @param createIndexes if true it will try to create all indexes if necessary when creating the datastore
+     */
+    public EuropeanaIdRegistryMongoServerImpl(MongoClient mongoClient, String databaseName, boolean createIndexes) {
+        this.mongoClient = mongoClient;
+        this.databaseName = databaseName;
+        europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
+        createDatastore(createIndexes);
+    }
 
 	/**
 	 * Create a new datastore to do get/delete/save operations on the database
@@ -87,13 +100,27 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 	 * @param username
 	 * @param password
 	 */
-	public EuropeanaIdRegistryMongoServerImpl(String host, int port, String databaseName, String username,
-											  String password) {
-		this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), databaseName, username, password).getMongo();
-		this.databaseName = databaseName;
-		europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
-		createDatastore();
+	@Deprecated
+	public EuropeanaIdRegistryMongoServerImpl(String host, int port, String databaseName, String username, String password) {
+        this(host, port, databaseName, username, password, false);
 	}
+
+    /**
+     * Create a new datastore to do get/delete/save operations on the database
+     * @param host
+     * @param port
+     * @param databaseName
+     * @param username
+     * @param password
+     * @param createIndexes if true it will try to create all indexes if necessary when creating the datastore
+     */
+    public EuropeanaIdRegistryMongoServerImpl(String host, int port, String databaseName, String username, String password,
+                                              boolean createIndexes) {
+        this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), databaseName, username, password).getMongo();
+        this.databaseName = databaseName;
+        europeanaIdMongoServer = new EuropeanaIdMongoServerImpl(mongoClient, databaseName);
+        createDatastore(createIndexes);
+    }
 
 	/*
 	 * (non-Javadoc)
@@ -107,14 +134,15 @@ public class EuropeanaIdRegistryMongoServerImpl implements MongoServer, European
 		return this.europeanaIdMongoServer;
 	}
 
-	private void createDatastore() {
+	private void createDatastore(boolean createIndexes) {
 		Morphia morphia = new Morphia();
 
 		morphia.map(EuropeanaIdRegistry.class);
 		morphia.map(FailedRecord.class);
 		datastore = morphia.createDatastore(mongoClient, databaseName);
-
-		datastore.ensureIndexes();
+        if (createIndexes) {
+            datastore.ensureIndexes();
+        }
 		LOG.info("EuropeanaIdMongoServer datastore is created");
 	}
 

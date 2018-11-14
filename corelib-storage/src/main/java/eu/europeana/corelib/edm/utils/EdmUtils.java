@@ -56,10 +56,10 @@ public class EdmUtils {
 
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static final String SPACE = " ";
-    private static final String PREFIX = "http://data.europeana.eu";
+    private static final String BASE_URL = "http://data.europeana.eu";
 
     private static IBindingFactory bfact;
+    private static boolean noBaseUrl = false;
 
     private EdmUtils() {
         // empty constructor to prevent initialization
@@ -69,10 +69,22 @@ public class EdmUtils {
      * Convert a FullBean to an EDM String
      *
      * @param fullBean The FullBean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return The resulting EDM string in RDF-XML
      */
-    public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
-        RDF rdf = toRDF(fullBean);
+    public static synchronized String toEDM(FullBeanImpl fullBean, boolean noBaseUrl) {
+        RDF rdf = toRDF(fullBean, noBaseUrl);
+        return marshallToEDM(rdf);
+    }
+
+    /**
+     * Convert a FullBean to an EDM String
+     *
+     * @param fullBean The FullBean to convert
+     * @return The resulting EDM string in RDF-XML
+     */
+    public static synchronized String toEDM(FullBeanImpl fullBean) {
+        RDF rdf = toRDF(fullBean, false);
         return marshallToEDM(rdf);
     }
 
@@ -105,12 +117,18 @@ public class EdmUtils {
         return null;
     }
 
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+        return EdmUtils.toRDF(fullBean, false);
+    }
+
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return RDF object
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean noBaseUrl) {
+        EdmUtils.noBaseUrl = noBaseUrl;
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -196,7 +214,7 @@ public class EdmUtils {
     private static String getType(FullBeanImpl fullBean) {
         for (ProxyImpl prx : fullBean.getProxies()) {
             if (!prx.isEuropeanaProxy()) {
-                return prx.getEdmType().toString();
+                return prx.getEdmType().getEnumNameValue();
             }
         }
         return null;
@@ -292,7 +310,7 @@ public class EdmUtils {
         if (isUri(europeanaAggregation.getAbout())) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
-            aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
+            aggregation.setAbout(baseUrlAndItem(europeanaAggregation.getAbout()));
         }
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
@@ -300,7 +318,7 @@ public class EdmUtils {
             if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
-                agCHO.setResource(PREFIX + fBean.getProvidedCHOs().get(0).getAbout());
+                agCHO.setResource(baseUrlAndItem(fBean.getProvidedCHOs().get(0).getAbout()));
             }
             aggregation.setAggregatedCHO(agCHO);
         }
@@ -352,45 +370,12 @@ public class EdmUtils {
     private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
         // there should be only 1 country at most
         if (edmCountry != null && edmCountry.size() > 0) {
-            return EdmUtils.convertToCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
+            return CountryUtils.convertToJibxCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
         }
         return null;
     }
 
-    /**
-     * JIBX uses equals function to generate a CountryCodes enum from a string, so that's why we need to match exactly
-     * to the value defined in the JIBX CountryCodes class (i.e. we need to capitalize the first letter of each word)
-     * @param country string with country name as it is in JIBX CountryCodes but without proper capitalization
-     * @return Country object with filled country code, or null if conversion failed
-     */
-    public static Country convertToCountry(String country) {
-        Country result = null;
-        if (StringUtils.isNotEmpty(country)) {
-            StringBuilder sb = new StringBuilder();
-            String[] splitCountry = country.trim().toLowerCase(Locale.GERMANY).split(SPACE);
-            for (String countryWord : splitCountry) {
-                if (StringUtils.equalsIgnoreCase("and", countryWord) || StringUtils.equalsIgnoreCase("of", countryWord)) {
-                    sb.append(countryWord.toLowerCase(Locale.GERMANY));
-                } else if (countryWord.charAt(0) == '(') {
-                    sb.append('(');
-                    sb.append(StringUtils.capitalize(countryWord.substring(1)));
-                } else {
-                    sb.append(StringUtils.capitalize(countryWord));
-                }
-                sb.append(SPACE);
-            }
-            String convertedCountry = sb.toString().trim();
 
-            CountryCodes cc = CountryCodes.convert(sb.toString().trim());
-            if (cc != null) {
-                result = new Country();
-                result.setCountry(cc);
-            } else {
-                LOG.error("Cannot convert country '{}' to JIBX country code! (converted country = {})", country, convertedCountry);
-            }
-        }
-        return result;
-    }
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
         List<ProxyType> proxyList = new ArrayList<>();
@@ -399,7 +384,7 @@ public class EdmUtils {
             if (isUri(prx.getAbout())) {
                 proxy.setAbout(prx.getAbout());
             } else {
-                proxy.setAbout(PREFIX + prx.getAbout());
+                proxy.setAbout(baseUrlAndItem(prx.getAbout()));
             }
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
@@ -432,7 +417,7 @@ public class EdmUtils {
                     if (isUri(pIn[i])) {
                         proxyIn.setResource(pIn[i]);
                     } else {
-                        proxyIn.setResource(PREFIX + pIn[i]);
+                        proxyIn.setResource(baseUrlAndItem(pIn[i]));
                     }
                     pInList.add(proxyIn);
                 }
@@ -453,7 +438,8 @@ public class EdmUtils {
             addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
             addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
             addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-            addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
+            addAsList(proxy, Realizes.class, prx.getEdmRealizes());
+            addAsObject(proxy, ProxyFor.class, baseUrlAndItem(prx.getProxyFor()));
             addAsList(proxy, Year.class, prx.getYear());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
@@ -509,14 +495,14 @@ public class EdmUtils {
             if (isUri(aggr.getAbout())) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
-                aggregation.setAbout(PREFIX + aggr.getAbout());
+                aggregation.setAbout(baseUrlAndItem(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
                 AggregatedCHO cho = new AggregatedCHO();
                 if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
-                    cho.setResource(PREFIX + rdf.getProvidedCHOList().get(0).getAbout());
+                    cho.setResource(baseUrlAndItem(rdf.getProvidedCHOList().get(0).getAbout()));
                 }
                 aggregation.setAggregatedCHO(cho);
             }
@@ -550,7 +536,7 @@ public class EdmUtils {
             if (isUri(pCho.getAbout())) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
-                pChoJibx.setAbout(PREFIX + pCho.getAbout());
+                pChoJibx.setAbout(baseUrlAndItem(pCho.getAbout()));
             }
 
             addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
@@ -573,8 +559,8 @@ public class EdmUtils {
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-                addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
-                addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
+                addAsList(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
+                addAsList(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
                 addAsObject(agent, DateOfEstablishment.class, ag.getRdaGr2DateOfEstablishment());
                 addAsObject(agent, DateOfTermination.class, ag.getRdaGr2DateOfTermination());
                 addAsObject(agent, Gender.class, ag.getRdaGr2Gender());
@@ -719,7 +705,7 @@ public class EdmUtils {
                 if (isUri(str)) {
                     ((ResourceType) obj).setResource(str);
                 } else {
-                    ((ResourceType) obj).setResource(PREFIX + str);
+                    ((ResourceType) obj).setResource(baseUrlAndItem(str));
                 }
                 method.invoke(dest, obj);
                 return true;
@@ -799,6 +785,9 @@ public class EdmUtils {
         }
         if (StringUtils.equals("Incorporates", clazzName) && list) {
             clazzName = "Incorporate";
+        }
+        if (StringUtils.equals("Realizes", clazzName) && list) {
+            clazzName = "Realize";
         }
         clazzName = StringUtils.strip(clazzName, "_1");
         clazzName = StringUtils.strip(clazzName, "1");
@@ -1011,6 +1000,15 @@ public class EdmUtils {
             result.put(StringUtils.substringAfter(entry.getKey(), "."), entry.getValue());
         }
         return result;
+    }
+
+    private static String baseUrlAndItem(String url){
+        if (noBaseUrl){
+            // the noBaseUrl situation is temporary for Metis migration and will be removed after the POC
+            return StringUtils.removeStartIgnoreCase(url, "/item");
+        } else {
+            return BASE_URL + url;
+        }
     }
 
 }

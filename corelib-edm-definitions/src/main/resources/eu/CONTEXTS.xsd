@@ -80,8 +80,8 @@
           <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
-          <element ref="rdaGr2:placeOfBirth" maxOccurs="1" minOccurs="0"/>
-          <element ref="rdaGr2:placeOfDeath" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfBirth" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfDeath" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="rdaGr2:professionOrOccupation" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>

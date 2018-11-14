@@ -26,7 +26,7 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	@Override
 	public void setProxyFor(String proxyFor) {
-		this.proxyFor = proxyFor;
+	    this.proxyFor = proxyFor;
 	}
 
 

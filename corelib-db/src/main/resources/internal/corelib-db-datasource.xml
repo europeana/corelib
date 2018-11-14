@@ -26,8 +26,8 @@
         <!-- Setting properties here won't work when deploying on Cloud Foundry because the Spring Auto-reconfiguration
              framework will ignore all original datasource properties and reset maxIdle and maxActive to 4, see also
              https://community.pivotal.io/s/article/Connection-pool-warning-message-maxIdle-is-larger-than-maxActive-setting-maxIdle-to-4-seen-in-PCF-deployed-Spring-app -->
-        <property name="maxIdle" value="20" />
-        <property name="maxActive" value="20" />
+        <property name="maxIdle" value="2" />
+        <property name="maxActive" value="10" />
     </bean>
 
     <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
@@ -36,27 +36,13 @@
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
 
-    <!-- Deprecated
-    <bean id="corelib_db_morphia_datastore_apilog" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
-        <constructor-arg value="API log"/>
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.apilog.dbname']}" type="java.lang.String"/>
-    </bean> -->
-
-    <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
+    <!-- <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
         <constructor-arg value="OAuth2"/>
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.oauth.dbname']}" type="java.lang.String"/>
-    </bean>
+    </bean> -->
 
-    <bean id="corelib_db_morphia_datastore_sugarcrmcache" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
-        <constructor-arg value="SugarCRM cache"/>
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.sugarCrmCache.dbname']}" type="java.lang.String"/>
-    </bean>
-
-    <bean id="corelib_db_entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+    <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="corelib_db_dataSource">
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" p:showSql="false"

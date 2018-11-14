@@ -24,8 +24,7 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
 import eu.europeana.corelib.definitions.solr.model.Term;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
+import eu.europeana.corelib.edm.exceptions.SolrIOException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.search.SearchService;
@@ -41,6 +40,7 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
@@ -52,12 +52,12 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -76,12 +76,7 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Lookup record information from Solr or Mongo
@@ -100,12 +95,17 @@ public class SearchServiceImpl implements SearchService {
      * Number of milliseconds before the query is aborted by SOLR
      */
     private static final int TIME_ALLOWED = 30_000;
+
     /**
      * The list of possible field input for spelling suggestions
      */
+    @Deprecated
     private static final List<String> SPELL_FIELDS = Arrays.asList("who",
             "what", "where", "when", "title");
+
+    /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+    // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
     private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
     private static final Logger LOG = LogManager.getLogger(SearchServiceImpl.class);
@@ -115,8 +115,9 @@ public class SearchServiceImpl implements SearchService {
     @Resource(name = "corelib_solr_mongoServer_id")
     protected EuropeanaIdMongoServer idServer;
 
-    // provided by setSolrServer()
-    private SolrServer solrServer;
+    // provided by setSolrClient method via xml-beans
+    private SolrClient solrClient;
+
     @Value("#{europeanaProperties['solr.facetLimit']}")
     private int facetLimit;
     @Value("#{europeanaProperties['solr.username']}")
@@ -132,35 +133,66 @@ public class SearchServiceImpl implements SearchService {
     // show solr query in output
     private boolean debug = false;
 
-
     @Override
-    public FullBean findById(String collectionId, String recordId, boolean similarItems)
-            throws MongoRuntimeException, MongoDBException {
+    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
     }
 
     @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws MongoRuntimeException, MongoDBException {
-
-        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
+        FullBean fullBean = fetchFullBean(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
+            return processFullBean(fullBean, europeanaObjectId, similarItems);
+        } else {
+            return null;
+        }
+    }
 
-            if (similarItems) {
-                try {
-                    fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-                } catch (SolrServerException e) {
-                    LOG.error("SolrServerException: {}", e.getMessage());
+    // split up fetching and processing the Fullbean to facilitate improving performance for HTTP caching
+    // (e.g. eTag matching)
+    @Override
+    public FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException {
+        long   startTime = System.currentTimeMillis();
+        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("SearchService fetch FullBean with europeanaObjectId took " + (System.currentTimeMillis() - startTime) + " ms");
+        }
+
+        if (Objects.isNull(fullBean)) {
+            startTime = System.currentTimeMillis();
+            String newId = resolveId(europeanaObjectId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("SearchService resolve newId took " + (System.currentTimeMillis() - startTime) + " ms");
+            }
+            // (comment from ObjectController) 2017-07-06 code PE: inserted as temp workaround until we resolve #662 (see also comment below)
+            if (StringUtils.isNotBlank(newId)){
+                startTime = System.currentTimeMillis();
+                fullBean = mongoServer.getFullBean(newId);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("SearchService fetch FullBean with newid took " + (System.currentTimeMillis() - startTime) + " ms");
                 }
             }
+        }
+        return fullBean;
+    }
 
-            if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-                ((FullBeanImpl) fullBean).setAsParent();
-                for (Aggregation agg : fullBean.getAggregations()) {
-                    if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
-                        for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                            wRes.initAttributionSnippet();
-                        }
+    public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
+        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
+        // November 2018: Deprecated code
+//        if (similarItems) {
+//            try {
+//                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
+//            } catch (EuropeanaException e) {
+//                LOG.error("Error trying to retrieve similar items", e);
+//            }
+//        }
+
+        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()) {
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                        wRes.initAttributionSnippet();
                     }
                 }
             }
@@ -182,7 +214,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public FullBean resolve(String europeanaObjectId, boolean similarItems)
             throws SolrTypeException {
-
         FullBean fullBean = resolveInternal(europeanaObjectId, similarItems);
         FullBean fullBeanNew = fullBean;
         if (fullBean != null) {
@@ -193,7 +224,6 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
-
         return fullBean;
     }
 
@@ -209,13 +239,14 @@ public class SearchServiceImpl implements SearchService {
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         if (fullBean != null) {
             WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-            if (similarItems) {
-                try {
-                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
-                } catch (SolrServerException e) {
-                    LOG.error("SolrServerException", e);
-                }
-            }
+            // November 2018: deprecated code
+//            if (similarItems) {
+//                try {
+//                    fullBean.setSimilarItems(findMoreLikeThis(fullBean.getAbout()));
+//                } catch (EuropeanaException e) {
+//                    LOG.error("SolrServerException", e);
+//                }
+//            }
         }
         return fullBean;
     }
@@ -285,15 +316,13 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Deprecated
-    public List<BriefBean> findMoreLikeThis(String europeanaObjectId)
-            throws SolrServerException {
+    public List<BriefBean> findMoreLikeThis(String europeanaObjectId) throws EuropeanaException {
         return findMoreLikeThis(europeanaObjectId, DEFAULT_MLT_COUNT);
     }
 
     @Override
     @Deprecated
-    public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count)
-            throws SolrServerException {
+    public List<BriefBean> findMoreLikeThis(String europeanaObjectId, int count) throws EuropeanaException {
         String query = "europeana_id:\"" + europeanaObjectId + "\"";
 
         SolrQuery solrQuery = new SolrQuery().setQuery(query);
@@ -317,34 +346,37 @@ public class SearchServiceImpl implements SearchService {
             LOG.debug(solrQuery.toString());
         }
 
-        QueryResponse response = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
 
-        @SuppressWarnings("unchecked")
-        NamedList<Object> moreLikeThisList = (NamedList<Object>) response
-                .getResponse().get("moreLikeThis");
-        List<BriefBean> beans = new ArrayList<>();
-        if (moreLikeThisList.size() > 0) {
+        try {
+            QueryResponse response = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+
             @SuppressWarnings("unchecked")
-            List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList
-                    .getVal(0);
-            for (SolrDocument doc : docs) {
-                beans.add(solrServer.getBinder().getBean(BriefBeanImpl.class,
-                        doc));
+            NamedList<Object> moreLikeThisList = (NamedList<Object>) response.getResponse().get("moreLikeThis");
+            List<BriefBean> beans = new ArrayList<>();
+            if (moreLikeThisList.size() > 0) {
+                @SuppressWarnings("unchecked")
+                List<SolrDocument> docs = (List<SolrDocument>) moreLikeThisList.getVal(0);
+                for (SolrDocument doc : docs) {
+                    beans.add(solrClient.getBinder().getBean(BriefBeanImpl.class, doc));
+                }
             }
+            return beans;
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
+            throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
         }
-        return beans;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws SolrTypeException {
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
         this.debug = debug;
         return search(beanInterface, query);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws SolrTypeException {
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }
@@ -416,7 +448,7 @@ public class SearchServiceImpl implements SearchService {
                     }
                     query.setExecutedQuery(solrQuery.toString());
 
-                    QueryResponse queryResponse = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
+                    QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
 
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
@@ -431,15 +463,18 @@ public class SearchServiceImpl implements SearchService {
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
+                } catch (IOException e) {
+                    LOG.error("Error querying solr", e);
+                    throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
                 } catch (SolrServerException e) {
-                    LOG.error("SolrServerException: " + e.getMessage() + " The query was: " + solrQuery);
+                    LOG.error("SolrServerException - query = {} ", solrQuery, e);
                     if (StringUtils.contains(e.getCause().toString(), "Collection")){
                         throw new SolrTypeException(e, ProblemType.INVALID_THEME);
                     } else {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 } catch (SolrException e) {
-                    LOG.error("SolrException: " + e.getMessage() + " The query was: " + solrQuery);
+                    LOG.error("SolrException - query = {} ", solrQuery, e);
                     if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
                     } else{
@@ -478,7 +513,7 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, query.getCurrentCursorMark());
 
             if (defaultSort) {
-                // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087)
+                // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087 and EA-1364)
                 solrQuery.removeSort("score");
                 // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
                 if (!solrQuery.getSortField().contains("europeana_id")) {
@@ -514,13 +549,22 @@ public class SearchServiceImpl implements SearchService {
                 || beanClazz == RichBeanImpl.class;
     }
 
+    /**
+     *
+     * @param query    The calculateTag term to find suggestions for
+     * @param pageSize Amount of requested suggestions
+     * @return
+     * @throws SolrTypeException
+     * @deprecated as of September 2018 (not working properly and very little usage)
+     */
     @Override
+    @Deprecated
     public List<Term> suggestions(String query, int pageSize) throws SolrTypeException {
         return suggestions(query, pageSize, null);
     }
 
     @Override
-    public List<Count> createCollections(String facetFieldName, String queryString, String... refinements) throws SolrTypeException {
+    public List<Count> createCollections(String facetFieldName, String queryString, String... refinements) throws EuropeanaException {
 
         Query query = new Query(queryString).setParameter("rows", "0")
                 .setParameter("facet", "true").setRefinements(refinements)
@@ -562,14 +606,12 @@ public class SearchServiceImpl implements SearchService {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Solr query is: " + solrQuery.toString());
             }
-            response = solrServer.query(solrQuery, SolrRequest.METHOD.POST);
+            response = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
             queryFacets = response.getFacetQuery();
         } catch (SolrServerException e) {
-            LOG.error("SolrServerException: " + e.getMessage() + " for query "
-                    + solrQuery.toString(), e);
+            LOG.error("SolrServerException - query = {} ", solrQuery, e);
         } catch (Exception e) {
-            LOG.error("Exception: " + e.getClass().getCanonicalName() + " "
-                    + e.getMessage() + " for query " + solrQuery.toString(), e);
+            LOG.error("Exception - class = {}, query = {}", e.getClass().getCanonicalName(), solrQuery, e);
         }
 
         return queryFacets;
@@ -582,7 +624,10 @@ public class SearchServiceImpl implements SearchService {
      * @param field    The field to query on
      * @param rHandler The ReqestHandler to use
      * @return A list of Terms for the specific term from the SolrSuggester
+     *
+     * @deprecated as of September 2018 (doesn't work anyway with new Solr, see also https://stackoverflow.com/q/33498056)
      */
+    @Deprecated
     private List<Term> getSuggestions(String query, String field, String rHandler) {
         List<Term> results = new ArrayList<>();
         try {
@@ -593,7 +638,7 @@ public class SearchServiceImpl implements SearchService {
             params.set("timeAllowed", TIME_ALLOWED);
 
             // get the query response
-            QueryResponse queryResponse = solrServer.query(params, SolrRequest.METHOD.POST);
+            QueryResponse queryResponse = solrClient.query(params, SolrRequest.METHOD.POST);
             SpellCheckResponse spellcheckResponse = queryResponse
                     .getSpellCheckResponse();
             // if the suggestions are not empty and there are collated results
@@ -629,8 +674,8 @@ public class SearchServiceImpl implements SearchService {
                     results.add(term);
                 }
             }
-        } catch (SolrServerException e) {
-            LOG.error("Exception :" + e.getMessage());
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
         }
 
         return results;
@@ -638,8 +683,10 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * Get the suggestions
+     * @deprecated as of September 2018
      */
     @Override
+    @Deprecated
     public List<Term> suggestions(String query, int pageSize, String field) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("%s, %d, %s", query, pageSize, field));
@@ -678,18 +725,23 @@ public class SearchServiceImpl implements SearchService {
                 : results;
     }
 
-    public void setSolrServer(SolrServer solrServer) {
-        this.solrServer = setServer(solrServer);
+    public void setSolrClient(SolrClient solrClient) {
+        //this.solrClient = setSolrClient(solrClient);
+        this.solrClient = setClient(solrClient);
     }
 
-    private SolrServer setServer(SolrServer solrServer) {
-        if (solrServer instanceof HttpSolrServer) {
-            HttpSolrServer server = new HttpSolrServer(((HttpSolrServer) solrServer).getBaseURL());
+    /**
+     * If it's not a cluster but a single solr server, we add authentication
+     */
+    private SolrClient setClient(SolrClient solrClient) {
+
+        if (solrClient instanceof HttpSolrClient) {
+            HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
             AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
             client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
             return server;
         } else {
-            return solrServer;
+            return solrClient;
         }
     }
 
@@ -717,14 +769,19 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Date getLastSolrUpdate() throws SolrServerException, IOException {
+    public Date getLastSolrUpdate() throws EuropeanaException {
         long t0 = new Date().getTime();
-        NamedList<Object> namedList = solrServer.request(new LukeRequest());
-        NamedList<Object> index = (NamedList<Object>) namedList.get("index");
-        if (LOG.isInfoEnabled()) {
-            LOG.info("spent: " + (new Date().getTime() - t0));
+        try {
+            NamedList<Object> namedList = solrClient.request(new LukeRequest());
+            NamedList<Object> index = (NamedList<Object>) namedList.get("index");
+            if (LOG.isInfoEnabled()) {
+                LOG.info("spent: " + (new Date().getTime() - t0));
+            }
+            return (Date) index.get("lastModified");
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
         }
-        return (Date) index.get("lastModified");
+        return null;
     }
 
     public void logTime(String type, long time) {

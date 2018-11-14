@@ -10,4 +10,6 @@ public interface TextMetaInfo {
 
     Boolean getIsSearchable();
 
+    String getRdfType();
+
 }

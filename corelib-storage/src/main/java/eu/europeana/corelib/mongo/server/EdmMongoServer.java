@@ -21,6 +21,7 @@ import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 
 /**
  * Basic MongoDB server implementation
@@ -39,7 +40,7 @@ public interface EdmMongoServer extends MongoServer {
 	 *         one specific object
 	 * @throws MongoDBException 
 	 */
-	FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException;
+	FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException, EuropeanaException;
 
 	/**
 	 * Search using the rdf:about field of an EDM entity
