@@ -60,8 +60,10 @@ public class EuropeanaUrlBuilder {
     public static UrlBuilder getThumbnailUrl(String uri, String size, DocType type) {
         UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.THUMBNAIL_BASE_URL)
                 .addParam("uri", uri.trim())
-                .addParam("size", size)
-                .addParam("type", type.toString());
+                .addParam("size", size);
+        if (type != null) {
+           url.addParam("type", type.toString());
+        }
         return url;
     }
 
