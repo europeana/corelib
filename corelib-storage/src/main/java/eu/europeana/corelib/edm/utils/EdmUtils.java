@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -51,12 +52,30 @@ import java.util.Map.Entry;
  */
 public class EdmUtils {
 
+    public static final String DEFAULT_LANGUAGE = "def";
+
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static IBindingFactory bfact;
-    private static final  String SPACE = " ";
-    private static final  String PREFIX = "http://data.europeana.eu";
+    private static final String BASE_URL = "http://data.europeana.eu";
 
+    private static IBindingFactory bfact;
+    private static boolean noBaseUrl = false;
+
+    private EdmUtils() {
+        // empty constructor to prevent initialization
+    }
+
+    /**
+     * Convert a FullBean to an EDM String
+     *
+     * @param fullBean The FullBean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
+     * @return The resulting EDM string in RDF-XML
+     */
+    public static synchronized String toEDM(FullBeanImpl fullBean, boolean noBaseUrl) {
+        RDF rdf = toRDF(fullBean, noBaseUrl);
+        return marshallToEDM(rdf);
+    }
 
     /**
      * Convert a FullBean to an EDM String
@@ -64,8 +83,8 @@ public class EdmUtils {
      * @param fullBean The FullBean to convert
      * @return The resulting EDM string in RDF-XML
      */
-    public static synchronized String toEDM(FullBeanImpl fullBean, boolean isUim) {
-        RDF rdf = toRDF(fullBean);
+    public static synchronized String toEDM(FullBeanImpl fullBean) {
+        RDF rdf = toRDF(fullBean, false);
         return marshallToEDM(rdf);
     }
 
@@ -93,17 +112,23 @@ public class EdmUtils {
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
             return out.toString("UTF-8");
         } catch (JiBXException | IOException e) {
-            LOG.error("Error converting fullbean to EDM: "+ e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error("Error marshalling RDF", e);
         }
         return null;
+    }
+
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+        return EdmUtils.toRDF(fullBean, false);
     }
 
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
+     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return RDF object
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean noBaseUrl) {
+        EdmUtils.noBaseUrl = noBaseUrl;
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -189,7 +214,7 @@ public class EdmUtils {
     private static String getType(FullBeanImpl fullBean) {
         for (ProxyImpl prx : fullBean.getProxies()) {
             if (!prx.isEuropeanaProxy()) {
-                return prx.getEdmType().toString();
+                return prx.getEdmType().getEnumNameValue();
             }
         }
         return null;
@@ -234,9 +259,9 @@ public class EdmUtils {
                     lat.setLat(place.getLatitude());
                     pType.setLat(lat);
 
-                    _Long _long = new _Long();
-                    _long.setLong(place.getLongitude());
-                    pType.setLong(_long);
+                    _Long l = new _Long();
+                    l.setLong(place.getLongitude());
+                    pType.setLong(l);
                 }
                 addAsList(pType, AltLabel.class, place.getAltLabel());
                 addAsList(pType, HasPart.class, place.getDcTermsHasPart());
@@ -285,7 +310,7 @@ public class EdmUtils {
         if (isUri(europeanaAggregation.getAbout())) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
-            aggregation.setAbout(PREFIX + europeanaAggregation.getAbout());
+            aggregation.setAbout(baseUrlAndItem(europeanaAggregation.getAbout()));
         }
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
@@ -293,7 +318,7 @@ public class EdmUtils {
             if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
-                agCHO.setResource(PREFIX + fBean.getProvidedCHOs().get(0).getAbout());
+                agCHO.setResource(baseUrlAndItem(fBean.getProvidedCHOs().get(0).getAbout()));
             }
             aggregation.setAggregatedCHO(agCHO);
         }
@@ -301,6 +326,7 @@ public class EdmUtils {
         DatasetName datasetName = new DatasetName();
         datasetName.setString(fBean.getEuropeanaCollectionName()[0]);
         aggregation.setDatasetName(datasetName);
+        // TODO country will be removed once Organizations are fully implemented
         Country country = convertMapToCountry(europeanaAggregation.getEdmCountry());
         if (country != null) {
             aggregation.setCountry(country);
@@ -342,26 +368,14 @@ public class EdmUtils {
     }
 
     private static Country convertMapToCountry(Map<String, List<String>> edmCountry) {
-
+        // there should be only 1 country at most
         if (edmCountry != null && edmCountry.size() > 0) {
-            Country country = new Country();
-            StringBuilder sb = new StringBuilder();
-            String[] splitCountry = edmCountry.entrySet().iterator().next().getValue().get(0).split(SPACE);
-            for (String countryWord : splitCountry) {
-                if (StringUtils.equals("and", countryWord)) {
-                    sb.append(countryWord);
-                } else {
-                    sb.append(StringUtils.capitalize(countryWord));
-                }
-                sb.append(SPACE);
-            }
-            String countryFixed = sb.toString().replace(" Of ", " of ").trim();
-            country.setCountry(CountryCodes.convert(countryFixed));
-
-            return country;
+            return CountryUtils.convertToJibxCountry(edmCountry.entrySet().iterator().next().getValue().get(0));
         }
         return null;
     }
+
+
 
     private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
         List<ProxyType> proxyList = new ArrayList<>();
@@ -370,7 +384,7 @@ public class EdmUtils {
             if (isUri(prx.getAbout())) {
                 proxy.setAbout(prx.getAbout());
             } else {
-                proxy.setAbout(PREFIX + prx.getAbout());
+                proxy.setAbout(baseUrlAndItem(prx.getAbout()));
             }
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
@@ -403,7 +417,7 @@ public class EdmUtils {
                     if (isUri(pIn[i])) {
                         proxyIn.setResource(pIn[i]);
                     } else {
-                        proxyIn.setResource(PREFIX + pIn[i]);
+                        proxyIn.setResource(baseUrlAndItem(pIn[i]));
                     }
                     pInList.add(proxyIn);
                 }
@@ -424,7 +438,8 @@ public class EdmUtils {
             addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
             addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
             addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
-            addAsObject(proxy, ProxyFor.class, PREFIX + prx.getProxyFor());
+            addAsList(proxy, Realizes.class, prx.getEdmRealizes());
+            addAsObject(proxy, ProxyFor.class, baseUrlAndItem(prx.getProxyFor()));
             addAsList(proxy, Year.class, prx.getYear());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
@@ -480,14 +495,14 @@ public class EdmUtils {
             if (isUri(aggr.getAbout())) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
-                aggregation.setAbout(PREFIX + aggr.getAbout());
+                aggregation.setAbout(baseUrlAndItem(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
                 AggregatedCHO cho = new AggregatedCHO();
                 if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
-                    cho.setResource(PREFIX + rdf.getProvidedCHOList().get(0).getAbout());
+                    cho.setResource(baseUrlAndItem(rdf.getProvidedCHOList().get(0).getAbout()));
                 }
                 aggregation.setAggregatedCHO(cho);
             }
@@ -501,7 +516,7 @@ public class EdmUtils {
             addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
             addAsList(aggregation, IntermediateProvider.class, aggr.getEdmIntermediateProvider());
 
-            if (aggr.getEdmUgc() != null && !aggr.getEdmUgc().equalsIgnoreCase("false")) {
+            if (aggr.getEdmUgc() != null && !"false".equalsIgnoreCase(aggr.getEdmUgc())) {
                 Ugc ugc = new Ugc();
                 ugc.setUgc(UGCType.valueOf(StringUtils.upperCase(aggr.getEdmUgc())));
                 aggregation.setUgc(ugc);
@@ -521,7 +536,7 @@ public class EdmUtils {
             if (isUri(pCho.getAbout())) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
-                pChoJibx.setAbout(PREFIX + pCho.getAbout());
+                pChoJibx.setAbout(baseUrlAndItem(pCho.getAbout()));
             }
 
             addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
@@ -544,8 +559,8 @@ public class EdmUtils {
                 addAsList(agent, Date.class, ag.getDcDate());
                 addAsObject(agent, DateOfBirth.class, ag.getRdaGr2DateOfBirth());
                 addAsObject(agent, DateOfDeath.class, ag.getRdaGr2DateOfDeath());
-                addAsObject(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
-                addAsObject(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
+                addAsList(agent, PlaceOfBirth.class, ag.getRdaGr2PlaceOfBirth());
+                addAsList(agent, PlaceOfDeath.class, ag.getRdaGr2PlaceOfDeath());
                 addAsObject(agent, DateOfEstablishment.class, ag.getRdaGr2DateOfEstablishment());
                 addAsObject(agent, DateOfTermination.class, ag.getRdaGr2DateOfTermination());
                 addAsObject(agent, Gender.class, ag.getRdaGr2Gender());
@@ -571,7 +586,7 @@ public class EdmUtils {
                     Method method = Concept.Choice.class.getMethod(getSetterMethodName(clazz, false), clazz);
                     LiteralType.Lang lang = null;
                     if (StringUtils.isNotEmpty(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new LiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -588,7 +603,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -609,7 +624,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -622,7 +637,7 @@ public class EdmUtils {
                 for (Entry<String, List<String>> entry : entries.entrySet()) {
                     ResourceOrLiteralType.Lang lang = null;
                     if (StringUtils.isNotEmpty(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new ResourceOrLiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -646,7 +661,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -660,7 +675,7 @@ public class EdmUtils {
                 for (Entry<String, List<String>> entry : entries.entrySet()) {
                     LiteralType.Lang lang = null;
                     if (StringUtils.isNotBlank(entry.getKey())
-                            && !StringUtils.equals("def", entry.getKey())) {
+                            && !StringUtils.equals(DEFAULT_LANGUAGE, entry.getKey())) {
                         lang = new LiteralType.Lang();
                         lang.setLang(entry.getKey());
                     }
@@ -677,7 +692,7 @@ public class EdmUtils {
                 }
             } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                     | InvocationTargetException | InstantiationException e) {
-                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
             }
         }
     }
@@ -690,14 +705,14 @@ public class EdmUtils {
                 if (isUri(str)) {
                     ((ResourceType) obj).setResource(str);
                 } else {
-                    ((ResourceType) obj).setResource(PREFIX + str);
+                    ((ResourceType) obj).setResource(baseUrlAndItem(str));
                 }
                 method.invoke(dest, obj);
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException | InstantiationException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -714,7 +729,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -728,7 +743,7 @@ public class EdmUtils {
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
                 | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -751,7 +766,7 @@ public class EdmUtils {
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
-            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
     }
@@ -770,6 +785,9 @@ public class EdmUtils {
         }
         if (StringUtils.equals("Incorporates", clazzName) && list) {
             clazzName = "Incorporate";
+        }
+        if (StringUtils.equals("Realizes", clazzName) && list) {
+            clazzName = "Realize";
         }
         clazzName = StringUtils.strip(clazzName, "_1");
         clazzName = StringUtils.strip(clazzName, "1");
@@ -795,7 +813,7 @@ public class EdmUtils {
                 return tList;
             }
         } catch (SecurityException | InstantiationException | IllegalAccessException e) {
-            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage());
+            LOG.error(e.getClass().getSimpleName() + " " + e.getMessage(), e);
         }
 
         return null;
@@ -809,57 +827,84 @@ public class EdmUtils {
                 try {
                     if (entry.getValue() != null) {
                         if (clazz.getSuperclass().isAssignableFrom(ResourceType.class)) {
-                            for (String str : entry.getValue()) {
-                                ResourceType t = (ResourceType) clazz.newInstance();
-                                t.setResource(str);
-                                list.add((T) t);
+                            for (String value : entry.getValue()) {
+                                // null check shouldn't be necessary, but sometimes there is incorrect data
+                                if (value != null) {
+                                    ResourceType t = (ResourceType) clazz.newInstance();
+                                    t.setResource(value);
+                                    list.add((T) t);
+                                }
                             }
 
                         } else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
-                            LiteralType.Lang lang = null;
-                            if (StringUtils.isNotEmpty(entry.getKey())
-                                    && !StringUtils.equals(entry.getKey(),"def")) {
-                                lang = new LiteralType.Lang();
-                                lang.setLang(entry.getKey());
-                            }
-                            for (String str : entry.getValue()) {
-                                LiteralType t = (LiteralType) clazz.newInstance();
-                                t.setString(str);
-                                t.setLang(lang);
-                                list.add((T) t);
-                            }
-
+                            list.addAll(createLiteralLangList(clazz, entry));
                         } else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
-                            ResourceOrLiteralType.Lang lang = null;
-                            if (StringUtils.isNotEmpty(entry.getKey())
-                                    && !StringUtils.equals(entry.getKey(), "def")
-                                    && !StringUtils.equals(entry.getKey(), "eur")) {
-                                lang = new ResourceOrLiteralType.Lang();
-                                lang.setLang(entry.getKey());
-                            }
-                            for (String str : entry.getValue()) {
-                                ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
-                                Resource resource = new Resource();
-                                t.setString("");
-                                if (isUri(str)) {
-                                    resource.setResource(str);
-                                    t.setResource(resource);
-                                } else {
-                                    t.setString(str);
-                                    t.setLang(lang);
-                                }
-
-                                list.add((T) t);
-                            }
+                            list.addAll(createResourceOrLiteralLangList(clazz, entry));
                         }
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-                    LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage());
+                    LOG.error("Error converting map to list", e);
                 }
             }
             return list;
         }
         return null;
+    }
+
+    private static ResourceOrLiteralType setResourceOrLiteralLangValue(ResourceOrLiteralType rlt, Resource r, ResourceOrLiteralType.Lang lang, String value) {
+        if (isUri(value)) {
+            r.setResource(value);
+            rlt.setResource(r);
+        } else {
+            rlt.setString(value);
+            rlt.setLang(lang);
+        }
+        return rlt;
+    }
+
+    private static <T> List<T> createLiteralLangList(Class<T> clazz, Entry<String, List<String>> entry)
+            throws InstantiationException, IllegalAccessException {
+        List<T> result = new ArrayList<>();
+        LiteralType.Lang lang = null;
+        if (StringUtils.isNotEmpty(entry.getKey()) && !StringUtils.equals(entry.getKey(),DEFAULT_LANGUAGE)) {
+            lang = new LiteralType.Lang();
+            lang.setLang(entry.getKey());
+        }
+        for (String value : entry.getValue()) {
+            // null check shouldn't be necessary, but sometimes there is incorrect data
+            if (value != null) {
+                LiteralType t = (LiteralType) clazz.newInstance();
+                t.setString(value);
+                t.setLang(lang);
+                result.add((T) t);
+            }
+        }
+        return result;
+    }
+
+    private static <T> List<T> createResourceOrLiteralLangList(Class<T> clazz, Entry<String, List<String>> entry)
+            throws InstantiationException, IllegalAccessException {
+        List<T> result = new ArrayList<>();
+        ResourceOrLiteralType.Lang lang = null;
+        // 2018-08-30 PE: not sure why the check for "eur". Looks like this is a very old definition
+        // and not used anymore, as it's the only reference to "eur" in the entire application
+        if (StringUtils.isNotEmpty(entry.getKey())
+                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)
+                && !StringUtils.equals(entry.getKey(), "eur")) {
+            lang = new ResourceOrLiteralType.Lang();
+            lang.setLang(entry.getKey());
+        }
+        for (String value : entry.getValue()) {
+            // null check shouldn't be necessary, but sometimes there is incorrect data
+            if (value != null) {
+                ResourceOrLiteralType t = (ResourceOrLiteralType) clazz.newInstance();
+                Resource resource = new Resource();
+                t.setString("");
+                setResourceOrLiteralLangValue(t, resource, lang, value);
+                result.add((T) t);
+            }
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -875,53 +920,44 @@ public class EdmUtils {
                     } else if (clazz.getSuperclass().isAssignableFrom(ResourceOrLiteralType.class)) {
                         ResourceOrLiteralType.Lang lang = null;
                         if (StringUtils.isNotEmpty(entry.getKey())
-                                && !StringUtils.equals(entry.getKey(), "def")) {
+                                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)) {
                             lang = new ResourceOrLiteralType.Lang();
                             lang.setLang(entry.getKey());
                         }
 
                         ResourceOrLiteralType obj = ((ResourceOrLiteralType) t);
                         Resource resource = new Resource();
-                        // resource.setResource("");
-
-                        // obj.setResource(resource);
                         obj.setString("");
-                        for (String str : entry.getValue()) {
-                            if (isUri(str)) {
-                                resource.setResource(str);
-                                obj.setResource(resource);
-                            } else {
-                                obj.setString(str);
-                                obj.setLang(lang);
-                            }
+                        for (String value : entry.getValue()) {
+                            setResourceOrLiteralLangValue(obj, resource, lang, value);
                         }
 
                         return (T) obj;
                     } else if (clazz.getSuperclass().isAssignableFrom(LiteralType.class)) {
                         LiteralType.Lang lang = null;
                         if (StringUtils.isNotEmpty(entry.getKey())
-                                && !StringUtils.equals(entry.getKey(), "def")) {
+                                && !StringUtils.equals(entry.getKey(), DEFAULT_LANGUAGE)) {
                             lang = new LiteralType.Lang();
                             lang.setLang(entry.getKey());
                         }
                         LiteralType obj = ((LiteralType) t);
                         obj.setString("");
-                        for (String str : entry.getValue()) {
-                            obj.setString(str);
+                        for (String value : entry.getValue()) {
+                            obj.setString(value);
                         }
                         obj.setLang(lang);
                         return (T) obj;
                     }
                 } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException e) {
                     LOG.error(e.getClass().getSimpleName() + "  "
-                            + e.getMessage());
+                            + e.getMessage(), e);
                 }
             }
         }
         return null;
     }
 
-    private static boolean isUri(String str) {
+    public static boolean isUri(String str) {
         return StringUtils.startsWith(str, "http://")
                 || StringUtils.startsWith(str, "https://")
                 || StringUtils.startsWith(str, "urn:")
@@ -929,7 +965,7 @@ public class EdmUtils {
     }
 
     /**
-     * Make a clone of a list
+     * Make a clone of a list. Note that the provided list can actually contain a single String or a Map<String, String>
      * @param list
      * @return
      */
@@ -938,11 +974,10 @@ public class EdmUtils {
             return null;
         }
         List<Map<String, String>> result = new ArrayList<>();
-        for (int i = 0, max = list.size(); i < max; i++) {
-            Object label = list.get(i);
-            if (label.getClass().getName() == "java.lang.String") {
+        for (Object label : list) {
+            if (label instanceof String) {
                 Map<String, String> map = new HashMap<>();
-                map.put("def", (String) label);
+                map.put(DEFAULT_LANGUAGE, (String) label);
                 result.add(map);
             } else {
                 result.add((Map<String, String>) label);
@@ -961,10 +996,19 @@ public class EdmUtils {
             return null;
         }
         Map<String, List<String>> result = new HashMap<>();
-        for (String key : map.keySet()) {
-            result.put(StringUtils.substringAfter(key, "."), map.get(key));
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            result.put(StringUtils.substringAfter(entry.getKey(), "."), entry.getValue());
         }
         return result;
+    }
+
+    private static String baseUrlAndItem(String url){
+        if (noBaseUrl){
+            // the noBaseUrl situation is temporary for Metis migration and will be removed after the POC
+            return StringUtils.removeStartIgnoreCase(url, "/item");
+        } else {
+            return BASE_URL + url;
+        }
     }
 
 }

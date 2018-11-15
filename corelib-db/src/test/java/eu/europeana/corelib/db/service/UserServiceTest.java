@@ -25,13 +25,11 @@ import eu.europeana.corelib.definitions.db.entity.relational.*;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.definitions.users.Role;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.web.exception.EmailServiceException;
+import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
@@ -289,7 +287,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSavedItem() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException, Neo4JException {
+    public void testCreateSavedItem() throws EuropeanaException {
         final String EMAIL = "testCreateSavedItem@europeana.eu";
         final String USERNAME = "testCreateSavedItem";
         final String PASSWORD = "test";
@@ -326,7 +324,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateSocialTag() throws DatabaseException, MongoDBException, MongoRuntimeException, EmailServiceException, Neo4JException {
+    public void testCreateSocialTag() throws EuropeanaException {
         final String EMAIL = "testCreateSocialTag@europeana.eu";
         final String USERNAME = "testCreateSocialTag";
         final String PASSWORD = "test";
@@ -404,7 +402,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void setupSeachServiceMock(String europeanaObjectId) throws MongoRuntimeException, MongoDBException, Neo4JException {
+    private void setupSeachServiceMock(String europeanaObjectId) throws EuropeanaException {
         FullBean mockBean = mock(FullBean.class);
         Proxy proxy = mock(Proxy.class);
         Aggregation aggregation = mock(Aggregation.class);

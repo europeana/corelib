@@ -60,12 +60,23 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	/**
 	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer#createDatastore()
 	 */
+	@Deprecated
 	@Override
 	public void createDatastore() {
+		createDatastore(false);
+	}
+
+	/**
+	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer#createDatastore(boolean)
+	 */
+	@Override
+	public void createDatastore(boolean createIndexes) {
 		Morphia morphia = new Morphia();
 		morphia.map(EuropeanaId.class);
 		datastore = morphia.createDatastore(mongoClient, databaseName);
-		datastore.ensureIndexes();
+		if (createIndexes) {
+			datastore.ensureIndexes();
+		}
 		LOG.info("EuropeanaIdMongoServer datastore is created");
 	}
 

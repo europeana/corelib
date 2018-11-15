@@ -15,7 +15,7 @@
     <parent>
         <groupId>eu.europeana</groupId>
         <artifactId>corelib</artifactId>
-        <version>2.7.1+EA1251</version>
+        <version>2.8.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,11 +26,12 @@
     <organization><name>Europeana Foundation</name></organization>
     <url>http://www.europeana.eu</url>
 
-    <properties>
-        <spring-boot.version>1.2.8.RELEASE</spring-boot.version>
-    </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>eu.europeana</groupId>
+            <artifactId>object-storage</artifactId>
+            <version>${objectStorage.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -52,10 +53,6 @@
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-definitions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-media-storage</artifactId>
         </dependency>
 
         <!-- Spring -->
@@ -124,10 +121,11 @@
             <version>${commonsIO.version}</version>
         </dependency>
 
+        <!-- For VcapApplicationListener in VcapPropertyLoaderListener class -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>${spring-boot.version}</version>
+            <version>${springBoot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -162,7 +160,8 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
+            <!-- set to compile instead of test to avoid error messages in bean .xml definitions -->
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -3,11 +3,15 @@ package eu.europeana.corelib.web.service;
 import java.io.UnsupportedEncodingException;
 
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import eu.europeana.corelib.web.utils.UrlBuilder;
 
+/**
+ * @deprecated October 2018 All functionality has been moved to EuropeanaUrlBuilder and Api2UrlBuilder
+ * @see EuropeanaUrlBuilder
+ */
+@Deprecated
 public interface EuropeanaUrlService {
-	// HARDCODED URLS
-	String URL_EUROPEANA 		= "https://www.europeana.eu";
 
 	// ENCODING
 	String ENC_UTF8 			= "UTF-8";
@@ -54,18 +58,22 @@ public interface EuropeanaUrlService {
 	@Deprecated
 	UrlBuilder getApi1Home(String apikey);
 
+	@Deprecated
 	UrlBuilder getApi2Home(String apikey);
 
 	/**
-	 * @deprecated September 2018 not used anymore
+	 * @deprecated October 2018 only used in old MyEuropeana functionality
 	 */
 	@Deprecated
 	UrlBuilder getApi1SearchJson(String apikey, String query, int start) throws UnsupportedEncodingException;
 
+	@Deprecated
 	UrlBuilder getApi2SearchJson(String apikey, String query, String rows) throws UnsupportedEncodingException;
 
+	@Deprecated
 	UrlBuilder getApi2RecordJson(String apikey, String collectionid, String objectid);
 
+    @Deprecated
 	UrlBuilder getApi2RecordJson(String apikey, String europeanaId);
 
 	/**
@@ -74,17 +82,22 @@ public interface EuropeanaUrlService {
 	@Deprecated
 	UrlBuilder getApi1Record(String apikey, String europeanaId, String extention);
 
+	@Deprecated
 	UrlBuilder getApi2Record(String apikey, String europeanaId, String extention);
 
+    @Deprecated
 	UrlBuilder getApi2Redirect(String apikey, String showAt, String provider, String europeanaId, String profile);
 
 	/**
 	 * @return base url of Europeana Collections homepage a.k.a. Europeana Portal
 	 */
+	@Deprecated
 	UrlBuilder getPortalHome();
 
+    @Deprecated
 	String getPortalResolve(String europeanaId);
 
+    @Deprecated
 	String getPortalResolve(String collectionid, String objectid);
 
 	/**
@@ -107,13 +120,15 @@ public interface EuropeanaUrlService {
 
 
 	/**
-	 * @deprecated September 2018 please use getPortalRecord(collectionid, objectid) method
+	 * @deprecated September 2018
+	 * @see EuropeanaUrlBuilder#getRecordPortalUrl(String, String)
 	 */
 	@Deprecated
 	UrlBuilder getPortalRecord(boolean relative, String collectionid, String objectid);
 
 	/**
-	 * @deprecated September 2018 please use getPortalRecord(europeanaId) method
+	 * @deprecated September 2018
+	 * @see EuropeanaUrlBuilder#getRecordPortalUrl(String)
 	 */
 	@Deprecated
 	UrlBuilder getPortalRecord(boolean relative, String EuropeanaId);
@@ -123,14 +138,20 @@ public interface EuropeanaUrlService {
 	 * @param collectionid
 	 * @param objectid
 	 * @return UrlBuilder that points to the Europeana Collections record webpage with the provided recordId
+	 * @deprecated October 2018
+	 * @see EuropeanaUrlBuilder#getRecordPortalUrl(String, String)
 	 */
+	@Deprecated
 	UrlBuilder getPortalRecord(String collectionid, String objectid);
 
 	/**
 	 *
 	 * @param europeanaId
 	 * @return  UrlBuilder that points to the Europeana Collections record webpage with the provided recordId
+	 * @deprecated October 2018
+	 * @see EuropeanaUrlBuilder#getRecordPortalUrl(String)
 	 */
+	@Deprecated
 	UrlBuilder getPortalRecord(String europeanaId);
 
 	/**
@@ -139,7 +160,13 @@ public interface EuropeanaUrlService {
 	@Deprecated
 	UrlBuilder getCanonicalPortalRecord(String europeanaId);
 
+	/**
+	 * @deprecated October 2018
+	 * @see EuropeanaUrlBuilder#getThumbnailUrl(String, String, DocType)
+	 */
+	@Deprecated
 	UrlBuilder getThumbnailUrl(String thumbnail, DocType type);
 
+	@Deprecated
 	String extractEuropeanaId(String url);
 }

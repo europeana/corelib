@@ -63,6 +63,7 @@ public class WebResourceImpl implements WebResource {
     private Map<String, List<String>> dctermsConformsTo;
     private Map<String, List<String>> dctermsCreated;
     private Map<String, List<String>> dctermsIsFormatOf;
+    private Map<String, List<String>> dctermsIsPartOf;
     private Map<String, List<String>> dctermsHasPart;
     private Map<String, List<String>> dcCreator;
     private Map<String, List<String>> dcType;
@@ -179,6 +180,16 @@ public class WebResourceImpl implements WebResource {
     @Override
     public void setDctermsIsFormatOf(Map<String, List<String>> dctermsIsFormatOf) {
         this.dctermsIsFormatOf = dctermsIsFormatOf;
+    }
+
+    @Override
+    public Map<String, List<String>> getDctermsIsPartOf() {
+        return dctermsIsPartOf;
+    }
+
+    @Override
+    public void setDctermsIsPartOf(Map<String, List<String>> dctermsIsPartOf) {
+        this.dctermsIsPartOf = dctermsIsPartOf;
     }
 
     @Override
@@ -451,7 +462,8 @@ public class WebResourceImpl implements WebResource {
 
     @Override
     public List<String> getEdmComponentColor() {
-        if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null) {
+        if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null
+                && webResourceMetaInfo.getImageMetaInfo().getColorPalette() != null) {
             return Arrays.asList(webResourceMetaInfo.getImageMetaInfo().getColorPalette());
         }
         return null;

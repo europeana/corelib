@@ -68,6 +68,12 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	String getEdmLandingPage();
 
 	/**
+	 * sets the edm:landingPage for an edm:EuropeanaAggregation
+	 * @param edmLandingPage
+	 */
+	void setEdmLandingPage(String edmLandingPage);
+
+	/**
 	 * 
 	 * @return the edm:isShownBy for an edm:EuropeanaAggregation
 	 */
@@ -140,7 +146,8 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	void setWebResources(List<? extends WebResource> webResources);
 
 	/**
-	 * 
+	 * Return original image url that is selected by Metis Media Service as a preview (so a thumbnail should be available
+	 * for this image)
 	 * @return the edm:preview for the edm:EuropeanaAggregation
 	 */
 	String getEdmPreview();

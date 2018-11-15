@@ -21,6 +21,7 @@ import eu.europeana.corelib.definitions.jibx.Height;
 import eu.europeana.corelib.definitions.jibx.HexBinaryType;
 import eu.europeana.corelib.definitions.jibx.IsFormatOf;
 import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
+import eu.europeana.corelib.definitions.jibx.IsPartOf;
 import eu.europeana.corelib.definitions.jibx.IsReferencedBy;
 import eu.europeana.corelib.definitions.jibx.Issued;
 import eu.europeana.corelib.definitions.jibx.LongType;
@@ -84,6 +85,7 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, Format.class, wr.getDcFormat());
             EdmUtils.addAsList(wResource, HasPart.class, wr.getDctermsHasPart());
             EdmUtils.addAsList(wResource, IsFormatOf.class, wr.getDctermsIsFormatOf());
+            EdmUtils.addAsList(wResource, IsPartOf.class, wr.getDctermsIsPartOf());
             EdmUtils.addAsObject(wResource, IsNextInSequence.class, wr.getIsNextInSequence());
             EdmUtils.addAsList(wResource, Issued.class, wr.getDctermsIssued());
             EdmUtils.addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
@@ -134,10 +136,15 @@ public class EdmWebResourceUtils {
             List<IsReferencedBy> hsList = new ArrayList<>();
             for (String isRef : wr.getDctermsIsReferencedBy()) {
                 IsReferencedBy hs = new IsReferencedBy();
-                ResourceOrLiteralType.Resource res= new ResourceOrLiteralType.Resource();
-                res.setResource(isRef);
-                hs.setResource(res);
-                hs.setString("");
+                if (EdmUtils.isUri(isRef)) {
+                    ResourceOrLiteralType.Resource res = new ResourceOrLiteralType.Resource();
+                    res.setResource(isRef);
+                    hs.setResource(res);
+                    hs.setString("");
+                } else {
+                    hs.setString(isRef);
+                    hs.setResource(null);
+                }
                 hs.setLang(null);
                 hsList.add(hs);
 

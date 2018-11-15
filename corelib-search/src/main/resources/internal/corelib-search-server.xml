@@ -17,9 +17,8 @@
 
 
     <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
-        <!-- search should use the same mongo server as record -->
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{corelib_db_mongoProvider.getDefaultDatabase()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.record.dbname']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore">
@@ -27,38 +26,39 @@
         <constructor-arg value="#{europeanaProperties['mongodb.recordId.dbname']}" type="java.lang.String"/>
     </bean>
 
-    <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.neo4j.server.impl.Neo4jServerImpl">
-        <constructor-arg value="#{europeanaProperties['neo4j.server']}"/>
-        <constructor-arg value="#{europeanaProperties['neo4j.index']}"/>
-        <constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
-    </bean>
+    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.search.impl.Neo4jSearchServiceImpl" lazy-init="true" />
 
-    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.search.impl.Neo4jSearchServiceImpl" />
-
-    <!-- default profile, multiple solr instances, connecting via Zookeeper -->
+    <!-- default profile, connecting to solr cluster via Zookeeper -->
     <beans profile="default">
-        <bean id="corelib_solr_zookeeper" class="org.apache.solr.client.solrj.impl.CloudSolrServer" lazy-init="true" init-method="connect">
-            <constructor-arg value="#{europeanaProperties['zookeeper.url']}" />
-            <constructor-arg>
-                <bean class="org.apache.solr.client.solrj.impl.LBHttpSolrServer">
-                    <constructor-arg type="java.lang.String[]" value="#{europeanaProperties['solr.url']}"></constructor-arg>
-                </bean>
-            </constructor-arg>
-            <!--         <property name="followRedirects" value="false" /> -->
-            <!--         <property name="connectionTimeout" value="#{europeanaProperties['solr.timeout']}" /> -->
-            <!--         <property name="defaultMaxConnectionsPerHost" value="64" /> -->
-            <!--         <property name="maxTotalConnections" value="125" /> -->
-            <property name="defaultCollection" value="#{europeanaProperties['solr.core']}" />
+        <!-- basically what we are doing here is
+               1. CloudSolrClient.Builder builder = new CloudSolrClient.Builder();
+               2. builder = builder.withZkHost(zookeeperUrl);
+               3. CloudSolrClient client = builder.build();
+                  client.setDefaultCollection(core);
+          The lazy-init is only set so it works in unit tests in other modules -->
+        <bean id="corelib_solr_zookeeper_builder" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder" lazy-init="true"/>
+
+        <bean id="corelib_solr_zookeeper_setHost" class="org.apache.solr.client.solrj.impl.CloudSolrClient.Builder"
+              factory-bean="corelib_solr_zookeeper_builder"
+              factory-method="withZkHost" lazy-init="true">
+            <constructor-arg value="#{europeanaProperties['zookeeper.url']}"/>
         </bean>
-        <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl" p:solrServer-ref="corelib_solr_zookeeper" />
+
+        <bean id="corelib_solr_zookeeper" class="org.apache.solr.client.solrj.impl.CloudSolrClient"
+              factory-method="build" factory-bean="corelib_solr_zookeeper_setHost"
+              p:defaultCollection="#{europeanaProperties['solr.core']}" lazy-init="true" />
+
+        <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
+              p:solrClient-ref="corelib_solr_zookeeper" />
     </beans>
 
     <!-- spring profile to use a single solr instance and no Zookeeper -->
     <beans profile="single-solr">
-        <bean id="corelib_solr_single_server" class="org.apache.solr.client.solrj.impl.HttpSolrServer" lazy-init="true" >
+        <bean id="corelib_solr_single_server" class="org.apache.solr.client.solrj.impl.HttpSolrClient" lazy-init="true" >
             <constructor-arg name="baseURL" value="#{europeanaProperties['solr.url']}"/>
         </bean>
-        <bean id="corelib_solr_searchService_metis" class="eu.europeana.corelib.search.impl.SearchServiceImpl" p:solrServer-ref="corelib_solr_single_server" />
+        <bean id="corelib_solr_searchService_single" class="eu.europeana.corelib.search.impl.SearchServiceImpl"
+              p:solrClient-ref="corelib_solr_single_server" />
     </beans>
 
 </beans>

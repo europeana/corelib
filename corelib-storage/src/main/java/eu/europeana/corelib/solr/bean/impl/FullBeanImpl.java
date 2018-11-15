@@ -4,7 +4,7 @@
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- * 
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
@@ -18,18 +18,16 @@ package eu.europeana.corelib.solr.bean.impl;
 
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
+import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.annotations.Transient;
-
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Agent;
@@ -40,8 +38,8 @@ import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.Service;
+import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -54,17 +52,15 @@ import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.ServiceImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 
-
-
 /**
- * @see eu.europeana.corelib.definitions.edm.beans.FullBean
- *
  * @author Yorgos.Mamakis@ kb.nl
+ * @see eu.europeana.corelib.definitions.edm.beans.FullBean
  */
 @SuppressWarnings("unchecked")
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @Entity("record")
-public class FullBeanImpl implements FullBean{
+@Converters(DocType.DocTypeConverter.class)
+public class FullBeanImpl implements FullBean {
 
     @Id
     protected ObjectId europeanaId;
@@ -92,15 +88,19 @@ public class FullBeanImpl implements FullBean{
     protected List<BriefBeanImpl> similarItems;
 
     @Reference
+    @Indexed
     protected List<PlaceImpl> places;
 
     @Reference
+    @Indexed
     protected List<AgentImpl> agents;
 
     @Reference
+    @Indexed
     protected List<TimespanImpl> timespans;
 
     @Reference
+    @Indexed
     protected List<ConceptImpl> concepts;
 
     @Reference
@@ -114,14 +114,16 @@ public class FullBeanImpl implements FullBean{
 
     @Reference
     protected List<ProxyImpl> proxies;
-    
+
     @Reference
+    @Indexed
     protected List<LicenseImpl> licenses;
 
     @Reference
+    @Indexed
     protected List<ServiceImpl> services;
 
-	protected String[] country;
+    protected String[] country;
     protected String[] userTags;
     protected String[] europeanaCollectionName;
 
@@ -191,8 +193,7 @@ public class FullBeanImpl implements FullBean{
     }
 
     @Override
-    public void setEuropeanaAggregation(
-            EuropeanaAggregation europeanaAggregation) {
+    public void setEuropeanaAggregation(EuropeanaAggregation europeanaAggregation) {
         this.europeanaAggregation = (EuropeanaAggregationImpl) europeanaAggregation;
     }
 
@@ -243,7 +244,7 @@ public class FullBeanImpl implements FullBean{
 
     @Override
     public void setType(DocType type) {
-        this.type = type;
+    this.type = type;
     }
 
     @Override
@@ -302,21 +303,26 @@ public class FullBeanImpl implements FullBean{
     }
 
     /**
-     * @return either the hashcode of the about field, or otherwise a hexed hashcode of the europeanaId
-     */
+    * @return either the hashcode of the about field, or otherwise a hexed hashcode of the europeanaId
+    */
     @Override
     public int hashCode() {
-        return StringUtils.isNotBlank(this.about) ? this.about.hashCode()
-                : this.europeanaId.toStringMongod().hashCode();
+    return StringUtils.isNotBlank(this.about) ? this.about.hashCode() : this.europeanaId.toHexString().hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         FullBeanImpl fullBean = (FullBeanImpl) o;
-        if (!europeanaId.equals(fullBean.europeanaId)) return false;
+        if (!europeanaId.equals(fullBean.europeanaId)) {
+            return false;
+        }
         return about != null ? about.equals(fullBean.about) : fullBean.about == null;
     }
 
@@ -332,14 +338,12 @@ public class FullBeanImpl implements FullBean{
 
     @Override
     public String[] getEuropeanaCollectionName() {
-        return this.europeanaCollectionName != null ? this.europeanaCollectionName
-                .clone() : null;
+        return this.europeanaCollectionName != null ? this.europeanaCollectionName.clone() : null;
     }
 
     @Override
     public void setEuropeanaCollectionName(String[] europeanaCollectionName) {
-        this.europeanaCollectionName = europeanaCollectionName != null ? europeanaCollectionName
-                .clone() : null;
+        this.europeanaCollectionName = europeanaCollectionName != null ? europeanaCollectionName.clone() : null;
     }
 
     @Override
@@ -379,15 +383,15 @@ public class FullBeanImpl implements FullBean{
 
     @Override
     public List<LicenseImpl> getLicenses() {
-		return licenses;
-	}
+        return licenses;
+    }
 
     @Override
-	public void setLicenses(List<? extends License> licenses) {
-		this.licenses = (List<LicenseImpl>)licenses;
-	}
+    public void setLicenses(List<? extends License> licenses) {
+        this.licenses = (List<LicenseImpl>) licenses;
+    }
 
-    public void setAsParent(){
+    public void setAsParent() {
         if (!this.aggregations.isEmpty()) {
             for (AggregationImpl agg : this.aggregations) {
                 agg.setParentBean(this);
@@ -396,12 +400,12 @@ public class FullBeanImpl implements FullBean{
     }
 
     @Override
-    public void setServices(List<? extends Service> services){
+    public void setServices(List<? extends Service> services) {
         this.services = (List<ServiceImpl>) services;
     }
 
     @Override
-    public List<ServiceImpl> getServices(){
+    public List<ServiceImpl> getServices() {
         return services;
     }
 

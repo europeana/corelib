@@ -1,25 +1,23 @@
 package eu.europeana.corelib.solr.entity;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
-import eu.europeana.corelib.web.exception.InvalidUrlException;
-import eu.europeana.corelib.web.service.impl.EuropeanaUrlServiceImpl;
+import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
-
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @JsonInclude(NON_EMPTY)
@@ -28,9 +26,8 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 
 
 	@Reference
+	@Indexed
 	private List<WebResource> webResources;
-
-	// note that edmLandingPage is not stored in Mongo anymore, but generated
 
 	private String aggregatedCHO;
 	private String[] aggregates;
@@ -40,7 +37,35 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	private Map<String,List<String>> edmCountry;
 	private Map<String,List<String>> edmLanguage;
 	private Map<String,List<String>> edmRights;
-	private String edmPreview ="";
+	private String edmPreview = "";
+
+	private String edmLandingPage; // used to be loaded from UIM Mongo, but not anymore with Metis Mongo
+
+	@JsonIgnore
+	private boolean edmLandingPageExternal = false; // does the edmLandingPage contain an alternative value set by an external source?
+
+	/**
+	 * The edmLandingPage is not stored in Mongo but derived. Since Morphia sets all fields after constructing the object
+	 * we have no choice but to call this method in the getter, but we make it so we only do this once.
+	 */
+    private String generateEdmLandingPage() {
+        String id = this.aggregatedCHO;
+        // note that for Metis aggregatedCHO will consist only of id, so this can be removed once Metis is live
+        if (id != null && id.startsWith("/item")) {
+            id = StringUtils.substringAfter(this.aggregatedCHO, "/item");
+        }
+        if (id == null) {
+            // use aggregation about field as fallback
+            id = StringUtils.substringAfter(this.about, "/aggregation/europeana");
+        }
+        // extra checks to see if we have a proper id and url
+        if (ValidateUtils.validateRecordIdFormat(id)) {
+            return EuropeanaUrlBuilder.getRecordPortalUrl(id).toString();
+        } else {
+            LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Found incorrect id: {}", id);
+        }
+        return null;
+    }
 
 	@Override
 	public String getAggregatedCHO() {
@@ -77,30 +102,20 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
      */
     @Override
     public String getEdmLandingPage() {
-		String id = this.aggregatedCHO;
-
-		// note that for Metis aggregatedCHO will consist only of id, so this can be removed once Metis is live
-		if (id != null && id.startsWith("/item")) {
-			id = StringUtils.substringAfter(this.aggregatedCHO, "/item");
-		}
-		if (id == null) {
-			// use aggregation about field as fallback
-			id = StringUtils.substringAfter(this.about, "/aggregation/europeana");
-		}
-
-		// extra checks to see if we have a proper id and url
-		if (ValidateUtils.validateRecordIdFormat(id)) {
-			try {
-				return EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id).toCanonicalUrl();
-			} catch (InvalidUrlException e) {
-				LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Generated url = {}",
-						EuropeanaUrlServiceImpl.getBeanInstance().getPortalRecord(id));
-			}
+    	if (edmLandingPageExternal) {
+			return this.edmLandingPage;
 		} else {
-			LogManager.getLogger(EuropeanaAggregationImpl.class).error("Error generating edmLandingPage. Found incorrect id: {}", id);
+    		return generateEdmLandingPage();
 		}
+    }
 
-		return null;
+    /**
+     * @see EuropeanaAggregation#setEdmLandingPage(String)
+     */
+    @Override
+    public void setEdmLandingPage(String edmLandingPage) {
+    	this.edmLandingPageExternal = true;
+        this.edmLandingPage = edmLandingPage;
     }
 
 	@Override

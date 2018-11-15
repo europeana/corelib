@@ -18,11 +18,9 @@ package eu.europeana.corelib.search.loader;
 
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.net.URI;
@@ -95,7 +93,7 @@ public class ContentLoader {
         }
     }
 
-    public int parse(final EdmMongoServer mongoDBServer, final SolrServer solrServer) {
+    public int parse(final EdmMongoServer mongoDBServer, final SolrClient solrServer) {
         for (Path path : collectionXML) {
             // TODO JV this is where the file that is contained in the path should be indexed using the
             // Metis indexing library and the right versions for the Mongo and Solr connection.
@@ -103,7 +101,7 @@ public class ContentLoader {
         return failed;
     }
 
-    public void commit(final SolrServer solrServer) {
+    public void commit(final SolrClient solrServer) {
         try {
 
             solrServer.commit();
@@ -222,37 +220,5 @@ public class ContentLoader {
      */
     private boolean isZipped(String collectionName) {
         return StringUtils.endsWith(collectionName, ".gzip") || StringUtils.endsWith(collectionName, ".zip");
-    }
-
-    /**
-     * Method to load content in SOLR and MongoDB
-     *
-     * @param args solrHome parameter holding "solr.solr.home" mongoHost the host the mongoDB is located mongoPort the
-     *             port mongoDB listens databaseName the databaseName to save collectionName the name of the collection
-     *             (an XML, a folder or a Zip file)
-     */
-    public static void main(String[] args) {
-
-        ApplicationContext context = new ClassPathXmlApplicationContext("/corelib-solr-context.xml");
-
-        SolrServer solrServer = context.getBean("corelib_solr_solrEmbedded", SolrServer.class);
-        EdmMongoServer mongoDBServer = context.getBean("corelib_solr_mongoServer", EdmMongoServer.class);
-
-        if ((solrServer != null) && (mongoDBServer != null)) {
-            ContentLoader contentLoader = null;
-            try {
-                contentLoader = ContentLoader.getInstance();
-                String COLLECTION = "corelib/corelib-solr/src/test/resources/records-test-update.zip";
-                contentLoader.readRecords(COLLECTION);
-                contentLoader.parse(mongoDBServer, solrServer);
-                contentLoader.commit(solrServer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (contentLoader != null) {
-                    contentLoader.cleanFiles();
-                }
-            }
-        }
     }
 }

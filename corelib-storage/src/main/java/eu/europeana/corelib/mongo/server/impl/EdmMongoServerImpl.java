@@ -20,7 +20,9 @@ package eu.europeana.corelib.mongo.server.impl;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
-import org.apache.log4j.Logger;
+import eu.europeana.corelib.web.exception.EuropeanaException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.mapping.MappingException;
@@ -42,13 +44,15 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
  */
 public class EdmMongoServerImpl implements EdmMongoServer {
 
-	private static final Logger LOG = Logger.getLogger(EdmMongoServerImpl.class);
+	private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
 
 	private MongoClient mongoClient;
 	private String databaseName;
 	private Datastore datastore;
 	private EuropeanaIdMongoServer europeanaIdMongoServer;
+	/* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
 	private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+	// TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
 	private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
 	/**
@@ -59,10 +63,24 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	 * @param databaseName
 	 * @throws MongoDBException
 	 */
+	@Deprecated
 	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName) throws MongoDBException {
+        this(mongoClient, databaseName, false);
+	}
+
+	/**
+	 * Create a new Morphia datastore to do get/delete/save operations on the database
+	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
+	 * provided mongoClient
+	 * @param mongoClient
+	 * @param databaseName
+	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
+	 * @throws MongoDBException
+	 */
+	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName, boolean createIndexes) throws MongoDBException {
 		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
-		createDatastore();
+		createDatastore(createIndexes);
 	}
 
 	/**
@@ -73,7 +91,23 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	 * @param username
 	 * @param password
 	 */
-	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) throws MongoDBException {
+	@Deprecated
+	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password)
+			throws MongoDBException {
+        this(hosts, ports, databaseName, username, password, false);
+	}
+
+	/**
+	 * Create a new datastore to do get/delete/save operations on the database.
+	 * @param hosts comma-separated host names
+	 * @param ports comma-separated port numbers
+	 * @param databaseName
+	 * @param username
+	 * @param password
+	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
+	 */
+	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password,
+							  boolean createIndexes) throws MongoDBException {
 		MongoClientOptions.Builder options = MongoClientOptions.builder();
 		options.socketKeepAlive(true);
 		options.connectionsPerHost(10);
@@ -81,7 +115,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		options.socketTimeout(6000);
 		this.mongoClient = new MongoProviderImpl(hosts, ports, databaseName, username, password, options).getMongo();
 		this.databaseName = databaseName;
-		createDatastore();
+		createDatastore(createIndexes);
 	}
 
 	@Override
@@ -90,7 +124,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		this.europeanaIdMongoServer = europeanaIdMongoServer;
 	}
 
-	private void createDatastore() {
+	private void createDatastore(boolean createIndexes) {
 		Morphia morphia = new Morphia();
 
 		morphia.map(FullBeanImpl.class);
@@ -109,7 +143,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(BasicProxyImpl.class);
 
 		datastore = morphia.createDatastore(mongoClient, databaseName);
-		datastore.ensureIndexes();
+		if (createIndexes) {
+			datastore.ensureIndexes();
+		}
 		LOG.info("Morphia EDMMongoServer datastore is created");
 	}
 
@@ -119,11 +155,12 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	}
 
 	@Override
-	public FullBean getFullBean(String id) throws MongoDBException, MongoRuntimeException {
+	public FullBean getFullBean(String id) throws EuropeanaException {
 		try {
 			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
 		} catch (RuntimeException re) {
-			if (re.getCause() != null && re.getCause() instanceof MappingException) {
+			if (re.getCause() != null &&
+					(re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
 				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);
 			} else {
 				throw new MongoRuntimeException(re, ProblemType.MONGO_UNREACHABLE);
@@ -134,34 +171,21 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	@Override
 	public FullBean resolve(String id) {
 
-		EuropeanaId newId = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(id);
+		EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
+		if (newId != null) {
+			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+		}
+		if (newId != null) {
+			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
+		}
+
 		if (newId != null) {
 			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
 			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class)
-					.field("about").equal(newId.getNewId()).get();
+			return datastore.find(FullBeanImpl.class).field("about").equal(newId.getNewId()).get();
 		}
 
-		newId = europeanaIdMongoServer
-				.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
-
-		if (newId != null) {
-			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(newId.getNewId()).get();
-		}
-
-		newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX
-				+ id);
-
-		if (newId != null) {
-			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class).field("about")
-					.equal(newId.getNewId()).get();
-		}
-
-		LOG.info(String.format("Unresolvable Europeana ID: %s", id));
+		LOG.info("Unresolvable Europeana ID: {}", id);
 		return null;
 	}
 

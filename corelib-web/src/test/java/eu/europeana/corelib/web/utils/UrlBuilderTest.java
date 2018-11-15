@@ -86,6 +86,14 @@ public class UrlBuilderTest {
 		url.setDomain("http://github.com/");
 		assertEquals("Domain replacement failed", expected, url.toString());
 	}
+
+	@Test
+	public void testProtocol() {
+		String expected = "http://www.europeana.eu/api/v2/thumbnail-by-url.json?uri=1.jpg&type=TEXT";
+		UrlBuilder url = new UrlBuilder("https://www.europeana.eu/api/v2/thumbnail-by-url.json?uri=1.jpg&type=TEXT");
+		url.setProtocol("http");
+		assertEquals("Protocol replacement failed", expected, url.toString());
+	}
 	
 	@Test
 	public void testCanonicalUrl() throws InvalidUrlException {

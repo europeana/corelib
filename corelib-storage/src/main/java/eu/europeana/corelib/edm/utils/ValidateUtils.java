@@ -16,6 +16,6 @@ public class ValidateUtils {
      * @return true if it has a valid format, otherwise false
      */
     public static final boolean validateRecordIdFormat(String europeanaId) {
-        return RECORD_ID.matcher(europeanaId).matches();
+        return europeanaId != null && RECORD_ID.matcher(europeanaId).matches();
     }
 }

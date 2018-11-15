@@ -34,10 +34,15 @@
           p:port="2500"
             />
 
-    <bean id="corelib_mediaStorageClient" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="eu.europeana.corelib.service.MediaStorageClient"/>
+    <!-- Override object storage setup so we don't create a real connection to S3 -->
+    <bean id="corelib_uimMediaStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl"/>
+    </bean>
+    <bean id="corelib_metisMediaStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl"/>
     </bean>
 
-    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_uimObjectStorageClient" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_metisObjectStorageClient" class="eu.europeana.corelib.definitions.EmptyBean"/>
 
 </beans>

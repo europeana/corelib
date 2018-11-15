@@ -7,7 +7,14 @@ import java.util.List;
 
 public interface EuropeanaIdMongoServer {
 
+	@Deprecated
 	void createDatastore();
+
+	/**
+	 *
+	 * @param createIndexes if true, it will try to generate the indexes if necessary
+	 */
+	void createDatastore(boolean createIndexes);
 
 	/**
 	 * Find the EuropeanaId records based on the oldId

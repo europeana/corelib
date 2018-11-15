@@ -27,6 +27,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
     public EmbeddedMongoProvider() {
         int port = 10000;
         try {
+            LOG.info("Starting embedded mongo...");
             IMongodConfig conf = new MongodConfigBuilder()
                     .version(Version.Main.PRODUCTION)
                     .net(new Net(port, Network.localhostIsIPv6())).build();
@@ -35,7 +36,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
             mongodExecutable.start();
             LOG.info("Creating new test MongoClient for EmbeddedMongoProvider");
             mongo = new MongoClient("localhost", port);
-            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test");
+            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test", true);
             mongoDBServer.getDatastore().getDB().dropDatabase();
         } catch (IOException | MongoDBException e) {
             e.printStackTrace();
