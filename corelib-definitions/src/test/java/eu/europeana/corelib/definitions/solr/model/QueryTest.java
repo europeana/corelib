@@ -320,9 +320,10 @@ public class QueryTest {
 	}
 
 	@Test
-	public void testSorts() {
+	public void testNormalSorts() {
 		// single field
 		Query q = new Query("*");
+
 		q.setSort("score ascending");
 		List<QuerySort> sorts = q.getSorts();
 		assertEquals(1, sorts.size());
@@ -341,11 +342,35 @@ public class QueryTest {
 		assertEquals(QuerySort.ORDER_ASC, sorts.get(2).getSortOrder());
 		assertEquals("COMPLETENESS", sorts.get(3).getSortField());
 		assertEquals(QuerySort.ORDER_DESC, sorts.get(3).getSortOrder());
-		assertTrue(q.toString().contains("id asc,timestamp_update desc,europeana_id asc,COMPLETENESS desc"));
+		assertTrue(q.toString().contains("sorts=id asc,timestamp_update desc,europeana_id asc,COMPLETENESS desc"));
 
 		// clear sorts
 		q.setSort("");
 		assertEquals(0, q.getSorts().size());
+	}
+
+	/**
+	 * Tests whether multi-value sorting functions are handled fine
+	 */
+	@Test
+	public void testMultiValueFunctionSorts() {
+		Query q = new Query("*");
+
+		q.setSort("field(proxy_dcterms_issued,min)");
+		List<QuerySort> sorts = q.getSorts();
+		assertEquals(1, sorts.size());
+		assertTrue(q.toString().contains("sorts=field(proxy_dcterms_issued,min) desc"));
+
+		q.setSort(" score , Field( proxy_dcterms_issued , min )+asc, COMPLETENESS asc");
+		sorts = q.getSorts();
+		assertEquals(3, sorts.size());
+		assertEquals("score", sorts.get(0).getSortField());
+		assertEquals(QuerySort.ORDER_DESC, sorts.get(0).getSortOrder());
+		assertEquals("Field( proxy_dcterms_issued , min )", sorts.get(1).getSortField());
+		assertEquals(QuerySort.ORDER_ASC, sorts.get(1).getSortOrder());
+		assertEquals("COMPLETENESS", sorts.get(2).getSortField());
+		assertEquals(QuerySort.ORDER_ASC, sorts.get(2).getSortOrder());
+		assertTrue(q.toString().contains("sorts=score desc,Field( proxy_dcterms_issued , min ) asc,COMPLETENESS asc"));
 	}
 
 }
