@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Interface for the APIBean. The APIBean contains the fields exposed by the
- * SOLR engine for public access. NOTE: Draft to be crosschecked and validated
- * over time
+ * The ApiBean contains the fields exposed by the SOLR engine by default (when using the 'standard' profile).
+ *
  * 
  * @author Yorgos Mamakis <yorgos.mamakis@ kb.nl>
  */
@@ -162,4 +161,10 @@ public interface ApiBean extends BriefBean {
 	 * @return
 	 */
 	Map<String, List<String>> getEdmPlaceAltLabelLangAware();
+
+	// temporary added for debugging purposes (see EA-1395)
+	List<Map<String, String>> getFulltext();
+
+	// temporary added for debugging purposes (see EA-1395)
+	Map<String, List<String>> getFulltextLangAware();
 }

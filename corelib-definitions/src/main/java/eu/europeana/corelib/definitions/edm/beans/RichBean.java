@@ -3,6 +3,10 @@ package eu.europeana.corelib.definitions.edm.beans;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  The RichBean contains the fields exposed by the SOLR engine for presenting each item in the search results when
+ *  using the 'rich' profile
+ */
 public interface RichBean extends ApiBean {
 
     /**

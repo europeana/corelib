@@ -52,7 +52,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     @Field("cc_skos_broader")
     private String[] edmConceptBroaderTerm;
 
-
     private List<Map<String, String>> edmConceptBroaderLabel;
 
     @Field("cc_skos_broader.*")
@@ -78,8 +77,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     private int score;
 
-    private String debugQuery;
-
     @Field("europeana_collectionName")
     private String[] europeanaCollectionName;
 
@@ -102,6 +99,15 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Field("timestamp_update") //This is obviously a typo, but do not change it as it will render previous ingested records unusable
     private Date timestampUpdate;
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Field("fulltext")
+    private List<Map<String, String>> fulltext;
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Field("fulltext.*")
+    private Map<String, List<String>> fulltextLangAware;
+
 
     @Override
     public String[] getEdmPlaceBroaderTerm() {
@@ -244,6 +250,18 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     @Override
     public Map<String, List<String>> getEdmPlaceAltLabelLangAware() {
         return EdmUtils.cloneMap(edmPlaceAltLabelLangAware);
+    }
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Override
+    public List<Map<String, String>> getFulltext() {
+        return EdmUtils.cloneList(fulltext);
+    }
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Override
+    public Map<String, List<String>> getFulltextLangAware() {
+        return EdmUtils.cloneMap(fulltextLangAware);
     }
 
 }
