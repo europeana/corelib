@@ -38,4 +38,10 @@ public interface RichBean extends ApiBean {
      * Language aware dc:subject
      */
     Map<String, List<String>> getDcSubjectLangAware();
+
+    // temporary added for debugging purposes (see EA-1395)
+    List<Map<String, String>> getFulltext();
+
+    // temporary added for debugging purposes (see EA-1395)
+    Map<String, List<String>> getFulltextLangAware();
 }

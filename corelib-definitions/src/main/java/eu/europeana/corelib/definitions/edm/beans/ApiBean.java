@@ -162,9 +162,4 @@ public interface ApiBean extends BriefBean {
 	 */
 	Map<String, List<String>> getEdmPlaceAltLabelLangAware();
 
-	// temporary added for debugging purposes (see EA-1395)
-	List<Map<String, String>> getFulltext();
-
-	// temporary added for debugging purposes (see EA-1395)
-	Map<String, List<String>> getFulltextLangAware();
 }
