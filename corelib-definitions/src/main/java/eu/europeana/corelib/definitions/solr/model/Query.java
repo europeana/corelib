@@ -453,7 +453,7 @@ public class Query implements Cloneable {
      * @param parameters Map containing parameter key-value pairs to be added
      * @return The Query object
      */
-    public Query setParameters(Map<String, String> parameters) {
+    public Query setFacetDateRangeParameters(Map<String, String> parameters) {
         parameterMap.putAll(parameters);
         return this;
     }
