@@ -52,7 +52,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
     @Field("cc_skos_broader")
     private String[] edmConceptBroaderTerm;
 
-
     private List<Map<String, String>> edmConceptBroaderLabel;
 
     @Field("cc_skos_broader.*")
@@ -78,8 +77,6 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     private int score;
 
-    private String debugQuery;
-
     @Field("europeana_collectionName")
     private String[] europeanaCollectionName;
 
@@ -102,6 +99,7 @@ public class ApiBeanImpl extends BriefBeanImpl implements ApiBean {
 
     @Field("timestamp_update") //This is obviously a typo, but do not change it as it will render previous ingested records unusable
     private Date timestampUpdate;
+
 
     @Override
     public String[] getEdmPlaceBroaderTerm() {

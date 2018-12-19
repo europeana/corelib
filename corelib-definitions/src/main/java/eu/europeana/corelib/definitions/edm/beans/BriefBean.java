@@ -24,10 +24,9 @@ import java.util.Map;
 import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
- * Interface for the BriefBean. The BriefBean contains the fields exposed by the
- * SOLR engine for presenting each record in the result and search page.
- * 
- * 
+ * The BriefBean contains the fields exposed by the SOLR engine for presenting each item in the search results when
+ * using the 'minimal' profile
+ *
  * @author Yorgos Mamakis <yorgos.mamakis@kb.nl>
  */
 public interface BriefBean extends IdBean {
