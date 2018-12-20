@@ -453,6 +453,7 @@ public class SearchServiceImpl implements SearchService {
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
+                    resultSet.setRangeFacets(queryResponse.getFacetRanges());
                     resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
