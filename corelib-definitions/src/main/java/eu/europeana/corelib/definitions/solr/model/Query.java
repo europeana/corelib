@@ -57,6 +57,7 @@ public class Query implements Cloneable {
     private boolean allowFacets            = true;
     private boolean apiQuery               = false;
     private boolean defaultFacetsRequested = false;
+    private boolean rangeFacetsRequested   = false;
 
     private int start;
     private int pageSize;
@@ -435,6 +436,10 @@ public class Query implements Cloneable {
         return parameterMap.containsKey(key);
     }
 
+    public boolean areRangeFacetsRequested() {
+        return rangeFacetsRequested;
+    }
+
     /**
      * Adds Solr parameterMap to the Query object
      *
@@ -454,7 +459,10 @@ public class Query implements Cloneable {
      * @return The Query object
      */
     public Query setFacetDateRangeParameters(Map<String, String> parameters) {
-        parameterMap.putAll(parameters);
+        if (!parameters.isEmpty()) {
+            rangeFacetsRequested = true;
+            parameterMap.putAll(parameters);
+        }
         return this;
     }
 
