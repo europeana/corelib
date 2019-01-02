@@ -48,7 +48,7 @@ public class QuerySortTest {
         assertEquals("id", lowercase.getSortField());
         assertEquals(QuerySort.ORDER_ASC, lowercase.getSortOrder());
 
-        QuerySort mixedCase = new QuerySort("COMPLETENESS DEScENDING");
+        QuerySort mixedCase = new QuerySort("COMPLETENESS+DEScENDING");
         assertEquals("COMPLETENESS", mixedCase.getSortField());
         assertEquals(QuerySort.ORDER_DESC, mixedCase.getSortOrder());
 
@@ -59,6 +59,23 @@ public class QuerySortTest {
         QuerySort multipleSpaces = new QuerySort("test   ascending ");
         assertEquals("test", multipleSpaces.getSortField());
         assertEquals(QuerySort.ORDER_ASC, multipleSpaces.getSortOrder());
+    }
+
+    /**
+     * Test if we properly recognize sorting functions for multi-value fields, for example field(proxy_dcterms_issued,min)
+     */
+    @Test
+    public void testMultiValueFunctionSort() {
+        QuerySort noOrder = new QuerySort("field(proxy_dcterms_issued,min)");
+        assertEquals("field(proxy_dcterms_issued,min)", noOrder.getSortField());
+
+        QuerySort withOrder = new QuerySort("FIELD(proxy_dcterms_issued,min)+ASC");
+        assertEquals("FIELD(proxy_dcterms_issued,min)", withOrder.getSortField());
+        assertEquals(QuerySort.ORDER_ASC, withOrder.getSortOrder());
+
+        QuerySort withOrderAndSpaces = new QuerySort(" Field( proxy_dcterms_issued , min ) descending ");
+        assertEquals("Field( proxy_dcterms_issued , min )", withOrderAndSpaces.getSortField());
+        assertEquals(QuerySort.ORDER_DESC, withOrderAndSpaces.getSortOrder());
     }
 
 

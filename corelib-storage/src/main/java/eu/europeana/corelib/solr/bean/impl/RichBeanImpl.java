@@ -25,7 +25,16 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     
     @Field("proxy_dc_subject.*")
     protected Map<String,List<String>> dcSubjectLangAware;
-    
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Field("fulltext")
+    private List<Map<String, String>> fulltext;
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Field("fulltext.*")
+    private Map<String, List<String>> fulltextLangAware;
+
+
     @Override
     public String[] getEdmIsShownBy() {
         return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
@@ -49,5 +58,17 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Override
     public Map<String, List<String>> getDcSubjectLangAware() {
         return EdmUtils.cloneMap(dcSubjectLangAware);
+    }
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Override
+    public List<Map<String, String>> getFulltext() {
+        return EdmUtils.cloneList(fulltext);
+    }
+
+    // temporary added for debugging purposes (see EA-1395)
+    @Override
+    public Map<String, List<String>> getFulltextLangAware() {
+        return EdmUtils.cloneMap(fulltextLangAware);
     }
 }
