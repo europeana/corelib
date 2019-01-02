@@ -6,8 +6,10 @@ import org.apache.commons.lang.StringUtils;
 
 public class ImagePropertyExtractor {
 
+    private ImagePropertyExtractor(){}
+
     public static String getSize(int tag) {
-        final Integer sizeCode = TagEncoding.IMAGE_SIZE.extractValue(tag);
+        final int sizeCode = TagEncoding.IMAGE_SIZE.extractValue(tag);
 
         switch (sizeCode) {
             case 1:
@@ -25,8 +27,7 @@ public class ImagePropertyExtractor {
     }
 
     public static String getColorSpace(int tag) {
-        final Integer colorSpaceCode = TagEncoding.IMAGE_COLOURSPACE.extractValue(tag);
-
+        final int colorSpaceCode = TagEncoding.IMAGE_COLOURSPACE.extractValue(tag);
         if (2 == colorSpaceCode) {
             return "false";
         } else if (1 == colorSpaceCode || 3 == colorSpaceCode) {
@@ -36,14 +37,16 @@ public class ImagePropertyExtractor {
         return "";
     }
 
+    // EA-1436 switched the values around to fix the mistake
+    // before: 10 portrait, 01 landscape
+    // now: 01 portrait, 10 landscape
     public static String getAspectRatio(int tag) {
-        final Integer aspectRatioCode = TagEncoding.IMAGE_ASPECTRATIO.extractValue(tag);
-
+        final int aspectRatioCode = TagEncoding.IMAGE_ASPECTRATIO.extractValue(tag);
         switch (aspectRatioCode) {
             case 1:
-                return "Landscape";
-            case 2:
                 return "Portrait";
+            case 2:
+                return "Landscape";
 
             default:
                 return "";
