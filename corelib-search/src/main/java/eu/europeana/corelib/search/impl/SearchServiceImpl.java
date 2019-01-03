@@ -463,6 +463,9 @@ public class SearchServiceImpl implements SearchService {
                     if (queryResponse.getFacetQuery() != null) {
                         resultSet.setQueryFacets(queryResponse.getFacetQuery());
                     }
+                    if (queryResponse.getHighlighting() != null) {
+                        resultSet.setHighlighting(queryResponse.getHighlighting());
+                    }
                 } catch (IOException e) {
                     LOG.error("Error querying solr", e);
                     throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);

@@ -550,6 +550,7 @@ public class Query implements Cloneable {
         return this.technicalFacetLimitMap;
     }
 
+    // TODO sonarlint warns against overriding clone()!
     @Override
     public Query clone() throws CloneNotSupportedException {
         return (Query) super.clone();
