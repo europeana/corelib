@@ -40,7 +40,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -56,10 +55,9 @@ public class EdmUtils {
 
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static final String BASE_URL = "http://data.europeana.eu";
+    private static final String BASE_URL = "http://data.europeana.eu/item";
 
     private static IBindingFactory bfact;
-    private static boolean noBaseUrl = false;
 
     private EdmUtils() {
         // empty constructor to prevent initialization
@@ -69,22 +67,10 @@ public class EdmUtils {
      * Convert a FullBean to an EDM String
      *
      * @param fullBean The FullBean to convert
-     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
-     * @return The resulting EDM string in RDF-XML
-     */
-    public static synchronized String toEDM(FullBeanImpl fullBean, boolean noBaseUrl) {
-        RDF rdf = toRDF(fullBean, noBaseUrl);
-        return marshallToEDM(rdf);
-    }
-
-    /**
-     * Convert a FullBean to an EDM String
-     *
-     * @param fullBean The FullBean to convert
      * @return The resulting EDM string in RDF-XML
      */
     public static synchronized String toEDM(FullBeanImpl fullBean) {
-        RDF rdf = toRDF(fullBean, false);
+        RDF rdf = toRDF(fullBean);
         return marshallToEDM(rdf);
     }
 
@@ -117,18 +103,12 @@ public class EdmUtils {
         return null;
     }
 
-    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
-        return EdmUtils.toRDF(fullBean, false);
-    }
-
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
-     * @param noBaseUrl omit the PREFIX true / false. Note that this is a temporary feature only for Metis POC!
      * @return RDF object
      */
-    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean noBaseUrl) {
-        EdmUtils.noBaseUrl = noBaseUrl;
+    public static synchronized RDF toRDF(FullBeanImpl fullBean) {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs());
@@ -310,7 +290,7 @@ public class EdmUtils {
         if (isUri(europeanaAggregation.getAbout())) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
-            aggregation.setAbout(baseUrlAndItem(europeanaAggregation.getAbout()));
+            aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
         }
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
@@ -318,7 +298,7 @@ public class EdmUtils {
             if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
-                agCHO.setResource(baseUrlAndItem(fBean.getProvidedCHOs().get(0).getAbout()));
+                agCHO.setResource(getBaseUrl(fBean.getProvidedCHOs().get(0).getAbout()));
             }
             aggregation.setAggregatedCHO(agCHO);
         }
@@ -384,7 +364,7 @@ public class EdmUtils {
             if (isUri(prx.getAbout())) {
                 proxy.setAbout(prx.getAbout());
             } else {
-                proxy.setAbout(baseUrlAndItem(prx.getAbout()));
+                proxy.setAbout(getBaseUrl(prx.getAbout()));
             }
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
@@ -417,7 +397,7 @@ public class EdmUtils {
                     if (isUri(pIn[i])) {
                         proxyIn.setResource(pIn[i]);
                     } else {
-                        proxyIn.setResource(baseUrlAndItem(pIn[i]));
+                        proxyIn.setResource(getBaseUrl(pIn[i]));
                     }
                     pInList.add(proxyIn);
                 }
@@ -439,7 +419,7 @@ public class EdmUtils {
             addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
             addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
             addAsList(proxy, Realizes.class, prx.getEdmRealizes());
-            addAsObject(proxy, ProxyFor.class, baseUrlAndItem(prx.getProxyFor()));
+            addAsObject(proxy, ProxyFor.class, getBaseUrl(prx.getProxyFor()));
             addAsList(proxy, Year.class, prx.getYear());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
@@ -495,14 +475,14 @@ public class EdmUtils {
             if (isUri(aggr.getAbout())) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
-                aggregation.setAbout(baseUrlAndItem(aggr.getAbout()));
+                aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
                 AggregatedCHO cho = new AggregatedCHO();
                 if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
-                    cho.setResource(baseUrlAndItem(rdf.getProvidedCHOList().get(0).getAbout()));
+                    cho.setResource(getBaseUrl(rdf.getProvidedCHOList().get(0).getAbout()));
                 }
                 aggregation.setAggregatedCHO(cho);
             }
@@ -536,7 +516,7 @@ public class EdmUtils {
             if (isUri(pCho.getAbout())) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
-                pChoJibx.setAbout(baseUrlAndItem(pCho.getAbout()));
+                pChoJibx.setAbout(getBaseUrl(pCho.getAbout()));
             }
 
             addAsList(pChoJibx, SameAs.class, pCho.getOwlSameAs());
@@ -705,7 +685,7 @@ public class EdmUtils {
                 if (isUri(str)) {
                     ((ResourceType) obj).setResource(str);
                 } else {
-                    ((ResourceType) obj).setResource(baseUrlAndItem(str));
+                    ((ResourceType) obj).setResource(getBaseUrl(str));
                 }
                 method.invoke(dest, obj);
                 return true;
@@ -1002,13 +982,8 @@ public class EdmUtils {
         return result;
     }
 
-    private static String baseUrlAndItem(String url){
-        if (noBaseUrl){
-            // the noBaseUrl situation is temporary for Metis migration and will be removed after the POC
-            return StringUtils.removeStartIgnoreCase(url, "/item");
-        } else {
-            return BASE_URL + url;
-        }
+    private static String getBaseUrl(String url){
+        return BASE_URL + url;
     }
 
 }
