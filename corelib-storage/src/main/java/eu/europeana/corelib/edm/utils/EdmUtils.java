@@ -20,6 +20,7 @@ import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.jibx.*;
+import eu.europeana.corelib.definitions.jibx.Date;
 import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType.Resource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
@@ -37,10 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -55,7 +53,7 @@ public class EdmUtils {
 
     private static final Logger LOG = LogManager.getLogger(EdmUtils.class);
 
-    private static final String BASE_URL = "http://data.europeana.eu/item";
+    private static final String BASE_URL = "http://data.europeana.eu";
 
     private static IBindingFactory bfact;
 
@@ -982,8 +980,14 @@ public class EdmUtils {
         return result;
     }
 
-    private static String getBaseUrl(String url){
-        return BASE_URL + url;
+    private static String getBaseUrl(String url) {
+        // Urls supplied by API2 always start with "/item" (see ItemFix.class) and the ones from OAI-PMH do not so
+        // that's why we need to check
+        String u = url.toLowerCase(Locale.GERMAN);
+        if (u.startsWith("/item") || u.startsWith("/aggregation") || u.startsWith("/proxy")) {
+            return BASE_URL + url;
+        }
+        return BASE_URL +"/item" + url;
     }
 
 }

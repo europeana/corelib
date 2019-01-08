@@ -50,7 +50,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements E
 	 */
     private String generateEdmLandingPage() {
         String id = this.aggregatedCHO;
-        // note that for Metis aggregatedCHO will consist only of id, so this can be removed once Metis is live
+        // it's possible that /item is added via the ItemFix.class in API2, so always check first
         if (id != null && id.startsWith("/item")) {
             id = StringUtils.substringAfter(this.aggregatedCHO, "/item");
         }
