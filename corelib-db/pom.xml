@@ -116,7 +116,6 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${mongoDriver.version}</version>
-            <scope>compile</scope>
         </dependency>
         <!-- Compression for mongo driver -->
         <dependency>
