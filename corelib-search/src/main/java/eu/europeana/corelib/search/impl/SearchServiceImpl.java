@@ -471,7 +471,11 @@ public class SearchServiceImpl implements SearchService {
                     throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
                 } catch (SolrServerException e) {
                     LOG.error("SolrServerException - query = {} ", solrQuery, e);
-                    if (StringUtils.contains(e.getCause().toString(), "Collection")){
+                    if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
+                        // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
+                        // see ticket EA-1441
+                        throw new SolrTypeException(e, ProblemType.SOLR_IS_BROKEN);
+                    } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
                         throw new SolrTypeException(e, ProblemType.INVALID_THEME);
                     } else {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
