@@ -372,7 +372,11 @@ public class Query implements Cloneable {
     }
 
     public Query setTechnicalFacets(String... technicalFacets) {
-        return setTechnicalFacets(Arrays.asList(technicalFacets));
+        if (technicalFacets != null){
+            return setTechnicalFacets(Arrays.asList(technicalFacets));
+        } else {
+            return this;
+        }
     }
 
     // extra check against enum type
