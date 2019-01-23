@@ -26,4 +26,8 @@ public interface Address {
 
 	String getAbout();
 
+	void setVcardHasGeo(String vcardHasGeo);
+
+	String getVcardHasGeo();
+
 }
