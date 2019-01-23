@@ -12,6 +12,8 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	private Map<String,List<String>> altLabel;
 	private Map<String,List<String>> hiddenLabel;
 	private Map<String,List<String>> note;
+	private String foafDepiction;
+	
 
 	@Override
 	public Map<String, List<String>> getPrefLabel() {
@@ -51,5 +53,15 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	@Override
 	public void setNote(Map<String,List<String>>note) {
 		this.note = note;
+	}
+
+	@Override
+	public String getFoafDepiction() {
+		return foafDepiction;
+	}
+
+	@Override
+	public void setFoafDepiction(String foafDepiction) {
+		this.foafDepiction = foafDepiction;
 	}
 }
