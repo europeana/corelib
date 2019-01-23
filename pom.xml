@@ -31,6 +31,9 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<!-- exclude generated code in SonarQube analysis -->
+		<sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
+
 		<apacheSolr.version>6.6.2</apacheSolr.version>
 		<apacheLucene.version>6.6.2</apacheLucene.version>
 		<!-- be careful when upgrading the mongo driver to v3.7.x because that will
