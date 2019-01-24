@@ -53,17 +53,6 @@
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-		<!--FINALLY! And good riddance!-->
-		<!--<dependency>-->
-            <!--<groupId>eu.europeana</groupId>-->
-            <!--<artifactId>crf-fake-tags</artifactId>-->
-            <!--<version>0.2-SNAPSHOT</version>-->
-        <!--</dependency>-->
-		<dependency>
-			<groupId>eu.europeana</groupId>
-			<artifactId>harvester-persistence</artifactId>
-			<version>0.2-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>

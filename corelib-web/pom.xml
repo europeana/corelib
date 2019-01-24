@@ -37,18 +37,6 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
-        <!--TODO release snapshot dependency-->
-        <dependency>
-            <groupId>eu.europeana</groupId>
-            <artifactId>harvester-client</artifactId>
-            <version>0.2-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-io</artifactId>
-                    <groupId>org.apache.commons</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- Corelib -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
