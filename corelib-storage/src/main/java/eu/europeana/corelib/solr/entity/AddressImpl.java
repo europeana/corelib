@@ -10,6 +10,7 @@ public class AddressImpl implements Address {
 	private String vcardPostalCode;
 	private String vcardCountryName;
 	private String vcardPostOfficeBox;
+	private String vcardHasGeo;
 	
 	@Override
 	public String getAbout() {
@@ -58,5 +59,13 @@ public class AddressImpl implements Address {
 	@Override
 	public void setVcardPostOfficeBox(String vcardPostOfficeBox) {
 		this.vcardPostOfficeBox = vcardPostOfficeBox;
+	}
+	@Override
+	public String getVcardHasGeo() {
+		return vcardHasGeo;
+	}
+	@Override
+	public void setVcardHasGeo(String vcardHasGeo) {
+		this.vcardHasGeo = vcardHasGeo;
 	}
 }

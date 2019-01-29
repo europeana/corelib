@@ -92,4 +92,16 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 */
 	Map<String, List<String>> getHiddenLabel();
 
+	/**
+	 * sets the foaf:depiction for contextual class
+	 * @param foafDepiction
+	 */
+	void setFoafDepiction(String foafDepiction);
+
+	/**
+	 * 
+	 * @return the foaf:depiction for cotextual class
+	 */
+	String getFoafDepiction();
+
 }

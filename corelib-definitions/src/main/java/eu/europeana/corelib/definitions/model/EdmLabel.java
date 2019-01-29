@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
+// TODO presumably never used, deprecation candidate
 public enum EdmLabel {
 
 	TIMESTAMP("timestamp", SolrType.INDEXED), 
@@ -46,9 +47,10 @@ public enum EdmLabel {
 	PROVIDER_AGGREGATION_DC_RIGHTS("provider_aggregation_dc_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_RIGHTS("provider_aggregation_edm_rights", SolrType.FACET), 
 	PROVIDER_AGGREGATION_EDM_UNSTORED("provider_aggregation_edm_unstored", SolrType.NOT_STORED),
-        PROVIDER_AGGREGATION_CC_LICENSE("provider_aggregation_cc_license", SolrType.INDEXED),
+	PROVIDER_AGGREGATION_CC_LICENSE("provider_aggregation_cc_license", SolrType.INDEXED),
 	PROVIDER_AGGREGATION_ODRL_INHERITED_FROM("provider_aggregation_odrl_inherited_from",SolrType.INDEXED),
 	PROVIDER_AGGREGATION_CC_DEPRECATED_ON("provider_aggregation_cc_deprecated_on",SolrType.INDEXED),
+
 	// EUROPEANA AGGREGATION
 	EDM_EUROPEANA_AGGREGATION("edm_europeana_aggregation", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_ORE_AGGREGATEDCHO("europeana_aggregation_edm_aggregatedCHO", SolrType.INDEXED),
@@ -61,6 +63,7 @@ public enum EdmLabel {
 	EUROPEANA_AGGREGATION_EDM_LANGUAGE("europeana_aggregation_edm_language", SolrType.INDEXED), 
 	EUROPEANA_AGGREGATION_EDM_RIGHTS("europeana_aggregation_edm_rights", SolrType.NOT_STORED),
 	EUROPEANA_AGGREGATION_EDM_PREVIEW("europeana_aggregation_edm_preview", SolrType.NOT_STORED),
+
 	// WEB RESOURCE FIELDS
 	EDM_WEB_RESOURCE("edm_webResource", SolrType.NOT_STORED), 
 	WR_DC_RIGHTS("wr_dc_rights", SolrType.FACET), 
@@ -78,7 +81,7 @@ public enum EdmLabel {
 	WR_DCTERMS_HAS_PART("wr_dcterms_hasPart", SolrType.NOT_STORED), 
 	WR_EDM_IS_NEXT_IN_SEQUENCE("wr_edm_isNextInSequence", SolrType.NOT_STORED),
 	WR_OWL_SAMEAS("wr_owl_sameAs",SolrType.NOT_STORED),
-        WR_CC_LICENSE("wr_cc_license", SolrType.INDEXED),
+	WR_CC_LICENSE("wr_cc_license", SolrType.INDEXED),
 	WR_ODRL_INHERITED_FROM("wr_odrl_inherited_from",SolrType.INDEXED),
 	WR_CC_DEPRECATED_ON("wr_cc_deprecated_on",SolrType.INDEXED),
     WR_SVCS_HAS_SERVICE("wr_svcs_hasservice",SolrType.NOT_STORED),
@@ -86,9 +89,10 @@ public enum EdmLabel {
 	WR_DCTERMS_ISREFERENCEDBY("wr_dcterms_isReferencedBy",SolrType.INDEXED),
 
 
-        LIC_RDF_ABOUT("cc_license", SolrType.INDEXED),
+	LIC_RDF_ABOUT("cc_license", SolrType.INDEXED),
 	LIC_ODRL_INHERITED_FROM("odrl_inherited_from",SolrType.INDEXED),
 	LIC_CC_DEPRECATED_ON("cc_deprecated_on",SolrType.INDEXED),
+
 	//SERVICE
 	SV_RDF_ABOUT("svcs_service",SolrType.INDEXED),
 	SV_DCTERMS_CONFORMS_TO("sv_dcterms_conformsTo",SolrType.INDEXED),

@@ -65,6 +65,8 @@ public class Query implements Cloneable {
     private String queryType;
     private String executedQuery;
 
+    private int nrSelectors;
+
     private QueryTranslation queryTranslation;
 
     private Map<String, String> valueReplacementMap;
@@ -232,20 +234,68 @@ public class Query implements Cloneable {
      */
     public Query setSort(String sort) {
         sorts.clear();
+
         if (!StringUtils.isEmpty(sort)) {
-            processSortFields(sort.trim().split("\\+|,|\\s+"));
+            // We need to take extra care with multi-value field sorting functions as they can contain spaces or commas
+            // That's why we first split everything into sort field, sort order and sort function.
+            String toSplit = sort.trim();
+            List<String> sortFields = new ArrayList<>();
+
+            while (toSplit.length() > 0) {
+                int endIndex;
+                String currentField;
+
+                // starts with multivalue-field-function?
+                if (toSplit.toLowerCase(Locale.GERMAN).startsWith("field(")) {
+                    endIndex = toSplit.indexOf(')');
+                    currentField = toSplit.substring(0, endIndex + 1);
+                } else {
+                    endIndex = indexOfFirstCommaPlusOrSpace(toSplit);
+                    currentField = toSplit.substring(0, endIndex);
+                }
+
+                if (StringUtils.isNotEmpty(currentField)) {
+                    sortFields.add(currentField);
+                }
+                if (endIndex == toSplit.length()) {
+                    break;
+                }
+                toSplit = toSplit.substring(endIndex + 1, toSplit.length()).trim();
+            }
+            combineSortAndOrder(sortFields);
         }
         return this;
     }
 
-    private void processSortFields(String[] sortFields) {
-        for (int i = 0; i < sortFields.length; i++) {
-            String sortField = sortFields[i];
+    /**
+     * Return the index of the first comma, plus or space character. If there is no such character we return the index
+     * of the string end
+     * @param s
+     */
+    private int indexOfFirstCommaPlusOrSpace(String s) {
+        int index1 = s.indexOf(',');
+        if (index1 == -1) {
+            index1 = s.length();
+        }
+        int index2 = s.indexOf(' ');
+        if (index2 == -1) {
+            index2 = s.length();
+        }
+        int index3 = s.indexOf('+');
+        if (index3 == -1) {
+            index3 = s.length();
+        }
+        return Math.min(Math.min(index1, index2), index3);
+    }
+
+    private void combineSortAndOrder(List<String> sortFields) {
+        for (int i = 0; i < sortFields.size(); i++) {
+            String sortField = sortFields.get(i);
             if (!StringUtils.isEmpty(sortField.trim())) {
 
                 // check if next field is sort order
-                if (i < sortFields.length - 1) {
-                    String nextSortField = sortFields[i + 1];
+                if (i < sortFields.size() - 1) {
+                    String nextSortField = sortFields.get(i + 1);
                     if (QuerySort.isSortOrder(nextSortField)) {
                         sorts.add(new QuerySort(sortField, nextSortField));
                         i++;
@@ -436,7 +486,7 @@ public class Query implements Cloneable {
     }
 
     /**
-     * Adds Solr parameterMap to the Query object
+     * Adds parameter to the Solr parameterMap
      *
      * @param key   The parameter name
      * @param value The value of the parameter
@@ -456,6 +506,22 @@ public class Query implements Cloneable {
     public Query setParameters(Map<String, String> parameters) {
         parameterMap.putAll(parameters);
         return this;
+    }
+
+    /**
+     * Adds the given value to the nrSelectors variable, this is used for limiting the number of highlights
+     * Also adds this parameter to the Solr parameterMap
+     *
+     * @param key   The parameter name (should be "hl.selectors")
+     * @param value The value of the parameter (should be parsable to int)
+     */
+    public void setNrSelectors(String key, int value){
+        this.nrSelectors = value;
+        setParameter(key, Integer.toString(value));
+    }
+
+    public int getNrSelectors() {
+        return nrSelectors;
     }
 
     // funky java 8 stuff yippee
@@ -502,6 +568,7 @@ public class Query implements Cloneable {
         return this.technicalFacetLimitMap;
     }
 
+    // TODO sonarlint warns against overriding clone()!
     @Override
     public Query clone() throws CloneNotSupportedException {
         return (Query) super.clone();
