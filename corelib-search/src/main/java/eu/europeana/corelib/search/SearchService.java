@@ -46,6 +46,9 @@ import java.util.Map;
  */
 public interface SearchService {
 
+	// removeme
+	Map watWilWickie();
+
 	/**
 	 * Retrieve a record by europeanaObjectId (no further processing)
 	 *

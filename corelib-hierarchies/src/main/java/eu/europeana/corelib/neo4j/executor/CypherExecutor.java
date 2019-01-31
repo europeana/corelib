@@ -4,7 +4,7 @@
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- * 
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
@@ -14,30 +14,15 @@
  *  See the Licence for the specific language governing permissions and limitations under
  *  the Licence.
  */
-package eu.europeana.corelib.neo4j.entity;
 
-import org.neo4j.graphdb.RelationshipType;
+package eu.europeana.corelib.neo4j.executor;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
- * Class representing a Relation in Neo4j
- * @author Yorgos.Mamakis@ europeana.eu
- *
+ * Created by luthien on 29/01/2019.
  */
-public class Relation implements RelationshipType {
-
-	private String name;
-
-	/**
-	 * Default constructor for a Relation
-	 * @param name The name of the neo4j relation
-	 */
-	public Relation(String name){
-		this.name = name;
-	}
-
-	@Override
-	public String name() {
-		return this.name;
-	}
-
+public interface CypherExecutor {
+    Iterator<Map<String,Object>> query(String statement, Map<String,Object> params);
 }

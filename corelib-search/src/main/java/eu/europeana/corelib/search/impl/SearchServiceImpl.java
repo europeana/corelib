@@ -27,6 +27,7 @@ import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.SolrIOException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.neo4j.server.CypherService;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.query.MoreLikeThis;
@@ -132,6 +133,16 @@ public class SearchServiceImpl implements SearchService {
 
     // show solr query in output
     private boolean debug = false;
+
+    // testing beep beep
+    @Resource(name = "corelib_neo4j_cypherservice" )
+    protected CypherService cypherService;
+
+    @Override
+    public Map watWilWickie(){
+        return cypherService.findNode("/9200300/BibliographicResource_3000095610167");
+    }
+
 
     @Override
     public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
@@ -377,6 +388,7 @@ public class SearchServiceImpl implements SearchService {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
+
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }

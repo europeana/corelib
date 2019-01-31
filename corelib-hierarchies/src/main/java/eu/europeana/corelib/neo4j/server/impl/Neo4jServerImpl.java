@@ -28,22 +28,26 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.kernel.Uniqueness;
-import org.neo4j.rest.graphdb.RestGraphDatabase;
-import org.neo4j.rest.graphdb.index.RestIndex;
-import org.neo4j.rest.graphdb.traversal.RestTraversal;
+import org.neo4j.graphdb.traversal.Uniqueness;
+//import org.neo4j.kernel.Uniqueness;
+//import org.neo4j.rest.graphdb.RestGraphDatabase;
+//import org.neo4j.rest.graphdb.index.RestIndex;
+//import org.neo4j.rest.graphdb.traversal.RestTraversal;
 import org.springframework.util.StringUtils;
 
+import javax.ws.rs.core.Context;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,8 +64,12 @@ public class Neo4jServerImpl implements Neo4jServer {
 
     private final static Logger LOG = LogManager.getLogger(Neo4jServerImpl.class);
 
-    private RestGraphDatabase                 graphDb;
-    private RestIndex<Node>                   index;
+    private GraphDatabaseService              db;
+    private TraversalDescription              traversal;
+
+
+//    private RestGraphDatabase                 graphDb;
+//    private RestIndex<Node>                   index;
     private org.apache.http.client.HttpClient client;
     private String                            customPath;
     private String                            serverPath;
@@ -72,6 +80,7 @@ public class Neo4jServerImpl implements Neo4jServer {
     private static final Relation DCTERMSHASPARTRELATION      = new Relation(RelType.DCTERMS_HASPART.getRelType());
     private static final Relation ISFAKEORDERRELATION         = new Relation(RelType.ISFAKEORDER.getRelType());
 
+
     /**
      * Neo4j contructor
      *
@@ -81,8 +90,8 @@ public class Neo4jServerImpl implements Neo4jServer {
      */
     public Neo4jServerImpl(String serverPath, String index, String customPath) {
         this.serverPath = serverPath;
-        this.graphDb = new RestGraphDatabase(serverPath);
-        this.index = this.graphDb.getRestAPI().getIndex(index);
+//        this.graphDb = new RestGraphDatabase(serverPath);
+//        this.index = this.graphDb.getRestAPI().getIndex(index);
         this.client = HttpClientBuilder.create().setConnectionManager(new PoolingHttpClientConnectionManager()).build();
         this.customPath = customPath;
         this.serverPath = serverPath;
@@ -94,7 +103,8 @@ public class Neo4jServerImpl implements Neo4jServer {
      * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
      * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
      */
-    public Neo4jServerImpl() {
+    public Neo4jServerImpl(@Context GraphDatabaseService db ) {
+        this.db = db;
     }
 
     /**
@@ -107,14 +117,14 @@ public class Neo4jServerImpl implements Neo4jServer {
     @Override
     public Node getNode(String rdfAbout) throws Neo4JException {
         Node node = null;
-        try {
-            IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") && (rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
-            if (nodes.size() > 0 && hasRelationships(nodes)) {
-                node = nodes.getSingle();
-            }
-        } catch (Exception e) {
-            throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
-        }
+//        try {
+//            IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") && (rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
+//            if (nodes.size() > 0 && hasRelationships(nodes)) {
+//                node = nodes.getSingle();
+//            }
+//        } catch (Exception e) {
+//            throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
+//        }
         return node;
     }
 
@@ -182,10 +192,10 @@ public class Neo4jServerImpl implements Neo4jServer {
 
     @Override
     public Node getParent(Node node) {
-        List<Node> nodes = getRelatedNodes(node, 1, 0, Direction.OUTGOING, DCTERMSISPARTOFRELATION);
-        if (nodes.size() > 0) {
-            return nodes.get(0);
-        }
+//        List<Node> nodes = getRelatedNodes(node, 1, 0, Direction.OUTGOING, DCTERMSISPARTOFRELATION);
+//        if (nodes.size() > 0) {
+//            return nodes.get(0);
+//        }
         return null;
     }
 
@@ -258,39 +268,39 @@ public class Neo4jServerImpl implements Neo4jServer {
 //    }
 
     // TODO REMOVEME (?)
-    private List<Node> getRelatedNodes(Node node, int limit, int offset, Direction direction, Relation relType) {
-        List<Node>  children = new ArrayList<Node>();
-        Transaction tx       = graphDb.beginTx();
-        RestTraversal traversal = (RestTraversal) graphDb.traversalDescription();
-
-        traversal.evaluator(Evaluators.excludeStartPosition());
-
-        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-        traversal.breadthFirst();
-        traversal.maxDepth(offset + limit);
-
-        traversal.relationships(relType, direction);
-        Traverser      tr      = traversal.traverse(node);
-        Iterator<Node> resIter = tr.nodes().iterator();
-
-        int i = 1;
-        while (resIter.hasNext()) {
-            Node relatedNode = resIter.next();
-            if (i >= offset) {
-                if (children.size() <= limit) {
-                    children.add(relatedNode);
-                }
-                if (children.size() == limit) {
-                    break;
-                }
-            }
-            i++;
-        }
-
-        tx.success();
-        tx.finish();
-        return children;
-    }
+//    private List<Node> getRelatedNodes(Node node, int limit, int offset, Direction direction, Relation relType) {
+//        List<Node>  children = new ArrayList<Node>();
+//        Transaction tx       = graphDb.beginTx();
+//        RestTraversal traversal = (RestTraversal) graphDb.traversalDescription();
+//
+//        traversal.evaluator(Evaluators.excludeStartPosition());
+//
+//        traversal.uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
+//        traversal.breadthFirst();
+//        traversal.maxDepth(offset + limit);
+//
+//        traversal.relationships(relType, direction);
+//        Traverser      tr      = traversal.traverse(node);
+//        Iterator<Node> resIter = tr.nodes().iterator();
+//
+//        int i = 1;
+//        while (resIter.hasNext()) {
+//            Node relatedNode = resIter.next();
+//            if (i >= offset) {
+//                if (children.size() <= limit) {
+//                    children.add(relatedNode);
+//                }
+//                if (children.size() == limit) {
+//                    break;
+//                }
+//            }
+//            i++;
+//        }
+//
+//        tx.success();
+//        tx.finish();
+//        return children;
+//    }
 
     @Override
     public long getChildrenCount(Node node) {

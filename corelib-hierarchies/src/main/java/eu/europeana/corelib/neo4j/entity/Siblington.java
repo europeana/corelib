@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2012 The Europeana Foundation
+ * Copyright 2007-2019 The Europeana Foundation
  *
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
@@ -18,18 +18,18 @@ package eu.europeana.corelib.neo4j.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * Class representing a collection of related nodes. ie. children under one parent,
- * following or preceding siblings etc
+ * Class representing a collection of related nodes; ie. children under one parent,
+ * following or preceding siblings, etc
  * Created by luthien (maike.dulk@ europeana.eu) 15/10/2015.
  *
  */
 
 @JsonSerialize
 public class Siblington {
-    private List<CustomNode> siblings = new ArrayList<CustomNode>();
+    private List<CustomNode> siblings = new ArrayList<>();
 
 
     public List<CustomNode> getSiblings() {

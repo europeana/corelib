@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2012 The Europeana Foundation
+ * Copyright 2007-2019 The Europeana Foundation
  *
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
@@ -19,9 +19,9 @@ package eu.europeana.corelib.neo4j.entity;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import eu.europeana.corelib.neo4j.server.impl.CustomNodeDeserializer;
+
 /**
  * Class that represents an embedded neo4j node in the Hierarchy class
  * @author Yorgos.Mamakis@ europeana.eu

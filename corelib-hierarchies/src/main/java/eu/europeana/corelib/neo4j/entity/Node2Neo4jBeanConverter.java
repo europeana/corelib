@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2012 The Europeana Foundation
+ * Copyright 2007-2019 The Europeana Foundation
  *
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
@@ -17,13 +17,12 @@
 package eu.europeana.corelib.neo4j.entity;
 
 import eu.europeana.corelib.definitions.solr.DocType;
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.BooleanNode;
-import org.codehaus.jackson.node.IntNode;
-import org.codehaus.jackson.node.TextNode;
+import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Node;
 
 import java.util.*;
@@ -32,10 +31,23 @@ import java.util.*;
  * Converter from a Neo4j Node to Neo4jBean
  *
  * @author Yorgos.Mamakis@ europeana.eu
+ * @author Luthien
  */
 public class Node2Neo4jBeanConverter {
 
-    private static final String KEYXMLLANG = "_xml:lang_";
+    private Node2Neo4jBeanConverter(){}
+
+    private static final String KEYXMLLANG          = "_xml:lang_";
+    private static final String RDFABOUT            = "rdf:about";
+    private static final String EDMTYPE             = "edm:type";
+    private static final String HASCHILDREN         = "hasChildren";
+    private static final String HASPARENT           = "hasParent";
+    private static final String EDMISNEXTINSEQUENCE = "edm:isNextInSequence";
+    private static final String ISFAKEORDER         = "isFakeOrder";
+    private static final String TRUE                = "true";
+    private static final String CHILDRENCOUNT       = "childrenCount";
+    private static final String RELBEFORE           = "relBefore";
+
 
     /**
      * Convert a neo4j node to a Neo4jBean
@@ -47,19 +59,19 @@ public class Node2Neo4jBeanConverter {
     public static Neo4jBean toNeo4jBean(Node node, long index) {
         if (node != null) {
             Neo4jBean neo4jBean = new Neo4jBean();
-            neo4jBean.setId((String) node.getProperty("rdf:about"));
-            neo4jBean.setType(DocType.valueOf(((String) node.getProperty("edm:type")).replace("\"", "")));
-            neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
+            neo4jBean.setId((String) node.getProperty(RDFABOUT));
+            neo4jBean.setType(DocType.valueOf(((String) node.getProperty(EDMTYPE)).replace("\"", "")));
+            neo4jBean.setHasChildren(node.hasProperty(HASCHILDREN));
 
             neo4jBean = retrieveLangAwareProperties(neo4jBean, node);
 
-            if (node.hasProperty("hasParent")) {
-                neo4jBean.setParent(StringUtils.replace((String) node.getProperty("hasParent"), "\\\"", ""));
+            if (node.hasProperty(HASPARENT)) {
+                neo4jBean.setParent(StringUtils.replace((String) node.getProperty(HASPARENT), "\\\"", ""));
             }
             neo4jBean.setIndex(index);
-            if (node.hasRelationship(DynamicRelationshipType.withName("edm:isNextInSequence"), Direction.OUTGOING)) {
+            if (node.hasRelationship(RelationshipType.withName(EDMISNEXTINSEQUENCE), Direction.OUTGOING)) {
                 neo4jBean.setRelBefore(Boolean.TRUE);
-            } else if (node.hasRelationship(DynamicRelationshipType.withName("isFakeOrder"), Direction.OUTGOING)) {
+            } else if (node.hasRelationship(RelationshipType.withName(ISFAKEORDER), Direction.OUTGOING)) {
                 neo4jBean.setRelBefore(Boolean.FALSE);
             }
             return neo4jBean;
@@ -77,19 +89,19 @@ public class Node2Neo4jBeanConverter {
     public static Neo4jBean toNeo4jBean(Node node) {
         if (node != null) {
             Neo4jBean neo4jBean = new Neo4jBean();
-            neo4jBean.setId((String) node.getProperty("rdf:about"));
+            neo4jBean.setId((String) node.getProperty(RDFABOUT));
             neo4jBean.setType(DocType.valueOf(((String) node
-                    .getProperty("edm:type")).replace("\"", "")));
-            neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
+                    .getProperty(EDMTYPE)).replace("\"", "")));
+            neo4jBean.setHasChildren(node.hasProperty(HASCHILDREN));
 
             neo4jBean = retrieveLangAwareProperties(neo4jBean, node);
 
-            if (node.hasProperty("hasParent")) {
-                neo4jBean.setParent(StringUtils.replace((String) node.getProperty("hasParent"), "\\\"", ""));
+            if (node.hasProperty(HASPARENT)) {
+                neo4jBean.setParent(StringUtils.replace((String) node.getProperty(HASPARENT), "\\\"", ""));
             }
-            if (node.hasRelationship(DynamicRelationshipType.withName("edm:isNextInSequance"), Direction.OUTGOING)) {
+            if (node.hasRelationship(RelationshipType.withName("edm:isNextInSequance"), Direction.OUTGOING)) {
                 neo4jBean.setRelBefore(Boolean.TRUE);
-            } else if (node.hasRelationship(DynamicRelationshipType.withName("isFakeOrder"), Direction.OUTGOING)) {
+            } else if (node.hasRelationship(RelationshipType.withName(ISFAKEORDER), Direction.OUTGOING)) {
                 neo4jBean.setRelBefore(Boolean.FALSE);
             }
             return neo4jBean;
@@ -117,7 +129,7 @@ public class Node2Neo4jBeanConverter {
 
     private static Map<String, List<String>> getLangAwareProperties(String key, String lang
             , Map<String, List<String>> langAwareProperties, Node node){
-        List<String> langAwareValues = langAwareProperties.get(lang) != null ? langAwareProperties.get(lang) : new ArrayList<String>();
+        List<String> langAwareValues = langAwareProperties.get(lang) != null ? langAwareProperties.get(lang) : new ArrayList<>();
         langAwareValues.addAll(Arrays.asList((String[]) node.getProperty(key)));
         langAwareProperties.put(lang, langAwareValues);
         return langAwareProperties;
@@ -161,8 +173,8 @@ public class Node2Neo4jBeanConverter {
 
         for (CustomNode pSiblingNode : pSiblingNodes) {
             pSiblingBeans.add(toNeo4jBean(pSiblingNode));
-            if (psChildNodes.size() > j && pSiblingNode.hasProperty("hasChildren") &&
-                    ((BooleanNode) pSiblingNode.getProperty("hasChildren")).asBoolean()) {
+            if (psChildNodes.size() > j && pSiblingNode.hasProperty(HASCHILDREN) &&
+                    (StringUtils.equalsIgnoreCase(pSiblingNode.getProperty(HASCHILDREN).toString(), TRUE))) {
                 psChildBeans.add(toNeo4jBean(psChildNodes.get(j)));
                 j++;
             } else {
@@ -172,8 +184,8 @@ public class Node2Neo4jBeanConverter {
 
         for (CustomNode fSiblingNode : fSiblingNodes) {
             fSiblingBeans.add(toNeo4jBean(fSiblingNode));
-            if (fsChildNodes.size() > k && fSiblingNode.hasProperty("hasChildren") &&
-                    ((BooleanNode) fSiblingNode.getProperty("hasChildren")).asBoolean()) {
+            if (fsChildNodes.size() > k && fSiblingNode.hasProperty(HASCHILDREN) &&
+                (StringUtils.equalsIgnoreCase(fSiblingNode.getProperty(HASCHILDREN).toString(), TRUE))) {
                 fsChildBeans.add(toNeo4jBean(fsChildNodes.get(k)));
                 k++;
             } else {
@@ -229,7 +241,8 @@ public class Node2Neo4jBeanConverter {
         for (CustomNode pSiblingNode : pSiblingNodes) {
             previousIndex--;
             pSiblingBeans.add(toNeo4jBean(pSiblingNode, previousIndex));
-            if (psChildNodes.size() > j && pSiblingNode.hasProperty("hasChildren") && ((BooleanNode) pSiblingNode.getProperty("hasChildren")).asBoolean()) {
+            if (psChildNodes.size() > j && pSiblingNode.hasProperty(HASCHILDREN) &&
+                (StringUtils.equalsIgnoreCase(pSiblingNode.getProperty(HASCHILDREN).toString(), TRUE))) {
                 psChildBeans.add(toNeo4jBean(psChildNodes.get(j), 1L));
                 j++;
             } else {
@@ -241,7 +254,8 @@ public class Node2Neo4jBeanConverter {
         for (CustomNode fSiblingNode : fSiblingNodes) {
             followingIndex++;
             fSiblingBeans.add(toNeo4jBean(fSiblingNode, followingIndex));
-            if (fsChildNodes.size() > k && fSiblingNode.hasProperty("hasChildren") && ((BooleanNode) fSiblingNode.getProperty("hasChildren")).asBoolean()) {
+            if (fsChildNodes.size() > k && fSiblingNode.hasProperty(HASCHILDREN) &&
+                (StringUtils.equalsIgnoreCase(fSiblingNode.getProperty(HASCHILDREN).toString(), TRUE))) {
                 fsChildBeans.add(toNeo4jBean(fsChildNodes.get(k), 1L));
                 k++;
             } else {
@@ -271,23 +285,23 @@ public class Node2Neo4jBeanConverter {
         if (node != null) {
 
             Neo4jBean neo4jBean = new Neo4jBean();
-            neo4jBean.setId(((TextNode) node.getProperty("rdf:about")).asText());
-            neo4jBean.setType(DocType.safeValueOf(node.getProperty("edm:type")
+            neo4jBean.setId(((TextNode) node.getProperty(RDFABOUT)).asText());
+            neo4jBean.setType(DocType.safeValueOf(node.getProperty(EDMTYPE)
                     .toString().replace("\"", "")));
-            neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
+            neo4jBean.setHasChildren(node.hasProperty(HASCHILDREN));
 
-            if (node.hasProperty("hasChildren") && node.hasProperty("childrenCount")) {
-                IntNode childrenCount = (IntNode) node.getProperty("childrenCount");
+            if (node.hasProperty(HASCHILDREN) && node.hasProperty(CHILDRENCOUNT)) {
+                IntNode childrenCount = (IntNode) node.getProperty(CHILDRENCOUNT);
                 neo4jBean.setChildrenCount(childrenCount.asLong());
             }
 
             neo4jBean = retrieveLangAwareProperties(neo4jBean, node);
 
-            if (node.hasProperty("hasParent")) {
-                neo4jBean.setParent(StringUtils.replace(node.getProperty("hasParent").toString(), "\"", ""));
+            if (node.hasProperty(HASPARENT)) {
+                neo4jBean.setParent(StringUtils.replace(node.getProperty(HASPARENT).toString(), "\"", ""));
             }
-            if (node.hasProperty("relBefore")) {
-                neo4jBean.setRelBefore(Boolean.parseBoolean(node.getProperty("relBefore").toString()));
+            if (node.hasProperty(RELBEFORE)) {
+                neo4jBean.setRelBefore(Boolean.parseBoolean(node.getProperty(RELBEFORE).toString()));
             }
             return neo4jBean;
         }
@@ -308,24 +322,24 @@ public class Node2Neo4jBeanConverter {
     public static Neo4jBean toNeo4jBean(CustomNode node, long index) {
         if (node != null) {
             Neo4jBean neo4jBean = new Neo4jBean();
-            neo4jBean.setId(((TextNode) node.getProperty("rdf:about")).asText());
-            neo4jBean.setType(DocType.safeValueOf(node.getProperty("edm:type")
+            neo4jBean.setId(((TextNode) node.getProperty(RDFABOUT)).asText());
+            neo4jBean.setType(DocType.safeValueOf(node.getProperty(EDMTYPE)
                     .toString().replace("\"", "")));
 
-            neo4jBean.setHasChildren(node.hasProperty("hasChildren"));
-            if (node.hasProperty("hasChildren") && node.hasProperty("childrenCount")) {
-                IntNode childrenCount = (IntNode) node.getProperty("childrenCount");
+            neo4jBean.setHasChildren(node.hasProperty(HASCHILDREN));
+            if (node.hasProperty(HASCHILDREN) && node.hasProperty(CHILDRENCOUNT)) {
+                IntNode childrenCount = (IntNode) node.getProperty(CHILDRENCOUNT);
                 neo4jBean.setChildrenCount(childrenCount.asLong());
             }
 
             neo4jBean = retrieveLangAwareProperties(neo4jBean, node);
 
-            if (node.hasProperty("hasParent")) {
-                neo4jBean.setParent(StringUtils.replace(node.getProperty("hasParent").toString(), "\"", ""));
+            if (node.hasProperty(HASPARENT)) {
+                neo4jBean.setParent(StringUtils.replace(node.getProperty(HASPARENT).toString(), "\"", ""));
             }
             neo4jBean.setIndex(index);
-            if (node.hasProperty("relBefore")) {
-                neo4jBean.setRelBefore(Boolean.parseBoolean(node.getProperty("relBefore").toString()));
+            if (node.hasProperty(RELBEFORE)) {
+                neo4jBean.setRelBefore(Boolean.parseBoolean(node.getProperty(RELBEFORE).toString()));
             }
             return neo4jBean;
         }
@@ -385,7 +399,7 @@ public class Node2Neo4jBeanConverter {
 
     private static Map<String, List<String>> getLangAwareProperties(String key, String lang
             , Map<String, List<String>> langAwareProperties, CustomNode customnode){
-        List<String> langAwareValues = langAwareProperties.get(lang) != null ? langAwareProperties.get(lang) : new ArrayList<String>();
+        List<String> langAwareValues = langAwareProperties.get(lang) != null ? langAwareProperties.get(lang) : new ArrayList<>();
         if (customnode.getProperty(key) instanceof ArrayNode) {
             langAwareValues.addAll(extractArrayNode(customnode, key));
         } else {

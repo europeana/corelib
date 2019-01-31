@@ -30,4 +30,8 @@
 		<constructor-arg value="#{europeanaProperties['neo4j.index']}"/>
 		<constructor-arg value="#{europeanaProperties['neo4j.custom']}"/>
 	</bean>
+	<bean id="corelib_neo4j_cypherservice" class="eu.europeana.corelib.neo4j.server.CypherService" lazy-init="true">
+		<constructor-arg value="bolt://neo4j:neo4j@localhost"/>
+		<constructor-arg value="edmsearch2"/>
+	</bean>
 </beans>
