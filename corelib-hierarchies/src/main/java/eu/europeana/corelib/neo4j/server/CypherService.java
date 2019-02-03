@@ -105,47 +105,30 @@ public class CypherService {
     }
 
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/children/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
-        try {
-            HttpResponse resp   = client.execute(method);
-            ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
-            return siblington.getSiblings();
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        } finally {
-            method.releaseConnection();
-        }
-        return null;
+        return nodeFetcher("children", rdfAbout, offset, limit);
     }
 
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
         return getFollowingSiblings(rdfAbout, 0, limit);
     }
 
-    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/following/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
-        try {
-            HttpResponse resp   = client.execute(method);
-            ObjectMapper mapper = new ObjectMapper();
-            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
-            return siblington.getSiblings();
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        } finally {
-            method.releaseConnection();
-        }
-        return null;
+        return nodeFetcher("following", rdfAbout, offset, limit);
     }
-
 
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
         return getPrecedingSiblings(rdfAbout, 0, limit);
     }
 
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int offset, int limit) {
-        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/preceding/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
+        return nodeFetcher("preceding", rdfAbout, offset, limit);
+    }
+
+    private List<CustomNode> nodeFetcher(String path, String rdfAbout, int offset, int limit){
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath)
+                + "fetch/" + path + "/rdfAbout/"
+                + StringUtils.replace(rdfAbout + "", "/", "%2F")
+                + "?offset=" + offset + "&limit=" + limit);
         try {
             HttpResponse resp   = client.execute(method);
             ObjectMapper mapper = new ObjectMapper();
