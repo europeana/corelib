@@ -5,8 +5,10 @@ import eu.europeana.corelib.neo4j.entity.Neo4jBean;
 import eu.europeana.corelib.neo4j.entity.Neo4jStructBean;
 import eu.europeana.corelib.neo4j.entity.Node2Neo4jBeanConverter;
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.neo4j.server.CypherService;
 import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import eu.europeana.corelib.search.Neo4jSearchService;
+import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.logging.log4j.LogManager;
 import org.neo4j.graphdb.Node;
 import org.springframework.context.annotation.Lazy;
@@ -20,12 +22,16 @@ import java.util.List;
  * Lookup hierarchical information from Neo4j server
  * @author Patrick Ehlert
  * Created on 01-03-2018
+ * @author Lúthien - refactored to use neo4j v.3.5.2 03-02-2019
  */
 @Lazy
 public class Neo4jSearchServiceImpl implements Neo4jSearchService {
 
     @Resource(name = "corelib_solr_neo4jServer" )
     protected Neo4jServer neo4jServer;
+
+    @Resource(name = "corelib_neo4j_cypherservice" )
+    protected CypherService cypherService;
 
 
     @PostConstruct
@@ -34,10 +40,21 @@ public class Neo4jSearchServiceImpl implements Neo4jSearchService {
     }
 
     @Override
+    public Neo4jBean getSingle(String rdfAbout) throws Neo4JException {
+        List<CustomNode> selfList = cypherService.getSingleNode(rdfAbout);
+        if (!selfList.isEmpty()) {
+            return Node2Neo4jBeanConverter.toNeo4jBean(selfList.get(0), 0l);
+        } else {
+            throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE,
+                    " \n\n... can't find node with ID: " + rdfAbout);
+        }
+    }
+
+    @Override
     public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
         long startIndex = offset;
-        List<CustomNode> children = neo4jServer.getChildren(rdfAbout, offset, limit);
+        List<CustomNode> children = cypherService.getChildren(rdfAbout, offset, limit);
         for (CustomNode child : children) {
             startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(child, startIndex));
@@ -60,19 +77,10 @@ public class Neo4jSearchServiceImpl implements Neo4jSearchService {
     }
 
     @Override
-    public Neo4jBean getHierarchicalBean(String rdfAbout) throws Neo4JException {
-        Node node = getNode(rdfAbout);
-        if (node != null) {
-            return Node2Neo4jBeanConverter.toNeo4jBean(node, neo4jServer.getNodeIndex(node));
-        }
-        return null;
-    }
-
-    @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit) throws Neo4JException {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> precedingSiblings = neo4jServer.getPrecedingSiblings(rdfAbout, offset, limit);
-        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout) - offset;
+        List<CustomNode> precedingSiblings = cypherService.getPrecedingSiblings(rdfAbout, offset, limit);
+        long startIndex = cypherService.getNodeIndex(rdfAbout) - offset;
         for (CustomNode precedingSibling : precedingSiblings) {
             startIndex -= 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(precedingSibling, startIndex));
@@ -81,20 +89,20 @@ public class Neo4jSearchServiceImpl implements Neo4jSearchService {
     }
 
     @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) throws Neo4JException {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int limit) {
         return getPrecedingSiblings(rdfAbout, 0, 10);
     }
 
     @Override
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) throws Neo4JException {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout) {
         return getPrecedingSiblings(rdfAbout, 10);
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit) throws Neo4JException {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> followingSiblings = neo4jServer.getFollowingSiblings(rdfAbout, offset, limit);
-        long startIndex = neo4jServer.getNodeIndexByRdfAbout(rdfAbout) + offset;
+        List<CustomNode> followingSiblings = cypherService.getFollowingSiblings(rdfAbout, offset, limit);
+        long startIndex = cypherService.getNodeIndex(rdfAbout) + offset;
         for (CustomNode followingSibling : followingSiblings) {
             startIndex += 1L;
             beans.add(Node2Neo4jBeanConverter.toNeo4jBean(followingSibling, startIndex));
@@ -103,18 +111,13 @@ public class Neo4jSearchServiceImpl implements Neo4jSearchService {
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) throws Neo4JException {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int limit) {
         return getFollowingSiblings(rdfAbout, 0, 10);
     }
 
     @Override
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout) throws Neo4JException {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout)  {
         return getFollowingSiblings(rdfAbout, 10);
-    }
-
-    @Override
-    public long getChildrenCount(String rdfAbout) throws Neo4JException {
-        return neo4jServer.getChildrenCount(getNode(rdfAbout));
     }
 
     // note that parents don't have their node indexes set in getInitialStruct

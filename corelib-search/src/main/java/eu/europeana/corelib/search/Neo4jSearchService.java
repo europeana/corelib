@@ -14,12 +14,12 @@ import java.util.List;
 public interface Neo4jSearchService {
 
     /**
-     * Get a node object
+     * Get the 'self' node
      *
-     * @param  nodeId The ID of the record
-     * @return node object
+     * @param  rdfAbout The ID of the node
+     * @return Neo4jBean representing 'self' node
      */
-    Neo4jBean getHierarchicalBean(String nodeId) throws Neo4JException;
+    Neo4jBean getSingle(String rdfAbout) throws Neo4JException;
 
     /**
      * Get the children of the node (max 10)
@@ -100,14 +100,6 @@ public interface Neo4jSearchService {
      * @return node's following siblings
      */
     List<Neo4jBean> getFollowingSiblings(String nodeId) throws Neo4JException;
-
-    /**
-     * Get the number of children this node has
-     *
-     * @param  nodeId
-     * @return the number of children
-     */
-    long getChildrenCount(String nodeId) throws Neo4JException;
 
     /**
      * Get the initial structure, which contains self, the ancestors,

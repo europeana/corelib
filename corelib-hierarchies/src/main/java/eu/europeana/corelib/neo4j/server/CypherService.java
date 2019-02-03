@@ -17,11 +17,22 @@
 
 package eu.europeana.corelib.neo4j.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.europeana.corelib.neo4j.entity.*;
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.neo4j.executor.*;
+import eu.europeana.corelib.web.exception.ProblemType;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.helpers.collection.Iterators;
 
+import org.apache.http.client.HttpClient;
+import org.springframework.util.StringUtils;
+
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -33,11 +44,16 @@ import static org.neo4j.helpers.collection.MapUtil.map;
  */
 public class CypherService {
 
+    private final static Logger LOG = LogManager.getLogger(CypherService.class);
+
     private final CypherExecutor cypher;
     private final String index;
+    private final String pluginPath;
+    private HttpClient client;
 
-    public CypherService(String uri, String index) {
+    public CypherService(String uri, String index, String pluginPath) {
         this.index = index;
+        this.pluginPath = pluginPath;
         cypher = createCypherExecutor(uri);
     }
 
@@ -55,22 +71,14 @@ public class CypherService {
     }
 
     public Node getNode(String rdfAbout) throws Neo4JException {
-        Map nodeFound = findNode(rdfAbout);
-//        if (nodeFound.)
-//        Node node = null;
-//        try {
-//            IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") && (rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
-//            if (nodes.size() > 0 && hasRelationships(nodes)) {
-//                node = nodes.getSingle();
-//            }
-//        } catch (Exception e) {
-//            throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
-//        }
-        return (Node) findNode(rdfAbout);
+        Map nodeMap = findNode(rdfAbout);
+        if (!nodeMap.isEmpty() && nodeMap.containsKey("record")){
+            return (Node) nodeMap.get("record");
+        } else {
+            throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE);
+        }
     }
 
-
-    // TODO change to query index with apoc procedure over cypher
     public Map findNode(String rdfAbout) {
         if (rdfAbout==null) return Collections.emptyMap();
         return Iterators.singleOrNull(cypher.query(
@@ -78,6 +86,121 @@ public class CypherService {
                 "', {rdfAboutQuery}) YIELD node AS record RETURN * LIMIT 1",
                 map("rdfAboutQuery", "rdf_about:\"" + rdfAbout + "\"")));
     }
+
+
+    public List<CustomNode> getSingleNode(String rdfAbout) {
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/self/rdfAbout/"
+                + StringUtils.replace(rdfAbout + "", "/", "%2F"));
+        try {
+            HttpResponse resp   = client.execute(method);
+            ObjectMapper mapper = new ObjectMapper();
+            Selfington selfington = mapper.readValue(resp.getEntity().getContent(), Selfington.class);
+            return selfington.getSelf();
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            method.releaseConnection();
+        }
+        return null;
+    }
+
+    public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) {
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/children/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
+        try {
+            HttpResponse resp   = client.execute(method);
+            ObjectMapper mapper = new ObjectMapper();
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
+            return siblington.getSiblings();
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            method.releaseConnection();
+        }
+        return null;
+    }
+
+    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
+        return getFollowingSiblings(rdfAbout, 0, limit);
+    }
+
+    // note: first "/" in rdfAbout was removed; this is added again in the neo4j plugin
+    public List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit) {
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/following/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
+        try {
+            HttpResponse resp   = client.execute(method);
+            ObjectMapper mapper = new ObjectMapper();
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
+            return siblington.getSiblings();
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            method.releaseConnection();
+        }
+        return null;
+    }
+
+
+    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
+        return getPrecedingSiblings(rdfAbout, 0, limit);
+    }
+
+    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int offset, int limit) {
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/preceding/rdfAbout/" + StringUtils.replace(rdfAbout + "", "/", "%2F") + "?offset=" + offset + "&limit=" + limit);
+        try {
+            HttpResponse resp   = client.execute(method);
+            ObjectMapper mapper = new ObjectMapper();
+            Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
+            return siblington.getSiblings();
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            method.releaseConnection();
+        }
+        return null;
+    }
+
+    public long getNodeIndex(String rdfAbout) {
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "count/hierarchy/rdfAbout/" + rdfAbout);
+        try {
+            HttpResponse resp = client.execute(method);
+            IndexObject obj = new ObjectMapper().readValue(resp.getEntity().getContent(), IndexObject.class);
+            return obj.getLength();
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        } finally {
+            method.releaseConnection();
+        }
+        return 0;
+    }
+
+    public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
+        if (!isHierarchy(rdfAbout)) {
+            return null;
+        }
+        HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/hierarchy/rdfAbout/"
+                + StringUtils.replace(rdfAbout, "/", "%2F"));
+        LOG.debug("path: {}", method.getURI());
+        try {
+            HttpResponse resp = client.execute(method);
+            if (resp.getStatusLine().getStatusCode() == 502) {
+                LOG.error(ProblemType.NEO4J_INCONSISTENT_DATA.getMessage() + " by Neo4J plugin, for node with ID: " + rdfAbout);
+                throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA, " \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            Hierarchy obj = mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
+            return obj;
+        } catch (IOException e) {
+            LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
+            throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);
+        } finally {
+            method.releaseConnection();
+        }
+    }
+
+    public boolean isHierarchy(String rdfAbout) {
+        return getSingleNode(rdfAbout) != null;
+    }
+
 
     // TODO change to query index with apoc procedure over cypher
     @SuppressWarnings("unchecked")
@@ -119,4 +242,8 @@ public class CypherService {
     }
 
 
+
+    private String fixTrailingSlash(String path) {
+        return path.endsWith("/") ? path : path + "/";
+    }
 }

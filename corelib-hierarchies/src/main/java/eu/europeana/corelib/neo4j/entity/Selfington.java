@@ -16,27 +16,27 @@
  */
 package eu.europeana.corelib.neo4j.entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Class representing a collection of related nodes; ie. children under one parent,
- * following or preceding siblings, etc
- * Created by luthien (maike.dulk@ europeana.eu) 15/10/2015.
+ * A List wrapper object to handle self node returned by plugin
+ * Created by luthien (maike.dulk@ europeana.eu) 3/2/2019.
  *
  */
 
 @JsonSerialize
-public class Siblington {
+public class Selfington {
 
-    private List<CustomNode> siblings = new ArrayList<>();
+    private List<CustomNode> self = new ArrayList<>();
 
-    public List<CustomNode> getSiblings() {
-        return siblings;
+    public List<CustomNode> getSelf() {
+        return self;
     }
 
-    public void setSiblings(List<CustomNode> siblings) {
-        this.siblings = siblings;
+    public void setSelf(List<CustomNode> self) {
+        this.self = self;
     }
 }

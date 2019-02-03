@@ -35,6 +35,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+
+import org.neo4j.driver.v1.types.Node;
+
 /**
  * Search service that retrieves BriefBeans or APIBeans in the case of a query
  * calculateTag or a FullBean in the case of a user selection. Currently the
@@ -47,7 +50,7 @@ import java.util.Map;
 public interface SearchService {
 
 	// removeme
-	Map watWilWickie();
+	Node watWilWickie();
 
 	/**
 	 * Retrieve a record by europeanaObjectId (no further processing)

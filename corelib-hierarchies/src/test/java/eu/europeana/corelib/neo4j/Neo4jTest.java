@@ -251,14 +251,14 @@ public class Neo4jTest {
 //        Neo4jStructBean structBean = Node2Neo4jBeanConverter.toNeo4jStruct(hierarchy, bean.getIndex());
 //        Assert.assertNotNull(structBean);
 //
-//        Assert.assertEquals(structBean.getSelf().getId(), bean.getId());
-//        Assert.assertEquals(structBean.getSelf().getIndex(), bean.getIndex());
-//        Assert.assertEquals(structBean.getSelf().getChildrenCount(), bean.getChildrenCount());
-//        Assert.assertEquals(structBean.getSelf().getDescription(), bean.getDescription());
-//        Assert.assertEquals(structBean.getSelf().getTitle(), bean.getTitle());
-//        Assert.assertEquals(structBean.getSelf().getType(), bean.getType());
-//        Assert.assertEquals(structBean.getSelf().getParent(), bean.getParent());
-//        Assert.assertEquals(structBean.getSelf(), bean);
+//        Assert.assertEquals(structBean.getSingleNode().getId(), bean.getId());
+//        Assert.assertEquals(structBean.getSingleNode().getIndex(), bean.getIndex());
+//        Assert.assertEquals(structBean.getSingleNode().getChildrenCount(), bean.getChildrenCount());
+//        Assert.assertEquals(structBean.getSingleNode().getDescription(), bean.getDescription());
+//        Assert.assertEquals(structBean.getSingleNode().getTitle(), bean.getTitle());
+//        Assert.assertEquals(structBean.getSingleNode().getType(), bean.getType());
+//        Assert.assertEquals(structBean.getSingleNode().getParent(), bean.getParent());
+//        Assert.assertEquals(structBean.getSingleNode(), bean);
 //        Assert.assertEquals(structBean.getParents().size(), 1);
 //        Node parent = server.getParent(node);
 //        Assert.assertEquals(structBean.getParents().get(0), Node2Neo4jBeanConverter.toNeo4jBean(parent, server.getNodeIndex(parent)));

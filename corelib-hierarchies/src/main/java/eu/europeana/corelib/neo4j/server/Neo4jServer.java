@@ -4,7 +4,7 @@
  *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
  *  by the European Commission;
  *  You may not use this work except in compliance with the Licence.
- * 
+ *
  *  You may obtain a copy of the Licence at:
  *  http://joinup.ec.europa.eu/software/page/eupl
  *
@@ -16,185 +16,212 @@
  */
 package eu.europeana.corelib.neo4j.server;
 
-import eu.europeana.corelib.neo4j.entity.CustomNode;
-import eu.europeana.corelib.neo4j.entity.Hierarchy;
+import eu.europeana.corelib.neo4j.entity.*;
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
+import eu.europeana.corelib.web.exception.ProblemType;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.graphdb.traversal.Uniqueness;
+//import org.neo4j.kernel.Uniqueness;
+//import org.neo4j.rest.graphdb.RestGraphDatabase;
+//import org.neo4j.rest.graphdb.index.RestIndex;
+//import org.neo4j.rest.graphdb.traversal.RestTraversal;
+import org.springframework.util.StringUtils;
 
+import javax.ws.rs.core.Context;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
- * Neo4j server connection interface
- * 
  * @author Yorgos.Mamakis@ europeana.eu
  * @author Maike.Dulk@ europeana.eu
  */
-public interface Neo4jServer {
+@SuppressWarnings("deprecation")
+public class Neo4jServer {
+
+	private final static Logger LOG = LogManager.getLogger(Neo4jServer.class);
+
+	private GraphDatabaseService              db;
+	private TraversalDescription              traversal;
+
+
+	//    private RestGraphDatabase                 graphDb;
+//    private RestIndex<Node>                   index;
+	private org.apache.http.client.HttpClient client;
+	private String                            customPath;
+	private String                            serverPath;
+
+	private static final Relation EDMISNEXTINSEQUENCERELATION = new Relation(RelType.EDM_ISNEXTINSEQUENCE.getRelType());
+	private static final Relation ISFIRSTINSEQUENCERELATION   = new Relation(RelType.ISFIRSTINSEQUENCE.getRelType());
+	private static final Relation DCTERMSISPARTOFRELATION     = new Relation(RelType.DCTERMS_ISPARTOF.getRelType());
+	private static final Relation DCTERMSHASPARTRELATION      = new Relation(RelType.DCTERMS_HASPART.getRelType());
+	private static final Relation ISFAKEORDERRELATION         = new Relation(RelType.ISFAKEORDER.getRelType());
+
+
+	/**
+	 * Neo4j contructor
+	 *
+	 * @param serverPath The path of the Neo4j server
+	 * @param index      The name of the index to search on
+	 * @param customPath The path of the custom Europeana Neo4j plugins
+	 */
+	public Neo4jServer(String serverPath, String index, String customPath) {
+		this.serverPath = serverPath;
+//        this.graphDb = new RestGraphDatabase(serverPath);
+//        this.index = this.graphDb.getRestAPI().getIndex(index);
+		this.client = HttpClientBuilder.create().setConnectionManager(new PoolingHttpClientConnectionManager()).build();
+		this.customPath = customPath;
+	}
+
+	/**
+	 * Node.Index = relative index of node in its hierarchical sequence
+	 * Node.Id = Neo4j numerical Id
+	 * Node.rdfAbout = hexadecimal rdf:about collection/item identifier
+	 * Note: initial "/" prefixed here again, it was taken out of the rdfAbout to avoid path separator problems
+	 */
+	public Neo4jServer(@Context GraphDatabaseService db ) {
+		this.db = db;
+	}
 
 	/**
 	 * @return the server path set during initialization
 	 */
-	public String getServerPath();
+	public String getServerPath() {
+		return serverPath;
+	}
 
-	/**
-	 * get node by its rdfAbout
-	 * 
-	 * @param rdfAbout the rdfAbout (id) to search on
-	 * @return         a Neo4j node
-	 * @throws         Neo4JException
-	 */
-	Node getNode(String rdfAbout) throws Neo4JException;
+	public Node getNode(String rdfAbout) throws Neo4JException {
+		Node node = null;
+//        try {
+//            IndexHits<Node> nodes = index.get("rdf_about", (!rdfAbout.startsWith("/") && (rdfAbout.contains("/") || rdfAbout.contains("%2F"))) ? "/" + rdfAbout : rdfAbout);
+//            if (nodes.size() > 0 && hasRelationships(nodes)) {
+//                node = nodes.getSingle();
+//            }
+//        } catch (Exception e) {
+//            throw new Neo4JException(e, ProblemType.NEO4J_CANNOTGETNODE);
+//        }
+		return node;
+	}
 
-	/**
-	 * Retrieve the children nodes of a parent node (parent-child relation
-	 * dcterms:hasPart). Returns null if null is present
-	 * @param node The node for which to retrieve the children
-	 * @param offset from which child to start receiving from
-	 * @param limit  how many children to receive
-	 * @return A list of children nodes with size <= to the specified limit
-	 * and from the specified offset
-	 */
-	List<CustomNode> getChildren(Node node, int offset, int limit);
+	public long getNodeIndex(Node node) {
+		return getNodeIndex(node.getId() + "");
+	}
 
-        /**
-         * Convenience override
-         * @param rdfAbout The node with this rdf:about to start from
-         * @param offset from which child to start receiving from
-         * @param limit  how many children to receive
-         * @return A list of children nodes with size  <= to the specified limit
-         * and from the specified offset
-         */
-	List<CustomNode> getChildren(String rdfAbout, int offset, int limit);
+	public long getNodeIndex(String nodeId) {
+		HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "europeana/hierarchycount/nodeId/" + nodeId);
+		try {
+			HttpResponse resp = client.execute(method);
 
-	/**
-	 * Retrieve the parent node of a node (parent relation dcterms:isPartOf)
-	 * 
-	 * @param node The node for which to retrieve the parent
-	 * @return The parent node
-	 */
-	Node getParent(Node node);
+			IndexObject obj = new ObjectMapper().readValue(resp.getEntity().getContent(), IndexObject.class);
+			return obj.getLength();
+		} catch (IOException e) {
+			LOG.error(e.getMessage());
+		} finally {
+			method.releaseConnection();
+		}
+		return 0;
+	}
 
-	/**
-	 * todo check if deprecated
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following outbound edm:isNextInSequence or isFakeOrder relations
-	 * 
-	 * @param node The node to start from
-	 * @param limit the number of nodes to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getFollowingSiblings(Node node, int limit);
+	public long getNodeIndexByRdfAbout(String rdfAbout) throws Neo4JException {
+		return getNodeIndex(getNode(rdfAbout));
+	}
 
-	/**
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following outbound edm:isNextInSequence or isFakeOrder relations
-	 * 
-	 * @param rdfAbout The node with this rdf:about to start from
-	 * @param limit the number of siblings to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getFollowingSiblings(String rdfAbout, int limit);
+	private boolean hasRelationships(IndexHits<Node> nodes) {
+		return nodes.getSingle().hasRelationship(DCTERMSISPARTOFRELATION) || nodes.getSingle().hasRelationship(DCTERMSHASPARTRELATION);
+	}
 
-	/**
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following outbound edm:isNextInSequence or isFakeOrder relations
-	 *
-	 * @param rdfAbout The node with this rdf:about to start from
-	 * @param offset the number of nodes skip
-	 * @param limit the number of siblings to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit);
+	public boolean isHierarchy(String rdfAbout) throws Neo4JException {
+		return getNode(rdfAbout) != null;
+	}
 
-	/**
-	 * todo check if deprecated
-     * Convenience override
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following inbound edm:isNextInSequence or isFakeOrder relations
-	 *
-	 * @param node The node to start from
-	 * @param limit the number of nodes to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getPrecedingSiblings(Node node, int limit);
+	public boolean isHierarchyTimeLimited(String rdfAbout, int hierarchyTimeout) throws Neo4JException, InterruptedException, ExecutionException, TimeoutException {
+		final ExecutorService timeoutExecutorService = Executors.newSingleThreadExecutor();
+		Future<Boolean>       future                 = timeoutExecutorService.submit(() -> isHierarchy(rdfAbout));
+		return future.get(hierarchyTimeout, TimeUnit.MILLISECONDS);
+	}
 
-	/**
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following inbound edm:isNextInSequence or isFakeOrder relations
-	 *
-	 * @param rdfAbout The node with this rdf:about to start from
-	 * @param offset the number of nodes skip
-	 * @param limit the number of nodes to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getPrecedingSiblings(String rdfAbout, int offset, int limit);
+	public long getChildrenCount(Node node) {
+		// start n = node(id) match (n)-[:HAS_PART]->(part) RETURN COUNT(part)
+		// as children
+		ObjectNode obj        = JsonNodeFactory.instance.objectNode();
+		ArrayNode  statements = JsonNodeFactory.instance.arrayNode();
+		obj.put("statements", statements);
+		ObjectNode statement = JsonNodeFactory.instance.objectNode();
+		statement.put("statement", "start n = node:edmsearch2(rdf_about={from}) match (n)-[:`dcterms:hasPart`]->(part)" + " WHERE NOT ID(n)=ID(part) RETURN COUNT(part) as children");
+//								" RETURN COUNT(part) as children");
+		ObjectNode parameters = statement.with("parameters");
+		statements.add(statement);
+		parameters.put("from", (String) node.getProperty("rdf:about"));
+		HttpPost httpMethod = new HttpPost(fixTrailingSlash(serverPath) + "transaction/commit");
+		try {
+			String str = new ObjectMapper().writeValueAsString(obj);
+			httpMethod.setEntity(new StringEntity(str));
+			httpMethod.setHeader("content-type", "application/json");
+			HttpResponse resp = client.execute(httpMethod);
 
-	/**
-	 * Retrieve ordered list of siblings using a specific node as a start
-	 * following inbound edm:isNextInSequence or isFakeOrder relations
-	 *
-	 * @param rdfAbout The node with this rdf:about to start from
-	 * @param limit the number of nodes to retrieve
-	 * @return A list of sibling nodes with size <= to the specified limit
-	 */
-	List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit);
-	
-	/**
-	 * Retrieve the number of children for a specific node
-	 * @param node The node to search on
-	 * @return The number of children for the specific node
-	 */
-	long getChildrenCount(Node node);
+			CustomResponse cr = new ObjectMapper().readValue(resp.getEntity().getContent(), CustomResponse.class);
 
-	/**
-	 * Get the order of the node within its hierarchy (local index)
-	 * @param node A specific neo4j node
-	 * @return The index number of the node
-	 */
-	long getNodeIndex(Node node);
+			if (cr.getResults() != null && !cr.getResults().isEmpty() && cr.getResults().get(0) != null && cr.getResults().get(0).getData() != null && !cr.getResults().get(0).getData().isEmpty() && cr.getResults().get(0).getData().get(0).get("row") != null && !cr.getResults().get(0).getData().get(0).get("row").isEmpty()) {
+				return Long.parseLong(cr.getResults().get(0).getData().get(0).get("row").get(0));
+			}
+		} catch (IllegalStateException | IOException e) {
+			LOG.error(e.getMessage());
+		} finally {
+			httpMethod.releaseConnection();
+		}
 
-	/**
-         * Get the order of the node within its hierarchy (local index)
-	 * @param nodeId the numerical id of the node
-	 * @return The index number of the node
-	 */
-	long getNodeIndex(String nodeId);
+		return 0;
+	}
 
-        /**
-         * Get the order of the node within its hierarchy (local index)
-	 * @param rdfAbout the rdf:about string of a specific neo4j node
-	 * @return The index number of the node
-	 */
-	long getNodeIndexByRdfAbout(String rdfAbout) throws Neo4JException;
+	public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
+		if (!isHierarchy(rdfAbout)) {
+			return null;
+		}
+		HttpGet method = new HttpGet(fixTrailingSlash(customPath) + "initial/startup/nodeId/" + StringUtils.replace(rdfAbout, "/", "%2F"));
+		LOG.debug("path: {}", method.getURI());
+		try {
+			HttpResponse resp = client.execute(method);
+			if (resp.getStatusLine().getStatusCode() == 502) {
+				LOG.error(ProblemType.NEO4J_INCONSISTENT_DATA.getMessage() + " by Neo4J plugin, for node with ID: " + rdfAbout);
+				throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA, " \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
+			}
+			ObjectMapper mapper = new ObjectMapper();
+			Hierarchy obj = mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
+			return obj;
+		} catch (IOException e) {
+			LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
+			throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);
+		} finally {
+			method.releaseConnection();
+		}
+	}
 
-	/**
-	 * Get the initial hierachy for a specific Europeana id
-	 * @param id The id to search on
-	 * @return A full Hierarchy consisting of parents- parents of parents- and nodes
-	 */
-	Hierarchy getInitialStruct(String id) throws Neo4JException;
+	public String getCustomPath() {
+		return customPath;
+	}
 
-	/**
-	 * The URI path for the REST cal to initial structure
-	 * @return
-	 */
-	String getCustomPath();
-
-	/**
-	 * Check if the specified id belongs to a hierarchy
-	 * @param id The Europeana id
-	 * @return true if it belongs to a hierarchy
-	 */
-	boolean isHierarchy(String id) throws Neo4JException;
-
-	/**
-	 * Check if the specified id belongs to a hierarchy
-	 * @param id The Europeana id
-	 * @param timeOutMillis seconds to wait until forcing a time-out (working around Neo4j issues)
-	 * @return true if it belongs to a hierarchy
-	 */
-	boolean isHierarchyTimeLimited(String id, int timeOutMillis) throws Neo4JException, InterruptedException,
-			ExecutionException, TimeoutException;
+	private String fixTrailingSlash(String path) {
+		return path.endsWith("/") ? path : path + "/";
+	}
 }
