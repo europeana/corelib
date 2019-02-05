@@ -26,11 +26,19 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
+	<import resource="corelib-definitions-context.xml" />
+
 	<bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.neo4j.Neo4jSearchService" lazy-init="true" />
 
 	<bean id="corelib_neo4j_cypherservice" class="eu.europeana.corelib.neo4j.server.CypherService" lazy-init="true">
-		<constructor-arg value="bolt://neo4j:neo4j@neo4j-prod.eanadev.org"/>
-		<constructor-arg value="edmsearch2"/>
-		<constructor-arg value="http://neo4j-prod.eanadev.org:7474/"/>
+		<constructor-arg value="#{europeanaProperties['neo4j.bolt.url']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['neo4j.index']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['neo4j.plugin.url']}" type="java.lang.String"/>
 	</bean>
+
+	<!--<bean id="corelib_neo4j_cypherservice" class="eu.europeana.corelib.neo4j.server.CypherService" lazy-init="true">-->
+		<!--<constructor-arg value="bolt://neo4j:neo4j@neo4j-prod.eanadev.org"/>-->
+		<!--<constructor-arg value="edmsearch2"/>-->
+		<!--<constructor-arg value="http://neo4j-prod.eanadev.org:7474/"/>-->
+	<!--</bean>-->
 </beans>
