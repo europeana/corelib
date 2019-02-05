@@ -16,21 +16,11 @@
  */
 package eu.europeana.corelib.neo4j;
 
-import eu.europeana.corelib.neo4j.server.Neo4jServer;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 //import eu.europeana.corelib.neo4j.exception.Neo4JException;
@@ -71,7 +61,7 @@ public class Neo4jTest {
 
     private static Process     neo4j;
 //    private static RestGraphDatabase db;
-    private static Neo4jServer server;
+//    private static Neo4jServer server;
 
     /**
      * Run once at start of test. We want to make sure log4j is initiated

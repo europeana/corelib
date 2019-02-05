@@ -24,6 +24,8 @@ import eu.europeana.corelib.neo4j.executor.*;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.neo4j.driver.v1.types.Node;
@@ -44,17 +46,24 @@ import static org.neo4j.helpers.collection.MapUtil.map;
  */
 public class CypherService {
 
-    private final static Logger LOG = LogManager.getLogger(CypherService.class);
+    private static final Logger LOG = LogManager.getLogger(CypherService.class);
 
     private final CypherExecutor cypher;
     private final String index;
     private final String pluginPath;
+    private final String serverPath;
     private HttpClient client;
 
     public CypherService(String uri, String index, String pluginPath) {
         this.index = index;
         this.pluginPath = pluginPath;
+        this.serverPath = uri;
         cypher = createCypherExecutor(uri);
+        this.client = HttpClientBuilder.create().setConnectionManager(new PoolingHttpClientConnectionManager()).build();
+    }
+
+    public String getServerPath() {
+        return serverPath;
     }
 
     private CypherExecutor createCypherExecutor(String uri) {
@@ -108,17 +117,17 @@ public class CypherService {
         return nodeFetcher("children", rdfAbout, offset, limit);
     }
 
-    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
-        return getFollowingSiblings(rdfAbout, 0, limit);
-    }
+//    public List<CustomNode> getFollowingSiblings(String rdfAbout, int limit) {
+//        return getFollowingSiblings(rdfAbout, 0, limit);
+//    }
 
     public List<CustomNode> getFollowingSiblings(String rdfAbout, int offset, int limit) {
         return nodeFetcher("following", rdfAbout, offset, limit);
     }
 
-    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
-        return getPrecedingSiblings(rdfAbout, 0, limit);
-    }
+//    public List<CustomNode> getPrecedingSiblings(String rdfAbout, int limit) {
+//        return getPrecedingSiblings(rdfAbout, 0, limit);
+//    }
 
     public List<CustomNode> getPrecedingSiblings(String rdfAbout, int offset, int limit) {
         return nodeFetcher("preceding", rdfAbout, offset, limit);
@@ -157,12 +166,10 @@ public class CypherService {
     }
 
     public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
-        if (!isHierarchy(rdfAbout)) {
-            return null;
-        }
         HttpGet method = new HttpGet(fixTrailingSlash(pluginPath) + "fetch/hierarchy/rdfAbout/"
                 + StringUtils.replace(rdfAbout, "/", "%2F"));
         LOG.debug("path: {}", method.getURI());
+
         try {
             HttpResponse resp = client.execute(method);
             if (resp.getStatusLine().getStatusCode() == 502) {
@@ -170,8 +177,7 @@ public class CypherService {
                 throw new Neo4JException(ProblemType.NEO4J_INCONSISTENT_DATA, " \n\n... thrown by Neo4J plugin, for node with ID: " + rdfAbout);
             }
             ObjectMapper mapper = new ObjectMapper();
-            Hierarchy obj = mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
-            return obj;
+            return mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
         } catch (IOException e) {
             LOG.error(ProblemType.NEO4J_CANNOTGETNODE.getMessage() + " with ID: " + rdfAbout);
             throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE, " with ID: " + rdfAbout);

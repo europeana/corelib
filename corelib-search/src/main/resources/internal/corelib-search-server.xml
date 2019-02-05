@@ -26,8 +26,6 @@
         <constructor-arg value="#{europeanaProperties['mongodb.recordId.dbname']}" type="java.lang.String"/>
     </bean>
 
-    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.search.impl.Neo4jSearchServiceImpl" lazy-init="true" />
-
     <!-- default profile, connecting to solr cluster via Zookeeper -->
     <beans profile="default">
         <!-- basically what we are doing here is
