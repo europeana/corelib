@@ -29,8 +29,8 @@
 	<bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.neo4j.Neo4jSearchService" lazy-init="true" />
 
 	<bean id="corelib_neo4j_cypherservice" class="eu.europeana.corelib.neo4j.server.CypherService" lazy-init="true">
-		<constructor-arg value="bolt://neo4j:neo4j@localhost"/>
+		<constructor-arg value="bolt://neo4j:neo4j@neo4j-prod.eanadev.org"/>
 		<constructor-arg value="edmsearch2"/>
-		<constructor-arg value="http://localhost:7474/"/>
+		<constructor-arg value="http://neo4j-prod.eanadev.org:7474/"/>
 	</bean>
 </beans>
