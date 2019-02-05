@@ -49,9 +49,6 @@ import org.neo4j.driver.v1.types.Node;
  */
 public interface SearchService {
 
-	// removeme
-	Node watWilWickie();
-
 	/**
 	 * Retrieve a record by europeanaObjectId (no further processing)
 	 *

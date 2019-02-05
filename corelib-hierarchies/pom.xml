@@ -32,7 +32,7 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-web</artifactId>
         </dependency>
-        
+
         <!-- OTHER -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
