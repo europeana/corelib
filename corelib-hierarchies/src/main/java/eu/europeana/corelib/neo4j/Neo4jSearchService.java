@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.neo4j.entity.*;
 import eu.europeana.corelib.neo4j.exception.Neo4JException;
-import eu.europeana.corelib.neo4j.server.CypherService;
+import eu.europeana.corelib.neo4j.server.Neo4jService;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -36,12 +36,12 @@ public class Neo4jSearchService {
     private static final String INDEX               = "index";
     private static final String NULL                = "(null)";
 
-    @Resource(name = "corelib_neo4j_cypherservice" )
-    protected CypherService cypherService;
+    @Resource(name = "corelib_neo4j_service" )
+    protected Neo4jService neo4jService;
 
     @PostConstruct
     private void init() {
-        LogManager.getLogger(Neo4jSearchService.class).info("Connected to {}", cypherService.getServerPath());
+        LogManager.getLogger(Neo4jSearchService.class).info("Connected to {}", neo4jService.getServerPath());
     }
 
     /**
@@ -51,7 +51,7 @@ public class Neo4jSearchService {
      * @return Neo4jBean representing 'self' node
      */
     public Neo4jBean getSingle(String rdfAbout) throws Neo4JException {
-        List<CustomNode> selfList = cypherService.getSingleNode(rdfAbout);
+        List<CustomNode> selfList = neo4jService.getSingleNode(rdfAbout);
         if (!selfList.isEmpty()) {
             return toNeo4jBean(selfList.get(0), -1L);
         } else {
@@ -71,7 +71,7 @@ public class Neo4jSearchService {
     public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) {
         List<Neo4jBean> beans = new ArrayList<>();
         long startIndex = offset;
-        List<CustomNode> children = cypherService.getChildren(rdfAbout, offset, limit);
+        List<CustomNode> children = neo4jService.getChildren(rdfAbout, offset, limit);
         for (CustomNode child : children) {
             startIndex += 1L;
             beans.add(toNeo4jBean(child, startIndex));
@@ -81,7 +81,7 @@ public class Neo4jSearchService {
 
     public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit, long selfIndex) {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> precedingSiblings = cypherService.getPrecedingSiblings(rdfAbout, offset, limit);
+        List<CustomNode> precedingSiblings = neo4jService.getPrecedingSiblings(rdfAbout, offset, limit);
         long startIndex = selfIndex - offset;
         for (CustomNode precedingSibling : precedingSiblings) {
             startIndex -= 1L;
@@ -100,7 +100,7 @@ public class Neo4jSearchService {
      */
     public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit, long selfIndex) {
         List<Neo4jBean> beans = new ArrayList<>();
-        List<CustomNode> followingSiblings = cypherService.getFollowingSiblings(rdfAbout, offset, limit);
+        List<CustomNode> followingSiblings = neo4jService.getFollowingSiblings(rdfAbout, offset, limit);
         long startIndex = selfIndex + offset;
         for (CustomNode followingSibling : followingSiblings) {
             startIndex += 1L;
@@ -117,7 +117,7 @@ public class Neo4jSearchService {
      * @return The hierarchical structure
      */
     public Neo4jStructBean getInitialStruct(String rdfAbout, long selfIndex) throws Neo4JException {
-        return Objects.requireNonNull(toNeo4jStruct(cypherService.getInitialStruct(rdfAbout), selfIndex));
+        return Objects.requireNonNull(toNeo4jStruct(neo4jService.getInitialStruct(rdfAbout), selfIndex));
     }
 
     /**
