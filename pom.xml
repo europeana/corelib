@@ -40,7 +40,7 @@
 
 		<commonsIO.version>2.4</commonsIO.version>
 		<commonsLang.version>2.6</commonsLang.version>
-		<commonsLang3.version>3.4</commonsLang3.version>
+		<commonsLang3.version>3.8.1</commonsLang3.version>
 		<httpclient.version>4.5.2</httpclient.version>
 		<jackson.version>2.6.5</jackson.version>
 		<jibx.version>1.3.1</jibx.version>
