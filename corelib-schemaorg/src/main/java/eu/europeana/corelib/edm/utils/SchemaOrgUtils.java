@@ -1,23 +1,52 @@
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.definitions.edm.entity.Agent;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.edm.model.schemaorg.*;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.*;
-import eu.europeana.corelib.utils.DateUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import eu.europeana.corelib.definitions.edm.entity.Agent;
+import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.Concept;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.edm.model.schemaorg.AudioObject;
+import eu.europeana.corelib.edm.model.schemaorg.CreativeWork;
+import eu.europeana.corelib.edm.model.schemaorg.GeoCoordinates;
+import eu.europeana.corelib.edm.model.schemaorg.MediaObject;
+import eu.europeana.corelib.edm.model.schemaorg.MultilingualString;
+import eu.europeana.corelib.edm.model.schemaorg.Organization;
+import eu.europeana.corelib.edm.model.schemaorg.Person;
+import eu.europeana.corelib.edm.model.schemaorg.Place;
+import eu.europeana.corelib.edm.model.schemaorg.QuantitativeValue;
+import eu.europeana.corelib.edm.model.schemaorg.Reference;
+import eu.europeana.corelib.edm.model.schemaorg.SchemaOrgConstants;
+import eu.europeana.corelib.edm.model.schemaorg.Text;
+import eu.europeana.corelib.edm.model.schemaorg.Thing;
+import eu.europeana.corelib.edm.model.schemaorg.VideoObject;
+import eu.europeana.corelib.edm.model.schemaorg.VisualArtwork;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.PlaceImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.TimespanImpl;
+import eu.europeana.corelib.utils.DateUtils;
 
 public final class SchemaOrgUtils {
 
@@ -86,12 +115,12 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Fill the properties of the Thing object for the specified concept.
+     * Fill the properties of the Schema.Org Thing from equivalent attributes of EDM concept.
      *
-     * @param concept source concept object
-     * @param conceptObject Thing object in which the properties will be filled in
+     * @param concept source EDM concept
+     * @param conceptObject Schema.Org Thing object in which the properties will be filled in
      */
-    private static void processConcept(ConceptImpl concept, Thing conceptObject) {
+    public static void processConcept(Concept concept, Thing conceptObject) {
         // @id
         conceptObject.setId(concept.getAbout());
 
@@ -124,66 +153,66 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Update the properties of the given Place object using data from PlaceImpl
+     * Update the properties of the given Schema.Org Place using data from EDM place
      *
-     * @param place source place object
-     * @param placeObject Place object to update
+     * @param edmPlace source EDM place
+     * @param placeObject Schema.Org Place object to update
      */
-    private static void processPlace(PlaceImpl place, Place placeObject) {
-        if (place == null) {
+    public static void processPlace(eu.europeana.corelib.definitions.edm.entity.Place edmPlace, Place placeObject) {
+        if (edmPlace == null) {
             return;
         }
 
         // @id
-        placeObject.setId(place.getAbout());
+        placeObject.setId(edmPlace.getAbout());
 
         // name
-        addMultilingualProperties(placeObject, place.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        addMultilingualProperties(placeObject, edmPlace.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
         // alternateName
-        addMultilingualProperties(placeObject, place.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        addMultilingualProperties(placeObject, edmPlace.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
         // geo
-        createGeoCoordinates(place, placeObject);
+        createGeoCoordinates(edmPlace, placeObject);
 
         // description
-        addMultilingualProperties(placeObject, place.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        addMultilingualProperties(placeObject, edmPlace.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
         // containsPlace
-        addReferences(placeObject, place.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE, Place.class);
+        addReferences(placeObject, edmPlace.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE, Place.class);
 
         // containedInPlace
-        addReferences(placeObject, place.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class);
+        addReferences(placeObject, edmPlace.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class);
 
         // sameAs
-        addTextProperties(placeObject, toList(place.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
     }
 
     /**
-     * Create GeoCoordinates object for the latitude, longitude and altitude taken from PlaceImpl and set the
-     * corresponding properties in Place object.
+     * Create GeoCoordinates object for the latitude, longitude and altitude taken from EDM Place and set the
+     * corresponding properties in Schema.Org Place.
      *
-     * @param place PlaceImpl object with necessary data
-     * @param placeObject Place object to update
+     * @param edmPlace EDM Place with necessary data
+     * @param placeObject Schema.Org Place object to update
      */
-    private static void createGeoCoordinates(PlaceImpl place, Place placeObject) {
+    private static void createGeoCoordinates(eu.europeana.corelib.definitions.edm.entity.Place edmPlace, Place placeObject) {
         GeoCoordinates geoCoordinates = new GeoCoordinates();
 
         // latitude
-        if (place.getLatitude() != null) {
-            geoCoordinates.addLatitude(new Text(String.valueOf(place.getLatitude())));
+        if (edmPlace.getLatitude() != null) {
+            geoCoordinates.addLatitude(new Text(String.valueOf(edmPlace.getLatitude())));
         }
         // TODO Try to retrieve the latitude from position if possible
 
         // longitude
-        if (place.getLongitude() != null) {
-            geoCoordinates.addLongitude(new Text(String.valueOf(place.getLongitude())));
+        if (edmPlace.getLongitude() != null) {
+            geoCoordinates.addLongitude(new Text(String.valueOf(edmPlace.getLongitude())));
         }
         // TODO Try to retrieve the longitude from position if possible
 
         // elevation
-        if (place.getAltitude() != null) {
-            geoCoordinates.addElevation(new Text(String.valueOf(place.getAltitude())));
+        if (edmPlace.getAltitude() != null) {
+            geoCoordinates.addElevation(new Text(String.valueOf(edmPlace.getAltitude())));
         }
 
         // geo
@@ -209,12 +238,12 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Update properties of the given Thing object (Person or Organization) using data from the given Agent
+     * Update properties of the given Schema.Org Thing (Person or Organization) using data from the given EDM Agent
      *
      * @param agentObject Person or Organization object to update
-     * @param agent source agent
+     * @param agent source EDM agent
      */
-    private static void processAgent(Agent agent, Thing agentObject) {
+    public static void processAgent(Agent agent, Thing agentObject) {
         // @id
         agentObject.setId(agent.getAbout());
 
