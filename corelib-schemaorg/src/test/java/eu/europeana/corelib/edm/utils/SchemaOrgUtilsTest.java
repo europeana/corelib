@@ -36,7 +36,7 @@ public class SchemaOrgUtilsTest {
         String output = SchemaOrgUtils.toSchemaOrg(bean);
         Assert.assertNotNull(output);
         //Used for testing purposes, use the following call to update the expected output whenever the serialization is updated
-        writeToFile(output);
+//        writeToFile(output);
         InputStream stream = getClass().getResourceAsStream(FULL_BEAN_FILE);
         String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
         assertEquals(expectedOutput, output);
