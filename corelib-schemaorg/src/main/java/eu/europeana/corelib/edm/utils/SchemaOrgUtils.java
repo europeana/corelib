@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.schemaorg.AudioObject;
 import eu.europeana.corelib.edm.model.schemaorg.CreativeWork;
@@ -47,6 +48,7 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.utils.DateUtils;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 
 public final class SchemaOrgUtils {
 
@@ -97,9 +99,29 @@ public final class SchemaOrgUtils {
     }
 
     /**
+	 * Update properties of the given Schema.Org Thing 
+	 * using data from the given EDM Contextual Class
+	 * 
+	 * @param entity source EDM Contextual Class
+	 * @param thing Schema.Org Thing to update
+	 */
+	public static void processEntity(ContextualClass entity, Thing thing) {
+
+		if (entity instanceof Concept) {
+			SchemaOrgUtils.processConcept((Concept) entity, thing);
+		} else if (entity instanceof eu.europeana.corelib.definitions.edm.entity.Place) {
+			SchemaOrgUtils.processPlace(
+					(eu.europeana.corelib.definitions.edm.entity.Place) entity,
+					(Place) thing);
+		} else	if (entity instanceof Agent) {
+			SchemaOrgUtils.processAgent((Agent) entity, thing);
+		}
+	}
+	
+    /**
      * Process all concepts on the given list and create a Thing object for each.
      *
-     * @param concepts conecpts to be processed
+     * @param concepts concepts to be processed
      * @return list of created Thing objects for each concept
      */
     private static List<Thing> processConcepts(List<ConceptImpl> concepts) {
@@ -745,7 +767,7 @@ public final class SchemaOrgUtils {
      * @return true when the string is a ISO8601 date or a reference to timespan
      */
     private static boolean isDateOrTimespan(String value) {
-        return (EdmUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX))
+        return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX))
                 || DateUtils.parse(value) != null;
     }
 
@@ -778,7 +800,7 @@ public final class SchemaOrgUtils {
      * @return true when value is uri starting with http://data.europeana.eu/place
      */
     private static boolean isPlace(String value) {
-        return EdmUtils.isUri(value) && value.startsWith(PLACE_PREFIX);
+        return EuropeanaUriUtils.isUri(value) && value.startsWith(PLACE_PREFIX);
     }
 
     /**
@@ -823,7 +845,7 @@ public final class SchemaOrgUtils {
                                          String value) {
         if (notNullNorEmpty(value)) {
             String valueToAdd = value;
-            if (EdmUtils.isUri(value) && timespans != null) {
+            if (EuropeanaUriUtils.isUri(value) && timespans != null) {
                 // value might be timespan
                 valueToAdd = createDateRange(value, language, timespans);
 
@@ -904,7 +926,7 @@ public final class SchemaOrgUtils {
      */
     private static void addProperty(Thing object, String value, String language, String propertyName, Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
-            if (EdmUtils.isUri(value)) {
+            if (EuropeanaUriUtils.isUri(value)) {
                 addReference(object, value, propertyName, referenceClass);
             } else {
                 addMultilingualProperty(object,
