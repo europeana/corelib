@@ -22,12 +22,12 @@ public class JsonLdSerializer {
      * @throws IOException
      */
     public String serialize(Thing object) throws IOException {
-        List<Thing> objects = new ArrayList<>();
-        objects.add(object);
-        return serialize(objects);
+    	init();
+        JsonldResourceBuilder<Thing> jsonResourceBuilder = createResourceBuilder(object);
+        return mapper.writer().writeValueAsString(jsonResourceBuilder.build(object));
     }
 
-    /**
+	/**
      * This method provides full serialization
      * @param objects
      * @return full user set view
@@ -35,10 +35,21 @@ public class JsonLdSerializer {
      */
     public String serialize(List<Thing> objects) throws IOException {
         init();
-        JsonldResourceBuilder<List<Thing>> jsonResourceBuilder = JsonldResource.Builder.create();
-        jsonResourceBuilder.context("http://schema.org");
+        JsonldResourceBuilder<List<Thing>> jsonResourceBuilder = createResourceBuilder(objects);
         return mapper.writer().writeValueAsString(jsonResourceBuilder.build(objects));
     }
+
+    private JsonldResourceBuilder<Thing> createResourceBuilder(Thing object) {
+		JsonldResourceBuilder<Thing> jsonResourceBuilder = JsonldResource.Builder.create();
+		jsonResourceBuilder.context("http://schema.org");
+        return jsonResourceBuilder;
+	}
+
+	private JsonldResourceBuilder<List<Thing>> createResourceBuilder(List<Thing> objects) {
+		JsonldResourceBuilder<List<Thing>> jsonResourceBuilder = JsonldResource.Builder.create();
+        jsonResourceBuilder.context("http://schema.org");
+		return jsonResourceBuilder;
+	}
 
     private void init() {
         JsonldModule module = new JsonldModule();
