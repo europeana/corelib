@@ -1,16 +1,16 @@
 package eu.europeana.corelib.edm.utils;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+
 import eu.europeana.corelib.edm.model.schemaorg.Text;
 import eu.europeana.corelib.edm.model.schemaorg.Thing;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import ioinformarics.oss.jackson.module.jsonld.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.JsonldResourceBuilder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JsonLdSerializer {
     ObjectMapper mapper = new ObjectMapper();
