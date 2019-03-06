@@ -20,12 +20,14 @@
             http://www.springframework.org/schema/tx/spring-tx.xsd
 	">
 
+    <!-- When deploying on Cloud Foundry this dataSource is ignored because when there is 1 database service defined in
+         the manifest the Spring Auto-reconfiguration framework will create it's own dataSource for that instead. See also
+         https://spring.io/blog/2011/11/04/using-cloud-foundry-services-with-spring-part-2-auto-reconfiguration
+         Unfortunately Spring Auto-reconfiguration then also automatically sets maxIdle and maxActive to 4. See also
+         https://community.pivotal.io/s/article/Connection-pool-warning-message-maxIdle-is-larger-than-maxActive-setting-maxIdle-to-4-seen-in-PCF-deployed-Spring-app -->
     <bean id="corelib_db_dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="#{europeanaProperties['db.driverClass']}"/>
         <property name="url" value="jdbc:#{europeanaProperties['postgres.jdbcUrl']}" />
-        <!-- Setting properties here won't work when deploying on Cloud Foundry because the Spring Auto-reconfiguration
-             framework will ignore all original datasource properties and reset maxIdle and maxActive to 4, see also
-             https://community.pivotal.io/s/article/Connection-pool-warning-message-maxIdle-is-larger-than-maxActive-setting-maxIdle-to-4-seen-in-PCF-deployed-Spring-app -->
         <property name="maxIdle" value="2" />
         <property name="maxActive" value="10" />
     </bean>
