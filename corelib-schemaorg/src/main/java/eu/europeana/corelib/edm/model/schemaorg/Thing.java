@@ -1,23 +1,27 @@
 package eu.europeana.corelib.edm.model.schemaorg;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
+import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+
 @JsonldType("Thing")
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({"@type", "@id", "name", "alternateName", "description", "inLanguage", "sameAs", "url"})
+@JsonPropertyOrder({"@type", "@id", SchemaOrgConstants.PROPERTY_NAME, 
+	SchemaOrgConstants.PROPERTY_ALTERNATE_NAME, SchemaOrgConstants.PROPERTY_DESCRIPTION, 
+	SchemaOrgConstants.PROPERTY_IN_LANGUAGE, SchemaOrgConstants.PROPERTY_SAME_AS })
 public class Thing implements BaseType {
     private String id;
-
+    
     /**
      * Properties
      */
@@ -57,12 +61,13 @@ public class Thing implements BaseType {
     public List<BaseType> getSameAs() {
         return getProperty(SchemaOrgConstants.PROPERTY_SAME_AS);
     }
-
+    
     @JsonldProperty(SchemaOrgConstants.PROPERTY_URL)
     public List<BaseType> getUrl() {
         return getProperty(SchemaOrgConstants.PROPERTY_URL);
     }
 
+    
     public void addName(MultilingualString name) {
         addProperty(SchemaOrgConstants.PROPERTY_NAME, name);
     }
@@ -86,7 +91,7 @@ public class Thing implements BaseType {
     public void addUrl(Text url) {
         addProperty(SchemaOrgConstants.PROPERTY_URL, url);
     }
-
+    
     @JsonIgnore
     @Override
     public String getTypeName() {

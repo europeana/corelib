@@ -103,9 +103,9 @@ public final class SchemaOrgUtils {
 	 * using data from the given EDM Contextual Class
 	 * 
 	 * @param entity source EDM Contextual Class
-	 * @param thing Schema.Org Thing to update
+	 * @param thing Schema.Org Contextual Entity to update
 	 */
-	public static void processEntity(ContextualClass entity, Thing thing) {
+	public static void processEntity(ContextualClass entity, eu.europeana.corelib.edm.model.schemaorg.ContextualEntity thing) {
 
 		if (entity instanceof Concept) {
 			SchemaOrgUtils.processConcept((Concept) entity, thing);
@@ -128,7 +128,7 @@ public final class SchemaOrgUtils {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (ConceptImpl concept : concepts) {
-            Thing conceptObject = new Thing();
+        	eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject = new eu.europeana.corelib.edm.model.schemaorg.Concept();
             referencedObjects.add(conceptObject);
 
             processConcept(concept, conceptObject);
@@ -140,9 +140,9 @@ public final class SchemaOrgUtils {
      * Fill the properties of the Schema.Org Thing from equivalent attributes of EDM concept.
      *
      * @param concept source EDM concept
-     * @param conceptObject Schema.Org Thing object in which the properties will be filled in
+     * @param conceptObject Schema.Org Contextual Entity object in which the properties will be filled in
      */
-    public static void processConcept(Concept concept, Thing conceptObject) {
+    public static void processConcept(Concept concept, eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject) {
         // @id
         conceptObject.setId(concept.getAbout());
 
@@ -154,6 +154,13 @@ public final class SchemaOrgUtils {
 
         // sameAs
         addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        
+        // url
+        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_PATTERN, concept.getEntityIdentifier());
+        conceptObject.setEntityPageUrl(entityPageUrl);
+        
+        // image
+        conceptObject.setImage(concept.getFoafDepiction());
     }
 
     /**
@@ -208,6 +215,14 @@ public final class SchemaOrgUtils {
 
         // sameAs
         addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        
+        // url
+        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_PATTERN, edmPlace.getEntityIdentifier());
+        //Not available yet
+        //placeObject.setEntityPageUrl(entityPageUrl);
+        
+        // image
+        placeObject.setImage(edmPlace.getFoafDepiction());
     }
 
     /**
@@ -251,7 +266,7 @@ public final class SchemaOrgUtils {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (Agent agent : agents) {
-            Thing agentObject = SchemaOrgTypeFactory.createAgent(agent);
+        	eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject = SchemaOrgTypeFactory.createAgent(agent);
             referencedObjects.add(agentObject);
 
             processAgent(agent, agentObject);
@@ -262,10 +277,10 @@ public final class SchemaOrgUtils {
     /**
      * Update properties of the given Schema.Org Thing (Person or Organization) using data from the given EDM Agent
      *
-     * @param agentObject Person or Organization object to update
+     * @param agentObject Schema.Org Contextual Entity object to update
      * @param agent source EDM agent
      */
-    public static void processAgent(Agent agent, Thing agentObject) {
+    public static void processAgent(Agent agent, eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject) {
         // @id
         agentObject.setId(agent.getAbout());
 
@@ -281,18 +296,23 @@ public final class SchemaOrgUtils {
         addMultilingualProperties(agentObject, agent.getRdaGr2BiographicalInformation(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
         if (agentObject instanceof Person) {
+        	
             // birthDate
             if (agent.getRdaGr2DateOfBirth() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
-            } else {
-                addMultilingualProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
+            	Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfBirth());
+            	addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_BIRTH_DATE, null, false);
+            } else if(agent.getBegin() != null) {
+            	Map<String, List<String>> dates = filterDates(agent.getBegin());
+            	addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_BIRTH_DATE, null, false);
             }
 
             // deathDate
             if (agent.getRdaGr2DateOfDeath() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
-            } else {
-                addMultilingualProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
+            	Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfDeath());
+            	addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_DEATH_DATE, null, false);
+            } else if(agent.getEnd() != null) {
+            	Map<String, List<String>> dates = filterDates(agent.getEnd());
+            	addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_DEATH_DATE, null, false);
             }
 
             // gender
@@ -302,25 +322,39 @@ public final class SchemaOrgUtils {
             addMultilingualProperties(agentObject, agent.getRdaGr2ProfessionOrOccupation(), SchemaOrgConstants.PROPERTY_JOB_TITLE);
 
             // birthPlace
-            addMultilingualPropertiesWithReferences(agentObject, agent.getRdaGr2PlaceOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_PLACE, Place.class);
+            addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_PLACE, Place.class);
 
             // deathPlace
-            addMultilingualPropertiesWithReferences(agentObject, agent.getRdaGr2PlaceOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_PLACE, Place.class);
+            addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_PLACE, Place.class);
         }
 
         if (agentObject instanceof Organization) {
             // foundingDate
-            addMultilingualProperties(agentObject, agent.getRdaGr2DateOfEstablishment(), SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
+        	if(agent.getRdaGr2DateOfEstablishment() != null)
+        	{
+	        	Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfEstablishment());
+	        	addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_FOUNDING_DATE, null, false);
+        	}
 
             // dissolutionDate
-            addMultilingualProperties(agentObject, agent.getRdaGr2DateOfTermination(), SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
+        	if(agent.getRdaGr2DateOfTermination() != null) {
+	            Map<String, List<String>> dissolutionDate = filterDates(agent.getRdaGr2DateOfTermination());
+	        	addDateProperty(agentObject, dissolutionDate, SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE, null, false);
+        	}
         }
 
         // sameAs
         addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        
+        // url
+        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_PATTERN, agent.getEntityIdentifier());
+        agentObject.setEntityPageUrl(entityPageUrl);
+        
+        // image
+        agentObject.setImage(agent.getFoafDepiction());
     }
 
-    /**
+	/**
      * Adds Text properties from the given values. Those are language independent
      *
      * @param object Thing object to update
@@ -601,6 +635,31 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Adds typed references. When a reference is detected its type will be
+     * set to <code>referenceClass</code>
+     * @param object object for which the properties will be added
+     * @param map map of values where key is the language and value is a values list
+     * @param propertyName name of property
+     * @param referenceClass class of reference
+     */
+    private static void addResourceOrReferenceProperties(Thing object,
+														            Map<String, List<String>> map,
+														            String propertyName,
+														            Class<? extends Thing> referenceClass) {
+    	if (map == null) {
+            return;
+        }
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+    		for (String value : entry.getValue()) {
+    			if (EuropeanaUriUtils.isUri(value))
+    				addProperty(object, value, entry.getKey(), propertyName, referenceClass);
+    			else
+    				addResourceProperty(object, value, entry.getKey(), propertyName, referenceClass);
+    		}
+        }
+	}
+    
+    /**
      * Adds multilingual properties or typed references. When a reference is detected the corresponding object is
      * being searched on <code>referenced</code> list and an additional object of type <code>referenceClass</code>
      * is created with properties.
@@ -813,7 +872,7 @@ public final class SchemaOrgUtils {
      * @param timespans list of timespans
      * @param allowInvalid when true all values are added, otherwise only valid dates are added
      */
-    private static void addDateProperty(CreativeWork object,
+    private static void addDateProperty(Thing object,
                                         Map<String,List<String>> map,
                                         String propertyName,
                                         List<TimespanImpl> timespans,
@@ -837,7 +896,7 @@ public final class SchemaOrgUtils {
      * @param language language of the value
      * @param value value to process
      */
-    private static void processDateValue(CreativeWork object,
+    private static void processDateValue(Thing object,
                                          String propertyName,
                                          List<TimespanImpl> timespans,
                                          boolean allowInvalid,
@@ -938,6 +997,44 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Creates a reference object, adds the multilingual string to the reference and adds the reference to the object.
+     *
+     * @param object object for which the property will be added
+     * @param propertyName name of property
+     * @param language language string, may be empty
+     * @param value value to add
+     * @param referenceClass class of reference that should be used for Reference object
+     */
+    private static void addResourceProperty(Thing object, String value, String language, String propertyName, Class<? extends Thing> referenceClass) {
+        if (notNullNorEmpty(value)) {
+        	Thing resource = instantiateResourceObject(referenceClass);
+        	addMultilingualProperty(resource,
+                    value,
+                    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(language) ? "" : language,
+                    SchemaOrgConstants.PROPERTY_NAME);
+            object.addProperty(propertyName, resource);
+        }
+    }
+
+    /*
+     * Instantiates the reference class object, otherwise a Thing object will be instantiate. 
+     * 
+     * @param referenceClass class to instantiate
+     */
+	private static Thing instantiateResourceObject(Class<? extends Thing> referenceClass) {
+		if(referenceClass == null)
+			return new Thing();
+		Thing resource = null;
+		try {
+			resource = (Thing) referenceClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			resource = new Thing();
+			LOG.info("Cannot instantiate object of class " + referenceClass.getCanonicalName() + ". Instance of Thing is used instead!");
+		}
+		return resource;
+	}
+    
+    /**
      * Creates a general (not typed) reference and adds it to the specified object as a property value of the given
      * property name.
      *
@@ -951,7 +1048,7 @@ public final class SchemaOrgUtils {
         reference.setId(id);
         object.addProperty(propertyName, reference);
     }
-
+    
     /**
      * Adds multilingual string properties for all values lists in the given map.
      * @param object object for which the property values will be added

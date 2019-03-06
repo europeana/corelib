@@ -7,7 +7,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 
 @JsonldType(SchemaOrgConstants.TYPE_PERSON)
-public class Person extends Thing {
+public class Person extends ContextualEntity {
 
     @JsonIgnore
     @Override
