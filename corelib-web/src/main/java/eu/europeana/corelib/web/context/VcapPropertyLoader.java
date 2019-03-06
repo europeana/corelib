@@ -95,27 +95,13 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         try (FileInputStream fis = new FileInputStream(europeanaProperties)){
             props.load(fis);
 
-            LOG.info("PRE");
-            LOG.info("postgres.db = "+props.getProperty("postgres.db"));
-            LOG.info("postgres.host = "+props.getProperty("postgres.host"));
-            LOG.info("postgres.jdbcUrl = "+props.getProperty("postgres.jdbcUrl"));
-            LOG.info("env DATABASE_URL = "+env.getProperty("DATABASE_URL"));
-            LOG.info("System.getProp DATABASE_URL ="+System.getProperty("DATABASE_URL"));
-            LOG.info("System.getEnv DATABASE_URL = "+System.getenv("DATABASE_URL"));
-
-            props.setProperty("postgres.db", env.getProperty(POSTGRESDB + env.getProperty(POSTGRES) + CREDENTIALS_DB));
-            props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME + env.getProperty(POSTGRES) + CREDENTIALS_USER));
-            props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD + env.getProperty(POSTGRES) + CREDENTIALS_PASSWORD));
-            props.setProperty("postgres.host", env.getProperty(POSTGRESHOST + env.getProperty(POSTGRES) + CREDENTIALS_HOST));
-            System.setProperty("DATABASE_URL", "test changed");
-
-            LOG.info("POST");
-            LOG.info("postgres.db = "+props.getProperty("postgres.db"));
-            LOG.info("postgres.host = "+props.getProperty("postgres.host"));
-            LOG.info("postgres.jdbcUrl = "+props.getProperty("postgres.jdbcUrl"));
-            LOG.info("env DATABASE_URL = "+env.getProperty("DATABASE_URL"));
-            LOG.info("System.getProp DATABASE_URL ="+System.getProperty("DATABASE_URL"));
-            LOG.info("System.getEnv DATABASE_URL = "+System.getenv("DATABASE_URL"));
+            // PostgreSQL db, username, password, host
+//            if (env.getProperty(POSTGRESHOST + env.getProperty(POSTGRES) + CREDENTIALS_HOST) != null) {
+//                props.setProperty("postgres.db", env.getProperty(POSTGRESDB + env.getProperty(POSTGRES) + CREDENTIALS_DB));
+//                props.setProperty("postgres.username", env.getProperty(POSTGRESUSERNAME + env.getProperty(POSTGRES) + CREDENTIALS_USER));
+//                props.setProperty("postgres.password", env.getProperty(POSTGRESPASSWORD + env.getProperty(POSTGRES) + CREDENTIALS_PASSWORD));
+//                props.setProperty("postgres.host", env.getProperty(POSTGRESHOST + env.getProperty(POSTGRES) + CREDENTIALS_HOST));
+//            }
 
             // MongoDB username, password, host, port
             // The actual Mongo db depends on the user-provided "mongo_service" value
