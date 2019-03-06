@@ -55,6 +55,7 @@ public class JsonLdSerializer {
         JsonldModule module = new JsonldModule();
         module.addSerializer(new TextSerializer(Text.class));
         mapper.registerModule(module);
+        //TODO: Sergiu actually we don't have any properties using java type Date 
         mapper.setDateFormat(new ISO8601DateFormat());
     }
 }

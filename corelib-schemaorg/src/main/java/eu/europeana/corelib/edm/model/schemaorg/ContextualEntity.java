@@ -21,7 +21,7 @@ public abstract class ContextualEntity extends Thing {
         return entityPageUrl;
     }
     
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_IMAGE)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_IMAGE)
     public String getImage() {
         return image;
     }

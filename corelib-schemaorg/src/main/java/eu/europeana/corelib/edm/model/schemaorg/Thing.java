@@ -37,32 +37,32 @@ public class Thing implements BaseType {
         return id;
     }
 
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_NAME)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_NAME)
     public List<BaseType> getName() {
         return getProperty(SchemaOrgConstants.PROPERTY_NAME);
     }
 
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_DESCRIPTION)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_DESCRIPTION)
     public List<BaseType> getDescription() {
         return getProperty(SchemaOrgConstants.PROPERTY_DESCRIPTION);
     }
 
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_IN_LANGUAGE)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_IN_LANGUAGE)
     public List<BaseType> getInLanguage() {
         return getProperty(SchemaOrgConstants.PROPERTY_IN_LANGUAGE);
     }
 
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_ALTERNATE_NAME)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_ALTERNATE_NAME)
     public List<BaseType> getAlternateName() {
         return getProperty(SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
     }
 
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_SAME_AS)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_SAME_AS)
     public List<BaseType> getSameAs() {
         return getProperty(SchemaOrgConstants.PROPERTY_SAME_AS);
     }
     
-    @JsonldProperty(SchemaOrgConstants.PROPERTY_URL)
+    @JsonProperty(SchemaOrgConstants.PROPERTY_URL)
     public List<BaseType> getUrl() {
         return getProperty(SchemaOrgConstants.PROPERTY_URL);
     }
