@@ -300,20 +300,16 @@ public final class SchemaOrgUtils {
 
 			// birthDate
 			if (agent.getRdaGr2DateOfBirth() != null) {
-				Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfBirth());
-				addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_BIRTH_DATE, null, false);
+				addMultilingualProperties(agentObject, agent.getRdaGr2DateOfBirth(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
 			} else if (agent.getBegin() != null) {
-				Map<String, List<String>> dates = filterDates(agent.getBegin());
-				addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_BIRTH_DATE, null, false);
+				addMultilingualProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
 			}
 
 			// deathDate
 			if (agent.getRdaGr2DateOfDeath() != null) {
-				Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfDeath());
-				addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_DEATH_DATE, null, false);
+				addMultilingualProperties(agentObject, agent.getRdaGr2DateOfDeath(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
 			} else if (agent.getEnd() != null) {
-				Map<String, List<String>> dates = filterDates(agent.getEnd());
-				addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_DEATH_DATE, null, false);
+				addMultilingualProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
 			}
 
 			// gender
@@ -333,14 +329,12 @@ public final class SchemaOrgUtils {
 			// foundingDate
         	if(agent.getRdaGr2DateOfEstablishment() != null)
         	{
-				Map<String, List<String>> dates = filterDates(agent.getRdaGr2DateOfEstablishment());
-				addDateProperty(agentObject, dates, SchemaOrgConstants.PROPERTY_FOUNDING_DATE, null, false);
+				addMultilingualProperties(agentObject, agent.getRdaGr2DateOfEstablishment(), SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
 			}
 
 			// dissolutionDate
 			if (agent.getRdaGr2DateOfTermination() != null) {
-				Map<String, List<String>> dissolutionDate = filterDates(agent.getRdaGr2DateOfTermination());
-	        	addDateProperty(agentObject, dissolutionDate, SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE, null, false);
+	        	addMultilingualProperties(agentObject, agent.getRdaGr2DateOfTermination(), SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
 			}
 		}
 
