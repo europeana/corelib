@@ -55,7 +55,7 @@ public class Neo4jSearchService {
         if (!selfList.isEmpty()) {
             return toNeo4jBean(selfList.get(0), -1L);
         } else {
-            throw new Neo4JException(ProblemType.NEO4J_CANNOTGETNODE,
+            throw new Neo4JException(ProblemType.NEO4J_404,
                     " \n\n... can't find node with ID: " + rdfAbout);
         }
     }
@@ -68,7 +68,7 @@ public class Neo4jSearchService {
      * @param  limit  The number of records to retrieve
      * @return node's children
      */
-    public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) {
+    public List<Neo4jBean> getChildren(String rdfAbout, int offset, int limit) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
         long startIndex = offset;
         List<CustomNode> children = neo4jService.getChildren(rdfAbout, offset, limit);
@@ -79,7 +79,7 @@ public class Neo4jSearchService {
         return beans;
     }
 
-    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit, long selfIndex) {
+    public List<Neo4jBean> getPrecedingSiblings(String rdfAbout, int offset, int limit, long selfIndex) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
         List<CustomNode> precedingSiblings = neo4jService.getPrecedingSiblings(rdfAbout, offset, limit);
         long startIndex = selfIndex - offset;
@@ -98,7 +98,7 @@ public class Neo4jSearchService {
      * @param  limit  How many siblings to retrieve
      * @return node's preceding siblings
      */
-    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit, long selfIndex) {
+    public List<Neo4jBean> getFollowingSiblings(String rdfAbout, int offset, int limit, long selfIndex) throws Neo4JException {
         List<Neo4jBean> beans = new ArrayList<>();
         List<CustomNode> followingSiblings = neo4jService.getFollowingSiblings(rdfAbout, offset, limit);
         long startIndex = selfIndex + offset;
