@@ -7,15 +7,18 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 
 @JsonldType(SchemaOrgConstants.TYPE_PLACE)
-public class Place extends Thing {
-
+public class Place extends ContextualEntity {
+	
     @JsonIgnore
     @Override
     public String getTypeName() { return SchemaOrgConstants.TYPE_PLACE; }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_GEO)
-    public List<BaseType> getGeo() {
-        return getProperty(SchemaOrgConstants.PROPERTY_GEO);
+    public BaseType getGeo() {
+    	List<BaseType> res = getProperty(SchemaOrgConstants.PROPERTY_GEO);
+    	if(res != null && !res.isEmpty())
+    		return res.get(0);
+    	return null;
     }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_CONTAINS_PLACE)

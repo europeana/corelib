@@ -13,18 +13,27 @@ public class GeoCoordinates extends Thing {
     public String getTypeName() { return SchemaOrgConstants.TYPE_GEO_COORDINATES; }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_LATITUDE)
-    public List<BaseType> getLatitude() {
-        return getProperty(SchemaOrgConstants.PROPERTY_LATITUDE);
+    public BaseType getLatitude() {
+    	List<BaseType> res = getProperty(SchemaOrgConstants.PROPERTY_LATITUDE);
+    	if(res != null && !res.isEmpty())
+    		return res.get(0);
+    	return null;
     }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_LONGITUDE)
-    public List<BaseType> getLongitude() {
-        return getProperty(SchemaOrgConstants.PROPERTY_LONGITUDE);
+    public BaseType getLongitude() {
+    	List<BaseType> res = getProperty(SchemaOrgConstants.PROPERTY_LONGITUDE);
+    	if(res != null && !res.isEmpty())
+    		return res.get(0);
+    	return null;
     }
 
     @JsonldProperty(SchemaOrgConstants.PROPERTY_ELEVATION)
-    public List<BaseType> getElevation() {
-        return getProperty(SchemaOrgConstants.PROPERTY_ELEVATION);
+    public BaseType getElevation() {
+    	List<BaseType> res = getProperty(SchemaOrgConstants.PROPERTY_ELEVATION);
+    	if(res != null && !res.isEmpty())
+    		return res.get(0);
+    	return null;
     }
 
     public void addLatitude(Text latitude) {

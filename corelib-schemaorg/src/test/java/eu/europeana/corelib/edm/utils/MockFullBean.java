@@ -220,6 +220,13 @@ public final class MockFullBean {
         agent.getRdaGr2DateOfDeath().put("def", new ArrayList<>());
         agent.getRdaGr2DateOfDeath().get("def").add("1519-05-02");
 
+        agent.setRdaGr2PlaceOfBirth(new HashMap<>());
+        agent.getRdaGr2PlaceOfBirth().put("def", new ArrayList<>());
+        agent.getRdaGr2PlaceOfBirth().get("def").add("http://dbpedia.org/resource/Republic_of_Florence");
+        agent.getRdaGr2PlaceOfBirth().get("def").add("http://dbpedia.org/resource/Vinci,_Tuscany");
+        agent.getRdaGr2PlaceOfBirth().put("en", new ArrayList<>());
+        agent.getRdaGr2PlaceOfBirth().get("en").add("Vinci, Republic of Florence");
+        
         agent.setRdaGr2PlaceOfDeath(new HashMap<>());
         agent.getRdaGr2PlaceOfDeath().put("def", new ArrayList<>());
         agent.getRdaGr2PlaceOfDeath().get("def").add("http://dbpedia.org/resource/France");

@@ -104,4 +104,10 @@ public interface ContextualClass extends AbstractEdmEntity {
 	 */
 	String getFoafDepiction();
 
+	/**
+	 * 
+	 * @return the identifier part (last part) of the getAbout url
+	 */
+	String getEntityIdentifier();
+	
 }
