@@ -16,27 +16,30 @@
  */
 package eu.europeana.corelib.solr.entity;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Indexed;
-import org.mongodb.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
-import eu.europeana.corelib.definitions.model.ColorSpace;
+import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Transient;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
@@ -447,15 +450,17 @@ public class WebResourceImpl implements WebResource {
     public String getEdmHasColorSpace() {
         if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null) {
             final String colorSpace = webResourceMetaInfo.getImageMetaInfo().getColorSpace();
-
-            if (colorSpace == null) {
-                return null;
+            if (StringUtils.isNotEmpty(colorSpace)) {
+                // we check if it's a known value so the json response will be consistent with .rdf and jsonld (see also
+                // EdmWebResourceUtils.setColorSpace())
+                ColorSpaceType csType = ColorSpaceType.convert(colorSpace);
+                if (csType == null) {
+                    LogManager.getLogger(WebResourceImpl.class).warn("Unknown color space '{}' for WebResourceMetaInfo {}",
+                            colorSpace, webResourceMetaInfo.getId());
+                    return null;
+                }
+                return csType.xmlValue();
             }
-            if ("gray".equalsIgnoreCase(colorSpace) || "grey".equalsIgnoreCase(colorSpace) ||
-                    "grayscale".equalsIgnoreCase(colorSpace) || "greyscale".equalsIgnoreCase(colorSpace)) {
-                return ColorSpace.getValue(ColorSpace.GRAYSCALE);
-            }
-            return ColorSpace.getValue(ColorSpace.SRGB);
         }
         return null;
     }
