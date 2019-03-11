@@ -1,46 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.jibx.AudioChannelNumber;
-import eu.europeana.corelib.definitions.jibx.BitRate;
-import eu.europeana.corelib.definitions.jibx.CodecName;
-import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
-import eu.europeana.corelib.definitions.jibx.ConformsTo;
-import eu.europeana.corelib.definitions.jibx.Created;
-import eu.europeana.corelib.definitions.jibx.Creator;
-import eu.europeana.corelib.definitions.jibx.Description;
-import eu.europeana.corelib.definitions.jibx.DoubleType;
-import eu.europeana.corelib.definitions.jibx.Duration;
-import eu.europeana.corelib.definitions.jibx.Extent;
-import eu.europeana.corelib.definitions.jibx.Format;
-import eu.europeana.corelib.definitions.jibx.HasColorSpace;
-import eu.europeana.corelib.definitions.jibx.HasMimeType;
-import eu.europeana.corelib.definitions.jibx.HasPart;
-import eu.europeana.corelib.definitions.jibx.HasService;
-import eu.europeana.corelib.definitions.jibx.Height;
-import eu.europeana.corelib.definitions.jibx.HexBinaryType;
-import eu.europeana.corelib.definitions.jibx.IsFormatOf;
-import eu.europeana.corelib.definitions.jibx.IsNextInSequence;
-import eu.europeana.corelib.definitions.jibx.IsPartOf;
-import eu.europeana.corelib.definitions.jibx.IsReferencedBy;
-import eu.europeana.corelib.definitions.jibx.Issued;
-import eu.europeana.corelib.definitions.jibx.LongType;
-import eu.europeana.corelib.definitions.jibx.OrientationType;
-import eu.europeana.corelib.definitions.jibx.Preview;
-import eu.europeana.corelib.definitions.jibx.RDF;
-import eu.europeana.corelib.definitions.jibx.ResourceOrLiteralType;
-import eu.europeana.corelib.definitions.jibx.Rights;
-import eu.europeana.corelib.definitions.jibx.Rights1;
-import eu.europeana.corelib.definitions.jibx.SameAs;
-import eu.europeana.corelib.definitions.jibx.SampleRate;
-import eu.europeana.corelib.definitions.jibx.SampleSize;
-import eu.europeana.corelib.definitions.jibx.Source;
-import eu.europeana.corelib.definitions.jibx.SpatialResolution;
-import eu.europeana.corelib.definitions.jibx.Type;
-import eu.europeana.corelib.definitions.jibx.Type1;
-import eu.europeana.corelib.definitions.jibx.WebResourceType;
-import eu.europeana.corelib.definitions.jibx.Width;
-import eu.europeana.corelib.definitions.model.ColorSpace;
+import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import org.apache.commons.lang.StringUtils;
@@ -194,15 +155,11 @@ public class EdmWebResourceUtils {
     }
 
     private static void setColorSpace(WebResource wr, WebResourceType wResource) {
-        if (wr.getEdmHasColorSpace() != null) {
+        String colorSpace = wr.getEdmHasColorSpace();
+        if (colorSpace != null) {
+            ColorSpaceType csType = ColorSpaceType.convert(colorSpace);
             HasColorSpace hasColorSpace = new HasColorSpace();
-            ColorSpaceType type;
-            if (StringUtils.equals(wr.getEdmHasColorSpace(), ColorSpace.getValue(ColorSpace.GRAYSCALE))) {
-                type = ColorSpaceType.GRAYSCALE;
-            } else {
-                type = ColorSpaceType.S_RGB;
-            }
-            hasColorSpace.setHasColorSpace(type);
+            hasColorSpace.setHasColorSpace(csType);
             wResource.setHasColorSpace(hasColorSpace);
         }
     }
