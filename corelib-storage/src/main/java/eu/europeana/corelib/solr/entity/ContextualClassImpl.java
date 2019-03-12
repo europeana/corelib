@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
@@ -65,6 +66,7 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 		this.foafDepiction = foafDepiction;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getEntityIdentifier() {
 		String[] splitArray = this.getAbout().split("/");
