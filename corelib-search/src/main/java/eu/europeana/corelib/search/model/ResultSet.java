@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
 import eu.europeana.corelib.definitions.solr.model.Query;
@@ -49,6 +50,11 @@ public class ResultSet<T> {
 	 * The list of facets
 	 */
 	private List<FacetField> facetFields;
+
+	/**
+	 * The list of facets
+	 */
+	private List<RangeFacet> rangeFacets;
 
 	/**
 	 * The spellcheck component response
@@ -164,6 +170,15 @@ public class ResultSet<T> {
 		this.queryFacets = queryFacets;
 		return this;
 	}
+
+	public List<RangeFacet> getRangeFacets() {
+		return rangeFacets;
+	}
+
+	public void setRangeFacets(List<RangeFacet> rangeFacets) {
+		this.rangeFacets = rangeFacets;
+	}
+
 	public String getCurrentCursorMark() {
 		return currentCursorMark;
 	}
