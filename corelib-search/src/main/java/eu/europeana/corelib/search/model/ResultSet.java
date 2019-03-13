@@ -93,6 +93,11 @@ public class ResultSet<T> {
 	 */
 	private String sortField;
 
+	/**
+	 * To store the highlighting response
+	 */
+	private Map<String,Map<String,List<String>>> highlighting;
+
 
 
 	/**
@@ -194,14 +199,6 @@ public class ResultSet<T> {
 
 	public void setSortField(String sortField) { this.sortField = sortField; }
 
-	@Override
-	public String toString() {
-		return "ResultSet [query=" + query + ", results=" + results
-				+ ", facetFields=" + facetFields + ", spellcheck=" + spellcheck
-				+ ", resultSize=" + resultSize + ", searchTime=" + searchTime
-				+ "]";
-	}
-
 	public String getSolrQueryString() {
 		return solrQueryString;
 	}
@@ -210,4 +207,19 @@ public class ResultSet<T> {
 		this.solrQueryString = solrQueryString;
 	}
 
+	public Map<String, Map<String, List<String>>> getHighlighting() {
+		return highlighting;
+	}
+
+	public void setHighlighting(Map<String, Map<String, List<String>>> highlighting) {
+		this.highlighting = highlighting;
+	}
+
+	@Override
+	public String toString() {
+		return "ResultSet [query=" + query + ", results=" + results
+			   + ", facetFields=" + facetFields + ", spellcheck=" + spellcheck
+			   + ", resultSize=" + resultSize + ", searchTime=" + searchTime
+			   + "]";
+	}
 }

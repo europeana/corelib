@@ -66,6 +66,8 @@ public class Query implements Cloneable {
     private String queryType;
     private String executedQuery;
 
+    private int nrSelectors;
+
     private QueryTranslation queryTranslation;
 
     private Map<String, String> valueReplacementMap;
@@ -493,7 +495,7 @@ public class Query implements Cloneable {
     }
 
     /**
-     * Adds Solr parameterMap to the Query object
+     * Adds parameter to the Solr parameterMap
      *
      * @param key   The parameter name
      * @param value The value of the parameter
@@ -516,6 +518,22 @@ public class Query implements Cloneable {
             parameterMap.putAll(parameters);
         }
         return this;
+    }
+
+    /**
+     * Adds the given value to the nrSelectors variable, this is used for limiting the number of highlights
+     * Also adds this parameter to the Solr parameterMap
+     *
+     * @param key   The parameter name (should be "hl.selectors")
+     * @param value The value of the parameter (should be parsable to int)
+     */
+    public void setNrSelectors(String key, int value){
+        this.nrSelectors = value;
+        setParameter(key, Integer.toString(value));
+    }
+
+    public int getNrSelectors() {
+        return nrSelectors;
     }
 
     // funky java 8 stuff yippee
@@ -562,6 +580,7 @@ public class Query implements Cloneable {
         return this.technicalFacetLimitMap;
     }
 
+    // TODO sonarlint warns against overriding clone()!
     @Override
     public Query clone() throws CloneNotSupportedException {
         return (Query) super.clone();

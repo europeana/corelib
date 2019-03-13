@@ -46,9 +46,9 @@ public final class SchemaOrgTypeFactory {
         return new MediaObject();
     }
 
-    public static Thing createAgent(Agent agent) {
+    public static eu.europeana.corelib.edm.model.schemaorg.ContextualEntity createAgent(Agent agent) {
         if (agent == null) {
-            return new CreativeWork();
+            return null;
         }
 
         if (agent.getRdaGr2DateOfEstablishment() != null || agent.getRdaGr2DateOfTermination() != null) {

@@ -267,8 +267,39 @@
 
     <simpleType name="ColorSpaceType">
         <restriction base="string">
-            <enumeration value="sRGB"/>
+            <enumeration value="CMY"/>
+            <enumeration value="CMYK"/>
             <enumeration value="grayscale"/>
+            <enumeration value="HCL"/>
+            <enumeration value="HCLp"/>
+            <enumeration value="HSB"/>
+            <enumeration value="HSI"/>
+            <enumeration value="HSL"/>
+            <enumeration value="HSV"/>
+            <enumeration value="HWB"/>
+            <enumeration value="Lab"/>
+            <enumeration value="LCHab"/>
+            <enumeration value="LCHuv"/>
+            <enumeration value="LMS"/>
+            <enumeration value="Log"/>
+            <enumeration value="Luv"/>
+            <enumeration value="OHTA"/>
+            <enumeration value="Rec601Luma"/>
+            <enumeration value="Rec601YCbCr"/>
+            <enumeration value="Rec709Luma"/>
+            <enumeration value="Rec709YCbCr"/>
+            <enumeration value="RGB"/>
+            <enumeration value="scRGB"/>
+            <enumeration value="sRGB"/>
+            <enumeration value="XYZ"/>
+            <enumeration value="xyY"/>
+            <enumeration value="YCbCr"/>
+            <enumeration value="YDbDr"/>
+            <enumeration value="YCC"/>
+            <enumeration value="YIQ"/>
+            <enumeration value="YPbPr"/>
+            <enumeration value="YUV"/>
+            <enumeration value="other"/>
         </restriction>
     </simpleType>
 

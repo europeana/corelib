@@ -100,6 +100,8 @@ public final class SchemaOrgConstants {
     public static final String PROPERTY_FOUNDING_DATE = "foundingDate";
 
     public static final String PROPERTY_DISSOLUTION_DATE = "dissolutionDate";
+    
+    public static final String PROPERTY_IMAGE = "image";
 
     public static final String TYPE_THING = "Thing";
 
@@ -144,4 +146,10 @@ public final class SchemaOrgConstants {
     public static final String LANGUAGE = "@language";
 
     public static final String VALUE = "@value";
+    
+    public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/portal/en/explore/topics/%s.html";
+    
+    public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/portal/en/explore/people/%s.html";
+    
+    public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/portal/en/explore/place/%s.html";
 }

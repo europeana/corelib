@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
@@ -12,6 +13,8 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	private Map<String,List<String>> altLabel;
 	private Map<String,List<String>> hiddenLabel;
 	private Map<String,List<String>> note;
+	private String foafDepiction;
+	
 
 	@Override
 	public Map<String, List<String>> getPrefLabel() {
@@ -51,5 +54,22 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	@Override
 	public void setNote(Map<String,List<String>>note) {
 		this.note = note;
+	}
+
+	@Override
+	public String getFoafDepiction() {
+		return foafDepiction;
+	}
+
+	@Override
+	public void setFoafDepiction(String foafDepiction) {
+		this.foafDepiction = foafDepiction;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getEntityIdentifier() {
+		String[] splitArray = this.getAbout().split("/");
+		return splitArray[splitArray.length-1];
 	}
 }
