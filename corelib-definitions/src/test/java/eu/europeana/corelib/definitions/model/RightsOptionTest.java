@@ -4,11 +4,24 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
- *
+ * Tests
  */
 public class RightsOptionTest {
+
+    /**
+     * We check if all rights options start with http:// and end with a slash. This is required for the getValueByUrl
+     * test to work properly!
+     */
+    @Test
+    public void checkRightsOption() {
+        for (RightsOption ro : RightsOption.values()) {
+            assertTrue(ro.getUrl().startsWith("http://"));
+            assertTrue(ro.getUrl().endsWith("/"));
+        }
+    }
 
     @Test
     public void getValueByUrlTest() {

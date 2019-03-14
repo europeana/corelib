@@ -39,9 +39,9 @@ public enum RightsOption {
 
     /**
      * open
-     * http://creativecommons.org/publicdomain/zero
+     * http://creativecommons.org/publicdomain/zero/
      */
-    CC_ZERO("http://creativecommons.org/publicdomain/zero", "CC0", "icon-cczero", true),
+    CC_ZERO("http://creativecommons.org/publicdomain/zero/", "CC0", "icon-cczero", true),
 
     /**
      * open
@@ -239,7 +239,8 @@ public enum RightsOption {
             // strip off any version numbering (e.g. creativecommons.org/publicdomain/mark/1.0/ )
             String[] urlToCheckParts = (urlToCheck.split("/"));
             if (urlToCheckParts.length >= 3) {
-                urlToCheck = urlToCheckParts[0] + "/" + urlToCheckParts[1] + "/" + urlToCheckParts[2];
+                // we add slashes at the front and end, to avoid accidental false matches with too short strings
+                urlToCheck = "/" + urlToCheckParts[0] + "/" + urlToCheckParts[1] + "/" + urlToCheckParts[2] +"/";
             }
 
             for (RightsOption option : RightsOption.values()) {
