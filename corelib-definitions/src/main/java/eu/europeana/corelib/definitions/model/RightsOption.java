@@ -19,6 +19,8 @@ package eu.europeana.corelib.definitions.model;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Locale;
+
 /**
  * Class represents a set of rights that can be attached to an item in the Europeana website.
  *
@@ -33,7 +35,7 @@ public enum RightsOption {
      * open
      * http://creativecommons.org/publicdomain/mark/
      */
-    CC_NOC("http://creativecommons.org/publicdomain/mark/", "Public Domain marked", "icon-pd", true),
+    CC_NOC("http://creativecommons.org/publicdomain/mark/", "Public Domain Mark", "icon-pd", true),
 
     /**
      * open
@@ -84,26 +86,27 @@ public enum RightsOption {
      * restricted
      * http://www.europeana.eu/rights/out-of-copyright-non-commercial/
      */
+    @Deprecated
     EU_OOC_NC("http://www.europeana.eu/rights/out-of-copyright-non-commercial/",
-            "Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false, true),
+            "Out of copyright - non commercial re-use", "icon-publicdomain icon-nceu", false),
 
     /**
      * restricted
      * http://rightsstatements.org/vocab/InC-EDU/1.0/
      */
-    RS_INC_EDU("http://rightsstatements.org/vocab/InC-EDU/1.0/", "In copyright - educational user permitted", "", true),
+    RS_INC_EDU("http://rightsstatements.org/vocab/InC-EDU/1.0/", "In Copyright - Educational Use Permitted", "", true),
 
     /**
      * restricted
      * http://rightsstatements.org/vocab/NoC-NC/1.0/
      */
-    RS_NOC_NC("http://rightsstatements.org/vocab/NoC-NC/1.0/", "No copyright - non-commercial use only", "", true),
+    RS_NOC_NC("http://rightsstatements.org/vocab/NoC-NC/1.0/", "No Copyright - non-commercial re-use only", "", true),
 
     /**
      * restricted
      * http://rightsstatements.org/vocab/NoC-OKLR/1.0/
      */
-    RS_NOC_OKLR("http://rightsstatements.org/vocab/NoC-OKLR/1.0/", "No copyright - other known legal restrictions", "", true),
+    RS_NOC_OKLR("http://rightsstatements.org/vocab/NoC-OKLR/1.0/", "No Copyright - Other Known Legal Restrictions", "", true),
 
 
     /* = = = | PERMISSION LICENCES | = = = = = = = = = = = = = = = = = = = = = = = */
@@ -111,32 +114,40 @@ public enum RightsOption {
     /**
      * permission
      * http://www.europeana.eu/rights/rr-f/
+     * @deprecated see http://www.europeana.eu/rights/rr-f/
      */
-    EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false, true),
+    @Deprecated
+    EU_RR_F("http://www.europeana.eu/rights/rr-f/", "Rights Reserved - Free Access", "icon-copyright", false),
 
     /**
      * permission
      * http://www.europeana.eu/rights/rr-p/
+     * @deprecated see http://www.europeana.eu/rights/rr-p/
      */
-    EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Rights Reserved - Paid Access", "icon-copyright", false, true),
+    @Deprecated
+    EU_RR_P("http://www.europeana.eu/rights/rr-p/", "Rights Reserved - Paid Access", "icon-copyright", false),
 
     /**
      * permission
      * http://www.europeana.eu/rights/rr-r/
+     * @deprecated see also http://www.europeana.eu/rights/rr-r/
      */
-    EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Restricted Access - Rights Reserved", "icon-copyright", false, true),
+    @Deprecated
+    EU_RR_R("http://www.europeana.eu/rights/rr-r/", "Rights Reserved - Restricted Access", "icon-copyright", false),
 
     /**
      * permission
      * http://www.europeana.eu/rights/unknown/
      */
-    EU_U("http://www.europeana.eu/rights/unknown/", "Unknown copyright status", "icon-unknown", false, true),
+    @Deprecated
+    EU_U("http://www.europeana.eu/rights/unknown/", "Unknown Copyright Status", "icon-unknown", false),
 
     /**
      * permission
      * http://www.europeana.eu/rights/test-orphan-work-test/
      */
-    EU_ORPHAN("http://www.europeana.eu/rights/test-orphan-work-test/", "Orphan Work", "icon-unknown", false, true),
+    @Deprecated
+    EU_ORPHAN("http://www.europeana.eu/rights/test-orphan-work-test/", "Orphan Work", "icon-unknown", false),
 
     /**
      * permission
@@ -148,20 +159,18 @@ public enum RightsOption {
      * permission
      * http://rightsstatements.org/vocab/InC-OW-EU/1.0/
      */
-    RS_INC_OW_EU("http://rightsstatements.org/vocab/InC-OW-EU/1.0/", "In copyright - EU orphan work", "", true),
+    RS_INC_OW_EU("http://rightsstatements.org/vocab/InC-OW-EU/1.0/", "In Copyright - EU Orphan Work", "", true),
 
     /**
      * permission
      * http://rightsstatements.org/vocab/CNE/1.0/
      */
-    RS_CNE("http://rightsstatements.org/vocab/CNE/1.0/", "Copyright not evaluated", "", true);
+    RS_CNE("http://rightsstatements.org/vocab/CNE/1.0/", "Copyright Not Evaluated", "", true);
 
     private String url = null;
     private String rightsText = null;
     private String rightsIcon = null;
     private boolean showExternalIcon = false;
-    private boolean isRelativeUrl = false;
-    private String relativeUrl = null;
 
     /**
      * Constructor for method
@@ -177,11 +186,6 @@ public enum RightsOption {
         this.showExternalIcon = showExternalIconIn;
     }
 
-    RightsOption(String url, String rightsText, String rightsIcon, boolean showExternalIconIn, boolean isRelativeUrl) {
-        this(url, rightsText, rightsIcon, showExternalIconIn);
-        this.isRelativeUrl = isRelativeUrl;
-    }
-
     /**
      * Returns the full Url associated with the rights
      *
@@ -189,21 +193,6 @@ public enum RightsOption {
      */
     public String getUrl() {
         return url;
-    }
-
-    public String getRelativeUrl(String portalUrl) {
-        if (relativeUrl == null) {
-            if (isRelativeUrl) {
-                if (!portalUrl.endsWith("/")) {
-                    portalUrl += "/";
-                }
-                relativeUrl = url.replace("http://www.europeana.eu/", portalUrl)
-                        .replaceAll("/$", ".html");
-            } else {
-                relativeUrl = url;
-            }
-        }
-        return relativeUrl;
     }
 
     /**
@@ -233,10 +222,22 @@ public enum RightsOption {
         return showExternalIcon;
     }
 
-    public static RightsOption safeValueByUrl(String url) {
+    /**
+     * Returns the RightsOption that corresponds to the provided url, or null if no match was found
+     * Note that the used protocol in the url (https://, ftp://) is ignored.
+     * @param url rights url
+     * @return RightsOption or null
+     */
+    public static RightsOption getValueByUrl(String url) {
         if (StringUtils.isNotBlank(url)) {
+            // strip off http:// and https:// to prevent matching problems
+            String urlToCheck = url.toLowerCase(Locale.GERMAN);
+            if (url.startsWith("http://") || url.startsWith("https://")) {
+                urlToCheck = StringUtils.substringAfter(url, "://");
+            }
+
             for (RightsOption option : RightsOption.values()) {
-                if (url.contains(option.getUrl())) {
+                if (option.url.contains(urlToCheck)) {
                     return option;
                 }
             }
@@ -244,7 +245,4 @@ public enum RightsOption {
         return null;
     }
 
-    public boolean isRelativeUrl() {
-        return isRelativeUrl;
-    }
 }
