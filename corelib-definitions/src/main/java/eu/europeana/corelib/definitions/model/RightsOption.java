@@ -230,10 +230,16 @@ public enum RightsOption {
      */
     public static RightsOption getValueByUrl(String url) {
         if (StringUtils.isNotBlank(url)) {
+
             // strip off http:// and https:// to prevent matching problems
             String urlToCheck = url.toLowerCase(Locale.GERMAN);
             if (url.startsWith("http://") || url.startsWith("https://")) {
                 urlToCheck = StringUtils.substringAfter(url, "://");
+            }
+            // strip off any version numbering (e.g. creativecommons.org/publicdomain/mark/1.0/ )
+            String[] urlToCheckParts = (urlToCheck.split("/"));
+            if (urlToCheckParts.length >= 3) {
+                urlToCheck = urlToCheckParts[0] + "/" + urlToCheckParts[1] + "/" + urlToCheckParts[2];
             }
 
             for (RightsOption option : RightsOption.values()) {
