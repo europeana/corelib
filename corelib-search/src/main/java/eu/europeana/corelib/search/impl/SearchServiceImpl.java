@@ -177,16 +177,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
+        // add meta info for all webresources
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-        // November 2018: Deprecated code
-//        if (similarItems) {
-//            try {
-//                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-//            } catch (EuropeanaException e) {
-//                LOG.error("Error trying to retrieve similar items", e);
-//            }
-//        }
 
+        // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
             for (Aggregation agg : fullBean.getAggregations()) {
