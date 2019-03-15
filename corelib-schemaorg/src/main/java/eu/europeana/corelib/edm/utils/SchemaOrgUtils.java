@@ -17,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.validation.Schema;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -93,7 +95,6 @@ public final class SchemaOrgUtils {
 	objectsToSerialize.addAll(processAgents(bean.getAgents()));
 	objectsToSerialize.addAll(processPlaces(bean.getPlaces()));
 	objectsToSerialize.addAll(processConcepts(bean.getConcepts()));
-	objectsToSerialize.addAll(processEdmOrganizations(bean.getOrganizations()));
 
 	JsonLdSerializer serializer = new JsonLdSerializer();
 	try {
@@ -120,7 +121,7 @@ public final class SchemaOrgUtils {
 	} else if (entity instanceof eu.europeana.corelib.definitions.edm.entity.Place) {
 	    SchemaOrgUtils.processPlace((eu.europeana.corelib.definitions.edm.entity.Place) entity, (Place) thing);
 	} else if (entity instanceof eu.europeana.corelib.definitions.edm.entity.Organization) {
-	    SchemaOrgUtils.processEdmOrganization((eu.europeana.corelib.definitions.edm.entity.Organization) entity, thing);
+	    SchemaOrgUtils.processOrganization((eu.europeana.corelib.definitions.edm.entity.Organization) entity, thing);
 	} else if (entity instanceof Agent) {
 	    SchemaOrgUtils.processAgent((Agent) entity, thing);
 	}
@@ -375,24 +376,6 @@ public final class SchemaOrgUtils {
 	// image
 	agentObject.setImage(agent.getFoafDepiction());
     }
-
-    /**
-     * Process list of organizations and create EdmOrganization for each.
-     *
-     * @param organizations organization list to process
-     * @return list of Organization objects created from the input list
-     */
-    private static List<Thing> processEdmOrganizations(List<OrganizationImpl> organizations) {
-	List<Thing> referencedObjects = new ArrayList<>();
-
-	for (eu.europeana.corelib.definitions.edm.entity.Organization organization : organizations) {
-	    EdmOrganization organizationObject = new EdmOrganization();
-	    referencedObjects.add(organizationObject);
-
-	    processEdmOrganization(organization, organizationObject);
-	}
-	return referencedObjects;
-    }
     
     /**
      * Update properties of the given Schema.Org Thing (EdmOrganization)
@@ -401,7 +384,7 @@ public final class SchemaOrgUtils {
      * @param entityObject Schema.Org Contextual Entity object to update
      * @param organization       source EDM Organization
      */
-    public static void processEdmOrganization(eu.europeana.corelib.definitions.edm.entity.Organization organization,
+    public static void processOrganization(eu.europeana.corelib.definitions.edm.entity.Organization organization,
 	    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity entityObject) {
 	// @id
 	entityObject.setId(organization.getAbout());
@@ -423,7 +406,11 @@ public final class SchemaOrgUtils {
 	addTextProperties(entityObject, Arrays.asList(organization.getFoafLogo()), SchemaOrgConstants.PROPERTY_LOGO);
 	
 	// areaServed
-	//addTextProperties(entityObject, organization.getEdmCountry(), SchemaOrgConstants.PROPERTY_AREA_SERVED);
+	String areaServed = null;
+	if(organization.getEdmCountry() != null && organization.getEdmCountry().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+	    areaServed = organization.getEdmCountry().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+	    addTextProperties(entityObject, Arrays.asList(areaServed), SchemaOrgConstants.PROPERTY_AREA_SERVED);
+	}
 	
 	// telephone
 	addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
@@ -432,7 +419,11 @@ public final class SchemaOrgUtils {
 	createPostalAddress(organization, (EdmOrganization)entityObject);
 	
 	// identifier
-	//addTextProperties(entityObject, organization.getDcIdentifier(), SchemaOrgConstants.PROPERTY_LOGO);
+	String dcIdentifier = null;
+	if(organization.getDcDescription() != null && organization.getDcDescription().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+	    dcIdentifier = organization.getDcDescription().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+	    addTextProperties(entityObject, Arrays.asList(dcIdentifier), SchemaOrgConstants.PROPERTY_IDENTIFIER);
+	}
 	
 	// sameAs
 	addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);

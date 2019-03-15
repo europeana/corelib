@@ -35,7 +35,6 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
-import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -161,16 +160,6 @@ public class FullBeanImpl implements FullBean {
     @Override
     public void setAgents(List<? extends Agent> agents) {
         this.agents = (List<AgentImpl>) agents;
-    }
-    
-    @Override
-    public List<OrganizationImpl> getOrganizations() {
-	return organizations;
-    }
-
-    @Override
-    public void setOrganizations(List<? extends Organization> organizations) {
-	this.organizations = (List<OrganizationImpl>) organizations;
     }
 
     @Override

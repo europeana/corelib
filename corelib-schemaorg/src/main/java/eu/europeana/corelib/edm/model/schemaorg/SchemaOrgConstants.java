@@ -165,8 +165,6 @@ public final class SchemaOrgConstants {
 
     public static final String TYPE_NEWSPAPER = "Newspaper";
     
-    public static final String TYPE_EDM_ORGANIZATION = "EdmOrganization";
-    
     public static final String TYPE_POSTAL_ADDRESS = "PostalAddress";
 
     public static final String DEFAULT_LANGUAGE = "def";

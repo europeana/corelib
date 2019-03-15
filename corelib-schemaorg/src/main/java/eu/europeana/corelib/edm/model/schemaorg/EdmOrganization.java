@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
-@JsonldType(SchemaOrgConstants.TYPE_EDM_ORGANIZATION)
+@JsonldType(SchemaOrgConstants.TYPE_ORGANIZATION)
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"@type", "@id", 
 	SchemaOrgConstants.PROPERTY_URL, SchemaOrgConstants.PROPERTY_IMAGE, 
@@ -20,7 +20,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 public class EdmOrganization extends ContextualEntity {
     @Override
     public String getTypeName() {
-        return SchemaOrgConstants.TYPE_EDM_ORGANIZATION;
+        return SchemaOrgConstants.TYPE_ORGANIZATION;
     }
     
     @JsonProperty(SchemaOrgConstants.PROPERTY_IDENTIFIER)

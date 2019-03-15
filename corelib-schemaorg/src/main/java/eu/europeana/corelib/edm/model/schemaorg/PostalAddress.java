@@ -18,7 +18,7 @@ import java.util.List;
 public class PostalAddress extends Thing {
     @JsonIgnore
     @Override
-    public String getTypeName() { return SchemaOrgConstants.TYPE_GEO_COORDINATES; }
+    public String getTypeName() { return SchemaOrgConstants.TYPE_POSTAL_ADDRESS; }
 
     @JsonProperty(SchemaOrgConstants.PROPERTY_STREET_ADDRESS)
     public BaseType getStreetAddress() {
