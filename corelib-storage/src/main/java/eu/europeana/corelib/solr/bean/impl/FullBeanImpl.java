@@ -35,6 +35,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
+import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -46,6 +47,7 @@ import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.LicenseImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -94,6 +96,10 @@ public class FullBeanImpl implements FullBean {
     @Reference
     @Indexed
     protected List<AgentImpl> agents;
+    
+    @Reference
+    @Indexed
+    protected List<OrganizationImpl> organizations;
 
     @Reference
     @Indexed
@@ -155,6 +161,16 @@ public class FullBeanImpl implements FullBean {
     @Override
     public void setAgents(List<? extends Agent> agents) {
         this.agents = (List<AgentImpl>) agents;
+    }
+    
+    @Override
+    public List<OrganizationImpl> getOrganizations() {
+	return organizations;
+    }
+
+    @Override
+    public void setOrganizations(List<? extends Organization> organizations) {
+	this.organizations = (List<OrganizationImpl>) organizations;
     }
 
     @Override

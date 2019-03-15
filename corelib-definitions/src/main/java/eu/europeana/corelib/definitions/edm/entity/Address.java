@@ -1,6 +1,6 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
-public interface Address {
+public interface Address extends AbstractEdmEntity{
 
 	void setVcardPostOfficeBox(String vcardPostOfficeBox);
 

@@ -27,6 +27,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
+import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.definitions.edm.entity.Place;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -74,6 +75,18 @@ public interface FullBean extends IdBean {
 	 */
 	void setAgents(List<? extends Agent> agents);
 
+	/**
+	 * 
+	 * @return The list of organizations for this record
+	 */
+	List<? extends Organization> getOrganizations();
+
+	/**
+	 * Sets the list of organizations for this record
+	 * @param organizations
+	 */
+	void setOrganizations(List<? extends Organization> organizations);
+	
 	/**
 	 * 
 	 * @return the list of timespans for this record
