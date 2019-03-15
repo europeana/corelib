@@ -47,7 +47,6 @@ public class AttributionSnippet {
 
 
     public AttributionSnippet(WebResourceImpl wRes) {
-        System.err.println("create attributionsnippet for "+wRes.getAbout());
 
         // webresource-level dc:creator & rights
         if (isNotBlank(wRes.getDcCreator())){
