@@ -1,6 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.definitions.edm.entity.Agent;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import eu.europeana.corelib.edm.model.schemaorg.*;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
@@ -52,9 +53,31 @@ public final class SchemaOrgTypeFactory {
         }
 
         if (agent.getRdaGr2DateOfEstablishment() != null || agent.getRdaGr2DateOfTermination() != null) {
+            //just Group of Persons, not EDM Organization
             return new Organization();
         }
         return new Person();
+    }
+    
+    public static ContextualEntity createContextualEntity(ContextualClass entity) {
+	ContextualEntity thingObject;
+	if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Organization) {
+	    thingObject = new EdmOrganization();
+	}
+	else if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Concept) {
+	    thingObject = new Concept();
+	}
+	else if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Agent) {
+	    thingObject = createAgent((Agent) entity);
+	}
+	else if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Place) {
+	    thingObject = new Place();
+	}
+	else {
+	    throw new RuntimeException(
+			"The given type is not supported by the schema.org interface");
+	}
+	return thingObject;
     }
 
     public static Thing createObject(FullBeanImpl bean) {
