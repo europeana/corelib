@@ -50,7 +50,7 @@ public class SchemaOrgUtilsTest {
     @Test
     public void toSchemaOrgEdmOrganizationTest() throws IOException {
 	String output;
-	ContextualClass organization = MockFullBean.getEdmOrganizsation();
+	ContextualClass organization = MockEdmOrganization.getEdmOrganization();
 	ContextualEntity thingObject = SchemaOrgTypeFactory.createContextualEntity(organization);
 	SchemaOrgUtils.processEntity(organization, thingObject);
 	JsonLdSerializer serializer = new JsonLdSerializer();
@@ -60,6 +60,8 @@ public class SchemaOrgUtilsTest {
 	InputStream stream = getClass().getResourceAsStream(EDMORGANIZATION_FILE);
         String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
         assertEquals(expectedOutput.length(), output.length());
+        // If fails, then the field order definition misses some fields 
+        assertEquals(expectedOutput, output);
     }
     
     void writeToFile(String output) throws IOException, URISyntaxException {
