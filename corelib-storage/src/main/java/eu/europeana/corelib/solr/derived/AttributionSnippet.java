@@ -118,7 +118,8 @@ public class AttributionSnippet {
         }
         textSnippet += shownAt;
         textSnippet += (dataProviderMap.size() > 0 || StringUtils.isNotBlank(shownAt)) ? ". " : "";
-        textSnippet += StringUtils.isNotBlank(rights) ? getRightsLabel(rights) + " - " + rights : ".";
+        String rightsLabel = getRightsLabel(rights);
+        textSnippet += StringUtils.isNotBlank(rightsLabel) ? rightsLabel + " - " + rights : rights;
     }
 
     private void assembleHtmlSnippet(){
@@ -148,7 +149,11 @@ public class AttributionSnippet {
             }
         }
         if (StringUtils.isNotBlank(rights)){
-            htmlSnippet += aHreficate(rights, getRightsLabel(rights), "", rightsPage);
+            String rightsLabel = getRightsLabel(rights);
+            if (StringUtils.isEmpty(rightsLabel)) {
+                rightsLabel = rights; // just repeat original rights url then
+            }
+            htmlSnippet += aHreficate(rights, rightsLabel, "", rightsPage);
             htmlSnippet += spannify("rel", "cc:useGuidelines", "", resPdUsgGd) + "." + span;
         }
         if (StringUtils.isNotBlank(landingPage)) {
@@ -184,13 +189,13 @@ public class AttributionSnippet {
     }
 
     private String getRightsLabel(String rightsURL) {
-        RightsOption option = RightsOption.getValueByUrl(rightsURL);
+        RightsOption option = RightsOption.getValueByUrl(rightsURL, false);
 
         if (option == null) {
             if (rightsURL != null) {
                 LogManager.getLogger(AttributionSnippet.class).warn("Unable to find label for rights URL {}", rightsURL);
             }
-            return "Could not determine rights label";
+            return null;
         } else if (option == RightsOption.EU_OOC_NC && StringUtils.isNotBlank(ccDeprecatedOn)) {
             return option.getRightsText() + " until " + ccDeprecatedOn;
         }
