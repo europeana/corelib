@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import eu.europeana.corelib.edm.model.schemaorg.ContextualEntity;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +26,7 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 public class SchemaOrgUtilsTest {
 
 	static String FULL_BEAN_FILE = "/schemaorg/fullbean.json";
+	static String EDMORGANIZATION_FILE = "/schemaorg/edmorganization.json";
 	
     /**
      * Test schema.org generation and serialization
@@ -44,10 +47,25 @@ public class SchemaOrgUtilsTest {
         assertEquals(expectedOutput.length(), output.length());
     }
 
-	void writeToFile(String output) throws IOException, URISyntaxException {
-		URI outputFilePath = getClass().getResource(FULL_BEAN_FILE).toURI();
-		File outputFile = new File(outputFilePath);
-		FileUtils.write(outputFile, output, StandardCharsets.UTF_8);
-	}
+    @Test
+    public void toSchemaOrgEdmOrganizationTest() throws IOException {
+	String output;
+	ContextualClass organization = MockFullBean.getEdmOrganizsation();
+	ContextualEntity thingObject = SchemaOrgTypeFactory.createContextualEntity(organization);
+	SchemaOrgUtils.processEntity(organization, thingObject);
+	JsonLdSerializer serializer = new JsonLdSerializer();
+	output = serializer.serialize(thingObject);
+	Assert.assertNotNull(output);
+	
+	InputStream stream = getClass().getResourceAsStream(EDMORGANIZATION_FILE);
+        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
+        assertEquals(expectedOutput.length(), output.length());
+    }
+    
+    void writeToFile(String output) throws IOException, URISyntaxException {
+	URI outputFilePath = getClass().getResource(FULL_BEAN_FILE).toURI();
+	File outputFile = new File(outputFilePath);
+	FileUtils.write(outputFile, output, StandardCharsets.UTF_8);
+    }
 
 }
