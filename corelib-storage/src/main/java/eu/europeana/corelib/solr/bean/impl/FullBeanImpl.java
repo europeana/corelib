@@ -86,15 +86,15 @@ public class FullBeanImpl implements FullBean {
 
     @Transient
     protected List<BriefBeanImpl> similarItems;
-    
+
     @Reference
     @Indexed
     protected List<PlaceImpl> places;
-    
+
     @Reference
     @Indexed
     protected List<AgentImpl> agents;
-    
+ 
     @Reference
     @Indexed
     protected List<TimespanImpl> timespans;
