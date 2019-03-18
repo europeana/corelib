@@ -46,7 +46,6 @@ import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
 import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -95,11 +94,7 @@ public class FullBeanImpl implements FullBean {
     @Reference
     @Indexed
     protected List<AgentImpl> agents;
-    
-    @Reference
-    @Indexed
-    protected List<OrganizationImpl> organizations;
-
+ 
     @Reference
     @Indexed
     protected List<TimespanImpl> timespans;
