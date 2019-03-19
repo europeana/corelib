@@ -97,4 +97,11 @@ public class EuropeanaUriUtils {
 		}
 		return value;
 	}
+	
+	public static boolean isUri(String str) {
+	    return StringUtils.startsWith(str, "http://")
+	           || StringUtils.startsWith(str, "https://")
+	           || StringUtils.startsWith(str, "urn:")
+	           || StringUtils.startsWith(str, "#");
+	}
 }

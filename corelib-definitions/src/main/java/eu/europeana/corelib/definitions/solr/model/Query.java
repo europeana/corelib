@@ -57,6 +57,7 @@ public class Query implements Cloneable {
     private boolean allowFacets            = true;
     private boolean apiQuery               = false;
     private boolean defaultFacetsRequested = false;
+    private boolean rangeFacetsRequested   = false;
 
     private int start;
     private int pageSize;
@@ -373,7 +374,11 @@ public class Query implements Cloneable {
     }
 
     public Query setTechnicalFacets(String... technicalFacets) {
-        return setTechnicalFacets(Arrays.asList(technicalFacets));
+        if (technicalFacets != null){
+            return setTechnicalFacets(Arrays.asList(technicalFacets));
+        } else {
+            return this;
+        }
     }
 
     // extra check against enum type
@@ -485,6 +490,10 @@ public class Query implements Cloneable {
         return parameterMap.containsKey(key);
     }
 
+    public boolean areRangeFacetsRequested() {
+        return rangeFacetsRequested;
+    }
+
     /**
      * Adds parameter to the Solr parameterMap
      *
@@ -503,8 +512,11 @@ public class Query implements Cloneable {
      * @param parameters Map containing parameter key-value pairs to be added
      * @return The Query object
      */
-    public Query setParameters(Map<String, String> parameters) {
-        parameterMap.putAll(parameters);
+    public Query setFacetDateRangeParameters(Map<String, String> parameters) {
+        if (!parameters.isEmpty()) {
+            rangeFacetsRequested = true;
+            parameterMap.putAll(parameters);
+        }
         return this;
     }
 

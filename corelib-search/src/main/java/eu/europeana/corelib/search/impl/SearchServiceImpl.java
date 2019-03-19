@@ -454,6 +454,9 @@ public class SearchServiceImpl implements SearchService {
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
+                    if (query.areRangeFacetsRequested()) {
+                        resultSet.setRangeFacets(queryResponse.getFacetRanges());
+                    }
                     resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
@@ -483,9 +486,11 @@ public class SearchServiceImpl implements SearchService {
                     }
                 } catch (SolrException e) {
                     LOG.error("SolrException - query = {} ", solrQuery, e);
-                    if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
+                    if (e.getMessage().toLowerCase().contains("cursormark")) {
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
-                    } else{
+                    } else if (e.getMessage().toLowerCase().contains("connect")) {
+                        throw new SolrTypeException(e, ProblemType.SOLR_UNREACHABLE);
+                    } else {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 }

@@ -1,9 +1,10 @@
-notifications:
-  email: false
 sudo: false
 language: java
 jdk:
   - oraclejdk8
+branches:
+  only:
+  - master
 install:
   - echo "<settings>
               <profiles>
@@ -40,8 +41,10 @@ install:
                   </profile>
               </profiles>
           </settings>" > ~/settings.xml
-  - mvn install -s ~/settings.xml -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -s ~/settings.xml
 script:
-  - mvn test -B -s ~/settings.xml
+  - mvn test org.jacoco:jacoco-maven-plugin:report-aggregate -B -s ~/settings.xml
 after_success:
-  - mvn clean cobertura:cobertura coveralls:report
+  - mvn org.eluder.coveralls:coveralls-maven-plugin:report -B -s ~/settings.xml
+notifications:
+  email: false
