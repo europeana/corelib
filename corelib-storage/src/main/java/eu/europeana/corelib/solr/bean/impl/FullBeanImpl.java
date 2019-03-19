@@ -94,7 +94,7 @@ public class FullBeanImpl implements FullBean {
     @Reference
     @Indexed
     protected List<AgentImpl> agents;
-
+ 
     @Reference
     @Indexed
     protected List<TimespanImpl> timespans;

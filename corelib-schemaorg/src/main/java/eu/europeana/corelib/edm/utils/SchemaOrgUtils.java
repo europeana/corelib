@@ -17,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.validation.Schema;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,12 +29,14 @@ import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.schemaorg.AudioObject;
 import eu.europeana.corelib.edm.model.schemaorg.CreativeWork;
+import eu.europeana.corelib.edm.model.schemaorg.EdmOrganization;
 import eu.europeana.corelib.edm.model.schemaorg.GeoCoordinates;
 import eu.europeana.corelib.edm.model.schemaorg.MediaObject;
 import eu.europeana.corelib.edm.model.schemaorg.MultilingualString;
 import eu.europeana.corelib.edm.model.schemaorg.Organization;
 import eu.europeana.corelib.edm.model.schemaorg.Person;
 import eu.europeana.corelib.edm.model.schemaorg.Place;
+import eu.europeana.corelib.edm.model.schemaorg.PostalAddress;
 import eu.europeana.corelib.edm.model.schemaorg.QuantitativeValue;
 import eu.europeana.corelib.edm.model.schemaorg.Reference;
 import eu.europeana.corelib.edm.model.schemaorg.SchemaOrgConstants;
@@ -44,6 +48,7 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.ConceptImpl;
+import eu.europeana.corelib.solr.entity.OrganizationImpl;
 import eu.europeana.corelib.solr.entity.PlaceImpl;
 import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
@@ -115,6 +120,8 @@ public final class SchemaOrgUtils {
 	    SchemaOrgUtils.processConcept((Concept) entity, thing);
 	} else if (entity instanceof eu.europeana.corelib.definitions.edm.entity.Place) {
 	    SchemaOrgUtils.processPlace((eu.europeana.corelib.definitions.edm.entity.Place) entity, (Place) thing);
+	} else if (entity instanceof eu.europeana.corelib.definitions.edm.entity.Organization) {
+	    SchemaOrgUtils.processOrganization((eu.europeana.corelib.definitions.edm.entity.Organization) entity, thing);
 	} else if (entity instanceof Agent) {
 	    SchemaOrgUtils.processAgent((Agent) entity, thing);
 	}
@@ -369,7 +376,108 @@ public final class SchemaOrgUtils {
 	// image
 	agentObject.setImage(agent.getFoafDepiction());
     }
+    
+    /**
+     * Update properties of the given Schema.Org Thing (EdmOrganization)
+     * using data from the given EDM Organization
+     *
+     * @param entityObject Schema.Org Contextual Entity object to update
+     * @param organization       source EDM Organization
+     */
+    public static void processOrganization(eu.europeana.corelib.definitions.edm.entity.Organization organization,
+	    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity entityObject) {
+	// @id
+	entityObject.setId(organization.getAbout());
 
+	// name
+	addMultilingualProperties(entityObject, organization.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+
+	// alternateName
+	addMultilingualProperties(entityObject, organization.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+	addMultilingualProperties(entityObject, organization.getEdmAcronym(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+	// description
+	//addMultilingualProperties(entityObject, organization.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+
+	// mainEntityOfPage
+	addTextProperties(entityObject, Arrays.asList(organization.getFoafHomepage()), SchemaOrgConstants.PROPERTY_MAIN_ENTITY_OF_PAGE);
+	
+	// logo
+	addTextProperties(entityObject, Arrays.asList(organization.getFoafLogo()), SchemaOrgConstants.PROPERTY_LOGO);
+	
+	// areaServed
+	String areaServed = null;
+	if(organization.getEdmCountry() != null && organization.getEdmCountry().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+	    areaServed = organization.getEdmCountry().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+	    addTextProperties(entityObject, Arrays.asList(areaServed), SchemaOrgConstants.PROPERTY_AREA_SERVED);
+	}
+	
+	// telephone
+	addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
+	
+	// address
+	createPostalAddress(organization, (EdmOrganization)entityObject);
+	
+	// identifier
+	String dcIdentifier = null;
+	if(organization.getDcDescription() != null && organization.getDcDescription().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+	    dcIdentifier = organization.getDcDescription().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+	    addTextProperties(entityObject, Arrays.asList(dcIdentifier), SchemaOrgConstants.PROPERTY_IDENTIFIER);
+	}
+	
+	// sameAs
+	addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
+	// url
+	String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN,
+		organization.getEntityIdentifier());
+	entityObject.setEntityPageUrl(entityPageUrl);
+
+	// image
+	entityObject.setImage(organization.getFoafDepiction());
+    }
+    
+    /**
+     * Create PostalAddress object for the properties taken
+     * from EDM Organization and set the corresponding properties in Schema.Org EdmOrganization.
+     *
+     * @param organization    EDM Organization with necessary data
+     * @param organizationObject Schema.Org EdmOrganization object to update
+     */
+    private static void createPostalAddress(eu.europeana.corelib.definitions.edm.entity.Organization organization,
+	    EdmOrganization organizationObject) {
+	PostalAddress postalAddress = new PostalAddress();
+	
+	eu.europeana.corelib.definitions.edm.entity.Address address = organization.getAddress();
+	if(address == null)
+	    return;
+	
+	// id
+	postalAddress.setId(address.getAbout());
+	
+	// streetAddress
+	addTextProperties(postalAddress, Arrays.asList(address.getVcardStreetAddress()), SchemaOrgConstants.PROPERTY_STREET_ADDRESS);
+	
+	// postalCode
+	addTextProperties(postalAddress, Arrays.asList(address.getVcardPostalCode()), SchemaOrgConstants.PROPERTY_POSTAL_CODE);
+	
+	// postOfficeBoxNumber
+	addTextProperties(postalAddress, Arrays.asList(address.getVcardPostOfficeBox()), SchemaOrgConstants.PROPERTY_POST_OFFICE_BOX_NUMBER);
+	
+	// addressLocality
+	addTextProperties(postalAddress, Arrays.asList(address.getVcardLocality()), SchemaOrgConstants.PROPERTY_ADDRESS_LOCALITY);
+	
+	// addressRegion
+	//addTextProperties(postalAddress, Arrays.asList(address.get), SchemaOrgConstants.PROPERTY_ADDRESS_REGION);
+	
+	// addressCountry
+	addTextProperties(postalAddress, Arrays.asList(address.getVcardCountryName()), SchemaOrgConstants.PROPERTY_ADDRESS_COUNTRY);
+	
+	// postalAddress
+	organizationObject.addAddress(postalAddress);
+    }
+
+    
     /**
      * Adds Text properties from the given values. Those are language independent
      *

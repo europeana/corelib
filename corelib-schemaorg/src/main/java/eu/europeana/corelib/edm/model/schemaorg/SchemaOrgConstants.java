@@ -102,6 +102,30 @@ public final class SchemaOrgConstants {
     public static final String PROPERTY_DISSOLUTION_DATE = "dissolutionDate";
     
     public static final String PROPERTY_IMAGE = "image";
+    
+    public static final String PROPERTY_MAIN_ENTITY_OF_PAGE = "mainEntityOfPage";
+    
+    public static final String PROPERTY_LOGO = "logo";
+    
+    public static final String PROPERTY_AREA_SERVED = "areaServed";
+    
+    public static final String PROPERTY_TELEPHONE = "telephone";
+    
+    public static final String PROPERTY_ADDRESS = "address";
+    
+    public static final String PROPERTY_IDENTIFIER = "identifier";
+    
+    public static final String PROPERTY_STREET_ADDRESS = "streetAddress";
+    
+    public static final String PROPERTY_POSTAL_CODE = "postalCode";
+    
+    public static final String PROPERTY_POST_OFFICE_BOX_NUMBER = "postOfficeBoxNumber";
+    
+    public static final String PROPERTY_ADDRESS_LOCALITY = "addressLocality";
+    
+    public static final String PROPERTY_ADDRESS_REGION = "addressRegion";
+    
+    public static final String PROPERTY_ADDRESS_COUNTRY = "addressCountry";
 
     public static final String TYPE_THING = "Thing";
 
@@ -140,6 +164,8 @@ public final class SchemaOrgConstants {
     public static final String TYPE_SCULPTURE = "Sculpture";
 
     public static final String TYPE_NEWSPAPER = "Newspaper";
+    
+    public static final String TYPE_POSTAL_ADDRESS = "PostalAddress";
 
     public static final String DEFAULT_LANGUAGE = "def";
 
@@ -152,4 +178,6 @@ public final class SchemaOrgConstants {
     public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/portal/en/explore/people/%s.html";
     
     public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/portal/en/explore/place/%s.html";
+    
+    public static final String ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN = "https://www.europeana.eu/portal/en/explore/organization/%s.html";
 }
