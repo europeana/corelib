@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
+/**
+ * This class represents the data structure for schema.org serialization of EDM Organizations
+ */
 @JsonldType(SchemaOrgConstants.TYPE_ORGANIZATION)
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"@type", "@id", 

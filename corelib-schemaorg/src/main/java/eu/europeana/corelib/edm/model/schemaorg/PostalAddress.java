@@ -9,6 +9,9 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 
 import java.util.List;
 
+/**
+ * This class represents the data structure for schema.org serialization of VCARD Address
+ */
 @JsonldType(SchemaOrgConstants.TYPE_POSTAL_ADDRESS)
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"@id", "@type", SchemaOrgConstants.PROPERTY_STREET_ADDRESS, 

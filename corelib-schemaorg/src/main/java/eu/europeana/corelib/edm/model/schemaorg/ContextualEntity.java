@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
-
+/**
+ * This class represents the common data structure used for schema.org serialization of EDM Contextual Classes 
+ */
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"@type", "@id", 
 	SchemaOrgConstants.PROPERTY_URL, SchemaOrgConstants.PROPERTY_IMAGE, SchemaOrgConstants.PROPERTY_NAME, 
@@ -13,7 +14,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldProperty;
 	SchemaOrgConstants.PROPERTY_IN_LANGUAGE, SchemaOrgConstants.PROPERTY_SAME_AS })
 public abstract class ContextualEntity extends Thing {
 
-	private String image;
+    private String image;
     private String entityPageUrl;
     
     @JsonProperty(SchemaOrgConstants.PROPERTY_URL)
