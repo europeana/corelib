@@ -21,10 +21,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 
 import eu.europeana.corelib.neo4j.entity.CustomNode;
 
@@ -41,7 +41,7 @@ public class CustomNodeDeserializer extends JsonDeserializer<CustomNode> {
 			throws IOException {
 		CustomNode node = new CustomNode();
 		 JsonNode json = jp.getCodec().readTree(jp);
-		 Iterator<String> iterator = json.getFieldNames();
+		 Iterator<String> iterator = json.fieldNames();
 		 Map<String,Object> properties = new HashMap<>();
 		 while(iterator.hasNext()){
 			 String iteratorKey = iterator.next();
