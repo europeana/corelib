@@ -397,7 +397,7 @@ public final class SchemaOrgUtils {
 	addMultilingualProperties(entityObject, organization.getEdmAcronym(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
 	// description
-	//addMultilingualProperties(entityObject, organization.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+	addMultilingualProperties(entityObject, SchemaOrgConstants.PROPERTY_DESCRIPTION, organization.getDcDescription());
 
 	// mainEntityOfPage
 	addTextProperties(entityObject, Arrays.asList(organization.getFoafHomepage()), SchemaOrgConstants.PROPERTY_MAIN_ENTITY_OF_PAGE);
@@ -419,10 +419,10 @@ public final class SchemaOrgUtils {
 	createPostalAddress(organization, (EdmOrganization)entityObject);
 	
 	// identifier
-	String dcIdentifier = null;
-	if(organization.getDcDescription() != null && organization.getDcDescription().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
-	    dcIdentifier = organization.getDcDescription().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
-	    addTextProperties(entityObject, Arrays.asList(dcIdentifier), SchemaOrgConstants.PROPERTY_IDENTIFIER);
+	List<String> dcIdentifier = null;
+	if(organization.getDcIdentifier() != null && organization.getDcIdentifier().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+	    dcIdentifier = organization.getDcIdentifier().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+	    addTextProperties(entityObject, dcIdentifier, SchemaOrgConstants.PROPERTY_IDENTIFIER);
 	}
 	
 	// sameAs
@@ -1267,6 +1267,18 @@ public final class SchemaOrgUtils {
 	for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 	    addMultilingualProperties(object, entry.getValue(),
 		    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey(), propertyName);
+	}
+    }
+    
+
+    private static void addMultilingualProperties(Thing object, String propertyName, Map<String, String> map) {
+	if (map == null) {
+	    return;
+	}
+	String language = null;
+	for (Map.Entry<String, String> entry : map.entrySet()) {
+	    language = SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey();
+	    addMultilingualProperty(object, entry.getValue(), language, propertyName);
 	}
     }
 

@@ -1,6 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import eu.europeana.corelib.definitions.edm.entity.Organization;
@@ -13,6 +14,9 @@ public class MockEdmOrganization {
 	OrganizationImpl organization = new OrganizationImpl();
 	
 	organization.setAbout("http://data.europeana.eu/organization/1482250000002112001");
+	organization.setDcIdentifier(new HashMap<>());
+	organization.getDcIdentifier().put("def", Arrays.asList("1482250000002112001"));
+	
 	organization.setFoafDepiction("http://commons.wikimedia.org/wiki/Special:FilePath/BnF.jpg");
 	organization.setFoafHomepage("http://www.bnf.fr");
 	
@@ -31,6 +35,9 @@ public class MockEdmOrganization {
 	organization.setFoafLogo("http://commons.wikimedia.org/wiki/Special:FilePath/Logo_BnF.svg");
 	organization.setEdmCountry(new HashMap<>());
 	organization.getEdmCountry().put("def", "FR");
+	
+	organization.setDcDescription(new HashMap<>());
+	organization.getDcDescription().put("en", "National Library of France");
 	
 	AddressImpl address = new AddressImpl();
 	organization.setAddress(address);
