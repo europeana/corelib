@@ -20,16 +20,16 @@ package eu.europeana.corelib.solr.derived;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Class for assembling and holding the data forming the (webresource-level) attribution snippet)
@@ -118,7 +118,8 @@ public class AttributionSnippet {
         }
         textSnippet += shownAt;
         textSnippet += (dataProviderMap.size() > 0 || StringUtils.isNotBlank(shownAt)) ? ". " : "";
-        textSnippet += StringUtils.isNotBlank(rights) ? getRightsLabel(rights) + " - " + rights : ".";
+        String rightsLabel = getRightsLabel(rights);
+        textSnippet += StringUtils.isNotBlank(rightsLabel) ? rightsLabel + " - " + rights : rights;
     }
 
     private void assembleHtmlSnippet(){
@@ -148,7 +149,11 @@ public class AttributionSnippet {
             }
         }
         if (StringUtils.isNotBlank(rights)){
-            htmlSnippet += aHreficate(rights, getRightsLabel(rights), "", rightsPage);
+            String rightsLabel = getRightsLabel(rights);
+            if (StringUtils.isEmpty(rightsLabel)) {
+                rightsLabel = rights; // just repeat original rights url then
+            }
+            htmlSnippet += aHreficate(rights, rightsLabel, "", rightsPage);
             htmlSnippet += spannify("rel", "cc:useGuidelines", "", resPdUsgGd) + "." + span;
         }
         if (StringUtils.isNotBlank(landingPage)) {
@@ -184,35 +189,17 @@ public class AttributionSnippet {
     }
 
     private String getRightsLabel(String rightsURL) {
-        String        rightsLabel   = "could not determine rights label";
-        String        rightsPattern = "zero|mark|/by/|/by-sa/|/by-nd/|/by-nc/|/by-nc-sa/|/by-nc-nd/|" +
-                "orphan|rr-p|rr-f|out-of-copyright|unknown|vocab/InC/|vocab/InC-OW-EU/|vocab/CNE/|" +
-                "vocab/InC-EDU/|vocab/NoC-NC/|vocab/NoC-OKLR/";
-        final Matcher m             = Pattern.compile(rightsPattern).matcher(rightsURL);
-        if (m.find())
-            switch (m.group()) {
-                case "vocab/InC/": rightsLabel = "In Copyright"; break;
-                case "vocab/InC-OW-EU/": rightsLabel = "In Copyright - EU Orphan Work"; break;
-                case "vocab/CNE/": rightsLabel = "Copyright Not Evaluated"; break;
-                case "vocab/InC-EDU/": rightsLabel = "In Copyright - Educational Use Permitted"; break;
-                case "vocab/NoC-NC/": rightsLabel = "Public Domain"; break;
-                case "vocab/NoC-OKLR/": rightsLabel = "Public Domain"; break;
-                case "zero": rightsLabel = "Public Domain"; break;
-                case "mark": rightsLabel = "Public Domain"; break;
-                case "/by/": rightsLabel = "CC BY"; break;
-                case "/by-sa/": rightsLabel = "CC BY-SA"; break;
-                case "/by-nd/": rightsLabel = "CC BY-ND"; break;
-                case "/by-nc/": rightsLabel = "CC BY-NC"; break;
-                case "/by-nc-sa/": rightsLabel = "CC BY-NC-SA"; break;
-                case "/by-nc-nd/": rightsLabel = "CC BY-NC-ND"; break;
-                case "orphan": rightsLabel = "Orphan Work"; break;
-                case "rr-p": rightsLabel = "Rights Reserved - Paid Access"; break;
-                case "rr-f": rightsLabel = "Rights Reserved - Free Access"; break;
-                case "out-of-copyright": rightsLabel = "Out of copyright - non commercial re-use" +
-                        (StringUtils.isNotBlank(ccDeprecatedOn) ? " until " + ccDeprecatedOn : ""); break;
-                case "unknown": rightsLabel = "Unknown"; break;
+        RightsOption option = RightsOption.getValueByUrl(rightsURL, false);
+
+        if (option == null) {
+            if (rightsURL != null) {
+                LogManager.getLogger(AttributionSnippet.class).warn("Unable to find label for rights URL {}", rightsURL);
             }
-        return rightsLabel;
+            return null;
+        } else if (option == RightsOption.EU_OOC_NC && StringUtils.isNotBlank(ccDeprecatedOn)) {
+            return option.getRightsText() + " until " + ccDeprecatedOn;
+        }
+        return option.getRightsText();
     }
 
     // creates a <span spantype="spanning" [xml:lang="lang"]> tag
