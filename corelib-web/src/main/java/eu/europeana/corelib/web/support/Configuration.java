@@ -26,7 +26,7 @@ public class Configuration {
 	@Value("#{europeanaProperties['api2.url']}")
 	private String api2url;
 
-	@Value("#{europeanaProperties['api.rowLimit']}")
+	@Value("#{europeanaProperties['api.search.rowLimit']}")
 	private int apiRowLimit;
 
 	// Google Field Trip channel attributes
