@@ -37,6 +37,8 @@ import java.util.*;
  */
 public class AttributionSnippet {
 
+    private static final String CANNOT_DETERMINE_RIGHTS = "Unmatched rights";
+
     private String textSnippet = "";
     private String htmlSnippet = "";
     String landingPage = "", shownAt = "", rights = "", ccDeprecatedOn = "";
@@ -119,7 +121,7 @@ public class AttributionSnippet {
         textSnippet += shownAt;
         textSnippet += (dataProviderMap.size() > 0 || StringUtils.isNotBlank(shownAt)) ? ". " : "";
         String rightsLabel = getRightsLabel(rights);
-        textSnippet += StringUtils.isNotBlank(rightsLabel) ? rightsLabel + " - " + rights : rights;
+        textSnippet += StringUtils.isBlank(rightsLabel) ? CANNOT_DETERMINE_RIGHTS : rightsLabel + " - " + rights;
     }
 
     private void assembleHtmlSnippet(){
@@ -148,12 +150,12 @@ public class AttributionSnippet {
                 htmlSnippet += aHreficate(shownAt, dataProviderEntry.getValue(), dataProviderEntry.getKey(), "") + ". ";
             }
         }
-        if (StringUtils.isNotBlank(rights)){
-            String rightsLabel = getRightsLabel(rights);
-            if (StringUtils.isEmpty(rightsLabel)) {
-                rightsLabel = rights; // just repeat original rights url then
-            }
-            htmlSnippet += aHreficate(rights, rightsLabel, "", rightsPage);
+
+        String rightsLabel = getRightsLabel(rights);
+        if (StringUtils.isBlank(rightsLabel)) {
+            htmlSnippet += CANNOT_DETERMINE_RIGHTS;
+        } else {
+            htmlSnippet += aHreficate(rights, getRightsLabel(rights), "", rightsPage);
             htmlSnippet += spannify("rel", "cc:useGuidelines", "", resPdUsgGd) + "." + span;
         }
         if (StringUtils.isNotBlank(landingPage)) {
