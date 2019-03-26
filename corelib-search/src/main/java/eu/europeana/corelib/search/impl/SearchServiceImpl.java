@@ -177,16 +177,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
+        // add meta info for all webresources
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-        // November 2018: Deprecated code
-//        if (similarItems) {
-//            try {
-//                fullBean.setSimilarItems(findMoreLikeThis(europeanaObjectId));
-//            } catch (EuropeanaException e) {
-//                LOG.error("Error trying to retrieve similar items", e);
-//            }
-//        }
 
+        // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
             for (Aggregation agg : fullBean.getAggregations()) {
@@ -377,6 +371,7 @@ public class SearchServiceImpl implements SearchService {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
+
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrTypeException(ProblemType.PAGINATION_LIMIT_REACHED);
         }
@@ -453,6 +448,9 @@ public class SearchServiceImpl implements SearchService {
 
                     resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
                     resultSet.setFacetFields(queryResponse.getFacetFields());
+                    if (query.areRangeFacetsRequested()) {
+                        resultSet.setRangeFacets(queryResponse.getFacetRanges());
+                    }
                     resultSet.setResultSize(queryResponse.getResults().getNumFound());
                     resultSet.setSearchTime(queryResponse.getElapsedTime());
                     resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
@@ -482,9 +480,11 @@ public class SearchServiceImpl implements SearchService {
                     }
                 } catch (SolrException e) {
                     LOG.error("SolrException - query = {} ", solrQuery, e);
-                    if (e.getMessage().toLowerCase().contains("cursorMark".toLowerCase())){
+                    if (e.getMessage().toLowerCase().contains("cursormark")) {
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
-                    } else{
+                    } else if (e.getMessage().toLowerCase().contains("connect")) {
+                        throw new SolrTypeException(e, ProblemType.SOLR_UNREACHABLE);
+                    } else {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 }

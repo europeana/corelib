@@ -18,6 +18,9 @@
 package eu.europeana.corelib.web.exception;
 
 public enum ProblemType {
+
+	// TODO clean up unused error messages
+
 	NOT_FOUND("Entity doesn't exists", ProblemResponseAction.IGNORE),
 	MATCH_ALL_DOCS("org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
 	UNDEFINED_FIELD("Undefined field", ProblemResponseAction.IGNORE),
@@ -34,8 +37,8 @@ public enum ProblemType {
 	TOKEN_MISMATCH("This Europeana token is not associated with the supplied email address.", ProblemResponseAction.LOG),
 	UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
 	TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
-	SOLR_UNREACHABLE("Unable to reach Solr Search Engine (Europeana Exception).", ProblemResponseAction.MAIL),
-	SOLR_IS_BROKEN("There's something wrong with Solr", ProblemResponseAction.IGNORE),
+	SOLR_UNREACHABLE("Unable to reach Solr Search Engine.", ProblemResponseAction.MAIL),
+	SOLR_IS_BROKEN("There's something wrong with Solr Search Engine.", ProblemResponseAction.IGNORE),
 	UNABLE_TO_PARSE_CURSORMARK("The provided cursor value is invalid, please make sure you encode the value before passing back on to the API.", ProblemResponseAction.LOG),
 	UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),
 	MALFORMED_SPRING_TYPE_CONVERSION("org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
@@ -43,10 +46,12 @@ public enum ProblemType {
 	INCONSISTENT_DATA("Inconsistent data", ProblemResponseAction.MAIL),
 	INVALIDARGUMENTS("Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
 	INVALIDCLASS("Service is called with invalid bean class.", ProblemResponseAction.MAIL),
-	UNKNOWN_MONGO_DB_HOST("Unknown MongoDB host", ProblemResponseAction.MAIL),
-	MONGO_UNREACHABLE("Cannot connect to MongoDB host", ProblemResponseAction.MAIL),
-	NEO4J_CANNOTGETNODE("Cannot retrieve hierarchical node", ProblemResponseAction.LOG),
-	NEO4J_INCONSISTENT_DATA("Inconsistency detected in hierarchical data", ProblemResponseAction.MAIL),
+	UNKNOWN_MONGO_DB_HOST("Unknown Mongo database host", ProblemResponseAction.MAIL),
+	MONGO_UNREACHABLE("Cannot connect to Mongo database host", ProblemResponseAction.MAIL),
+	NEO4J_404("No hierarchical data found for record", ProblemResponseAction.LOG),
+	NEO4J_502("Inconsistency in hierarchical data for record", ProblemResponseAction.MAIL),
+	NEO4J_500("Error processing hierarchical data for record", ProblemResponseAction.MAIL),
+	NEO4J_GENERAL_FAILURE("Error connecting to hierarchical data storage", ProblemResponseAction.MAIL),
 	XMPMETADATACREATION("Unable to crate XMP metadata for thumbnail", ProblemResponseAction.IGNORE),
 	XMPMETADATARETRIEVAL("Error while reading XMP metadata from thumbnail", ProblemResponseAction.IGNORE),
 	NO_USERNAME("User name does not exist.", ProblemResponseAction.IGNORE),

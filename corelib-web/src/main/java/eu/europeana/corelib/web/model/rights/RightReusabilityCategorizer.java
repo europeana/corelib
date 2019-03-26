@@ -61,7 +61,7 @@ public class RightReusabilityCategorizer {
 	private static List<String> openUrls = new ArrayList<String>();
 	static {
 		openUrls.add(RightsOption.CC_NOC.getUrl());
-		openUrls.add(RightsOption.CC_ZERO.getUrl() + "/1.0/");
+		openUrls.add(RightsOption.CC_ZERO.getUrl() + "1.0/");
 		openUrls.add(RightsOption.CC_BY.getUrl());
 		openUrls.add(RightsOption.CC_BY_SA.getUrl());
 	}

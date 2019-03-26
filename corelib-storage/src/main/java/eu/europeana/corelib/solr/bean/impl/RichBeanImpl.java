@@ -34,7 +34,7 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Field("fulltext.*")
     private Map<String, List<String>> fulltextLangAware;
 
-    
+
     @Override
     public String[] getEdmIsShownBy() {
         return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
