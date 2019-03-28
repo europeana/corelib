@@ -67,6 +67,7 @@ public class ContextualClassImpl extends AbstractEdmEntityImpl implements Contex
 	}
 
 	@JsonIgnore
+	@com.fasterxml.jackson.annotation.JsonIgnore
 	@Override
 	public String getEntityIdentifier() {
 		String[] splitArray = this.getAbout().split("/");
