@@ -52,6 +52,7 @@
 		<jodatime.version>2.9.2</jodatime.version>
 		<junit.version>4.12</junit.version>
 		<log4j2.version>2.9.1</log4j2.version>
+		<version.slf4j>1.7.25</version.slf4j>
 		<mockito.version>1.10.19</mockito.version>
 		<objectStorage.version>1.6</objectStorage.version>
 
