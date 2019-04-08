@@ -52,6 +52,9 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("provider_aggregation_edm_object")
     protected String[] edmObject;
 
+    @Field("provider_aggregation_edm_isShownBy")
+    protected String[] edmIsShownBy;
+
     @Field("COMPLETENESS")
     protected String europeanaCompleteness;
 
@@ -184,6 +187,11 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Override
     public String[] getEdmObject() { // was getThumbnails
         return (this.edmObject != null ? this.edmObject.clone() : null);
+    }
+
+    @Override
+    public String[] getEdmIsShownBy() {
+        return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
     }
 
     @Override
