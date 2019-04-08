@@ -97,8 +97,8 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             if (!StringUtils.startsWithIgnoreCase(value, "http")) {
                 value = "https://" + value;
             }
-            LOG.info("VCAP Url property {} with is added to application properties as {}. Value = {}", vcapKey, propKey, value);
             props.setProperty(propKey, value);
+            LOG.info("VCAP Url property {} with is added to application properties as {}. Value = {}", vcapKey, propKey, props.getProperty(propKey));
         }
     }
 
