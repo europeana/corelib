@@ -20,9 +20,7 @@ public class RightReusabilityCategorizer {
 	private long numberOfRestricted;
 
 	private static String openRightsQuery;
-	private static String noOpenRightsQuery;
 	private static String restrictedRightsQuery;
-	private static String noRestrictedRightsQuery;
 	private static String permissionRightsQuery;
 	private static String allRightsQuery;
 	private static String uncategorizedQuery;
@@ -38,17 +36,14 @@ public class RightReusabilityCategorizer {
 
 	private static int permissionStrategy = PERMISSION_STRATEGY_POSITIVE;
 
-	private static final int SELECTED_UNCATEGORIZED = 0;
-	private static final int SELECTED_OPEN = 1;
-	private static final int SELECTED_RESTRICTED = 2;
-	private static final int SELECTED_PERMISSION = 4;
-
 	private static final String OPEN          = "open";
 	private static final String RESTRICTED    = "restricted";
 	private static final String UNCATEGORIZED = "uncategorized";
 	private static final String PERMISSION    = "permission";
 
 	private static final String REUSABILITY   = "REUSABILITY";
+
+	private static final String REUSABILITYLIST = "REUSABILITY:list";
 
 	private static Map<String, String> reusabilityValueMap = new LinkedHashMap<>();
 	static {
@@ -98,9 +93,6 @@ public class RightReusabilityCategorizer {
 	void categorize(String url, long count) {
 		String cleanedUrl = cleanUrl(url);
 		String category = null;
-//		if (StringUtils.isBlank(cleanedUrl)) {
-//			break;
-//		}
 
 		if (examinedUrlsMap.containsKey(cleanedUrl)) {
 			category = examinedUrlsMap.get(cleanedUrl);
@@ -141,13 +133,6 @@ public class RightReusabilityCategorizer {
 		return openRightsQuery;
 	}
 
-	private static String getNoOpenRightsQuery() {
-		if (noOpenRightsQuery == null) {
-			noOpenRightsQuery = joinNegatives(solarizeUrls(openUrls));
-		}
-		return noOpenRightsQuery;
-	}
-
 	static String getRestrictedRightsQuery() {
 		if (restrictedRightsQuery == null) {
 			restrictedRightsQuery = join(solarizeUrls(restrictedUrls));
@@ -155,16 +140,9 @@ public class RightReusabilityCategorizer {
 		return restrictedRightsQuery;
 	}
 
-	private static String getNoRestrictedRightsQuery() {
-		if (noRestrictedRightsQuery == null) {
-			noRestrictedRightsQuery = joinNegatives(solarizeUrls(restrictedUrls));
-		}
-		return noRestrictedRightsQuery;
-	}
-
 	static String getAllRightsQuery() {
 		if (allRightsQuery == null) {
-			List<String> solarizedUrls = new ArrayList<String>();
+			List<String> solarizedUrls = new ArrayList<>();
 			solarizedUrls.addAll(solarizeUrls(openUrls));
 			solarizedUrls.addAll(solarizeUrls(restrictedUrls));
 			allRightsQuery = join(solarizedUrls);
@@ -180,11 +158,7 @@ public class RightReusabilityCategorizer {
 				List<String> solarizedUrls = new ArrayList<>();
 				solarizedUrls.addAll(solarizeUrls(openUrls));
 				solarizedUrls.addAll(solarizeUrls(restrictedUrls));
-				if (permissionStrategy == PERMISSION_STRATEGY_NEGATIVE_WITH_RIGHTS) {
-					permissionRightsQuery = joinNegatives(solarizedUrls);
-				} else {
-					permissionRightsQuery = joinAllNegatives(solarizedUrls);
-				}
+				permissionRightsQuery = joinNegatives(solarizedUrls);
 			}
 			savedStrategy = permissionStrategy;
 		}
@@ -226,10 +200,6 @@ public class RightReusabilityCategorizer {
 		return "-" + rights(StringUtils.join(urls, " OR "));
 	}
 
-	private static String joinAllNegatives(List<String> urls) {
-		return joinNegatives(urls);
-	}
-
 	public static List<QueryFacet> getQueryFacets() {
 		if (queryFacets == null) {
 			queryFacets = new ArrayList<>();
@@ -242,7 +212,9 @@ public class RightReusabilityCategorizer {
 	}
 
 	private String cleanUrl(String url) {
-		return url.trim().replace("&qf=RIGHTS:", "").replace("\"", "").replace("RIGHTS:", "");
+		return url.trim().replace("&qf=RIGHTS:", "")
+				.replace("\"", "")
+				.replace("RIGHTS:", "");
 	}
 
 	long getNumberOfOpen() {
@@ -265,28 +237,15 @@ public class RightReusabilityCategorizer {
 		return mapValueReplacements(qf, false);
 	}
 
-	//	pseudocode:
-	//
-	//			- initialise to 0
-	//			- loop through qf values
-	//- assign: open: +1; restricted: +2; permission: +4
-	//			- if qf has value uncategorised: -7
-	//
-	//			- if abs[rfilters] > 3:
-	//			-> add permissionURLs; rfilters -= 4;
-	//- if abs[rfilters] > 1:
-	//			-> add restrictionURLs; rfilters -= 2;
-	//- if abs[rfilters] > 0:
-	//			-> add openURLs; rfilters -= 1;
-	//- if rfilters < 0 : add minus sign before
-
-
 	public static Map<String, String> mapValueReplacements(String[] qf, boolean fromApi) {
 		if (ArrayUtils.isEmpty(qf)) {
 			return null;
 		}
 
 		Map<String, String> valueReplacements = new HashMap<>();
+		List<String> urlList = new ArrayList<>();
+		boolean negateQf = false;
+		String urlString;
 		String open = REUSABILITY + ":" + OPEN;
 		String restricted = REUSABILITY + ":" + RESTRICTED;
 		String permission = REUSABILITY + ":" + PERMISSION;
@@ -295,43 +254,43 @@ public class RightReusabilityCategorizer {
 		int reusabilityFilters = 0;
 		for (String value : qf) {
 			if (value.equalsIgnoreCase(open) || (fromApi && value.equalsIgnoreCase(OPEN))) {
-				TaggedQuery query = new TaggedQuery(REUSABILITY, getOpenRightsQuery());
-				valueReplacements.put(open, query.toString());
-				reusabilityFilters += SELECTED_OPEN;
+				reusabilityFilters += 1;
 			} else if (value.equalsIgnoreCase(restricted) || (fromApi && value.equalsIgnoreCase(RESTRICTED))) {
-				TaggedQuery query = new TaggedQuery(REUSABILITY, getRestrictedRightsQuery());
-				valueReplacements.put(restricted, query.toString());
-				reusabilityFilters += SELECTED_RESTRICTED;
+				reusabilityFilters += 2;
 			} else if (value.equalsIgnoreCase(permission) || (fromApi && value.equalsIgnoreCase(PERMISSION))) {
-				TaggedQuery query = new TaggedQuery(REUSABILITY, getPermissionRightsQuery());
-				valueReplacements.put(permission, query.toString());
-				reusabilityFilters += SELECTED_PERMISSION;
-			} else if (fromApi && value.equalsIgnoreCase(UNCATEGORIZED)) {
-				reusabilityFilters = SELECTED_UNCATEGORIZED;
-
+				reusabilityFilters += 4;
+			} else if (value.equalsIgnoreCase(uncategorized) || (fromApi && value.equalsIgnoreCase(UNCATEGORIZED))) {
+				reusabilityFilters -= 7;
+				negateQf = true;
 			}
 		}
-
-		if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED)) {
-			TaggedQuery query = new TaggedQuery(REUSABILITY, RightReusabilityCategorizer.getAllRightsQuery());
-			valueReplacements.put(open, query.toString());
-			valueReplacements.put(restricted, "");
-		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_PERMISSION)) {
-			TaggedQuery query = new TaggedQuery(REUSABILITY, RightReusabilityCategorizer.getNoRestrictedRightsQuery());
-			valueReplacements.put(open, query.toString());
-			valueReplacements.put(permission, "");
-		} else if (reusabilityFilters == (SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
-			TaggedQuery query = new TaggedQuery(REUSABILITY, RightReusabilityCategorizer.getNoOpenRightsQuery());
-			valueReplacements.put(restricted, query.toString());
-			valueReplacements.put(permission, "");
-		} else if (reusabilityFilters == (SELECTED_OPEN + SELECTED_RESTRICTED + SELECTED_PERMISSION)) {
-			valueReplacements.put(open, "");
-			valueReplacements.put(restricted, "");
-			valueReplacements.put(permission, "");
-		} else if (reusabilityFilters == SELECTED_UNCATEGORIZED) {
-			TaggedQuery query = new TaggedQuery(REUSABILITY, RightReusabilityCategorizer.getUncategorizedQuery());
-			valueReplacements.put(uncategorized, query.toString());
+		// reusabilityFilters == 0 means: all reusabilities + uncategorised -> means 'everything', ergo: refinement
+		if (reusabilityFilters == 0){
+			return null;
 		}
+
+		if (Math.abs(reusabilityFilters) > 3){
+			urlList.addAll(permissionUrls);
+			if (negateQf) reusabilityFilters += 4;
+			else reusabilityFilters -= 4;
+		}
+		if (Math.abs(reusabilityFilters) > 1){
+			urlList.addAll(restrictedUrls);
+			if (negateQf) reusabilityFilters += 2;
+			else reusabilityFilters -= 2;
+		}
+		if (Math.abs(reusabilityFilters) > 0){
+			urlList.addAll(openUrls);
+		}
+
+		urlString = join(solarizeUrls(urlList));
+
+		if (negateQf) {
+			urlString = "-" + urlString;
+		}
+
+		TaggedQuery query = new TaggedQuery(REUSABILITY, urlString);
+		valueReplacements.put(REUSABILITYLIST, query.toString());
 		return valueReplacements;
 	}
 }
