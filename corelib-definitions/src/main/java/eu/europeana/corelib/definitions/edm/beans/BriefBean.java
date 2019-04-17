@@ -44,6 +44,11 @@ public interface BriefBean extends IdBean {
 	String[] getEdmObject();
 
 	/**
+	 * @return edm:isShownBy
+	 */
+	String[] getEdmIsShownBy();
+
+	/**
 	 * 
 	 * @return YEAR field
 	 */

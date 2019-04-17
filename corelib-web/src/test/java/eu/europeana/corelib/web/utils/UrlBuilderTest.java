@@ -15,7 +15,7 @@ public class UrlBuilderTest {
 		assertEquals("Cleaning of double slashes or unwanted chars at the end failed", clean, url.toString());
 		
 		dirty = "www.europeana.eu//portal/";
-		clean = "http://www.europeana.eu/portal";
+		clean = "https://www.europeana.eu/portal";
 		url = new UrlBuilder(dirty);
 		assertEquals("Cleaning of ending slashes and missing protocol", clean, url.toString());
 

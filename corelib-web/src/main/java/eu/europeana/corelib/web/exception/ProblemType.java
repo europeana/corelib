@@ -37,7 +37,7 @@ public enum ProblemType {
 	TOKEN_MISMATCH("This Europeana token is not associated with the supplied email address.", ProblemResponseAction.LOG),
 	UNKNOWN_TOKEN("Token does not exist.", ProblemResponseAction.IGNORE),
 	TOKEN_OUTDATED("Token is outdated.", ProblemResponseAction.IGNORE),
-	SOLR_UNREACHABLE("Unable to reach Solr Search Engine.", ProblemResponseAction.MAIL),
+	SOLR_UNREACHABLE("Unable to connect to Solr Search Engine.", ProblemResponseAction.MAIL),
 	SOLR_IS_BROKEN("There's something wrong with Solr Search Engine.", ProblemResponseAction.IGNORE),
 	UNABLE_TO_PARSE_CURSORMARK("The provided cursor value is invalid, please make sure you encode the value before passing back on to the API.", ProblemResponseAction.LOG),
 	UNABLE_TO_PARSE_JSON("Unable to parse JSON response.", ProblemResponseAction.LOG),

@@ -45,7 +45,7 @@ public class UrlBuilder {
 
 	public static final String PATH_SEPERATOR = "/";
 
-	private String protocol = "http";
+	private String protocol = "https";
 	private String domain = null;
 	private int port = 80;
 	private StringBuilder path;
