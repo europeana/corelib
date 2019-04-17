@@ -15,14 +15,15 @@ public interface RichBean extends ApiBean {
     String[] getEdmIsShownBy();
 
     /**
-     * @return edm:isShownBy
-     */
-    String[] getDcDescription();
-
-    /**
      * @return edm:landingPage
      */
     String[] getEdmLandingPage();
+
+    /**
+     *
+     * @return dc:description
+     */
+    String[] getDcDescription();
 
     /**
      * Language aware dc:description

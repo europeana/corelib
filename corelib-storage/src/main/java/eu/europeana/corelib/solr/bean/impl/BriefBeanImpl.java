@@ -130,9 +130,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("proxy_dc_title")
     protected String[] proxyDcTitle;
 
-    @Field("proxy_dc_description")
-    protected String[] dcDescription;
-
     @Field("score")
     protected Float score;
 
@@ -164,20 +161,13 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public String[] getDcDescription() {
-        return (this.dcDescription != null ? this.dcDescription.clone() : null);
-    }
-
-    @Override
     public String[] getTitle() {
         if (this.title != null) {
             return this.title.clone();
         } else if (this.proxyDcTitle != null) {
             return this.proxyDcTitle.clone();
-        } else if (this.dcDescription != null) {
-            return this.dcDescription.clone();
         } else {
-            return null;
+            return new String[0];
         }
     }
 
