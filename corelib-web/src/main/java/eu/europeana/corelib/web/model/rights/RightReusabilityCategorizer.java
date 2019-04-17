@@ -36,6 +36,11 @@ public class RightReusabilityCategorizer {
 
 	private static int permissionStrategy = PERMISSION_STRATEGY_POSITIVE;
 
+	private static final int SELECTED_OPEN = 1;
+	private static final int SELECTED_RESTRICTED = 2;
+	private static final int SELECTED_PERMISSION = 4;
+	private static final int SELECTED_UNCATEGORIZED = 7;
+
 	private static final String OPEN          = "open";
 	private static final String RESTRICTED    = "restricted";
 	private static final String UNCATEGORIZED = "uncategorized";
@@ -254,13 +259,13 @@ public class RightReusabilityCategorizer {
 		int reusabilityFilters = 0;
 		for (String value : qf) {
 			if (value.equalsIgnoreCase(open) || (fromApi && value.equalsIgnoreCase(OPEN))) {
-				reusabilityFilters += 1;
+				reusabilityFilters += SELECTED_OPEN;
 			} else if (value.equalsIgnoreCase(restricted) || (fromApi && value.equalsIgnoreCase(RESTRICTED))) {
-				reusabilityFilters += 2;
+				reusabilityFilters += SELECTED_RESTRICTED;
 			} else if (value.equalsIgnoreCase(permission) || (fromApi && value.equalsIgnoreCase(PERMISSION))) {
-				reusabilityFilters += 4;
+				reusabilityFilters += SELECTED_PERMISSION;
 			} else if (value.equalsIgnoreCase(uncategorized) || (fromApi && value.equalsIgnoreCase(UNCATEGORIZED))) {
-				reusabilityFilters -= 7;
+				reusabilityFilters -= SELECTED_UNCATEGORIZED;
 				negateQf = true;
 			}
 		}
