@@ -19,6 +19,7 @@ package eu.europeana.corelib.solr.bean.impl;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -274,10 +275,16 @@ public class FullBeanImpl implements FullBean {
 
     @Override
     public DocType getType() {
-        if (type != null) {
+        if (this.type != null) {
             return this.type;
         }
-        return this.getProxies().get(0).getEdmType();
+        for (Proxy p : this.getProxies()) {
+            if (p.getEdmType() != null) {
+                return p.getEdmType();
+            }
+        }
+        LogManager.getLogger(FullBeanImpl.class).error("Type is null, no proxy.edmType found as fallback!");
+        return null;
     }
 
     @Override
