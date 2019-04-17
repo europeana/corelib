@@ -12,12 +12,18 @@ public interface RichBean extends ApiBean {
     /**
      * @return edm:isShownBy
      */
-    String[] getDcDescription();
+    String[] getEdmIsShownBy();
 
     /**
      * @return edm:landingPage
      */
     String[] getEdmLandingPage();
+
+    /**
+     *
+     * @return dc:description
+     */
+    String[] getDcDescription();
 
     /**
      * Language aware dc:description
