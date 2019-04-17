@@ -12,11 +12,6 @@ public interface RichBean extends ApiBean {
     /**
      * @return edm:isShownBy
      */
-    String[] getEdmIsShownBy();
-
-    /**
-     * @return edm:isShownBy
-     */
     String[] getDcDescription();
 
     /**

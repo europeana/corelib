@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
+/**
+ * @see eu.europeana.corelib.definitions.edm.beans.RichBean
+ */
 @JsonPropertyOrder(alphabetic=true)
 public class RichBeanImpl extends ApiBeanImpl implements RichBean {
 
-    @Field("provider_aggregation_edm_isShownBy")
-    protected String[] edmIsShownBy;
 
     @Field("europeana_aggregation_edm_landingPage")
     protected String[] edmLandingPage;
@@ -34,11 +35,6 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Field("fulltext.*")
     private Map<String, List<String>> fulltextLangAware;
 
-
-    @Override
-    public String[] getEdmIsShownBy() {
-        return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
-    }
 
     @Override
     public String[] getEdmLandingPage() {
