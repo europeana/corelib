@@ -20,17 +20,6 @@ public interface RichBean extends ApiBean {
     String[] getEdmLandingPage();
 
     /**
-     *
-     * @return dc:description
-     */
-    String[] getDcDescription();
-
-    /**
-     * Language aware dc:description
-     */
-    Map<String, List<String>> getDcDescriptionLangAware();
-
-    /**
      * Language aware dc:type
      */
     Map<String, List<String>> getDcTypeLangAware();

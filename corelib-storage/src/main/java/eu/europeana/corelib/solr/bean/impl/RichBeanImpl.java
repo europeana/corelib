@@ -14,15 +14,8 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 @JsonPropertyOrder(alphabetic=true)
 public class RichBeanImpl extends ApiBeanImpl implements RichBean {
 
-
     @Field("europeana_aggregation_edm_landingPage")
     protected String[] edmLandingPage;
-
-    @Field("proxy_dc_description")
-    protected String[] dcDescription;
-
-    @Field("proxy_dc_description.*")
-    protected Map<String,List<String>> dcDescriptionLangAware;
     
     @Field("proxy_dc_type.*")
     protected Map<String,List<String>> dcTypeLangAware;
@@ -38,34 +31,9 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Field("fulltext.*")
     private Map<String, List<String>> fulltextLangAware;
 
-
-
-    @Override
-    public String[] getTitle() {
-        if (this.title != null) {
-            return this.title.clone();
-        } else if (this.proxyDcTitle != null) {
-            return this.proxyDcTitle.clone();
-        } else if (this.dcDescription != null) {
-            return this.dcDescription.clone();
-        } else {
-            return new String[0];
-        }
-    }
-
     @Override
     public String[] getEdmLandingPage() {
         return (this.edmLandingPage != null ? this.edmLandingPage.clone() : null);
-    }
-
-    @Override
-    public String[] getDcDescription() {
-        return (this.dcDescription != null ? this.dcDescription.clone() : null);
-    }
-
-    @Override
-    public Map<String, List<String>> getDcDescriptionLangAware() {
-        return EdmUtils.cloneMap(dcDescriptionLangAware);
     }
 
     @Override

@@ -55,6 +55,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("provider_aggregation_edm_isShownBy")
     protected String[] edmIsShownBy;
 
+    @Field("proxy_dc_description")
+    protected String[] dcDescription;
+
+    @Field("proxy_dc_description.*")
+    protected Map<String,List<String>> dcDescriptionLangAware;
+
     @Field("COMPLETENESS")
     protected String europeanaCompleteness;
 
@@ -169,6 +175,8 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
             return this.title.clone();
         } else if (this.proxyDcTitle != null) {
             return this.proxyDcTitle.clone();
+        } else if (this.dcDescription != null) {
+            return this.dcDescription.clone();
         } else {
             return new String[0];
         }
@@ -182,6 +190,16 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Override
     public String[] getEdmIsShownBy() {
         return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
+    }
+
+    @Override
+    public String[] getDcDescription() {
+        return (this.dcDescription != null ? this.dcDescription.clone() : null);
+    }
+
+    @Override
+    public Map<String, List<String>> getDcDescriptionLangAware() {
+        return EdmUtils.cloneMap(dcDescriptionLangAware);
     }
 
     @Override
