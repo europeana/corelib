@@ -6,18 +6,18 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import eu.europeana.corelib.storage.MongoProvider;
-import java.util.Arrays;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class to create a MongoClient
  */
 public class MongoProviderImpl implements MongoProvider {
-
-    private static final Logger LOG = Logger.getLogger(MongoProviderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MongoProviderImpl.class);
 
     private MongoClient mongo;
     private String defaultDatabase;

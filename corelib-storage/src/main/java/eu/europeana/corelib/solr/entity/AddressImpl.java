@@ -13,7 +13,7 @@ import eu.europeana.corelib.definitions.edm.entity.Address;
 @JsonSerialize(include = Inclusion.NON_EMPTY)
 @JsonInclude(NON_EMPTY)
 @Entity ("Address")
-public class AddressImpl extends ContextualClassImpl implements Address {
+public class AddressImpl implements Address {
 
 	private String about;
 	private String vcardStreetAddress;

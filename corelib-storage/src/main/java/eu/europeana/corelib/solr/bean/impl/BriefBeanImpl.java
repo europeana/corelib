@@ -52,6 +52,15 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("provider_aggregation_edm_object")
     protected String[] edmObject;
 
+    @Field("provider_aggregation_edm_isShownBy")
+    protected String[] edmIsShownBy;
+
+    @Field("proxy_dc_description")
+    protected String[] dcDescription;
+
+    @Field("proxy_dc_description.*")
+    protected Map<String,List<String>> dcDescriptionLangAware;
+
     @Field("COMPLETENESS")
     protected String europeanaCompleteness;
 
@@ -130,9 +139,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("proxy_dc_title")
     protected String[] proxyDcTitle;
 
-    @Field("proxy_dc_description")
-    protected String[] dcDescription;
-
     @Field("score")
     protected Float score;
 
@@ -164,11 +170,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public String[] getDcDescription() {
-        return (this.dcDescription != null ? this.dcDescription.clone() : null);
-    }
-
-    @Override
     public String[] getTitle() {
         if (this.title != null) {
             return this.title.clone();
@@ -177,13 +178,28 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         } else if (this.dcDescription != null) {
             return this.dcDescription.clone();
         } else {
-            return null;
+            return new String[0];
         }
     }
 
     @Override
     public String[] getEdmObject() { // was getThumbnails
         return (this.edmObject != null ? this.edmObject.clone() : null);
+    }
+
+    @Override
+    public String[] getEdmIsShownBy() {
+        return (this.edmIsShownBy != null ? this.edmIsShownBy.clone() : null);
+    }
+
+    @Override
+    public String[] getDcDescription() {
+        return (this.dcDescription != null ? this.dcDescription.clone() : null);
+    }
+
+    @Override
+    public Map<String, List<String>> getDcDescriptionLangAware() {
+        return EdmUtils.cloneMap(dcDescriptionLangAware);
     }
 
     @Override
