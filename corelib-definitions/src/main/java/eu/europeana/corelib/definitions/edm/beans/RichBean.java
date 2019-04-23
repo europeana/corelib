@@ -10,11 +10,6 @@ import java.util.Map;
 public interface RichBean extends ApiBean {
 
     /**
-     * @return edm:isShownBy
-     */
-    String[] getEdmIsShownBy();
-
-    /**
      * @return edm:landingPage
      */
     String[] getEdmLandingPage();
