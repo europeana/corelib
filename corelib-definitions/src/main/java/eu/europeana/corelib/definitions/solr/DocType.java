@@ -53,7 +53,7 @@ public enum DocType {
 		if (StringArrayUtils.isNotBlank(strings)) {
 			return safeValueOf(strings[0]);
 		}
-		LogManager.getLogger(DocType.class).error("Illegal type value (empty array)");
+		LogManager.getLogger(DocType.class).debug("Illegal type value (empty array)");
 		return null;
 	}
 
@@ -73,7 +73,7 @@ public enum DocType {
 				}
 			}
 		}
-		LogManager.getLogger(DocType.class).error("Illegal type value '{}'", enumNameValue);
+		LogManager.getLogger(DocType.class).debug("Illegal type value '{}'", enumNameValue);
 		return null;
 	}
 
