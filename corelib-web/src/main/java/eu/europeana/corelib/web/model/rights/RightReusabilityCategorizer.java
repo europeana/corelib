@@ -41,10 +41,10 @@ public class RightReusabilityCategorizer {
 	private static final int SELECTED_PERMISSION = 4;
 	private static final int SELECTED_UNCATEGORIZED = 7;
 
-	public static final String OPEN          = "open";
-	public static final String RESTRICTED    = "restricted";
-	public static final String UNCATEGORIZED = "uncategorized";
-	public static final String PERMISSION    = "permission";
+	private static final String OPEN          = "open";
+	private static final String RESTRICTED    = "restricted";
+	private static final String UNCATEGORIZED = "uncategorized";
+	private static final String PERMISSION    = "permission";
 
 	private static final String REUSABILITY   = "REUSABILITY";
 
@@ -222,11 +222,11 @@ public class RightReusabilityCategorizer {
 				.replace("RIGHTS:", "");
 	}
 
-	long getNumberOfOpen() {
+	public long getNumberOfOpen() {
 		return numberOfOpen;
 	}
 
-	long getNumberOfRestricted() {
+	public long getNumberOfRestricted() {
 		return numberOfRestricted;
 	}
 
