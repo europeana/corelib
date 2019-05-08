@@ -41,10 +41,10 @@ public class RightReusabilityCategorizer {
 	private static final int SELECTED_PERMISSION = 4;
 	private static final int SELECTED_UNCATEGORIZED = 7;
 
-	private static final String OPEN          = "open";
-	private static final String RESTRICTED    = "restricted";
-	private static final String UNCATEGORIZED = "uncategorized";
-	private static final String PERMISSION    = "permission";
+	public static final String OPEN          = "open";
+	public static final String RESTRICTED    = "restricted";
+	public static final String UNCATEGORIZED = "uncategorized";
+	public static final String PERMISSION    = "permission";
 
 	private static final String REUSABILITY   = "REUSABILITY";
 
@@ -90,12 +90,12 @@ public class RightReusabilityCategorizer {
 		permissionUrls.add(RightsOption.RS_CNE.getUrl());
 	}
 
-	RightReusabilityCategorizer() {
+	public RightReusabilityCategorizer() {
 		numberOfOpen = 0;
 		numberOfRestricted = 0;
 	}
 
-	void categorize(String url, long count) {
+	public void categorize(String url, long count) {
 		String cleanedUrl = cleanUrl(url);
 		String category = null;
 
