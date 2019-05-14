@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.europeana.corelib.edm.utils.EdmUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.edm.beans.ApiBean;

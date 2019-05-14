@@ -22,7 +22,7 @@ import eu.europeana.corelib.definitions.users.Role;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.email.impl.EmailBuilderImpl;
 import eu.europeana.corelib.web.exception.EmailServiceException;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

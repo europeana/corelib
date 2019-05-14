@@ -21,7 +21,7 @@
 
 package eu.europeana.corelib.definitions.model.web;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>

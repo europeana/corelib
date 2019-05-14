@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.definitions.model;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Enumeration holding the Solr Structure and field definitions

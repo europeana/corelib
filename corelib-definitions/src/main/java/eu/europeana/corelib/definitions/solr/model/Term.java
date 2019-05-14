@@ -17,7 +17,7 @@
 
 package eu.europeana.corelib.definitions.solr.model;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Container class for terms of suggestions. It has three properties:
