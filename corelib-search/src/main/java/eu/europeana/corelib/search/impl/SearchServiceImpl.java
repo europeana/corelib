@@ -72,6 +72,7 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
+import scala.annotation.meta.field;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -357,7 +358,7 @@ public class SearchServiceImpl implements SearchService {
             return beans;
         } catch (SolrServerException | IOException e) {
             LOG.error("Error querying solr", e);
-            throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
+            throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
         }
     }
 
@@ -466,26 +467,30 @@ public class SearchServiceImpl implements SearchService {
                     }
                 } catch (IOException e) {
                     LOG.error("Error querying solr", e);
-                    throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
+                    throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
                 } catch (SolrServerException e) {
                     LOG.error("SolrServerException - query = {} ", solrQuery, e);
                     if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
                         // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
                         // see ticket EA-1441
-                        throw new SolrTypeException(e, ProblemType.SOLR_IS_BROKEN);
+                        throw new SolrTypeException(e, ProblemType.NO_LIVE_SOLR);
                     } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
                         throw new SolrTypeException(e, ProblemType.INVALID_THEME);
                     } else {
-                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
                     }
                 } catch (SolrException e) {
                     LOG.error("SolrException - query = {} ", solrQuery, e);
                     if (e.getMessage().toLowerCase().contains("cursormark")) {
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
                     } else if (e.getMessage().toLowerCase().contains("connect")) {
-                        throw new SolrTypeException(e, ProblemType.SOLR_UNREACHABLE);
+                        if (e.getMessage().toLowerCase().contains("zookeeper")) {
+                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_ZOOKEEPER);
+                        } else {
+                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_SOLR);
+                        }
                     } else {
-                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
+                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
                     }
                 }
 
