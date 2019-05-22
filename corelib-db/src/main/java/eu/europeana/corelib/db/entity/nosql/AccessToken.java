@@ -1,12 +1,13 @@
-/**
-	 * Only for internal (test) usage, clears a table...
-	 */
 package eu.europeana.corelib.db.entity.nosql;
 
-import java.util.Date;
+/**
+ * Only for internal (test) usage, clears a table...
+ */
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
+
+import java.util.Date;
 
 /**
  * Class representing an OAuth2AccessToken
