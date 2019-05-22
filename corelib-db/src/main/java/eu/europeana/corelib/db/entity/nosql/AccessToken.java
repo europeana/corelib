@@ -1,7 +1,6 @@
 /**
 	 * Only for internal (test) usage, clears a table...
-	 */
-package eu.europeana.corelib.db.entity.nosql;
+	 */package eu.europeana.corelib.db.entity.nosql;
 
 import java.util.Date;
 
