@@ -4,11 +4,10 @@ package eu.europeana.corelib.db.entity.nosql;
  * Only for internal (test) usage, clears a table...
  */
 
-import java.util.Date;
-
-import eu.europeana.corelib.db.entity.nosql.RefreshToken;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
+
+import java.util.Date;
 
 /**
  * Class representing an OAuth2AccessToken
