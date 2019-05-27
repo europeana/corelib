@@ -1,3 +1,19 @@
+/*
+ * Copyright 2007-2012 The Europeana Foundation
+ *
+ *  Licenced under the EUPL, Version 1.1 (the "Licence") and subsequent versions as approved
+ *  by the European Commission;
+ *  You may not use this work except in compliance with the Licence.
+ *
+ *  You may obtain a copy of the Licence at:
+ *  http://joinup.ec.europa.eu/software/page/eupl
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the Licence is distributed on an "AS IS" basis, without warranties or conditions of
+ *  any kind, either express or implied.
+ *  See the Licence for the specific language governing permissions and limitations under
+ *  the Licence.
+ */
 package eu.europeana.corelib.search.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
@@ -85,7 +101,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Deprecated
     private static final List<String> SPELL_FIELDS = Arrays.asList("who",
-            "what", "where", "when", "title");
+                                                                   "what", "where", "when", "title");
 
     /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
@@ -341,7 +357,7 @@ public class SearchServiceImpl implements SearchService {
             return beans;
         } catch (SolrServerException | IOException e) {
             LOG.error("Error querying solr", e);
-            throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
+            throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
         }
     }
 
@@ -394,7 +410,7 @@ public class SearchServiceImpl implements SearchService {
                     for (String facetToAdd : query.getSolrFacets()) {
                         if (query.doProduceFacetUnion()) {
                             if (hasFacetRefinements
-                                    && filteredFacets.contains(facetToAdd)) {
+                                && filteredFacets.contains(facetToAdd)) {
                                 facetToAdd = MessageFormat.format(
                                         UNION_FACETS_FORMAT, facetToAdd);
                             }
@@ -450,30 +466,26 @@ public class SearchServiceImpl implements SearchService {
                     }
                 } catch (IOException e) {
                     LOG.error("Error querying solr", e);
-                    throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
+                    throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
                 } catch (SolrServerException e) {
                     LOG.error("SolrServerException - query = {} ", solrQuery, e);
                     if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
                         // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
                         // see ticket EA-1441
-                        throw new SolrTypeException(e, ProblemType.NO_LIVE_SOLR);
+                        throw new SolrTypeException(e, ProblemType.SOLR_IS_BROKEN);
                     } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
                         throw new SolrTypeException(e, ProblemType.INVALID_THEME);
                     } else {
-                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 } catch (SolrException e) {
                     LOG.error("SolrException - query = {} ", solrQuery, e);
                     if (e.getMessage().toLowerCase().contains("cursormark")) {
                         throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
                     } else if (e.getMessage().toLowerCase().contains("connect")) {
-                        if (e.getMessage().toLowerCase().contains("zookeeper")) {
-                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_ZOOKEEPER);
-                        } else {
-                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_SOLR);
-                        }
+                        throw new SolrTypeException(e, ProblemType.SOLR_UNREACHABLE);
                     } else {
-                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 }
 
@@ -531,8 +543,8 @@ public class SearchServiceImpl implements SearchService {
         String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
         return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:")
-                || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
-                || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
+                 || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
+                 || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
     }
 
     /**
@@ -540,8 +552,8 @@ public class SearchServiceImpl implements SearchService {
      */
     private boolean isValidBeanClass(Class<? extends IdBeanImpl> beanClazz) {
         return beanClazz == BriefBeanImpl.class
-                || beanClazz == ApiBeanImpl.class
-                || beanClazz == RichBeanImpl.class;
+               || beanClazz == ApiBeanImpl.class
+               || beanClazz == RichBeanImpl.class;
     }
 
     /**
@@ -638,8 +650,8 @@ public class SearchServiceImpl implements SearchService {
                     .getSpellCheckResponse();
             // if the suggestions are not empty and there are collated results
             if (spellcheckResponse != null
-                    && !spellcheckResponse.getSuggestions().isEmpty()
-                    && spellcheckResponse.getCollatedResults() != null) {
+                && !spellcheckResponse.getSuggestions().isEmpty()
+                && spellcheckResponse.getCollatedResults() != null) {
                 for (Collation collation : spellcheckResponse
                         .getCollatedResults()) {
                     StringBuilder termResult = new StringBuilder();
@@ -654,7 +666,7 @@ public class SearchServiceImpl implements SearchService {
                             }
                             // termResult.
                             if (!StringUtils.contains(termResult.toString(),
-                                    term)) {
+                                                      term)) {
                                 termResult.append(term).append(" ");
                             }
                         }
@@ -662,10 +674,10 @@ public class SearchServiceImpl implements SearchService {
                     // return the term, the number of hits for each collation
                     // and the field that it should be mapped to
                     Term term = new Term(termResult.toString().trim(),
-                            collation.getNumberOfHits(),
-                            SuggestionTitle.getMappedTitle(field),
-                            SearchUtils.escapeFacet(field,
-                                    termResult.toString()));
+                                         collation.getNumberOfHits(),
+                                         SuggestionTitle.getMappedTitle(field),
+                                         SearchUtils.escapeFacet(field,
+                                                                 termResult.toString()));
                     results.add(term);
                 }
             }
@@ -713,11 +725,11 @@ public class SearchServiceImpl implements SearchService {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Returned %d results in %d ms",
-                    results.size() > pageSize ? pageSize : results.size(),
-                    new Date().getTime() - start));
+                                    results.size() > pageSize ? pageSize : results.size(),
+                                    new Date().getTime() - start));
         }
         return results.size() > pageSize ? results.subList(0, pageSize)
-                : results;
+                                         : results;
     }
 
     public void setSolrClient(SolrClient solrClient) {
@@ -742,7 +754,7 @@ public class SearchServiceImpl implements SearchService {
 
     private enum SuggestionTitle {
         TITLE("title", "Title"), DATE("when", "Time/Period"), PLACE("where",
-                "Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
+                                                                    "Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
 
         private String title;
         private String mappedTitle;
