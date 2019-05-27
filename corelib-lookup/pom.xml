@@ -28,9 +28,9 @@
 		</dependency>
 		<!-- OTHER -->
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commonsLang.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commonsLang3.version}</version>
 		</dependency>
 
 		<dependency>

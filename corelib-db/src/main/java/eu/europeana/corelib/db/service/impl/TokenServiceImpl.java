@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.entity.relational.TokenImpl;

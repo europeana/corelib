@@ -2,7 +2,7 @@ package eu.europeana.corelib.lookup.utils;
 
 import java.io.File;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility class to read mappings developed by SIPCreator

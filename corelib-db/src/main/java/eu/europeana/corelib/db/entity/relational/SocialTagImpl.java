@@ -6,7 +6,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import eu.europeana.corelib.db.entity.relational.abstracts.EuropeanaUserObjectImpl;
 import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;

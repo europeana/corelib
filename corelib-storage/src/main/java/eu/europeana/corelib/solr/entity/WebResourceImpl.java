@@ -8,7 +8,7 @@ import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;

@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 import javax.annotation.Resource;
 
 import eu.europeana.corelib.definitions.EuropeanaStaticUrl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import eu.europeana.corelib.definitions.ApplicationContextContainer;
 import eu.europeana.corelib.definitions.model.ThumbSize;

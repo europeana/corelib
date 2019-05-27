@@ -8,8 +8,8 @@ import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.service.EmailService;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -174,7 +174,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         StringBuilder pass = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
-            pass.append(allowableCharacters[RandomUtils.nextInt(max)]);
+            pass.append(allowableCharacters[RandomUtils.nextInt(0, max)]);
         }
 
         return pass.toString();

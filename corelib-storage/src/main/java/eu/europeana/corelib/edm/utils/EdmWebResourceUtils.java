@@ -4,7 +4,7 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.jibx.*;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package eu.europeana.corelib.search.queryextractor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class QueryNormalizer {
 
