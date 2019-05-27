@@ -488,7 +488,6 @@ public class SearchServiceImpl implements SearchService {
                         throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
                     }
                 }
-
             } else {
                 throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
             }
