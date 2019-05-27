@@ -476,7 +476,6 @@ public class SearchServiceImpl implements SearchService {
                         throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
                     }
                 }
-
             } else {
                 throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
             }
