@@ -6,15 +6,15 @@ package eu.europeana.corelib.definitions.edm.entity;
  */
 public interface QualityAnnotation extends AbstractEdmEntity {
 
-  String[] getDctermsCreated();
+  String getDctermsCreated();
 
-  void setDcTermsCreated(String[] dcTermsCreated);
+  void setDcTermsCreated(String dcTermsCreated);
 
-  String[] getOaHasTarget();
+  String getOaHasTarget();
 
-  void setOaHasTarget(String[] oaHasTarget);
+  void setOaHasTarget(String oaHasTarget);
 
-  String[] getOaHasBody();
+  String getOaHasBody();
 
-  void setOaHasBody(String[] oaHasBody);
+  void setOaHasBody(String oaHasBody);
 }

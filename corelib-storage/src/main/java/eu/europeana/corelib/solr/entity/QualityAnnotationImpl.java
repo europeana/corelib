@@ -10,37 +10,37 @@ import org.mongodb.morphia.annotations.Entity;
 @Entity("QualityAnnotation")
 public class QualityAnnotationImpl extends AbstractEdmEntityImpl implements QualityAnnotation {
 
-  private String[] dctermsCreated;
-  private String[] oaHasTarget;
-  private String[] oaHasBody;
+  private String dctermsCreated;
+  private String oaHasTarget;
+  private String oaHasBody;
 
   @Override
-  public String[] getDctermsCreated() {
+  public String getDctermsCreated() {
     return dctermsCreated;
   }
 
   @Override
-  public void setDcTermsCreated(String[] dcTermsCreated) {
+  public void setDcTermsCreated(String dcTermsCreated) {
     this.dctermsCreated = dcTermsCreated;
   }
 
   @Override
-  public String[] getOaHasTarget() {
+  public String getOaHasTarget() {
     return oaHasTarget;
   }
 
   @Override
-  public void setOaHasTarget(String[] oaHasTarget) {
+  public void setOaHasTarget(String oaHasTarget) {
     this.oaHasTarget = oaHasTarget;
   }
 
   @Override
-  public String[] getOaHasBody() {
+  public String getOaHasBody() {
     return oaHasBody;
   }
 
   @Override
-  public void setOaHasBody(String[] oaHasBody) {
+  public void setOaHasBody(String oaHasBody) {
     this.oaHasBody = oaHasBody;
   }
 }
