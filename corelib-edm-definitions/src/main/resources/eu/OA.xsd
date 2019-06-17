@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3.org/ns/oa#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" elementFormDefault="qualified">
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+  <element name="hasTarget" type="rdf:ResourceType"/>
+  <element name="hasBody" type="rdf:ResourceType"/>
+</schema>

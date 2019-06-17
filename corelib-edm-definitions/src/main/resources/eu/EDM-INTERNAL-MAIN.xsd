@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema"
+<schema  xmlns="http://www.w3.org/2001/XMLSchema"
     targetNamespace="http://www.europeana.eu/schemas/edm/"
     xmlns:edm="http://www.europeana.eu/schemas/edm/" 
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -14,6 +14,7 @@
     xmlns:dcat="http://www.w3.org/ns/dcat#"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:svcs="http://rdfs.org/sioc/services#"
+    xmlns:dqv="http://www.w3.org/ns/dqv#"
         xmlns:doap="http://usefulinc.com/ns/doap#"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
 
@@ -30,6 +31,7 @@
     <import namespace="http://www.w3.org/ns/dcat#" schemaLocation="DCAT.xsd"/>
    	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
     <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
+    <import namespace="http://www.w3.org/ns/dqv#" schemaLocation="DQV.xsd"/>
     <import namespace="http://usefulinc.com/ns/doap#" schemaLocation="DOAP.xsd"/>
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
@@ -64,6 +66,7 @@
             <element ref="foaf:Organization" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="dcat:Dataset" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="svcs:Service" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="dqv:QualityAnnotation" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
 
@@ -104,6 +107,7 @@
                     <element ref="edm:completeness" maxOccurs="1" minOccurs="0"/>
                     <element ref="dcterms:created" maxOccurs="1" minOccurs="0"/>
                     <element ref="dcterms:modified" maxOccurs="1" minOccurs="0"/>
+                    <element ref="dqv:hasQualityAnnotation" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
             </extension>
         </complexContent>
