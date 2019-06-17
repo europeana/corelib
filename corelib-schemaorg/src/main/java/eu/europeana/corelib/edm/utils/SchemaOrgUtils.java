@@ -163,7 +163,10 @@ public final class SchemaOrgUtils {
 
 	// alternateName
 	addMultilingualProperties(conceptObject, concept.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
-
+	
+	// description
+	addMultilingualProperties(conceptObject, concept.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+	    
 	// sameAs
 	addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
