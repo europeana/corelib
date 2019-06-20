@@ -151,13 +151,17 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return The similar items for this record
+	 * @deprecated June 2019 not used anymore
 	 */
+	@Deprecated
 	List<? extends BriefBean> getSimilarItems();
 
 	/**
 	 * Sets the similar items for this record
 	 * @param similarItems
+	 * @deprecated June 2019 not used anymore
 	 */
+	@Deprecated
 	void setSimilarItems(List<? extends BriefBean> similarItems);
 
 	/**
