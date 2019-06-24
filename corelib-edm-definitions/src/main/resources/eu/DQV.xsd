@@ -23,7 +23,7 @@
         <extension base="rdf:AboutType">
           <sequence minOccurs="1" maxOccurs="1">
             <element ref="dcterms:created" minOccurs="1" maxOccurs="1"/>
-            <element ref="oa:hasTarget" minOccurs="1" maxOccurs="1"/>
+            <element ref="oa:hasTarget" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="oa:hasBody" minOccurs="1" maxOccurs="1"/>
           </sequence>
         </extension>
