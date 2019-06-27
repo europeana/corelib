@@ -32,8 +32,10 @@ public class EdmWebResourceUtils {
      * Add all webresources in the provided aggregation, to the provide RDF object
      * @param rdf
      * @param aggr
+     * @param preserveIdentifiers
      */
-    public static void createWebResources(RDF rdf, AggregationImpl aggr) {
+    public static void createWebResources(RDF rdf, AggregationImpl aggr,
+        boolean preserveIdentifiers) {
         List<WebResourceType> webResources = new ArrayList<>();
         for (WebResource wr : aggr.getWebResources()) {
             WebResourceType wResource = new WebResourceType();
@@ -47,14 +49,14 @@ public class EdmWebResourceUtils {
             EdmUtils.addAsList(wResource, HasPart.class, wr.getDctermsHasPart());
             EdmUtils.addAsList(wResource, IsFormatOf.class, wr.getDctermsIsFormatOf());
             EdmUtils.addAsList(wResource, IsPartOf.class, wr.getDctermsIsPartOf());
-            EdmUtils.addAsObject(wResource, IsNextInSequence.class, wr.getIsNextInSequence());
+            EdmUtils.addAsObject(wResource, IsNextInSequence.class, wr.getIsNextInSequence(), preserveIdentifiers);
             EdmUtils.addAsList(wResource, Issued.class, wr.getDctermsIssued());
             EdmUtils.addAsList(wResource, Rights.class, wr.getWebResourceDcRights());
             EdmUtils.addAsList(wResource, Type.class, wr.getDcType());
             EdmUtils.addAsObject(wResource, Rights1.class, wr.getWebResourceEdmRights());
             EdmUtils.addAsList(wResource, Source.class, wr.getDcSource());
             EdmUtils.addAsList(wResource, SameAs.class, wr.getOwlSameAs());
-            EdmUtils.addAsObject(wResource, Type1.class, wr.getRdfType());
+            EdmUtils.addAsObject(wResource, Type1.class, wr.getRdfType(), preserveIdentifiers);
 
             setRdfType(wr, wResource);
             setCodecName(wr, wResource);
@@ -74,7 +76,7 @@ public class EdmWebResourceUtils {
             setComponentColorList(wr, wResource);
             setHasServiceList(wr, wResource);
 
-            EdmUtils.addAsObject(wResource,Preview.class,wr.getEdmPreview());
+            EdmUtils.addAsObject(wResource,Preview.class,wr.getEdmPreview(), preserveIdentifiers);
             //addAsList(wResource, IsReferencedBy.class, wr.getDctermsIsReferencedBy());
 
             setIsReferencedBy(wr, wResource);
