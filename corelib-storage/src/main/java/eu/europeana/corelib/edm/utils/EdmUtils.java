@@ -98,6 +98,8 @@ public class EdmUtils {
     /**
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
+     * @param preserveIdentifiers if true does not change the identifiers of entities, if false it
+     * will add the {@link #BASE_URL} as prefix if it's not already a {@link #isUri(String)}.
      * @return RDF object
      */
     public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean preserveIdentifiers) {
