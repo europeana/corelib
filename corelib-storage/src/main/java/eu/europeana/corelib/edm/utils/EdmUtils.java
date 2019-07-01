@@ -92,17 +92,28 @@ public class EdmUtils {
      * @return RDF object
      */
     public static synchronized RDF toRDF(FullBeanImpl fullBean) {
+      return toRDF(fullBean, false);
+    }
+
+    /**
+     * Convert a FullBean to an RDF object
+     * @param fullBean the fullbean to convert
+     * @param preserveIdentifiers if true does not change the identifiers of entities, if false it
+     * will add the {@link #BASE_URL} as prefix if it's not already a {@link #isUri(String)}.
+     * @return RDF object
+     */
+    public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean preserveIdentifiers) {
         RDF rdf = new RDF();
         String type = getType(fullBean);
-        appendCHO(rdf, fullBean.getProvidedCHOs());
-        appendAggregation(rdf, fullBean.getAggregations());
-        appendProxy(rdf, fullBean.getProxies(), type);
-        appendEuropeanaAggregation(rdf, fullBean);
+        appendCHO(rdf, fullBean.getProvidedCHOs(), preserveIdentifiers);
+        appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
+        appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
+        appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
         appendAgents(rdf, fullBean.getAgents());
         appendConcepts(rdf, fullBean.getConcepts());
         appendPlaces(rdf, fullBean.getPlaces());
         appendTimespans(rdf, fullBean.getTimespans());
-        appendLicenses(rdf, fullBean.getLicenses());
+        appendLicenses(rdf, fullBean.getLicenses(), preserveIdentifiers);
         appendServices(rdf, fullBean.getServices());
         return rdf;
     }
@@ -155,14 +166,15 @@ public class EdmUtils {
         }
     }
 
-    private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses) {
+    private static void appendLicenses(RDF rdf, List<LicenseImpl> licenses,
+        boolean preserveIdentifiers) {
         if (licenses != null) {
             List<License> licenseList = new ArrayList<>();
             for (LicenseImpl lic : licenses) {
                 License license = new License();
                 license.setAbout(lic.getAbout());
                 addAsObject(license, InheritFrom.class,
-                        lic.getOdrlInheritFrom());
+                        lic.getOdrlInheritFrom(), preserveIdentifiers);
                 DateType date = new DateType();
                 date.setDate(new java.sql.Date(lic.getCcDeprecatedOn()
                         .getTime()));
@@ -267,18 +279,19 @@ public class EdmUtils {
         }
     }
 
-    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean) {
+    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean,
+        boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
-        if (isUri(europeanaAggregation.getAbout())) {
+        if (isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
             aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
         }
 
-        if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO())) {
+        if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)) {
             AggregatedCHO agCHO = new AggregatedCHO();
-            if (isUri(fBean.getProvidedCHOs().get(0).getAbout())) {
+            if (isUri(fBean.getProvidedCHOs().get(0).getAbout()) || preserveIdentifiers) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
                 agCHO.setResource(getBaseUrl(fBean.getProvidedCHOs().get(0).getAbout()));
@@ -296,13 +309,13 @@ public class EdmUtils {
         }
         addAsObject(aggregation, Creator.class, europeanaAggregation.getDcCreator());
         addAsList(aggregation, HasView.class, europeanaAggregation.getEdmHasView());
-        addAsObject(aggregation, IsShownBy.class, europeanaAggregation.getEdmIsShownBy());
-        addAsObject(aggregation, LandingPage.class, europeanaAggregation.getEdmLandingPage());
+        addAsObject(aggregation, IsShownBy.class, europeanaAggregation.getEdmIsShownBy(), preserveIdentifiers);
+        addAsObject(aggregation, LandingPage.class, europeanaAggregation.getEdmLandingPage(), preserveIdentifiers);
         Language1 language = convertMapToLanguage(europeanaAggregation.getEdmLanguage());
         if (language != null) {
             aggregation.setLanguage(language);
         }
-        addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview());
+        addAsObject(aggregation, Preview.class, europeanaAggregation.getEdmPreview(), preserveIdentifiers);
         addAsObject(aggregation, Rights1.class, europeanaAggregation.getEdmRights());
         Completeness completeness = new Completeness();
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
@@ -340,11 +353,12 @@ public class EdmUtils {
 
 
 
-    private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr) {
+    private static void appendProxy(RDF rdf, List<ProxyImpl> proxies, String typeStr,
+        boolean preserveIdentifiers) {
         List<ProxyType> proxyList = new ArrayList<>();
         for (ProxyImpl prx : proxies) {
             ProxyType proxy = new ProxyType();
-            if (isUri(prx.getAbout())) {
+            if (isUri(prx.getAbout()) || preserveIdentifiers) {
                 proxy.setAbout(prx.getAbout());
             } else {
                 proxy.setAbout(getBaseUrl(prx.getAbout()));
@@ -377,7 +391,7 @@ public class EdmUtils {
                 pInList = new ArrayList<>();
                 for (int i = 0; i < pIn.length; i++) {
                     ProxyIn proxyIn = new ProxyIn();
-                    if (isUri(pIn[i])) {
+                    if (isUri(pIn[i]) || preserveIdentifiers) {
                         proxyIn.setResource(pIn[i]);
                     } else {
                         proxyIn.setResource(getBaseUrl(pIn[i]));
@@ -398,11 +412,11 @@ public class EdmUtils {
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
             addAsList(proxy, IsDerivativeOf.class, prx.getEdmIsDerivativeOf());
             addAsList(proxy, IsRelatedTo.class, prx.getEdmIsRelatedTo());
-            addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf());
+            addAsObject(proxy, IsRepresentationOf.class, prx.getEdmIsRepresentationOf(), preserveIdentifiers);
             addAsList(proxy, IsSimilarTo.class, prx.getEdmIsSimilarTo());
             addAsList(proxy, IsSuccessorOf.class, prx.getEdmIsSuccessorOf());
             addAsList(proxy, Realizes.class, prx.getEdmRealizes());
-            addAsObject(proxy, ProxyFor.class, getBaseUrl(prx.getProxyFor()));
+            addAsObject(proxy, ProxyFor.class, preserveIdentifiers?prx.getProxyFor():getBaseUrl(prx.getProxyFor()), preserveIdentifiers);
             addAsList(proxy, Year.class, prx.getYear());
 
             List<EuropeanaType.Choice> dcChoices = new ArrayList<>();
@@ -451,18 +465,19 @@ public class EdmUtils {
         rdf.setProxyList(proxyList);
     }
 
-    private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations) {
+    private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations,
+        boolean preserveIdentifiers) {
         List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
             Aggregation aggregation = new Aggregation();
-            if (isUri(aggr.getAbout())) {
+            if (isUri(aggr.getAbout()) || preserveIdentifiers) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
                 aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
-            if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO())) {
+            if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)) {
                 AggregatedCHO cho = new AggregatedCHO();
-                if (isUri(rdf.getProvidedCHOList().get(0).getAbout())) {
+                if (isUri(rdf.getProvidedCHOList().get(0).getAbout()) || preserveIdentifiers) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
                     cho.setResource(getBaseUrl(rdf.getProvidedCHOList().get(0).getAbout()));
@@ -472,9 +487,9 @@ public class EdmUtils {
             if (!addAsObject(aggregation, DataProvider.class, aggr.getEdmDataProvider())) {
                 addAsObject(aggregation, DataProvider.class, aggr.getEdmProvider());
             }
-            addAsObject(aggregation, IsShownAt.class, aggr.getEdmIsShownAt());
-            addAsObject(aggregation, IsShownBy.class, aggr.getEdmIsShownBy());
-            addAsObject(aggregation, _Object.class, aggr.getEdmObject());
+            addAsObject(aggregation, IsShownAt.class, aggr.getEdmIsShownAt(), preserveIdentifiers);
+            addAsObject(aggregation, IsShownBy.class, aggr.getEdmIsShownBy(), preserveIdentifiers);
+            addAsObject(aggregation, _Object.class, aggr.getEdmObject(), preserveIdentifiers);
             addAsObject(aggregation, Provider.class, aggr.getEdmProvider());
             addAsObject(aggregation, Rights1.class, aggr.getEdmRights());
             addAsList(aggregation, IntermediateProvider.class, aggr.getEdmIntermediateProvider());
@@ -486,17 +501,17 @@ public class EdmUtils {
             }
             addAsList(aggregation, Rights.class, aggr.getDcRights());
             addAsList(aggregation, HasView.class, aggr.getHasView());
-            EdmWebResourceUtils.createWebResources(rdf, aggr);
+            EdmWebResourceUtils.createWebResources(rdf, aggr, preserveIdentifiers);
             aggregationList.add(aggregation);
         }
         rdf.setAggregationList(aggregationList);
     }
 
-    private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos) {
+    private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos, boolean preserveIdentifiers) {
         List<ProvidedCHOType> pChoList = new ArrayList<>();
         for (ProvidedCHOImpl pCho : chos) {
             ProvidedCHOType pChoJibx = new ProvidedCHOType();
-            if (isUri(pCho.getAbout())) {
+            if (isUri(pCho.getAbout()) || preserveIdentifiers) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
                 pChoJibx.setAbout(getBaseUrl(pCho.getAbout()));
@@ -660,12 +675,12 @@ public class EdmUtils {
         }
     }
 
-    public static boolean addAsObject(Object dest, Class<? extends ResourceType> clazz, String str) {
+    public static boolean addAsObject(Object dest, Class<? extends ResourceType> clazz, String str, boolean preserveIdentifiers) {
         try {
             if (StringUtils.isNotBlank(str)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
                 Object obj = clazz.newInstance();
-                if (isUri(str)) {
+                if (isUri(str) || preserveIdentifiers) {
                     ((ResourceType) obj).setResource(str);
                 } else {
                     ((ResourceType) obj).setResource(getBaseUrl(str));
@@ -921,7 +936,7 @@ public class EdmUtils {
     }
 
     /**
-     * @deprecated use {@linkplain EuropeanaUriUtils#isUri(String)} instead 
+     * @deprecated use {@linkplain EuropeanaUriUtils#isUri(String)} instead
      * @param str
      * @return
      */
