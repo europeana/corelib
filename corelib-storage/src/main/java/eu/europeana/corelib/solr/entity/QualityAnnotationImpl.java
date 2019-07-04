@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
 import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import org.bson.types.ObjectId;
@@ -27,6 +28,7 @@ public class QualityAnnotationImpl implements AbstractEdmEntity, QualityAnnotati
   @Indexed
   private String body;
 
+  @JsonIgnore
   @Override
   public ObjectId getId() {
     return this.id;
