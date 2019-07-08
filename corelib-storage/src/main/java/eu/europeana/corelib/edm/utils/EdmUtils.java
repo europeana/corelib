@@ -194,7 +194,7 @@ public final class EdmUtils {
                 QualityAnnotation qualityAnnotation = new QualityAnnotation();
                 resultList.add(qualityAnnotation);
 
-                qualityAnnotation.setAbout(anno.getAbout());
+                qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
 
                 Created created = new Created();
                 created.setString(anno.getCreated());
@@ -204,7 +204,7 @@ public final class EdmUtils {
                 hasBody.setResource(anno.getBody());
                 qualityAnnotation.setHasBody(hasBody);
 
-                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
+                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), BASE_URL);
             }
 
             rdf.setQualityAnnotationList(resultList);
@@ -350,7 +350,7 @@ public final class EdmUtils {
             List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
             for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
                 HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                hasQualityAnnotation.setResource(anno);
+                hasQualityAnnotation.setResource(getBaseUrl(anno));
                 qualityAnnotations.add(hasQualityAnnotation);
             }
             aggregation.setHasQualityAnnotationList(qualityAnnotations);
@@ -761,11 +761,15 @@ public final class EdmUtils {
         return false;
     }
 
-    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String... prefix) {
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
+        return addAsList(dest, clazz, vals, null);
+    }
+
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix) {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-                if (prefix.length == 1) {
+                if (StringUtils.isNotBlank(prefix)) {
                     String[] valNew = new String[vals.length];
                     int i = 0;
                     for (String val : vals) {
