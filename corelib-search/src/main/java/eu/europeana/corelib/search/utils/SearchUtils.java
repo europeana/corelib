@@ -59,6 +59,7 @@ public class SearchUtils {
 	 * @return Returns true if there is no TYPE facet or each type facet has
 	 *         valid value
 	 */
+	@Deprecated // EA-1631 usefullness of this method is disputed
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {

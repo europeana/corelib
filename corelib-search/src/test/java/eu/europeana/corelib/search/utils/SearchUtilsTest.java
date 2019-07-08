@@ -106,9 +106,9 @@ public class SearchUtilsTest {
         String[] refinementsOk = new String[]{"TYPE:IMAGE"};
         String[] refinementsLowercase = new String[]{"TYPE:image"};
         String[] refinementsBad = new String[]{"TYPE:BAD"};
-        assertTrue(SearchUtils.checkTypeFacet(refinementsOk));
-        assertTrue(SearchUtils.checkTypeFacet(refinementsLowercase));
-        assertFalse(SearchUtils.checkTypeFacet(refinementsBad));
+        assertTrue(SearchUtils.checkTypeFacet(refinementsOk));          // call to this method was removed in EA-1631
+        assertTrue(SearchUtils.checkTypeFacet(refinementsLowercase));   // if it turns out not to be necessary, also
+        assertFalse(SearchUtils.checkTypeFacet(refinementsBad));        // remove these calls and the method itself
     }
 
     @Test
