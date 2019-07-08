@@ -366,120 +366,118 @@ public class SearchServiceImpl implements SearchService {
 
         if (isValidBeanClass(beanClazz)) {
             String[] refinements = query.getRefinements(true);
-            if (SearchUtils.checkTypeFacet(refinements)) {
-                SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-                if (refinements != null) { // TODO add length 0 check!!
-                    solrQuery.addFilterQuery(refinements);
-                }
+            SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-                solrQuery.setRows(query.getPageSize());
-                solrQuery.setStart(query.getStart());
-
-                setSortAndCursor(query, resultSet, solrQuery);
-
-                // add extra parameters if any
-                if (query.getParameterMap() != null) {
-                    Map<String, String> parameters = query.getParameterMap();
-                    for (String key : parameters.keySet()) {
-                        solrQuery.setParam(key, parameters.get(key));
-                    }
-                }
-
-                // facets are optional
-                if (query.areFacetsAllowed()) {
-                    solrQuery.setFacet(true);
-                    List<String> filteredFacets = query.getFacetsUsedInRefinements();
-                    boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
-
-                    for (String facetToAdd : query.getSolrFacets()) {
-                        if (query.doProduceFacetUnion()) {
-                            if (hasFacetRefinements
-                                && filteredFacets.contains(facetToAdd)) {
-                                facetToAdd = MessageFormat.format(
-                                        UNION_FACETS_FORMAT, facetToAdd);
-                            }
-                        }
-                        solrQuery.addFacetField(facetToAdd);
-                    }
-                    solrQuery.setFacetLimit(facetLimit);
-                }
-
-                // spellcheck is optional
-                if (query.isSpellcheckAllowed()) {
-                    if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
-                        solrQuery.setParam("spellcheck", "on");
-                        solrQuery.setParam("spellcheck.collate", "true");
-                        solrQuery.setParam("spellcheck.extendedResults", "true");
-                        solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-                        solrQuery.setParam("spellcheck.q", query.getQuery());
-                    }
-                }
-                // change this to *isblank / empty
-                if (query.getQueryFacets() != null) {
-                    for (String facetQuery : query.getQueryFacets()) {
-                        solrQuery.addFacetQuery(facetQuery);
-                    }
-                }
-
-                try {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Solr query is: " + solrQuery);
-                    }
-                    query.setExecutedQuery(solrQuery.toString());
-
-                    QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
-
-
-                    resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
-                    resultSet.setFacetFields(queryResponse.getFacetFields());
-                    if (query.areRangeFacetsRequested()) {
-                        resultSet.setRangeFacets(queryResponse.getFacetRanges());
-                    }
-                    resultSet.setResultSize(queryResponse.getResults().getNumFound());
-                    resultSet.setSearchTime(queryResponse.getElapsedTime());
-                    resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
-                    resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
-                    if (debug) {
-                        resultSet.setSolrQueryString(query.getExecutedQuery());
-                    }
-                    if (queryResponse.getFacetQuery() != null) {
-                        resultSet.setQueryFacets(queryResponse.getFacetQuery());
-                    }
-                    if (queryResponse.getHighlighting() != null) {
-                        resultSet.setHighlighting(queryResponse.getHighlighting());
-                    }
-                } catch (IOException e) {
-                    LOG.error("Error querying solr", e);
-                    throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
-                } catch (SolrServerException e) {
-                    LOG.error("SolrServerException - query = {} ", solrQuery, e);
-                    if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
-                        // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
-                        // see ticket EA-1441
-                        throw new SolrTypeException(e, ProblemType.NO_LIVE_SOLR);
-                    } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
-                        throw new SolrTypeException(e, ProblemType.INVALID_THEME);
-                    } else {
-                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
-                    }
-                } catch (SolrException e) {
-                    LOG.error("SolrException - query = {} ", solrQuery, e);
-                    if (e.getMessage().toLowerCase().contains("cursormark")) {
-                        throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
-                    } else if (e.getMessage().toLowerCase().contains("connect")) {
-                        if (e.getMessage().toLowerCase().contains("zookeeper")) {
-                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_ZOOKEEPER);
-                        } else {
-                            throw new SolrTypeException(e, ProblemType.CANT_CONNECT_SOLR);
-                        }
-                    } else {
-                        throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
-                    }
-                }
-            } else {
-                throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+            if (refinements != null) { // TODO add length 0 check!!
+                solrQuery.addFilterQuery(refinements);
             }
+
+            solrQuery.setRows(query.getPageSize());
+            solrQuery.setStart(query.getStart());
+
+            setSortAndCursor(query, resultSet, solrQuery);
+
+            // add extra parameters if any
+            if (query.getParameterMap() != null) {
+                Map<String, String> parameters = query.getParameterMap();
+                for (String key : parameters.keySet()) {
+                    solrQuery.setParam(key, parameters.get(key));
+                }
+            }
+
+            // facets are optional
+            if (query.areFacetsAllowed()) {
+                solrQuery.setFacet(true);
+                List<String> filteredFacets = query.getFacetsUsedInRefinements();
+                boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
+
+                for (String facetToAdd : query.getSolrFacets()) {
+                    if (query.doProduceFacetUnion()) {
+                        if (hasFacetRefinements
+                            && filteredFacets.contains(facetToAdd)) {
+                            facetToAdd = MessageFormat.format(
+                                    UNION_FACETS_FORMAT, facetToAdd);
+                        }
+                    }
+                    solrQuery.addFacetField(facetToAdd);
+                }
+                solrQuery.setFacetLimit(facetLimit);
+            }
+
+            // spellcheck is optional
+            if (query.isSpellcheckAllowed()) {
+                if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
+                    solrQuery.setParam("spellcheck", "on");
+                    solrQuery.setParam("spellcheck.collate", "true");
+                    solrQuery.setParam("spellcheck.extendedResults", "true");
+                    solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+                    solrQuery.setParam("spellcheck.q", query.getQuery());
+                }
+            }
+            // change this to *isblank / empty
+            if (query.getQueryFacets() != null) {
+                for (String facetQuery : query.getQueryFacets()) {
+                    solrQuery.addFacetQuery(facetQuery);
+                }
+            }
+
+            try {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Solr query is: " + solrQuery);
+                }
+                query.setExecutedQuery(solrQuery.toString());
+
+                QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+
+
+                resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+                resultSet.setFacetFields(queryResponse.getFacetFields());
+                if (query.areRangeFacetsRequested()) {
+                    resultSet.setRangeFacets(queryResponse.getFacetRanges());
+                }
+                resultSet.setResultSize(queryResponse.getResults().getNumFound());
+                resultSet.setSearchTime(queryResponse.getElapsedTime());
+                resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+                resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
+                if (debug) {
+                    resultSet.setSolrQueryString(query.getExecutedQuery());
+                }
+                if (queryResponse.getFacetQuery() != null) {
+                    resultSet.setQueryFacets(queryResponse.getFacetQuery());
+                }
+                if (queryResponse.getHighlighting() != null) {
+                    resultSet.setHighlighting(queryResponse.getHighlighting());
+                }
+            } catch (IOException e) {
+                LOG.error("Error querying solr", e);
+                throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
+            } catch (SolrServerException e) {
+                LOG.error("SolrServerException - query = {} ", solrQuery, e);
+                if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
+                    // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
+                    // see ticket EA-1441
+                    throw new SolrTypeException(e, ProblemType.NO_LIVE_SOLR);
+                } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
+                    throw new SolrTypeException(e, ProblemType.INVALID_THEME);
+                } else {
+                    throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                }
+            } catch (SolrException e) {
+                LOG.error("SolrException - query = {} ", solrQuery, e);
+                if (e.getMessage().toLowerCase().contains("cursormark")) {
+                    throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
+                } else if (e.getMessage().toLowerCase().contains("connect")) {
+                    if (e.getMessage().toLowerCase().contains("zookeeper")) {
+                        throw new SolrTypeException(e, ProblemType.CANT_CONNECT_ZOOKEEPER);
+                    } else {
+                        throw new SolrTypeException(e, ProblemType.CANT_CONNECT_SOLR);
+                    }
+                } else {
+                    throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                }
+            }
+
 
         } else {
             throw new SolrTypeException(ProblemType.INVALIDCLASS, "Bean class: " + beanClazz);
