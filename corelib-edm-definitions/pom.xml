@@ -16,6 +16,7 @@
 	<url>http://www.europeana.eu</url>
 
 	<properties>
+		<!-- Define static list of namespaces, so we filter out all old-stuff and only include required namespaces -->
 		<binding.replace><![CDATA[ $1
     <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml" />
     <namespace uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" prefix="rdf" />
@@ -33,6 +34,8 @@
     <namespace uri="http://creativecommons.org/ns#" prefix="cc" />
     <namespace uri="http://www.openarchives.org/ore/terms/" prefix="ore" />
     <namespace uri="http://rdfs.org/sioc/services#" prefix="svcs" />
+    <namespace uri="http://www.w3.org/ns/oa#" prefix="oa" />
+    <namespace uri="http://www.w3.org/ns/dqv#" prefix="dqv" />
             ]]>
 		</binding.replace>
 		<token.regex><![CDATA[ (<binding.*>) ]]></token.regex>
