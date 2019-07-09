@@ -32,7 +32,7 @@ import java.util.Map.Entry;
  * @author Yorgos.Mamakis@ kb.nl
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
-public class EdmUtils {
+public final class EdmUtils {
 
     public static final String DEFAULT_LANGUAGE = "def";
 
@@ -99,13 +99,14 @@ public class EdmUtils {
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
      * @param preserveIdentifiers if true does not change the identifiers of entities, if false it
-     * will add the {@link #BASE_URL} as prefix if it's not already a {@link #isUri(String)}.
+     * will add the {@link #BASE_URL} as prefix if it's not already an uri}.
      * @return RDF object
      */
     public static synchronized RDF toRDF(FullBeanImpl fullBean, boolean preserveIdentifiers) {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs(), preserveIdentifiers);
+        appendQualityAnnotations(rdf, fullBean.getQualityAnnotations());
         appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
         appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
         appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
@@ -184,6 +185,30 @@ public class EdmUtils {
             rdf.setLicenseList(licenseList);
         }
 
+    }
+
+    private static void appendQualityAnnotations(RDF rdf, List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations) {
+        if (qualityAnnotations != null) {
+            List<QualityAnnotation> resultList = new ArrayList<>();
+            for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
+                QualityAnnotation qualityAnnotation = new QualityAnnotation();
+                resultList.add(qualityAnnotation);
+
+                qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
+
+                Created created = new Created();
+                created.setString(anno.getCreated());
+                qualityAnnotation.setCreated(created);
+
+                HasBody hasBody = new HasBody();
+                hasBody.setResource(anno.getBody());
+                qualityAnnotation.setHasBody(hasBody);
+
+                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), BASE_URL);
+            }
+
+            rdf.setQualityAnnotationList(resultList);
+        }
     }
 
     private static String getType(FullBeanImpl fullBean) {
@@ -283,7 +308,7 @@ public class EdmUtils {
         boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
-        if (isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
+        if (EuropeanaUriUtils.isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
             aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
@@ -291,7 +316,7 @@ public class EdmUtils {
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)) {
             AggregatedCHO agCHO = new AggregatedCHO();
-            if (isUri(fBean.getProvidedCHOs().get(0).getAbout()) || preserveIdentifiers) {
+            if (EuropeanaUriUtils.isUri(fBean.getProvidedCHOs().get(0).getAbout()) || preserveIdentifiers) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
                 agCHO.setResource(getBaseUrl(fBean.getProvidedCHOs().get(0).getAbout()));
@@ -320,6 +345,16 @@ public class EdmUtils {
         Completeness completeness = new Completeness();
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
+
+        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
+            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
+            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
+                HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
+                hasQualityAnnotation.setResource(getBaseUrl(anno));
+                qualityAnnotations.add(hasQualityAnnotation);
+            }
+            aggregation.setHasQualityAnnotationList(qualityAnnotations);
+        }
 
         Created created = new Created();
         created.setString(DateUtils.format(fBean.getTimestampCreated()));
@@ -358,7 +393,7 @@ public class EdmUtils {
         List<ProxyType> proxyList = new ArrayList<>();
         for (ProxyImpl prx : proxies) {
             ProxyType proxy = new ProxyType();
-            if (isUri(prx.getAbout()) || preserveIdentifiers) {
+            if (EuropeanaUriUtils.isUri(prx.getAbout()) || preserveIdentifiers) {
                 proxy.setAbout(prx.getAbout());
             } else {
                 proxy.setAbout(getBaseUrl(prx.getAbout()));
@@ -391,7 +426,7 @@ public class EdmUtils {
                 pInList = new ArrayList<>();
                 for (int i = 0; i < pIn.length; i++) {
                     ProxyIn proxyIn = new ProxyIn();
-                    if (isUri(pIn[i]) || preserveIdentifiers) {
+                    if (EuropeanaUriUtils.isUri(pIn[i]) || preserveIdentifiers) {
                         proxyIn.setResource(pIn[i]);
                     } else {
                         proxyIn.setResource(getBaseUrl(pIn[i]));
@@ -470,14 +505,14 @@ public class EdmUtils {
         List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
             Aggregation aggregation = new Aggregation();
-            if (isUri(aggr.getAbout()) || preserveIdentifiers) {
+            if (EuropeanaUriUtils.isUri(aggr.getAbout()) || preserveIdentifiers) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
                 aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)) {
                 AggregatedCHO cho = new AggregatedCHO();
-                if (isUri(rdf.getProvidedCHOList().get(0).getAbout()) || preserveIdentifiers) {
+                if (EuropeanaUriUtils.isUri(rdf.getProvidedCHOList().get(0).getAbout()) || preserveIdentifiers) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
                     cho.setResource(getBaseUrl(rdf.getProvidedCHOList().get(0).getAbout()));
@@ -511,7 +546,7 @@ public class EdmUtils {
         List<ProvidedCHOType> pChoList = new ArrayList<>();
         for (ProvidedCHOImpl pCho : chos) {
             ProvidedCHOType pChoJibx = new ProvidedCHOType();
-            if (isUri(pCho.getAbout()) || preserveIdentifiers) {
+            if (EuropeanaUriUtils.isUri(pCho.getAbout()) || preserveIdentifiers) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
                 pChoJibx.setAbout(getBaseUrl(pCho.getAbout()));
@@ -622,7 +657,7 @@ public class EdmUtils {
                     for (String str : entry.getValue()) {
                         if (StringUtils.isNotBlank(str)) {
                             ResourceOrLiteralType obj = clazz.newInstance();
-                            if (isUri(str)) {
+                            if (EuropeanaUriUtils.isUri(str)) {
                                 Resource resource = new Resource();
                                 resource.setResource(str);
                                 obj.setResource(resource);
@@ -680,7 +715,7 @@ public class EdmUtils {
             if (StringUtils.isNotBlank(str)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
                 Object obj = clazz.newInstance();
-                if (isUri(str) || preserveIdentifiers) {
+                if (EuropeanaUriUtils.isUri(str) || preserveIdentifiers) {
                     ((ResourceType) obj).setResource(str);
                 } else {
                     ((ResourceType) obj).setResource(getBaseUrl(str));
@@ -726,11 +761,15 @@ public class EdmUtils {
         return false;
     }
 
-    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String... prefix) {
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
+        return addAsList(dest, clazz, vals, null);
+    }
+
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix) {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-                if (prefix.length == 1) {
+                if (StringUtils.isNotBlank(prefix)) {
                     String[] valNew = new String[vals.length];
                     int i = 0;
                     for (String val : vals) {
@@ -830,7 +869,7 @@ public class EdmUtils {
     }
 
     private static ResourceOrLiteralType setResourceOrLiteralLangValue(ResourceOrLiteralType rlt, Resource r, ResourceOrLiteralType.Lang lang, String value) {
-        if (isUri(value)) {
+        if (EuropeanaUriUtils.isUri(value)) {
             r.setResource(value);
             rlt.setResource(r);
         } else {
@@ -940,6 +979,7 @@ public class EdmUtils {
      * @param str
      * @return
      */
+    @Deprecated
     public static boolean isUri(String str) {
         return EuropeanaUriUtils.isUri(str);
     }
