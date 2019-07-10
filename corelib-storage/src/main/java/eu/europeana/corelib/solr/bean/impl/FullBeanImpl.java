@@ -112,7 +112,6 @@ public class FullBeanImpl implements FullBean {
   protected List<ServiceImpl> services;
 
   @Embedded
-  @Indexed
   protected List<QualityAnnotationImpl> qualityAnnotations;
 
   protected String[] country;
