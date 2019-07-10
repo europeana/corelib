@@ -363,6 +363,7 @@ public class QueryTest {
 
 		q.setSort(" score , Field( proxy_dcterms_issued , min )+asc, COMPLETENESS asc");
 		sorts = q.getSorts();
+		assertNotNull(sorts);
 		assertEquals(3, sorts.size());
 		assertEquals("score", sorts.get(0).getSortField());
 		assertEquals(QuerySort.ORDER_DESC, sorts.get(0).getSortOrder());
@@ -373,4 +374,22 @@ public class QueryTest {
 		assertTrue(q.toString().contains("sorts=score desc,Field( proxy_dcterms_issued , min ) asc,COMPLETENESS asc"));
 	}
 
+	/**
+	 * Test whether a random sort is created okay
+	 */
+	@Test
+	public void testRandomSort() {
+		Query q = new Query("*");
+		q.setSort("random_123ab");
+		List<QuerySort> sorts = q.getSorts();
+		assertNotNull(sorts);
+		assertEquals(1, sorts.size());
+		assertEquals("random_123ab", sorts.get(0).getSortField());
+
+		q.setSort("random");
+		sorts = q.getSorts();
+		assertNotNull(sorts);
+		// was a seed generated?
+		assertTrue(sorts.get(0).getSortField().matches(QuerySortTest.SORT_RANDOM_WITH_SEED_PATTERN));
+	}
 }

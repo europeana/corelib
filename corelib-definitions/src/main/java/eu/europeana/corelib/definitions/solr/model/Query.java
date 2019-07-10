@@ -272,12 +272,15 @@ public class Query implements Cloneable {
         return Math.min(Math.min(index1, index2), index3);
     }
 
+    /**
+     * Go over all sort fields to see which is a sort field and which a sort order and combine them
+     */
     private void combineSortAndOrder(List<String> sortFields) {
         for (int i = 0; i < sortFields.size(); i++) {
             String sortField = sortFields.get(i);
             if (!StringUtils.isEmpty(sortField.trim())) {
 
-                // check if next field is sort order
+                // check if next string is sort field name or sort order
                 if (i < sortFields.size() - 1) {
                     String nextSortField = sortFields.get(i + 1);
                     if (QuerySort.isSortOrder(nextSortField)) {

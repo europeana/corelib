@@ -17,6 +17,8 @@
 
 	<properties>
 		<!-- Define static list of namespaces, so we filter out all old-stuff and only include required namespaces -->
+		<!-- Note that any change here should also be done on the context.jsonld file in the api2 project so rdf
+		     and json-ld answers are in sync -->
 		<binding.replace><![CDATA[ $1
     <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml" />
     <namespace uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" prefix="rdf" />
