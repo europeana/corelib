@@ -1,6 +1,6 @@
 package eu.europeana.corelib.db.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.encoding.BasePasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 

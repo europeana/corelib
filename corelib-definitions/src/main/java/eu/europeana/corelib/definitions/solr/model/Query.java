@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import eu.europeana.corelib.utils.EuropeanaStringUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
@@ -272,12 +272,15 @@ public class Query implements Cloneable {
         return Math.min(Math.min(index1, index2), index3);
     }
 
+    /**
+     * Go over all sort fields to see which is a sort field and which a sort order and combine them
+     */
     private void combineSortAndOrder(List<String> sortFields) {
         for (int i = 0; i < sortFields.size(); i++) {
             String sortField = sortFields.get(i);
             if (!StringUtils.isEmpty(sortField.trim())) {
 
-                // check if next field is sort order
+                // check if next string is sort field name or sort order
                 if (i < sortFields.size() - 1) {
                     String nextSortField = sortFields.get(i + 1);
                     if (QuerySort.isSortOrder(nextSortField)) {
@@ -664,16 +667,14 @@ public class Query implements Cloneable {
                 boolean replaced        = false;
                 String  pseudoFacetName = null;
                 if (valueReplacementMap != null && valueReplacementMap.containsKey(facetTerm)) {
-                    pseudoFacetName = facetTerm.substring(0, facetTerm.indexOf(":"));
+                    pseudoFacetName = StringUtils.substringBefore(facetTerm, ":");
                     facetTerm = valueReplacementMap.get(facetTerm);
                     replaced = true;
                     if (StringUtils.isBlank(facetTerm)) {
                         continue;
                     }
                 }
-
-                int     colon     = facetTerm.indexOf(":");
-                String  facetName = facetTerm.substring(0, colon);
+                String  facetName = StringUtils.substringBefore(facetTerm, ":");
                 boolean isTagged  = false;
                 if (facetName.contains("!tag")) {
                     facetName = facetName.replaceFirst("\\{!tag=.*?\\}", "");
@@ -695,7 +696,7 @@ public class Query implements Cloneable {
                     if (isTagged && !collector.isTagged()) {
                         collector.setTagged(true);
                     }
-                    collector.addValue(facetTerm.substring(colon + 1), replaced);
+                    collector.addValue(StringUtils.substringAfter(facetTerm, ":"), replaced);
                 } else {
                     searchRefinementsList.add(facetTerm);
                 }
@@ -704,7 +705,7 @@ public class Query implements Cloneable {
             }
         }
 
-        facetsUsedInRefinementsList = new ArrayList<String>(register.keySet());
+        facetsUsedInRefinementsList = new ArrayList<>(register.keySet());
         for (FacetCollector collector : register.values()) {
             facetedRefinementsList.add(collector.toString());
         }

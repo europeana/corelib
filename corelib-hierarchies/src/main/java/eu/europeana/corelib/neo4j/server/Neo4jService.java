@@ -63,11 +63,10 @@ public class Neo4jService {
             Selfington selfington = mapper.readValue(resp.getEntity().getContent(), Selfington.class);
             return selfington.getSelf();
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
         } finally {
             request.releaseConnection();
         }
-        return Collections.emptyList();
     }
 
     public List<CustomNode> getChildren(String rdfAbout, int offset, int limit) throws Neo4JException {
@@ -94,11 +93,10 @@ public class Neo4jService {
             Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
             return siblington.getSiblings();
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
         } finally {
             request.releaseConnection();
         }
-        return Collections.emptyList();
     }
 
     public Hierarchy getInitialStruct(String rdfAbout) throws Neo4JException {
@@ -111,8 +109,7 @@ public class Neo4jService {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
         } catch (IOException e) {
-            LOG.error(ProblemType.NEO4J_GENERAL_FAILURE.getMessage());
-            throw new Neo4JException(ProblemType.NEO4J_GENERAL_FAILURE);
+            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
         } finally {
             request.releaseConnection();
         }
@@ -121,13 +118,10 @@ public class Neo4jService {
     private HttpResponse executeRequest(HttpGet request, String rdfAbout) throws Neo4JException, IOException {
         HttpResponse resp = client.execute(request);
         if (resp.getStatusLine().getStatusCode() == 404) {
-            LOG.error(ProblemType.NEO4J_404.getMessage() + " " + rdfAbout);
             throw new Neo4JException(ProblemType.NEO4J_404, rdfAbout);
         } else if (resp.getStatusLine().getStatusCode() == 502) {
-            LOG.error(ProblemType.NEO4J_502.getMessage() + " " + rdfAbout);
-            throw new Neo4JException(ProblemType.NEO4J_502, rdfAbout);
+            throw new Neo4JException(ProblemType.NEO4J_502_BAD_DATA, rdfAbout);
         } else if (resp.getStatusLine().getStatusCode() == 500) {
-            LOG.error(ProblemType.NEO4J_500.getMessage() + " " + rdfAbout);
             throw new Neo4JException(ProblemType.NEO4J_500, rdfAbout);
         }
         return resp;

@@ -26,7 +26,7 @@ import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -56,6 +56,7 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
+import scala.annotation.meta.field;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Deprecated
     private static final List<String> SPELL_FIELDS = Arrays.asList("who",
-            "what", "where", "when", "title");
+                                                                   "what", "where", "when", "title");
 
     /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
@@ -341,7 +342,7 @@ public class SearchServiceImpl implements SearchService {
             return beans;
         } catch (SolrServerException | IOException e) {
             LOG.error("Error querying solr", e);
-            throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
+            throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
         }
     }
 
@@ -365,117 +366,118 @@ public class SearchServiceImpl implements SearchService {
 
         if (isValidBeanClass(beanClazz)) {
             String[] refinements = query.getRefinements(true);
-            if (SearchUtils.checkTypeFacet(refinements)) {
-                SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-                if (refinements != null) { // TODO add length 0 check!!
-                    solrQuery.addFilterQuery(refinements);
-                }
+            SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-                solrQuery.setRows(query.getPageSize());
-                solrQuery.setStart(query.getStart());
-
-                setSortAndCursor(query, resultSet, solrQuery);
-
-                // add extra parameters if any
-                if (query.getParameterMap() != null) {
-                    Map<String, String> parameters = query.getParameterMap();
-                    for (String key : parameters.keySet()) {
-                        solrQuery.setParam(key, parameters.get(key));
-                    }
-                }
-
-                // facets are optional
-                if (query.areFacetsAllowed()) {
-                    solrQuery.setFacet(true);
-                    List<String> filteredFacets = query.getFacetsUsedInRefinements();
-                    boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
-
-                    for (String facetToAdd : query.getSolrFacets()) {
-                        if (query.doProduceFacetUnion()) {
-                            if (hasFacetRefinements
-                                    && filteredFacets.contains(facetToAdd)) {
-                                facetToAdd = MessageFormat.format(
-                                        UNION_FACETS_FORMAT, facetToAdd);
-                            }
-                        }
-                        solrQuery.addFacetField(facetToAdd);
-                    }
-                    solrQuery.setFacetLimit(facetLimit);
-                }
-
-                // spellcheck is optional
-                if (query.isSpellcheckAllowed()) {
-                    if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
-                        solrQuery.setParam("spellcheck", "on");
-                        solrQuery.setParam("spellcheck.collate", "true");
-                        solrQuery.setParam("spellcheck.extendedResults", "true");
-                        solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-                        solrQuery.setParam("spellcheck.q", query.getQuery());
-                    }
-                }
-                // change this to *isblank / empty
-                if (query.getQueryFacets() != null) {
-                    for (String facetQuery : query.getQueryFacets()) {
-                        solrQuery.addFacetQuery(facetQuery);
-                    }
-                }
-
-                try {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Solr query is: " + solrQuery);
-                    }
-                    query.setExecutedQuery(solrQuery.toString());
-
-                    QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
-
-
-                    resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
-                    resultSet.setFacetFields(queryResponse.getFacetFields());
-                    if (query.areRangeFacetsRequested()) {
-                        resultSet.setRangeFacets(queryResponse.getFacetRanges());
-                    }
-                    resultSet.setResultSize(queryResponse.getResults().getNumFound());
-                    resultSet.setSearchTime(queryResponse.getElapsedTime());
-                    resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
-                    resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
-                    if (debug) {
-                        resultSet.setSolrQueryString(query.getExecutedQuery());
-                    }
-                    if (queryResponse.getFacetQuery() != null) {
-                        resultSet.setQueryFacets(queryResponse.getFacetQuery());
-                    }
-                    if (queryResponse.getHighlighting() != null) {
-                        resultSet.setHighlighting(queryResponse.getHighlighting());
-                    }
-                } catch (IOException e) {
-                    LOG.error("Error querying solr", e);
-                    throw new SolrIOException(e, ProblemType.SOLR_UNREACHABLE);
-                } catch (SolrServerException e) {
-                    LOG.error("SolrServerException - query = {} ", solrQuery, e);
-                    if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
-                        // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
-                        // see ticket EA-1441
-                        throw new SolrTypeException(e, ProblemType.SOLR_IS_BROKEN);
-                    } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
-                        throw new SolrTypeException(e, ProblemType.INVALID_THEME);
-                    } else {
-                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-                    }
-                } catch (SolrException e) {
-                    LOG.error("SolrException - query = {} ", solrQuery, e);
-                    if (e.getMessage().toLowerCase().contains("cursormark")) {
-                        throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
-                    } else if (e.getMessage().toLowerCase().contains("connect")) {
-                        throw new SolrTypeException(e, ProblemType.SOLR_UNREACHABLE);
-                    } else {
-                        throw new SolrTypeException(e, ProblemType.MALFORMED_QUERY);
-                    }
-                }
-
-            } else {
-                throw new SolrTypeException(ProblemType.INVALIDARGUMENTS);
+            if (refinements != null) { // TODO add length 0 check!!
+                solrQuery.addFilterQuery(refinements);
             }
+
+            solrQuery.setRows(query.getPageSize());
+            solrQuery.setStart(query.getStart());
+
+            setSortAndCursor(query, resultSet, solrQuery);
+
+            // add extra parameters if any
+            if (query.getParameterMap() != null) {
+                Map<String, String> parameters = query.getParameterMap();
+                for (String key : parameters.keySet()) {
+                    solrQuery.setParam(key, parameters.get(key));
+                }
+            }
+
+            // facets are optional
+            if (query.areFacetsAllowed()) {
+                solrQuery.setFacet(true);
+                List<String> filteredFacets = query.getFacetsUsedInRefinements();
+                boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
+
+                for (String facetToAdd : query.getSolrFacets()) {
+                    if (query.doProduceFacetUnion()) {
+                        if (hasFacetRefinements
+                            && filteredFacets.contains(facetToAdd)) {
+                            facetToAdd = MessageFormat.format(
+                                    UNION_FACETS_FORMAT, facetToAdd);
+                        }
+                    }
+                    solrQuery.addFacetField(facetToAdd);
+                }
+                solrQuery.setFacetLimit(facetLimit);
+            }
+
+            // spellcheck is optional
+            if (query.isSpellcheckAllowed()) {
+                if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
+                    solrQuery.setParam("spellcheck", "on");
+                    solrQuery.setParam("spellcheck.collate", "true");
+                    solrQuery.setParam("spellcheck.extendedResults", "true");
+                    solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+                    solrQuery.setParam("spellcheck.q", query.getQuery());
+                }
+            }
+            // change this to *isblank / empty
+            if (query.getQueryFacets() != null) {
+                for (String facetQuery : query.getQueryFacets()) {
+                    solrQuery.addFacetQuery(facetQuery);
+                }
+            }
+
+            try {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Solr query is: " + solrQuery);
+                }
+                query.setExecutedQuery(solrQuery.toString());
+
+                QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+
+
+                resultSet.setResults((List<T>) queryResponse.getBeans(beanClazz));
+                resultSet.setFacetFields(queryResponse.getFacetFields());
+                if (query.areRangeFacetsRequested()) {
+                    resultSet.setRangeFacets(queryResponse.getFacetRanges());
+                }
+                resultSet.setResultSize(queryResponse.getResults().getNumFound());
+                resultSet.setSearchTime(queryResponse.getElapsedTime());
+                resultSet.setSpellcheck(queryResponse.getSpellCheckResponse());
+                resultSet.setNextCursorMark(queryResponse.getNextCursorMark());
+                if (debug) {
+                    resultSet.setSolrQueryString(query.getExecutedQuery());
+                }
+                if (queryResponse.getFacetQuery() != null) {
+                    resultSet.setQueryFacets(queryResponse.getFacetQuery());
+                }
+                if (queryResponse.getHighlighting() != null) {
+                    resultSet.setHighlighting(queryResponse.getHighlighting());
+                }
+            } catch (IOException e) {
+                LOG.error("Error querying solr", e);
+                throw new SolrIOException(e, ProblemType.CANT_CONNECT_SOLR);
+            } catch (SolrServerException e) {
+                LOG.error("SolrServerException - query = {} ", solrQuery, e);
+                if (StringUtils.containsIgnoreCase(e.getCause().toString(), "no live solrserver")) {
+                    // temporary message for "field 'what' was indexed without offsets, cannot highlight" error
+                    // see ticket EA-1441
+                    throw new SolrTypeException(e, ProblemType.NO_LIVE_SOLR);
+                } else if (StringUtils.contains(e.getCause().toString(), "Collection")){
+                    throw new SolrTypeException(e, ProblemType.INVALID_THEME);
+                } else {
+                    throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                }
+            } catch (SolrException e) {
+                LOG.error("SolrException - query = {} ", solrQuery, e);
+                if (e.getMessage().toLowerCase().contains("cursormark")) {
+                    throw new SolrTypeException(e, ProblemType.UNABLE_TO_PARSE_CURSORMARK);
+                } else if (e.getMessage().toLowerCase().contains("connect")) {
+                    if (e.getMessage().toLowerCase().contains("zookeeper")) {
+                        throw new SolrTypeException(e, ProblemType.CANT_CONNECT_ZOOKEEPER);
+                    } else {
+                        throw new SolrTypeException(e, ProblemType.CANT_CONNECT_SOLR);
+                    }
+                } else {
+                    throw new SolrTypeException(e, ProblemType.SOLR_ERROR);
+                }
+            }
+
 
         } else {
             throw new SolrTypeException(ProblemType.INVALIDCLASS, "Bean class: " + beanClazz);
@@ -527,8 +529,8 @@ public class SearchServiceImpl implements SearchService {
         String subquery = StringUtils.substringBefore(query, "filter_tags");
         String queryWithoutTags = StringUtils.substringBefore(subquery, "facet_tags");
         return !(StringUtils.contains(queryWithoutTags, "who:") || StringUtils.contains(queryWithoutTags, "what:")
-                || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
-                || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
+                 || StringUtils.contains(queryWithoutTags, "where:") || StringUtils.contains(queryWithoutTags, "when:")
+                 || StringUtils.contains(queryWithoutTags, "title:")) && StringUtils.contains(queryWithoutTags, ":") && !(StringUtils.contains(queryWithoutTags.trim(), " ") && StringUtils.contains(queryWithoutTags.trim(), "\""));
     }
 
     /**
@@ -536,8 +538,8 @@ public class SearchServiceImpl implements SearchService {
      */
     private boolean isValidBeanClass(Class<? extends IdBeanImpl> beanClazz) {
         return beanClazz == BriefBeanImpl.class
-                || beanClazz == ApiBeanImpl.class
-                || beanClazz == RichBeanImpl.class;
+               || beanClazz == ApiBeanImpl.class
+               || beanClazz == RichBeanImpl.class;
     }
 
     /**
@@ -634,8 +636,8 @@ public class SearchServiceImpl implements SearchService {
                     .getSpellCheckResponse();
             // if the suggestions are not empty and there are collated results
             if (spellcheckResponse != null
-                    && !spellcheckResponse.getSuggestions().isEmpty()
-                    && spellcheckResponse.getCollatedResults() != null) {
+                && !spellcheckResponse.getSuggestions().isEmpty()
+                && spellcheckResponse.getCollatedResults() != null) {
                 for (Collation collation : spellcheckResponse
                         .getCollatedResults()) {
                     StringBuilder termResult = new StringBuilder();
@@ -650,7 +652,7 @@ public class SearchServiceImpl implements SearchService {
                             }
                             // termResult.
                             if (!StringUtils.contains(termResult.toString(),
-                                    term)) {
+                                                      term)) {
                                 termResult.append(term).append(" ");
                             }
                         }
@@ -658,10 +660,10 @@ public class SearchServiceImpl implements SearchService {
                     // return the term, the number of hits for each collation
                     // and the field that it should be mapped to
                     Term term = new Term(termResult.toString().trim(),
-                            collation.getNumberOfHits(),
-                            SuggestionTitle.getMappedTitle(field),
-                            SearchUtils.escapeFacet(field,
-                                    termResult.toString()));
+                                         collation.getNumberOfHits(),
+                                         SuggestionTitle.getMappedTitle(field),
+                                         SearchUtils.escapeFacet(field,
+                                                                 termResult.toString()));
                     results.add(term);
                 }
             }
@@ -709,11 +711,11 @@ public class SearchServiceImpl implements SearchService {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Returned %d results in %d ms",
-                    results.size() > pageSize ? pageSize : results.size(),
-                    new Date().getTime() - start));
+                                    results.size() > pageSize ? pageSize : results.size(),
+                                    new Date().getTime() - start));
         }
         return results.size() > pageSize ? results.subList(0, pageSize)
-                : results;
+                                         : results;
     }
 
     public void setSolrClient(SolrClient solrClient) {
@@ -738,7 +740,7 @@ public class SearchServiceImpl implements SearchService {
 
     private enum SuggestionTitle {
         TITLE("title", "Title"), DATE("when", "Time/Period"), PLACE("where",
-                "Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
+                                                                    "Place"), PERSON("who", "Creator"), SUBJECT("what", "Subject");
 
         private String title;
         private String mappedTitle;
@@ -794,4 +796,3 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 }
-

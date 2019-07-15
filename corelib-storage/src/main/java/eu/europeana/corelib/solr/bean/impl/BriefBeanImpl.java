@@ -3,7 +3,7 @@ package eu.europeana.corelib.solr.bean.impl;
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.EdmUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -47,6 +47,12 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("COMPLETENESS")
     protected String europeanaCompleteness;
+
+    @Field("contentTier")
+    protected String contentTier;
+
+    @Field("metadataTier")
+    protected String metadataTier;
 
     @Field("TYPE")
     protected String[] docType;
@@ -147,10 +153,7 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Override
     public String[] getEdmPreview() {
-        // TODO Oct 2018 We should add an edmPreview field to Solr in the next reindex and map this method to that new Solr field.
-        // This way we know what image(s) Metis Media Service has selected and can return that in Search results.
-        // Until this is implemented we simply return an empty result
-        return new String[0];
+        return edmPreview;
     }
 
     @Override
@@ -234,6 +237,16 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Override
     public int getEuropeanaCompleteness() {
         return (!StringUtils.isBlank(europeanaCompleteness) ? Integer.parseInt(europeanaCompleteness) : 0);
+    }
+
+    @Override
+    public Integer getContentTier() {
+        return (!StringUtils.isBlank(contentTier) ? Integer.parseInt(contentTier) : null);
+    }
+
+    @Override
+    public String getMetadataTier() {
+        return metadataTier;
     }
 
     @Override
@@ -326,10 +339,10 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         return EdmUtils.cloneMap(edmAgentLabelLangAware);
     }
 
-	@Override
-	public Boolean getPreviewNoDistribute() {
-		return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
-	}
+    @Override
+    public Boolean getPreviewNoDistribute() {
+        return edmPreviewNotDistribute!=null?edmPreviewNotDistribute:false;
+    }
 
     @Override
     public Map<String, List<String>> getDcTitleLangAware() {

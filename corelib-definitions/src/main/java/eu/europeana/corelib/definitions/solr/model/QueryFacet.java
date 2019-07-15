@@ -1,6 +1,6 @@
 package eu.europeana.corelib.definitions.solr.model;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Helper class to build Solr query facets

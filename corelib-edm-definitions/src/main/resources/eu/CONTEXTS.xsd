@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://www.europeana.eu/schemas/edm/" 
   xmlns:edm="http://www.europeana.eu/schemas/edm/" 
   xmlns:dc="http://purl.org/dc/elements/1.1/"

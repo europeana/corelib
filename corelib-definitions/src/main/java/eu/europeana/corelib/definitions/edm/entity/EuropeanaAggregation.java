@@ -141,4 +141,8 @@ public interface EuropeanaAggregation extends AbstractEdmEntity {
 	 * @param edmPreview
 	 */
 	void setEdmPreview(String edmPreview);
+
+	String[] getDqvHasQualityAnnotation();
+
+	void setDqvHasQualityAnnotation(String[] dqvHasQualityAnnotation);
 }

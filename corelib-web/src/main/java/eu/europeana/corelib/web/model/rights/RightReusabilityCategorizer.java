@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.definitions.solr.model.QueryFacet;
@@ -90,12 +90,12 @@ public class RightReusabilityCategorizer {
 		permissionUrls.add(RightsOption.RS_CNE.getUrl());
 	}
 
-	RightReusabilityCategorizer() {
+	public RightReusabilityCategorizer() {
 		numberOfOpen = 0;
 		numberOfRestricted = 0;
 	}
 
-	void categorize(String url, long count) {
+	public void categorize(String url, long count) {
 		String cleanedUrl = cleanUrl(url);
 		String category = null;
 
@@ -222,11 +222,11 @@ public class RightReusabilityCategorizer {
 				.replace("RIGHTS:", "");
 	}
 
-	long getNumberOfOpen() {
+	public long getNumberOfOpen() {
 		return numberOfOpen;
 	}
 
-	long getNumberOfRestricted() {
+	public long getNumberOfRestricted() {
 		return numberOfRestricted;
 	}
 

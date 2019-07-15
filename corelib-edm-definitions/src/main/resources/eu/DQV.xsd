@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.w3.org/ns/dqv#"
+  xmlns:dqv="http://www.w3.org/ns/dqv#"
+  xmlns:oa="http://www.w3.org/ns/oa#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified">
+  <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd"/>
+  <import namespace="http://purl.org/dc/terms/" schemaLocation="DCTERMS.xsd"/>
+  <import namespace="http://www.w3.org/ns/oa#" schemaLocation="OA.xsd"/>
+
+  <element name="hasQualityAnnotation" type="rdf:ResourceType">
+    <annotation>
+      <documentation>The identifier of the Quality annotation. Example:
+        &lt;dqv:hasQualityAnnotation rdf:resource="#metadataTier"/&gt;
+      </documentation>
+    </annotation>
+
+  </element>
+  <element name="QualityAnnotation">
+    <complexType>
+      <complexContent>
+        <extension base="rdf:AboutType">
+          <sequence minOccurs="1" maxOccurs="1">
+            <element ref="dcterms:created" minOccurs="1" maxOccurs="1"/>
+            <element ref="oa:hasTarget" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="oa:hasBody" minOccurs="1" maxOccurs="1"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+</schema>

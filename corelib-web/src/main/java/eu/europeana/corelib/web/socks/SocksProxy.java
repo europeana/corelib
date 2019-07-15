@@ -1,6 +1,6 @@
 package eu.europeana.corelib.web.socks;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;

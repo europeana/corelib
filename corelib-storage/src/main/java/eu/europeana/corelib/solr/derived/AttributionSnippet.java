@@ -6,8 +6,8 @@ import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 
 import java.text.DateFormat;
@@ -28,7 +28,6 @@ public class AttributionSnippet {
     Map <String, String> creatorMap      = new HashMap<>();
     Map <String, String> titleMap        = new HashMap<>();
     Map <String, String> dataProviderMap = new HashMap<>();
-
 
 
     public AttributionSnippet(WebResourceImpl wRes) {

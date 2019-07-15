@@ -12,6 +12,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class QuerySortTest {
 
+    static final String SORT_RANDOM_WITH_SEED_PATTERN = "(?i)" +
+            QuerySort.SORT_RANDOM + QuerySort.SORT_RANDOM_SEED_SEPARATOR +"[0-9a-zA-Z]+";
+
     /**
      * Test whether we recognize a sort order specification properly
      */
@@ -76,6 +79,36 @@ public class QuerySortTest {
         QuerySort withOrderAndSpaces = new QuerySort(" Field( proxy_dcterms_issued , min ) descending ");
         assertEquals("Field( proxy_dcterms_issued , min )", withOrderAndSpaces.getSortField());
         assertEquals(QuerySort.ORDER_DESC, withOrderAndSpaces.getSortOrder());
+    }
+
+    /**
+     * Test the isRandomNoSeed() function
+     */
+    @Test
+    public void testRandomNoSeed() {
+        assertTrue(QuerySort.isRandomNoSeed("random"));
+        assertTrue(QuerySort.isRandomNoSeed(" RanDom "));
+        assertFalse(QuerySort.isRandomNoSeed("random_a7as6sd"));
+        assertFalse(QuerySort.isRandomNoSeed("random1"));
+        assertFalse(QuerySort.isRandomNoSeed(" this is just some random string "));
+    }
+
+    /**
+     * Test if a QuerySort object is created properly when if it contains 'random'
+     */
+    @Test
+    public void testRandom() {
+        // was a seed generated and added?
+        QuerySort randomNoSeed = new QuerySort("random");
+        assertTrue(randomNoSeed.getSortField().matches(SORT_RANDOM_WITH_SEED_PATTERN));
+
+        String randomSeed = "random_a7as6sd";
+        QuerySort randomWithSeed = new QuerySort(randomSeed);
+        assertEquals(randomSeed, randomWithSeed.getSortField());
+
+        String noRandom = "random1";
+        QuerySort noRandomSort = new QuerySort(noRandom);
+        assertEquals(noRandom, noRandomSort.getSortField());
     }
 
 

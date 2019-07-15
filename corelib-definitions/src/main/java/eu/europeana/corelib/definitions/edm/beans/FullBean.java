@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.edm.beans;
 
+import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import java.util.Date;
 import java.util.List;
 
@@ -150,13 +151,17 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return The similar items for this record
+	 * @deprecated June 2019 not used anymore
 	 */
+	@Deprecated
 	List<? extends BriefBean> getSimilarItems();
 
 	/**
 	 * Sets the similar items for this record
 	 * @param similarItems
+	 * @deprecated June 2019 not used anymore
 	 */
+	@Deprecated
 	void setSimilarItems(List<? extends BriefBean> similarItems);
 
 	/**
@@ -301,4 +306,15 @@ public interface FullBean extends IdBean {
 	 * @param services
      */
 	void setServices(List<? extends Service> services);
+
+	/**
+	 * Get the associated list of dqv:QualityAnnotation for the record
+	 */
+	List<? extends QualityAnnotation> getQualityAnnotations();
+
+	/**
+	 * Set the list of dqv:QualityAnnotation for the record
+	 * @param qualityAnnotations
+	 */
+	void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations);
 }

@@ -16,7 +16,7 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,9 +54,15 @@ public class WebMetaInfo {
 
         // Temp fix for missing web resources
         Aggregation aggregationFix = fullBean.getAggregations().get(0);
+
         if (aggregationFix.getEdmIsShownBy() != null) {
             String isShownBy = aggregationFix.getEdmIsShownBy();
             generateWebResource(aggregationFix, isShownBy);
+        }
+
+        if (aggregationFix.getEdmIsShownAt() != null) {
+            String isShownAt = aggregationFix.getEdmIsShownAt();
+            generateWebResource(aggregationFix, isShownAt);
         }
 
         if (aggregationFix.getEdmObject() != null) {
@@ -152,6 +158,10 @@ public class WebMetaInfo {
                 urls.add(aggregation.getEdmIsShownBy());
             }
 
+            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownAt())) {
+                urls.add(aggregation.getEdmIsShownAt());
+            }
+
             if (null != aggregation.getHasView()) {
                 urls.addAll(Arrays.asList(aggregation.getHasView()));
             }
@@ -177,6 +187,12 @@ public class WebMetaInfo {
                     String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
                     hashCodes.put(hashCodeIsShownBy, webResource);
                 }
+
+                // Locate the technical meta data from the aggregation is shown at
+                if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownAt() != null) {
+                    String hashCodeIsShownAt = generateHashCode(aggregation.getEdmIsShownAt(), aggregation.getAbout());
+                    hashCodes.put(hashCodeIsShownAt, webResource);
+                }
             }
         }
         return hashCodes;
@@ -189,24 +205,21 @@ public class WebMetaInfo {
      * @param about
      */
     private static void generateWebResource(Aggregation aggregation, String about) {
-        boolean containsWr = false;
         if (aggregation.getWebResources() != null) {
             for (WebResource wr : aggregation.getWebResources()) {
                 if (StringUtils.equals(about, wr.getAbout())) {
-                    containsWr = true;
+                    return;
                 }
             }
         }
-        if (!containsWr) {
-            List<WebResource> wResources = (List<WebResource>) aggregation.getWebResources();
-            if (wResources == null) {
-                wResources = new ArrayList<>();
-            }
-            WebResourceImpl wr = new WebResourceImpl();
-            wr.setAbout(about);
-            wResources.add(wr);
-            aggregation.setWebResources(wResources);
+        List<WebResource> wResources = (List<WebResource>) aggregation.getWebResources();
+        if (wResources == null) {
+            wResources = new ArrayList<>();
         }
+        WebResourceImpl wr = new WebResourceImpl();
+        wr.setAbout(about);
+        wResources.add(wr);
+        aggregation.setWebResources(wResources);
     }
 
     private static String generateHashCode(String wrId, String recordId){

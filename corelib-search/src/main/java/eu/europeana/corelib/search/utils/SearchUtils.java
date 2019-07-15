@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
 import org.apache.lucene.search.TermQuery;
@@ -59,6 +59,7 @@ public class SearchUtils {
 	 * @return Returns true if there is no TYPE facet or each type facet has
 	 *         valid value
 	 */
+	@Deprecated // EA-1631 usefullness of this method is disputed
 	public static boolean checkTypeFacet(String[] refinements) {
 		if (refinements != null) {
 			for (String refinement : refinements) {
