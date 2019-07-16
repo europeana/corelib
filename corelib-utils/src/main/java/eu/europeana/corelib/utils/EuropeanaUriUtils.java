@@ -111,7 +111,7 @@ public class EuropeanaUriUtils {
 		Collection<String> schemes = new TreeSet<String>();
 		try
 		{
-			URL url = EuropeanaUriUtils.class.getResource("/resources/iri.schemes.cfg");
+			URL url = EuropeanaUriUtils.class.getClassLoader().getResource("iri.schemes.cfg");
 			CSVParser parser = CSVParser.parse(url, UTF8, CSVFormat.EXCEL);
 			int i = 0;
 			for ( CSVRecord record : parser.getRecords() )
