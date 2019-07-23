@@ -189,7 +189,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		List<WebResourceMetaInfoImpl> metaInfoList = query.asList();
 
 		metaInfoList.forEach((cursor) -> {
-			System.out.println(cursor.toString());
 			String id= cursor.getId();
 			WebResourceMetaInfoImpl metaInfo= cursor;
 			metaInfos.put(id,metaInfo);
