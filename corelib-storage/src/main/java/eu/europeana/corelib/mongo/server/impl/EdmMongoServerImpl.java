@@ -1,7 +1,9 @@
 package eu.europeana.corelib.mongo.server.impl;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,11 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import org.mongodb.morphia.query.Query;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -124,6 +131,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
 		morphia.map(BasicProxyImpl.class);
+		morphia.map(WebResourceMetaInfoImpl.class);
 
 		datastore = morphia.createDatastore(mongoClient, databaseName);
 		if (createIndexes) {
@@ -172,6 +180,23 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		return null;
 	}
 
+	@Override
+	public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
+		Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
+
+		final BasicDBObject basicObject = new BasicDBObject("_id", new BasicDBObject("$in", hashCodes));   //{_id:{"$in":["1","2","3"]}}
+		Query<WebResourceMetaInfoImpl> query = getDatastore().createQuery(WebResourceMetaInfoImpl.class).filter("_id", basicObject);
+		List<WebResourceMetaInfoImpl> metaInfoList = query.asList();
+
+		metaInfoList.forEach((cursor) -> {
+			System.out.println(cursor.toString());
+			String id= cursor.getId();
+			WebResourceMetaInfoImpl metaInfo= cursor;
+			metaInfos.put(id,metaInfo);
+		});
+		return metaInfos;
+
+	}
 	@Override
 	public String toString() {
 		return "MongoDB: [Host: " + mongoClient.getAddress().getHost() + "]\n"
