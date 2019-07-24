@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
@@ -45,7 +45,7 @@ import eu.europeana.corelib.solr.entity.TimespanImpl;
  * @see eu.europeana.corelib.definitions.edm.beans.FullBean
  */
 @SuppressWarnings("unchecked")
-@JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("record")
 @Converters(DocType.DocTypeConverter.class)
 public class FullBeanImpl implements FullBean {

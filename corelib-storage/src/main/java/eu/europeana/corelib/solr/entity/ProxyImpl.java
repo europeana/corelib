@@ -3,8 +3,8 @@ package eu.europeana.corelib.solr.entity;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import java.util.List;
 import java.util.Map;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Converters;
 import org.mongodb.morphia.annotations.Entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,8 +14,7 @@ import eu.europeana.corelib.definitions.solr.DocType;
 /**
  * @author Yorgos.Mamakis@ kb.nl
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("Proxy")
 @Converters(DocType.DocTypeConverter.class)
 public class ProxyImpl extends BasicProxyImpl implements Proxy {

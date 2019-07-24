@@ -3,8 +3,7 @@ package eu.europeana.corelib.solr.entity;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.mongodb.morphia.annotations.Entity;
 
@@ -12,8 +11,7 @@ import eu.europeana.corelib.definitions.edm.entity.License;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("License")
 public class LicenseImpl extends AbstractEdmEntityImpl implements License {
 

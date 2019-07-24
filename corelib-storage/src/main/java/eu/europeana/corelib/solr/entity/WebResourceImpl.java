@@ -1,6 +1,5 @@
 package eu.europeana.corelib.solr.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
@@ -11,9 +10,9 @@ import eu.europeana.corelib.solr.derived.AttributionSnippet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
@@ -29,8 +28,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  * @author Yorgos.Mamakis@ kb.nl
  * @see eu.europeana.corelib.definitions.edm.entity.WebResource
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("WebResource")
 public class WebResourceImpl implements WebResource {
 
@@ -65,12 +63,12 @@ public class WebResourceImpl implements WebResource {
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     private AggregationImpl parentAggregation;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     private WebResourceMetaInfoImpl webResourceMetaInfo;
 
     @Override
@@ -294,7 +292,7 @@ public class WebResourceImpl implements WebResource {
      * @return
      */
     @Override
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     public String getFileFormat() {
         if (webResourceMetaInfo != null) {
             if (webResourceMetaInfo.getImageMetaInfo() != null) {
@@ -523,7 +521,7 @@ public class WebResourceImpl implements WebResource {
         this.webResourceMetaInfo = wrMetaInfo;
     }
 
-    @JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     public WebResourceMetaInfo getWebResourceMetaInfo() {
         return webResourceMetaInfo;
     }
