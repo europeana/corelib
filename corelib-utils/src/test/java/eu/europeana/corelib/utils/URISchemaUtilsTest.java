@@ -9,39 +9,39 @@ import static org.junit.Assert.*;
  *
  */
 public class URISchemaUtilsTest {
-	
-	@Test
-	public void absoluteURITest() {
-		assertTrue(EuropeanaUriUtils.isAbsoluteIRI("https://"));
 
-		assertTrue(EuropeanaUriUtils.isAbsoluteIRI("http://"));
+    @Test
+    public void absoluteURITest() {
+        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("https://"));
 
-		assertTrue(EuropeanaUriUtils.isAbsoluteIRI("session://"));
+        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("http://"));
 
-		assertTrue( EuropeanaUriUtils.isAbsoluteIRI("bitcoin:"));
+        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("session://"));
 
-		assertFalse(EuropeanaUriUtils.isAbsoluteIRI("5fdh5672"));
+        assertTrue( EuropeanaUriUtils.isAbsoluteIRI("bitcoin:"));
 
-		assertFalse( EuropeanaUriUtils.isAbsoluteIRI(""));
+        assertFalse(EuropeanaUriUtils.isAbsoluteIRI("5fdh5672"));
 
-	}
+        assertFalse( EuropeanaUriUtils.isAbsoluteIRI(""));
 
-	@Test
-	public void RealtiveURITest() {
-		assertTrue( EuropeanaUriUtils.isRelativeIRI("/proxy"));
+    }
 
-		assertTrue( EuropeanaUriUtils.isRelativeIRI("../"));
+    @Test
+    public void RealtiveURITest() {
+        assertTrue( EuropeanaUriUtils.isRelativeIRI("/proxy"));
 
-		assertTrue( EuropeanaUriUtils.isRelativeIRI("#"));
+        assertTrue( EuropeanaUriUtils.isRelativeIRI("../"));
 
-		assertTrue( EuropeanaUriUtils.isRelativeIRI("./"));
+        assertTrue( EuropeanaUriUtils.isRelativeIRI("#"));
 
-		assertFalse( EuropeanaUriUtils.isRelativeIRI("&&"));
+        assertTrue( EuropeanaUriUtils.isRelativeIRI("./"));
 
-		assertFalse( EuropeanaUriUtils.isRelativeIRI("*^"));
+        assertFalse( EuropeanaUriUtils.isRelativeIRI("&&"));
 
-		assertFalse( EuropeanaUriUtils.isRelativeIRI(""));
+        assertFalse( EuropeanaUriUtils.isRelativeIRI("*^"));
 
-	}
+        assertFalse( EuropeanaUriUtils.isRelativeIRI(""));
+
+    }
 
 }

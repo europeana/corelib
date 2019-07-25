@@ -1,21 +1,18 @@
 package eu.europeana.corelib.utils;
 
-
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-
+import java.net.URL;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.TreeSet;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,7 +29,6 @@ public class EuropeanaUriUtils {
 
 	private static Charset UTF8  = Charset.forName("UTF-8");
 	private static String  P_STR = "^([a-zA-Z][a-zA-Z+-.]*):.*$";
-
 	public  static Pattern            PATTERN = Pattern.compile(P_STR);
 	public  static Collection<String> SCHEMES = loadSchemes();
 
@@ -97,7 +93,6 @@ public class EuropeanaUriUtils {
 		}
 		return value;
 	}
-
 
 	public static boolean isUri(String str) {
 		return ( isRelativeIRI(str) || isAbsoluteIRI(str) );
