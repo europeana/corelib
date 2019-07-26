@@ -27,10 +27,8 @@ public class EuropeanaUriUtils {
 
 	private final static String REPLACEMENT = "_";
 
-	private static Charset UTF8  = Charset.forName("UTF-8");
-	private static String  P_STR = "^([a-zA-Z][a-zA-Z+-.]*):.*$";
-	public  static Pattern            PATTERN = Pattern.compile(P_STR);
-	public  static Collection<String> SCHEMES = loadSchemes();
+
+	private static final  Collection<String>   SCHEMES =  loadSchemes();
 
 	private EuropeanaUriUtils() {
 
@@ -102,19 +100,21 @@ public class EuropeanaUriUtils {
 
 	private static Collection<String> loadSchemes()
 	{
-		Collection<String> schemes = new TreeSet<String>();
+		Collection<String> schemes = new TreeSet<>();
 		try
 		{
 			URL url = EuropeanaUriUtils.class.getClassLoader().getResource("iri.schemes.cfg");
-			CSVParser parser = CSVParser.parse(url, UTF8, CSVFormat.EXCEL);
-			int i = 0;
-			for ( CSVRecord record : parser.getRecords() )
-			{
-				if ( i++ == 0 ) { continue; }
-				schemes.add(record.get(0));
-			}
+				CSVParser parser = CSVParser.parse(url, Charset.forName("UTF-8"), CSVFormat.EXCEL);
+				int i = 0;
+				for (CSVRecord record : parser.getRecords()) {
+					if (i++ == 0) {
+						continue;
+					}
+					schemes.add(record.get(0));
+				}
 		}
-		catch (IOException e) {}
+		catch (IOException e) {
+		}
 
 		return schemes;
 	}
@@ -123,8 +123,10 @@ public class EuropeanaUriUtils {
 
 	public static boolean isAbsoluteIRI(String iri)
 	{
+		String   P_STR   =  "^([a-zA-Z][a-zA-Z+-.]*):.*$";
+		Pattern PATTERN =  Pattern.compile(P_STR);
 		Matcher m = PATTERN.matcher(iri);
-		return ( m.find() ? SCHEMES.contains(m.group(1)) : false );
+		return ( m.find() &&  SCHEMES.contains(m.group(1)));
 	}
 
 	public static boolean isRelativeIRI(String iri)
