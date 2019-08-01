@@ -93,18 +93,6 @@ public class WebMetaInfo {
         }
     }
 
-
-//    private static String extractId(String json) {
-//        int index = json.indexOf("\"_id\"");
-//        if (index != -1) {
-//            index = json.indexOf('\"', index + "\"_id\"".length());
-//            if (index != -1) {
-//                return json.substring(index + 1, json.indexOf('\"', index + 1));
-//            }
-//        }
-//        return null;
-//    }
-
     private static Map<String, WebResource> prepareWebResourceHashCodes(FullBean fullBean) {
         Map<String, WebResource> hashCodes = new HashMap<>();
 

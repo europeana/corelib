@@ -184,7 +184,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
 		Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
 
-		final BasicDBObject basicObject = new BasicDBObject("_id", new BasicDBObject("$in", hashCodes));   //{_id:{"$in":["1","2","3"]}}
+		final BasicDBObject basicObject = new BasicDBObject(new BasicDBObject("$in", hashCodes));   //{_id:{"$in":["1","2","3"]}}
 		Query<WebResourceMetaInfoImpl> query = getDatastore().createQuery(WebResourceMetaInfoImpl.class).filter("_id", basicObject);
 		List<WebResourceMetaInfoImpl> metaInfoList = query.asList();
 
