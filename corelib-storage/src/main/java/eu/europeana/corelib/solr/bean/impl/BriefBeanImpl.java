@@ -240,8 +240,8 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public Integer getContentTier() {
-        return (!StringUtils.isBlank(contentTier) ? Integer.parseInt(contentTier) : null);
+    public String getContentTier() {
+        return contentTier;
     }
 
     @Override

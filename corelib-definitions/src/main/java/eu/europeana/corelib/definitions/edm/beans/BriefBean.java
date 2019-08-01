@@ -104,7 +104,7 @@ public interface BriefBean extends IdBean {
 	 *
 	 * @return content tier information if available (but only if debug profile is enabled)
 	 */
-	Integer getContentTier();
+	String getContentTier();
 
 	/**
 	 *
