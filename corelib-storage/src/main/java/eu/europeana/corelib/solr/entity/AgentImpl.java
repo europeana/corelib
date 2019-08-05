@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.mongodb.morphia.annotations.Entity;
 
@@ -19,8 +19,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  * @author Yorgos.Mamakis@ kb.nl
  *
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity ("Agent")
 public class AgentImpl extends ContextualClassImpl implements Agent {
 

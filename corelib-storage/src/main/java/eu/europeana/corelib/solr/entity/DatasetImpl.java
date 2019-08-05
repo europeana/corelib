@@ -4,15 +4,14 @@ package eu.europeana.corelib.solr.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import java.util.Map;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Dataset;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("Dataset")
 //TODO: NOT TO BE USED
 public class DatasetImpl extends AbstractEdmEntityImpl implements Dataset {

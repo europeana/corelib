@@ -14,7 +14,7 @@ import org.apache.solr.client.solrj.beans.Field;
 
 import eu.europeana.corelib.definitions.edm.beans.ApiBean;
 import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.ApiBean

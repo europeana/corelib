@@ -1,13 +1,13 @@
 package eu.europeana.corelib.db.entity.relational.custom;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * Tag Cloud item
  * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Deprecated
 public class TagCloudItem {
 	

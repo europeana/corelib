@@ -1,14 +1,15 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
 import org.mongodb.morphia.annotations.Entity;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.io.Serializable;
 
 /**
  * A class which contains information about a VIDEO document
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("VideoMetaInfo")
 public class VideoMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo {
 

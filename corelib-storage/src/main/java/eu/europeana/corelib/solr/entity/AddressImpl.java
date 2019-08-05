@@ -2,16 +2,15 @@ package eu.europeana.corelib.solr.entity;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import eu.europeana.corelib.definitions.edm.entity.Address;
 
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity ("Address")
 public class AddressImpl implements Address {
 
