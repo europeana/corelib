@@ -1,11 +1,15 @@
 package eu.europeana.corelib.mongo.server;
 
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.web.exception.EuropeanaException;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Basic MongoDB server implementation
@@ -56,4 +60,13 @@ public interface EdmMongoServer extends MongoServer {
 	 * @param europeanaIdMongoServer
 	 */
 	void setEuropeanaIdMongoServer(EuropeanaIdMongoServer europeanaIdMongoServer);
+
+	/**
+	 * Method for retrieiving the Metainfo to fill aggregation
+	 *
+	 * @param hashCodes
+	 * @return Map<String, WebResourceMetaInfoImpl>
+	 */
+
+	Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes);
 }
