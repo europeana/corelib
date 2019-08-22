@@ -18,7 +18,9 @@ import java.util.Optional;
 
 /**
  *  Service for retrieving media (e.g. thumbnails) from an object storage like Amazons S3 or IBM Cloud S3
+ * @deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself
  */
+@Deprecated
 public class MediaStorageServiceImpl implements MediaStorageService {
 
     private static final Logger LOG = LogManager.getLogger(MediaStorageServiceImpl.class);
