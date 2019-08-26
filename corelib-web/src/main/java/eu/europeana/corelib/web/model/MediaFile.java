@@ -5,7 +5,9 @@ import org.joda.time.DateTime;
 
 /**
  * Wrapping class around a media object retrieved from object storage
+ * @deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself
  */
+@Deprecated
 public class MediaFile {
 
     private final String id;

@@ -29,7 +29,7 @@
 	<!-- Deprecated
 	<bean id="corelib_web_MicrosoftTranslatorService" class="eu.europeana.corelib.web.service.impl.MicrosoftTranslatorServiceImpl" />
 	-->
-
+<!--Deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself-->
 	<bean id="corelib_uimMediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" >
 		<constructor-arg ref="corelib_uimObjectStorageClient"/>
 	</bean>
