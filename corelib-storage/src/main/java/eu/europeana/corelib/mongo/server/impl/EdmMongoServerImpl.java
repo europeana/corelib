@@ -20,7 +20,6 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import org.mongodb.morphia.query.Query;
 
 import java.util.HashMap;
 import java.util.List;
@@ -184,9 +183,11 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 	public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
 		Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
 
-		final BasicDBObject basicObject = new BasicDBObject(new BasicDBObject("$in", hashCodes));   //{_id:{"$in":["1","2","3"]}}
-		Query<WebResourceMetaInfoImpl> query = getDatastore().createQuery(WebResourceMetaInfoImpl.class).filter("_id", basicObject);
-		List<WebResourceMetaInfoImpl> metaInfoList = query.asList();
+		final BasicDBObject basicObject = new BasicDBObject("$in", hashCodes);   //{"$in":["1","2","3"]}
+		getDatastore().createQuery(WebResourceMetaInfoImpl.class);
+		List<WebResourceMetaInfoImpl> metaInfoList = getDatastore().find(WebResourceMetaInfoImpl.class)
+				.disableValidation()
+				.field("_id").equal(basicObject).asList();
 
 		metaInfoList.forEach((cursor) -> {
 			String id= cursor.getId();
