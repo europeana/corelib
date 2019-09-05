@@ -1,30 +1,30 @@
-<html>
-<body>
-
-<p>Dear ${apiKey.firstName} ${apiKey.lastName},</p>
-
-<p>Thank you for registering for the new Europeana API. These are your Europeana API keys:</p>
-
-<p style="font-family:Courier,Courier New">==========<br/>
-    API key      : ${apiKey.id}<br/>
-    Private key  : ${apiKey.privateKey}<br/>
-    ==========</p>
-<p>
-    The private key is used for specific API methods that require additional user authentication while the public key must be used by all others,see </br>
-    https://pro.europeana.eu/resources/apis/intro#access.
-</p>
-
-<p>
-    Please do not share these keys with third parties or expose it in user interfaces or in markup as the API keys are confidential and are for use by the client or user only.
-</p>
-<p>
-Our technical documentation for all APIs is available at https://pro.europeana.eu/resources/apis which includes an API console for testing and community developed libraries for a variety of programming languages.
-</p>
-<p>
-Please join us in the Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi - to ask questions to us and other developers and to give us your feedback on our API. You can also contact us directly by mailing api@europeana.eu and we'd be especially grateful if you would let us know about your implementation so that we can feature it in our application gallery on Europeana Pro - https://pro.europeana.eu/resources/apps
-</p>
-<p>Best regards,<br/>
-    The Europeana API Team</p>
-
-</body>
-</html>
+##<html>
+##<body>
+##
+##<p>Dear ${apiKey.firstName} ${apiKey.lastName},</p>
+##
+##<p>Thank you for registering for the new Europeana API. These are your Europeana API keys:</p>
+##
+##<p style="font-family:Courier,Courier New">==========<br/>
+##    API key      : ${apiKey.id}<br/>
+##    Private key  : ${apiKey.privateKey}<br/>
+##    ==========</p>
+##<p>
+##    The private key is used for specific API methods that require additional user authentication while the public key must be used by all others,see </br>
+##    https://pro.europeana.eu/resources/apis/intro#access.
+##</p>
+##
+##<p>
+##    Please do not share these keys with third parties or expose it in user interfaces or in markup as the API keys are confidential and are for use by the client or user only.
+##</p>
+##<p>
+##Our technical documentation for all APIs is available at https://pro.europeana.eu/resources/apis which includes an API console for testing and community developed libraries for a variety of programming languages.
+##</p>
+##<p>
+##Please join us in the Europeana API Forum - https://groups.google.com/forum/?pli=1#!forum/europeanaapi - to ask questions to us and other developers and to give us your feedback on our API. You can also contact us directly by mailing api@europeana.eu and we'd be especially grateful if you would let us know about your implementation so that we can feature it in our application gallery on Europeana Pro - https://pro.europeana.eu/resources/apps
+##</p>
+##<p>Best regards,<br/>
+##    The Europeana API Team</p>
+##
+##</body>
+##</html>
