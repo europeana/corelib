@@ -64,8 +64,10 @@ public class FullBeanImpl implements FullBean {
 
   protected String[] language;
 
+  @Indexed
   protected Date timestampCreated;
 
+  @Indexed
   protected Date timestampUpdated;
 
   protected DocType type;
