@@ -58,6 +58,9 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         }
     }
 
+    /**
+     * @deprecated September 2019 not supported anymore
+     */
     @Override
     @Deprecated
     public void updateApplicationName(String apiKey, String applicationName) throws DatabaseException {
@@ -67,6 +70,9 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         }
     }
 
+    /**
+     * @deprecated September 2019 not supported anymore
+     */
     @Override
     @Deprecated
     public ApiKey createApiKey(String token, String email, String apiKey,
@@ -119,6 +125,10 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         return key;
     }
 
+    /**
+     * @deprecated September 2019 not supported anymore
+     */
+    @Deprecated
     @Override
     public ApiKey updateApiKey(
             String apiKey, String email, Long limit, String application, String company, String firstName,
@@ -139,6 +149,10 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         throw new DatabaseException(ProblemType.NOT_FOUND);
     }
 
+    /**
+     * @deprecated September 2019 not supported anymore
+     */
+    @Deprecated
     @Override
     public ApiKey changeLimit(String apiKey, long limit) throws DatabaseException {
         ApiKey key = getDao().findByPK(apiKey);
@@ -149,6 +163,10 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
         throw new DatabaseException(ProblemType.NOT_FOUND);
     }
 
+    /**
+     * @deprecated September 2019 not supported anymore
+     */
+    @Deprecated
     @Override
     public void removeApiKey(String apiKeyId) throws DatabaseException {
         ApiKey apiKey = getDao().findByPK(apiKeyId);

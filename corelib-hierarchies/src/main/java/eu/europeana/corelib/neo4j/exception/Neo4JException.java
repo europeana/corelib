@@ -11,17 +11,17 @@ import eu.europeana.corelib.web.exception.ProblemType;
  */
 public class Neo4JException extends EuropeanaException {
 
-	private static final long serialVersionUID = 662625433933164897L;
+    private static final long serialVersionUID = 662625433933164897L;
 
-	public Neo4JException(ProblemType problem) {
-		super(problem);
-	}
+    public Neo4JException(ProblemType problem) {
+        super(problem);
+    }
 
-	public Neo4JException(ProblemType problem, String additionalInfo) {
-		super(problem, additionalInfo);
-	}
+    public Neo4JException(ProblemType problem, String additionalInfo) {
+        super(problem, additionalInfo);
+    }
 
-	public Neo4JException(Throwable causedBy, ProblemType problem) {
-		super(causedBy,problem);
-	}
+    public Neo4JException(ProblemType problem, Throwable causedBy) {
+        super(problem, causedBy);
+    }
 }

@@ -63,7 +63,7 @@ public class Neo4jService {
             Selfington selfington = mapper.readValue(resp.getEntity().getContent(), Selfington.class);
             return selfington.getSelf();
         } catch (IOException e) {
-            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
+            throw new Neo4JException(ProblemType.NEO4J_503_CONNECTION, e);
         } finally {
             request.releaseConnection();
         }
@@ -93,7 +93,7 @@ public class Neo4jService {
             Siblington siblington = mapper.readValue(resp.getEntity().getContent(), Siblington.class);
             return siblington.getSiblings();
         } catch (IOException e) {
-            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
+            throw new Neo4JException(ProblemType.NEO4J_503_CONNECTION, e);
         } finally {
             request.releaseConnection();
         }
@@ -109,7 +109,7 @@ public class Neo4jService {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(resp.getEntity().getContent(), Hierarchy.class);
         } catch (IOException e) {
-            throw new Neo4JException(e, ProblemType.NEO4J_503_CONNECTION);
+            throw new Neo4JException(ProblemType.NEO4J_503_CONNECTION, e);
         } finally {
             request.releaseConnection();
         }

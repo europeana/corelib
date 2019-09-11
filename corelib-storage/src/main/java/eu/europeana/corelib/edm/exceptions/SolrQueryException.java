@@ -4,31 +4,34 @@ import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
- * Exception that can be thrown when received data is invalid and/or inconsistent
+ * Exception thrown when there is a problem with the search query (user error)
+ *
  * @author Patrick Ehlert
  */
-public class BadDataException extends EuropeanaException{
+public class SolrQueryException extends EuropeanaException {
 
-    private static final long serialVersionUID = -343856562570766816L;
+    private static final long serialVersionUID = -2969728542278535536L;
 
     /**
      * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType)
      */
-    public BadDataException(ProblemType problem) {
-        super(problem);
+
+    public SolrQueryException(ProblemType problemType) {
+        super(problemType);
     }
 
     /**
      * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, String)
      */
-    public BadDataException(ProblemType problem, String errorDetails) {
-        super(problem, errorDetails);
+    public SolrQueryException(ProblemType problemType, String errorDetails) {
+        super(problemType, errorDetails);
     }
 
     /**
      * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, Throwable)
      */
-    public BadDataException(ProblemType problem, Throwable causedBy) {
-        super(problem, causedBy);
+    public SolrQueryException(ProblemType problemType, Throwable causedBy){
+        super(problemType, causedBy);
     }
+
 }

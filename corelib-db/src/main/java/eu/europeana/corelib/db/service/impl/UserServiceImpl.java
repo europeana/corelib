@@ -18,7 +18,6 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.search.SearchService;
@@ -337,7 +336,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
-    public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, Neo4JException {
+    public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
             throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
@@ -371,7 +370,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
     @Override
     public User createSocialTag(Long userId, String europeanaObjectId,
-                                String tag) throws DatabaseException, Neo4JException {
+                                String tag) throws DatabaseException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
                 || StringUtils.isBlank(tag)) {
@@ -535,13 +534,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     private FullBean populateEuropeanaUserObject(User user,
-                                                 String europeanaObjectId, EuropeanaUserObject instance) throws DatabaseException, Neo4JException {
+                                                 String europeanaObjectId, EuropeanaUserObject instance) throws DatabaseException {
 
         FullBean bean;
         try {
             bean = searchService.findById(europeanaObjectId, false);
         } catch (EuropeanaException e) {
-            throw new DatabaseException(e, e.getProblem());
+            throw new DatabaseException(e.getProblem(), e);
         }
 
         if ((user == null) || (bean == null)) {
