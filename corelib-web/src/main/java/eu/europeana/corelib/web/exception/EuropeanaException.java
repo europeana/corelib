@@ -34,11 +34,24 @@ public abstract class EuropeanaException extends Exception {
         this.errorDetails = errorDetails;
     }
 
+    /**
+     * Create a new exception based on the provided problem type, plus a exception cause.
+     * The message of the exception cause is used to fill the errorDetails field.
+     * @param problem particular problem
+     * @param causedBy initial exception
+     */
     public EuropeanaException(ProblemType problem, Throwable causedBy) {
         super(causedBy);
         this.problem = problem;
+        this.errorDetails = causedBy.getMessage();
     }
 
+    /**
+     * Create a new exception based on the provided problem type, plus a exception cause.
+     * @param problem particular problem
+     * @param errorDetails string containing more information about the error
+     * @param causedBy initial exception
+     */
     public EuropeanaException(ProblemType problem, String errorDetails, Throwable causedBy) {
         super(causedBy);
         this.problem = problem;
