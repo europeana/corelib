@@ -59,11 +59,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     ) throws DatabaseException, EmailServiceException {
 
         if (StringUtils.isBlank(email)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         if (StringUtils.isBlank(redirect)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         if (StringUtils.isBlank(username)) {
@@ -184,7 +184,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User sendResetPasswordToken(String email, String redirect, String activationUrl) throws DatabaseException, EmailServiceException {
         if (StringUtils.isBlank(email)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = findByEmail(email);
         if (user == null) {
@@ -208,7 +208,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User resetPassword(String email, String tokenString, String newPassword) throws DatabaseException, EmailServiceException  {
         if (StringUtils.isBlank(email) || StringUtils.isBlank(tokenString) || StringUtils.isBlank(newPassword)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = findByEmail(email);
         if (user == null) {
@@ -269,7 +269,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         if (StringUtils.isBlank(oldPassword)
                 || StringUtils.isBlank(newPassword)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = getDao().findByPK(userId);
 
@@ -278,7 +278,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         }
 
         if (!StringUtils.equals(user.getPassword(), oldPassword)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         user.setPassword(hashPassword(newPassword));
@@ -291,12 +291,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         if ((userId == null) || StringUtils.isBlank(query)
                 || StringUtils.isBlank(queryString)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         SavedSearchImpl savedSearch = new SavedSearchImpl();
@@ -315,12 +315,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         if ((userId == null) || (savedSearchId==null) || StringUtils.isBlank(query)
                 || StringUtils.isBlank(queryString)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         SavedSearchImpl savedSearch = getDao().findByPK(SavedSearchImpl.class,
@@ -339,12 +339,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         if (findSavedItemByEuropeanaId(userId, europeanaObjectId) != null) {
@@ -374,12 +374,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
                 || StringUtils.isBlank(tag)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         SocialTag socialTag = new SocialTagImpl();
@@ -451,7 +451,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public List<TagCloudItem> createSocialTagCloud(Long userId) throws DatabaseException {
         if (userId == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         return getDao().findByNamedQueryCustom(TagCloudItem.class, SocialTag.QUERY_CREATECLOUD_BYUSER, userId);
     }
@@ -459,7 +459,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public List<SocialTag> findSocialTagsByTag(Long userId, String tag) throws DatabaseException {
         if ((userId == null) || StringUtils.isBlank(tag)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_TAG, userId, StringUtils.lowerCase(tag));
     }
@@ -467,7 +467,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public List<SocialTag> findSocialTagsByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
         if ((userId == null) || StringUtils.isBlank(europeanaId)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         return getDao().findByNamedQuery(SocialTag.class, SocialTag.QUERY_FINDBY_USER_EUROPEANAID, userId, europeanaId);
     }
@@ -475,7 +475,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException {
         if ((userId == null) || StringUtils.isBlank(europeanaId)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         return getDao().findOneByNamedQuery(SavedItemImpl.class, SavedItem.QUERY_FINDBY_OBJECTID, userId, europeanaId);
     }
@@ -483,11 +483,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User updateUserLanguagePortal(Long userId, String languageCode) throws DatabaseException {
         if (userId == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         user.setLanguagePortal(languageCode);
         return user;
@@ -496,11 +496,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User updateUserLanguageItem(Long userId, String languageCode) throws DatabaseException {
         if (userId == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         user.setLanguageItem(languageCode);
         return user;
@@ -509,11 +509,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User updateUserLanguageSearch(Long userId, String... languageCodes) throws DatabaseException {
         if (userId == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         user.setLanguageSearch(languageCodes);
         updateUserLanguageSearchApplied(userId, languageCodes.length > 0);
@@ -523,11 +523,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Override
     public User updateUserLanguageSearchApplied(Long userId, Boolean languageSearchApplied) throws DatabaseException {
         if (userId == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         User user = getDao().findByPK(userId);
         if (user == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
         user.setLanguageSearchApplied(languageSearchApplied);
         return user;
@@ -544,7 +544,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         }
 
         if ((user == null) || (bean == null)) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
         instance.setEuropeanaUri(bean.getAbout());

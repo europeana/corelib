@@ -396,14 +396,15 @@ public class SearchServiceImpl implements SearchService {
                 throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, e);
             } catch (SolrServerException e) {
                 if (StringUtils.contains(e.getCause().toString(), "Collection")){
-                    throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN, e);
+                    throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN); // do not include cause error for known problems
                 }
                 throw new SolrQueryException(ProblemType.SEARCH_QUERY_INVALID, e);
             } catch (SolrException e) {
-                if (e.getMessage().toLowerCase().contains("cursormark")) {
-                    throw new SolrQueryException(ProblemType.SEARCH_CURSORMARK_INVALID, e);
-                } else if (e.getMessage().toLowerCase().contains("connect")) {
-                    if (e.getMessage().toLowerCase().contains("zookeeper")) {
+                String msg = e.getMessage().toLowerCase(Locale.GERMAN);
+                if (msg.contains("cursormark")) {
+                    throw new SolrQueryException(ProblemType.SEARCH_CURSORMARK_INVALID); // do not include cause error known problems
+                } else if (msg.contains("connect")) {
+                    if (msg.contains("zookeeper")) {
                         throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, "Cannot connect to Zookeeper", e);
                     } else {
                         throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, "Cannot connect to Solr", e);
@@ -412,7 +413,7 @@ public class SearchServiceImpl implements SearchService {
                 throw new SolrQueryException(ProblemType.SEARCH_QUERY_INVALID, e);
             }
         } else {
-            // programming error!
+            // Programming error! A new profile/bean was introduced?
             throw new SolrTypeException(ProblemType.INVALIDCLASS, "Unknown bean class: " + beanClazz);
         }
         return resultSet;

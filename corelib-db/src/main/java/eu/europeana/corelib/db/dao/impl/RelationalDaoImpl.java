@@ -50,7 +50,7 @@ public class RelationalDaoImpl<E extends IdentifiedEntity<?>> implements Relatio
         try {
             return entityManager.find(clazz, id);
         } catch (IllegalArgumentException e) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS, e);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS, e);
         }
     }
 

@@ -54,7 +54,7 @@ public class ApiKeyServiceImpl extends AbstractServiceImpl<ApiKey> implements Ap
 
     public void checkNotEmpty(ApiKey apiKey) throws DatabaseException {
         if (apiKey == null) {
-            throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+            throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
     }
 
