@@ -285,11 +285,9 @@ public class EuropeanaUriUtils {
 	/**
 	 * Create the EuropeanaID from the collection ID and record ID
 	 * 
-	 * @param collectionId
-	 *            The collection ID
-	 * @param recordId
-	 *            The record ID (unique local identifier of a collection record)
-	 * @return The Europeana compatible ID
+	 * @param collectionId 	collection ID
+	 * @param recordId     	record ID (unique local identifier of a collection record)
+	 * @return 			   	Europeana compatible ID
 	 */
 
 	public static String createSanitizedEuropeanaId(String collectionId, String recordId) {
@@ -302,10 +300,9 @@ public class EuropeanaUriUtils {
 	
 	private static String sanitizeRecordId(String recordId) {
 
-		recordId = StringUtils.startsWith(recordId, "http://") ? StringUtils
-				.substringAfter(
-						StringUtils.substringAfter(recordId, "http://"), "/")
-				: recordId;
+		recordId = StringUtils.startsWith(recordId, "http://") ?
+				   StringUtils.substringAfter(StringUtils.substringAfter(recordId, "http://"), "/") :
+				   recordId;
 		Pattern pattern = Pattern.compile("[^a-zA-Z0-9_]");
 		Matcher matcher = pattern.matcher(recordId);
 		recordId = matcher.replaceAll(REPLACEMENT);
@@ -314,47 +311,23 @@ public class EuropeanaUriUtils {
 
 	private static String sanitizeCollectionId(String collectionId) {
 		Pattern pattern = Pattern.compile("[a-zA-Z]");
-		Matcher matcher = pattern.matcher(collectionId.substring(
-				collectionId.length() - 1, collectionId.length()));
-		return matcher.find() ? StringUtils.substring(collectionId, 0,
-				collectionId.length() - 1) : collectionId;
+		Matcher matcher = pattern.matcher(collectionId.substring(collectionId.length() - 1));
+		return matcher.find() ? StringUtils.substring(collectionId, 0, collectionId.length() - 1) : collectionId;
 	}
-
-//	public static String encode(String value) {
-//		if (StringUtils.isNotBlank(value)) {
-//			try {
-//				value = URLEncoder.encode(value, "UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//			}
-//		}
-//		return value;
-//	}
-//
-//	public static String decode(String value) {
-//		if (StringUtils.isNotBlank(value)) {
-//			try {
-//				value = URLDecoder.decode(value, "UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//			}
-//		}
-//		return value;
-//	}
 
 	public static boolean isUri(String str) {
 		return ( isRelativeIRI(str) || isAbsoluteIRI(str) );
 	}
 
-	// will check is it's a absolute or relative URI
-
-	public static boolean isAbsoluteIRI(String iri) {
+	// will check if it's a absolute or relative URI
+	static boolean isAbsoluteIRI(String iri) {
 		Pattern pattern =  Pattern.compile(PATTERN_STR);
 		Matcher m = pattern.matcher(iri);
 		return ( m.find() && schemes.contains(m.group(1)));
 	}
 
-	public static boolean isRelativeIRI(String iri) {
-		return ( iri.startsWith("/")   || iri.startsWith("#")
-				|| iri.startsWith("../") || iri.startsWith("./") );
+	static boolean isRelativeIRI(String iri) {
+		return ( iri.startsWith("/")   || iri.startsWith("#") || iri.startsWith("../") || iri.startsWith("./") );
 	}
 
 }
