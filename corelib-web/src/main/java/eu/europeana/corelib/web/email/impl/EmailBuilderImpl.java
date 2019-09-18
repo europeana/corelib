@@ -110,7 +110,7 @@ public class EmailBuilderImpl implements EmailBuilder {
 			this.emailCc = config.getEmailCc();
 			this.subject = config.getSubject();
 		} else {
-			throw new EmailServiceException(ProblemType.INVALIDARGUMENTS);
+			throw new EmailServiceException(ProblemType.INVALID_ARGUMENTS);
 		}
 	}
 }

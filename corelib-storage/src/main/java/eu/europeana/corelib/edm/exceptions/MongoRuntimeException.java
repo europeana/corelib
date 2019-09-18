@@ -10,14 +10,20 @@ import eu.europeana.corelib.web.exception.ProblemType;
 
 public class MongoRuntimeException extends EuropeanaException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5078231212709296605L;
 
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType)
+     */
     public MongoRuntimeException(ProblemType problem) {
         super(problem);
     }
 
-    public MongoRuntimeException(Throwable causedBy,ProblemType problem) {
-        super(causedBy,problem);
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, Throwable)
+     */
+    public MongoRuntimeException(ProblemType problem, Throwable causedBy) {
+        super(problem, causedBy);
     }
 
 }

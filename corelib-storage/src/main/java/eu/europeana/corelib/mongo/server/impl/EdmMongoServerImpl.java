@@ -151,9 +151,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		} catch (RuntimeException re) {
 			if (re.getCause() != null &&
 					(re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
-				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);
+				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR, re);
 			} else {
-				throw new MongoRuntimeException(re, ProblemType.MONGO_UNREACHABLE);
+				throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE, re);
 			}
 		}
 	}
