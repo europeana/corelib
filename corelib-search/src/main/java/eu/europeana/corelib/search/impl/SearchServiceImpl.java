@@ -301,7 +301,8 @@ public class SearchServiceImpl implements SearchService {
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
 
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
-            throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED);
+            throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED,
+                    "It is not possible to paginate beyond the first 1000 search results. Please use cursor-based pagination instead");
         }
         ResultSet<T> resultSet = new ResultSet<>();
         Class<? extends IdBeanImpl> beanClazz = SearchUtils
@@ -402,7 +403,8 @@ public class SearchServiceImpl implements SearchService {
             } catch (SolrException e) {
                 String msg = e.getMessage().toLowerCase(Locale.GERMAN);
                 if (msg.contains("cursormark")) {
-                    throw new SolrQueryException(ProblemType.SEARCH_CURSORMARK_INVALID); // do not include cause error known problems
+                    throw new SolrQueryException(ProblemType.SEARCH_CURSORMARK_INVALID,
+                            "Please make sure you encode the cursor value before sending it to the API."); // do not include cause error for known problems
                 } else if (msg.contains("connect")) {
                     if (msg.contains("zookeeper")) {
                         throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, "Cannot connect to Zookeeper", e);
