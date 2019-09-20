@@ -193,7 +193,7 @@ public class EuropeanaUriUtils {
 		schemes.add("pop");
 		schemes.add("pres");
 		schemes.add("prospero");
-		schemes.add("proxy");
+//		schemes.add("proxy");
 		schemes.add("psyc");
 		schemes.add("qb");
 		schemes.add("query");
@@ -316,7 +316,7 @@ public class EuropeanaUriUtils {
 	}
 
 	public static boolean isUri(String str) {
-		return ( isRelativeIRI(str) || isAbsoluteIRI(str) );
+		return (isAbsoluteIRI(str) );
 	}
 
 	// will check if it's a absolute or relative URI
@@ -326,8 +326,8 @@ public class EuropeanaUriUtils {
 		return ( m.find() && schemes.contains(m.group(1)));
 	}
 
-	static boolean isRelativeIRI(String iri) {
-		return ( iri.startsWith("/")   || iri.startsWith("#") || iri.startsWith("../") || iri.startsWith("./") );
-	}
+//	static boolean isRelativeIRI(String iri) {
+//		return ( iri.startsWith("/")   || iri.startsWith("#") || iri.startsWith("../") || iri.startsWith("./") );
+//	}
 
 }
