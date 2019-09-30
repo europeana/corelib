@@ -1,8 +1,5 @@
 package eu.europeana.corelib.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -193,7 +190,7 @@ public class EuropeanaUriUtils {
 		schemes.add("pop");
 		schemes.add("pres");
 		schemes.add("prospero");
-//		schemes.add("proxy");
+//		schemes.add("proxy"); //removed See ticket EA-1781
 		schemes.add("psyc");
 		schemes.add("qb");
 		schemes.add("query");
@@ -276,6 +273,7 @@ public class EuropeanaUriUtils {
 		schemes.add("z39.50");
 		schemes.add("z39.50r");
 		schemes.add("z39.50s");
+		schemes.add("#");
 	}
 
 	private EuropeanaUriUtils() {
@@ -325,9 +323,5 @@ public class EuropeanaUriUtils {
 		Matcher m = pattern.matcher(iri);
 		return ( m.find() && schemes.contains(m.group(1)));
 	}
-
-//	static boolean isRelativeIRI(String iri) {
-//		return ( iri.startsWith("/")   || iri.startsWith("#") || iri.startsWith("../") || iri.startsWith("./") );
-//	}
 
 }
