@@ -26,22 +26,4 @@ public class URISchemaUtilsTest {
 
     }
 
-    @Test
-    public void RealtiveURITest() {
-        assertTrue( EuropeanaUriUtils.isRelativeIRI("/proxy"));
-
-        assertTrue( EuropeanaUriUtils.isRelativeIRI("../"));
-
-        assertTrue( EuropeanaUriUtils.isRelativeIRI("#"));
-
-        assertTrue( EuropeanaUriUtils.isRelativeIRI("./"));
-
-        assertFalse( EuropeanaUriUtils.isRelativeIRI("&&"));
-
-        assertFalse( EuropeanaUriUtils.isRelativeIRI("*^"));
-
-        assertFalse( EuropeanaUriUtils.isRelativeIRI(""));
-
-    }
-
 }
