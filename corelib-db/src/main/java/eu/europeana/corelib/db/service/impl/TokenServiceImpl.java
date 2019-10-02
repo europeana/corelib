@@ -58,8 +58,8 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	@Override
 	public Token create(String email, String redirect) throws DatabaseException {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(redirect)) {
-			log.severe("DatabaseException: email or redirect URL cannot be null [create token]. " + ProblemType.INVALIDARGUMENTS);
-			throw new DatabaseException(ProblemType.INVALIDARGUMENTS);
+			log.severe("DatabaseException: email or redirect URL cannot be null [create token]. " + ProblemType.INVALID_ARGUMENTS);
+			throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
 		}
 		TokenImpl token = new TokenImpl();
 		token.setCreated(new Date());

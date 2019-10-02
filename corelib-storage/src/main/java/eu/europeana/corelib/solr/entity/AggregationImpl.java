@@ -4,9 +4,9 @@ package eu.europeana.corelib.solr.entity;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import java.util.List;
 import java.util.Map;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
@@ -22,8 +22,7 @@ import eu.europeana.corelib.utils.StringArrayUtils;
  * @author Yorgos.Mamakis@ kb.nl
  * 
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 //@NodeEntity(partial = true)
 @Entity("Aggregation")
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
@@ -69,7 +68,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	private Map<String,List<String>> edmIntermediateProvider;
 
 	@Transient
-	@JsonIgnore @com.fasterxml.jackson.annotation.JsonIgnore
+	@JsonIgnore
 	private FullBean parentBean;
 
 	@Override

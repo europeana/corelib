@@ -12,11 +12,24 @@ public class SolrIOException extends EuropeanaException {
 
     private static final long serialVersionUID = -7926477896852883299L;
 
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType)
+     */
     public SolrIOException(ProblemType problemType) {
         super(problemType);
     }
 
-    public SolrIOException(Throwable causedBy, ProblemType problemType){
-        super(causedBy, problemType);
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, Throwable)
+     */
+    public SolrIOException(ProblemType problemType, Throwable causedBy){
+        super(problemType, causedBy);
+    }
+
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, String, Throwable)
+     */
+    public SolrIOException(ProblemType problemType, String errorDetails, Throwable causedBy) {
+        super(problemType, errorDetails, causedBy);
     }
 }

@@ -15,7 +15,7 @@
           p:host="localhost"
           p:port="2500"
             />
-
+    <!--Deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself-->
     <!-- Override object storage setup so we don't create a real connection to S3 -->
     <bean id="corelib_uimMediaStorageService" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl"/>

@@ -143,18 +143,6 @@ public class SearchServiceTest {
         Assert.assertNull(results.getSpellcheck());
     }
 
-//    @Test
-//    @Ignore // TODO Deprecate?
-//    public void findSuggestions() throws SolrTypeException {
-//        testCount++;
-//
-//        List<Term> terms = searchService.suggestions("model mod", 10, "title");
-//        Assert.assertEquals(2, terms.size());
-//        Assert.assertEquals("Title", terms.get(0).getField());
-//        Assert.assertEquals(1, terms.get(0).getFrequency());
-//        Assert.assertEquals("modell der dulcitone mechanik", terms.get(0).getTerm());
-//    }
-
 	/*
     @Test
 	public void findAllTest() throws SolrTypeException {
@@ -194,20 +182,6 @@ public class SearchServiceTest {
         assertFalse("No results given back... ", results.getResults().isEmpty());
         FullBean fBean = searchService.findById(results.getResults().get(0).getId(), true);
         assertNotNull(fBean);
-    }
-
-    @Test
-    @Deprecated
-    public void testFindMoreLikeThis() throws EuropeanaException {
-        LOG.info("TEST testFindMoreLikeThis");
-        testCount++;
-        Query query = new Query("*:*");
-        query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
-        assertFalse("No results given back... ", results.getResults().isEmpty());
-        List<BriefBean> mlt = searchService.findMoreLikeThis(results.getResults().get(0).getId());
-        assertNotNull(mlt);
-        Assert.assertEquals(10, mlt.size());
     }
 
     @Test

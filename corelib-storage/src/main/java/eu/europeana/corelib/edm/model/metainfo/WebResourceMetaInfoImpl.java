@@ -3,12 +3,13 @@ package eu.europeana.corelib.edm.model.metainfo;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one info field which is not null.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("WebResourceMetaInfo")
 public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo {
     @Id

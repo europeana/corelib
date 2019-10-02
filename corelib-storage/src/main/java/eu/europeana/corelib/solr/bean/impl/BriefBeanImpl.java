@@ -5,10 +5,9 @@ import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.utils.EdmUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonPropertyOrder(alphabetic=true)
-@JsonSerialize(include = Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
 
     @Field("timestamp")
@@ -240,8 +239,8 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public Integer getContentTier() {
-        return (!StringUtils.isBlank(contentTier) ? Integer.parseInt(contentTier) : null);
+    public String getContentTier() {
+        return contentTier;
     }
 
     @Override

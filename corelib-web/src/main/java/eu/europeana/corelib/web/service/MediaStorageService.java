@@ -6,8 +6,10 @@ import eu.europeana.domain.StorageObject;
 import org.jclouds.io.Payload;
 
 import java.io.IOException;
-
-
+/**
+ * @deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself
+ */
+@Deprecated
 public interface MediaStorageService {
 
     /**

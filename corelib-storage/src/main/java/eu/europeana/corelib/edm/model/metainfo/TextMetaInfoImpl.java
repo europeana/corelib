@@ -1,9 +1,10 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.mongodb.morphia.annotations.Entity;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("TextMetaInfo")
 public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo {
 

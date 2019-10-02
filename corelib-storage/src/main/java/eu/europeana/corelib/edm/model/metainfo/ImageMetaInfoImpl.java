@@ -2,13 +2,14 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import org.mongodb.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * A class which contains information about an IMAGE document
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("ImageMetaInfo")
 @JsonIgnoreProperties({"colorPalette"})
 public class ImageMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.ImageMetaInfo {

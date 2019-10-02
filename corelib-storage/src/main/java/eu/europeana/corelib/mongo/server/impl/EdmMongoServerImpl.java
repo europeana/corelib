@@ -1,7 +1,9 @@
 package eu.europeana.corelib.mongo.server.impl;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,10 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -124,6 +130,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		morphia.map(PhysicalThingImpl.class);
 		morphia.map(ConceptSchemeImpl.class);
 		morphia.map(BasicProxyImpl.class);
+		morphia.map(WebResourceMetaInfoImpl.class);
 
 		datastore = morphia.createDatastore(mongoClient, databaseName);
 		if (createIndexes) {
@@ -144,9 +151,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		} catch (RuntimeException re) {
 			if (re.getCause() != null &&
 					(re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
-				throw new MongoDBException(re, ProblemType.RECORD_RETRIEVAL_ERROR);
+				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR, re);
 			} else {
-				throw new MongoRuntimeException(re, ProblemType.MONGO_UNREACHABLE);
+				throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE, re);
 			}
 		}
 	}
@@ -172,6 +179,24 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 		return null;
 	}
 
+	@Override
+	public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
+		Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
+
+		final BasicDBObject basicObject = new BasicDBObject("$in", hashCodes);   //{"$in":["1","2","3"]}
+		getDatastore().createQuery(WebResourceMetaInfoImpl.class);
+		List<WebResourceMetaInfoImpl> metaInfoList = getDatastore().find(WebResourceMetaInfoImpl.class)
+				.disableValidation()
+				.field("_id").equal(basicObject).asList();
+
+		metaInfoList.forEach((cursor) -> {
+			String id= cursor.getId();
+			WebResourceMetaInfoImpl metaInfo= cursor;
+			metaInfos.put(id,metaInfo);
+		});
+		return metaInfos;
+
+	}
 	@Override
 	public String toString() {
 		return "MongoDB: [Host: " + mongoClient.getAddress().getHost() + "]\n"

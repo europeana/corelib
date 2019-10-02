@@ -4,7 +4,7 @@
 	   xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-
+	<!--Deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself-->
 	<bean id="corelib_uimObjectStorageClient" class="eu.europeana.features.S3ObjectStorageClient">
 		<constructor-arg value="#{europeanaProperties['uim.thumbnails.s3.key']}"/>
 		<constructor-arg value="#{europeanaProperties['uim.thumbnails.s3.secret']}"/>

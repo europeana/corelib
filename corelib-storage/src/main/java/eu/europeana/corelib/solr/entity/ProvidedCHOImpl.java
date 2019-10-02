@@ -1,8 +1,8 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.mongodb.morphia.annotations.Entity;
 
@@ -17,8 +17,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
-@JsonSerialize(include = Inclusion.NON_EMPTY)
-@JsonInclude(NON_EMPTY)
+@JsonInclude(Include.NON_EMPTY)
 @Entity("ProvidedCHO")
 public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 

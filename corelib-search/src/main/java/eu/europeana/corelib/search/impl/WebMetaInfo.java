@@ -84,54 +84,13 @@ public class WebMetaInfo {
 
     private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
         Map<String, WebResource> webResourceHashCodes = prepareWebResourceHashCodes(fullBean);
-        Map<String, WebResourceMetaInfoImpl> metaInfos = retrieveWebMetaInfos(mongoServer, new ArrayList<>(webResourceHashCodes.keySet()));
-
+        Map<String, WebResourceMetaInfoImpl> metaInfos = mongoServer.retrieveWebMetaInfos(new ArrayList<>(webResourceHashCodes.keySet()));
         for (Map.Entry<String, WebResourceMetaInfoImpl> metaInfo : metaInfos.entrySet()) {
             WebResource webResource = webResourceHashCodes.get(metaInfo.getKey());
             if (webResource != null && metaInfo.getValue() != null) {
                 ((WebResourceImpl) webResource).setWebResourceMetaInfo(metaInfo.getValue());
             }
         }
-    }
-
-    /**
-     * This retrieves several WebResources in one go
-     * @param mongoServer
-     * @param hashCodes
-     * @return
-     */
-    private static Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(EdmMongoServer mongoServer, List<String> hashCodes) {
-        Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
-
-        final DB db = mongoServer.getDatastore().getDB();
-        final DBCollection webResourceMetaInfoColl = db.getCollection("WebResourceMetaInfo");
-
-        final BasicDBObject query = new BasicDBObject("_id", new BasicDBObject("$in", hashCodes));
-        final DBCursor cursor = webResourceMetaInfoColl.find(query);
-
-        final Type type = new TypeToken<WebResourceMetaInfoImpl>() {}.getType();
-
-        while (cursor.hasNext()) {
-            String json = cursor.next().toString();
-            WebResourceMetaInfoImpl metaInfo = new Gson().fromJson(json, type);
-            // create object from json seems to have problem with _id field, we have to extract it from json
-            String id = extractId(json);
-            if (id != null) {
-                metaInfos.put(id, metaInfo);
-            }
-        }
-        return metaInfos;
-    }
-
-    private static String extractId(String json) {
-        int index = json.indexOf("\"_id\"");
-        if (index != -1) {
-            index = json.indexOf('\"', index + "\"_id\"".length());
-            if (index != -1) {
-                return json.substring(index + 1, json.indexOf('\"', index + 1));
-            }
-        }
-        return null;
     }
 
     private static Map<String, WebResource> prepareWebResourceHashCodes(FullBean fullBean) {

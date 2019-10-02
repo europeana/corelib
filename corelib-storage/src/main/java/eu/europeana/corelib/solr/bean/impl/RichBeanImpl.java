@@ -6,7 +6,7 @@ import org.apache.solr.client.solrj.beans.Field;
 import eu.europeana.corelib.definitions.edm.beans.RichBean;
 import java.util.List;
 import java.util.Map;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.beans.RichBean

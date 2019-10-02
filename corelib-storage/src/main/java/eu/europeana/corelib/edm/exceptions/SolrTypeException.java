@@ -5,25 +5,26 @@ import eu.europeana.corelib.web.exception.ProblemType;
 
 /**
  * Exception thrown when SearchService gets a bean other than BriefBean or ApiBean
- * 
+ *
  * @author Yorgos.Mamakis
  *
  */
 public class SolrTypeException extends EuropeanaException {
-	private static final long serialVersionUID = 1354282016526186556L;
 
-	public SolrTypeException(ProblemType problemType) {
-		super(problemType);
-	}
+    private static final long serialVersionUID = 1354282016526186556L;
 
-	/**
-	 * @see eu.europeana.corelib.definitions.exception.EuropeanaException#EuropeanaException(ProblemType, String)
-	 */
-	public SolrTypeException(ProblemType problemType, String additionalInfo) {
-		super(problemType, additionalInfo);
-	}
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType)
+     */
+    public SolrTypeException(ProblemType problemType) {
+        super(problemType);
+    }
 
-	public SolrTypeException(Throwable causedBy, ProblemType problemType){
-		super(causedBy, problemType);
-	}
+    /**
+     * @see eu.europeana.corelib.web.exception.EuropeanaException#EuropeanaException(ProblemType, String)
+     */
+    public SolrTypeException(ProblemType problemType, String errorDetails) {
+        super(problemType, errorDetails);
+    }
+
 }
