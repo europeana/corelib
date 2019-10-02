@@ -1,5 +1,7 @@
 package eu.europeana.corelib.solr.derived;
 
+
+
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -28,6 +30,7 @@ public class AttributionSnippet {
     Map <String, String> creatorMap      = new HashMap<>();
     Map <String, String> titleMap        = new HashMap<>();
     Map <String, String> dataProviderMap = new HashMap<>();
+
 
 
     public AttributionSnippet(WebResourceImpl wRes) {
