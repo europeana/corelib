@@ -3,12 +3,6 @@ package eu.europeana.corelib.search.impl;
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -32,9 +26,11 @@ import java.util.*;
 public class WebMetaInfo {
 
     private static final Logger LOG = LogManager.getLogger(WebMetaInfo.class);
+    private static final String MANIFEST_PREVIEW_INSTANCE = "?recordApi=https://metis-preview-api-prod.eanadev.org";
 
     @SuppressWarnings("squid:S2070")
     private static final HashFunction hf = Hashing.md5();
+
 
     private WebMetaInfo() {
         // empty constructor to prevent initialization
@@ -47,7 +43,7 @@ public class WebMetaInfo {
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, String manifestAddUrl) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -80,6 +76,7 @@ public class WebMetaInfo {
         fillAggregations(fullBean, mongoServer);
 
         addReferencedByIIIF(fullBean);
+        addPreviewInstancesIIIF(fullBean, manifestAddUrl);
     }
 
     private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
@@ -181,7 +178,7 @@ public class WebMetaInfo {
         aggregation.setWebResources(wResources);
     }
 
-    private static String generateHashCode(String wrId, String recordId){
+    private static String generateHashCode(String wrId, String recordId) {
         return hf.newHasher()
                 .putString(wrId, Charsets.UTF_8)
                 .putString("-", Charsets.UTF_8)
@@ -190,7 +187,7 @@ public class WebMetaInfo {
                 .toString();
     }
 
-       /**
+    /**
      * This is temporary code: if a record is a newspaper record and doesn't have a referencedBy value, we add
      * a reference to IIIF (see ticket EA-992)
      * @param bean
@@ -202,7 +199,7 @@ public class WebMetaInfo {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation"+bean.getAbout()+"/manifest";
+                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
                     wr.setDctermsIsReferencedBy(new String[]{iiifId});
                 }
             }
@@ -220,12 +217,12 @@ public class WebMetaInfo {
     public static boolean isNewsPaperRecord(FullBean bean) {
         boolean result = false;
         if (bean.getProxies() != null) {
-            for (Proxy proxy : bean.getProxies()){
+            for (Proxy proxy : bean.getProxies()) {
                 Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
                     for (List<String> langValues : langMap.values()) {
                         result = langValues.contains("http://schema.org/PublicationIssue") ||
-                                 langValues.contains("https://schema.org/PublicationIssue");
+                                langValues.contains("https://schema.org/PublicationIssue");
                         if (result) {
                             break;
                         }
@@ -260,5 +257,37 @@ public class WebMetaInfo {
         }
         LOG.debug("hasReferencedBy = false");
         return false;
+    }
+
+    /**
+     * Check if the dctermsIsReferencedBy is not null then add the preview instances for IIIF. check ticket: EA-1184
+     * @param bean
+     * @param manifestAddUrl
+     * @return
+     */
+    private static void addPreviewInstancesIIIF(FullBean bean, String manifestAddUrl) {
+        long start = System.nanoTime();
+        //check if manifestAddUrl property is present and true
+        if (manifestAddUrl != null && manifestAddUrl.equals("true")) {
+            for (Aggregation a : bean.getAggregations()) {
+                // add to all webresources in all aggregations
+                for (WebResource wr : a.getWebResources()) {
+                    //check if dctermsIsReferencedBy is not null or empty
+                    if (wr.getDctermsIsReferencedBy() != null && wr.getDctermsIsReferencedBy().length > 0) {
+                        String result[]= new String[wr.getDctermsIsReferencedBy().length];
+                        int i=0;
+                        for (String value : wr.getDctermsIsReferencedBy()) {
+                            result[i]=value + MANIFEST_PREVIEW_INSTANCE;
+                            i++;
+                        }
+                        wr.setDctermsIsReferencedBy(result);
+                    }
+                }
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("AddPreviewInstancesIIIF took {} ns", System.nanoTime() - start);
+            }
+        }
+
     }
 }
