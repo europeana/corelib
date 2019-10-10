@@ -434,6 +434,7 @@ public class WebResourceImpl implements WebResource {
             // temporary change, should be removed after the next reindex. See ticket : EA-1796 10-10-2019
             String imageColorSpace= webResourceMetaInfo.getImageMetaInfo().getColorSpace();
             final String colorSpace = (StringUtils.equals(imageColorSpace, "Gray"))?("grayscale"):(imageColorSpace);
+
             if (StringUtils.isNotEmpty(colorSpace)) {
                 // we check if it's a known value so the json response will be consistent with .rdf and jsonld (see also
                 // EdmWebResourceUtils.setColorSpace())
