@@ -431,11 +431,20 @@ public class WebResourceImpl implements WebResource {
     @Override
     public String getEdmHasColorSpace() {
         if (webResourceMetaInfo != null && webResourceMetaInfo.getImageMetaInfo() != null) {
-            final String colorSpace = webResourceMetaInfo.getImageMetaInfo().getColorSpace();
+            final String colorSpace;
+            // temporary change, should be removed after the next reindex. See ticket : EA-1796 10-10-2019
+            if(StringUtils.equals(webResourceMetaInfo.getImageMetaInfo().getColorSpace(), "Gray")) {
+                colorSpace = "grayscale";
+            }
+            else {
+                colorSpace = webResourceMetaInfo.getImageMetaInfo().getColorSpace();
+            }
             if (StringUtils.isNotEmpty(colorSpace)) {
                 // we check if it's a known value so the json response will be consistent with .rdf and jsonld (see also
                 // EdmWebResourceUtils.setColorSpace())
                 ColorSpaceType csType = ColorSpaceType.convert(colorSpace);
+                LogManager.getLogger(WebResourceImpl.class).warn("cs type '{}'  colorspace '{}'",
+                        csType, colorSpace);
                 if (csType == null) {
                     LogManager.getLogger(WebResourceImpl.class).warn("Unknown color space '{}' for WebResourceMetaInfo {}",
                             colorSpace, webResourceMetaInfo.getId());
