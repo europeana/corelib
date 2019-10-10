@@ -443,8 +443,6 @@ public class WebResourceImpl implements WebResource {
                 // we check if it's a known value so the json response will be consistent with .rdf and jsonld (see also
                 // EdmWebResourceUtils.setColorSpace())
                 ColorSpaceType csType = ColorSpaceType.convert(colorSpace);
-                LogManager.getLogger(WebResourceImpl.class).warn("cs type '{}'  colorspace '{}'",
-                        csType, colorSpace);
                 if (csType == null) {
                     LogManager.getLogger(WebResourceImpl.class).warn("Unknown color space '{}' for WebResourceMetaInfo {}",
                             colorSpace, webResourceMetaInfo.getId());
