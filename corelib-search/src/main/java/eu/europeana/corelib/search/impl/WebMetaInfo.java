@@ -26,7 +26,6 @@ import java.util.*;
 public class WebMetaInfo {
 
     private static final Logger LOG = LogManager.getLogger(WebMetaInfo.class);
-    private static final String MANIFEST_PREVIEW_INSTANCE = "?recordApi=https://metis-preview-api-prod.eanadev.org";
 
     @SuppressWarnings("squid:S2070")
     private static final HashFunction hf = Hashing.md5();
@@ -43,7 +42,7 @@ public class WebMetaInfo {
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, String manifestAddUrl) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, boolean manifestAddUrl, String api2BaseUrl) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -75,8 +74,7 @@ public class WebMetaInfo {
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         fillAggregations(fullBean, mongoServer);
 
-        addReferencedByIIIF(fullBean);
-        addPreviewInstancesIIIF(fullBean, manifestAddUrl);
+        addReferencedByIIIF(fullBean, manifestAddUrl, api2BaseUrl);
     }
 
     private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
@@ -192,14 +190,19 @@ public class WebMetaInfo {
      * a reference to IIIF (see ticket EA-992)
      * @param bean
      */
-    private static void addReferencedByIIIF(FullBean bean) {
+    private static void addReferencedByIIIF(FullBean bean, boolean manifestAddUrl, String api2BaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
         if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    String iiifId;
+                    if(manifestAddUrl){
+                        iiifId= "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest?recordApi="+api2BaseUrl;
+                    }else {
+                        iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    }
                     wr.setDctermsIsReferencedBy(new String[]{iiifId});
                 }
             }
@@ -257,37 +260,5 @@ public class WebMetaInfo {
         }
         LOG.debug("hasReferencedBy = false");
         return false;
-    }
-
-    /**
-     * Check if the dctermsIsReferencedBy is not null then add the preview instances for IIIF. check ticket: EA-1184
-     * @param bean
-     * @param manifestAddUrl
-     * @return
-     */
-    private static void addPreviewInstancesIIIF(FullBean bean, String manifestAddUrl) {
-        long start = System.nanoTime();
-        //check if manifestAddUrl property is present and true
-        if (manifestAddUrl != null && manifestAddUrl.equals("true")) {
-            for (Aggregation a : bean.getAggregations()) {
-                // add to all webresources in all aggregations
-                for (WebResource wr : a.getWebResources()) {
-                    //check if dctermsIsReferencedBy is not null or empty
-                    if (wr.getDctermsIsReferencedBy() != null && wr.getDctermsIsReferencedBy().length > 0) {
-                        String result[]= new String[wr.getDctermsIsReferencedBy().length];
-                        int i=0;
-                        for (String value : wr.getDctermsIsReferencedBy()) {
-                            result[i]=value + MANIFEST_PREVIEW_INSTANCE;
-                            i++;
-                        }
-                        wr.setDctermsIsReferencedBy(result);
-                    }
-                }
-            }
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("AddPreviewInstancesIIIF took {} ns", System.nanoTime() - start);
-            }
-        }
-
     }
 }
