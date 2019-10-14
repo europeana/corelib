@@ -89,7 +89,7 @@ public class SearchServiceImpl implements SearchService {
     private int searchLimit;
 
     @Value("#{europeanaProperties['manifest.add.url']}")
-    private boolean manifestAddUrl;
+    private Boolean manifestAddUrl;
 
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
@@ -167,9 +167,14 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public FullBean processFullBean(FullBean fullBean){
+        //check if manifestAddUrl property is present
         // add meta info for all webresources
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
-
+        if(manifestAddUrl==null || manifestAddUrl.equals(Boolean.FALSE)){
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, false, api2BaseUrl);
+        }
+        else {
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, true, api2BaseUrl);
+        }
         // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();

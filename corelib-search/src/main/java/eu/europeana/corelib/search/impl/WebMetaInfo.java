@@ -241,7 +241,7 @@ public class WebMetaInfo {
     }
 
     /**
-     * Check if the record is a newspaper record (there is a dcTermsIsPartOf that starts with http://data.theeuropeanalibrary.org)
+     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were ingested and do not construct any manifest urls ourselves
      * @param bean
      * @return
      */
