@@ -42,7 +42,7 @@ public class WebMetaInfo {
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, boolean manifestAddUrl, String api2BaseUrl) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, Boolean manifestAddUrl, String api2BaseUrl) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -190,18 +190,16 @@ public class WebMetaInfo {
      * a reference to IIIF (see ticket EA-992)
      * @param bean
      */
-    private static void addReferencedByIIIF(FullBean bean, boolean manifestAddUrl, String api2BaseUrl) {
+    private static void addReferencedByIIIF(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
-            // add to all webresources in all aggregations
+        if (isNewsPaperRecord(bean)  && bean.getAggregations() != null) {
+            // add to all webresources in all aggregations && !hasReferencedBy(bean)
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId;
-                    if(manifestAddUrl){
-                        iiifId= "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest?recordApi="+api2BaseUrl;
-                    }else {
-                        iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    if (manifestAddUrl != null && manifestAddUrl.equals(Boolean.TRUE)) {
+                        iiifId = iiifId + "?recordApi=" + api2BaseUrl;
                     }
                     wr.setDctermsIsReferencedBy(new String[]{iiifId});
                 }

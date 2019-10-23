@@ -167,14 +167,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public FullBean processFullBean(FullBean fullBean){
-        //check if manifestAddUrl property is present
         // add meta info for all webresources
-        if(manifestAddUrl==null || manifestAddUrl.equals(Boolean.FALSE)){
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, false, api2BaseUrl);
-        }
-        else {
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, true, api2BaseUrl);
-        }
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
         // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
