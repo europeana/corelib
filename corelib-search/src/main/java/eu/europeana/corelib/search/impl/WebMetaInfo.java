@@ -30,7 +30,6 @@ public class WebMetaInfo {
     @SuppressWarnings("squid:S2070")
     private static final HashFunction hf = Hashing.md5();
 
-
     private WebMetaInfo() {
         // empty constructor to prevent initialization
     }
@@ -193,8 +192,8 @@ public class WebMetaInfo {
     private static void addReferencedByIIIF(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if (isNewsPaperRecord(bean)  && bean.getAggregations() != null) {
-            // add to all webresources in all aggregations && !hasReferencedBy(bean)
+        if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
+            // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
                     String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
@@ -223,7 +222,7 @@ public class WebMetaInfo {
                 if (langMap != null) {
                     for (List<String> langValues : langMap.values()) {
                         result = langValues.contains("http://schema.org/PublicationIssue") ||
-                                langValues.contains("https://schema.org/PublicationIssue");
+                                 langValues.contains("https://schema.org/PublicationIssue");
                         if (result) {
                             break;
                         }
