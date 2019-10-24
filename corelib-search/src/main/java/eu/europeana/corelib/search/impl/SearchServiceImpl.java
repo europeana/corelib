@@ -88,6 +88,12 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
 
+    @Value("#{europeanaProperties['manifest.add.url']}")
+    private Boolean manifestAddUrl;
+
+    @Value("#{europeanaProperties['api2.baseUrl']}")
+    private String api2BaseUrl;
+
     // show solr query in output
     private boolean debug = false;
 
@@ -162,8 +168,7 @@ public class SearchServiceImpl implements SearchService {
 
     public FullBean processFullBean(FullBean fullBean){
         // add meta info for all webresources
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
-
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
         // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
@@ -221,7 +226,7 @@ public class SearchServiceImpl implements SearchService {
         mongoServer.setEuropeanaIdMongoServer(idServer);
         FullBean fullBean = mongoServer.resolve(europeanaObjectId);
         if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer);
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl,api2BaseUrl);
         }
         return fullBean;
     }

@@ -3,12 +3,6 @@ package eu.europeana.corelib.search.impl;
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
@@ -47,7 +41,7 @@ public class WebMetaInfo {
      * @param mongoServer
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, Boolean manifestAddUrl, String api2BaseUrl) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -79,7 +73,7 @@ public class WebMetaInfo {
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         fillAggregations(fullBean, mongoServer);
 
-        addReferencedByIIIF(fullBean);
+        addReferencedByIIIF(fullBean, manifestAddUrl, api2BaseUrl);
     }
 
     private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
@@ -181,7 +175,7 @@ public class WebMetaInfo {
         aggregation.setWebResources(wResources);
     }
 
-    private static String generateHashCode(String wrId, String recordId){
+    private static String generateHashCode(String wrId, String recordId) {
         return hf.newHasher()
                 .putString(wrId, Charsets.UTF_8)
                 .putString("-", Charsets.UTF_8)
@@ -190,19 +184,22 @@ public class WebMetaInfo {
                 .toString();
     }
 
-       /**
+    /**
      * This is temporary code: if a record is a newspaper record and doesn't have a referencedBy value, we add
      * a reference to IIIF (see ticket EA-992)
      * @param bean
      */
-    private static void addReferencedByIIIF(FullBean bean) {
+    private static void addReferencedByIIIF(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
         if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation"+bean.getAbout()+"/manifest";
+                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    if (manifestAddUrl != null && manifestAddUrl.equals(Boolean.TRUE)) {
+                        iiifId = iiifId + "?recordApi=" + api2BaseUrl;
+                    }
                     wr.setDctermsIsReferencedBy(new String[]{iiifId});
                 }
             }
@@ -220,7 +217,7 @@ public class WebMetaInfo {
     public static boolean isNewsPaperRecord(FullBean bean) {
         boolean result = false;
         if (bean.getProxies() != null) {
-            for (Proxy proxy : bean.getProxies()){
+            for (Proxy proxy : bean.getProxies()) {
                 Map<String, List<String>> langMap = proxy.getDcType();
                 if (langMap != null) {
                     for (List<String> langValues : langMap.values()) {
@@ -241,7 +238,7 @@ public class WebMetaInfo {
     }
 
     /**
-     * Check if the record is a newspaper record (there is a dcTermsIsPartOf that starts with http://data.theeuropeanalibrary.org)
+     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were ingested and do not construct any manifest urls ourselves
      * @param bean
      * @return
      */
