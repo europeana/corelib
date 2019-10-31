@@ -528,7 +528,6 @@ public class SearchServiceImpl implements SearchService {
 
     public void setSolrClient(SolrClient solrClient) {
         this.solrClient = setClient(solrClient);
-        System.out.println("setting solr client with options" +solrClient);
     }
 
     /**
