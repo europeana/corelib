@@ -87,6 +87,10 @@ public class SearchServiceImpl implements SearchService {
     private String password;
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
+    @Value("#{europeanaProperties['solr.connect.timeout']}")
+    private int solrConnectTimeout;
+    @Value("#{europeanaProperties['solr.so.timeout']}")
+    private int solrSocketTimeout;
 
     // show solr query in output
     private boolean debug = false;
@@ -524,15 +528,18 @@ public class SearchServiceImpl implements SearchService {
 
     public void setSolrClient(SolrClient solrClient) {
         this.solrClient = setClient(solrClient);
+        System.out.println("setting solr client with options" +solrClient);
     }
 
     /**
      * If it's not a cluster but a single solr server, we add authentication
      */
     private SolrClient setClient(SolrClient solrClient) {
-
         if (solrClient instanceof HttpSolrClient) {
             HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
+            System.out.println("SERVER :: "+server);
+            server.setConnectionTimeout(solrConnectTimeout);
+            server.setSoTimeout(solrSocketTimeout);
             AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
             client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
             return server;
