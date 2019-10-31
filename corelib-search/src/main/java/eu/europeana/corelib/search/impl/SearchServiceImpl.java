@@ -536,7 +536,6 @@ public class SearchServiceImpl implements SearchService {
     private SolrClient setClient(SolrClient solrClient) {
         if (solrClient instanceof HttpSolrClient) {
             HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
-            System.out.println("SERVER :: "+server);
             server.setConnectionTimeout(solrConnectTimeout);
             server.setSoTimeout(solrSocketTimeout);
             AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
