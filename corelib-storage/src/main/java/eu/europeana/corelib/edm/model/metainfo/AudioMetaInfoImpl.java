@@ -53,6 +53,11 @@ public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
      */
     private Integer bitDepth;
 
+    /**
+     * The Codec the audio is encoded with.
+     */
+    private String codec;
+
     public AudioMetaInfoImpl() {
         this.sampleRate = null;
         this.bitRate = null;
@@ -62,11 +67,12 @@ public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
         this.fileSize = null;
         this.channels = null;
         this.bitDepth = null;
+        this.codec = null;
     }
 
     public AudioMetaInfoImpl(final Integer sampleRate, final Integer bitRate,
                              final Long duration, final String mimeType, final String fileFormat,
-                             final Long fileSize, final Integer channels, final Integer bitDepth) {
+                             final Long fileSize, final Integer channels, final Integer bitDepth, final String codec) {
         this.sampleRate = sampleRate;
         this.bitRate = bitRate;
         this.duration = duration;
@@ -75,6 +81,7 @@ public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
         this.fileSize = fileSize;
         this.channels = channels;
         this.bitDepth = bitDepth;
+        this.codec = codec;
     }
 
     public Integer getSampleRate() {
@@ -109,6 +116,8 @@ public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
         return bitDepth;
     }
 
+    public String getCodec() { return codec; }
+
     public void setSampleRate(Integer sampleRate) {
         this.sampleRate = sampleRate;
     }
@@ -140,4 +149,9 @@ public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.m
     public void setBitDepth(Integer bitDepth) {
         this.bitDepth = bitDepth;
     }
+
+    public void setCodec(String codec) {
+        this.codec = codec;
+    }
+
 }
