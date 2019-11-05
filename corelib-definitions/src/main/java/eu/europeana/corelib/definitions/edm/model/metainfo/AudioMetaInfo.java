@@ -18,4 +18,6 @@ public interface AudioMetaInfo {
 
     Integer getBitDepth();
 
+    String getCodec();
+
 }
