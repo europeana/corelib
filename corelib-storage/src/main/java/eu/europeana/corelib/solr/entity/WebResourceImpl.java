@@ -281,8 +281,13 @@ public class WebResourceImpl implements WebResource {
 
     @Override
     public String getEdmCodecName() {
-        if (webResourceMetaInfo != null && webResourceMetaInfo.getVideoMetaInfo() != null) {
-            return webResourceMetaInfo.getVideoMetaInfo().getCodec();
+        if (webResourceMetaInfo != null) {
+            if (webResourceMetaInfo.getVideoMetaInfo() != null) {
+                return webResourceMetaInfo.getVideoMetaInfo().getCodec();
+            }
+            if (webResourceMetaInfo.getAudioMetaInfo() != null) {
+                return webResourceMetaInfo.getAudioMetaInfo().getCodec();
+            }
         }
         return null;
     }
