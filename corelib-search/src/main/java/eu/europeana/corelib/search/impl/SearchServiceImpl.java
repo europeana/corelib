@@ -405,6 +405,9 @@ public class SearchServiceImpl implements SearchService {
                 }
                 throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, e);
             } catch (SolrServerException e) {
+                if (StringUtils.contains(e.getCause().toString(), "SolrServers" )) {
+                    throw new SolrIOException(ProblemType.TIMEOUT_SOLR , e);
+                }
                 if (StringUtils.contains(e.getCause().toString(), "Collection")){
                     throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN); // do not include cause error for known problems
                 }
