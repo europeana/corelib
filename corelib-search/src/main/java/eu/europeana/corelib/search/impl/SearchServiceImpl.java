@@ -48,6 +48,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -402,6 +403,9 @@ public class SearchServiceImpl implements SearchService {
             } catch (SolrServerException e) {
                 if (StringUtils.contains(e.getCause().toString(), "Collection")){
                     throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN); // do not include cause error for known problems
+                }
+                if (e.getCause() instanceof SocketTimeoutException) {
+                    throw new SolrIOException(ProblemType.TIMEOUT_SOLR, e);
                 }
                 throw new SolrQueryException(ProblemType.SEARCH_QUERY_INVALID, e);
             } catch (SolrException e) {
