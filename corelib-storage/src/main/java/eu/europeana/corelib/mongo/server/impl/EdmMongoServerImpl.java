@@ -203,7 +203,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
             String id= cursor.getId();
             metaInfos.put(id, cursor);
         });
-        LOG.error("Mongo cursor done in {} ms", (System.currentTimeMillis() - start));
+        LOG.debug("Mongo cursor done in {} ms", (System.currentTimeMillis() - start));
         return metaInfos;
 
     }
