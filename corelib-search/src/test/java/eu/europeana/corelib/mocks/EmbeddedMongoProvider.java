@@ -39,7 +39,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
             mongo = new MongoClient("localhost", port);
             EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, DB_NAME);
             mongoDBServer.getDatastore().getDB().dropDatabase();
-        } catch (IOException | MongoDBException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

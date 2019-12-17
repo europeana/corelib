@@ -29,192 +29,202 @@ import java.util.Map;
 /**
  * @see eu.europeana.corelib.mongo.server.EdmMongoServer
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
 public class EdmMongoServerImpl implements EdmMongoServer {
 
-	private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
+    private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
 
-	private MongoClient mongoClient;
-	private String databaseName;
-	private Datastore datastore;
-	private EuropeanaIdMongoServer europeanaIdMongoServer;
-	/* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
-	private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-	// TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-	private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
+    private MongoClient mongoClient;
+    private String databaseName;
+    private Datastore datastore;
+    private EuropeanaIdMongoServer europeanaIdMongoServer;
+    /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
+    private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+    // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
+    private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
 
-	/**
-	 * Create a new Morphia datastore to do get/delete/save operations on the database
-	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
-	 * provided mongoClient
-	 * @param mongoClient
-	 * @param databaseName
-	 * @throws MongoDBException
-	 */
-	@Deprecated
-	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName) throws MongoDBException {
+    /**
+     * Create a new Morphia datastore to do get/delete/save operations on the database
+     * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
+     * provided mongoClient
+     * @param mongoClient
+     * @param databaseName
+     * @deprecated
+     */
+    @Deprecated
+    public EdmMongoServerImpl(MongoClient mongoClient, String databaseName)  {
         this(mongoClient, databaseName, false);
-	}
+    }
 
-	/**
-	 * Create a new Morphia datastore to do get/delete/save operations on the database
-	 * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
-	 * provided mongoClient
-	 * @param mongoClient
-	 * @param databaseName
-	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
-	 * @throws MongoDBException
-	 */
-	public EdmMongoServerImpl(MongoClient mongoClient, String databaseName, boolean createIndexes) throws MongoDBException {
-		this.mongoClient = mongoClient;
-		this.databaseName = databaseName;
-		createDatastore(createIndexes);
-	}
+    /**
+     * Create a new Morphia datastore to do get/delete/save operations on the database
+     * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
+     * provided mongoClient
+     * @param mongoClient
+     * @param databaseName
+     * @param createIndexes, if true then it will try to create the necessary indexes if needed
+     */
+    public EdmMongoServerImpl(MongoClient mongoClient, String databaseName, boolean createIndexes) {
+        this.mongoClient = mongoClient;
+        this.databaseName = databaseName;
+        createDatastore(createIndexes);
+    }
 
-	/**
-	 * Create a new datastore to do get/delete/save operations on the database.
-	 * @param hosts comma-separated host names
-	 * @param ports comma-separated port numbers
-	 * @param databaseName
-	 * @param username
-	 * @param password
-	 */
-	@Deprecated
-	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password)
-			throws MongoDBException {
+    /**
+     * Create a new datastore to do get/delete/save operations on the database.
+     * @param hosts comma-separated host names
+     * @param ports comma-separated port numbers
+     * @param databaseName
+     * @param username
+     * @param password
+     * @deprecated
+     */
+    @Deprecated
+    public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) {
         this(hosts, ports, databaseName, username, password, false);
-	}
+    }
 
-	/**
-	 * Create a new datastore to do get/delete/save operations on the database.
-	 * @param hosts comma-separated host names
-	 * @param ports comma-separated port numbers
-	 * @param databaseName
-	 * @param username
-	 * @param password
-	 * @param createIndexes, if true then it will try to create the necessary indexes if needed
-	 */
-	public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password,
-							  boolean createIndexes) throws MongoDBException {
-		MongoClientOptions.Builder options = MongoClientOptions.builder();
-		options.socketKeepAlive(true);
-		options.connectionsPerHost(10);
-		options.connectTimeout(5000);
-		options.socketTimeout(6000);
-		this.mongoClient = new MongoProviderImpl(hosts, ports, databaseName, username, password, options).getMongo();
-		this.databaseName = databaseName;
-		createDatastore(createIndexes);
-	}
+    /**
+     * Create a new datastore to do get/delete/save operations on the database.
+     * Note that this constructor sets specific connectionTimeout and socketTimeout values
+     * @param hosts comma-separated host names
+     * @param ports comma-separated port numbers
+     * @param databaseName
+     * @param username
+     * @param password
+     * @param createIndexes, if true then it will try to create the necessary indexes if needed
+     */
+    public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password,
+                              boolean createIndexes) {
+        MongoClientOptions.Builder options = MongoClientOptions.builder();
+        options.socketKeepAlive(true);
+        options.connectionsPerHost(10);
+        options.connectTimeout(5000);
+        options.socketTimeout(6000);
+        this.mongoClient = new MongoProviderImpl(hosts, ports, databaseName, username, password, options).getMongo();
+        this.databaseName = databaseName;
+        createDatastore(createIndexes);
+    }
 
-	@Override
-	public void setEuropeanaIdMongoServer(
-			EuropeanaIdMongoServer europeanaIdMongoServer) {
-		this.europeanaIdMongoServer = europeanaIdMongoServer;
-	}
+    @Override
+    public void setEuropeanaIdMongoServer(EuropeanaIdMongoServer europeanaIdMongoServer) {
+        this.europeanaIdMongoServer = europeanaIdMongoServer;
+    }
 
-	private void createDatastore(boolean createIndexes) {
-		Morphia morphia = new Morphia();
+    private void createDatastore(boolean createIndexes) {
+        Morphia morphia = new Morphia();
 
-		morphia.map(FullBeanImpl.class);
-		morphia.map(ProvidedCHOImpl.class);
-		morphia.map(AgentImpl.class);
-		morphia.map(AggregationImpl.class);
-		morphia.map(ConceptImpl.class);
-		morphia.map(ProxyImpl.class);
-		morphia.map(PlaceImpl.class);
-		morphia.map(TimespanImpl.class);
-		morphia.map(WebResourceImpl.class);
-		morphia.map(EuropeanaAggregationImpl.class);
-		morphia.map(EventImpl.class);
-		morphia.map(PhysicalThingImpl.class);
-		morphia.map(ConceptSchemeImpl.class);
-		morphia.map(BasicProxyImpl.class);
-		morphia.map(WebResourceMetaInfoImpl.class);
+        morphia.map(FullBeanImpl.class);
+        morphia.map(ProvidedCHOImpl.class);
+        morphia.map(AgentImpl.class);
+        morphia.map(AggregationImpl.class);
+        morphia.map(ConceptImpl.class);
+        morphia.map(ProxyImpl.class);
+        morphia.map(PlaceImpl.class);
+        morphia.map(TimespanImpl.class);
+        morphia.map(WebResourceImpl.class);
+        morphia.map(EuropeanaAggregationImpl.class);
+        morphia.map(EventImpl.class);
+        morphia.map(PhysicalThingImpl.class);
+        morphia.map(ConceptSchemeImpl.class);
+        morphia.map(BasicProxyImpl.class);
+        morphia.map(WebResourceMetaInfoImpl.class);
 
-		datastore = morphia.createDatastore(mongoClient, databaseName);
-		if (createIndexes) {
-			datastore.ensureIndexes();
-		}
-		LOG.info("Morphia EDMMongoServer datastore is created");
-	}
+        datastore = morphia.createDatastore(mongoClient, databaseName);
+        if (createIndexes) {
+            datastore.ensureIndexes();
+        }
+        LOG.info("Morphia EDMMongoServer datastore is created");
+    }
 
-	@Override
-	public Datastore getDatastore() {
-		return this.datastore;
-	}
+    @Override
+    public Datastore getDatastore() {
+        return this.datastore;
+    }
 
-	@Override
-	public FullBean getFullBean(String id) throws EuropeanaException {
-		try {
-			return datastore.find(FullBeanImpl.class).field("about").equal(id).get();
-		} catch (RuntimeException re) {
-			if (re.getCause() != null &&
-					(re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
-				throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR, re);
-			} else {
-				throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE, re);
-			}
-		}
-	}
+    @Override
+    public FullBean getFullBean(String id) throws EuropeanaException {
+        try {
+            long start = 0;
+            if (LOG.isDebugEnabled()) {
+                start = System.currentTimeMillis();
+            }
+            FullBeanImpl result =  datastore.find(FullBeanImpl.class).field("about").equal(id).get();
+            LOG.debug ("Mongo query find fullbean {} finished in {} ms", id, (System.currentTimeMillis() - start));
+            return result;
+        } catch (RuntimeException re) {
+            if (re.getCause() != null &&
+                    (re.getCause() instanceof MappingException || re.getCause() instanceof java.lang.ClassCastException)) {
+                throw new MongoDBException(ProblemType.RECORD_RETRIEVAL_ERROR, re);
+            } else {
+                throw new MongoRuntimeException(ProblemType.MONGO_UNREACHABLE, re);
+            }
+        }
+    }
 
-	@Override
-	public FullBean resolve(String id) {
+    @Override
+    public FullBean resolve(String id) {
 
-		EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
-		if (newId != null) {
-			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
-		}
-		if (newId != null) {
-			newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
-		}
+        EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
+        if (newId != null) {
+            newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
+        }
+        if (newId != null) {
+            newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
+        }
 
-		if (newId != null) {
-			//TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
-			//europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-			return datastore.find(FullBeanImpl.class).field("about").equal(newId.getNewId()).get();
-		}
+        if (newId != null) {
+            //TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
+            //europeanaIdMongoServer.updateTime(newId.getNewId(), id);
+            return datastore.find(FullBeanImpl.class).field("about").equal(newId.getNewId()).get();
+        }
 
-		LOG.info("Unresolvable Europeana ID: {}", id);
-		return null;
-	}
+        LOG.info("Unresolvable Europeana ID: {}", id);
+        return null;
+    }
 
-	@Override
-	public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
-		Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
+    @Override
+    public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
+        Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
 
-		final BasicDBObject basicObject = new BasicDBObject("$in", hashCodes);   //{"$in":["1","2","3"]}
-		getDatastore().createQuery(WebResourceMetaInfoImpl.class);
-		List<WebResourceMetaInfoImpl> metaInfoList = getDatastore().find(WebResourceMetaInfoImpl.class)
-				.disableValidation()
-				.field("_id").equal(basicObject).asList();
+        final BasicDBObject basicObject = new BasicDBObject("$in", hashCodes);   // e.g. {"$in":["1","2","3"]}
+        long start = 0;
+        if (LOG.isDebugEnabled()) {
+            start = System.currentTimeMillis();
+        }
+        List<WebResourceMetaInfoImpl> metaInfoList = getDatastore().find(WebResourceMetaInfoImpl.class)
+                .disableValidation()
+                .field("_id").equal(basicObject).asList();
+        LOG.debug("Mongo query find metainfo for {} webresources done in {} ms", hashCodes.size(), (System.currentTimeMillis() - start));
 
-		metaInfoList.forEach((cursor) -> {
-			String id= cursor.getId();
-			WebResourceMetaInfoImpl metaInfo= cursor;
-			metaInfos.put(id,metaInfo);
-		});
-		return metaInfos;
+        start = System.currentTimeMillis();
+        metaInfoList.forEach(cursor -> {
+            String id= cursor.getId();
+            metaInfos.put(id, cursor);
+        });
+        LOG.error("Mongo cursor done in {} ms", (System.currentTimeMillis() - start));
+        return metaInfos;
 
-	}
-	@Override
-	public String toString() {
-		return "MongoDB: [Host: " + mongoClient.getAddress().getHost() + "]\n"
-				+ "[Port: " + mongoClient.getAddress().getPort() + "]\n"
-				+ "[DB: " + databaseName + "]\n";
-	}
+    }
+    @Override
+    public String toString() {
+        return "MongoDB: [Host: " + mongoClient.getAddress().getHost() + "]\n"
+                + "[Port: " + mongoClient.getAddress().getPort() + "]\n"
+                + "[DB: " + databaseName + "]\n";
+    }
 
-	@Override
-	public <T> T searchByAbout(Class<T> clazz, String about) {
+    @Override
+    public <T> T searchByAbout(Class<T> clazz, String about) {
 
-		return datastore.find(clazz).filter("about", about).get();
-	}
+        return datastore.find(clazz).filter("about", about).get();
+    }
 
-	@Override
-	public void close() {
-		if (mongoClient != null) {
-			LOG.info("Closing MongoClient for EDMMongoServer");
-			mongoClient.close();
-		}
-	}
+    @Override
+    public void close() {
+        if (mongoClient != null) {
+            LOG.info("Closing MongoClient for EDMMongoServer");
+            mongoClient.close();
+        }
+    }
 }
