@@ -12,13 +12,13 @@
 		<class>eu.europeana.corelib.db.entity.relational.SocialTagImpl</class>
 		<class>eu.europeana.corelib.db.entity.relational.TokenImpl</class>
 		<class>eu.europeana.corelib.db.entity.relational.UserImpl</class>
-		<properties>
-			<property name="hibernate.c3p0.min_size" value="5" />
-			<property name="hibernate.c3p0.max_size" value="50" />
-			<property name="hibernate.c3p0.timeout" value="5000" />
-			<property name="hibernate.c3p0.idle_test_period" value="150" />
-			<property name="hibernate.c3p0.max_statements" value="10" />
-		</properties>
+<!--		<properties>-->
+<!--			<property name="hibernate.c3p0.min_size" value="5" />-->
+<!--			<property name="hibernate.c3p0.max_size" value="50" />-->
+<!--			<property name="hibernate.c3p0.timeout" value="5000" />-->
+<!--			<property name="hibernate.c3p0.idle_test_period" value="150" />-->
+<!--			<property name="hibernate.c3p0.max_statements" value="10" />-->
+<!--		</properties>-->
 		
 	</persistence-unit>
 
