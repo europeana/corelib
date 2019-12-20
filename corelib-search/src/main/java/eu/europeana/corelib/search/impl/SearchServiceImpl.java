@@ -400,22 +400,16 @@ public class SearchServiceImpl implements SearchService {
                     resultSet.setHighlighting(queryResponse.getHighlighting());
                 }
             } catch (IOException e) {
-                if (e.getCause() instanceof SocketTimeoutException) {
-                    throw new SolrIOException(ProblemType.TIMEOUT_SOLR , e);
-                }
                 throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, e);
             } catch (SolrServerException e) {
-                if (StringUtils.contains(e.getCause().toString(), "SolrServers" )) {
-                    throw new SolrIOException(ProblemType.TIMEOUT_SOLR , e);
-                }
                 if (StringUtils.contains(e.getCause().toString(), "Collection")){
                     throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN); // do not include cause error for known problems
                 }
+                if(StringUtils.containsIgnoreCase(e.getCause().toString(), "Timeout")){
+                    throw new SolrQueryException(ProblemType.TIMEOUT_SOLR, e);
+                }
                 throw new SolrQueryException(ProblemType.SEARCH_QUERY_INVALID, e);
             } catch (SolrException e) {
-                if (e.getCause() instanceof TimeoutException) {
-                    throw new SolrIOException(ProblemType.TIMEOUT_SOLR, e);
-                }
                 String msg = e.getMessage().toLowerCase(Locale.GERMAN);
                 if (msg.contains("cursormark")) {
                     throw new SolrQueryException(ProblemType.SEARCH_CURSORMARK_INVALID,
