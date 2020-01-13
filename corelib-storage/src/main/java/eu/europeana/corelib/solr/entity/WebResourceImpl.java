@@ -270,11 +270,9 @@ public class WebResourceImpl implements WebResource {
 
     @Override
     public String getRdfType() {
-        if (webResourceMetaInfo != null && webResourceMetaInfo.getTextMetaInfo() != null
-                && webResourceMetaInfo.getTextMetaInfo().getIsSearchable() != null
-                && webResourceMetaInfo.getTextMetaInfo().getIsSearchable()) {
+        if (webResourceMetaInfo != null && webResourceMetaInfo.getTextMetaInfo() != null) {
             // TODO set proper value once we defined edm:FullTextResource
-            //return "edm:FullTextResource";
+            return webResourceMetaInfo.getTextMetaInfo().getRdfType();
         }
         return null;
     }
