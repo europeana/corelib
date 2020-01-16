@@ -434,6 +434,7 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.addSort("timestamp_update", ORDER.desc);
             // completeness is added last because many records have incorrect value 0
             solrQuery.addSort("europeana_completeness", ORDER.desc);
+            solrQuery.addSort("europeana_id", ORDER.asc);
         } else {
             // User set sort
             solrQuery.clearSorts();
