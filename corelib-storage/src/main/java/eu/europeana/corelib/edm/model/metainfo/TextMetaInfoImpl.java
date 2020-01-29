@@ -26,7 +26,10 @@ public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.mo
 
     /**
      * Shows if the file contains only images (returns false) or any text (returns true)
+     * @deprecated since 13 Jan 2020. Field is not used anywhere
+     *
      */
+    @Deprecated
     private Boolean isSearchable;
 
     /**
