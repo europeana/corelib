@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/europeana/corelib.svg?branch=master)](https://travis-ci.org/europeana/corelib)[![Coverage Status](https://coveralls.io/repos/europeana/corelib/badge.svg?branch=master&service=github)](https://coveralls.io/github/europeana/corelib?branch=master)
 
 The CoreLib repository contains the libraries that provide the underlying functionality (i.e. search and ingestion)
-for both the Europeana [Portal](https://github.com/europeana/portal/) (deprecated) and [API](https://github.com/europeana/api2/).
+for both the Europeana [Portal](https://github.com/europeana/) (deprecated) and [API](https://github.com/europeana/api2/).
 
 ## Build requirements
 ### Runtime

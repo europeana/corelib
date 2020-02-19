@@ -42,7 +42,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
     /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-    private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
+    private static final String PORTAL_PREFIX = "http://www.europeana.eu/record";
 
     /**
      * Create a new Morphia datastore to do get/delete/save operations on the database
