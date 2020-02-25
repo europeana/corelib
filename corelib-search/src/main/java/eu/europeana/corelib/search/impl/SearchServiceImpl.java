@@ -150,6 +150,9 @@ public class SearchServiceImpl implements SearchService {
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
                 fullBean = mongoServer.getFullBean(newId);
+                if (fullBean == null) {
+                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
+                }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("SearchService fetch FullBean with newid took " + (System.currentTimeMillis() - startTime) + " ms");
                 }
