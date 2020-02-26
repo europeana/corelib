@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
@@ -19,6 +20,8 @@ import java.util.Set;
 
 import javax.xml.validation.Schema;
 
+import eu.europeana.corelib.edm.model.schemaorg.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,23 +30,6 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.edm.model.schemaorg.AudioObject;
-import eu.europeana.corelib.edm.model.schemaorg.CreativeWork;
-import eu.europeana.corelib.edm.model.schemaorg.EdmOrganization;
-import eu.europeana.corelib.edm.model.schemaorg.GeoCoordinates;
-import eu.europeana.corelib.edm.model.schemaorg.MediaObject;
-import eu.europeana.corelib.edm.model.schemaorg.MultilingualString;
-import eu.europeana.corelib.edm.model.schemaorg.Organization;
-import eu.europeana.corelib.edm.model.schemaorg.Person;
-import eu.europeana.corelib.edm.model.schemaorg.Place;
-import eu.europeana.corelib.edm.model.schemaorg.PostalAddress;
-import eu.europeana.corelib.edm.model.schemaorg.QuantitativeValue;
-import eu.europeana.corelib.edm.model.schemaorg.Reference;
-import eu.europeana.corelib.edm.model.schemaorg.SchemaOrgConstants;
-import eu.europeana.corelib.edm.model.schemaorg.Text;
-import eu.europeana.corelib.edm.model.schemaorg.Thing;
-import eu.europeana.corelib.edm.model.schemaorg.VideoObject;
-import eu.europeana.corelib.edm.model.schemaorg.VisualArtwork;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
@@ -417,7 +403,7 @@ public final class SchemaOrgUtils {
 	
 	// telephone
 	addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
-	
+
 	// address
 	createPostalAddress(organization, (EdmOrganization)entityObject);
 	
@@ -507,7 +493,7 @@ public final class SchemaOrgUtils {
      * @param bean   bean with all properties
      */
     private static void processProvidedCHO(CreativeWork object, FullBeanImpl bean) {
-	for (ProvidedCHOImpl providedCHO : bean.getProvidedCHOs()) {
+		for (ProvidedCHOImpl providedCHO : bean.getProvidedCHOs()) {
 	    // @id
 	    if (!notNullNorEmpty(object.getId())) {
 		object.setId(URL_PREFIX + providedCHO.getAbout());
@@ -568,7 +554,7 @@ public final class SchemaOrgUtils {
 
 	    // associatedMedia
 	    Set<String> medias = new HashSet<>();
-	    addDistinctValues(medias, aggregation.getHasView());
+		addDistinctValues(medias, aggregation.getHasView());
 	    addDistinctValues(medias, aggregation.getEdmIsShownBy());
 	    referencedObjects.addAll(processWebResources(object, medias, aggregation, bean));
 	}
@@ -591,9 +577,8 @@ public final class SchemaOrgUtils {
     private static List<Thing> processWebResources(CreativeWork object, Set<String> mediaUrls, Aggregation aggregation,
 	    FullBeanImpl bean) {
 	List<Thing> mediaObjects = new ArrayList<>();
-
 	for (WebResource resource : aggregation.getWebResources()) {
-	    if (resource.getEbucoreHasMimeType() != null && mediaUrls.contains(resource.getAbout())) {
+		if (resource.getEbucoreHasMimeType() != null && mediaUrls.contains(resource.getAbout())) {
 		MediaObject mediaObject = SchemaOrgTypeFactory.createMediaObject(resource.getEbucoreHasMimeType());
 		addReference(object, resource.getAbout(), SchemaOrgConstants.PROPERTY_ASSOCIATED_MEDIA,
 			mediaObject.getClass());
@@ -681,16 +666,21 @@ public final class SchemaOrgUtils {
 	mediaObject.addEncodingFormat(new Text(resource.getEbucoreHasMimeType()));
 
 	// contentSize
-	mediaObject.addContentSize(new Text(String.valueOf(resource.getEbucoreFileByteSize())));
+		if(resource.getEbucoreFileByteSize() != null) {
+			mediaObject.addContentSize(new Text(String.valueOf(resource.getEbucoreFileByteSize())));
+		}
 
 	if (!(mediaObject instanceof AudioObject)) {
 	    // height
-	    addQuantitativeProperty(mediaObject, String.valueOf(resource.getEbucoreHeight()), UNIT_CODE_E37,
-		    SchemaOrgConstants.PROPERTY_HEIGHT);
-
+		if(resource.getEbucoreHeight()!= null) {
+			addQuantitativeProperty(mediaObject, String.valueOf(resource.getEbucoreHeight()), UNIT_CODE_E37,
+					SchemaOrgConstants.PROPERTY_HEIGHT);
+		}
 	    // width
-	    addQuantitativeProperty(mediaObject, String.valueOf(resource.getEbucoreWidth()), UNIT_CODE_E37,
-		    SchemaOrgConstants.PROPERTY_WIDTH);
+		if(resource.getEbucoreHeight() != null) {
+			addQuantitativeProperty(mediaObject, String.valueOf(resource.getEbucoreWidth()), UNIT_CODE_E37,
+					SchemaOrgConstants.PROPERTY_WIDTH);
+		}
 	}
 
 	if (mediaObject instanceof AudioObject || mediaObject instanceof VideoObject) {
@@ -728,8 +718,8 @@ public final class SchemaOrgUtils {
     private static void addQuantitativeProperty(MediaObject mediaObject, String value, String untiCode,
 	    String propertyName) {
 	QuantitativeValue quantitativeValue = new QuantitativeValue();
-	quantitativeValue.addValue(new Text(value));
-	quantitativeValue.addUnitCode(new Text(untiCode));
+	quantitativeValue.setValue(value);
+	quantitativeValue.setUnitCode(untiCode);
 	mediaObject.addProperty(propertyName, quantitativeValue);
     }
 
@@ -915,7 +905,7 @@ public final class SchemaOrgUtils {
 		    SchemaOrgConstants.PROPERTY_IS_PART_OF, null);
 
 	    // datePublished
-	    addDateProperty(object, proxy.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
+		addDateProperty(object, proxy.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
 		    bean.getTimespans(), true);
 
 	    // mentions
@@ -999,8 +989,8 @@ public final class SchemaOrgUtils {
      * @return true when the string is a ISO8601 date or a reference to timespan
      */
     private static boolean isDateOrTimespan(String value) {
-	return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX)) || isIsoDate(value)
-		|| isIsoDateTime(value);
+	return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX)) || isYearRange(value)
+			|| isIsoDate(value) || isIsoDateTime(value);
     }
 
     /**
@@ -1027,8 +1017,25 @@ public final class SchemaOrgUtils {
      * 
      */
     private static boolean isIsoDateTime(String value) {
-	return DateUtils.parse(value) != null;
+		return DateUtils.parse(value) != null;
     }
+
+    private static boolean isYearRange(String value) {
+		String[] years = value.split("-");
+		//check for range ex: 1980-1990
+		if (years.length == 2 && Year.parse(years[0]).isBefore(Year.parse(years[1]))) {
+			return true;
+		}
+		//check for single year ex: 1930
+		if(years.length == 1 ) {
+			try { Year year = Year.of(Integer.parseInt(value));
+				  return year!=null;
+			    } catch(Exception e) {
+				  return false;
+			   }
+		    }
+    	return false;
+	}
 
     /**
      * Searches for places in the provided map and returns the map containing them.
@@ -1105,11 +1112,10 @@ public final class SchemaOrgUtils {
 	    if (EuropeanaUriUtils.isUri(value) && timespans != null) {
 		// value might be timespan
 		valueToAdd = createDateRange(value, language, timespans);
-
+		addDateProperty(object, valueToAdd, propertyName);
 	    }
-	    if (allowInvalid || isIsoDate(value) || isIsoDateTime(value)) {
-		addMultilingualProperty(object, valueToAdd,
-			SchemaOrgConstants.DEFAULT_LANGUAGE.equals(language) ? "" : language, propertyName);
+	    else if (allowInvalid || isYearRange(value) || isIsoDate(value) || isIsoDateTime(value)) {
+			addDateProperty(object, valueToAdd, propertyName);
 	    }
 	}
     }
@@ -1171,10 +1177,18 @@ public final class SchemaOrgUtils {
 
     private static void addMultilingualProperty(Thing object, String value, String language, String propertyName) {
 	MultilingualString property = new MultilingualString();
-	property.setLanguage(language);
+	if(!StringUtils.isEmpty(language)) {
+		property.setLanguage(language);
+	}
 	property.setValue(value);
 	object.addProperty(propertyName, property);
     }
+
+	private static void addDateProperty(Thing object, String value, String propertyName) {
+		DateString property = new DateString();
+		property.setValue(value);
+		object.addProperty(propertyName, property);
+	}
 
     /**
      * Checks whether value is Uri adding a reference in this case or adding the
@@ -1272,7 +1286,6 @@ public final class SchemaOrgUtils {
 		    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey(), propertyName);
 	}
     }
-    
 
     private static void addMultilingualProperties(Thing object, String propertyName, Map<String, String> map) {
 	if (map == null) {

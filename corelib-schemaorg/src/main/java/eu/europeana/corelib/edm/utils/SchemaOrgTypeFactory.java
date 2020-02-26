@@ -82,6 +82,7 @@ public final class SchemaOrgTypeFactory {
 
     public static Thing createObject(FullBeanImpl bean) {
         if (bean == null) {
+            System.out.println("createObject :: Bean is null ");
             return null;
         }
 
