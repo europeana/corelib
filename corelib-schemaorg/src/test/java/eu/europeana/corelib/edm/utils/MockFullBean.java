@@ -123,6 +123,8 @@ public final class MockFullBean {
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/1901");
         proxy.getDctermsTemporal().get("def").add("1981-1990");
         proxy.getDctermsTemporal().get("def").add("1930");
+        proxy.getDctermsTemporal().get("def").add("xyxc"); // this should NOT be present in temporal coverage as it is not a valid year
+
 
         proxy.setDctermsCreated(new HashMap<>());
         proxy.getDctermsCreated().put("def", new ArrayList<>());
@@ -201,6 +203,10 @@ public final class MockFullBean {
         List<WebResourceImpl> webResources = new ArrayList<>();
         WebResourceImpl webResource = new WebResourceImpl();
         webResources.add(webResource);
+
+        webResource.setDctermsCreated(new HashMap<>());
+        webResource.getDctermsCreated().put("def", new ArrayList<>());
+        webResource.getDctermsCreated().get("def").add("1936-05-11");
 
         //should be present in videoObject
         webResource.setAbout("http://teylers.adlibhosting.com/internetserver/Details/kunst/25027");
