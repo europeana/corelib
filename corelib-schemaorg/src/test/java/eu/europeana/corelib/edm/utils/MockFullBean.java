@@ -123,6 +123,7 @@ public final class MockFullBean {
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/1901");
         proxy.getDctermsTemporal().get("def").add("1981-1990");
         proxy.getDctermsTemporal().get("def").add("1930");
+        proxy.getDctermsTemporal().get("def").add("1930");
         proxy.getDctermsTemporal().get("def").add("xyxc"); // this should NOT be present in temporal coverage as it is not a valid year
 
 
