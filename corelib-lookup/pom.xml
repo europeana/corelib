@@ -26,7 +26,16 @@
 			<groupId>eu.europeana.corelib</groupId>
 			<artifactId>corelib-common-storage</artifactId>
 		</dependency>
+
 		<!-- OTHER -->
+
+		<!-- for EA-1907 integrate API with new Metis redirection DB -->
+		<dependency>
+			<groupId>eu.europeana.metis</groupId>
+			<artifactId>metis-common</artifactId>
+			<version>${metis.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

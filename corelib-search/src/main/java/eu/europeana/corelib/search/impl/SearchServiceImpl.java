@@ -68,11 +68,12 @@ public class SearchServiceImpl implements SearchService {
     private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
     private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-
+    private static final String EUROPEANA_ID = "europeana_id";
     private static final Logger LOG = LogManager.getLogger(SearchServiceImpl.class);
 
     @Resource(name = "corelib_solr_mongoServer")
     protected EdmMongoServer mongoServer;
+
     @Resource(name = "corelib_solr_mongoServer_id")
     protected EuropeanaIdMongoServer idServer;
 
@@ -97,27 +98,9 @@ public class SearchServiceImpl implements SearchService {
     // show solr query in output
     private boolean debug = false;
 
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    @Override
-    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
-    }
-
     @Override
     public FullBean findById(String collectionId, String recordId) throws EuropeanaException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
-    }
-
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
-        return findById(europeanaObjectId);
     }
 
     @Override
@@ -137,14 +120,14 @@ public class SearchServiceImpl implements SearchService {
         long   startTime = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("SearchService fetch FullBean with europeanaObjectId took " + (System.currentTimeMillis() - startTime) + " ms");
+            LOG.debug("SearchService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
         }
 
         if (Objects.isNull(fullBean)) {
             startTime = System.currentTimeMillis();
             String newId = resolveId(europeanaObjectId);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("SearchService resolve newId took " + (System.currentTimeMillis() - startTime) + " ms");
+                LOG.debug("SearchService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
             }
             // (comment from ObjectController) 2017-07-06 code PE: inserted as temp workaround until we resolve #662 (see also comment below)
             if (StringUtils.isNotBlank(newId)){
@@ -154,82 +137,9 @@ public class SearchServiceImpl implements SearchService {
                     LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
                 }
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("SearchService fetch FullBean with newid took " + (System.currentTimeMillis() - startTime) + " ms");
+                    LOG.debug("SearchService fetch FullBean with newid took {}", (System.currentTimeMillis() - startTime));
                 }
             }
-        }
-        return fullBean;
-    }
-
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore. Also parameter europeanaObjectId is no longer needed
-     */
-    @Deprecated
-    public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
-        return processFullBean(fullBean);
-    }
-
-    public FullBean processFullBean(FullBean fullBean){
-        // add meta info for all webresources
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
-        // generate attribution snippets for all webresources
-        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-            ((FullBeanImpl) fullBean).setAsParent();
-            for (Aggregation agg : fullBean.getAggregations()) {
-                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
-                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                        wRes.initAttributionSnippet();
-                    }
-                }
-            }
-        }
-        return fullBean;
-    }
-
-    /**
-     * @see SearchService#resolve(String, String, boolean)
-     */
-    @Override
-    public FullBean resolve(String collectionId, String recordId, boolean similarItems) throws SolrTypeException {
-        return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
-    }
-
-    /**
-     * @see SearchService#resolve(String, boolean)
-     * @deprecated sept 2019, similarItems are not supported anymore. Also parameter europeanaObjectId is no longer needed
-     */
-    @Deprecated
-    @Override
-    public FullBean resolve(String europeanaObjectId, boolean similarItems) {
-        return resolve(europeanaObjectId);
-    }
-
-    /**
-     * @see SearchService#resolve(String)
-     */
-    @Override
-    public FullBean resolve(String europeanaObjectId) {
-        FullBean fullBean = resolveInternal(europeanaObjectId);
-        FullBean fullBeanNew = fullBean;
-        if (fullBean != null) {
-            while (fullBeanNew != null) {
-                fullBeanNew = resolveInternal(fullBeanNew.getAbout());
-                if (fullBeanNew != null) {
-                    fullBean = fullBeanNew;
-                }
-            }
-        }
-        return fullBean;
-    }
-
-    /**
-     * Retrieve bean via a single redirect, i.e. checks if a record has a newer Id and if so retrieves the bean via that newId.
-     */
-    private FullBean resolveInternal(String europeanaObjectId) {
-        mongoServer.setEuropeanaIdMongoServer(idServer);
-        FullBean fullBean = mongoServer.resolve(europeanaObjectId);
-        if (fullBean != null) {
-            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl,api2BaseUrl);
         }
         return fullBean;
     }
@@ -250,15 +160,6 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         return lastId;
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#resolveId(String, String)
-     */
-    @Override
-    public String resolveId(String collectionId, String recordId) throws BadDataException {
-        return resolveId(EuropeanaUriUtils.createEuropeanaId(
-                collectionId, recordId));
     }
 
     /**
@@ -297,6 +198,23 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
+    public FullBean processFullBean(FullBean fullBean){
+        // add meta info for all webresources
+        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
+        // generate attribution snippets for all webresources
+        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
+            ((FullBeanImpl) fullBean).setAsParent();
+            for (Aggregation agg : fullBean.getAggregations()) {
+                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                        wRes.initAttributionSnippet();
+                    }
+                }
+            }
+        }
+        return fullBean;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
@@ -333,8 +251,8 @@ public class SearchServiceImpl implements SearchService {
             // add extra parameters if any
             if (query.getParameterMap() != null) {
                 Map<String, String> parameters = query.getParameterMap();
-                for (String key : parameters.keySet()) {
-                    solrQuery.setParam(key, parameters.get(key));
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                    solrQuery.setParam(entry.getKey(), entry.getValue());
                 }
             }
 
@@ -345,12 +263,8 @@ public class SearchServiceImpl implements SearchService {
                 boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
 
                 for (String facetToAdd : query.getSolrFacets()) {
-                    if (query.doProduceFacetUnion()) {
-                        if (hasFacetRefinements
-                            && filteredFacets.contains(facetToAdd)) {
-                            facetToAdd = MessageFormat.format(
-                                    UNION_FACETS_FORMAT, facetToAdd);
-                        }
+                    if (query.doProduceFacetUnion() && hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
+                        facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
                     }
                     solrQuery.addFacetField(facetToAdd);
                 }
@@ -358,14 +272,12 @@ public class SearchServiceImpl implements SearchService {
             }
 
             // spellcheck is optional
-            if (query.isSpellcheckAllowed()) {
-                if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
-                    solrQuery.setParam("spellcheck", "on");
-                    solrQuery.setParam("spellcheck.collate", "true");
-                    solrQuery.setParam("spellcheck.extendedResults", "true");
-                    solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-                    solrQuery.setParam("spellcheck.q", query.getQuery());
-                }
+            if (query.isSpellcheckAllowed() && (solrQuery.getStart() == null || solrQuery.getStart() <= 1)) {
+                solrQuery.setParam("spellcheck", "on");
+                solrQuery.setParam("spellcheck.collate", "true");
+                solrQuery.setParam("spellcheck.extendedResults", "true");
+                solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+                solrQuery.setParam("spellcheck.q", query.getQuery());
             }
             // change this to *isblank / empty
             if (query.getQueryFacets() != null) {
@@ -376,7 +288,7 @@ public class SearchServiceImpl implements SearchService {
 
             try {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Solr query is: " + solrQuery);
+                    LOG.debug("Solr query is: {}", solrQuery);
                 }
                 query.setExecutedQuery(solrQuery.toString());
 
@@ -430,14 +342,14 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
-        boolean defaultSort = query.getSorts().size() == 0;
+        boolean defaultSort = query.getSorts().isEmpty();
         if (defaultSort) {
             solrQuery.setSort("has_media", ORDER.desc);
             solrQuery.addSort("score", ORDER.desc);
             solrQuery.addSort("timestamp_update", ORDER.desc);
             // completeness is added last because many records have incorrect value 0
             solrQuery.addSort("europeana_completeness", ORDER.desc);
-            solrQuery.addSort("europeana_id", ORDER.asc);
+            solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
         } else {
             // User set sort
             solrQuery.clearSorts();
@@ -454,11 +366,10 @@ public class SearchServiceImpl implements SearchService {
                 // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087 and EA-1364)
                 solrQuery.removeSort("score");
                 // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
-                if (!solrQuery.getSortField().contains("europeana_id")) {
-                    solrQuery.addSort("europeana_id", ORDER.asc);
+                if (!solrQuery.getSortField().contains(EUROPEANA_ID)) {
+                    solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
                 }
             }
-
         } else {
             // TimeAllowed and cursormark are not allowed together in a query
             solrQuery.setTimeAllowed(TIME_ALLOWED);
@@ -518,7 +429,7 @@ public class SearchServiceImpl implements SearchService {
         Map<String, Integer> queryFacets = null;
         try {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Solr query is: " + solrQuery.toString());
+                LOG.debug("Solr query is: {}", solrQuery);
             }
             response = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
             queryFacets = response.getFacetQuery();
@@ -558,7 +469,7 @@ public class SearchServiceImpl implements SearchService {
             NamedList<Object> namedList = solrClient.request(new LukeRequest());
             NamedList<Object> index = (NamedList<Object>) namedList.get("index");
             if (LOG.isInfoEnabled()) {
-                LOG.info("spent: " + (new Date().getTime() - t0));
+                LOG.info("spent: {}", (new Date().getTime() - t0));
             }
             return (Date) index.get("lastModified");
         } catch (SolrServerException | IOException e) {
@@ -579,4 +490,100 @@ public class SearchServiceImpl implements SearchService {
             request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
         }
     }
+
+
+
+
+
+    // === CODE BELOW THIS LINE IS DEPRECATED OR NOT USED ANY LONGER
+
+    /**
+     * @see SearchService#resolve(String)
+     *
+     * @deprecated - indirectly deprecated; only called by deprecated method
+     */
+    @Deprecated
+    @Override
+    public FullBean resolve(String europeanaObjectId) {
+        FullBean fullBean = resolveInternal(europeanaObjectId);
+        FullBean fullBeanNew = fullBean;
+        if (fullBean != null) {
+            while (fullBeanNew != null) {
+                fullBeanNew = resolveInternal(fullBeanNew.getAbout());
+                if (fullBeanNew != null) {
+                    fullBean = fullBeanNew;
+                }
+            }
+        }
+        return fullBean;
+    }
+
+    /**
+     * Retrieve bean via a single redirect, i.e. checks if a record has a newer Id and if so retrieves the bean via that newId.
+     *
+     * @deprecated - indirectly deprecated; only called by deprecated method
+     */
+    @Deprecated
+    private FullBean resolveInternal(String europeanaObjectId) {
+        mongoServer.setEuropeanaIdMongoServer(idServer);
+        FullBean fullBean = mongoServer.resolve(europeanaObjectId);
+        if (fullBean != null) {
+            WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl,api2BaseUrl);
+        }
+        return fullBean;
+    }
+
+    /**
+     * @see SearchService#resolve(String, String, boolean)
+     */
+    @Override
+    public FullBean resolve(String collectionId, String recordId, boolean similarItems) throws SolrTypeException {
+        return resolve(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), similarItems);
+    }
+
+    /**
+     * @see eu.europeana.corelib.search.SearchService#resolveId(String, String)
+     */
+    @Override
+    public String resolveId(String collectionId, String recordId) throws BadDataException {
+        return resolveId(EuropeanaUriUtils.createEuropeanaId(
+                collectionId, recordId));
+    }
+
+    /**
+     * @deprecated sept 2019, similarItems are not supported anymore
+     */
+    @Deprecated
+    @Override
+    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
+        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
+    }
+
+    /**
+     * @deprecated sept 2019, similarItems are not supported anymore
+     */
+    @Deprecated
+    @Override
+    public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
+        return findById(europeanaObjectId);
+    }
+
+    /**
+     * @deprecated sept 2019, similarItems are not supported anymore. Also parameter europeanaObjectId is no longer needed
+     */
+    @Deprecated
+    public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
+        return processFullBean(fullBean);
+    }
+
+    /**
+     * @see SearchService#resolve(String, boolean)
+     * @deprecated sept 2019, similarItems are not supported anymore. Also parameter europeanaObjectId is no longer needed
+     */
+    @Deprecated
+    @Override
+    public FullBean resolve(String europeanaObjectId, boolean similarItems) {
+        return resolve(europeanaObjectId);
+    }
+
 }

@@ -42,7 +42,9 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-hierarchies</artifactId>
         </dependency>
+
         <!-- OTHER -->
+
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>

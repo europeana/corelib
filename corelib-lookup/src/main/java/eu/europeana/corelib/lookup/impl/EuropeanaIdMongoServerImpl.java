@@ -9,6 +9,8 @@ import org.mongodb.morphia.query.UpdateOperations;
 import eu.europeana.corelib.storage.MongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
+import eu.europeana.metis.mongo.RecordRedirect;
+import eu.europeana.metis.mongo.RecordRedirectDao; // <- continue here
 
 import java.util.Date;
 import java.util.List;
