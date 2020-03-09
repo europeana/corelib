@@ -11,18 +11,20 @@ import static org.junit.Assert.*;
 public class URISchemaUtilsTest {
 
     @Test
-    public void absoluteURITest() {
-        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("https://"));
+    public void isURITest() {
+        assertTrue(EuropeanaUriUtils.isUri("https://"));
 
-        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("http://"));
+        assertTrue(EuropeanaUriUtils.isUri("http://"));
 
-        assertTrue(EuropeanaUriUtils.isAbsoluteIRI("session://"));
+        assertTrue(EuropeanaUriUtils.isUri("session://"));
 
-        assertTrue( EuropeanaUriUtils.isAbsoluteIRI("bitcoin:"));
+        assertTrue(EuropeanaUriUtils.isUri("#"));
 
-        assertFalse(EuropeanaUriUtils.isAbsoluteIRI("5fdh5672"));
+        assertTrue( EuropeanaUriUtils.isUri("bitcoin:"));
 
-        assertFalse( EuropeanaUriUtils.isAbsoluteIRI(""));
+        assertFalse(EuropeanaUriUtils.isUri("5fdh5672"));
+
+        assertFalse( EuropeanaUriUtils.isUri(""));
 
     }
 

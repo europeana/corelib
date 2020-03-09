@@ -18,8 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.validation.Schema;
-
 import eu.europeana.corelib.edm.model.schemaorg.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -57,6 +55,9 @@ public final class SchemaOrgUtils {
             Locale.ENGLISH);
 
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+    private static List<String> linkedContextualEntities = new ArrayList<>();
+
 
     private SchemaOrgUtils() {
         // empty constructor prevent initialization
@@ -122,10 +123,12 @@ public final class SchemaOrgUtils {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (ConceptImpl concept : concepts) {
-            eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject = new eu.europeana.corelib.edm.model.schemaorg.Concept();
-            referencedObjects.add(conceptObject);
+            if(linkedContextualEntities.contains(concept.getAbout())) {
+                eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject = new eu.europeana.corelib.edm.model.schemaorg.Concept();
+                referencedObjects.add(conceptObject);
 
-            processConcept(concept, conceptObject);
+                processConcept(concept, conceptObject);
+            }
         }
         return referencedObjects;
     }
@@ -174,10 +177,12 @@ public final class SchemaOrgUtils {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (PlaceImpl place : places) {
-            Place placeObject = new Place();
-            referencedObjects.add(placeObject);
+            if(linkedContextualEntities.contains(place.getAbout())) {
+                Place placeObject = new Place();
+                referencedObjects.add(placeObject);
 
-            processPlace(place, placeObject);
+                processPlace(place, placeObject);
+            }
         }
         return referencedObjects;
     }
@@ -270,13 +275,14 @@ public final class SchemaOrgUtils {
      */
     private static List<Thing> processAgents(List<AgentImpl> agents) {
         List<Thing> referencedObjects = new ArrayList<>();
-
         for (Agent agent : agents) {
-            eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject = SchemaOrgTypeFactory
-                    .createAgent(agent);
-            referencedObjects.add(agentObject);
+             if(linkedContextualEntities.contains(agent.getAbout())) {
+                 eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject = SchemaOrgTypeFactory
+                         .createAgent(agent);
+                 referencedObjects.add(agentObject);
 
-            processAgent(agent, agentObject);
+                 processAgent(agent, agentObject);
+             }
         }
         return referencedObjects;
     }
@@ -309,22 +315,22 @@ public final class SchemaOrgUtils {
 
             // birthDate
             if (agent.getRdaGr2DateOfBirth() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfBirth(),
+                addStringProperties(agentObject, agent.getRdaGr2DateOfBirth(),
                         SchemaOrgConstants.PROPERTY_BIRTH_DATE);
             } else if (agent.getBegin() != null) {
-                addMultilingualProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
+                addStringProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
             }
 
             // deathDate
             if (agent.getRdaGr2DateOfDeath() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfDeath(),
+                addStringProperties(agentObject, agent.getRdaGr2DateOfDeath(),
                         SchemaOrgConstants.PROPERTY_DEATH_DATE);
             } else if (agent.getEnd() != null) {
-                addMultilingualProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
+                addStringProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
             }
 
             // gender
-            addMultilingualProperties(agentObject, agent.getRdaGr2Gender(), SchemaOrgConstants.PROPERTY_GENDER);
+            addStringProperties(agentObject, agent.getRdaGr2Gender(), SchemaOrgConstants.PROPERTY_GENDER);
 
             // jobTitle
             addMultilingualProperties(agentObject, agent.getRdaGr2ProfessionOrOccupation(),
@@ -342,13 +348,13 @@ public final class SchemaOrgUtils {
         if (agentObject instanceof Organization) {
             // foundingDate
             if (agent.getRdaGr2DateOfEstablishment() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfEstablishment(),
+                addStringProperties(agentObject, agent.getRdaGr2DateOfEstablishment(),
                         SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
             }
 
             // dissolutionDate
             if (agent.getRdaGr2DateOfTermination() != null) {
-                addMultilingualProperties(agentObject, agent.getRdaGr2DateOfTermination(),
+                addStringProperties(agentObject, agent.getRdaGr2DateOfTermination(),
                         SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
             }
         }
@@ -392,13 +398,6 @@ public final class SchemaOrgUtils {
 
         // logo
         addTextProperties(entityObject, Arrays.asList(organization.getFoafLogo()), SchemaOrgConstants.PROPERTY_LOGO);
-
-        // areaServed
-        String areaServed = null;
-        if (organization.getEdmCountry() != null && organization.getEdmCountry().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
-            areaServed = organization.getEdmCountry().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
-            addTextProperties(entityObject, Arrays.asList(areaServed), SchemaOrgConstants.PROPERTY_AREA_SERVED);
-        }
 
         // telephone
         addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
@@ -465,26 +464,6 @@ public final class SchemaOrgUtils {
         organizationObject.addAddress(postalAddress);
     }
 
-
-    /**
-     * Adds Text properties from the given values. Those are language independent
-     *
-     * @param object       Thing object to update
-     * @param values       string values to put under property with the given
-     *                     property name
-     * @param propertyName name of property
-     */
-    private static void addTextProperties(Thing object, List<String> values, String propertyName) {
-        if (values == null) {
-            return;
-        }
-        for (String value : values) {
-            if (notNullNorEmpty(value)) {
-                object.addProperty(propertyName, new Text(value));
-            }
-        }
-    }
-
     /**
      * Process necessary properties from provided CHOs
      *
@@ -516,19 +495,6 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Helper method to convert array of strings to a list
-     *
-     * @param array array of strings
-     * @return empty list when the array is null, result of Arrays.asList otherwise
-     */
-    private static List<String> toList(String[] array) {
-        if (array == null) {
-            return new ArrayList<>();
-        }
-        return Arrays.asList(array);
-    }
-
-    /**
      * Process necessary properties from Aggregations
      *
      * @param object object for which the properties will be added
@@ -548,7 +514,7 @@ public final class SchemaOrgUtils {
             addDistinctValues(providerMap, aggregation.getEdmDataProvider());
             addDistinctValues(providerMap, aggregation.getEdmProvider());
             addDistinctValues(providerMap, aggregation.getEdmIntermediateProvider());
-            addMultilingualPropertiesWithReferences(object, providerMap, SchemaOrgConstants.PROPERTY_PROVIDER,
+            addResourceOrReferenceProperties(object, providerMap, SchemaOrgConstants.PROPERTY_PROVIDER,
                     Organization.class);
 
             // associatedMedia
@@ -612,8 +578,7 @@ public final class SchemaOrgUtils {
             if (bean.getEuropeanaAggregation() != null
                     && notNullNorEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
                 // thumbnailUrl (only for VideoObject)
-                addReference(mediaObject, bean.getEuropeanaAggregation().getEdmPreview(),
-                        SchemaOrgConstants.PROPERTY_THUMBNAIL_URL, null);
+                mediaObject.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
             }
 
             // uploadDate (only for VideoObject)
@@ -621,14 +586,25 @@ public final class SchemaOrgUtils {
         }
 
         // contentUrl
-        addReference(mediaObject, resource.getAbout(), SchemaOrgConstants.PROPERTY_CONTENT_URL, null);
+        mediaObject.addContentUrl( new Text(resource.getAbout()));
 
         // creator
-        addMultilingualPropertiesWithReferences(mediaObject, resource.getDcCreator(),
-                SchemaOrgConstants.PROPERTY_CREATOR, null);
+        addResourceOrReferenceProperties(mediaObject, resource.getDcCreator(),
+                SchemaOrgConstants.PROPERTY_CREATOR, Thing.class);
 
-        // description
-        addMultilingualProperties(mediaObject, resource.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        // description::  if missing take ore:Proxy/dc:description or ore:Proxy.dc:title
+        if(resource.getDcDescription() != null && !resource.getDcDescription().isEmpty()) {
+            addMultilingualProperties(mediaObject, resource.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        } else {
+            for (ProxyImpl proxy : bean.getProxies()) {
+                if(proxy.getDcDescription()!= null && !proxy.getDcDescription().isEmpty()) {
+                    addMultilingualProperties(mediaObject, proxy.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+                } else if (proxy.getDcTitle()!= null && !proxy.getDcTitle().isEmpty()) {
+
+                    addMultilingualProperties(mediaObject, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+                }
+            }
+        }
 
         // encodesCreativeWork
         if (!bean.getProvidedCHOs().isEmpty()) {
@@ -641,10 +617,10 @@ public final class SchemaOrgUtils {
                 bean.getTimespans(), false);
 
         // hasPart
-        addReferences(mediaObject, resource.getDctermsHasPart(), SchemaOrgConstants.PROPERTY_HAS_PART, null);
+        addReferences(mediaObject, resource.getDctermsHasPart(), SchemaOrgConstants.PROPERTY_HAS_PART, MediaObject.class);
 
         // isPartOf
-        addReferences(mediaObject, resource.getDctermsIsPartOf(), SchemaOrgConstants.PROPERTY_IS_PART_OF, null);
+        addReferences(mediaObject, resource.getDctermsIsPartOf(), SchemaOrgConstants.PROPERTY_IS_PART_OF, MediaObject.class);
 
         // datePublished
         addDateProperty(mediaObject, resource.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
@@ -652,14 +628,15 @@ public final class SchemaOrgUtils {
 
         // license
         if (resource.getWebResourceEdmRights() != null && !resource.getWebResourceEdmRights().isEmpty()) {
-            addMultilingualProperties(mediaObject, resource.getWebResourceEdmRights(),
+            addStringProperties(mediaObject, resource.getWebResourceEdmRights(),
                     SchemaOrgConstants.PROPERTY_LICENSE);
         } else {
-            addMultilingualProperties(mediaObject, aggregation.getEdmRights(), SchemaOrgConstants.PROPERTY_LICENSE);
+            addStringProperties(mediaObject, aggregation.getEdmRights(), SchemaOrgConstants.PROPERTY_LICENSE);
         }
 
         // sameAs
-        addReferences(mediaObject, toList(resource.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS, null);
+        addTextProperties(mediaObject, toList(resource.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
 
         // encodingFormat
         mediaObject.addEncodingFormat(new Text(resource.getEbucoreHasMimeType()));
@@ -692,64 +669,228 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Try to cnovert string value to miliseconds and then to ISO8601 time.
+     * Process all proxies from the bean and add specific properties to the given
+     * object.
      *
-     * @param value value to create duration
-     * @return ISO8601 time or the input value if error occurs
+     * @param object object for which the properties will be added
+     * @param bean   bean from database to get values for properties
      */
-    private static String createDuration(String value) {
-        try {
-            return Duration.ofMillis(Long.valueOf(value)).toString();
-        } catch (NumberFormatException e) {
-            return value;
-        }
-    }
+    private static void processProxies(CreativeWork object, FullBeanImpl bean) {
+        for (ProxyImpl proxy : bean.getProxies()) {
+            // contributor
+            addResourceOrReferenceProperties(object, proxy.getDcContributor(),
+                    SchemaOrgConstants.PROPERTY_CONTRIBUTOR, Thing.class);
 
-    /**
-     * Create QuantitativeValue object and set it in the proper media object
-     * property
-     *
-     * @param mediaObject  media object to update
-     * @param value        value for {@link QuantitativeValue} object
-     * @param untiCode     unit code for {@link QuantitativeValue} object
-     * @param propertyName name of the property
-     */
-    private static void addQuantitativeProperty(MediaObject mediaObject, String value, String untiCode,
-                                                String propertyName) {
-        QuantitativeValue quantitativeValue = new QuantitativeValue();
-        quantitativeValue.setValue(value);
-        quantitativeValue.setUnitCode(untiCode);
-        mediaObject.addProperty(propertyName, quantitativeValue);
-    }
+            // about
+            addResourceOrReferenceProperties(object, proxy.getDcSubject(), SchemaOrgConstants.PROPERTY_ABOUT,
+                    Thing.class);
+            addResourceOrReferenceProperties(object, proxy.getDcType(), SchemaOrgConstants.PROPERTY_ABOUT, Thing.class);
+            addResourceOrReferenceProperties(object, proxy.getEdmHasType(), SchemaOrgConstants.PROPERTY_ABOUT,
+                    Thing.class);
+            addProperty(object, proxy.getEdmIsRepresentationOf(), "", SchemaOrgConstants.PROPERTY_ABOUT, null);
+            // values from dc:coverage will be added later
 
-    /**
-     * Add values to the map only if they don't exist
-     *
-     * @param map   map to which values will be added
-     * @param toAdd values to be added
-     */
-    private static void addDistinctValues(Map<String, List<String>> map, Map<String, List<String>> toAdd) {
-        if (toAdd != null) {
-            for (Map.Entry<String, List<String>> entry : toAdd.entrySet()) {
-                List<String> values = map.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
-                entry.getValue().forEach(value -> {
-                    if (!values.contains(value)) {
-                        values.add(value);
-                    }
-                });
+            // creator
+            addResourceOrReferenceProperties(object, proxy.getDcCreator(), SchemaOrgConstants.PROPERTY_CREATOR,
+                    Thing.class);
+
+            // description
+            addMultilingualProperties(object, proxy.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+
+            // inLanguage
+            addLanguageProperty(object, proxy.getDcLanguage(), SchemaOrgConstants.PROPERTY_IN_LANGUAGE, Language.class);
+
+            // publisher
+            addResourceOrReferenceProperties(object, proxy.getDcPublisher(),
+                    SchemaOrgConstants.PROPERTY_PUBLISHER, Thing.class);
+
+            // name
+            addMultilingualProperties(object, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_NAME);
+
+            // alternateName
+            addMultilingualProperties(object, proxy.getDctermsAlternative(),
+                    SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+            // dateCreated
+            addDateProperty(object, proxy.getDctermsCreated(), SchemaOrgConstants.PROPERTY_DATE_CREATED,
+                    bean.getTimespans(), true);
+
+            // hasPart
+            addResourceOrReferenceProperties(object, proxy.getDctermsHasPart(),
+                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class);
+            addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmIncorporates()), "",
+                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class);
+
+            // exampleOfWork
+            addResourceOrReferenceProperties(object, proxy.getDctermsIsFormatOf(),
+                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class);
+            addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmRealizes()), "",
+                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class);
+
+            // isPartOf
+            addResourceOrReferenceProperties(object, proxy.getDctermsIsPartOf(),
+                    SchemaOrgConstants.PROPERTY_IS_PART_OF, CreativeWork.class);
+
+            // datePublished
+            addDateProperty(object, proxy.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
+                    bean.getTimespans(), true);
+
+            // mentions
+            addResourceOrReferenceProperties(object, proxy.getDctermsReferences(),
+                    SchemaOrgConstants.PROPERTY_MENTIONS, Thing.class);
+
+            // spatialCoverage
+            Map<String, List<String>> dcCoverage = copyMap(proxy.getDcCoverage());
+            Map<String, List<String>> places = filterPlaces(dcCoverage);
+            addResourceOrReferenceProperties(object, places, SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class);
+            addResourceOrReferenceProperties(object, proxy.getDctermsSpatial(),
+                    SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class);
+
+            // temporalCoverage
+            Map<String, List<String>> dates = filterDates(dcCoverage);
+            addDateProperty(object, dates, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, bean.getTimespans(), false);
+            addDateProperty(object, proxy.getDctermsTemporal(), SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE,
+                    bean.getTimespans(), false);
+
+            // now dcCoverage should only contain values that should be added to about
+            // property
+            addResourceOrReferenceProperties(object, dcCoverage, SchemaOrgConstants.PROPERTY_ABOUT, null);
+
+            // isBasedOn
+            addReferences(object, toList(proxy.getEdmIsDerivativeOf()), SchemaOrgConstants.PROPERTY_IS_BASED_ON,
+                    CreativeWork.class);
+
+            // sameAs - none in ProxyImpl though there should be ore:Proxy/owl:sameAs
+
+            if (object instanceof VisualArtwork) {
+                // artform
+                addMultilingualProperties(object, proxy.getDcFormat(), SchemaOrgConstants.PROPERTY_ARTFORM);
+
+                // artMedium
+                addMultilingualProperties(object, proxy.getDctermsMedium(), SchemaOrgConstants.PROPERTY_ART_MEDIUM);
             }
         }
     }
 
     /**
-     * Add values to the set
+     * Adds multilingual string properties for all values lists in the given map.
      *
-     * @param set   set to which values will be added
-     * @param toAdd values to be added
+     * @param object       object for which the property values will be added
+     * @param map          map of language to list of values to be added
+     * @param propertyName name of property
      */
-    private static void addDistinctValues(Set<String> set, String... toAdd) {
-        if (toAdd != null) {
-            Collections.addAll(set, toAdd);
+    private static void addMultilingualProperties(Thing object, Map<String, List<String>> map, String propertyName) {
+        if (map == null) {
+            return;
+        }
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            addMultilingualProperties(object, entry.getValue(),
+                    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey(), propertyName);
+        }
+    }
+
+    private static void addMultilingualProperties(Thing object, String propertyName, Map<String, String> map) {
+        if (map == null) {
+            return;
+        }
+        String language = null;
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            language = SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey();
+            addMultilingualProperty(object, entry.getValue(), language, propertyName);
+        }
+    }
+
+    /**
+     * Adds multilingual string properties to property named with
+     * <code>propertyName</code> for all values present in the values list. The
+     * given language will be used for each value.
+     *
+     * @param object       object for which the property values will be added
+     * @param values       values to be added
+     * @param language     language used for each value
+     * @param propertyName name of property
+     */
+    private static void addMultilingualProperties(Thing object, List<String> values, String language,
+                                                  String propertyName) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            if (notNullNorEmpty(value)) {
+                addMultilingualProperty(object, value, language, propertyName);
+            }
+        }
+    }
+
+    private static void addMultilingualProperty(Thing object, String value, String language, String propertyName) {
+        MultilingualString property = new MultilingualString();
+        property.setLanguage(language);
+        property.setValue(value);
+        object.addProperty(propertyName, property);
+    }
+
+    /**
+     * Adds String properties for all values lists in the given map.
+     *
+     * @param object       object for which the property values will be added
+     * @param map          map of language to list of values to be added
+     * @param propertyName name of property
+     */
+    private static void addStringProperties(Thing object, Map<String, List<String>> map, String propertyName) {
+        if (map == null) {
+            return;
+        }
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            addStringProperties(object, entry.getValue(),  SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey()
+                    ,propertyName);
+        }
+    }
+
+    /**
+     * Adds string properties to property named with
+     * <code>propertyName</code> for all values present in the values list. The
+     * given language will be used for each value.
+     *
+     * @param object       object for which the property values will be added
+     * @param values       values to be added
+     * @param language     language used for each value
+     * @param propertyName name of property
+     */
+    private static  void addStringProperties(Thing object, List<String> values,String language, String propertyName) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            if (notNullNorEmpty(value)) {
+                addStringProperty(object, value, language, propertyName);
+            }
+        }
+    }
+
+    private static void addStringProperty(Thing object, String value, String language, String propertyName) {
+        object.addProperty(propertyName, new Text(value));
+    }
+
+    /**
+     * For all entries in the map adds a ISO8601 date range if a corresponding
+     * timespan can be found or the unchanged value otherwise.
+     *
+     * @param object       object for which the property will be added
+     * @param map          map of values (key is language)
+     * @param propertyName name of property
+     * @param timespans    list of timespans
+     * @param allowInvalid when true all values are added, otherwise only valid
+     *                     dates are added
+     */
+    private static void addDateProperty(Thing object, Map<String, List<String>> map, String propertyName,
+                                        List<TimespanImpl> timespans, boolean allowInvalid) {
+        if (map == null) {
+            return;
+        }
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            for (String value : entry.getValue()) {
+                processDateValue(object, propertyName, timespans, allowInvalid, entry.getKey(), value);
+            }
         }
     }
 
@@ -791,38 +932,21 @@ public final class SchemaOrgUtils {
         }
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
-                if (EuropeanaUriUtils.isUri(value))
+                if (EuropeanaUriUtils.isUri(value)) {
+                    //while creating reference for about, contibutor, creator reference class should be null.
+                    if(referenceNull(propertyName)) {
+                        referenceClass = null;
+                        linkedContextualEntities.add(value);
+                    }
                     addProperty(object, value, entry.getKey(), propertyName, referenceClass);
-                else
+                } else {
                     addResourceProperty(object, value, entry.getKey(), propertyName, referenceClass);
+                }
             }
         }
     }
-
     /**
-     * Adds multilingual properties or typed references. When a reference is
-     * detected the corresponding object is being searched on
-     * <code>referenced</code> list and an additional object of type
-     * <code>referenceClass</code> is created with properties.
-     *
-     * @param object         object for which the properties will be added
-     * @param values         array of values
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
-     */
-    private static void addMultilingualPropertiesWithReferences(Thing object, List<String> values, String language,
-                                                                String propertyName, Class<? extends Thing> referenceClass) {
-        if (values == null) {
-            return;
-        }
-        for (String value : values) {
-            addProperty(object, value, language, propertyName, referenceClass);
-        }
-    }
-
-    /**
-     * Adds multilingual properties or typed references. When a reference is
-     * detected its type will be set to <code>referenceClass</code>
+     * Adds language property for typed reference.
      *
      * @param object         object for which the properties will be added
      * @param map            map of values where key is the language and value is a
@@ -830,155 +954,109 @@ public final class SchemaOrgUtils {
      * @param propertyName   name of property
      * @param referenceClass class of reference
      */
-    private static void addReferences(Thing object, Map<String, List<String>> map, String propertyName,
-                                      Class<? extends Thing> referenceClass) {
+
+    private static void addLanguageProperty(Thing object, Map<String, List<String>> map, String propertyName, Class<? extends Thing> referenceClass) {
         if (map == null) {
             return;
         }
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            addReferences(object, entry.getValue(), propertyName, referenceClass);
-        }
-    }
 
-    /**
-     * Process all proxies from the bean and add specific properties to the given
-     * object.
-     *
-     * @param object object for which the properties will be added
-     * @param bean   bean from database to get values for properties
-     */
-    private static void processProxies(CreativeWork object, FullBeanImpl bean) {
-        for (ProxyImpl proxy : bean.getProxies()) {
-            // contributor
-            addMultilingualPropertiesWithReferences(object, proxy.getDcContributor(),
-                    SchemaOrgConstants.PROPERTY_CONTRIBUTOR, null);
-
-            // about
-            addMultilingualPropertiesWithReferences(object, proxy.getDcSubject(), SchemaOrgConstants.PROPERTY_ABOUT,
-                    null);
-            addMultilingualPropertiesWithReferences(object, proxy.getDcType(), SchemaOrgConstants.PROPERTY_ABOUT, null);
-            addMultilingualPropertiesWithReferences(object, proxy.getEdmHasType(), SchemaOrgConstants.PROPERTY_ABOUT,
-                    null);
-            addProperty(object, proxy.getEdmIsRepresentationOf(), "", SchemaOrgConstants.PROPERTY_ABOUT, null);
-            // values from dc:coverage will be added later
-
-            // creator
-            addMultilingualPropertiesWithReferences(object, proxy.getDcCreator(), SchemaOrgConstants.PROPERTY_CREATOR,
-                    null);
-
-            // description
-            addMultilingualProperties(object, proxy.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
-
-            // inLanguage
-            addMultilingualProperties(object, proxy.getDcLanguage(), SchemaOrgConstants.PROPERTY_IN_LANGUAGE);
-
-            // publisher
-            addMultilingualPropertiesWithReferences(object, proxy.getDcPublisher(),
-                    SchemaOrgConstants.PROPERTY_PUBLISHER, null);
-
-            // name
-            addMultilingualProperties(object, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_NAME);
-
-            // alternateName
-            addMultilingualProperties(object, proxy.getDctermsAlternative(),
-                    SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
-
-            // dateCreated
-            addDateProperty(object, proxy.getDctermsCreated(), SchemaOrgConstants.PROPERTY_DATE_CREATED,
-                    bean.getTimespans(), true);
-
-            // hasPart
-            addMultilingualPropertiesWithReferences(object, proxy.getDctermsHasPart(),
-                    SchemaOrgConstants.PROPERTY_HAS_PART, null);
-            addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmIncorporates()), "",
-                    SchemaOrgConstants.PROPERTY_HAS_PART, null);
-
-            // exampleOfWork
-            addMultilingualPropertiesWithReferences(object, proxy.getDctermsIsFormatOf(),
-                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class);
-            addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmRealizes()), "",
-                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class);
-
-            // isPartOf
-            addMultilingualPropertiesWithReferences(object, proxy.getDctermsIsPartOf(),
-                    SchemaOrgConstants.PROPERTY_IS_PART_OF, null);
-
-            // datePublished
-            addDateProperty(object, proxy.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
-                    bean.getTimespans(), true);
-
-            // mentions
-            addMultilingualPropertiesWithReferences(object, proxy.getDctermsReferences(),
-                    SchemaOrgConstants.PROPERTY_MENTIONS, null);
-
-            // spatialCoverage
-            Map<String, List<String>> dcCoverage = copyMap(proxy.getDcCoverage());
-            Map<String, List<String>> places = filterPlaces(dcCoverage);
-            addMultilingualPropertiesWithReferences(object, places, SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, null);
-            addMultilingualPropertiesWithReferences(object, proxy.getDctermsSpatial(),
-                    SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, null);
-
-            // temporalCoverage
-            Map<String, List<String>> dates = filterDates(dcCoverage);
-            addDateProperty(object, dates, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, bean.getTimespans(), false);
-            addDateProperty(object, proxy.getDctermsTemporal(), SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE,
-                    bean.getTimespans(), false);
-
-            // now dcCoverage should only contain values that should be added to about
-            // property
-            addMultilingualPropertiesWithReferences(object, dcCoverage, SchemaOrgConstants.PROPERTY_ABOUT, null);
-
-            // isBasedOn
-            addReferences(object, toList(proxy.getEdmIsDerivativeOf()), SchemaOrgConstants.PROPERTY_IS_BASED_ON,
-                    CreativeWork.class);
-
-            // sameAs - none in ProxyImpl though there should be ore:Proxy/owl:sameAs
-
-            if (object instanceof VisualArtwork) {
-                // artform
-                addMultilingualProperties(object, proxy.getDcFormat(), SchemaOrgConstants.PROPERTY_ARTFORM);
-
-                // artMedium
-                addMultilingualProperties(object, proxy.getDctermsMedium(), SchemaOrgConstants.PROPERTY_ART_MEDIUM);
-            }
-        }
-    }
-
-    /**
-     * Make a copy of a map if it's not null
-     *
-     * @param map map to copy
-     * @return copy of a map or empty one if the source map is null
-     */
-    private static Map<String, List<String>> copyMap(Map<String, List<String>> map) {
-        if (map == null) {
-            return new HashMap<>();
-        }
-        return new HashMap<>(map);
-    }
-
-    /**
-     * Filter the date values from the map. The date values are either strings that
-     * are a parsable ISO8601 date or a reference to the timespan. The filtered
-     * values are returned and removed from the source map.
-     *
-     * @param map map to filter
-     * @return filtered values
-     */
-    private static Map<String, List<String>> filterDates(Map<String, List<String>> map) {
-        Map<String, List<String>> dates = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
-                if (isDateOrTimespan(value)) {
-                    List<String> datesList = dates.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
-                    datesList.add(value);
-                }
-            }
-            if (dates.get(entry.getKey()) != null) {
-                entry.getValue().removeAll(dates.get(entry.getKey()));
+                processLanguageValue(object, propertyName, entry.getKey(), value, referenceClass);
             }
         }
-        return dates;
+    }
+    private static void processLanguageValue(Thing object, String propertyName, String language, String value,  Class<? extends Thing> referenceClass) {
+        if (notNullNorEmpty(value)) {
+            Thing resource = instantiateResourceObject(Language.class);
+            resource.addProperty(SchemaOrgConstants.PROPERTY_NAME, new Text(value));
+            object.addProperty(propertyName, resource);
+        }
+    }
+
+    /**
+     * Adds references for all values in the array. References may have a specific
+     * type if <code>referenceClass</code> is specified.
+     *
+     * @param object         object for which the properties will be added
+     * @param values         values to be added as references
+     * @param propertyName   name of property
+     * @param referenceClass class of reference
+     */
+    private static void addReferences(Thing object, List<String> values, String propertyName,
+                                      Class<? extends Thing> referenceClass) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            addReference(object, value, propertyName, referenceClass);
+        }
+    }
+
+    /**
+     * Do the actual processing of the value to be added as a property
+     *
+     * @param object       object for which the property will be added
+     * @param propertyName name of property
+     * @param timespans    list of timespans
+     * @param allowInvalid when true all values are added, otherwise only valid
+     *                     dates are added
+     * @param language     language of the value
+     * @param value        value to process
+     */
+    private static void processDateValue(Thing object, String propertyName, List<TimespanImpl> timespans,
+                                         boolean allowInvalid, String language, String value) {
+        if (notNullNorEmpty(value)) {
+            String valueToAdd = value;
+            if (EuropeanaUriUtils.isUri(value) && timespans != null) {
+                // value might be timespan
+                valueToAdd = createDateRange(value, language, timespans);
+                //if the valuetoAdd is still URI and property is temporalCoverage. Create a reference
+                if(EuropeanaUriUtils.isUri(valueToAdd) && StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE)) {
+                    addReference(object,valueToAdd,propertyName, null );
+                } else {
+                    object.addProperty(propertyName, new Text(valueToAdd));
+                }
+            } else if (allowInvalid || isYearRange(value) || isIsoDate(value) || isIsoDateTime(value)) {
+                   object.addProperty(propertyName, new Text(valueToAdd));
+            }
+        }
+    }
+
+    /**
+     * Looks for timespan containing value and creates the ISO8601 date range from
+     * its begin/end dates. If no timespan found the unchanged value is returned.
+     *
+     * @param value     value to create data range
+     * @param language  language of the specified value
+     * @param timespans the list of timespans
+     * @return ISO8601 date range if a proper timespan was found, the input value
+     * otherwise
+     */
+    private static String createDateRange(String value, String language, List<TimespanImpl> timespans) {
+        for (TimespanImpl timespan : timespans) {
+            if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
+                    && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
+                try {
+                    LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
+                    LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
+                    return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/"
+                            + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                } catch (DateTimeParseException e) {
+                    try {
+                        // we can try different format
+                        LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), dateFormatter);
+                        LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), dateFormatter);
+                        return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "/"
+                                + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                    } catch (DateTimeParseException e1) {
+                        LOG.warn("Could not parse dates: " + timespan.getBegin().get(language).get(0) + ", "
+                                + timespan.getEnd().get(language).get(0));
+                    }
+                }
+            }
+        }
+        return value;
     }
 
     /**
@@ -1037,6 +1115,30 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Filter the date values from the map. The date values are either strings that
+     * are a parsable ISO8601 date or a reference to the timespan. The filtered
+     * values are returned and removed from the source map.
+     *
+     * @param map map to filter
+     * @return filtered values
+     */
+    private static Map<String, List<String>> filterDates(Map<String, List<String>> map) {
+        Map<String, List<String>> dates = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            for (String value : entry.getValue()) {
+                if (isDateOrTimespan(value)) {
+                    List<String> datesList = dates.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
+                    datesList.add(value);
+                }
+            }
+            if (dates.get(entry.getKey()) != null) {
+                entry.getValue().removeAll(dates.get(entry.getKey()));
+            }
+        }
+        return dates;
+    }
+
+    /**
      * Searches for places in the provided map and returns the map containing them.
      * They are also removed from the provided map
      *
@@ -1060,6 +1162,19 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Make a copy of a map if it's not null
+     *
+     * @param map map to copy
+     * @return copy of a map or empty one if the source map is null
+     */
+    private static Map<String, List<String>> copyMap(Map<String, List<String>> map) {
+        if (map == null) {
+            return new HashMap<>();
+        }
+        return new HashMap<>(map);
+    }
+
+    /**
      * Returns true when a value is URI and it starts with place prefix
      * http://data.europeana.eu/place
      *
@@ -1068,124 +1183,6 @@ public final class SchemaOrgUtils {
      */
     private static boolean isPlace(String value) {
         return EuropeanaUriUtils.isUri(value) && value.startsWith(PLACE_PREFIX);
-    }
-
-    /**
-     * For all entries in the map adds a ISO8601 date range if a corresponding
-     * timespan can be found or the unchanged value otherwise.
-     *
-     * @param object       object for which the property will be added
-     * @param map          map of values (key is language)
-     * @param propertyName name of property
-     * @param timespans    list of timespans
-     * @param allowInvalid when true all values are added, otherwise only valid
-     *                     dates are added
-     */
-    private static void addDateProperty(Thing object, Map<String, List<String>> map, String propertyName,
-                                        List<TimespanImpl> timespans, boolean allowInvalid) {
-        if (map == null) {
-            return;
-        }
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            for (String value : entry.getValue()) {
-                processDateValue(object, propertyName, timespans, allowInvalid, entry.getKey(), value);
-            }
-        }
-    }
-
-    /**
-     * Do the actual processing of the value to be added as a property
-     *
-     * @param object       object for which the property will be added
-     * @param propertyName name of property
-     * @param timespans    list of timespans
-     * @param allowInvalid when true all values are added, otherwise only valid
-     *                     dates are added
-     * @param language     language of the value
-     * @param value        value to process
-     */
-    private static void processDateValue(Thing object, String propertyName, List<TimespanImpl> timespans,
-                                         boolean allowInvalid, String language, String value) {
-        if (notNullNorEmpty(value)) {
-            String valueToAdd = value;
-            if (EuropeanaUriUtils.isUri(value) && timespans != null) {
-                // value might be timespan
-                valueToAdd = createDateRange(value, language, timespans);
-                addDateProperty(object, valueToAdd, propertyName);
-            } else if (allowInvalid || isYearRange(value) || isIsoDate(value) || isIsoDateTime(value)) {
-                addDateProperty(object, valueToAdd, propertyName);
-            }
-        }
-    }
-
-    /**
-     * Looks for timespan containing value and creates the ISO8601 date range from
-     * its begin/end dates. If no timespan found the unchanged value is returned.
-     *
-     * @param value     value to create data range
-     * @param language  language of the specified value
-     * @param timespans the list of timespans
-     * @return ISO8601 date range if a proper timespan was found, the input value
-     * otherwise
-     */
-    private static String createDateRange(String value, String language, List<TimespanImpl> timespans) {
-        for (TimespanImpl timespan : timespans) {
-            if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
-                    && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
-                try {
-                    LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
-                    LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
-                    return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/"
-                            + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                } catch (DateTimeParseException e) {
-                    try {
-                        // we can try different format
-                        LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), dateFormatter);
-                        LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), dateFormatter);
-                        return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "/"
-                                + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-                    } catch (DateTimeParseException e1) {
-                        LOG.warn("Could not parse dates: " + timespan.getBegin().get(language).get(0) + ", "
-                                + timespan.getEnd().get(language).get(0));
-                    }
-                }
-            }
-        }
-        return value;
-    }
-
-    /**
-     * Adds references for all values in the array. References may have a specific
-     * type if <code>referenceClass</code> is specified.
-     *
-     * @param object         object for which the properties will be added
-     * @param values         values to be added as references
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
-     */
-    private static void addReferences(Thing object, List<String> values, String propertyName,
-                                      Class<? extends Thing> referenceClass) {
-        if (values == null) {
-            return;
-        }
-        for (String value : values) {
-            addReference(object, value, propertyName, referenceClass);
-        }
-    }
-
-    private static void addMultilingualProperty(Thing object, String value, String language, String propertyName) {
-        MultilingualString property = new MultilingualString();
-        if (!StringUtils.isEmpty(language)) {
-            property.setLanguage(language);
-        }
-        property.setValue(value);
-        object.addProperty(propertyName, property);
-    }
-
-    private static void addDateProperty(Thing object, String value, String propertyName) {
-        DateString property = new DateString();
-        property.setValue(value);
-        object.addProperty(propertyName, property);
     }
 
     /**
@@ -1210,6 +1207,23 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Creates a general (not typed) reference and adds it to the specified object
+     * as a property value of the given property name.
+     *
+     * @param object         object for which the reference will be added
+     * @param id             id of the reference
+     * @param propertyName   name of property
+     * @param referenceClass class of reference that should be used for Reference
+     *                       object
+     */
+    private static void addReference(Thing object, String id, String propertyName,
+                                     Class<? extends Thing> referenceClass) {
+        Reference reference = new Reference(referenceClass);
+        reference.setId(id);
+        object.addProperty(propertyName, reference);
+    }
+
+    /**
      * Creates a reference object, adds the multilingual string to the reference and
      * adds the reference to the object.
      *
@@ -1224,11 +1238,91 @@ public final class SchemaOrgUtils {
                                             Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
             Thing resource = instantiateResourceObject(referenceClass);
-            addMultilingualProperty(resource, value,
-                    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(language) ? "" : language,
-                    SchemaOrgConstants.PROPERTY_NAME);
+            if(StringUtils.equals(language, SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+                resource.addProperty(SchemaOrgConstants.PROPERTY_NAME, new Text(value));
+            } else {
+                addMultilingualProperty(resource, value,
+                           language, SchemaOrgConstants.PROPERTY_NAME);
+            }
             object.addProperty(propertyName, resource);
         }
+    }
+
+    /**
+     * Adds multilingual properties or typed references. When a reference is
+     * detected the corresponding object is being searched on
+     * <code>referenced</code> list and an additional object of type
+     * <code>referenceClass</code> is created with properties.
+     *
+     * @param object         object for which the properties will be added
+     * @param values         array of values
+     * @param propertyName   name of property
+     * @param referenceClass class of reference
+     */
+    private static void addMultilingualPropertiesWithReferences(Thing object, List<String> values, String language,
+                                                                String propertyName, Class<? extends Thing> referenceClass) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            addProperty(object, value, language, propertyName, referenceClass);
+        }
+    }
+
+    /**
+     * Adds multilingual properties or typed references. When a reference is
+     * detected its type will be set to <code>referenceClass</code>
+     *
+     * @param object         object for which the properties will be added
+     * @param map            map of values where key is the language and value is a
+     *                       values list
+     * @param propertyName   name of property
+     * @param referenceClass class of reference
+     */
+    private static void addReferences(Thing object, Map<String, List<String>> map, String propertyName,
+                                      Class<? extends Thing> referenceClass) {
+        if (map == null) {
+            return;
+        }
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            addReferences(object, entry.getValue(), propertyName, referenceClass);
+        }
+    }
+
+    /**
+     * Adds Text properties from the given values. Those are language independent
+     *
+     * @param object       Thing object to update
+     * @param values       string values to put under property with the given
+     *                     property name
+     * @param propertyName name of property
+     */
+    private static void addTextProperties(Thing object, List<String> values, String propertyName) {
+        if (values == null) {
+            return;
+        }
+        for (String value : values) {
+            if (notNullNorEmpty(value)) {
+                object.addProperty(propertyName, new Text(value));
+            }
+        }
+    }
+
+    /**
+     * Create QuantitativeValue object and set it in the proper media object
+     * property
+     *
+     * @param mediaObject  media object to update
+     * @param value        value for {@link QuantitativeValue} object
+     * @param untiCode     unit code for {@link QuantitativeValue} object
+     * @param propertyName name of the property
+     */
+    private static void addQuantitativeProperty(MediaObject mediaObject, String value, String untiCode,
+                                                String propertyName) {
+        QuantitativeValue quantitativeValue = new QuantitativeValue();
+        quantitativeValue.setValue(value);
+        quantitativeValue.setUnitCode(untiCode);
+        mediaObject.addProperty(propertyName, quantitativeValue);
     }
 
     /*
@@ -1251,72 +1345,7 @@ public final class SchemaOrgUtils {
         return resource;
     }
 
-    /**
-     * Creates a general (not typed) reference and adds it to the specified object
-     * as a property value of the given property name.
-     *
-     * @param object         object for which the reference will be added
-     * @param id             id of the reference
-     * @param propertyName   name of property
-     * @param referenceClass class of reference that should be used for Reference
-     *                       object
-     */
-    private static void addReference(Thing object, String id, String propertyName,
-                                     Class<? extends Thing> referenceClass) {
-        Reference reference = new Reference(referenceClass);
-        reference.setId(id);
-        object.addProperty(propertyName, reference);
-    }
 
-    /**
-     * Adds multilingual string properties for all values lists in the given map.
-     *
-     * @param object       object for which the property values will be added
-     * @param map          map of language to list of values to be added
-     * @param propertyName name of property
-     */
-    private static void addMultilingualProperties(Thing object, Map<String, List<String>> map, String propertyName) {
-        if (map == null) {
-            return;
-        }
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            addMultilingualProperties(object, entry.getValue(),
-                    SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey(), propertyName);
-        }
-    }
-
-    private static void addMultilingualProperties(Thing object, String propertyName, Map<String, String> map) {
-        if (map == null) {
-            return;
-        }
-        String language = null;
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            language = SchemaOrgConstants.DEFAULT_LANGUAGE.equals(entry.getKey()) ? "" : entry.getKey();
-            addMultilingualProperty(object, entry.getValue(), language, propertyName);
-        }
-    }
-
-    /**
-     * Adds multilingual string properties to property named with
-     * <code>propertyName</code> for all values present in the values list. The
-     * given language will be used for each value.
-     *
-     * @param object       object for which the property values will be added
-     * @param values       values to be added
-     * @param language     language used for each value
-     * @param propertyName name of property
-     */
-    private static void addMultilingualProperties(Thing object, List<String> values, String language,
-                                                  String propertyName) {
-        if (values == null) {
-            return;
-        }
-        for (String value : values) {
-            if (notNullNorEmpty(value)) {
-                addMultilingualProperty(object, value, language, propertyName);
-            }
-        }
-    }
 
     /**
      * Checks whether the given parameter is neither null nor empty
@@ -1326,5 +1355,77 @@ public final class SchemaOrgUtils {
      */
     private static boolean notNullNorEmpty(String value) {
         return value != null && !value.isEmpty();
+    }
+
+
+
+    /**
+     * Helper method to convert array of strings to a list
+     *
+     * @param array array of strings
+     * @return empty list when the array is null, result of Arrays.asList otherwise
+     */
+    private static List<String> toList(String[] array) {
+        if (array == null) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(array);
+    }
+
+    /**
+     * Try to cnovert string value to miliseconds and then to ISO8601 time.
+     *
+     * @param value value to create duration
+     * @return ISO8601 time or the input value if error occurs
+     */
+    private static String createDuration(String value) {
+        try {
+            return Duration.ofMillis(Long.valueOf(value)).toString();
+        } catch (NumberFormatException e) {
+            return value;
+        }
+    }
+
+
+
+    /**
+     * Add values to the map only if they don't exist
+     *
+     * @param map   map to which values will be added
+     * @param toAdd values to be added
+     */
+    private static void addDistinctValues(Map<String, List<String>> map, Map<String, List<String>> toAdd) {
+        if (toAdd != null) {
+            for (Map.Entry<String, List<String>> entry : toAdd.entrySet()) {
+                List<String> values = map.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
+                entry.getValue().forEach(value -> {
+                    if (!values.contains(value)) {
+                        values.add(value);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Add values to the set
+     *
+     * @param set   set to which values will be added
+     * @param toAdd values to be added
+     */
+    private static void addDistinctValues(Set<String> set, String... toAdd) {
+        if (toAdd != null) {
+            Collections.addAll(set, toAdd);
+        }
+    }
+
+
+
+    private static boolean referenceNull(String propertyName) {
+        if(StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
+                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER)) {
+            return true;
+        }
+        return false;
     }
 }
