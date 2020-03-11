@@ -932,11 +932,11 @@ public final class SchemaOrgUtils {
         }
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
+                addLinkedContextualEntities(propertyName,value);
                 if (EuropeanaUriUtils.isUri(value)) {
                     //while creating reference for about, contibutor, creator reference class should be null.
                     if(referenceNull(propertyName)) {
                         referenceClass = null;
-                        linkedContextualEntities.add(value);
                     }
                     addProperty(object, value, entry.getKey(), propertyName, referenceClass);
                 } else {
@@ -1416,5 +1416,11 @@ public final class SchemaOrgUtils {
     private static boolean referenceNull(String propertyName) {
         return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
                 || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
+    }
+
+    private static void addLinkedContextualEntities(String propertyName, String value) {
+        if(referenceNull(propertyName)) {
+            linkedContextualEntities.add(value);
+        }
     }
 }
