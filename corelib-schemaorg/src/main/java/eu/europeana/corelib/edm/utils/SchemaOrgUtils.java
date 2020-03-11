@@ -962,13 +962,13 @@ public final class SchemaOrgUtils {
 
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
-                processLanguageValue(object, propertyName, entry.getKey(), value, referenceClass);
+                processLanguageValue(object, propertyName, value, referenceClass);
             }
         }
     }
-    private static void processLanguageValue(Thing object, String propertyName, String language, String value,  Class<? extends Thing> referenceClass) {
+    private static void processLanguageValue(Thing object, String propertyName, String value,  Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
-            Thing resource = instantiateResourceObject(Language.class);
+            Thing resource = instantiateResourceObject(referenceClass);
             resource.addProperty(SchemaOrgConstants.PROPERTY_NAME, new Text(value));
             object.addProperty(propertyName, resource);
         }
@@ -1345,8 +1345,6 @@ public final class SchemaOrgUtils {
         return resource;
     }
 
-
-
     /**
      * Checks whether the given parameter is neither null nor empty
      *
@@ -1356,8 +1354,6 @@ public final class SchemaOrgUtils {
     private static boolean notNullNorEmpty(String value) {
         return value != null && !value.isEmpty();
     }
-
-
 
     /**
      * Helper method to convert array of strings to a list
@@ -1385,8 +1381,6 @@ public final class SchemaOrgUtils {
             return value;
         }
     }
-
-
 
     /**
      * Add values to the map only if they don't exist
@@ -1419,13 +1413,8 @@ public final class SchemaOrgUtils {
         }
     }
 
-
-
     private static boolean referenceNull(String propertyName) {
-        if(StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
-                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER)) {
-            return true;
-        }
-        return false;
+        return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
+                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
     }
 }
