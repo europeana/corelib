@@ -13,4 +13,8 @@
 		<!--<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>-->
 	</bean>
 
+	<bean id="redirect_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
+		<constructor-arg value="#{europeanaProperties['redirect.mongodb.connectionUrl']}" type="java.lang.String"/>
+	</bean>
+
 </beans>

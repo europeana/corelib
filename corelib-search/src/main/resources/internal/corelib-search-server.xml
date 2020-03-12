@@ -11,9 +11,17 @@
         <constructor-arg value="#{europeanaProperties['mongodb.record.dbname']}" type="java.lang.String"/>
     </bean>
 
+<!--    EA-1907 switching to using the new RecordRedirect library from Metis-->
+
     <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.recordId.dbname']}" type="java.lang.String"/>
+    </bean>
+
+    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
+        <constructor-arg value="#{redirect_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['redirect.mongodb.dbname']}" type="java.lang.String"/>
+        <constructor-arg type="boolean" value="false"/>
     </bean>
 
     <!-- default profile, connecting to solr cluster via Zookeeper -->

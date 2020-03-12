@@ -233,7 +233,7 @@ public class SearchServiceTest {
 //            idServer.createDatastore();
         idServer.saveEuropeanaId(eId);
 //            searchService.setEuropeanaIdMongoServer(idServer);
-        assertNotNull(searchService.resolve("test_id", false));
+        assertNotNull(searchService.resolve("test_id"));
     }
 
 
