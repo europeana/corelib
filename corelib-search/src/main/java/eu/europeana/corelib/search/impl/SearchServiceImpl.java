@@ -94,6 +94,9 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
 
+    @Value("#{europeanaProperties['htmlsnippet.css.source']}")
+    private String htmlCssSource;
+
     // show solr query in output
     private boolean debug = false;
 
@@ -178,7 +181,7 @@ public class SearchServiceImpl implements SearchService {
             for (Aggregation agg : fullBean.getAggregations()) {
                 if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
                     for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                        wRes.initAttributionSnippet();
+                        wRes.initAttributionSnippet(htmlCssSource);
                     }
                 }
             }
