@@ -55,9 +55,7 @@ public class AttributionTest {
        String htmlSnippet= attributionSnippet.getHtmlSnippet();
        InputStream stream = AttributionTest.class.getResourceAsStream(HTML_SNIPPET_FILE);
        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
-        System.out.println(htmlSnippet);
-
-        Assert.assertTrue(!htmlSnippet.isEmpty());
+       Assert.assertTrue(!htmlSnippet.isEmpty());
        Assert.assertEquals(expectedOutput.length(), htmlSnippet.length());
        Assert.assertEquals(expectedOutput, htmlSnippet);
    }
