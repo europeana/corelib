@@ -356,10 +356,10 @@ public class WebResourceImpl implements WebResource {
     @Override
     public String getEbucoreDuration() {
         if (webResourceMetaInfo != null) {
-            if (webResourceMetaInfo.getAudioMetaInfo() != null) {
+            if (webResourceMetaInfo.getAudioMetaInfo() != null && webResourceMetaInfo.getAudioMetaInfo().getDuration() != null) {
                 return Long.toString(webResourceMetaInfo.getAudioMetaInfo().getDuration());
             }
-            if (webResourceMetaInfo.getVideoMetaInfo() != null) {
+            if (webResourceMetaInfo.getVideoMetaInfo() != null && webResourceMetaInfo.getAudioMetaInfo().getDuration() != null) {
                 return Long.toString(webResourceMetaInfo.getVideoMetaInfo().getDuration());
             }
         }
