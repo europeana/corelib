@@ -1,12 +1,14 @@
 package eu.europeana.corelib.solr.derived;
 
-public class AttributionConstants {
+public class AttributionConstants{
+
+    private AttributionConstants(){}
 
     //AttributionConverter Constants
-    public static final String OUT_OF_COPYRIGHT = "out-of-copyright";
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
-    public static final String BASE_URL = "http://data.europeana.eu/item";
-    public static final String DEF = "def";
+    public static final String OUT_OF_COPYRIGHT           = "out-of-copyright";
+    public static final String DATE_FORMAT                = "yyyy-MM-dd";
+    public static final String BASE_URL                   = "http://data.europeana.eu/item";
+    public static final String DEF                        = "def";
 
 
     //html constants
@@ -17,8 +19,8 @@ public class AttributionConstants {
     public static final String COUNTRY                    = "Country";
     public static final String RIGHTS                     = "Rights";
 
-    public static final String HTML_BEGIN_TAG            = "<link rel='stylesheet' type='text/css' href='";
-    public static final String HTML_ATTRIBUTION_TAG      = "'/><div class='attribution'>";
+    public static final String HTML_BEGIN_TAG             = "<link rel='stylesheet' type='text/css' href='";
+    public static final String HTML_ATTRIBUTION_TAG       = "'/><div class='attribution'>";
 
     public static final String SPAN_FIELD                 ="<span class='field'>";
     public static final String SPAN_FNAME                 = "<span class='fname'>";

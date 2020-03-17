@@ -138,7 +138,7 @@ public class AttributionConverter {
         if (StringUtils.isNotEmpty(rightsIcon)) {
             return rightsIcon.split(" ");
         }
-        return null;
+        return new String[0];
     }
 
     // utility to check whether of not a Map is empty or null
@@ -193,7 +193,7 @@ public class AttributionConverter {
         String retval = "";
         for (Map.Entry<String, List<String>> entrySet : map.entrySet()) {
             List<String> entryList = stripEmptyStrings(entrySet.getValue());
-            if (entryList != null && !entryList.isEmpty()) {
+            if (!entryList.isEmpty()) {
                 retval += cleanUp(entryList.get(0));
                 break; // needed ernly wernce
             }
@@ -205,7 +205,7 @@ public class AttributionConverter {
     private String[] stripEmptyStrings(String[] swissCheese) {
         List<String> solidCheese = new ArrayList<>();
         for (String cheeseOrHole : swissCheese) {
-            if (!"".equals(cheeseOrHole)) {
+            if (StringUtils.isNotBlank(cheeseOrHole)) {
                 solidCheese.add(cheeseOrHole);
             }
         }
