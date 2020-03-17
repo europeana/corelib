@@ -531,8 +531,8 @@ public class WebResourceImpl implements WebResource {
         return webResourceMetaInfo;
     }
 
-    public void initAttributionSnippet() {
-        attributionSnippet = new AttributionSnippet(this);
+    public void initAttributionSnippet(String htmlCssSource) {
+        attributionSnippet = new AttributionSnippet(this, htmlCssSource);
     }
 
     public String getTextAttributionSnippet() {
