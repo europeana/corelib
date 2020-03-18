@@ -35,7 +35,7 @@ public enum ProblemType {
     APIKEY_MISSING("400-AM", "No API key provided", ProblemResponseAction.IGNORE),
     APIKEY_NOT_REGISTERED("401-AR", "API key is not registered", ProblemResponseAction.IGNORE),
     APIKEY_DEPRECATED("410-AD", "API key is deprecated", ProblemResponseAction.IGNORE),
-    APIKEY_OTHER("400-AO", "Unexpected error", ProblemResponseAction.LOG_ERR),
+    APIKEY_OTHER("500-AO", "Unexpected error", ProblemResponseAction.LOG_ERR),
     MAIL_ERROR(null,"Error sending email", ProblemResponseAction.LOG_ERR),
     MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.MAIL),
     RECORD_RETRIEVAL_ERROR(null,"Record retrieval error", ProblemResponseAction.LOG_ERR),
