@@ -359,7 +359,7 @@ public class WebResourceImpl implements WebResource {
             if (webResourceMetaInfo.getAudioMetaInfo() != null && webResourceMetaInfo.getAudioMetaInfo().getDuration() != null) {
                 return Long.toString(webResourceMetaInfo.getAudioMetaInfo().getDuration());
             }
-            if (webResourceMetaInfo.getVideoMetaInfo() != null && webResourceMetaInfo.getAudioMetaInfo().getDuration() != null) {
+            if (webResourceMetaInfo.getVideoMetaInfo() != null && webResourceMetaInfo.getVideoMetaInfo().getDuration() != null) {
                 return Long.toString(webResourceMetaInfo.getVideoMetaInfo().getDuration());
             }
         }
