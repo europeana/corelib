@@ -122,22 +122,4 @@ public class Attribution {
     public void setLandingPage(String landingPage) {
         this.landingPage = landingPage;
     }
-
-    @Override
-    public String toString() {
-        return "Attribution{" +
-                "itemUri='" + itemUri + '\'' +
-                ", title=" + title +
-                ", creator=" + creator +
-                ", date=" + date +
-                ", provider=" + provider +
-                ", providerUrl='" + providerUrl + '\'' +
-                ", country='" + country + '\'' +
-                ", rightsStatement='" + rightsStatement + '\'' +
-                ", rightsLabel='" + rightsLabel + '\'' +
-                ", rightsIcon=" + Arrays.toString(rightsIcon) +
-                ", ccDeprecatedOn='" + ccDeprecatedOn + '\'' +
-                ", landingPage='" + landingPage + '\'' +
-                '}';
-    }
 }
