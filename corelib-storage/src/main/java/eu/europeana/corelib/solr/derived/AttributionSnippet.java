@@ -65,7 +65,9 @@ public class AttributionSnippet {
         for (Map.Entry<String, String> entry : attribution.getProvider().entrySet()){
             spannify(AttributionConstants.INSTITUTION, entry.getValue(), entry.getKey(), false, true, attribution.getProviderUrl(), null);
         }
-        spannify(AttributionConstants.COUNTRY, attribution.getCountry(), null, false, false, null, null);
+        for (Map.Entry<String, String> entry : attribution.getCountry().entrySet()) {
+            spannify(AttributionConstants.COUNTRY, entry.getValue(), entry.getKey(), false, false, null, null);
+        }
         spannify(AttributionConstants.RIGHTS, attribution.getRightsLabel(),null, true, true, attribution.getRightsStatement(), attribution.getRightsIcon());
         htmlSnippet.append(AttributionConstants.DIV_CLOSE_TAG);
     }
@@ -82,6 +84,7 @@ public class AttributionSnippet {
             htmlSnippet.append(AttributionConstants.SPAN_FIELD);
             htmlSnippet.append(AttributionConstants.SPAN_FNAME);
             htmlSnippet.append(spanType);
+            htmlSnippet.append(AttributionConstants.COLON);
             htmlSnippet.append(AttributionConstants.SPAN_CLOSING_TAG);
             setSpanFvalue(lang);
             if(isRights && iconList != null) {

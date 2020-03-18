@@ -1,5 +1,6 @@
 package eu.europeana.corelib.solr.derived;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class Attribution {
     private Map<String, String>     date;
     private Map<String, String>     provider;
     private String                  providerUrl;
-    private String                  country;
+    private Map<String, String>     country;
     private String                  rightsStatement;
     private String                  rightsLabel;
     private String []               rightsIcon;
@@ -23,6 +24,7 @@ public class Attribution {
         creator    = new HashMap<>();
         provider   = new HashMap<>();
         date       = new HashMap<>();
+        country   = new HashMap<>();
     }
 
     public String getItemUri() {
@@ -73,11 +75,11 @@ public class Attribution {
         this.providerUrl = providerUrl;
     }
 
-    public String getCountry() {
+    public Map<String, String> getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Map<String, String> country) {
         this.country = country;
     }
 
@@ -119,5 +121,23 @@ public class Attribution {
 
     public void setLandingPage(String landingPage) {
         this.landingPage = landingPage;
+    }
+
+    @Override
+    public String toString() {
+        return "Attribution{" +
+                "itemUri='" + itemUri + '\'' +
+                ", title=" + title +
+                ", creator=" + creator +
+                ", date=" + date +
+                ", provider=" + provider +
+                ", providerUrl='" + providerUrl + '\'' +
+                ", country='" + country + '\'' +
+                ", rightsStatement='" + rightsStatement + '\'' +
+                ", rightsLabel='" + rightsLabel + '\'' +
+                ", rightsIcon=" + Arrays.toString(rightsIcon) +
+                ", ccDeprecatedOn='" + ccDeprecatedOn + '\'' +
+                ", landingPage='" + landingPage + '\'' +
+                '}';
     }
 }
