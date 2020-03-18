@@ -104,7 +104,7 @@ public class AttributionSnippet {
 
     //creates <span class="fvalue" xml:lang = "en">value</span>
     private void setSpanFvalue(String lang){
-        if(StringUtils.isNotEmpty(lang)) {
+        if(StringUtils.isNotEmpty(lang) && !StringUtils.equals(lang, AttributionConstants.DEF)) {
             htmlSnippet.append(AttributionConstants.SPAN_FVALUE_LANG_TAG);
             htmlSnippet.append(lang);
             htmlSnippet.append(AttributionConstants.SPAN_FVALUE_LANG_CLOSE_TAG);
