@@ -167,7 +167,7 @@ public final class SchemaOrgConstants {
     
     public static final String TYPE_POSTAL_ADDRESS = "PostalAddress";
 
-    public static final String TYPE_LANAGUAGE = "Language";
+    public static final String TYPE_LANGUAGE = "Language";
 
     public static final String DEFAULT_LANGUAGE = "def";
 
