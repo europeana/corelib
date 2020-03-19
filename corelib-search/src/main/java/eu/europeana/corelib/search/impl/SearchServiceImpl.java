@@ -6,7 +6,6 @@ import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
-import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.edm.exceptions.SolrIOException;
 import eu.europeana.corelib.edm.exceptions.SolrQueryException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
@@ -21,6 +20,7 @@ import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.metis.mongo.RecordRedirect;
 import eu.europeana.metis.mongo.RecordRedirectDao;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -63,20 +63,12 @@ public class SearchServiceImpl implements SearchService {
     /**
      * Number of milliseconds before the query is aborted by SOLR
      */
-    private static final int TIME_ALLOWED = 30_000;
-
-    /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
-    private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-    // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-    private static final String PORTAL_PREFIX = "http://www.europeana.eu/portal/record";
-    private static final String EUROPEANA_ID = "europeana_id";
-    private static final Logger LOG = LogManager.getLogger(SearchServiceImpl.class);
+    private static final int TIME_ALLOWED       = 30_000;
+    private static final String EUROPEANA_ID    = "europeana_id";
+    private static final Logger LOG             = LogManager.getLogger(SearchServiceImpl.class);
 
     @Resource(name = "corelib_solr_mongoServer")
     protected EdmMongoServer mongoServer;
-
-//    @Resource(name = "corelib_solr_mongoServer_id")
-//    protected EuropeanaIdMongoServer idServer;
 
     @Resource(name = "metis_redirect_mongo")
     protected RecordRedirectDao redirectDao;
@@ -99,17 +91,22 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
 
-    // show solr query in output
     private boolean debug = false;
 
+    /**
+     * @see eu.europeana.corelib.search.SearchService#findById(String, String) 
+     */
     @Override
     public FullBean findById(String collectionId, String recordId) throws EuropeanaException {
         return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
     }
 
+    /**
+     * @see eu.europeana.corelib.search.SearchService#findById(String)
+     */
     @Override
-    public FullBean findById(String europeanaObjectId) throws EuropeanaException {
-        FullBean fullBean = fetchFullBean(europeanaObjectId);
+    public FullBean findById(String europeanaId) throws EuropeanaException {
+        FullBean fullBean = fetchFullBean(europeanaId);
         if (fullBean != null) {
             return processFullBean(fullBean);
         } else {
@@ -117,32 +114,41 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
-    // split up fetching and processing the Fullbean to facilitate improving performance for HTTP caching
-    // (e.g. eTag matching)
+    /**
+     * @see eu.europeana.corelib.search.SearchService#fetchFullBean(String) 
+     * split up fetching and processing the Fullbean to facilitate improving performance for HTTP caching
+     * (e.g. eTag matching)
+     */
     @Override
-    public FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException {
+    public FullBean fetchFullBean(String europeanaId) throws EuropeanaException {
         long   startTime = System.currentTimeMillis();
-        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        FullBean fullBean = mongoServer.getFullBean(europeanaId);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("SearchService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
+            LOG.debug("SearchService fetch FullBean with EuropeanaID {} took {} ms", europeanaId,
+                      (System.currentTimeMillis() - startTime));
         }
 
         if (Objects.isNull(fullBean)) {
             startTime = System.currentTimeMillis();
-            String newId = resolve(europeanaObjectId);
+            String newId = resolve(europeanaId);
+
             if (LOG.isDebugEnabled()) {
-                LOG.debug("SearchService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
+                LOG.debug("SearchService resolving EuropeanaID {} to {} took {} ms", europeanaId,
+                          newId,
+                          (System.currentTimeMillis() - startTime));
             }
             // (comment from ObjectController) 2017-07-06 code PE: inserted as temp workaround until we resolve #662 (see also comment below)
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
                 fullBean = mongoServer.getFullBean(newId);
                 if (fullBean == null) {
-                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
+                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaId, newId);
                 }
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("SearchService fetch FullBean with newid took {}", (System.currentTimeMillis() - startTime));
+                    LOG.debug("SearchService fetching FullBean with newid took {}", (System.currentTimeMillis() - startTime));
                 }
+            } else {
+                LOG.debug("SearchService no redirection was found for EuropeanaID {}", europeanaId);
             }
         }
         return fullBean;
@@ -150,46 +156,28 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * @see eu.europeana.corelib.search.SearchService#resolve(String)
+     * According to the Metis team, the getRecordRedirectsByOldId can only return one object because oldId is unique.
+     * The method returns a List only because Morphia doesn't know about the uniqueness.
+     * Even regardless of that, every RecordRedirect for a given oldId should contain the same newId; therefore it
+     * is safe to return redirects.get(0).getNewId()
      */
     @Override
-    public String resolve(String europeanaObjectId) {
-        List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaObjectId);
-        if (redirects.size() > 1){
-            return getMostRecentRedirect(redirects);
-        } else if (redirects.size() == 1){
-            return redirects.get(0).getNewId();
-        } else {
+    public String resolve(String europeanaId) {
+        List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
+        if (redirects.isEmpty()){
+            LOG.debug("SearchService no redirection was found for EuropeanaID {}", europeanaId);
             return null;
+        } else {
+            return redirects.get(0).getNewId();
         }
     }
 
     /**
-     * According to the Metis documentation the RecordRedirectDao should always return the most recent RecordRedirect.
-     * However, because the getRecordRedirectsByOldId() method returns a List nonetheless. let's make sure we use
-     * the most recent RecordRedirect object when more than one is returned after all.
+     * @see eu.europeana.corelib.search.SearchService#processFullBean(FullBean)
      */
-    private String getMostRecentRedirect(List<RecordRedirect> redirects){
-        RecordRedirect mostRecentRedirect = null;
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, 1900);
-        cal.set(Calendar.MONTH, Calendar.JANUARY);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        Date previousTimestamp = cal.getTime();
-
-        for (RecordRedirect redirect : redirects){
-            if (redirect.getTimestamp().compareTo(previousTimestamp) > 0){
-                mostRecentRedirect = redirect;
-                previousTimestamp = redirect.getTimestamp();
-            }
-        }
-        return mostRecentRedirect != null ? mostRecentRedirect.getNewId() : null;
-    }
-
     @Override
     public FullBean processFullBean(FullBean fullBean){
-        // add meta info for all webresources
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
-        // generate attribution snippets for all webresources
         if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
             ((FullBeanImpl) fullBean).setAsParent();
             for (Aggregation agg : fullBean.getAggregations()) {
@@ -202,7 +190,10 @@ public class SearchServiceImpl implements SearchService {
         }
         return fullBean;
     }
-
+    
+    /**
+     * @see eu.europeana.corelib.search.SearchService#search(Class, Query, boolean) 
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
@@ -210,6 +201,9 @@ public class SearchServiceImpl implements SearchService {
         return search(beanInterface, query);
     }
 
+    /**
+     * @see eu.europeana.corelib.search.SearchService#search(Class, Query)
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
@@ -227,7 +221,7 @@ public class SearchServiceImpl implements SearchService {
 
             SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-            if (refinements != null) { // TODO add length 0 check!!
+            if (ArrayUtils.isNotEmpty(refinements)) {
                 solrQuery.addFilterQuery(refinements);
             }
 
@@ -376,11 +370,17 @@ public class SearchServiceImpl implements SearchService {
                || beanClazz == RichBeanImpl.class;
     }
 
+    /**
+     * @see eu.europeana.corelib.search.SearchService#seeAlso(List) 
+     */
     @Override
     public Map<String, Integer> seeAlso(List<String> queries) {
         return queryFacetSearch("*:*", null, queries);
     }
 
+    /**
+     * @see eu.europeana.corelib.search.SearchService#queryFacetSearch(String, String[], List) 
+     */
     @Override
     public Map<String, Integer> queryFacetSearch(String query, String[] qf,
                                                  List<String> queries) {
@@ -430,6 +430,9 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
+    /**
+     * @see SearchService#getLastSolrUpdate() 
+     */
     @Override
     @SuppressWarnings("unchecked")
     public Date getLastSolrUpdate() {
@@ -454,13 +457,14 @@ public class SearchServiceImpl implements SearchService {
             credentials = new UsernamePasswordCredentials(user, pass);
         }
 
+        /**
+         * @see HttpRequestInterceptor#process(HttpRequest, HttpContext) 
+         */
         @Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
         }
     }
-
-
 
 
     // ----------------------------------------------------------------- //
@@ -484,42 +488,6 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         return new ArrayList<>();
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#resolve(String, String)
-     */
-    @Deprecated
-    @Override
-    public String resolve(String collectionId, String recordId) {
-        return resolve(EuropeanaUriUtils.createEuropeanaId(
-                collectionId, recordId));
-    }
-
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    @Override
-    public FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
-    }
-
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    @Override
-    public FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException {
-        return findById(europeanaObjectId);
-    }
-
-    /**
-     * @deprecated sept 2019, similarItems are not supported anymore. Also parameter europeanaObjectId is no longer needed
-     */
-    @Deprecated
-    public FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems){
-        return processFullBean(fullBean);
     }
 
 }

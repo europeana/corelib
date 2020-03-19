@@ -14,7 +14,7 @@
 	</bean>
 
 	<bean id="redirect_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
-		<constructor-arg value="#{europeanaProperties['redirect.mongodb.connectionUrl']}" type="java.lang.String"/>
+		<constructor-arg value="#{europeanaProperties['mongodb.redirect.connectionUrl']}" type="java.lang.String"/>
 	</bean>
 
 </beans>

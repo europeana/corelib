@@ -385,7 +385,7 @@ public class UserServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void setupSeachServiceMock(String europeanaObjectId) throws EuropeanaException {
+    private void setupSeachServiceMock(String europeanaId) throws EuropeanaException {
         FullBean mockBean = mock(FullBean.class);
         Proxy proxy = mock(Proxy.class);
         Aggregation aggregation = mock(Aggregation.class);
@@ -394,15 +394,15 @@ public class UserServiceTest {
         dcPublisher.put("def", Collections.singletonList(AUTHOR[0]));
 
         when(mockBean.getTitle()).thenReturn(TITLE);
-        when(mockBean.getId()).thenReturn(europeanaObjectId);
+        when(mockBean.getId()).thenReturn(europeanaId);
         when(mockBean.getType()).thenReturn(DocType.TEXT);
-        when(mockBean.getAbout()).thenReturn(europeanaObjectId);
+        when(mockBean.getAbout()).thenReturn(europeanaId);
         when((List<Aggregation>) mockBean.getAggregations()).thenReturn(Collections.singletonList(aggregation));
         when((List<Proxy>) mockBean.getProxies()).thenReturn(Collections.singletonList(proxy));
 
         when(proxy.getDcPublisher()).thenReturn(dcPublisher);
         when(aggregation.getEdmObject()).thenReturn(THUMBNAIL[0]);
 
-        when(searchService.findById(anyString(), anyBoolean())).thenReturn(mockBean);
+        when(searchService.findById(anyString())).thenReturn(mockBean);
     }
 }

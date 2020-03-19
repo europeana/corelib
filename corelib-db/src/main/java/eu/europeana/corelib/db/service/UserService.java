@@ -142,22 +142,22 @@ public interface UserService extends AbstractService<User> {
      * Creates and add a SavedItem to an existing User
      *
      * @param userId            The id of the excising user to add the new SavedSearch to
-     * @param europeanaObjectId EuropeanaObjectId
+     * @param europeanaId europeanaId
      * @return The User including the new saved item
      * @throws DatabaseException Thrown when no valid user or object id is provided
      */
-    User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, Neo4JException;
+    User createSavedItem(Long userId, String europeanaId) throws DatabaseException, Neo4JException;
 
     /**
      * Creates and add a SocialTag to an existing user
      *
      * @param userId            The id of the excising user to add the new SavedSearch to
-     * @param europeanaObjectId EuropeanaObjectId
+     * @param europeanaId europeanaId
      * @param tag
      * @return The User including the new social tag
      * @throws DatabaseException Thrown when no valid user, object id or tag is provided
      */
-    User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException, Neo4JException;
+    User createSocialTag(Long userId, String europeanaId, String tag) throws DatabaseException, Neo4JException;
 
     /**
      * Removes a SavedSearch from database and User.
@@ -181,7 +181,7 @@ public interface UserService extends AbstractService<User> {
      * Removes a SavedItem from database by objectid
      *
      * @param userId   The id of the existing user
-     * @param objectId EuropeanaObjectId
+     * @param objectId europeanaId
      * @throws DatabaseException
      */
     void removeSavedItem(Long userId, String objectId) throws DatabaseException;
@@ -198,7 +198,7 @@ public interface UserService extends AbstractService<User> {
      * Remove SocialTag(s) matching the objectId and/or tag
      *
      * @param userId   The id of the existing user
-     * @param objectId EuropeanaObjectId
+     * @param objectId europeanaId
      * @param tag      Tag to remove
      * @throws DatabaseException
      */
@@ -224,14 +224,14 @@ public interface UserService extends AbstractService<User> {
      * Returns a list of SocialTag objects filtered by User and EuropeanaId
      *
      * @param userId      Existing id of user account
-     * @param europeanaId EuropeanaObjectId
+     * @param europeanaId europeanaId
      * @throws DatabaseException
      */
     List<SocialTag> findSocialTagsByEuropeanaId(Long userId, String europeanaId) throws DatabaseException;
 
     /**
      * @param userId      Existing id of user account
-     * @param europeanaId EuropeanaObjectId
+     * @param europeanaId europeanaId
      * @throws DatabaseException
      */
     SavedItem findSavedItemByEuropeanaId(Long userId, String europeanaId) throws DatabaseException;

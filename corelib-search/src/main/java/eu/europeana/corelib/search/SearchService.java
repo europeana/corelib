@@ -25,16 +25,16 @@ import java.util.Map;
 public interface SearchService {
 
     /**
-     * Retrieve a record by europeanaObjectId (no further processing)
+     * Retrieve a record by europeanaId (no further processing)
      *
-     * @param europeanaObjectId The unique europeana id
+     * @param europeanaId The unique europeana id
      * @return A full Europeana record
      * @throws EuropeanaException;
      */
-    FullBean fetchFullBean(String europeanaObjectId) throws EuropeanaException;
+    FullBean fetchFullBean(String europeanaId) throws EuropeanaException;
 
     /**
-     * (optionally) adding similar items to a FullBean, etcetera
+     * Adds meta-info and the Attribution snippet to all webresources of the FullBean
      *
      * @param fullBean The FullBean to be processed (injectWebMetaInfoBatch etc.)
      * @return processed full Europeana record
@@ -42,14 +42,32 @@ public interface SearchService {
     FullBean processFullBean(FullBean fullBean);
 
     /**
-     * Checks if a redirected newId is available for a EuropeanaId that wasn't found in the regular collection.
-     * This method now calls the Metis RecordRedirectDao, eliminating the need to iterate the operation to retrieve
-     * the most recent redirection
+     * Retrieves a record by collectionId and recordId and calling processFullBean() afterwards
      *
-     * @param europeanaObjectId the old record id
+     * @param collectionId id of the collection to which this record belongs
+     * @param recordId
+     * @return A full europeana record
+     * @throws EuropeanaException
+     */
+    FullBean findById(String collectionId, String recordId) throws EuropeanaException;
+
+    /**
+     * Retrieve a record by id and calling processFullBean() afterwards
+     *
+     * @param europeanaId The unique europeana id
+     * @return A full europeana record
+     * @throws EuropeanaException
+     */
+    FullBean findById(String europeanaId) throws EuropeanaException;
+
+    /**
+     * Checks if a redirected newId is available for a EuropeanaId that wasn't found in the regular collection
+     * and returns that if found.
+     *
+     * @param europeanaId the old record id
      * @return a new record id, null if none was found
      */
-    String resolve(String europeanaObjectId);
+    String resolve(String europeanaId);
 
     /**
      * Perform a calculateTag in SOLR based on the given query and return the results
@@ -99,19 +117,6 @@ public interface SearchService {
     // --> CODE BELOW THIS LINE IS DEPRECATED OR NOT USED ANY LONGER <-- //
     // ----------------------------------------------------------------- //
 
-
-    /**
-     * Uses the provided collectionId and recordId to create an EuropeanaId and checks if that id is old and has a newId.
-     * Note that this new id may also be old so we check iteratively and return the newest id
-     *
-     * @param collectionId the collection Id
-     * @param recordId     the record Id
-     * @return a new record id, null if none was found
-     * @deprecated by EA-1907
-     */
-    @Deprecated
-    String resolve(String collectionId, String recordId) throws BadDataException;
-
     /**
      * Create collection list for a given query and facet field
      *
@@ -125,65 +130,5 @@ public interface SearchService {
     @Deprecated
     List<FacetField.Count> createCollections(String facetFieldName, String queryString, String... refinements) throws
                                                                                                                EuropeanaException;
-
-    /**
-     * (optionally) adding similar items to a FullBean, etcetera
-     *
-     * @param fullBean          The FullBean to be processed (injectWebMetaInfoBatch etc.)
-     * @param europeanaObjectId The unique europeana id
-     * @param similarItems      whether to retrieve similar items
-     * @return processed full europeana record
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    FullBean processFullBean(FullBean fullBean, String europeanaObjectId, boolean similarItems);
-
-    /**
-     * Retrieves a record by collectionId and recordId and calling processFullBean() afterwards
-     *
-     * @param collectionId id of the collection to which this record belongs
-     * @param recordId
-     * @param similarItems whether to retrieve similar items
-     * @return A full europeana record
-     * @throws EuropeanaException
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    FullBean findById(String collectionId, String recordId, boolean similarItems) throws EuropeanaException;
-
-    /**
-     * Retrieves a record by collectionId and recordId and calling processFullBean() afterwards
-     *
-     * @param collectionId id of the collection to which this record belongs
-     * @param recordId
-     * @return A full europeana record
-     * @throws EuropeanaException
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    FullBean findById(String collectionId, String recordId) throws EuropeanaException;
-
-    /**
-     * Retrieve a record by id and calling processFullBean() afterwards
-     *
-     * @param europeanaObjectId The unique europeana id
-     * @param similarItems      Whether to retrieve similar items
-     * @return A full europeana record
-     * @throws EuropeanaException
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    FullBean findById(String europeanaObjectId, boolean similarItems) throws EuropeanaException;
-
-    /**
-     * Retrieve a record by id and calling processFullBean() afterwards
-     *
-     * @param europeanaObjectId The unique europeana id
-     * @return A full europeana record
-     * @throws EuropeanaException
-     * @deprecated sept 2019, similarItems are not supported anymore
-     */
-    @Deprecated
-    FullBean findById(String europeanaObjectId) throws EuropeanaException;
 
 }
