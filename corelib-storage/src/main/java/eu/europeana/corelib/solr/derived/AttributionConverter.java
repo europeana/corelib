@@ -1,11 +1,13 @@
 package eu.europeana.corelib.solr.derived;
 
+import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.License;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -31,18 +33,20 @@ public class AttributionConverter {
     }
 
     private void processTCD(Attribution attribution, WebResourceImpl wRes) {
-        //title, creator and date from proxy
+        // get the creator first from web resource level
+        if (attribution.getCreator().size() == 0 && isNotBlank(wRes.getDcCreator())) {
+            attribution.getCreator().putAll(concatLangawareMap(wRes.getDcCreator()));
+        }
+        //if still empty get, title, creator and date from proxy
         checkProxy(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getProxies(), attribution);
         // if there was no title found in the proxy, get it from the record object itself
         if (attribution.getTitle().size() == 0 && ArrayUtils.isNotEmpty(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle())) {
             attribution.getTitle().put("", collectListInLines(Arrays.asList(stripEmptyStrings(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle()))));
         }
-        // if there was no creator found in the proxy, get it from webresource-level dc:creator
-        if (attribution.getCreator().size() == 0 && isNotBlank(wRes.getDcCreator())) {
-            attribution.getCreator().putAll(concatLangawareMap(wRes.getDcCreator()));
-        }
         //check europeana aggregation if TCD is still empty
         checkEuropeanaAggregration(attribution, ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation());
+
+        checkCreatorLabel(attribution, (List<Agent>) ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAgents());
     }
 
     private void checkProxy(List<? extends Proxy> proxies, Attribution attribution) {
@@ -75,6 +79,45 @@ public class AttributionConverter {
         }
     }
 
+    // form a creator map with nonURI Values and labels for URI values
+    public void checkCreatorLabel(Attribution attribution, List<Agent> agents) {
+        Map<String, String> creatorMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : attribution.getCreator().entrySet()) {
+                if(EuropeanaUriUtils.isUri(entry.getValue())) {
+                   for(Agent agent : agents) {
+                       if(StringUtils.equals(entry.getValue(), agent.getAbout())) {
+                        creatorMap.putAll(getCreatorFromAgent(agent));
+                       }
+                   }
+                }
+                else {
+                    creatorMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+        attribution.getCreator().clear();
+        attribution.setCreator(creatorMap);
+        }
+
+    // get the prefLabel from Agent in "en" or any other first language available
+    private Map getCreatorFromAgent(Agent agent) {
+        Map<String, String> map = new HashMap<>();
+        if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
+            List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
+            map.put(AttributionConstants.EN, (collectListInLines(enList)));
+        } else {
+            //as pref label english is not present; pick up the first one available
+            // should not strip "def" as it will generate a "" key which might be already existing in the map.
+            // And if the value of "" is not URI, we will end up removing that value from the creator
+            for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
+                List<String> langList = stripEmptyStrings(langMap.getValue());
+                map.put(langMap.getKey(),  (collectListInLines(langList)));
+                if(map.size() == 1) {
+                    break;  // conditional break
+                }
+            }
+        }
+        return map;
+    }
     private void processProvider(Attribution attribution, WebResourceImpl wRes) {
         //provider : edmDataProvider
         if (isNotBlank(wRes.getParentAggregation().getEdmDataProvider())) {
@@ -85,10 +128,12 @@ public class AttributionConverter {
     }
 
     private void processCountry(Attribution attribution, WebResourceImpl wRes) {
-        //country :
-        if (((AggregationImpl) wRes.getParentAggregation()).getParentBean().getCountry() != null &&
-                ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getCountry().length != 0) {
-            attribution.setCountry(collectListInLines(Arrays.asList(stripEmptyStrings(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getCountry()))));
+        //country :edmCountry
+        EuropeanaAggregation euAgg = ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation();
+        if(euAgg != null) {
+            if (attribution.getCountry().size() == 0 && isNotBlank(euAgg.getEdmCountry())){
+                attribution.getCountry().putAll(concatLangawareMap(euAgg.getEdmCountry()));
+            }
         }
     }
 
@@ -148,13 +193,13 @@ public class AttributionConverter {
 
     // daisy-chains Strings in a List, separated with ;
     private String collectListInLines(List<String> list) {
-        String value = "";
+        StringBuilder value = new StringBuilder();
         int i = 1;
         for (String langString : list) {
-            value += cleanUp(langString) + (i < list.size() ? "; " : "");
+            value.append(cleanUp(langString) + (i < list.size() ? "; " : ""));
             i++;
         }
-        return value;
+        return value.toString();
     }
 
     // removes surrounding whitespaces plus a possible trailing period
@@ -190,15 +235,15 @@ public class AttributionConverter {
 
     // returns only the first non-empty value found in a Map<String, List<String>> (used for edm:rights)
     private String squeezeMap(Map<String, List<String>> map) {
-        String retval = "";
+        StringBuilder retval = new StringBuilder();
         for (Map.Entry<String, List<String>> entrySet : map.entrySet()) {
             List<String> entryList = stripEmptyStrings(entrySet.getValue());
             if (!entryList.isEmpty()) {
-                retval += cleanUp(entryList.get(0));
+                retval.append(cleanUp(entryList.get(0)));
                 break; // needed ernly wernce
             }
         }
-        return retval;
+        return retval.toString();
     }
 
     //	removes empty Strings from String arrays

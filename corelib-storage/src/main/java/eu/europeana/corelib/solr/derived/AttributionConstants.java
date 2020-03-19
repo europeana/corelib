@@ -9,6 +9,7 @@ public class AttributionConstants{
     public static final String DATE_FORMAT                = "yyyy-MM-dd";
     public static final String BASE_URL                   = "http://data.europeana.eu/item";
     public static final String DEF                        = "def";
+    public static final String EN                        = "en";
 
 
     //html constants
@@ -26,6 +27,7 @@ public class AttributionConstants{
     public static final String SPAN_FNAME                 = "<span class='fname'>";
     public static final String SPAN_FVALUE                = "<span class='fvalue'>";
     public static final String SPAN_CLOSING_TAG           = "</span>";
+    public static final String COLON                      = ":";
 
     public static final String BEGIN_HREF                 = "<a href='";
     public static final String HREF                       = "' target='_blank' rel='noopener'>";
