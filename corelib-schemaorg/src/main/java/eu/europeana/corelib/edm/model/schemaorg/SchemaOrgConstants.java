@@ -175,11 +175,11 @@ public final class SchemaOrgConstants {
 
     public static final String VALUE = "@value";
     
-    public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/portal/en/explore/topics/%s.html";
+    public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/en/collections/topic/%s";
     
-    public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/portal/en/explore/people/%s.html";
+    public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/en/collections/person/%s";
     
-    public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/portal/en/explore/place/%s.html";
+    public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/en/collections/place/%s";
     
-    public static final String ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN = "https://www.europeana.eu/portal/en/explore/organization/%s.html";
+    public static final String ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN = "https://www.europeana.eu/en/collections/organization/%s";
 }

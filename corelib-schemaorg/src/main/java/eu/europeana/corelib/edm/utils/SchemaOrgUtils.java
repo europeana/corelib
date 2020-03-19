@@ -159,10 +159,11 @@ public final class SchemaOrgUtils {
         addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_PATTERN,
-                concept.getEntityIdentifier());
-        conceptObject.setEntityPageUrl(entityPageUrl);
-
+        if(StringUtils.startsWithIgnoreCase(concept.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_PATTERN,
+                    concept.getEntityIdentifier());
+            conceptObject.setEntityPageUrl(entityPageUrl);
+        }
         // image
         conceptObject.setImage(concept.getFoafDepiction());
     }
@@ -224,11 +225,12 @@ public final class SchemaOrgUtils {
         addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_PATTERN,
-                edmPlace.getEntityIdentifier());
-        // Not available yet
-        // placeObject.setEntityPageUrl(entityPageUrl);
-
+        if(StringUtils.startsWithIgnoreCase(edmPlace.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_PATTERN,
+                    edmPlace.getEntityIdentifier());
+            // Not available yet
+            // placeObject.setEntityPageUrl(entityPageUrl);
+        }
         // image
         placeObject.setImage(edmPlace.getFoafDepiction());
     }
@@ -363,10 +365,11 @@ public final class SchemaOrgUtils {
         addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_PATTERN,
-                agent.getEntityIdentifier());
-        agentObject.setEntityPageUrl(entityPageUrl);
-
+        if(StringUtils.startsWithIgnoreCase(agent.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_PATTERN,
+                    agent.getEntityIdentifier());
+            agentObject.setEntityPageUrl(entityPageUrl);
+        }
         // image
         agentObject.setImage(agent.getFoafDepiction());
     }
@@ -416,9 +419,11 @@ public final class SchemaOrgUtils {
         addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN,
-                organization.getEntityIdentifier());
-        entityObject.setEntityPageUrl(entityPageUrl);
+        if(StringUtils.startsWithIgnoreCase(organization.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN,
+                    organization.getEntityIdentifier());
+            entityObject.setEntityPageUrl(entityPageUrl);
+        }
 
         // image
         entityObject.setImage(organization.getFoafDepiction());
