@@ -12,9 +12,8 @@
     </bean>
 
     <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
-        <constructor-arg value="#{redirect_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.redirect.dbname']}" type="java.lang.String"/>
-        <constructor-arg type="boolean" value="false"/>
     </bean>
 
     <!-- default profile, connecting to solr cluster via Zookeeper -->
