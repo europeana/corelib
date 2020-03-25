@@ -1,16 +1,11 @@
 package eu.europeana.corelib.solr.derived;
 
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Agent;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,17 +19,18 @@ public class AttributionTest {
 
     private static final String HTML_SNIPPET_FILE = "/htmlsnippet.txt";
     private static final String TEXT_SNIPPET_FILE = "/textsnippet.txt";
-    private static final String HTML_CSS_SOURCE   = "https://style.europeana.eu/attribution/style.css";
+    private static final String HTML_CSS_SOURCE = "https://style.europeana.eu/attribution/style.css";
 
-    private static final String CREATOR_VALUE_1  = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/organizations/index.php?tema=3";
-    private static final String CREATOR_VALUE_2   = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/olympic_creator/index.php?tema=test";
-    private static final String CREATOR_VALUE_3   = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/olympic_creator/index.php?tema=test1";
-    private static final String CREATOR_VALUE_4   = "Europeana Creator test";
-    private static final String CREATOR_VALUE_5   = "https://test-multiple-language-map";
+    private static final String CREATOR_VALUE_1 = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/organizations/index.php?tema=3";
+    private static final String CREATOR_VALUE_2 = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/olympic_creator/index.php?tema=test";
+    private static final String CREATOR_VALUE_3 = "http://repository.olympicmuseum-thessaloniki.org/vocabularies/olympic_creator/index.php?tema=test1";
+    private static final String CREATOR_VALUE_4 = "Europeana Creator test";
+    private static final String CREATOR_VALUE_5 = "https://test-multiple-language-map";
+    private static final String CREATOR_VALUE_6 = "Europeana -Creator test"; // to check duplicates with punctuation
 
-    private static final String CREATOR_VALUE_2_LABEL  = "Weenenk";
-    private static final String CREATOR_VALUE_3_LABEL  = "Ολυμπιακό μουσείο Θεσσαλονίκης";
-    private static final String CREATOR_VALUE_5_LABEL  = "वीनेंक";
+    private static final String CREATOR_VALUE_2_LABEL = "Weenenk";
+    private static final String CREATOR_VALUE_3_LABEL = "Ολυμπιακό μουσείο Θεσσαλονίκης";
+    private static final String CREATOR_VALUE_5_LABEL = "वीनेंक";
 
     private Map<String, List<String>> creatorMap;
 
@@ -43,13 +39,13 @@ public class AttributionTest {
     private static AttributionConverter attributionConverter;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         attributionSnippet = Mockito.spy(AttributionSnippet.class);
         attributionConverter = Mockito.spy(AttributionConverter.class);
         creatorMap = new HashMap<>();
     }
 
-    private static Attribution createAttr(){
+    private static Attribution createAttr() {
         Attribution attribution = new Attribution();
         attribution.setItemUri("http://data.europeana.eu/item/142/UEDIN_214");
         Map<String, String> map = new HashMap<>();
@@ -76,9 +72,10 @@ public class AttributionTest {
         return attribution;
     }
 
-    private void  mockCreatorMap(String value ) {
+    private void mockCreatorMap(String value) {
         creatorMap.put("", new ArrayList<>());
         creatorMap.get("").add(CREATOR_VALUE_4);
+        creatorMap.get("").add(CREATOR_VALUE_6);
         creatorMap.get("").add("#agent_CourtoisNephewElder");
         creatorMap.get("").add(value);
     }
@@ -89,8 +86,9 @@ public class AttributionTest {
         map.put("", creatorValue);
         attribution.setCreator(map);
         return attribution;
-   }
-       public List<Agent>  mockAgent() {
+    }
+
+    public List<Agent> mockAgent() {
         List<Agent> agents = new ArrayList<>();
         AgentImpl agent = new AgentImpl();
         agents.add(agent);
@@ -110,6 +108,7 @@ public class AttributionTest {
         agent.setPrefLabel(new HashMap<>());
         agent.getPrefLabel().put("en", new ArrayList<>());
         agent.getPrefLabel().get("en").add("Weenenk");
+        agent.getPrefLabel().get("en").add("Olympic Museum"); //another en value. But it should pick only one
         agent.getPrefLabel().put("hn", new ArrayList<>());
         agent.getPrefLabel().get("hn").add("वीनेंक");
 
@@ -121,6 +120,8 @@ public class AttributionTest {
         agent.setPrefLabel(new HashMap<>());
         agent.getPrefLabel().put("el", new ArrayList<>());
         agent.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        agent.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
+
 
         //fouth agent with multiple other languages
         agent = new AgentImpl();
@@ -130,27 +131,29 @@ public class AttributionTest {
         agent.setPrefLabel(new HashMap<>());
         agent.getPrefLabel().put("el", new ArrayList<>());
         agent.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        agent.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
         agent.getPrefLabel().put("hn", new ArrayList<>());
         agent.getPrefLabel().get("hn").add("वीनेंक");
+        agent.getPrefLabel().get("hn").add("Olympic Museum"); //another hn value. But it should pick only one
 
-           return agents;
+        return agents;
     }
 
     @Test
     public void testHtmlSnippet() throws IOException {
-       attributionSnippet.assembleHtmlSnippet(createAttr(), HTML_CSS_SOURCE);
-       String htmlSnippet= attributionSnippet.getHtmlSnippet();
-       InputStream stream = AttributionTest.class.getResourceAsStream(HTML_SNIPPET_FILE);
-       String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
-       Assert.assertTrue(!htmlSnippet.isEmpty());
-       Assert.assertEquals(expectedOutput.length(), htmlSnippet.length());
-       Assert.assertEquals(expectedOutput, htmlSnippet);
-   }
+        attributionSnippet.assembleHtmlSnippet(createAttr(), HTML_CSS_SOURCE);
+        String htmlSnippet = attributionSnippet.getHtmlSnippet();
+        InputStream stream = AttributionTest.class.getResourceAsStream(HTML_SNIPPET_FILE);
+        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
+        Assert.assertTrue(!htmlSnippet.isEmpty());
+        Assert.assertEquals(expectedOutput.length(), htmlSnippet.length());
+        Assert.assertEquals(expectedOutput, htmlSnippet);
+    }
 
     @Test
     public void testTextSnippet() throws IOException {
         attributionSnippet.assembleTextSnippet(createAttr());
-        String textSnippet= attributionSnippet.getTextSnippet();
+        String textSnippet = attributionSnippet.getTextSnippet();
         InputStream stream = AttributionTest.class.getResourceAsStream(TEXT_SNIPPET_FILE);
         String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
         Assert.assertTrue(!textSnippet.isEmpty());
@@ -161,20 +164,21 @@ public class AttributionTest {
     // creator value is URI and it is NOT present in the agents. It should only contain the default value CREATOR_VALUE_4
     @Test
     public void testCreator_isUriWithNoAgents() throws IOException {
-        Attribution attribution= new Attribution();
+        Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_1);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
     }
 
-//    // creator value is URI and it is present in the agents. It should pick the "en" preflabel if present
+    // creator value is URI and it is present in the agents. It should pick the "en" preflabel if present
     @Test
     public void testCreator_isUriWithAgentsWithEnglishLabel() throws IOException {
-        Attribution attribution= new Attribution();
+        Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_2);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_2_LABEL));
     }
 
@@ -184,11 +188,12 @@ public class AttributionTest {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_3);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_3_LABEL));
         Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_3_LABEL));
     }
 
-//    // creator value is URI and it is present in the agents. It should pick the first language present in the prefLabel
+    // creator value is URI and it is present in the agents. It should pick the first language present in the prefLabel
     @Test
     public void testCreator_isUriWithAgentsWithMultipleOtherLanguage() throws IOException {
         Attribution attribution = new Attribution();
@@ -196,5 +201,6 @@ public class AttributionTest {
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_5_LABEL));
         Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
     }
 }

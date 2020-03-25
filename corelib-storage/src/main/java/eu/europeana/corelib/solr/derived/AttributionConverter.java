@@ -7,6 +7,7 @@ import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.utils.ComparatorUtils;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -98,7 +99,7 @@ public class AttributionConverter {
                 }
             }
             //remove any duplicates
-            removeDuplicates(creatorValues);
+            ComparatorUtils.removeDuplicates(creatorValues);
             finalMap.put(creator.getKey(), creatorValues);
         }
         //set the final values to attribution
@@ -110,13 +111,15 @@ public class AttributionConverter {
         List<String> creatorValues = new ArrayList<>();
         if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
             List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
-            creatorValues.add(collectListInLines(enList));
+            //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+            creatorValues.add(enList.get(0));
         }
         else {
             //other first one available
             for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
                 List<String> langList = stripEmptyStrings(langMap.getValue());
-                creatorValues.add(collectListInLines(langList));
+                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                creatorValues.add(langList.get(0));
                 if(creatorValues.size() == 1) {
                     break;  // conditional break
                 }
@@ -137,10 +140,8 @@ public class AttributionConverter {
     private void processCountry(Attribution attribution, WebResourceImpl wRes) {
         //country :edmCountry
         EuropeanaAggregation euAgg = ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation();
-        if(euAgg != null) {
-            if (attribution.getCountry().size() == 0 && isNotBlank(euAgg.getEdmCountry())){
+        if(euAgg != null && attribution.getCountry().size() == 0 && isNotBlank(euAgg.getEdmCountry())) {
                 attribution.getCountry().putAll(concatLangawareMap(euAgg.getEdmCountry()));
-            }
         }
     }
 
@@ -277,12 +278,5 @@ public class AttributionConverter {
             }
         }
         return solidCheese.toArray(new String[solidCheese.size()]);
-    }
-
-    // utility to remove duplicates from the List
-    private void removeDuplicates (List<String> listWithDuplicates) {
-        Set<String> set = new HashSet<>(listWithDuplicates);
-        listWithDuplicates.clear();
-        listWithDuplicates.addAll(set);
     }
 }
