@@ -36,6 +36,8 @@ public class AttributionTest {
     private static final String CREATOR_VALUE_3_LABEL  = "Ολυμπιακό μουσείο Θεσσαλονίκης";
     private static final String CREATOR_VALUE_5_LABEL  = "वीनेंक";
 
+    private Map<String, List<String>> creatorMap;
+
 
     private static AttributionSnippet attributionSnippet;
     private static AttributionConverter attributionConverter;
@@ -44,6 +46,7 @@ public class AttributionTest {
     public void setUp(){
         attributionSnippet = Mockito.spy(AttributionSnippet.class);
         attributionConverter = Mockito.spy(AttributionConverter.class);
+        creatorMap = new HashMap<>();
     }
 
     private static Attribution createAttr(){
@@ -71,6 +74,13 @@ public class AttributionTest {
         attribution.setCcDeprecatedOn(null);
         attribution.setLandingPage("https://www.europeana.eu/portal/record/142/UEDIN_214.html");
         return attribution;
+    }
+
+    private void  mockCreatorMap(String value ) {
+        creatorMap.put("", new ArrayList<>());
+        creatorMap.get("").add(CREATOR_VALUE_4);
+        creatorMap.get("").add("#agent_CourtoisNephewElder");
+        creatorMap.get("").add(value);
     }
 
     private static Attribution mockCreator(String creatorValue) {
@@ -148,75 +158,43 @@ public class AttributionTest {
         Assert.assertEquals(expectedOutput, textSnippet);
     }
 
-    // creator value is URI and it is NOT present in the agents. hence it should not create a Creator Tag (attribution.getCreator should be empty)
+    // creator value is URI and it is NOT present in the agents. It should only contain the default value CREATOR_VALUE_4
     @Test
     public void testCreator_isUriWithNoAgents() throws IOException {
-        Attribution attribution= mockCreator(CREATOR_VALUE_1);
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_1));
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(attribution.getCreator().isEmpty());
+        Attribution attribution= new Attribution();
+        mockCreatorMap(CREATOR_VALUE_1);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 
-    // creator value is URI and it is present in the agents. It should pick the "en" preflabel if present
+//    // creator value is URI and it is present in the agents. It should pick the "en" preflabel if present
     @Test
     public void testCreator_isUriWithAgentsWithEnglishLabel() throws IOException {
-        Attribution attribution= mockCreator(CREATOR_VALUE_2);
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_2));
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_2_LABEL));
+        Attribution attribution= new Attribution();
+        mockCreatorMap(CREATOR_VALUE_2);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_2_LABEL));
     }
 
     // creator value is URI and it is present in the agents. It should pick the other language preflabel if present
     @Test
     public void testCreator_isUriWithAgentsWithNoEnglishLabel() throws IOException {
-        Attribution attribution= mockCreator(CREATOR_VALUE_3);
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_3));
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_3_LABEL));
+        Attribution attribution = new Attribution();
+        mockCreatorMap(CREATOR_VALUE_3);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_3_LABEL));
         Assert.assertTrue(attribution.getCreator().size() == 1);
-
     }
 
-    // creator value is URI and it is present in the agents. It should pick the first language present in the prefLabel
+//    // creator value is URI and it is present in the agents. It should pick the first language present in the prefLabel
     @Test
     public void testCreator_isUriWithAgentsWithMultipleOtherLanguage() throws IOException {
-        Attribution attribution= mockCreator(CREATOR_VALUE_5);
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_5));
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_5_LABEL));
-        Assert.assertTrue(attribution.getCreator().size() == 1);
-    }
-
-    // creator value is not URI. It should not modify the attribution.getCreator()
-    @Test
-    public void testCreator_isNotURI() throws IOException {
-        Attribution attribution= mockCreator(CREATOR_VALUE_4);
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_4));
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_4));
-        Assert.assertTrue(attribution.getCreator().size() == 1);
-
-    }
-
-    // test multiple creator value. To test if there is any Java concurrent exception in the code or any other exception.
-    @Test
-    public void testCreator_multipleCreator() throws IOException {
         Attribution attribution = new Attribution();
-        Map<String, String> map = new HashMap<>();
-        map.put("1", CREATOR_VALUE_1);  // not present in agent
-        map.put("2", CREATOR_VALUE_2);  // present in agent with english label
-        map.put("3", CREATOR_VALUE_3);  //present in agent with NO english label
-        map.put("", CREATOR_VALUE_4); // Not a URI present with "" key
-        map.put("5", CREATOR_VALUE_5); //present in agent with multiple language label
-        attribution.setCreator(map);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent());
-        Assert.assertTrue(!attribution.getCreator().containsValue(CREATOR_VALUE_1));
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_2_LABEL));
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_3_LABEL));
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_4));
-        Assert.assertTrue(attribution.getCreator().containsValue(CREATOR_VALUE_5_LABEL));
-        Assert.assertTrue(attribution.getCreator().size() == 4);
-
+        mockCreatorMap(CREATOR_VALUE_5);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_5_LABEL));
+        Assert.assertTrue(attribution.getCreator().size() == 1);
     }
 }
