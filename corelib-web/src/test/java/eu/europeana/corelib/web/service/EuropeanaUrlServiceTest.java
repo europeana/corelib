@@ -55,11 +55,11 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalRecordTest() {
 		final String collectionId = "euro";
 		final String recordId = "testrecord";
-		String expected = "http://localhost:8081/portal/record/euro/testrecord.html";
+		String expected = "http://localhost:8081/record/euro/testrecord";
 		assertEquals("getPortalHome full url failed", expected,
 				europeanaUrlService.getPortalRecord(collectionId, recordId).toString());
 
-		expected = "https://www.europeana.eu/portal/record/euro/testrecord.html";
+		expected = "https://www.europeana.eu/record/euro/testrecord";
 		assertEquals("getCanonicalPortalRecord failed", expected,
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
 	}

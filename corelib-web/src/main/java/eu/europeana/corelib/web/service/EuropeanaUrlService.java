@@ -20,7 +20,6 @@ public interface EuropeanaUrlService {
     String PATH_RECORD 		= "record";
 
     // PORTAL PATHS
-    String PATH_PORTAL 		= "portal";
     String PATH_PORTAL_RESOLVE = "resolve";
 
     // API PATHS

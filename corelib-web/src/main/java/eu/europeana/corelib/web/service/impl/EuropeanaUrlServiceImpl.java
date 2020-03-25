@@ -206,7 +206,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getPortalRecord(String collectionid, String objectid) {
 		UrlBuilder url = getPortalHome();
-		url.addPath(PATH_PORTAL).addPath(PATH_RECORD, collectionid).addPage(objectid + EXT_HTML);
+		url.addPath(PATH_RECORD, collectionid).addPage(objectid);
 		return url;
 	}
 
@@ -218,7 +218,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getPortalRecord(String europeanaId) {
 		UrlBuilder url = getPortalHome();
-		url.addPath(PATH_PORTAL).addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
+		url.addPath(PATH_RECORD).addPage(europeanaId);
 		return url;
 	}
 
@@ -229,7 +229,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getCanonicalPortalRecord(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.EUROPEANA_PORTAL_URL);
-		url.addPath(PATH_PORTAL).addPath(PATH_RECORD).addPage(europeanaId + EXT_HTML);
+		url.addPath(PATH_RECORD).addPage(europeanaId);
 		return url;
 	}
 
