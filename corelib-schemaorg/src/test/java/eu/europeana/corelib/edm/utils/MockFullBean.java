@@ -8,7 +8,6 @@ import java.util.List;
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
-import eu.europeana.corelib.edm.model.metainfo.VideoMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -36,12 +35,7 @@ public final class MockFullBean {
 
     public static FullBeanImpl mock() {
         FullBeanImpl bean = new FullBeanImpl();
-        bean.setAbout("/2021618/internetserver_Details_kunst_25027");
-        bean.setTitle(new String[] {"Mona Lisa"});
-        bean.setLanguage(new String[] {"nl"});
-        bean.setTimestampCreated(new Date(1395759054479L));
-        bean.setTimestampUpdated(new Date(1395759054479L));
-        bean.setEuropeanaCollectionName(new String[] { "2021618_Ag_NL_DigitaleCollectie_TeylersKunst"});
+        setBean(bean);
 
         setProvidedCHO(bean);
         setAgents(bean);
@@ -51,7 +45,62 @@ public final class MockFullBean {
         setPlaces(bean);
         setConcepts(bean);
         setTimespans(bean);
+        return bean;
+    }
 
+    public static FullBeanImpl mockProvidedCHO() {
+        FullBeanImpl bean = new FullBeanImpl();
+        setBean(bean);
+        setProvidedCHO(bean);
+
+        EuropeanaAggregationImpl europeanaAggregation = new EuropeanaAggregationImpl();
+        europeanaAggregation.setEdmPreview("edmpreviewTest");
+        europeanaAggregation.setEdmLandingPage("edmLandingPageTest");
+        bean.setEuropeanaAggregation(europeanaAggregation);
+        return bean;
+    }
+
+    public static FullBeanImpl mockProxies() {
+        FullBeanImpl bean = new FullBeanImpl();
+        setBean(bean);
+        setProxies(bean);
+        return bean;
+    }
+
+    public static FullBeanImpl mockAggregation() {
+        FullBeanImpl bean = new FullBeanImpl();
+        setBean(bean);
+        setProvidedCHO(bean);
+        setAggregations(bean);
+
+        List<ProxyImpl> proxies = new ArrayList<>();
+        ProxyImpl proxy = new ProxyImpl();
+        proxies.add(proxy);
+        bean.setProxies(proxies);
+        return bean;
+    }
+
+    public static FullBeanImpl mockPlaces() {
+        FullBeanImpl bean = new FullBeanImpl();
+        setBean(bean);
+        setPlaces(bean);
+        return bean;
+    }
+
+    public static FullBeanImpl mockConcept() {
+        FullBeanImpl bean = new FullBeanImpl();
+        setBean(bean);
+        setConcepts(bean);
+        return bean;
+    }
+
+    private static FullBeanImpl setBean(FullBeanImpl bean) {
+        bean.setAbout("/2021618/internetserver_Details_kunst_25027");
+        bean.setTitle(new String[] {"Mona Lisa"});
+        bean.setLanguage(new String[] {"nl"});
+        bean.setTimestampCreated(new Date(1395759054479L));
+        bean.setTimestampUpdated(new Date(1395759054479L));
+        bean.setEuropeanaCollectionName(new String[] { "2021618_Ag_NL_DigitaleCollectie_TeylersKunst"});
         return bean;
     }
 
@@ -64,6 +113,10 @@ public final class MockFullBean {
         proxy.setProxyIn(new String[] {"/aggregation/provider/2021618/internetserver_Details_kunst_25027"});
         proxy.setProxyFor("/item/2021618/internetserver_Details_kunst_25027");
 
+        proxy.setDcContributor(new HashMap<>());
+        proxy.getDcContributor().put("def" , new ArrayList<>());
+        proxy.getDcContributor().get("def").add("contributor");
+
         proxy.setDcCreator(new HashMap<>());
         proxy.getDcCreator().put("def", new ArrayList<>());
         proxy.getDcCreator().get("def").add("Calamatta, Luigi (1801-1869)");
@@ -74,6 +127,14 @@ public final class MockFullBean {
         proxy.setDcDate(new HashMap<>());
         proxy.getDcDate().put("def", new ArrayList<>());
         proxy.getDcDate().get("def").add("1821 - 1869");
+
+        proxy.setDcDescription(new HashMap<>());
+        proxy.getDcDescription().put("def" , new ArrayList<>());
+        proxy.getDcDescription().get("def").add("Monalisa Panting");
+
+        proxy.setDctermsCreated(new HashMap<>());
+        proxy.getDctermsCreated().put("def" , new ArrayList<>());
+        proxy.getDctermsCreated().get("def").add("01 November 1915");
 
         proxy.setDcFormat(new HashMap<>());
         proxy.getDcFormat().put("def", new ArrayList<>());
@@ -97,10 +158,6 @@ public final class MockFullBean {
         proxy.getDcType().get("def").add("grafiek");
         proxy.getDcType().get("def").add("http://data.europeana.eu/concept/base/48");
 
-        proxy.setDctermsAlternative(new HashMap<>());
-        proxy.getDctermsAlternative().put("def" , new ArrayList<>());
-        proxy.getDctermsAlternative().get("def").add("MonaLisa Painting");
-
         proxy.setAbout("/proxy/provider/2021618/internetserver_Details_kunst_25027");
 
         proxy = new ProxyImpl();
@@ -121,25 +178,7 @@ public final class MockFullBean {
         proxy.getDctermsTemporal().put("def", new ArrayList<>());
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/19xx");
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/1901");
-        proxy.getDctermsTemporal().get("def").add("1981-1990");
-        proxy.getDctermsTemporal().get("def").add("1930");
-        proxy.getDctermsTemporal().get("def").add("1930");
-        proxy.getDctermsTemporal().get("def").add("xyxc"); // this should NOT be present in temporal coverage as it is not a valid year
-
-
-        proxy.setDctermsCreated(new HashMap<>());
-        proxy.getDctermsCreated().put("def", new ArrayList<>());
-        proxy.getDctermsCreated().get("def").add("01 November 1928"); //This is invalid date, allow invalid is true for dcCreated and this should get added in dateCreated
-
-        proxy.setDcCoverage(new HashMap<>());
-        proxy.getDcCoverage().put("def" , new ArrayList<>());
-        proxy.getDcCoverage().get("def").add("http://semium.org/time/1977");
-        proxy.getDcCoverage().get("def").add("01 December 1950"); //allow invalid is false for dcCoverage and this should not get added in temporal coverage, But then it will get added in about
-
-        //to test https mapping
-        proxy.setDcDescription(new HashMap<>());
-        proxy.getDcDescription().put("def" , new ArrayList<>());
-        proxy.getDcDescription().get("def").add("https://data.europeana.eu/test");
+        proxy.getDctermsTemporal().get("def").add("1936-05-11");
 
         proxy.setAbout("/proxy/europeana/2021618/internetserver_Details_kunst_25027");
 
@@ -180,13 +219,7 @@ public final class MockFullBean {
         aggregation.getEdmDataProvider().put("def", new ArrayList<>());
         aggregation.getEdmDataProvider().get("def").add("Teylers Museum");
 
-        //should be present in associated media as Image object
         aggregation.setEdmIsShownBy("http://teylers.adlibhosting.com/wwwopacx/wwwopac.ashx?command=getcontent&server=images&value=TvB%20G%203674.jpg");
-
-        //should be present in associatedMedia as Video object
-        String [] hasViews = {"http://teylers.adlibhosting.com/internetserver/Details/kunst/25027"};
-        aggregation.setHasView(hasViews);
-
         aggregation.setEdmIsShownAt("http://teylers.adlibhosting.com/internetserver/Details/kunst/25027");
         aggregation.setEdmObject("http://teylers.adlibhosting.com/wwwopacx/wwwopac.ashx?command=getcontent&server=images&value=TvB%20G%203674.jpg");
 
@@ -205,33 +238,11 @@ public final class MockFullBean {
         WebResourceImpl webResource = new WebResourceImpl();
         webResources.add(webResource);
 
-        webResource.setDctermsCreated(new HashMap<>());
-        webResource.getDctermsCreated().put("def", new ArrayList<>());
-        webResource.getDctermsCreated().get("def").add("1936-05-11");
-
-        //should be present in videoObject
         webResource.setAbout("http://teylers.adlibhosting.com/internetserver/Details/kunst/25027");
-        webResource.setWebResourceMetaInfo(new WebResourceMetaInfoImpl());
-        ((WebResourceMetaInfoImpl)webResource.getWebResourceMetaInfo()).setVideoMetaInfo(new VideoMetaInfoImpl());
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setMimeType("video/mp4");
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setBitRate(400);
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setDuration(2000L);
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setHeight(500);
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setWidth(650);
 
         webResource = new WebResourceImpl();
         webResources.add(webResource);
 
-        //this weresource will not be added in the schema.org as there is no associatedMedia present for value "testing"
-         webResource.setAbout("testing");
-         webResource.setWebResourceMetaInfo(new WebResourceMetaInfoImpl());
-        ((WebResourceMetaInfoImpl)webResource.getWebResourceMetaInfo()).setVideoMetaInfo(new VideoMetaInfoImpl());
-        ((VideoMetaInfoImpl)webResource.getWebResourceMetaInfo().getVideoMetaInfo()).setMimeType("video/mp4");
-
-        webResource = new WebResourceImpl();
-        webResources.add(webResource);
-
-        //should be present in ImageObject
         webResource.setAbout("http://teylers.adlibhosting.com/wwwopacx/wwwopac.ashx?command=getcontent&server=images&value=TvB%20G%203674.jpg");
         webResource.setWebResourceMetaInfo(new WebResourceMetaInfoImpl());
         ((WebResourceMetaInfoImpl)webResource.getWebResourceMetaInfo()).setImageMetaInfo(new ImageMetaInfoImpl());
@@ -255,7 +266,6 @@ public final class MockFullBean {
         AgentImpl agent = new AgentImpl();
         agents.add(agent);
 
-        // first agent Person
         agent.setEnd(new HashMap<>());
         agent.getEnd().put("def", new ArrayList<>());
         agent.getEnd().get("def").add("1519-05-02");
@@ -279,7 +289,7 @@ public final class MockFullBean {
         agent.getRdaGr2PlaceOfBirth().get("def").add("http://dbpedia.org/resource/Vinci,_Tuscany");
         agent.getRdaGr2PlaceOfBirth().put("en", new ArrayList<>());
         agent.getRdaGr2PlaceOfBirth().get("en").add("Vinci, Republic of Florence");
-        
+
         agent.setRdaGr2PlaceOfDeath(new HashMap<>());
         agent.getRdaGr2PlaceOfDeath().put("def", new ArrayList<>());
         agent.getRdaGr2PlaceOfDeath().get("def").add("http://dbpedia.org/resource/France");
@@ -301,22 +311,6 @@ public final class MockFullBean {
         agent.setAltLabel(new HashMap<>());
         agent.getAltLabel().put("en", new ArrayList<>());
         agent.getAltLabel().get("en").add("Leonardo da Vinci");
-
-        agent.setAbout("http://data.europeana.eu/agent/base/6");
-
-        //adding second agent Orgainsation
-        agent = new AgentImpl();
-        agents.add(agent);
-
-        agent.setPrefLabel(new HashMap<>());
-        agent.getPrefLabel().put("en", new ArrayList<>());
-        agent.getPrefLabel().get("en").add("European museums");
-        agent.getPrefLabel().put("fr", new ArrayList<>());
-        agent.getPrefLabel().get("fr").add("Musées européens");
-
-        agent.setRdaGr2DateOfTermination(new HashMap<>());
-        agent.getRdaGr2DateOfTermination().put("def", new ArrayList<>());
-        agent.getRdaGr2DateOfTermination().get("def").add("2019-05-02");
 
         agent.setAbout("http://data.europeana.eu/agent/base/6");
 

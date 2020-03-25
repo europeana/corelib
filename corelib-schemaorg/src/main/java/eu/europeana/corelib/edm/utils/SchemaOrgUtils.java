@@ -475,7 +475,7 @@ public final class SchemaOrgUtils {
      * @param object object for which the properties will be added
      * @param bean   bean with all properties
      */
-    private static void processProvidedCHO(CreativeWork object, FullBeanImpl bean) {
+    public static void processProvidedCHO(CreativeWork object, FullBeanImpl bean) {
         for (ProvidedCHOImpl providedCHO : bean.getProvidedCHOs()) {
             // @id
             if (!notNullNorEmpty(object.getId())) {
@@ -506,7 +506,7 @@ public final class SchemaOrgUtils {
      * @param bean   bean with all properties
      * @return list of referenced objects created while processing aggregations
      */
-    private static List<Thing> processAggregations(CreativeWork object, FullBeanImpl bean) {
+    public static List<Thing> processAggregations(CreativeWork object, FullBeanImpl bean) {
         List<Thing> referencedObjects = new ArrayList<>();
         for (AggregationImpl aggregation : bean.getAggregations()) {
             // sameAs
@@ -680,7 +680,7 @@ public final class SchemaOrgUtils {
      * @param object object for which the properties will be added
      * @param bean   bean from database to get values for properties
      */
-    private static void processProxies(CreativeWork object, FullBeanImpl bean) {
+    public static void processProxies(CreativeWork object, FullBeanImpl bean) {
         for (ProxyImpl proxy : bean.getProxies()) {
             // contributor
             addResourceOrReferenceProperties(object, proxy.getDcContributor(),
