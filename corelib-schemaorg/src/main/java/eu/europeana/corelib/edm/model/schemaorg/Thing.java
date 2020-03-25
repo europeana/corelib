@@ -1,8 +1,6 @@
 package eu.europeana.corelib.edm.model.schemaorg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonldType(SchemaOrgConstants.TYPE_THING)
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
@@ -113,4 +112,24 @@ public class Thing implements BaseType {
     private List<BaseType> getCurrentPropertyValue(String propertyName) {
         return properties.computeIfAbsent(propertyName, k -> new ArrayList<>());
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == this) return true;
+        if (!(o instanceof Thing)) {
+            return false;
+        }
+        Thing thing = (Thing) o;
+        return Objects.equals(this.id, thing.getId()) &&
+               Objects.equals(this.properties.toString(), thing.properties.toString());
+    }
+
+    @Override
+    public int hashCode(){
+        return new HashCodeBuilder(83, 211)
+                .append(id)
+                .append(properties.toString())
+                .toHashCode();
+    }
+
 }

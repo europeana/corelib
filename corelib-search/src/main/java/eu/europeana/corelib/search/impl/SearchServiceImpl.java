@@ -94,6 +94,9 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
 
+    @Value("#{europeanaProperties['htmlsnippet.css.source']}")
+    private String htmlCssSource;
+
     // show solr query in output
     private boolean debug = false;
 
@@ -150,6 +153,9 @@ public class SearchServiceImpl implements SearchService {
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
                 fullBean = mongoServer.getFullBean(newId);
+                if (fullBean == null) {
+                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
+                }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("SearchService fetch FullBean with newid took " + (System.currentTimeMillis() - startTime) + " ms");
                 }
@@ -175,7 +181,7 @@ public class SearchServiceImpl implements SearchService {
             for (Aggregation agg : fullBean.getAggregations()) {
                 if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
                     for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                        wRes.initAttributionSnippet();
+                        wRes.initAttributionSnippet(htmlCssSource);
                     }
                 }
             }

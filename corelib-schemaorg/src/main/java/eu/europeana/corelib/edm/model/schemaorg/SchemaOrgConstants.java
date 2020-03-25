@@ -167,17 +167,19 @@ public final class SchemaOrgConstants {
     
     public static final String TYPE_POSTAL_ADDRESS = "PostalAddress";
 
+    public static final String TYPE_LANGUAGE = "Language";
+
     public static final String DEFAULT_LANGUAGE = "def";
 
     public static final String LANGUAGE = "@language";
 
     public static final String VALUE = "@value";
     
-    public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/en/explore/topics";
+    public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/en/collections/topic/%s";
     
-    public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/en/explore/people";
+    public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/en/collections/person/%s";
     
-    public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/en/explore/place";
+    public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/en/collections/place/%s";
     
-    public static final String ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN = "https://www.europeana.eu/en/explore/organization";
+    public static final String ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN = "https://www.europeana.eu/en/collections/organization/%s";
 }
