@@ -31,8 +31,10 @@ public enum ProblemType {
 
     // Other errors
     // ------------
-    APIKEY_INVALID(null, "Invalid API key", ProblemResponseAction.IGNORE),
-    APIKEY_MISSING(null, "No API key provided", ProblemResponseAction.IGNORE),
+    APIKEY_MISSING("400-AM", "No API key provided", ProblemResponseAction.IGNORE),
+    APIKEY_DOES_NOT_EXIST("401-AX", "API key doesn't exist", ProblemResponseAction.IGNORE),
+    APIKEY_DEPRECATED("410-AD", "API key is deprecated", ProblemResponseAction.IGNORE),
+    APIKEY_ERROR("500-AE", "Error checking API key", ProblemResponseAction.LOG_ERR),
     MAIL_ERROR(null,"Error sending email", ProblemResponseAction.LOG_ERR),
     MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.MAIL),
     RECORD_RETRIEVAL_ERROR(null,"Record retrieval error", ProblemResponseAction.LOG_ERR),
