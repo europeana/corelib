@@ -22,7 +22,7 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void getApi2RedirectTest() {
-		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=https%3A%2F%2Fwww.europeana.eu%2Fresolve%2Frecord%2Fkb%2Frecord&profile=full";
+		String expected = "http://localhost:8080/api/123/redirect?shownAt=http%3A%2F%2Fwww.kb.nl&provider=example&id=https%3A%2F%2Fwww.europeana.eu%2Fresolve%2Fitem%2Fkb%2Frecord&profile=full";
 		assertEquals("getPortalHome full url failed", expected, europeanaUrlService.getApi2Redirect("123", "http://www.kb.nl", "example", "/kb/record", "full").toString());
 	}
 
@@ -34,7 +34,7 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void getPortalResolveTest() {
-		String expected = "https://www.europeana.eu/resolve/record/euro/testrecord";
+		String expected = "https://www.europeana.eu/resolve/item/euro/testrecord";
 		assertEquals("getPortalResolve url failed", expected, europeanaUrlService.getPortalResolve("/euro/testrecord"));
 	}
 
@@ -55,11 +55,11 @@ public class EuropeanaUrlServiceTest extends AbstractJUnit4SpringContextTests {
 	public void getPortalRecordTest() {
 		final String collectionId = "euro";
 		final String recordId = "testrecord";
-		String expected = "http://localhost:8081/record/euro/testrecord";
+		String expected = "http://localhost:8081/item/euro/testrecord";
 		assertEquals("getPortalHome full url failed", expected,
 				europeanaUrlService.getPortalRecord(collectionId, recordId).toString());
 
-		expected = "https://www.europeana.eu/record/euro/testrecord";
+		expected = "https://www.europeana.eu/item/euro/testrecord";
 		assertEquals("getCanonicalPortalRecord failed", expected,
 				europeanaUrlService.getCanonicalPortalRecord("/euro/testrecord").toString());
 	}

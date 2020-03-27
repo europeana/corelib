@@ -18,6 +18,8 @@ public interface EuropeanaUrlService {
 
     // GENERAL PATHS
     String PATH_RECORD 		= "record";
+    String PATH_ITEM		= "item";
+
 
     // PORTAL PATHS
     String PATH_PORTAL_RESOLVE = "resolve";

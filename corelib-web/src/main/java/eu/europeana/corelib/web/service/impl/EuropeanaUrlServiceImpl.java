@@ -136,7 +136,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public String getPortalResolve(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.EUROPEANA_PORTAL_URL);
-		url.addPath(PATH_PORTAL_RESOLVE, PATH_RECORD, europeanaId).disableTrailingSlash();
+		url.addPath(PATH_PORTAL_RESOLVE, PATH_ITEM, europeanaId).disableTrailingSlash();
 		return url.toString();
 	}
 
@@ -147,7 +147,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public String getPortalResolve(String collectionid, String objectid) {
 		UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.EUROPEANA_PORTAL_URL);
-		url.addPath(PATH_PORTAL_RESOLVE, PATH_RECORD, collectionid, objectid).disableTrailingSlash();
+		url.addPath(PATH_PORTAL_RESOLVE, PATH_ITEM, collectionid, objectid).disableTrailingSlash();
 		return url.toString();
 	}
 
@@ -157,7 +157,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Deprecated
 	@Override
 	public UrlBuilder getPortalSearch() throws UnsupportedEncodingException {
-		return getPortalSearch(true, "search.html", null, null);
+		return getPortalSearch(true, "search", null, null);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Deprecated
 	@Override
 	public UrlBuilder getPortalSearch(boolean relative, String query, String rows) throws UnsupportedEncodingException {
-		return getPortalSearch(relative, "search.html", query, rows);
+		return getPortalSearch(relative, "search", query, rows);
 	}
 
     /**
@@ -206,7 +206,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getPortalRecord(String collectionid, String objectid) {
 		UrlBuilder url = getPortalHome();
-		url.addPath(PATH_RECORD, collectionid).addPage(objectid);
+		url.addPath(PATH_ITEM, collectionid).addPage(objectid);
 		return url;
 	}
 
@@ -218,7 +218,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getPortalRecord(String europeanaId) {
 		UrlBuilder url = getPortalHome();
-		url.addPath(PATH_RECORD).addPage(europeanaId);
+		url.addPath(PATH_ITEM).addPage(europeanaId);
 		return url;
 	}
 
@@ -229,7 +229,7 @@ public class EuropeanaUrlServiceImpl implements EuropeanaUrlService {
 	@Override
 	public UrlBuilder getCanonicalPortalRecord(String europeanaId) {
 		UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.EUROPEANA_PORTAL_URL);
-		url.addPath(PATH_RECORD).addPage(europeanaId);
+		url.addPath(PATH_ITEM).addPage(europeanaId);
 		return url;
 	}
 
