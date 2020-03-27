@@ -8,6 +8,7 @@ import java.util.*;
  */
 public class ComparatorUtils implements Comparator<String> {
 
+    private static final String PUNCTUATION_REGEX = "[\\p{Punct}]+";
     /**
      * Method for removing Punctuations from string
      * This will help in sorting and comparing better
@@ -16,8 +17,8 @@ public class ComparatorUtils implements Comparator<String> {
      * Note: the regex used can be modified to exclude few punctuations that we want
      * ex: "[\\p{Punct}&&[^_-]]+" , this excludes two punctuations _ (underscore) , - (hyphen)
      */
-    public static String stripPunctuations(String value) {
-        return value.replaceAll("[\\p{Punct}]+", "");
+    public static String stripPunctuation(String value) {
+        return value.replaceAll(PUNCTUATION_REGEX, "");
     }
 
     /**
@@ -29,7 +30,7 @@ public class ComparatorUtils implements Comparator<String> {
     public static List<String> stripPunctuations(List<String> list) {
         List<String> listWithoutPunctuation = new ArrayList<>();
         for (String value : list) {
-            listWithoutPunctuation.add(stripPunctuations(value));
+            listWithoutPunctuation.add(stripPunctuation(value));
         }
         return listWithoutPunctuation;
     }
@@ -50,7 +51,7 @@ public class ComparatorUtils implements Comparator<String> {
 
     @Override
     public int compare(String o1, String o2) {
-        if (stripPunctuations(o1).equalsIgnoreCase(stripPunctuations(o2))) {
+        if (stripPunctuation(o1).equalsIgnoreCase(stripPunctuation(o2))) {
             return 0;
         }
         return 1;

@@ -1,5 +1,6 @@
 package eu.europeana.corelib.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,33 +10,47 @@ import java.util.List;
 
 public class ComparatorUtilsTest {
 
-    private static final String TESTING_VALUE_1 = "test.ing";
-    private static final String TESTING_VALUE_2 = "Rembrandt Harmensz. van Rijn";
-    private static final String TESTING_VALUE_3 = "Rembrandt -Harmensz van Rijn";
+    private static final String TESTING_VALUE_1 = "Testing";
+    private static final String TESTING_VALUE_2 = "TEST-ing";
+    private static final String TESTING_VALUE_3 = "test\\ING";
+    private static final String TESTING_VALUE_4 = "Rembrandt Harmensz van Rijn";
+    private static final String TESTING_VALUE_5 = "Rembrandt Harmensz .van Rijn";
+    private static final String TESTING_VALUE_6 = "Rembrandt -Harmensz van Rijn";
+
 
     List<String> list = new ArrayList<>();
 
     @Before
     public void setup() {
         list.add(TESTING_VALUE_1);
-        list.add("TEST-ing");
-        list.add("test.ING");
-        list.add("test\\ing");
         list.add(TESTING_VALUE_2);
         list.add(TESTING_VALUE_3);
+        list.add(TESTING_VALUE_4);
+        list.add(TESTING_VALUE_5);
+        list.add(TESTING_VALUE_6);
     }
 
     @Test
     public void testPunctuation() {
-        List<String> newList = ComparatorUtils.stripPunctuations(list);
-        Assert.assertTrue(list.size() == 6);
+       //stripPunctuation(String)
+       Assert.assertTrue(StringUtils.equalsIgnoreCase(ComparatorUtils.stripPunctuation(TESTING_VALUE_2), TESTING_VALUE_1));
+       Assert.assertTrue(StringUtils.equalsIgnoreCase(ComparatorUtils.stripPunctuation(TESTING_VALUE_3), TESTING_VALUE_1));
+       Assert.assertTrue(StringUtils.equalsIgnoreCase(ComparatorUtils.stripPunctuation(TESTING_VALUE_5), TESTING_VALUE_4));
+       Assert.assertTrue(StringUtils.equalsIgnoreCase(ComparatorUtils.stripPunctuation(TESTING_VALUE_6), TESTING_VALUE_4));
+
+       //stripPunctuations(List)
+       Assert.assertTrue(ComparatorUtils.stripPunctuations(list).size() == 6);
     }
 
     @Test
     public void testCompare() {
-        List<String> newList = ComparatorUtils.removeDuplicates(list);
-        Assert.assertTrue(newList.size() == 2);
-        Assert.assertTrue(newList.contains(TESTING_VALUE_1));
-        Assert.assertTrue(newList.contains(TESTING_VALUE_2) || newList.contains(TESTING_VALUE_3));
+        //check the size before
+        Assert.assertTrue(list.size() == 6);
+        ComparatorUtils.removeDuplicates(list);
+        //check size after
+        Assert.assertTrue(list.size() == 2);
+        //check the values in the list
+        Assert.assertTrue(list.contains(TESTING_VALUE_1));
+        Assert.assertTrue(list.contains(TESTING_VALUE_4));
     }
 }

@@ -168,7 +168,7 @@ public class AttributionTest {
         mockCreatorMap(CREATOR_VALUE_1);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 
     // creator value is URI and it is present in the agents. It should pick the "en" preflabel if present
@@ -178,7 +178,7 @@ public class AttributionTest {
         mockCreatorMap(CREATOR_VALUE_2);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_2_LABEL));
     }
 
@@ -189,7 +189,7 @@ public class AttributionTest {
         mockCreatorMap(CREATOR_VALUE_3);
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().size() == 1);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_3_LABEL));
     }
 
@@ -201,6 +201,6 @@ public class AttributionTest {
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_5_LABEL));
         Assert.assertTrue(attribution.getCreator().size() == 1);
-        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4) || attribution.getCreator().get("").contains(CREATOR_VALUE_6));
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 }
