@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import eu.europeana.corelib.edm.model.schemaorg.*;
 import org.apache.commons.lang3.StringUtils;
@@ -1009,7 +1010,7 @@ public final class SchemaOrgUtils {
      * @param language     language of the value
      * @param value        value to process
      */
-    private static void processDateValue(Thing object, String propertyName, List<TimespanImpl> timespans,
+    public static void processDateValue(Thing object, String propertyName, List<TimespanImpl> timespans,
                                          boolean allowInvalid, String language, String value) {
         if (notNullNorEmpty(value)) {
             String valueToAdd = value;
@@ -1022,7 +1023,7 @@ public final class SchemaOrgUtils {
                 } else {
                     object.addProperty(propertyName, new Text(valueToAdd));
                 }
-            } else if (allowInvalid || isYearRange(value) || isIsoDate(value) || isIsoDateTime(value)) {
+            } else if (allowInvalid || DateUtils.isYear(value) || DateUtils.isIsoDate(value) || DateUtils.isIsoDateTime(value)) {
                    object.addProperty(propertyName, new Text(valueToAdd));
             }
         }
@@ -1042,6 +1043,7 @@ public final class SchemaOrgUtils {
         for (TimespanImpl timespan : timespans) {
             if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
                     && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
+
                 try {
                     LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
                     LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
@@ -1071,53 +1073,13 @@ public final class SchemaOrgUtils {
      * @return true when the string is a ISO8601 date or a reference to timespan
      */
     private static boolean isDateOrTimespan(String value) {
-        return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX)) || isYearRange(value)
-                || isIsoDate(value) || isIsoDateTime(value);
+        return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX)) || DateUtils.isYear(value)
+                || DateUtils.isIsoDate(value) || DateUtils.isIsoDateTime(value);
     }
 
-    /**
-     * Returns true if the string is a ISO8601 date (format: "yyyy-MM-dd")
-     *
-     * @param value value to check
-     * @return true when the string is a ISO8601 date
-     */
-    private static boolean isIsoDate(String value) {
-        try {
-            TemporalAccessor tmp = dateFormatter.parse(value);
-            return tmp != null;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
-    /**
-     * Returns true if the string is a ISO8601 date time (format:
-     * "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-     *
-     * @param value value to check
-     * @return true when the string is a ISO8601 date time
-     */
-    private static boolean isIsoDateTime(String value) {
-        return DateUtils.parse(value) != null;
-    }
 
-    private static boolean isYearRange(String value) {
-        String[] years = value.split("-");
-        //check for range ex: 1980-1990
-        if (years.length == 2 && Year.parse(years[0]).isBefore(Year.parse(years[1]))) {
-            return true;
-        }
-        //check for single year ex: 1930
-        if (years.length == 1) {
-            try {
-                Year year = Year.of(Integer.parseInt(value));
-                return year != null;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
-    }
+
 
     /**
      * Filter the date values from the map. The date values are either strings that

@@ -96,22 +96,24 @@ public class AttributionConverter{
     // set Attribution with creator values. Checks for URI and adds their labels from Agents. Adds the NonURI values too
     public void checkCreatorLabel(Attribution attribution, List<Agent> agents, Map<String, List<String>> creatorMap) {
         Map<String, List<String>> finalMap = new HashMap<>();
-        for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
-            List<String> creatorValues = new ArrayList<>();
-            for (String value : creator.getValue()) {
-                if (EuropeanaUriUtils.isUri(value)) {
-                    for (Agent agent : agents) {
-                        if (StringUtils.equals(value, agent.getAbout())) {
-                            creatorValues.addAll(getCreatorFromAgent(agent));
+        if(!creatorMap.isEmpty() && !agents.isEmpty()) {
+            for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
+                List<String> creatorValues = new ArrayList<>();
+                for (String value : creator.getValue()) {
+                    if (EuropeanaUriUtils.isUri(value)) {
+                        for (Agent agent : agents) {
+                            if (StringUtils.equals(value, agent.getAbout())) {
+                                creatorValues.addAll(getCreatorFromAgent(agent));
+                            }
                         }
+                    } else {
+                        creatorValues.add(value);
                     }
-                } else {
-                    creatorValues.add(value);
                 }
+                //remove any duplicates
+                ComparatorUtils.removeDuplicates(creatorValues);
+                finalMap.put(creator.getKey(), creatorValues);
             }
-            //remove any duplicates
-            ComparatorUtils.removeDuplicates(creatorValues);
-            finalMap.put(creator.getKey(), creatorValues);
         }
         //set the final values to attribution
         attribution.setCreator(concatLangawareMap(finalMap));
@@ -120,22 +122,54 @@ public class AttributionConverter{
     // get the prefLabel from Agent in "en" or any other first language available
     private List<String> getCreatorFromAgent(Agent agent) {
         List<String> creatorValues = new ArrayList<>();
-        if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
-            List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
-            //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-            creatorValues.add(enList.get(0));
-        } else {
-            //other first one available
-            for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
-                List<String> langList = stripEmptyStrings(langMap.getValue());
-                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-                creatorValues.add(langList.get(0));
-                if (creatorValues.size() == 1) {
-                    break;  // conditional break
-                }
+        if (agent != null) {
+            if (agent.getPrefLabel() != null) {
+                creatorValues = processPrefLabel(agent);
+            } else if (agent.getAltLabel() != null) {
+                creatorValues = processAltLabel(agent);
             }
         }
         return creatorValues;
+    }
+
+    private List<String> processPrefLabel(Agent agent) {
+        List<String> creatorLabels = new ArrayList<>();
+            if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
+                List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
+                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                creatorLabels.add(enList.get(0));
+            } else {
+                //other first one available
+                for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
+                    List<String> langList = stripEmptyStrings(langMap.getValue());
+                    //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                    creatorLabels.add(langList.get(0));
+                    if (creatorLabels.size() == 1) {
+                        break;  // conditional break
+                    }
+                }
+            }
+        return creatorLabels;
+    }
+
+    private List<String> processAltLabel(Agent agent) {
+        List<String> creatorLabels = new ArrayList<>();
+            if (agent.getAltLabel().get(AttributionConstants.EN) != null) {
+                List<String> enList = stripEmptyStrings(agent.getAltLabel().get(AttributionConstants.EN));
+                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                creatorLabels.add(enList.get(0));
+            } else {
+                //other first one available
+                for (Map.Entry<String, List<String>> langMap : agent.getAltLabel().entrySet()) {
+                    List<String> langList = stripEmptyStrings(langMap.getValue());
+                    //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                    creatorLabels.add(langList.get(0));
+                    if (creatorLabels.size() == 1) {
+                        break;  // conditional break
+                    }
+                }
+            }
+        return creatorLabels;
     }
 
     private void processProvider(Attribution attribution, WebResourceImpl wRes) {
