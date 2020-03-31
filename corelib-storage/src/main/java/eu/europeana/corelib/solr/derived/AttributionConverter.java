@@ -7,6 +7,7 @@ import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.utils.ComparatorUtils;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class AttributionConverter {
+public class AttributionConverter{
 
     public Attribution createAttribution(WebResourceImpl wRes) {
         Attribution attribution = new Attribution();
@@ -29,49 +30,62 @@ public class AttributionConverter {
     }
 
     private void processItemURI(Attribution attribution, WebResourceImpl wRes) {
-        attribution.setItemUri(AttributionConstants.BASE_URL+((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAbout());
+        attribution.setItemUri(
+                AttributionConstants.BASE_URL + ((AggregationImpl) wRes.getParentAggregation()).getParentBean()
+                                                                                               .getAbout());
     }
 
     private void processTCD(Attribution attribution, WebResourceImpl wRes) {
+        //map to store the creator values and process it
+        Map<String, List<String>> creatorMap = new HashMap<>();
         // get the creator first from web resource level
-        if (attribution.getCreator().size() == 0 && isNotBlank(wRes.getDcCreator())) {
-            attribution.getCreator().putAll(concatLangawareMap(wRes.getDcCreator()));
+        if (isNotBlank(wRes.getDcCreator())) {
+            creatorMap.putAll(createCreatorMap(wRes.getDcCreator()));
         }
-        //if still empty get, title, creator and date from proxy
-        checkProxy(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getProxies(), attribution);
+        // if still empty get, title, creator and date from proxy
+        checkProxy(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getProxies(), attribution,
+                   creatorMap);
         // if there was no title found in the proxy, get it from the record object itself
-        if (attribution.getTitle().size() == 0 && ArrayUtils.isNotEmpty(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle())) {
-            attribution.getTitle().put("", collectListInLines(Arrays.asList(stripEmptyStrings(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle()))));
+        if (attribution.getTitle().isEmpty() && ArrayUtils.isNotEmpty(
+                ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle())) {
+            attribution.getTitle().put("", collectListInLines(Arrays.asList(
+                    stripEmptyStrings(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getTitle()))));
         }
         //check europeana aggregation if TCD is still empty
-        checkEuropeanaAggregration(attribution, ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation());
-
-        checkCreatorLabel(attribution, (List<Agent>) ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAgents());
+        checkEuropeanaAggregration(attribution, ((AggregationImpl) wRes.getParentAggregation()).getParentBean()
+                                                                                               .getEuropeanaAggregation(),
+                                   creatorMap);
+        // check for URI, labels and remove duplicate for creator
+        checkCreatorLabel(attribution,
+                          (List<Agent>) ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAgents(),
+                          creatorMap);
     }
 
-    private void checkProxy(List<? extends Proxy> proxies, Attribution attribution) {
-        if (!proxies.isEmpty()) {
+    private void checkProxy(List<? extends Proxy> proxies, Attribution attribution,
+                            Map<String, List<String>> creatorMap) {
+        if (! proxies.isEmpty()) {
             for (Proxy proxy : proxies) {
-                if (attribution.getCreator().size() == 0 && isNotBlank(proxy.getDcCreator())) {
-                    attribution.setCreator(concatLangawareMap(proxy.getDcCreator()));
+                if (creatorMap.isEmpty() && isNotBlank(proxy.getDcCreator())) {
+                    creatorMap.putAll(createCreatorMap(proxy.getDcCreator()));
                 }
-                if (attribution.getTitle().size() == 0 && isNotBlank(proxy.getDcTitle())) {
+                if (attribution.getTitle().isEmpty() && isNotBlank(proxy.getDcTitle())) {
                     attribution.setTitle(concatLangawareMap(proxy.getDcTitle()));
                 }
-                if (attribution.getDate().size() == 0 && isNotBlank(proxy.getYear())) {
+                if (attribution.getDate().isEmpty() && isNotBlank(proxy.getYear())) {
                     attribution.setDate(concatLangawareMap(proxy.getYear()));
                 }
             }
         }
     }
 
-    private void checkEuropeanaAggregration(Attribution attribution, EuropeanaAggregation euAgg) {
+    private void checkEuropeanaAggregration(Attribution attribution, EuropeanaAggregation euAgg,
+                                            Map<String, List<String>> creatorMap) {
         if (euAgg != null) {
             // get EuropeanaAggregation's edm:landingPage
             attribution.setLandingPage(euAgg.getEdmLandingPage());
             // if creatorMap is empty still, check on the Europeana aggregation
-            if (attribution.getCreator().size() == 0 && isNotBlank(euAgg.getDcCreator())) {
-                attribution.getCreator().putAll(concatLangawareMap(euAgg.getDcCreator()));
+            if (creatorMap.isEmpty() && isNotBlank(euAgg.getDcCreator())) {
+                creatorMap.putAll(createCreatorMap(euAgg.getDcCreator()));
             } // ditto, if rights is still empty
             if (StringUtils.isEmpty(attribution.getRightsStatement()) && isNotBlank(euAgg.getEdmRights())) {
                 attribution.setRightsStatement(squeezeMap(euAgg.getEdmRights()));
@@ -79,45 +93,51 @@ public class AttributionConverter {
         }
     }
 
-    // form a creator map with nonURI Values and labels for URI values
-    public void checkCreatorLabel(Attribution attribution, List<Agent> agents) {
-        Map<String, String> creatorMap = new HashMap<>();
-        for (Map.Entry<String, String> entry : attribution.getCreator().entrySet()) {
-                if(EuropeanaUriUtils.isUri(entry.getValue())) {
-                   for(Agent agent : agents) {
-                       if(StringUtils.equals(entry.getValue(), agent.getAbout())) {
-                        creatorMap.putAll(getCreatorFromAgent(agent));
-                       }
-                   }
-                }
-                else {
-                    creatorMap.put(entry.getKey(), entry.getValue());
+    // set Attribution with creator values. Checks for URI and adds their labels from Agents. Adds the NonURI values too
+    public void checkCreatorLabel(Attribution attribution, List<Agent> agents, Map<String, List<String>> creatorMap) {
+        Map<String, List<String>> finalMap = new HashMap<>();
+        for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
+            List<String> creatorValues = new ArrayList<>();
+            for (String value : creator.getValue()) {
+                if (EuropeanaUriUtils.isUri(value)) {
+                    for (Agent agent : agents) {
+                        if (StringUtils.equals(value, agent.getAbout())) {
+                            creatorValues.addAll(getCreatorFromAgent(agent));
+                        }
+                    }
+                } else {
+                    creatorValues.add(value);
                 }
             }
-        attribution.getCreator().clear();
-        attribution.setCreator(creatorMap);
+            //remove any duplicates
+            ComparatorUtils.removeDuplicates(creatorValues);
+            finalMap.put(creator.getKey(), creatorValues);
         }
+        //set the final values to attribution
+        attribution.setCreator(concatLangawareMap(finalMap));
+    }
 
     // get the prefLabel from Agent in "en" or any other first language available
-    private Map getCreatorFromAgent(Agent agent) {
-        Map<String, String> map = new HashMap<>();
+    private List<String> getCreatorFromAgent(Agent agent) {
+        List<String> creatorValues = new ArrayList<>();
         if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
             List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
-            map.put(AttributionConstants.EN, (collectListInLines(enList)));
+            //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+            creatorValues.add(enList.get(0));
         } else {
-            //as pref label english is not present; pick up the first one available
-            // should not strip "def" as it will generate a "" key which might be already existing in the map.
-            // And if the value of "" is not URI, we will end up removing that value from the creator
+            //other first one available
             for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
                 List<String> langList = stripEmptyStrings(langMap.getValue());
-                map.put(langMap.getKey(),  (collectListInLines(langList)));
-                if(map.size() == 1) {
+                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+                creatorValues.add(langList.get(0));
+                if (creatorValues.size() == 1) {
                     break;  // conditional break
                 }
             }
         }
-        return map;
+        return creatorValues;
     }
+
     private void processProvider(Attribution attribution, WebResourceImpl wRes) {
         //provider : edmDataProvider
         if (isNotBlank(wRes.getParentAggregation().getEdmDataProvider())) {
@@ -129,11 +149,10 @@ public class AttributionConverter {
 
     private void processCountry(Attribution attribution, WebResourceImpl wRes) {
         //country :edmCountry
-        EuropeanaAggregation euAgg = ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation();
-        if(euAgg != null) {
-            if (attribution.getCountry().size() == 0 && isNotBlank(euAgg.getEdmCountry())){
-                attribution.getCountry().putAll(concatLangawareMap(euAgg.getEdmCountry()));
-            }
+        EuropeanaAggregation euAgg = ((AggregationImpl) wRes.getParentAggregation()).getParentBean()
+                                                                                    .getEuropeanaAggregation();
+        if (euAgg != null && attribution.getCountry().isEmpty() && isNotBlank(euAgg.getEdmCountry())) {
+            attribution.getCountry().putAll(concatLangawareMap(euAgg.getEdmCountry()));
         }
     }
 
@@ -143,7 +162,8 @@ public class AttributionConverter {
             attribution.setRightsStatement(squeezeMap(wRes.getWebResourceEdmRights()));
         }
         // If rightsStatement is still empty, check on the aggregation
-        if (StringUtils.isEmpty(attribution.getRightsStatement()) && isNotBlank(wRes.getParentAggregation().getEdmRights())) {
+        if (StringUtils.isEmpty(attribution.getRightsStatement()) && isNotBlank(
+                wRes.getParentAggregation().getEdmRights())) {
             attribution.setRightsStatement(squeezeMap(wRes.getParentAggregation().getEdmRights()));
         }
         processDeprecatedDate(attribution, wRes);
@@ -173,7 +193,8 @@ public class AttributionConverter {
             }
             return option.getRightsText();
         } else if (attribution.getRightsStatement() != null) {
-            LogManager.getLogger(AttributionConverter.class).warn("Unable to find label for rights URL {}", attribution.getRightsStatement());
+            LogManager.getLogger(AttributionConverter.class).warn("Unable to find label for rights URL {}",
+                                                                  attribution.getRightsStatement());
         }
         return null;
     }
@@ -188,15 +209,15 @@ public class AttributionConverter {
 
     // utility to check whether of not a Map is empty or null
     private boolean isNotBlank(Map<?, ?> map) {
-        return map != null && !map.isEmpty();
+        return map != null && ! map.isEmpty();
     }
 
     // daisy-chains Strings in a List, separated with ;
     private String collectListInLines(List<String> list) {
         StringBuilder value = new StringBuilder();
-        int i = 1;
+        int           i     = 1;
         for (String langString : list) {
-            value.append(cleanUp(langString) + (i < list.size() ? "; " : ""));
+            value.append(cleanUp(langString)).append(i < list.size() ? "; " : "");
             i++;
         }
         return value.toString();
@@ -233,12 +254,27 @@ public class AttributionConverter {
         return flatMap;
     }
 
+    // saves the creator values in a language aware map
+    private Map createCreatorMap(Map<String, List<String>> bulkyMap) {
+        Map<String, List<String>> creatorMap = new HashMap<>();
+        if (bulkyMap.get(AttributionConstants.DEF) != null) {
+            List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
+            creatorMap.put("", defList);
+        } else {
+            for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+                List<String> langList = stripEmptyStrings(langMap.getValue());
+                creatorMap.put(langMap.getKey(), langList);
+            }
+        }
+        return creatorMap;
+    }
+
     // returns only the first non-empty value found in a Map<String, List<String>> (used for edm:rights)
     private String squeezeMap(Map<String, List<String>> map) {
         StringBuilder retval = new StringBuilder();
         for (Map.Entry<String, List<String>> entrySet : map.entrySet()) {
             List<String> entryList = stripEmptyStrings(entrySet.getValue());
-            if (!entryList.isEmpty()) {
+            if (! entryList.isEmpty()) {
                 retval.append(cleanUp(entryList.get(0)));
                 break; // needed ernly wernce
             }
@@ -254,6 +290,6 @@ public class AttributionConverter {
                 solidCheese.add(cheeseOrHole);
             }
         }
-        return solidCheese.toArray(new String[solidCheese.size()]);
+        return solidCheese.toArray(new String[0]);
     }
 }
