@@ -30,9 +30,9 @@ import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 @ContextConfiguration({"/corelib-web-context.xml", "/corelib-web-test.xml"})
 public class SchemaOrgUtilsTest {
 
-    static String FULL_BEAN_FILE = "/schemaorg/fullbean.json";
-    static String EDMORGANIZATION_FILE = "/schemaorg/edmorganization.json";
-    static String DATEFORMATCHECK_FILE = "/schemaorg/dateformat.json";
+    private static final String FULL_BEAN_FILE = "/schemaorg/fullbean.json";
+    private static final String EDMORGANIZATION_FILE = "/schemaorg/edmorganization.json";
+    private static final String DATEFORMATCHECK_FILE = "/schemaorg/dateformat.json";
 
     /**
      * Test schema.org generation and serialization
@@ -47,12 +47,12 @@ public class SchemaOrgUtilsTest {
         Assert.assertNotNull(output);
         //Used for testing purposes, use the following call to update the expected output whenever the serialization is updated
         //writeToFile(output);
-        InputStream stream = getClass().getResourceAsStream(FULL_BEAN_FILE);
-        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
-        //we cannot string compare until the ordering of properties is implemented
-        //still, a fast indication that the output was changed will be indicated through the length of the string
-        assertEquals(expectedOutput.length(), output.length());
-        stream.close();
+        try (InputStream stream = getClass().getResourceAsStream(FULL_BEAN_FILE)) {
+            String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            //we cannot string compare until the ordering of properties is implemented
+            //still, a fast indication that the output was changed will be indicated through the length of the string
+            assertEquals(expectedOutput.length(), output.length());
+        }
     }
 
     @Test
@@ -65,11 +65,12 @@ public class SchemaOrgUtilsTest {
         output = serializer.serialize(thingObject);
         Assert.assertNotNull(output);
 
-        InputStream stream = getClass().getResourceAsStream(EDMORGANIZATION_FILE);
-        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
-        assertEquals(expectedOutput.length(), output.length());
-        // If fails, then the field order definition misses some fields 
-        assertEquals(expectedOutput, output);
+        try (InputStream stream = getClass().getResourceAsStream(EDMORGANIZATION_FILE)) {
+            String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            assertEquals(expectedOutput.length(), output.length());
+            // If fails, then the field order definition misses some fields
+            assertEquals(expectedOutput, output);
+        }
     }
 
     @Test
@@ -92,16 +93,17 @@ public class SchemaOrgUtilsTest {
         SchemaOrgUtils.processDateValue(object, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, timespans, false, "def", "http://semium.org/time/1901"); //duplicate
         SchemaOrgUtils.processDateValue(object, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, timespans, false, "def", "23 march"); //invalid
         SchemaOrgUtils.processDateValue(object, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, timespans, true, "def", "23 testing invalid"); //7
+        SchemaOrgUtils.processDateValue(object, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, timespans, false, "def", ""); //invalid
 
         assertNotNull(object.getTemporalCoverage());
         assertEquals(7, object.getTemporalCoverage().size());
         JsonLdSerializer serializer = new JsonLdSerializer();
         output = serializer.serialize(object);
         assertNotNull(output);
-        InputStream stream = getClass().getResourceAsStream(DATEFORMATCHECK_FILE);
-        String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
-        assertEquals(expectedOutput, output);
-        stream.close();
+        try (InputStream stream = getClass().getResourceAsStream(DATEFORMATCHECK_FILE)) {
+            String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            assertEquals(expectedOutput, output);
+        }
     }
 
     void writeToFile(String output) throws IOException, URISyntaxException {

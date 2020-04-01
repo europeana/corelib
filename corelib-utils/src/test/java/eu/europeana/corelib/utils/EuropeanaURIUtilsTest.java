@@ -18,6 +18,7 @@ public class EuropeanaURIUtilsTest {
         assertTrue(EuropeanaUriUtils.isUri("#"));
         assertTrue( EuropeanaUriUtils.isUri("bitcoin:"));
         assertFalse(EuropeanaUriUtils.isUri("5fdh5672"));
+        assertFalse( EuropeanaUriUtils.isUri(""));
         assertFalse( EuropeanaUriUtils.isUri(null));
     }
 
