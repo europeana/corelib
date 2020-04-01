@@ -27,6 +27,8 @@ public class AttributionTest {
     private static final String CREATOR_VALUE_4 = "Europeana Creator test";
     private static final String CREATOR_VALUE_5 = "https://test-multiple-language-map";
     private static final String CREATOR_VALUE_6 = "Europeana -Creator test"; // to check duplicates with punctuation
+    private static final String CREATOR_VALUE_7 = "http://europeana-test-empty-preflabel";
+    private static final String CREATOR_VALUE_8 = "http://europeana-test-altlabel";
 
     private static final String CREATOR_VALUE_2_LABEL = "Weenenk";
     private static final String CREATOR_VALUE_3_LABEL = "Ολυμπιακό μουσείο Θεσσαλονίκης";
@@ -136,6 +138,23 @@ public class AttributionTest {
         agent.getPrefLabel().get("hn").add("वीनेंक");
         agent.getPrefLabel().get("hn").add("Olympic Museum"); //another hn value. But it should pick only one
 
+        //fifth agent without preflabel
+        agent = new AgentImpl();
+        agents.add(agent);
+        agent.setAbout(CREATOR_VALUE_7);
+
+        //sixth agent with no preflabel but with altlabel
+        agent = new AgentImpl();
+        agents.add(agent);
+        agent.setAbout(CREATOR_VALUE_8);
+        agent.setAltLabel(new HashMap<>());
+        agent.getAltLabel().put("def", new ArrayList<>());
+        agent.getAltLabel().get("def").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        agent.getAltLabel().get("def").add("Olympic Museum");
+        agent.getAltLabel().put("en", new ArrayList<>());
+        agent.getAltLabel().get("en").add("Olympic Museum");
+        agent.getAltLabel().get("en").add("वीनेंक");
+
         return agents;
     }
 
@@ -203,4 +222,36 @@ public class AttributionTest {
         Assert.assertTrue(attribution.getCreator().size() == 1);
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
+
+    // empty prefLabel and altLabel check
+    @Test
+    public void testCreator_isUriWithAgentsWithNoPrefLabel() throws IOException {
+        Attribution attribution = new Attribution();
+        mockCreatorMap(CREATOR_VALUE_7);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
+    }
+
+    // empty prefLabel but altLabel available
+    @Test
+    public void testCreator_isUriWithAgentsWithAltLabel() throws IOException {
+        Attribution attribution = new Attribution();
+        mockCreatorMap(CREATOR_VALUE_8);
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
+        Assert.assertTrue(attribution.getCreator().get("").contains("Olympic Museum"));
+    }
+
+    // creator map empty check
+    @Test
+    public void test_emptyCreatorMap() throws IOException {
+        Attribution attribution = new Attribution();
+        Assert.assertTrue(creatorMap.isEmpty());
+        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        Assert.assertTrue(attribution.getCreator().isEmpty());
+    }
+
+
 }

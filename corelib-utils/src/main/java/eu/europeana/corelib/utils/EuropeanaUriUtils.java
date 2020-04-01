@@ -313,7 +313,10 @@ public class EuropeanaUriUtils {
 	}
 
 	public static boolean isUri(String str) {
-		return (isAbsoluteIRI(str) || isRelativeIRI(str));
+		if (StringUtils.isNotEmpty(str)) {
+			return (isAbsoluteIRI(str) || isRelativeIRI(str));
+		}
+		return false;
 	}
 
 	// will check if it's a absolute or relative URI
