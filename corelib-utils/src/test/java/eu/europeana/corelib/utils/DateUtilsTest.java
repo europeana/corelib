@@ -42,12 +42,16 @@ public class DateUtilsTest {
 		assertFalse(DateUtils.isYearRange("Geschichte 1775"));
 		assertFalse(DateUtils.isYearRange("1775 -Geschichte"));
 		assertFalse(DateUtils.isYearRange("1775 -"));
+		assertFalse(DateUtils.isYearRange(""));
+		assertFalse(DateUtils.isYearRange(null));
 
 		//check year
 		assertTrue(DateUtils.isYear("1880"));
 		assertFalse(DateUtils.isYear("188F"));
 		assertFalse(DateUtils.isYear("1C80"));
 		assertFalse(DateUtils.isYear("abcd"));
+		assertFalse(DateUtils.isYear(""));
+		assertFalse(DateUtils.isYear(null));
 	}
 
 	@Test
@@ -57,6 +61,8 @@ public class DateUtilsTest {
 		assertFalse(DateUtils.isIsoDate("13-02-2000"));
 		assertFalse(DateUtils.isIsoDate("testing-90"));
 		assertFalse(DateUtils.isIsoDate("8765 testing"));
+		assertFalse(DateUtils.isIsoDate(""));
+		assertFalse(DateUtils.isIsoDate(null));
 	}
 
 	@Test
@@ -67,5 +73,7 @@ public class DateUtilsTest {
 		assertFalse(DateUtils.isIsoDateTime("2017-07-2601:00:00.000Z"));
 		assertFalse(DateUtils.isIsoDateTime("2017-07-26T01:00:00.000"));
 		assertFalse(DateUtils.isIsoDateTime("2017-07-26T01::00.000Z"));
+		assertFalse(DateUtils.isIsoDateTime(""));
+		assertFalse(DateUtils.isIsoDateTime(null));
 	}
 }

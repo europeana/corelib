@@ -8,24 +8,17 @@ import static org.junit.Assert.*;
  * @author Srishti Singh
  *
  */
-public class URISchemaUtilsTest {
+public class EuropeanaURIUtilsTest {
 
     @Test
     public void isURITest() {
         assertTrue(EuropeanaUriUtils.isUri("https://"));
-
         assertTrue(EuropeanaUriUtils.isUri("http://"));
-
         assertTrue(EuropeanaUriUtils.isUri("session://"));
-
         assertTrue(EuropeanaUriUtils.isUri("#"));
-
         assertTrue( EuropeanaUriUtils.isUri("bitcoin:"));
-
         assertFalse(EuropeanaUriUtils.isUri("5fdh5672"));
-
-        assertFalse( EuropeanaUriUtils.isUri(""));
-
+        assertFalse( EuropeanaUriUtils.isUri(null));
     }
 
 }

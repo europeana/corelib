@@ -96,19 +96,11 @@ public class AttributionConverter{
     // set Attribution with creator values. Checks for URI and adds their labels from Agents. Adds the NonURI values too
     public void checkCreatorLabel(Attribution attribution, List<Agent> agents, Map<String, List<String>> creatorMap) {
         Map<String, List<String>> finalMap = new HashMap<>();
-        if(!creatorMap.isEmpty() && !agents.isEmpty()) {
+        if (! creatorMap.isEmpty() && ! agents.isEmpty()) {
             for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
                 List<String> creatorValues = new ArrayList<>();
                 for (String value : creator.getValue()) {
-                    if (EuropeanaUriUtils.isUri(value)) {
-                        for (Agent agent : agents) {
-                            if (StringUtils.equals(value, agent.getAbout())) {
-                                creatorValues.addAll(getCreatorFromAgent(agent));
-                            }
-                        }
-                    } else {
-                        creatorValues.add(value);
-                    }
+                   getCreatorLabel(agents, value, creatorValues);
                 }
                 //remove any duplicates
                 ComparatorUtils.removeDuplicates(creatorValues);
@@ -119,6 +111,18 @@ public class AttributionConverter{
         attribution.setCreator(concatLangawareMap(finalMap));
     }
 
+    //creates a list of Creator values including labels for URI values and non URI values
+    private void getCreatorLabel(List<Agent> agents, String creatorValue, List<String> creatorValues) {
+        if (EuropeanaUriUtils.isUri(creatorValue)) {
+            for (Agent agent : agents) {
+                if (StringUtils.equals(creatorValue, agent.getAbout())) {
+                    creatorValues.addAll(getCreatorFromAgent(agent));
+                }
+            }
+        } else {
+            creatorValues.add(creatorValue);
+        }
+    }
     // get the prefLabel from Agent in "en" or any other first language available
     private List<String> getCreatorFromAgent(Agent agent) {
         List<String> creatorValues = new ArrayList<>();

@@ -2,6 +2,7 @@ package eu.europeana.corelib.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
@@ -60,10 +61,12 @@ public class DateUtils {
 	 * @return
 	 */
 	public static Date parse(String date) {
-		try {
-			return DATE_TIME_FORMATTER.parse(date);
-		} catch (ParseException e) {
-			LOG.warn(e.getMessage());
+		if (StringUtils.isNotEmpty(date)) {
+			try {
+				return DATE_TIME_FORMATTER.parse(date);
+			} catch (ParseException e) {
+				LOG.warn(e.getMessage());
+			}
 		}
 		return null;
 	}
@@ -80,7 +83,7 @@ public class DateUtils {
 			try {
 				Year year = Year.of(Integer.parseInt(value));
 				return year != null;
-			} catch (Exception e) {
+			} catch (NumberFormatException | DateTimeException e) {
 				return false;
 			}
 		}
@@ -94,14 +97,15 @@ public class DateUtils {
 	 * @return true when the string is a year range
 	 */
 	public static boolean isYearRange(String value) {
-		String[] years = value.split("-");
-		//check for range ex: 1980-1990
-		if (years.length == 2) {
-			try {
-				return Year.parse(years[0]).isBefore(Year.parse(years[1]));
-			}
-			catch(Exception e) {
-				return false;
+		if (StringUtils.isNotEmpty(value)) {
+			String[] years = value.split("-");
+			//check for range ex: 1980-1990
+			if (years.length == 2) {
+				try {
+					return Year.parse(years[0]).isBefore(Year.parse(years[1]));
+				} catch (DateTimeException e) {
+					return false;
+				}
 			}
 		}
 		return false;
@@ -113,12 +117,15 @@ public class DateUtils {
 	 * @return true when the string is a ISO8601 date
 	 */
 	public static boolean isIsoDate(String value) {
-		try {
-			TemporalAccessor tmp = ISO_DATE_FORMATTER.parse(value);
-			return tmp != null;
-		} catch (Exception e) {
-			return false;
+		if (StringUtils.isNotEmpty(value)){
+			try {
+				TemporalAccessor tmp = ISO_DATE_FORMATTER.parse(value);
+				return tmp != null;
+			} catch (DateTimeException e) {
+				return false;
+			}
 		}
+		return false;
 	}
 
 	/**
