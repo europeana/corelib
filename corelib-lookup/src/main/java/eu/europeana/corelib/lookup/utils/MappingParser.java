@@ -1,6 +1,7 @@
 package eu.europeana.corelib.lookup.utils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -13,7 +14,7 @@ import java.io.IOException;
  */
 public abstract class MappingParser {
 
-	private static final Logger LOG = Logger.getLogger(MappingParser.class);
+	private static final Logger LOG = LogManager.getLogger(MappingParser.class);
 
 	protected String repository;
 	/**

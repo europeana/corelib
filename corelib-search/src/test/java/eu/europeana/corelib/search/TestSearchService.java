@@ -2,7 +2,7 @@ package eu.europeana.corelib.search;
 
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 public interface TestSearchService extends SearchService {
 

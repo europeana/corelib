@@ -1,7 +1,8 @@
 package eu.europeana.corelib.lookup.impl;
 
 import com.mongodb.MongoClient;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongoServer {
 
-	private static final Logger LOG = Logger.getLogger(EuropeanaIdMongoServerImpl.class);
+	private static final Logger LOG = LogManager.getLogger(EuropeanaIdMongoServerImpl.class);
 	private static final String OLD_ID = "oldId";
 	private static final String NEW_ID = "newId";
 
@@ -43,11 +44,21 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 
 	/**
 	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer#createDatastore()
+	 * @deprecated
 	 */
 	@Deprecated
 	@Override
 	public void createDatastore() {
 		createDatastore(false);
+	}
+
+	/**
+	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer#setDatastore(org.mongodb.morphia.Datastore)
+	 */
+	@Override
+	public void setDatastore(Datastore datastore) {
+		this.datastore = datastore;
+
 	}
 
 	/**
@@ -89,7 +100,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 		try {
 			return datastore.find(EuropeanaId.class).field(OLD_ID).equal(oldId).get();
 		} catch (Exception e) {
-			LOG.error("Error retrieving europeanaId", e);
+			LOG.error("[EuropeanaIdMongoServer] [retrieveEuropeanaIdFromOld()] Error retrieving europeanaId", e);
 		}
 		return null;
 	}
@@ -104,8 +115,7 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public List<EuropeanaId> retrieveEuropeanaIdFromNew(String newId) {
-		return datastore.find(EuropeanaId.class).field(NEW_ID).equal(newId)
-				.asList();
+		return datastore.find(EuropeanaId.class).field(NEW_ID).equal(newId).asList();
 	}
 
 	/**
@@ -113,8 +123,8 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public boolean oldIdExists(String newId) {
-		return datastore.find(EuropeanaId.class).field(NEW_ID).equal(newId)
-				.get() != null;
+		return datastore.find(EuropeanaId.class).field(NEW_ID).equal(newId).get() != null;
+
 	}
 
 	/**
@@ -172,11 +182,9 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	 */
 	@Override
 	public void deleteEuropeanaId(String oldId, String newId) {
-
 		Query<EuropeanaId> deleteQuery = datastore
 				.createQuery(EuropeanaId.class).field(OLD_ID).equal(oldId)
 				.field(NEW_ID).equal(newId);
-
 		datastore.findAndDelete(deleteQuery);
 	}
 
@@ -198,7 +206,6 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 	public void deleteEuropeanaIdFromNew(String newId) {
 		Query<EuropeanaId> deleteQuery = datastore
 				.createQuery(EuropeanaId.class).field(NEW_ID).equal(newId);
-
 		datastore.findAndDelete(deleteQuery);
 	}
 
@@ -213,15 +220,6 @@ public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongo
 		UpdateOperations<EuropeanaId> ops = datastore.createUpdateOperations(
 				EuropeanaId.class).set("timestamp", new Date().getTime());
 		datastore.update(updateQuery, ops);
-	}
-
-	/**
-	 * @see eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer#setDatastore(org.mongodb.morphia.Datastore)
-	 */
-	@Override
-	public void setDatastore(Datastore datastore) {
-		this.datastore = datastore;
-
 	}
 
 	/**

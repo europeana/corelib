@@ -18,21 +18,14 @@ import org.apache.logging.log4j.Logger;
 /**
  * Helper class to create a MongoClient
  */
-public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener {
-//    private static final Logger LOG = LoggerFactory.getLogger(MongoProviderImpl.class);
+public class MongoProviderImpl implements MongoProvider {
+
     private static final Logger LOG                   = LogManager.getLogger(MongoProviderImpl.class);
 
     private static final int MAX_CONNECTION_IDLE_MILLIS   = 30000;
-    private static final int MAX_CONNECTION_LIFE_MILLIS   = 60000;
-    private static final int CONNECTIONS_PER_HOST         = 40;
-    private static final int THREADS_MAY_BLOCK_MULTIPLIER = 100;
-    private static final int SOCKET_TIMEOUT_MILLIS        = 60000;
-    private static final int CONNECT_TIMEOUT_MILLIS       = 30000;
 
     private MongoClient mongo;
     private String definedDatabase;
-
-    private int nrConnections = 0;
 
     /**
      * Create a new MongoClient based on a connectionUrl, e.g.
@@ -43,13 +36,7 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
      * @param connectionUrl
      */
     public MongoProviderImpl(String connectionUrl) {
-//        MongoClientURI uri = new MongoClientURI(connectionUrl);
-//        defaultDatabase = uri.getDatabase();
-//        LOG.info("Creating new MongoClient - "+uri.getHosts() +
-//                (StringUtils.isEmpty(defaultDatabase) ? "" : ", database "+ defaultDatabase));
-//        mongo = new MongoClient(uri);
-
-        MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder().addConnectionPoolListener(this);
+        MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder();
         clientOptionsBuilder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS);
         MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
         definedDatabase = uri.getDatabase();
@@ -57,20 +44,25 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
                 uri.getHosts(),
                 (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase));
         mongo = new MongoClient(uri);
-        LOG.info("[MongoProvider] [constructor] connection count: {}", this.nrConnections);
     }
 
     /**
      * Create a new MongoClient without any credentials
+     * @deprecated This constructor is not used anywhere
+     *
      * @param hosts comma-separated host names
      * @param ports omma-separated port numbers
      */
+    @Deprecated ()
     public MongoProviderImpl(String hosts, String ports) {
         this(hosts, ports, null, null, null, null);
     }
 
     /**
      * Create a new MongoClient with the supplied credentials
+     * Used only in corelib.lookup EuropeanaIdRegistryMongoServerImpl; two other usages (in corelib-db ApiMongoConnector
+     * and in corelib.lookup CollectionMongoServerImpl) are unused themselves
+     *
      * @param hosts comma-separated host names
      * @param ports comma-separated port numbers
      * @param dbName optional
@@ -104,7 +96,7 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
                     ServerAddress address = new ServerAddress(host, getPort(ports, i));
                     serverAddresses.add(address);
                 } catch (NumberFormatException e) {
-                    LOG.error("Error parsing port numbers", e);
+                    LOG.error("[MongoProvider] [params constructor] error parsing port numbers", e);
                 }
             }
             i++;
@@ -117,9 +109,11 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
         }
 
         if (StringUtils.isEmpty(dbName) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +" (no credentials)");
+            LOG.info("[MongoProvider] [params constructor] creating new MongoClient: {} {}",
+                    Arrays.toString(hosts),
+                    " (no credentials)");
             definedDatabase = null;
-            mongo = new MongoClient(serverAddresses, builder.build());
+            mongo           = new MongoClient(serverAddresses, builder.build());
         } else {
             List<MongoCredential> credentials = new ArrayList<>();
             credentials.add(MongoCredential.createCredential(username, dbName, password.toCharArray()));
@@ -129,8 +123,7 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
         }
     }
 
-    private int getPort(String[] ports, int index)
-        throws NumberFormatException {
+    private int getPort(String[] ports, int index) {
         if (ports == null || index < 0) {
             throw new NumberFormatException("Empty port");
         }
@@ -143,6 +136,11 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
     /**
      * Create a new MongoClient with the supplied credentials and optionsBuilder
      * If no optionsBuilder is provided a default one will be constructed.
+     *
+     * Usages:  corelib-storage:    EdmMongoServerImpl, but that method is not used
+     * internally:         #49 (deprecated, nog used)
+     * #65 => corelib.lookup EuropeanaIdRegistryMongoServerImpl
+     *
      * @param hosts comma-separated host names
      * @param ports comma-separated port numbers
      * @param dbName optional
@@ -151,7 +149,12 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
      * @param optionsBuilder optional
      */
     public MongoProviderImpl(String hosts, String ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
-        this(StringUtils.split(hosts, ","), StringUtils.split(ports, ","), dbName, username, password, optionsBuilder);
+        this(StringUtils.split(hosts, ","),
+                StringUtils.split(ports, ","),
+                dbName,
+                username,
+                password,
+                optionsBuilder);
     }
 
     /**
@@ -175,50 +178,8 @@ public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener
     @Override
     public void close() {
         if (mongo != null) {
-            LOG.info("Closing MongoClient - "+mongo.getServerAddressList().get(0));
+            LOG.info("[MongoProvider] ... closing MongoClient ... {}", mongo.getServerAddressList().get(0));
             mongo.close();
         }
-    }
-
-    @Override
-    public void connectionPoolOpened(ConnectionPoolOpenedEvent event) {
-        System.out.println("MONGO connectionPoolOpened ");
-    }
-
-    @Override
-    public void connectionPoolClosed(ConnectionPoolClosedEvent event) {
-        System.out.println("MONGO connectionPoolClosed");
-
-    }
-
-    @Override
-    public void connectionCheckedOut(ConnectionCheckedOutEvent event) {
-    }
-
-    @Override
-    public void connectionCheckedIn(ConnectionCheckedInEvent event) {
-    }
-
-    @Override
-    public void waitQueueEntered(ConnectionPoolWaitQueueEnteredEvent event) {
-
-    }
-
-    @Override
-    public void waitQueueExited(ConnectionPoolWaitQueueExitedEvent event) {
-
-    }
-
-    @Override
-    public void connectionAdded(ConnectionAddedEvent event) {
-        System.out.println("Connection is added");
-
-    }
-
-    @Override
-    public void connectionRemoved(ConnectionRemovedEvent event) {
-        System.out.println("Connection is removed" );
-
-
     }
 }

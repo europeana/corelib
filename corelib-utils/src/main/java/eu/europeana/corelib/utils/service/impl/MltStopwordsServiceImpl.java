@@ -13,7 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import eu.europeana.corelib.utils.service.MltStopwordsService;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @deprecated July 2017 MoreLikeThis / SimilarItems for records is no longer being used (and doesn't work properly)
@@ -65,7 +66,7 @@ public class MltStopwordsServiceImpl implements MltStopwordsService {
 					stopwords.add(StringUtils.lowerCase(line));
 				}
 			} catch (IOException e) {
-				Logger.getLogger(MltStopwordsServiceImpl.class).error("Error reading stopwords", e);
+				LogManager.getLogger(MltStopwordsServiceImpl.class).error("Error reading stopwords", e);
 			} finally {
 				LineIterator.closeQuietly(it);
 			}

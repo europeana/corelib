@@ -34,23 +34,25 @@ import java.util.Map;
 public class EdmMongoServerImpl implements EdmMongoServer {
 
     private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
-
-    private MongoClient mongoClient;
-    private String databaseName;
-    private Datastore datastore;
-    private EuropeanaIdMongoServer europeanaIdMongoServer;
     /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
-    private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
+    private static final String                 RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
     // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-    private static final String PORTAL_PREFIX = "http://www.europeana.eu/record";
+    private static final String                 PORTAL_PREFIX = "http://www.europeana.eu/record";
+    private              MongoClient            mongoClient;
+    private              String                 databaseName;
+    private              Datastore              datastore;
+    private              EuropeanaIdMongoServer europeanaIdMongoServer;
 
     /**
      * Create a new Morphia datastore to do get/delete/save operations on the database
      * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
      * provided mongoClient
+     * Used by corelib.search embeddedMongoProvider (unit test usage) only
+     *
+     *@deprecated
+     *
      * @param mongoClient
      * @param databaseName
-     * @deprecated
      */
     @Deprecated
     public EdmMongoServerImpl(MongoClient mongoClient, String databaseName)  {
@@ -61,6 +63,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
      * Create a new Morphia datastore to do get/delete/save operations on the database
      * Any required login credentials as well as connection options (like timeouts) should be set in advance in the
      * provided mongoClient
+     * Used by corelib.search embeddedMongoProvider (unit test usage) only
+     *
      * @param mongoClient
      * @param databaseName
      * @param createIndexes, if true then it will try to create the necessary indexes if needed
@@ -73,12 +77,13 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
     /**
      * Create a new datastore to do get/delete/save operations on the database.
+     * @deprecated              unused
+     *
      * @param hosts comma-separated host names
      * @param ports comma-separated port numbers
      * @param databaseName
      * @param username
      * @param password
-     * @deprecated
      */
     @Deprecated
     public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) {
@@ -87,7 +92,8 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
     /**
      * Create a new datastore to do get/delete/save operations on the database.
-     * Note that this constructor sets specific connectionTimeout and socketTimeout values
+     * (called only from #102 above, which is deprecated / unused)
+     *
      * @param hosts comma-separated host names
      * @param ports comma-separated port numbers
      * @param databaseName

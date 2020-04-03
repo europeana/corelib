@@ -1,7 +1,8 @@
 package eu.europeana.corelib.neo4j;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
@@ -12,7 +13,6 @@ import org.junit.BeforeClass;
 //import org.apache.commons.io.FileUtils;
 //import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
-//import org.apache.log4j.Logger;
 //import org.codehaus.jackson.node.TextNode;
 //import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 //import org.codehaus.plexus.logging.console.ConsoleLogger;
@@ -39,7 +39,7 @@ import org.apache.log4j.Level;
  */
 public class Neo4jTest {
 
-    private static final Logger LOG = Logger.getLogger(Neo4jTest.class);
+    private static final Logger LOG = LogManager.getLogger(Neo4jTest.class);
     private static final String DB_SERVER_ADDRESS = "http://localhost:7474";
     private static final String DB_FOLDER = "/db/data/";
 
@@ -53,7 +53,6 @@ public class Neo4jTest {
     @BeforeClass
     public static void setup() {
         BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
 
         // skip all Neo4j tests on Windows computers
         String os = System.getProperty("os.name").toLowerCase();

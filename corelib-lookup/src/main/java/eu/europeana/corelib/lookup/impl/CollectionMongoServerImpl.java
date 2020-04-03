@@ -1,7 +1,8 @@
 package eu.europeana.corelib.lookup.impl;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.mongodb.MongoClient;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
@@ -22,7 +23,7 @@ import eu.europeana.corelib.tools.lookuptable.CollectionMongoServer;
  */
 public class CollectionMongoServerImpl implements MongoServer, CollectionMongoServer {
 
-	private static final Logger log = Logger.getLogger(CollectionMongoServerImpl.class.getName());
+	private static final Logger LOG = LogManager.getLogger(CollectionMongoServerImpl.class.getName());
 
 	private MongoClient mongoClient;
 	private String databaseName;
@@ -31,10 +32,12 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	/**
 	 * Constructor for the CollectionMongoServer to ensure that everything has been set upon initialization
 	 * Any required login credentials should be present in the provided mongoClient
-	 * 
+	 * @deprecated 	not called from anywhere
+	 *
 	 * @param mongoClient the Mongo Server to connect to
 	 * @param databaseName the database to connect to
 	 */
+	@Deprecated
 	public CollectionMongoServerImpl(MongoClient mongoClient, String databaseName) {
 		this.mongoClient = mongoClient;
 		this.databaseName = databaseName;
@@ -70,7 +73,7 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 		morphia.map(Collection.class);
 		datastore = morphia.createDatastore(mongoClient, databaseName);
 		datastore.ensureIndexes();
-		log.info("CollectionMongoServer datastore is created");
+		LOG.info("[corelib.lookup CollectionMongoServer] CollectionMongoServer datastore is created");
 	}
 
 	/**
@@ -78,6 +81,7 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	 */
 	@Override
 	public Datastore getDatastore() {
+		LOG.info("[corelib.lookup CollectionMongoServer] get datastore");
 		return this.datastore;
 	}
 
@@ -87,7 +91,7 @@ public class CollectionMongoServerImpl implements MongoServer, CollectionMongoSe
 	@Override
 	public void close() {
 		if (mongoClient != null) {
-			log.info("Closing MongoClient for CollectionMongoServer");
+			LOG.info("[corelib.lookup CollectionMongoServer] closing MongoClient");
 			mongoClient.close();
 		}
 	}

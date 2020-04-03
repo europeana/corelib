@@ -3,9 +3,10 @@ package eu.europeana.corelib.db.service.impl;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.europeana.corelib.db.entity.relational.TokenImpl;
@@ -26,7 +27,7 @@ import eu.europeana.corelib.web.exception.ProblemType;
 public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		TokenService {
 
-	private final Logger log = Logger.getLogger(getClass().getName());
+	private static final Logger LOG = LogManager.getLogger(TokenServiceImpl.class);
 
 	/**
 	 * Overriding the findByID() method to handle expiration
@@ -39,7 +40,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 		try {
 			token = super.findByID(id);
 		} catch (DatabaseException e) {
-			log.severe("DatabaseException: " + e.getLocalizedMessage());
+			LOG.error("DatabaseException: {}",  e.getLocalizedMessage());
 			return null;
 		}
 		if (token != null) {
@@ -48,7 +49,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 				return token;
 			} else {
 			getDao().delete(token);
-			log.severe("Token is outdated, so deleted: " + id);
+			LOG.error("Token is outdated, so deleted: {}",  id);
 			throw new DatabaseException(ProblemType.TOKEN_OUTDATED);
 		}
 		}
@@ -58,7 +59,7 @@ public class TokenServiceImpl extends AbstractServiceImpl<Token> implements
 	@Override
 	public Token create(String email, String redirect) throws DatabaseException {
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(redirect)) {
-			log.severe("DatabaseException: email or redirect URL cannot be null [create token]. " + ProblemType.INVALID_ARGUMENTS);
+			LOG.error("DatabaseException: email or redirect URL cannot be null [create token]. {}",  ProblemType.INVALID_ARGUMENTS);
 			throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
 		}
 		TokenImpl token = new TokenImpl();
