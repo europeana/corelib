@@ -5,22 +5,34 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.event.*;
 import eu.europeana.corelib.storage.MongoProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Helper class to create a MongoClient
  */
-public class MongoProviderImpl implements MongoProvider {
-    private static final Logger LOG = LoggerFactory.getLogger(MongoProviderImpl.class);
+public class MongoProviderImpl implements MongoProvider , ConnectionPoolListener {
+//    private static final Logger LOG = LoggerFactory.getLogger(MongoProviderImpl.class);
+    private static final Logger LOG                   = LogManager.getLogger(MongoProviderImpl.class);
+
+    private static final int MAX_CONNECTION_IDLE_MILLIS   = 30000;
+    private static final int MAX_CONNECTION_LIFE_MILLIS   = 60000;
+    private static final int CONNECTIONS_PER_HOST         = 40;
+    private static final int THREADS_MAY_BLOCK_MULTIPLIER = 100;
+    private static final int SOCKET_TIMEOUT_MILLIS        = 60000;
+    private static final int CONNECT_TIMEOUT_MILLIS       = 30000;
 
     private MongoClient mongo;
-    private String defaultDatabase;
+    private String definedDatabase;
+
+    private int nrConnections = 0;
 
     /**
      * Create a new MongoClient based on a connectionUrl, e.g.
@@ -31,11 +43,21 @@ public class MongoProviderImpl implements MongoProvider {
      * @param connectionUrl
      */
     public MongoProviderImpl(String connectionUrl) {
-        MongoClientURI uri = new MongoClientURI(connectionUrl);
-        defaultDatabase = uri.getDatabase();
-        LOG.info("Creating new MongoClient - "+uri.getHosts() +
-                (StringUtils.isEmpty(defaultDatabase) ? "" : ", database "+ defaultDatabase));
+//        MongoClientURI uri = new MongoClientURI(connectionUrl);
+//        defaultDatabase = uri.getDatabase();
+//        LOG.info("Creating new MongoClient - "+uri.getHosts() +
+//                (StringUtils.isEmpty(defaultDatabase) ? "" : ", database "+ defaultDatabase));
+//        mongo = new MongoClient(uri);
+
+        MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder().addConnectionPoolListener(this);
+        clientOptionsBuilder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS);
+        MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
+        definedDatabase = uri.getDatabase();
+        LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
+                uri.getHosts(),
+                (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase));
         mongo = new MongoClient(uri);
+        LOG.info("[MongoProvider] [constructor] connection count: {}", this.nrConnections);
     }
 
     /**
@@ -96,13 +118,13 @@ public class MongoProviderImpl implements MongoProvider {
 
         if (StringUtils.isEmpty(dbName) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +" (no credentials)");
-            defaultDatabase = null;
+            definedDatabase = null;
             mongo = new MongoClient(serverAddresses, builder.build());
         } else {
             List<MongoCredential> credentials = new ArrayList<>();
             credentials.add(MongoCredential.createCredential(username, dbName, password.toCharArray()));
             LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +", database "+dbName+" (with credentials)");
-            defaultDatabase = dbName;
+            definedDatabase = dbName;
             mongo = new MongoClient(serverAddresses, credentials, builder.build());
         }
     }
@@ -144,7 +166,7 @@ public class MongoProviderImpl implements MongoProvider {
      * @see MongoProvider#getDefaultDatabase()
      */
     public String getDefaultDatabase() {
-        return defaultDatabase;
+        return definedDatabase;
     }
 
     /**
@@ -158,4 +180,45 @@ public class MongoProviderImpl implements MongoProvider {
         }
     }
 
+    @Override
+    public void connectionPoolOpened(ConnectionPoolOpenedEvent event) {
+        System.out.println("MONGO connectionPoolOpened ");
+    }
+
+    @Override
+    public void connectionPoolClosed(ConnectionPoolClosedEvent event) {
+        System.out.println("MONGO connectionPoolClosed");
+
+    }
+
+    @Override
+    public void connectionCheckedOut(ConnectionCheckedOutEvent event) {
+    }
+
+    @Override
+    public void connectionCheckedIn(ConnectionCheckedInEvent event) {
+    }
+
+    @Override
+    public void waitQueueEntered(ConnectionPoolWaitQueueEnteredEvent event) {
+
+    }
+
+    @Override
+    public void waitQueueExited(ConnectionPoolWaitQueueExitedEvent event) {
+
+    }
+
+    @Override
+    public void connectionAdded(ConnectionAddedEvent event) {
+        System.out.println("Connection is added");
+
+    }
+
+    @Override
+    public void connectionRemoved(ConnectionRemovedEvent event) {
+        System.out.println("Connection is removed" );
+
+
+    }
 }
