@@ -5,7 +5,6 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import com.mongodb.event.*;
 import eu.europeana.corelib.storage.MongoProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
