@@ -94,7 +94,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
+        //emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
 
         return user;
     }
@@ -190,7 +190,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         if (user == null) {
             throw new DatabaseException(ProblemType.NO_USER);
         }
-        emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
+        //emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
         return user;
     }
 
@@ -223,7 +223,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         // user exists; token exists and matches on email address: go ahead
         user.setPassword(hashPassword(newPassword));
         tokenService.remove(token);
-        emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
+        //emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
         return user;
     }
 
