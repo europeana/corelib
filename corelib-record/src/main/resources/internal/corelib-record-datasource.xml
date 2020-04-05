@@ -8,9 +8,6 @@
 
 	<bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
 		<constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>
-		<!-- old way of connecting to mongo -->
-		<!--<constructor-arg value="#{europeanaProperties['mongodb.host']}" type="java.lang.String"/>-->
-		<!--<constructor-arg value="#{europeanaProperties['mongodb.port']}" type="java.lang.String"/>-->
 	</bean>
 
 </beans>

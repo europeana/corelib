@@ -6,9 +6,11 @@ package eu.europeana.corelib.db.util;
  * the the europeana thumbnail.
  * 
  * @author Georgios Markakis <gwarkx@hotmail.com>
+ * @deprecated (since April 2020)
  *
  * @since 11 Jul 2012
  */
+@Deprecated // not used anywhere
 public enum  EDMXMPValues {
 	// dc:title (with xml:lang attribute set to "x-default") from dc:title
 	dc_title("dc:title"),

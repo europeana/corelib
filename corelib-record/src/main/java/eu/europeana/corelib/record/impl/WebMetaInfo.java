@@ -1,4 +1,4 @@
-package eu.europeana.corelib.search.impl;
+package eu.europeana.corelib.record.impl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashFunction;
@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**

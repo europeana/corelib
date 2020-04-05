@@ -18,9 +18,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +46,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Resource(type = TokenService.class)
     private TokenService tokenService;
 
-    @Resource(type = SearchService.class)
-    private SearchService searchService;
+    @Resource(type = RecordService.class)
+    private RecordService recordService;
 
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
@@ -538,7 +538,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         FullBean bean;
         try {
-            bean = searchService.findById(europeanaObjectId, false);
+            bean = recordService.findById(europeanaObjectId);
         } catch (EuropeanaException e) {
             throw new DatabaseException(e.getProblem(), e);
         }

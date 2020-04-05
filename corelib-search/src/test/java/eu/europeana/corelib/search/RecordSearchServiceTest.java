@@ -5,6 +5,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
@@ -34,12 +35,15 @@ import static org.junit.Assert.*;
  */
 // TODO JV this test is ignored until the Mongo and Solar versions are updated. Then the Metis
 // indexing library should be used to save the required test records (see ContentLoader class).
+
+// TODO PE April 2020: This unit test requires major refactoring. It's not a good idea to combine solr and mongo
+// stuff into a single unit test.
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/corelib-solr-context.xml", "/corelib-solr-test.xml"})
-public class SearchServiceTest {
+@ContextConfiguration({"/corelib-solr-context.xml", "/corelib-mongo-context.xml", "/corelib-solr-test.xml"})
+public class RecordSearchServiceTest {
 
-    private static final Logger LOG = LogManager.getLogger(SearchServiceTest.class);
+    private static final Logger LOG = LogManager.getLogger(RecordSearchServiceTest.class);
 
     private static final ContentLoader CONTENT_LOADER = ContentLoader.getInstance();
 
@@ -52,10 +56,13 @@ public class SearchServiceTest {
     @Resource(name = "corelib_solr_searchService")
     private SearchService searchService;
 
-    @Resource(name = "corelib_solr_mongoServer")
+    @Resource(name = "corelib_record_recordService")
+    private RecordService recordService;
+
+    @Resource(name = "corelib_record_mongoServer")
     private EdmMongoServer mongoServer;
 
-    @Resource(name = "corelib_solr_mongoServer_id")
+    @Resource(name = "corelib_record_mongoServer_id")
     private EuropeanaIdMongoServer idServer;
 
     @Resource(name = "corelib_solr_solrEmbedded")
@@ -63,7 +70,7 @@ public class SearchServiceTest {
 
     @BeforeClass
     public static void setupClass() {
-        for (Method method : SearchServiceTest.class.getMethods()) {
+        for (Method method : RecordSearchServiceTest.class.getMethods()) {
             for (Annotation annotation : method.getAnnotations()) {
                 if (annotation.annotationType().equals(org.junit.Test.class)) {
                     no_of_tests++;
@@ -180,7 +187,7 @@ public class SearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = searchService.findById(results.getResults().get(0).getId(), true);
+        FullBean fBean = recordService.findById(results.getResults().get(0).getId());
         assertNotNull(fBean);
     }
 
@@ -233,7 +240,7 @@ public class SearchServiceTest {
 //            idServer.createDatastore();
         idServer.saveEuropeanaId(eId);
 //            searchService.setEuropeanaIdMongoServer(idServer);
-        assertNotNull(searchService.resolve("test_id", false));
+        assertNotNull(recordService.resolveId("test_id" ));
     }
 
 
