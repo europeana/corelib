@@ -189,7 +189,8 @@ public class SchemaOrgUtilsTest {
     }
 
     public String getResponseFromFile(String fileName) throws IOException {
-        InputStream stream = getClass().getResourceAsStream(fileName);
-        return IOUtils.toString(stream, StandardCharsets.UTF_8);
+        try(InputStream stream = getClass().getResourceAsStream(fileName)) {
+            return IOUtils.toString(stream, StandardCharsets.UTF_8);
+        }
     }
 }
