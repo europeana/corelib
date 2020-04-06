@@ -43,38 +43,6 @@ public interface SearchService {
     <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException;
 
     /**
-     * Create collection list for a given query and facet field
-     *
-     * @param facetFieldName The SolrFacetType field to create the collection for
-     * @param queryString    The Query to use for creating the collection
-     * @param refinements    Optional refinements
-     * @return               A List of FacetField.Count objects containing the collection
-     * @throws               EuropeanaException;
-     * @deprecated (since April 2020)
-     */
-    @Deprecated // not used anywhere
-    List<FacetField.Count> createCollections(String facetFieldName,
-                                             String queryString, String... refinements) throws EuropeanaException;
-
-    /**
-     * Returns a list of "see also" suggestions. The suggestions are organized
-     * by fields (who, what, where, when, and title). Each suggestion contains a
-     * field value and the number of documents it matches.
-     *
-     * @param  queries Map of field names, and corresponding field values.
-     * @return list of see also suggestions
-     * @deprecated (since April 2020)
-     */
-    @Deprecated // not used anywhere
-    Map<String, Integer> seeAlso(List<String> queries);
-
-    /*
-     * @deprecated (since April 2020)
-     */
-    @Deprecated // not used anywhere
-    Map<String, Integer> queryFacetSearch(String query, String[] qf, List<String> queries);
-
-    /**
      * @throws EuropeanaException;
      * @throws IOException
      * @return last modification time of Solr index

@@ -17,6 +17,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Deprecated // to be replaced soon with new redirection functionality
 public class EuropeanaIdMongoServerTest {
     EuropeanaIdMongoServerImpl server;
 

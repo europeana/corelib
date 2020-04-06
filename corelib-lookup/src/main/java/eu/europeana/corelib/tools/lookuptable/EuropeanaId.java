@@ -10,6 +10,7 @@ import org.mongodb.morphia.annotations.Indexed;
  * @author yorgos.mamakis@ kb.nl
  *
  */
+@Deprecated // to be replaced soon with new redirection functionality
 @Entity ("EuropeanaID")
 public class EuropeanaId{
 	

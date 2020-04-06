@@ -198,15 +198,6 @@ public class RecordSearchServiceTest {
         assertNotNull(searchService.getLastSolrUpdate());
     }
 
-    @Test
-    public void testSeeAlso() {
-        LOG.info("TEST testSeeAlso");
-        testCount++;
-        List<String> queries = new ArrayList<>();
-        queries.add("DATA_PROVIDER:*");
-        assertNotNull(searchService.seeAlso(queries));
-    }
-
     /**
      * Tests whether setting a sort returns in a valid query
      * @throws SolrTypeException

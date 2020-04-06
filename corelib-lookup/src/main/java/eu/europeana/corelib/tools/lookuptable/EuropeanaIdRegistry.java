@@ -14,6 +14,7 @@ import org.mongodb.morphia.annotations.Indexed;
  * @since 3 Oct 2012
  */
 
+@Deprecated // to be replaced soon with new redirection functionality
 @Entity ("EuropeanaIdRegistry")
 public class EuropeanaIdRegistry {
 	
