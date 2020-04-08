@@ -27,6 +27,6 @@ public class EuropeanaStaticUrl {
     /**
      * Europeana thumbnail base url. Only parameters should be added (e.g. uri-parameter indicating which thumbnail to retrieve)
      */
-    public static final String THUMBNAIL_BASE_URL = EUROPEANA_PORTAL_URL + "/api/v2/thumbnail-by-url.json?";
+    public static final String THUMBNAIL_BASE_URL = EUROPEANA_PORTAL_URL + "/thumbnail/v2/url.json?";
 
 }
