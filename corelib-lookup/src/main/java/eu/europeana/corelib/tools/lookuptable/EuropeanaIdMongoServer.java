@@ -4,7 +4,7 @@ import org.mongodb.morphia.Datastore;
 
 import java.util.List;
 
-
+@Deprecated // to be replaced soon with new redirection functionality
 public interface EuropeanaIdMongoServer {
 
 	@Deprecated

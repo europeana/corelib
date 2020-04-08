@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- special configuration for Metis with a single Solr server and no ZooKeeper -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="corelib_record_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.record.dbname']}" type="java.lang.String"/>
+    </bean>
+
+    <bean id="corelib_record_mongoServer_id" class="eu.europeana.corelib.lookup.impl.EuropeanaIdMongoServerImpl" init-method="createDatastore">
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.recordId.dbname']}" type="java.lang.String"/>
+    </bean>
+
+    <bean id="corelib_record_recordService" class="eu.europeana.corelib.record.impl.RecordServiceImpl"/>
+
+</beans>

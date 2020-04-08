@@ -7,7 +7,6 @@ import eu.europeana.corelib.definitions.db.entity.relational.SavedItem;
 import eu.europeana.corelib.definitions.db.entity.relational.SocialTag;
 import eu.europeana.corelib.definitions.db.entity.relational.Token;
 import eu.europeana.corelib.definitions.db.entity.relational.User;
-import eu.europeana.corelib.neo4j.exception.Neo4JException;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 
 import java.util.List;
@@ -146,7 +145,7 @@ public interface UserService extends AbstractService<User> {
      * @return The User including the new saved item
      * @throws DatabaseException Thrown when no valid user or object id is provided
      */
-    User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException, Neo4JException;
+    User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException;
 
     /**
      * Creates and add a SocialTag to an existing user
@@ -157,7 +156,7 @@ public interface UserService extends AbstractService<User> {
      * @return The User including the new social tag
      * @throws DatabaseException Thrown when no valid user, object id or tag is provided
      */
-    User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException, Neo4JException;
+    User createSocialTag(Long userId, String europeanaObjectId, String tag) throws DatabaseException;
 
     /**
      * Removes a SavedSearch from database and User.

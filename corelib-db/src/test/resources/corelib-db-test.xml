@@ -27,7 +27,9 @@
     <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.db.EmbeddedMongoProvider"/>
 
     <!-- Mocking services from other modules and overruling their configuration -->
-
+    <bean id="corelib_record_recordService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="eu.europeana.corelib.record.RecordService" />
+    </bean>
     <bean id="corelib_solr_searchService" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.search.SearchService" />
     </bean>
@@ -36,14 +38,10 @@
         <constructor-arg value="eu.europeana.corelib.web.service.EmailService"/>
     </bean>
 
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_solr_mongoServer_id" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_solr_mongoServer_metainfo" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_record_mongoServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_record_mongoServer_id" class="eu.europeana.corelib.definitions.EmptyBean"/>
+    <bean id="corelib_record_mongoServer_metainfo" class="eu.europeana.corelib.definitions.EmptyBean"/>
     <bean id="corelib_solr_solrServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
     <bean id="corelib_solr_solrEmbedded" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_solr_mongoProvider" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_solr_neo4jServer" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_neo4j_searchService" class="eu.europeana.corelib.definitions.EmptyBean"/>
-    <bean id="corelib_web_S3ObjectStorageClient" class="eu.europeana.corelib.definitions.EmptyBean"/>
 
 </beans>

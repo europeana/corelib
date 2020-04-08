@@ -27,10 +27,6 @@
         <property name="username" value="#{europeanaProperties['smtp.username']}"/>
         <property name="password" value="#{europeanaProperties['smtp.password']}"/>
     </bean>
-    <!--p:host="#{europeanaProperties['smtp.host']}"-->
-    <!--p:port="#{europeanaProperties['smtp.port']}"-->
-    <!--p:username="#{europeanaProperties['smtp.username']}"-->
-    <!--p:password="#{europeanaProperties['smtp.password']}"/>-->
 
     <bean id="corelib_web_velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="velocityProperties">
@@ -44,13 +40,6 @@
     <bean id="corelib_web_emailBuilder" class="eu.europeana.corelib.web.email.impl.EmailBuilderImpl" scope="prototype"/>
 
     <util:map id="corelib_web_emailConfigs">
-        <entry key="activation">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/activation"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="My Europeana activation"
-            />
-        </entry>
         <entry key="apikeys">
             <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
                   p:template="/email/apikeys"
@@ -59,64 +48,12 @@
                   p:subject="Your Europeana API keys"
             />
         </entry>
-        <entry key="forgotPassword">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/forgot-password"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="My Europeana reset password"
-            />
-        </entry>
-        <entry key="userFeedback">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/feedback"
-                  p:emailFrom="#{europeanaProperties['feedback.from']}"
-                  p:emailTo="#{europeanaProperties['feedback.to']}"
-                  p:subject="User Feedback"
-            />
-        </entry>
-        <entry key="userFeedbackConfirm">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/feedback-confirmation"
-                  p:emailFrom="#{europeanaProperties['feedback.from']}"
-                  p:subject="User Feedback"
-            />
-		</entry>
-		<entry key="registerNotify">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-notify"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['register.to']}"
-				p:subject="Someone registered just now"
-			/>
-		</entry>
-		<entry key="registerApiNotifyAdmin">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-api-notify-admin"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:emailTo="#{europeanaProperties['register-api.to']}"
-				p:subject="Someone registered for the API just now"
-			/>
-		</entry>
-		<entry key="registerApiNotifyUser">
-			<bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-				p:template="/email/register-api-notify-user-multilang"
-				p:emailFrom="#{europeanaProperties['system.from']}"
-				p:subject="Thank you for registering for the new Europeana API"
-			/>
-        </entry>
         <entry key="exception">
             <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
                   p:template="/email/exception"
                   p:emailFrom="#{europeanaProperties['system.from']}"
                   p:emailTo="#{europeanaProperties['exception.to']}"
                   p:subject="Exception in portal"
-            />
-        </entry>
-        <entry key="resetPasswordConfirm">
-            <bean class="eu.europeana.corelib.web.email.model.EmailConfig"
-                  p:template="/email/reset-password-confirmation"
-                  p:emailFrom="#{europeanaProperties['system.from']}"
-                  p:subject="Your password has been reset"
             />
         </entry>
     </util:map>
