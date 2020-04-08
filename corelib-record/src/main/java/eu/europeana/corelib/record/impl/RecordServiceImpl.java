@@ -84,7 +84,7 @@ public class RecordServiceImpl implements RecordService {
         long   startTime = System.currentTimeMillis();
         FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("SearchService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
+            LOG.debug("RecordService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
         }
 
         if (Objects.isNull(fullBean) && resolve) {
@@ -92,7 +92,7 @@ public class RecordServiceImpl implements RecordService {
             startTime = System.currentTimeMillis();
             String newId = resolveId(europeanaObjectId);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("SearchService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
+                LOG.debug("RecordService resolve newId took {} ms", (System.currentTimeMillis() - startTime));
             }
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
@@ -101,7 +101,7 @@ public class RecordServiceImpl implements RecordService {
                     LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
                 }
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("SearchService fetch FullBean with new id took {} ms", (System.currentTimeMillis() - startTime));
+                    LOG.debug("RecordService fetch FullBean with new id took {} ms", (System.currentTimeMillis() - startTime));
                 }
             }
         }
