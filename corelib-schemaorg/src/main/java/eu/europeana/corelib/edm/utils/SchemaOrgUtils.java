@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import eu.europeana.corelib.edm.model.schemaorg.*;
 import org.apache.commons.lang3.StringUtils;
@@ -45,20 +42,14 @@ public final class SchemaOrgUtils {
     private static final Logger LOG = LogManager.getLogger(SchemaOrgUtils.class);
 
     private static final String URL_PREFIX = "http://data.europeana.eu";
-
     private static final String PLACE_PREFIX = "http://data.europeana.eu/place";
-
     private static final String TIMESPAN_PREFIX = "http://semium.org";
-
     private static final String UNIT_CODE_E37 = "E37";
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy",
             Locale.ENGLISH);
-
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-
     private static List<String> linkedContextualEntities = new ArrayList<>();
-
 
     private SchemaOrgUtils() {
         // empty constructor prevent initialization
@@ -620,7 +611,7 @@ public final class SchemaOrgUtils {
 
         // dateCreated
         addDateProperty(mediaObject, resource.getDctermsCreated(), SchemaOrgConstants.PROPERTY_DATE_CREATED,
-                bean.getTimespans(), false);
+                bean.getTimespans(), true);
 
         // hasPart
         addReferences(mediaObject, resource.getDctermsHasPart(), SchemaOrgConstants.PROPERTY_HAS_PART, MediaObject.class);
@@ -630,7 +621,7 @@ public final class SchemaOrgUtils {
 
         // datePublished
         addDateProperty(mediaObject, resource.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
-                bean.getTimespans(), false);
+                bean.getTimespans(), true);
 
         // license
         if (resource.getWebResourceEdmRights() != null && !resource.getWebResourceEdmRights().isEmpty()) {
@@ -756,7 +747,7 @@ public final class SchemaOrgUtils {
             Map<String, List<String>> dates = filterDates(dcCoverage);
             addDateProperty(object, dates, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE, bean.getTimespans(), false);
             addDateProperty(object, proxy.getDctermsTemporal(), SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE,
-                    bean.getTimespans(), false);
+                    bean.getTimespans(), true);
 
             // now dcCoverage should only contain values that should be added to about
             // property
@@ -1076,10 +1067,6 @@ public final class SchemaOrgUtils {
         return (EuropeanaUriUtils.isUri(value) && value.startsWith(TIMESPAN_PREFIX)) || DateUtils.isYear(value)
                 || DateUtils.isIsoDate(value) || DateUtils.isIsoDateTime(value);
     }
-
-
-
-
 
     /**
      * Filter the date values from the map. The date values are either strings that
