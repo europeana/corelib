@@ -36,8 +36,22 @@ public class WebMetaInfo {
     /**
      * Add webResources and fill them with metadata retrieved from Mongo
      *
-     * @param fullBean
-     * @param mongoServer
+     * @param fullBean the fullbean object to which metadata should be added
+     * @param mongoServer the mongo server from which the metadata should be retrieved
+     */
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
+        injectWebMetaInfoBatch(fullBean, mongoServer, null, null);
+    }
+
+    /**
+     * Add webResources and fill them with metadata retrieved from Mongo
+     *
+     * @param fullBean the fullbean object to which metadata should be added
+     * @param mongoServer the mongo server from which the metadata should be retrieved
+     * @param manifestAddUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
+     *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
+     *                       by the api2BaseUrl value
+     * @param api2BaseUrl FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
      */
     @SuppressWarnings("unchecked")
     public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, Boolean manifestAddUrl, String api2BaseUrl) {
@@ -237,7 +251,8 @@ public class WebMetaInfo {
     }
 
     /**
-     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were ingested and do not construct any manifest urls ourselves
+     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were
+     * ingested and do not construct any manifest urls ourselves
      * @param bean
      * @return
      */
