@@ -26,6 +26,7 @@
         <!-- exclude generated code in SonarQube analysis -->
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
+        <metis.version>1.8.0</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
         <mongoDriver.version>3.7.1</mongoDriver.version>
@@ -58,7 +59,6 @@
         <module>corelib-storage</module>
         <module>corelib-web</module>
         <module>corelib-edm-definitions</module>
-        <module>corelib-lookup</module>
         <module>corelib-hierarchies</module>
         <module>corelib-record</module>
         <module>corelib-search</module>
@@ -70,31 +70,31 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-common-storage</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-db</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-edm-definitions</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-hierarchies</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>google-collections</artifactId>
@@ -106,7 +106,7 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-lookup</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -118,31 +118,31 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.9.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

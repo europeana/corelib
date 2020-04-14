@@ -43,7 +43,9 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-record</artifactId>
         </dependency>
+
         <!-- OTHER -->
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>

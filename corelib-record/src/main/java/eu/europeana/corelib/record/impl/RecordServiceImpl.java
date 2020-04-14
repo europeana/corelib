@@ -7,18 +7,16 @@ import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import eu.europeana.corelib.web.exception.ProblemType;
+import eu.europeana.metis.mongo.RecordRedirect;
+import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,17 +34,11 @@ public class RecordServiceImpl implements RecordService {
 
     private static final Logger LOG = LogManager.getLogger(RecordServiceImpl.class);
 
-    /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
-    @Deprecated // can be removed when we have the new redirect functionality
-    private static final String RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-    // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-    @Deprecated // can be removed when we have the new redirect functionality
-    private static final String PORTAL_PREFIX = "http://www.europeana.eu/record";
-
     @Resource(name = "corelib_record_mongoServer")
     protected EdmMongoServer mongoServer;
-    @Resource(name = "corelib_record_mongoServer_id")
-    protected EuropeanaIdMongoServer idServer;
+
+    @Resource(name = "metis_redirect_mongo")
+    protected RecordRedirectDao redirectDao;
 
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
@@ -129,67 +121,28 @@ public class RecordServiceImpl implements RecordService {
         return fullBean;
     }
 
+
+
     /**
      * @see RecordService#resolveId(String)
      */
     @Override
-    @Deprecated // will be deprecated when the new redirect database goes live
-    public String resolveId(String europeanaObjectId) throws BadDataException {
-        List<String> idsSeen = new ArrayList<>(); // used to detect circular references
-
-        String lastId = resolveIdInternal(europeanaObjectId, idsSeen);
-        String newId = lastId;
-        while (newId != null) {
-            newId = resolveIdInternal(newId, idsSeen);
-            if (newId != null) {
-                lastId = newId;
-            }
+    public String resolveId(String europeanaId) throws BadDataException {
+        List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
+        if (redirects.isEmpty()){
+            LOG.debug("RecordService no redirection was found for EuropeanaID {}", europeanaId);
+            return null;
+        } else {
+            return redirects.get(0).getNewId();
         }
-        return lastId;
     }
 
     /**
      * @see RecordService#resolveId(String, String)
      */
     @Override
-    @Deprecated // will be deprecated when the new redirect database goes live
     public String resolveId(String collectionId, String recordId) throws BadDataException {
-        return resolveId(EuropeanaUriUtils.createEuropeanaId(
-                collectionId, recordId));
+        return resolveId(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
     }
 
-    /**
-     * Checks if there is a new id for the provided europeanaObjectId, using different variations of this id
-     * Additionally this method checks if the new found id is an id that was resolved earlier in the chain (check for circular reference)
-     * @param europeanaObjectId
-     * @param europeanaObjectIdsSeen list with all europeanaObjectIds (without any prefixes) we've resolved so far.
-     * @return the found newId of the record, or null if no newId was found,
-     * @throws BadDataException if a circular id reference is found
-     */
-    @Deprecated // will be deprecated when the new redirect database goes live
-    private String resolveIdInternal(String europeanaObjectId, List<String> europeanaObjectIdsSeen) throws BadDataException {
-        europeanaObjectIdsSeen.add(europeanaObjectId);
-
-        List<String> idsToCheck = new ArrayList<>();
-        idsToCheck.add(europeanaObjectId);
-        idsToCheck.add(RESOLVE_PREFIX + europeanaObjectId);
-        idsToCheck.add(PORTAL_PREFIX + europeanaObjectId);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Trying to resolve ids {}", idsToCheck);
-        }
-        EuropeanaId newId = idServer.retrieveEuropeanaIdFromOld(idsToCheck);
-        if (newId != null) {
-            String result = newId.getNewId();
-
-            // check for circular references
-            if (result != null && europeanaObjectIdsSeen.contains(result)) {
-                europeanaObjectIdsSeen.add(result);
-                String message = "Cannot resolve record-id because a circular id reference was found! "+europeanaObjectIdsSeen;
-                LOG.error(message);
-                throw new BadDataException(ProblemType.INCONSISTENT_DATA, message +" The data team will be notified of the problem.");
-            }
-            return result;
-        }
-        return null;
-    }
 }

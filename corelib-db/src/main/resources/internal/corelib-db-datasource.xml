@@ -15,6 +15,7 @@
          https://spring.io/blog/2011/11/04/using-cloud-foundry-services-with-spring-part-2-auto-reconfiguration
          Unfortunately Spring Auto-reconfiguration then also automatically sets maxIdle and maxActive to 4. See also
          https://community.pivotal.io/s/article/Connection-pool-warning-message-maxIdle-is-larger-than-maxActive-setting-maxIdle-to-4-seen-in-PCF-deployed-Spring-app -->
+
     <bean id="corelib_db_dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="#{europeanaProperties['db.driverClass']}"/>
         <property name="url" value="jdbc:#{europeanaProperties['postgres.jdbcUrl']}" />
@@ -27,12 +28,6 @@
     </bean>
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>
-
-    <!-- <bean id="corelib_db_morphia_datastore_oauth2" factory-bean="corelib_db_mongo_api" factory-method="createDatastore">
-        <constructor-arg value="OAuth2"/>
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.oauth.dbname']}" type="java.lang.String"/>
-    </bean> -->
 
     <bean id="corelib_db_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="corelib_db_dataSource">

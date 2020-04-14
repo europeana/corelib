@@ -16,6 +16,7 @@ import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
 import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -105,7 +106,7 @@ public class SearchServiceImpl implements SearchService {
 
             SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
 
-            if (refinements != null) { // TODO add length 0 check!!
+            if (ArrayUtils.isNotEmpty(refinements)) {
                 solrQuery.addFilterQuery(refinements);
             }
 
@@ -117,8 +118,8 @@ public class SearchServiceImpl implements SearchService {
             // add extra parameters if any
             if (query.getParameterMap() != null) {
                 Map<String, String> parameters = query.getParameterMap();
-                for (String key : parameters.keySet()) {
-                    solrQuery.setParam(key, parameters.get(key));
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                    solrQuery.setParam(entry.getKey(), entry.getValue());
                 }
             }
 
@@ -129,12 +130,8 @@ public class SearchServiceImpl implements SearchService {
                 boolean hasFacetRefinements = (filteredFacets != null && !filteredFacets.isEmpty());
 
                 for (String facetToAdd : query.getSolrFacets()) {
-                    if (query.doProduceFacetUnion()) {
-                        if (hasFacetRefinements
-                            && filteredFacets.contains(facetToAdd)) {
-                            facetToAdd = MessageFormat.format(
-                                    UNION_FACETS_FORMAT, facetToAdd);
-                        }
+                    if (query.doProduceFacetUnion() && hasFacetRefinements && filteredFacets.contains(facetToAdd)) {
+                        facetToAdd = MessageFormat.format(UNION_FACETS_FORMAT, facetToAdd);
                     }
                     solrQuery.addFacetField(facetToAdd);
                 }
@@ -142,14 +139,12 @@ public class SearchServiceImpl implements SearchService {
             }
 
             // spellcheck is optional
-            if (query.isSpellcheckAllowed()) {
-                if (solrQuery.getStart() == null || solrQuery.getStart() <= 1) {
-                    solrQuery.setParam("spellcheck", "on");
-                    solrQuery.setParam("spellcheck.collate", "true");
-                    solrQuery.setParam("spellcheck.extendedResults", "true");
-                    solrQuery.setParam("spellcheck.onlyMorePopular", "true");
-                    solrQuery.setParam("spellcheck.q", query.getQuery());
-                }
+            if (query.isSpellcheckAllowed() && (solrQuery.getStart() == null || solrQuery.getStart() <= 1)) {
+                solrQuery.setParam("spellcheck", "on");
+                solrQuery.setParam("spellcheck.collate", "true");
+                solrQuery.setParam("spellcheck.extendedResults", "true");
+                solrQuery.setParam("spellcheck.onlyMorePopular", "true");
+                solrQuery.setParam("spellcheck.q", query.getQuery());
             }
             // change this to *isblank / empty
             if (query.getQueryFacets() != null) {
@@ -160,7 +155,7 @@ public class SearchServiceImpl implements SearchService {
 
             try {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Solr query is: " + solrQuery);
+                    LOG.debug("Solr query is: {}", solrQuery);
                 }
                 query.setExecutedQuery(solrQuery.toString());
 
@@ -214,7 +209,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
-        boolean defaultSort = query.getSorts().size() == 0;
+        boolean defaultSort = query.getSorts().isEmpty();
         if (defaultSort) {
             solrQuery.setSort("has_media", ORDER.desc);
             solrQuery.addSort("score", ORDER.desc);
@@ -242,7 +237,6 @@ public class SearchServiceImpl implements SearchService {
                     solrQuery.addSort("europeana_id", ORDER.asc);
                 }
             }
-
         } else {
             // TimeAllowed and cursormark are not allowed together in a query
             solrQuery.setTimeAllowed(TIME_ALLOWED);
@@ -306,6 +300,9 @@ public class SearchServiceImpl implements SearchService {
             credentials = new UsernamePasswordCredentials(user, pass);
         }
 
+        /**
+         * @see HttpRequestInterceptor#process(HttpRequest, HttpContext) 
+         */
         @Override
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));

@@ -4,18 +4,15 @@ import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import org.apache.solr.client.solrj.response.FacetField;
 
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans from Solr
  *
  * @author Yorgos.Mamakis@ kb.nl
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @author luthien
  * @author Patrick Ehlert (major refactoring April 2020)
  */
 public interface SearchService {
@@ -38,13 +35,12 @@ public interface SearchService {
      * @param beanInterface  The required bean type, should be ApiBean or BriefBean
      * @param query          Model class containing the calculateTag specification.
      * @return               The calculateTag results, including facets, breadcrumb and original query.
-     * @throws EuropeanaException;
+     * @throws EuropeanaException
      */
     <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException;
 
     /**
-     * @throws EuropeanaException;
-     * @throws IOException
+     * @throws EuropeanaException
      * @return last modification time of Solr index
      */
     Date getLastSolrUpdate() throws EuropeanaException;

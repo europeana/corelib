@@ -9,8 +9,8 @@ import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -24,8 +24,6 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -62,8 +60,8 @@ public class RecordSearchServiceTest {
     @Resource(name = "corelib_record_mongoServer")
     private EdmMongoServer mongoServer;
 
-    @Resource(name = "corelib_record_mongoServer_id")
-    private EuropeanaIdMongoServer idServer;
+    @Resource(name = "metis_redirect_mongo")
+    private RecordRedirectDao mongoIdServer;
 
     @Resource(name = "corelib_solr_solrEmbedded")
     private EmbeddedSolrServer solrServer;
@@ -192,7 +190,7 @@ public class RecordSearchServiceTest {
     }
 
     @Test
-    public void testGestLastSolrUpdate() throws EuropeanaException {
+    public void testGetLastSolrUpdate() throws EuropeanaException {
         LOG.info("TEST testGestLastSolrUpdate");
         testCount++;
         assertNotNull(searchService.getLastSolrUpdate());
@@ -213,27 +211,5 @@ public class RecordSearchServiceTest {
         assertNotNull(results);
         assertTrue(results.getResultSize() > 0);
     }
-
-//    @Test TODO: fix this test...
-    public void testResolve() throws EuropeanaException  {
-        LOG.info("TEST testResolve");
-        testCount++;
-        Query query = new Query("*:*");
-        ResultSet<BriefBean> results;
-        results = searchService.search(BriefBean.class, query);
-        String newId = results.getResults().get(0).getId();
-        String oldId = "test_id";
-        EuropeanaId eId = new EuropeanaId();
-        eId.setNewId(newId);
-        eId.setOldId(oldId);
-//            Mongo mongo = new Mongo("localhost", port);
-//            idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
-//            idServer.createDatastore();
-        idServer.saveEuropeanaId(eId);
-//            searchService.setEuropeanaIdMongoServer(idServer);
-        assertNotNull(recordService.resolveId("test_id" ));
-    }
-
-
 
 }
