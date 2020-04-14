@@ -1,25 +1,21 @@
 package eu.europeana.corelib.search.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
 import eu.europeana.corelib.edm.exceptions.SolrIOException;
 import eu.europeana.corelib.edm.exceptions.SolrQueryException;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.search.utils.SearchUtils;
-import eu.europeana.corelib.solr.bean.impl.*;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.utils.EuropeanaUriUtils;
+import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.metis.mongo.RecordRedirect;
-import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpException;
@@ -46,32 +42,28 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
 
 /**
- * Lookup record information from Solr or Mongo
+ * Search service that retrieves BriefBeans or APIBeans from Solr
+ *
  * @author Yorgos.Mamakis@ kb.nl
- * @author
+ * @author Willem-Jan Boogerd <www.eledge.net/contact>
+ * @author Patrick Ehlert (major refactoring April 2020)
  * @see eu.europeana.corelib.search.SearchService
  */
 public class SearchServiceImpl implements SearchService {
 
+    private static final Logger LOG = LogManager.getLogger(SearchServiceImpl.class);
+
     private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
+
     /**
      * Number of milliseconds before the query is aborted by SOLR
      */
-    private static final int TIME_ALLOWED       = 30_000;
-    private static final String EUROPEANA_ID    = "europeana_id";
-    private static final Logger LOG             = LogManager.getLogger(SearchServiceImpl.class);
-
-    @Resource(name = "corelib_solr_mongoServer")
-    protected EdmMongoServer mongoServer;
-
-    @Resource(name = "metis_redirect_mongo")
-    protected RecordRedirectDao redirectDao;
+    private static final int TIME_ALLOWED = 30_000;
 
     // provided by setSolrClient method via xml-beans
     private SolrClient solrClient;
@@ -85,128 +77,21 @@ public class SearchServiceImpl implements SearchService {
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
 
-    @Value("#{europeanaProperties['manifest.add.url']}")
-    private Boolean manifestAddUrl;
-
-    @Value("#{europeanaProperties['api2.baseUrl']}")
-    private String api2BaseUrl;
-
-    private boolean debug = false;
-
     /**
-     * @see eu.europeana.corelib.search.SearchService#findById(String, String) 
-     */
-    @Override
-    public FullBean findById(String collectionId, String recordId) throws EuropeanaException {
-        return findById(EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#findById(String)
-     */
-    @Override
-    public FullBean findById(String europeanaId) throws EuropeanaException {
-        FullBean fullBean = fetchFullBean(europeanaId);
-        if (fullBean != null) {
-            return processFullBean(fullBean);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#fetchFullBean(String) 
-     * split up fetching and processing the Fullbean to facilitate improving performance for HTTP caching
-     * (e.g. eTag matching)
-     */
-    @Override
-    public FullBean fetchFullBean(String europeanaId) throws EuropeanaException {
-        long   startTime = System.currentTimeMillis();
-        FullBean fullBean = mongoServer.getFullBean(europeanaId);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("SearchService fetch FullBean with EuropeanaID {} took {} ms", europeanaId,
-                      (System.currentTimeMillis() - startTime));
-        }
-
-        if (Objects.isNull(fullBean)) {
-            startTime = System.currentTimeMillis();
-            String newId = resolve(europeanaId);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("SearchService resolving EuropeanaID {} to {} took {} ms", europeanaId,
-                          newId,
-                          (System.currentTimeMillis() - startTime));
-            }
-            // (comment from ObjectController) 2017-07-06 code PE: inserted as temp workaround until we resolve #662 (see also comment below)
-            if (StringUtils.isNotBlank(newId)){
-                startTime = System.currentTimeMillis();
-                fullBean = mongoServer.getFullBean(newId);
-                if (fullBean == null) {
-                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaId, newId);
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("SearchService fetching FullBean with newid took {}", (System.currentTimeMillis() - startTime));
-                }
-            } else {
-                LOG.debug("SearchService no redirection was found for EuropeanaID {}", europeanaId);
-            }
-        }
-        return fullBean;
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#resolve(String)
-     * According to the Metis team, the getRecordRedirectsByOldId can only return one object because oldId is unique.
-     * The method returns a List only because Morphia doesn't know about the uniqueness.
-     * Even regardless of that, every RecordRedirect for a given oldId should contain the same newId; therefore it
-     * is safe to return redirects.get(0).getNewId()
-     */
-    @Override
-    public String resolve(String europeanaId) {
-        List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
-        if (redirects.isEmpty()){
-            LOG.debug("SearchService no redirection was found for EuropeanaID {}", europeanaId);
-            return null;
-        } else {
-            return redirects.get(0).getNewId();
-        }
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#processFullBean(FullBean)
-     */
-    @Override
-    public FullBean processFullBean(FullBean fullBean){
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
-        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-            ((FullBeanImpl) fullBean).setAsParent();
-            for (Aggregation agg : fullBean.getAggregations()) {
-                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
-                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                        wRes.initAttributionSnippet();
-                    }
-                }
-            }
-        }
-        return fullBean;
-    }
-    
-    /**
-     * @see eu.europeana.corelib.search.SearchService#search(Class, Query, boolean) 
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
-        this.debug = debug;
-        return search(beanInterface, query);
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#search(Class, Query)
+     * @see SearchService#search(Class, Query, boolean)
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
+        return search(beanInterface, query, false);
+    }
+
+    /**
+     * @see SearchService#search(Class, Query)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
 
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED,
@@ -331,7 +216,7 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.addSort("timestamp_update", ORDER.desc);
             // completeness is added last because many records have incorrect value 0
             solrQuery.addSort("europeana_completeness", ORDER.desc);
-            solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
+            solrQuery.addSort("europeana_id", ORDER.asc);
         } else {
             // User set sort
             solrQuery.clearSorts();
@@ -348,8 +233,8 @@ public class SearchServiceImpl implements SearchService {
                 // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087 and EA-1364)
                 solrQuery.removeSort("score");
                 // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
-                if (!solrQuery.getSortField().contains(EUROPEANA_ID)) {
-                    solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
+                if (!solrQuery.getSortField().contains("europeana_id")) {
+                    solrQuery.addSort("europeana_id", ORDER.asc);
                 }
             }
         } else {
@@ -371,44 +256,23 @@ public class SearchServiceImpl implements SearchService {
     }
 
     /**
-     * @see eu.europeana.corelib.search.SearchService#seeAlso(List) 
+     * @see SearchService#getLastSolrUpdate()
      */
     @Override
-    public Map<String, Integer> seeAlso(List<String> queries) {
-        return queryFacetSearch("*:*", null, queries);
-    }
-
-    /**
-     * @see eu.europeana.corelib.search.SearchService#queryFacetSearch(String, String[], List) 
-     */
-    @Override
-    public Map<String, Integer> queryFacetSearch(String query, String[] qf,
-                                                 List<String> queries) {
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setQuery(query);
-        if (qf != null) {
-            solrQuery.addFilterQuery(qf);
-        }
-        solrQuery.setRows(0);
-        solrQuery.setFacet(true);
-        solrQuery.setTimeAllowed(TIME_ALLOWED);
-        for (String queryFacet : queries) {
-            solrQuery.addFacetQuery(queryFacet);
-        }
-        QueryResponse response;
-        Map<String, Integer> queryFacets = null;
+    @SuppressWarnings("unchecked")
+    public Date getLastSolrUpdate() throws EuropeanaException {
+        long t0 = new Date().getTime();
         try {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Solr query is: {}", solrQuery);
+            NamedList<Object> namedList = solrClient.request(new LukeRequest());
+            NamedList<Object> index = (NamedList<Object>) namedList.get("index");
+            if (LOG.isInfoEnabled()) {
+                LOG.info("spent: " + (new Date().getTime() - t0));
             }
-            response = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
-            queryFacets = response.getFacetQuery();
-        } catch (SolrServerException e) {
-            LOG.error("SolrServerException - query = {} ", solrQuery, e);
-        } catch (IOException | RuntimeException e) {
-            LOG.error("Exception - class = {}, query = {}", e.getClass().getCanonicalName(), solrQuery, e);
+            return (Date) index.get("lastModified");
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
         }
-        return queryFacets;
+        return null;
     }
 
     public void setSolrClient(SolrClient solrClient) {
@@ -419,7 +283,6 @@ public class SearchServiceImpl implements SearchService {
      * If it's not a cluster but a single solr server, we add authentication
      */
     private SolrClient setClient(SolrClient solrClient) {
-
         if (solrClient instanceof HttpSolrClient) {
             HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
             AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
@@ -428,26 +291,6 @@ public class SearchServiceImpl implements SearchService {
         } else {
             return solrClient;
         }
-    }
-
-    /**
-     * @see SearchService#getLastSolrUpdate() 
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public Date getLastSolrUpdate() {
-        long t0 = new Date().getTime();
-        try {
-            NamedList<Object> namedList = solrClient.request(new LukeRequest());
-            NamedList<Object> index = (NamedList<Object>) namedList.get("index");
-            if (LOG.isInfoEnabled()) {
-                LOG.info("spent: {}", (new Date().getTime() - t0));
-            }
-            return (Date) index.get("lastModified");
-        } catch (SolrServerException | IOException e) {
-            LOG.error("Error querying solr", e);
-        }
-        return null;
     }
 
     private static class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
@@ -465,29 +308,4 @@ public class SearchServiceImpl implements SearchService {
             request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
         }
     }
-
-
-    // ----------------------------------------------------------------- //
-    // --> CODE BELOW THIS LINE IS DEPRECATED OR NOT USED ANY LONGER <-- //
-    // ----------------------------------------------------------------- //
-
-    @Deprecated
-    @Override
-    public List<Count> createCollections(String facetFieldName, String queryString, String... refinements) throws EuropeanaException {
-
-        Query query = new Query(queryString).setParameter("rows", "0")
-                                            .setParameter("facet", "true").setRefinements(refinements)
-                                            .setParameter("facet.mincount", "1")
-                                            .setParameter("facet.limit", "750").setSpellcheckAllowed(false);
-        query.setSolrFacet(facetFieldName);
-
-        final ResultSet<BriefBean> response = search(BriefBean.class, query);
-        for (FacetField facetField : response.getFacetFields()) {
-            if (facetField.getName().equalsIgnoreCase(facetFieldName)) {
-                return facetField.getValues();
-            }
-        }
-        return new ArrayList<>();
-    }
-
 }

@@ -62,7 +62,7 @@ public class MediaObject extends CreativeWork {
         addProperty(SchemaOrgConstants.PROPERTY_UPLOAD_DATE, uploadDate);
     }
 
-    public void addContentUrl(Reference contentUrl) {
+    public void addContentUrl(Text contentUrl) {
         addProperty(SchemaOrgConstants.PROPERTY_CONTENT_URL, contentUrl);
     }
 

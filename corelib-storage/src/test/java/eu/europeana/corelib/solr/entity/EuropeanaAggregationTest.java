@@ -1,6 +1,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,7 +24,7 @@ public class EuropeanaAggregationTest extends AbstractJUnit4SpringContextTests {
         String testId = "/12345/abcde";
         EuropeanaAggregation ea = new EuropeanaAggregationImpl();
         ea.setAbout("/aggregation/europeana" + testId);
-        assertEquals("https://www.europeana.eu/portal/record"+testId+".html", ea.getEdmLandingPage());
+        assertEquals("https://www.europeana.eu/item"+testId, ea.getEdmLandingPage());
     }
 
     @Test
@@ -31,7 +32,7 @@ public class EuropeanaAggregationTest extends AbstractJUnit4SpringContextTests {
         String testId = "/12345/abcde";
         EuropeanaAggregation ea = new EuropeanaAggregationImpl();
         ea.setAggregatedCHO(testId);
-        assertEquals("https://www.europeana.eu/portal/record"+testId+".html", ea.getEdmLandingPage());
+        assertEquals("https://www.europeana.eu/item"+testId, ea.getEdmLandingPage());
     }
 
 

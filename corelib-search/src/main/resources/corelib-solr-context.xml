@@ -12,11 +12,10 @@
 
     <!-- USING OTHER MODULES -->
     <import resource="corelib-definitions-context.xml" />
-    <import resource="corelib-hierarchy-server.xml"/>
 
 	<!-- INTERNAL -->
-	<import resource="internal/corelib-search-datasource.xml" />
 	<import resource="internal/corelib-search-server.xml" />
+
 
     <context:annotation-config/>
 

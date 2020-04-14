@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>eu.europeana</groupId>
 		<artifactId>corelib</artifactId>
-		<version>2.9.3-SNAPSHOT</version>
+		<version>2.9.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -43,13 +43,6 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commonsIO.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.imgscalr</groupId>
-			<artifactId>imgscalr-lib</artifactId>
-			<version>4.2</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>

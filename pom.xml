@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>corelib</artifactId>
-    <version>2.9.3-SNAPSHOT</version>
+    <version>2.9.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Europeana Core Library</name>
@@ -61,6 +61,7 @@
         <module>corelib-edm-definitions</module>
         <module>corelib-lookup</module>
         <module>corelib-hierarchies</module>
+        <module>corelib-record</module>
         <module>corelib-search</module>
         <module>corelib-schemaorg</module>
     </modules>
@@ -106,6 +107,12 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-lookup</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.europeana.corelib</groupId>
+                <artifactId>corelib-record</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

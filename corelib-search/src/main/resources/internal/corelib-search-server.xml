@@ -5,17 +5,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <bean id="corelib_solr_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.record.dbname']}" type="java.lang.String"/>
-    </bean>
-
-    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
-        <constructor-arg value="#{europeanaProperties['mongodb.redirect.dbname']}" type="java.lang.String"/>
-    </bean>
-
     <!-- default profile, connecting to solr cluster via Zookeeper -->
     <beans profile="default">
         <!-- basically what we are doing here is

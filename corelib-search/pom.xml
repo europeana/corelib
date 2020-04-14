@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>eu.europeana</groupId>
         <artifactId>corelib</artifactId>
-        <version>2.9.3-SNAPSHOT</version>
+        <version>2.9.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -13,8 +14,8 @@
     <artifactId>corelib-search</artifactId>
     <name>Europeana Core Library Search</name>
 
-    <organization><name>Europeana Foundation</name></organization>
     <url>http://www.europeana.eu</url>
+    <organization><name>Europeana Foundation</name></organization>
 
     <dependencies>
         <!-- CORELIB -->
@@ -40,23 +41,11 @@
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-hierarchies</artifactId>
+            <artifactId>corelib-record</artifactId>
         </dependency>
 
         <!-- OTHER -->
 
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <version>1.47.3</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -79,6 +68,18 @@
         </dependency>
 
         <!-- TEST -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>1.47.3</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>

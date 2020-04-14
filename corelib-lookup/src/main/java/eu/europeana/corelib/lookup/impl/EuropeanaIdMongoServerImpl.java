@@ -19,6 +19,7 @@ import java.util.List;
  * @author yorgos.mamakis@ kb.nl
  *
  */
+@Deprecated // to be replaced soon with new redirection functionality
 public class EuropeanaIdMongoServerImpl implements MongoServer, EuropeanaIdMongoServer {
 
 	private static final Logger LOG = Logger.getLogger(EuropeanaIdMongoServerImpl.class);

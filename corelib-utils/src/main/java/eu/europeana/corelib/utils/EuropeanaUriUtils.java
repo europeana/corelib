@@ -273,7 +273,6 @@ public class EuropeanaUriUtils {
 		schemes.add("z39.50");
 		schemes.add("z39.50r");
 		schemes.add("z39.50s");
-		schemes.add("#");
 	}
 
 	private EuropeanaUriUtils() {
@@ -314,7 +313,10 @@ public class EuropeanaUriUtils {
 	}
 
 	public static boolean isUri(String str) {
-		return (isAbsoluteIRI(str) );
+		if (StringUtils.isNotEmpty(str)) {
+			return (isAbsoluteIRI(str) || isRelativeIRI(str));
+		}
+		return false;
 	}
 
 	// will check if it's a absolute or relative URI
@@ -324,4 +326,7 @@ public class EuropeanaUriUtils {
 		return ( m.find() && schemes.contains(m.group(1)));
 	}
 
+	static boolean isRelativeIRI(String iri) {
+		return iri.startsWith("#");
+	}
 }

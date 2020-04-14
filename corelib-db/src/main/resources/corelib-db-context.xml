@@ -13,7 +13,9 @@
 
 	<!-- USING OTHER MODULES -->
 	<import resource="corelib-definitions-context.xml"/>
+    <import resource="corelib-mongo-context.xml"/>
 	<import resource="corelib-solr-context.xml"/>
+
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-db-datasource.xml"/>

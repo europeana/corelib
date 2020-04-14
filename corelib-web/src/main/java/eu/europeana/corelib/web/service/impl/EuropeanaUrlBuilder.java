@@ -29,8 +29,8 @@ public class EuropeanaUrlBuilder {
      */
     public static UrlBuilder getRecordPortalUrl(String europeanaId) {
         UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.EUROPEANA_PORTAL_URL)
-                .addPath("portal", "record")
-                .addPage(europeanaId + ".html");
+                .addPath("item")
+                .addPage(europeanaId);
         return url;
     }
 
