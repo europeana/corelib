@@ -39,6 +39,13 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-web</artifactId>
         </dependency>
+
+        <!-- get alternative record id (redirect) -->
+        <dependency>
+            <groupId>eu.europeana.metis</groupId>
+            <artifactId>metis-common</artifactId>
+            <version>${metis.version}</version>
+        </dependency>
         <!-- OTHER -->
         <dependency>
             <groupId>org.springframework</groupId>
