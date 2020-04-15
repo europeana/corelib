@@ -105,12 +105,6 @@
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
-                <artifactId>corelib-lookup</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
                 <version>${project.version}</version>
             </dependency>

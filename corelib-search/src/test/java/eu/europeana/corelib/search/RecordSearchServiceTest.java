@@ -8,7 +8,6 @@ import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;

@@ -1,11 +1,10 @@
 package eu.europeana.corelib.mongo.server;
 
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.storage.MongoServer;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 
 import java.util.List;
@@ -44,22 +43,6 @@ public interface EdmMongoServer extends MongoServer {
 	 * @throws InstantiationException
 	 */
 	<T> T searchByAbout(Class<T> clazz, String about);
-
-	/**
-	 * Resolve a fullbean based on its id. This method should be called if the
-	 * getFullBean method has failed
-	 * 
-	 * @param id
-	 * @return
-	 */
-	FullBean resolve(String id);
-
-	/**
-	 * Set the EuropeanaId redirect server
-	 * 
-	 * @param europeanaIdMongoServer
-	 */
-	void setEuropeanaIdMongoServer(EuropeanaIdMongoServer europeanaIdMongoServer);
 
 	/**
 	 * Method for retrieiving the Metainfo to fill aggregation
