@@ -40,6 +40,7 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
     // Note that for proper working the VCAP properties name should be the same as the key in the europeana.properties
     // file but with dots replaced by underscores
     private static final String VCAP_API2_BASEURL = "api2_baseUrl"; // matches api2.baseUrl in europeana.properties
+    private static final String VCAP_GATEWAY_BASEURL = "apiGateway_baseUrl"; // matches apiGateway.baseUrl in europeana.properties
     private static final String VCAP_PORTAL_BASEURL = "portal_baseUrl"; // matches portal.baseUrl in europeana.properties
 
     private static StandardServletEnvironment env = new StandardServletEnvironment();
@@ -60,8 +61,9 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         try (FileInputStream fis = new FileInputStream(europeanaProperties)){
             props.load(fis);
 
-            // Add VCAP properties for API2 and Portal to the loaded properties
+            // Add VCAP properties for API2, Gateway and Portal to the loaded properties
             setVcapUrlProperty(props, VCAP_API2_BASEURL);
+            setVcapUrlProperty(props, VCAP_GATEWAY_BASEURL);
             setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
 
             // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate

@@ -87,8 +87,8 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testProtocol() {
-		String expected = "http://www.europeana.eu/api/v2/thumbnail-by-url.json?uri=1.jpg&type=TEXT";
-		UrlBuilder url = new UrlBuilder("https://www.europeana.eu/api/v2/thumbnail-by-url.json?uri=1.jpg&type=TEXT");
+		String expected = "http://www.europeana.eu/thumbnail/v2/url.json?uri=1.jpg&type=TEXT";
+		UrlBuilder url = new UrlBuilder("https://www.europeana.eu/thumbnail/v2/url.json?uri=1.jpg&type=TEXT");
 		url.setProtocol("http");
 		assertEquals("Protocol replacement failed", expected, url.toString());
 	}

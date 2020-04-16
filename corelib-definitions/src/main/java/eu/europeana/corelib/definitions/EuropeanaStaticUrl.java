@@ -25,8 +25,12 @@ public class EuropeanaStaticUrl {
     public static final String EUROPEANA_PORTAL_URL = "https://www.europeana.eu";
 
     /**
+     * API gateway base url. URl to start using the API gateway to access all generated API links.
+     */
+    public static final String API_GATEWAY_URL = "https://api.europeana.eu";
+
+    /**
      * Europeana thumbnail base url. Only parameters should be added (e.g. uri-parameter indicating which thumbnail to retrieve)
      */
-    public static final String THUMBNAIL_BASE_URL = EUROPEANA_PORTAL_URL + "/api/v2/thumbnail-by-url.json?";
-
+    public static final String THUMBNAIL_BASE_URL = API_GATEWAY_URL + "/thumbnail/v2/url.json?";
 }
