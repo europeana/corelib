@@ -3,23 +3,21 @@ package eu.europeana.corelib.mongo.server.impl;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.edm.exceptions.MongoDBException;
+import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
+import eu.europeana.corelib.solr.entity.*;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.mapping.MappingException;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.corelib.edm.exceptions.MongoDBException;
-import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.*;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaIdMongoServer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,14 +32,10 @@ import java.util.Map;
 public class EdmMongoServerImpl implements EdmMongoServer {
 
     private static final Logger LOG = LogManager.getLogger(EdmMongoServerImpl.class);
-    /* A lot of old records are in the EuropeanaId database with "http://www.europeana.eu/resolve/record/1/2" as 'oldId' */
-    private static final String                 RESOLVE_PREFIX = "http://www.europeana.eu/resolve/record";
-    // TODO October 2018 It seems there are no records with this prefix in the EuropeanaId database so most likely this can be removed
-    private static final String                 PORTAL_PREFIX = "http://www.europeana.eu/record";
+
     private              MongoClient            mongoClient;
     private              String                 databaseName;
     private              Datastore              datastore;
-    private              EuropeanaIdMongoServer europeanaIdMongoServer;
 
     /**
      * Create a new Morphia datastore to do get/delete/save operations on the database
@@ -113,11 +107,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
         createDatastore(createIndexes);
     }
 
-    @Override
-    public void setEuropeanaIdMongoServer(EuropeanaIdMongoServer europeanaIdMongoServer) {
-        this.europeanaIdMongoServer = europeanaIdMongoServer;
-    }
-
     private void createDatastore(boolean createIndexes) {
         Morphia morphia = new Morphia();
 
@@ -170,27 +159,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
     }
 
     @Override
-    public FullBean resolve(String id) {
-
-        EuropeanaId newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(id);
-        if (newId != null) {
-            newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(RESOLVE_PREFIX + id);
-        }
-        if (newId != null) {
-            newId = europeanaIdMongoServer.retrieveEuropeanaIdFromOld(PORTAL_PREFIX	+ id);
-        }
-
-        if (newId != null) {
-            //TODO For now update time is disabled because it's rather expensive operation and we need to think of a better approach
-            //europeanaIdMongoServer.updateTime(newId.getNewId(), id);
-            return datastore.find(FullBeanImpl.class).field("about").equal(newId.getNewId()).get();
-        }
-
-        LOG.info("Unresolvable Europeana ID: {}", id);
-        return null;
-    }
-
-    @Override
     public Map<String, WebResourceMetaInfoImpl> retrieveWebMetaInfos(List<String> hashCodes) {
         Map<String, WebResourceMetaInfoImpl> metaInfos = new HashMap<>();
 
@@ -222,7 +190,6 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
     @Override
     public <T> T searchByAbout(Class<T> clazz, String about) {
-
         return datastore.find(clazz).filter("about", about).get();
     }
 

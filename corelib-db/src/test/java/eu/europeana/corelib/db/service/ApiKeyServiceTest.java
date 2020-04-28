@@ -1,5 +1,7 @@
 package eu.europeana.corelib.db.service;
 
+import eu.europeana.corelib.db.dao.RelationalDao;
+import eu.europeana.corelib.db.entity.relational.UserImpl;
 import eu.europeana.corelib.db.exception.DatabaseException;
 import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.web.exception.EmailServiceException;
@@ -27,8 +29,8 @@ public class ApiKeyServiceTest {
     @Resource
     private ApiKeyService apiKeyService;
 
-    //@Resource(name = "corelib_db_userDao")
-    //private RelationalDao<UserImpl> userDao;
+//    @Resource(name = "corelib_db_userDao")
+//    private RelationalDao<UserImpl> userDao;
 
     @Resource
     private EmailService emailServiceMock;
@@ -40,7 +42,7 @@ public class ApiKeyServiceTest {
      * @throws IOException
      */
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         reset(emailServiceMock);
     }
 
@@ -50,7 +52,7 @@ public class ApiKeyServiceTest {
      * @throws IOException
      */
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() {
         //userDao.deleteAll();
     }
 

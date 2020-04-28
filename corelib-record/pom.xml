@@ -11,8 +11,8 @@
     </parent>
 
     <groupId>eu.europeana.corelib</groupId>
-    <artifactId>corelib-search</artifactId>
-    <name>Europeana Core Library Search</name>
+    <artifactId>corelib-record</artifactId>
+    <name>Europeana Core Library Record Retrieval</name>
 
     <url>http://www.europeana.eu</url>
     <organization><name>Europeana Foundation</name></organization>
@@ -39,13 +39,14 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-web</artifactId>
         </dependency>
+
+        <!-- get alternative record id (redirect) -->
         <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-record</artifactId>
+            <groupId>eu.europeana.metis</groupId>
+            <artifactId>metis-common</artifactId>
+            <version>${metis.version}</version>
         </dependency>
-
         <!-- OTHER -->
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -55,16 +56,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-queryparser</artifactId>
-            <version>${apacheLucene.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-common</artifactId>
-            <version>${apacheLucene.version}</version>
         </dependency>
 
         <!-- TEST -->
@@ -80,19 +71,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
-            <version>${apacheSolr.version}</version>
-            <scope>test</scope>
-            <exclusions>
-				<exclusion>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-        </dependency>
-        <dependency>
+       <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${springCore.version}</version>
@@ -117,4 +96,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

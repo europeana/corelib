@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>corelib</artifactId>
-    <version>2.9.3-SNAPSHOT</version>
+    <version>2.9.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Europeana Core Library</name>
@@ -26,6 +26,7 @@
         <!-- exclude generated code in SonarQube analysis -->
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
+        <metis.version>1.8.0</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
         <mongoDriver.version>3.7.1</mongoDriver.version>
@@ -58,8 +59,7 @@
         <module>corelib-storage</module>
         <module>corelib-web</module>
         <module>corelib-edm-definitions</module>
-        <module>corelib-lookup</module>
-        <module>corelib-hierarchies</module>
+        <module>corelib-record</module>
         <module>corelib-search</module>
         <module>corelib-schemaorg</module>
     </modules>
@@ -104,7 +104,7 @@
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
-                <artifactId>corelib-lookup</artifactId>
+                <artifactId>corelib-record</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

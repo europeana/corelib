@@ -18,9 +18,9 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
-import eu.europeana.corelib.search.SearchService;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +46,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     @Resource(type = TokenService.class)
     private TokenService tokenService;
 
-    @Resource(type = SearchService.class)
-    private SearchService searchService;
+    @Resource(type = RecordService.class)
+    private RecordService recordService;
 
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
@@ -94,7 +94,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
         user = getDao().insert(user);
 
-        emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
+        //emailService.sendActivationToken(tokenService.create(email, redirect), activationUrl);
 
         return user;
     }
@@ -190,7 +190,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         if (user == null) {
             throw new DatabaseException(ProblemType.NO_USER);
         }
-        emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
+        //emailService.sendNewPasswordToken(tokenService.create(email, redirect), activationUrl, friendlyUserName(user));
         return user;
     }
 
@@ -223,7 +223,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         // user exists; token exists and matches on email address: go ahead
         user.setPassword(hashPassword(newPassword));
         tokenService.remove(token);
-        emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
+        //emailService.sendPasswordResetConfirmation(user, friendlyUserName(user));
         return user;
     }
 
@@ -336,9 +336,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
-    public User createSavedItem(Long userId, String europeanaObjectId) throws DatabaseException {
+    public User createSavedItem(Long userId, String europeanaId) throws DatabaseException {
 
-        if ((userId == null) || StringUtils.isBlank(europeanaObjectId)) {
+        if ((userId == null) || StringUtils.isBlank(europeanaId)) {
             throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
@@ -347,14 +347,14 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
 
-        if (findSavedItemByEuropeanaId(userId, europeanaObjectId) != null) {
+        if (findSavedItemByEuropeanaId(userId, europeanaId) != null) {
             throw new DatabaseException(ProblemType.DUPLICATE);
         }
 
         SavedItem savedItem = new SavedItemImpl();
         FullBean bean;
 
-        bean = populateEuropeanaUserObject(user, europeanaObjectId, savedItem);
+        bean = populateEuropeanaUserObject(user, europeanaId, savedItem);
 
         if (bean != null) {
             List<? extends Proxy> proxies = bean.getProxies();
@@ -369,10 +369,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     @Override
-    public User createSocialTag(Long userId, String europeanaObjectId,
+    public User createSocialTag(Long userId, String europeanaId,
                                 String tag) throws DatabaseException {
 
-        if ((userId == null) || StringUtils.isBlank(europeanaObjectId)
+        if ((userId == null) || StringUtils.isBlank(europeanaId)
                 || StringUtils.isBlank(tag)) {
             throw new DatabaseException(ProblemType.INVALID_ARGUMENTS);
         }
@@ -383,7 +383,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
         }
 
         SocialTag socialTag = new SocialTagImpl();
-        populateEuropeanaUserObject(user, europeanaObjectId, socialTag);
+        populateEuropeanaUserObject(user, europeanaId, socialTag);
 
         socialTag.setTag(StringUtils.abbreviate(tag,
                 RelationalDatabase.FIELDSIZE_TAG));
@@ -534,11 +534,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
     }
 
     private FullBean populateEuropeanaUserObject(User user,
-                                                 String europeanaObjectId, EuropeanaUserObject instance) throws DatabaseException {
+                                                 String europeanaId, EuropeanaUserObject instance) throws DatabaseException {
 
         FullBean bean;
         try {
-            bean = searchService.findById(europeanaObjectId, false);
+            bean = recordService.findById(europeanaId);
         } catch (EuropeanaException e) {
             throw new DatabaseException(e.getProblem(), e);
         }
@@ -595,7 +595,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             }
         }
         if (title == null) {
-            title = europeanaObjectId;
+            title = europeanaId;
         }
 
         instance.setTitle(StringUtils.abbreviate(title, RelationalDatabase.FIELDSIZE_TITLE));

@@ -1,11 +1,9 @@
 package eu.europeana.corelib.web.service;
 
-import eu.europeana.corelib.definitions.db.entity.relational.User;
-import eu.europeana.corelib.definitions.users.Role;
+import eu.europeana.corelib.definitions.db.entity.relational.ApiKey;
 import eu.europeana.corelib.web.email.EmailBuilder;
 import eu.europeana.corelib.web.email.impl.EmailBuilderImpl;
 import eu.europeana.corelib.web.exception.EmailServiceException;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.subethamail.wiser.Wiser;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -52,7 +49,7 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Before
-    public void clear() throws Exception {
+    public void clear() {
         if (!runOnce) {
             reconfigureMailSenders(applicationContext, 2500);
             runOnce = true;
@@ -61,32 +58,15 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         wiser.stop();
     }
 
     @Test
-    public void testSendForgotPassword() throws EmailServiceException {
-        User user = createFakeUser("testSendToken", "testSendForgotPassword@testSendForgotPassword.eu");
-        emailService.sendForgotPassword(user, "testSendToken.eu/test.html");
-        assertEquals(1, wiser.getMessages().size());
-    }
-
-    @Test(expected = EmailServiceException.class)
-    public void testSendForgotPasswordException() throws EmailServiceException {
-        User user = createFakeUser("testSendToken", "testSendForgotPassword@testSendForgotPassword.eu");
-        emailService.sendForgotPassword(user, null);
-    }
-
-    @Test
-    public void testSendFeedback() throws EmailServiceException {
-        emailService.sendFeedback("testSendFeedback@testSendFeedback.eu", "Feedback Test");
-        assertEquals(2, wiser.getMessages().size());
-    }
-
-    @Test(expected = EmailServiceException.class)
-    public void testSendFeedbackException() throws EmailServiceException {
-        emailService.sendFeedback("testSendFeedback@testSendFeedback.eu", null);
+    public void testSendApiKeys() throws EmailServiceException {
+        ApiKey fakeKey = createFakeApiKey("testKey", "testPrivateKey", "Test", "Case", "unit@test.com");
+        emailService.sendApiKeys(fakeKey);
+        assertEquals(2, wiser.getMessages().size()); // 2 because we always send a copy to ourselves
     }
 
     @Test(expected = EmailServiceException.class)
@@ -98,16 +78,15 @@ public class EmailServiceTest extends AbstractJUnit4SpringContextTests {
         builder.setTemplate("doesNotExists");
     }
 
-    private User createFakeUser(final String username, final String email) {
-        User userMock = mock(User.class);
-        when(userMock.getId()).thenReturn(NumberUtils.LONG_ONE);
-        when(userMock.getUserName()).thenReturn(username);
-        when(userMock.getRole()).thenReturn(Role.ROLE_USER);
-        when(userMock.getRegistrationDate()).thenReturn(new Date());
-        when(userMock.getEmail()).thenReturn(email);
-        when(userMock.getLanguageSearchApplied()).thenReturn(Boolean.TRUE);
-
-        return userMock;
+    private ApiKey createFakeApiKey(final String publicKey, final String privateKey,
+                                    final String firstName, final String lastName, final String emailAddress) {
+        ApiKey keyMock = mock(ApiKey.class);
+        when(keyMock.getId()).thenReturn(publicKey);
+        when(keyMock.getPrivateKey()).thenReturn(privateKey);
+        when(keyMock.getFirstName()).thenReturn(firstName);
+        when(keyMock.getLastName()).thenReturn(lastName);
+        when(keyMock.getEmail()).thenReturn(emailAddress);
+        return keyMock;
     }
 
     private static void reconfigureMailSenders(ApplicationContext applicationContext, int port) {
