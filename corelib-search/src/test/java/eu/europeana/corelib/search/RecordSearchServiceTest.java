@@ -100,7 +100,7 @@ public class RecordSearchServiceTest {
 //                    idServer.createDatastore();
 //                    searchService.setEdmMongoServer(mongoDBServer);
 //                    searchService.setEuropeanaIdMongoServer(idServer);
-//                    searchService.setLogger(Logger.getLogger(SearchServiceImpl.class));
+//                    searchService.setLogger(LogManager.getLogger(SearchServiceImpl.class));
 
 
                 try {

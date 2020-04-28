@@ -11,7 +11,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Date util classes
@@ -19,10 +20,9 @@ import org.apache.log4j.Logger;
  *
  */
 public class DateUtils {
-    private static final Logger LOG = Logger.getLogger(DateUtils.class);
+    private static final Logger LOG = LogManager.getLogger(DateUtils.class);
     private static final SimpleDateFormat  DATE_TIME_FORMATTER     = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     private static final DateTimeFormatter ISO_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-
 
     static {
         DATE_TIME_FORMATTER.setTimeZone(TimeZone.getTimeZone("GTM"));
