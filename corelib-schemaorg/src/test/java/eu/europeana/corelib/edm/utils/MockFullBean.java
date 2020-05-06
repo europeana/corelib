@@ -121,15 +121,15 @@ public final class MockFullBean {
         proxy.getDctermsTemporal().put("def", new ArrayList<>());
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/19xx");
         proxy.getDctermsTemporal().get("def").add("http://semium.org/time/1901");
-        proxy.getDctermsTemporal().get("def").add("1981-1990"); //invalid
+        proxy.getDctermsTemporal().get("def").add("1981-1990"); //valid now
         proxy.getDctermsTemporal().get("def").add("1930");
         proxy.getDctermsTemporal().get("def").add("1930");
-        proxy.getDctermsTemporal().get("def").add("xyxc"); // this should NOT be present in temporal coverage as it is not a valid year
+        proxy.getDctermsTemporal().get("def").add("xyxc"); // Valid
 
 
         proxy.setDctermsCreated(new HashMap<>());
         proxy.getDctermsCreated().put("def", new ArrayList<>());
-        proxy.getDctermsCreated().get("def").add("01 November 1928"); //This is invalid date, allow invalid is true for dcCreated and this should get added in dateCreated
+        proxy.getDctermsCreated().get("def").add("01 November 1928"); //This is valid date
 
         proxy.setDcCoverage(new HashMap<>());
         proxy.getDcCoverage().put("def" , new ArrayList<>());
