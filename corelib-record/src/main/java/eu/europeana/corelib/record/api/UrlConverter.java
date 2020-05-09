@@ -75,7 +75,7 @@ public final class UrlConverter {
 
     /**
      * Make sure the ProvideCHO, AggregatedCHO and ProxyFor values start with '/item' (this was removed for records
-     * ingested with Metis system)
+     * ingested with Metis system, see also EA-1257)
      * @param bean the fullbean to modify
      */
     public static void addSlashItem(FullBean bean) {
