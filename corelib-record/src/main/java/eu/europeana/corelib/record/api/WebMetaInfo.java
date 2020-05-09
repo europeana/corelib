@@ -1,19 +1,17 @@
-package eu.europeana.corelib.record.impl;
+package eu.europeana.corelib.record.api;
 
-import com.google.common.base.Charsets;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -22,9 +20,7 @@ import java.util.*;
  * @author Patrick Ehlert
  * Created on 01-03-2018
  */
-public class WebMetaInfo {
-
-    private static final Logger LOG = LogManager.getLogger(WebMetaInfo.class);
+public final class WebMetaInfo {
 
     @SuppressWarnings("squid:S2070")
     private static final HashFunction hf = Hashing.md5();
@@ -38,23 +34,10 @@ public class WebMetaInfo {
      *
      * @param fullBean the fullbean object to which metadata should be added
      * @param mongoServer the mongo server from which the metadata should be retrieved
-     */
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer) {
-        injectWebMetaInfoBatch(fullBean, mongoServer, null, null);
-    }
-
-    /**
-     * Add webResources and fill them with metadata retrieved from Mongo
-     *
-     * @param fullBean the fullbean object to which metadata should be added
-     * @param mongoServer the mongo server from which the metadata should be retrieved
-     * @param manifestAddUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
-     *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
-     *                       by the api2BaseUrl value
-     * @param api2BaseUrl FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
+     * @param attributionCss location where the attribution css file is available
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, Boolean manifestAddUrl, String api2BaseUrl) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, String attributionCss) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -86,7 +69,27 @@ public class WebMetaInfo {
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         fillAggregations(fullBean, mongoServer);
 
-        addReferencedByIIIF(fullBean, manifestAddUrl, api2BaseUrl);
+        addAttributionSnippets(fullBean, attributionCss);
+    }
+
+    /**
+     * For each webresource in the fullbean, generate an attribution snippet
+     * @param fullBean
+     * @param cssLocation
+     */
+    private static void addAttributionSnippets(FullBean fullBean, String cssLocation) {
+        if ((fullBean.getAggregations() == null ||  fullBean.getAggregations().isEmpty())) {
+            return;
+        }
+
+        ((FullBeanImpl) fullBean).setAsParent();
+        for (Aggregation agg : fullBean.getAggregations()) {
+            if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
+                for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
+                    wRes.initAttributionSnippet(cssLocation);
+                }
+            }
+        }
     }
 
     private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
@@ -190,86 +193,11 @@ public class WebMetaInfo {
 
     private static String generateHashCode(String wrId, String recordId) {
         return hf.newHasher()
-                .putString(wrId, Charsets.UTF_8)
-                .putString("-", Charsets.UTF_8)
-                .putString(recordId, Charsets.UTF_8)
+                .putString(wrId, StandardCharsets.UTF_8)
+                .putString("-", StandardCharsets.UTF_8)
+                .putString(recordId, StandardCharsets.UTF_8)
                 .hash()
                 .toString();
     }
 
-    /**
-     * This is temporary code: if a record is a newspaper record and doesn't have a referencedBy value, we add
-     * a reference to IIIF (see ticket EA-992)
-     * @param bean
-     */
-    private static void addReferencedByIIIF(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
-        // tmp add timing information to see impact
-        long start = System.nanoTime();
-        if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
-            // add to all webresources in all aggregations
-            for (Aggregation a : bean.getAggregations()) {
-                for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
-                    if (manifestAddUrl != null && manifestAddUrl.equals(Boolean.TRUE)) {
-                        iiifId = iiifId + "?recordApi=" + api2BaseUrl;
-                    }
-                    wr.setDctermsIsReferencedBy(new String[]{iiifId});
-                }
-            }
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("AddReferencedByIIIF took {} ns", System.nanoTime() - start);
-        }
-    }
-
-    /**
-     * Check if the record is a newspaper record (there is a dcType value called 'http://schema.org/PublicationIssue')
-     * @param bean
-     * @return true if it's a newspaper record, otherwise false
-     */
-    public static boolean isNewsPaperRecord(FullBean bean) {
-        boolean result = false;
-        if (bean.getProxies() != null) {
-            for (Proxy proxy : bean.getProxies()) {
-                Map<String, List<String>> langMap = proxy.getDcType();
-                if (langMap != null) {
-                    for (List<String> langValues : langMap.values()) {
-                        result = langValues.contains("http://schema.org/PublicationIssue") ||
-                                 langValues.contains("https://schema.org/PublicationIssue");
-                        if (result) {
-                            break;
-                        }
-                    }
-                }
-                if (result) {
-                    break;
-                }
-            }
-        }
-        LOG.debug("isNewsPaperRecord = {}", result);
-        return result;
-    }
-
-    /**
-     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were
-     * ingested and do not construct any manifest urls ourselves
-     * @param bean
-     * @return
-     */
-    public static boolean hasReferencedBy(FullBean bean) {
-        if (bean.getAggregations() != null) {
-            // check all aggregations
-            for (Aggregation a : bean.getAggregations()) {
-                // check all webresources
-                for (WebResource wr : a.getWebResources()) {
-                    if (wr.getDctermsIsReferencedBy() != null && wr.getDctermsIsReferencedBy().length > 0) {
-                        LOG.debug("hasReferencedBy = true");
-                        return true;
-                    }
-                }
-            }
-        }
-        LOG.debug("hasReferencedBy = false");
-        return false;
-    }
 }
