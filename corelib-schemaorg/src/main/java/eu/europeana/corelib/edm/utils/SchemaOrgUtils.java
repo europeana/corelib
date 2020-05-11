@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import eu.europeana.corelib.edm.model.schemaorg.*;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +55,7 @@ public final class SchemaOrgUtils {
 
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
-    private static List<String> linkedContextualEntities = new ArrayList<>();
+    protected static List<String> linkedContextualEntities = new ArrayList<>();
 
 
     private SchemaOrgUtils() {
@@ -76,13 +74,7 @@ public final class SchemaOrgUtils {
         List<Thing> objectsToSerialize = new ArrayList<>();
         Thing object = SchemaOrgTypeFactory.createObject(bean);
         objectsToSerialize.add(object);
-        processProvidedCHO((CreativeWork) object, bean);
-        processProxies((CreativeWork) object, bean);
-        objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean));
-        objectsToSerialize.addAll(processAgents(bean.getAgents()));
-        objectsToSerialize.addAll(processPlaces(bean.getPlaces()));
-        objectsToSerialize.addAll(processConcepts(bean.getConcepts()));
-
+        getSchemaOrg(bean, objectsToSerialize, object);
         JsonLdSerializer serializer = new JsonLdSerializer();
         try {
             jsonld = serializer.serialize(objectsToSerialize);
@@ -93,6 +85,16 @@ public final class SchemaOrgUtils {
         return jsonld;
     }
 
+    protected static void getSchemaOrg(FullBeanImpl bean, List<Thing> objectsToSerialize, Thing object) {
+        processProvidedCHO((CreativeWork) object, bean);
+        processProxies((CreativeWork) object, bean);
+        objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean));
+        //remove duplicates from the linkedContextualEntities
+        removeDuplicates(linkedContextualEntities);
+        objectsToSerialize.addAll(processAgents(bean.getAgents()));
+        objectsToSerialize.addAll(processPlaces(bean.getPlaces()));
+        objectsToSerialize.addAll(processConcepts(bean.getConcepts()));
+    }
     /**
      * Update properties of the given Schema.Org Thing using data from the given EDM
      * Contextual Class
@@ -482,7 +484,6 @@ public final class SchemaOrgUtils {
             if (!notNullNorEmpty(object.getId())) {
                 object.setId(URL_PREFIX + providedCHO.getAbout());
             }
-
             // sameAs
             addTextProperties(object, toList(providedCHO.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
@@ -759,7 +760,7 @@ public final class SchemaOrgUtils {
                     bean.getTimespans(), false);
 
             // now dcCoverage should only contain values that should be added to about
-            // property
+            // about
             addResourceOrReferenceProperties(object, dcCoverage, SchemaOrgConstants.PROPERTY_ABOUT, null);
 
             // isBasedOn
@@ -1389,5 +1390,10 @@ public final class SchemaOrgUtils {
         if(referenceNull(propertyName)) {
             linkedContextualEntities.add(value);
         }
+    }
+    private static void removeDuplicates(List<String> list) {
+        List<String> listWithoutDuplicates = list.stream().distinct().collect(Collectors.toList());
+        list.clear();
+        list.addAll(listWithoutDuplicates);
     }
 }
