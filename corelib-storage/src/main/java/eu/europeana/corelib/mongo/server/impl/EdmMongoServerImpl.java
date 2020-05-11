@@ -43,7 +43,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
      * provided mongoClient
      * Used by corelib.search embeddedMongoProvider (unit test usage) only
      *
-     *@deprecated
+     * @deprecated please use EdmMongoServerImpl(MongoClient, String, boolean)
      *
      * @param mongoClient
      * @param databaseName
@@ -78,6 +78,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
      * @param databaseName
      * @param username
      * @param password
+     * @deprecated please use EdmMongoServerImpl(MongoClient, String, boolean)    *
      */
     @Deprecated
     public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password) {
@@ -94,7 +95,9 @@ public class EdmMongoServerImpl implements EdmMongoServer {
      * @param username
      * @param password
      * @param createIndexes, if true then it will try to create the necessary indexes if needed
+     * @deprecated please use EdmMongoServerImpl(MongoClient, String, boolean)
      */
+    @Deprecated
     public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username, String password,
                               boolean createIndexes) {
         MongoClientOptions.Builder options = MongoClientOptions.builder();

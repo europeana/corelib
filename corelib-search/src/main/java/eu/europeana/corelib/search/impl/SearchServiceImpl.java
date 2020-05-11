@@ -76,6 +76,10 @@ public class SearchServiceImpl implements SearchService {
     private String password;
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
+    @Value("#{europeanaProperties['solr.connect.timeout']}")
+    private int solrConnectTimeout;
+    @Value("#{europeanaProperties['solr.so.timeout']}")
+    private int solrSocketTimeout;
 
     /**
      * @see SearchService#search(Class, Query, boolean)
@@ -183,7 +187,10 @@ public class SearchServiceImpl implements SearchService {
             } catch (IOException e) {
                 throw new SolrIOException(ProblemType.CANT_CONNECT_SOLR, e);
             } catch (SolrServerException e) {
-                if (StringUtils.contains(e.getCause().toString(), "Collection")){
+                if (StringUtils.containsIgnoreCase(e.getCause().toString(), "Timeout")){
+                    throw new SolrQueryException(ProblemType.TIMEOUT_SOLR, e);
+                }
+                if (StringUtils.containsIgnoreCase(e.getCause().toString(), "Collection")){
                     throw new SolrQueryException(ProblemType.SEARCH_THEME_UNKNOWN); // do not include cause error for known problems
                 }
                 throw new SolrQueryException(ProblemType.SEARCH_QUERY_INVALID, e);
@@ -285,6 +292,8 @@ public class SearchServiceImpl implements SearchService {
     private SolrClient setClient(SolrClient solrClient) {
         if (solrClient instanceof HttpSolrClient) {
             HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
+            server.setConnectionTimeout(solrConnectTimeout);
+            server.setSoTimeout(solrSocketTimeout);
             AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
             client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
             return server;
