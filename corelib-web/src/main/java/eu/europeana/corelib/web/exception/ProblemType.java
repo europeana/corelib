@@ -42,10 +42,6 @@ public enum ProblemType {
     INVALID_ARGUMENTS(null,"Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
     NO_USERNAME(null,"User name does not exist.", ProblemResponseAction.IGNORE),
     NO_PASSWORD(null,"Password does not exist.", ProblemResponseAction.IGNORE),
-    NEO4J_404(null,"No hierarchical data found for record", ProblemResponseAction.LOG_ERR),
-    NEO4J_500(null,"Error processing hierarchical data for record", ProblemResponseAction.LOG_ERR),
-    NEO4J_502_BAD_DATA(null,"Inconsistency in hierarchical data for record", ProblemResponseAction.LOG_ERR),
-    NEO4J_503_CONNECTION(null,"Could not connect to hierarchy database", ProblemResponseAction.LOG_ERR),
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
 
     // Deprecated (still in use, but in deprecated classes)
