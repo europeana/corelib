@@ -9,6 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SchemaOrgUtilsTest Utilities
+ *
+ * @author Srishti Singh
+ * <p>
+ * Created on 09-05-2020
+ */
+
 public class SchemaOrgTestUtilities {
 
     protected static final String THING          = "Thing";
