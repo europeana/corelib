@@ -36,7 +36,7 @@ public interface RecordService {
 
     /**
      * Retrieve a record object from the database (without {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
-     * Use {@link #addWebResourceMetaInfo(FullBean)} to add the web resources meta info an attribution snippets
+     * Use {@link #enrichFullBean(FullBean)} to add the web resources meta info an attribution snippets
      *
      * @param europeanaObjectId The unique europeana id
      * @param resolveId if true and the record was not found, then the resolve method is used to check if this record has
@@ -47,14 +47,24 @@ public interface RecordService {
     FullBean fetchFullBean(String europeanaObjectId, boolean resolveId) throws EuropeanaException;
 
     /**
-     * Retrieve all {@link eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo} for the web resources
-     * in this full bean and generate attribution snippets
+     * This prepares a Fullbean retrieved from Mongo for use by Record API and other services
+     * It adds:
+     * <ul>
+     *     <li>MetaInfo for all web resources</li>
+     *     <li>Attribution snippet for all web resources</li>
+     *     <li>Link to IIIF Manifest for newspaper items (that do not have referencedBy)</li>
+     * </ul> and also makes sure that
+     * <ul>
+     *     <li>edmPreview has a proper thumbnail url</li>
+     *     <li>edmLandingpage has a proper portal url</li>
+     *     <li>providedCHO, aggregatedCHO and proxyFor values start with '/item'</li>
+     * </ul>
      *
-     * @param fullBean the basic fullbean for which web resources should be added
-     * @return enriched full bean with web resources
+     * @param fullBean the basic fullbean we should enrich for usage
+     * @return enriched full bean
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean addWebResourceMetaInfo(FullBean fullBean) throws EuropeanaException;
+    FullBean enrichFullBean(FullBean fullBean) throws EuropeanaException;
 
     /**
      * Checks if an europeanaObjectId is old and has a newId. Note that this new id may also be old so we check iteratively

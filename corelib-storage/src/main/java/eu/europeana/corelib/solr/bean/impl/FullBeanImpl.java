@@ -4,6 +4,8 @@ import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import eu.europeana.corelib.solr.entity.QualityAnnotationImpl;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
@@ -73,9 +75,6 @@ public class FullBeanImpl implements FullBean {
   protected DocType type;
 
   protected int europeanaCompleteness;
-
-  @Transient
-  protected List<BriefBeanImpl> similarItems;
 
   @Reference
   @Indexed
@@ -325,7 +324,7 @@ public class FullBeanImpl implements FullBean {
     if (!europeanaId.equals(fullBean.europeanaId)) {
       return false;
     }
-    return about != null ? about.equals(fullBean.about) : fullBean.about == null;
+    return Objects.equals(about, fullBean.about);
   }
 
   @Override
@@ -357,16 +356,6 @@ public class FullBeanImpl implements FullBean {
   @Override
   public Date getTimestampUpdated() {
     return timestampUpdated != null ? this.timestampUpdated : new Date(0);
-  }
-
-  @Override
-  public List<? extends BriefBean> getSimilarItems() {
-    return this.similarItems;
-  }
-
-  @Override
-  public void setSimilarItems(List<? extends BriefBean> similarItems) {
-    this.similarItems = (List<BriefBeanImpl>) similarItems;
   }
 
   @Override

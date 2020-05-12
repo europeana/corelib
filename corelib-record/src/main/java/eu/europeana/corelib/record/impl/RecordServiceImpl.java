@@ -1,12 +1,12 @@
 package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.RecordService;
-import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.record.api.IIIFLink;
+import eu.europeana.corelib.record.api.UrlConverter;
+import eu.europeana.corelib.record.api.WebMetaInfo;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.RecordRedirect;
@@ -40,12 +40,16 @@ public class RecordServiceImpl implements RecordService {
     @Resource(name = "metis_redirect_mongo")
     protected RecordRedirectDao redirectDao;
 
+    @Value("#{europeanaProperties['portal.baseUrl']}")
+    private String portalBaseUrl;
+    @Value("#{europeanaProperties['apiGateway.baseUrl']}")
+    private String apiGatewayBaseUrl;
     @Value("#{europeanaProperties['api2.baseUrl']}")
     private String api2BaseUrl;
     @Value("#{europeanaProperties['manifest.add.url']}")
     private Boolean manifestAddUrl;
     @Value("#{europeanaProperties['htmlsnippet.css.source']}")
-    private String htmlCssSource;
+    private String attributionCss;
 
     /**
      * @see RecordService#findById(String, String)
@@ -62,7 +66,7 @@ public class RecordServiceImpl implements RecordService {
     public FullBean findById(String europeanaObjectId) throws EuropeanaException {
         FullBean fullBean = fetchFullBean(europeanaObjectId, true);
         if (fullBean != null) {
-            return addWebResourceMetaInfo(fullBean);
+            return enrichFullBean(fullBean);
         } else {
             return null;
         }
@@ -101,23 +105,24 @@ public class RecordServiceImpl implements RecordService {
     }
 
     /**
-     * @see RecordService#addWebResourceMetaInfo(FullBean)
+     * @see RecordService#enrichFullBean(FullBean)
      */
-    public FullBean addWebResourceMetaInfo(FullBean fullBean){
-        // add meta info for all webresources
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, manifestAddUrl, api2BaseUrl);
+    public FullBean enrichFullBean(FullBean fullBean){
+        // 1. add meta info for all webresources + generate attribution snippets
+        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
 
-        // generate attribution snippets for all webresources
-        if ((fullBean.getAggregations() != null && !fullBean.getAggregations().isEmpty())) {
-            ((FullBeanImpl) fullBean).setAsParent();
-            for (Aggregation agg : fullBean.getAggregations()) {
-                if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
-                    for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
-                        wRes.initAttributionSnippet(htmlCssSource);
-                    }
-                }
-            }
-        }
+        // 2. add link to IIIF for newspaper items
+        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, api2BaseUrl);
+
+        // 3. make sure we add /item in various places
+        UrlConverter.addSlashItem(fullBean);
+
+        // 4. generate proper edmPreview thumbnail urls
+        UrlConverter.setEdmPreview(fullBean, apiGatewayBaseUrl);
+
+        // 5. generate proper edmLandingpage portal urls
+        UrlConverter.setEdmLandingPage(fullBean, portalBaseUrl);
+
         return fullBean;
     }
 
