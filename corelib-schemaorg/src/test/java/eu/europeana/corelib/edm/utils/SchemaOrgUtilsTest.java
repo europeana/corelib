@@ -143,13 +143,16 @@ public class SchemaOrgUtilsTest {
         }
 
         //name
-        assertTrue(StringUtils.equals(MockBeanConstants.DC_TITLE, SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_NAME, object).get(0)));
+        assertTrue(StringUtils.equals(MockBeanConstants.DC_TITLE,
+                SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_NAME, object).get(0)));
 
         //description
-        assertTrue(StringUtils.equals( MockBeanConstants.DC_DESCRIPTION, SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, object).get(0)));
+        assertTrue(StringUtils.equals( MockBeanConstants.DC_DESCRIPTION,
+                SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, object).get(0)));
 
         //alternate name
-        assertTrue(StringUtils.equals(MockBeanConstants.DC_ALTERNATIVE, SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_ALTERNATE_NAME, object).get(0)));
+        assertTrue(StringUtils.equals(MockBeanConstants.DC_ALTERNATIVE,
+                SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_ALTERNATE_NAME, object).get(0)));
     }
 
     private static int checkLinkedObjects(List<Thing> schemaResponse, Thing object) {
@@ -203,7 +206,8 @@ public class SchemaOrgUtilsTest {
                             //id
                             assertEquals(MockBeanConstants.DC_CREATOR_8, thing.getId());
                             //dissolutionDate
-                            assertEquals(MockBeanConstants.DISOLUTION_DATE, thing.getProperty(SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE).get(0).toString());
+                            assertEquals(MockBeanConstants.DISOLUTION_DATE,
+                                    thing.getProperty(SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE).get(0).toString());
                             linkedObjectsTested++;
                         }
                         //Place Object check
@@ -211,7 +215,8 @@ public class SchemaOrgUtilsTest {
                             //id
                             assertEquals( MockBeanConstants.DC_CREATOR_7, thing.getId());
                             //description
-                            assertEquals( MockBeanConstants.PLACE_NOTE, SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing).get(0));
+                            assertEquals( MockBeanConstants.PLACE_NOTE,
+                                    SchemaOrgTestUtilities.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing).get(0));
                             linkedObjectsTested++;
 
                         }
