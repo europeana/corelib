@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Resource(name = "metis_redirect_mongo")
     protected RecordRedirectDao redirectDao;
+    @Value("${mongodb.redirect.dbname}")
+    private String redirectDbName;
 
     @Value("#{europeanaProperties['portal.baseUrl']}")
     private String portalBaseUrl;
@@ -50,6 +53,34 @@ public class RecordServiceImpl implements RecordService {
     private Boolean manifestAddUrl;
     @Value("#{europeanaProperties['htmlsnippet.css.source']}")
     private String attributionCss;
+
+    /**
+     * Check if the redirectDao works fine. If not we disable it.
+     * This is a temporary hack so we can use the Record API without a redirect database (for Metis Sandbox)
+     * When we switch to Spring-Boot we can implement a more elegant solution with @ConditionalOnProperty for example
+     */
+    @PostConstruct
+    private void checkConfiguration() {
+        if (redirectDao == null || StringUtils.isEmpty(redirectDbName) || StringUtils.containsIgnoreCase(redirectDbName,"REMOVED")) {
+            LOG.warn("No redirect database configured!");
+            redirectDao = null;
+        } else {
+            // do a request to see if things are working (if database exists and we have access)
+            try {
+                redirectDao.getRecordRedirectsByOldId("/xx/yy");
+                LOG.info("Connection to redirect database {} is okay.", redirectDbName);
+            } catch (RuntimeException e) {
+                if (e.getMessage().contains("not authorized")) {
+                    // this is the expected behavior if we try to access a database that doesn't exist.
+                    LOG.warn("Not authorized to access redirect database {}. It may not exist.", redirectDbName);
+                    redirectDao = null;
+                    LOG.warn("Redirect functionality is now disabled");
+                } else {
+                    LOG.error("Error accessing redirect database {}!", redirectDbName, e);
+                }
+            }
+        }
+    }
 
     /**
      * @see RecordService#findById(String, String)
@@ -133,6 +164,9 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public String resolveId(String europeanaId) throws BadDataException {
+        if (redirectDao == null) {
+            return null;
+        }
         List<RecordRedirect> redirects = redirectDao.getRecordRedirectsByOldId(europeanaId);
         if (redirects.isEmpty()){
             LOG.debug("RecordService no redirection was found for EuropeanaID {}", europeanaId);
