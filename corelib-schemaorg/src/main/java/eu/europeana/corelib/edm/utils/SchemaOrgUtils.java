@@ -60,9 +60,7 @@ public final class SchemaOrgUtils {
      * @param bean bean with metadata
      * @return string representation of schema.org object
      */
-    public static String toSchemaOrg(FullBeanImpl bean) {
-        String jsonld = null;
-
+    public static String toSchemaOrg(FullBeanImpl bean) throws IOException {
         List<String> linkedContextualEntities = new ArrayList<>();
 
         List<Thing> objectsToSerialize = new ArrayList<>();
@@ -76,13 +74,7 @@ public final class SchemaOrgUtils {
         objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
 
         JsonLdSerializer serializer = new JsonLdSerializer();
-        try {
-            jsonld = serializer.serialize(objectsToSerialize);
-        } catch (IOException e) {
-            LOG.error("Serialization to schema.org failed for " + object.getId(), e);
-        }
-
-        return jsonld;
+        return serializer.serialize(objectsToSerialize);
     }
 
     /**
