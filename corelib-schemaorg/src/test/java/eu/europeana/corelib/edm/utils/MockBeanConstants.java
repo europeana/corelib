@@ -14,13 +14,13 @@ import java.util.Date;
 
 public class MockBeanConstants {
 
-    public static final String   FULL_BEAN_FILE              = "/schemaorg/fullbean.json";
-    public static final String   EDMORGANIZATION_FILE        = "/schemaorg/edmorganization.json";
+    protected static final String   FULL_BEAN_FILE              = "/schemaorg/fullbean.json";
+    protected static final String   EDMORGANIZATION_FILE        = "/schemaorg/edmorganization.json";
 
-    public static final String TEMPORAL_COVERAGE_TIMESPAN_1  = "1901-01-01T00:19:32/2000-12-31T01:00:00";
-    public static final String TEMPORAL_COVERAGE_TIMESPAN_2  = "1901-01-01/1902-01-01";
-    public static final String VIDEO_OBJECT                  = "VideoObject";
-    public static final String IMAGE_OBJECT                  = "ImageObject";
+    protected static final String TEMPORAL_COVERAGE_TIMESPAN_1  = "1901-01-01T00:19:32/2000-12-31T01:00:00";
+    protected static final String TEMPORAL_COVERAGE_TIMESPAN_2  = "1901-01-01/1902-01-01";
+    protected static final String VIDEO_OBJECT                  = "VideoObject";
+    protected static final String IMAGE_OBJECT                  = "ImageObject";
 
 
     protected static final String  COMMON_ABOUT             = "2021618/internetserver_Details_kunst_25027";
