@@ -19,12 +19,6 @@ import java.util.List;
 
 public class SchemaOrgTestUtils {
 
-    protected static final String THING          = "Thing";
-    protected static final String TEXT           = "Text";
-    protected static final String ORANGANIZATION = "Organization";
-    protected static final String PERSON         = "Person";
-    protected static final String PLACE          = "Place";
-
     // get Resources and Reference values
     protected static List<String> getResourceOrReference(String propertyName, Thing object) {
         List<String> resOrRef = new ArrayList<>();
@@ -39,8 +33,8 @@ public class SchemaOrgTestUtils {
         List<Reference> referenceList = new ArrayList<>();
         List<BaseType> propertiesList = object.getProperty(propertyName);
         for (BaseType property : propertiesList) {
-            if (! StringUtils.equalsIgnoreCase(property.getTypeName(), THING) && ! StringUtils.equalsIgnoreCase(property.getTypeName(), TEXT)
-                    && ! StringUtils.equalsIgnoreCase(property.getTypeName(), ORANGANIZATION)) {
+            if (! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.THING) && ! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.TEXT)
+                    && ! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
                 referenceList.add((Reference) property);
             }
         }
@@ -56,7 +50,7 @@ public class SchemaOrgTestUtils {
         List<Thing> resourceList = new ArrayList<>();
         List<BaseType> propertiesList = object.getProperty(propertyName);
         for (BaseType resource : propertiesList) {
-            if (StringUtils.equalsIgnoreCase(resource.getTypeName(), THING) || StringUtils.equalsIgnoreCase(resource.getTypeName(), ORANGANIZATION)) {
+            if (StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.THING) || StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
                 resourceList.add((Thing) resource);
             }
         }
@@ -71,7 +65,7 @@ public class SchemaOrgTestUtils {
         List<String> texts = new ArrayList<>();
         List<BaseType> propertiesList = object.getProperty(propertyName);
         for (BaseType text : propertiesList) {
-            if (StringUtils.equalsIgnoreCase(text.getTypeName(), TEXT)) {
+            if (StringUtils.equalsIgnoreCase(text.getTypeName(), MockBeanConstants.TEXT)) {
                 texts.add(text.toString());
             }
         }

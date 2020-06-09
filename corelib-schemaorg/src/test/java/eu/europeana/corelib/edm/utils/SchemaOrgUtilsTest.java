@@ -189,7 +189,7 @@ public class SchemaOrgUtilsTest {
             for (int i = 0; i < linkedContextualEntities.size(); i++) {
                 if (StringUtils.equals(linkedContextualEntities.get(i), thing.getId())) {
                     // if agent: Person
-                    if (StringUtils.equals(thing.getTypeName(), SchemaOrgTestUtils.PERSON)) {
+                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PERSON)) {
                         //id
                         assertEquals(MockBeanConstants.DC_CREATOR_6, thing.getId());
                         //birthDate
@@ -199,7 +199,7 @@ public class SchemaOrgUtilsTest {
                         linkedObjectsTested++;
                     }
                     // if Organization
-                    if (StringUtils.equals(thing.getTypeName(), SchemaOrgTestUtils.ORANGANIZATION)) {
+                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
                         //id
                         assertEquals(MockBeanConstants.DC_CREATOR_8, thing.getId());
                         //dissolutionDate
@@ -208,7 +208,7 @@ public class SchemaOrgUtilsTest {
                         linkedObjectsTested++;
                     }
                     //Place Object check
-                    if (StringUtils.equals(thing.getTypeName(), SchemaOrgTestUtils.PLACE)) {
+                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PLACE)) {
                         //id
                         assertEquals( MockBeanConstants.DC_CREATOR_7, thing.getId());
                         //description
@@ -218,7 +218,7 @@ public class SchemaOrgUtilsTest {
 
                     }
                     //Concept object
-                    if (StringUtils.equals(thing.getTypeName(), SchemaOrgTestUtils.THING)) {
+                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.THING)) {
                         //id
                         assertEquals(MockBeanConstants.DC_CREATOR_4, thing.getId());
                         //description

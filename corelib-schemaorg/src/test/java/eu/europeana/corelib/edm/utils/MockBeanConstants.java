@@ -22,6 +22,11 @@ public class MockBeanConstants {
     protected static final String VIDEO_OBJECT                  = "VideoObject";
     protected static final String IMAGE_OBJECT                  = "ImageObject";
 
+    protected static final String THING          = "Thing";
+    protected static final String TEXT           = "Text";
+    protected static final String ORANGANIZATION = "Organization";
+    protected static final String PERSON         = "Person";
+    protected static final String PLACE          = "Place";
 
     protected static final String  COMMON_ABOUT             = "2021618/internetserver_Details_kunst_25027";
     protected static final String  DEF                      = "def";
