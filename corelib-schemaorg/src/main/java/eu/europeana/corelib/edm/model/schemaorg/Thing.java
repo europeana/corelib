@@ -105,7 +105,7 @@ public class Thing implements BaseType {
         }
     }
 
-    List<BaseType> getProperty(String propertyName) {
+    public List<BaseType> getProperty(String propertyName) {
         return properties.get(propertyName);
     }
 

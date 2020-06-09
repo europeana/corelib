@@ -61,29 +61,33 @@ public final class SchemaOrgUtils {
      * @return string representation of schema.org object
      */
     public static String toSchemaOrg(FullBeanImpl bean) throws IOException {
-        List<String> linkedContextualEntities = new ArrayList<>();
 
         List<Thing> objectsToSerialize = new ArrayList<>();
         Thing object = SchemaOrgTypeFactory.createObject(bean);
         objectsToSerialize.add(object);
+        List<String> linkedContextualEntities = new ArrayList<>();
+        getSchemaOrg(bean, objectsToSerialize, object, linkedContextualEntities);
+
+        JsonLdSerializer serializer = new JsonLdSerializer();
+        return serializer.serialize(objectsToSerialize);
+    }
+
+    protected static void getSchemaOrg(FullBeanImpl bean, List<Thing> objectsToSerialize, Thing object, List<String> linkedContextualEntities) {
+
         processProvidedCHO((CreativeWork) object, bean);
         processProxies((CreativeWork) object, bean, linkedContextualEntities);
         objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean, linkedContextualEntities));
         objectsToSerialize.addAll(processAgents(bean.getAgents(), linkedContextualEntities));
         objectsToSerialize.addAll(processPlaces(bean.getPlaces(), linkedContextualEntities));
         objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
-
-        JsonLdSerializer serializer = new JsonLdSerializer();
-        return serializer.serialize(objectsToSerialize);
     }
-
-    /**
-     * Update properties of the given Schema.Org Thing using data from the given EDM
-     * Contextual Class
-     *
-     * @param entity source EDM Contextual Class
-     * @param thing  Schema.Org Contextual Entity to update
-     */
+        /**
+         * Update properties of the given Schema.Org Thing using data from the given EDM
+         * Contextual Class
+         *
+         * @param entity source EDM Contextual Class
+         * @param thing  Schema.Org Contextual Entity to update
+         */
     public static void processEntity(ContextualClass entity,
                                      eu.europeana.corelib.edm.model.schemaorg.ContextualEntity thing) {
 
@@ -102,7 +106,7 @@ public final class SchemaOrgUtils {
      * Process all concepts on the given list and create a Thing object for each.
      *
      * @param concepts concepts to be processed
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      * @return list of created Thing objects for each concept
      */
     private static List<Thing> processConcepts(List<ConceptImpl> concepts, List<String> linkedContextualEntities) {
@@ -158,7 +162,7 @@ public final class SchemaOrgUtils {
      * Process list of places and create Place for each.
      *
      * @param places places list to process
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      * @return list of Place objects created from the input list
      */
     private static List<Thing> processPlaces(List<PlaceImpl> places, List<String> linkedContextualEntities) {
@@ -203,10 +207,10 @@ public final class SchemaOrgUtils {
 
         // containsPlace
         addReferences(placeObject, edmPlace.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE,
-                Place.class);
+                Place.class, null);
 
         // containedInPlace
-        addReferences(placeObject, edmPlace.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class);
+        addReferences(placeObject, edmPlace.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class, null);
 
         // sameAs
         addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
@@ -259,7 +263,7 @@ public final class SchemaOrgUtils {
      * each
      *
      * @param agents agents to process
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      * @return list of Person and / or Organization objects created from given
      * agents
      */
@@ -492,7 +496,7 @@ public final class SchemaOrgUtils {
      *
      * @param object object for which the properties will be added
      * @param bean   bean with all properties
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      * @return list of referenced objects created while processing aggregations
      */
     private static List<Thing> processAggregations(CreativeWork object, FullBeanImpl bean, List<String> linkedContextualEntities) {
@@ -531,7 +535,7 @@ public final class SchemaOrgUtils {
      *                    edm:isShownBy
      * @param aggregation current aggregation
      * @param bean
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      * @return a list of created referenced media objects
      */
     private static List<Thing> processWebResources(CreativeWork object, Set<String> mediaUrls, Aggregation aggregation,
@@ -558,7 +562,7 @@ public final class SchemaOrgUtils {
      * @param resource    web resource to retrieve property values
      * @param bean        bean with all the data needed to generate some mappings
      * @param aggregation aggregation object needed to generate some mappings
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      */
     private static void processWebResource(MediaObject mediaObject, WebResource resource, FullBeanImpl bean,
                                            Aggregation aggregation, List<String> linkedContextualEntities) {
@@ -604,6 +608,7 @@ public final class SchemaOrgUtils {
 
         // encodesCreativeWork
         if (!bean.getProvidedCHOs().isEmpty()) {
+            addLinkedContextualEntities(bean.getProvidedCHOs().get(0).getAbout(), linkedContextualEntities);
             addReference(mediaObject, URL_PREFIX + bean.getProvidedCHOs().get(0).getAbout(),
                     SchemaOrgConstants.PROPERTY_ENCODES_CREATIVE_WORK, null);
         }
@@ -613,10 +618,10 @@ public final class SchemaOrgUtils {
                 bean.getTimespans(), true);
 
         // hasPart
-        addReferences(mediaObject, resource.getDctermsHasPart(), SchemaOrgConstants.PROPERTY_HAS_PART, MediaObject.class);
+        addReferences(mediaObject, resource.getDctermsHasPart(), SchemaOrgConstants.PROPERTY_HAS_PART, MediaObject.class, linkedContextualEntities);
 
         // isPartOf
-        addReferences(mediaObject, resource.getDctermsIsPartOf(), SchemaOrgConstants.PROPERTY_IS_PART_OF, MediaObject.class);
+        addReferences(mediaObject, resource.getDctermsIsPartOf(), SchemaOrgConstants.PROPERTY_IS_PART_OF, MediaObject.class, linkedContextualEntities);
 
         // datePublished
         addDateProperty(mediaObject, resource.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
@@ -670,7 +675,7 @@ public final class SchemaOrgUtils {
      *
      * @param object object for which the properties will be added
      * @param bean   bean from database to get values for properties
-     * @param linkedContextualEntities  list of contextual entities linked with object
+     * @param linkedContextualEntities  list of all the references in the object
      */
     private static void processProxies(CreativeWork object, FullBeanImpl bean, List<String> linkedContextualEntities) {
         for (ProxyImpl proxy : bean.getProxies()) {
@@ -684,7 +689,7 @@ public final class SchemaOrgUtils {
             addResourceOrReferenceProperties(object, proxy.getDcType(), SchemaOrgConstants.PROPERTY_ABOUT, Thing.class, linkedContextualEntities);
             addResourceOrReferenceProperties(object, proxy.getEdmHasType(), SchemaOrgConstants.PROPERTY_ABOUT,
                     Thing.class, linkedContextualEntities);
-            addProperty(object, proxy.getEdmIsRepresentationOf(), "", SchemaOrgConstants.PROPERTY_ABOUT, null);
+            addProperty(object, proxy.getEdmIsRepresentationOf(), "", SchemaOrgConstants.PROPERTY_ABOUT, null, linkedContextualEntities);
             // values from dc:coverage will be added later
 
             // creator
@@ -714,19 +719,19 @@ public final class SchemaOrgUtils {
 
             // hasPart
             addResourceOrReferenceProperties(object, proxy.getDctermsHasPart(),
-                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class, null);
+                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class, linkedContextualEntities);
             addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmIncorporates()), "",
-                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class);
+                    SchemaOrgConstants.PROPERTY_HAS_PART, CreativeWork.class, linkedContextualEntities);
 
             // exampleOfWork
             addResourceOrReferenceProperties(object, proxy.getDctermsIsFormatOf(),
-                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class, null);
+                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class, linkedContextualEntities);
             addMultilingualPropertiesWithReferences(object, toList(proxy.getEdmRealizes()), "",
-                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class);
+                    SchemaOrgConstants.PROPERTY_EXAMPLE_OF_WORK, CreativeWork.class, linkedContextualEntities);
 
             // isPartOf
             addResourceOrReferenceProperties(object, proxy.getDctermsIsPartOf(),
-                    SchemaOrgConstants.PROPERTY_IS_PART_OF, CreativeWork.class, null);
+                    SchemaOrgConstants.PROPERTY_IS_PART_OF, CreativeWork.class, linkedContextualEntities);
 
             // datePublished
             addDateProperty(object, proxy.getDctermsIssued(), SchemaOrgConstants.PROPERTY_DATE_PUBLISHED,
@@ -734,14 +739,14 @@ public final class SchemaOrgUtils {
 
             // mentions
             addResourceOrReferenceProperties(object, proxy.getDctermsReferences(),
-                    SchemaOrgConstants.PROPERTY_MENTIONS, Thing.class, null);
+                    SchemaOrgConstants.PROPERTY_MENTIONS, Thing.class, linkedContextualEntities);
 
             // spatialCoverage
             Map<String, List<String>> dcCoverage = copyMap(proxy.getDcCoverage());
             Map<String, List<String>> places = filterPlaces(dcCoverage);
-            addResourceOrReferenceProperties(object, places, SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class, null);
+            addResourceOrReferenceProperties(object, places, SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class, linkedContextualEntities);
             addResourceOrReferenceProperties(object, proxy.getDctermsSpatial(),
-                    SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class, null);
+                    SchemaOrgConstants.PROPERTY_SPATIAL_COVERAGE, Place.class, linkedContextualEntities);
 
             // temporalCoverage
             Map<String, List<String>> dates = filterDates(dcCoverage);
@@ -755,7 +760,7 @@ public final class SchemaOrgUtils {
 
             // isBasedOn
             addReferences(object, toList(proxy.getEdmIsDerivativeOf()), SchemaOrgConstants.PROPERTY_IS_BASED_ON,
-                    CreativeWork.class);
+                    CreativeWork.class, linkedContextualEntities);
 
             // sameAs - none in ProxyImpl though there should be ore:Proxy/owl:sameAs
 
@@ -890,36 +895,13 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Adds multilingual properties or typed references. When a reference is
-     * detected its type will be set to <code>referenceClass</code>
-     *
-     * @param object         object for which the properties will be added
-     * @param map            map of values where key is the language and value is a
-     *                       values list
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
-     */
-    private static void addMultilingualPropertiesWithReferences(Thing object, Map<String, List<String>> map,
-                                                                String propertyName, Class<? extends Thing> referenceClass) {
-        if (map == null) {
-            return;
-        }
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            addMultilingualPropertiesWithReferences(object, entry.getValue(), entry.getKey(), propertyName,
-                    referenceClass);
-        }
-    }
-
-    /**
      * Adds typed references. When a reference is detected its type will be set to
      * <code>referenceClass</code>
      *
      * @param object         object for which the properties will be added
      * @param map            map of values where key is the language and value is a
      *                       values list
-     * @param linkedContextualEntities list of all the contextual entities which are linked to the object.
-     *                                 The value is passed only for the associated properties like creator, about,
-     *                                 contributor and publisher.
+     * @param linkedContextualEntities list of all the references in the object
      * @param propertyName   name of property
      * @param referenceClass class of reference
      */
@@ -930,13 +912,12 @@ public final class SchemaOrgUtils {
         }
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
-                    addLinkedContextualEntities(value, linkedContextualEntities);
                 if (EuropeanaUriUtils.isUri(value)) {
                     //while creating reference for about, contibutor, creator reference class should be null.
                     if(referenceNull(propertyName)) {
                         referenceClass = null;
                     }
-                    addProperty(object, value, entry.getKey(), propertyName, referenceClass);
+                    addProperty(object, value, entry.getKey(), propertyName, referenceClass, linkedContextualEntities);
                 } else {
                     addResourceProperty(object, value, entry.getKey(), propertyName, referenceClass);
                 }
@@ -980,13 +961,15 @@ public final class SchemaOrgUtils {
      * @param values         values to be added as references
      * @param propertyName   name of property
      * @param referenceClass class of reference
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void addReferences(Thing object, List<String> values, String propertyName,
-                                      Class<? extends Thing> referenceClass) {
+                                      Class<? extends Thing> referenceClass, List<String> linkedContextualEntities ) {
         if (values == null) {
             return;
         }
         for (String value : values) {
+            addLinkedContextualEntities(value, linkedContextualEntities);
             addReference(object, value, propertyName, referenceClass);
         }
     }
@@ -1148,11 +1131,13 @@ public final class SchemaOrgUtils {
      * @param propertyName name of property
      * @param language     language string, may be empty
      * @param value        value to add
+     * @param linkedContextualEntities  list of all the references in the object
      */
     private static void addProperty(Thing object, String value, String language, String propertyName,
-                                    Class<? extends Thing> referenceClass) {
+                                    Class<? extends Thing> referenceClass ,  List<String> linkedContextualEntities) {
         if (notNullNorEmpty(value)) {
             if (EuropeanaUriUtils.isUri(value)) {
+                addLinkedContextualEntities(value, linkedContextualEntities);
                 addReference(object, value, propertyName, referenceClass);
             } else {
                 addMultilingualProperty(object, value,
@@ -1213,14 +1198,15 @@ public final class SchemaOrgUtils {
      * @param values         array of values
      * @param propertyName   name of property
      * @param referenceClass class of reference
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void addMultilingualPropertiesWithReferences(Thing object, List<String> values, String language,
-                                                                String propertyName, Class<? extends Thing> referenceClass) {
+                                                                String propertyName, Class<? extends Thing> referenceClass, List<String> linkedContextualEntities) {
         if (values == null) {
             return;
         }
         for (String value : values) {
-            addProperty(object, value, language, propertyName, referenceClass);
+            addProperty(object, value, language, propertyName, referenceClass,linkedContextualEntities);
         }
     }
 
@@ -1233,14 +1219,15 @@ public final class SchemaOrgUtils {
      *                       values list
      * @param propertyName   name of property
      * @param referenceClass class of reference
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void addReferences(Thing object, Map<String, List<String>> map, String propertyName,
-                                      Class<? extends Thing> referenceClass) {
+                                      Class<? extends Thing> referenceClass, List<String> linkedContextualEntities) {
         if (map == null) {
             return;
         }
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            addReferences(object, entry.getValue(), propertyName, referenceClass);
+            addReferences(object, entry.getValue(), propertyName, referenceClass, linkedContextualEntities);
         }
     }
 
