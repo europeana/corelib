@@ -61,7 +61,6 @@ public final class SchemaOrgUtils {
      * @return string representation of schema.org object
      */
     public static String toSchemaOrg(FullBeanImpl bean) throws IOException {
-
         List<Thing> objectsToSerialize = new ArrayList<>();
         Thing object = SchemaOrgTypeFactory.createObject(bean);
         objectsToSerialize.add(object);
@@ -73,7 +72,6 @@ public final class SchemaOrgUtils {
     }
 
     protected static void getSchemaOrg(FullBeanImpl bean, List<Thing> objectsToSerialize, Thing object, List<String> linkedContextualEntities) {
-
         processProvidedCHO((CreativeWork) object, bean);
         processProxies((CreativeWork) object, bean, linkedContextualEntities);
         objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean, linkedContextualEntities));
@@ -81,6 +79,7 @@ public final class SchemaOrgUtils {
         objectsToSerialize.addAll(processPlaces(bean.getPlaces(), linkedContextualEntities));
         objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
     }
+
         /**
          * Update properties of the given Schema.Org Thing using data from the given EDM
          * Contextual Class

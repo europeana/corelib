@@ -36,7 +36,7 @@ public class SchemaOrgUtilsTest {
      * @throws IOException
      */
     @Test
-    public void toSchemaOrg_Serialization() throws IOException, URISyntaxException {
+    public void toSchemaOrg_Serialization() throws IOException {
         FullBeanImpl bean = MockFullBean.mock();
         String output = SchemaOrgUtils.toSchemaOrg(bean);
         Assert.assertNotNull(output);
