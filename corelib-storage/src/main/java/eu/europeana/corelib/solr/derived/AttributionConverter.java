@@ -295,45 +295,63 @@ public class AttributionConverter{
     }
 
     // saves the creator and Title values in a language aware map
-    private Map createCreatorTitleMap(Map<String, List<String>> bulkyMap) {
+    protected Map createCreatorTitleMap(Map<String, List<String>> bulkyMap) {
         Map<String, List<String>> creatorMap = new HashMap<>();
         if (bulkyMap.get(AttributionConstants.DEF) != null) {
             List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
+            ComparatorUtils.removeDuplicates(defList);
             creatorMap.put("", defList);
         }
-        // check for "en"
-            if (bulkyMap.get(AttributionConstants.EN) != null) {
-                List<String> enList = stripEmptyStrings(bulkyMap.get(AttributionConstants.EN));
-                creatorMap.put(AttributionConstants.EN, enList);
-            } else {
-                creatorMap.putAll(getOtherLanguageMap(bulkyMap));
-            }
+        if (bulkyMap.get(AttributionConstants.EN) != null) {
+            List<String> enList = stripEmptyStrings(bulkyMap.get(AttributionConstants.EN));
+            getFinalMap(creatorMap, enList, AttributionConstants.EN);
+        } else {
+                getOtherLanguageMap(bulkyMap, creatorMap);
+         }
         return creatorMap;
     }
 
-    // checks for languages staring with "en", if not present looks for other languages.
-    private Map getOtherLanguageMap (Map<String, List<String>> bulkyMap) {
-        Map<String, List<String>> creatorMap = new HashMap<>();
+    // checks for languages staring with "en", if not present look for other language.
+    private Map getOtherLanguageMap (Map<String, List<String>> bulkyMap,  Map<String, List<String>> creatorMap) {
+        boolean langValues = false;
         //check for any language which starts with "en" like "en-GB"
         for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
             if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)
                           && StringUtils.startsWith(langMap.getKey(), AttributionConstants.EN)) {
                 List<String> langList = stripEmptyStrings(langMap.getValue());
-                    creatorMap.put(langMap.getKey(), langList);
+                getFinalMap(creatorMap, langList, langMap.getKey());
+                langValues = true;
                     break;
             }
         }
-        // if map is still empty check for any other language present.
-        if(creatorMap.isEmpty()) {
+        if (! langValues) {
             for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
                 if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)) {
                     List<String> langList = stripEmptyStrings(langMap.getValue());
-                    creatorMap.put(langMap.getKey(), langList);
+                    getFinalMap(creatorMap, langList, langMap.getKey());
                     break; // pick only one doesn't matter which one
                 }
             }
         }
         return creatorMap;
+    }
+
+    //removes duplicates across the list and across creatorMap existing values
+    private static Map getFinalMap(Map<String, List<String>> creatorMap, List<String> langList, String key) {
+        ComparatorUtils.removeDuplicates(langList);
+        if (! removeDuplicatesFromOneList(creatorMap, langList).isEmpty()) {
+            creatorMap.put(key, langList);
+        }
+        return creatorMap;
+    }
+
+    //removes Duplicates from one list by comparing with another
+    private static List<String> removeDuplicatesFromOneList (Map<String, List<String>> map, List<String> listWithDuplicates) {
+        for (Map.Entry<String, List<String>> creatorMap : map.entrySet()) {
+            List<String> values= creatorMap.getValue();
+            listWithDuplicates.removeAll(new HashSet(values));
+        }
+        return  listWithDuplicates;
     }
 
     // returns only the first non-empty value found in a Map<String, List<String>> (used for edm:rights)
