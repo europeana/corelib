@@ -252,6 +252,4 @@ public class AttributionTest {
         attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
         Assert.assertTrue(attribution.getCreator().isEmpty());
     }
-
-
 }

@@ -36,9 +36,11 @@ public class AttributionSnippet {
     protected void assembleTextSnippet(Attribution attribution) {
         if (attribution.getTitle().size() > 0) {
             textSnippet.append(flattenThisMap(attribution.getTitle()));
-            textSnippet.append(StringUtils.isNotBlank(attribution.getLandingPage()) ? " - " : "");
         }
-        textSnippet.append(attribution.getLandingPage());
+        if(StringUtils.isNotBlank(attribution.getLandingPage())) {
+            textSnippet.append(" - ");
+            textSnippet.append(attribution.getLandingPage());
+        }
         textSnippet.append((attribution.getTitle().size() > 0) || StringUtils.isNotBlank(attribution.getLandingPage()) ? ". " : "");
         if (attribution.getCreator().size() > 0) {
             textSnippet.append(flattenThisMap(attribution.getCreator()));
@@ -46,9 +48,11 @@ public class AttributionSnippet {
         }
         if (attribution.getProvider().size() > 0) {
             textSnippet.append(flattenThisMap(attribution.getProvider()));
-            textSnippet.append(StringUtils.isNotBlank(attribution.getProviderUrl()) ? " - " : "");
         }
-        textSnippet.append(attribution.getProviderUrl());
+        if(StringUtils.isNotBlank(attribution.getProviderUrl())) {
+            textSnippet.append(" - ");
+            textSnippet.append(attribution.getProviderUrl());
+        }
         textSnippet.append((attribution.getProvider().size() > 0 || StringUtils.isNotBlank(attribution.getProviderUrl())) ? ". " : "");
         textSnippet.append(StringUtils.isBlank(attribution.getRightsLabel()) ? AttributionConstants.CANNOT_DETERMINE_RIGHTS : attribution.getRightsLabel() + " - " + attribution.getRightsStatement());
     }

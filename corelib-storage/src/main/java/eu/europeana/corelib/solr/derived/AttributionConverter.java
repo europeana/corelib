@@ -301,19 +301,38 @@ public class AttributionConverter{
             List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
             creatorMap.put("", defList);
         }
-        // other language
+        // check for "en"
             if (bulkyMap.get(AttributionConstants.EN) != null) {
                 List<String> enList = stripEmptyStrings(bulkyMap.get(AttributionConstants.EN));
                 creatorMap.put(AttributionConstants.EN, enList);
             } else {
-                for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
-                    if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)) {
-                        List<String> langList = stripEmptyStrings(langMap.getValue());
-                        creatorMap.put(langMap.getKey(), langList);
-                        break; //only add one other language value. Doesn't matter which one
-                    }
+                creatorMap.putAll(getOtherLanguageMap(bulkyMap));
+            }
+        return creatorMap;
+    }
+
+    // checks for languages staring with "en", if not present looks for other languages.
+    private Map getOtherLanguageMap (Map<String, List<String>> bulkyMap) {
+        Map<String, List<String>> creatorMap = new HashMap<>();
+        //check for any language which starts with "en" like "en-GB"
+        for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+            if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)
+                          && StringUtils.startsWith(langMap.getKey(), AttributionConstants.EN)) {
+                List<String> langList = stripEmptyStrings(langMap.getValue());
+                    creatorMap.put(langMap.getKey(), langList);
+                    break;
+            }
+        }
+        // if map is still empty check for any other language present.
+        if(creatorMap.isEmpty()) {
+            for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+                if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)) {
+                    List<String> langList = stripEmptyStrings(langMap.getValue());
+                    creatorMap.put(langMap.getKey(), langList);
+                    break; // pick only one doesn't matter which one
                 }
             }
+        }
         return creatorMap;
     }
 
