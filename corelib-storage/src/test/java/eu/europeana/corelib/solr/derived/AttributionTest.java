@@ -34,6 +34,14 @@ public class AttributionTest {
     private static final String CREATOR_VALUE_3_LABEL = "Ολυμπιακό μουσείο Θεσσαλονίκης";
     private static final String CREATOR_VALUE_5_LABEL = "वीनेंक";
 
+    private static final String LANGAWARE_MAP_VALUE_1 = "Default Value";
+    private static final String LANGAWARE_MAP_VALUE_2 = "English";
+    private static final String LANGAWARE_MAP_VALUE_3 = "Other-English-lang";
+    private static final String LANGAWARE_MAP_VALUE_4 = "Dutch";
+    private static final String LANGAWARE_MAP_VALUE_5 = "Hindi";
+
+
+
     private Map<String, List<String>> creatorMap;
 
 
@@ -90,7 +98,7 @@ public class AttributionTest {
         return attribution;
     }
 
-    public List<Agent> mockAgent() {
+    private List<Agent> mockAgent() {
         List<Agent> agents = new ArrayList<>();
         AgentImpl agent = new AgentImpl();
         agents.add(agent);
@@ -253,5 +261,56 @@ public class AttributionTest {
         Assert.assertTrue(attribution.getCreator().isEmpty());
     }
 
+    @Test
+    public void test_createCreatorTitleMap() {
+        Map<String, List<String>> resultMap ;
 
+        Map<String, List<String>> langAwareMap = new HashMap<>();
+        List<String > valueList = new ArrayList<>();
+        //adding def
+        valueList.add(LANGAWARE_MAP_VALUE_1);
+        valueList.add("https://urivalue");
+        valueList.add(LANGAWARE_MAP_VALUE_2);
+        langAwareMap.put("def", valueList);
+        resultMap = attributionConverter.createCreatorTitleMap(langAwareMap);
+
+        Assert.assertTrue(! resultMap.isEmpty());
+        Assert.assertTrue(resultMap.get("").contains(LANGAWARE_MAP_VALUE_1) && resultMap.get("").contains(LANGAWARE_MAP_VALUE_2) && resultMap.get("").contains("https://urivalue"));
+
+        //add other language "de"
+        valueList = new ArrayList<>();
+        valueList.add(LANGAWARE_MAP_VALUE_4); //unique
+        valueList.add(LANGAWARE_MAP_VALUE_4); //duplicate
+        valueList.add(LANGAWARE_MAP_VALUE_2); // already present in def
+        langAwareMap.put("de", valueList);
+        resultMap.clear();
+        resultMap = attributionConverter.createCreatorTitleMap(langAwareMap);
+
+        Assert.assertTrue(resultMap.containsKey("de"));
+        Assert.assertTrue(resultMap.get("de").contains(LANGAWARE_MAP_VALUE_4));
+
+        // adding other language starting with "en".
+        valueList = new ArrayList<>();
+        valueList.add(LANGAWARE_MAP_VALUE_2); // already present in result map in def
+        valueList.add(LANGAWARE_MAP_VALUE_5); // unique value
+        valueList.add(LANGAWARE_MAP_VALUE_3); // unique value
+        langAwareMap.put("en-gb", valueList);
+        resultMap.clear();
+        resultMap = attributionConverter.createCreatorTitleMap(langAwareMap);
+
+        Assert.assertTrue(resultMap.containsKey("en-gb"));
+        Assert.assertTrue(resultMap.get("en-gb").contains(LANGAWARE_MAP_VALUE_3) && resultMap.get("en-gb").contains(LANGAWARE_MAP_VALUE_5));
+
+        //adding "en"
+        valueList = new ArrayList<>();
+        valueList.add(LANGAWARE_MAP_VALUE_2); //value already present in resultMap in def
+        valueList.add(LANGAWARE_MAP_VALUE_2); // duplicate
+        valueList.add(LANGAWARE_MAP_VALUE_5); //unique value
+        langAwareMap.put("en", valueList);
+        resultMap.clear();
+        resultMap = attributionConverter.createCreatorTitleMap(langAwareMap);
+
+        Assert.assertTrue(resultMap.containsKey("en"));
+        Assert.assertTrue(resultMap.get("en").contains(LANGAWARE_MAP_VALUE_5));
+    }
 }

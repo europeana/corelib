@@ -40,7 +40,7 @@ public class AttributionConverter{
         Map<String, List<String>> creatorMap = new HashMap<>();
         // get the creator first from web resource level
         if (isNotBlank(wRes.getDcCreator())) {
-            creatorMap.putAll(createCreatorMap(wRes.getDcCreator()));
+            creatorMap.putAll(createCreatorTitleMap(wRes.getDcCreator()));
         }
         // if still empty get, title, creator and date from proxy
         checkProxy(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getProxies(), attribution,
@@ -66,10 +66,10 @@ public class AttributionConverter{
         if (! proxies.isEmpty()) {
             for (Proxy proxy : proxies) {
                 if (creatorMap.isEmpty() && isNotBlank(proxy.getDcCreator())) {
-                    creatorMap.putAll(createCreatorMap(proxy.getDcCreator()));
+                    creatorMap.putAll(createCreatorTitleMap(proxy.getDcCreator()));
                 }
                 if (attribution.getTitle().isEmpty() && isNotBlank(proxy.getDcTitle())) {
-                    attribution.setTitle(concatLangawareMap(proxy.getDcTitle()));
+                    attribution.setTitle(concatLangawareMap(createCreatorTitleMap(proxy.getDcTitle())));
                 }
                 if (attribution.getDate().isEmpty() && isNotBlank(proxy.getYear())) {
                     attribution.setDate(concatLangawareMap(proxy.getYear()));
@@ -85,7 +85,7 @@ public class AttributionConverter{
             attribution.setLandingPage(euAgg.getEdmLandingPage());
             // if creatorMap is empty still, check on the Europeana aggregation
             if (creatorMap.isEmpty() && isNotBlank(euAgg.getDcCreator())) {
-                creatorMap.putAll(createCreatorMap(euAgg.getDcCreator()));
+                creatorMap.putAll(createCreatorTitleMap(euAgg.getDcCreator()));
             } // ditto, if rights is still empty
             if (StringUtils.isEmpty(attribution.getRightsStatement()) && isNotBlank(euAgg.getEdmRights())) {
                 attribution.setRightsStatement(squeezeMap(euAgg.getEdmRights()));
@@ -96,16 +96,16 @@ public class AttributionConverter{
     // set Attribution with creator values. Checks for URI and adds their labels from Agents. Adds the NonURI values too
     public void checkCreatorLabel(Attribution attribution, List<Agent> agents, Map<String, List<String>> creatorMap) {
         Map<String, List<String>> finalMap = new HashMap<>();
-        if (! creatorMap.isEmpty() && ! agents.isEmpty()) {
-            for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
-                List<String> creatorValues = new ArrayList<>();
-                for (String value : creator.getValue()) {
-                   getCreatorLabel(agents, value, creatorValues);
+        if (! creatorMap.isEmpty()) {
+                for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
+                    List<String> creatorValues = new ArrayList<>();
+                    for (String value : creator.getValue()) {
+                        getCreatorLabel(agents, value, creatorValues);
+                    }
+                    //remove any duplicates
+                    ComparatorUtils.removeDuplicates(creatorValues);
+                    finalMap.put(creator.getKey(), creatorValues);
                 }
-                //remove any duplicates
-                ComparatorUtils.removeDuplicates(creatorValues);
-                finalMap.put(creator.getKey(), creatorValues);
-            }
         }
         //set the final values to attribution
         attribution.setCreator(concatLangawareMap(finalMap));
@@ -114,9 +114,11 @@ public class AttributionConverter{
     //creates a list of Creator values including labels for URI values and non URI values
     private void getCreatorLabel(List<Agent> agents, String creatorValue, List<String> creatorValues) {
         if (EuropeanaUriUtils.isUri(creatorValue)) {
-            for (Agent agent : agents) {
-                if (StringUtils.equals(creatorValue, agent.getAbout())) {
-                    creatorValues.addAll(getCreatorFromAgent(agent));
+            if (! agents.isEmpty()) {
+                for (Agent agent : agents) {
+                    if (StringUtils.equals(creatorValue, agent.getAbout())) {
+                        creatorValues.addAll(getCreatorFromAgent(agent));
+                    }
                 }
             }
         } else {
@@ -278,7 +280,7 @@ public class AttributionConverter{
 
     // takes a language-aware Map<String, List<String>> and and daisy-chains the Strings in the
     // value List<String>, separated with ; . It also strips out 'def' language tags.
-    private Map concatLangawareMap(Map<String, List<String>> bulkyMap) {
+    private Map  concatLangawareMap(Map<String, List<String>> bulkyMap) {
         Map<String, String> flatMap = new HashMap<>();
         if (bulkyMap.get(AttributionConstants.DEF) != null) {
             List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
@@ -292,19 +294,64 @@ public class AttributionConverter{
         return flatMap;
     }
 
-    // saves the creator values in a language aware map
-    private Map createCreatorMap(Map<String, List<String>> bulkyMap) {
+    // saves the creator and Title values in a language aware map
+    protected Map createCreatorTitleMap(Map<String, List<String>> bulkyMap) {
         Map<String, List<String>> creatorMap = new HashMap<>();
         if (bulkyMap.get(AttributionConstants.DEF) != null) {
             List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
+            ComparatorUtils.removeDuplicates(defList);
             creatorMap.put("", defList);
+        }
+        if (bulkyMap.get(AttributionConstants.EN) != null) {
+            List<String> enList = stripEmptyStrings(bulkyMap.get(AttributionConstants.EN));
+            getFinalMap(creatorMap, enList, AttributionConstants.EN);
         } else {
-            for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+                getOtherLanguageMap(bulkyMap, creatorMap);
+         }
+        return creatorMap;
+    }
+
+    // checks for languages staring with "en", if not present look for other language.
+    private Map getOtherLanguageMap (Map<String, List<String>> bulkyMap,  Map<String, List<String>> creatorMap) {
+        boolean langValues = false;
+        //check for any language which starts with "en" like "en-GB"
+        for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+            if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)
+                          && StringUtils.startsWith(langMap.getKey(), AttributionConstants.EN)) {
                 List<String> langList = stripEmptyStrings(langMap.getValue());
-                creatorMap.put(langMap.getKey(), langList);
+                getFinalMap(creatorMap, langList, langMap.getKey());
+                langValues = true;
+                    break;
+            }
+        }
+        if (! langValues) {
+            for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
+                if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)) {
+                    List<String> langList = stripEmptyStrings(langMap.getValue());
+                    getFinalMap(creatorMap, langList, langMap.getKey());
+                    break; // pick only one doesn't matter which one
+                }
             }
         }
         return creatorMap;
+    }
+
+    //removes duplicates across the list and across creatorMap existing values
+    private static Map getFinalMap(Map<String, List<String>> creatorMap, List<String> langList, String key) {
+        ComparatorUtils.removeDuplicates(langList);
+        if (! removeDuplicatesFromOneList(creatorMap, langList).isEmpty()) {
+            creatorMap.put(key, langList);
+        }
+        return creatorMap;
+    }
+
+    //removes Duplicates from one list by comparing with another
+    private static List<String> removeDuplicatesFromOneList (Map<String, List<String>> map, List<String> listWithDuplicates) {
+        for (Map.Entry<String, List<String>> creatorMap : map.entrySet()) {
+            List<String> values= creatorMap.getValue();
+            listWithDuplicates.removeAll(new HashSet(values));
+        }
+        return  listWithDuplicates;
     }
 
     // returns only the first non-empty value found in a Map<String, List<String>> (used for edm:rights)
