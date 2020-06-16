@@ -36,7 +36,7 @@ public class MongoProviderImpl implements MongoProvider {
      */
     public MongoProviderImpl(String connectionUrl) {
         MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder();
-        clientOptionsBuilder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS);
+//        clientOptionsBuilder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS);
         MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
         definedDatabase = uri.getDatabase();
         LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
