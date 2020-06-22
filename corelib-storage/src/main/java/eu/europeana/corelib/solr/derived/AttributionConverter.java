@@ -316,21 +316,20 @@ public class AttributionConverter{
         boolean langValues = false;
         //check for any language which starts with "en" like "en-GB"
         for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
-            if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)
-                          && StringUtils.startsWith(langMap.getKey(), AttributionConstants.EN)) {
+            if (StringUtils.startsWith(langMap.getKey(), AttributionConstants.EN)) {
                 List<String> langList = stripEmptyStrings(langMap.getValue());
                 getFinalMap(creatorMap, langList, langMap.getKey());
                 langValues = true;
                     break;
-            }
+          }
         }
         if (! langValues) {
             for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
-                if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF) && ! StringUtils.equals(langMap.getKey(), AttributionConstants.EN)) {
+                if (! StringUtils.equals(langMap.getKey(), AttributionConstants.DEF)) {
                     List<String> langList = stripEmptyStrings(langMap.getValue());
                     getFinalMap(creatorMap, langList, langMap.getKey());
                     break; // pick only one doesn't matter which one
-                }
+               }
             }
         }
         return creatorMap;

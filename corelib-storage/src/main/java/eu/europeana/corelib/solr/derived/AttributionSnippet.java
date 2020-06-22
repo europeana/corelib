@@ -144,14 +144,14 @@ public class AttributionSnippet {
         htmlSnippet.append(AttributionConstants.CLOSE_HREF);
     }
 
-    //creates <dd lang="lang">  OR <dd>
+    //creates <dd lang="lang"> OR <dd>
     private void openValueTag(String lang) {
-        if (StringUtils.isNotEmpty(lang) && !StringUtils.equals(lang, AttributionConstants.DEF)) {
+        if (lang == null) { // value will be null for rights tag
+            htmlSnippet.append(AttributionConstants.VALUE_TAG_OPEN);
+        } else {
             htmlSnippet.append(AttributionConstants.LANG_TAG_OPEN);
             htmlSnippet.append(lang);
             htmlSnippet.append(AttributionConstants.LANG_TAG_CLOSE);
-        } else {
-            htmlSnippet.append(AttributionConstants.VALUE_TAG_OPEN);
         }
     }
 
