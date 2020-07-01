@@ -4,6 +4,8 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.metis.utils.MediaType;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +38,7 @@ public final class IIIFLink {
     public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if (isNewsPaperRecord(bean) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
+        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && !hasReferencedBy(bean) && bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
@@ -78,6 +80,97 @@ public final class IIIFLink {
             }
         }
         LOG.debug("isNewsPaperRecord = {}", result);
+        return result;
+    }
+
+    /**
+     * Check if it's a manifest Audio/Video record or EUscreen Item
+     * @param bean fullbean to check
+     * @return true if it's AV record  otherwise false
+     */
+    public static boolean isManifestAVRecord (FullBean bean) {
+        String edmType = null;
+        boolean result    = false;
+        boolean edmTypeAV;
+        //get edmType
+        if (bean.getProxies() != null) {
+            for (Proxy proxy : bean.getProxies()) {
+                if(proxy.getEdmType() != null) {
+                    edmType = proxy.getEdmType().getEnumNameValue();
+                }
+            }
+        }
+        if (StringUtils.isNotEmpty(edmType)) {
+            // check if edmType is Audio or Video
+            edmTypeAV = StringUtils.equals(edmType, "VIDEO") || StringUtils.equals(edmType, "AUDIO");
+            LOG.debug("edmType A/V = {}", edmTypeAV);
+            // if edmType is A/V, do the mimeType check
+            if (edmTypeAV) {
+                 result = checkMimeType(bean);
+                 // if mimeType is not playable, check for EUScreen item
+                if (! result) {
+                    result = isEUScreenItem(bean);
+                }
+            }
+        }
+       return  result;
+    }
+
+    /**
+     * Check if webResources has a playable MimeType
+     * @param bean fullbean to check
+     * @return true if mimeType is playable  otherwise false
+     */
+    private static boolean checkMimeType(FullBean bean) {
+        boolean result = false ;
+        if (bean.getAggregations() != null) {
+            for (Aggregation a : bean.getAggregations()) {
+                for (WebResource wr : a.getWebResources()) {
+                    result = isPlayableMimeType(wr.getEbucoreHasMimeType());
+                    if (result) {
+                        break;
+                    }
+                }
+                if (result) {
+                    break;
+                }
+            }
+        }
+        LOG.debug("isA/V Item = {}", result);
+        return result;
+    }
+
+    /**
+     * Check if the mimeType is playable mimeType
+     * @param mimeType mimeType to check
+     * @return true if mimeType is playable
+     **/
+    private static boolean isPlayableMimeType(String mimeType) {
+        MediaType mediaType = MediaType.getMediaType(mimeType);
+        return (mediaType == MediaType.AUDIO || mediaType == MediaType.VIDEO) ;
+    }
+
+    /**
+     * Check if the record is a EU Screen Item (if edmShownAt start with  value 'http://www.euscreen.eu' )
+     * @param bean fullbean to check
+     * @return true if it's a EUScreen item, otherwise false
+     */
+    private static  boolean isEUScreenItem(FullBean bean) {
+        boolean result = false;
+        // check edmIsShownAt
+        if (bean.getAggregations() != null) {
+            for (Aggregation a : bean.getAggregations()) {
+                if (a.getEdmIsShownAt() != null  &&
+                        (a.getEdmIsShownAt().startsWith("http://www.euscreen.eu") ||
+                                a.getEdmIsShownAt().startsWith("https://www.euscreen.eu")) ) {
+                    result = true;
+                }
+                if (result) {
+                    break;
+                }
+            }
+        }
+        LOG.debug("isEUScreen Item = {}", result);
         return result;
     }
 
