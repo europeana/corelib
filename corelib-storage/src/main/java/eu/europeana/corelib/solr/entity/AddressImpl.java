@@ -1,13 +1,8 @@
 package eu.europeana.corelib.solr.entity;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.mongodb.morphia.annotations.Entity;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Address;
 
 @JsonInclude(Include.NON_EMPTY)

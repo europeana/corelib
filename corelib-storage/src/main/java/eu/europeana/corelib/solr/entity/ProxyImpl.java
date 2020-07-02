@@ -1,15 +1,14 @@
 package eu.europeana.corelib.solr.entity;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import java.util.List;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.mongodb.morphia.annotations.Converters;
-import org.mongodb.morphia.annotations.Entity;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import dev.morphia.annotations.Converters;
+import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl

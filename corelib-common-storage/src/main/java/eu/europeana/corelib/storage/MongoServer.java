@@ -1,6 +1,6 @@
 package eu.europeana.corelib.storage;
 
-import org.mongodb.morphia.Datastore;
+import dev.morphia.Datastore;
 
 /**
  * A basic interface for a connection to MongoDB storage

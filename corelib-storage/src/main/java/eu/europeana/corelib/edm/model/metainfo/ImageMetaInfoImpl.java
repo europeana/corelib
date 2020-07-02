@@ -1,10 +1,10 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.mongodb.morphia.annotations.Entity;
-import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import dev.morphia.annotations.Entity;
+import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
 
 /**
  * A class which contains information about an IMAGE document

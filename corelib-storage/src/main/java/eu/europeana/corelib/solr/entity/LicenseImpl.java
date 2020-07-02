@@ -5,7 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import org.mongodb.morphia.annotations.Entity;
+import dev.morphia.annotations.Entity;
 
 import eu.europeana.corelib.definitions.edm.entity.License;
 

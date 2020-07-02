@@ -1,12 +1,10 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.bson.types.ObjectId;
-
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Indexed;
-
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Indexed;
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
+import org.bson.types.ObjectId;
 
 /**
  * @see AbstractEdmEntity

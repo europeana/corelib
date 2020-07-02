@@ -1,8 +1,8 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.mongodb.morphia.annotations.Entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import dev.morphia.annotations.Entity;
 
 
 /**

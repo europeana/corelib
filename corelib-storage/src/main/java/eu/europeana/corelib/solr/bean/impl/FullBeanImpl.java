@@ -1,46 +1,19 @@
 package eu.europeana.corelib.solr.bean.impl;
 
-import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
-import eu.europeana.corelib.solr.entity.QualityAnnotationImpl;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import dev.morphia.annotations.*;
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
+import eu.europeana.corelib.definitions.edm.entity.*;
+import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.solr.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.mongodb.morphia.annotations.Converters;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Indexed;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.annotations.Transient;
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.FullBean;
-import eu.europeana.corelib.definitions.edm.entity.Agent;
-import eu.europeana.corelib.definitions.edm.entity.Aggregation;
-import eu.europeana.corelib.definitions.edm.entity.Concept;
-import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.edm.entity.License;
-import eu.europeana.corelib.definitions.edm.entity.Place;
-import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.definitions.edm.entity.Service;
-import eu.europeana.corelib.definitions.edm.entity.Timespan;
-import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
-import eu.europeana.corelib.solr.entity.LicenseImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.ServiceImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl

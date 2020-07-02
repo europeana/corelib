@@ -1,10 +1,10 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Property;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one info field which is not null.
