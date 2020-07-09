@@ -1,14 +1,9 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import org.mongodb.morphia.annotations.Entity;
-
+import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * ProvidedCHO (edm:ProvidedCHO) means provided cultural heritage object

@@ -1,23 +1,17 @@
 package eu.europeana.corelib.solr.entity;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.mongodb.morphia.annotations.Entity;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
+import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Address;
 import eu.europeana.corelib.definitions.edm.entity.Organization;
+
+import java.util.List;
+import java.util.Map;
 
 @JsonInclude(Include.NON_EMPTY)
 @Entity("Organization")

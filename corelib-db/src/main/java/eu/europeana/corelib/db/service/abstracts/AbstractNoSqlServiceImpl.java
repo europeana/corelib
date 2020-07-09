@@ -1,11 +1,10 @@
 package eu.europeana.corelib.db.service.abstracts;
 
-import java.io.Serializable;
-
-import org.mongodb.morphia.Key;
-
+import dev.morphia.Key;
 import eu.europeana.corelib.db.dao.NosqlDao;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
+
+import java.io.Serializable;
 
 /**
  * Implementation od the {@link AbstractNoSqlService}

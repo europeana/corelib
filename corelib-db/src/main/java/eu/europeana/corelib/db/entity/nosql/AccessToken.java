@@ -4,8 +4,8 @@ package eu.europeana.corelib.db.entity.nosql;
  * Only for internal (test) usage, clears a table...
  */
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Indexed;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Indexed;
 
 import java.util.Date;
 

@@ -1,24 +1,21 @@
 package eu.europeana.corelib.solr.entity;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Reference;
+import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
+import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
+import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Indexed;
-import org.mongodb.morphia.annotations.Reference;
-import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.utils.StringArrayUtils;
+
+import java.util.List;
+import java.util.Map;
 
 @JsonInclude(Include.NON_EMPTY)
 @Entity("EuropeanaAggregation")

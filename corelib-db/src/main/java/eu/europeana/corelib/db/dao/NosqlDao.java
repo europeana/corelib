@@ -1,6 +1,6 @@
 package eu.europeana.corelib.db.dao;
 
-import org.mongodb.morphia.dao.DAO;
+import dev.morphia.dao.DAO;
 import eu.europeana.corelib.db.entity.nosql.abstracts.NoSqlEntity;
 
 import java.io.Serializable;

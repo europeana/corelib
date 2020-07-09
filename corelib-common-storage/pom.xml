@@ -28,8 +28,8 @@
             <version>${mongoDriver.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mongodb.morphia</groupId>
-            <artifactId>morphia</artifactId>
+            <groupId>dev.morphia.morphia</groupId>
+            <artifactId>core</artifactId>
             <version>${morphia.version}</version>
             <exclusions>
                 <exclusion>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${version.slf4j}</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 </project>

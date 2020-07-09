@@ -1,10 +1,8 @@
 package eu.europeana.corelib.edm.model.metainfo;
 
-import org.mongodb.morphia.annotations.Entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import java.io.Serializable;
+import dev.morphia.annotations.Entity;
 
 /**
  * A class which contains information about a VIDEO document

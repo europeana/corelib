@@ -1,13 +1,13 @@
 package eu.europeana.corelib.db.wrapper;
 
-import com.mongodb.*;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoException;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import eu.europeana.corelib.storage.MongoProvider;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
-
-import org.mongodb.morphia.Morphia;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mongodb.morphia.Datastore;
 
 
 /**

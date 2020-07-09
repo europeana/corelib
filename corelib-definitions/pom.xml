@@ -29,8 +29,8 @@
 			<version>${commonsLang3.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
+			<groupId>dev.morphia.morphia</groupId>
+			<artifactId>core</artifactId>
 			<version>${morphia.version}</version>
 		</dependency>
 		<dependency>
