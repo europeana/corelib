@@ -113,7 +113,7 @@ public final class IIIFLink {
                 }
             }
         }
-       return  result;
+       return  result; 
     }
 
     /**
