@@ -21,6 +21,9 @@ public final class IIIFLink {
 
     private static final Logger LOG = LogManager.getLogger(IIIFLink.class);
 
+    private static final String AUDIO = "AUDIO" ;
+    private static final String VIDEO = "VIDEO" ;
+
     private IIIFLink() {
         // empty constructor to prevent initialization
     }
@@ -100,19 +103,12 @@ public final class IIIFLink {
                 }
             }
         }
-        if (StringUtils.isNotEmpty(edmType)) {
-            // check if edmType is Audio or Video
-            edmTypeAV = StringUtils.equals(edmType, "VIDEO") || StringUtils.equals(edmType, "AUDIO");
+            edmTypeAV = StringUtils.containsAny(edmType, AUDIO, VIDEO);
             LOG.debug("edmType A/V = {}", edmTypeAV);
-            // if edmType is A/V, do the mimeType check
+            // if edmType is A/V, check if mimeType is playable or Is a EUScreen Item
             if (edmTypeAV) {
-                 result = checkMimeType(bean);
-                 // if mimeType is not playable, check for EUScreen item
-                if (! result) {
-                    result = isEUScreenItem(bean);
-                }
+                 result = checkMimeType(bean) || isEUScreenItem(bean);
             }
-        }
        return  result;
     }
 
@@ -128,11 +124,8 @@ public final class IIIFLink {
                 for (WebResource wr : a.getWebResources()) {
                     result = isPlayableMimeType(wr.getEbucoreHasMimeType());
                     if (result) {
-                        break;
+                        return result;
                     }
-                }
-                if (result) {
-                    break;
                 }
             }
         }
