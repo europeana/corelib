@@ -127,8 +127,8 @@ public final class IIIFLink {
         if (null != bean.getAggregations()) {
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    if (wr.getEbucoreHasMimeType().equalsIgnoreCase(MediaType.AUDIO.name()) ||
-                        wr.getEbucoreHasMimeType().equalsIgnoreCase(MediaType.VIDEO.name())) {
+                    if (MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.AUDIO ||
+                        MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.VIDEO) {
                         LOG.debug("isA/V Item = TRUE");
                         return true;
                     }
