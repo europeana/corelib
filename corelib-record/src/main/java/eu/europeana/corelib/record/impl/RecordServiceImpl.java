@@ -142,7 +142,7 @@ public class RecordServiceImpl implements RecordService {
         // 1. add meta info for all webresources + generate attribution snippets
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
 
-        // 2. add link to IIIF for newspaper items
+        // 2. add link to IIIF for newspaper and AV/EUScreen items
         IIIFLink.addReferencedBy(fullBean, manifestAddUrl, api2BaseUrl);
 
         // 3. make sure we add /item in various places
