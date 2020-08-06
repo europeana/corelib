@@ -65,9 +65,9 @@ public interface Organization extends ContextualClass{
 
 	Map<String, List<String>> getEdmEuropeanaRole();
 
-	void setAddressInt(AddressInt address);
+	void setAddress(Address address);
 
-	AddressInt getAddressInt();
+	Address getAddress();
 
 	//TODO: SG - move the setters/getters for OwlSameAs to the parent interface for all entity types
 	void setOwlSameAs(String[] owlSameAs);

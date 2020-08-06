@@ -3,7 +3,7 @@ package eu.europeana.corelib.solr.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import eu.europeana.corelib.definitions.edm.entity.AddressInt;
+import eu.europeana.corelib.definitions.edm.entity.Address;
 import eu.europeana.corelib.definitions.edm.entity.Organization;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +29,7 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 	private Map<String,String> edmGeographicLevel;
 	private Map<String,String> edmCountry;
 	private String[] owlSameAs;
-
-	// TODO: 8/5/20 Fix address structure in db, it's currently as address.AddressImpl which is not clean
-	@Deprecated
-	private AddressWrapper address;
-
-	private AddressInt addressInt;
+	private Address address;
 
 	public Map<String, List<String>> getEdmAcronym() {
 		return this.edmAcronym;
@@ -184,19 +179,11 @@ public class OrganizationImpl extends ContextualClassImpl implements Organizatio
 		this.owlSameAs = owlSameAs;
 	}
 
-	public AddressWrapper getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressWrapper address) {
+	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public AddressInt getAddressInt() {
-		return addressInt;
-	}
-
-	public void setAddressInt(AddressInt addressInt) {
-		this.addressInt = addressInt;
 	}
 }
