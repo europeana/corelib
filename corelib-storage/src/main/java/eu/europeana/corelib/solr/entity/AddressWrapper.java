@@ -9,15 +9,15 @@ import dev.morphia.annotations.Embedded;
  * @author Simon Tzanakis
  * @since 2020-08-05
  */
-public class Address {
+public class AddressWrapper {
 
   @Embedded(value = "AddressImpl")
   private AddressImpl addressImpl;
 
-  public Address() {
+  public AddressWrapper() {
   }
 
-  public Address(AddressImpl addressImpl) {
+  public AddressWrapper(AddressImpl addressImpl) {
     this.addressImpl = addressImpl;
   }
 

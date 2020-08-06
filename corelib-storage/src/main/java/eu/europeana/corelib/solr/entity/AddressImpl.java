@@ -3,10 +3,11 @@ package eu.europeana.corelib.solr.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
+import eu.europeana.corelib.definitions.edm.entity.AddressInt;
 
 @JsonInclude(Include.NON_EMPTY)
 @Entity
-public class AddressImpl extends Address{
+public class AddressImpl implements AddressInt {
 
   private String about;
   private String vcardStreetAddress;
