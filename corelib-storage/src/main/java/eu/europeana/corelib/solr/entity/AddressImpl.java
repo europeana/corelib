@@ -6,71 +6,71 @@ import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Address;
 
 @JsonInclude(Include.NON_EMPTY)
-@Entity ("Address")
+@Entity
 public class AddressImpl implements Address {
 
-	private String about;
-	private String vcardStreetAddress;
-	private String vcardLocality;
-	private String vcardPostalCode;
-	private String vcardCountryName;
-	private String vcardPostOfficeBox;
-	private String vcardHasGeo;
-	
-	@Override
-	public String getAbout() {
-		return about;
-	}
-	@Override
-	public void setAbout(String about) {
-		this.about = about;
-	}
-	@Override
-	public String getVcardStreetAddress() {
-		return vcardStreetAddress;
-	}
-	@Override
-	public void setVcardStreetAddress(String vcardStreetAddress) {
-		this.vcardStreetAddress = vcardStreetAddress;
-	}
-	@Override
-	public String getVcardLocality() {
-		return vcardLocality;
-	}
-	@Override
-	public void setVcardLocality(String vcardLocality) {
-		this.vcardLocality = vcardLocality;
-	}
-	@Override
-	public String getVcardPostalCode() {
-		return vcardPostalCode;
-	}
-	@Override
-	public void setVcardPostalCode(String vcardPostalCode) {
-		this.vcardPostalCode = vcardPostalCode;
-	}
-	@Override
-	public String getVcardCountryName() {
-		return vcardCountryName;
-	}
-	@Override
-	public void setVcardCountryName(String vcardCountryName) {
-		this.vcardCountryName = vcardCountryName;
-	}
-	@Override
-	public String getVcardPostOfficeBox() {
-		return vcardPostOfficeBox;
-	}
-	@Override
-	public void setVcardPostOfficeBox(String vcardPostOfficeBox) {
-		this.vcardPostOfficeBox = vcardPostOfficeBox;
-	}
-	@Override
-	public String getVcardHasGeo() {
-		return vcardHasGeo;
-	}
-	@Override
-	public void setVcardHasGeo(String vcardHasGeo) {
-		this.vcardHasGeo = vcardHasGeo;
-	}
+  private String about;
+  private String vcardStreetAddress;
+  private String vcardLocality;
+  private String vcardPostalCode;
+  private String vcardCountryName;
+  private String vcardPostOfficeBox;
+  private String vcardHasGeo;
+  
+  public String getAbout() {
+    return about;
+  }
+
+  public void setAbout(String about) {
+    this.about = about;
+  }
+
+  public String getVcardStreetAddress() {
+    return vcardStreetAddress;
+  }
+
+  public void setVcardStreetAddress(String vcardStreetAddress) {
+    this.vcardStreetAddress = vcardStreetAddress;
+  }
+
+  public String getVcardLocality() {
+    return vcardLocality;
+  }
+
+  public void setVcardLocality(String vcardLocality) {
+    this.vcardLocality = vcardLocality;
+  }
+
+  public String getVcardPostalCode() {
+    return vcardPostalCode;
+  }
+
+  public void setVcardPostalCode(String vcardPostalCode) {
+    this.vcardPostalCode = vcardPostalCode;
+  }
+
+  public String getVcardCountryName() {
+    return vcardCountryName;
+  }
+
+  public void setVcardCountryName(String vcardCountryName) {
+    this.vcardCountryName = vcardCountryName;
+  }
+
+  public String getVcardPostOfficeBox() {
+    return vcardPostOfficeBox;
+  }
+
+  public void setVcardPostOfficeBox(String vcardPostOfficeBox) {
+    this.vcardPostOfficeBox = vcardPostOfficeBox;
+  }
+
+  public String getVcardHasGeo() {
+    return vcardHasGeo;
+  }
+
+  public void setVcardHasGeo(String vcardHasGeo) {
+    this.vcardHasGeo = vcardHasGeo;
+  }
+
 }
