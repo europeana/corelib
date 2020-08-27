@@ -29,7 +29,7 @@
         <metis.version>1.8.0</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
-        <mongoDriver.version>3.12.5</mongoDriver.version>
+        <mongoDriver.version>4.0.2</mongoDriver.version>
         <morphia.version>1.5.8</morphia.version>
 
         <commonsIO.version>2.4</commonsIO.version>

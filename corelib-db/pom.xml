@@ -109,7 +109,7 @@
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
+            <artifactId>mongodb-driver-core</artifactId>
             <version>${mongoDriver.version}</version>
         </dependency>
         <!-- Compression for mongo driver -->
