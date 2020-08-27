@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Field;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.IndexOptions;
+import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
@@ -14,13 +17,12 @@ import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.bson.types.ObjectId;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.bson.types.ObjectId;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
@@ -28,6 +30,8 @@ import java.util.Map;
  */
 @JsonInclude(Include.NON_EMPTY)
 @Entity("WebResource")
+@Indexes({
+    @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true))})
 public class WebResourceImpl implements WebResource {
 
     @Id
@@ -35,7 +39,6 @@ public class WebResourceImpl implements WebResource {
     private Map<String, List<String>> webResourceDcRights;
     private Map<String, List<String>> webResourceEdmRights;
 
-    @Indexed(unique = false)
     private String about;
 
     private Map<String, List<String>> dcDescription;

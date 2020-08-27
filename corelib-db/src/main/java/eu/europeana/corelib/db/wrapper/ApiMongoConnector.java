@@ -1,6 +1,6 @@
 package eu.europeana.corelib.db.wrapper;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.mongodb.MongoException;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
@@ -36,8 +36,8 @@ public class ApiMongoConnector {
     public Datastore createDatastore(String connectionUrl) throws InterruptedException {
         MongoProvider mongo = new MongoProviderImpl(connectionUrl);
         this.label          = mongo.getDefaultDatabase();
-        this.mongoClient    = mongo.getMongo();
-        return new Morphia().createDatastore(mongoClient, label);
+        this.mongoClient    = mongo.getMongoClient();
+        return Morphia.createDatastore(mongoClient, label);
     }
 
     /**
@@ -56,11 +56,10 @@ public class ApiMongoConnector {
     public Datastore createDatastore(String label, String host, int port, String dbName, String username,
                                      String password) {
         Datastore datastore = null;
-        Morphia connection = new Morphia();
         try {
             this.label       = label;
-            this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), dbName, username, password).getMongo();
-            datastore        = connection.createDatastore(mongoClient, dbName);
+            this.mongoClient = new MongoProviderImpl(host, String.valueOf(port), dbName, username, password).getMongoClient();
+            datastore        = Morphia.createDatastore(mongoClient, dbName);
         } catch (MongoException e) {
             LOG.error(e.getMessage(), e);
         }
@@ -80,11 +79,10 @@ public class ApiMongoConnector {
     @Deprecated
     public Datastore createDatastore(String label, MongoClient mongoClient, String dbName) {
         Datastore datastore  = null;
-        Morphia  connection  = new Morphia();
         try {
             this.label       = label;
             this.mongoClient = mongoClient;
-            datastore        = connection.createDatastore(mongoClient, dbName);
+            datastore        = Morphia.createDatastore(mongoClient, dbName);
         } catch (MongoException e) {
             LOG.error(e.getMessage(), e);
         }

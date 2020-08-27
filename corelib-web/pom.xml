@@ -26,6 +26,7 @@
                     <artifactId>openstack-swift</artifactId>
                     <groupId>org.apache.jclouds.api</groupId>
                 </exclusion>
+
             </exclusions>
         </dependency>
         <!-- Corelib -->
@@ -143,18 +144,5 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
-                <configuration>
-                    <argLine>-XX:-UseSplitVerifier</argLine>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

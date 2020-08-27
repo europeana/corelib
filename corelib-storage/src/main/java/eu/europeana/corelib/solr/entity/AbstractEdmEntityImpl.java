@@ -1,8 +1,11 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.morphia.annotations.Field;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.IndexOptions;
+import dev.morphia.annotations.Indexes;
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
 import org.bson.types.ObjectId;
 
@@ -11,9 +14,10 @@ import org.bson.types.ObjectId;
  * 
  * @author Yorgos.Mamakis@ kb.nl
  */
+@Indexes({
+		@Index(fields = {@Field("about")}, options = @IndexOptions(unique = true))})
 public class AbstractEdmEntityImpl implements AbstractEdmEntity {
 
-	@Indexed(unique = true)
 	protected String about;
 
 	@Id

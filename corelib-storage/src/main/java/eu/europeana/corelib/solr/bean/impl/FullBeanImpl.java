@@ -23,12 +23,21 @@ import java.util.Objects;
 @JsonInclude(Include.NON_EMPTY)
 @Entity("record")
 @Converters(DocType.DocTypeConverter.class)
+@Indexes({
+    @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true)),
+    @Index(fields = {@Field("timestampCreated")}),
+    @Index(fields = {@Field("timestampUpdated")}),
+    @Index(fields = {@Field("places")}),
+    @Index(fields = {@Field("agents")}),
+    @Index(fields = {@Field("timespans")}),
+    @Index(fields = {@Field("concepts")}),
+    @Index(fields = {@Field("licenses")}),
+    @Index(fields = {@Field("services")})})
 public class FullBeanImpl implements FullBean {
 
   @Id
   protected ObjectId europeanaId;
 
-  @Indexed(unique = true)
   protected String about;
 
   protected String[] title;
@@ -39,10 +48,8 @@ public class FullBeanImpl implements FullBean {
 
   protected String[] language;
 
-  @Indexed
   protected Date timestampCreated;
 
-  @Indexed
   protected Date timestampUpdated;
 
   protected DocType type;
@@ -50,19 +57,15 @@ public class FullBeanImpl implements FullBean {
   protected int europeanaCompleteness;
 
   @Reference
-  @Indexed
   protected List<PlaceImpl> places;
 
   @Reference
-  @Indexed
   protected List<AgentImpl> agents;
 
   @Reference
-  @Indexed
   protected List<TimespanImpl> timespans;
 
   @Reference
-  @Indexed
   protected List<ConceptImpl> concepts;
 
   @Reference
@@ -78,14 +81,11 @@ public class FullBeanImpl implements FullBean {
   protected List<ProxyImpl> proxies;
 
   @Reference
-  @Indexed
   protected List<LicenseImpl> licenses;
 
   @Reference
-  @Indexed
   protected List<ServiceImpl> services;
 
-  @Embedded
   protected List<QualityAnnotationImpl> qualityAnnotations;
 
   protected String[] country;

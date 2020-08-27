@@ -1,6 +1,7 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.morphia.annotations.Embedded;
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
 import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import org.bson.types.ObjectId;
@@ -17,6 +18,7 @@ import dev.morphia.annotations.Indexed;
  * @since 2019-06-13
  */
 @Entity("QualityAnnotation")
+@Embedded
 public class QualityAnnotationImpl implements AbstractEdmEntity, QualityAnnotation {
 
   @Id

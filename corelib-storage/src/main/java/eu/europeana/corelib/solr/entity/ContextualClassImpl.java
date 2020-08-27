@@ -1,12 +1,12 @@
 package eu.europeana.corelib.solr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.morphia.annotations.Embedded;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
+@Embedded
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
 	
 	private Map<String,List<String>> prefLabel;
