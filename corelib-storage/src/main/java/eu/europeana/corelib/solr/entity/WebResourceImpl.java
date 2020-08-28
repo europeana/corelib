@@ -7,7 +7,6 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Field;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Index;
-import dev.morphia.annotations.IndexOptions;
 import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
@@ -31,7 +30,7 @@ import org.bson.types.ObjectId;
 @JsonInclude(Include.NON_EMPTY)
 @Entity("WebResource")
 @Indexes({
-    @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true))})
+    @Index(fields = {@Field("about")})})
 public class WebResourceImpl implements WebResource {
 
     @Id
