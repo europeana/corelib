@@ -29,8 +29,7 @@ import org.bson.types.ObjectId;
  */
 @JsonInclude(Include.NON_EMPTY)
 @Entity("WebResource")
-@Indexes({
-    @Index(fields = {@Field("about")})})
+@Indexes({@Index(fields = {@Field("about")})})
 public class WebResourceImpl implements WebResource {
 
     @Id
@@ -79,11 +78,6 @@ public class WebResourceImpl implements WebResource {
     @Override
     public void setAbout(String about) {
         this.about = about;
-    }
-
-    @Override
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     @Override
@@ -220,6 +214,11 @@ public class WebResourceImpl implements WebResource {
     @Override
     public ObjectId getId() {
         return this.id;
+    }
+
+    @Override
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     @Override

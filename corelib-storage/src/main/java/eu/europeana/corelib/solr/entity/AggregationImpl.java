@@ -5,25 +5,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Field;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
-
 import java.util.List;
 import java.util.Map;
 
 /**
  * @see eu.europeana.corelib.definitions.edm.entity.Aggregation
  * @author Yorgos.Mamakis@ kb.nl
- * 
+ *
  */
 @JsonInclude(Include.NON_EMPTY)
 //@NodeEntity(partial = true)
 @Entity("Aggregation")
+@Indexes(@Index(fields = {@Field("webResources")}))
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
 //	@GraphProperty(propertyType = String.class)
@@ -31,34 +33,33 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	private String edmIsShownBy;
 	private String edmIsShownAt;
 	private String edmObject;
-	
+
 //	@GraphProperty(propertyType = String.class)
 	private Map<String,List<String>> edmProvider;
-	
+
 //	@GraphProperty(propertyType = String.class)
 	private Map<String,List<String>> edmRights;
-	
+
 //	@GraphProperty(defaultValue="")
 	private String edmUgc;
-	
+
 //	@GraphProperty(propertyType = String.class)
 	private Map<String,List<String>> dcRights;
-	
+
 //	@GraphProperty(defaultValue="")
 	private String[] hasView;
-	
+
 //	@GraphProperty(defaultValue="")
 	private String aggregatedCHO;
-	
+
 //	@GraphProperty(defaultValue="")
 	private String[] aggregates;
-	
+
 //	@GraphProperty(defaultValue="")
 	private String[] edmUnstored;
 
 //	@Transient
 	@Reference
-	@Indexed
 	private List<WebResourceImpl> webResources;
 
 //	@GraphProperty
@@ -100,7 +101,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 		this.edmUgc = edmUgc;
 	}
 
-	
+
 	@Override
 	public void setEdmDataProvider(Map<String,List<String>> edmDataProvider) {
 		this.edmDataProvider = edmDataProvider;

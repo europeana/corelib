@@ -5,8 +5,12 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoClientSettings.Builder;
 import com.mongodb.client.MongoClient;
 import dev.morphia.Datastore;
+import dev.morphia.Morphia;
+import dev.morphia.mapping.DiscriminatorFunction;
 import dev.morphia.mapping.Mapper;
+import dev.morphia.mapping.MapperOptions;
 import dev.morphia.mapping.MappingException;
+import dev.morphia.mapping.NamingStrategy;
 import dev.morphia.query.experimental.filters.Filters;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -99,8 +103,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
    */
   @Deprecated
   public EdmMongoServerImpl(String hosts, String ports, String databaseName, String username,
-      String password,
-      boolean createIndexes) {
+      String password, boolean createIndexes) {
     //Keep alive is removed and by default enabled
     final Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyToSocketSettings(builder ->
@@ -115,6 +118,10 @@ public class EdmMongoServerImpl implements EdmMongoServer {
   }
 
   private void createDatastore(boolean createIndexes) {
+    final MapperOptions mapperOptions = MapperOptions.builder().discriminatorKey("className")
+        .discriminator(DiscriminatorFunction.className())
+        .collectionNaming(NamingStrategy.identity()).build();
+    this.datastore = Morphia.createDatastore(this.mongoClient, databaseName, mapperOptions);
     final Mapper mapper = datastore.getMapper();
 
     mapper.map(FullBeanImpl.class);
