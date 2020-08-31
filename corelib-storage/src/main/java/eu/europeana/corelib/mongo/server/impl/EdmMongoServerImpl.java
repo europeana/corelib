@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClient;
 import dev.morphia.Datastore;
 import dev.morphia.mapping.Mapper;
 import dev.morphia.mapping.MappingException;
+import dev.morphia.query.experimental.filters.Filters;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
 import eu.europeana.corelib.edm.exceptions.MongoRuntimeException;
@@ -150,7 +151,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
       if (LOG.isDebugEnabled()) {
         start = System.currentTimeMillis();
       }
-      FullBeanImpl result = datastore.find(FullBeanImpl.class).field("about").equal(id).first();
+      FullBeanImpl result = datastore.find(FullBeanImpl.class).filter(Filters.eq("about", id)).first();
       LOG.debug("Mongo query find fullbean {} finished in {} ms", id,
           (System.currentTimeMillis() - start));
       return result;
@@ -177,7 +178,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
     }
     List<WebResourceMetaInfoImpl> metaInfoList = getDatastore().find(WebResourceMetaInfoImpl.class)
         .disableValidation()
-        .field("_id").equal(basicObject).iterator().toList();
+        .filter(Filters.eq("_id", basicObject)).iterator().toList();
     LOG.debug("Mongo query find metainfo for {} webresources done in {} ms", hashCodes.size(),
         (System.currentTimeMillis() - start));
 
@@ -199,7 +200,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
 
   @Override
   public <T> T searchByAbout(Class<T> clazz, String about) {
-    return datastore.find(clazz).filter("about", about).first();
+    return datastore.find(clazz).filter(Filters.eq("about", about)).first();
   }
 
   @Override
