@@ -22,7 +22,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
 
     private static final String DB_NAME = "europeana_test";
 
-    private MongoClient mongo;
+    private MongoClient mongoClient;
 
     public EmbeddedMongoProvider() {
         int port = 10000;
@@ -34,9 +34,8 @@ public class EmbeddedMongoProvider implements MongoProvider {
             MongodExecutable mongodExecutable = starter.prepare(conf);
             mongodExecutable.start();
             LOG.info("Creating new test MongoClient for EmbeddedMongoProvider");
-            mongo = MongoClients
-                .create(String.format("mongodb://%s:%s", "localhost", port));
-            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, DB_NAME);
+            mongoClient = MongoClients.create(String.format("mongodb://%s:%s", "localhost", port));
+            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongoClient, DB_NAME, false);
             mongoDBServer.getDatastore().getDatabase().drop();
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,7 +47,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
      */
     @Override
     public MongoClient getMongoClient() {
-        return mongo;
+        return mongoClient;
     }
 
     /**
@@ -62,9 +61,9 @@ public class EmbeddedMongoProvider implements MongoProvider {
      */
     @Override
     public void close() {
-        if (mongo != null) {
+        if (mongoClient != null) {
             LOG.info("Closing test MongoClient for EmbeddedMongoProvider");
-            mongo.close();
+            mongoClient.close();
         }
     }
 }
