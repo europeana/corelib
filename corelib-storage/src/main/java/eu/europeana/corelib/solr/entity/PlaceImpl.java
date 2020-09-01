@@ -15,7 +15,7 @@ import java.util.Map;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Place")
+@Entity(value = "Place", useDiscriminator = false)
 public class PlaceImpl extends ContextualClassImpl implements Place {
 
 	private Map<String,List<String>> isPartOf;

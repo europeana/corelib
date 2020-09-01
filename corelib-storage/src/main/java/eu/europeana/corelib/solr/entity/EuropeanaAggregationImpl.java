@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 
 @JsonInclude(Include.NON_EMPTY)
-@Entity("EuropeanaAggregation")
+@Entity(value = "EuropeanaAggregation", useDiscriminator = false)
 @Indexes({@Index(fields = {@Field("webResources")})})
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     EuropeanaAggregation {

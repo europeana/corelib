@@ -2,13 +2,13 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Embedded;
 
 /**
  * A class which contains information about a VIDEO document
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("VideoMetaInfo")
+@Embedded(useDiscriminator = false)
 public class VideoMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.VideoMetaInfo {
 
     /**

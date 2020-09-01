@@ -6,11 +6,8 @@ import com.mongodb.MongoClientSettings.Builder;
 import com.mongodb.client.MongoClient;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
-import dev.morphia.mapping.DiscriminatorFunction;
 import dev.morphia.mapping.Mapper;
-import dev.morphia.mapping.MapperOptions;
 import dev.morphia.mapping.MappingException;
-import dev.morphia.mapping.NamingStrategy;
 import dev.morphia.query.experimental.filters.Filters;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.MongoDBException;
@@ -118,10 +115,7 @@ public class EdmMongoServerImpl implements EdmMongoServer {
   }
 
   private void createDatastore(boolean createIndexes) {
-    final MapperOptions mapperOptions = MapperOptions.builder().discriminatorKey("className")
-        .discriminator(DiscriminatorFunction.className())
-        .collectionNaming(NamingStrategy.identity()).build();
-    this.datastore = Morphia.createDatastore(this.mongoClient, databaseName, mapperOptions);
+    this.datastore = Morphia.createDatastore(this.mongoClient, databaseName);
     final Mapper mapper = datastore.getMapper();
 
     mapper.map(FullBeanImpl.class);

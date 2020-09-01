@@ -1,18 +1,13 @@
 package eu.europeana.corelib.solr.entity;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import dev.morphia.annotations.Entity;
-
 import eu.europeana.corelib.definitions.edm.entity.License;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import java.util.Date;
 
 @JsonInclude(Include.NON_EMPTY)
-@Entity("License")
+@Entity(value = "License", useDiscriminator = false)
 public class LicenseImpl extends AbstractEdmEntityImpl implements License {
 
 	private String odrlInheritFrom;

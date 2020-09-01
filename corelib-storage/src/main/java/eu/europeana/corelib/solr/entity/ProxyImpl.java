@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Proxy")
+@Entity(value = "Proxy", useDiscriminator = false)
 @Converters(DocType.DocTypeConverter.class)
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 

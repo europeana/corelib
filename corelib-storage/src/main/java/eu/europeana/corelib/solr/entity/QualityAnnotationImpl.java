@@ -17,11 +17,10 @@ import org.bson.types.ObjectId;
  * @author Simon Tzanakis (Simon.Tzanakis@europeana.eu)
  * @since 2019-06-13
  */
-@Embedded
+@Embedded(useDiscriminator = false)
 @Indexes(@Index(fields = {@Field("about")}))
 public class QualityAnnotationImpl implements AbstractEdmEntity, QualityAnnotation {
 
-  protected ObjectId id = new ObjectId();
   protected String about;
 
   private String created;
@@ -31,12 +30,14 @@ public class QualityAnnotationImpl implements AbstractEdmEntity, QualityAnnotati
   @JsonIgnore
   @Override
   public ObjectId getId() {
-    return this.id;
+    //Ids are not required for embedded documents
+    return null;
   }
 
   @Override
   public void setId(ObjectId id) {
-    this.id = id;
+    //Ids are not required for embedded documents
+    //Nothing to do
   }
 
   @Override

@@ -13,7 +13,7 @@ import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("ProvidedCHO")
+@Entity(value = "ProvidedCHO", useDiscriminator = false)
 public class ProvidedCHOImpl extends AbstractEdmEntityImpl implements ProvidedCHO {
 
 	private String[] owlSameAs;

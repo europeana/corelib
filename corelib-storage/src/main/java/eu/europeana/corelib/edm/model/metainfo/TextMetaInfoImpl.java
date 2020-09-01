@@ -2,10 +2,10 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Embedded;
 
 @JsonInclude(Include.NON_EMPTY)
-@Entity("TextMetaInfo")
+@Embedded(useDiscriminator = false)
 public class TextMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.TextMetaInfo {
 
     /**

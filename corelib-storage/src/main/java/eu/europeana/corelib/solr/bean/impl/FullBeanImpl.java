@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("unchecked")
 @JsonInclude(Include.NON_EMPTY)
-@Entity("record")
+@Entity(value = "record", useDiscriminator = false)
 @Converters(DocType.DocTypeConverter.class)
 @Indexes({
     @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true)),

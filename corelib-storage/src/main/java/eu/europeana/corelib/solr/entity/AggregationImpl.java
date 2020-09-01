@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @JsonInclude(Include.NON_EMPTY)
 //@NodeEntity(partial = true)
-@Entity("Aggregation")
+@Entity(value = "Aggregation", useDiscriminator = false)
 @Indexes(@Index(fields = {@Field("webResources")}))
 public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregation {
 
