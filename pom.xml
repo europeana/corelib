@@ -29,7 +29,7 @@
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
-        <morphia.version>1.5.8</morphia.version>
+        <morphia.version>2.0.0</morphia.version>
 
         <commonsIO.version>2.4</commonsIO.version>
         <commonsLang3.version>3.9</commonsLang3.version>
