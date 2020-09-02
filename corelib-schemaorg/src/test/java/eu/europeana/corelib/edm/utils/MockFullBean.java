@@ -1,10 +1,5 @@
 package eu.europeana.corelib.edm.utils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import eu.europeana.corelib.definitions.edm.model.metainfo.ImageOrientation;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
@@ -20,8 +15,10 @@ import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
 import eu.europeana.corelib.solr.entity.ProxyImpl;
 import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
-import eu.europeana.corelib.utils.DateUtils;
-import org.mockito.MockitoAnnotations;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Given our current FullBean implementation it's not easy to deserialize a FullBean from json string, so for now we
@@ -63,7 +60,7 @@ public final class MockFullBean {
         ProxyImpl proxy = new ProxyImpl();
         proxies.add(proxy);
 
-        proxy.setEdmType(DocType.IMAGE);
+        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
         proxy.setProxyIn(new String[]{MockBeanConstants.AGGREGATION_ABOUT});
         proxy.setProxyFor(MockBeanConstants.ABOUT);
 
@@ -109,7 +106,7 @@ public final class MockFullBean {
         proxy = new ProxyImpl();
         proxies.add(proxy);
 
-        proxy.setEdmType(DocType.IMAGE);
+        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
         proxy.setProxyIn(new String[]{MockBeanConstants.EUROPEANA_AGG_ABOUT});
         proxy.setProxyFor(MockBeanConstants.ABOUT);
 

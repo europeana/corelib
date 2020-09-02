@@ -101,7 +101,7 @@ public final class IIIFLink {
         if (null != bean.getProxies()) {
             for (Proxy proxy : bean.getProxies()) {
                 if (null != proxy.getEdmType()) {
-                    edmType = proxy.getEdmType().getEnumNameValue();
+                    edmType = proxy.getEdmType();
                 }
             }
         }

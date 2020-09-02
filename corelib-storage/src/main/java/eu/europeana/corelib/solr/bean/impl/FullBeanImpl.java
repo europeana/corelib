@@ -7,6 +7,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.*;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.*;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
@@ -22,7 +23,6 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 @JsonInclude(Include.NON_EMPTY)
 @Entity(value = "record", useDiscriminator = false)
-@Converters(DocType.DocTypeConverter.class)
 @Indexes({
     @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true)),
     @Index(fields = {@Field("timestampCreated")}),
@@ -52,7 +52,7 @@ public class FullBeanImpl implements FullBean {
 
   protected Date timestampUpdated;
 
-  protected DocType type;
+  protected String type;
 
   protected int europeanaCompleteness;
 
@@ -208,8 +208,24 @@ public class FullBeanImpl implements FullBean {
   }
 
   @Override
-  public void setType(DocType type) {
-    this.type = type;
+  public void setType(String type) {
+    this.type = Optional.ofNullable(DocType.safeValueOf(type)).map(DocType::getEnumNameValue)
+        .orElse(null);
+  }
+
+  @Override
+  public String getType() {
+    if (this.type != null) {
+      return this.type;
+    }
+    for (Proxy p : this.getProxies()) {
+      if (p.getEdmType() != null) {
+        return p.getEdmType();
+      }
+    }
+    LogManager.getLogger(FullBeanImpl.class)
+        .error("Type is null, no proxy.edmType found as fallback!");
+    return null;
   }
 
   @Override
@@ -235,21 +251,6 @@ public class FullBeanImpl implements FullBean {
   @Override
   public String[] getLanguage() {
     return (this.language != null ? this.language.clone() : null);
-  }
-
-  @Override
-  public DocType getType() {
-    if (this.type != null) {
-      return this.type;
-    }
-    for (Proxy p : this.getProxies()) {
-      if (p.getEdmType() != null) {
-        return p.getEdmType();
-      }
-    }
-    LogManager.getLogger(FullBeanImpl.class)
-        .error("Type is null, no proxy.edmType found as fallback!");
-    return null;
   }
 
   @Override

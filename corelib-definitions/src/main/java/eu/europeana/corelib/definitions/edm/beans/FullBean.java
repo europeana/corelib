@@ -128,7 +128,7 @@ public interface FullBean extends IdBean {
 	 * Sets the type for this record
 	 * @param type
 	 */
-	void setType(DocType type);
+	void setType(String type);
 
 	/**
 	 * Sets the europeana completeness for this record
@@ -212,7 +212,7 @@ public interface FullBean extends IdBean {
 	 * 
 	 * @return the type for this record
 	 */
-	DocType getType();
+	String getType();
 
 	/**
 	 * 

@@ -3,8 +3,6 @@ package eu.europeana.corelib.definitions.edm.entity;
 import java.util.List;
 import java.util.Map;
 
-import eu.europeana.corelib.definitions.solr.DocType;
-
 /**
  * Provider Proxy fields representation
  * 
@@ -18,7 +16,7 @@ public interface Proxy extends BasicProxy {
 	 * 
 	 * @return DocType representing the edm:type fields for a Proxy
 	 */
-	DocType getEdmType();
+	String getEdmType();
 
 	/**
 	 * Set the edmType field for a Proxy
@@ -26,7 +24,7 @@ public interface Proxy extends BasicProxy {
 	 * @param edmType
 	 * 			String array containing the edmType of a Proxy
 	 */
-	void setEdmType(DocType edmType);
+	void setEdmType(String edmType);
 
 	/**
 	 * 

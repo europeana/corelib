@@ -1,7 +1,6 @@
 package eu.europeana.corelib.web.service.impl;
 
 import eu.europeana.corelib.definitions.EuropeanaStaticUrl;
-import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.web.utils.UrlBuilder;
 
 /**
@@ -42,7 +41,7 @@ public class EuropeanaUrlBuilder {
      * @param type defaults to IMAGE (optional)
      * @return UrlBuilder
      */
-    public static UrlBuilder getThumbnailUrl(String uri, DocType type) {
+    public static UrlBuilder getThumbnailUrl(String uri, String type) {
         return getThumbnailUrl(uri, null, type);
     }
 
@@ -57,12 +56,12 @@ public class EuropeanaUrlBuilder {
      */
     // TODO for now we keep this here because it can be used by both API2 and OAI-PMH. However once OAI-PMH retrieves
     // data from Record API (instead of directly from Corelib), then we can move this to the API2 project
-    public static UrlBuilder getThumbnailUrl(String uri, String size, DocType type) {
+    public static UrlBuilder getThumbnailUrl(String uri, String size, String type) {
         UrlBuilder url = new UrlBuilder(EuropeanaStaticUrl.THUMBNAIL_BASE_URL)
                 .addParam("uri", uri.trim())
                 .addParam("size", size);
         if (type != null) {
-           url.addParam("type", type.toString());
+           url.addParam("type", type);
         }
         return url;
     }

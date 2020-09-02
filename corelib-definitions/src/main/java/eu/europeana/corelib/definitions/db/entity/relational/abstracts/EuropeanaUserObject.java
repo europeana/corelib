@@ -2,8 +2,6 @@ package eu.europeana.corelib.definitions.db.entity.relational.abstracts;
 
 import java.util.Date;
 
-import eu.europeana.corelib.definitions.solr.DocType;
-
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  * @deprecated January 2018 OAuth and MyEuropeana are no longer being used
@@ -27,8 +25,8 @@ public interface EuropeanaUserObject extends UserConnected<Long> {
 
 	void setEuropeanaUri(String europeanaUri);
 
-	DocType getDocType();
+	String getDocType();
 
-	void setDocType(DocType docType);
+	void setDocType(String docType);
 
 }
