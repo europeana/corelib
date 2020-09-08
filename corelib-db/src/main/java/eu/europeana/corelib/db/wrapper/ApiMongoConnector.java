@@ -34,7 +34,7 @@ public class ApiMongoConnector {
      */
     @Deprecated
     public Datastore createDatastore(String connectionUrl) throws InterruptedException {
-        MongoProvider mongo = new MongoProviderImpl(connectionUrl);
+        MongoProvider mongo = new MongoProviderImpl(connectionUrl, "0");
         this.label          = mongo.getDefaultDatabase();
         this.mongoClient    = mongo.getMongo();
         return new Morphia().createDatastore(mongoClient, label);
