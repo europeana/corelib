@@ -219,8 +219,8 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     }
 
     @Override
-    public DocType getType() {
-        return (docType != null ? DocType.safeValueOf(docType) : null);
+    public String getType() {
+        return (docType != null ? DocType.safeValueOf(docType).getEnumNameValue() : null);
     }
 
     @Override
