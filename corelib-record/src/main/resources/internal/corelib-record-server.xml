@@ -7,12 +7,12 @@
 
 
     <bean id="corelib_record_mongoServer" class="eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl" >
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongoClient()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.record.dbname']}" type="java.lang.String"/>
     </bean>
 
     <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
-        <constructor-arg value="#{corelib_db_mongoProvider.getMongo()}"/>
+        <constructor-arg value="#{corelib_db_mongoProvider.getMongoClient()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.redirect.dbname']}" type="java.lang.String"/>
     </bean>
 
