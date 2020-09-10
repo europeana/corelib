@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
  * Let the search-api (and other api's?) connect to a mongo database with Morphia
  * This class uses a basic Morphia connection without any mappings or other specific settings
  */
+@Deprecated(since = "September 2020", forRemoval = true)
 public class ApiMongoConnector {
 
     private static final Logger LOG = LogManager.getLogger(ApiMongoConnector.class);
