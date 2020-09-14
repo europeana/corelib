@@ -17,17 +17,6 @@
     <url>http://www.europeana.eu</url>
 
     <dependencies>
-        <dependency>
-            <groupId>eu.europeana</groupId>
-            <artifactId>object-storage</artifactId>
-            <version>${objectStorage.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>openstack-swift</artifactId>
-                    <groupId>org.apache.jclouds.api</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- Corelib -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
