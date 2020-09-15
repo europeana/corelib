@@ -25,6 +25,7 @@
 
     <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.storage.impl.MongoProviderImpl" destroy-method="close">
         <constructor-arg value="#{europeanaProperties['mongodb.connectionUrl']}" type="java.lang.String"/>
+        <constructor-arg value="#{europeanaProperties['mongodb.max.connection.idle.time']}" type="java.lang.String"/>
     </bean>
 
     <bean id="corelib_db_mongo_api" class="eu.europeana.corelib.db.wrapper.ApiMongoConnector"/>

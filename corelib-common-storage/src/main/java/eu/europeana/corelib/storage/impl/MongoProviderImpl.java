@@ -21,8 +21,6 @@ public class MongoProviderImpl implements MongoProvider {
 
     private static final Logger LOG                   = LogManager.getLogger(MongoProviderImpl.class);
 
-    private static final int MAX_CONNECTION_IDLE_MILLIS   = 30000;
-
     private MongoClient mongo;
     private String definedDatabase;
 
@@ -35,9 +33,7 @@ public class MongoProviderImpl implements MongoProvider {
      * @param connectionUrl
      */
     public MongoProviderImpl(String connectionUrl) {
-        MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder();
-        clientOptionsBuilder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS);
-        MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
+        MongoClientURI uri = new MongoClientURI(connectionUrl);
         definedDatabase = uri.getDatabase();
         LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
                 uri.getHosts(),
@@ -46,15 +42,25 @@ public class MongoProviderImpl implements MongoProvider {
     }
 
     /**
-     * Create a new MongoClient without any credentials
-     * @deprecated This constructor is not used anywhere
+     * Create a new MongoClient based on a connectionUrl with MongoClientOptions e.g.
+     * mongodb://user:password@mongo1.eanadev.org:27000/europeana_1?replicaSet=europeana
+     * @see <a href="http://api.mongodb.com/java/current/com/mongodb/MongoClientURI.html">
+     *     MongoClientURI documentation</a>
      *
-     * @param hosts comma-separated host names
-     * @param ports omma-separated port numbers
+     * @param connectionUrl
+     * @param maxConnectionIdleTime sets the maxConnectionIdleTime if not empty
      */
-    @Deprecated ()
-    public MongoProviderImpl(String hosts, String ports) {
-        this(hosts, ports, null, null, null, null);
+    public MongoProviderImpl(String connectionUrl, String maxConnectionIdleTime) {
+        MongoClientOptions.Builder clientOptionsBuilder = new MongoClientOptions.Builder();
+        if(StringUtils.isNotEmpty(maxConnectionIdleTime) && Integer.parseInt(maxConnectionIdleTime) > 0) {
+            clientOptionsBuilder.maxConnectionIdleTime(Integer.parseInt(maxConnectionIdleTime));
+        }
+        MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
+        definedDatabase = uri.getDatabase();
+        LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}, maxConnectionIdleTime {} ms ",
+                uri.getHosts(),
+                (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase), uri.getOptions().getMaxConnectionIdleTime());
+        mongo = new MongoClient(uri);
     }
 
     /**
