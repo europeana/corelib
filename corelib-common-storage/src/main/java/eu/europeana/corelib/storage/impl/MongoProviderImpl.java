@@ -25,6 +25,23 @@ public class MongoProviderImpl implements MongoProvider {
     private String definedDatabase;
 
     /**
+     * Create a new MongoClient based on a connectionUrl, e.g.
+     * mongodb://user:password@mongo1.eanadev.org:27000/europeana_1?replicaSet=europeana
+     * @see <a href="http://api.mongodb.com/java/current/com/mongodb/MongoClientURI.html">
+     *     MongoClientURI documentation</a>
+     *
+     * @param connectionUrl
+     */
+    public MongoProviderImpl(String connectionUrl) {
+        MongoClientURI uri = new MongoClientURI(connectionUrl);
+        definedDatabase = uri.getDatabase();
+        LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
+                uri.getHosts(),
+                (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase));
+        mongo = new MongoClient(uri);
+    }
+
+    /**
      * Create a new MongoClient based on a connectionUrl with MongoClientOptions e.g.
      * mongodb://user:password@mongo1.eanadev.org:27000/europeana_1?replicaSet=europeana
      * @see <a href="http://api.mongodb.com/java/current/com/mongodb/MongoClientURI.html">
@@ -40,9 +57,9 @@ public class MongoProviderImpl implements MongoProvider {
         }
         MongoClientURI uri = new MongoClientURI(connectionUrl, clientOptionsBuilder);
         definedDatabase = uri.getDatabase();
-        LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
+        LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}, maxConnectionIdleTime {} ms ",
                 uri.getHosts(),
-                (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase));
+                (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase), uri.getOptions().getMaxConnectionIdleTime());
         mongo = new MongoClient(uri);
     }
 
