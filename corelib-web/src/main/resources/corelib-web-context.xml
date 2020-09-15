@@ -11,8 +11,6 @@
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-web-email.xml" />
- 	<import resource="internal/corelib-web-thumbnails.xml" />
-	
 
 	<!-- CONFIGURATION -->
 	<bean id="europeana_configuration" class="eu.europeana.corelib.web.support.Configuration" />
@@ -23,17 +21,5 @@
 	</bean>
 
 	<bean id="corelib_web_wikipediaApiService" class="eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl" />
-
-	<!-- Deprecated
-	<bean id="corelib_web_MicrosoftTranslatorService" class="eu.europeana.corelib.web.service.impl.MicrosoftTranslatorServiceImpl" />
-	-->
-<!--Deprecated 15 August 2019, all thumbnail files are now served by the thumbnail application itself-->
-	<bean id="corelib_uimMediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" >
-		<constructor-arg ref="corelib_uimObjectStorageClient"/>
-	</bean>
-
-	<bean id="corelib_metisMediaStorageService" class="eu.europeana.corelib.web.service.impl.MediaStorageServiceImpl" >
-		<constructor-arg ref="corelib_metisObjectStorageClient"/>
-	</bean>
 
 </beans>
