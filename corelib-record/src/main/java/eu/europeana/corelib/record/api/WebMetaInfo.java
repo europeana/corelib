@@ -106,20 +106,6 @@ public final class WebMetaInfo {
     private static Map<String, WebResource> prepareWebResourceHashCodes(FullBean fullBean) {
         Map<String, WebResource> hashCodes = new HashMap<>();
 
-        for (final WebResource webResource : fullBean.getEuropeanaAggregation().getWebResources()) {
-            // Locate the technical meta data from the web resource about
-            if (webResource.getAbout() != null) {
-                String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                hashCodes.put(hashCodeAbout, webResource);
-            }
-
-            // Locate the technical meta data from the aggregation is shown by
-            if (!hashCodes.containsValue(webResource) && fullBean.getEuropeanaAggregation().getEdmIsShownBy() != null) {
-                String hashCodeIsShownBy = generateHashCode(fullBean.getEuropeanaAggregation().getEdmIsShownBy(), fullBean.getAbout());
-                hashCodes.put(hashCodeIsShownBy, webResource);
-            }
-        }
-
         for (final Aggregation aggregation : fullBean.getAggregations()) {
             final Set<String> urls = new HashSet<>();
 
