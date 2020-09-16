@@ -44,17 +44,7 @@
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-common</artifactId>
             <version>${metis.version}</version>
-            <!-- At the moment the snapshot version of metis-common uses and older mongo and morphia so we need
-            to exclude those-->
             <exclusions>
-                <exclusion>
-                    <groupId>org.mongodb</groupId>
-                    <artifactId>mongo-java-driver</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>dev.morphia.morphia</groupId>
-                    <artifactId>core</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>com.zoho.crm</groupId>
                     <artifactId>java-sdk</artifactId>
