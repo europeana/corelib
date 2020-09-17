@@ -72,12 +72,24 @@ public final class SchemaOrgUtils {
     }
 
     protected static void getSchemaOrg(FullBeanImpl bean, List<Thing> objectsToSerialize, Thing object, List<String> linkedContextualEntities) {
-        processProvidedCHO((CreativeWork) object, bean);
-        processProxies((CreativeWork) object, bean, linkedContextualEntities);
-        objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean, linkedContextualEntities));
-        objectsToSerialize.addAll(processAgents(bean.getAgents(), linkedContextualEntities));
-        objectsToSerialize.addAll(processPlaces(bean.getPlaces(), linkedContextualEntities));
-        objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
+        if (bean.getProvidedCHOs() != null) {
+            processProvidedCHO((CreativeWork) object, bean);
+        }
+        if (bean.getProxies() != null) {
+            processProxies((CreativeWork) object, bean, linkedContextualEntities);
+        }
+        if (bean.getAggregations() != null) {
+            objectsToSerialize.addAll(processAggregations((CreativeWork) object, bean, linkedContextualEntities));
+        }
+        if (bean.getAgents() != null) {
+            objectsToSerialize.addAll(processAgents(bean.getAgents(), linkedContextualEntities));
+        }
+        if (bean.getPlaces() != null) {
+            objectsToSerialize.addAll(processPlaces(bean.getPlaces(), linkedContextualEntities));
+        }
+        if (bean.getConcepts() != null) {
+            objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
+        }
     }
 
         /**
@@ -1360,8 +1372,10 @@ public final class SchemaOrgUtils {
      * @param propertyName property to be checked
      */
     private static boolean referenceNull(String propertyName) {
-        return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
-                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR) || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
+        return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT)
+                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
+                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR)
+                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
     }
 
     /**
