@@ -13,6 +13,7 @@ import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +26,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     EuropeanaAggregation {
 
   @Reference
-  private List<WebResourceImpl> webResources;
+  private List<WebResourceImpl> webResources = new ArrayList<>();
 
   private String aggregatedCHO;
   private String[] aggregates;

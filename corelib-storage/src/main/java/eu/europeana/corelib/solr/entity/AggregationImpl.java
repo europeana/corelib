@@ -14,6 +14,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@Transient
 	@Reference
-	private List<WebResourceImpl> webResources;
+	private List<WebResourceImpl> webResources = new ArrayList<>();;
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;

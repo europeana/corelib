@@ -7,6 +7,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.*;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.*;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -57,36 +58,36 @@ public class FullBeanImpl implements FullBean {
   protected int europeanaCompleteness;
 
   @Reference
-  protected List<PlaceImpl> places;
+  protected List<PlaceImpl> places = new ArrayList<>();
 
   @Reference
-  protected List<AgentImpl> agents;
+  protected List<AgentImpl> agents = new ArrayList<>();
 
   @Reference
-  protected List<TimespanImpl> timespans;
+  protected List<TimespanImpl> timespans = new ArrayList<>();
 
   @Reference
-  protected List<ConceptImpl> concepts;
+  protected List<ConceptImpl> concepts = new ArrayList<>();
 
   @Reference
-  protected List<AggregationImpl> aggregations;
+  protected List<AggregationImpl> aggregations = new ArrayList<>();
 
   @Reference
-  protected List<ProvidedCHOImpl> providedCHOs;
+  protected List<ProvidedCHOImpl> providedCHOs = new ArrayList<>();
 
   @Reference
   protected EuropeanaAggregationImpl europeanaAggregation;
 
   @Reference
-  protected List<ProxyImpl> proxies;
+  protected List<ProxyImpl> proxies = new ArrayList<>();
 
   @Reference
-  protected List<LicenseImpl> licenses;
+  protected List<LicenseImpl> licenses = new ArrayList<>();
 
   @Reference
-  protected List<ServiceImpl> services;
+  protected List<ServiceImpl> services = new ArrayList<>();
 
-  protected List<QualityAnnotationImpl> qualityAnnotations;
+  protected List<QualityAnnotationImpl> qualityAnnotations = new ArrayList<>();
 
   protected String[] country;
   protected String[] userTags;
