@@ -10,6 +10,7 @@ import java.util.*;
  * Class for assembling and holding the data forming the (webresource-level) attribution snippet)
  * Created by luthien on 30/11/2015.
  */
+//Annotation is required, otherwise morphia complains
 @Embedded(useDiscriminator = false)
 public class AttributionSnippet {
 
