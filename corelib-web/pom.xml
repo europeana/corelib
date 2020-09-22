@@ -5,7 +5,7 @@
     <parent>
         <groupId>eu.europeana</groupId>
         <artifactId>corelib</artifactId>
-        <version>2.10.2-SNAPSHOT</version>
+        <version>2.10.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -17,18 +17,6 @@
     <url>http://www.europeana.eu</url>
 
     <dependencies>
-        <dependency>
-            <groupId>eu.europeana</groupId>
-            <artifactId>object-storage</artifactId>
-            <version>${objectStorage.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>openstack-swift</artifactId>
-                    <groupId>org.apache.jclouds.api</groupId>
-                </exclusion>
-
-            </exclusions>
-        </dependency>
         <!-- Corelib -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
@@ -80,11 +68,11 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.google.code.gson</groupId>-->
-<!--            <artifactId>gson</artifactId>-->
-<!--            <version>2.2.4</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
