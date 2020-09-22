@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Concept")
+@Entity(value = "Concept", useDiscriminator = false)
 public class ConceptImpl extends ContextualClassImpl implements Concept {
 
 	private String[] broader;

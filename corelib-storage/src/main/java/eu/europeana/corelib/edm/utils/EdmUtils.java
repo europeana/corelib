@@ -214,7 +214,7 @@ public final class EdmUtils {
     private static String getType(FullBeanImpl fullBean) {
         for (ProxyImpl prx : fullBean.getProxies()) {
             if (!prx.isEuropeanaProxy()) {
-                return prx.getEdmType().getEnumNameValue();
+                return prx.getEdmType();
             }
         }
         return null;

@@ -1,11 +1,9 @@
 package eu.europeana.corelib.solr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import java.util.List;
 import java.util.Map;
-
-import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 public class ContextualClassImpl extends AbstractEdmEntityImpl implements ContextualClass {
 	

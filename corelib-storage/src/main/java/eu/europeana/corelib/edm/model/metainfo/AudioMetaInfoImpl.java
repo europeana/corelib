@@ -2,14 +2,14 @@ package eu.europeana.corelib.edm.model.metainfo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Embedded;
 
 
 /**
  * A class which contains information about an AUDIO document
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("AudioMetaInfo")
+@Embedded(useDiscriminator = false)
 public class AudioMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.AudioMetaInfo {
 
     /**

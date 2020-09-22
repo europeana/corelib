@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Timespan")
+@Entity(value = "Timespan", useDiscriminator = false)
 public class TimespanImpl extends ContextualClassImpl implements
 		eu.europeana.corelib.definitions.edm.entity.Timespan {
 

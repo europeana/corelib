@@ -6,7 +6,7 @@ import eu.europeana.corelib.definitions.edm.entity.Service;
 /**
  * Created by ymamakis on 1/12/16.
  */
-@Entity("Service")
+@Entity(value = "Service", useDiscriminator = false)
 public class ServiceImpl extends AbstractEdmEntityImpl implements Service {
 
     private String[] dctermsConformsTo;

@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Property;
 
 /**
  * An object which wraps all types of metainfo. It will have always maximum one info field which is not null.
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("WebResourceMetaInfo")
+@Entity(value = "WebResourceMetaInfo", useDiscriminator = false)
 public class WebResourceMetaInfoImpl implements eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo {
     @Id
-    @Property("id")
     private final String id;
 
     /**

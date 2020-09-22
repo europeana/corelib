@@ -2,23 +2,21 @@ package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.morphia.annotations.Converters;
 import dev.morphia.annotations.Entity;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.solr.DocType;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Yorgos.Mamakis@ kb.nl
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Proxy")
-@Converters(DocType.DocTypeConverter.class)
+@Entity(value = "Proxy", useDiscriminator = false)
 public class ProxyImpl extends BasicProxyImpl implements Proxy {
 
-	private DocType edmType;
+	private String edmType;
 
 	private Map<String,List<String>> year;
 
@@ -27,12 +25,13 @@ public class ProxyImpl extends BasicProxyImpl implements Proxy {
 	private boolean europeanaProxy;
 
 	@Override
-	public void setEdmType(DocType edmType) {
-		this.edmType = edmType;
+	public void setEdmType(String edmType) {
+		this.edmType = Optional.ofNullable(DocType.safeValueOf(edmType)).map(DocType::getEnumNameValue)
+				.orElse(null);
 	}
 
 	@Override
-	public DocType getEdmType() {
+	public String getEdmType() {
 		return this.edmType;
 	}
 

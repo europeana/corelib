@@ -7,6 +7,8 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.*;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.solr.entity.*;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bson.types.ObjectId;
@@ -21,14 +23,22 @@ import java.util.Objects;
  */
 @SuppressWarnings("unchecked")
 @JsonInclude(Include.NON_EMPTY)
-@Entity("record")
-@Converters(DocType.DocTypeConverter.class)
+@Entity(value = "record", useDiscriminator = false)
+@Indexes({
+    @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true)),
+    @Index(fields = {@Field("timestampCreated")}),
+    @Index(fields = {@Field("timestampUpdated")}),
+    @Index(fields = {@Field("places")}),
+    @Index(fields = {@Field("agents")}),
+    @Index(fields = {@Field("timespans")}),
+    @Index(fields = {@Field("concepts")}),
+    @Index(fields = {@Field("licenses")}),
+    @Index(fields = {@Field("services")})})
 public class FullBeanImpl implements FullBean {
 
   @Id
   protected ObjectId europeanaId;
 
-  @Indexed(unique = true)
   protected String about;
 
   protected String[] title;
@@ -39,54 +49,45 @@ public class FullBeanImpl implements FullBean {
 
   protected String[] language;
 
-  @Indexed
   protected Date timestampCreated;
 
-  @Indexed
   protected Date timestampUpdated;
 
-  protected DocType type;
+  protected String type;
 
   protected int europeanaCompleteness;
 
   @Reference
-  @Indexed
-  protected List<PlaceImpl> places;
+  protected List<PlaceImpl> places = new ArrayList<>();
 
   @Reference
-  @Indexed
-  protected List<AgentImpl> agents;
+  protected List<AgentImpl> agents = new ArrayList<>();
 
   @Reference
-  @Indexed
-  protected List<TimespanImpl> timespans;
+  protected List<TimespanImpl> timespans = new ArrayList<>();
 
   @Reference
-  @Indexed
-  protected List<ConceptImpl> concepts;
+  protected List<ConceptImpl> concepts = new ArrayList<>();
 
   @Reference
-  protected List<AggregationImpl> aggregations;
+  protected List<AggregationImpl> aggregations = new ArrayList<>();
 
   @Reference
-  protected List<ProvidedCHOImpl> providedCHOs;
+  protected List<ProvidedCHOImpl> providedCHOs = new ArrayList<>();
 
   @Reference
   protected EuropeanaAggregationImpl europeanaAggregation;
 
   @Reference
-  protected List<ProxyImpl> proxies;
+  protected List<ProxyImpl> proxies = new ArrayList<>();
 
   @Reference
-  @Indexed
-  protected List<LicenseImpl> licenses;
+  protected List<LicenseImpl> licenses = new ArrayList<>();
 
   @Reference
-  @Indexed
-  protected List<ServiceImpl> services;
+  protected List<ServiceImpl> services = new ArrayList<>();
 
-  @Embedded
-  protected List<QualityAnnotationImpl> qualityAnnotations;
+  protected List<QualityAnnotationImpl> qualityAnnotations = new ArrayList<>();
 
   protected String[] country;
   protected String[] userTags;
@@ -208,8 +209,24 @@ public class FullBeanImpl implements FullBean {
   }
 
   @Override
-  public void setType(DocType type) {
-    this.type = type;
+  public void setType(String type) {
+    this.type = Optional.ofNullable(DocType.safeValueOf(type)).map(DocType::getEnumNameValue)
+        .orElse(null);
+  }
+
+  @Override
+  public String getType() {
+    if (this.type != null) {
+      return this.type;
+    }
+    for (Proxy p : this.getProxies()) {
+      if (p.getEdmType() != null) {
+        return p.getEdmType();
+      }
+    }
+    LogManager.getLogger(FullBeanImpl.class)
+        .error("Type is null, no proxy.edmType found as fallback!");
+    return null;
   }
 
   @Override
@@ -235,21 +252,6 @@ public class FullBeanImpl implements FullBean {
   @Override
   public String[] getLanguage() {
     return (this.language != null ? this.language.clone() : null);
-  }
-
-  @Override
-  public DocType getType() {
-    if (this.type != null) {
-      return this.type;
-    }
-    for (Proxy p : this.getProxies()) {
-      if (p.getEdmType() != null) {
-        return p.getEdmType();
-      }
-    }
-    LogManager.getLogger(FullBeanImpl.class)
-        .error("Type is null, no proxy.edmType found as fallback!");
-    return null;
   }
 
   @Override

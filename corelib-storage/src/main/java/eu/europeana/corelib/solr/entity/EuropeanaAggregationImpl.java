@@ -4,27 +4,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Field;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.utils.ValidateUtils;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 
-import java.util.List;
-import java.util.Map;
-
 @JsonInclude(Include.NON_EMPTY)
-@Entity("EuropeanaAggregation")
+@Entity(value = "EuropeanaAggregation", useDiscriminator = false)
+@Indexes({@Index(fields = {@Field("webResources")})})
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     EuropeanaAggregation {
 
   @Reference
-  @Indexed
-  private List<WebResource> webResources;
+  private List<WebResourceImpl> webResources = new ArrayList<>();
 
   private String aggregatedCHO;
   private String[] aggregates;
@@ -175,7 +177,7 @@ public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
   @SuppressWarnings("unchecked")
   @Override
   public void setWebResources(List<? extends WebResource> webResources) {
-    this.webResources = (List<WebResource>) webResources;
+    this.webResources = (List<WebResourceImpl>) webResources;
   }
 
   @Override

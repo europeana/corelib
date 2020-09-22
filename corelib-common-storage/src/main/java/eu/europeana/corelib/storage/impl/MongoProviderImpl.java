@@ -1,14 +1,16 @@
 package eu.europeana.corelib.storage.impl;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientURI;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import eu.europeana.corelib.storage.MongoProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +23,8 @@ public class MongoProviderImpl implements MongoProvider {
 
     private static final Logger LOG                   = LogManager.getLogger(MongoProviderImpl.class);
 
-    private MongoClient mongo;
+    private MongoClient mongoClient;
+
     private String definedDatabase;
 
     /**
@@ -33,12 +36,17 @@ public class MongoProviderImpl implements MongoProvider {
      * @param connectionUrl
      */
     public MongoProviderImpl(String connectionUrl) {
-        MongoClientURI uri = new MongoClientURI(connectionUrl);
-        definedDatabase = uri.getDatabase();
+        final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
+        mongoClientSettingsBuilder.applyToConnectionPoolSettings(
+            builder -> builder.maxConnectionIdleTime(MAX_CONNECTION_IDLE_MILLIS, TimeUnit.MILLISECONDS));
+        final ConnectionString connectionString = new ConnectionString(connectionUrl);
+        definedDatabase = connectionString.getDatabase();
         LOG.info("[MongoProvider] [constructor] creating new MongoClient for {}, {}",
-                uri.getHosts(),
+            connectionString.getHosts(),
                 (StringUtils.isEmpty(definedDatabase) ? "default database" : "database: " + definedDatabase));
-        mongo = new MongoClient(uri);
+
+        mongoClient = MongoClients
+            .create(mongoClientSettingsBuilder.applyConnectionString(connectionString).build());
     }
 
     /**
@@ -90,9 +98,9 @@ public class MongoProviderImpl implements MongoProvider {
      * @param dbName optional
      * @param username optional
      * @param password optional
-     * @param optionsBuilder optional
+     * @param mongoClientSettingsBuilder optional
      */
-    public MongoProviderImpl(String[] hosts, String[] ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
+    public MongoProviderImpl(String[] hosts, String[] ports, String dbName, String username, String password, MongoClientSettings.Builder mongoClientSettingsBuilder) {
         List<ServerAddress> serverAddresses = new ArrayList<>();
         int i = 0;
         for (String host : hosts) {
@@ -107,25 +115,26 @@ public class MongoProviderImpl implements MongoProvider {
             i++;
         }
 
-        MongoClientOptions.Builder builder = optionsBuilder;
-        if (optionsBuilder == null) {
+        MongoClientSettings.Builder clientSettingsBuilder = mongoClientSettingsBuilder;
+        if (mongoClientSettingsBuilder == null) {
             // use defaults
-            builder = MongoClientOptions.builder();
+            clientSettingsBuilder = MongoClientSettings.builder();
         }
+        clientSettingsBuilder.applyToClusterSettings(builder -> builder.hosts(serverAddresses));
 
         if (StringUtils.isEmpty(dbName) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             LOG.info("[MongoProvider] [params constructor] creating new MongoClient: {} {}",
                     Arrays.toString(hosts),
                     " (no credentials)");
             definedDatabase = null;
-            mongo           = new MongoClient(serverAddresses, builder.build());
         } else {
-            List<MongoCredential> credentials = new ArrayList<>();
-            credentials.add(MongoCredential.createCredential(username, dbName, password.toCharArray()));
+            final MongoCredential credential = MongoCredential
+                .createCredential(username, dbName, password.toCharArray());
             LOG.info("Creating new MongoClient - "+ Arrays.toString(hosts) +", database "+dbName+" (with credentials)");
             definedDatabase = dbName;
-            mongo = new MongoClient(serverAddresses, credentials, builder.build());
+            mongoClientSettingsBuilder.credential(credential);
         }
+        mongoClient = MongoClients.create(clientSettingsBuilder.build());
     }
 
     private int getPort(String[] ports, int index) {
@@ -151,23 +160,22 @@ public class MongoProviderImpl implements MongoProvider {
      * @param dbName optional
      * @param username optional
      * @param password optional
-     * @param optionsBuilder optional
+     * @param mongoClientsSettingsBuilder optional
      */
-    public MongoProviderImpl(String hosts, String ports, String dbName, String username, String password, MongoClientOptions.Builder optionsBuilder) {
+    public MongoProviderImpl(String hosts, String ports, String dbName, String username, String password, MongoClientSettings.Builder mongoClientsSettingsBuilder) {
         this(StringUtils.split(hosts, ","),
                 StringUtils.split(ports, ","),
                 dbName,
                 username,
-                password,
-                optionsBuilder);
+                password, mongoClientsSettingsBuilder);
     }
 
     /**
-     * @see MongoProvider#getMongo()
+     * @see MongoProvider#getMongoClient()
      */
     @Override
-    public MongoClient getMongo() {
-        return mongo;
+    public MongoClient getMongoClient() {
+        return mongoClient;
     }
 
     /**
@@ -182,9 +190,9 @@ public class MongoProviderImpl implements MongoProvider {
      */
     @Override
     public void close() {
-        if (mongo != null) {
-            LOG.info("[MongoProvider] ... closing MongoClient ... {}", mongo.getServerAddressList().get(0));
-            mongo.close();
+        if (mongoClient != null) {
+            LOG.info("[MongoProvider] ... closing MongoClient ... {}", mongoClient.getClusterDescription().getClusterSettings().getHosts().get(0));
+            mongoClient.close();
         }
     }
 }

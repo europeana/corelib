@@ -1,12 +1,13 @@
 package eu.europeana.corelib.solr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Field;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.Indexes;
 import eu.europeana.corelib.definitions.edm.entity.AbstractEdmEntity;
 import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import org.bson.types.ObjectId;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Indexed;
 
 /**
  * Contains Quality annotation tier information.
@@ -16,27 +17,27 @@ import dev.morphia.annotations.Indexed;
  * @author Simon Tzanakis (Simon.Tzanakis@europeana.eu)
  * @since 2019-06-13
  */
-@Entity("QualityAnnotation")
+@Embedded(useDiscriminator = false)
+@Indexes(@Index(fields = {@Field("about")}))
 public class QualityAnnotationImpl implements AbstractEdmEntity, QualityAnnotation {
 
-  @Id
-  protected ObjectId id = new ObjectId();
   protected String about;
 
   private String created;
   private String[] target;
-  @Indexed
   private String body;
 
   @JsonIgnore
   @Override
   public ObjectId getId() {
-    return this.id;
+    //Ids are not required for embedded documents
+    return null;
   }
 
   @Override
   public void setId(ObjectId id) {
-    this.id = id;
+    //Ids are not required for embedded documents
+    //Nothing to do
   }
 
   @Override

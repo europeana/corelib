@@ -1,18 +1,23 @@
 package eu.europeana.corelib.edm.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.jibx.RDF;
 import eu.europeana.corelib.definitions.solr.DocType;
 import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.*;
-import org.junit.Test;
-
+import eu.europeana.corelib.solr.entity.AggregationImpl;
+import eu.europeana.corelib.solr.entity.EuropeanaAggregationImpl;
+import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
+import eu.europeana.corelib.solr.entity.ProxyImpl;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests both the EdmUtils and EdmWebResourceUtils classes.
@@ -34,7 +39,7 @@ public class EdmUtilsTest {
         ProxyImpl proxy = new ProxyImpl();
         proxy.setAbout("/proxy/provider/1234/test_5678");
         proxy.setProxyFor("/item/1234/test_5678");
-        proxy.setEdmType(DocType.IMAGE);
+        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
         bean.getProxies().add(proxy);
 
         bean.setProvidedCHOs(new ArrayList<>());

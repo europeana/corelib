@@ -15,7 +15,7 @@ import java.util.Map;
  *
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity ("Agent")
+@Entity (value = "Agent", useDiscriminator = false)
 public class AgentImpl extends ContextualClassImpl implements Agent {
 
 	private Map<String,List<String>> begin;

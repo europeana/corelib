@@ -1,24 +1,19 @@
 package eu.europeana.corelib.db.entity.relational.abstracts;
 
+import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
+import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
+import eu.europeana.corelib.definitions.solr.DocType;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
-
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.apache.commons.lang3.StringUtils;
-
-import eu.europeana.corelib.definitions.db.entity.RelationalDatabase;
-import eu.europeana.corelib.definitions.db.entity.relational.abstracts.EuropeanaUserObject;
-import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
  * Super class Saved europeana objects in my Europeana
@@ -45,8 +40,7 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 	private String europeanaObject;
 
 	@Column(length = FIELDSIZE_DOCTYPE)
-	@Enumerated(EnumType.STRING)
-	private DocType docType = DocType.IMAGE;
+	private String docType = DocType.IMAGE.getEnumNameValue();
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -109,12 +103,12 @@ public abstract class EuropeanaUserObjectImpl extends UserConnectedImpl<Long> im
 	}
 
 	@Override
-	public DocType getDocType() {
+	public String getDocType() {
 		return docType;
 	}
 
 	@Override
-	public void setDocType(DocType docType) {
+	public void setDocType(String docType) {
 		this.docType = docType;
 	}
 }

@@ -44,7 +44,14 @@
             <groupId>eu.europeana.metis</groupId>
             <artifactId>metis-common</artifactId>
             <version>${metis.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.zoho.crm</groupId>
+                    <artifactId>java-sdk</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <!-- OTHER -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -67,7 +74,7 @@
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <version>1.47.3</version>
+            <version>2.2.0</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -89,17 +96,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
-                <configuration>
-                    <argLine>-XX:-UseSplitVerifier</argLine>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

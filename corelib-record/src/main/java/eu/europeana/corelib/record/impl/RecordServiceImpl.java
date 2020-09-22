@@ -76,7 +76,7 @@ public class RecordServiceImpl implements RecordService {
                     redirectDao = null;
                     LOG.warn("Redirect functionality is now disabled");
                 } else {
-                    LOG.error("Error accessing redirect database {}!", redirectDbName, e);
+                    LOG.error("Error accessing redirect database '{}'", redirectDbName, e);
                 }
             }
         }
