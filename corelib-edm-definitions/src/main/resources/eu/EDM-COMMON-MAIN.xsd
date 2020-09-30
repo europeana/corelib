@@ -682,7 +682,7 @@
         </annotation>
     </element>
 
-    <element name="rights" type="rdf:ResourceType">
+    <element name="rights" type="rdf:RightsStatements">
         <annotation>
             <documentation>Information about copyright of the digital object as specified by
                 isShownBy and isShownAt.The value in this element is a URL constructed according to

@@ -174,7 +174,7 @@ public final class EdmUtils {
             for (LicenseImpl lic : licenses) {
                 License license = new License();
                 license.setAbout(lic.getAbout());
-                addAsObject(license, InheritFrom.class,
+                addAsObjectRights(license, InheritFrom.class,
                         lic.getOdrlInheritFrom(), preserveIdentifiers);
                 DateType date = new DateType();
                 date.setDate(new java.sql.Date(lic.getCcDeprecatedOn()
@@ -730,6 +730,26 @@ public final class EdmUtils {
         return false;
     }
 
+    public static boolean addAsObjectRights(Object dest, Class<? extends RightsStatements> clazz, String str, boolean preserveIdentifiers) {
+        try {
+            if (StringUtils.isNotBlank(str)) {
+                Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
+                Object obj = clazz.newInstance();
+                if (EuropeanaUriUtils.isUri(str) || preserveIdentifiers) {
+                    ((RightsStatements) obj).setResource(str);
+                } else {
+                    ((RightsStatements) obj).setResource(getBaseUrl(str));
+                }
+                method.invoke(dest, obj);
+                return true;
+            }
+        } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException
+            | InvocationTargetException | InstantiationException e) {
+            LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
+        }
+        return false;
+    }
+
     public static <T> boolean addAsObject(Object dest, Class<T> clazz, Map<String, List<String>> map) {
         try {
             if ((map != null) && (!map.isEmpty())) {
@@ -793,6 +813,9 @@ public final class EdmUtils {
         String clazzName = clazz.getSimpleName();
         if (StringUtils.equals("Rights", clazzName) && list) {
             clazzName = "Right";
+        }
+        if (StringUtils.equals("RightsStatements", clazzName) && list) {
+            clazzName = "RightsStatements";
         }
         if (StringUtils.equals("SameAs", clazzName) && list) {
             clazzName = "SameA";
