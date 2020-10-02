@@ -18,17 +18,23 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
+import eu.europeana.corelib.record.config.RecordServerBeanConfig;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import eu.europeana.corelib.web.exception.EmailServiceException;
 import eu.europeana.corelib.web.service.EmailService;
+import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static eu.europeana.corelib.db.util.UserUtils.hashPassword;
 
@@ -51,6 +57,10 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
 
     @Resource(name = "corelib_web_emailService")
     private EmailService emailService;
+
+    @Autowired
+    RecordServerBeanConfig recordServerConfig;
+
 
     @Override
     public User create(
@@ -537,8 +547,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
                                                  String europeanaId, EuropeanaUserObject instance) throws DatabaseException {
 
         FullBean bean;
+        Optional<DataSourceWrapper> ds = recordServerConfig.getDefaultDataSource();
+
+        if(ds.isEmpty()){
+            throw new IllegalStateException("No datasource configured");
+        }
         try {
-            bean = recordService.findById(europeanaId);
+            bean = recordService.findById(ds.get(), europeanaId);
         } catch (EuropeanaException e) {
             throw new DatabaseException(e.getProblem(), e);
         }

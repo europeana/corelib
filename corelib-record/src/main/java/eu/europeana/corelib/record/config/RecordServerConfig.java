@@ -4,10 +4,10 @@ import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.record.impl.RecordServiceImpl;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.metis.mongo.RecordRedirectDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Configuration
 public class RecordServerConfig {
@@ -29,17 +29,17 @@ public class RecordServerConfig {
         return new MongoProviderImpl(mongoConnectionUrl, mongoMaxConnectionIdleTime);
     }
 
-    @Bean(name = "corelib_record_mongoServer")
+    @Bean
     public EdmMongoServerImpl edmMongoServer() {
         return new EdmMongoServerImpl(mongoProvider().getMongoClient(), recordDbName, false);
     }
 
-    @Bean(name = "metis_redirect_mongo")
+    @Bean
     public RecordRedirectDao redirectDao() {
         return new RecordRedirectDao(mongoProvider().getMongoClient(), redirectDbName, false);
     }
 
-    @Bean(name = "corelib_record_recordService")
+    @Bean
     public RecordServiceImpl recordService() {
         return new RecordServiceImpl();
     }
