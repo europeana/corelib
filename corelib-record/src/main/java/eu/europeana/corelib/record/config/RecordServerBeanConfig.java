@@ -11,9 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.annotation.PreDestroy;
+import java.util.*;
 
 /**
  * This class configures database connections specified as application properties.
@@ -26,8 +25,9 @@ public class RecordServerBeanConfig {
     private final Map<String, DataSourceWrapper> dataSourceById = new HashMap<>();
 
     private final DataSourceConfigLoader configLoader;
-
     private String defaultDataSourceId;
+
+    private final List<MongoProviderImpl> mongoConnections = new ArrayList<>();
 
     public RecordServerBeanConfig(@Autowired DataSourceConfigLoader configLoader) {
         this.configLoader = configLoader;
@@ -38,7 +38,8 @@ public class RecordServerBeanConfig {
         //TODO: validate connections here.
         for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader.getMongoInstances()) {
             MongoProviderImpl mongoProvider = new MongoProviderImpl(instance.getConnectionUrl(), configLoader.getMongoMaxConnectionIdleTime());
-
+            // keep track of connections, so they can be closed on exit
+            mongoConnections.add(mongoProvider);
             for (DataSourceConfigLoader.DataSourceConfigProperty dsConfig : instance.getSources()) {
                 DataSourceWrapper dsWrapper = new DataSourceWrapper();
                 // create connection to Record db if configured
@@ -113,6 +114,16 @@ public class RecordServerBeanConfig {
             }
         }
         return false;
+    }
+
+    /**
+     * Invoked by Spring container on application exit.
+     * Closes database connections.
+     */
+    @PreDestroy
+    private void closeConnections() {
+        LOG.info("Closing database connections...");
+        mongoConnections.forEach(MongoProviderImpl::close);
     }
 }
 
