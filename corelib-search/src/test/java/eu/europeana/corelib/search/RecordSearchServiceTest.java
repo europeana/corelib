@@ -144,7 +144,7 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("musi");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         Assert.assertNull(results.getSpellcheck());
     }
 
@@ -183,7 +183,7 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("*:*");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
         FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId());
         assertNotNull(fBean);
@@ -193,7 +193,7 @@ public class RecordSearchServiceTest {
     public void testGetLastSolrUpdate() throws EuropeanaException {
         LOG.info("TEST testGestLastSolrUpdate");
         testCount++;
-        assertNotNull(searchService.getLastSolrUpdate());
+        assertNotNull(searchService.getLastSolrUpdate(solrServer));
     }
 
     /**
@@ -207,7 +207,7 @@ public class RecordSearchServiceTest {
         Query query = new Query("keyboard");
 
         query.setSort("score descending timestamp_created asc+timestamp_update,COMPLETENESS");
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer,BriefBean.class, query);
         assertNotNull(results);
         assertTrue(results.getResultSize() > 0);
     }

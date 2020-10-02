@@ -45,7 +45,6 @@ public class SearchServerConfig {
     @Bean
     public SearchServiceImpl defaultSearchService() {
         SearchServiceImpl searchServiceImpl = new SearchServiceImpl();
-        searchServiceImpl.setSolrClient(defaultSolrClient());
         return searchServiceImpl;
     }
 
@@ -64,7 +63,6 @@ public class SearchServerConfig {
     @Profile("single-solr")
     public SearchServiceImpl singleSolrSearchService() {
         SearchServiceImpl searchServiceImpl = new SearchServiceImpl();
-        searchServiceImpl.setSolrClient(singleSolrClient());
         return searchServiceImpl;
     }
 }

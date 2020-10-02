@@ -53,7 +53,7 @@ public class RecordServerConfig {
                 // create connection to Redirect db if configured
                 if (dsConfig.getRedirectDbName().isPresent()) {
                     RecordRedirectDao redirectDb = new RecordRedirectDao(mongoProvider.getMongoClient(), dsConfig.getRedirectDbName().get(), false);
-                    if(validateRedirectDbConnection(redirectDb, dsConfig.getRedirectDbName().get())) {
+                    if (validateRedirectDbConnection(redirectDb, dsConfig.getRedirectDbName().get())) {
                         dsWrapper.setRedirectDb(redirectDb);
                         LOG.info("Registered RecordRedirectDao  for data source: {}, redirect-dbName={}", dsConfig.getId(), dsConfig.getRedirectDbName().get());
                     }
@@ -76,7 +76,7 @@ public class RecordServerConfig {
     /**
      * Gets data sources with the given id
      *
-     * @param id Data source ID
+     * @param id configured data source ID
      * @return Optional containing matching data sources
      */
     public Optional<DataSourceWrapper> getDataSourceById(String id) {
@@ -86,7 +86,9 @@ public class RecordServerConfig {
     /**
      * Gets the default data sources.
      * This will also be the first Record DB / Redirect DB pair in the app configuration
+     *
      * @return Optional containing matching data sources.
+     * @deprecated  use #getDataSourceById(String)
      */
     public Optional<DataSourceWrapper> getDefaultDataSource() {
         return Optional.ofNullable(dataSourceById.get(defaultDataSourceId));
@@ -96,6 +98,7 @@ public class RecordServerConfig {
      * Check if the redirectDao works fine. If not we disable it.
      * This is a temporary hack so we can use the Record API without a redirect database (for Metis Sandbox)
      * When we switch to Spring-Boot we can implement a more elegant solution with @ConditionalOnProperty for example
+     *
      * @param redirectDb
      * @param redirectDbName
      */

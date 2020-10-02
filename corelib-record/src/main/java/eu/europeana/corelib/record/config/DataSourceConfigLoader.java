@@ -1,5 +1,6 @@
 package eu.europeana.corelib.record.config;
 
+import eu.europeana.corelib.utils.ConfigUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+
+import static eu.europeana.corelib.utils.ConfigUtils.SEPARATOR;
+import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
 
 
 /**
@@ -28,12 +32,9 @@ import java.util.Properties;
  */
 @Configuration
 public class DataSourceConfigLoader {
-    private static final String SEPARATOR = ".";
     private static final String CONNECTION_URL_PROP = "connectionUrl";
     private static final String RECORD_DB_PROP = "record-dbname";
     private static final String REDIRECT_DB_URL_PROP = "redirect-dbname";
-
-    private static final String DEFAULT_DATASOURCE_ID = "default";
 
     private Properties properties;
 
@@ -59,7 +60,6 @@ public class DataSourceConfigLoader {
     @PostConstruct
     void loadMongoConfig() {
         int instanceNo = 1;
-
         while (containsKeyPrefix(properties, "mongo" + instanceNo)) {
             String basePath = "mongo" + instanceNo + SEPARATOR;
             MongoConfigProperty instance = new MongoConfigProperty();
@@ -94,18 +94,7 @@ public class DataSourceConfigLoader {
     }
 
 
-    /**
-     * Checks if a key with the given prefix is contained within a Properties object.
-     *
-     * @param properties Properties object
-     * @param keyPrefix  key prefix to check for
-     * @return true if prefix is contained within properties object, false otherwise.
-     */
-    private boolean containsKeyPrefix(Properties properties, String keyPrefix) {
-        return properties.keySet().stream().anyMatch(k
-                -> k.toString().startsWith(keyPrefix)
-        );
-    }
+
 
     public String getMongoMaxConnectionIdleTime() {
         return mongoMaxConnectionIdleTime;

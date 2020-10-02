@@ -15,6 +15,8 @@
 
 	<!-- INTERNAL -->
 	<bean class="eu.europeana.corelib.search.config.SearchServerConfig" />
+	<bean class="eu.europeana.corelib.search.config.SolrConfigLoader" />
+	<bean class="eu.europeana.corelib.search.config.SearchServerBeanConfig" />
 
     <context:annotation-config/>
 
