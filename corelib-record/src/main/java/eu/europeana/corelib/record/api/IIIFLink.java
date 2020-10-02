@@ -27,6 +27,7 @@ public final class IIIFLink {
     private static final String HTTPS_SCHEMA_ORG_PUBLICATION_ISSUE = "https://schema.org/PublicationIssue";
     private static final String HTTP_WWW_EUSCREEN_EU               = "http://www.euscreen.eu";
     private static final String HTTPS_WWW_EUSCREEN_EU              = "https://www.euscreen.eu";
+    private static final String DEFAULT_IIIF_BASE_URL = "https://iiif.europeana.eu";
 
     private IIIFLink() {
         // empty constructor to prevent initialization
@@ -40,8 +41,10 @@ public final class IIIFLink {
      *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
      *                       by the api2BaseUrl value
      * @param api2BaseUrl    FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
+     *
+     * @param manifestBaseUrl IIIF manifest location
      */
-    public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
+    public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl, String manifestBaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
         if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && !hasReferencedBy(bean) &&
@@ -49,7 +52,8 @@ public final class IIIFLink {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    String iifBaseUrl = StringUtils.isBlank(manifestBaseUrl) ? DEFAULT_IIIF_BASE_URL : manifestBaseUrl;
+                    String iiifId = iifBaseUrl + "/presentation" + bean.getAbout() + "/manifest";
                     if (Boolean.TRUE.equals(manifestAddUrl)) {
                         iiifId = iiifId + "?recordApi=" + api2BaseUrl;
                     }
