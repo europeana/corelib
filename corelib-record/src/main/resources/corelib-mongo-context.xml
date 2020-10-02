@@ -15,8 +15,7 @@
 
     <!-- INTERNAL -->
     <bean class="eu.europeana.corelib.record.config.DataSourceConfigLoader"/>
-<!--    <bean class="eu.europeana.corelib.record.config.RecordServerConfig"/>-->
-    <bean class="eu.europeana.corelib.record.config.RecordServerBeanConfig"/>
+    <bean class="eu.europeana.corelib.record.config.RecordServerConfig"/>
     <bean class="eu.europeana.corelib.record.impl.RecordServiceImpl"/>
 
     <context:annotation-config/>
