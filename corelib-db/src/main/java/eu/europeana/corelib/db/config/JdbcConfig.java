@@ -13,20 +13,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 @Configuration
-public class DataConfig implements TransactionManagementConfigurer {
+public class JdbcConfig implements TransactionManagementConfigurer {
 
     @Value("#{europeanaProperties['db.driverClass']}")
     private String jdbcDriverClass;
 
     @Value("#{europeanaProperties['postgres.jdbcUrl']}")
     private String jdbcUrl;
-
-    @Value("#{europeanaProperties['mongodb.connectionUrl']}")
-    private String mongoConnectionUrl;
-
-    @Value("#{europeanaProperties['mongodb.max.connection.idle.time']}")
-    private String mongoMaxConnectionIdleTime;
-
 
     /**
      * When deploying on Cloud Foundry this dataSource is ignored because when there is 1 database service defined in
@@ -47,11 +40,6 @@ public class DataConfig implements TransactionManagementConfigurer {
     }
 
 
-    @Bean(name = "corelib_db_mongoProvider", destroyMethod = "close")
-    public MongoProviderImpl mongoProvider() {
-        return new MongoProviderImpl(mongoConnectionUrl, mongoMaxConnectionIdleTime);
-    }
-
     @Bean(name = "corelib_db_entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -66,7 +54,7 @@ public class DataConfig implements TransactionManagementConfigurer {
         return entityManagerFactoryBean;
     }
 
-    @Bean(name = "corelib_db_transactionManager")
+    @Bean
     @Primary
     public JpaTransactionManager txManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

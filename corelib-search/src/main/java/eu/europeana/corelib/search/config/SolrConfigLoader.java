@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import static eu.europeana.corelib.utils.ConfigUtils.SEPARATOR;
 import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
 
 @Configuration
 public class SolrConfigLoader {
-
     private static final String URL_PROP = "url";
     private static final String CORE_PROP = "core";
     private static final String ZOOKEEPER_URL_PROP = "zookeeper.url";
@@ -32,7 +28,7 @@ public class SolrConfigLoader {
     }
 
     @PostConstruct
-    void loadMongoConfig() {
+    void loadConfig() {
         int solrInstanceNo = 1;
         while (containsKeyPrefix(properties, "solr" + solrInstanceNo)) {
             String basePath = "solr" + solrInstanceNo + SEPARATOR;
@@ -49,21 +45,27 @@ public class SolrConfigLoader {
     }
 
     public List<SolrConfigProperty> getSolrInstances() {
-        return solrInstances;
+        return Collections.unmodifiableList(solrInstances);
     }
 
+    public SolrConfigProperty getInstance(int index) {
+        return solrInstances.get(index);
+    }
+
+    /**
+     * Helper class to contain config properties
+     */
     static class SolrConfigProperty {
         private final String id;
         private final String url;
         private final String coreCollection;
         private final String zookeeperUrl;
 
-
         public SolrConfigProperty(String id, String url, String coreCollection, String zookeeperUrl) {
             // if zookeeperUrl is specified, then core collection is also required
             if (StringUtils.isAnyBlank(id, url) || StringUtils.isAnyBlank(zookeeperUrl, coreCollection)) {
                 throw new IllegalArgumentException(String.format(
-                        "Invalid Solr config .properties file: id=%s, url=%s, core=%s, zookeeperUrl=%s", id, url, coreCollection, zookeeperUrl
+                        "Invalid Solr config: id=%s, url=%s, core=%s, zookeeperUrl=%s", id, url, coreCollection, zookeeperUrl
                 ));
             }
             this.id = id;
@@ -87,7 +89,5 @@ public class SolrConfigLoader {
         public Optional<String> getZookeeperUrl() {
             return Optional.ofNullable(zookeeperUrl);
         }
-
     }
-
 }

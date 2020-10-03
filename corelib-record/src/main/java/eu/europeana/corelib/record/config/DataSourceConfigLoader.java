@@ -9,10 +9,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import static eu.europeana.corelib.utils.ConfigUtils.SEPARATOR;
 import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
@@ -86,7 +83,7 @@ public class DataSourceConfigLoader {
     }
 
     public List<MongoConfigProperty> getMongoInstances() {
-        return mongoConfigProperties;
+        return Collections.unmodifiableList(mongoConfigProperties);
     }
 
     public MongoConfigProperty getInstance(int index) {

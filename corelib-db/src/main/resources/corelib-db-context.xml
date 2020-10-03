@@ -18,7 +18,7 @@
 
 
 	<!-- INTERNAL DEFINITIONS -->
-	<bean class="eu.europeana.corelib.db.config.DataConfig" />
+	<bean class="eu.europeana.corelib.db.config.JdbcConfig" />
 	<import resource="internal/corelib-db-dao.xml"/>
 	<import resource="internal/corelib-db-internal.xml"/>
 

@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * This class configures database connections specified as application properties.
- * It also enables the retrieval of a Record DB/Redirect DB pairs by a unique identifier.
+ * It also enables the retrieval of Record DB/Redirect DB pairs by a unique identifier.
  */
 @Configuration
 public class RecordServerConfig {
@@ -35,7 +35,6 @@ public class RecordServerConfig {
 
     @PostConstruct
     private void setupDataSources() {
-        //TODO: validate connections here.
         for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader.getMongoInstances()) {
             MongoProviderImpl mongoProvider = new MongoProviderImpl(instance.getConnectionUrl(), configLoader.getMongoMaxConnectionIdleTime());
             // keep track of connections, so they can be closed on exit
@@ -121,7 +120,6 @@ public class RecordServerConfig {
 
     /**
      * Invoked by Spring container on application exit.
-     * Closes database connections.
      */
     @PreDestroy
     private void closeConnections() {

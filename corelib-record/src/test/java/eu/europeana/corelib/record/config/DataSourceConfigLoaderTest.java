@@ -6,8 +6,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
-public class DataSourceConfigPropertyConfigLoaderTest {
-
+public class DataSourceConfigLoaderTest {
 
     @Test
     public void shouldLoadConfigCorrectly() {
@@ -32,7 +31,6 @@ public class DataSourceConfigPropertyConfigLoaderTest {
         props.setProperty("mongo1.source1.redirect-dbname", "record-dbName");
         new DataSourceConfigLoader(props).loadMongoConfig();
     }
-
 
 
     private Properties setupProperties(int numMongo, int numDataSources) {

@@ -14,10 +14,9 @@
     <import resource="corelib-definitions-context.xml" />
 
 	<!-- INTERNAL -->
-	<bean class="eu.europeana.corelib.search.config.SearchServerConfig" />
 	<bean class="eu.europeana.corelib.search.config.SolrConfigLoader" />
-	<bean class="eu.europeana.corelib.search.config.SearchServerBeanConfig" />
-
+	<bean class="eu.europeana.corelib.search.config.SearchServerConfig" />
+	<bean class="eu.europeana.corelib.search.impl.SearchServiceImpl" />
     <context:annotation-config/>
 
 </beans>
