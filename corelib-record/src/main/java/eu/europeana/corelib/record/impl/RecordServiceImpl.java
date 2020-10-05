@@ -45,6 +45,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Value("#{europeanaProperties['portal.baseUrl']}")
     private String portalBaseUrl;
+    @Value("#{europeanaProperties['iiifManifest.baseUrl']}")
+    private String manifestBaseUrl;
     @Value("#{europeanaProperties['apiGateway.baseUrl']}")
     private String apiGatewayBaseUrl;
     @Value("#{europeanaProperties['api2.baseUrl']}")
@@ -143,7 +145,7 @@ public class RecordServiceImpl implements RecordService {
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
 
         // 2. add link to IIIF for newspaper and AV/EUScreen items
-        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, api2BaseUrl);
+        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, api2BaseUrl, manifestBaseUrl);
 
         // 3. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);
