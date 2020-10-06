@@ -49,7 +49,7 @@ public final class IIIFLink {
     public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl, String manifestBaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && !hasReferencedBy(bean) &&
+        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) &&
             bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
