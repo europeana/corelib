@@ -17,7 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,9 +34,6 @@ public class RecordServiceImpl implements RecordService {
 
     private static final Logger LOG = LogManager.getLogger(RecordServiceImpl.class);
 
-
-    @Value("${mongodb.redirect.dbname}")
-    private String redirectDbName;
 
     @Value("#{europeanaProperties['portal.baseUrl']}")
     private String portalBaseUrl;

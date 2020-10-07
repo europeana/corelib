@@ -3,7 +3,6 @@ package eu.europeana.corelib.record;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**

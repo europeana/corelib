@@ -1,6 +1,5 @@
 package eu.europeana.corelib.db.config;
 
-import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

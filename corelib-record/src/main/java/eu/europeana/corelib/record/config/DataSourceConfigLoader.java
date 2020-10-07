@@ -1,6 +1,5 @@
 package eu.europeana.corelib.record.config;
 
-import eu.europeana.corelib.utils.ConfigUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

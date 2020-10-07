@@ -1,6 +1,5 @@
 package eu.europeana.corelib.search.impl;
 
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
@@ -18,13 +17,6 @@ import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -32,10 +24,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.LukeRequest;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CursorMarkParams;
@@ -44,7 +33,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans from Solr
