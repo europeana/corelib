@@ -35,6 +35,8 @@ public class RecordServiceImpl implements RecordService {
 
     private static final Logger LOG = LogManager.getLogger(RecordServiceImpl.class);
 
+    @Value("#{europeanaProperties['iiifManifest.baseUrl']}")
+    private String manifestBaseUrl;
     @Value("#{europeanaProperties['manifest.add.url']}")
     private Boolean manifestAddUrl;
     @Value("#{europeanaProperties['htmlsnippet.css.source']}")
@@ -107,7 +109,7 @@ public class RecordServiceImpl implements RecordService {
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
 
         // 2. add link to IIIF for newspaper and AV/EUScreen items
-        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl());
+        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
 
         // 3. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);

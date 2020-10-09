@@ -43,6 +43,7 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
     private static final String VCAP_API2_BASEURL = "api2_baseUrl"; // matches api2.baseUrl in europeana.properties
     private static final String VCAP_GATEWAY_BASEURL = "apiGateway_baseUrl"; // matches apiGateway.baseUrl in europeana.properties
     private static final String VCAP_PORTAL_BASEURL = "portal_baseUrl"; // matches portal.baseUrl in europeana.properties
+    private static final String VCAP_MANIFEST_BASEURL="iiifManifest_baseUrl"; // matches iiifManifest.baseUrl in europeana.properties
 
     private static StandardServletEnvironment env = new StandardServletEnvironment();
 
@@ -66,6 +67,7 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             setVcapUrlProperty(props, VCAP_API2_BASEURL);
             setVcapUrlProperty(props, VCAP_GATEWAY_BASEURL);
             setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
+            setVcapUrlProperty(props, VCAP_MANIFEST_BASEURL);
 
             // Set route-specific VCAP properties
             setVcapUrlOverrides(props, VCAP_API2_BASEURL);
