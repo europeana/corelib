@@ -1,5 +1,6 @@
 package eu.europeana.corelib.web.context;
 
+import eu.europeana.corelib.utils.ConfigUtils;
 import eu.europeana.corelib.web.socks.SocksProxy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -61,10 +62,15 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         try (FileInputStream fis = new FileInputStream(europeanaProperties)){
             props.load(fis);
 
-            // Add VCAP properties for API2, Gateway and Portal to the loaded properties
+            // Add default VCAP properties for API2, Gateway and Portal to the loaded properties
             setVcapUrlProperty(props, VCAP_API2_BASEURL);
             setVcapUrlProperty(props, VCAP_GATEWAY_BASEURL);
             setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
+
+            // Set route-specific VCAP properties
+            setVcapUrlOverrides(props, VCAP_API2_BASEURL);
+            setVcapUrlOverrides(props, VCAP_GATEWAY_BASEURL);
+            setVcapUrlOverrides(props, VCAP_PORTAL_BASEURL);
 
             // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate
             // time elsewhere in the (api) code
@@ -105,6 +111,20 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             LOG.info("VCAP Url property {} with is added to application properties as {}. Value = {}", vcapKey, propKey, props.getProperty(propKey));
         }
     }
+
+    /**
+     * BaseURLs can be overridden for specific routes.eg: route1_api2_baseUrl
+     * Load these overrides here.
+     */
+    private void setVcapUrlOverrides(Properties props, String vcapKey){
+        int propNo=1;
+
+        while(ConfigUtils.containsKeyPrefix(env.getSystemEnvironment(), "route" + propNo + "_" + vcapKey)){
+            setVcapUrlProperty(props,"route" + propNo + "_" + vcapKey);
+            propNo ++;
+        }
+    }
+
 
     /**
      * We rewrite properties to file so any changes made here can be read later by Spring

@@ -18,6 +18,7 @@ import eu.europeana.corelib.definitions.db.entity.relational.abstracts.Europeana
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.record.config.RecordServerConfig;
@@ -551,7 +552,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements
             throw new IllegalStateException("No datasource configured");
         }
         try {
-            bean = recordService.findById(ds.get(), europeanaId);
+            // BaseUrlWrapper added to fix compilation error. TODO: This class should be deleted as it isn't used anymore
+            bean = recordService.findById(ds.get(), europeanaId, new BaseUrlWrapper("", "",""));
         } catch (EuropeanaException e) {
             throw new DatabaseException(e.getProblem(), e);
         }

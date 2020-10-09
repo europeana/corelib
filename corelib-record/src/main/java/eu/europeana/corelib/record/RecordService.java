@@ -24,23 +24,25 @@ public interface RecordService {
      * @param datasource Record server + Redirect DAO implementation to use for query
      * @param collectionId id of the collection to which this record belongs
      * @param recordId id of the record in a collection
+     * @param urls Base urls to use in enriching bean
      * @return FullBean including WebResources
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId) throws EuropeanaException;
+    FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException;
 
     /**
      * Retrieves a record including all it's {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
      *
      * @param europeanaObjectId The unique europeana id
+     * @param urls Base urls to use in enriching bean
      * @return FullBean including WebResources
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean findById(DataSourceWrapper datasource, String europeanaObjectId) throws EuropeanaException;
+    FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException;
 
     /**
      * Retrieve a record object from the database (without {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
-     * Use {@link #enrichFullBean(EdmMongoServer, FullBean)} to add the web resources meta info an attribution snippets
+     * Use {@link #enrichFullBean(EdmMongoServer, FullBean, BaseUrlWrapper)} to add the web resources meta info an attribution snippets
      *
      * @param europeanaObjectId The unique europeana id
      * @param resolveId if true and the record was not found, then the resolve method is used to check if this record has
@@ -68,7 +70,7 @@ public interface RecordService {
      * @return enriched full bean
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean) throws EuropeanaException;
+    FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean, BaseUrlWrapper baseUrls) throws EuropeanaException;
 
     /**
      * Checks if an europeanaObjectId is old and has a newId. Note that this new id may also be old so we check iteratively
