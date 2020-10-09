@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DataSourceConfigLoaderTest {
 
@@ -23,7 +24,7 @@ public class DataSourceConfigLoaderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowOnMissingDatasourceId() {
+    public void shouldThrowOnMissingId() {
         Properties props = new Properties();
         // no data source ID in props
         props.setProperty("mongo1.connectionUrl", "mongo://connection-string");
@@ -32,6 +33,42 @@ public class DataSourceConfigLoaderTest {
         new DataSourceConfigLoader(props).loadMongoConfig();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowOnEmptyId() {
+        Properties props = new Properties();
+        props.setProperty("mongo1.source1.id", "");
+        props.setProperty("mongo1.connectionUrl", "mongo://connection-string");
+        props.setProperty("mongo1.source1.record-dbname", "record-dbName");
+        props.setProperty("mongo1.source1.redirect-dbname", "record-dbName");
+        new DataSourceConfigLoader(props).loadMongoConfig();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowOnEmptyConnectionString() {
+        Properties props = new Properties();
+
+        props.setProperty("mongo1.source1.id", "dsId");
+        props.setProperty("mongo1.connectionUrl", "");
+        props.setProperty("mongo1.source1.record-dbname", "record-dbName");
+        props.setProperty("mongo1.source1.redirect-dbname", "");
+
+        new DataSourceConfigLoader(props).loadMongoConfig();
+    }
+
+    @Test
+    public void shouldIgnoreEmptyRedirectDbConfig() {
+        Properties props = new Properties();
+
+        props.setProperty("mongo1.source1.id", "dsId");
+        props.setProperty("mongo1.connectionUrl", "mongo://connection-string");
+        props.setProperty("mongo1.source1.record-dbname", "record-dbName");
+        props.setProperty("mongo1.source1.redirect-dbname", "");
+
+        DataSourceConfigLoader loader = new DataSourceConfigLoader(props);
+        loader.loadMongoConfig();
+
+        assertTrue(loader.getInstance(0).getSource(0).getRedirectDbName().isEmpty());
+    }
 
     private Properties setupProperties(int numMongo, int numDataSources) {
         Properties props = new Properties();

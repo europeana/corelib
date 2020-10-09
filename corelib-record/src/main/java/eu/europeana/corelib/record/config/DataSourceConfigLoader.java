@@ -1,14 +1,19 @@
 package eu.europeana.corelib.record.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.function.Predicate;
 
 import static eu.europeana.corelib.utils.ConfigUtils.SEPARATOR;
 import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
@@ -90,12 +95,9 @@ public class DataSourceConfigLoader {
     }
 
 
-
-
     public String getMongoMaxConnectionIdleTime() {
         return mongoMaxConnectionIdleTime;
     }
-
 
 
     static class MongoConfigProperty {
@@ -107,6 +109,10 @@ public class DataSourceConfigLoader {
         }
 
         private void setConnectionUrl(String connectionUrl) {
+            if (StringUtils.isEmpty(connectionUrl)) {
+                throw new IllegalArgumentException("ConnectionUrl cannot be empty for Mongo config");
+            }
+
             this.connectionUrl = connectionUrl;
         }
 
@@ -143,7 +149,7 @@ public class DataSourceConfigLoader {
 
         private DataSourceConfigProperty(@Nonnull String id, String redirectDbName, String recordDbName) {
             if (StringUtils.isEmpty(id)) {
-                throw new IllegalArgumentException(String.format("Data source ID missing in .properties file. redirectDbName=%s, recordDbName=%s", redirectDbName, recordDbName));
+                throw new IllegalArgumentException(String.format("Data source ID missing in properties. redirectDbName=%s, recordDbName=%s", redirectDbName, recordDbName));
             }
 
             this.id = id;
@@ -155,12 +161,22 @@ public class DataSourceConfigLoader {
             return id;
         }
 
+        /**
+         * Gets the configured Redirect DB name.
+         *
+         * @return Optional containing configured value, or empty optional if value is empty.
+         */
         public Optional<String> getRedirectDbName() {
-            return Optional.ofNullable(redirectDbName);
+            return Optional.ofNullable(redirectDbName).filter(Predicate.not(StringUtils::isEmpty));
         }
 
+        /**
+         * Gets the configured Record DB name
+         *
+         * @return Optional containing configured value, or empty optional if value is empty.
+         */
         public Optional<String> getRecordDbName() {
-            return Optional.ofNullable(recordDbName);
+            return Optional.ofNullable(recordDbName).filter(Predicate.not(StringUtils::isEmpty));
         }
 
 

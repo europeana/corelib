@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.function.Predicate;
 
 import static eu.europeana.corelib.utils.ConfigUtils.SEPARATOR;
 import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
@@ -62,8 +67,10 @@ public class SolrConfigLoader {
         private final String zookeeperUrl;
 
         public SolrConfigProperty(String id, String url, String coreCollection, String zookeeperUrl) {
-            // if zookeeperUrl is specified, then core collection is also required
-            if (StringUtils.isAnyBlank(id, url) || StringUtils.isAnyBlank(zookeeperUrl, coreCollection)) {
+
+            if (StringUtils.isAnyBlank(id, url) ||
+                    // if zookeeperUrl is specified, then core collection is also required
+                    (StringUtils.isBlank(zookeeperUrl) ^ StringUtils.isBlank(coreCollection))) {
                 throw new IllegalArgumentException(String.format(
                         "Invalid Solr config: id=%s, url=%s, core=%s, zookeeperUrl=%s", id, url, coreCollection, zookeeperUrl
                 ));
@@ -83,11 +90,13 @@ public class SolrConfigLoader {
         }
 
         public Optional<String> getCoreCollection() {
-            return Optional.ofNullable(coreCollection);
+            return Optional.ofNullable(coreCollection).filter(Predicate.not(StringUtils::isEmpty));
         }
 
         public Optional<String> getZookeeperUrl() {
-            return Optional.ofNullable(zookeeperUrl);
+            return Optional.ofNullable(zookeeperUrl).filter(Predicate.not(StringUtils::isEmpty));
         }
     }
+
+
 }

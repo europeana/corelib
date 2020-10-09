@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SolrConfigLoaderTest {
     @Test
-    public void shouldLoadConfigProperly() {
+    public void shouldLoadConfigWithZookeeperUrl() {
         Properties props = setupProperties();
         SolrConfigLoader loader = new SolrConfigLoader(props);
         loader.loadConfig();
@@ -18,6 +18,19 @@ public class SolrConfigLoaderTest {
         assertEquals("solr-url-1", loader.getInstance(0).getUrl());
         assertEquals("zookeeper-1", loader.getInstance(0).getZookeeperUrl().get());
         assertEquals("collection-1", loader.getInstance(0).getCoreCollection().get());
+    }
+
+    @Test
+    public void shouldLoadConfigWithoutZookeeperUrl() {
+        Properties props = new Properties();
+        props.setProperty("solr1.id", "solr1");
+        props.setProperty("solr1.url", "solr-url-1");
+
+        SolrConfigLoader loader = new SolrConfigLoader(props);
+        loader.loadConfig();
+
+        assertEquals("solr1", loader.getInstance(0).getId());
+        assertEquals("solr-url-1", loader.getInstance(0).getUrl());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -42,6 +55,28 @@ public class SolrConfigLoaderTest {
         SolrConfigLoader loader = new SolrConfigLoader(props);
         loader.loadConfig();
     }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowOnMissingCoreCollectionWithZookeeperUrl() {
+        Properties props = new Properties();
+        props.setProperty("solr1.id", "id1");
+        props.setProperty("solr1.url", "solr-url-1");
+        props.setProperty("solr1.zookeeper.url", "zookeeper-1");
+        SolrConfigLoader loader = new SolrConfigLoader(props);
+        loader.loadConfig();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowOnMissingZookeeperUrlWithCoreCollection() {
+        Properties props = new Properties();
+        props.setProperty("solr1.id", "id1");
+        props.setProperty("solr1.url", "solr-url-1");
+        props.setProperty("solr1.core", "collection-1");
+        SolrConfigLoader loader = new SolrConfigLoader(props);
+        loader.loadConfig();
+    }
+
 
     private Properties setupProperties() {
         Properties props = new Properties();
