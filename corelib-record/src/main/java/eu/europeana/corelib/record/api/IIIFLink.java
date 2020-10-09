@@ -5,10 +5,12 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.metis.utils.MediaType;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public final class IIIFLink {
     private static final String HTTPS_SCHEMA_ORG_PUBLICATION_ISSUE = "https://schema.org/PublicationIssue";
     private static final String HTTP_WWW_EUSCREEN_EU               = "http://www.euscreen.eu";
     private static final String HTTPS_WWW_EUSCREEN_EU              = "https://www.euscreen.eu";
+    private static final String DEFAULT_IIIF_BASE_URL = "https://iiif.europeana.eu";
 
     private IIIFLink() {
         // empty constructor to prevent initialization
@@ -40,26 +43,55 @@ public final class IIIFLink {
      *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
      *                       by the api2BaseUrl value
      * @param api2BaseUrl    FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
+     *
+     * @param manifestBaseUrl IIIF manifest location
      */
-    public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl) {
+    public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl, String manifestBaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && !hasReferencedBy(bean) &&
+        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) &&
             bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
                 for (WebResource wr : a.getWebResources()) {
-                    String iiifId = "https://iiif.europeana.eu/presentation" + bean.getAbout() + "/manifest";
+                    String iifBaseUrl = StringUtils.isBlank(manifestBaseUrl) ? DEFAULT_IIIF_BASE_URL : manifestBaseUrl;
+                    String iiifId = iifBaseUrl + "/presentation" + bean.getAbout() + "/manifest";
                     if (Boolean.TRUE.equals(manifestAddUrl)) {
                         iiifId = iiifId + "?recordApi=" + api2BaseUrl;
                     }
-                    wr.setDctermsIsReferencedBy(new String[]{iiifId});
+
+                    // update reference link if no dcTermsIsReferencedBy is set
+                    if (ArrayUtils.isEmpty(wr.getDctermsIsReferencedBy())) {
+                        wr.setDctermsIsReferencedBy(new String[]{iiifId});
+                        continue;
+                    }
+
+                    // if dcTermsIsReferencedBy already exists, only update values starting with http(s)://iiif.europeana.eu
+                    List<String> dcTerms = new ArrayList<>();
+                    for (String referenceUrl : wr.getDctermsIsReferencedBy()) {
+                        dcTerms.add(shouldUpdateManifestUrl(manifestBaseUrl, referenceUrl) ? iiifId : referenceUrl);
+                    }
+                    wr.setDctermsIsReferencedBy(dcTerms.toArray(new String[0]));
                 }
             }
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("AddReferencedByIIIF took {} ns", System.nanoTime() - start);
         }
+    }
+
+    /**
+     * Determines if the IIIF manifest link in a WebResource should be updated.
+     * This should be updated when the WebResource has a dcTermsIsReferencedBy value that starts with "http://iiif.europeana.eu" or "https://iiif.europeana.eu" AND
+     * the manifestBaseUrl config property is set.
+     *
+     * @param reference       existing IIIF link in resource
+     * @param manifestBaseUrl configured baseUrl property for manifest links
+     * @return true if conditions match
+     */
+    private static boolean shouldUpdateManifestUrl(String manifestBaseUrl, String reference) {
+        return StringUtils.isNotBlank(manifestBaseUrl) &&
+                StringUtils.startsWithAny(reference, new String[]{"http://iiif.europeana.eu", "https://iiif.europeana.eu"});
     }
 
     /**
