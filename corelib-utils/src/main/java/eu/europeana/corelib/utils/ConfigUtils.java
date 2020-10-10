@@ -1,7 +1,10 @@
 package eu.europeana.corelib.utils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Contains convenience methods for loading config properties
@@ -34,6 +37,22 @@ public class ConfigUtils {
         return map.keySet().stream().anyMatch(k
                 -> k.startsWith(keyPrefix)
         );
+    }
+
+
+    /**
+     * Gets all keys within the map that match a regular expression
+     *
+     * @param map   map to search
+     * @param regex regular expression pattern to match keys against
+     * @return list containing matching keys
+     */
+    public static List<String> getMatchingKeys(Map<String, ?> map, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        return map.keySet()
+                .stream()
+                .filter(pattern.asMatchPredicate())
+                .collect(Collectors.toUnmodifiableList());
     }
 
 }

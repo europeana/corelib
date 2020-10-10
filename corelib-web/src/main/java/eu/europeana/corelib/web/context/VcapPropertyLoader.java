@@ -15,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Bridge between the VCAP (a.k.a. Cloud Foundry) metadata and the europeana.properties file (part of the war).This reads the
@@ -45,7 +47,10 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
     private static final String VCAP_PORTAL_BASEURL = "portal_baseUrl"; // matches portal.baseUrl in europeana.properties
     private static final String VCAP_MANIFEST_BASEURL="iiifManifest_baseUrl"; // matches iiifManifest.baseUrl in europeana.properties
 
-    private static StandardServletEnvironment env = new StandardServletEnvironment();
+    private static final StandardServletEnvironment env = new StandardServletEnvironment();
+
+    // Used to find route-specific baseUrl settings in env. Keys have the format route(number)_(baseUrl)
+    private static final String ROUTE_BASEURL_PROP_REGEX=String.format("^route\\d+_(%s|%s|%s)", VCAP_API2_BASEURL, VCAP_GATEWAY_BASEURL, VCAP_PORTAL_BASEURL);
 
     public VcapPropertyLoader() {
         super();
@@ -69,10 +74,9 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
             setVcapUrlProperty(props, VCAP_MANIFEST_BASEURL);
 
-            // Set route-specific VCAP properties
-            setVcapUrlOverrides(props, VCAP_API2_BASEURL);
-            setVcapUrlOverrides(props, VCAP_GATEWAY_BASEURL);
-            setVcapUrlOverrides(props, VCAP_PORTAL_BASEURL);
+            // BaseURLs can be overridden for specific routes.eg: route1_api2_baseUrl. Load these here
+            List<String> routeBaseUrls = ConfigUtils.getMatchingKeys(env.getSystemEnvironment(), ROUTE_BASEURL_PROP_REGEX);
+            routeBaseUrls.forEach(key -> setVcapUrlProperty(props, key));
 
             // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate
             // time elsewhere in the (api) code
@@ -113,20 +117,6 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             LOG.info("VCAP Url property {} with is added to application properties as {}. Value = {}", vcapKey, propKey, props.getProperty(propKey));
         }
     }
-
-    /**
-     * BaseURLs can be overridden for specific routes.eg: route1_api2_baseUrl
-     * Load these overrides here.
-     */
-    private void setVcapUrlOverrides(Properties props, String vcapKey){
-        int propNo=1;
-
-        while(ConfigUtils.containsKeyPrefix(env.getSystemEnvironment(), "route" + propNo + "_" + vcapKey)){
-            setVcapUrlProperty(props,"route" + propNo + "_" + vcapKey);
-            propNo ++;
-        }
-    }
-
 
     /**
      * We rewrite properties to file so any changes made here can be read later by Spring
