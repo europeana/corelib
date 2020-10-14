@@ -5,6 +5,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
@@ -185,7 +186,7 @@ public class RecordSearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId());
+        FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 

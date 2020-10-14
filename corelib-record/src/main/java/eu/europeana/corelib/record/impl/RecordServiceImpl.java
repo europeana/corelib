@@ -3,6 +3,7 @@ package eu.europeana.corelib.record.impl;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.record.api.IIIFLink;
@@ -34,37 +35,30 @@ public class RecordServiceImpl implements RecordService {
 
     private static final Logger LOG = LogManager.getLogger(RecordServiceImpl.class);
 
-
-    @Value("#{europeanaProperties['portal.baseUrl']}")
-    private String portalBaseUrl;
     @Value("#{europeanaProperties['iiifManifest.baseUrl']}")
     private String manifestBaseUrl;
-    @Value("#{europeanaProperties['apiGateway.baseUrl']}")
-    private String apiGatewayBaseUrl;
-    @Value("#{europeanaProperties['api2.baseUrl']}")
-    private String api2BaseUrl;
     @Value("#{europeanaProperties['manifest.add.url']}")
     private Boolean manifestAddUrl;
     @Value("#{europeanaProperties['htmlsnippet.css.source']}")
     private String attributionCss;
 
     /**
-     * @see RecordService#findById(DataSourceWrapper, String, String)
+     * @see RecordService#findById(DataSourceWrapper, String, String, BaseUrlWrapper)
      */
     @Override
-    public FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId) throws EuropeanaException {
-        return findById(datasource, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId));
+    public FullBean findById(DataSourceWrapper datasource, String collectionId, String recordId, BaseUrlWrapper urls) throws EuropeanaException {
+        return findById(datasource, EuropeanaUriUtils.createEuropeanaId(collectionId, recordId), urls);
     }
 
     /**
-     * @see RecordService#findById(DataSourceWrapper, String)
+     * @see RecordService#findById(DataSourceWrapper, String, BaseUrlWrapper)
      */
     @Override
-    public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId) throws EuropeanaException {
+    public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
         FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
 
         if (fullBean != null && datasource.getRecordServer().isPresent()) {
-            return enrichFullBean(datasource.getRecordServer().get(), fullBean);
+            return enrichFullBean(datasource.getRecordServer().get(), fullBean, urls);
         } else {
             return null;
         }
@@ -108,23 +102,23 @@ public class RecordServiceImpl implements RecordService {
     }
 
     /**
-     * @see RecordService#enrichFullBean(EdmMongoServer, FullBean)
+     * @see RecordService#enrichFullBean(EdmMongoServer, FullBean, BaseUrlWrapper)
      */
-    public FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean){
+    public FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean, BaseUrlWrapper urls){
         // 1. add meta info for all webresources + generate attribution snippets
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
 
         // 2. add link to IIIF for newspaper and AV/EUScreen items
-        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, api2BaseUrl, manifestBaseUrl);
+        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
 
         // 3. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);
 
         // 4. generate proper edmPreview thumbnail urls
-        UrlConverter.setEdmPreview(fullBean, apiGatewayBaseUrl);
+        UrlConverter.setEdmPreview(fullBean, urls.getApiGatewayBaseUrl());
 
         // 5. generate proper edmLandingpage portal urls
-        UrlConverter.setEdmLandingPage(fullBean, portalBaseUrl);
+        UrlConverter.setEdmLandingPage(fullBean, urls.getPortalBaseUrl());
 
         return fullBean;
     }
