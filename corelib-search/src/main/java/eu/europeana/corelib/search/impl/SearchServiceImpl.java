@@ -1,6 +1,5 @@
 package eu.europeana.corelib.search.impl;
 
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
@@ -18,13 +17,6 @@ import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -32,10 +24,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.LukeRequest;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CursorMarkParams;
@@ -44,7 +33,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans from Solr
@@ -65,37 +57,28 @@ public class SearchServiceImpl implements SearchService {
      */
     private static final int TIME_ALLOWED = 30_000;
 
-    // provided by setSolrClient method via xml-beans
-    private SolrClient solrClient;
-
     @Value("#{europeanaProperties['solr.facetLimit']}")
     private int facetLimit;
-    @Value("#{europeanaProperties['solr.username']}")
-    private String username;
-    @Value("#{europeanaProperties['solr.password']}")
-    private String password;
+
     @Value("#{europeanaProperties['solr.searchLimit']}")
     private int searchLimit;
-    @Value("#{europeanaProperties['solr.connect.timeout']}")
-    private int solrConnectTimeout;
-    @Value("#{europeanaProperties['solr.so.timeout']}")
-    private int solrSocketTimeout;
+
 
     /**
-     * @see SearchService#search(Class, Query, boolean)
+     * @see SearchService#search(SolrClient solrClient, Class, Query, boolean)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query) throws EuropeanaException {
-        return search(beanInterface, query, false);
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient, Class<T> beanInterface, Query query) throws EuropeanaException {
+        return search(solrClient, beanInterface, query, false);
     }
 
     /**
-     * @see SearchService#search(Class, Query)
+     * @see SearchService#search(SolrClient solrClient, Class, Query)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IdBean> ResultSet<T> search(Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
+    public <T extends IdBean> ResultSet<T> search(SolrClient solrClient,  Class<T> beanInterface, Query query, boolean debug) throws EuropeanaException {
 
         if (query.getStart() != null && (query.getStart() + query.getPageSize() > searchLimit)) {
             throw new SolrQueryException(ProblemType.SEARCH_PAGE_LIMIT_REACHED,
@@ -263,11 +246,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     /**
-     * @see SearchService#getLastSolrUpdate()
+     * @see SearchService#getLastSolrUpdate(SolrClient solrClient)
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Date getLastSolrUpdate() throws EuropeanaException {
+    public Date getLastSolrUpdate(SolrClient solrClient) throws EuropeanaException {
         long t0 = new Date().getTime();
         try {
             NamedList<Object> namedList = solrClient.request(new LukeRequest());
@@ -282,39 +265,4 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
-    public void setSolrClient(SolrClient solrClient) {
-        this.solrClient = setClient(solrClient);
-    }
-
-    /**
-     * If it's not a cluster but a single solr server, we add authentication
-     */
-    private SolrClient setClient(SolrClient solrClient) {
-        if (solrClient instanceof HttpSolrClient) {
-            HttpSolrClient server = new HttpSolrClient(((HttpSolrClient) solrClient).getBaseURL());
-            server.setConnectionTimeout(solrConnectTimeout);
-            server.setSoTimeout(solrSocketTimeout);
-            AbstractHttpClient client = (AbstractHttpClient) server.getHttpClient();
-            client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
-            return server;
-        } else {
-            return solrClient;
-        }
-    }
-
-    private static class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
-        private final UsernamePasswordCredentials credentials;
-
-        public PreEmptiveBasicAuthenticator(String user, String pass) {
-            credentials = new UsernamePasswordCredentials(user, pass);
-        }
-
-        /**
-         * @see HttpRequestInterceptor#process(HttpRequest, HttpContext) 
-         */
-        @Override
-        public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-            request.addHeader(BasicScheme.authenticate(credentials, "US-ASCII", false));
-        }
-    }
 }

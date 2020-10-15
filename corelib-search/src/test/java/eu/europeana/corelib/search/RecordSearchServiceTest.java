@@ -5,6 +5,8 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.record.BaseUrlWrapper;
+import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
@@ -143,7 +145,7 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("musi");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         Assert.assertNull(results.getSpellcheck());
     }
 
@@ -182,9 +184,9 @@ public class RecordSearchServiceTest {
         testCount++;
         Query query = new Query("*:*");
         query.setDefaultSolrFacets();
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = recordService.findById(results.getResults().get(0).getId());
+        FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 
@@ -192,7 +194,7 @@ public class RecordSearchServiceTest {
     public void testGetLastSolrUpdate() throws EuropeanaException {
         LOG.info("TEST testGestLastSolrUpdate");
         testCount++;
-        assertNotNull(searchService.getLastSolrUpdate());
+        assertNotNull(searchService.getLastSolrUpdate(solrServer));
     }
 
     /**
@@ -206,7 +208,7 @@ public class RecordSearchServiceTest {
         Query query = new Query("keyboard");
 
         query.setSort("score descending timestamp_created asc+timestamp_update,COMPLETENESS");
-        ResultSet<BriefBean> results = searchService.search(BriefBean.class, query);
+        ResultSet<BriefBean> results = searchService.search(solrServer,BriefBean.class, query);
         assertNotNull(results);
         assertTrue(results.getResultSize() > 0);
     }

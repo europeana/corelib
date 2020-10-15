@@ -1,5 +1,6 @@
 package eu.europeana.corelib.web.context;
 
+import eu.europeana.corelib.utils.ConfigUtils;
 import eu.europeana.corelib.web.socks.SocksProxy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Bridge between the VCAP (a.k.a. Cloud Foundry) metadata and the europeana.properties file (part of the war).This reads the
@@ -44,7 +47,10 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
     private static final String VCAP_PORTAL_BASEURL = "portal_baseUrl"; // matches portal.baseUrl in europeana.properties
     private static final String VCAP_MANIFEST_BASEURL="iiifManifest_baseUrl"; // matches iiifManifest.baseUrl in europeana.properties
 
-    private static StandardServletEnvironment env = new StandardServletEnvironment();
+    private static final StandardServletEnvironment env = new StandardServletEnvironment();
+
+    // Used to find route-specific baseUrl settings in env. Keys have the format route(number)_(baseUrl)
+    private static final String ROUTE_BASEURL_PROP_REGEX=String.format("^route\\d+_(%s|%s|%s)", VCAP_API2_BASEURL, VCAP_GATEWAY_BASEURL, VCAP_PORTAL_BASEURL);
 
     public VcapPropertyLoader() {
         super();
@@ -62,11 +68,15 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         try (FileInputStream fis = new FileInputStream(europeanaProperties)){
             props.load(fis);
 
-            // Add VCAP properties for API2, Gateway and Portal to the loaded properties
+            // Add default VCAP properties for API2, Gateway and Portal to the loaded properties
             setVcapUrlProperty(props, VCAP_API2_BASEURL);
             setVcapUrlProperty(props, VCAP_GATEWAY_BASEURL);
             setVcapUrlProperty(props, VCAP_PORTAL_BASEURL);
             setVcapUrlProperty(props, VCAP_MANIFEST_BASEURL);
+
+            // BaseURLs can be overridden for specific routes.eg: route1_api2_baseUrl. Load these here
+            List<String> routeBaseUrls = ConfigUtils.getMatchingKeys(env.getSystemEnvironment(), ROUTE_BASEURL_PROP_REGEX);
+            routeBaseUrls.forEach(key -> setVcapUrlProperty(props, key));
 
             // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate
             // time elsewhere in the (api) code

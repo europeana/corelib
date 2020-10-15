@@ -18,7 +18,7 @@
 
 
 	<!-- INTERNAL DEFINITIONS -->
-	<import resource="internal/corelib-db-datasource.xml"/>
+	<bean class="eu.europeana.corelib.db.config.JdbcConfig" />
 	<import resource="internal/corelib-db-dao.xml"/>
 	<import resource="internal/corelib-db-internal.xml"/>
 
@@ -33,5 +33,4 @@
 	<!-- deprecated -->
 	<!-- <bean id="corelib_db_oAuth2TokenService" class="eu.europeana.corelib.db.service.impl.OAuth2TokenServiceImpl"
 		/> -->
-
 </beans>
