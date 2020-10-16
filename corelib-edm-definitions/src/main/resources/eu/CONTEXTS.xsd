@@ -117,6 +117,7 @@
           <element ref="edm:end" maxOccurs="1" minOccurs="0" />
           <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="skos:hiddenLabel" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>
