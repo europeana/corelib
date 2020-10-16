@@ -24,6 +24,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 	private Map<String,List<String>> dctermsHasPart;
 
 	private String[] owlSameAs;
+	private String isNextInSequence;
 
 	@Override
 	public Map<String,List<String>> getBegin() {
@@ -91,5 +92,13 @@ public class TimespanImpl extends ContextualClassImpl implements
 		this.owlSameAs = owlSameAs!=null?owlSameAs.clone():null;
 	}
 
-	
+	@Override
+	public String getIsNextInSequence() {
+		return isNextInSequence;
+	}
+
+	@Override
+	public void setIsNextInSequence(String isNextInSequence) {
+		this.isNextInSequence = isNextInSequence;
+	}
 }
