@@ -57,5 +57,6 @@
   <element name="related" type="rdf:ResourceType" />
   <element name="inScheme" type="rdf:ResourceType" />
   <element name="note" type="rdf:LiteralType" />
+  <element name="hiddenLabel" type="rdf:LiteralType" />
 
 </schema>

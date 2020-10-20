@@ -80,7 +80,18 @@ public interface Timespan extends ContextualClass {
 	 * @return the owl:sameAs for the edm:Timespan
 	 */
 	String[] getOwlSameAs();
-	
+
+
+	/**
+	 * @return the edm:isNextInSequence
+	 */
+	String getIsNextInSequence();
+
+	/**
+	 * sets the edm:isNextInSequence for the edm:Timespan
+	 * @param isNextInSequence
+	 */
+	void setIsNextInSequence(String isNextInSequence);
 
 	
 	
