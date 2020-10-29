@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>eu.europeana.metis</groupId>
+            <artifactId>metis-common</artifactId>
+            <version>${metis.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commonsLang3.version}</version>

@@ -2,7 +2,6 @@ package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
@@ -11,6 +10,7 @@ import eu.europeana.corelib.record.api.UrlConverter;
 import eu.europeana.corelib.record.api.WebMetaInfo;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import eu.europeana.metis.mongo.RecordRedirect;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.commons.lang3.StringUtils;

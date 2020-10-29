@@ -2,7 +2,7 @@ package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 

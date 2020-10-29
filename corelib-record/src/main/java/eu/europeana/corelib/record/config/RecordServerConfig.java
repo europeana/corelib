@@ -1,8 +1,8 @@
 package eu.europeana.corelib.record.config;
 
-import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +43,7 @@ public class RecordServerConfig {
                 DataSourceWrapper dsWrapper = new DataSourceWrapper();
                 // create connection to Record db if configured
                 if (dsConfig.getRecordDbName().isPresent()) {
-                    dsWrapper.setRecordServer(new EdmMongoServerImpl(mongoProvider.getMongoClient(), dsConfig.getRecordDbName().get(), false));
+                    dsWrapper.setRecordServer(new EdmMongoServer(mongoProvider.getMongoClient(), dsConfig.getRecordDbName().get(), false));
                     LOG.info("Registered EdmMongoServer for data source: {}, record-dbName={}", dsConfig.getId(), dsConfig.getRecordDbName().get());
                 } else {
                     LOG.info("No record db configured for data source: {}", dsConfig.getId());

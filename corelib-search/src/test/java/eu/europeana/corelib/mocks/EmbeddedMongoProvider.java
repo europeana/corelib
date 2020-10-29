@@ -9,9 +9,8 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.mongo.server.impl.EdmMongoServerImpl;
 import eu.europeana.corelib.storage.MongoProvider;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 
@@ -35,7 +34,7 @@ public class EmbeddedMongoProvider implements MongoProvider {
             mongodExecutable.start();
             LOG.info("Creating new test MongoClient for EmbeddedMongoProvider");
             mongoClient = MongoClients.create(String.format("mongodb://%s:%s", "localhost", port));
-            EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongoClient, DB_NAME, false);
+            EdmMongoServer mongoDBServer = new EdmMongoServer(mongoClient, DB_NAME, false);
             mongoDBServer.getDatastore().getDatabase().drop();
         } catch (IOException e) {
             e.printStackTrace();

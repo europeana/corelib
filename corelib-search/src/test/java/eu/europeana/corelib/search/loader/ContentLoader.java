@@ -1,6 +1,6 @@
 package eu.europeana.corelib.search.loader;
 
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;

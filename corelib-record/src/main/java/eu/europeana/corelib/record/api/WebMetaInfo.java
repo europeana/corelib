@@ -6,9 +6,9 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.metis.mongo.EdmMongoServer;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
