@@ -24,8 +24,6 @@
         </property>
     </bean>
 
-    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.db.EmbeddedMongoProvider"/>
-
     <!-- Mocking services from other modules and overruling their configuration -->
     <bean id="corelib_record_recordService" class="org.mockito.Mockito" factory-method="mock">
         <constructor-arg value="eu.europeana.corelib.record.RecordService" />

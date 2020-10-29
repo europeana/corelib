@@ -11,9 +11,6 @@
     <!-- INTERNAL -->
     <import resource="corelib-definitions-test.xml"/>
 
-    <!-- OVERRIDE FOR TESTING -->
-    <bean id="corelib_db_mongoProvider" class="eu.europeana.corelib.mocks.EmbeddedMongoProvider"/>
-
     <bean id="corelib_solr_solrEmbedded"
           class="org.apache.solr.client.solrj.embedded.EmbeddedSolrServer"
           lazy-init="true">

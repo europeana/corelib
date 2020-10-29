@@ -50,7 +50,7 @@ public class RecordServerConfig {
                 // create connection to Record db if configured
                 if (dsConfig.getRecordDbName().isPresent()) {
                     dsWrapper.setRecordServer(new EdmMongoServer(mongoClient,
-                        dsConfig.getRecordDbName().get(), false));
+                        dsConfig.getRecordDbName().get()));
                     LOG.info("Registered EdmMongoServer for data source: {}, record-dbName={}",
                         dsConfig.getId(), dsConfig.getRecordDbName().get());
                 } else {
@@ -60,7 +60,7 @@ public class RecordServerConfig {
                 // create connection to Redirect db if configured
                 if (dsConfig.getRedirectDbName().isPresent()) {
                     RecordRedirectDao redirectDb = new RecordRedirectDao(
-                        mongoClient, dsConfig.getRedirectDbName().get(), false);
+                        mongoClient, dsConfig.getRedirectDbName().get());
                     if (validateRedirectDbConnection(redirectDb,
                         dsConfig.getRedirectDbName().get())) {
                         dsWrapper.setRedirectDb(redirectDb);
