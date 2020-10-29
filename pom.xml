@@ -51,7 +51,6 @@
     <modules>
         <module>corelib-utils</module>
         <module>corelib-definitions</module>
-        <module>corelib-common-storage</module>
         <module>corelib-db</module>
         <module>corelib-storage</module>
         <module>corelib-web</module>

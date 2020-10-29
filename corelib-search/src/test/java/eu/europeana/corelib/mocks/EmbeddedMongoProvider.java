@@ -9,12 +9,11 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
-import eu.europeana.corelib.storage.MongoProvider;
 import eu.europeana.metis.mongo.EdmMongoServer;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 
-public class EmbeddedMongoProvider implements MongoProvider {
+public class EmbeddedMongoProvider {
 
 
     private static final Logger LOG = Logger.getLogger(EmbeddedMongoProvider.class);
@@ -41,24 +40,12 @@ public class EmbeddedMongoProvider implements MongoProvider {
         }
     }
 
-    /**
-     * @see MongoProvider#getMongoClient()
-     */
-    @Override
     public MongoClient getMongoClient() {
         return mongoClient;
     }
 
-    /**
-     * @see MongoProvider#getDefaultDatabase()
-     */
-    @Override
     public String getDefaultDatabase() { return DB_NAME;}
 
-    /**
-     * @see MongoProvider#close()
-     */
-    @Override
     public void close() {
         if (mongoClient != null) {
             LOG.info("Closing test MongoClient for EmbeddedMongoProvider");
