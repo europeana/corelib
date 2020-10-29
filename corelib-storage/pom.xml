@@ -17,6 +17,11 @@
     <url>http://www.europeana.eu</url>
 
     <dependencies>
+        <dependency>
+            <groupId>eu.europeana.metis</groupId>
+            <artifactId>metis-schema</artifactId>
+            <version>${metis.version}</version>
+        </dependency>
         <!-- Corelib -->
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
@@ -25,10 +30,6 @@
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-edm-definitions</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>

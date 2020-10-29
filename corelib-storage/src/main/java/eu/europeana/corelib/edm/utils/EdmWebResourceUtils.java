@@ -1,7 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
-import eu.europeana.corelib.definitions.jibx.*;
+import eu.europeana.metis.schema.jibx.*;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import org.apache.commons.lang3.StringUtils;

@@ -1,7 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.definitions.jibx.Country;
-import eu.europeana.corelib.definitions.jibx.CountryCodes;
+import eu.europeana.metis.schema.jibx.Country;
+import eu.europeana.metis.schema.jibx.CountryCodes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
