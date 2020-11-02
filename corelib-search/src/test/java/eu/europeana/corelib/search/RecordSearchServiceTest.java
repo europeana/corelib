@@ -10,7 +10,7 @@ import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import eu.europeana.metis.mongo.EdmMongoServer;
+import eu.europeana.metis.mongo.RecordDao;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,7 +59,7 @@ public class RecordSearchServiceTest {
     private RecordService recordService;
 
     @Resource(name = "corelib_record_mongoServer")
-    private EdmMongoServer mongoServer;
+    private RecordDao recordDao;
 
     @Resource(name = "metis_redirect_mongo")
     private RecordRedirectDao mongoIdServer;
@@ -95,18 +95,18 @@ public class RecordSearchServiceTest {
 //                    MongodExecutable mongodExecutable = runtime.prepare(conf);
 //                    mongodExecutable.start();
 //                    Mongo mongo = new Mongo("localhost", port);
-//                    EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test",
+//                    RecordDao mongoDBServer = new RecordDaoImpl(mongo, "europeana_test",
 //                            "", "");
 //                    idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
 //                    mongoDBServer.getDatastore().getDB().dropDatabase();
 //                    idServer.createDatastore();
-//                    searchService.setEdmMongoServer(mongoDBServer);
+//                    searchService.setRecordDao(mongoDBServer);
 //                    searchService.setEuropeanaIdMongoServer(idServer);
 //                    searchService.setLogger(LogManager.getLogger(SearchServiceImpl.class));
 
 
                 try {
-                    Assert.assertTrue("records failed to load...", CONTENT_LOADER.parse(mongoServer, solrServer) == 0);
+                    Assert.assertTrue("records failed to load...", CONTENT_LOADER.parse(recordDao, solrServer) == 0);
                     CONTENT_LOADER.commit(solrServer);
 //                        Thread.sleep(5000);
                     dataLoaded = LoadingStatus.LOADED;
@@ -186,7 +186,7 @@ public class RecordSearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
+        FullBean fBean = recordService.findById(new DataSourceWrapper(recordDao, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 

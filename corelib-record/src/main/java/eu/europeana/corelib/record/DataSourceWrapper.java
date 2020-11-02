@@ -1,6 +1,6 @@
 package eu.europeana.corelib.record;
 
-import eu.europeana.metis.mongo.EdmMongoServer;
+import eu.europeana.metis.mongo.RecordDao;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 
 import java.util.Optional;
@@ -11,27 +11,27 @@ import java.util.Optional;
  */
 public class DataSourceWrapper {
 
-    private EdmMongoServer recordServer;
+    private RecordDao recordDao;
     private RecordRedirectDao redirectDb;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(EdmMongoServer recordServer, RecordRedirectDao redirectDb) {
-        this.recordServer = recordServer;
+    public DataSourceWrapper(RecordDao recordDao, RecordRedirectDao redirectDb) {
+        this.recordDao = recordDao;
         this.redirectDb = redirectDb;
     }
 
-    public void setRecordServer(EdmMongoServer recordServer) {
-        this.recordServer = recordServer;
+    public void setRecordDao(RecordDao recordDao) {
+        this.recordDao = recordDao;
     }
 
     public void setRedirectDb(RecordRedirectDao redirectDb) {
         this.redirectDb = redirectDb;
     }
 
-    public Optional<EdmMongoServer> getRecordServer() {
-        return Optional.ofNullable(recordServer);
+    public Optional<RecordDao> getRecordDao() {
+        return Optional.ofNullable(recordDao);
     }
 
     public Optional<RecordRedirectDao> getRedirectDb() {
@@ -39,7 +39,7 @@ public class DataSourceWrapper {
     }
 
     public boolean isConfigured(){
-        return recordServer != null || redirectDb != null;
+        return recordDao != null || redirectDb != null;
     }
 
 }

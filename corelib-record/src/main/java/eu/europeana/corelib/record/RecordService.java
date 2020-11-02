@@ -2,7 +2,7 @@ package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.metis.mongo.EdmMongoServer;
+import eu.europeana.metis.mongo.RecordDao;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 
@@ -42,7 +42,7 @@ public interface RecordService {
 
     /**
      * Retrieve a record object from the database (without {@link eu.europeana.corelib.definitions.edm.entity.WebResource}s
-     * Use {@link #enrichFullBean(EdmMongoServer, FullBean, BaseUrlWrapper)} to add the web resources meta info an attribution snippets
+     * Use {@link #enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)} to add the web resources meta info an attribution snippets
      *
      * @param europeanaObjectId The unique europeana id
      * @param resolveId if true and the record was not found, then the resolve method is used to check if this record has
@@ -70,7 +70,7 @@ public interface RecordService {
      * @return enriched full bean
      * @throws EuropeanaException when there is an error retrieving the data
      */
-    FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean, BaseUrlWrapper baseUrls) throws EuropeanaException;
+    FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper baseUrls) throws EuropeanaException;
 
     /**
      * Checks if an europeanaObjectId is old and has a newId. Note that this new id may also be old so we check iteratively

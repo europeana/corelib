@@ -25,7 +25,7 @@
     <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
           p:solrClient-ref="corelib_solr_solrEmbedded" />
 
-    <bean id="corelib_record_mongoServer" class="eu.europeana.metis.mongo.EdmMongoServer">
+    <bean id="corelib_record_mongoServer" class="eu.europeana.metis.mongo.RecordDao">
         <constructor-arg value="#{corelib_db_mongoProvider.mongoClient()}"/>
         <constructor-arg value="europeana_test" type="java.lang.String"/>
     </bean>
