@@ -38,9 +38,9 @@ public class RecordServerConfig {
     private void setupDataSources() {
         for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader
             .getMongoInstances()) {
+            // TODO: 04/11/2020 The MaxConnection idle time can be now passed in the connection url with maxIdleTimeMS
             final MongoClient mongoClient = MongoClientProvider
-                .create(instance.getConnectionUrl(),
-                    Integer.parseInt(configLoader.getMongoMaxConnectionIdleTime()))
+                .create(instance.getConnectionUrl())
                 .createMongoClient();
 
             // keep track of connections, so they can be closed on exit

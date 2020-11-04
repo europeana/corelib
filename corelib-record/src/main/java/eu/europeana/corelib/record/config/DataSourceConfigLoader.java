@@ -54,6 +54,7 @@ public class DataSourceConfigLoader {
     }
 
     public void setMongoMaxConnectionIdleTime(String mongoMaxConnectionIdleTime) {
+        // TODO: 04/11/2020 The MaxConnection idle time can be now passed in the connection url with maxIdleTimeMS
         this.mongoMaxConnectionIdleTime = mongoMaxConnectionIdleTime;
     }
 
@@ -96,6 +97,7 @@ public class DataSourceConfigLoader {
 
 
     public String getMongoMaxConnectionIdleTime() {
+        // TODO: 04/11/2020 The MaxConnection idle time can be now passed in the connection url with maxIdleTimeMS
         return mongoMaxConnectionIdleTime;
     }
 

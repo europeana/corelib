@@ -36,8 +36,9 @@ public class ApiMongoConnector {
      */
     @Deprecated
     public Datastore createDatastore(String connectionUrl) {
+        // TODO: 04/11/2020 The MaxConnection idle time can be now passed in the connection url with maxIdleTimeMS
         final MongoClientProvider<IllegalArgumentException> mongoClientProvider = MongoClientProvider
-            .create(connectionUrl, 0);
+            .create(connectionUrl);
         this.label = mongoClientProvider.getAuthenticationDatabase();
         this.mongoClient = mongoClientProvider.createMongoClient();
         return Morphia.createDatastore(this.mongoClient, label);
