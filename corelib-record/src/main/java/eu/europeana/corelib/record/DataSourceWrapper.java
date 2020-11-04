@@ -1,6 +1,8 @@
 package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.corelib.mongo.server.impl.EdmMongerServerInitializer;
+import eu.europeana.corelib.mongo.server.impl.RedirectDaoInitializer;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 
 import java.util.Optional;
@@ -11,35 +13,35 @@ import java.util.Optional;
  */
 public class DataSourceWrapper {
 
-    private EdmMongoServer recordServer;
-    private RecordRedirectDao redirectDb;
+    private EdmMongerServerInitializer recordServerInitializer;
+    private RedirectDaoInitializer redirectDaoInitializer;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(EdmMongoServer recordServer, RecordRedirectDao redirectDb) {
-        this.recordServer = recordServer;
-        this.redirectDb = redirectDb;
+    public DataSourceWrapper(EdmMongerServerInitializer edmMongerServerInitializer, RedirectDaoInitializer redirectDaoInitializer) {
+        this.recordServerInitializer = edmMongerServerInitializer;
+        this.redirectDaoInitializer = redirectDaoInitializer;
     }
 
-    public void setRecordServer(EdmMongoServer recordServer) {
-        this.recordServer = recordServer;
+    public void setRecordServer(EdmMongerServerInitializer edmMongerServerInitializer) {
+        this.recordServerInitializer = edmMongerServerInitializer;
     }
 
-    public void setRedirectDb(RecordRedirectDao redirectDb) {
-        this.redirectDb = redirectDb;
+    public void setRedirectDb(RedirectDaoInitializer redirectDb) {
+        this.redirectDaoInitializer = redirectDb;
     }
 
     public Optional<EdmMongoServer> getRecordServer() {
-        return Optional.ofNullable(recordServer);
+        return Optional.ofNullable(recordServerInitializer.get());
     }
 
     public Optional<RecordRedirectDao> getRedirectDb() {
-        return Optional.ofNullable(redirectDb);
+        return Optional.ofNullable(redirectDaoInitializer.get());
     }
 
-    public boolean isConfigured(){
-        return recordServer != null || redirectDb != null;
+    public boolean isConfigured() {
+        return recordServerInitializer != null || redirectDaoInitializer != null;
     }
 
 }
