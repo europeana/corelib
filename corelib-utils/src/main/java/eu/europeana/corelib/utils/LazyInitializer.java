@@ -1,4 +1,4 @@
-package eu.europeana.corelib.storage;
+package eu.europeana.corelib.utils;
 
 
 import java.util.function.Supplier;

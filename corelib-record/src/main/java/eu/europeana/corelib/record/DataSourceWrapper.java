@@ -1,8 +1,8 @@
 package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.mongo.server.impl.EdmMongerServerInitializer;
-import eu.europeana.corelib.mongo.server.impl.RedirectDaoInitializer;
+import eu.europeana.corelib.record.config.initializers.EdmMongerServerInitializer;
+import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 
 import java.util.Optional;

@@ -1,9 +1,9 @@
 package eu.europeana.corelib.record.config;
 
-import eu.europeana.corelib.mongo.server.impl.EdmMongerServerInitializer;
-import eu.europeana.corelib.mongo.server.impl.RedirectDaoInitializer;
+import eu.europeana.corelib.record.config.initializers.EdmMongerServerInitializer;
+import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.corelib.record.DataSourceWrapper;
-import eu.europeana.corelib.storage.MongoProviderInitializer;
+import eu.europeana.corelib.record.config.initializers.MongoProviderInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
-package eu.europeana.corelib.mongo.server.impl;
+package eu.europeana.corelib.record.config.initializers;
 
-import eu.europeana.corelib.storage.LazyInitializer;
-import eu.europeana.corelib.storage.MongoProviderInitializer;
+import eu.europeana.corelib.utils.LazyInitializer;
 import eu.europeana.metis.mongo.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

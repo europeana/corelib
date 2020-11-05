@@ -1,6 +1,8 @@
-package eu.europeana.corelib.storage;
+package eu.europeana.corelib.record.config.initializers;
 
+import eu.europeana.corelib.storage.MongoProvider;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
+import eu.europeana.corelib.utils.LazyInitializer;
 
 /**
  * Lazily initializes a connection to a Mongo instance
