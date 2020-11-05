@@ -12,7 +12,7 @@ public class MongoProviderInitializer extends LazyInitializer<MongoProvider> {
     private final String connectionUrl;
     private final String maxConnectionIdleTime;
 
-    private boolean isConnectionOpen;
+    private MongoProvider provider;
 
     public MongoProviderInitializer(String connectionUrl, String maxConnectionIdleTime) {
         this.connectionUrl = connectionUrl;
@@ -22,14 +22,17 @@ public class MongoProviderInitializer extends LazyInitializer<MongoProvider> {
 
     @Override
     protected MongoProvider initialize() {
-        MongoProviderImpl mongoProvider = new MongoProviderImpl(connectionUrl, maxConnectionIdleTime);
-        isConnectionOpen = true;
-        return mongoProvider;
+        provider = new MongoProviderImpl(connectionUrl, maxConnectionIdleTime);
+        return provider;
     }
 
+    /**
+     * Closes the underlying {@link MongoProvider} connection.
+     * To be invoked on application exit.
+     */
     public void close() {
-        if (isConnectionOpen) {
-            get().close();
+        if (provider != null) {
+            provider.close();
         }
     }
 }
