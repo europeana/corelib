@@ -2,9 +2,9 @@ package eu.europeana.corelib.record.config;
 
 import com.mongodb.client.MongoClient;
 import eu.europeana.corelib.record.DataSourceWrapper;
-import eu.europeana.metis.mongo.RecordDao;
-import eu.europeana.metis.mongo.MongoClientProvider;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.connection.MongoClientProvider;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

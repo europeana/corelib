@@ -2,9 +2,9 @@ package eu.europeana.corelib.record;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.metis.mongo.RecordDao;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 
 /**
  * Retrieves CHO records from Mongo database.

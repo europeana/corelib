@@ -1,8 +1,7 @@
 package eu.europeana.corelib.record;
 
-import eu.europeana.metis.mongo.RecordDao;
-import eu.europeana.metis.mongo.RecordRedirectDao;
-
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import java.util.Optional;
 
 /**

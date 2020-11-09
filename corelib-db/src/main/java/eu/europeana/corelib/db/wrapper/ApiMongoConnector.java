@@ -4,8 +4,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.MongoException;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
-import eu.europeana.metis.mongo.MongoClientProvider;
-import eu.europeana.metis.mongo.MongoProperties;
+import eu.europeana.metis.mongo.connection.MongoClientProvider;
+import eu.europeana.metis.mongo.connection.MongoProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
