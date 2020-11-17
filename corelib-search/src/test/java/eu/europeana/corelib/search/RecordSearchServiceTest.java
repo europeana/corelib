@@ -186,7 +186,9 @@ public class RecordSearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = recordService.findById(new DataSourceWrapper(mongoServer, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
+
+        // TODO: wire up database providers
+        FullBean fBean = recordService.findById(new DataSourceWrapper(), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 
