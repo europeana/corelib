@@ -20,11 +20,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 
 	private Map<String,List<String>> begin;
 	private Map<String,List<String>> end;
-	private Map<String,List<String>> isPartOf;
-	private Map<String,List<String>> dctermsHasPart;
+	private String beginString;
+	private String endString;
+	private String[] dctermsIsPartOf;
 
 	private String[] owlSameAs;
-	private String isNextInSequence;
+	private String[] edmIsNextInSequence;
 
 	@Override
 	public Map<String,List<String>> getBegin() {
@@ -37,8 +38,8 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public Map<String,List<String>> getIsPartOf() {
-		return this.isPartOf;
+	public String[] getIsPartOf() {
+		return this.dctermsIsPartOf;
 	}
 
 	@Override
@@ -52,8 +53,8 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public void setIsPartOf(Map<String,List<String>> isPartOf) {
-		this.isPartOf = isPartOf;
+	public void setIsPartOf(String[] isPartOf) {
+		this.dctermsIsPartOf = isPartOf;
 	}
 
 	@Override
@@ -73,13 +74,13 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public Map<String,List<String>> getDctermsHasPart() {
-		return this.dctermsHasPart;
+	public String[] getDctermsHasPart() {
+		return this.dctermsIsPartOf;
 	}
 
 	@Override
-	public void setDctermsHasPart(Map<String,List<String>> dctermsHasPart) {
-		this.dctermsHasPart = dctermsHasPart;
+	public void setDctermsHasPart(String[] dctermsHasPart) {
+		this.dctermsIsPartOf = dctermsHasPart;
 	}
 
 	@Override
@@ -93,12 +94,36 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String getIsNextInSequence() {
-		return isNextInSequence;
+	public String[] getIsNextInSequence() {
+		return edmIsNextInSequence;
 	}
 
 	@Override
-	public void setIsNextInSequence(String isNextInSequence) {
-		this.isNextInSequence = isNextInSequence;
+	public void setIsNextInSequence(String[] isNextInSequence) {
+		this.edmIsNextInSequence = isNextInSequence;
+	}
+
+	@Override
+	public String getBeginString() {
+		// TODO Auto-generated method stub
+		return beginString;
+	}
+
+	@Override
+	public String getEndString() {
+		// TODO Auto-generated method stub
+		return endString;
+	}
+
+	@Override
+	public void setBegin(String begin) {
+		this.beginString = begin;
+		
+	}
+
+	@Override
+	public void setEnd(String end) {
+		this.endString = end;
+		
 	}
 }

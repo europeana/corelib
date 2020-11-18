@@ -25,6 +25,7 @@ import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.AgentImpl;
@@ -430,6 +431,47 @@ public final class SchemaOrgUtils {
 
         // image
         entityObject.setImage(organization.getFoafDepiction());
+    }
+
+    /**
+     * Update properties of the given Schema.Org entity
+     * using data from the given EDM Timespan
+     *
+     * @param timespanObject Schema.Org Contextual Entity object to update
+     * @param timespan       source EDM timespan
+     */
+    public static void processTimespan(Timespan agent,
+                                    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity timespanObject) {
+        // @id
+    	timespanObject.setId(agent.getAbout());
+
+        // name
+        addMultilingualProperties(timespanObject, agent.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+
+        // alternateName
+        addMultilingualProperties(timespanObject, agent.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+
+        // description
+        addMultilingualProperties(timespanObject, agent.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+
+        // sameAs
+        addTextProperties(timespanObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
+        // url
+        if(StringUtils.startsWithIgnoreCase(agent.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_PATTERN,
+                    agent.getEntityIdentifier());
+            timespanObject.setEntityPageUrl(entityPageUrl);
+        }
+        // image
+        timespanObject.setImage(agent.getFoafDepiction());
+
+        //begin date
+        addTextProperties(timespanObject, Arrays.asList(agent.getBeginString()), SchemaOrgConstants.PROPERTY_BEGIN_DATE);
+
+        //end date
+        addTextProperties(timespanObject, Arrays.asList(agent.getEndString()), SchemaOrgConstants.PROPERTY_END_DATE);
+
     }
 
     /**

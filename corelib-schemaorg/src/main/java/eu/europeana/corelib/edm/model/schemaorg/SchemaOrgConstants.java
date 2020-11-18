@@ -63,6 +63,10 @@ public final class SchemaOrgConstants {
 
     public static final String PROPERTY_DEATH_DATE = "deathDate";
 
+    public static final String PROPERTY_BEGIN_DATE = "beginDate";
+
+    public static final String PROPERTY_END_DATE = "endDate";
+
     public static final String PROPERTY_GENDER = "gender";
 
     public static final String PROPERTY_JOB_TITLE = "jobTitle";
@@ -178,6 +182,8 @@ public final class SchemaOrgConstants {
     public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/en/collections/topic/%s";
     
     public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/en/collections/person/%s";
+    
+    public static final String ENTITY_PAGE_URL_TIMESPAN_PATTERN = "https://www.europeana.eu/en/timespan/%s";
     
     public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/en/collections/place/%s";
     

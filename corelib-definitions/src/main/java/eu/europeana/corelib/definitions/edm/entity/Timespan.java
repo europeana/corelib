@@ -14,14 +14,43 @@ public interface Timespan extends ContextualClass {
 	/**
 	 * Retrieve the edm:begin field of a Timespan
 	 * 
-	 * @return Stringrepresenting the edm:begin field of a timespan
+	 * @return String representing the edm:begin field of a timespan
+	 */
+	
+	String getBeginString();
+	/**
+	 * Retrieve the edm:end field of a Timespan
+	 * 
+	 * @return String representing the edm:end field of a timespan
+	 */
+	String getEndString();
+	/**
+	 * Set the edm:begin field for a Timespan. It expects to find a date.
+	 * 
+	 * @param begin
+	 *            the edm:begin field for a Timespan
+	 */
+	void setBegin(String begin);
+
+	/**
+	 * Set the edm:end field for a Timespan. It expects to find a date.
+	 * 
+	 * @param end
+	 *            the edm:end field for a Timespan
+	 */
+	void setEnd(String end);
+
+	/**
+	 * Retrieve the edm:begin field of a Timespan
+	 * 
+	 * @return Map<String,List<String>> representing the edm:begin field of a timespan
 	 */
 	Map<String,List<String>> getBegin();
 
 	/**
 	 * Retrieve the edm:end field of a Timespan
 	 * 
-	 * @return String representing the edm:end field of a timespan
+	 * @return Map<String,List<String>> representing the edm:end field of a timespan
 	 */
 	Map<String,List<String>> getEnd();
 
@@ -31,7 +60,7 @@ public interface Timespan extends ContextualClass {
 	 * @return String array representing the dcterms:isPartOf fields of a
 	 *         timespan
 	 */
-	Map<String,List<String>> getIsPartOf();
+	String[] getIsPartOf();
 
 	/**
 	 * Set the edm:begin field for a Timespan. It expects to find a date.
@@ -55,19 +84,19 @@ public interface Timespan extends ContextualClass {
 	 * @param isPartOf
 	 *            A String array representing the isPartOf fields for a Timespan
 	 */
-	void setIsPartOf(Map<String,List<String>> isPartOf);
+	void setIsPartOf(String[] isPartOf);
 	
 	/**
 	 * sets the dcterms:hasPart for the edm:Timespan
 	 * @param hasPart
 	 */
-	void setDctermsHasPart(Map<String,List<String>> hasPart);
+	void setDctermsHasPart(String[] hasPart);
 	
 	/**
 	 * 
 	 * @return the dcterms:hasPart for the edm:Timespan
 	 */
-	Map<String,List<String>> getDctermsHasPart();
+	String[] getDctermsHasPart();
 	
 	/**
 	 * sets the owl:sameAs for the edm:Timespan
@@ -85,13 +114,13 @@ public interface Timespan extends ContextualClass {
 	/**
 	 * @return the edm:isNextInSequence
 	 */
-	String getIsNextInSequence();
+	String[] getIsNextInSequence();
 
 	/**
 	 * sets the edm:isNextInSequence for the edm:Timespan
 	 * @param isNextInSequence
 	 */
-	void setIsNextInSequence(String isNextInSequence);
+	void setIsNextInSequence(String[] isNextInSequence);
 
 	
 	
