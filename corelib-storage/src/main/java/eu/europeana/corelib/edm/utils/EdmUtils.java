@@ -230,7 +230,7 @@ public final class EdmUtils {
                 addAsObject(timeSpan, Begin.class, ts.getBegin());
                 addAsObject(timeSpan, End.class, ts.getEnd());
                 addAsList(timeSpan, HasPart.class, ts.getDctermsHasPart());
-                addAsList(timeSpan, IsPartOf.class, ts.getIsPartOf());
+                addAsList(timeSpan, IsPartOf.class, ts.getIsPartOfArray());
                 addAsList(timeSpan, Note.class, ts.getNote());
                 addAsList(timeSpan, SameAs.class, ts.getOwlSameAs());
                 addAsList(timeSpan, PrefLabel.class, ts.getPrefLabel());

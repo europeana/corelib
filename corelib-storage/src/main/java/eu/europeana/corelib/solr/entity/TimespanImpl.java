@@ -38,7 +38,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String[] getIsPartOf() {
+	public String[] getIsPartOfArray() {
 		return this.dctermsIsPartOf;
 	}
 
@@ -53,7 +53,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public void setIsPartOf(String[] isPartOf) {
+	public void setIsPartOfArray(String[] isPartOf) {
 		this.dctermsIsPartOf = isPartOf;
 	}
 

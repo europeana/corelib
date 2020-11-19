@@ -60,7 +60,7 @@ public interface Timespan extends ContextualClass {
 	 * @return String array representing the dcterms:isPartOf fields of a
 	 *         timespan
 	 */
-	String[] getIsPartOf();
+	String[] getIsPartOfArray();
 
 	/**
 	 * Set the edm:begin field for a Timespan. It expects to find a date.
@@ -84,7 +84,7 @@ public interface Timespan extends ContextualClass {
 	 * @param isPartOf
 	 *            A String array representing the isPartOf fields for a Timespan
 	 */
-	void setIsPartOf(String[] isPartOf);
+	void setIsPartOfArray(String[] isPartOf);
 	
 	/**
 	 * sets the dcterms:hasPart for the edm:Timespan

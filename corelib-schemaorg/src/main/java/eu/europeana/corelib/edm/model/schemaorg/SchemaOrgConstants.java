@@ -12,6 +12,8 @@ public final class SchemaOrgConstants {
     public static final String PROPERTY_DATE_CREATED = "dateCreated";
 
     public static final String PROPERTY_HAS_PART = "hasPart";
+    
+    public static final String PROPERTY_NEXT_IN_SEQUENCE = "nextInSequence";
 
     public static final String PROPERTY_EXAMPLE_OF_WORK = "exampleOfWork";
 
@@ -146,6 +148,8 @@ public final class SchemaOrgConstants {
     public static final String TYPE_ORGANIZATION = "Organization";
 
     public static final String TYPE_PERSON = "Person";
+    
+    public static final String TYPE_TIMESPAN = "Timespan";
 
     public static final String TYPE_IMAGE_OBJECT = "ImageObject";
 
