@@ -20,12 +20,11 @@ public class TimespanImpl extends ContextualClassImpl implements
 
 	private Map<String,List<String>> begin;
 	private Map<String,List<String>> end;
-	private String beginString;
-	private String endString;
-	private String[] dctermsIsPartOf;
+	private Map<String,List<String>> isPartOf;
+	private Map<String,List<String>> dctermsHasPart;
 
 	private String[] owlSameAs;
-	private String[] edmIsNextInSequence;
+	private String isNextInSequence;
 
 	@Override
 	public Map<String,List<String>> getBegin() {
@@ -38,8 +37,8 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String[] getIsPartOfArray() {
-		return this.dctermsIsPartOf;
+	public Map<String,List<String>> getIsPartOf() {
+		return this.isPartOf;
 	}
 
 	@Override
@@ -53,8 +52,8 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public void setIsPartOfArray(String[] isPartOf) {
-		this.dctermsIsPartOf = isPartOf;
+	public void setIsPartOf(Map<String,List<String>> isPartOf) {
+		this.isPartOf = isPartOf;
 	}
 
 	@Override
@@ -74,13 +73,13 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String[] getDctermsHasPart() {
-		return this.dctermsIsPartOf;
+	public Map<String,List<String>> getDctermsHasPart() {
+		return this.dctermsHasPart;
 	}
 
 	@Override
-	public void setDctermsHasPart(String[] dctermsHasPart) {
-		this.dctermsIsPartOf = dctermsHasPart;
+	public void setDctermsHasPart(Map<String,List<String>> dctermsHasPart) {
+		this.dctermsHasPart = dctermsHasPart;
 	}
 
 	@Override
@@ -94,36 +93,12 @@ public class TimespanImpl extends ContextualClassImpl implements
 	}
 
 	@Override
-	public String[] getIsNextInSequence() {
-		return edmIsNextInSequence;
+	public String getIsNextInSequence() {
+		return isNextInSequence;
 	}
 
 	@Override
-	public void setIsNextInSequence(String[] isNextInSequence) {
-		this.edmIsNextInSequence = isNextInSequence;
-	}
-
-	@Override
-	public String getBeginString() {
-		// TODO Auto-generated method stub
-		return beginString;
-	}
-
-	@Override
-	public String getEndString() {
-		// TODO Auto-generated method stub
-		return endString;
-	}
-
-	@Override
-	public void setBegin(String begin) {
-		this.beginString = begin;
-		
-	}
-
-	@Override
-	public void setEnd(String end) {
-		this.endString = end;
-		
+	public void setIsNextInSequence(String isNextInSequence) {
+		this.isNextInSequence = isNextInSequence;
 	}
 }

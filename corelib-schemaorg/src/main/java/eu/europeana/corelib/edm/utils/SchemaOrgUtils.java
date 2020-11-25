@@ -463,12 +463,6 @@ public final class SchemaOrgUtils {
         // hasPart
         //addTextProperties(timespanObject, toList(agent.getDctermsHasPart()), SchemaOrgConstants.PROPERTY_HAS_PART);
 
-        // isPartOf
-        addTextProperties(timespanObject, toList(agent.getIsPartOfArray()), SchemaOrgConstants.PROPERTY_IS_PART_OF);
-
-        // nextInSequence
-        addTextProperties(timespanObject, toList(agent.getIsNextInSequence()), SchemaOrgConstants.PROPERTY_NEXT_IN_SEQUENCE);
-
 //        // url
 //        if(StringUtils.startsWithIgnoreCase(agent.getAbout(), URL_PREFIX)) {
 //            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_PATTERN,
@@ -479,10 +473,10 @@ public final class SchemaOrgUtils {
 //        timespanObject.setImage(agent.getFoafDepiction());
 
         //begin date
-        addTextProperties(timespanObject, Arrays.asList(agent.getBeginString()), SchemaOrgConstants.PROPERTY_BEGIN_DATE);
+        //addTextProperties(timespanObject, Arrays.asList(agent.getBeginString()), SchemaOrgConstants.PROPERTY_BEGIN_DATE);
 
         //end date
-        addTextProperties(timespanObject, Arrays.asList(agent.getEndString()), SchemaOrgConstants.PROPERTY_END_DATE);
+        //addTextProperties(timespanObject, Arrays.asList(agent.getEndString()), SchemaOrgConstants.PROPERTY_END_DATE);
 
     }
 

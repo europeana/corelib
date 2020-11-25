@@ -13,8 +13,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"@type", "@id", 
     SchemaOrgConstants.PROPERTY_NAME,SchemaOrgConstants.PROPERTY_ALTERNATE_NAME, SchemaOrgConstants.PROPERTY_DESCRIPTION,
-	SchemaOrgConstants.PROPERTY_BEGIN_DATE, SchemaOrgConstants.PROPERTY_END_DATE,SchemaOrgConstants.PROPERTY_SAME_AS,
-	SchemaOrgConstants.PROPERTY_IS_PART_OF, SchemaOrgConstants.PROPERTY_HAS_PART, SchemaOrgConstants.PROPERTY_NEXT_IN_SEQUENCE})
+    SchemaOrgConstants.PROPERTY_SAME_AS})
 public class Timespan extends ContextualEntity {
 
     @JsonIgnore
