@@ -12,8 +12,6 @@ public final class SchemaOrgConstants {
     public static final String PROPERTY_DATE_CREATED = "dateCreated";
 
     public static final String PROPERTY_HAS_PART = "hasPart";
-    
-    public static final String PROPERTY_NEXT_IN_SEQUENCE = "nextInSequence";
 
     public static final String PROPERTY_EXAMPLE_OF_WORK = "exampleOfWork";
 
@@ -64,10 +62,6 @@ public final class SchemaOrgConstants {
     public static final String PROPERTY_BIRTH_DATE = "birthDate";
 
     public static final String PROPERTY_DEATH_DATE = "deathDate";
-
-    public static final String PROPERTY_BEGIN_DATE = "beginDate";
-
-    public static final String PROPERTY_END_DATE = "endDate";
 
     public static final String PROPERTY_GENDER = "gender";
 
@@ -148,8 +142,6 @@ public final class SchemaOrgConstants {
     public static final String TYPE_ORGANIZATION = "Organization";
 
     public static final String TYPE_PERSON = "Person";
-    
-    public static final String TYPE_TIMESPAN = "Timespan";
 
     public static final String TYPE_IMAGE_OBJECT = "ImageObject";
 
@@ -186,8 +178,6 @@ public final class SchemaOrgConstants {
     public static final String ENTITY_PAGE_URL_CONCEPT_PATTERN = "https://www.europeana.eu/en/collections/topic/%s";
     
     public static final String ENTITY_PAGE_URL_AGENT_PATTERN = "https://www.europeana.eu/en/collections/person/%s";
-    
-    public static final String ENTITY_PAGE_URL_TIMESPAN_PATTERN = "https://www.europeana.eu/en/timespan/%s";
     
     public static final String ENTITY_PAGE_URL_PLACE_PATTERN = "https://www.europeana.eu/en/collections/place/%s";
     

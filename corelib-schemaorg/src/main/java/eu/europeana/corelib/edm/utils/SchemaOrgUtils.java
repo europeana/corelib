@@ -460,24 +460,6 @@ public final class SchemaOrgUtils {
         // sameAs
         addTextProperties(timespanObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
-        // hasPart
-        //addTextProperties(timespanObject, toList(agent.getDctermsHasPart()), SchemaOrgConstants.PROPERTY_HAS_PART);
-
-//        // url
-//        if(StringUtils.startsWithIgnoreCase(agent.getAbout(), URL_PREFIX)) {
-//            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_PATTERN,
-//                    agent.getEntityIdentifier());
-//            timespanObject.setEntityPageUrl(entityPageUrl);
-//        }
-//        // image
-//        timespanObject.setImage(agent.getFoafDepiction());
-
-        //begin date
-        //addTextProperties(timespanObject, Arrays.asList(agent.getBeginString()), SchemaOrgConstants.PROPERTY_BEGIN_DATE);
-
-        //end date
-        //addTextProperties(timespanObject, Arrays.asList(agent.getEndString()), SchemaOrgConstants.PROPERTY_END_DATE);
-
     }
 
     /**
