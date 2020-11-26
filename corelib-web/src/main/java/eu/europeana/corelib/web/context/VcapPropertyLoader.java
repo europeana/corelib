@@ -130,7 +130,7 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         }
         // Overwriting the original file
         FileUtils.writeStringToFile(propsFile, sb + "\n", false);
-        LOG.info("Properties: {}", sb.toString());
+        LOG.debug("Properties: {}", sb.toString());
     }
 
     private void initSocksProxyConfig(String host, String port, String user, String password) {
