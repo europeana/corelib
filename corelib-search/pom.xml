@@ -33,6 +33,12 @@
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-storage</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>stax</groupId>
+            		<artifactId>stax-api</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
