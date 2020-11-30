@@ -12,7 +12,7 @@
         <constructor-arg value="false"/>
     </bean>
 
-    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
+    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.dao.RecordRedirectDao">
         <constructor-arg value="#{corelib_db_mongoProvider.getMongoClient()}"/>
         <constructor-arg value="#{europeanaProperties['mongodb.redirect.dbname']}" type="java.lang.String"/>
         <constructor-arg value="false"/>
