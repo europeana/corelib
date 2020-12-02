@@ -478,9 +478,8 @@ public final class SchemaOrgUtils {
     private static void processProvidedCHO(CreativeWork object, FullBeanImpl bean) {
         for (ProvidedCHOImpl providedCHO : bean.getProvidedCHOs()) {
             // @id
-            StringBuilder id = new StringBuilder(URL_PREFIX);
             if (!notNullNorEmpty(object.getId())) {
-                object.setId(id.append(providedCHO.getAbout()).toString());
+                object.setId(URL_PREFIX + providedCHO.getAbout());
             }
 
             // sameAs
@@ -594,10 +593,8 @@ public final class SchemaOrgUtils {
 
         // encodesCreativeWork
         if (!bean.getProvidedCHOs().isEmpty()) {
-            StringBuilder about = new StringBuilder(URL_PREFIX);
-            about.append(bean.getProvidedCHOs().get(0).getAbout());
             addLinkedContextualEntities(bean.getProvidedCHOs().get(0).getAbout(), linkedContextualEntities);
-            addReference(mediaObject, about.toString(),
+            addReference(mediaObject, URL_PREFIX + bean.getProvidedCHOs().get(0).getAbout(),
                     SchemaOrgConstants.PROPERTY_ENCODES_CREATIVE_WORK, null);
         }
 
