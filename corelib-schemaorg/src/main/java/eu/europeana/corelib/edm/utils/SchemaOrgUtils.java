@@ -1046,21 +1046,26 @@ public final class SchemaOrgUtils {
      */
     private static String createDateRange(String value, String language, List<TimespanImpl> timespans) {
         for (TimespanImpl timespan : timespans) {
+            StringBuilder dateRange = new StringBuilder();
             if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
                     && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
 
                 try {
                     LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
                     LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
-                    return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/"
-                            + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    dateRange.append(beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    dateRange.append("/");
+                    dateRange.append(endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    return dateRange.toString();
                 } catch (DateTimeParseException e) {
                     try {
                         // we can try different format
                         LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), dateFormatter);
                         LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), dateFormatter);
-                        return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "/"
-                                + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                        dateRange.append(beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                        dateRange.append("/");
+                        dateRange.append(endDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                        return dateRange.toString();
                     } catch (DateTimeParseException e1) {
                         LOG.warn("Could not parse dates: {} , {} ", timespan.getBegin().get(language).get(0),
                                 timespan.getEnd().get(language).get(0));
