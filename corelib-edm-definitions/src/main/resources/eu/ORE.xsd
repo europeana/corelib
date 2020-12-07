@@ -155,7 +155,7 @@
 								id:
 								<sch:value-of select="@rdf:about" />
 								- Within a Proxy
-								context, dc:language is mandatory when dc:language has the value
+								context, dc:language is mandatory when edm:type has the value
 								'TEXT'.
 							</sch:assert>
 							<sch:assert test="edm:type or (not(edm:type) and edm:europeanaProxy)">
