@@ -28,7 +28,6 @@ public enum ProblemType {
     TIMEOUT_SOLR("504-SA", "Timeout connecting to search engine.", ProblemResponseAction.LOG_ERR),
     // No need to specify error code as this is a programming error (not run-time error) which should never occur in production
     INVALIDCLASS(null,"Search service is called with invalid bean class.", ProblemResponseAction.MAIL),
-
     // Other errors
     // ------------
     APIKEY_MISSING("400-AM", "No API key provided", ProblemResponseAction.IGNORE),
@@ -43,6 +42,7 @@ public enum ProblemType {
     NO_USERNAME(null,"User name does not exist.", ProblemResponseAction.IGNORE),
     NO_PASSWORD(null,"Password does not exist.", ProblemResponseAction.IGNORE),
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
+    CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.MAIL ),
 
     // Deprecated (still in use, but in deprecated classes)
     // ----------
