@@ -301,4 +301,12 @@ public interface FullBean extends IdBean {
 	 * @param qualityAnnotations
 	 */
 	void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations);
+
+	/**
+	 *
+	 * @return the SchemaOrg response for this record
+	 */
+	String getSchemaOrg();
+
+	void setSchemaOrg(String schemaOrgResponse);
 }

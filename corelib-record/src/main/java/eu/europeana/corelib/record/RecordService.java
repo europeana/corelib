@@ -52,6 +52,8 @@ public interface RecordService {
      */
     FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolveId) throws EuropeanaException;
 
+    FullBean fetchSchemaOrg(DataSourceWrapper datasource, String europeanaObjectId, boolean resolveId) throws EuropeanaException;
+
     /**
      * This prepares a Fullbean retrieved from Mongo for use by Record API and other services
      * It adds:

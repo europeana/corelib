@@ -4,6 +4,7 @@ import eu.europeana.corelib.record.config.initializers.EdmMongerServerInitialize
 import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.config.initializers.MongoProviderInitializer;
+import eu.europeana.corelib.record.config.initializers.SchemaMongerServerInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,13 @@ public class RecordServerConfig {
                     LOG.info("Registered EdmMongoServer for data source: {}, record-dbName={}", dsConfig.getId(), dsConfig.getRecordDbName().get());
                 } else {
                     LOG.info("No record db configured for data source: {}", dsConfig.getId());
+                }
+                // create connection to Record db if configured
+                if (dsConfig.getSchemaDbName().isPresent()) {
+                    dsWrapper.setSchemaServer(new SchemaMongerServerInitializer(connection, dsConfig.getSchemaDbName().get()));
+                    LOG.info("Registered schemaMongoServer for data source: {}, schema-dbName={}", dsConfig.getId(), dsConfig.getSchemaDbName().get());
+                } else {
+                    LOG.info("No schema db configured for data source: {}", dsConfig.getId());
                 }
 
                 // create connection to Redirect db if configured

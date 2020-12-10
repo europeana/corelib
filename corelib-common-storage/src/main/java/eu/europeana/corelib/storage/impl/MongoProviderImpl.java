@@ -24,6 +24,7 @@ public class MongoProviderImpl implements MongoProvider {
     private static final Logger LOG                   = LogManager.getLogger(MongoProviderImpl.class);
 
     private MongoClient mongoClient;
+    private MongoClient mongoClient1;
 
     private String definedDatabase;
 
@@ -72,6 +73,8 @@ public class MongoProviderImpl implements MongoProvider {
                 connectionString.getMaxConnectionIdleTime());
 
         mongoClient = MongoClients
+                .create(mongoClientSettingsBuilder.applyConnectionString(connectionString).build());
+        mongoClient1 = MongoClients
                 .create(mongoClientSettingsBuilder.applyConnectionString(connectionString).build());
     }
 

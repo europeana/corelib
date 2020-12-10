@@ -55,15 +55,31 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
-        FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
+            FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
 
-        if (fullBean != null && datasource.getRecordServer().isPresent()) {
-            return enrichFullBean(datasource.getRecordServer().get(), fullBean, urls);
-        } else {
-            return null;
-        }
+            if (fullBean != null && datasource.getRecordServer().isPresent()) {
+                return enrichFullBean(datasource.getRecordServer().get(), fullBean, urls);
+            } else {
+                return null;
+            }
     }
 
+
+
+    @Override
+    public FullBean fetchSchemaOrg(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve) throws EuropeanaException {
+        long   startTime = System.currentTimeMillis();
+        if (datasource.getSchemaServer().isEmpty()) {
+            LOG.warn("Could not fetch schemaorg with europeanaObjectId {}. No record server configured", europeanaObjectId);
+            return null;
+        }
+        EdmMongoServer mongoServer = datasource.getSchemaServer().get();
+        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RecordService fetch SchemaoRg with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
+        }
+        return fullBean;
+    }
     /**
      * @see RecordService#fetchFullBean(DataSourceWrapper, String, boolean)
      */

@@ -32,6 +32,8 @@ import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.corelib.storage.impl.MongoProviderImpl;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import eu.europeana.corelib.web.exception.ProblemType;
+
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -57,6 +57,9 @@ public class FullBeanImpl implements FullBean {
 
   protected int europeanaCompleteness;
 
+  protected String schemaOrgResponse;
+
+
   @Reference
   protected List<PlaceImpl> places = new ArrayList<>();
 
@@ -384,6 +387,16 @@ public class FullBeanImpl implements FullBean {
   @Override
   public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
     this.qualityAnnotations = (List<QualityAnnotationImpl>) qualityAnnotations;
+  }
+
+  @Override
+  public String getSchemaOrg() {
+    return this.schemaOrgResponse;
+  }
+
+  @Override
+  public void setSchemaOrg(String schemaOrgResponse) {
+    this.schemaOrgResponse = schemaOrgResponse;
   }
 
 }

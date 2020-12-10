@@ -35,6 +35,8 @@ import static eu.europeana.corelib.utils.ConfigUtils.containsKeyPrefix;
 public class DataSourceConfigLoader {
     private static final String CONNECTION_URL_PROP = "connectionUrl";
     private static final String RECORD_DB_PROP = "record-dbname";
+    private static final String SCHEMA_DB_PROP = "schema-dbname";
+
     private static final String REDIRECT_DB_URL_PROP = "redirect-dbname";
 
     private Properties properties;
@@ -74,7 +76,8 @@ public class DataSourceConfigLoader {
                 DataSourceConfigProperty dsConfig = new DataSourceConfigProperty(
                         properties.getProperty(dsBasePath + "id"),
                         properties.getProperty(dsBasePath + REDIRECT_DB_URL_PROP),
-                        properties.getProperty(dsBasePath + RECORD_DB_PROP)
+                        properties.getProperty(dsBasePath + RECORD_DB_PROP),
+                        properties.getProperty(dsBasePath + SCHEMA_DB_PROP)
                 );
 
                 instance.addDataSource(dsConfig);
@@ -146,8 +149,12 @@ public class DataSourceConfigLoader {
         private final String id;
         private final String redirectDbName;
         private final String recordDbName;
+        private final String schemaDbName;
 
-        private DataSourceConfigProperty(@Nonnull String id, String redirectDbName, String recordDbName) {
+        public Optional<String> getSchemaDbName() {
+            return Optional.ofNullable(schemaDbName).filter(Predicate.not(StringUtils::isEmpty));        }
+
+        private DataSourceConfigProperty(@Nonnull String id, String redirectDbName, String recordDbName, String schemaDbName) {
             if (StringUtils.isEmpty(id)) {
                 throw new IllegalArgumentException(String.format("Data source ID missing in properties. redirectDbName=%s, recordDbName=%s", redirectDbName, recordDbName));
             }
@@ -155,6 +162,7 @@ public class DataSourceConfigLoader {
             this.id = id;
             this.redirectDbName = redirectDbName;
             this.recordDbName = recordDbName;
+            this.schemaDbName = schemaDbName;
         }
 
         public String getId() {
