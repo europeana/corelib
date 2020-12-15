@@ -39,7 +39,9 @@ public class RecordServerConfig {
             MongoProviderInitializer connection = new MongoProviderInitializer(instance.getConnectionUrl(), configLoader.getMongoMaxConnectionIdleTime());
             // keep track of connections, so they can be closed on exit
             mongoConnections.add(connection);
+            System.out.println(" record server config " +mongoConnections);
             for (DataSourceConfigLoader.DataSourceConfigProperty dsConfig : instance.getSources()) {
+                System.out.println(" DataSourceConfigProperty " +dsConfig);
                 DataSourceWrapper dsWrapper = new DataSourceWrapper();
                 // create connection to Record db if configured
                 if (dsConfig.getRecordDbName().isPresent()) {
@@ -51,8 +53,8 @@ public class RecordServerConfig {
 
                 // create connection to Redirect db if configured
                 if (dsConfig.getRedirectDbName().isPresent()) {
-                    RedirectDaoInitializer redirectDbInit = new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get());
-                    dsWrapper.setRedirectDb(redirectDbInit);
+                    System.out.println(" getRedirectDbName is precesnt true  ");
+                    dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
                 } else {
                     LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
                 }

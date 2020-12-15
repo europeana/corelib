@@ -37,7 +37,7 @@ public class DataSourceWrapper {
     }
 
     public Optional<RecordRedirectDao> getRedirectDb() {
-        return Optional.ofNullable(redirectDaoInitializer.get());
+        return redirectDaoInitializer == null ? Optional.empty() : Optional.ofNullable(redirectDaoInitializer.get());
     }
 
     public boolean isConfigured() {

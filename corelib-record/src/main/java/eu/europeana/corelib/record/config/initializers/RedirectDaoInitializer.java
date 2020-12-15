@@ -20,11 +20,13 @@ public class RedirectDaoInitializer extends LazyInitializer<RecordRedirectDao> {
         this.dbName = redirectDbName;
     }
 
-
+    /**
+     * EA-2350 - will not validate the redirect Db on the first request
+     * assuming the configuration value present is valid
+     */
     @Override
     protected RecordRedirectDao initialize() {
-        RecordRedirectDao db = new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
-        return (validateRedirectDbConnection(db, dbName)) ? db : null;
+        return new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
     }
 
 
