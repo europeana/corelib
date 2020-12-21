@@ -164,13 +164,19 @@ public final class SchemaOrgUtils {
         addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        if(StringUtils.startsWithIgnoreCase(concept.getAbout(), URL_PREFIX)) {
-            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_PATTERN,
-                    concept.getEntityIdentifier());
-            conceptObject.setEntityPageUrl(entityPageUrl);
-        }
+        addEntityPageUrl(concept, conceptObject, SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_TYPE);
+        
         // image
         conceptObject.setImage(concept.getFoafDepiction());
+    }
+
+    private static void addEntityPageUrl(ContextualClass entity,
+	    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject, String entityPageType) {
+	if(StringUtils.startsWithIgnoreCase(entity.getAbout(), URL_PREFIX)) {
+            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PATTERN, entityPageType,
+                    entity.getEntityIdentifier());
+            conceptObject.setEntityPageUrl(entityPageUrl);
+        }
     }
 
     /**
@@ -231,12 +237,9 @@ public final class SchemaOrgUtils {
         addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        if(StringUtils.startsWithIgnoreCase(edmPlace.getAbout(), URL_PREFIX)) {
-            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_PATTERN,
-                    edmPlace.getEntityIdentifier());
-            // Not available yet
-            // placeObject.setEntityPageUrl(entityPageUrl);
-        }
+        //not available yet
+//        addEntityPageUrl(edmPlace, placeObject, SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_TYPE);
+        
         // image
         placeObject.setImage(edmPlace.getFoafDepiction());
     }
@@ -372,11 +375,8 @@ public final class SchemaOrgUtils {
         addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        if(StringUtils.startsWithIgnoreCase(agent.getAbout(), URL_PREFIX)) {
-            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_PATTERN,
-                    agent.getEntityIdentifier());
-            agentObject.setEntityPageUrl(entityPageUrl);
-        }
+        addEntityPageUrl(agent, agentObject, SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_TYPE);
+        
         // image
         agentObject.setImage(agent.getFoafDepiction());
     }
@@ -426,12 +426,8 @@ public final class SchemaOrgUtils {
         addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
         // url
-        if(StringUtils.startsWithIgnoreCase(organization.getAbout(), URL_PREFIX)) {
-            String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_EDM_ORGANIZATION_PATTERN,
-                    organization.getEntityIdentifier());
-            entityObject.setEntityPageUrl(entityPageUrl);
-        }
-
+        addEntityPageUrl(organization, entityObject, SchemaOrgConstants.ENTITY_PAGE_URL_ORGANIZATION_TYPE);
+        
         // image
         entityObject.setImage(organization.getFoafDepiction());
     }
@@ -443,22 +439,25 @@ public final class SchemaOrgUtils {
      * @param timespanObject Schema.Org Contextual Entity object to update
      * @param timespan       source EDM timespan
      */
-    public static void processTimespan(Timespan agent,
+    public static void processTimespan(Timespan time,
                                     eu.europeana.corelib.edm.model.schemaorg.ContextualEntity timespanObject) {
         // @id
-    	timespanObject.setId(agent.getAbout());
+    	timespanObject.setId(time.getAbout());
 
         // name
-        addMultilingualProperties(timespanObject, agent.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        addMultilingualProperties(timespanObject, time.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
         // alternateName
-        addMultilingualProperties(timespanObject, agent.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        addMultilingualProperties(timespanObject, time.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
         // description
-        addMultilingualProperties(timespanObject, agent.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        addMultilingualProperties(timespanObject, time.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
+        //url 
+        addEntityPageUrl(time, timespanObject, SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_TYPE);
+        
         // sameAs
-        addTextProperties(timespanObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        addTextProperties(timespanObject, toList(time.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
     }
 

@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonldType(SchemaOrgConstants.TYPE_THING)
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-@JsonPropertyOrder({"@type", "@id", SchemaOrgConstants.PROPERTY_NAME, 
+@JsonPropertyOrder({"@type", "@id", SchemaOrgConstants.PROPERTY_URL, SchemaOrgConstants.PROPERTY_NAME, 
 	SchemaOrgConstants.PROPERTY_ALTERNATE_NAME, SchemaOrgConstants.PROPERTY_DESCRIPTION, 
 	SchemaOrgConstants.PROPERTY_IN_LANGUAGE, SchemaOrgConstants.PROPERTY_SAME_AS })
 public class Thing implements BaseType {
