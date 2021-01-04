@@ -20,13 +20,24 @@ public class RedirectDaoInitializer extends LazyInitializer<RecordRedirectDao> {
         this.dbName = redirectDbName;
     }
 
+    // TODO - remove the validation for redirectDb once we upgrade to metis-version 3
     /**
      * EA-2350 - will not validate the redirect Db on the first request
      * assuming the configuration value present is valid
+     *
+     * BUT until metis-common dependency issue for "java.lang.NoClassDefFoundError: javax/ws/rs/NotFoundException"
+     * is not resolved. It's better to validate the first request and initialise the
+     * RecordRedirectDao accordingly.
+     *
+     * Otherwise we would always get this error for a invalid record identifier,
+     * if redirectDb is present at RecordServiceImpl.resolveId().
+     *
      */
     @Override
     protected RecordRedirectDao initialize() {
-        return new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
+        RecordRedirectDao db = new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
+        return (validateRedirectDbConnection(db, dbName)) ? db : null;
+       // return new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
     }
 
 
@@ -50,6 +61,13 @@ public class RedirectDaoInitializer extends LazyInitializer<RecordRedirectDao> {
                 LOG.warn("Redirect functionality is now disabled");
             } else {
                 LOG.error("Error accessing redirect database '{}'", redirectDbName, e);
+            }
+        } // TODO - remove this once we upgrade to metis-version 3
+        // this is to avoid the known exception due to dependency issue
+        catch (NoClassDefFoundError error) {
+            if (error.getMessage().contains("javax/ws/rs/NotFoundException")) {
+                LOG.error("Error while initialising redirect database {}", redirectDbName, error);
+                LOG.warn("Redirect functionality is now disabled");
             }
         }
         return false;
