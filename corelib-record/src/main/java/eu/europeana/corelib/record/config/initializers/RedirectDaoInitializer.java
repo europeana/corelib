@@ -1,7 +1,7 @@
 package eu.europeana.corelib.record.config.initializers;
 
 import eu.europeana.corelib.utils.LazyInitializer;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,10 +12,10 @@ public class RedirectDaoInitializer extends LazyInitializer<RecordRedirectDao> {
 
     private static final Logger LOG = LogManager.getLogger(RedirectDaoInitializer.class);
 
-    private final MongoProviderInitializer connection;
+    private final MongoClientInitializer connection;
     private final String dbName;
 
-    public RedirectDaoInitializer(MongoProviderInitializer connection, String redirectDbName) {
+    public RedirectDaoInitializer(MongoClientInitializer connection, String redirectDbName) {
         this.connection = connection;
         this.dbName = redirectDbName;
     }
@@ -23,7 +23,7 @@ public class RedirectDaoInitializer extends LazyInitializer<RecordRedirectDao> {
 
     @Override
     protected RecordRedirectDao initialize() {
-        RecordRedirectDao db = new RecordRedirectDao(connection.get().getMongoClient(), dbName, false);
+        RecordRedirectDao db = new RecordRedirectDao(connection.get(), dbName, false);
         return (validateRedirectDbConnection(db, dbName)) ? db : null;
     }
 

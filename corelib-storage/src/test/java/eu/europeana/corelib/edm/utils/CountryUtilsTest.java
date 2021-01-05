@@ -1,7 +1,7 @@
 package eu.europeana.corelib.edm.utils;
 
-import eu.europeana.corelib.definitions.jibx.Country;
-import eu.europeana.corelib.definitions.jibx.CountryCodes;
+import eu.europeana.metis.schema.jibx.Country;
+import eu.europeana.metis.schema.jibx.CountryCodes;
 import eu.europeana.corelib.edm.utils.EdmUtils;
 import org.junit.Test;
 

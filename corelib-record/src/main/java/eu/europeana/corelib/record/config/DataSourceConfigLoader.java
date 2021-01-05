@@ -39,9 +39,6 @@ public class DataSourceConfigLoader {
 
     private Properties properties;
 
-    @Value("#{europeanaProperties['mongodb.max.connection.idle.time']}")
-    private String mongoMaxConnectionIdleTime;
-
     private final List<MongoConfigProperty> mongoConfigProperties = new ArrayList<>();
 
 
@@ -52,11 +49,6 @@ public class DataSourceConfigLoader {
     public void setProperties(Properties properties) {
         this.properties = properties;
     }
-
-    public void setMongoMaxConnectionIdleTime(String mongoMaxConnectionIdleTime) {
-        this.mongoMaxConnectionIdleTime = mongoMaxConnectionIdleTime;
-    }
-
 
     @PostConstruct
     void loadMongoConfig() {
@@ -93,12 +85,6 @@ public class DataSourceConfigLoader {
     public MongoConfigProperty getInstance(int index) {
         return mongoConfigProperties.get(index);
     }
-
-
-    public String getMongoMaxConnectionIdleTime() {
-        return mongoMaxConnectionIdleTime;
-    }
-
 
     static class MongoConfigProperty {
         private String connectionUrl;

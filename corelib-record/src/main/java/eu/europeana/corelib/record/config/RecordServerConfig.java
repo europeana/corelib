@@ -1,9 +1,9 @@
 package eu.europeana.corelib.record.config;
 
-import eu.europeana.corelib.record.config.initializers.EdmMongerServerInitializer;
-import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.corelib.record.DataSourceWrapper;
-import eu.europeana.corelib.record.config.initializers.MongoProviderInitializer;
+import eu.europeana.corelib.record.config.initializers.MongoClientInitializer;
+import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
+import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ import javax.annotation.PreDestroy;
 import java.util.*;
 
 /**
- * This class configures database connections specified as application properties.
- * It also enables the retrieval of Record DB/Redirect DB pairs by a unique identifier.
+ * This class configures database connections specified as application properties. It also enables
+ * the retrieval of Record DB/Redirect DB pairs by a unique identifier.
  */
 @Configuration
 public class RecordServerConfig {
@@ -27,7 +27,7 @@ public class RecordServerConfig {
     private final DataSourceConfigLoader configLoader;
     private String defaultDataSourceId;
 
-    private final List<MongoProviderInitializer> mongoConnections = new ArrayList<>();
+    private final List<MongoClientInitializer> mongoConnections = new ArrayList<>();
 
     public RecordServerConfig(@Autowired DataSourceConfigLoader configLoader) {
         this.configLoader = configLoader;
@@ -36,23 +36,26 @@ public class RecordServerConfig {
     @PostConstruct
     private void setupDataSources() {
         for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader.getMongoInstances()) {
-            MongoProviderInitializer connection = new MongoProviderInitializer(instance.getConnectionUrl(), configLoader.getMongoMaxConnectionIdleTime());
+            MongoClientInitializer connection = new MongoClientInitializer(instance.getConnectionUrl());
             // keep track of connections, so they can be closed on exit
             mongoConnections.add(connection);
+
             for (DataSourceConfigLoader.DataSourceConfigProperty dsConfig : instance.getSources()) {
                 DataSourceWrapper dsWrapper = new DataSourceWrapper();
                 // create connection to Record db if configured
                 if (dsConfig.getRecordDbName().isPresent()) {
-                    dsWrapper.setRecordServer(new EdmMongerServerInitializer(connection, dsConfig.getRecordDbName().get()));
-                    LOG.info("Registered EdmMongoServer for data source: {}, record-dbName={}", dsConfig.getId(), dsConfig.getRecordDbName().get());
+                    dsWrapper.setRecordDao(new RecordDaoInitializer(connection, dsConfig.getRecordDbName().get()));
+                    LOG.info("Registered RecordDao for data source: {}, record-dbName={}",
+                            dsConfig.getId(), dsConfig.getRecordDbName().get());
                 } else {
                     LOG.info("No record db configured for data source: {}", dsConfig.getId());
                 }
 
                 // create connection to Redirect db if configured
                 if (dsConfig.getRedirectDbName().isPresent()) {
-                    RedirectDaoInitializer redirectDbInit = new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get());
-                    dsWrapper.setRedirectDb(redirectDbInit);
+                    dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
+                    LOG.info("Registered RecordRedirectDao for data source: {}, redirect-dbName={}",
+                            dsConfig.getId(), dsConfig.getRedirectDbName().get());
                 } else {
                     LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
                 }
@@ -80,8 +83,8 @@ public class RecordServerConfig {
     }
 
     /**
-     * Gets the default data sources.
-     * This will also be the first Record DB / Redirect DB pair in the app configuration
+     * Gets the default data sources. This will also be the first Record DB / Redirect DB pair in
+     * the app configuration
      *
      * @return Optional containing matching data sources.
      * @deprecated use #getDataSourceById(String)
@@ -90,14 +93,13 @@ public class RecordServerConfig {
         return Optional.ofNullable(dataSourceById.get(defaultDataSourceId));
     }
 
-
     /**
      * Invoked by Spring container on application exit.
      */
     @PreDestroy
     private void closeConnections() {
-        LOG.info("Closing database connections...");
-        mongoConnections.forEach(MongoProviderInitializer::close);
+        LOG.info("Closing mongo connections...");
+        mongoConnections.forEach(MongoClientInitializer::close);
     }
 }
 

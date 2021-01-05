@@ -1,9 +1,9 @@
 package eu.europeana.corelib.record;
 
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
-import eu.europeana.corelib.record.config.initializers.EdmMongerServerInitializer;
+import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
 import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 
 import java.util.Optional;
 
@@ -13,27 +13,27 @@ import java.util.Optional;
  */
 public class DataSourceWrapper {
 
-    private EdmMongerServerInitializer recordServerInitializer;
+    private RecordDaoInitializer recordDaoInitializer;
     private RedirectDaoInitializer redirectDaoInitializer;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(EdmMongerServerInitializer edmMongerServerInitializer, RedirectDaoInitializer redirectDaoInitializer) {
-        this.recordServerInitializer = edmMongerServerInitializer;
+    public DataSourceWrapper(RecordDaoInitializer recordDaoInitializer, RedirectDaoInitializer redirectDaoInitializer) {
+        this.recordDaoInitializer = recordDaoInitializer;
         this.redirectDaoInitializer = redirectDaoInitializer;
     }
 
-    public void setRecordServer(EdmMongerServerInitializer edmMongerServerInitializer) {
-        this.recordServerInitializer = edmMongerServerInitializer;
+    public void setRecordDao(RecordDaoInitializer recordDaoInitializer) {
+        this.recordDaoInitializer = recordDaoInitializer;
     }
 
     public void setRedirectDb(RedirectDaoInitializer redirectDb) {
         this.redirectDaoInitializer = redirectDb;
     }
 
-    public Optional<EdmMongoServer> getRecordServer() {
-        return Optional.ofNullable(recordServerInitializer.get());
+    public Optional<RecordDao> getRecordDao() {
+        return Optional.ofNullable(recordDaoInitializer.get());
     }
 
     public Optional<RecordRedirectDao> getRedirectDb() {
@@ -41,7 +41,7 @@ public class DataSourceWrapper {
     }
 
     public boolean isConfigured() {
-        return recordServerInitializer != null || redirectDaoInitializer != null;
+        return recordDaoInitializer != null || redirectDaoInitializer != null;
     }
 
 }

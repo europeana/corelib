@@ -24,14 +24,6 @@
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-edm-definitions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-common-storage</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-storage</artifactId>
         </dependency>
         <dependency>
@@ -39,17 +31,15 @@
             <artifactId>corelib-web</artifactId>
         </dependency>
 
-        <!-- get alternative record id (redirect) -->
         <dependency>
             <groupId>eu.europeana.metis</groupId>
-            <artifactId>metis-common</artifactId>
+            <artifactId>metis-schema</artifactId>
             <version>${metis.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.zoho.crm</groupId>
-                    <artifactId>java-sdk</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>eu.europeana.metis</groupId>
+            <artifactId>metis-common-mongo</artifactId>
+            <version>${metis.version}</version>
         </dependency>
 
         <!-- OTHER -->

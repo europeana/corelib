@@ -6,9 +6,9 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.metis.mongo.dao.RecordDao;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -33,11 +33,11 @@ public final class WebMetaInfo {
      * Add webResources and fill them with metadata retrieved from Mongo
      *
      * @param fullBean the fullbean object to which metadata should be added
-     * @param mongoServer the mongo server from which the metadata should be retrieved
+     * @param recordDao the record dao from which the metadata should be retrieved
      * @param attributionCss location where the attribution css file is available
      */
     @SuppressWarnings("unchecked")
-    public static void injectWebMetaInfoBatch(final FullBean fullBean, final EdmMongoServer mongoServer, String attributionCss) {
+    public static void injectWebMetaInfoBatch(final FullBean fullBean, final RecordDao recordDao, String attributionCss) {
         if (fullBean == null || fullBean.getAggregations() == null || fullBean.getAggregations().isEmpty()) {
             return;
         }
@@ -67,7 +67,7 @@ public final class WebMetaInfo {
         }
 
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
-        fillAggregations(fullBean, mongoServer);
+        fillAggregations(fullBean, recordDao);
 
         addAttributionSnippets(fullBean, attributionCss);
     }
@@ -92,9 +92,9 @@ public final class WebMetaInfo {
         }
     }
 
-    private static void fillAggregations(final FullBean fullBean, final EdmMongoServer mongoServer) {
+    private static void fillAggregations(final FullBean fullBean, final RecordDao recordDao) {
         Map<String, WebResource> webResourceHashCodes = prepareWebResourceHashCodes(fullBean);
-        Map<String, WebResourceMetaInfoImpl> metaInfos = mongoServer.retrieveWebMetaInfos(new ArrayList<>(webResourceHashCodes.keySet()));
+        Map<String, WebResourceMetaInfoImpl> metaInfos = recordDao.retrieveWebMetaInfos(new ArrayList<>(webResourceHashCodes.keySet()));
         for (Map.Entry<String, WebResourceMetaInfoImpl> metaInfo : metaInfos.entrySet()) {
             WebResource webResource = webResourceHashCodes.get(metaInfo.getKey());
             if (webResource != null && metaInfo.getValue() != null) {

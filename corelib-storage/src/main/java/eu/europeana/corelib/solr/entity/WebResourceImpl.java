@@ -12,7 +12,7 @@ import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.definitions.edm.model.metainfo.WebResourceMetaInfo;
-import eu.europeana.corelib.definitions.jibx.ColorSpaceType;
+import eu.europeana.metis.schema.jibx.ColorSpaceType;
 import eu.europeana.corelib.definitions.model.Orientation;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.derived.AttributionSnippet;

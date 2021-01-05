@@ -4,14 +4,14 @@ import eu.europeana.corelib.definitions.edm.beans.BriefBean;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.edm.exceptions.SolrTypeException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
 import eu.europeana.corelib.search.loader.ContentLoader;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -59,7 +59,7 @@ public class RecordSearchServiceTest {
     private RecordService recordService;
 
     @Resource(name = "corelib_record_mongoServer")
-    private EdmMongoServer mongoServer;
+    private RecordDao mongoServer;
 
     @Resource(name = "metis_redirect_mongo")
     private RecordRedirectDao mongoIdServer;
@@ -95,12 +95,12 @@ public class RecordSearchServiceTest {
 //                    MongodExecutable mongodExecutable = runtime.prepare(conf);
 //                    mongodExecutable.start();
 //                    Mongo mongo = new Mongo("localhost", port);
-//                    EdmMongoServer mongoDBServer = new EdmMongoServerImpl(mongo, "europeana_test",
+//                    RecordDao mongoDBServer = new RecordDaoImpl(mongo, "europeana_test",
 //                            "", "");
 //                    idServer = new EuropeanaIdMongoServerImpl(mongo, "europeana_id_test", "", "");
 //                    mongoDBServer.getDatastore().getDB().dropDatabase();
 //                    idServer.createDatastore();
-//                    searchService.setEdmMongoServer(mongoDBServer);
+//                    searchService.setRecordDao(mongoDBServer);
 //                    searchService.setEuropeanaIdMongoServer(idServer);
 //                    searchService.setLogger(LogManager.getLogger(SearchServiceImpl.class));
 
@@ -188,7 +188,8 @@ public class RecordSearchServiceTest {
         assertFalse("No results given back... ", results.getResults().isEmpty());
 
         // TODO: wire up database providers
-        FullBean fBean = recordService.findById(new DataSourceWrapper(), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
+        FullBean fBean = recordService.findById(new DataSourceWrapper(), results.getResults().get(0).getId(),
+                new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 

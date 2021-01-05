@@ -1,6 +1,6 @@
 package eu.europeana.corelib.search.loader;
 
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
+import eu.europeana.metis.mongo.dao.RecordDao;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -77,7 +77,7 @@ public class ContentLoader {
         }
     }
 
-    public int parse(final EdmMongoServer mongoDBServer, final SolrClient solrServer) {
+    public int parse(final RecordDao recordDao, final SolrClient solrServer) {
         for (Path path : collectionXML) {
             // TODO JV this is where the file that is contained in the path should be indexed using the
             // Metis indexing library and the right versions for the Mongo and Solr connection.

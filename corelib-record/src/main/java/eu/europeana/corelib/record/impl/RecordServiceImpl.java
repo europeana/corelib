@@ -2,7 +2,6 @@ package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
-import eu.europeana.corelib.mongo.server.EdmMongoServer;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
@@ -11,8 +10,9 @@ import eu.europeana.corelib.record.api.UrlConverter;
 import eu.europeana.corelib.record.api.WebMetaInfo;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 import eu.europeana.corelib.web.exception.EuropeanaException;
-import eu.europeana.metis.mongo.RecordRedirect;
-import eu.europeana.metis.mongo.RecordRedirectDao;
+import eu.europeana.metis.mongo.dao.RecordDao;
+import eu.europeana.metis.mongo.dao.RecordRedirectDao;
+import eu.europeana.metis.mongo.model.RecordRedirect;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,8 +57,8 @@ public class RecordServiceImpl implements RecordService {
     public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
         FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
 
-        if (fullBean != null && datasource.getRecordServer().isPresent()) {
-            return enrichFullBean(datasource.getRecordServer().get(), fullBean, urls);
+        if (fullBean != null && datasource.getRecordDao().isPresent()) {
+            return enrichFullBean(datasource.getRecordDao().get(), fullBean, urls);
         } else {
             return null;
         }
@@ -70,12 +70,12 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve) throws EuropeanaException {
         long   startTime = System.currentTimeMillis();
-        if (datasource.getRecordServer().isEmpty()) {
+        if (datasource.getRecordDao().isEmpty()) {
             LOG.warn("Could not fetch FullBean with europeanaObjectId {}. No record server configured", europeanaObjectId);
             return null;
         }
-        EdmMongoServer mongoServer = datasource.getRecordServer().get();
-        FullBean fullBean = mongoServer.getFullBean(europeanaObjectId);
+        RecordDao recordDao = datasource.getRecordDao().get();
+        FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
         if (LOG.isDebugEnabled()) {
             LOG.debug("RecordService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
         }
@@ -89,7 +89,7 @@ public class RecordServiceImpl implements RecordService {
             }
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
-                fullBean = mongoServer.getFullBean(newId);
+                fullBean = recordDao.getFullBean(newId);
                 if (fullBean == null) {
                     LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
                 }
@@ -102,11 +102,11 @@ public class RecordServiceImpl implements RecordService {
     }
 
     /**
-     * @see RecordService#enrichFullBean(EdmMongoServer, FullBean, BaseUrlWrapper)
+     * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
      */
-    public FullBean enrichFullBean(EdmMongoServer mongoServer, FullBean fullBean, BaseUrlWrapper urls){
+    public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
         // 1. add meta info for all webresources + generate attribution snippets
-        WebMetaInfo.injectWebMetaInfoBatch(fullBean, mongoServer, attributionCss);
+        WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
 
         // 2. add link to IIIF for newspaper and AV/EUScreen items
         IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
