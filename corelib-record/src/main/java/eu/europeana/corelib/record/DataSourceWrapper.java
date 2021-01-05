@@ -1,7 +1,10 @@
 package eu.europeana.corelib.record;
 
+import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
+import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import eu.europeana.metis.mongo.dao.RecordDao;
 import eu.europeana.metis.mongo.dao.RecordRedirectDao;
+
 import java.util.Optional;
 
 /**
@@ -10,35 +13,35 @@ import java.util.Optional;
  */
 public class DataSourceWrapper {
 
-    private RecordDao recordDao;
-    private RecordRedirectDao redirectDb;
+    private RecordDaoInitializer recordDaoInitializer;
+    private RedirectDaoInitializer redirectDaoInitializer;
 
     public DataSourceWrapper() {
     }
 
-    public DataSourceWrapper(RecordDao recordDao, RecordRedirectDao redirectDb) {
-        this.recordDao = recordDao;
-        this.redirectDb = redirectDb;
+    public DataSourceWrapper(RecordDaoInitializer recordDaoInitializer, RedirectDaoInitializer redirectDaoInitializer) {
+        this.recordDaoInitializer = recordDaoInitializer;
+        this.redirectDaoInitializer = redirectDaoInitializer;
     }
 
-    public void setRecordDao(RecordDao recordDao) {
-        this.recordDao = recordDao;
+    public void setRecordDao(RecordDaoInitializer recordDaoInitializer) {
+        this.recordDaoInitializer = recordDaoInitializer;
     }
 
-    public void setRedirectDb(RecordRedirectDao redirectDb) {
-        this.redirectDb = redirectDb;
+    public void setRedirectDb(RedirectDaoInitializer redirectDb) {
+        this.redirectDaoInitializer = redirectDb;
     }
 
     public Optional<RecordDao> getRecordDao() {
-        return Optional.ofNullable(recordDao);
+        return Optional.ofNullable(recordDaoInitializer.get());
     }
 
     public Optional<RecordRedirectDao> getRedirectDb() {
-        return Optional.ofNullable(redirectDb);
+        return Optional.ofNullable(redirectDaoInitializer.get());
     }
 
-    public boolean isConfigured(){
-        return recordDao != null || redirectDb != null;
+    public boolean isConfigured() {
+        return recordDaoInitializer != null || redirectDaoInitializer != null;
     }
 
 }

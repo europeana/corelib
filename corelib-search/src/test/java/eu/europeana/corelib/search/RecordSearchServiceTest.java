@@ -59,7 +59,7 @@ public class RecordSearchServiceTest {
     private RecordService recordService;
 
     @Resource(name = "corelib_record_mongoServer")
-    private RecordDao recordDao;
+    private RecordDao mongoServer;
 
     @Resource(name = "metis_redirect_mongo")
     private RecordRedirectDao mongoIdServer;
@@ -106,7 +106,7 @@ public class RecordSearchServiceTest {
 
 
                 try {
-                    Assert.assertTrue("records failed to load...", CONTENT_LOADER.parse(recordDao, solrServer) == 0);
+                    Assert.assertTrue("records failed to load...", CONTENT_LOADER.parse(mongoServer, solrServer) == 0);
                     CONTENT_LOADER.commit(solrServer);
 //                        Thread.sleep(5000);
                     dataLoaded = LoadingStatus.LOADED;
@@ -186,7 +186,10 @@ public class RecordSearchServiceTest {
         query.setDefaultSolrFacets();
         ResultSet<BriefBean> results = searchService.search(solrServer, BriefBean.class, query);
         assertFalse("No results given back... ", results.getResults().isEmpty());
-        FullBean fBean = recordService.findById(new DataSourceWrapper(recordDao, mongoIdServer), results.getResults().get(0).getId(), new BaseUrlWrapper("", "",""));
+
+        // TODO: wire up database providers
+        FullBean fBean = recordService.findById(new DataSourceWrapper(), results.getResults().get(0).getId(),
+                new BaseUrlWrapper("", "",""));
         assertNotNull(fBean);
     }
 

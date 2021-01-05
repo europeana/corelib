@@ -1,10 +1,9 @@
 package eu.europeana.corelib.record.config;
 
-import com.mongodb.client.MongoClient;
 import eu.europeana.corelib.record.DataSourceWrapper;
-import eu.europeana.metis.mongo.dao.RecordDao;
-import eu.europeana.metis.mongo.connection.MongoClientProvider;
-import eu.europeana.metis.mongo.dao.RecordRedirectDao;
+import eu.europeana.corelib.record.config.initializers.MongoClientInitializer;
+import eu.europeana.corelib.record.config.initializers.RecordDaoInitializer;
+import eu.europeana.corelib.record.config.initializers.RedirectDaoInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class RecordServerConfig {
     private final DataSourceConfigLoader configLoader;
     private String defaultDataSourceId;
 
-    private final List<MongoClient> mongoClients = new ArrayList<>();
+    private final List<MongoClientInitializer> mongoConnections = new ArrayList<>();
 
     public RecordServerConfig(@Autowired DataSourceConfigLoader configLoader) {
         this.configLoader = configLoader;
@@ -36,38 +35,27 @@ public class RecordServerConfig {
 
     @PostConstruct
     private void setupDataSources() {
-        for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader
-            .getMongoInstances()) {
-            // TODO: 04/11/2020 The MaxConnection idle time can be now passed in the connection url with maxIdleTimeMS
-            final MongoClient mongoClient = MongoClientProvider
-                .create(instance.getConnectionUrl())
-                .createMongoClient();
-
+        for (DataSourceConfigLoader.MongoConfigProperty instance : configLoader.getMongoInstances()) {
+            MongoClientInitializer connection = new MongoClientInitializer(instance.getConnectionUrl());
             // keep track of connections, so they can be closed on exit
-            mongoClients.add(mongoClient);
+            mongoConnections.add(connection);
+
             for (DataSourceConfigLoader.DataSourceConfigProperty dsConfig : instance.getSources()) {
                 DataSourceWrapper dsWrapper = new DataSourceWrapper();
                 // create connection to Record db if configured
                 if (dsConfig.getRecordDbName().isPresent()) {
-                    dsWrapper.setRecordDao(new RecordDao(mongoClient,
-                        dsConfig.getRecordDbName().get()));
+                    dsWrapper.setRecordDao(new RecordDaoInitializer(connection, dsConfig.getRecordDbName().get()));
                     LOG.info("Registered RecordDao for data source: {}, record-dbName={}",
-                        dsConfig.getId(), dsConfig.getRecordDbName().get());
+                            dsConfig.getId(), dsConfig.getRecordDbName().get());
                 } else {
                     LOG.info("No record db configured for data source: {}", dsConfig.getId());
                 }
 
                 // create connection to Redirect db if configured
                 if (dsConfig.getRedirectDbName().isPresent()) {
-                    RecordRedirectDao redirectDb = new RecordRedirectDao(
-                        mongoClient, dsConfig.getRedirectDbName().get());
-                    if (validateRedirectDbConnection(redirectDb,
-                        dsConfig.getRedirectDbName().get())) {
-                        dsWrapper.setRedirectDb(redirectDb);
-                        LOG.info(
-                            "Registered RecordRedirectDao  for data source: {}, redirect-dbName={}",
+                    dsWrapper.setRedirectDb(new RedirectDaoInitializer(connection, dsConfig.getRedirectDbName().get()));
+                    LOG.info("Registered RecordRedirectDao for data source: {}, redirect-dbName={}",
                             dsConfig.getId(), dsConfig.getRedirectDbName().get());
-                    }
                 } else {
                     LOG.info("No redirect db configured for data source: {}", dsConfig.getId());
                 }
@@ -106,39 +94,12 @@ public class RecordServerConfig {
     }
 
     /**
-     * Check if the redirectDao works fine. If not we disable it. This is a temporary hack so we can
-     * use the Record API without a redirect database (for Metis Sandbox) When we switch to
-     * Spring-Boot we can implement a more elegant solution with @ConditionalOnProperty for example
-     *
-     * @param redirectDb
-     * @param redirectDbName
-     */
-    private boolean validateRedirectDbConnection(RecordRedirectDao redirectDb,
-        String redirectDbName) {
-        try {
-            redirectDb.getRecordRedirectsByOldId("/xx/yy");
-            LOG.info("Connection to redirect database {} is okay.", redirectDbName);
-            return true;
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not authorized")) {
-                // this is the expected behavior if we try to access a database that doesn't exist.
-                LOG.warn("Not authorized to access redirect database {}. It may not exist.",
-                    redirectDbName);
-                LOG.warn("Redirect functionality is now disabled");
-            } else {
-                LOG.error("Error accessing redirect database '{}'", redirectDbName, e);
-            }
-        }
-        return false;
-    }
-
-    /**
      * Invoked by Spring container on application exit.
      */
     @PreDestroy
     private void closeConnections() {
-        LOG.info("Closing database connections...");
-        mongoClients.forEach(MongoClient::close);
+        LOG.info("Closing mongo connections...");
+        mongoConnections.forEach(MongoClientInitializer::close);
     }
 }
 

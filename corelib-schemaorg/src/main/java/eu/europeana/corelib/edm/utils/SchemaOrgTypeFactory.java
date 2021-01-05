@@ -73,6 +73,9 @@ public final class SchemaOrgTypeFactory {
 	else if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Place) {
 	    thingObject = new Place();
 	}
+	else if(entity instanceof eu.europeana.corelib.definitions.edm.entity.Timespan) {
+	    thingObject = new Timespan();
+	}
 	else {
 	    throw new RuntimeException(
 			"The given type is not supported by the schema.org interface");

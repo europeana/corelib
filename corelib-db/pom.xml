@@ -29,10 +29,6 @@
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-common-storage</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-utils</artifactId>
         </dependency>
         <dependency>
