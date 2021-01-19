@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-public class JdbcConfig implements TransactionManagementConfigurer {
+@EnableTransactionManagement
+public class JdbcConfig  {
 
     @Value("#{europeanaProperties['db.driverClass']}")
     private String jdbcDriverClass;
@@ -53,17 +53,12 @@ public class JdbcConfig implements TransactionManagementConfigurer {
         return entityManagerFactoryBean;
     }
 
-    @Bean
+    @Bean(name="corelib_db_transactionManager")
     @Primary
     public JpaTransactionManager txManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         transactionManager.setDataSource(dbDataSource());
         return transactionManager;
-    }
-
-    @Override
-    public PlatformTransactionManager annotationDrivenTransactionManager() {
-        return txManager();
     }
 }
