@@ -491,9 +491,6 @@ public final class SchemaOrgUtils {
         // addressLocality
         addTextProperties(postalAddress, Arrays.asList(address.getVcardLocality()), SchemaOrgConstants.PROPERTY_ADDRESS_LOCALITY);
 
-        // addressRegion
-        //addTextProperties(postalAddress, Arrays.asList(address.get), SchemaOrgConstants.PROPERTY_ADDRESS_REGION);
-
         // addressCountry
         addTextProperties(postalAddress, Arrays.asList(address.getVcardCountryName()), SchemaOrgConstants.PROPERTY_ADDRESS_COUNTRY);
 
@@ -609,20 +606,11 @@ public final class SchemaOrgUtils {
         // @id
         mediaObject.setId(resource.getAbout());
 
-        // name
-        for (ProxyImpl proxy : bean.getProxies()) {
-            addMultilingualProperties(mediaObject, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_NAME);
-        }
+        //name and Description
+        getNameAndDescription(mediaObject, resource, bean);
 
         if (mediaObject instanceof VideoObject) {
-            if (bean.getEuropeanaAggregation() != null
-                    && notNullNorEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
-                // thumbnailUrl (only for VideoObject)
-                mediaObject.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
-            }
-
-            // uploadDate (only for VideoObject)
-            mediaObject.addUploadDate(new Text(DateUtils.format(bean.getTimestampCreated())));
+            addVideoObjectProperties(mediaObject, bean);
         }
 
         // contentUrl
@@ -631,20 +619,6 @@ public final class SchemaOrgUtils {
         // creator
         addResourceOrReferenceProperties(mediaObject, resource.getDcCreator(),
                 SchemaOrgConstants.PROPERTY_CREATOR, Thing.class, linkedContextualEntities);
-
-        // description::  if missing take ore:Proxy/dc:description or ore:Proxy.dc:title
-        if(resource.getDcDescription() != null && !resource.getDcDescription().isEmpty()) {
-            addMultilingualProperties(mediaObject, resource.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
-        } else {
-            for (ProxyImpl proxy : bean.getProxies()) {
-                if(proxy.getDcDescription()!= null && !proxy.getDcDescription().isEmpty()) {
-                    addMultilingualProperties(mediaObject, proxy.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
-                } else if (proxy.getDcTitle()!= null && !proxy.getDcTitle().isEmpty()) {
-
-                    addMultilingualProperties(mediaObject, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
-                }
-            }
-        }
 
         // encodesCreativeWork
         if (!bean.getProvidedCHOs().isEmpty()) {
@@ -707,6 +681,51 @@ public final class SchemaOrgUtils {
             // bitrate
             mediaObject.addBitrate(new Text(String.valueOf(resource.getEbucoreBitRate())));
         }
+    }
+
+    /**
+     * Adds name and description properties to the media object based on the web resource
+     *
+     * @param mediaObject media object to which the properties will be added
+     * @param resource    web resource to retrieve property values
+     * @param bean        bean with all the data needed to generate some mappings
+     */
+    private static void getNameAndDescription(MediaObject mediaObject, WebResource resource, FullBeanImpl bean) {
+        boolean proxyDescReq = true;
+        // description : if missing take ore:Proxy/dc:description or ore:Proxy.dc:title
+        if(resource.getDcDescription() != null && !resource.getDcDescription().isEmpty()) {
+            proxyDescReq = false;
+            addMultilingualProperties(mediaObject, resource.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        }
+
+        // name
+        for (ProxyImpl proxy : bean.getProxies()) {
+            addMultilingualProperties(mediaObject, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_NAME);
+            // description from proxy : if proxyDescReq is true
+            if (proxyDescReq) {
+                if (proxy.getDcDescription() != null && !proxy.getDcDescription().isEmpty()) {
+                    addMultilingualProperties(mediaObject, proxy.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+                } else if (proxy.getDcTitle() != null && !proxy.getDcTitle().isEmpty()) {
+                    addMultilingualProperties(mediaObject, proxy.getDcTitle(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds thumbnail url and upload date for Video objects
+     *
+     * @param mediaObject media object to which the properties will be added
+     * @param bean        bean with all the data needed to generate some mappings
+     */
+    private static void addVideoObjectProperties(MediaObject mediaObject, FullBeanImpl bean) {
+        if (bean.getEuropeanaAggregation() != null
+                && notNullNorEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
+            // thumbnailUrl (only for VideoObject)
+            mediaObject.addThumbnailUrl(new Text(bean.getEuropeanaAggregation().getEdmPreview()));
+        }
+        // uploadDate (only for VideoObject)
+        mediaObject.addUploadDate(new Text(DateUtils.format(bean.getTimestampCreated())));
     }
 
     /**
@@ -1056,24 +1075,29 @@ public final class SchemaOrgUtils {
      */
     private static String createDateRange(String value, String language, List<TimespanImpl> timespans) {
         for (TimespanImpl timespan : timespans) {
+            StringBuilder dateRange = new StringBuilder();
             if (timespan.getAbout().equals(value) && timespan.getBegin() != null && timespan.getEnd() != null
                     && timespan.getBegin().get(language) != null && timespan.getEnd().get(language) != null) {
 
                 try {
                     LocalDateTime beginDate = LocalDateTime.parse(timespan.getBegin().get(language).get(0), formatter);
                     LocalDateTime endDate = LocalDateTime.parse(timespan.getEnd().get(language).get(0), formatter);
-                    return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "/"
-                            + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    dateRange.append(beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    dateRange.append("/");
+                    dateRange.append(endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    return dateRange.toString();
                 } catch (DateTimeParseException e) {
                     try {
                         // we can try different format
                         LocalDate beginDate = LocalDate.parse(timespan.getBegin().get(language).get(0), dateFormatter);
                         LocalDate endDate = LocalDate.parse(timespan.getEnd().get(language).get(0), dateFormatter);
-                        return beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + "/"
-                                + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+                        dateRange.append(beginDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                        dateRange.append("/");
+                        dateRange.append(endDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                        return dateRange.toString();
                     } catch (DateTimeParseException e1) {
-                        LOG.warn("Could not parse dates: " + timespan.getBegin().get(language).get(0) + ", "
-                                + timespan.getEnd().get(language).get(0));
+                        LOG.warn("Could not parse dates: {} , {} ", timespan.getBegin().get(language).get(0),
+                                timespan.getEnd().get(language).get(0));
                     }
                 }
             }
@@ -1321,8 +1345,8 @@ public final class SchemaOrgUtils {
             resource = referenceClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             resource = new Thing();
-            LOG.info("Cannot instantiate object of class " + referenceClass.getCanonicalName()
-                    + ". Instance of Thing is used instead!");
+            LOG.info("Cannot instantiate object of class {} . Instance of Thing is used instead!",
+                    referenceClass.getCanonicalName());
         }
         return resource;
     }
