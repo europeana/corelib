@@ -106,7 +106,7 @@ public final class EdmUtils {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs(), preserveIdentifiers);
-        appendQualityAnnotations(rdf, fullBean.getQualityAnnotations());
+        appendQualityAnnotations(rdf, fullBean.getQualityAnnotations(), preserveIdentifiers);
         appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
         appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
         appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
@@ -187,14 +187,20 @@ public final class EdmUtils {
 
     }
 
-    private static void appendQualityAnnotations(RDF rdf, List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations) {
+    private static void appendQualityAnnotations(RDF rdf,
+        List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
+        boolean preserveIdentifiers) {
         if (qualityAnnotations != null) {
             List<QualityAnnotation> resultList = new ArrayList<>();
             for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
                 QualityAnnotation qualityAnnotation = new QualityAnnotation();
                 resultList.add(qualityAnnotation);
 
-                qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
+                if (EuropeanaUriUtils.isUri(anno.getAbout()) || preserveIdentifiers) {
+                    qualityAnnotation.setAbout(anno.getAbout());
+                } else {
+                    qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
+                }
 
                 Created created = new Created();
                 created.setString(anno.getCreated());
@@ -204,7 +210,7 @@ public final class EdmUtils {
                 hasBody.setResource(anno.getBody());
                 qualityAnnotation.setHasBody(hasBody);
 
-                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), BASE_URL);
+                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null);
             }
 
             rdf.setQualityAnnotationList(resultList);
