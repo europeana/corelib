@@ -176,10 +176,10 @@ public final class EdmUtils {
                 license.setAbout(lic.getAbout());
                 addAsObject(license, InheritFrom.class,
                         lic.getOdrlInheritFrom(), preserveIdentifiers);
-                DateType date = new DateType();
-                date.setDate(new java.sql.Date(lic.getCcDeprecatedOn()
-                        .getTime()));
-                license.setDeprecatedOn(date);
+                DateType dateType = new DateType();
+                Optional.ofNullable(lic.getCcDeprecatedOn()).map(java.util.Date::getTime).map(java.sql.Date::new).ifPresent(
+                    dateType::setDate);
+                license.setDeprecatedOn(dateType);
                 licenseList.add(license);
             }
             rdf.setLicenseList(licenseList);
