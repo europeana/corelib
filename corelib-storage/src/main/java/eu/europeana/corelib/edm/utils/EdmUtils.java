@@ -174,12 +174,12 @@ public final class EdmUtils {
             for (LicenseImpl lic : licenses) {
                 License license = new License();
                 license.setAbout(lic.getAbout());
-                addAsObject(license, InheritFrom.class,
-                        lic.getOdrlInheritFrom(), preserveIdentifiers);
-                DateType dateType = new DateType();
-                Optional.ofNullable(lic.getCcDeprecatedOn()).map(java.util.Date::getTime).map(java.sql.Date::new).ifPresent(
-                    dateType::setDate);
-                license.setDeprecatedOn(dateType);
+                addAsObject(license, InheritFrom.class, lic.getOdrlInheritFrom(), preserveIdentifiers);
+                if (lic.getCcDeprecatedOn() != null) {
+                    DateType dateType = new DateType();
+                    dateType.setDate(new java.sql.Date(lic.getCcDeprecatedOn().getTime()));
+                    license.setDeprecatedOn(dateType);
+                }
                 licenseList.add(license);
             }
             rdf.setLicenseList(licenseList);
