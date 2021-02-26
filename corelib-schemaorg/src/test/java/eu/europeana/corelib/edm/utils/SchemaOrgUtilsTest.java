@@ -188,44 +188,48 @@ public class SchemaOrgUtilsTest {
         for (Thing thing : schemaResponse) {
             for (int i = 0; i < linkedContextualEntities.size(); i++) {
                 if (StringUtils.equals(linkedContextualEntities.get(i), thing.getId())) {
-                    // if agent: Person
-                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PERSON)) {
-                        //id
-                        assertEquals(MockBeanConstants.DC_CREATOR_6, thing.getId());
-                        //birthDate
-                        assertEquals(MockBeanConstants.BIRTH_DATE, thing.getProperty(SchemaOrgConstants.PROPERTY_BIRTH_DATE).get(0).toString());
-                        //deathDate
-                        assertEquals(MockBeanConstants.DEATH_DATE, thing.getProperty(SchemaOrgConstants.PROPERTY_DEATH_DATE).get(0).toString());
-                        linkedObjectsTested++;
-                    }
-                    // if Organization
-                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
-                        //id
-                        assertEquals(MockBeanConstants.DC_CREATOR_8, thing.getId());
-                        //dissolutionDate
-                        assertEquals(MockBeanConstants.DISOLUTION_DATE,
-                                thing.getProperty(SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE).get(0).toString());
-                        linkedObjectsTested++;
-                    }
-                    //Place Object check
-                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PLACE)) {
-                        //id
-                        assertEquals( MockBeanConstants.DC_CREATOR_7, thing.getId());
-                        //description
-                        assertEquals( MockBeanConstants.PLACE_NOTE,
-                                SchemaOrgTestUtils.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing).get(0));
-                        linkedObjectsTested++;
-
-                    }
-                    //Concept object
-                    if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.THING)) {
-                        //id
-                        assertEquals(MockBeanConstants.DC_CREATOR_4, thing.getId());
-                        //description
-                        for (String description : SchemaOrgTestUtils.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing)) {
-                            assertTrue(StringUtils.equals(description, MockBeanConstants.CONCEPT_NOTE_1) ||
-                                    StringUtils.equals(description, MockBeanConstants.CONCEPT_NOTE_2));
+                    if (!thing.getId().startsWith(MockBeanConstants.URL_PREFIX)) {
+                        // if agent: Person
+                        if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PERSON)) {
+                            //id
+                            assertEquals(MockBeanConstants.DC_CREATOR_6, thing.getId());
+                            //birthDate
+                            assertEquals(MockBeanConstants.BIRTH_DATE, thing.getProperty(SchemaOrgConstants.PROPERTY_BIRTH_DATE).get(0).toString());
+                            //deathDate
+                            assertEquals(MockBeanConstants.DEATH_DATE, thing.getProperty(SchemaOrgConstants.PROPERTY_DEATH_DATE).get(0).toString());
+                            linkedObjectsTested++;
                         }
+                        // if Organization
+                        if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
+                            //id
+                            assertEquals(MockBeanConstants.DC_CREATOR_8, thing.getId());
+                            //dissolutionDate
+                            assertEquals(MockBeanConstants.DISOLUTION_DATE,
+                                    thing.getProperty(SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE).get(0).toString());
+                            linkedObjectsTested++;
+                        }
+                        //Place Object check
+                        if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.PLACE)) {
+                            //id
+                            assertEquals(MockBeanConstants.DC_CREATOR_7, thing.getId());
+                            //description
+                            assertEquals(MockBeanConstants.PLACE_NOTE,
+                                    SchemaOrgTestUtils.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing).get(0));
+                            linkedObjectsTested++;
+
+                        }
+                        //Concept object
+                        if (StringUtils.equals(thing.getTypeName(), MockBeanConstants.THING)) {
+                            //id
+                            assertEquals(MockBeanConstants.DC_CREATOR_4, thing.getId());
+                            //description
+                            for (String description : SchemaOrgTestUtils.getMultilingualString(SchemaOrgConstants.PROPERTY_DESCRIPTION, thing)) {
+                                assertTrue(StringUtils.equals(description, MockBeanConstants.CONCEPT_NOTE_1) ||
+                                        StringUtils.equals(description, MockBeanConstants.CONCEPT_NOTE_2));
+                            }
+                            linkedObjectsTested++;
+                        }
+                    } else {
                         linkedObjectsTested++;
                     }
 
