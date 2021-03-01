@@ -13,7 +13,7 @@ public class MockEdmOrganization {
     public static Organization getEdmOrganization() {
 	OrganizationImpl organization = new OrganizationImpl();
 	
-	organization.setAbout("http://data.europeana.eu/organization/1482250000002112001");
+	organization.setAbout("http://data.test.eu/organization/1482250000002112001");
 	organization.setDcIdentifier(new HashMap<>());
 	organization.getDcIdentifier().put("def", Arrays.asList("1482250000002112001"));
 	
