@@ -8,6 +8,7 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	private String[] proxyIn;
 	private String proxyFor;
+	private String[] lineage;
 
 	@Override
 	public String[] getProxyIn() {
@@ -16,7 +17,7 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 
 	@Override
 	public void setProxyIn(String[] proxyIn) {
-		this.proxyIn = proxyIn!=null?proxyIn.clone():null;
+		this.proxyIn = proxyIn != null ? proxyIn.clone() : null;
 	}
 
 	@Override
@@ -27,6 +28,16 @@ public class BasicProxyImpl extends PhysicalThingImpl implements BasicProxy {
 	@Override
 	public void setProxyFor(String proxyFor) {
 	    this.proxyFor = proxyFor;
+	}
+
+	@Override
+	public String[] getLineage() {
+		return this.lineage;
+	}
+
+	@Override
+	public void setLineage(String[] lineage) {
+		this.lineage = lineage != null ? lineage.clone() : null;
 	}
 
 

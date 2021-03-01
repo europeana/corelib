@@ -7,11 +7,11 @@ package eu.europeana.corelib.definitions.edm.entity;
  *
  */
 
-public interface BasicProxy  extends PhysicalThing {
+public interface BasicProxy extends PhysicalThing {
 	/**
 	 * Retrieve the ore:ProxyIn field for a Proxy (It always points to the rdf:About of an Aggregation)
 	 * 
-	 * @return	String containing the proxyIn of a Proxy
+	 * @return	String array containing the proxyIn of a Proxy
 	 */
 	String[] getProxyIn();
 
@@ -19,7 +19,7 @@ public interface BasicProxy  extends PhysicalThing {
 	 * Set the proxyIn field for a Proxy
 	 * 
 	 * @param proxyIn
-	 * 			String containing the proxyIn of a Proxy
+	 * 			String array containing the proxyIn of a Proxy
 	 */
 	void setProxyIn(String[] proxyIn);
 
@@ -37,5 +37,19 @@ public interface BasicProxy  extends PhysicalThing {
 	 * 			String containing the proxyIn of a Proxy
 	 */
 	void setProxyFor(String proxyFor);
-	
+
+	/**
+	 * Retrieve the ore:lineage field for a Proxy (It always points to the rdf:About of another Proxy)
+	 *
+	 * @return	String array containing the lineage of a Proxy
+	 */
+	String[] getLineage();
+
+	/**
+	 * Set the lineage field for a Proxy
+	 *
+	 * @param lineage
+	 * 			String array containing the lineage of a Proxy
+	 */
+	void setLineage(String[] lineage);
 }
