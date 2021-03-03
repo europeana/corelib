@@ -93,13 +93,13 @@ public final class SchemaOrgUtils {
         }
     }
 
-        /**
-         * Update properties of the given Schema.Org Thing using data from the given EDM
-         * Contextual Class
-         *
-         * @param entity source EDM Contextual Class
-         * @param thing  Schema.Org Contextual Entity to update
-         */
+    /**
+     * Update properties of the given Schema.Org Thing using data from the given EDM
+     * Contextual Class
+     *
+     * @param entity source EDM Contextual Class
+     * @param thing  Schema.Org Contextual Entity to update
+     */
     public static void processEntity(ContextualClass entity,
                                      eu.europeana.corelib.edm.model.schemaorg.ContextualEntity thing) {
 
@@ -119,16 +119,18 @@ public final class SchemaOrgUtils {
 
     /**
      * Process all concepts on the given list and create a Thing object for each.
+     * To limit the size of schema.org responses only entity-ids are listed for
+     * contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
      *
-     * @param concepts concepts to be processed
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param concepts                 concepts to be processed
+     * @param linkedContextualEntities list of all the references in the object
      * @return list of created Thing objects for each concept
      */
     private static List<Thing> processConcepts(List<ConceptImpl> concepts, List<String> linkedContextualEntities) {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (ConceptImpl concept : concepts) {
-            if(linkedContextualEntities.contains(concept.getAbout())) {
+            if (linkedContextualEntities.contains(concept.getAbout()) && !StringUtils.startsWith(concept.getAbout(), URL_PREFIX)) {
                 eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject = new eu.europeana.corelib.edm.model.schemaorg.Concept();
                 referencedObjects.add(conceptObject);
 
@@ -150,32 +152,29 @@ public final class SchemaOrgUtils {
                                       eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject) {
         // @id
         conceptObject.setId(concept.getAbout());
-        //To limit the size of schema.org responses only entity-ids are listed for
-        // contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
-        if (!concept.getAbout().startsWith(URL_PREFIX)) {
-            // name
-            addMultilingualProperties(conceptObject, concept.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        // name
+        addMultilingualProperties(conceptObject, concept.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // alternateName
-            addMultilingualProperties(conceptObject, concept.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        // alternateName
+        addMultilingualProperties(conceptObject, concept.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
-            // description
-            addMultilingualProperties(conceptObject, concept.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        // description
+        addMultilingualProperties(conceptObject, concept.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
-            // sameAs
-            addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        // sameAs
+        addTextProperties(conceptObject, toList(concept.getExactMatch()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
-            // url
-            addEntityPageUrl(concept, conceptObject, SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_TYPE);
+        // url
+        addEntityPageUrl(concept, conceptObject, SchemaOrgConstants.ENTITY_PAGE_URL_CONCEPT_TYPE);
 
-            // image
-            conceptObject.setImage(concept.getFoafDepiction());
-        }
+        // image
+        conceptObject.setImage(concept.getFoafDepiction());
+
     }
 
     private static void addEntityPageUrl(ContextualClass entity,
-	    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject, String entityPageType) {
-	if(StringUtils.startsWithIgnoreCase(entity.getAbout(), URL_PREFIX)) {
+                                         eu.europeana.corelib.edm.model.schemaorg.ContextualEntity conceptObject, String entityPageType) {
+        if (StringUtils.startsWithIgnoreCase(entity.getAbout(), URL_PREFIX)) {
             String entityPageUrl = String.format(SchemaOrgConstants.ENTITY_PAGE_URL_PATTERN, entityPageType,
                     entity.getEntityIdentifier());
             conceptObject.setEntityPageUrl(entityPageUrl);
@@ -184,16 +183,18 @@ public final class SchemaOrgUtils {
 
     /**
      * Process list of places and create Place for each.
+     * To limit the size of schema.org responses only entity-ids are listed for
+     * contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
      *
-     * @param places places list to process
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param places                   places list to process
+     * @param linkedContextualEntities list of all the references in the object
      * @return list of Place objects created from the input list
      */
     private static List<Thing> processPlaces(List<PlaceImpl> places, List<String> linkedContextualEntities) {
         List<Thing> referencedObjects = new ArrayList<>();
 
         for (PlaceImpl place : places) {
-            if(linkedContextualEntities.contains(place.getAbout())) {
+            if (linkedContextualEntities.contains(place.getAbout()) && !StringUtils.startsWith(place.getAbout(), URL_PREFIX)) {
                 Place placeObject = new Place();
                 referencedObjects.add(placeObject);
 
@@ -216,39 +217,35 @@ public final class SchemaOrgUtils {
 
         // @id
         placeObject.setId(edmPlace.getAbout());
-        //To limit the size of schema.org responses only entity-ids are listed for
-        // contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
-        if (!edmPlace.getAbout().startsWith(URL_PREFIX)) {
 
-            // name
-            addMultilingualProperties(placeObject, edmPlace.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        // name
+        addMultilingualProperties(placeObject, edmPlace.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // alternateName
-            addMultilingualProperties(placeObject, edmPlace.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        // alternateName
+        addMultilingualProperties(placeObject, edmPlace.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
-            // geo
-            createGeoCoordinates(edmPlace, placeObject);
+        // geo
+        createGeoCoordinates(edmPlace, placeObject);
 
-            // description
-            addMultilingualProperties(placeObject, edmPlace.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        // description
+        addMultilingualProperties(placeObject, edmPlace.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
-            // containsPlace
-            addReferences(placeObject, edmPlace.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE,
-                    Place.class, null);
+        // containsPlace
+        addReferences(placeObject, edmPlace.getDcTermsHasPart(), SchemaOrgConstants.PROPERTY_CONTAINS_PLACE,
+                Place.class, null);
 
-            // containedInPlace
-            addReferences(placeObject, edmPlace.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class, null);
+        // containedInPlace
+        addReferences(placeObject, edmPlace.getIsPartOf(), SchemaOrgConstants.PROPERTY_CONTAINED_IN_PLACE, Place.class, null);
 
-            // sameAs
-            addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+        // sameAs
+        addTextProperties(placeObject, toList(edmPlace.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
 
-            // url
-            //not available yet
+        // url
+        //not available yet
 //        addEntityPageUrl(edmPlace, placeObject, SchemaOrgConstants.ENTITY_PAGE_URL_PLACE_TYPE);
 
-            // image
-            placeObject.setImage(edmPlace.getFoafDepiction());
-        }
+        // image
+        placeObject.setImage(edmPlace.getFoafDepiction());
     }
 
     /**
@@ -284,24 +281,25 @@ public final class SchemaOrgUtils {
     }
 
     /**
-     * Process agents from the given list and create a proper schema.org object for
-     * each
+     * Process agents from the given list and create a proper schema.org object for each
+     * To limit the size of schema.org responses only entity-ids are listed for
+     * contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
      *
-     * @param agents agents to process
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param agents                   agents to process
+     * @param linkedContextualEntities list of all the references in the object
      * @return list of Person and / or Organization objects created from given
      * agents
      */
     private static List<Thing> processAgents(List<AgentImpl> agents, List<String> linkedContextualEntities) {
         List<Thing> referencedObjects = new ArrayList<>();
         for (Agent agent : agents) {
-             if(linkedContextualEntities.contains(agent.getAbout())) {
-                 eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject = SchemaOrgTypeFactory
-                         .createAgent(agent);
-                 referencedObjects.add(agentObject);
+            if (linkedContextualEntities.contains(agent.getAbout()) && !StringUtils.startsWith(agent.getAbout(), URL_PREFIX)) {
+                eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject = SchemaOrgTypeFactory
+                        .createAgent(agent);
+                referencedObjects.add(agentObject);
 
-                 processAgent(agent, agentObject);
-             }
+                processAgent(agent, agentObject);
+            }
         }
         return referencedObjects;
     }
@@ -317,78 +315,75 @@ public final class SchemaOrgUtils {
                                     eu.europeana.corelib.edm.model.schemaorg.ContextualEntity agentObject) {
         // @id
         agentObject.setId(agent.getAbout());
-        //To limit the size of schema.org responses only entity-ids are listed for
-        // contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
-        if (!agent.getAbout().startsWith(URL_PREFIX)) {
-            // name
-            addMultilingualProperties(agentObject, agent.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
-            addMultilingualProperties(agentObject, agent.getFoafName(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // alternateName
-            addMultilingualProperties(agentObject, agent.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        // name
+        addMultilingualProperties(agentObject, agent.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        addMultilingualProperties(agentObject, agent.getFoafName(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // description
-            addMultilingualProperties(agentObject, agent.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
-            addMultilingualProperties(agentObject, agent.getRdaGr2BiographicalInformation(),
-                    SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        // alternateName
+        addMultilingualProperties(agentObject, agent.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
-            if (agentObject instanceof Person) {
+        // description
+        addMultilingualProperties(agentObject, agent.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        addMultilingualProperties(agentObject, agent.getRdaGr2BiographicalInformation(),
+                SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
-                // birthDate
-                if (agent.getRdaGr2DateOfBirth() != null) {
-                    addStringProperties(agentObject, agent.getRdaGr2DateOfBirth(),
-                            SchemaOrgConstants.PROPERTY_BIRTH_DATE);
-                } else if (agent.getBegin() != null) {
-                    addStringProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
-                }
+        if (agentObject instanceof Person) {
 
-                // deathDate
-                if (agent.getRdaGr2DateOfDeath() != null) {
-                    addStringProperties(agentObject, agent.getRdaGr2DateOfDeath(),
-                            SchemaOrgConstants.PROPERTY_DEATH_DATE);
-                } else if (agent.getEnd() != null) {
-                    addStringProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
-                }
-
-                // gender
-                addStringProperties(agentObject, agent.getRdaGr2Gender(), SchemaOrgConstants.PROPERTY_GENDER);
-
-                // jobTitle
-                addMultilingualProperties(agentObject, agent.getRdaGr2ProfessionOrOccupation(),
-                        SchemaOrgConstants.PROPERTY_JOB_TITLE);
-
-                // birthPlace
-                addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfBirth(),
-                        SchemaOrgConstants.PROPERTY_BIRTH_PLACE, Place.class, null);
-
-                // deathPlace
-                addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfDeath(),
-                        SchemaOrgConstants.PROPERTY_DEATH_PLACE, Place.class, null);
+            // birthDate
+            if (agent.getRdaGr2DateOfBirth() != null) {
+                addStringProperties(agentObject, agent.getRdaGr2DateOfBirth(),
+                        SchemaOrgConstants.PROPERTY_BIRTH_DATE);
+            } else if (agent.getBegin() != null) {
+                addStringProperties(agentObject, agent.getBegin(), SchemaOrgConstants.PROPERTY_BIRTH_DATE);
             }
 
-            if (agentObject instanceof Organization) {
-                // foundingDate
-                if (agent.getRdaGr2DateOfEstablishment() != null) {
-                    addStringProperties(agentObject, agent.getRdaGr2DateOfEstablishment(),
-                            SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
-                }
-
-                // dissolutionDate
-                if (agent.getRdaGr2DateOfTermination() != null) {
-                    addStringProperties(agentObject, agent.getRdaGr2DateOfTermination(),
-                            SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
-                }
+            // deathDate
+            if (agent.getRdaGr2DateOfDeath() != null) {
+                addStringProperties(agentObject, agent.getRdaGr2DateOfDeath(),
+                        SchemaOrgConstants.PROPERTY_DEATH_DATE);
+            } else if (agent.getEnd() != null) {
+                addStringProperties(agentObject, agent.getEnd(), SchemaOrgConstants.PROPERTY_DEATH_DATE);
             }
 
-            // sameAs
-            addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+            // gender
+            addStringProperties(agentObject, agent.getRdaGr2Gender(), SchemaOrgConstants.PROPERTY_GENDER);
 
-            // url
-            addEntityPageUrl(agent, agentObject, SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_TYPE);
+            // jobTitle
+            addMultilingualProperties(agentObject, agent.getRdaGr2ProfessionOrOccupation(),
+                    SchemaOrgConstants.PROPERTY_JOB_TITLE);
 
-            // image
-            agentObject.setImage(agent.getFoafDepiction());
+            // birthPlace
+            addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfBirth(),
+                    SchemaOrgConstants.PROPERTY_BIRTH_PLACE, Place.class, null);
+
+            // deathPlace
+            addResourceOrReferenceProperties(agentObject, agent.getRdaGr2PlaceOfDeath(),
+                    SchemaOrgConstants.PROPERTY_DEATH_PLACE, Place.class, null);
         }
+
+        if (agentObject instanceof Organization) {
+            // foundingDate
+            if (agent.getRdaGr2DateOfEstablishment() != null) {
+                addStringProperties(agentObject, agent.getRdaGr2DateOfEstablishment(),
+                        SchemaOrgConstants.PROPERTY_FOUNDING_DATE);
+            }
+
+            // dissolutionDate
+            if (agent.getRdaGr2DateOfTermination() != null) {
+                addStringProperties(agentObject, agent.getRdaGr2DateOfTermination(),
+                        SchemaOrgConstants.PROPERTY_DISSOLUTION_DATE);
+            }
+        }
+
+        // sameAs
+        addTextProperties(agentObject, toList(agent.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
+        // url
+        addEntityPageUrl(agent, agentObject, SchemaOrgConstants.ENTITY_PAGE_URL_AGENT_TYPE);
+
+        // image
+        agentObject.setImage(agent.getFoafDepiction());
     }
 
     /**
@@ -402,47 +397,45 @@ public final class SchemaOrgUtils {
                                            eu.europeana.corelib.edm.model.schemaorg.ContextualEntity entityObject) {
         // @id
         entityObject.setId(organization.getAbout());
-        //To limit the size of schema.org responses only entity-ids are listed for
-        // contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
-        if (!organization.getAbout().startsWith(URL_PREFIX)) {
-            // name
-            addMultilingualProperties(entityObject, organization.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // alternateName
-            addMultilingualProperties(entityObject, organization.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
-            addMultilingualProperties(entityObject, organization.getEdmAcronym(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        // name
+        addMultilingualProperties(entityObject, organization.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // description
-            addMultilingualProperties(entityObject, SchemaOrgConstants.PROPERTY_DESCRIPTION, organization.getDcDescription());
+        // alternateName
+        addMultilingualProperties(entityObject, organization.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        addMultilingualProperties(entityObject, organization.getEdmAcronym(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
-            // mainEntityOfPage
-            addTextProperties(entityObject, Arrays.asList(organization.getFoafHomepage()), SchemaOrgConstants.PROPERTY_MAIN_ENTITY_OF_PAGE);
+        // description
+        addMultilingualProperties(entityObject, SchemaOrgConstants.PROPERTY_DESCRIPTION, organization.getDcDescription());
 
-            // logo
-            addTextProperties(entityObject, Arrays.asList(organization.getFoafLogo()), SchemaOrgConstants.PROPERTY_LOGO);
+        // mainEntityOfPage
+        addTextProperties(entityObject, Arrays.asList(organization.getFoafHomepage()), SchemaOrgConstants.PROPERTY_MAIN_ENTITY_OF_PAGE);
 
-            // telephone
-            addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
+        // logo
+        addTextProperties(entityObject, Arrays.asList(organization.getFoafLogo()), SchemaOrgConstants.PROPERTY_LOGO);
 
-            // address
-            createPostalAddress(organization, (EdmOrganization) entityObject);
+        // telephone
+        addTextProperties(entityObject, organization.getFoafPhone(), SchemaOrgConstants.PROPERTY_TELEPHONE);
 
-            // identifier
-            List<String> dcIdentifier = null;
-            if (organization.getDcIdentifier() != null && organization.getDcIdentifier().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
-                dcIdentifier = organization.getDcIdentifier().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
-                addTextProperties(entityObject, dcIdentifier, SchemaOrgConstants.PROPERTY_IDENTIFIER);
-            }
+        // address
+        createPostalAddress(organization, (EdmOrganization) entityObject);
 
-            // sameAs
-            addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
-
-            // url
-            addEntityPageUrl(organization, entityObject, SchemaOrgConstants.ENTITY_PAGE_URL_ORGANIZATION_TYPE);
-
-            // image
-            entityObject.setImage(organization.getFoafDepiction());
+        // identifier
+        List<String> dcIdentifier = null;
+        if (organization.getDcIdentifier() != null && organization.getDcIdentifier().containsKey(SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+            dcIdentifier = organization.getDcIdentifier().get(SchemaOrgConstants.DEFAULT_LANGUAGE);
+            addTextProperties(entityObject, dcIdentifier, SchemaOrgConstants.PROPERTY_IDENTIFIER);
         }
+
+        // sameAs
+        addTextProperties(entityObject, toList(organization.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
+        // url
+        addEntityPageUrl(organization, entityObject, SchemaOrgConstants.ENTITY_PAGE_URL_ORGANIZATION_TYPE);
+
+        // image
+        entityObject.setImage(organization.getFoafDepiction());
+
     }
 
     /**
@@ -450,31 +443,28 @@ public final class SchemaOrgUtils {
      * using data from the given EDM Timespan
      *
      * @param timespanObject Schema.Org Contextual Entity object to update
-     * @param time source EDM timespan
+     * @param time           source EDM timespan
      */
     public static void processTimespan(Timespan time,
-                                    eu.europeana.corelib.edm.model.schemaorg.ContextualEntity timespanObject) {
+                                       eu.europeana.corelib.edm.model.schemaorg.ContextualEntity timespanObject) {
         // @id
-    	timespanObject.setId(time.getAbout());
-        //To limit the size of schema.org responses only entity-ids are listed for
-        // contextual entities (places, agents, concepts, time spans) that start with http://data.europeana.eu/
-    	if (!time.getAbout().startsWith(URL_PREFIX)) {
+        timespanObject.setId(time.getAbout());
 
-            // name
-            addMultilingualProperties(timespanObject, time.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
+        // name
+        addMultilingualProperties(timespanObject, time.getPrefLabel(), SchemaOrgConstants.PROPERTY_NAME);
 
-            // alternateName
-            addMultilingualProperties(timespanObject, time.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
+        // alternateName
+        addMultilingualProperties(timespanObject, time.getAltLabel(), SchemaOrgConstants.PROPERTY_ALTERNATE_NAME);
 
-            // description
-            addMultilingualProperties(timespanObject, time.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
+        // description
+        addMultilingualProperties(timespanObject, time.getNote(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
 
-            //url
-            addEntityPageUrl(time, timespanObject, SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_TYPE);
+        //url
+        addEntityPageUrl(time, timespanObject, SchemaOrgConstants.ENTITY_PAGE_URL_TIMESPAN_TYPE);
 
-            // sameAs
-            addTextProperties(timespanObject, toList(time.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
-        }
+        // sameAs
+        addTextProperties(timespanObject, toList(time.getOwlSameAs()), SchemaOrgConstants.PROPERTY_SAME_AS);
+
 
     }
 
@@ -548,9 +538,9 @@ public final class SchemaOrgUtils {
     /**
      * Process necessary properties from Aggregations
      *
-     * @param object object for which the properties will be added
-     * @param bean   bean with all properties
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param object                   object for which the properties will be added
+     * @param bean                     bean with all properties
+     * @param linkedContextualEntities list of all the references in the object
      * @return list of referenced objects created while processing aggregations
      */
     private static List<Thing> processAggregations(CreativeWork object, FullBeanImpl bean, List<String> linkedContextualEntities) {
@@ -584,12 +574,12 @@ public final class SchemaOrgUtils {
      * corresponding MediaObject with additional information. Each MediaObject is of
      * the specific subclass based on the mime type.
      *
-     * @param object      object to add references
-     * @param mediaUrls   urls of web resources retrieved from hasView and
-     *                    edm:isShownBy
-     * @param aggregation current aggregation
+     * @param object                   object to add references
+     * @param mediaUrls                urls of web resources retrieved from hasView and
+     *                                 edm:isShownBy
+     * @param aggregation              current aggregation
      * @param bean
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param linkedContextualEntities list of all the references in the object
      * @return a list of created referenced media objects
      */
     private static List<Thing> processWebResources(CreativeWork object, Set<String> mediaUrls, Aggregation aggregation,
@@ -612,11 +602,11 @@ public final class SchemaOrgUtils {
     /**
      * Adds specific properties to the media object based on the web resource
      *
-     * @param mediaObject media object to which the properties will be added
-     * @param resource    web resource to retrieve property values
-     * @param bean        bean with all the data needed to generate some mappings
-     * @param aggregation aggregation object needed to generate some mappings
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param mediaObject              media object to which the properties will be added
+     * @param resource                 web resource to retrieve property values
+     * @param bean                     bean with all the data needed to generate some mappings
+     * @param aggregation              aggregation object needed to generate some mappings
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void processWebResource(MediaObject mediaObject, WebResource resource, FullBeanImpl bean,
                                            Aggregation aggregation, List<String> linkedContextualEntities) {
@@ -631,7 +621,7 @@ public final class SchemaOrgUtils {
         }
 
         // contentUrl
-        mediaObject.addContentUrl( new Text(resource.getAbout()));
+        mediaObject.addContentUrl(new Text(resource.getAbout()));
 
         // creator
         addResourceOrReferenceProperties(mediaObject, resource.getDcCreator(),
@@ -710,7 +700,7 @@ public final class SchemaOrgUtils {
     private static void getNameAndDescription(MediaObject mediaObject, WebResource resource, FullBeanImpl bean) {
         boolean proxyDescReq = true;
         // description : if missing take ore:Proxy/dc:description or ore:Proxy.dc:title
-        if(resource.getDcDescription() != null && !resource.getDcDescription().isEmpty()) {
+        if (resource.getDcDescription() != null && !resource.getDcDescription().isEmpty()) {
             proxyDescReq = false;
             addMultilingualProperties(mediaObject, resource.getDcDescription(), SchemaOrgConstants.PROPERTY_DESCRIPTION);
         }
@@ -749,9 +739,9 @@ public final class SchemaOrgUtils {
      * Process all proxies from the bean and add specific properties to the given
      * object.
      *
-     * @param object object for which the properties will be added
-     * @param bean   bean from database to get values for properties
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param object                   object for which the properties will be added
+     * @param bean                     bean from database to get values for properties
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void processProxies(CreativeWork object, FullBeanImpl bean, List<String> linkedContextualEntities) {
         for (ProxyImpl proxy : bean.getProxies()) {
@@ -932,7 +922,7 @@ public final class SchemaOrgUtils {
      * @param values       values to be added
      * @param propertyName name of property
      */
-    private static  void addStringProperties(Thing object, List<String> values, String propertyName) {
+    private static void addStringProperties(Thing object, List<String> values, String propertyName) {
         if (values == null) {
             return;
         }
@@ -974,12 +964,12 @@ public final class SchemaOrgUtils {
      * Adds typed references. When a reference is detected its type will be set to
      * <code>referenceClass</code>
      *
-     * @param object         object for which the properties will be added
-     * @param map            map of values where key is the language and value is a
-     *                       values list
+     * @param object                   object for which the properties will be added
+     * @param map                      map of values where key is the language and value is a
+     *                                 values list
      * @param linkedContextualEntities list of all the references in the object
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
+     * @param propertyName             name of property
+     * @param referenceClass           class of reference
      */
     private static void addResourceOrReferenceProperties(Thing object, Map<String, List<String>> map,
                                                          String propertyName, Class<? extends Thing> referenceClass, List<String> linkedContextualEntities) {
@@ -989,9 +979,13 @@ public final class SchemaOrgUtils {
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             for (String value : entry.getValue()) {
                 if (EuropeanaUriUtils.isUri(value)) {
-                    //while creating reference for about, contibutor, creator reference class should be null.
-                    if(referenceNull(propertyName)) {
+                    //while creating reference for about, contributor, creator, publisher reference class should be null.
+                    // Only for values NOT starting with http://data.europeana.eu
+                    if (referenceNull(propertyName, value)) {
                         referenceClass = null;
+                    } else {
+                        // for value starting with http://data.europeana.eu, assign correct reference class
+                        referenceClass = getReferenceClass(value);
                     }
                     addProperty(object, value, entry.getKey(), propertyName, referenceClass, linkedContextualEntities);
                 } else {
@@ -1000,6 +994,7 @@ public final class SchemaOrgUtils {
             }
         }
     }
+
     /**
      * Adds language property for typed reference.
      *
@@ -1021,7 +1016,8 @@ public final class SchemaOrgUtils {
             }
         }
     }
-    private static void processLanguageValue(Thing object, String propertyName, String value,  Class<? extends Thing> referenceClass) {
+
+    private static void processLanguageValue(Thing object, String propertyName, String value, Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
             Thing resource = instantiateResourceObject(referenceClass);
             resource.addProperty(SchemaOrgConstants.PROPERTY_NAME, new Text(value));
@@ -1033,14 +1029,14 @@ public final class SchemaOrgUtils {
      * Adds references for all values in the array. References may have a specific
      * type if <code>referenceClass</code> is specified.
      *
-     * @param object         object for which the properties will be added
-     * @param values         values to be added as references
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
+     * @param object                   object for which the properties will be added
+     * @param values                   values to be added as references
+     * @param propertyName             name of property
+     * @param referenceClass           class of reference
      * @param linkedContextualEntities list of all the references in the object
      */
     private static void addReferences(Thing object, List<String> values, String propertyName,
-                                      Class<? extends Thing> referenceClass, List<String> linkedContextualEntities ) {
+                                      Class<? extends Thing> referenceClass, List<String> linkedContextualEntities) {
         if (values == null) {
             return;
         }
@@ -1062,20 +1058,20 @@ public final class SchemaOrgUtils {
      * @param value        value to process
      */
     public static void processDateValue(Thing object, String propertyName, List<TimespanImpl> timespans,
-                                         boolean allowInvalid, String language, String value) {
+                                        boolean allowInvalid, String language, String value) {
         if (notNullNorEmpty(value)) {
             String valueToAdd = value;
             if (EuropeanaUriUtils.isUri(value) && timespans != null) {
                 // value might be timespan
                 valueToAdd = createDateRange(value, language, timespans);
                 //if the valuetoAdd is still URI and property is temporalCoverage. Create a reference
-                if(EuropeanaUriUtils.isUri(valueToAdd) && StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE)) {
-                    addReference(object,valueToAdd,propertyName, null );
+                if (EuropeanaUriUtils.isUri(valueToAdd) && StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_TEMPORAL_COVERAGE)) {
+                    addReference(object, valueToAdd, propertyName, null);
                 } else {
                     object.addProperty(propertyName, new Text(valueToAdd));
                 }
             } else if (allowInvalid || DateUtils.isYear(value) || DateUtils.isIsoDate(value) || DateUtils.isIsoDateTime(value)) {
-                   object.addProperty(propertyName, new Text(valueToAdd));
+                object.addProperty(propertyName, new Text(valueToAdd));
             }
         }
     }
@@ -1208,14 +1204,14 @@ public final class SchemaOrgUtils {
      * Checks whether value is Uri adding a reference in this case or adding the
      * multilingual string otherwise.
      *
-     * @param object       object for which the property will be added
-     * @param propertyName name of property
-     * @param language     language string, may be empty
-     * @param value        value to add
-     * @param linkedContextualEntities  list of all the references in the object
+     * @param object                   object for which the property will be added
+     * @param propertyName             name of property
+     * @param language                 language string, may be empty
+     * @param value                    value to add
+     * @param linkedContextualEntities list of all the references in the object
      */
     private static void addProperty(Thing object, String value, String language, String propertyName,
-                                    Class<? extends Thing> referenceClass ,  List<String> linkedContextualEntities) {
+                                    Class<? extends Thing> referenceClass, List<String> linkedContextualEntities) {
         if (notNullNorEmpty(value)) {
             if (EuropeanaUriUtils.isUri(value)) {
                 addLinkedContextualEntities(value, linkedContextualEntities);
@@ -1259,11 +1255,11 @@ public final class SchemaOrgUtils {
                                             Class<? extends Thing> referenceClass) {
         if (notNullNorEmpty(value)) {
             Thing resource = instantiateResourceObject(referenceClass);
-            if(StringUtils.equals(language, SchemaOrgConstants.DEFAULT_LANGUAGE)) {
+            if (StringUtils.equals(language, SchemaOrgConstants.DEFAULT_LANGUAGE)) {
                 resource.addProperty(SchemaOrgConstants.PROPERTY_NAME, new Text(value));
             } else {
                 addMultilingualProperty(resource, value,
-                           language, SchemaOrgConstants.PROPERTY_NAME);
+                        language, SchemaOrgConstants.PROPERTY_NAME);
             }
             object.addProperty(propertyName, resource);
         }
@@ -1275,10 +1271,10 @@ public final class SchemaOrgUtils {
      * <code>referenced</code> list and an additional object of type
      * <code>referenceClass</code> is created with properties.
      *
-     * @param object         object for which the properties will be added
-     * @param values         array of values
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
+     * @param object                   object for which the properties will be added
+     * @param values                   array of values
+     * @param propertyName             name of property
+     * @param referenceClass           class of reference
      * @param linkedContextualEntities list of all the references in the object
      */
     private static void addMultilingualPropertiesWithReferences(Thing object, List<String> values, String language,
@@ -1287,7 +1283,7 @@ public final class SchemaOrgUtils {
             return;
         }
         for (String value : values) {
-            addProperty(object, value, language, propertyName, referenceClass,linkedContextualEntities);
+            addProperty(object, value, language, propertyName, referenceClass, linkedContextualEntities);
         }
     }
 
@@ -1295,11 +1291,11 @@ public final class SchemaOrgUtils {
      * Adds multilingual properties or typed references. When a reference is
      * detected its type will be set to <code>referenceClass</code>
      *
-     * @param object         object for which the properties will be added
-     * @param map            map of values where key is the language and value is a
-     *                       values list
-     * @param propertyName   name of property
-     * @param referenceClass class of reference
+     * @param object                   object for which the properties will be added
+     * @param map                      map of values where key is the language and value is a
+     *                                 values list
+     * @param propertyName             name of property
+     * @param referenceClass           class of reference
      * @param linkedContextualEntities list of all the references in the object
      */
     private static void addReferences(Thing object, Map<String, List<String>> map, String propertyName,
@@ -1438,14 +1434,43 @@ public final class SchemaOrgUtils {
 
     /**
      * To check if reference class will be null for the property
+     * Only for propertyValue NOT starting with http://data.europeana.eu
      *
-     * @param propertyName property to be checked
+     * @param propertyName  property to be checked
+     * @param propertyValue property value to be checked
      */
-    private static boolean referenceNull(String propertyName) {
-        return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT)
-                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
-                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR)
-                || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
+    private static boolean referenceNull(String propertyName, String propertyValue) {
+        if (!StringUtils.startsWith(propertyValue, URL_PREFIX)) {
+            return (StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_ABOUT)
+                    || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CONTRIBUTOR)
+                    || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_CREATOR)
+                    || StringUtils.equals(propertyName, SchemaOrgConstants.PROPERTY_PUBLISHER));
+        }
+        return false;
+    }
+
+    /**
+     * get the reference class for the property value
+     * starting with http://data.europeana.eu
+     *
+     * @param propertyValue property value to be checked
+     */
+    private static Class<? extends Thing> getReferenceClass(String propertyValue) {
+        if (StringUtils.startsWith(propertyValue, URL_PREFIX)) {
+            if (propertyValue.startsWith(URL_PREFIX + "/agent")) {
+                return Person.class;
+            }
+            if (propertyValue.startsWith(URL_PREFIX + "/place")) {
+                return Place.class;
+            }
+            if (propertyValue.contains(URL_PREFIX + "/concept")) {
+                return Thing.class;
+            }
+            // any other unrecognised entity, consider it as a Thing
+            return Thing.class;
+        }
+        // return null for every other case
+        return null;
     }
 
     /**
@@ -1453,8 +1478,8 @@ public final class SchemaOrgUtils {
      *
      * @param value value to be added
      */
-    private static void addLinkedContextualEntities(String value,  List<String> linkedContextualEntities) {
-        if(linkedContextualEntities != null) {
+    private static void addLinkedContextualEntities(String value, List<String> linkedContextualEntities) {
+        if (linkedContextualEntities != null) {
             linkedContextualEntities.add(value);
         }
     }

@@ -33,6 +33,9 @@ public class SchemaOrgTestUtils {
         List<Reference> referenceList = new ArrayList<>();
         List<BaseType> propertiesList = object.getProperty(propertyName);
         for (BaseType property : propertiesList) {
+            if(StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.THING) && property.toString().contains(MockBeanConstants.URL_PREFIX)) {
+                referenceList.add((Reference) property);
+            }
             if (! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.THING) && ! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.TEXT)
                     && ! StringUtils.equalsIgnoreCase(property.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
                 referenceList.add((Reference) property);
@@ -50,8 +53,10 @@ public class SchemaOrgTestUtils {
         List<Thing> resourceList = new ArrayList<>();
         List<BaseType> propertiesList = object.getProperty(propertyName);
         for (BaseType resource : propertiesList) {
-            if (StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.THING) || StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
-                resourceList.add((Thing) resource);
+            if (!resource.toString().contains(MockBeanConstants.URL_PREFIX)) {
+                if (StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.THING) || StringUtils.equalsIgnoreCase(resource.getTypeName(), MockBeanConstants.ORANGANIZATION)) {
+                    resourceList.add((Thing) resource);
+                }
             }
         }
         for (Thing resource : resourceList) {

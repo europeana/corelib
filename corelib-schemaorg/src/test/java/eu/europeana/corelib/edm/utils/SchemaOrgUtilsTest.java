@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -81,7 +82,6 @@ public class SchemaOrgUtilsTest {
         JsonLdSerializer serializer = new JsonLdSerializer();
         output = serializer.serialize(thingObject);
         Assert.assertNotNull(output);
-
         try (InputStream stream = getClass().getResourceAsStream(MockBeanConstants.EDMORGANIZATION_FILE)) {
             String expectedOutput = IOUtils.toString(stream, StandardCharsets.UTF_8);
             assertEquals(expectedOutput.length(), output.length());
