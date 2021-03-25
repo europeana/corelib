@@ -40,6 +40,7 @@ public class EdmUtilsTest {
         proxy.setAbout("/proxy/provider/1234/test_5678");
         proxy.setProxyFor("/item/1234/test_5678");
         proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
+        proxy.setProxyIn(new String [] {"/aggregation/provider/1234/test_5678"});
         bean.getProxies().add(proxy);
 
         bean.setProvidedCHOs(new ArrayList<>());

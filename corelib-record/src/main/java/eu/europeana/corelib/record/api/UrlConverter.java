@@ -5,6 +5,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import eu.europeana.corelib.web.utils.UrlBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -36,16 +37,21 @@ public final class UrlConverter {
     public static void setEdmPreview(FullBean bean, String thumbnailBaseUrl) {
         String edmPreviewUrl = null;
 
-        // first try edmPreview, else edmObject and else edmIsShownBy
+        // first try edmPreview else edmObject and else edmIsShownBy of main Aggregation
         if (StringUtils.isNotEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
             edmPreviewUrl = bean.getEuropeanaAggregation().getEdmPreview();
             LOG.debug("edmPreview found: {}", edmPreviewUrl);
-        } else if (StringUtils.isNotEmpty(bean.getAggregations().get(0).getEdmObject())) {
-            edmPreviewUrl = bean.getAggregations().get(0).getEdmObject();
-            LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
-        } else if (StringUtils.isNotEmpty(bean.getAggregations().get(0).getEdmIsShownBy())) {
-            edmPreviewUrl = bean.getAggregations().get(0).getEdmIsShownBy();
-            LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
+        } else if (edmPreviewUrl == null) {
+            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean);
+            edmPreviewUrl = dataProviderAggregation.getEdmObject();
+            if(edmPreviewUrl == null) {
+                edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
+                if (edmPreviewUrl != null) {
+                    LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
+                }
+            } else {
+                LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
+            }
         } else {
             LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
         }

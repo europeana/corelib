@@ -6,6 +6,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
+import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import eu.europeana.metis.mongo.dao.RecordDao;
@@ -42,8 +43,8 @@ public final class WebMetaInfo {
             return;
         }
 
-        // Temp fix for missing web resources
-        Aggregation aggregationFix = fullBean.getAggregations().get(0);
+        // Temp fix for missing web resources, get the main Aggregation
+        Aggregation aggregationFix = ProxyAggregationUtils.getDataProviderAggregation(fullBean);
 
         if (aggregationFix.getEdmIsShownBy() != null) {
             String isShownBy = aggregationFix.getEdmIsShownBy();
