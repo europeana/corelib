@@ -16,17 +16,6 @@ public class ProxyAggregationUtilsTest {
 
 
     @Test
-    public void getLineageFromEuropeanaProxyTest() {
-        List<String> lineage = proxyAggregationUtils.getLineageFromEuropeanaProxy(bean);
-
-        Assert.assertNotNull(lineage);
-        Assert.assertEquals(bean.getProxies().size()-1, lineage.size());
-        Assert.assertTrue(lineage.contains(MockBeanUtils.PROVIDER_PROXY_ABOUT));
-        Assert.assertTrue(lineage.contains(MockBeanUtils.SECOND_PROXY_ABOUT));
-        Assert.assertTrue(lineage.contains(MockBeanUtils.THIRD_PROXY_ABOUT));
-    }
-
-    @Test
     public void getProxyWithOutLineageTest() {
         Proxy proxy = proxyAggregationUtils.getProxyWithOutLineage(minimalBean);
         Assert.assertNotNull(proxy);
@@ -59,8 +48,7 @@ public class ProxyAggregationUtilsTest {
 
     @Test
     public void whenNoLineagePresentTest() {
-        List<String> lineage = proxyAggregationUtils.getLineageFromEuropeanaProxy(minimalBean);
-        Assert.assertEquals(0, lineage.size());
+        Assert.assertFalse(proxyAggregationUtils.isLineagePresentInEuropeanaProxy(minimalBean));
         Assert.assertTrue(minimalBean.getProxies().size() == 2);
 
         // test order
@@ -90,23 +78,25 @@ public class ProxyAggregationUtilsTest {
     }
 
     private void checkProxyOrder(List<Proxy> proxies) {
-        // check first proxy
+        // check europeana proxy
         Assert.assertTrue(proxies.get(0).isEuropeanaProxy());
         Assert.assertEquals(MockBeanUtils.EUROPEANA_PROXY_ABOUT, proxies.get(0).getAbout());
 
-        // check data provider proxy
+        // check aggregator proxy
         Assert.assertFalse(proxies.get(1).isEuropeanaProxy());
-        Assert.assertEquals(MockBeanUtils.PROVIDER_PROXY_ABOUT, proxies.get(1).getAbout());
-        Assert.assertNull(proxies.get(1).getLineage());
-        Assert.assertEquals(MockBeanUtils.DATAPROVIDER_AGGREGATION_ABOUT, proxies.get(1).getProxyIn()[0]);
+        Assert.assertEquals(MockBeanUtils.SECOND_PROXY_ABOUT, proxies.get(1).getAbout());
+        Assert.assertEquals(MockBeanUtils.THIRD_PROXY_ABOUT, proxies.get(1).getLineage()[0]);
 
-        // check other proxies
         Assert.assertFalse(proxies.get(2).isEuropeanaProxy());
         Assert.assertEquals(MockBeanUtils.THIRD_PROXY_ABOUT, proxies.get(2).getAbout());
         Assert.assertEquals(MockBeanUtils.PROVIDER_PROXY_ABOUT, proxies.get(2).getLineage()[0]);
-
+        // check data provider proxy
         Assert.assertFalse(proxies.get(3).isEuropeanaProxy());
-        Assert.assertEquals(MockBeanUtils.SECOND_PROXY_ABOUT, proxies.get(3).getAbout());
-        Assert.assertEquals(MockBeanUtils.THIRD_PROXY_ABOUT, proxies.get(3).getLineage()[0]);
+        Assert.assertEquals(MockBeanUtils.PROVIDER_PROXY_ABOUT, proxies.get(3).getAbout());
+        Assert.assertNull(proxies.get(3).getLineage());
+        Assert.assertEquals(MockBeanUtils.DATAPROVIDER_AGGREGATION_ABOUT, proxies.get(3).getProxyIn()[0]);
+
+
+
     }
 }

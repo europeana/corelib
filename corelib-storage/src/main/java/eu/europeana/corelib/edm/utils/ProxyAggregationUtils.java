@@ -28,7 +28,7 @@ public class ProxyAggregationUtils {
     public static Proxy getProxyWithOutLineage(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()) {
-                if(isProxyWithOutLineage(proxy) && !proxy.isEuropeanaProxy()) {
+                if (isProxyWithOutLineage(proxy) && !proxy.isEuropeanaProxy()) {
                     return proxy;
                 }
             }
@@ -38,7 +38,7 @@ public class ProxyAggregationUtils {
 
     /**
      * Orders Proxies
-     * Order : Europeana Proxy, data provider proxy, then other proxies
+     * Order : Europeana Proxy -> Aggregator Proxy -> Data Provider
      * Other proxies are ordered according to the lineage order present in europeana proxy
      *
      * @param bean
@@ -47,61 +47,79 @@ public class ProxyAggregationUtils {
     public static List<Proxy> orderProxy(FullBean bean) {
         List<Proxy> orderedProxy = new ArrayList<>();
         orderedProxy.add(getEuropeanaProxy(bean.getProxies()));
-        List<String> lineages = getLineageFromEuropeanaProxy(bean);
-        orderedProxy.addAll(orderNonEuropeanaProxy(lineages, bean));
-        
+        orderedProxy.addAll(orderNonEuropeanaProxy(isLineagePresentInEuropeanaProxy(bean), bean));
+
         return orderedProxy;
     }
 
     /**
      * Orders non-europeana Proxies
-     * First adds the data provider proxy and then
-     * orders the other proxies based on the lineage order
+     * Aggregator Proxy -> Data Provider
      *
-     * @param lineages lineage values from europeana proxy
+     * @param isLineagePresent true if lineage is present in europeana proxy
      * @param bean
      * @return
      */
-    private static List<Proxy> orderNonEuropeanaProxy( List<String> lineages, FullBean bean) {
+    private static List<Proxy> orderNonEuropeanaProxy(boolean isLineagePresent, FullBean bean) {
         List<Proxy> orderedProxy = new ArrayList<>();
-        if(lineages.isEmpty()) {
+        if (isLineagePresent) {
+            getNonEuropeanaProxies(orderedProxy, bean);
+        } else {
             LOG.info("Only one non-europeana proxy exists for record {}.", bean.getId());
             for (Proxy proxy : bean.getProxies()) {
-                if(!proxy.isEuropeanaProxy()) {
+                if (!proxy.isEuropeanaProxy()) {
                     orderedProxy.add(proxy);
                 }
             }
-        } else {
-            getNonEuropeanaProxies(orderedProxy, lineages, bean);
         }
         return orderedProxy;
     }
-    
-    private static void getNonEuropeanaProxies(List<Proxy> orderedProxy, List<String> lineages, FullBean bean) {
-        // add the data provider proxy : proxy without ore:lineage
-        for(Proxy proxy : bean.getProxies()) {
-            if(isNonEuropeanaDataProviderProxy(proxy)) {
-                orderedProxy.add(proxy);
-            }
-        }
-        for (String lineage: lineages) {
-            for(Proxy proxy : bean.getProxies()) {
-                if(StringUtils.equals(proxy.getAbout(), lineage) && isNonEuropeanaProxy(proxy)) {
-                    orderedProxy.add(proxy);
+
+    /**
+     * Adds non-europeana proxy via lineage values.
+     * Order returned : Aggregator proxies -> data provider proxy
+     *
+     * @param bean
+     * @return
+     */
+    private static void getNonEuropeanaProxies(List<Proxy> orderedProxy, FullBean bean) {
+        Proxy proxy = getProxyWithOutLineage(bean);
+        if (proxy != null) {
+            orderedProxy.add(proxy);
+            String lineageToCheck = proxy.getAbout();
+
+            // get aggregator proxies through lineages
+            for (int i = 0; i < bean.getProxies().size() - 2; i++) {
+                Proxy nextProxy = getNextproxy(bean, lineageToCheck);
+                if (nextProxy != null) {
+                    lineageToCheck = nextProxy.getAbout();
+                    orderedProxy.add(nextProxy);
                 }
             }
+            Collections.reverse(orderedProxy);
+        } else {
+            LOG.error("There is no proxy without ore:lineage for record {}.", bean.getId());
         }
     }
 
-    public static List<String> getLineageFromEuropeanaProxy(FullBean bean) {
+    private static Proxy getNextproxy(FullBean bean, String lineageTocheck) {
+        for (Proxy proxy : bean.getProxies()) {
+            if (!proxy.isEuropeanaProxy() && !isProxyWithOutLineage(proxy) && StringUtils.equals(proxy.getLineage()[0], lineageTocheck)) {
+                return proxy;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isLineagePresentInEuropeanaProxy(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()) {
-                if(proxy.isEuropeanaProxy() && proxy.getLineage() != null) {
-                    return Arrays.asList(proxy.getLineage());
+                if (proxy.isEuropeanaProxy() && proxy.getLineage() != null) {
+                    return true;
                 }
             }
         }
-        return new ArrayList<>();
+        return false;
     }
 
     private static Proxy getEuropeanaProxy(List<? extends Proxy> proxies) {
@@ -111,14 +129,6 @@ public class ProxyAggregationUtils {
             }
         }
         return null;
-    }
-
-    private static boolean isNonEuropeanaDataProviderProxy(Proxy proxy) {
-        return (!proxy.isEuropeanaProxy() && isProxyWithOutLineage(proxy));
-    }
-
-    private static boolean isNonEuropeanaProxy(Proxy proxy) {
-        return (!proxy.isEuropeanaProxy() && !isProxyWithOutLineage(proxy));
     }
 
     /**
@@ -144,11 +154,11 @@ public class ProxyAggregationUtils {
     public static List<Aggregation> orderAggregation(FullBean bean) {
         List<Aggregation> orderAggregation = new ArrayList<>();
         Aggregation dataProviderAgg = getDataProviderAggregation(bean);
-        if(dataProviderAgg != null) {
+        if (dataProviderAgg != null) {
             orderAggregation.add(dataProviderAgg);
         }
-        for(Aggregation aggregation : bean.getAggregations()) {
-            if (dataProviderAgg!= null) {
+        for (Aggregation aggregation : bean.getAggregations()) {
+            if (dataProviderAgg != null) {
                 if (!StringUtils.equals(dataProviderAgg.getAbout(), aggregation.getAbout())) {
                     orderAggregation.add(aggregation);
                 }
@@ -199,7 +209,6 @@ public class ProxyAggregationUtils {
         }
         return new String[]{};
     }
-
 
 
 }
