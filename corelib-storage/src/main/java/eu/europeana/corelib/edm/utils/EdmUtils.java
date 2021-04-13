@@ -220,7 +220,7 @@ public final class EdmUtils {
     // get the type from the main proxy
     private static String getType(FullBeanImpl fullBean) {
         for (ProxyImpl prx : fullBean.getProxies()) {
-            if (!prx.isEuropeanaProxy() && ProxyAggregationUtils.isProxyWithOutLineage(prx)) {
+            if (!prx.isEuropeanaProxy() && prx.getEdmType() != null) {
                 return prx.getEdmType();
             }
         }
