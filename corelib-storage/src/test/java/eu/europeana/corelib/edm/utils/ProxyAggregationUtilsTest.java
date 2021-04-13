@@ -73,6 +73,12 @@ public class ProxyAggregationUtilsTest {
     public void whenNoDataProviderAggregationPresent() {
         Aggregation aggregation = proxyAggregationUtils.getDataProviderAggregation(minimalBean);
         Assert.assertNull(aggregation);
+
+        // check the ordering
+        List<Aggregation> aggregations = proxyAggregationUtils.orderAggregation(minimalBean);
+        Assert.assertNotNull(aggregations);
+        Assert.assertEquals(minimalBean.getAggregations().size(), aggregations.size());
+        Assert.assertEquals(minimalBean.getAggregations().get(0).getAbout(), aggregations.get(0).getAbout());
     }
 
     @Test
