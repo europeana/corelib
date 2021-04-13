@@ -41,19 +41,17 @@ public final class UrlConverter {
         if (StringUtils.isNotEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
             edmPreviewUrl = bean.getEuropeanaAggregation().getEdmPreview();
             LOG.debug("edmPreview found: {}", edmPreviewUrl);
-        } else if (edmPreviewUrl == null) {
-            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean);
-            edmPreviewUrl = dataProviderAggregation.getEdmObject();
-            if(edmPreviewUrl == null) {
-                edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
-                if (edmPreviewUrl != null) {
-                    LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
-                }
-            } else {
-                LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
-            }
         } else {
-            LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
+            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean);
+            if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
+                edmPreviewUrl = dataProviderAggregation.getEdmObject();
+                LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
+            } else if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmIsShownBy())) {
+                edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
+                LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
+            } else {
+                LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
+            }
         }
 
         if (StringUtils.isNotEmpty(edmPreviewUrl)) {

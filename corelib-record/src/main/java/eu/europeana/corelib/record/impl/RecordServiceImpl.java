@@ -2,6 +2,7 @@ package eu.europeana.corelib.record.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.edm.exceptions.BadDataException;
+import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.record.BaseUrlWrapper;
 import eu.europeana.corelib.record.DataSourceWrapper;
 import eu.europeana.corelib.record.RecordService;
@@ -105,19 +106,23 @@ public class RecordServiceImpl implements RecordService {
      * @see RecordService#enrichFullBean(RecordDao, FullBean, BaseUrlWrapper)
      */
     public FullBean enrichFullBean(RecordDao recordDao, FullBean fullBean, BaseUrlWrapper urls){
-        // 1. add meta info for all webresources + generate attribution snippets
+        // 1. order the proxy and aggregation
+        fullBean.setProxies(ProxyAggregationUtils.orderProxy(fullBean));
+        fullBean.setAggregations(ProxyAggregationUtils.orderAggregation(fullBean));
+
+        // 2. add meta info for all webresources + generate attribution snippets
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
 
-        // 2. add link to IIIF for newspaper and AV/EUScreen items
+        // 3. add link to IIIF for newspaper and AV/EUScreen items
         IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
 
-        // 3. make sure we add /item in various places
+        // 4. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);
 
-        // 4. generate proper edmPreview thumbnail urls
+        // 5. generate proper edmPreview thumbnail urls
         UrlConverter.setEdmPreview(fullBean, urls.getApiGatewayBaseUrl());
 
-        // 5. generate proper edmLandingpage portal urls
+        // 6. generate proper edmLandingpage portal urls
         UrlConverter.setEdmLandingPage(fullBean, urls.getPortalBaseUrl());
 
         return fullBean;
