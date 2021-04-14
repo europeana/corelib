@@ -62,4 +62,12 @@ public class Reference<T extends Thing> implements BaseType {
                 .append(id)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Reference{" +
+                "type=" + type +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }
