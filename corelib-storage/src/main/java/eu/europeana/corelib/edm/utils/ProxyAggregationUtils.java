@@ -18,9 +18,7 @@ public class ProxyAggregationUtils {
     private static final Logger LOG = LogManager.getLogger(ProxyAggregationUtils.class);
 
     /**
-     * Identifies if the proxy is the proxy without ore:lineage
-     * if lineage is NOT present , return true
-     * or else false
+     * Returns the proxy if the proxy without ore:lineage
      *
      * @param bean
      * @return
@@ -37,9 +35,8 @@ public class ProxyAggregationUtils {
     }
 
     /**
-     * Orders Proxies
+     * Orders the Proxies
      * Order : Europeana Proxy -> Aggregator Proxy -> Data Provider
-     * Other proxies are ordered according to the lineage order present in europeana proxy
      *
      * @param bean
      * @return
@@ -48,13 +45,17 @@ public class ProxyAggregationUtils {
         List<Proxy> orderedProxy = new ArrayList<>();
         orderedProxy.add(getEuropeanaProxy(bean.getProxies()));
         orderedProxy.addAll(orderNonEuropeanaProxy(isLineagePresentInEuropeanaProxy(bean), bean));
-
-        return orderedProxy;
+        // this is fail-safe check, in case we miss any proxy OR
+        // if there was a NO proxy without Lineage, will return the same order as present
+        if (orderedProxy.size() == bean.getProxies().size()) {
+            return orderedProxy;
+        }
+        return (List<Proxy>) bean.getProxies();
     }
 
     /**
      * Orders non-europeana Proxies
-     * Aggregator Proxy -> Data Provider
+     * Order : Aggregator Proxy -> Data Provider
      *
      * @param isLineagePresent true if lineage is present in europeana proxy
      * @param bean
@@ -97,7 +98,8 @@ public class ProxyAggregationUtils {
                 }
             }
             Collections.reverse(orderedProxy);
-        } else {
+        } else { // this should not happen, but in case will Log error,
+            // Also should return the proxy order present in bean. See : orderProxy()
             LOG.error("There is no proxy without ore:lineage for record {}.", bean.getId());
         }
     }
@@ -111,6 +113,12 @@ public class ProxyAggregationUtils {
         return null;
     }
 
+    /**
+     * Checks if there is lineage present in Europeana proxy
+     *
+     * @param bean
+     * @return
+     */
     public static boolean isLineagePresentInEuropeanaProxy(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()) {
@@ -122,6 +130,12 @@ public class ProxyAggregationUtils {
         return false;
     }
 
+    /**
+     * Returns europeana proxy
+     *
+     * @param proxies
+     * @return
+     */
     private static Proxy getEuropeanaProxy(List<? extends Proxy> proxies) {
         for (Proxy proxy : proxies) {
             if (proxy.isEuropeanaProxy()) {
@@ -154,16 +168,14 @@ public class ProxyAggregationUtils {
     public static List<Aggregation> orderAggregation(FullBean bean) {
         List<Aggregation> orderAggregation = new ArrayList<>();
         Aggregation dataProviderAgg = getDataProviderAggregation(bean);
-        if (dataProviderAgg != null) {
-            orderAggregation.add(dataProviderAgg);
+        // if there is no data provider aggregation return the aggregations as it is
+        if(dataProviderAgg == null) {
+            return (List<Aggregation>) bean.getAggregations();
         }
+        orderAggregation.add(dataProviderAgg);
         for (Aggregation aggregation : bean.getAggregations()) {
-            if (dataProviderAgg != null) {
-                if (!StringUtils.equals(dataProviderAgg.getAbout(), aggregation.getAbout())) {
-                    orderAggregation.add(aggregation);
-                }
-            } else {
-                return (List<Aggregation>) bean.getAggregations();
+            if (!StringUtils.equals(dataProviderAgg.getAbout(), aggregation.getAbout())) {
+                orderAggregation.add(aggregation);
             }
         }
         return orderAggregation;

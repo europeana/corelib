@@ -13,6 +13,7 @@ public class ProxyAggregationUtilsTest {
     private ProxyAggregationUtils  proxyAggregationUtils;
     private FullBean bean = MockBeanUtils.MockMultipleProxyAggregationBean();
     private FullBean minimalBean = MockBeanUtils.MockMinimalBean();
+    private FullBean invalidProxyBean = MockBeanUtils.MockBeanWithLineageProxy();
 
 
     @Test
@@ -26,6 +27,17 @@ public class ProxyAggregationUtilsTest {
         Assert.assertNotNull(proxy);
         Assert.assertNull(proxy.getLineage());
         Assert.assertEquals(MockBeanUtils.PROVIDER_PROXY_ABOUT, proxy.getAbout());
+    }
+
+    @Test
+    public void whenProxyWithoutLineageIsNotPresentTest() {
+        Proxy proxy = proxyAggregationUtils.getProxyWithOutLineage(invalidProxyBean);
+        Assert.assertNull(proxy);
+
+        // check order
+        List<Proxy> orderedProxy = proxyAggregationUtils.orderProxy(invalidProxyBean);
+        Assert.assertNotNull(orderedProxy);
+        Assert.assertEquals(invalidProxyBean.getProxies().size(), orderedProxy.size());
     }
 
     @Test

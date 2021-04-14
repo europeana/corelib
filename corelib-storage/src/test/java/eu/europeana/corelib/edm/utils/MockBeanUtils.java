@@ -150,4 +150,56 @@ public class MockBeanUtils {
 
         return bean;
     }
+
+    static FullBeanImpl MockBeanWithLineageProxy() {
+        FullBeanImpl bean = new FullBeanImpl();
+        bean.setAbout(ABOUT);
+
+        // europeana proxy
+        bean.setProxies(new ArrayList<>());
+        ProxyImpl proxy = new ProxyImpl();
+        proxy.setAbout(EUROPEANA_PROXY_ABOUT);
+        proxy.setProxyFor(PROXY_FOR);
+        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
+        proxy.setProxyIn(new String [] {EUROPEANA_PROXY_IN});
+        proxy.setLineage(new String [] {PROVIDER_PROXY_ABOUT});
+        proxy.setEuropeanaProxy(true);
+        bean.getProxies().add(proxy);
+
+        // 1st proxy
+        proxy = new ProxyImpl();
+        proxy.setAbout(PROVIDER_PROXY_ABOUT);
+        proxy.setProxyFor(PROXY_FOR);
+        proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
+        proxy.setProxyIn(new String [] {DATAPROVIDER_AGGREGATION_ABOUT});
+        proxy.setLineage(new String [] {"dummy"});
+        bean.getProxies().add(proxy);
+
+        bean.setProvidedCHOs(new ArrayList<>());
+        ProvidedCHOImpl providedCHO = new ProvidedCHOImpl();
+        providedCHO.setAbout(ABOUT);
+        bean.getProvidedCHOs().add(providedCHO);
+
+        bean.setAggregations(new ArrayList<>());
+
+        // 2nd aggregation
+        AggregationImpl aggregation = new AggregationImpl();
+        aggregation.setAbout(SECOND_AGGREGATION_ABOUT);
+        aggregation.setEdmIsShownAt(IS_SHOWN_AT);
+        aggregation.setEdmIsShownBy(IS_SHOWN_BY);
+        bean.getAggregations().add(aggregation);
+
+        // empty webresources
+        List<WebResourceImpl> webResources = new ArrayList<>();
+        aggregation.setWebResources(webResources);
+
+        EuropeanaAggregationImpl europeanaAggregation = new EuropeanaAggregationImpl();
+        europeanaAggregation.setAbout(EUROPEANA_AGGREGATION_ABOUT);
+        bean.setEuropeanaAggregation(europeanaAggregation);
+
+        bean.setEuropeanaCollectionName(new String[] { EUROPEANA_COLLECTION_NAME});
+
+        return bean;
+    }
+
 }
