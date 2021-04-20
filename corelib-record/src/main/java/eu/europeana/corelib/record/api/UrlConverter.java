@@ -42,7 +42,7 @@ public final class UrlConverter {
             edmPreviewUrl = bean.getEuropeanaAggregation().getEdmPreview();
             LOG.debug("edmPreview found: {}", edmPreviewUrl);
         } else {
-            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean);
+            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean, null);
             if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
                 edmPreviewUrl = dataProviderAggregation.getEdmObject();
                 LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);

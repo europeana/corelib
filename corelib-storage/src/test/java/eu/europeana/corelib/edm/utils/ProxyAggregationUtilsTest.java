@@ -42,7 +42,7 @@ public class ProxyAggregationUtilsTest {
 
     @Test
     public void getDataProviderAggregationTest() {
-        Aggregation aggregation = proxyAggregationUtils.getDataProviderAggregation(bean);
+        Aggregation aggregation = proxyAggregationUtils.getDataProviderAggregation(bean, null);
         Assert.assertNotNull(aggregation);
         Assert.assertEquals(MockBeanUtils.DATAPROVIDER_AGGREGATION_ABOUT, aggregation.getAbout());
     }
@@ -57,21 +57,17 @@ public class ProxyAggregationUtilsTest {
 
     }
 
-
     @Test
     public void whenNoLineagePresentTest() {
-        Assert.assertFalse(proxyAggregationUtils.isLineagePresentInEuropeanaProxy(minimalBean));
-        Assert.assertTrue(minimalBean.getProxies().size() == 2);
-
+        List<Proxy> orderedProxy = proxyAggregationUtils.orderProxy(minimalBean);
         // test order
-        List<Proxy> proxies = proxyAggregationUtils.orderProxy(minimalBean);
-        Assert.assertNotNull(proxies);
-        Assert.assertEquals(minimalBean.getProxies().size(), proxies.size());
+        Assert.assertNotNull(orderedProxy);
+        Assert.assertEquals(minimalBean.getProxies().size(), orderedProxy.size());
     }
 
     @Test
     public void whenNoDataProviderAggregationPresent() {
-        Aggregation aggregation = proxyAggregationUtils.getDataProviderAggregation(minimalBean);
+        Aggregation aggregation = proxyAggregationUtils.getDataProviderAggregation(minimalBean, null);
         Assert.assertNull(aggregation);
 
         // check the ordering

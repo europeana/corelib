@@ -39,7 +39,7 @@ public class MockBeanUtils {
         proxy.setProxyFor(PROXY_FOR);
         proxy.setEdmType(DocType.IMAGE.getEnumNameValue());
         proxy.setProxyIn(new String [] {EUROPEANA_PROXY_IN});
-        proxy.setLineage(new String [] {THIRD_PROXY_ABOUT, PROVIDER_PROXY_ABOUT, SECOND_PROXY_ABOUT});
+        proxy.setLineage(new String [] {PROVIDER_PROXY_ABOUT, THIRD_PROXY_ABOUT, SECOND_PROXY_ABOUT});
         proxy.setEuropeanaProxy(true);
         bean.getProxies().add(proxy);
 
