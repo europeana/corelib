@@ -56,8 +56,8 @@ public class ProxyAggregationUtils {
             Collections.reverse(lineages);
             orderedProxy.addAll(orderNonEuropeanaProxy(lineages, nonEuropeanaProxy));
         }
-        // this is fail-safe check, in case we miss any proxy OR
-        // if there was a NO proxy without Lineage, will return the same order as present
+        // this is fail-safe check, in case we miss any proxy
+        // will return the same order as present
         if (orderedProxy.size() == bean.getProxies().size()) {
             return orderedProxy;
         }
@@ -141,7 +141,12 @@ public class ProxyAggregationUtils {
         }
         orderAggregation.add(dataProviderAgg);
         orderAggregation.addAll(nonDataProvdrAggregation);
-        return orderAggregation;
+        // this is fail-safe check, in case we miss any aggregation
+        // will return the same order as present
+        if (orderAggregation.size() == bean.getAggregations().size()) {
+            return orderAggregation;
+        }
+        return (List<Aggregation>) bean.getAggregations();
     }
 
 
