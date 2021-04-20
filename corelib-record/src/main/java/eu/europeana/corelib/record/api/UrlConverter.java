@@ -43,16 +43,18 @@ public final class UrlConverter {
             LOG.debug("edmPreview found: {}", edmPreviewUrl);
         } else {
             Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean, null);
-            if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
-                edmPreviewUrl = dataProviderAggregation.getEdmObject();
-                LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
-            } else if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmIsShownBy())) {
-                edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
-                LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
-            } else {
-                LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
-            }
+            if (dataProviderAggregation != null) {
+                if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
+                    edmPreviewUrl = dataProviderAggregation.getEdmObject();
+                    LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
+                } else if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmIsShownBy())) {
+                    edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
+                    LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
+                } else {
+                    LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
+                }
         }
+    }
 
         if (StringUtils.isNotEmpty(edmPreviewUrl)) {
             UrlBuilder urlBuilder = EuropeanaUrlBuilder.getThumbnailUrl(edmPreviewUrl, bean.getType());

@@ -189,7 +189,7 @@ public class ProxyAggregationUtils {
     private static String[] getDataProviderFromProxyWithOutLineage(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()) {
-                if (isProxyWithOutLineage(proxy)) {
+                if (isProxyWithOutLineage(proxy) && !proxy.isEuropeanaProxy()) {
                     return proxy.getProxyIn();
                 }
             }
