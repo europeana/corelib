@@ -5,7 +5,6 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
 import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
-import eu.europeana.corelib.edm.utils.ProxyAggregationUtils;
 import eu.europeana.corelib.web.service.impl.EuropeanaUrlBuilder;
 import eu.europeana.corelib.web.utils.UrlBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -30,31 +29,32 @@ public final class UrlConverter {
 
     /**
      * Modify original edmPreview image urls from Mongo into API thumbnail urls
-     * @param bean the fullbean to modify
+     *
+     * @param bean             the fullbean to modify
      * @param thumbnailBaseUrl optional, alternative FQDN for the generated thumbnail urls. If null the
      *                         default FQDN is used (api.europeana.eu)
      */
     public static void setEdmPreview(FullBean bean, String thumbnailBaseUrl) {
         String edmPreviewUrl = null;
 
-        // first try edmPreview else edmObject and else edmIsShownBy of main Aggregation
+        // first try edmPreview else edmObject and else edmIsShownBy of data provider Aggregation
         if (StringUtils.isNotEmpty(bean.getEuropeanaAggregation().getEdmPreview())) {
             edmPreviewUrl = bean.getEuropeanaAggregation().getEdmPreview();
             LOG.debug("edmPreview found: {}", edmPreviewUrl);
         } else {
-            Aggregation dataProviderAggregation = ProxyAggregationUtils.getDataProviderAggregation(bean, null);
-            if (dataProviderAggregation != null) {
-                if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
-                    edmPreviewUrl = dataProviderAggregation.getEdmObject();
-                    LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
-                } else if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmIsShownBy())) {
-                    edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
-                    LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
-                } else {
-                    LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
-                }
+            // data provider aggregation is the first in list
+            // if there was no data provider aggregation, the first aggregation is picked
+            Aggregation dataProviderAggregation = bean.getAggregations().get(0);
+            if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmObject())) {
+                edmPreviewUrl = dataProviderAggregation.getEdmObject();
+                LOG.debug("No edmPreview, but edmObject found: {}", edmPreviewUrl);
+            } else if (StringUtils.isNotEmpty(dataProviderAggregation.getEdmIsShownBy())) {
+                edmPreviewUrl = dataProviderAggregation.getEdmIsShownBy();
+                LOG.debug("No edmPreview or edmObject, but edmIsShownBy found: {}", edmPreviewUrl);
+            } else {
+                LOG.debug("No edmPreview, edmObject or edmIsShownBy found");
+            }
         }
-    }
 
         if (StringUtils.isNotEmpty(edmPreviewUrl)) {
             UrlBuilder urlBuilder = EuropeanaUrlBuilder.getThumbnailUrl(edmPreviewUrl, bean.getType());
@@ -67,7 +67,8 @@ public final class UrlConverter {
 
     /**
      * Set a proper landing page value
-     * @param bean the fullbean to modify
+     *
+     * @param bean          the fullbean to modify
      * @param portalBaseUrl optional, alternative FQDN for the generated portal url. If null the
      *                      default FQDN is used (api.europeana.eu)
      */
@@ -82,6 +83,7 @@ public final class UrlConverter {
     /**
      * Make sure the ProvideCHO, AggregatedCHO and ProxyFor values start with '/item' (this was removed for records
      * ingested with Metis system, see also EA-1257)
+     *
      * @param bean the fullbean to modify
      */
     public static void addSlashItem(FullBean bean) {
@@ -103,7 +105,7 @@ public final class UrlConverter {
             euAggr.setAggregatedCHO(SLASH_ITEM + euAggr.getAggregatedCHO());
         }
         // ProxyFor
-        for (Proxy proxy: bean.getProxies()) {
+        for (Proxy proxy : bean.getProxies()) {
             if (!proxy.getProxyFor().toLowerCase(Locale.getDefault()).startsWith(SLASH_ITEM)) {
                 proxy.setProxyFor(SLASH_ITEM + proxy.getProxyFor());
             }
