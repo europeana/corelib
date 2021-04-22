@@ -42,7 +42,9 @@ public final class WebMetaInfo {
             return;
         }
 
-        // Temp fix for missing web resources
+        // Temp fix for missing web resources, get the DataProvider Aggregation
+        // data provider aggregation is the first in list
+        // if there was no data provider aggregation, the first aggregation is picked
         Aggregation aggregationFix = fullBean.getAggregations().get(0);
 
         if (aggregationFix.getEdmIsShownBy() != null) {
@@ -68,7 +70,6 @@ public final class WebMetaInfo {
 
         ((List<Aggregation>) fullBean.getAggregations()).set(0, aggregationFix);
         fillAggregations(fullBean, recordDao);
-
         addAttributionSnippets(fullBean, attributionCss);
     }
 
@@ -83,6 +84,7 @@ public final class WebMetaInfo {
         }
 
         ((FullBeanImpl) fullBean).setAsParent();
+        // ideally there should be web resource present only for the data provider aggregation
         for (Aggregation agg : fullBean.getAggregations()) {
             if (agg.getWebResources() != null && !agg.getWebResources().isEmpty()) {
                 for (WebResourceImpl wRes : (List<WebResourceImpl>) agg.getWebResources()) {
@@ -92,65 +94,67 @@ public final class WebMetaInfo {
         }
     }
 
+    /**
+     * method will add web resource meta info to the data provider aggregation web resource
+     * @param fullBean
+     * @param recordDao
+     */
     private static void fillAggregations(final FullBean fullBean, final RecordDao recordDao) {
-        Map<String, WebResource> webResourceHashCodes = prepareWebResourceHashCodes(fullBean);
+        // fill aggregation with webresource meta info only for data provider aggregation. See: EA-2523
+        Aggregation dataProviderAggregation = fullBean.getAggregations().get(0);
+        Map<String, WebResource> webResourceHashCodes = prepareWebResourceHashCodes(dataProviderAggregation, fullBean.getAbout());
         Map<String, WebResourceMetaInfoImpl> metaInfos = recordDao.retrieveWebMetaInfos(new ArrayList<>(webResourceHashCodes.keySet()));
         for (Map.Entry<String, WebResourceMetaInfoImpl> metaInfo : metaInfos.entrySet()) {
             WebResource webResource = webResourceHashCodes.get(metaInfo.getKey());
-            if (webResource != null && metaInfo.getValue() != null) {
-                ((WebResourceImpl) webResource).setWebResourceMetaInfo(metaInfo.getValue());
-            }
+            ((WebResourceImpl) webResource).setWebResourceMetaInfo(metaInfo.getValue());
         }
     }
 
-    private static Map<String, WebResource> prepareWebResourceHashCodes(FullBean fullBean) {
+    private static Map<String, WebResource> prepareWebResourceHashCodes(Aggregation aggregation, String about) {
         Map<String, WebResource> hashCodes = new HashMap<>();
+         final Set<String> urls = new HashSet<>();
 
-        for (final Aggregation aggregation : fullBean.getAggregations()) {
-            final Set<String> urls = new HashSet<>();
+         if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
+             urls.add(aggregation.getEdmIsShownBy());
+         }
 
-            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownBy())) {
-                urls.add(aggregation.getEdmIsShownBy());
-            }
+         if (StringUtils.isNotEmpty(aggregation.getEdmIsShownAt())) {
+             urls.add(aggregation.getEdmIsShownAt());
+         }
 
-            if (StringUtils.isNotEmpty(aggregation.getEdmIsShownAt())) {
-                urls.add(aggregation.getEdmIsShownAt());
-            }
+         if (null != aggregation.getHasView()) {
+            urls.addAll(Arrays.asList(aggregation.getHasView()));
+         }
 
-            if (null != aggregation.getHasView()) {
-                urls.addAll(Arrays.asList(aggregation.getHasView()));
-            }
+         // if the fix adds a web resource for edmObject it also has to be added here in order to be processed
+         if (null != aggregation.getEdmObject()) {
+             urls.add(aggregation.getEdmObject());
+         }
 
-            // if the fix adds a web resource for edmObject it also has to be added here in order to be processed
-            if (null != aggregation.getEdmObject()) {
-                urls.add(aggregation.getEdmObject());
-            }
+         for (final WebResource webResource : aggregation.getWebResources()) {
+             if (!urls.contains(webResource.getAbout().trim())) {
+                 continue;
+             }
 
-            for (final WebResource webResource : aggregation.getWebResources()) {
-                if (!urls.contains(webResource.getAbout().trim())) {
-                    continue;
-                }
+             // Locate the technical meta data from the web resource about
+             if (webResource.getAbout() != null) {
+                 String hashCodeAbout = generateHashCode(webResource.getAbout(), about);
+                 hashCodes.put(hashCodeAbout, webResource);
+              }
 
-                // Locate the technical meta data from the web resource about
-                if (webResource.getAbout() != null) {
-                    String hashCodeAbout = generateHashCode(webResource.getAbout(), fullBean.getAbout());
-                    hashCodes.put(hashCodeAbout, webResource);
-                }
+             // Locate the technical meta data from the aggregation is shown by
+             if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownBy() != null) {
+                 String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
+                 hashCodes.put(hashCodeIsShownBy, webResource);
+             }
 
-                // Locate the technical meta data from the aggregation is shown by
-                if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownBy() != null) {
-                    String hashCodeIsShownBy = generateHashCode(aggregation.getEdmIsShownBy(), aggregation.getAbout());
-                    hashCodes.put(hashCodeIsShownBy, webResource);
-                }
-
-                // Locate the technical meta data from the aggregation is shown at
-                if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownAt() != null) {
-                    String hashCodeIsShownAt = generateHashCode(aggregation.getEdmIsShownAt(), aggregation.getAbout());
-                    hashCodes.put(hashCodeIsShownAt, webResource);
-                }
-            }
-        }
-        return hashCodes;
+             // Locate the technical meta data from the aggregation is shown at
+             if (!hashCodes.containsValue(webResource) && aggregation.getEdmIsShownAt() != null) {
+                 String hashCodeIsShownAt = generateHashCode(aggregation.getEdmIsShownAt(), aggregation.getAbout());
+                 hashCodes.put(hashCodeIsShownAt, webResource);
+             }
+         }
+         return hashCodes;
     }
 
     /**
