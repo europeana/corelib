@@ -29,7 +29,8 @@ public final class IIIFLink {
     private static final String HTTPS_SCHEMA_ORG_PUBLICATION_ISSUE = "https://schema.org/PublicationIssue";
     private static final String HTTP_WWW_EUSCREEN_EU               = "http://www.euscreen.eu";
     private static final String HTTPS_WWW_EUSCREEN_EU              = "https://www.euscreen.eu";
-    private static final String DEFAULT_IIIF_BASE_URL = "https://iiif.europeana.eu";
+    private static final String HTTP_DEFAULT_IIIF_BASE_URL         = "http://iiif.europeana.eu";
+    private static final String HTTPS_DEFAULT_IIIF_BASE_URL        = "https://iiif.europeana.eu";
 
     private IIIFLink() {
         // empty constructor to prevent initialization
@@ -39,40 +40,20 @@ public final class IIIFLink {
      * If the record is a newspaper record and doesn't have a referencedBy value, add a link to IIIF Manifest
      *
      * @param bean           fullbean to which referenceBy IIIF link should be added
-     * @param manifestAddUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
+     * @param manifestAddApiUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
      *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
      *                       by the api2BaseUrl value
      * @param api2BaseUrl    FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
      *
      * @param manifestBaseUrl IIIF manifest location
      */
-    public static void addReferencedBy(FullBean bean, Boolean manifestAddUrl, String api2BaseUrl, String manifestBaseUrl) {
+    public static void addReferencedBy(FullBean bean, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) &&
-            bean.getAggregations() != null) {
+        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && bean.getAggregations() != null) {
             // add to all webresources in all aggregations
             for (Aggregation a : bean.getAggregations()) {
-                for (WebResource wr : a.getWebResources()) {
-                    String iifBaseUrl = StringUtils.isBlank(manifestBaseUrl) ? DEFAULT_IIIF_BASE_URL : manifestBaseUrl;
-                    String iiifId = iifBaseUrl + "/presentation" + bean.getAbout() + "/manifest";
-                    if (Boolean.TRUE.equals(manifestAddUrl)) {
-                        iiifId = iiifId + "?recordApi=" + api2BaseUrl;
-                    }
-
-                    // update reference link if no dcTermsIsReferencedBy is set
-                    if (ArrayUtils.isEmpty(wr.getDctermsIsReferencedBy())) {
-                        wr.setDctermsIsReferencedBy(new String[]{iiifId});
-                        continue;
-                    }
-
-                    // if dcTermsIsReferencedBy already exists, only update values starting with http(s)://iiif.europeana.eu
-                    List<String> dcTerms = new ArrayList<>();
-                    for (String referenceUrl : wr.getDctermsIsReferencedBy()) {
-                        dcTerms.add(shouldUpdateManifestUrl(manifestBaseUrl, referenceUrl) ? iiifId : referenceUrl);
-                    }
-                    wr.setDctermsIsReferencedBy(dcTerms.toArray(new String[0]));
-                }
+                addManifestUrl(a, bean.getAbout(), manifestAddApiUrl, api2BaseUrl, manifestBaseUrl);
             }
         }
         if (LOG.isDebugEnabled()) {
@@ -80,10 +61,37 @@ public final class IIIFLink {
         }
     }
 
+    private static void addManifestUrl(Aggregation a, String about, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
+        for (WebResource wr : a.getWebResources()) {
+            String iiifBaseUrl = StringUtils.isBlank(manifestBaseUrl) ? HTTPS_DEFAULT_IIIF_BASE_URL : manifestBaseUrl;
+            String manifestUrl = iiifBaseUrl + "/presentation" + about + "/manifest";
+            if (Boolean.TRUE.equals(manifestAddApiUrl)) {
+                if (api2BaseUrl != null && api2BaseUrl.startsWith("http")) {
+                    manifestUrl = manifestUrl + "?recordApi=" + api2BaseUrl;
+                } else {
+                    manifestUrl = manifestUrl + "?recordApi=https://" + api2BaseUrl;
+                }
+            }
+
+            // update reference link if no dcTermsIsReferencedBy is set
+            if (ArrayUtils.isEmpty(wr.getDctermsIsReferencedBy())) {
+                wr.setDctermsIsReferencedBy(new String[]{manifestUrl});
+                continue;
+            }
+
+            // if dcTermsIsReferencedBy already exists, only update values starting with http(s)://iiif.europeana.eu
+            List<String> dcTerms = new ArrayList<>();
+            for (String referenceUrl : wr.getDctermsIsReferencedBy()) {
+                dcTerms.add(shouldUpdateManifestUrl(manifestBaseUrl, referenceUrl) ? manifestUrl : referenceUrl);
+            }
+            wr.setDctermsIsReferencedBy(dcTerms.toArray(new String[0]));
+        }
+    }
+
     /**
      * Determines if the IIIF manifest link in a WebResource should be updated.
-     * This should be updated when the WebResource has a dcTermsIsReferencedBy value that starts with "http://iiif.europeana.eu" or "https://iiif.europeana.eu" AND
-     * the manifestBaseUrl config property is set.
+     * This should be updated when the WebResource has a dcTermsIsReferencedBy value that starts with
+     * "http://iiif.europeana.eu" or "https://iiif.europeana.eu" AND the manifestBaseUrl config property is set.
      *
      * @param reference       existing IIIF link in resource
      * @param manifestBaseUrl configured baseUrl property for manifest links
@@ -91,7 +99,7 @@ public final class IIIFLink {
      */
     private static boolean shouldUpdateManifestUrl(String manifestBaseUrl, String reference) {
         return StringUtils.isNotBlank(manifestBaseUrl) &&
-                StringUtils.startsWithAny(reference, new String[]{"http://iiif.europeana.eu", "https://iiif.europeana.eu"});
+                StringUtils.startsWithAny(reference, HTTPS_DEFAULT_IIIF_BASE_URL, HTTP_DEFAULT_IIIF_BASE_URL);
     }
 
     /**
@@ -103,19 +111,26 @@ public final class IIIFLink {
     private static boolean isNewsPaperRecord(FullBean bean) {
         if (null != bean.getProxies()) {
             for (Proxy proxy : bean.getProxies()) {
-                Map<String, List<String>> langMap = proxy.getDcType();
-                if (null != langMap) {
-                    for (List<String> langValues : langMap.values()) {
-                        if (langValues.contains(HTTP_SCHEMA_ORG_PUBLICATION_ISSUE) ||
-                                 langValues.contains(HTTPS_SCHEMA_ORG_PUBLICATION_ISSUE)){
-                            LOG.debug("isNewsPaperRecord = TRUE");
-                            return true;
-                        }
-                    }
+                if (dcTypeIsPublicationIssue(proxy)) {
+                    LOG.debug("isNewsPaperRecord = TRUE");
+                    return true;
                 }
             }
         }
         LOG.debug("isNewsPaperRecord = FALSE");
+        return false;
+    }
+
+    private static boolean dcTypeIsPublicationIssue(Proxy p) {
+        Map<String, List<String>> langMap = p.getDcType();
+        if (null != langMap) {
+            for (List<String> langValues : langMap.values()) {
+                if (langValues.contains(HTTP_SCHEMA_ORG_PUBLICATION_ISSUE) ||
+                        langValues.contains(HTTPS_SCHEMA_ORG_PUBLICATION_ISSUE)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -158,16 +173,23 @@ public final class IIIFLink {
     private static boolean checkMimeType(FullBean bean) {
         if (null != bean.getAggregations()) {
             for (Aggregation a : bean.getAggregations()) {
-                for (WebResource wr : a.getWebResources()) {
-                    if (MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.AUDIO ||
-                        MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.VIDEO) {
-                        LOG.debug("isA/V Item = TRUE");
-                        return true;
-                    }
+                if (hasAudioOrVideoWebResource(a)) {
+                    LOG.debug("is A/V Item = TRUE");
+                    return true;
                 }
             }
         }
-        LOG.debug("isA/V Item = FALSE");
+        LOG.debug("is A/V Item = FALSE");
+        return false;
+    }
+
+    private static boolean hasAudioOrVideoWebResource(Aggregation a) {
+        for (WebResource wr : a.getWebResources()) {
+            if (MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.AUDIO ||
+                    MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.VIDEO) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -192,27 +214,4 @@ public final class IIIFLink {
         return false;
     }
 
-    /**
-     * Checks if there is any webresource that has a dcTermsIsReferenced value (if true we rely on the values that were
-     * ingested and do not construct any manifest urls ourselves
-     *
-     * @param bean
-     * @return true if bean has a webresource for any aggregation that has a dcTermsIsReferenced value, otherwise false
-     */
-    private static boolean hasReferencedBy(FullBean bean) {
-        if (null != bean.getAggregations()) {
-            // check all aggregations
-            for (Aggregation a : bean.getAggregations()) {
-                // check all webresources
-                for (WebResource wr : a.getWebResources()) {
-                    if (null != wr.getDctermsIsReferencedBy() && 0 < wr.getDctermsIsReferencedBy().length) {
-                        LOG.debug("hasReferencedBy = TRUE");
-                        return true;
-                    }
-                }
-            }
-        }
-        LOG.debug("hasReferencedBy = FALSE");
-        return false;
-    }
 }

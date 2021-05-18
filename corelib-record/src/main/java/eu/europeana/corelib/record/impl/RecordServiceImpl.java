@@ -38,8 +38,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Value("#{europeanaProperties['iiifManifest.baseUrl']}")
     private String manifestBaseUrl;
-    @Value("#{europeanaProperties['manifest.add.url']}")
-    private Boolean manifestAddUrl;
+    @Value("#{europeanaProperties['manifest.add.apiUrl']}")
+    private Boolean manifestAddApiUrl;
     @Value("#{europeanaProperties['htmlsnippet.css.source']}")
     private String attributionCss;
 
@@ -114,7 +114,7 @@ public class RecordServiceImpl implements RecordService {
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
 
         // 3. add link to IIIF for newspaper and AV/EUScreen items
-        IIIFLink.addReferencedBy(fullBean, manifestAddUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
+        IIIFLink.addReferencedBy(fullBean, manifestAddApiUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
 
         // 4. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);
