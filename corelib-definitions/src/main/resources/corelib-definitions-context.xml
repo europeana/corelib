@@ -7,17 +7,16 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="europeanaProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" 
+	<bean id="europeanaProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean"
 		p:ignoreResourceNotFound="true">
 		<property name="locations">
 			<list>
-				<value>classpath:cloud_config.properties</value>
 				<value>classpath:europeana.properties</value>
 				<value>classpath:europeana.user.properties</value> <!-- to allow diffferent props for development/testing -->
 			</list>
 		</property>
 		<property name="fileEncoding" value="UTF-8"/>
-	</bean> 
+	</bean>
 
 	<!-- INTERNAL DEFINITIONS -->
 	<import resource="internal/corelib-definitions-beans.xml"/>

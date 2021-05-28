@@ -9,7 +9,7 @@ public class RequestUtils {
 	@SuppressWarnings("unchecked")
 	public static Map<String, String[]> getParameterMap(HttpServletRequest request) {
 		if (request != null) {
-			return (Map<String, String[]>)request.getParameterMap();
+			return request.getParameterMap();
 		}
 		return null;
 	}

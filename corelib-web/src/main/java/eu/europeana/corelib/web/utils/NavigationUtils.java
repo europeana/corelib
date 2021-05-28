@@ -9,14 +9,16 @@ import eu.europeana.corelib.definitions.solr.model.Query;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
+@Deprecated(since = "May 2021")
 public class NavigationUtils {
 
 	private NavigationUtils() {
 		// Constructor must be private
 	}
 
+	@Deprecated(since = "May 2021")
 	public static List<BreadCrumb> createBreadCrumbList(Query q) {
-		List<BreadCrumb> crumbs = new ArrayList<BreadCrumb>();
+		List<BreadCrumb> crumbs = new ArrayList<>();
 		BreadCrumb crumb = new BreadCrumb(q.getQuery(), "query", q.getQuery(), null);
 		crumbs.add(crumb);
 		String[] refinements = q.getRefinements();

@@ -114,10 +114,12 @@ public class ResultSet<T> {
 		return this;
 	}
 
+	@Deprecated(since = "May 2021")
 	public SpellCheckResponse getSpellcheck() {
 		return spellcheck;
 	}
 
+	@Deprecated(since = "May 2021")
 	public ResultSet<T> setSpellcheck(SpellCheckResponse spellcheck) {
 		this.spellcheck = spellcheck;
 		return this;
