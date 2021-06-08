@@ -7,19 +7,19 @@
         <artifactId>europeana-parent-pom</artifactId>
         <version>2.0</version>
     </parent>
-    
+
     <repositories>
-		<repository>
-			<id>libs-release-local</id>
-			<name>europeana-releases</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-release</url>
-		</repository>
-		<repository>
-			<id>libs-snapshots-local</id>
-			<name>europeana-snapshots</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
-		</repository>
-	</repositories>
+        <repository>
+            <id>libs-release-local</id>
+            <name>europeana-releases</name>
+            <url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+        </repository>
+        <repository>
+            <id>libs-snapshots-local</id>
+            <name>europeana-snapshots</name>
+            <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+        </repository>
+    </repositories>
 
     <artifactId>corelib</artifactId>
     <version>2.13.3-SNAPSHOT</version>
@@ -34,9 +34,6 @@
     <properties>
         <version.maven.compiler.plugin>3.8.1</version.maven.compiler.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- exclude generated code in SonarQube analysis -->
-        <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
         <metis.version>4</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
@@ -136,13 +133,21 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
+
+        <!-- commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commonsLang3.version}</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>

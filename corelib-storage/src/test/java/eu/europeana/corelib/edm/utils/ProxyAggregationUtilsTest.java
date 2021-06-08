@@ -11,9 +11,9 @@ import java.util.List;
 public class ProxyAggregationUtilsTest {
 
     private ProxyAggregationUtils  proxyAggregationUtils;
-    private FullBean bean = MockBeanUtils.MockMultipleProxyAggregationBean();
-    private FullBean minimalBean = MockBeanUtils.MockMinimalBean();
-    private FullBean invalidProxyBean = MockBeanUtils.MockBeanWithLineageProxy();
+    private FullBean bean = MockBeanUtils.mockMultipleProxyAggregationBean();
+    private FullBean minimalBean = MockBeanUtils.mockMinimalBean();
+    private FullBean invalidProxyBean = MockBeanUtils.mockBeanWithLineageProxy();
 
 
     @Test

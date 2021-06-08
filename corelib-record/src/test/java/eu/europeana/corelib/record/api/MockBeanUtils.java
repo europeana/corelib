@@ -1,16 +1,23 @@
-package eu.europeana.corelib.edm.utils;
+package eu.europeana.corelib.record.api;
 
+import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.edm.model.metainfo.ImageMetaInfoImpl;
+import eu.europeana.corelib.edm.model.metainfo.WebResourceMetaInfoImpl;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import eu.europeana.corelib.solr.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This is a slightly modified copy of the MockBeanUtils class from corelib-storage. It used for testing
+ * for example IIIFLink
+ */
 public class MockBeanUtils {
 
 
-    public static final String ABOUT = "/multipleProxy/1234/test_5678";
     public static final String EUROPEANA_PROXY_ABOUT = "/proxy/europeana/15/fashion";
     public static final String PROXY_FOR = "/item/1234/test_5678";
     public static final String EUROPEANA_PROXY_IN = "/aggregation/europeana/1/fashion_894";
@@ -28,9 +35,9 @@ public class MockBeanUtils {
     public static final String EUROPEANA_COLLECTION_NAME  ="1234_test" ;
 
 
-    static FullBeanImpl mockMultipleProxyAggregationBean() {
+    static FullBeanImpl mockMultipleProxyAggregationBean(String about) {
         FullBeanImpl bean = new FullBeanImpl();
-        bean.setAbout(ABOUT);
+        bean.setAbout(about);
 
         // europeana proxy
         bean.setProxies(new ArrayList<>());
@@ -70,7 +77,7 @@ public class MockBeanUtils {
 
         bean.setProvidedCHOs(new ArrayList<>());
         ProvidedCHOImpl providedCHO = new ProvidedCHOImpl();
-        providedCHO.setAbout(ABOUT);
+        providedCHO.setAbout(about);
         bean.getProvidedCHOs().add(providedCHO);
 
         bean.setAggregations(new ArrayList<>());
@@ -102,9 +109,9 @@ public class MockBeanUtils {
         return bean;
     }
 
-    static FullBeanImpl mockMinimalBean() {
+    static FullBeanImpl mockMinimalBean(String about) {
         FullBeanImpl bean = new FullBeanImpl();
-        bean.setAbout(ABOUT);
+        bean.setAbout(about);
 
         // europeana proxy
         bean.setProxies(new ArrayList<>());
@@ -126,7 +133,7 @@ public class MockBeanUtils {
 
         bean.setProvidedCHOs(new ArrayList<>());
         ProvidedCHOImpl providedCHO = new ProvidedCHOImpl();
-        providedCHO.setAbout(ABOUT);
+        providedCHO.setAbout(about);
         bean.getProvidedCHOs().add(providedCHO);
 
         bean.setAggregations(new ArrayList<>());
@@ -151,9 +158,9 @@ public class MockBeanUtils {
         return bean;
     }
 
-    static FullBeanImpl mockBeanWithLineageProxy() {
+    static FullBeanImpl mockBeanWithLineageProxy(String about) {
         FullBeanImpl bean = new FullBeanImpl();
-        bean.setAbout(ABOUT);
+        bean.setAbout(about);
 
         // europeana proxy
         bean.setProxies(new ArrayList<>());
@@ -177,7 +184,7 @@ public class MockBeanUtils {
 
         bean.setProvidedCHOs(new ArrayList<>());
         ProvidedCHOImpl providedCHO = new ProvidedCHOImpl();
-        providedCHO.setAbout(ABOUT);
+        providedCHO.setAbout(about);
         bean.getProvidedCHOs().add(providedCHO);
 
         bean.setAggregations(new ArrayList<>());
@@ -200,6 +207,26 @@ public class MockBeanUtils {
         bean.setEuropeanaCollectionName(new String[] { EUROPEANA_COLLECTION_NAME});
 
         return bean;
+    }
+
+
+    static WebResourceImpl generateWebResource(String about, String mimeType) {
+        // we always generate an image, should not matter for test
+        ImageMetaInfoImpl imi = new ImageMetaInfoImpl();
+        imi.setMimeType(mimeType);
+
+        WebResourceMetaInfoImpl wrmi = new WebResourceMetaInfoImpl(null, imi, null, null, null);
+
+        WebResourceImpl wr = new WebResourceImpl();
+        wr.setAbout(about);
+        wr.setWebResourceMetaInfo(wrmi);
+        return wr;
+    }
+
+    static FullBean addWebResource(FullBean fb, WebResourceImpl wr) {
+        List<WebResourceImpl> wrs = (List<WebResourceImpl>) fb.getAggregations().get(0).getWebResources();
+        wrs.add(wr);
+        return fb;
     }
 
 }

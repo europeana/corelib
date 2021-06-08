@@ -31,11 +31,6 @@
 		</dependency>
 		<!-- Other -->
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commonsLang3.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>dev.morphia.morphia</groupId>
 			<artifactId>morphia-core</artifactId>
 			<version>${morphia.version}</version>
@@ -61,6 +56,7 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.2</version>
 		</dependency>
+
 	</dependencies>
 
 </project>

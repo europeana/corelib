@@ -10,13 +10,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * If a record is a newspaper record and doesn't have a referencedBy value, we add a reference to IIIF
- * (see ticket EA-992) Optionally, this reference can include this API's FQDN (api2BaseUrl) as a
+ * If a record doesn't have a referencedBy value and doesn't contain any items of type that we block, then we add a
+ * reference to IIIF. Optionally, this reference can include this API's FQDN (api2BaseUrl) as a
  * parameter so IIIF Manifest will use this API to load data.
  */
 public final class IIIFLink {
@@ -32,26 +40,45 @@ public final class IIIFLink {
     private static final String HTTP_DEFAULT_IIIF_BASE_URL         = "http://iiif.europeana.eu";
     private static final String HTTPS_DEFAULT_IIIF_BASE_URL        = "https://iiif.europeana.eu";
 
+    private static final String BLOCKED_MIME_TYPES_FILENAME = "IIIF_blocked_mime_types.txt";
+    private static List<String> blockedMimeTypes;
+
+    static {
+        URL file = IIIFLink.class.getClassLoader().getResource(BLOCKED_MIME_TYPES_FILENAME);
+        if (file == null) {
+            LOG.warn("Unable to find file {}", BLOCKED_MIME_TYPES_FILENAME);
+        } else {
+            try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
+                blockedMimeTypes = lines.map(String::toLowerCase).collect(Collectors.toUnmodifiableList());
+            } catch (IOException | URISyntaxException e) {
+                LOG.error("Error loading file {}", BLOCKED_MIME_TYPES_FILENAME, e);
+                blockedMimeTypes = new ArrayList<>();
+            }
+        }
+        LOG.info("Loaded {} mime-types from file for which no IIIF link will be created", blockedMimeTypes.size());
+    }
+
     private IIIFLink() {
-        // empty constructor to prevent initialization
+        // hide public constructor to prevent initialization
     }
 
     /**
-     * If the record is a newspaper record and doesn't have a referencedBy value, add a link to IIIF Manifest
+     * Add a link to a IIIF manifest in the dcReferencedBy field if
+     * 1. the record doesn't have a webresource with a mime-type listed in the blocked mime-types file, if so we skip
+     * generating links for the entire record
+     * 2. the webresource in question doesn't already have a dcReferencedBy field, if so we just skip that webresource
      *
      * @param bean           fullbean to which referenceBy IIIF link should be added
      * @param manifestAddApiUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
      *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
      *                       by the api2BaseUrl value
      * @param api2BaseUrl    FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
-     *
      * @param manifestBaseUrl IIIF manifest location
      */
     public static void addReferencedBy(FullBean bean, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
         // tmp add timing information to see impact
         long start = System.nanoTime();
-        if ((isNewsPaperRecord(bean) || isManifestAVRecord(bean)) && bean.getAggregations() != null) {
-            // add to all webresources in all aggregations
+        if (bean.getAggregations() != null && !hasBlockedMimeTypes(bean)) {
             for (Aggregation a : bean.getAggregations()) {
                 addManifestUrl(a, bean.getAbout(), manifestAddApiUrl, api2BaseUrl, manifestBaseUrl);
             }
@@ -59,6 +86,26 @@ public final class IIIFLink {
         if (LOG.isDebugEnabled()) {
             LOG.debug("AddReferencedByIIIF took {} ns", System.nanoTime() - start);
         }
+    }
+
+    /**
+     * We iterate over all web resources to see if there is any with a mimetype for which we shouldn't generate
+     * an IIIF link.
+     * @param bean the fullbean the is checked
+     * @return true if has web resource with blocked mime-type, false otherwise
+     */
+    private static boolean hasBlockedMimeTypes(FullBean bean) {
+        // the first aggregation (from data provider) should be the one that contains the webresources
+        List<? extends WebResource> webResources = bean.getAggregations().get(0).getWebResources();
+        for (WebResource wr : webResources) {
+            String mimeType = wr.getEbucoreHasMimeType();
+            if (StringUtils.isNotBlank(mimeType) && blockedMimeTypes.contains(mimeType.toLowerCase(Locale.ROOT))) {
+                LOG.debug("Record {} has webresource {} with blocked mime-type. No IIIF link is generated",
+                        bean.getAbout(), wr.getAbout());
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void addManifestUrl(Aggregation a, String about, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
@@ -89,7 +136,7 @@ public final class IIIFLink {
     }
 
     /**
-     * Determines if the IIIF manifest link in a WebResource should be updated.
+     * Determines if the IIIF manifest link in a WebResource should be updated with an extra parameter.
      * This should be updated when the WebResource has a dcTermsIsReferencedBy value that starts with
      * "http://iiif.europeana.eu" or "https://iiif.europeana.eu" AND the manifestBaseUrl config property is set.
      *
@@ -107,7 +154,9 @@ public final class IIIFLink {
      *
      * @param bean fullbean to check
      * @return true if it's a newspaper record, otherwise false
+     * @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
      */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean isNewsPaperRecord(FullBean bean) {
         if (null != bean.getProxies()) {
             for (Proxy proxy : bean.getProxies()) {
@@ -121,6 +170,10 @@ public final class IIIFLink {
         return false;
     }
 
+    /**
+     *  @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
+     */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean dcTypeIsPublicationIssue(Proxy p) {
         Map<String, List<String>> langMap = p.getDcType();
         if (null != langMap) {
@@ -139,7 +192,9 @@ public final class IIIFLink {
      *
      * @param bean fullbean to check
      * @return true if it's AV record  otherwise false
+     * @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
      */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean isManifestAVRecord(FullBean bean) {
         String  edmType = null;
         boolean isEdmTypeAV;
@@ -169,7 +224,9 @@ public final class IIIFLink {
      *
      * @param bean fullbean to check
      * @return true if mimeType is playable, otherwise false
+     * @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
      */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean checkMimeType(FullBean bean) {
         if (null != bean.getAggregations()) {
             for (Aggregation a : bean.getAggregations()) {
@@ -183,6 +240,10 @@ public final class IIIFLink {
         return false;
     }
 
+    /**
+     *  @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
+     */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean hasAudioOrVideoWebResource(Aggregation a) {
         for (WebResource wr : a.getWebResources()) {
             if (MediaType.getMediaType(wr.getEbucoreHasMimeType()) == MediaType.AUDIO ||
@@ -198,13 +259,15 @@ public final class IIIFLink {
      *
      * @param bean fullbean to check
      * @return true if it's a EUScreen item, otherwise false
+     * @deprecated algorithm that determines for which records to generate an IIIF link changed, not used anymore
      */
+    @Deprecated(since = "v2.13.2", forRemoval = true)
     private static boolean isEUScreenItem(FullBean bean) {
         // check edmIsShownAt
         if (null != bean.getAggregations()) {
             for (Aggregation a : bean.getAggregations()) {
                 if (null != a.getEdmIsShownAt() && (a.getEdmIsShownAt().startsWith(HTTP_WWW_EUSCREEN_EU) ||
-                                                    a.getEdmIsShownAt().startsWith(HTTPS_WWW_EUSCREEN_EU))) {
+                        a.getEdmIsShownAt().startsWith(HTTPS_WWW_EUSCREEN_EU))) {
                     LOG.debug("isEUScreen Item = TRUE");
                     return true;
                 }
