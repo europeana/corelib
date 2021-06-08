@@ -23,61 +23,27 @@ public enum ProblemType {
     SEARCH_THEME_UNKNOWN("400-ST", "Theme does not exist", ProblemResponseAction.LOG_WARN),
     SEARCH_THEME_MULTIPLE("400-SU", "Theme parameter accepts one value only", ProblemResponseAction.LOG_WARN),
 
-    CANT_CONNECT_SOLR("503-SA","Unable to connect to search engine.", ProblemResponseAction.MAIL),
+    CANT_CONNECT_SOLR("503-SA","Unable to connect to search engine.", ProblemResponseAction.LOG_ERR),
     // At the moment we don't use timeout, but we should start to use it with ticket EA-1391
     TIMEOUT_SOLR("504-SA", "Timeout connecting to search engine.", ProblemResponseAction.LOG_ERR),
     // No need to specify error code as this is a programming error (not run-time error) which should never occur in production
-    INVALIDCLASS(null,"Search service is called with invalid bean class.", ProblemResponseAction.MAIL),
+    INVALIDCLASS(null,"Search service is called with invalid bean class.", ProblemResponseAction.LOG_ERR),
     // Other errors
     // ------------
     APIKEY_MISSING("400-AM", "No API key provided", ProblemResponseAction.IGNORE),
     APIKEY_DOES_NOT_EXIST("401-AX", "API key doesn't exist", ProblemResponseAction.IGNORE),
     APIKEY_DEPRECATED("410-AD", "API key is deprecated", ProblemResponseAction.IGNORE),
-    APIKEY_ERROR("500-AE", "Error checking API key", ProblemResponseAction.LOG_ERR),
-    MAIL_ERROR(null,"Error sending email", ProblemResponseAction.LOG_ERR),
-    MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.MAIL),
+    MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.LOG_ERR),
     RECORD_RETRIEVAL_ERROR(null,"Record retrieval error", ProblemResponseAction.LOG_ERR),
-    INCONSISTENT_DATA(null,"Inconsistent data", ProblemResponseAction.MAIL),
-    INVALID_ARGUMENTS(null,"Service is called with invalid argument(s)", ProblemResponseAction.MAIL),
-    NO_USERNAME(null,"User name does not exist.", ProblemResponseAction.IGNORE),
-    NO_PASSWORD(null,"Password does not exist.", ProblemResponseAction.IGNORE),
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
-    CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.MAIL ),
+    CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.LOG_ERR);
 
-    // Deprecated (still in use, but in deprecated classes)
-    // ----------
-    NOT_FOUND(null,"Entity doesn't exists", ProblemResponseAction.IGNORE),
-    UNKNOWN(null,"unknown", ProblemResponseAction.IGNORE),
-    TOKEN_INVALID(null,"Europeana token has expired and is no longer valid.", ProblemResponseAction.LOG_ERR),
-    TOKEN_MISMATCH(null,"This Europeana token is not associated with the supplied email address.", ProblemResponseAction.LOG_ERR),
-    TOKEN_OUTDATED(null,"Token is outdated.", ProblemResponseAction.LOG_ERR),
-    NO_USER_ID(null,"User id does not exist.", ProblemResponseAction.IGNORE),
-    NO_USER(null,"User does not exist.", ProblemResponseAction.IGNORE),
-    MISSING_PARAM_USERNAME(null,"Required parameter 'username' missing.", ProblemResponseAction.IGNORE),
-    MISSING_PARAM_EMAIL(null,"Required parameter 'email' missing.", ProblemResponseAction.IGNORE),
-    MISSING_PARAM_PASSWORD(null,"Required parameter 'password' missing.", ProblemResponseAction.IGNORE),
-    DUPLICATE(null,"Record already exists.", ProblemResponseAction.IGNORE);
-
-    // Not used anymore, to be deleted soon
-// MATCH_ALL_DOCS(null,"org.apache.lucene.search.MatchAllDocsQuery", ProblemResponseAction.IGNORE),
-// UNDEFINED_FIELD(null,"Undefined field", ProblemResponseAction.IGNORE),
-// RECORD_NOT_INDEXED(null,"Requested Europeana record not indexed.", ProblemResponseAction.IGNORE),
-// RECORD_NOT_FOUND(null,"Requested Europeana record not found.", ProblemResponseAction.IGNORE),
-// PAGE_NOT_FOUND(null,"Requested Europeana page not found.", ProblemResponseAction.IGNORE),
-// RECORD_REVOKED(null,"Europeana record is revoked by the content provider.", ProblemResponseAction.IGNORE),
-// MALFORMED_URL(null,"Required parameters are missing from the request.", ProblemResponseAction.LOG),
-// MALFORMED_QUERY(null,"Invalid query parameter.", ProblemResponseAction.LOG),
-// UNABLE_TO_CHANGE_LANGUAGE(null,"We are unable to change the interface to the requested language.", ProblemResponseAction.LOG),
-// TOKEN_EXPIRED(null,"Europeana token has expired and is no longer valid.", ProblemResponseAction.IGNORE),
-// UNKNOWN_TOKEN(null,"Token does not exist.", ProblemResponseAction.IGNORE),
-// UNABLE_TO_PARSE_JSON(null,"Unable to parse JSON response.", ProblemResponseAction.LOG),
-// MALFORMED_SPRING_TYPE_CONVERSION(null,"org.springframework.beans.TypeMismatchException:", ProblemResponseAction.IGNORE),
-// NONE(null,"An exception occurred", ProblemResponseAction.MAIL),
-// UNKNOWN_MONGO_DB_HOST(null,"Unknown Mongo database host", ProblemResponseAction.MAIL),
-// XMPMETADATACREATION(null,"Unable to crate XMP metadata for thumbnail", ProblemResponseAction.IGNORE),
-// XMPMETADATARETRIEVAL(null,"Error while reading XMP metadata from thumbnail", ProblemResponseAction.IGNORE),
-// NO_OLD_PASSWORD(null,"Old password does not exist.", ProblemResponseAction.IGNORE);
-
+    // following errors are not longer used and will soon be removed
+    //APIKEY_ERROR("500-AE", "Error checking API key", ProblemResponseAction.LOG_ERR),
+    //INCONSISTENT_DATA(null,"Inconsistent data", ProblemResponseAction.LOG_ERR),
+    //INVALID_ARGUMENTS(null,"Service is called with invalid argument(s)", ProblemResponseAction.LOG_ERR),
+    //NO_USERNAME(null,"User name does not exist.", ProblemResponseAction.IGNORE),
+    //NO_PASSWORD(null,"Password does not exist.", ProblemResponseAction.IGNORE),
 
     private String errorCode;
     private String message;

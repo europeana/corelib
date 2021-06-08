@@ -10,7 +10,7 @@
 
 	<util:properties id="europeanaProperties" location="classpath:test-config/europeana-test.properties" />
 
-	<!-- INTERNAL DEFINITIONS -->
-	<import resource="internal/corelib-definitions-beans.xml"/>
+	<bean id="corelib_definitions_contextcontainer" class="eu.europeana.corelib.definitions.ApplicationContextContainer"/>
+
 
 </beans>

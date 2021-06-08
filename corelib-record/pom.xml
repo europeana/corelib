@@ -26,10 +26,6 @@
             <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-storage</artifactId>
         </dependency>
-        <dependency>
-            <groupId>eu.europeana.corelib</groupId>
-            <artifactId>corelib-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>eu.europeana.metis</groupId>
@@ -48,16 +44,11 @@
             <artifactId>spring-context-support</artifactId>
             <version>${springCore.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3.1</version>
-        </dependency>
         <!-- Required by WebMetaInfo (md5 hash) -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>30.1.1-jre</version>
         </dependency>
 
         <!-- TEST -->

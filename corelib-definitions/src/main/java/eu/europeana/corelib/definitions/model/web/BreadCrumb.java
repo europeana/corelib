@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
  */
+@Deprecated(since = "May 2021") // not used
 public class BreadCrumb {
 
 	/**
