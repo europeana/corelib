@@ -110,6 +110,7 @@ public final class IIIFLink {
 
     private static void addManifestUrl(Aggregation a, String about, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
         for (WebResource wr : a.getWebResources()) {
+            LOG.debug("webresource = {}, dctermsReferencedBy = {}", wr.getAbout(), wr.getDctermsIsReferencedBy());
             String iiifBaseUrl = StringUtils.isBlank(manifestBaseUrl) ? HTTPS_DEFAULT_IIIF_BASE_URL : manifestBaseUrl;
             String manifestUrl = iiifBaseUrl + "/presentation" + about + "/manifest";
             if (Boolean.TRUE.equals(manifestAddApiUrl)) {
@@ -123,13 +124,21 @@ public final class IIIFLink {
             // update reference link if no dcTermsIsReferencedBy is set
             if (ArrayUtils.isEmpty(wr.getDctermsIsReferencedBy())) {
                 wr.setDctermsIsReferencedBy(new String[]{manifestUrl});
+                LOG.debug("webresource = {}, updated dctermsReferencedBy to {}", wr.getAbout(), wr.getDctermsIsReferencedBy());
                 continue;
             }
 
             // if dcTermsIsReferencedBy already exists, only update values starting with http(s)://iiif.europeana.eu
             List<String> dcTerms = new ArrayList<>();
             for (String referenceUrl : wr.getDctermsIsReferencedBy()) {
-                dcTerms.add(shouldUpdateManifestUrl(manifestBaseUrl, referenceUrl) ? manifestUrl : referenceUrl);
+                if (shouldUpdateManifestUrl(manifestBaseUrl, referenceUrl)) {
+                    LOG.debug("webresource = {}, replaced existing dctermsReferencedBy {} with {}",
+                            wr.getAbout(), referenceUrl, manifestUrl);
+                    dcTerms.add(manifestUrl);
+                } else {
+                    LOG.debug("webresource = {}, keeping existing dctermsReferencedBy {}", wr.getAbout(), referenceUrl);
+                    dcTerms.add(referenceUrl);
+                }
             }
             wr.setDctermsIsReferencedBy(dcTerms.toArray(new String[0]));
         }

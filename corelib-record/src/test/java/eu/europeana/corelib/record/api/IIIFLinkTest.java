@@ -79,11 +79,10 @@ public class IIIFLinkTest {
      * value
      */
     @Test
-    public void testAddManifestAlreadyHasValue() {
+    public void testAddManifestAlreadyHasValueWeKeep() {
         String recordId = "/test/bean4";
         String resourceId = "https://some.webresource.with.preset.value";
         String[] presetValue = new String[]{"Hi! I'm a dctermsReferenceByValue!"};
-
 
         FullBean fb = MockBeanUtils.mockMinimalBean(recordId);
         WebResourceImpl wri = MockBeanUtils.generateWebResource(resourceId, "video/mp4");
@@ -101,6 +100,32 @@ public class IIIFLinkTest {
             } else {
                 assertEquals(MANIFEST_BASE_URL + PRESENTATION_PATH + recordId + MANIFEST_PATH, value);
             }
+        }
+    }
+
+    /**
+     * Test if we overwrite a dctermsIsReferencedBy value if
+     * 1. a particular webresource already has a dcTermsIsReferenced
+     * 2. the dctermesIsReferencedBy value starts with http(s)://iiif.europeana.eu
+     * value
+     */
+    @Test
+    public void testAddManifestAlreadyHasValueButWeNeedToOverwrite() {
+        String recordId = "/test/bean4";
+        String resourceId = "https://some.webresource.with.preset.value";
+        String[] presetValue = new String[]{"https://iiif.europeana.eu/ Hi! I'm a preset invalid url. I will be replaced"};
+
+        FullBean fb = MockBeanUtils.mockMinimalBean(recordId);
+        WebResourceImpl wri = MockBeanUtils.generateWebResource(resourceId, "video/mp4");
+        wri.setDctermsIsReferencedBy(presetValue);
+        MockBeanUtils.addWebResource(fb, wri);
+        MockBeanUtils.addWebResource(fb,
+                MockBeanUtils.generateWebResource("https://some.webresource2.eu", "image/jpeg"));
+
+        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        assert(fb.getAggregations().get(0).getWebResources().size() > 0);
+        for (WebResource wr : fb.getAggregations().get(0).getWebResources()) {
+            assertEquals(MANIFEST_BASE_URL + PRESENTATION_PATH + recordId + MANIFEST_PATH, wr.getDctermsIsReferencedBy()[0]);
         }
     }
 }
