@@ -56,7 +56,7 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public FullBean findById(DataSourceWrapper datasource, String europeanaObjectId, BaseUrlWrapper urls) throws EuropeanaException {
-        FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true);
+        FullBean fullBean = fetchFullBean(datasource, europeanaObjectId, true, false);
 
         if (fullBean != null && datasource.getRecordDao().isPresent()) {
             return enrichFullBean(datasource.getRecordDao().get(), fullBean, urls);
@@ -69,14 +69,14 @@ public class RecordServiceImpl implements RecordService {
      * @see RecordService#fetchFullBean(DataSourceWrapper, String, boolean)
      */
     @Override
-    public FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve) throws EuropeanaException {
+    public FullBean fetchFullBean(DataSourceWrapper datasource, String europeanaObjectId, boolean resolve, boolean isDefault) throws EuropeanaException {
         long   startTime = System.currentTimeMillis();
         if (datasource.getRecordDao().isEmpty()) {
             LOG.warn("Could not fetch FullBean with europeanaObjectId {}. No record server configured", europeanaObjectId);
             return null;
         }
         RecordDao recordDao = datasource.getRecordDao().get();
-        FullBean fullBean = recordDao.getFullBean(europeanaObjectId);
+        FullBean fullBean = recordDao.getFullBean(europeanaObjectId, isDefault);
         if (LOG.isDebugEnabled()) {
             LOG.debug("RecordService fetch FullBean with europeanaObjectId took {} ms", (System.currentTimeMillis() - startTime));
         }
@@ -90,7 +90,7 @@ public class RecordServiceImpl implements RecordService {
             }
             if (StringUtils.isNotBlank(newId)){
                 startTime = System.currentTimeMillis();
-                fullBean = recordDao.getFullBean(newId);
+                fullBean = recordDao.getFullBean(newId, isDefault);
                 if (fullBean == null) {
                     LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
                 }
