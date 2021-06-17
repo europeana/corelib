@@ -12,6 +12,9 @@ public enum ProblemType {
 
     // Generic error message indicating a malformed search query, but unknown what the exact problem is
     SEARCH_QUERY_INVALID("400-SA", "Invalid search query", ProblemResponseAction.LOG_WARN),
+    SEARCH_INVALID_QSOURCE("400-IQS", "Invalid q.source parameter", ProblemResponseAction.IGNORE),
+    SEARCH_INVALID_QTARGET("400-IQT", "Invalid q.target parameter", ProblemResponseAction.IGNORE),
+    SEARCH_MISSING_QTARGET("400-MQT", "Missing q.target parameter", ProblemResponseAction.IGNORE),
     SEARCH_CURSORMARK_INVALID("400-SC","Invalid cursor value. Please make sure you encode the cursor value before sending it to the API.",
             ProblemResponseAction.LOG_WARN),
     SEARCH_START_AND_CURSOR("400-SD", "Parameters 'start' and 'cursorMark' cannot be used together", ProblemResponseAction.LOG_WARN),

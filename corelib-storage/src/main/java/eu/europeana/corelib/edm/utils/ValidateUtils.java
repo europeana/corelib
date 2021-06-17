@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 public class ValidateUtils {
 
     private static final Pattern RECORD_ID = Pattern.compile("^/[a-zA-Z0-9_]*/[a-zA-Z0-9_]*$");
+    private static final Pattern LANGUAGE_FIELD = Pattern.compile("^[a-zA-Z]{2}$");
+
 
     /**
      * Checks if the provided recordId has the correct format (no illegal characters that may mess up the query)
@@ -17,5 +19,15 @@ public class ValidateUtils {
      */
     public static final boolean validateRecordIdFormat(String europeanaId) {
         return europeanaId != null && RECORD_ID.matcher(europeanaId).matches();
+    }
+
+    /**
+     * Checks if the provided string consists of a 2 characters (a-z). Note that we don't check if the string refers
+     * to an existing language
+     * @param languageAbbrevation
+     * @return true if format is valid, otherwise false
+     */
+    public static final boolean validateLanguageAbbrevation(String languageAbbrevation) {
+        return languageAbbrevation != null && LANGUAGE_FIELD.matcher(languageAbbrevation).matches();
     }
 }
