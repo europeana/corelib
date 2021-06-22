@@ -38,6 +38,8 @@ public enum ProblemType {
     APIKEY_DEPRECATED("410-AD", "API key is deprecated", ProblemResponseAction.IGNORE),
     MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.LOG_ERR),
     RECORD_RETRIEVAL_ERROR(null,"Record retrieval error", ProblemResponseAction.LOG_ERR),
+    MISSING_PARAMETER(null, "Missing required parameter", ProblemResponseAction.LOG_WARN),
+    INVALID_PARAMETER_VALUE(null, "Invalid parameter value", ProblemResponseAction.LOG_WARN),
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
     CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.LOG_ERR);
 
