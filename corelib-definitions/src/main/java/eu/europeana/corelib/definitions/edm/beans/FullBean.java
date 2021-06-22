@@ -103,7 +103,9 @@ public interface FullBean extends IdBean {
 	/**
 	 * Sets the title for this record
 	 * @param title
+	 * @deprecated unused, there are no records that have this field
 	 */
+	@Deprecated(since = "June 2021", forRemoval = false)
 	void setTitle(String[] title);
 
 	/**
@@ -187,7 +189,9 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return the title for this record
+	 * @deprecated unused, there are no records that have this field
 	 */
+	@Deprecated(since = "June 2021", forRemoval = false)
 	String[] getTitle();
 
 	/**
@@ -211,7 +215,7 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return the type for this record
-	 */
+     */
 	String getType();
 
 	/**

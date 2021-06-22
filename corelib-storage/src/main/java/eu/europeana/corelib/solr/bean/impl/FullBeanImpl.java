@@ -188,7 +188,11 @@ public class FullBeanImpl implements FullBean {
     this.europeanaId = europeanaId;
   }
 
+  /**
+   * @deprecated unused, there are no records that have this field
+   */
   @Override
+  @Deprecated(since = "June 2021", forRemoval = true)
   public void setTitle(String[] title) {
     this.title = title.clone();
   }
@@ -234,7 +238,11 @@ public class FullBeanImpl implements FullBean {
     this.europeanaCompleteness = europeanaCompleteness;
   }
 
+  /**
+   * @deprecated unused, there are no records that have this field
+   */
   @Override
+  @Deprecated(since = "June 2021", forRemoval = true)
   public String[] getTitle() {
     return (this.title != null ? this.title.clone() : null);
   }
