@@ -1,5 +1,8 @@
 package eu.europeana.corelib.definitions.edm.entity;
 
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 public interface Address {
 
 	void setVcardPostOfficeBox(String vcardPostOfficeBox);
