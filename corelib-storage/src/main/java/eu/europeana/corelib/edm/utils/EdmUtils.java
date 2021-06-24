@@ -110,6 +110,7 @@ public final class EdmUtils {
         appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
         appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
         appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
+        appendOrganisations(rdf, fullBean.getOrganizations());
         appendAgents(rdf, fullBean.getAgents());
         appendConcepts(rdf, fullBean.getConcepts());
         appendPlaces(rdf, fullBean.getPlaces());
@@ -311,8 +312,7 @@ public final class EdmUtils {
         }
     }
 
-    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean,
-        boolean preserveIdentifiers) {
+    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean, boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
         if (EuropeanaUriUtils.isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
@@ -567,6 +567,19 @@ public final class EdmUtils {
             pChoList.add(pChoJibx);
         }
         rdf.setProvidedCHOList(pChoList);
+    }
+
+    private static void appendOrganisations(RDF rdf, List<OrganizationImpl> organisations) {
+        if (organisations != null) {
+            List<Organization> organizationList = new ArrayList<>();
+            for (OrganizationImpl source : organisations) {
+                Organization target = new Organization();
+                target.setAbout(source.getAbout());
+                addAsList(target, PrefLabel.class, source.getPrefLabel());
+                // TODO for now we only add about and preflabel fields since nothing else is stored in Mongo
+            }
+            rdf.setOrganizationList(organizationList);
+        }
     }
 
     private static void appendAgents(RDF rdf, List<AgentImpl> agents) {
