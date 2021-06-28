@@ -38,7 +38,7 @@
         <!-- exclude generated code in SonarQube analysis -->
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
-        <metis.version>4</metis.version>
+        <metis.version>5-SNAPSHOT</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
