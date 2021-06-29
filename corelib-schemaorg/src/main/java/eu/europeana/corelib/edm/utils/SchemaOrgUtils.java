@@ -17,24 +17,19 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.europeana.corelib.edm.model.schemaorg.*;
+import eu.europeana.corelib.solr.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import eu.europeana.corelib.definitions.edm.entity.Agent;
+import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Concept;
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.solr.entity.AgentImpl;
-import eu.europeana.corelib.solr.entity.AggregationImpl;
-import eu.europeana.corelib.solr.entity.ConceptImpl;
-import eu.europeana.corelib.solr.entity.PlaceImpl;
-import eu.europeana.corelib.solr.entity.ProvidedCHOImpl;
-import eu.europeana.corelib.solr.entity.ProxyImpl;
-import eu.europeana.corelib.solr.entity.TimespanImpl;
 import eu.europeana.corelib.utils.DateUtils;
 import eu.europeana.corelib.utils.EuropeanaUriUtils;
 
@@ -90,6 +85,9 @@ public final class SchemaOrgUtils {
         }
         if (bean.getConcepts() != null) {
             objectsToSerialize.addAll(processConcepts(bean.getConcepts(), linkedContextualEntities));
+        }
+        if (bean.getOrganizations() != null) {
+            objectsToSerialize.addAll(processEdmOrganisations(bean.getOrganizations(), linkedContextualEntities));
         }
     }
 
@@ -387,6 +385,30 @@ public final class SchemaOrgUtils {
     }
 
     /**
+     * Process organisation from the given list and create a proper schema.org object for each
+     * To limit the size of schema.org responses only entity-ids are listed for
+     * contextual entities (places, agents, concepts, organizations, time spans) that start with http://data.europeana.eu/
+     *
+     * @param organisations                   organisations to process
+     * @param linkedContextualEntities list of all the references in the object
+     * @return list of Person and / or Organization objects created from given
+     * agents
+     */
+    private static List<Thing> processEdmOrganisations(List<OrganizationImpl> organisations, List<String> linkedContextualEntities) {
+        List<Thing> referencedObjects = new ArrayList<>();
+
+        for (Organization organization : organisations) {
+            if (linkedContextualEntities.contains(organization.getAbout()) && !StringUtils.startsWith(organization.getAbout(), URL_PREFIX)) {
+                EdmOrganization edmOrganisationObject = new EdmOrganization();
+                referencedObjects.add(edmOrganisationObject);
+
+                processOrganization(organization, edmOrganisationObject);
+            }
+        }
+        return referencedObjects;
+    }
+
+    /**
      * Update properties of the given Schema.Org Thing (EdmOrganization)
      * using data from the given EDM Organization
      *
@@ -557,7 +579,7 @@ public final class SchemaOrgUtils {
             addDistinctValues(providerMap, aggregation.getEdmProvider());
             addDistinctValues(providerMap, aggregation.getEdmIntermediateProvider());
             addResourceOrReferenceProperties(object, providerMap, SchemaOrgConstants.PROPERTY_PROVIDER,
-                    Organization.class, linkedContextualEntities);
+                    eu.europeana.corelib.edm.model.schemaorg.Organization.class, linkedContextualEntities);
 
             // associatedMedia
             Set<String> medias = new HashSet<>();
@@ -1465,6 +1487,9 @@ public final class SchemaOrgUtils {
             }
             if (propertyValue.contains(URL_PREFIX + "/concept")) {
                 return Thing.class;
+            }
+            if (propertyValue.contains(URL_PREFIX + "/organization")) {
+                return EdmOrganization.class;
             }
             // any other unrecognised entity, consider it as a Thing
             return Thing.class;

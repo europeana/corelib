@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -44,6 +45,14 @@ public final class EdmUtils {
 
     private EdmUtils() {
         // empty constructor to prevent initialization
+    }
+
+    static {
+        try {
+            bfact = BindingDirectory.getFactory(RDF.class);
+        } catch (JiBXException e) {
+            LOG.error("Error initializing EdmUtils binding with JBIX classes", e);
+        }
     }
 
     /**
@@ -73,13 +82,10 @@ public final class EdmUtils {
     private static String marshallToEDM(RDF rdf) {
         IMarshallingContext marshallingContext;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()){
-            if (bfact == null) {
-                bfact = BindingDirectory.getFactory(RDF.class);
-            }
             marshallingContext = bfact.createMarshallingContext();
             marshallingContext.setOutput(out, null);
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
-            return out.toString("UTF-8");
+            return out.toString(StandardCharsets.UTF_8);
         } catch (JiBXException | IOException e) {
             LOG.error("Error marshalling RDF", e);
         }
@@ -577,6 +583,7 @@ public final class EdmUtils {
                 target.setAbout(source.getAbout());
                 addAsList(target, PrefLabel.class, source.getPrefLabel());
                 // TODO for now we only add about and preflabel fields since nothing else is stored in Mongo
+                organizationList.add(target);
             }
             rdf.setOrganizationList(organizationList);
         }
