@@ -22,7 +22,7 @@
 	</repositories>
 
     <artifactId>corelib</artifactId>
-    <version>2.13.3-SNAPSHOT</version>
+    <version>2.14.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Europeana Core Library</name>
@@ -38,7 +38,7 @@
         <!-- exclude generated code in SonarQube analysis -->
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
-        <metis.version>4</metis.version>
+        <metis.version>5-SNAPSHOT</metis.version>
         <apacheSolr.version>6.6.2</apacheSolr.version>
         <apacheLucene.version>6.6.2</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
@@ -76,43 +76,43 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.13.3-SNAPSHOT</version>
+                <version>2.14.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

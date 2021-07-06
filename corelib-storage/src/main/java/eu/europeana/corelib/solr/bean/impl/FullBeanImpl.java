@@ -30,6 +30,7 @@ import java.util.Objects;
     @Index(fields = {@Field("timestampUpdated")}),
     @Index(fields = {@Field("places")}),
     @Index(fields = {@Field("agents")}),
+    @Index(fields = {@Field("organizations")}),
     @Index(fields = {@Field("timespans")}),
     @Index(fields = {@Field("concepts")}),
     @Index(fields = {@Field("licenses")}),
@@ -62,6 +63,9 @@ public class FullBeanImpl implements FullBean {
 
   @Reference
   protected List<AgentImpl> agents = new ArrayList<>();
+
+  @Reference
+  protected List<OrganizationImpl> organizations = new ArrayList<>();
 
   @Reference
   protected List<TimespanImpl> timespans = new ArrayList<>();
@@ -109,6 +113,11 @@ public class FullBeanImpl implements FullBean {
   }
 
   @Override
+  public List<OrganizationImpl> getOrganizations() {
+    return this.organizations;
+  }
+
+  @Override
   public String getAbout() {
     return this.about;
   }
@@ -121,6 +130,11 @@ public class FullBeanImpl implements FullBean {
   @Override
   public void setAgents(List<? extends Agent> agents) {
     this.agents = (List<AgentImpl>) agents;
+  }
+
+  @Override
+  public void setOrganizations(List<? extends Organization> organizations) {
+    this.organizations = (List<OrganizationImpl>) organizations;
   }
 
   @Override

@@ -92,7 +92,7 @@ public class RecordServiceImpl implements RecordService {
                 startTime = System.currentTimeMillis();
                 fullBean = recordDao.getFullBean(newId);
                 if (fullBean == null) {
-                    LOG.warn("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
+                    LOG.debug("{} was redirected to {} but there is no such record!", europeanaObjectId, newId);
                 }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("RecordService fetch FullBean with new id took {} ms", (System.currentTimeMillis() - startTime));

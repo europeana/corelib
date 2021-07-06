@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @JsonInclude(Include.NON_EMPTY)
-@Entity("Organization")
+@Entity(value = "Organization", useDiscriminator = false)
 public class OrganizationImpl extends ContextualClassImpl implements Organization {
 
 	private String rdfType;
