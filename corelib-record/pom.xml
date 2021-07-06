@@ -24,6 +24,10 @@
         </dependency>
         <dependency>
             <groupId>eu.europeana.corelib</groupId>
+            <artifactId>corelib-schemaorg</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.europeana.corelib</groupId>
             <artifactId>corelib-storage</artifactId>
         </dependency>
 
