@@ -21,7 +21,6 @@ import org.apache.logging.log4j.LogManager;
 
 @JsonInclude(Include.NON_EMPTY)
 @Entity(value = "EuropeanaAggregation", useDiscriminator = false)
-@Indexes({@Index(fields = {@Field("webResources")})})
 public class EuropeanaAggregationImpl extends AbstractEdmEntityImpl implements
     EuropeanaAggregation {
 
