@@ -226,9 +226,9 @@ public class QueryExtractor {
 		}
 	}
 
-	public boolean deconstructQuery(Query query, Stack<QueryType> queryTypeStack) {
+	public void deconstructQuery(Query query, Stack<QueryType> queryTypeStack) {
 		if (query == null) {
-			return true;
+			return;
 		}
 		if (query instanceof TermQuery) {
 			queryTypeStack.add(QueryType.TERM);
@@ -264,7 +264,6 @@ public class QueryExtractor {
 		if (queryTypeStack.size() > 0) {
 			queryTypeStack.pop();
 		}
-		return true;
 	}
 
 	private void deconstructPhraseQuery(PhraseQuery query,
