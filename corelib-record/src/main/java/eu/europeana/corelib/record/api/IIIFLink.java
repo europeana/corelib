@@ -184,7 +184,8 @@ public final class IIIFLink {
      */
     private static boolean hasNonEuropeanaDcTermsIsRefValue(WebResource wr, String about) {
         String[] dcRefValue = wr.getDctermsIsReferencedBy();
-        if (dcRefValue != null && !StringUtils.startsWithAny(dcRefValue[0], HTTPS_DEFAULT_IIIF_BASE_URL, HTTP_DEFAULT_IIIF_BASE_URL)) {
+        if (dcRefValue != null && dcRefValue.length > 0 &&
+                !StringUtils.startsWithAny(dcRefValue[0], HTTPS_DEFAULT_IIIF_BASE_URL, HTTP_DEFAULT_IIIF_BASE_URL)) {
             LOG.debug("Record {} has webresource {} with provided (non-europeana) dcTermsIsReferencedBy", about, wr.getAbout());
             return true;
         }
