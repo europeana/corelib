@@ -57,7 +57,7 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
 
         this.postProcessEnvironment(env, new SpringApplication());
 
-        ClassLoader c = getClass().getClassLoader();
+        ClassLoader c = Thread.currentThread().getContextClassLoader();
         @SuppressWarnings("resource")
         URLClassLoader urlC = (URLClassLoader) c;
         URL[] urls = urlC.getURLs();
