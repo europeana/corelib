@@ -185,6 +185,10 @@ public class SearchUtils {
 		return new ArrayList<>(map.values());
 	}
 
+	/**
+	 * @deprecated will be replaced by new translation services
+	 */
+	@Deprecated(since = "July 2021")
 	public static QueryTranslation translateQuery(String query, List<String> languages) {
 		QueryTranslation queryTranslation = new QueryTranslation();
 		if (wikipediaApiService == null) {
@@ -253,12 +257,18 @@ public class SearchUtils {
 		return !StringUtils.contains(queryTerm, ":");
 	}
 
-	
-	
+	/**
+	 * @deprecated unused, will be replaced by new translation services
+	 */
+	@Deprecated(since = "July 2021")
 	public static String normalizeBooleans(String query) {
 		return QueryNormalizer.normalizeBooleans(query);
 	}
 
+	/**
+	 * @deprecated unused, will be replaced by new translation services
+	 */
+	@Deprecated(since = "July 2021")
 	public static void translateQuery(String rawQueryString, QueryTranslation translatedQueries) {
 		Map<String, List<LanguageVersion>> languageVersionMap = translatedQueries.getSortedMap();
 		int lastPart = 0;

@@ -31,6 +31,10 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryExtractor {
 
 	private Logger log = LogManager.getLogger(QueryExtractor.class.getCanonicalName());

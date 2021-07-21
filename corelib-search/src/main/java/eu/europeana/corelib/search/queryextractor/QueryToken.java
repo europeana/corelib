@@ -5,6 +5,10 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryToken {
 
 	private Stack<QueryType> typeStack;

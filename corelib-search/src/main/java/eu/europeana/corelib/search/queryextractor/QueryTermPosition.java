@@ -1,5 +1,9 @@
 package eu.europeana.corelib.search.queryextractor;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryTermPosition {
 
 	private int start;
