@@ -27,7 +27,14 @@ import java.util.Objects;
 @Indexes({
     @Index(fields = {@Field("about")}, options = @IndexOptions(unique = true)),
     @Index(fields = {@Field("timestampCreated")}),
-    @Index(fields = {@Field("timestampUpdated")})})
+    @Index(fields = {@Field("timestampUpdated")}),
+    @Index(fields = {@Field("places")}),
+    @Index(fields = {@Field("agents")}),
+    @Index(fields = {@Field("organizations")}),
+    @Index(fields = {@Field("timespans")}),
+    @Index(fields = {@Field("concepts")}),
+    @Index(fields = {@Field("licenses")}),
+    @Index(fields = {@Field("services")})})
 public class FullBeanImpl implements FullBean {
 
   @Id

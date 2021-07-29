@@ -28,7 +28,7 @@ import org.bson.types.ObjectId;
  * @see eu.europeana.corelib.definitions.edm.entity.WebResource
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity(value = "WebResource", useDiscriminator = false)
+@Entity("WebResource")
 @Indexes({@Index(fields = {@Field("about")})})
 public class WebResourceImpl implements WebResource {
 
