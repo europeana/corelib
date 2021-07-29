@@ -1,4 +1,4 @@
-package eu.europeana.corelib.record.schemaorg.utils;
+package eu.europeana.corelib.edm.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

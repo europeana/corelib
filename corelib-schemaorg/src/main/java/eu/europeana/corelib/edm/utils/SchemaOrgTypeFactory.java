@@ -1,4 +1,4 @@
-package eu.europeana.corelib.record.schemaorg.utils;
+package eu.europeana.corelib.edm.utils;
 
 import eu.europeana.corelib.definitions.edm.entity.Agent;
 import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
