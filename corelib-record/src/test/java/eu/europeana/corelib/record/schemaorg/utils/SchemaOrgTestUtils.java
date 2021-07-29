@@ -1,4 +1,4 @@
-package eu.europeana.corelib.edm.utils;
+package eu.europeana.corelib.record.schemaorg.utils;
 
 import eu.europeana.corelib.edm.model.schemaorg.BaseType;
 import eu.europeana.corelib.edm.model.schemaorg.MultilingualString;
