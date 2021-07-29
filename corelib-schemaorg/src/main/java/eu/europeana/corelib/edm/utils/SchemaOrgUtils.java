@@ -1,4 +1,4 @@
-package eu.europeana.corelib.record.schemaorg.utils;
+package eu.europeana.corelib.edm.utils;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.europeana.corelib.edm.model.schemaorg.*;
-import eu.europeana.corelib.edm.utils.JsonLdSerializer;
 import eu.europeana.corelib.solr.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

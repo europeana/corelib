@@ -1,7 +1,4 @@
-package eu.europeana.corelib.record.schemaorg.utils;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+package eu.europeana.corelib.edm.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,23 +9,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.europeana.corelib.definitions.EuropeanaStaticUrl;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import eu.europeana.corelib.edm.model.schemaorg.*;
+import eu.europeana.corelib.utils.DateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.definitions.EuropeanaStaticUrl;
-import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
-import eu.europeana.corelib.edm.model.schemaorg.ContextualEntity;
-import eu.europeana.corelib.edm.model.schemaorg.SchemaOrgConstants;
-import eu.europeana.corelib.edm.model.schemaorg.Thing;
-import eu.europeana.corelib.edm.utils.JsonLdSerializer;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
-import eu.europeana.corelib.utils.DateUtils;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/corelib-web-context.xml", "/corelib-web-test.xml"})
