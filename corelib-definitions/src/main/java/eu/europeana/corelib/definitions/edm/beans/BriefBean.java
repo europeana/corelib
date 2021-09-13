@@ -20,12 +20,6 @@ public interface BriefBean extends IdBean {
 
     /**
      *
-     * @return foaf_organization (organizations)
-     */
-    String[] getOrganizations();
-
-    /**
-     *
      * @return edm:object
      */
     String[] getEdmObject();

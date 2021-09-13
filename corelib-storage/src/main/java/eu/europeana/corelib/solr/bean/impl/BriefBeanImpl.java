@@ -26,9 +26,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
     @Field("timestamp")
     protected Date timestamp;
 
-    @Field("foaf_organization")
-    private String[] organizations;
-
     @Field("PROVIDER")
     protected String[] provider;
 
@@ -169,11 +166,6 @@ public class BriefBeanImpl extends IdBeanImpl implements BriefBean {
         } else {
             return new String[0];
         }
-    }
-
-    @Override
-    public String[] getOrganizations() {
-        return (this.organizations != null ? this.organizations.clone() : null);
     }
 
     @Override
