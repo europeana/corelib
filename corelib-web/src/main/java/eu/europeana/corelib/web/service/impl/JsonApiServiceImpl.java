@@ -16,6 +16,10 @@ import eu.europeana.corelib.web.service.JsonApiService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class JsonApiServiceImpl implements JsonApiService {
 
 	private static final String USER_AGENT = "Europeana API-bot/2.0 (Europeana; http://europeana.eu; api@europeana.eu)";

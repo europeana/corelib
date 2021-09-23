@@ -535,11 +535,17 @@ public class WebResourceImpl implements WebResource {
     }
 
     public String getTextAttributionSnippet() {
-        return attributionSnippet.getTextSnippet();
+        if (attributionSnippet != null) {
+            return attributionSnippet.getTextSnippet();
+        }
+        return null;
     }
 
     public String getHtmlAttributionSnippet() {
-        return attributionSnippet.getHtmlSnippet();
+        if (attributionSnippet != null) {
+            return attributionSnippet.getHtmlSnippet();
+        }
+        return null;
     }
 
     /**

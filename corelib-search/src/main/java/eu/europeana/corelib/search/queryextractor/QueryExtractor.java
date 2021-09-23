@@ -31,6 +31,10 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryExtractor {
 
 	private Logger log = LogManager.getLogger(QueryExtractor.class.getCanonicalName());
@@ -226,9 +230,9 @@ public class QueryExtractor {
 		}
 	}
 
-	public boolean deconstructQuery(Query query, Stack<QueryType> queryTypeStack) {
+	public void deconstructQuery(Query query, Stack<QueryType> queryTypeStack) {
 		if (query == null) {
-			return true;
+			return;
 		}
 		if (query instanceof TermQuery) {
 			queryTypeStack.add(QueryType.TERM);
@@ -264,7 +268,6 @@ public class QueryExtractor {
 		if (queryTypeStack.size() > 0) {
 			queryTypeStack.pop();
 		}
-		return true;
 	}
 
 	private void deconstructPhraseQuery(PhraseQuery query,

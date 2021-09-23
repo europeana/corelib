@@ -11,9 +11,9 @@ public class BreadCrumbTest {
 		BreadCrumb breadcrumb = new BreadCrumb("test", "test.html");
 		assertEquals("test", breadcrumb.getDisplay());
 		assertEquals("test.html", breadcrumb.getHref());
-		assertEquals(false, breadcrumb.isLast());
-		assertEquals(null, breadcrumb.getParam());
-		assertEquals(null, breadcrumb.getValue());
+		assertFalse(breadcrumb.isLast());
+		assertNull(breadcrumb.getParam());
+		assertNull(breadcrumb.getValue());
 	}
 
 	@Test
@@ -21,13 +21,13 @@ public class BreadCrumbTest {
 		BreadCrumb breadcrumb = new BreadCrumb("test", "qf", "TYPE:TEXT", null);
 		assertEquals("test", breadcrumb.getDisplay());
 		assertEquals("qf=TYPE:TEXT", breadcrumb.getHref());
-		assertEquals(false, breadcrumb.isLast());
+		assertFalse(breadcrumb.isLast());
 	}
 
 	public void testLastMarker() {
 		BreadCrumb breadcrumb = new BreadCrumb("test", "qf", "TYPE:TEXT", null);
 		breadcrumb.markAsLast();
-		assertEquals(true, breadcrumb.isLast());
+		assertTrue(breadcrumb.isLast());
 	}
 
 	public void testParamsAndValue() {
