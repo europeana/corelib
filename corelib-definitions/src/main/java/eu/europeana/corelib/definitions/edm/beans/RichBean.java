@@ -25,7 +25,6 @@ public interface RichBean extends ApiBean {
     Map<String, List<String>> getDcSubjectLangAware();
 
     /**
-     *
      * @return foaf_organization (organizations)
      */
     String[] getOrganizations();
