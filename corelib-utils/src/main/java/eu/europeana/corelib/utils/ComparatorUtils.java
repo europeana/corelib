@@ -3,7 +3,7 @@ package eu.europeana.corelib.utils;
 import java.util.*;
 
 /**
- * Class for removing Duplicates
+ * Class for removing Duplicates and comparing Values
  * Created by Srishti on 25-03-2020.
  */
 public class ComparatorUtils implements Comparator<String> {
@@ -47,6 +47,16 @@ public class ComparatorUtils implements Comparator<String> {
         listWithDuplicates.clear();
         listWithDuplicates.addAll(set);
         return listWithDuplicates;
+    }
+
+    /**
+     * Check if the two strings match without space and case
+     * @param value1
+     * @param value2
+     * @return
+     */
+    public static boolean sameValueWithoutSpace(String value1, String value2) {
+        return value1.replaceAll("\\s+","").equalsIgnoreCase(value2.replaceAll("\\s+",""));
     }
 
     @Override
