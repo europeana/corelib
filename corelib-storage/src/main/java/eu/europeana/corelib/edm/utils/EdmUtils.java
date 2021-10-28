@@ -418,7 +418,6 @@ public final class EdmUtils {
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
             proxy.setEuropeanaProxy(europeanaProxy);
-
             List<IsNextInSequence> nis = null;
 
             String[] seqArray = prx.getEdmIsNextInSequence();
@@ -459,6 +458,7 @@ public final class EdmUtils {
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
+            addAsList(proxy, Lineage.class, prx.getLineage());
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
