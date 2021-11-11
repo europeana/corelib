@@ -1,7 +1,7 @@
 package eu.europeana.corelib.solr.derived;
 
-import eu.europeana.corelib.definitions.edm.entity.Agent;
-import eu.europeana.corelib.solr.entity.AgentImpl;
+import eu.europeana.corelib.definitions.edm.entity.ContextualClass;
+import eu.europeana.corelib.solr.entity.ContextualClassImpl;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,10 +40,7 @@ public class AttributionTest {
     private static final String LANGAWARE_MAP_VALUE_4 = "Dutch";
     private static final String LANGAWARE_MAP_VALUE_5 = "Hindi";
 
-
-
     private Map<String, List<String>> creatorMap;
-
 
     private static AttributionSnippet attributionSnippet;
     private static AttributionConverter attributionConverter;
@@ -98,72 +95,72 @@ public class AttributionTest {
         return attribution;
     }
 
-    private List<Agent> mockAgent() {
-        List<Agent> agents = new ArrayList<>();
-        AgentImpl agent = new AgentImpl();
-        agents.add(agent);
-        //first agent : not present in creator
-        agent.setAbout("http://repository.olympicmuseum-not-present");
-        agent.setPrefLabel(new HashMap<>());
-        agent.getPrefLabel().put("en", new ArrayList<>());
-        agent.getPrefLabel().get("en").add("Olympic Museum of Thessaloniki");
-        agent.getPrefLabel().put("el", new ArrayList<>());
-        agent.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+    private List<? extends ContextualClass> mockEntity() {
+        List<ContextualClass> entity = new ArrayList<>();
+        // initiate based on entityType for now we check two type Agent and organisations
+        ContextualClass object = new ContextualClassImpl();
+        entity.add(object);
+        //first entity : not present in uri maps
+        object.setAbout("http://repository.olympicmuseum-not-present");
+        object.setPrefLabel(new HashMap<>());
+        object.getPrefLabel().put("en", new ArrayList<>());
+        object.getPrefLabel().get("en").add("Olympic Museum of Thessaloniki");
+        object.getPrefLabel().put("el", new ArrayList<>());
+        object.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
 
-        //second agent : present in creator with two langusge preflabel.
-        agent = new AgentImpl();
-        agents.add(agent);
+        //second entity : with two language preflabel.
+        object = new ContextualClassImpl();
+        entity.add(object);
 
-        agent.setAbout(CREATOR_VALUE_2);
-        agent.setPrefLabel(new HashMap<>());
-        agent.getPrefLabel().put("en", new ArrayList<>());
-        agent.getPrefLabel().get("en").add("Weenenk");
-        agent.getPrefLabel().get("en").add("Olympic Museum"); //another en value. But it should pick only one
-        agent.getPrefLabel().put("hn", new ArrayList<>());
-        agent.getPrefLabel().get("hn").add("वीनेंक");
+        object.setAbout(CREATOR_VALUE_2);
+        object.setPrefLabel(new HashMap<>());
+        object.getPrefLabel().put("en", new ArrayList<>());
+        object.getPrefLabel().get("en").add("Weenenk");
+        object.getPrefLabel().get("en").add("Olympic Museum"); //another en value. But it should pick only one
+        object.getPrefLabel().put("hn", new ArrayList<>());
+        object.getPrefLabel().get("hn").add("वीनेंक");
 
-        //third agent: present in creator without english language
-        agent = new AgentImpl();
-        agents.add(agent);
+        //third entity:  without english language
+        object = new ContextualClassImpl();
+        entity.add(object);
 
-        agent.setAbout(CREATOR_VALUE_3);
-        agent.setPrefLabel(new HashMap<>());
-        agent.getPrefLabel().put("el", new ArrayList<>());
-        agent.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
-        agent.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
+        object.setAbout(CREATOR_VALUE_3);
+        object.setPrefLabel(new HashMap<>());
+        object.getPrefLabel().put("el", new ArrayList<>());
+        object.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        object.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
 
+        //fouth entity with multiple other languages
+        object = new ContextualClassImpl();
+        entity.add(object);
 
-        //fouth agent with multiple other languages
-        agent = new AgentImpl();
-        agents.add(agent);
+        object.setAbout(CREATOR_VALUE_5);
+        object.setPrefLabel(new HashMap<>());
+        object.getPrefLabel().put("el", new ArrayList<>());
+        object.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        object.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
+        object.getPrefLabel().put("hn", new ArrayList<>());
+        object.getPrefLabel().get("hn").add("वीनेंक");
+        object.getPrefLabel().get("hn").add("Olympic Museum"); //another hn value. But it should pick only one
 
-        agent.setAbout(CREATOR_VALUE_5);
-        agent.setPrefLabel(new HashMap<>());
-        agent.getPrefLabel().put("el", new ArrayList<>());
-        agent.getPrefLabel().get("el").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
-        agent.getPrefLabel().get("el").add("Olympic Museum"); //another el value. But it should pick only one
-        agent.getPrefLabel().put("hn", new ArrayList<>());
-        agent.getPrefLabel().get("hn").add("वीनेंक");
-        agent.getPrefLabel().get("hn").add("Olympic Museum"); //another hn value. But it should pick only one
-
-        //fifth agent without preflabel
-        agent = new AgentImpl();
-        agents.add(agent);
-        agent.setAbout(CREATOR_VALUE_7);
+        //fifth entity without preflabel
+        object = new ContextualClassImpl();
+        entity.add(object);
+        object.setAbout(CREATOR_VALUE_7);
 
         //sixth agent with no preflabel but with altlabel
-        agent = new AgentImpl();
-        agents.add(agent);
-        agent.setAbout(CREATOR_VALUE_8);
-        agent.setAltLabel(new HashMap<>());
-        agent.getAltLabel().put("def", new ArrayList<>());
-        agent.getAltLabel().get("def").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
-        agent.getAltLabel().get("def").add("Olympic Museum");
-        agent.getAltLabel().put("en", new ArrayList<>());
-        agent.getAltLabel().get("en").add("Olympic Museum");
-        agent.getAltLabel().get("en").add("वीनेंक");
+        object = new ContextualClassImpl();
+        entity.add(object);
+        object.setAbout(CREATOR_VALUE_8);
+        object.setAltLabel(new HashMap<>());
+        object.getAltLabel().put("def", new ArrayList<>());
+        object.getAltLabel().get("def").add("Ολυμπιακό μουσείο Θεσσαλονίκης");
+        object.getAltLabel().get("def").add("Olympic Museum");
+        object.getAltLabel().put("en", new ArrayList<>());
+        object.getAltLabel().get("en").add("Olympic Museum");
+        object.getAltLabel().get("en").add("वीनेंक");
 
-        return agents;
+        return entity;
     }
 
     @Test
@@ -193,8 +190,8 @@ public class AttributionTest {
     public void testCreator_isUriWithNoAgents() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_1);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 
@@ -203,8 +200,8 @@ public class AttributionTest {
     public void testCreator_isUriWithAgentsWithEnglishLabel() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_2);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_2_LABEL));
     }
@@ -214,8 +211,8 @@ public class AttributionTest {
     public void testCreator_isUriWithAgentsWithNoEnglishLabel() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_3);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_3_LABEL));
     }
@@ -225,9 +222,9 @@ public class AttributionTest {
     public void testCreator_isUriWithAgentsWithMultipleOtherLanguage() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_5);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_5_LABEL));
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 
@@ -236,8 +233,8 @@ public class AttributionTest {
     public void testCreator_isUriWithAgentsWithNoPrefLabel() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_7);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
     }
 
@@ -246,8 +243,8 @@ public class AttributionTest {
     public void testCreator_isUriWithAgentsWithAltLabel() throws IOException {
         Attribution attribution = new Attribution();
         mockCreatorMap(CREATOR_VALUE_8);
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
-        Assert.assertTrue(attribution.getCreator().size() == 1);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
+        Assert.assertEquals(1, attribution.getCreator().size());
         Assert.assertTrue(attribution.getCreator().get("").contains(CREATOR_VALUE_4));
         Assert.assertTrue(attribution.getCreator().get("").contains("Olympic Museum"));
     }
@@ -257,7 +254,7 @@ public class AttributionTest {
     public void test_emptyCreatorMap() throws IOException {
         Attribution attribution = new Attribution();
         Assert.assertTrue(creatorMap.isEmpty());
-        attributionConverter.checkCreatorLabel(attribution, mockAgent(), creatorMap);
+        attribution.setCreator(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, null));
         Assert.assertTrue(attribution.getCreator().isEmpty());
     }
 
@@ -312,5 +309,15 @@ public class AttributionTest {
 
         Assert.assertTrue(resultMap.containsKey("en"));
         Assert.assertTrue(resultMap.get("en").contains(LANGAWARE_MAP_VALUE_5));
+    }
+
+    @Test
+    public void test_OrganisationLabelWithEdmLang() {
+        Attribution attribution = new Attribution();
+        mockCreatorMap(CREATOR_VALUE_2);
+        attribution.setProvider(attributionConverter.checkLabelInMaps(mockEntity(), creatorMap, "hn"));
+        Assert.assertEquals(1, attribution.getProvider().size());
+        Assert.assertTrue(attribution.getProvider().get("").contains(CREATOR_VALUE_4));
+        Assert.assertTrue(attribution.getProvider().get("").contains(CREATOR_VALUE_5_LABEL));
     }
 }

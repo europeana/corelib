@@ -1,9 +1,6 @@
 package eu.europeana.corelib.solr.derived;
 
-import eu.europeana.corelib.definitions.edm.entity.Agent;
-import eu.europeana.corelib.definitions.edm.entity.EuropeanaAggregation;
-import eu.europeana.corelib.definitions.edm.entity.License;
-import eu.europeana.corelib.definitions.edm.entity.Proxy;
+import eu.europeana.corelib.definitions.edm.entity.*;
 import eu.europeana.corelib.definitions.model.RightsOption;
 import eu.europeana.corelib.solr.entity.AggregationImpl;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
@@ -56,9 +53,8 @@ public class AttributionConverter{
                                                                                                .getEuropeanaAggregation(),
                                    creatorMap);
         // check for URI, labels and remove duplicate for creator
-        checkCreatorLabel(attribution,
-                          (List<Agent>) ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAgents(),
-                          creatorMap);
+        attribution.setCreator(checkLabelInMaps(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getAgents(),
+                   creatorMap, null));
     }
 
     private void checkProxy(List<? extends Proxy> proxies, Attribution attribution,
@@ -69,10 +65,10 @@ public class AttributionConverter{
                     creatorMap.putAll(createCreatorTitleMap(proxy.getDcCreator()));
                 }
                 if (attribution.getTitle().isEmpty() && isNotBlank(proxy.getDcTitle())) {
-                    attribution.setTitle(concatLangawareMap(createCreatorTitleMap(proxy.getDcTitle())));
+                    attribution.setTitle(concatLangAwareMap(createCreatorTitleMap(proxy.getDcTitle()), true));
                 }
                 if (attribution.getDate().isEmpty() && isNotBlank(proxy.getYear())) {
-                    attribution.setDate(concatLangawareMap(proxy.getYear()));
+                    attribution.setDate(concatLangAwareMap(proxy.getYear(), true));
                 }
             }
         }
@@ -93,98 +89,168 @@ public class AttributionConverter{
         }
     }
 
-    // set Attribution with creator values. Checks for URI and adds their labels from Agents. Adds the NonURI values too
-    public void checkCreatorLabel(Attribution attribution, List<Agent> agents, Map<String, List<String>> creatorMap) {
-        Map<String, List<String>> finalMap = new HashMap<>();
-        if (! creatorMap.isEmpty()) {
-                for (Map.Entry<String, List<String>> creator : creatorMap.entrySet()) {
-                    List<String> creatorValues = new ArrayList<>();
-                    for (String value : creator.getValue()) {
-                        getCreatorLabel(agents, value, creatorValues);
-                    }
-                    //remove any duplicates
-                    ComparatorUtils.removeDuplicates(creatorValues);
-                    finalMap.put(creator.getKey(), creatorValues);
-                }
+    private void processProvider(Attribution attribution, WebResourceImpl wRes) {
+        //provider : edmDataProvider
+        if (isNotBlank(wRes.getParentAggregation().getEdmDataProvider())) {
+            // get edmLanguage, and only pick first one
+            List<String> edmLanguage = getEdmLanguage(wRes);
+            String edmLang = edmLanguage.isEmpty() ? null : edmLanguage.get(0);
+            // get the edmProvider Map
+            Map<String, List<String>> providerMap = concatLangAwareMap(wRes.getParentAggregation().getEdmDataProvider(), false);
+            // check the map for uri's and their labels
+            attribution.setProvider(checkLabelInMaps(((AggregationImpl) wRes.getParentAggregation()).getParentBean().getOrganizations(),
+                    providerMap ,edmLang));
         }
-        //set the final values to attribution
-        attribution.setCreator(concatLangawareMap(finalMap));
+        //providerUrl : edmShownAt
+        attribution.setProviderUrl(wRes.getParentAggregation().getEdmIsShownAt());
     }
 
-    //creates a list of Creator values including labels for URI values and non URI values
-    private void getCreatorLabel(List<Agent> agents, String creatorValue, List<String> creatorValues) {
-        if (EuropeanaUriUtils.isUri(creatorValue)) {
-            if (! agents.isEmpty()) {
-                for (Agent agent : agents) {
-                    if (StringUtils.equals(creatorValue, agent.getAbout())) {
-                        creatorValues.addAll(getCreatorFromAgent(agent));
+    /**
+     * Returns the language list of the edm:languages
+     * @param wRes
+     * @return
+     */
+    public List<String> getEdmLanguage(WebResourceImpl wRes) {
+        List<String> lang = new ArrayList<>();
+        Map<String,List<String>> edmLanguage = ((AggregationImpl) wRes.getParentAggregation()).getParentBean().getEuropeanaAggregation().getEdmLanguage();
+        for (Map.Entry<String, List<String>> entry : edmLanguage.entrySet()) {
+            for (String languageAbbreviation : entry.getValue()) {
+                lang.add(languageAbbreviation);
+            }
+        }
+        return lang;
+    }
+
+    /**
+     * Returns the final map with preflabels for uri and non-uri values.
+     * Checks the map for uri values and adds theirs labels from entity.
+     * Adds the NonURI values too
+     * @param entities
+     * @param initialMap
+     * @param edmLang
+     * @return
+     */
+    public Map<String, String> checkLabelInMaps(List<? extends ContextualClass> entities, Map<String, List<String>> initialMap, String edmLang) {
+        Map<String, List<String>> finalMap = new HashMap<>();
+        if (!initialMap.isEmpty()) {
+            for (Map.Entry<String, List<String>> entry : initialMap.entrySet()) {
+                // add all the labels and non uri values in the list for the each key
+                List<String> labelsAndNonUriValues = new ArrayList<>();
+                for (String value : entry.getValue()) {
+                    getLabelsAndNonUriValues(entities, value, labelsAndNonUriValues, edmLang);
+                }
+                //remove any duplicates
+                ComparatorUtils.removeDuplicates(labelsAndNonUriValues);
+                finalMap.put(entry.getKey(), labelsAndNonUriValues);
+            }
+        }
+        return concatLangAwareMap(finalMap, true);
+    }
+
+    /**
+     * creates a list of values including labels for URI values and non URI values.
+     * @param entities Entities to check for labels
+     * @param valueToCheck value to be checked if uri or non uri
+     * @param finalValues Final list of values. Labels and non-uri values are added in this list
+     * @param edmLang edm language
+     */
+    private void getLabelsAndNonUriValues(List<? extends ContextualClass> entities, String valueToCheck, List<String> finalValues, String edmLang) {
+        if (EuropeanaUriUtils.isUri(valueToCheck)) {
+            if (!entities.isEmpty()) {
+                for (ContextualClass entity : entities) {
+                    if (StringUtils.equals(valueToCheck, entity.getAbout())) {
+                        finalValues.addAll(getLabelsFromEntity(entity, edmLang));
                     }
                 }
             }
         } else {
-            creatorValues.add(creatorValue);
+            finalValues.add(valueToCheck);
         }
-    }
-    // get the prefLabel from Agent in "en" or any other first language available
-    private List<String> getCreatorFromAgent(Agent agent) {
-        List<String> creatorValues = new ArrayList<>();
-        if (agent != null) {
-            if (agent.getPrefLabel() != null) {
-                creatorValues = processPrefLabel(agent);
-            } else if (agent.getAltLabel() != null) {
-                creatorValues = processAltLabel(agent);
-            }
-        }
-        return creatorValues;
     }
 
-    private List<String> processPrefLabel(Agent agent) {
-        List<String> creatorLabels = new ArrayList<>();
-            if (agent.getPrefLabel().get(AttributionConstants.EN) != null) {
-                List<String> enList = stripEmptyStrings(agent.getPrefLabel().get(AttributionConstants.EN));
-                //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-                creatorLabels.add(enList.get(0));
-            } else {
-                //other first one available
-                for (Map.Entry<String, List<String>> langMap : agent.getPrefLabel().entrySet()) {
-                    List<String> langList = stripEmptyStrings(langMap.getValue());
-                    //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-                    creatorLabels.add(langList.get(0));
-                    if (creatorLabels.size() == 1) {
-                        break;  // conditional break
-                    }
+    /**
+     * get the prefLabel from Entity.
+     * Now if prefLabel are empty, then the method will check the altLabels as well
+     *
+     * @param entity
+     * @return
+     */
+    private List<String> getLabelsFromEntity(ContextualClass entity, String edmLang) {
+        List<String> labels = new ArrayList<>();
+        if (entity.getPrefLabel() != null) {
+            labels = getPrefLabel(entity, edmLang);
+        } else if (entity.getAltLabel() != null) {
+            labels = getAltLabelEnOrFirstAvailable(entity);
+        }
+        return labels;
+    }
+
+    /**
+     * Picks the prefLabel from the entity.
+     *  1. if prefLabel size ==1 , pick that one
+     *  2. Otherwise, pick the edmLang one
+     *  3. Otherwise, Find the 'en' label
+     *  4. Otherwise, pick the first 'lang' available
+     * NOTE : ideally there should be only one value present in the lang List.
+     *        But there are cases with multiple values. It should pick only one
+     * For #Creator edmLang is null.
+     * @param entity
+     * @param edmLang
+     * @return
+     */
+    private List<String> getPrefLabel(ContextualClass entity, String edmLang) {
+        List<String> labels = new ArrayList<>();
+        // 1. if only one prefLabel, pick that one.
+        if (entity.getPrefLabel().size() == 1) {
+            Map.Entry<String, List<String>> entry = entity.getPrefLabel().entrySet().iterator().next();
+            labels.add(entry.getValue().get(0));
+        }
+        // 2. pick the one that matches edmLanguage
+        else if (edmLang != null && entity.getPrefLabel().get(edmLang) != null) {
+            labels.add(String.valueOf(stripEmptyStrings(entity.getPrefLabel().get(edmLang)).get(0)));
+        }
+        // 3. Find 'en' one and pick the first value
+        else if (entity.getPrefLabel().get(AttributionConstants.EN) != null) {
+            List<String> enList = stripEmptyStrings(entity.getPrefLabel().get(AttributionConstants.EN));
+            labels.add(enList.get(0));
+        } else {
+            //other first one available
+            for (Map.Entry<String, List<String>> langMap : entity.getPrefLabel().entrySet()) {
+                List<String> langList = stripEmptyStrings(langMap.getValue());
+                labels.add(langList.get(0));
+                if (labels.size() == 1) {
+                    break;  // conditional break
                 }
             }
-        return creatorLabels;
+        }
+        return labels;
     }
 
-    private List<String> processAltLabel(Agent agent) {
-        List<String> creatorLabels = new ArrayList<>();
-            if (agent.getAltLabel().get(AttributionConstants.EN) != null) {
-                List<String> enList = stripEmptyStrings(agent.getAltLabel().get(AttributionConstants.EN));
+    /**
+     * Picks the altLabel from the entity.
+     *  1. Find the 'en' label and pick the first value
+     *  2. Otherwise pick the first 'lang' available
+     * @param entity
+     * @return
+     */
+    private List<String> getAltLabelEnOrFirstAvailable(ContextualClass entity) {
+        List<String> labels = new ArrayList<>();
+        if (entity.getAltLabel().get(AttributionConstants.EN) != null) {
+            List<String> enList = stripEmptyStrings(entity.getAltLabel().get(AttributionConstants.EN));
+            //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
+            labels.add(enList.get(0));
+        } else {
+            //other first one available
+            for (Map.Entry<String, List<String>> langMap : entity.getAltLabel().entrySet()) {
+                List<String> langList = stripEmptyStrings(langMap.getValue());
                 //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-                creatorLabels.add(enList.get(0));
-            } else {
-                //other first one available
-                for (Map.Entry<String, List<String>> langMap : agent.getAltLabel().entrySet()) {
-                    List<String> langList = stripEmptyStrings(langMap.getValue());
-                    //ideally there should be only one value present. But there are cases with multiple values. It should should pick only one
-                    creatorLabels.add(langList.get(0));
-                    if (creatorLabels.size() == 1) {
-                        break;  // conditional break
-                    }
+                labels.add(langList.get(0));
+                if (labels.size() == 1) {
+                    break;  // conditional break
                 }
             }
-        return creatorLabels;
-    }
-
-    private void processProvider(Attribution attribution, WebResourceImpl wRes) {
-        //provider : edmDataProvider
-        if (isNotBlank(wRes.getParentAggregation().getEdmDataProvider())) {
-            attribution.setProvider(concatLangawareMap(wRes.getParentAggregation().getEdmDataProvider()));
         }
-        //providerUrl : edmShownAt
-        attribution.setProviderUrl(wRes.getParentAggregation().getEdmIsShownAt());
+        return labels;
     }
 
     private void processCountry(Attribution attribution, WebResourceImpl wRes) {
@@ -192,7 +258,7 @@ public class AttributionConverter{
         EuropeanaAggregation euAgg = ((AggregationImpl) wRes.getParentAggregation()).getParentBean()
                                                                                     .getEuropeanaAggregation();
         if (euAgg != null && attribution.getCountry().isEmpty() && isNotBlank(euAgg.getEdmCountry())) {
-            attribution.getCountry().putAll(concatLangawareMap(euAgg.getEdmCountry()));
+            attribution.getCountry().putAll(concatLangAwareMap(euAgg.getEdmCountry(), true));
         }
     }
 
@@ -273,29 +339,53 @@ public class AttributionConverter{
     }
 
     //	removes "" and null elements from String Lists
-    private List stripEmptyStrings(List swissCheese) {
+    private List<String> stripEmptyStrings(List<String> swissCheese) {
         swissCheese.removeAll(Arrays.asList("", null));
         return swissCheese;
     }
 
-    // takes a language-aware Map<String, List<String>> and and daisy-chains the Strings in the
-    // value List<String>, separated with ; . It also strips out 'def' language tags.
-    private Map  concatLangawareMap(Map<String, List<String>> bulkyMap) {
-        Map<String, String> flatMap = new HashMap<>();
+
+    /**
+     * Returns the lang Aware map.
+     * if concat true : takes a language-aware Map<String, List<String>> and daisy-chains the Strings in the
+     *                   value List<String>, separated with ; . It also strips out 'def' language tags.
+     * if concat false : returns the lang aware map
+     * @param bulkyMap
+     * @return
+     */
+    private Map  concatLangAwareMap(Map<String, List<String>> bulkyMap, boolean concat) {
+        Map<String, List<String>> langAwareMap = new HashMap<>();
+        // get the desired map
         if (bulkyMap.get(AttributionConstants.DEF) != null) {
-            List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
-            flatMap.put("", collectListInLines(defList));
+            langAwareMap.put("", stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF)));
         } else {
             for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
-                List<String> langList = stripEmptyStrings(langMap.getValue());
-                flatMap.put(langMap.getKey(), collectListInLines(langList));
+                langAwareMap.put(langMap.getKey(), stripEmptyStrings(langMap.getValue()));
             }
+        }
+        // check if concatenation required
+        if (concat) {
+            return concatMap(langAwareMap);
+        }
+        return langAwareMap;
+    }
+
+    /**
+     * takes a language-aware Map<String, List<String>> and daisy-chains the Strings in the
+     * value List<String>, separated with ;
+     * @param langAwareMap
+     * @return
+     */
+    private Map<String, String> concatMap(Map<String, List<String>> langAwareMap) {
+        Map<String, String> flatMap = new HashMap<>();
+        for (Map.Entry<String, List<String>> langMap : langAwareMap.entrySet()) {
+            flatMap.put(langMap.getKey(), collectListInLines(langMap.getValue()));
         }
         return flatMap;
     }
 
     // saves the creator and Title values in a language aware map
-    protected Map createCreatorTitleMap(Map<String, List<String>> bulkyMap) {
+    protected Map<String, List<String>> createCreatorTitleMap(Map<String, List<String>> bulkyMap) {
         Map<String, List<String>> creatorMap = new HashMap<>();
         if (bulkyMap.get(AttributionConstants.DEF) != null) {
             List<String> defList = stripEmptyStrings(bulkyMap.get(AttributionConstants.DEF));
@@ -312,7 +402,7 @@ public class AttributionConverter{
     }
 
     // checks for languages staring with "en", if not present look for other language.
-    private Map getOtherLanguageMap (Map<String, List<String>> bulkyMap,  Map<String, List<String>> creatorMap) {
+    private Map<String, List<String>> getOtherLanguageMap (Map<String, List<String>> bulkyMap,  Map<String, List<String>> creatorMap) {
         boolean langValues = false;
         //check for any language which starts with "en" like "en-GB"
         for (Map.Entry<String, List<String>> langMap : bulkyMap.entrySet()) {
@@ -336,7 +426,7 @@ public class AttributionConverter{
     }
 
     //removes duplicates across the list and across creatorMap existing values
-    private static Map getFinalMap(Map<String, List<String>> creatorMap, List<String> langList, String key) {
+    private static Map<String, List<String>> getFinalMap(Map<String, List<String>> creatorMap, List<String> langList, String key) {
         ComparatorUtils.removeDuplicates(langList);
         if (! removeDuplicatesFromOneList(creatorMap, langList).isEmpty()) {
             creatorMap.put(key, langList);
