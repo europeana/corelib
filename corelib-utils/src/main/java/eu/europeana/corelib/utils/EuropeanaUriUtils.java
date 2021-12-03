@@ -1,12 +1,11 @@
 package eu.europeana.corelib.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * EuropeanaID creator class
@@ -15,12 +14,12 @@ import org.apache.commons.lang3.StringUtils;
  * 
  */
 
-public class EuropeanaUriUtils {
+public final class EuropeanaUriUtils {
 
 
 	private static final String REPLACEMENT = "_";
 	private static final String PATTERN_STR   =  "^([a-zA-Z][a-zA-Z+-.]*):.*$";
-	private static final List<String> schemes= new ArrayList<>();
+	private static final Set<String> schemes= new HashSet<>();
 
 	static {
 		schemes.add("aaa");
