@@ -22,7 +22,7 @@
 	</repositories>
 
     <artifactId>corelib</artifactId>
-    <version>2.15.3</version>
+    <version>2.15.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Europeana Core Library</name>
@@ -75,43 +75,43 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.15.3</version>
+                <version>2.15.4-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
