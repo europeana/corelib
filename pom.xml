@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>eu.europeana</groupId>
         <artifactId>europeana-parent-pom</artifactId>
-        <version>2.0</version>
+        <version>2.3</version>
     </parent>
     
-    <repositories>
-		<repository>
-			<id>libs-release-local</id>
-			<name>europeana-releases</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-release</url>
-		</repository>
-		<repository>
-			<id>libs-snapshots-local</id>
-			<name>europeana-snapshots</name>
-			<url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
-		</repository>
-	</repositories>
-
     <artifactId>corelib</artifactId>
-    <version>2.15.4-SNAPSHOT</version>
+    <version>2.15.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Europeana Core Library</name>
@@ -30,6 +18,22 @@
         <url>http://www.europeana.eu</url>
         <name>Europeana Foundation</name>
     </organization>
+
+    <modules>
+        <module>corelib-utils</module>
+        <module>corelib-definitions</module>
+        <module>corelib-storage</module>
+        <module>corelib-web</module>
+        <module>corelib-record</module>
+        <module>corelib-search</module>
+        <module>corelib-schemaorg</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:git@github.com:europeana/corelib.git</connection>
+        <developerConnection>scm:git:git@github.com:europeana/corelib.git</developerConnection>
+        <url>https://github.com/europeana/corelib</url>
+    </scm>
 
     <properties>
         <version.maven.compiler.plugin>3.8.1</version.maven.compiler.plugin>
@@ -39,8 +43,8 @@
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
         <metis.version>5</metis.version>
-        <apacheSolr.version>6.6.2</apacheSolr.version>
-        <apacheLucene.version>6.6.2</apacheLucene.version>
+        <apacheSolr.version>8.11.0</apacheSolr.version>
+        <apacheLucene.version>8.11.0</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
         <morphia.version>2.0.0</morphia.version>
 
@@ -60,58 +64,49 @@
         <maven.compiler.release>11</maven.compiler.release>
     </properties>
 
-    <modules>
-        <module>corelib-utils</module>
-        <module>corelib-definitions</module>
-        <module>corelib-storage</module>
-        <module>corelib-web</module>
-        <module>corelib-record</module>
-        <module>corelib-search</module>
-        <module>corelib-schemaorg</module>
-    </modules>
     <dependencyManagement>
         <dependencies>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.15.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -135,34 +130,50 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>libs-release-local</id>
+            <name>europeana-releases</name>
+            <url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+        </repository>
+        <repository>
+            <id>libs-snapshots-local</id>
+            <name>europeana-snapshots</name>
+            <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-        </plugin>
+            <!-- This will be active when running the verify or install goal
+                 To skip (e.g. during debugging) use 'mvn clean package')-->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>6.5.0</version>
+                <configuration>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <suppressionFiles>
+                        <suppressionFile>owasp-suppress.xml</suppressionFile>
+                    </suppressionFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${version.maven.compiler.plugin}</version>
-                    <configuration>
-                        <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                        <release>11</release>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
-
-    <scm>
-        <connection>scm:git:git@github.com:europeana/corelib.git</connection>
-        <developerConnection>scm:git:git@github.com:europeana/corelib.git</developerConnection>
-        <url>https://github.com/europeana/corelib</url>
-        <tag>HEAD</tag>
-    </scm>
 
 </project>
