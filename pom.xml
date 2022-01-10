@@ -42,8 +42,8 @@
         <sonar.exclusions>src/main/java/eu/europeana/corelib/definitions/jibx/**</sonar.exclusions>
 
         <metis.version>5</metis.version>
-        <apacheSolr.version>8.11.0</apacheSolr.version>
-        <apacheLucene.version>8.11.0</apacheLucene.version>
+        <apacheSolr.version>8.11.1</apacheSolr.version>
+        <apacheLucene.version>8.11.1</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
         <morphia.version>2.0.0</morphia.version>
 
