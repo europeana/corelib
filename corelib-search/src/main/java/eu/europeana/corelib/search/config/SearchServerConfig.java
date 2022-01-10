@@ -5,7 +5,6 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -54,25 +54,24 @@ public class SearchServerConfig {
     @PostConstruct
     private void setupSolrConnections() {
         for (SolrConfigLoader.SolrConfigProperty instance : configLoader.getSolrInstances()) {
-            // zookeeper clients must specify a host and default collection
+            // zookeeper clients must specify hosts and default collection
             if (instance.getZookeeperUrl().isEmpty() || instance.getCoreCollection().isEmpty()) {
-                //for single solr server, we add authentication
-                HttpSolrClient singleSolrClient = new HttpSolrClient.Builder(instance.getUrl()).build();
+                HttpSolrClient.Builder builder = new HttpSolrClient.Builder();
+                builder.withBaseSolrUrl(instance.getUrl())
+                        .withConnectionTimeout(solrConnectTimeout)
+                        .withSocketTimeout(solrSocketTimeout)
+                        .allowCompression(true);
+                HttpSolrClient singleSolrClient = builder.build();
 
-                singleSolrClient.setConnectionTimeout(solrConnectTimeout);
-                singleSolrClient.setSoTimeout(solrSocketTimeout);
-                AbstractHttpClient client = (AbstractHttpClient) singleSolrClient.getHttpClient();
-                client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(username, password));
-
-                LOG.info("Registered SolrClient without zookeeper - id:{}, url: {}", instance.getId(), instance.getUrl());
+                LOG.info("Registered single SolrClient without zookeeper - id:{}, url: {}", instance.getId(), instance.getUrl());
                 solrClientById.put(instance.getId(), singleSolrClient);
             } else {
-                CloudSolrClient zkClient = new CloudSolrClient.Builder()
-                        .withZkHost(instance.getZookeeperUrl().get())
+                CloudSolrClient zkClient = new CloudSolrClient.Builder(
+                        Arrays.asList(instance.getZookeeperUrl().get().split(",")), Optional.empty())
+                        .withConnectionTimeout(zkConnectTimeout)
+                        .withSocketTimeout(solrSocketTimeout)
                         .build();
                 zkClient.setDefaultCollection(instance.getCoreCollection().get());
-                zkClient.setZkConnectTimeout(zkConnectTimeout);
-                zkClient.setSoTimeout(solrTimeout);
 
                 LOG.info("Registered SolrClient with zookeeper - id:{}, url:{}, zookeeperUrl:{}, core:{}",
                         instance.getId(), instance.getUrl(), instance.getZookeeperUrl().get(), instance.getCoreCollection().get());
