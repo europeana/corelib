@@ -16,6 +16,10 @@ import eu.europeana.corelib.web.model.wikipedia.WikipediaQuery.Query.Page;
 import eu.europeana.corelib.web.model.wikipedia.WikipediaQuery.Query.Page.WikiLangLink;
 import eu.europeana.corelib.web.service.WikipediaApiService;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements WikipediaApiService {
 
 	private static final String LANGLINKS = ".wikipedia.org/w/api.php?action=query&prop=langlinks&lllimit=200&redirects=&format=json";
@@ -30,7 +34,7 @@ public class WikipediaApiServiceImpl extends JsonApiServiceImpl implements Wikip
 		try{
 			return ApplicationContextContainer.getBean(WikipediaApiServiceImpl.class);			
 		}
-		catch(NullPointerException e){
+		catch (NullPointerException e){
 			return new WikipediaApiServiceImpl();
 		}
 	}

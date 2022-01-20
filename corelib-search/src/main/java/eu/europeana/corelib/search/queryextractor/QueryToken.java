@@ -6,6 +6,10 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
+/**
+ * @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryToken {
 
     private ArrayDeque<QueryType> typeStack;

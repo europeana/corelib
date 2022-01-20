@@ -1,5 +1,6 @@
 package eu.europeana.corelib.definitions.edm.beans;
 
+import eu.europeana.corelib.definitions.edm.entity.Organization;
 import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,6 @@ import eu.europeana.corelib.definitions.edm.entity.ProvidedCHO;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.Timespan;
 import eu.europeana.corelib.definitions.edm.entity.Service;
-import eu.europeana.corelib.definitions.solr.DocType;
 
 /**
  * Interface for the FullBean. FullBean contains all the fields exposed by the MongoDB required by Portal in order to
@@ -57,6 +57,18 @@ public interface FullBean extends IdBean {
 	 * @param agents
 	 */
 	void setAgents(List<? extends Agent> agents);
+
+	/**
+	 *
+	 * @return The list of organizations for this record
+	 */
+	List<? extends Organization> getOrganizations();
+
+	/**
+	 * Sets the list of agents for this record
+	 * @param organizations
+	 */
+	void setOrganizations(List<? extends Organization> organizations);
 
 	/**
 	 * 
@@ -103,7 +115,9 @@ public interface FullBean extends IdBean {
 	/**
 	 * Sets the title for this record
 	 * @param title
+	 * @deprecated unused, there are no records that have this field
 	 */
+	@Deprecated(since = "June 2021", forRemoval = false)
 	void setTitle(String[] title);
 
 	/**
@@ -187,7 +201,9 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return the title for this record
+	 * @deprecated unused, there are no records that have this field
 	 */
+	@Deprecated(since = "June 2021", forRemoval = false)
 	String[] getTitle();
 
 	/**
@@ -211,7 +227,7 @@ public interface FullBean extends IdBean {
 	/**
 	 * 
 	 * @return the type for this record
-	 */
+     */
 	String getType();
 
 	/**

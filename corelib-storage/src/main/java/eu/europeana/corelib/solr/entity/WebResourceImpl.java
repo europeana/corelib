@@ -28,7 +28,7 @@ import org.bson.types.ObjectId;
  * @see eu.europeana.corelib.definitions.edm.entity.WebResource
  */
 @JsonInclude(Include.NON_EMPTY)
-@Entity("WebResource")
+@Entity(value = "WebResource", useDiscriminator = false)
 @Indexes({@Index(fields = {@Field("about")})})
 public class WebResourceImpl implements WebResource {
 
@@ -535,11 +535,17 @@ public class WebResourceImpl implements WebResource {
     }
 
     public String getTextAttributionSnippet() {
-        return attributionSnippet.getTextSnippet();
+        if (attributionSnippet != null) {
+            return attributionSnippet.getTextSnippet();
+        }
+        return null;
     }
 
     public String getHtmlAttributionSnippet() {
-        return attributionSnippet.getHtmlSnippet();
+        if (attributionSnippet != null) {
+            return attributionSnippet.getHtmlSnippet();
+        }
+        return null;
     }
 
     /**

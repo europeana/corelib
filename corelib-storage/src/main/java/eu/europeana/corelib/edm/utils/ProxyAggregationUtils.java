@@ -22,7 +22,9 @@ public class ProxyAggregationUtils {
      *
      * @param bean
      * @return
+     * @deprecated not used anymore (other than in unit test)
      */
+    @Deprecated(since = "June 2021", forRemoval = true)
     public static Proxy getProxyWithOutLineage(FullBean bean) {
         if (bean.getProxies() != null) {
             for (Proxy proxy : bean.getProxies()) {
@@ -136,7 +138,7 @@ public class ProxyAggregationUtils {
         Aggregation dataProviderAgg = getDataProviderAggregation(bean, nonDataProvdrAggregation);
         // if there is no data provider aggregation return the aggregations as it is
         if (dataProviderAgg == null) {
-            LOG.error("There is no data provider aggregation available for record {}", bean.getAbout());
+            LOG.error("No data provider aggregation available for record {}", bean.getAbout());
             return (List<Aggregation>) bean.getAggregations();
         }
         orderAggregation.add(dataProviderAgg);
@@ -174,7 +176,7 @@ public class ProxyAggregationUtils {
                 }
             }
         } else {
-            LOG.error("There is no aggregation available");
+            LOG.error("No aggregation available for record {}", bean.getAbout());
         }
         return dataProviderAggregation;
     }

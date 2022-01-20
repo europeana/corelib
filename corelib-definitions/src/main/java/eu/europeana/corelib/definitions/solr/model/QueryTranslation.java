@@ -10,6 +10,10 @@ import java.util.TreeMap;
 
 import eu.europeana.corelib.utils.model.LanguageVersion;
 
+/**
+ *  @deprecated will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryTranslation {
 
 	private List<LanguageVersion> languageVersions;

@@ -2,9 +2,11 @@ package eu.europeana.corelib.utils.model;
 
 /**
  * A simple class for holding information about a text and its language code.
+ * @deprecated will be replaced by new translation services
  * 
  * @author Peter.Kiraly@europeana.eu
  */
+@Deprecated(since = "July 2021")
 public class LanguageVersion implements Comparable<LanguageVersion> {
 
 	protected String text;

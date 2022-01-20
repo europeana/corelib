@@ -53,4 +53,12 @@ public class ComparatorUtilsTest {
         Assert.assertTrue(list.contains(TESTING_VALUE_1));
         Assert.assertTrue(list.contains(TESTING_VALUE_4));
     }
+
+    @Test
+    public void testSameValueWithoutSpace() {
+        Assert.assertTrue(ComparatorUtils.sameValueWithoutSpace("Calamatta, Luigi (1801-1869)", "Calamatta, Luigi (1801 - 1869)"));
+        Assert.assertTrue(ComparatorUtils.sameValueWithoutSpace("Leonardo da Vinci (1452 - 1519)", "Leonardo da Vinci (1452-1519)"));
+        Assert.assertTrue(ComparatorUtils.sameValueWithoutSpace("TvB G 3674", "TvB G 3674"));
+        Assert.assertFalse(ComparatorUtils.sameValueWithoutSpace("graveur", "Calamatta"));
+    }
 }

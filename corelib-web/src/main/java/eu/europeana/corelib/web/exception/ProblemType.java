@@ -35,8 +35,14 @@ public enum ProblemType {
     APIKEY_DEPRECATED("410-AD", "API key is deprecated", ProblemResponseAction.IGNORE),
     MONGO_UNREACHABLE(null,"Cannot connect to CHO database", ProblemResponseAction.LOG_ERR),
     RECORD_RETRIEVAL_ERROR(null,"Record retrieval error", ProblemResponseAction.LOG_ERR),
+    MISSING_PARAMETER(null, "Missing required parameter", ProblemResponseAction.LOG_WARN),
+    INVALID_PARAMETER_VALUE(null, "Invalid parameter value", ProblemResponseAction.LOG_WARN),
     INVALID_URL(null,"Url is invalid", ProblemResponseAction.LOG_ERR),
-    CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.LOG_ERR);
+    CONFIG_ERROR(null, "Invalid application config", ProblemResponseAction.LOG_ERR),
+
+    TRANSLATION_SERVICE_DISABLED(null, "Sorry, there is no translation service available for this application", ProblemResponseAction.IGNORE),
+    TRANSLATION_SERVICE_ERROR(null, "Error translating data", ProblemResponseAction.LOG_ERR),
+    TRANSLATION_SERVICE_LIMIT_ERROR("502-TS", "Translation limit quota exceeded.", ProblemResponseAction.LOG_ERR);
 
     // following errors are not longer used and will soon be removed
     //APIKEY_ERROR("500-AE", "Error checking API key", ProblemResponseAction.LOG_ERR),

@@ -22,14 +22,14 @@
         <constructor-arg value="search"/>
     </bean>
 
-    <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"
-          p:solrClient-ref="corelib_solr_solrEmbedded" />
+<!--    <bean id="corelib_solr_searchService" class="eu.europeana.corelib.search.impl.TestSearchServiceImpl"-->
+<!--          p:solrClient-ref="corelib_solr_solrEmbedded" />-->
 
-    <bean id="corelib_record_mongoServer" class="eu.europeana.metis.mongo.RecordDao">
+    <bean id="corelib_record_mongoServer" class="eu.europeana.metis.mongo.dao.RecordDao">
         <constructor-arg value="#{corelib_db_mongoProvider.mongoClient()}"/>
         <constructor-arg value="europeana_test" type="java.lang.String"/>
     </bean>
-    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.RecordRedirectDao">
+    <bean id="metis_redirect_mongo" class="eu.europeana.metis.mongo.dao.RecordRedirectDao">
         <constructor-arg value="#{corelib_db_mongoProvider.mongoClient()}"/>
         <constructor-arg value="#europeana_id_test" type="java.lang.String"/>
     </bean>

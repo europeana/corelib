@@ -16,7 +16,10 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
 
     @Field("europeana_aggregation_edm_landingPage")
     protected String[] edmLandingPage;
-    
+
+    @Field("foaf_organization")
+    private String[] organizations;
+
     @Field("proxy_dc_type.*")
     protected Map<String,List<String>> dcTypeLangAware;
     
@@ -44,6 +47,11 @@ public class RichBeanImpl extends ApiBeanImpl implements RichBean {
     @Override
     public Map<String, List<String>> getDcSubjectLangAware() {
         return EdmUtils.cloneMap(dcSubjectLangAware);
+    }
+
+    @Override
+    public String[] getOrganizations() {
+        return (this.organizations != null ? this.organizations.clone() : null);
     }
 
     // temporary added for debugging purposes (see EA-1395)

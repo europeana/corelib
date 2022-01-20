@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -44,6 +45,14 @@ public final class EdmUtils {
 
     private EdmUtils() {
         // empty constructor to prevent initialization
+    }
+
+    static {
+        try {
+            bfact = BindingDirectory.getFactory(RDF.class);
+        } catch (JiBXException e) {
+            LOG.error("Error initializing EdmUtils binding with JBIX classes", e);
+        }
     }
 
     /**
@@ -73,13 +82,10 @@ public final class EdmUtils {
     private static String marshallToEDM(RDF rdf) {
         IMarshallingContext marshallingContext;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()){
-            if (bfact == null) {
-                bfact = BindingDirectory.getFactory(RDF.class);
-            }
             marshallingContext = bfact.createMarshallingContext();
             marshallingContext.setOutput(out, null);
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
-            return out.toString("UTF-8");
+            return out.toString(StandardCharsets.UTF_8);
         } catch (JiBXException | IOException e) {
             LOG.error("Error marshalling RDF", e);
         }
@@ -110,6 +116,7 @@ public final class EdmUtils {
         appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
         appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
         appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
+        appendOrganisations(rdf, fullBean.getOrganizations());
         appendAgents(rdf, fullBean.getAgents());
         appendConcepts(rdf, fullBean.getConcepts());
         appendPlaces(rdf, fullBean.getPlaces());
@@ -311,8 +318,7 @@ public final class EdmUtils {
         }
     }
 
-    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean,
-        boolean preserveIdentifiers) {
+    private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean, boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
         if (EuropeanaUriUtils.isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
@@ -412,7 +418,6 @@ public final class EdmUtils {
             EuropeanaProxy europeanaProxy = new EuropeanaProxy();
             europeanaProxy.setEuropeanaProxy(prx.isEuropeanaProxy());
             proxy.setEuropeanaProxy(europeanaProxy);
-
             List<IsNextInSequence> nis = null;
 
             String[] seqArray = prx.getEdmIsNextInSequence();
@@ -453,6 +458,7 @@ public final class EdmUtils {
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
+            addAsList(proxy, Lineage.class, prx.getLineage());
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
@@ -567,6 +573,20 @@ public final class EdmUtils {
             pChoList.add(pChoJibx);
         }
         rdf.setProvidedCHOList(pChoList);
+    }
+
+    private static void appendOrganisations(RDF rdf, List<OrganizationImpl> organisations) {
+        if (organisations != null) {
+            List<Organization> organizationList = new ArrayList<>();
+            for (OrganizationImpl source : organisations) {
+                Organization target = new Organization();
+                target.setAbout(source.getAbout());
+                addAsList(target, PrefLabel.class, source.getPrefLabel());
+                // TODO for now we only add about and preflabel fields since nothing else is stored in Mongo
+                organizationList.add(target);
+            }
+            rdf.setOrganizationList(organizationList);
+        }
     }
 
     private static void appendAgents(RDF rdf, List<AgentImpl> agents) {

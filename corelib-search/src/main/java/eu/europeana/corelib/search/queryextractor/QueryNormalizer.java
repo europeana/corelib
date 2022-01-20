@@ -2,6 +2,10 @@ package eu.europeana.corelib.search.queryextractor;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * @deprecated unused, will be replaced by new translation services
+ */
+@Deprecated(since = "July 2021")
 public class QueryNormalizer {
 
 	public static String normalizeBooleans(String query) {
