@@ -318,7 +318,20 @@ public final class EuropeanaUriUtils {
      */
     public static boolean isUri(String str) {
         if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteIRI(str) || isRelativeIRI(str));
+            return (isAbsoluteIRI(str) || isRelativeIRI(str, false));
+        }
+        return false;
+    }
+
+    /**
+     * Check if the provided string is an uri with few extra relative Uris
+     * Also includes Uri's starting with / or ../ or ./
+     * @param str string to check
+     * @return true if the provided string is an uri, otherwise false
+     */
+    public static boolean isUriExt(String str) {
+        if (StringUtils.isNotEmpty(str)) {
+            return (isAbsoluteIRI(str) || isRelativeIRI(str, true));
         }
         return false;
     }
@@ -330,7 +343,20 @@ public final class EuropeanaUriUtils {
         return ( m.find() && schemes.contains(m.group(1)));
     }
 
-    static boolean isRelativeIRI(String iri) {
-        return iri.startsWith("#");
+    /**
+     * Checks if the uri is a relative URI
+     * if extended true -> then will check for Relative URI's starting with / or ../ or ./ as well
+     *
+     * @param iri
+     * @param extended
+     * @return
+     */
+    static boolean isRelativeIRI(String iri, boolean extended) {
+        if (extended) {
+            return (iri.startsWith("#") || iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
+        } else {
+            return iri.startsWith("#") ;
+        }
     }
+
 }
