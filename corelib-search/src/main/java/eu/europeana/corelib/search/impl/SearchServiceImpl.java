@@ -51,6 +51,7 @@ public class SearchServiceImpl implements SearchService {
     private static final Logger LOG = LogManager.getLogger(SearchServiceImpl.class);
 
     private static final String UNION_FACETS_FORMAT = "'{'!ex={0}'}'{0}";
+    private static final String EUROPEANA_ID = "europeana_id";
 
     /**
      * Number of milliseconds before the query is aborted by SOLR
@@ -205,7 +206,7 @@ public class SearchServiceImpl implements SearchService {
             solrQuery.addSort("contentTier", ORDER.desc);
             solrQuery.addSort("metadataTier", ORDER.desc);
             solrQuery.addSort("timestamp_update", ORDER.desc);
-            solrQuery.addSort("europeana_id", ORDER.asc);
+            solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
         } else {
             // User set sort
             solrQuery.clearSorts();
@@ -222,8 +223,8 @@ public class SearchServiceImpl implements SearchService {
                 // There's a bug in Solr and we have to remove 'score' for default sorting (see also EA-1087 and EA-1364)
                 solrQuery.removeSort("score");
                 // Cursor-based pagination requires a unique key field for first cursor, so we add europeana_id if necessary
-                if (!solrQuery.getSortField().contains("europeana_id")) {
-                    solrQuery.addSort("europeana_id", ORDER.asc);
+                if (!solrQuery.getSortField().contains(EUROPEANA_ID)) {
+                    solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
                 }
             }
         } else {
@@ -255,7 +256,7 @@ public class SearchServiceImpl implements SearchService {
             NamedList<Object> namedList = solrClient.request(new LukeRequest());
             NamedList<Object> index = (NamedList<Object>) namedList.get("index");
             if (LOG.isInfoEnabled()) {
-                LOG.info("spent: " + (new Date().getTime() - t0));
+                LOG.info("spent: {}", (new Date().getTime() - t0));
             }
             return (Date) index.get("lastModified");
         } catch (SolrServerException | IOException e) {
