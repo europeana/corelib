@@ -201,11 +201,10 @@ public class SearchServiceImpl implements SearchService {
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
         boolean defaultSort = query.getSorts().isEmpty();
         if (defaultSort) {
-            solrQuery.setSort("has_media", ORDER.desc);
             solrQuery.addSort("score", ORDER.desc);
+            solrQuery.addSort("contentTier", ORDER.desc);
+            solrQuery.addSort("metadataTier", ORDER.desc);
             solrQuery.addSort("timestamp_update", ORDER.desc);
-            // completeness is added last because many records have incorrect value 0
-            solrQuery.addSort("europeana_completeness", ORDER.desc);
             solrQuery.addSort("europeana_id", ORDER.asc);
         } else {
             // User set sort
