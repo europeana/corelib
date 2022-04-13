@@ -1,0 +1,6 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/2002/07/owl#" default="elements" prefix="owl"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.SameAs" name="sameAs">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+</binding>

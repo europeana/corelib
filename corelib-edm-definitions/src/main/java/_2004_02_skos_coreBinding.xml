@@ -1,0 +1,62 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/2004/02/skos/core#" default="elements" prefix="skos"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Concept" name="Concept">
+    <structure map-as="rdf:AboutType"/>
+    <collection get-method="getChoiceList" set-method="setChoiceList" usage="optional" create-type="java.util.ArrayList">
+      <structure type="eu.europeana.corelib.definitions.jibx.Concept$Choice" ordered="false" choice="true">
+        <structure type="eu.europeana.corelib.definitions.jibx.PrefLabel" test-method="ifPrefLabel" get-method="getPrefLabel" set-method="setPrefLabel" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.AltLabel" test-method="ifAltLabel" get-method="getAltLabel" set-method="setAltLabel" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Broader" test-method="ifBroader" get-method="getBroader" set-method="setBroader" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Narrower" test-method="ifNarrower" get-method="getNarrower" set-method="setNarrower" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Related" test-method="ifRelated" get-method="getRelated" set-method="setRelated" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.BroadMatch" test-method="ifBroadMatch" get-method="getBroadMatch" set-method="setBroadMatch" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.NarrowMatch" test-method="ifNarrowMatch" get-method="getNarrowMatch" set-method="setNarrowMatch" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.RelatedMatch" test-method="ifRelatedMatch" get-method="getRelatedMatch" set-method="setRelatedMatch" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.ExactMatch" test-method="ifExactMatch" get-method="getExactMatch" set-method="setExactMatch" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.CloseMatch" test-method="ifCloseMatch" get-method="getCloseMatch" set-method="setCloseMatch" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Note" test-method="ifNote" get-method="getNote" set-method="setNote" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.Notation" test-method="ifNotation" get-method="getNotation" set-method="setNotation" usage="optional"/>
+        <structure type="eu.europeana.corelib.definitions.jibx.InScheme" test-method="ifInScheme" get-method="getInScheme" set-method="setInScheme" usage="optional"/>
+      </structure>
+    </collection>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.BroadMatch" name="broadMatch">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.NarrowMatch" name="narrowMatch">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.RelatedMatch" name="relatedMatch">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.ExactMatch" name="exactMatch">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.CloseMatch" name="closeMatch">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Notation" name="notation">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.PrefLabel" name="prefLabel">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AltLabel" name="altLabel">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Broader" name="broader">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Narrower" name="narrower">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Related" name="related">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.InScheme" name="inScheme">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Note" name="note">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+</binding>

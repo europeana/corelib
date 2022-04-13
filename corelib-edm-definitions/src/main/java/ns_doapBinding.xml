@@ -1,0 +1,6 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://usefulinc.com/ns/doap#" default="elements" prefix="doap"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Implements" name="implements">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+</binding>

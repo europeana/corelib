@@ -1,0 +1,48 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://purl.org/dc/elements/1.1/" default="elements" prefix="dc"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Rights" name="rights">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Contributor" name="contributor">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Coverage" name="coverage">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Creator" name="creator">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Date" name="date">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Description" name="description">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Identifier" name="identifier">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Format" name="format">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Language" name="language">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Publisher" name="publisher">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Relation" name="relation">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Source" name="source">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Subject" name="subject">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Title" name="title">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Type" name="type">
+    <structure map-as="rdf:ResourceOrLiteralType"/>
+  </mapping>
+</binding>

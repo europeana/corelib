@@ -1,0 +1,18 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/ns/dcat#" prefix="dcat"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Dataset" name="Dataset" ns="http://www.w3.org/ns/dcat#">
+    <structure map-as="rdf:AboutType"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.DatasetName" get-method="getDatasetName" set-method="setDatasetName"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Provider" get-method="getProvider" set-method="setProvider"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.IntermediateProvider" get-method="getIntermediateProviderList" set-method="setIntermediateProviderList" usage="optional" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.DataProvider" get-method="getDataProviderList" set-method="setDataProviderList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Country" get-method="getCountry" set-method="setCountry"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Language1" get-method="getLanguage" set-method="setLanguage"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Identifier" get-method="getIdentifierList" set-method="setIdentifierList" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Description" get-method="getDescriptionList" set-method="setDescriptionList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Created" get-method="getCreated" set-method="setCreated"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Extent" get-method="getExtent" set-method="setExtent" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Modified" get-method="getModified" set-method="setModified" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Status" get-method="getStatus" set-method="setStatus"/>
+  </mapping>
+</binding>

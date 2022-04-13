@@ -1,0 +1,9 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/ns/oa#" default="elements" prefix="oa"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasTarget" name="hasTarget">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasBody" name="hasBody">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+</binding>

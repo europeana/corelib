@@ -1,0 +1,19 @@
+<binding xmlns:xml="http://www.w3.org/XML/1998/namespace" trim-whitespace="true">
+  <namespace uri="http://www.w3.org/XML/1998/namespace" prefix="xml"/>
+  <mapping abstract="true" type-name="xml:space" class="eu.europeana.corelib.definitions.jibx.Space">
+    <format type="eu.europeana.corelib.definitions.jibx.Space$SpaceInner" enum-value-method="xmlValue"/>
+    <value style="text" get-method="getSpace" set-method="setSpace"/>
+  </mapping>
+  <mapping abstract="true" type-name="xml:specialAttrs-AttributeGroup" class="eu.europeana.corelib.definitions.jibx.SpecialAttrs">
+    <structure get-method="getBase" set-method="setBase" usage="optional">
+      <value style="attribute" name="base" ns="http://www.w3.org/XML/1998/namespace" get-method="getBase" set-method="setBase" usage="optional"/>
+    </structure>
+    <structure get-method="getLang" set-method="setLang" usage="optional">
+      <value style="attribute" name="lang" ns="http://www.w3.org/XML/1998/namespace" get-method="getLang" set-method="setLang" usage="optional"/>
+    </structure>
+    <structure map-as="xml:space" get-method="getSpace" set-method="setSpace" usage="optional"/>
+    <structure get-method="getId" set-method="setId" usage="optional">
+      <value style="attribute" name="id" ns="http://www.w3.org/XML/1998/namespace" get-method="getId" set-method="setId" usage="optional"/>
+    </structure>
+  </mapping>
+</binding>

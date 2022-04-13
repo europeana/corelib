@@ -1,0 +1,11 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" trim-whitespace="true">
+  <namespace uri="http://rdfs.org/sioc/services#" default="elements" prefix="svcs"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasService" name="has_service">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Service" name="Service">
+    <structure map-as="rdf:AboutType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.ConformsTo" get-method="getConformsToList" set-method="setConformsToList" create-type="java.util.ArrayList"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Implements" get-method="getImplementList" set-method="setImplementList" usage="optional" create-type="java.util.ArrayList"/>
+  </mapping>
+</binding>

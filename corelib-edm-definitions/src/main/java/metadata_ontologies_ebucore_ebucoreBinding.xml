@@ -1,0 +1,39 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" trim-whitespace="true">
+  <namespace uri="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" default="elements" prefix="ebucore"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.LongType" name="fileByteSize">
+    <structure map-as="rdf:LongType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.DoubleType" name="frameRate">
+    <structure map-as="rdf:DoubleType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.HasMimeType" name="hasMimeType">
+    <value style="text" get-method="getHasMimeType" set-method="setHasMimeType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Duration" name="duration">
+    <value style="text" get-method="getDuration" set-method="setDuration"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Width" name="width">
+    <structure map-as="rdf:IntegerType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Height" name="height">
+    <structure map-as="rdf:IntegerType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.SampleSize" name="sampleSize">
+    <structure map-as="rdf:IntegerType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.SampleRate" name="sampleRate">
+    <structure map-as="rdf:IntegerType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.BitRate" name="bitRate">
+    <structure map-as="rdf:NonNegativeIntegerType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.AudioChannelNumber" name="audioChannelNumber">
+    <structure map-as="rdf:NonNegativeIntegerType"/>
+  </mapping>
+  <mapping abstract="true" type-name="ebucore:OrientationType" class="eu.europeana.corelib.definitions.jibx.OrientationType">
+    <structure map-as="rdf:StringType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.OrientationType" name="orientation">
+    <structure map-as="ebucore:OrientationType"/>
+  </mapping>
+</binding>

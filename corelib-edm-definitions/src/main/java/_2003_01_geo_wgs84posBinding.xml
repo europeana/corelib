@@ -1,0 +1,12 @@
+<binding trim-whitespace="true">
+  <namespace uri="http://www.w3.org/2003/01/geo/wgs84_pos#" default="elements" prefix="wgs84"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Lat" name="lat">
+    <value style="text" get-method="getLat" set-method="setLat"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx._Long" name="long">
+    <value style="text" get-method="getLong" set-method="setLong"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Alt" name="alt">
+    <value style="text" get-method="getAlt" set-method="setAlt"/>
+  </mapping>
+</binding>

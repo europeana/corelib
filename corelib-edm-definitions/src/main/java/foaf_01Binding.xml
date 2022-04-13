@@ -1,0 +1,24 @@
+<binding xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:edm="http://www.europeana.eu/schemas/edm/" trim-whitespace="true">
+  <namespace uri="http://xmlns.com/foaf/0.1/" prefix="foaf"/>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Homepage" name="homepage" ns="http://xmlns.com/foaf/0.1/">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Name" name="name" ns="http://xmlns.com/foaf/0.1/">
+    <structure map-as="rdf:LiteralType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Logo" name="logo" ns="http://xmlns.com/foaf/0.1/">
+    <structure map-as="rdf:ResourceType"/>
+  </mapping>
+  <mapping class="eu.europeana.corelib.definitions.jibx.Organization" name="Organization" ns="http://xmlns.com/foaf/0.1/">
+    <structure map-as="edm:AgentType"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.Acronym" get-method="getAcronymList" set-method="setAcronymList" usage="optional" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.OrganizationScope" get-method="getOrganizationScope" set-method="setOrganizationScope"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.OrganizationDomain" get-method="getOrganizationDomain" set-method="setOrganizationDomain"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.OrganizationSector" get-method="getOrganizationSector" set-method="setOrganizationSector"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.GeographicLevel" get-method="getGeographicLevel" set-method="setGeographicLevel"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Country" get-method="getCountry" set-method="setCountry"/>
+    <collection item-type="eu.europeana.corelib.definitions.jibx.EuropeanaRole" get-method="getEuropeanaRoleList" set-method="setEuropeanaRoleList" create-type="java.util.ArrayList"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Homepage" get-method="getHomepage" set-method="setHomepage" usage="optional"/>
+    <structure type="eu.europeana.corelib.definitions.jibx.Logo" get-method="getLogo" set-method="setLogo" usage="optional"/>
+  </mapping>
+</binding>
