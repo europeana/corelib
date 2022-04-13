@@ -318,45 +318,27 @@ public final class EuropeanaUriUtils {
      */
     public static boolean isUri(String str) {
         if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteIRI(str) || isRelativeIRI(str, false));
-        }
-        return false;
-    }
-
-    /**
-     * Check if the provided string is an uri with few extra relative Uris
-     * Also includes Uri's starting with / or ../ or ./
-     * @param str string to check
-     * @return true if the provided string is an uri, otherwise false
-     */
-    public static boolean isUriExt(String str) {
-        if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteIRI(str) || isRelativeIRI(str, true));
+            return (isAbsoluteUri(str) || isRelativeUri(str));
         }
         return false;
     }
 
     // will check if it's a absolute or relative URI
-    static boolean isAbsoluteIRI(String iri) {
+    public static boolean isAbsoluteUri(String iri) {
         Pattern pattern =  Pattern.compile(PATTERN_STR);
         Matcher m = pattern.matcher(iri);
         return ( m.find() && schemes.contains(m.group(1)));
     }
 
     /**
-     * Checks if the uri is a relative URI
-     * if extended true -> then will check for Relative URI's starting with / or ../ or ./ as well
+     * Checks if the uri is a relative URI by checking if it starts with "/", "../" or "./"
      *
      * @param iri
-     * @param extended
      * @return
      */
-    static boolean isRelativeIRI(String iri, boolean extended) {
-        if (extended) {
-            return (iri.startsWith("#") || iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
-        } else {
-            return iri.startsWith("#") ;
-        }
+    public static boolean isRelativeUri(String iri) {
+        return (iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
+        
     }
 
 }
