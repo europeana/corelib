@@ -19,6 +19,7 @@ public final class EuropeanaUriUtils {
 
     private static final String REPLACEMENT = "_";
     private static final String PATTERN_STR   =  "^([a-zA-Z][a-zA-Z+-.]*):.*$";
+    private static final String RELATIVE_IRI_PATTERN   =  "^[\\.\\./|\\./|/|#]\\S.*$";
     private static final Set<String> schemes= new HashSet<>();
 
     static {
@@ -355,7 +356,9 @@ public final class EuropeanaUriUtils {
         if (extended) {
             return (iri.startsWith("#") || iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
         } else {
-            return iri.startsWith("#") ;
+            Pattern pattern = Pattern.compile(RELATIVE_IRI_PATTERN);
+            Matcher m = pattern.matcher(iri);
+            return m.find();
         }
     }
 

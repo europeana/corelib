@@ -21,12 +21,12 @@ public class EuropeanaURIUtilsTest {
         assertTrue(EuropeanaUriUtils.isUri("https://"));
         assertTrue(EuropeanaUriUtils.isUri("http://"));
         assertTrue(EuropeanaUriUtils.isUri("session://"));
-        assertTrue(EuropeanaUriUtils.isUri("#"));
+        assertFalse(EuropeanaUriUtils.isUri("#"));
         assertTrue( EuropeanaUriUtils.isUri("bitcoin:"));
         assertFalse(EuropeanaUriUtils.isUri("5fdh5672"));
         assertFalse(EuropeanaUriUtils.isUri(""));
         assertFalse(EuropeanaUriUtils.isUri(null));
-        assertFalse(EuropeanaUriUtils.isUri("/direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isUri("/direct/2385451"));
 
         //check for more relative URi for using isUriExt
         assertTrue(EuropeanaUriUtils.isUriExt("/direct/2385451"));
