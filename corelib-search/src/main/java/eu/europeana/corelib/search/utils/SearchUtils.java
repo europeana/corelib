@@ -200,10 +200,10 @@ public class SearchUtils {
 		for (QueryToken token : queryTokens) {
 			if (!token.getType().equals(QueryType.TERMRANGE)) {
 				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
-				if (languageVersions.size() > 0) {
+				if (!languageVersions.isEmpty()) {
 					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
 					List<String> alternatives = extractLanguageVersions(languageVersions);
-					if (alternatives.size() > 0) {
+					if (!alternatives.isEmpty()) {
 						QueryModification queryModification = token.createModification(query, alternatives);
 						if (queryModification != null) {
 							queryModifications.add(queryModification);

@@ -1,13 +1,5 @@
 package eu.europeana.corelib.search.queryextractor;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,16 +12,12 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser.Operator;
-import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.FuzzyQuery;
-import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.PhraseQuery;
-import org.apache.lucene.search.PrefixQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TermRangeQuery;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * @deprecated will be replaced by new translation services
@@ -37,21 +25,16 @@ import org.apache.lucene.search.TermRangeQuery;
 @Deprecated(since = "July 2021")
 public class QueryExtractor {
 
-	private Logger log = LogManager.getLogger(QueryExtractor.class.getCanonicalName());
+	private static final Logger LOG = LogManager.getLogger(QueryExtractor.class.getCanonicalName());
 
-	private static Analyzer analyzer;
-
-	private static QueryParser queryParser;
+	private static final Analyzer ANALYZER = new StandardAnalyzer();
+	private static final QueryParser QUERY_PARSER = new QueryParser("text", ANALYZER);
 	static {
-
-		analyzer = new StandardAnalyzer();
-		queryParser = new QueryParser("text", analyzer);
-		queryParser.setDefaultOperator(Operator.AND);
+		QUERY_PARSER.setDefaultOperator(Operator.AND);
 	}
 
 	private List<QueryToken> queryTokens = new ArrayList<>();
 	private int group = 0;
-
 	private String rawQueryString;
 
 	public QueryExtractor(String rawQueryString) {
@@ -65,9 +48,7 @@ public class QueryExtractor {
 	public List<String> extractTerms(boolean byGroups) {
 		List<String> terms = new ArrayList<>();
 		for (QueryToken token : extractInfo(byGroups)) {
-			terms.add(token.getPosition() == null ? token
-					.getNormalizedQueryTerm() : token.getPosition()
-					.getOriginal());
+			terms.add(token.getPosition() == null ? token.getNormalizedQueryTerm() : token.getPosition().getOriginal());
 		}
 		return terms;
 	}
@@ -114,11 +95,11 @@ public class QueryExtractor {
 		List<QueryTermPosition> termPositions = extractTokens(rawQueryString);
 		Query query = null;
 		try {
-			query = queryParser.parse(rawQueryString);
+			query = QUERY_PARSER.parse(rawQueryString);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			LOG.error("Query {}", query, e);
 		}
-		Stack<QueryType> queryTypeStack = new Stack<>();
+		Deque<QueryType> queryTypeStack = new ArrayDeque<>();
 		deconstructQuery(query, queryTypeStack);
 		insertPositions(termPositions);
 	}
@@ -126,8 +107,7 @@ public class QueryExtractor {
 	private List<QueryToken> getTermsByGroups() {
 		List<QueryToken> queryTerms = new ArrayList<>();
 		for (QueryToken token : queryTokens) {
-			if (queryTerms.size() == 0
-					|| token.getType().equals(QueryType.TERMRANGE)) {
+			if (queryTerms.isEmpty() || token.getType().equals(QueryType.TERMRANGE)) {
 				queryTerms.add(token);
 			} else {
 				int lastIndex = queryTerms.size() - 1;
@@ -136,18 +116,15 @@ public class QueryExtractor {
 					try {
 						QueryToken mergedToken = prevToken.clone();
 						mergedToken.merge(token, rawQueryString);
-						if (!mergedToken.getPosition().getOriginal()
-								.contains(" AND ")
-								&& !mergedToken.getPosition().getOriginal()
-										.contains(" OR ")
-								&& !mergedToken.getPosition().getOriginal()
-										.contains(" NOT ")) {
+						if (!mergedToken.getPosition().getOriginal().contains(" AND ")
+								&& !mergedToken.getPosition().getOriginal().contains(" OR ")
+								&& !mergedToken.getPosition().getOriginal().contains(" NOT ")) {
 							queryTerms.set(lastIndex, mergedToken);
 						} else {
 							queryTerms.add(token);
 						}
 					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
+						LOG.error("Cannot clone {}", prevToken, e);
 					}
 				} else {
 					queryTerms.add(token);
@@ -158,9 +135,10 @@ public class QueryExtractor {
 	}
 
 	private void insertPositions(List<QueryTermPosition> termPositions) {
-		
-		int lastFoundPosition = -1, max = termPositions.size();
-		
+
+		int lastFoundPosition = -1;
+		int max = termPositions.size();
+
 		for (QueryToken token : queryTokens) {
 			boolean isPhrase = token.getType().equals(QueryType.PHRASE);
 			List<QueryTermPosition> bag = new ArrayList<>();
@@ -169,42 +147,34 @@ public class QueryExtractor {
 			for (int i = (lastFoundPosition + 1); i < max; i++) {
 				QueryTermPosition position = termPositions.get(i);
 				if (isPhrase) {
-					String candidate = foundPart.equals("") ? position
-							.getTransformed() : foundPart + " "
-							+ position.getTransformed();
+					String candidate = "".equals(foundPart) ? position.getTransformed() : (foundPart + " " + position.getTransformed());
 					if (token.getNormalizedQueryTerm().equals(candidate)) {
 						bag.add(position);
 						success = true;
 						foundPart = candidate;
 						lastFoundPosition = i;
 						break;
-					} else if (token.getNormalizedQueryTerm().startsWith(
-							candidate)) {
+					} else if (token.getNormalizedQueryTerm().startsWith(candidate)) {
 						bag.add(position);
 						foundPart = candidate;
 					}
 				} else {
-					if (token.getNormalizedQueryTerm().equals(
-							position.getTransformed())) {
+					if (token.getNormalizedQueryTerm().equals(position.getTransformed())) {
 						token.setPosition(position);
 						lastFoundPosition = i;
 						if (token.getType().equals(QueryType.TERM)
 								&& position.getStart() > 0
 								&& position.getEnd() < rawQueryString.length()
-								&& rawQueryString.substring(
-										position.getStart() - 1,
-										position.getStart()).equals("\"")
-								&& rawQueryString.substring(position.getEnd(),
-										position.getEnd() + 1).equals("\"")) {
+								&& "\"".equals(rawQueryString.substring(position.getStart() - 1, position.getStart()))
+								&& "\"".equals(rawQueryString.substring(position.getEnd(), position.getEnd() + 1))) {
 							token.getTypeStack().pop();
 							token.getTypeStack().add(QueryType.PHRASE);
 						}
 						success = true;
 						break;
-					}
-					else{
+					} else{
 						// ANDY
-						if(position.getTransformed().contains(":")){
+						if(position.getTransformed().contains(":")) {
 							token.setPosition(position);
 							lastFoundPosition = i;
 							success = true;
@@ -220,17 +190,15 @@ public class QueryExtractor {
 					int end = bag.get(bag.size() - 1).getEnd();
 					int pos = bag.get(0).getPosition();
 					String original = rawQueryString.substring(start, end);
-					token.setPosition(new QueryTermPosition(start, end,
-							foundPart, original, pos));
+					token.setPosition(new QueryTermPosition(start, end,	foundPart, original, pos));
 				}
-			}
-			else {
-				log.debug("token not found for: " + token.getNormalizedQueryTerm());
+			} else {
+				LOG.debug("token not found for: {}", token.getNormalizedQueryTerm());
 			}
 		}
 	}
 
-	public void deconstructQuery(Query query, Stack<QueryType> queryTypeStack) {
+	public void deconstructQuery(Query query, Deque<QueryType> queryTypeStack) {
 		if (query == null) {
 			return;
 		}
@@ -260,18 +228,16 @@ public class QueryExtractor {
 		} else if (query instanceof MatchAllDocsQuery) {
 			group++;
 			queryTypeStack.add(QueryType.MATCHALLDOCS);
-			deconstructMatchAllDocsQuery((MatchAllDocsQuery) query,
-					queryTypeStack);
+			deconstructMatchAllDocsQuery((MatchAllDocsQuery) query,	queryTypeStack);
 		} else {
-			log.trace("Unhandled query class: " + query.getClass());
+			LOG.trace("Unhandled query class: {}", query.getClass());
 		}
-		if (queryTypeStack.size() > 0) {
+		if (!queryTypeStack.isEmpty()) {
 			queryTypeStack.pop();
 		}
 	}
 
-	private void deconstructPhraseQuery(PhraseQuery query,
-			Stack<QueryType> queryTypeStack) {
+	private void deconstructPhraseQuery(PhraseQuery query, Deque<QueryType> queryTypeStack) {
 		int[] positions = query.getPositions();
 		Term[] terms = query.getTerms();
 
@@ -283,34 +249,24 @@ public class QueryExtractor {
 		queryTokens.add(new QueryToken(term, queryTypeStack, group));
 	}
 
-	private void deconstructTermRangeQuery(TermRangeQuery query,
-			Stack<QueryType> queryTypeStack) {
-		queryTokens.add(new QueryToken(query.getLowerTerm().utf8ToString(),
-				queryTypeStack, group));
-		queryTokens.add(new QueryToken(query.getUpperTerm().utf8ToString(),
-				queryTypeStack, group));
+	private void deconstructTermRangeQuery(TermRangeQuery query, Deque<QueryType> queryTypeStack) {
+		queryTokens.add(new QueryToken(query.getLowerTerm().utf8ToString(),	queryTypeStack, group));
+		queryTokens.add(new QueryToken(query.getUpperTerm().utf8ToString(),	queryTypeStack, group));
 	}
 
-	private void deconstructFuzzyQuery(FuzzyQuery query,
-			Stack<QueryType> queryTypeStack) {
-		queryTokens.add(new QueryToken(query.getTerm().text(), queryTypeStack,
-				group));
+	private void deconstructFuzzyQuery(FuzzyQuery query, Deque<QueryType> queryTypeStack) {
+		queryTokens.add(new QueryToken(query.getTerm().text(), queryTypeStack, group));
 	}
 
-	private void deconstructPrefixQuery(PrefixQuery query,
-			Stack<QueryType> queryTypeStack) {
-		queryTokens.add(new QueryToken(query.getPrefix().text(),
-				queryTypeStack, group));
+	private void deconstructPrefixQuery(PrefixQuery query, Deque<QueryType> queryTypeStack) {
+		queryTokens.add(new QueryToken(query.getPrefix().text(), queryTypeStack, group));
 	}
 
-	private void deconstructMatchAllDocsQuery(MatchAllDocsQuery query,
-			Stack<QueryType> queryTypeStack) {
-		// queryTokens.add(new QueryToken(query.toString(), queryTypeStack,
-		// group));
+	private void deconstructMatchAllDocsQuery(MatchAllDocsQuery query, Deque<QueryType> queryTypeStack) {
+		// queryTokens.add(new QueryToken(query.toString(), queryTypeStack, group));
 	}
 
-	private void deconstructBooleanQuery(BooleanQuery query,
-			Stack<QueryType> queryTypeStack) {
+	private void deconstructBooleanQuery(BooleanQuery query, Deque<QueryType> queryTypeStack) {
 		Occur prevOccur = null;
 		for (BooleanClause clause : query.clauses()) {
 			if (prevOccur != clause.getOccur()) {
@@ -325,21 +281,15 @@ public class QueryExtractor {
 
 	private QueryType resolveOccur(String name) {
 		switch (name) {
-		case "AND":
-			return QueryType.BOOLEAN_AND;
-		case "OR":
-			return QueryType.BOOLEAN_OR;
-		case "NOT":
-			return QueryType.BOOLEAN_NOT;
-		default:
-			return QueryType.BOOLEAN;
+			case "AND": return QueryType.BOOLEAN_AND;
+			case "OR":  return QueryType.BOOLEAN_OR;
+			case "NOT": return QueryType.BOOLEAN_NOT;
+			default: return QueryType.BOOLEAN;
 		}
 	}
 
-	private void deconstructTermQuery(TermQuery query,
-			Stack<QueryType> queryTypeStack) {
-		queryTokens.add(new QueryToken(query.getTerm().text(), queryTypeStack,
-				group));
+	private void deconstructTermQuery(TermQuery query, Deque<QueryType> queryTypeStack) {
+		queryTokens.add(new QueryToken(query.getTerm().text(), queryTypeStack, group));
 	}
 
 	private List<QueryTermPosition> extractTokens(String text) {
@@ -347,11 +297,9 @@ public class QueryExtractor {
 		List<QueryTermPosition> queryTerms = new ArrayList<>();
 		TokenStream ts;
 		try {
-			ts = analyzer.tokenStream("text", new StringReader(text));
-			OffsetAttribute offsetAttribute = ts
-					.addAttribute(OffsetAttribute.class);
-			CharTermAttribute charTermAttribute = ts
-					.addAttribute(CharTermAttribute.class);
+			ts = ANALYZER.tokenStream("text", new StringReader(text));
+			OffsetAttribute offsetAttribute = ts.addAttribute(OffsetAttribute.class);
+			CharTermAttribute charTermAttribute = ts.addAttribute(CharTermAttribute.class);
 			ts.reset();
 
 			int i = 0;
@@ -359,22 +307,19 @@ public class QueryExtractor {
 				int start = offsetAttribute.startOffset();
 				int end = offsetAttribute.endOffset();
 				String term = charTermAttribute.toString();
-				
-				// ANDY  
+
+				// ANDY
 				if(term.contains(":")){
-					start = start + term.indexOf(":")+1;
+					start = start + term.indexOf(':') + 1;
 				}
 				// END ANDY
-				
-				queryTerms.add(
-					new QueryTermPosition(start, end, term, text.substring(start, end), i++)
-				);
-				
+
+				queryTerms.add(new QueryTermPosition(start, end, term, text.substring(start, end), i++));
 			}
 			ts.end();
 			ts.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("Error streaming text = {}", text, e);
 		}
 		return queryTerms;
 	}

@@ -1,7 +1,6 @@
 package eu.europeana.corelib.record.schemaorg.utils;
 
 import eu.europeana.corelib.edm.model.schemaorg.SchemaOrgConstants;
-import eu.europeana.corelib.record.schemaorg.utils.SchemaOrgTypeFactory;
 import eu.europeana.corelib.solr.bean.impl.FullBeanImpl;
 import org.junit.Assert;
 import org.junit.Test;
