@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
  */
 
 public final class EuropeanaUriUtils {
-
-
-    private static final String REPLACEMENT = "_";
-    private static final String PATTERN_STR   =  "^([a-zA-Z][a-zA-Z+-.]*):.*$";
-    private static final String RELATIVE_IRI_PATTERN   =  "^[\\.\\./|\\./|/|#]\\S.*$";
+    
+    private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/)\\S+$");
+//    private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session|bitcoin)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/|[A-Za-z])\\S+$");
+    //private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z+-.]*):.*$");
+    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^(https?|ftp|session)://[^\\s/$.?#].[^\\s]*$");
     private static final Set<String> schemes= new HashSet<>();
 
     static {
@@ -302,7 +302,7 @@ public final class EuropeanaUriUtils {
                 recordId;
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9_]");
         Matcher matcher = pattern.matcher(recordId);
-        recordId = matcher.replaceAll(REPLACEMENT);
+        recordId = matcher.replaceAll("_");
         return recordId;
     }
 
@@ -313,9 +313,10 @@ public final class EuropeanaUriUtils {
     }
 
     /**
-     * Check if the provided string is an uri
-     * @param str string to check
-     * @return true if the provided string is an uri, otherwise false
+     * Check if the provided string is a valid (absolute or relative) URI
+     *
+     * @param str URI to check
+     * @return true if the provided string is not empty and a valid URI, otherwise false
      */
     public static boolean isUri(String str) {
         if (StringUtils.isNotEmpty(str)) {
@@ -323,34 +324,37 @@ public final class EuropeanaUriUtils {
         }
         return false;
     }
-
-    // will check if it's a absolute or relative URI
-    public static boolean isAbsoluteUri(String iri) {
-        Pattern pattern =  Pattern.compile(PATTERN_STR);
-        Matcher m = pattern.matcher(iri);
+    
+    /**
+     * Checks if the URI is absolute URI
+     *
+     * @param uri URI to check
+     * @return true is the URI is absolute, false otherwise
+     */
+    public static boolean isAbsoluteUri(String uri) {
+        Matcher m = ABSOLUTEURLPATTERN.matcher(uri);
         return ( m.find() && schemes.contains(m.group(1)));
     }
-
+    
+//    "^(https?|ftp)://[^\s/$.?#].[^\s]*$"
+    // relative URI checker
+   // "^(?!www\.|(?:http|ftp)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/|[A-Za-z])\\S+$"
+    //Pattern pattern = Pattern.compile("^(?!www\\.|(?:http|ftp)s?://|[A-Za-z]:\\|//)\\S{2,}$");
+    //        Pattern pattern = Pattern.compile("^[\\.\\./|\\./|/|#]\\S.*$");
+    
     /**
-     * Checks if the uri is a relative URI by checking if it starts with "/", "../" or "./"
+     * Checks if the supplied string is a relative URI by checking if it starts with
+     * "#" (edm specific cases), "/", "../", "./" or directly with the filepath, and
+     * contains no whitespace characters (\r\n\t\f\v)
+     * The first half starting (?! ... pattern is a negative lookout to actively filter
+     * absolute URIs
      *
-     * @param iri
-     * @return
+     * @param uri URI to check
+     * @return true is the URI is relative according to the above, false otherwise
      */
-<<<<<<< HEAD
-    public static boolean isRelativeUri(String iri) {
-        return (iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
-        
-=======
-    static boolean isRelativeIRI(String iri, boolean extended) {
-        if (extended) {
-            return (iri.startsWith("#") || iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
-        } else {
-            Pattern pattern = Pattern.compile(RELATIVE_IRI_PATTERN);
-            Matcher m = pattern.matcher(iri);
-            return m.find();
-        }
->>>>>>> be25b1847d3a8d086aa0a15e408b6c0c7a180c6d
+    static boolean isRelativeUri(String uri) {
+        Matcher m = RELATIVEURLPATTERN.matcher(uri);
+        return m.find();
     }
 
 }
