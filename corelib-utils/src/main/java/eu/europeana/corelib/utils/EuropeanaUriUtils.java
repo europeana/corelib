@@ -336,12 +336,6 @@ public final class EuropeanaUriUtils {
         return ( m.find() && schemes.contains(m.group(1)));
     }
     
-//    "^(https?|ftp)://[^\s/$.?#].[^\s]*$"
-    // relative URI checker
-   // "^(?!www\.|(?:http|ftp)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/|[A-Za-z])\\S+$"
-    //Pattern pattern = Pattern.compile("^(?!www\\.|(?:http|ftp)s?://|[A-Za-z]:\\|//)\\S{2,}$");
-    //        Pattern pattern = Pattern.compile("^[\\.\\./|\\./|/|#]\\S.*$");
-    
     /**
      * Checks if the supplied string is a relative URI by checking if it starts with
      * "#" (edm specific cases), "/", "../", "./" or directly with the filepath, and

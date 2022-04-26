@@ -203,7 +203,7 @@ public final class EdmUtils {
                 QualityAnnotation qualityAnnotation = new QualityAnnotation();
                 resultList.add(qualityAnnotation);
 
-                if (EuropeanaUriUtils.isUri(anno.getAbout()) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     qualityAnnotation.setAbout(anno.getAbout());
                 } else {
                     qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
@@ -321,7 +321,7 @@ public final class EdmUtils {
     private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean, boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
-        if (EuropeanaUriUtils.isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
+        if (preserveIdentifiers) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
             aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
@@ -329,7 +329,7 @@ public final class EdmUtils {
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)) {
             AggregatedCHO agCHO = new AggregatedCHO();
-            if (EuropeanaUriUtils.isUri(fBean.getProvidedCHOs().get(0).getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
                 agCHO.setResource(getBaseUrl(fBean.getProvidedCHOs().get(0).getAbout()));
@@ -363,7 +363,7 @@ public final class EdmUtils {
             List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
             for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
                 HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                if (EuropeanaUriUtils.isUri(anno) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     hasQualityAnnotation.setResource(anno);
                 } else {
                     hasQualityAnnotation.setResource(getBaseUrl(anno));
@@ -410,7 +410,7 @@ public final class EdmUtils {
         List<ProxyType> proxyList = new ArrayList<>();
         for (ProxyImpl prx : proxies) {
             ProxyType proxy = new ProxyType();
-            if (EuropeanaUriUtils.isUri(prx.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 proxy.setAbout(prx.getAbout());
             } else {
                 proxy.setAbout(getBaseUrl(prx.getAbout()));
@@ -424,10 +424,10 @@ public final class EdmUtils {
 
             if (seqArray != null) {
                 nis = new ArrayList<>();
-
-                for (int i = 0; i < seqArray.length; i++) {
+    
+                for (String s : seqArray) {
                     IsNextInSequence item = new IsNextInSequence();
-                    item.setResource(seqArray[i]);
+                    item.setResource(s);
                     nis.add(item);
                 }
             }
@@ -440,12 +440,12 @@ public final class EdmUtils {
             List<ProxyIn> pInList = null;
             if (pIn != null) {
                 pInList = new ArrayList<>();
-                for (int i = 0; i < pIn.length; i++) {
+                for (String s : pIn) {
                     ProxyIn proxyIn = new ProxyIn();
-                    if (EuropeanaUriUtils.isUri(pIn[i]) || preserveIdentifiers) {
-                        proxyIn.setResource(pIn[i]);
+                    if (preserveIdentifiers) {
+                        proxyIn.setResource(s);
                     } else {
-                        proxyIn.setResource(getBaseUrl(pIn[i]));
+                        proxyIn.setResource(getBaseUrl(s));
                     }
                     pInList.add(proxyIn);
                 }
