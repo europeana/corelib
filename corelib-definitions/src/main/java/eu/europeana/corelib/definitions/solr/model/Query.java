@@ -109,6 +109,11 @@ public class Query implements Cloneable {
         this.query = query;
         return this;
     }
+    
+    public Query addGeoParamsToQuery(String geoParameters){
+        this.query += geoParameters;
+        return this;
+    }
 
     public String[] getRefinements() {
         return getRefinements(false);
