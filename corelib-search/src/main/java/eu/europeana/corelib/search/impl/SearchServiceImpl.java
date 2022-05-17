@@ -201,10 +201,12 @@ public class SearchServiceImpl implements SearchService {
 
     private <T extends IdBean> void setSortAndCursor(Query query, ResultSet<T> resultSet, SolrQuery solrQuery) {
         boolean defaultSort = query.getSorts().isEmpty();
+        // EA-2996 workaround broken search on search_acceptance_publish collection
+        // to be able to test distance search
         if (defaultSort) {
             solrQuery.addSort("score", ORDER.desc);
-            solrQuery.addSort("contentTier", ORDER.desc);
-            solrQuery.addSort("metadataTier", ORDER.desc);
+            //solrQuery.addSort("contentTier", ORDER.desc);   <- TODO uncomment this
+            //solrQuery.addSort("metadataTier", ORDER.desc);  <- TODO uncomment this
             solrQuery.addSort("timestamp_update", ORDER.desc);
             solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
         } else {
