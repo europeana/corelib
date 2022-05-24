@@ -19,13 +19,13 @@
     </organization>
 
     <modules>
-        <module>corelib-utils</module>
         <module>corelib-definitions</module>
-        <module>corelib-storage</module>
-        <module>corelib-web</module>
         <module>corelib-record</module>
-        <module>corelib-search</module>
         <module>corelib-schemaorg</module>
+        <module>corelib-search</module>
+        <module>corelib-storage</module>
+        <module>corelib-utils</module>
+        <module>corelib-web</module>
     </modules>
 
     <scm>
