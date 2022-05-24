@@ -522,14 +522,14 @@ public final class EdmUtils {
         List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
             Aggregation aggregation = new Aggregation();
-            if (EuropeanaUriUtils.isUri(aggr.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
                 aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)) {
                 AggregatedCHO cho = new AggregatedCHO();
-                if (EuropeanaUriUtils.isUri(rdf.getProvidedCHOList().get(0).getAbout()) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
                     cho.setResource(getBaseUrl(rdf.getProvidedCHOList().get(0).getAbout()));
@@ -563,7 +563,7 @@ public final class EdmUtils {
         List<ProvidedCHOType> pChoList = new ArrayList<>();
         for (ProvidedCHOImpl pCho : chos) {
             ProvidedCHOType pChoJibx = new ProvidedCHOType();
-            if (EuropeanaUriUtils.isUri(pCho.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
                 pChoJibx.setAbout(getBaseUrl(pCho.getAbout()));
@@ -746,7 +746,10 @@ public final class EdmUtils {
             if (StringUtils.isNotBlank(str)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
                 Object obj = clazz.newInstance();
-                if (EuropeanaUriUtils.isUri(str) || preserveIdentifiers) {
+                // when adding as object, the str value maybe an absolute url (starting with http or https), for fields like
+                // edmIsShownBy, edmIsShownAt etc. And, we don't want to add the Base Url to those values.
+                // That's why the check for absoluteUri is added here.
+                if (EuropeanaUriUtils.isAbsoluteUri(str) || preserveIdentifiers) {
                     ((ResourceType) obj).setResource(str);
                 } else {
                     ((ResourceType) obj).setResource(getBaseUrl(str));
