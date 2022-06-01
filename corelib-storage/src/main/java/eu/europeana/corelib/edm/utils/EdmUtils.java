@@ -217,7 +217,7 @@ public final class EdmUtils {
                 hasBody.setResource(anno.getBody());
                 qualityAnnotation.setHasBody(hasBody);
 
-                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null);
+                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
             }
 
             rdf.setQualityAnnotationList(resultList);
@@ -458,7 +458,8 @@ public final class EdmUtils {
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
-            addAsList(proxy, Lineage.class, prx.getLineage());
+            addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
+
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
@@ -795,31 +796,75 @@ public final class EdmUtils {
         return false;
     }
 
+    /**
+     * Adds the values as list.
+     * Prefix is always null and addBaseUrl is always set to false.
+     *
+     * @param dest
+     * @param clazz
+     * @param vals
+     * @param <T>
+     * @return
+     */
     public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
-        return addAsList(dest, clazz, vals, null);
+        return addAsList(dest, clazz, vals, null, false);
     }
 
-    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix) {
+    /**
+     * Adds values as List
+     * if prefix present adds the prefix in the values
+     * OR if addBaseUrl true, will check if the value is an absolute url or not.
+     *                        if not will add the base Url to the value.
+     * @param dest
+     * @param clazz
+     * @param vals
+     * @param prefix
+     * @param addBaseUrl
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix, boolean addBaseUrl) {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-                if (StringUtils.isNotBlank(prefix)) {
-                    String[] valNew = new String[vals.length];
-                    int i = 0;
-                    for (String val : vals) {
-                        valNew[i] = prefix + val;
-                        i++;
-                    }
-                    method.invoke(dest, convertListFromArray(clazz, valNew));
-                } else {
-                    method.invoke(dest, convertListFromArray(clazz, vals));
-                }
+                String[] newValues = getModifiedValues(vals,prefix, addBaseUrl);
+                method.invoke(dest, convertListFromArray(clazz, newValues));
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
             LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
+    }
+
+    /**
+     * Returns the String array with either prefix added to all the values
+     * OR base url added to the relative uri's
+     * OR else returns the original array
+     * @param values
+     * @param prefix
+     * @param addBaseUrl
+     * @return
+     */
+    private static String[] getModifiedValues(String[] values, String prefix, boolean addBaseUrl) {
+        String[] newValues = new String[values.length];
+        if (StringUtils.isNotBlank(prefix)) {
+            int i = 0;
+            for (String val : values) {
+                newValues[i] = prefix + val;
+                i++;
+            }
+        }
+        else if (addBaseUrl) {
+            int i = 0;
+            for (String value : values) {
+                newValues[i] = EuropeanaUriUtils.isAbsoluteUri(value) ? value : getBaseUrl(value);
+                i++;
+            }
+        } else {
+            return values;
+        }
+        return newValues;
     }
 
     private static String getSetterMethodName(Class<?> clazz, boolean list) {
