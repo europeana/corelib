@@ -346,7 +346,7 @@ public final class EuropeanaUriUtils {
      * @param uri URI to check
      * @return true is the URI is relative according to the above, false otherwise
      */
-    static boolean isRelativeUri(String uri) {
+    public static boolean isRelativeUri(String uri) {
         Matcher m = RELATIVEURLPATTERN.matcher(uri);
         return m.find();
     }

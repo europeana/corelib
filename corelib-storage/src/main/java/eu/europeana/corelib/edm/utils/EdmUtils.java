@@ -827,7 +827,7 @@ public final class EdmUtils {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-                String[] newValues = getModifiedValues(vals,prefix, addBaseUrl);
+                String[] newValues = getModifiedValues(vals, prefix, addBaseUrl);
                 method.invoke(dest, convertListFromArray(clazz, newValues));
                 return true;
             }
@@ -858,7 +858,7 @@ public final class EdmUtils {
         else if (addBaseUrl) {
             int i = 0;
             for (String value : values) {
-                newValues[i] = EuropeanaUriUtils.isAbsoluteUri(value) ? value : getBaseUrl(value);
+                newValues[i] = EuropeanaUriUtils.isRelativeUri(value) ? getBaseUrl(value) : value;
                 i++;
             }
         } else {
