@@ -15,10 +15,11 @@ import java.util.regex.Pattern;
  */
 
 public final class EuropeanaUriUtils {
-
-
-    private static final String REPLACEMENT = "_";
-    private static final String PATTERN_STR   =  "^([a-zA-Z][a-zA-Z+-.]*):.*$";
+    
+    private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/)\\S+$");
+//    private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session|bitcoin)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/|[A-Za-z])\\S+$");
+    //private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z+-.]*):.*$");
+    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^(https?|ftp|session)://[^\\s/$.?#].[^\\s]*$");
     private static final Set<String> schemes= new HashSet<>();
 
     static {
@@ -301,7 +302,7 @@ public final class EuropeanaUriUtils {
                 recordId;
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9_]");
         Matcher matcher = pattern.matcher(recordId);
-        recordId = matcher.replaceAll(REPLACEMENT);
+        recordId = matcher.replaceAll("_");
         return recordId;
     }
 
@@ -312,51 +313,42 @@ public final class EuropeanaUriUtils {
     }
 
     /**
-     * Check if the provided string is an uri
-     * @param str string to check
-     * @return true if the provided string is an uri, otherwise false
+     * Check if the provided string is a valid (absolute or relative) URI
+     *
+     * @param str URI to check
+     * @return true if the provided string is not empty and a valid URI, otherwise false
      */
     public static boolean isUri(String str) {
         if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteIRI(str) || isRelativeIRI(str, false));
+            return (isAbsoluteUri(str) || isRelativeUri(str));
         }
         return false;
     }
-
+    
     /**
-     * Check if the provided string is an uri with few extra relative Uris
-     * Also includes Uri's starting with / or ../ or ./
-     * @param str string to check
-     * @return true if the provided string is an uri, otherwise false
+     * Checks if the URI is absolute URI
+     *
+     * @param uri URI to check
+     * @return true is the URI is absolute, false otherwise
      */
-    public static boolean isUriExt(String str) {
-        if (StringUtils.isNotEmpty(str)) {
-            return (isAbsoluteIRI(str) || isRelativeIRI(str, true));
-        }
-        return false;
-    }
-
-    // will check if it's a absolute or relative URI
-    static boolean isAbsoluteIRI(String iri) {
-        Pattern pattern =  Pattern.compile(PATTERN_STR);
-        Matcher m = pattern.matcher(iri);
+    public static boolean isAbsoluteUri(String uri) {
+        Matcher m = ABSOLUTEURLPATTERN.matcher(uri);
         return ( m.find() && schemes.contains(m.group(1)));
     }
-
+    
     /**
-     * Checks if the uri is a relative URI
-     * if extended true -> then will check for Relative URI's starting with / or ../ or ./ as well
+     * Checks if the supplied string is a relative URI by checking if it starts with
+     * "#" (edm specific cases), "/", "../", "./" or directly with the filepath, and
+     * contains no whitespace characters (\r\n\t\f\v)
+     * The first half starting (?! ... pattern is a negative lookout to actively filter
+     * absolute URIs
      *
-     * @param iri
-     * @param extended
-     * @return
+     * @param uri URI to check
+     * @return true is the URI is relative according to the above, false otherwise
      */
-    static boolean isRelativeIRI(String iri, boolean extended) {
-        if (extended) {
-            return (iri.startsWith("#") || iri.startsWith("/") || iri.startsWith("../") || iri.startsWith("./"));
-        } else {
-            return iri.startsWith("#") ;
-        }
+    public static boolean isRelativeUri(String uri) {
+        Matcher m = RELATIVEURLPATTERN.matcher(uri);
+        return m.find();
     }
 
 }

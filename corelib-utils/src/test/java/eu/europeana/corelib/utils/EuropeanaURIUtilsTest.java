@@ -18,23 +18,45 @@ public class EuropeanaURIUtilsTest {
 
     @Test
     public void isURITest() {
-        assertTrue(EuropeanaUriUtils.isUri("https://"));
-        assertTrue(EuropeanaUriUtils.isUri("http://"));
-        assertTrue(EuropeanaUriUtils.isUri("session://"));
-        assertTrue(EuropeanaUriUtils.isUri("#"));
-        assertTrue( EuropeanaUriUtils.isUri("bitcoin:"));
+        assertFalse(EuropeanaUriUtils.isUri("https://"));
+        assertFalse(EuropeanaUriUtils.isUri("http://"));
+        assertFalse(EuropeanaUriUtils.isUri("session://"));
+        
+        assertTrue(EuropeanaUriUtils.isUri("https://a.b"));
+        assertTrue(EuropeanaUriUtils.isUri("http://wobbly"));
+        assertTrue(EuropeanaUriUtils.isUri("session://do/something.args"));
+        
+        assertFalse(EuropeanaUriUtils.isUri("#"));
+        assertFalse(EuropeanaUriUtils.isUri("bitcoin:")); // beats me why we would need this ?
         assertFalse(EuropeanaUriUtils.isUri("5fdh5672"));
         assertFalse(EuropeanaUriUtils.isUri(""));
         assertFalse(EuropeanaUriUtils.isUri(null));
-        assertFalse(EuropeanaUriUtils.isUri("/direct/2385451"));
+        
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("/direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isRelativeUri("/direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isUri("/direct/2385451"));
 
-        //check for more relative URi for using isUriExt
-        assertTrue(EuropeanaUriUtils.isUriExt("/direct/2385451"));
-        assertTrue(EuropeanaUriUtils.isUriExt("../direct/2385451"));
-        assertTrue(EuropeanaUriUtils.isUriExt("./direct/2385451"));
-        assertTrue(EuropeanaUriUtils.isUriExt("/direct/2385451"));
-        assertFalse(EuropeanaUriUtils.isUriExt("2385451"));
-        assertFalse(EuropeanaUriUtils.isUriExt(null));
+        // check for absolute, relative or generic URI's
+        assertTrue(EuropeanaUriUtils.isUri("/direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isRelativeUri("/direct/2385451"));
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("/direct/2385451"));
+        
+        assertTrue(EuropeanaUriUtils.isUri("../direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isRelativeUri("../direct/2385451"));
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("../direct/2385451"));
+        
+        assertTrue(EuropeanaUriUtils.isUri("./direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isRelativeUri("./direct/2385451"));
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("./direct/2385451"));
+    
+        assertTrue(EuropeanaUriUtils.isUri("#direct/2385451"));
+        assertTrue(EuropeanaUriUtils.isRelativeUri("#direct/2385451"));
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("#direct/2385451"));
+        
+        assertFalse(EuropeanaUriUtils.isUri("# Bûter, brea en griene tsiis"));
+        
+        assertFalse(EuropeanaUriUtils.isUri("2385451"));
+        assertFalse(EuropeanaUriUtils.isUri(null));
 
     }
 

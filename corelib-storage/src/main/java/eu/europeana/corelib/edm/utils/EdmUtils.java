@@ -203,7 +203,7 @@ public final class EdmUtils {
                 QualityAnnotation qualityAnnotation = new QualityAnnotation();
                 resultList.add(qualityAnnotation);
 
-                if (EuropeanaUriUtils.isUri(anno.getAbout()) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     qualityAnnotation.setAbout(anno.getAbout());
                 } else {
                     qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
@@ -217,7 +217,7 @@ public final class EdmUtils {
                 hasBody.setResource(anno.getBody());
                 qualityAnnotation.setHasBody(hasBody);
 
-                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null);
+                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
             }
 
             rdf.setQualityAnnotationList(resultList);
@@ -321,7 +321,7 @@ public final class EdmUtils {
     private static void appendEuropeanaAggregation(RDF rdf, FullBeanImpl fBean, boolean preserveIdentifiers) {
         EuropeanaAggregationType aggregation = new EuropeanaAggregationType();
         EuropeanaAggregation europeanaAggregation = fBean.getEuropeanaAggregation();
-        if (EuropeanaUriUtils.isUri(europeanaAggregation.getAbout()) || preserveIdentifiers) {
+        if (preserveIdentifiers) {
             aggregation.setAbout(europeanaAggregation.getAbout());
         } else {
             aggregation.setAbout(getBaseUrl(europeanaAggregation.getAbout()));
@@ -329,7 +329,7 @@ public final class EdmUtils {
 
         if (!addAsObject(aggregation, AggregatedCHO.class, europeanaAggregation.getAggregatedCHO(), preserveIdentifiers)) {
             AggregatedCHO agCHO = new AggregatedCHO();
-            if (EuropeanaUriUtils.isUri(fBean.getProvidedCHOs().get(0).getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 agCHO.setResource(fBean.getProvidedCHOs().get(0).getAbout());
             } else {
                 agCHO.setResource(getBaseUrl(fBean.getProvidedCHOs().get(0).getAbout()));
@@ -363,7 +363,7 @@ public final class EdmUtils {
             List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
             for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
                 HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                if (EuropeanaUriUtils.isUri(anno) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     hasQualityAnnotation.setResource(anno);
                 } else {
                     hasQualityAnnotation.setResource(getBaseUrl(anno));
@@ -410,7 +410,7 @@ public final class EdmUtils {
         List<ProxyType> proxyList = new ArrayList<>();
         for (ProxyImpl prx : proxies) {
             ProxyType proxy = new ProxyType();
-            if (EuropeanaUriUtils.isUri(prx.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 proxy.setAbout(prx.getAbout());
             } else {
                 proxy.setAbout(getBaseUrl(prx.getAbout()));
@@ -424,10 +424,10 @@ public final class EdmUtils {
 
             if (seqArray != null) {
                 nis = new ArrayList<>();
-
-                for (int i = 0; i < seqArray.length; i++) {
+    
+                for (String s : seqArray) {
                     IsNextInSequence item = new IsNextInSequence();
-                    item.setResource(seqArray[i]);
+                    item.setResource(s);
                     nis.add(item);
                 }
             }
@@ -440,12 +440,12 @@ public final class EdmUtils {
             List<ProxyIn> pInList = null;
             if (pIn != null) {
                 pInList = new ArrayList<>();
-                for (int i = 0; i < pIn.length; i++) {
+                for (String s : pIn) {
                     ProxyIn proxyIn = new ProxyIn();
-                    if (EuropeanaUriUtils.isUri(pIn[i]) || preserveIdentifiers) {
-                        proxyIn.setResource(pIn[i]);
+                    if (preserveIdentifiers) {
+                        proxyIn.setResource(s);
                     } else {
-                        proxyIn.setResource(getBaseUrl(pIn[i]));
+                        proxyIn.setResource(getBaseUrl(s));
                     }
                     pInList.add(proxyIn);
                 }
@@ -458,7 +458,8 @@ public final class EdmUtils {
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
-            addAsList(proxy, Lineage.class, prx.getLineage());
+            addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
+
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
             addAsList(proxy, Incorporates.class, prx.getEdmIncorporates());
@@ -522,14 +523,14 @@ public final class EdmUtils {
         List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
             Aggregation aggregation = new Aggregation();
-            if (EuropeanaUriUtils.isUri(aggr.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 aggregation.setAbout(aggr.getAbout());
             } else {
                 aggregation.setAbout(getBaseUrl(aggr.getAbout()));
             }
             if (!addAsObject(aggregation, AggregatedCHO.class, aggr.getAggregatedCHO(), preserveIdentifiers)) {
                 AggregatedCHO cho = new AggregatedCHO();
-                if (EuropeanaUriUtils.isUri(rdf.getProvidedCHOList().get(0).getAbout()) || preserveIdentifiers) {
+                if (preserveIdentifiers) {
                     cho.setResource(rdf.getProvidedCHOList().get(0).getAbout());
                 } else {
                     cho.setResource(getBaseUrl(rdf.getProvidedCHOList().get(0).getAbout()));
@@ -563,7 +564,7 @@ public final class EdmUtils {
         List<ProvidedCHOType> pChoList = new ArrayList<>();
         for (ProvidedCHOImpl pCho : chos) {
             ProvidedCHOType pChoJibx = new ProvidedCHOType();
-            if (EuropeanaUriUtils.isUri(pCho.getAbout()) || preserveIdentifiers) {
+            if (preserveIdentifiers) {
                 pChoJibx.setAbout(pCho.getAbout());
             } else {
                 pChoJibx.setAbout(getBaseUrl(pCho.getAbout()));
@@ -746,7 +747,10 @@ public final class EdmUtils {
             if (StringUtils.isNotBlank(str)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, false), clazz);
                 Object obj = clazz.newInstance();
-                if (EuropeanaUriUtils.isUri(str) || preserveIdentifiers) {
+                // when adding as object, the str value maybe an absolute url (starting with http or https), for fields like
+                // edmIsShownBy, edmIsShownAt etc. And, we don't want to add the Base Url to those values.
+                // That's why the check for absoluteUri is added here.
+                if (EuropeanaUriUtils.isAbsoluteUri(str) || preserveIdentifiers) {
                     ((ResourceType) obj).setResource(str);
                 } else {
                     ((ResourceType) obj).setResource(getBaseUrl(str));
@@ -792,31 +796,75 @@ public final class EdmUtils {
         return false;
     }
 
+    /**
+     * Adds the values as list.
+     * Prefix is always null and addBaseUrl is always set to false.
+     *
+     * @param dest
+     * @param clazz
+     * @param vals
+     * @param <T>
+     * @return
+     */
     public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals) {
-        return addAsList(dest, clazz, vals, null);
+        return addAsList(dest, clazz, vals, null, false);
     }
 
-    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix) {
+    /**
+     * Adds values as List
+     * if prefix present adds the prefix in the values
+     * OR if addBaseUrl true, will check if the value is an absolute url or not.
+     *                        if not will add the base Url to the value.
+     * @param dest
+     * @param clazz
+     * @param vals
+     * @param prefix
+     * @param addBaseUrl
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean addAsList(Object dest, Class<T> clazz, String[] vals, String prefix, boolean addBaseUrl) {
         try {
             if (StringArrayUtils.isNotBlank(vals)) {
                 Method method = dest.getClass().getMethod(getSetterMethodName(clazz, true), List.class);
-                if (StringUtils.isNotBlank(prefix)) {
-                    String[] valNew = new String[vals.length];
-                    int i = 0;
-                    for (String val : vals) {
-                        valNew[i] = prefix + val;
-                        i++;
-                    }
-                    method.invoke(dest, convertListFromArray(clazz, valNew));
-                } else {
-                    method.invoke(dest, convertListFromArray(clazz, vals));
-                }
+                String[] newValues = getModifiedValues(vals, prefix, addBaseUrl);
+                method.invoke(dest, convertListFromArray(clazz, newValues));
                 return true;
             }
         } catch (SecurityException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
             LOG.error(e.getClass().getSimpleName() + "  " + e.getMessage(), e);
         }
         return false;
+    }
+
+    /**
+     * Returns the String array with either prefix added to all the values
+     * OR base url added to the relative uri's
+     * OR else returns the original array
+     * @param values
+     * @param prefix
+     * @param addBaseUrl
+     * @return
+     */
+    private static String[] getModifiedValues(String[] values, String prefix, boolean addBaseUrl) {
+        String[] newValues = new String[values.length];
+        if (StringUtils.isNotBlank(prefix)) {
+            int i = 0;
+            for (String val : values) {
+                newValues[i] = prefix + val;
+                i++;
+            }
+        }
+        else if (addBaseUrl) {
+            int i = 0;
+            for (String value : values) {
+                newValues[i] = EuropeanaUriUtils.isRelativeUri(value) ? getBaseUrl(value) : value;
+                i++;
+            }
+        } else {
+            return values;
+        }
+        return newValues;
     }
 
     private static String getSetterMethodName(Class<?> clazz, boolean list) {
