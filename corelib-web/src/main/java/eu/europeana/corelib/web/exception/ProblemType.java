@@ -17,7 +17,7 @@ public enum ProblemType {
     SEARCH_START_AND_CURSOR("400-SD", "Parameters 'start' and 'cursorMark' cannot be used together", ProblemResponseAction.LOG_WARN),
     SEARCH_QUERY_EMPTY("400-SE", "Empty search query parameter", ProblemResponseAction.LOG_WARN),
     BOOST_PARAM_INVALID_FORMAT("400-SB", "Invalid boost parameter. Parameter should start with '{!edismax' and end with '}'.", ProblemResponseAction.LOG_ERR),
-    BOOST_PARAM_INVALID_VALUE("400-SB", "Invalid boost parameter. Multiple value of 'ps', 'tie', 'qf', 'pf', OR curly braces in between are not allowed", ProblemResponseAction.LOG_ERR),
+    BOOST_PARAM_INVALID_VALUE("400-SB", "Invalid boost parameter. Curly braces in between are not allowed", ProblemResponseAction.LOG_ERR),
 
     SEARCH_HITSELECTOR_INVALID("400-SH", "Invalid search hit selector value", ProblemResponseAction.LOG_WARN),
     SEARCH_PAGE_LIMIT_REACHED("400-SL",
