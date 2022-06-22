@@ -554,8 +554,10 @@ public final class EdmUtils {
             }
             addAsList(aggregation, Rights.class, aggr.getDcRights());
             addAsList(aggregation, HasView.class, aggr.getHasView());
-            EdmWebResourceUtils.createWebResources(rdf, aggr, preserveIdentifiers);
             aggregationList.add(aggregation);
+            if (aggr.getWebResources() != null && !aggr.getWebResources().isEmpty()) {
+                EdmWebResourceUtils.createWebResources(rdf, aggr, preserveIdentifiers);
+            }
         }
         rdf.setAggregationList(aggregationList);
     }

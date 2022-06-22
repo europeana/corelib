@@ -82,7 +82,9 @@ public class EdmWebResourceUtils {
             setIsReferencedBy(wr, wResource);
             webResources.add(wResource);
         }
-
+        if (rdf.getWebResourceList() != null && !rdf.getWebResourceList().isEmpty()) {
+            webResources.addAll(rdf.getWebResourceList());
+        }
         rdf.setWebResourceList(webResources);
     }
 
