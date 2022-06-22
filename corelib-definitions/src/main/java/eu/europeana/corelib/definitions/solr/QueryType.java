@@ -8,7 +8,9 @@ public enum QueryType {
 	ADVANCED("advanced"), 
 	MORE_LIKE_THIS("moreLikeThis"),
 	SIMPLE("search"),
-	BM25F("bm25f");
+	BM25F("bm25f"),
+	DISMAX("dismax"),
+	EDISMAX("edismax");
 
 	private String queryType;
 
