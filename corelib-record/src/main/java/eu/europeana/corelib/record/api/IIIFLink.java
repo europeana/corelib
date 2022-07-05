@@ -232,26 +232,21 @@ public final class IIIFLink {
     private static void addManifestWebResource(FullBean bean, List<WebResource> webResourcesWithIIIFLinks) {
         // add timing information to see impact
         long start = System.nanoTime();
+        ((List<WebResource>)bean.getAggregations().get(0).getWebResources()).addAll(getManifestResources(webResourcesWithIIIFLinks));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding {} new manifest web resources with dcTermsIsReferencedBy values took {} ms", webResourcesWithIIIFLinks.size(),
+                    (double) (System.nanoTime() - start) / 1_000_0000);
+        }
+    }
 
+    private static List<WebResource> getManifestResources(List<WebResource> webResourcesWithIIIFLinks) {
         List<WebResource> manifestResources = new ArrayList<>();
-
         webResourcesWithIIIFLinks.stream().forEach(webResource -> {
             WebResource manifestResource = new WebResourceImpl();
-            manifestResource.setAbout(webResource.getDctermsIsReferencedBy()[0]);
+            manifestResource.setAbout(webResource.getDctermsIsReferencedBy()[0]); // will never be null or empty
             manifestResource.setRdfType(MANIFEST_RDF_TYPE);
             manifestResources.add(manifestResource);
         });
-
-        ((List<WebResource>)bean.getAggregations().get(0).getWebResources()).addAll(manifestResources);
-
-        // fail-safe check
-        if(webResourcesWithIIIFLinks.size() != manifestResources.size()) {
-            LOG.error("Mismatch between the - {} resources with IIIF Links and {} manifest resources.",
-                    webResourcesWithIIIFLinks.size(), manifestResources.size());
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Adding {} new manifest web resources with dcTermsIsReferencedBy values took {} ms", manifestResources.size(),
-                    (double) (System.nanoTime() - start) / 1_000_0000);
-        }
+        return manifestResources;
     }
 }
