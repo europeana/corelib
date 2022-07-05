@@ -113,8 +113,8 @@ public class RecordServiceImpl implements RecordService {
         // 2. add meta info for all webresources + generate attribution snippets
         WebMetaInfo.injectWebMetaInfoBatch(fullBean, recordDao, attributionCss);
 
-        // 3. add link to IIIF for newspaper and AV/EUScreen items
-        IIIFLink.addReferencedBy(fullBean, manifestAddApiUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
+        // 3. add link to IIIF for newspaper and AV/EUScreen items. Also adds the manifest resources for the IIIF links.
+        IIIFLink.addReferencedByAndManifestResources(fullBean, manifestAddApiUrl, urls.getApi2BaseUrl(), manifestBaseUrl);
 
         // 4. make sure we add /item in various places
         UrlConverter.addSlashItem(fullBean);

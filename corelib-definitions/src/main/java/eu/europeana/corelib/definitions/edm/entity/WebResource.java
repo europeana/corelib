@@ -191,6 +191,11 @@ public interface WebResource extends AbstractEdmEntity {
   String getRdfType();
 
   /**
+   * rdf:type for edm:WebResource
+   */
+  void setRdfType(String rdfType);
+
+  /**
    * edm:codecName
    */
   String getEdmCodecName();

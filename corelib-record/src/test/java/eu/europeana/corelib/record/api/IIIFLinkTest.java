@@ -4,6 +4,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +16,6 @@ public class IIIFLinkTest {
     private static final String PRESENTATION_PATH = "/presentation";
     private static final String MANIFEST_PATH = "/manifest";
     private static final String API2_BASE_URL = "api-test.eanadev.org";
-
 
     private String expectedIIIFUrl(String recordId) {
         return MANIFEST_BASE_URL + PRESENTATION_PATH + recordId + MANIFEST_PATH;
@@ -33,10 +33,9 @@ public class IIIFLinkTest {
         String edmIsShownBy = fb.getAggregations().get(0).getEdmIsShownBy();
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(edmIsShownBy, "image/jpeg"));
 
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
-        for (WebResource wr : fb.getAggregations().get(0).getWebResources()) {
-            assertEquals(expectedIIIFUrl(recordId), wr.getDctermsIsReferencedBy()[0]);
-        }
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+
+        verifyManifestUrlAndResources(fb, 2, expectedIIIFUrl(recordId));
     }
 
     /**
@@ -52,10 +51,9 @@ public class IIIFLinkTest {
         fb.getAggregations().get(0).setHasView(new String[] {id});
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(id, "application/xhtml+xml"));
 
-        IIIFLink.addReferencedBy(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
-        for (WebResource wr : fb.getAggregations().get(0).getWebResources()) {
-            assertEquals(expectedIIIFUrl(recordId) + "?recordApi=https://"+ API2_BASE_URL, wr.getDctermsIsReferencedBy()[0]);
-        }
+        IIIFLink.addReferencedByAndManifestResources(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
+
+        verifyManifestUrlAndResources(fb, 2, expectedIIIFUrl(recordId) + "?recordApi=https://"+ API2_BASE_URL);
     }
 
     /**
@@ -70,9 +68,10 @@ public class IIIFLinkTest {
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource("I'm a webresource id", "image/jpeg"));
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource("Me too!", "video/mp4"));
 
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
         assertNull(agg.getWebResources().get(0).getDctermsIsReferencedBy());
         assertNull(agg.getWebResources().get(1).getDctermsIsReferencedBy());
+        assertEquals(2, agg.getWebResources().size());
     }
 
     /**
@@ -91,7 +90,8 @@ public class IIIFLinkTest {
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(edmIsShownBy, "image/jpeg"));
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(hasViewId, "application/pdf"));
 
-        IIIFLink.addReferencedBy(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
+        IIIFLink.addReferencedByAndManifestResources(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
+        assertEquals(2, agg.getWebResources().size());
         for (WebResource wr : agg.getWebResources()) {
             assertNull(wr.getDctermsIsReferencedBy());
         }
@@ -117,7 +117,8 @@ public class IIIFLinkTest {
         wri.setDctermsIsReferencedBy(presetValue);
         MockBeanUtils.addWebResource(fb, wri);
 
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        assertEquals(2, agg.getWebResources().size());
         for (WebResource wr : agg.getWebResources()) {
             String[] value = wr.getDctermsIsReferencedBy();
             if (wr.getAbout().equals(hasViewId)) {
@@ -144,8 +145,8 @@ public class IIIFLinkTest {
         wri.setDctermsIsReferencedBy(presetValue);
         MockBeanUtils.addWebResource(fb, wri);
 
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
-        assertEquals(expectedIIIFUrl(recordId), agg.getWebResources().get(0).getDctermsIsReferencedBy()[0]);
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        verifyManifestUrlAndResources(fb, 2, expectedIIIFUrl(recordId));
     }
 
     /**
@@ -165,12 +166,27 @@ public class IIIFLinkTest {
         WebResourceImpl wri = MockBeanUtils.generateWebResource(edmIsShownAt, "video/mp4");
         MockBeanUtils.addWebResource(fb, wri);
 
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
         assertNull(agg.getWebResources().get(0).getDctermsIsReferencedBy());
 
         // now we try again as an A/V item
         fb.getProxies().get(0).setEdmType("VIDEO");
-        IIIFLink.addReferencedBy(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
-        assertEquals(expectedIIIFUrl(recordId), agg.getWebResources().get(0).getDctermsIsReferencedBy()[0]);
+        IIIFLink.addReferencedByAndManifestResources(fb, false, API2_BASE_URL, MANIFEST_BASE_URL);
+        verifyManifestUrlAndResources(fb, 2, expectedIIIFUrl(recordId));
+    }
+
+    private void verifyManifestUrlAndResources(FullBean fb, int expectedSize, String expectedIIIFUrl) {
+        // check the size of the web resources = existing + newly added manifest resources
+        assertEquals(expectedSize, fb.getAggregations().get(0).getWebResources().size());
+
+        // Verify if the existing web resources is updated with DctermsIsReferencedBy value
+        // and manifest web resource is added with expectedIIIFUrl
+        for (WebResource wr : fb.getAggregations().get(0).getWebResources()) {
+            if (StringUtils.equals(wr.getRdfType(), IIIFLink.MANIFEST_RDF_TYPE) && wr.getDctermsIsReferencedBy() == null) {
+                assertEquals(expectedIIIFUrl, wr.getAbout());
+            } else {
+                assertEquals(expectedIIIFUrl, wr.getDctermsIsReferencedBy()[0]);
+            }
+        }
     }
 }
