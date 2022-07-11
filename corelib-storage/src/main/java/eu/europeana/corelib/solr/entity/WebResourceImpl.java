@@ -59,6 +59,7 @@ public class WebResourceImpl implements WebResource {
     private String[] svcsHasService;
     private String[] dctermsIsReferencedBy;
     private String edmPreview;
+    private String rdfType;
 
     @Transient
     // Jackson JsonIgnore annotation is required for proper serialization by Search & Record API
@@ -272,7 +273,15 @@ public class WebResourceImpl implements WebResource {
         if (webResourceMetaInfo != null && webResourceMetaInfo.getTextMetaInfo() != null) {
             return webResourceMetaInfo.getTextMetaInfo().getRdfType();
         }
+        if (this.rdfType != null) {
+            return this.rdfType;
+        }
         return null;
+    }
+
+    @Override
+    public void setRdfType(String rdfType) {
+        this.rdfType = rdfType;
     }
 
     @Override

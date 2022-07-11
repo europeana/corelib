@@ -4,6 +4,7 @@ import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
+import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,7 @@ public final class IIIFLink {
     private static final String HTTPS_WWW_EUSCREEN_EU              = "https://www.euscreen.eu";
     private static final String HTTP_DEFAULT_IIIF_BASE_URL         = "http://iiif.europeana.eu";
     private static final String HTTPS_DEFAULT_IIIF_BASE_URL        = "https://iiif.europeana.eu";
+    public static final String MANIFEST_RDF_TYPE                   = "http://iiif.io/api/presentation/3#Manifest";
 
     private static final String BLOCKED_MIME_TYPES_FILENAME = "IIIF_blocked_mime_types.txt";
     private static List<String> blockedMimeTypes;
@@ -64,6 +66,8 @@ public final class IIIFLink {
      * Note that only edmIsShownBy or hasView webresources are considered in these checks (or edmIsShownAt for EU-screen
      * A/V items)
      *
+     * Also Adds the manifest Web resources for the IIIF manifest links added in the dcReferencedBy field
+     *
      * @param bean           fullbean to which referenceBy IIIF link should be added
      * @param manifestAddApiUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
      *                       field. This extra parameter tells IIIF manifest to load data from the API instance specified
@@ -71,7 +75,7 @@ public final class IIIFLink {
      * @param api2BaseUrl    FQDN of API that should be used by IIIF manifest (works only if manifestAddUrl is true)
      * @param manifestBaseUrl IIIF manifest location
      */
-    public static void addReferencedBy(FullBean bean, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
+    public static void addReferencedByAndManifestResources(FullBean bean, Boolean manifestAddApiUrl, String api2BaseUrl, String manifestBaseUrl) {
         // add timing information to see impact
         long start = System.nanoTime();
 
@@ -103,6 +107,9 @@ public final class IIIFLink {
         for (WebResource wr : webResourcesToUpdate) {
             addManifestUrl(wr, bean.getAbout(), manifestAddApiUrl, api2BaseUrl, manifestBaseUrl);
         }
+
+        // Now, add manifest web resources for the IIIF manifest links added in the dcReferencedBy field
+        addManifestWebResource(bean, webResourcesToUpdate);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Adding dcTermsIsReferencedBy to {} web resources took {} ms", webResourcesToUpdate.size(),
@@ -217,4 +224,29 @@ public final class IIIFLink {
         wr.setDctermsIsReferencedBy(new String[]{manifestUrl});
     }
 
+    /**
+     * Adds the manifest resources from the IIIF Links web resources provided
+     * @param bean
+     * @param webResourcesWithIIIFLinks
+     */
+    private static void addManifestWebResource(FullBean bean, List<WebResource> webResourcesWithIIIFLinks) {
+        // add timing information to see impact
+        long start = System.nanoTime();
+        ((List<WebResource>)bean.getAggregations().get(0).getWebResources()).addAll(getManifestResources(webResourcesWithIIIFLinks));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding {} new manifest web resources with dcTermsIsReferencedBy values took {} ms", webResourcesWithIIIFLinks.size(),
+                    (double) (System.nanoTime() - start) / 1_000_0000);
+        }
+    }
+
+    private static List<WebResource> getManifestResources(List<WebResource> webResourcesWithIIIFLinks) {
+        List<WebResource> manifestResources = new ArrayList<>();
+        webResourcesWithIIIFLinks.stream().forEach(webResource -> {
+            WebResource manifestResource = new WebResourceImpl();
+            manifestResource.setAbout(webResource.getDctermsIsReferencedBy()[0]); // will never be null or empty
+            manifestResource.setRdfType(MANIFEST_RDF_TYPE);
+            manifestResources.add(manifestResource);
+        });
+        return manifestResources;
+    }
 }
