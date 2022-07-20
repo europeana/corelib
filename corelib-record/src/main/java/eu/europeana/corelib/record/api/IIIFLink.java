@@ -5,6 +5,7 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.Proxy;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
+import eu.europeana.corelib.utils.ComparatorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -241,9 +242,15 @@ public final class IIIFLink {
 
     private static List<WebResource> getManifestResources(List<WebResource> webResourcesWithIIIFLinks) {
         List<WebResource> manifestResources = new ArrayList<>();
-        webResourcesWithIIIFLinks.stream().forEach(webResource -> {
+        // get the unique IIIF links to be added as a manifest resources.
+        List<String> manifestLinksToAdd = ComparatorUtils.removeDuplicates(
+                webResourcesWithIIIFLinks.stream().map(
+                        webResource -> webResource.getDctermsIsReferencedBy()[0]) // will never be null or empty
+                        .collect(Collectors.toList()));
+
+        manifestLinksToAdd.stream().forEach(manifestLink -> {
             WebResource manifestResource = new WebResourceImpl();
-            manifestResource.setAbout(webResource.getDctermsIsReferencedBy()[0]); // will never be null or empty
+            manifestResource.setAbout(manifestLink);
             manifestResource.setRdfType(MANIFEST_RDF_TYPE);
             manifestResources.add(manifestResource);
         });
