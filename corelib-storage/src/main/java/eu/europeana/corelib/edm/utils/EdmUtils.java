@@ -87,7 +87,11 @@ public final class EdmUtils {
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
             return out.toString(StandardCharsets.UTF_8);
         } catch (JiBXException | IOException e) {
-            LOG.error("Error marshalling RDF", e);
+            String id = null;
+            if (rdf != null && rdf.getProvidedCHOList() != null && !rdf.getProvidedCHOList().isEmpty()) {
+                id = rdf.getProvidedCHOList().get(0).getAbout();
+            }
+            LOG.error("Error marshalling RDF of record {}", id, e);
         }
         return null;
     }
