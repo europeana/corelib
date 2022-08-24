@@ -56,19 +56,32 @@ public interface Timespan extends ContextualClass {
 	 *            A String array representing the isPartOf fields for a Timespan
 	 */
 	void setIsPartOf(Map<String,List<String>> isPartOf);
-	
+
 	/**
 	 * sets the dcterms:hasPart for the edm:Timespan
 	 * @param hasPart
 	 */
 	void setDctermsHasPart(Map<String,List<String>> hasPart);
-	
+
 	/**
-	 * 
+	 *
 	 * @return the dcterms:hasPart for the edm:Timespan
 	 */
 	Map<String,List<String>> getDctermsHasPart();
-	
+
+
+	/**
+	 * sets the skos:notation for the edm:Timespan
+	 * @param skosNotation
+	 */
+	void setSkosNotation(Map<String,List<String>> skosNotation);
+
+	/**
+	 *
+	 * @return the skos:notation for the edm:Timespan
+	 */
+	Map<String,List<String>> getSkosNotation();
+
 	/**
 	 * sets the owl:sameAs for the edm:Timespan
 	 * @param owlSameAs

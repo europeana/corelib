@@ -22,6 +22,7 @@ public class TimespanImpl extends ContextualClassImpl implements
 	private Map<String,List<String>> end;
 	private Map<String,List<String>> isPartOf;
 	private Map<String,List<String>> dctermsHasPart;
+	private Map<String,List<String>> skosNotation;
 
 	private String[] owlSameAs;
 	private String isNextInSequence;
@@ -80,6 +81,16 @@ public class TimespanImpl extends ContextualClassImpl implements
 	@Override
 	public void setDctermsHasPart(Map<String,List<String>> dctermsHasPart) {
 		this.dctermsHasPart = dctermsHasPart;
+	}
+
+	@Override
+	public Map<String, List<String>> getSkosNotation() {
+		return this.skosNotation;
+	}
+
+	@Override
+	public void setSkosNotation(Map<String, List<String>> skosNotation) {
+		this.skosNotation = skosNotation;
 	}
 
 	@Override
