@@ -26,6 +26,7 @@ import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
@@ -265,4 +266,24 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
+    @Override
+    public Long getItemsLinkedToEntity(SolrClient solrClient, Query query) {
+        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(false));
+        solrQuery.setRows(query.getPageSize());
+        try {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Solr query is: {}", solrQuery);
+            }
+
+            QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+
+            if (queryResponse.getResponse() != null) {
+                SolrDocumentList response = (SolrDocumentList) queryResponse.getResponse().get("response");
+                return response != null ? response.getNumFound() : 0;
+            }
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
+        }
+        return 0L;
+    }
 }

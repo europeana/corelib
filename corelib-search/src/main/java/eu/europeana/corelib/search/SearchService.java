@@ -48,4 +48,6 @@ public interface SearchService {
      * @return last modification time of Solr index
      */
     Date getLastSolrUpdate(SolrClient solrClient) throws EuropeanaException;
+
+    Long getItemsLinkedToEntity(SolrClient solrClient, Query query);
 }
