@@ -1,6 +1,7 @@
 package eu.europeana.corelib.search.impl;
 
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.definitions.solr.model.QuerySort;
 import eu.europeana.corelib.edm.exceptions.SolrIOException;
@@ -25,6 +26,7 @@ import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
@@ -34,10 +36,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans from Solr
@@ -285,5 +284,34 @@ public class SearchServiceImpl implements SearchService {
             LOG.error("Error querying solr", e);
         }
         return 0L;
+    }
+
+    @Override
+    public Map<String, Long> getFacet(SolrClient solrClient, Query query, SolrFacetType facetType) {
+        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(false));
+        solrQuery.setRows(0);
+        solrQuery.setFacet(true);
+        solrQuery.addFacetField(facetType.toString());
+
+        try {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Solr query is: {}", solrQuery);
+            }
+            QueryResponse queryResponse = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+
+            if (queryResponse.getResponse() != null && !queryResponse.getFacetFields().isEmpty()) {
+                FacetField facetField = queryResponse.getFacetFields().get(0);
+                Map<String, Long> valueCountMap = new HashMap<>();
+                for (var count : facetField.getValues()) {
+                    if (StringUtils.isNotEmpty(count.getName()) && count.getCount() > 0) {
+                        valueCountMap.put(count.getName(), count.getCount());
+                    }
+                }
+               return valueCountMap;
+            }
+        } catch (SolrServerException | IOException e) {
+            LOG.error("Error querying solr", e);
+        }
+        return Collections.emptyMap();
     }
 }
