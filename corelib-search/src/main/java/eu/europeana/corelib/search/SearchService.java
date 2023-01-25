@@ -1,12 +1,14 @@
 package eu.europeana.corelib.search;
 
 import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.solr.SolrFacetType;
 import eu.europeana.corelib.definitions.solr.model.Query;
 import eu.europeana.corelib.search.model.ResultSet;
 import eu.europeana.corelib.web.exception.EuropeanaException;
 import org.apache.solr.client.solrj.SolrClient;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Search service that retrieves BriefBeans or APIBeans from Solr
@@ -48,4 +50,9 @@ public interface SearchService {
      * @return last modification time of Solr index
      */
     Date getLastSolrUpdate(SolrClient solrClient) throws EuropeanaException;
+
+    Long getItemsLinkedToEntity(SolrClient solrClient, Query query);
+
+     Map<String, Long> getFacet(SolrClient solrClient, Query query, SolrFacetType facetType);
+
 }
