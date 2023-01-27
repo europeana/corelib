@@ -39,7 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <metis.version>6</metis.version>
-
+        <sonar.organization>europeana</sonar.organization>
         <apacheSolr.version>8.11.1</apacheSolr.version>
         <apacheLucene.version>8.11.1</apacheLucene.version>
         <mongoDriver.version>4.0.2</mongoDriver.version>
