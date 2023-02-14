@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <name>Core Library</name>
-    <description>Europeana Core Library with common functionality for Search & Record API</description>
+    <description>Europeana Core Library with common functionality for Search and Record API</description>
     <organization>
         <url>http://www.europeana.eu</url>
         <name>Europeana Foundation</name>
