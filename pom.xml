@@ -136,15 +136,28 @@
     </dependencies>
 
     <repositories>
+        <!--Release repositories-->
         <repository>
-            <id>libs-release-local</id>
-            <name>europeana-releases</name>
-            <url>http://artifactory.eanadev.org/artifactory/libs-release</url>
+            <id>libs-release</id>
+            <name>libs-release</name>
+            <url>https://artifactory.eanadev.org/artifactory/libs-release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
-            <id>libs-snapshots-local</id>
-            <name>europeana-snapshots</name>
-            <url>http://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+            <id>libs-snapshot</id>
+            <name>libs-snapshot</name>
+            <url>https://artifactory.eanadev.org/artifactory/libs-snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
