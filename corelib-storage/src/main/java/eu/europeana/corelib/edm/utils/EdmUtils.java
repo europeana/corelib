@@ -61,6 +61,18 @@ public final class EdmUtils {
      * @param fullBean The FullBean to convert
      * @return The resulting EDM string in RDF-XML
      */
+    public static synchronized String toEDM(FullBeanImpl fullBean, boolean preserveIdentifiers) {
+        RDF rdf = toRDF(fullBean, preserveIdentifiers);
+        return marshallToEDM(rdf);
+    }
+
+
+    /**
+     * Convert a FullBean to an EDM String
+     *
+     * @param fullBean The FullBean to convert
+     * @return The resulting EDM string in RDF-XML
+     */
     public static synchronized String toEDM(FullBeanImpl fullBean) {
         RDF rdf = toRDF(fullBean);
         return marshallToEDM(rdf);
@@ -109,6 +121,9 @@ public final class EdmUtils {
      * Convert a FullBean to an RDF object
      * @param fullBean the fullbean to convert
      * @param preserveIdentifiers if true does not change the identifiers of entities, if false it
+     *
+     *  NOTE : for re-indexing the preserveIdentifiers is set to true. We dO NOT chnage the record value during re-indexing
+     *
      * will add the {@link #BASE_URL} as prefix if it's not already an uri}.
      * @return RDF object
      */
@@ -220,8 +235,12 @@ public final class EdmUtils {
                 HasBody hasBody = new HasBody();
                 hasBody.setResource(anno.getBody());
                 qualityAnnotation.setHasBody(hasBody);
-
-                addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
+                // this for cases we don not want to append or change the values with a base urls. Mostly used in re-indexing
+                if (preserveIdentifiers) {
+                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
+                } else {
+                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
+                }
             }
 
             rdf.setQualityAnnotationList(resultList);
@@ -462,7 +481,12 @@ public final class EdmUtils {
             proxy.setType(type);
 
             addAsObject(proxy, CurrentLocation.class, prx.getEdmCurrentLocation());
-            addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
+            // this for cases we don not want to append or change the values with a base urls. Mostly used in re-indexing
+            if (preserveIdentifiers) {
+                addAsList(proxy, Lineage.class, prx.getLineage());
+            } else {
+                addAsList(proxy, Lineage.class, prx.getLineage(), null, true);
+            }
 
             addAsList(proxy, HasMet.class, prx.getEdmHasMet());
             addAsList(proxy, HasType.class, prx.getEdmHasType());
