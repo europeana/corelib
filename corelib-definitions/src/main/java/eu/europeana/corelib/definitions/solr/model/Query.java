@@ -1,20 +1,17 @@
 package eu.europeana.corelib.definitions.solr.model;
 
+import eu.europeana.corelib.definitions.solr.SolrFacetType;
+import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
+import eu.europeana.corelib.utils.StringArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-
-import eu.europeana.corelib.definitions.solr.SolrFacetType;
-import eu.europeana.corelib.definitions.solr.TechnicalFacetType;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import eu.europeana.corelib.utils.EuropeanaStringUtils;
-import eu.europeana.corelib.utils.StringArrayUtils;
-import eu.europeana.corelib.utils.model.LanguageVersion;
-import org.apache.logging.log4j.LogManager;
 
 /**
  * @author Willem-Jan Boogerd <www.eledge.net/contact>
@@ -50,8 +47,6 @@ public class Query implements Cloneable {
     private String executedQuery;
 
     private int nrSelectors;
-
-    private QueryTranslation queryTranslation;
 
     private Map<String, String> valueReplacementMap;
     private Map<String, String> parameterMap = new HashMap<>();
@@ -95,13 +90,6 @@ public class Query implements Cloneable {
      */
 
     public String getQuery() {
-        return query;
-    }
-
-    public String getQuery(boolean withTranslations) {
-        if (withTranslations && queryTranslation != null && StringUtils.isNotBlank(queryTranslation.getModifiedQuery())) {
-            return queryTranslation.getModifiedQuery();
-        }
         return query;
     }
 
@@ -164,15 +152,6 @@ public class Query implements Cloneable {
     public Query setValueReplacements(Map<String, String> valueReplacementMap) {
         this.valueReplacementMap = valueReplacementMap;
         return this;
-    }
-
-    public Query setQueryTranslation(QueryTranslation queryTranslation) {
-        this.queryTranslation = queryTranslation;
-        return this;
-    }
-
-    public QueryTranslation getQueryTranslation() {
-        return queryTranslation;
     }
 
     public Query addFacetQuery(QueryFacet queryFacet) {
@@ -716,17 +695,6 @@ public class Query implements Cloneable {
         for (FacetCollector collector : register.values()) {
             facetedRefinementsList.add(collector.toString());
         }
-    }
-
-    public static String concatenateQueryTranslations(List<LanguageVersion> languageVersions) {
-        List<String> queryTranslationTerms = new ArrayList<>();
-        for (LanguageVersion term : languageVersions) {
-            String phrase = EuropeanaStringUtils.createPhraseValue(term.getText());
-            if (!queryTranslationTerms.contains(phrase)) {
-                queryTranslationTerms.add(phrase);
-            }
-        }
-        return StringUtils.join(queryTranslationTerms, " OR ");
     }
 
     private class FacetCollector {

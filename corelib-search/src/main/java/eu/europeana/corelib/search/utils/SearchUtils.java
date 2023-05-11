@@ -1,16 +1,15 @@
 package eu.europeana.corelib.search.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-
+import eu.europeana.corelib.definitions.edm.beans.ApiBean;
+import eu.europeana.corelib.definitions.edm.beans.BriefBean;
+import eu.europeana.corelib.definitions.edm.beans.IdBean;
+import eu.europeana.corelib.definitions.edm.beans.RichBean;
+import eu.europeana.corelib.definitions.solr.DocType;
+import eu.europeana.corelib.edm.utils.FieldMapping;
+import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
+import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
@@ -18,29 +17,14 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
-import eu.europeana.corelib.definitions.edm.beans.ApiBean;
-import eu.europeana.corelib.definitions.edm.beans.BriefBean;
-import eu.europeana.corelib.definitions.edm.beans.IdBean;
-import eu.europeana.corelib.definitions.edm.beans.RichBean;
-import eu.europeana.corelib.definitions.solr.DocType;
-import eu.europeana.corelib.definitions.solr.model.QueryTranslation;
-import eu.europeana.corelib.edm.utils.FieldMapping;
-import eu.europeana.corelib.search.queryextractor.QueryExtractor;
-import eu.europeana.corelib.search.queryextractor.QueryModification;
-import eu.europeana.corelib.search.queryextractor.QueryNormalizer;
-import eu.europeana.corelib.search.queryextractor.QueryToken;
-import eu.europeana.corelib.search.queryextractor.QueryType;
-import eu.europeana.corelib.solr.bean.impl.ApiBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.BriefBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.IdBeanImpl;
-import eu.europeana.corelib.solr.bean.impl.RichBeanImpl;
-import eu.europeana.corelib.utils.model.LanguageVersion;
-import eu.europeana.corelib.web.service.WikipediaApiService;
-import eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SearchUtils {
-
-	private static WikipediaApiService wikipediaApiService;
 
 	private static final Pattern ID_PATTERN = Pattern.compile("^\\{!id=([^:]+):([^:]+) ex=(.*?)\\}");
 
@@ -185,51 +169,6 @@ public class SearchUtils {
 		return new ArrayList<>(map.values());
 	}
 
-	/**
-	 * @deprecated will be replaced by new translation services
-	 */
-	@Deprecated(since = "July 2021")
-	public static QueryTranslation translateQuery(String query, List<String> languages) {
-		QueryTranslation queryTranslation = new QueryTranslation();
-		if (wikipediaApiService == null) {
-			wikipediaApiService = WikipediaApiServiceImpl.getBeanInstance();
-		}
-		QueryExtractor queryExtractor = new QueryExtractor(query);
-		List<QueryToken> queryTokens = queryExtractor.extractInfo(true);
-		List<QueryModification> queryModifications = new ArrayList<>();
-		for (QueryToken token : queryTokens) {
-			if (!token.getType().equals(QueryType.TERMRANGE)) {
-				List<LanguageVersion> languageVersions = wikipediaApiService.getVersionsInMultiLanguage(token.getTerm(), languages);
-				if (!languageVersions.isEmpty()) {
-					queryTranslation.addLanguageVersions(token.getExtendedPosition(), languageVersions);
-					List<String> alternatives = extractLanguageVersions(languageVersions);
-					if (!alternatives.isEmpty()) {
-						QueryModification queryModification = token.createModification(query, alternatives);
-						if (queryModification != null) {
-							queryModifications.add(queryModification);
-						}
-					}
-				}
-			}
-		}
-		queryTranslation.sortLanguageVersions();
-		queryTranslation.setModifiedQuery(queryExtractor.rewrite(queryModifications));
-		return queryTranslation;
-	}
-
-	private static List<String> extractLanguageVersions(List<LanguageVersion> languageVersions) {
-		List<String> termsList = new ArrayList<>();
-		Set<String> terms = new HashSet<>();
-		for (LanguageVersion languageVersion : languageVersions) {
-			String text = languageVersion.getText();
-			if (StringUtils.isNotBlank(text)) {
-				terms.add(languageVersion.getText());
-			}
-		}
-		termsList.addAll(terms);
-		return termsList;
-	}
-
 	public static boolean isSimpleQuery(String queryTerm) {
 		return isNotFieldQuery(queryTerm)
 				&& (isTermQuery(queryTerm) || containsNoneSearchOperators(queryTerm));
@@ -255,44 +194,6 @@ public class SearchUtils {
 
 	private static boolean isNotFieldQuery(String queryTerm) {
 		return !StringUtils.contains(queryTerm, ":");
-	}
-
-	/**
-	 * @deprecated unused, will be replaced by new translation services
-	 */
-	@Deprecated(since = "July 2021")
-	public static String normalizeBooleans(String query) {
-		return QueryNormalizer.normalizeBooleans(query);
-	}
-
-	/**
-	 * @deprecated unused, will be replaced by new translation services
-	 */
-	@Deprecated(since = "July 2021")
-	public static void translateQuery(String rawQueryString, QueryTranslation translatedQueries) {
-		Map<String, List<LanguageVersion>> languageVersionMap = translatedQueries.getSortedMap();
-		int lastPart = 0;
-		String rewritten = "";
-		for (String key : languageVersionMap.keySet()) {
-			String[] parts = key.split(":", 2);
-			int start = Integer.parseInt(parts[0]);
-			int end = Integer.parseInt(parts[1]);
-			rewritten += rawQueryString.substring(lastPart, start);
-			String query = rawQueryString.substring(start, end);
-			lastPart = end;
-			List<String> languageVersions = extractLanguageVersions(languageVersionMap.get(key));
-			if (languageVersions != null && languageVersions.size() > 0) {
-				if (!(query.startsWith("\"") && query.endsWith("\"") && query.contains(" "))) {
-					query = "(" + query + ")";
-				}
-				String modification = "(" + query + " OR \"" + StringUtils.join(languageVersions, "\" OR \"") + "\"" + ")";
-				rewritten += modification;
-			}
-		}
-		if (lastPart < rawQueryString.length()) {
-			rewritten += rawQueryString.substring(lastPart);
-		}
-		translatedQueries.setModifiedQuery(rewritten);
 	}
 
 	public static String fixBuggySolrIndex(String queryString){
