@@ -9,7 +9,4 @@
 	<!-- USING OTHER MODULES -->
 	<import resource="corelib-definitions-context.xml" />
 
-	<!-- SERVICES -->
-	<bean id="corelib_web_wikipediaApiService" class="eu.europeana.corelib.web.service.impl.WikipediaApiServiceImpl" />
-
 </beans>

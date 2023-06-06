@@ -92,7 +92,7 @@ public class SearchServiceImpl implements SearchService {
         if (isValidBeanClass(beanClazz)) {
             String[] refinements = query.getRefinements(true);
 
-            SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(true));
+            SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
 
             if (ArrayUtils.isNotEmpty(refinements)) {
                 solrQuery.addFilterQuery(refinements);
@@ -269,7 +269,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Long getItemsLinkedToEntity(SolrClient solrClient, Query query) {
-        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(false));
+        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
         solrQuery.setRows(query.getPageSize());
         try {
             if (LOG.isDebugEnabled()) {
@@ -290,7 +290,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Map<String, Long> getFacet(SolrClient solrClient, Query query, SolrFacetType facetType) {
-        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery(false));
+        SolrQuery solrQuery = new SolrQuery().setQuery(query.getQuery());
         solrQuery.setRows(0);
         solrQuery.setFacet(true);
         solrQuery.addFacetField(facetType.toString());
