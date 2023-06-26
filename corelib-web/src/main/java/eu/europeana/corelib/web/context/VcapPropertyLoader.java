@@ -1,7 +1,6 @@
 package eu.europeana.corelib.web.context;
 
 import eu.europeana.corelib.utils.ConfigUtils;
-import eu.europeana.corelib.web.socks.SocksProxy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -78,22 +77,6 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
             List<String> routeBaseUrls = ConfigUtils.getMatchingKeys(env.getSystemEnvironment(), ROUTE_BASEURL_PROP_REGEX);
             routeBaseUrls.forEach(key -> setVcapUrlProperty(props, key));
 
-            // We initialize socks proxy here, because it turned out to be difficult to initialize this at the appropriate
-            // time elsewhere in the (api) code
-            String host = props.getProperty("socks.host");
-            Boolean enabled = Boolean.valueOf(props.getProperty("socks.enabled"));
-            if (StringUtils.isEmpty(host)) {
-                LOG.info("No socks proxy host configured");
-            } else if (!enabled) {
-                LOG.info("Socks proxy disabled");
-            } else {
-                LOG.info("Setting up proxy at " + host);
-                initSocksProxyConfig(host,
-                        props.getProperty("socks.port"),
-                        props.getProperty("socks.user"),
-                        props.getProperty("socks.password"));
-            }
-
             rewritePropertiesToFile(props, europeanaProperties);
         } catch (IOException e) {
             LOG.error("Error reading or writing properties", e);
@@ -131,11 +114,6 @@ public class VcapPropertyLoader extends CloudFoundryVcapEnvironmentPostProcessor
         // Overwriting the original file
         FileUtils.writeStringToFile(propsFile, sb + "\n", false);
         LOG.debug("Properties: {}", sb.toString());
-    }
-
-    private void initSocksProxyConfig(String host, String port, String user, String password) {
-        SocksProxy socksProxy = new SocksProxy(host, port, user, password);
-        socksProxy.init();
     }
 
 }
