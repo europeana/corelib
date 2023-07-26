@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>corelib</artifactId>
-    <version>2.16.3-SNAPSHOT</version>
+    <version>2.16.3</version>
     <packaging>pom</packaging>
 
     <name>Core Library</name>
@@ -68,43 +68,43 @@
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-definitions</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-record</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-search</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-storage</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-utils</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-web</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
 
             <dependency>
                 <groupId>eu.europeana.corelib</groupId>
                 <artifactId>corelib-schemaorg</artifactId>
-                <version>2.16.3-SNAPSHOT</version>
+                <version>2.16.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
