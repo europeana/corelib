@@ -5,10 +5,12 @@ import eu.europeana.corelib.definitions.edm.entity.Aggregation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.solr.entity.WebResourceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class IIIFLinkTest {
 
@@ -49,10 +51,9 @@ public class IIIFLinkTest {
         FullBean fb = MockBeanUtils.mockMinimalBean(recordId);
         String id = "https://some.webresource.eu";
         fb.getAggregations().get(0).setHasView(new String[] {id});
-        MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(id, "application/xhtml+xml"));
+        MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(id, "audio/vorbis"));
 
         IIIFLink.addReferencedByAndManifestResources(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
-
         verifyManifestUrlAndResources(fb, 2, expectedIIIFUrl(recordId) + "?recordApi=https://"+ API2_BASE_URL);
     }
 
@@ -75,8 +76,7 @@ public class IIIFLinkTest {
     }
 
     /**
-     * Test if we don't add any dcTermsIsReferencedBy value if there is one webresource with a mime-type that's in our
-     * blocked mime-type list
+     * Test if we don't add any dcTermsIsReferencedBy value for invalid mimetypes web resources
      */
     @Test
     public void testNotAddManifestBlockedMimeType() {
@@ -88,14 +88,14 @@ public class IIIFLinkTest {
         String edmIsShownBy = fb.getAggregations().get(0).getEdmIsShownBy();
         agg.setHasView(new String[] {hasViewId});
         MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(edmIsShownBy, "image/jpeg"));
-        MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(hasViewId, "application/pdf"));
+        MockBeanUtils.addWebResource(fb, MockBeanUtils.generateWebResource(hasViewId, "text/html"));
 
         IIIFLink.addReferencedByAndManifestResources(fb, true, API2_BASE_URL, MANIFEST_BASE_URL);
-        assertEquals(2, agg.getWebResources().size());
-        for (WebResource wr : agg.getWebResources()) {
-            assertNull(wr.getDctermsIsReferencedBy());
-        }
+        assertEquals(3, agg.getWebResources().size());
+        checkManifestLink(agg.getWebResources(), edmIsShownBy, true);
+        checkManifestLink(agg.getWebResources(), hasViewId, false);
     }
+
 
     /**
      * Test if we don't add any dctermsIsReferencedBy values if a particular webresource already has a dcTermsIsReferenced
@@ -186,6 +186,18 @@ public class IIIFLinkTest {
                 assertEquals(expectedIIIFUrl, wr.getAbout());
             } else {
                 assertEquals(expectedIIIFUrl, wr.getDctermsIsReferencedBy()[0]);
+            }
+        }
+    }
+
+    private void checkManifestLink(List<? extends WebResource> webResourceList, String wrToCheck, boolean manifestLinkPresent) {
+        for (WebResource wr : webResourceList) {
+            if(StringUtils.equals(wr.getAbout(), wrToCheck)) {
+                if (manifestLinkPresent) {
+                    assertNotNull(wr.getDctermsIsReferencedBy());
+                } else {
+                    assertNull(wr.getDctermsIsReferencedBy());
+                }
             }
         }
     }
