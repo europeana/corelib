@@ -39,7 +39,7 @@ public final class IIIFLink {
     private static final String SUPPORTED_MIME_TYPES_FILENAME = "IIIF_supported_mime_types.txt";
     private static List<String> supportedMimeTypes;
 
-    // load blocked mime-types from file
+    // load supported mime-types from file
     static {
         URL file = IIIFLink.class.getClassLoader().getResource(SUPPORTED_MIME_TYPES_FILENAME);
         if (file == null) {
