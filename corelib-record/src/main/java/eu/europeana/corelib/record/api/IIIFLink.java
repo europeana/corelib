@@ -36,23 +36,23 @@ public final class IIIFLink {
     private static final String HTTPS_DEFAULT_IIIF_BASE_URL        = "https://iiif.europeana.eu";
     public static final String MANIFEST_RDF_TYPE                   = "http://iiif.io/api/presentation/3#Manifest";
 
-    private static final String BLOCKED_MIME_TYPES_FILENAME = "IIIF_blocked_mime_types.txt";
-    private static List<String> blockedMimeTypes;
+    private static final String SUPPORTED_MIME_TYPES_FILENAME = "IIIF_supported_mime_types.txt";
+    private static List<String> supportedMimeTypes;
 
-    // load blocked mime-types from file
+    // load supported mime-types from file
     static {
-        URL file = IIIFLink.class.getClassLoader().getResource(BLOCKED_MIME_TYPES_FILENAME);
+        URL file = IIIFLink.class.getClassLoader().getResource(SUPPORTED_MIME_TYPES_FILENAME);
         if (file == null) {
-            LOG.warn("Unable to find file {}", BLOCKED_MIME_TYPES_FILENAME);
+            LOG.warn("Unable to find file {}", SUPPORTED_MIME_TYPES_FILENAME);
         } else {
             try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
-                blockedMimeTypes = lines.map(String::toLowerCase).collect(Collectors.toUnmodifiableList());
+                supportedMimeTypes = lines.map(String::toLowerCase).collect(Collectors.toUnmodifiableList());
             } catch (IOException | URISyntaxException e) {
-                LOG.error("Error loading file {}", BLOCKED_MIME_TYPES_FILENAME, e);
-                blockedMimeTypes = new ArrayList<>();
+                LOG.error("Error loading file {}", SUPPORTED_MIME_TYPES_FILENAME, e);
+                supportedMimeTypes = new ArrayList<>();
             }
         }
-        LOG.info("Loaded {} mime-types from file for which no IIIF link will be created", blockedMimeTypes.size());
+        LOG.info("Loaded {} mime-types from file for which no IIIF link will be created", supportedMimeTypes.size());
     }
 
     private IIIFLink() {
@@ -60,14 +60,15 @@ public final class IIIFLink {
     }
 
     /**
-     * Add a link to a IIIF manifest in the dcReferencedBy field if
-     * 1. the record is an EU screen audio or video time, OR if
-     * 2a. the record doesn't have a webresource with a mime-type listed in the blocked mime-types file
-     * 2b. the record doesn't have a webresource that already has a non-europeana dcReferencedBy field
-     * Note that only edmIsShownBy or hasView webresources are considered in these checks (or edmIsShownAt for EU-screen
-     * A/V items)
+     * Add a link to a IIIF manifest in the dcReferencedBy field if ->
+     *    1. Check if there is any provider Manifest in the Record, if so, do nothing
+     *     2. Go through all WebResources in the edm:isShownBy and edm:hasViews, for each:
+     *           a) Check if the media type matches one of the cases present in SUPPORTED_MIME_TYPES_FILENAME file
+     *           b) If so add a link to the Manifest, otherwise continue the loop
+     *     3) If the record is an EU screen audio or video, add the IIIF manifest link as well
      *
-     * Also Adds the manifest Web resources for the IIIF manifest links added in the dcReferencedBy field
+     * If at least 1 WebResource was linked to a Manifest, add the Manifest web resource for the
+     * IIIF manifest links added in dcReferencedBy field
      *
      * @param bean           fullbean to which referenceBy IIIF link should be added
      * @param manifestAddApiUrl if true adds extra parameter to manifest links generated as value for dctermsIsReferencedBy
@@ -80,7 +81,8 @@ public final class IIIFLink {
         // add timing information to see impact
         long start = System.nanoTime();
 
-        List<String> webResourceIds = getRelevantWebResourceIds(bean);
+        boolean isEUScreen = isEUScreen(bean);
+        List<String> webResourceIds = getRelevantWebResourceIds(bean, isEUScreen);
 
         // find the corresponding webresource objects
         List<WebResource> webResourcesToUpdate = new ArrayList<>();
@@ -88,12 +90,14 @@ public final class IIIFLink {
         for (WebResource wr : bean.getAggregations().get(0).getWebResources()) {
             LOG.debug("Checking webresources with id {}", wr.getAbout());
             if (webResourceIds.contains(wr.getAbout())) {
-                // abort if there is a blocked item or dcTermsIsReferencedBy value not from europeana
-                if (hasNonEuropeanaDcTermsIsRefValue(wr, bean.getAbout()) || hasBlockedMimeTypes(wr, bean.getAbout())) {
+                // If there ia provider manifest present in any of the web resource, NO need to add any IIIF links
+                if (hasProviderManifest(wr, bean.getAbout())) {
                     LOG.debug("Abort adding dcTermsIsReferenceBy values for record {}", bean.getAbout());
                     webResourceIds.clear();
                     webResourcesToUpdate.clear();
-                } else {
+                } // if there is no provider manifest and web resource contains supported mimetype by Manifest, we will add the IIIF links
+                 // Or if the record is a EU screen item
+                 else if (isMimeTypeSupported(wr, bean.getAbout()) || isEUScreen) {
                     LOG.debug("  Webresource {} should be updated", wr.getAbout());
                     webResourceIds.remove(wr.getAbout());
                     webResourcesToUpdate.add(wr);
@@ -118,17 +122,14 @@ public final class IIIFLink {
         }
     }
 
-    private static List<String> getRelevantWebResourceIds(FullBean bean) {
+    private static List<String> getRelevantWebResourceIds(FullBean bean, boolean isEuScreen) {
         List<String> result = new ArrayList<>();
+
         // if it's an EU-screen sound or video item use isShownAt, otherwise use isShownBy
-        String isShownAt = isEUScreenItem(bean);
-        if (isShownAt != null && isVideoOrSound(bean)) {
-            LOG.debug("Found edmIsShownAt = {}", isShownAt);
-            result.add(isShownAt);
-        } else {
-            String isShownBy = getIsShownBy(bean);
-            LOG.debug("Found edmIsShownBy = {}", isShownBy);
-            result.add(isShownBy);
+        String edmIsShownByOrAt = getIsShownByOrAt(bean, isEuScreen);
+        if (edmIsShownByOrAt != null) {
+            result.add(edmIsShownByOrAt);
+            LOG.debug("Found edmIsShown{} = {}", isEuScreen ? "At" : "By" , edmIsShownByOrAt);
         }
         // also add all hasViews
         // the first aggregation (from data provider) should be the one that contains the hasViews and webresources
@@ -143,18 +144,21 @@ public final class IIIFLink {
     }
 
     /**
-     * Check if the record is a EU Screen Item (if edmShownAt start with  value 'http(s)://www.euscreen.eu')
-     * If so we return the value of the edmIsShownAtField, otherwise we return null
+     * Check if it's an EUScreen sound or video record -
+     *   check if EdmIsShownAt starts with (http|https):////www.euscreen.eu
+     *   and if edmType is video or sound
+     * @param bean
+     * @return
      */
-    private static String isEUScreenItem(FullBean bean) {
+    private  static boolean isEUScreen(FullBean bean) {
         for (Aggregation a : bean.getAggregations()) {
-            if (StringUtils.startsWithAny (a.getEdmIsShownAt(), HTTP_WWW_EUSCREEN_EU, HTTPS_WWW_EUSCREEN_EU)) {
+            if (StringUtils.startsWithAny (a.getEdmIsShownAt(), HTTP_WWW_EUSCREEN_EU, HTTPS_WWW_EUSCREEN_EU) && isVideoOrSound(bean)) {
                 LOG.debug("isEUScreen A/V item = TRUE");
-                return a.getEdmIsShownAt();
+                return true;
             }
         }
         LOG.debug("isEUScreen A/V item = FALSE");
-        return null;
+        return false;
     }
 
     /**
@@ -174,12 +178,15 @@ public final class IIIFLink {
     }
 
     /**
-     * Check if the record is a EU Screen Item (if edmShownAt start with  value 'http(s)://www.euscreen.eu')
-     * If so we return the value of the edmIsShownAtField, otherwise we return null
+     * If euScreenItem is true, returns EdmIsShownAt value.
+     * Else returns EdmIsShownBy value if present, otherwise return null
      */
-    private static String getIsShownBy(FullBean bean) {
+    private static String getIsShownByOrAt(FullBean bean, boolean euScreenItem) {
         for (Aggregation a : bean.getAggregations()) {
-            if (a.getEdmIsShownBy() != null) {
+            if (euScreenItem && a.getEdmIsShownAt() != null) {
+                return a.getEdmIsShownAt();
+            }
+            else if (a.getEdmIsShownBy() != null) {
                 return a.getEdmIsShownBy();
             }
         }
@@ -187,10 +194,11 @@ public final class IIIFLink {
     }
 
     /**
-     * Checks if the provided webresource as a dcTermsIsReferencedBy value that does not start with
-     * http(s)://iiif.europeana.eu
+     * See if the webresource already has a provider manifest -
+     *   Checks if the provided webresource has a dcTermsIsReferencedBy value that does not start with
+     *   http(s)://iiif.europeana.eu
      */
-    private static boolean hasNonEuropeanaDcTermsIsRefValue(WebResource wr, String about) {
+    private static boolean hasProviderManifest(WebResource wr, String about) {
         String[] dcRefValue = wr.getDctermsIsReferencedBy();
         if (dcRefValue != null && dcRefValue.length > 0 &&
                 !StringUtils.startsWithAny(dcRefValue[0], HTTPS_DEFAULT_IIIF_BASE_URL, HTTP_DEFAULT_IIIF_BASE_URL)) {
@@ -201,12 +209,12 @@ public final class IIIFLink {
     }
 
     /**
-     * Checks if the provided webresource has a mime-type that is in our blocked list
+     * Checks if the provided webresource contains supported mime types by IIIF manifest
      */
-    private static boolean hasBlockedMimeTypes(WebResource wr, String about) {
+    private static boolean isMimeTypeSupported(WebResource wr, String about) {
         String mimeType = wr.getEbucoreHasMimeType();
-        if (StringUtils.isNotBlank(mimeType) && blockedMimeTypes.contains(mimeType.toLowerCase(Locale.ROOT))) {
-            LOG.debug("Record {} has webresource {} with blocked mime-type", about, wr.getAbout());
+        if (StringUtils.isNotBlank(mimeType) && supportedMimeTypes.contains(mimeType.toLowerCase(Locale.ROOT))) {
+            LOG.debug("Record {} has webresource {} with valid/supported mime-type {}", about, wr.getAbout(), mimeType);
             return true;
         }
         return false;
