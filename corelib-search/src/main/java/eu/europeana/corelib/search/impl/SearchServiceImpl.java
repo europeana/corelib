@@ -205,8 +205,8 @@ public class SearchServiceImpl implements SearchService {
         // to be able to test distance search
         if (defaultSort) {
             solrQuery.addSort("score", ORDER.desc);
-            //solrQuery.addSort("contentTier", ORDER.desc);   <- TODO uncomment this
-            //solrQuery.addSort("metadataTier", ORDER.desc);  <- TODO uncomment this
+            solrQuery.addSort("contentTier", ORDER.desc);
+            solrQuery.addSort("metadataTier", ORDER.desc);
             solrQuery.addSort("timestamp_update", ORDER.desc);
             solrQuery.addSort(EUROPEANA_ID, ORDER.asc);
         } else {

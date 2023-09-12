@@ -97,11 +97,14 @@ public class Query implements Cloneable {
         this.query = query;
         return this;
     }
-    
+
+//    public Query addGeoParamsToQuery(String point, String distance, String fieldsToAdd){
     public Query addGeoParamsToQuery(String sField, String point, String distance){
         parameterMap.put("sfield", sField);
         parameterMap.put("pt", point);
         parameterMap.put("d", distance);
+//        String existingFlParameters = parameterMap.get("fl");
+//        parameterMap.replace("fl", fieldsToAdd + " " + existingFlParameters);
         return this;
     }
 
