@@ -15,11 +15,10 @@ import java.util.regex.Pattern;
  */
 
 public final class EuropeanaUriUtils {
-    
+
     private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/)\\S+$");
-//    private static final Pattern RELATIVEURLPATTERN = Pattern.compile("^(?!www\\.|(?:http|ftp|session|bitcoin)s?://|[A-Za-z]:\\|//)(?:#|\\./|\\.\\./|/|[A-Za-z])\\S+$");
-    //private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z+-.]*):.*$");
-    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^(https?|ftp|session)://[^\\s/$.?#].[^\\s]*$");
+    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z+-.]*)://[^/$.?#].*$");
+//    private static final Pattern ABSOLUTEURLPATTERN = Pattern.compile("^(https?|ftp|session)://[^\\s/$.?#].[^\\s]*$");
     private static final Set<String> schemes= new HashSet<>();
 
     static {
