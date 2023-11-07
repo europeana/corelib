@@ -58,6 +58,12 @@ public class EuropeanaURIUtilsTest {
         assertFalse(EuropeanaUriUtils.isUri("2385451"));
         assertFalse(EuropeanaUriUtils.isUri(null));
 
+        // absolute uri test for values with spaces
+        assertTrue(EuropeanaUriUtils.isAbsoluteUri("http://catalogue.museogalileo.it/images/cat/approfondimenti_300/6623_1653_0827-055 + 6623_1653_0826-029_elab_300.jpg"));
+        assertTrue(EuropeanaUriUtils.isAbsoluteUri("http://www.budaivigado.hu/ftp/rmne//Mozgokep/Tanc/Magyarpalatka.1991.11.16/Magyarpalatkai_sűrű magyarMoldovan_Istvan91.mp4"));
+        assertTrue(EuropeanaUriUtils.isUri("http://www.budaivigado.hu/ftp/rmne//Mozgokep/Tanc/Magyarpalatka.1991.11.16/Magyarpalatkai_sűrű magyarMoldovan_Istvan91.mp4"));
+        assertFalse(EuropeanaUriUtils.isUri("Europeana space test"));
+        assertFalse(EuropeanaUriUtils.isAbsoluteUri("Europeana space test"));
     }
 
     @Test
