@@ -19,11 +19,10 @@ import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.JiBXException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -82,11 +81,11 @@ public final class EdmUtils {
 
     private static String marshallToEDM(RDF rdf) {
         IMarshallingContext marshallingContext;
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream()){
+        try (StringWriter out = new StringWriter()){
             marshallingContext = bfact.createMarshallingContext();
-            marshallingContext.setOutput(out, null);
+            marshallingContext.setOutput(out, EuropeanaUTF8Escaper.s_instance);
             marshallingContext.marshalDocument(rdf, "UTF-8", true);
-            return out.toString(StandardCharsets.UTF_8);
+            return out.toString();
         } catch (JiBXException | IOException e) {
             String id = null;
             if (rdf != null && rdf.getProvidedCHOList() != null && !rdf.getProvidedCHOList().isEmpty()) {
