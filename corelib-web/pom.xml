@@ -113,7 +113,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <!-- set to compile instead of test to avoid error messages in bean .xml definitions -->
             <scope>compile</scope>

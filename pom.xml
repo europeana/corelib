@@ -49,17 +49,17 @@
         <commonsIO.version>2.4</commonsIO.version>
         <commonsLang3.version>3.12.0</commonsLang3.version>
         <httpclient.version>4.5.13</httpclient.version>
-        <jackson.version>2.14.1</jackson.version>
+        <jackson.version>2.16.0</jackson.version>
         <jibx.version>1.3.3</jibx.version>
         <jodatime.version>2.9.2</jodatime.version>
         <junit.version>4.13.1</junit.version>
         <log4j2.version>2.19.0</log4j2.version>
-        <mockito.version>1.10.19</mockito.version>
+        <mockito.version>3.2.0</mockito.version>
 
         <springBoot.version>1.3.8.RELEASE</springBoot.version>
         <springCore.version>4.3.23.RELEASE</springCore.version>
 
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencyManagement>
