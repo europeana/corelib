@@ -1104,7 +1104,9 @@ public final class EdmUtils {
     }
 
     /**
-     * Make a clone of a map
+     * Make a clone of a map. If the key contains a separator "." , get the value of the key after that.
+     * This is to overcome solr fields like proxy_dc_creator.en. To get the language tagged value.
+     * NOTE : if there is no seperator then the substringAfter method returns empty string.
      * @param map
      * @return
      */
@@ -1114,7 +1116,11 @@ public final class EdmUtils {
         }
         Map<String, List<String>> result = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            result.put(StringUtils.substringAfter(entry.getKey(), "."), entry.getValue());
+            if (StringUtils.contains(entry.getKey(), ".")) {
+                result.put(StringUtils.substringAfter(entry.getKey(), "."), entry.getValue());
+            } else {
+                result.put(entry.getKey(), entry.getValue());
+            }
         }
         return result;
     }
