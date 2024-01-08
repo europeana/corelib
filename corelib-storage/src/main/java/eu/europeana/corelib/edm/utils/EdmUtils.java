@@ -370,19 +370,20 @@ public final class EdmUtils {
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
 
-        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
-            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
-            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
-                HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                if (preserveIdentifiers) {
-                    hasQualityAnnotation.setResource(anno);
-                } else {
-                    hasQualityAnnotation.setResource(getBaseUrl(anno));
-                }
-                qualityAnnotations.add(hasQualityAnnotation);
-            }
-            aggregation.setHasQualityAnnotationList(qualityAnnotations);
-        }
+        System.out.println("here not adding quality annotations ");
+//        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
+//            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
+//            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
+//                HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
+//                if (preserveIdentifiers) {
+//                    hasQualityAnnotation.setResource(anno);
+//                } else {
+//                    hasQualityAnnotation.setResource(getBaseUrl(anno));
+//                }
+//                qualityAnnotations.add(hasQualityAnnotation);
+//            }
+//            aggregation.setHasQualityAnnotationList(qualityAnnotations);
+//        }
 
         Created created = new Created();
         created.setString(DateUtils.format(fBean.getTimestampCreated()));
@@ -570,6 +571,10 @@ public final class EdmUtils {
             }
             addAsList(aggregation, Rights.class, aggr.getDcRights());
             addAsList(aggregation, HasView.class, aggr.getHasView());
+
+            // EA-3652 add quality annotations in aggregation
+
+
             aggregationList.add(aggregation);
             if (aggr.getWebResources() != null && !aggr.getWebResources().isEmpty()) {
                 EdmWebResourceUtils.createWebResources(rdf, aggr, preserveIdentifiers);
@@ -577,6 +582,38 @@ public final class EdmUtils {
         }
         rdf.setAggregationList(aggregationList);
     }
+
+    private static void appendQualityAnnotations(Aggregation aggregation,
+                                                 List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
+                                                 boolean preserveIdentifiers) {
+        if (qualityAnnotations != null) {
+            List<QualityAnnotation> resultList = new ArrayList<>();
+
+            for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
+                if (StringUtils.equals(aggregation.getAbout(), anno.getTarget()[0])) {
+                    QualityAnnotation qualityAnnotation = new QualityAnnotation();
+
+                    Created created = new Created();
+                    created.setString(anno.getCreated());
+                    qualityAnnotation.setCreated(created);
+
+                    HasBody hasBody = new HasBody();
+                    hasBody.setResource(anno.getBody());
+                    qualityAnnotation.setHasBody(hasBody);
+
+                    // this for cases we don not want to append or change the values with a base urls. Mostly used in re-indexing
+                    if (preserveIdentifiers) {
+                        addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
+                    } else {
+                        addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
+                    }
+                    resultList.add(qualityAnnotation);
+                }
+            }
+            // TODO jibx
+        }
+    }
+
 
     private static void appendCHO(RDF rdf, List<ProvidedCHOImpl> chos, boolean preserveIdentifiers) {
         List<ProvidedCHOType> pChoList = new ArrayList<>();

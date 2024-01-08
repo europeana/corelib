@@ -235,4 +235,15 @@ public interface Aggregation extends AbstractEdmEntity {
 	 */
 
 	void setEdmIntermediateProvider(Map<String,List<String>> edmIntermediateProvider);
+
+	/**
+	 * Get the associated list of dqv:QualityAnnotation for the record
+	 */
+	List<? extends QualityAnnotation> getQualityAnnotations();
+
+	/**
+	 * Set the list of dqv:QualityAnnotation for the record
+	 * @param qualityAnnotations
+	 */
+	void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations);
 }

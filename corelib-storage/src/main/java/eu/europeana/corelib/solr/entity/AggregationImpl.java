@@ -12,6 +12,7 @@ import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
 import eu.europeana.corelib.definitions.edm.entity.Aggregation;
+import eu.europeana.corelib.definitions.edm.entity.QualityAnnotation;
 import eu.europeana.corelib.definitions.edm.entity.WebResource;
 import eu.europeana.corelib.utils.StringArrayUtils;
 import java.util.ArrayList;
@@ -66,6 +67,8 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	private Boolean edmPreviewNoDistribute;
 
 	private Map<String,List<String>> edmIntermediateProvider;
+
+	private List<? extends QualityAnnotation> qualityAnnotations;
 
 	@Transient
 	@JsonIgnore
@@ -237,6 +240,16 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 	@Override
 	public void setEdmIntermediateProvider(Map<String, List<String>> edmIntermediateProvider) {
 		this.edmIntermediateProvider = edmIntermediateProvider;
+	}
+
+	@Override
+	public List<? extends QualityAnnotation> getQualityAnnotations() {
+		return this.qualityAnnotations;
+	}
+
+	@Override
+	public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
+		this.qualityAnnotations = qualityAnnotations;
 	}
 
 	/**
