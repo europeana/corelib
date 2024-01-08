@@ -119,8 +119,8 @@ public final class EdmUtils {
         RDF rdf = new RDF();
         String type = getType(fullBean);
         appendCHO(rdf, fullBean.getProvidedCHOs(), preserveIdentifiers);
-        appendQualityAnnotations(rdf, fullBean.getQualityAnnotations(), preserveIdentifiers);
-        appendAggregation(rdf, fullBean.getAggregations(), preserveIdentifiers);
+       // appendQualityAnnotations(rdf, fullBean.getQualityAnnotations(), preserveIdentifiers);
+        appendAggregation(rdf, fullBean.getAggregations(), fullBean.getQualityAnnotations(), preserveIdentifiers);
         appendProxy(rdf, fullBean.getProxies(), type, preserveIdentifiers);
         appendEuropeanaAggregation(rdf, fullBean, preserveIdentifiers);
         appendOrganisations(rdf, fullBean.getOrganizations());
@@ -199,40 +199,6 @@ public final class EdmUtils {
             rdf.setLicenseList(licenseList);
         }
 
-    }
-
-    private static void appendQualityAnnotations(RDF rdf,
-        List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
-        boolean preserveIdentifiers) {
-        if (qualityAnnotations != null) {
-            List<QualityAnnotation> resultList = new ArrayList<>();
-            for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
-                QualityAnnotation qualityAnnotation = new QualityAnnotation();
-                resultList.add(qualityAnnotation);
-
-                if (preserveIdentifiers) {
-                    qualityAnnotation.setAbout(anno.getAbout());
-                } else {
-                    qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
-                }
-
-                Created created = new Created();
-                created.setString(anno.getCreated());
-                qualityAnnotation.setCreated(created);
-
-                HasBody hasBody = new HasBody();
-                hasBody.setResource(anno.getBody());
-                qualityAnnotation.setHasBody(hasBody);
-                // this for cases we don not want to append or change the values with a base urls. Mostly used in re-indexing
-                if (preserveIdentifiers) {
-                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget());
-                } else {
-                    addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
-                }
-            }
-
-            rdf.setQualityAnnotationList(resultList);
-        }
     }
 
     // get the type from the main proxy
@@ -536,6 +502,7 @@ public final class EdmUtils {
     }
 
     private static void appendAggregation(RDF rdf, List<AggregationImpl> aggregations,
+                                          List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
         boolean preserveIdentifiers) {
         List<Aggregation> aggregationList = new ArrayList<>();
         for (AggregationImpl aggr : aggregations) {
@@ -572,8 +539,9 @@ public final class EdmUtils {
             addAsList(aggregation, Rights.class, aggr.getDcRights());
             addAsList(aggregation, HasView.class, aggr.getHasView());
 
-            // EA-3652 add quality annotations in aggregation
-
+            // EA-3652 add quality annotations in aggregation. qualityAnnotations are present in old data,
+            // Not sure how it is present in new data in mongo
+            appendQualityAnnotationsToAggregation(aggregation, qualityAnnotations, preserveIdentifiers);
 
             aggregationList.add(aggregation);
             if (aggr.getWebResources() != null && !aggr.getWebResources().isEmpty()) {
@@ -583,11 +551,11 @@ public final class EdmUtils {
         rdf.setAggregationList(aggregationList);
     }
 
-    private static void appendQualityAnnotations(Aggregation aggregation,
+    private static void appendQualityAnnotationsToAggregation(Aggregation aggregation,
                                                  List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
                                                  boolean preserveIdentifiers) {
         if (qualityAnnotations != null) {
-            List<QualityAnnotation> resultList = new ArrayList<>();
+            List<HasQualityAnnotation> resultList = new ArrayList<>();
 
             for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
                 if (StringUtils.equals(aggregation.getAbout(), anno.getTarget()[0])) {
@@ -607,10 +575,13 @@ public final class EdmUtils {
                     } else {
                         addAsList(qualityAnnotation, HasTarget.class, anno.getTarget(), null, true);
                     }
-                    resultList.add(qualityAnnotation);
+
+                    HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
+                    hasQualityAnnotation.setQualityAnnotation(qualityAnnotation);
+                    resultList.add(hasQualityAnnotation);
                 }
             }
-            // TODO jibx
+            aggregation.setHasQualityAnnotationList(resultList);
         }
     }
 

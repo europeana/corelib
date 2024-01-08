@@ -39,7 +39,9 @@
         <version.maven.compiler.plugin>3.8.1</version.maven.compiler.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <metis.version>6</metis.version>
+        <metis.version>12-SNAPSHOT</metis.version>
+        <metis.schema.version>9-SNAPSHOT</metis.schema.version>
+
         <sonar.organization>europeana</sonar.organization>
         <apacheSolr.version>8.11.1</apacheSolr.version>
         <apacheLucene.version>8.11.1</apacheLucene.version>
