@@ -210,11 +210,11 @@ public final class EdmUtils {
                 QualityAnnotation qualityAnnotation = new QualityAnnotation();
                 resultList.add(qualityAnnotation);
 
-                if (preserveIdentifiers) {
-                    qualityAnnotation.setAbout(anno.getAbout());
-                } else {
-                    qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
-                }
+//                if (preserveIdentifiers) {
+//                    qualityAnnotation.setAbout(anno.getAbout());
+//                } else {
+//                    qualityAnnotation.setAbout(getBaseUrl(anno.getAbout()));
+//                }
 
                 Created created = new Created();
                 created.setString(anno.getCreated());
@@ -231,7 +231,7 @@ public final class EdmUtils {
                 }
             }
 
-            rdf.setQualityAnnotationList(resultList);
+           // rdf.setQualityAnnotationList(resultList);
         }
     }
 
