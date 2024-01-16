@@ -539,8 +539,8 @@ public final class EdmUtils {
             addAsList(aggregation, Rights.class, aggr.getDcRights());
             addAsList(aggregation, HasView.class, aggr.getHasView());
 
-            // EA-3652 add quality annotations in aggregation. qualityAnnotations are present in old data,
-            // Not sure how it is present in new data in mongo
+            // EA-3652 add quality annotations in aggregation.
+            // TODO - qualityAnnotations are present in old data, Not sure how it is present in new data in mongo
             appendQualityAnnotationsToAggregation(aggregation, qualityAnnotations, preserveIdentifiers);
 
             aggregationList.add(aggregation);
@@ -551,6 +551,30 @@ public final class EdmUtils {
         rdf.setAggregationList(aggregationList);
     }
 
+    /**
+     * Append quality annotation to Aggregation
+     * See - EA-3652 and MET-5632
+     * Previously Aggregation object did not contain tier calculation information.
+     * The change is to insert the quality annotations here:
+     *
+     * {
+     *     "about" : "/aggregation/provider/test/LCVA",
+     *     "dqvHasQualityAnnotation" : [
+     *         {
+     *             "created" : "2023-02-22T19:03:54.498268Z",
+     *             "target" : [ "/aggregation/provider/test/LCVA" ],
+     *             "body" : "... /contentTiervalue"
+     *         },
+     *         ...
+     *     ],
+     *     ...
+     * }
+     * NOTE : the target field corresponds with about field of the Aggregation.
+     *
+     * @param aggregation
+     * @param qualityAnnotations
+     * @param preserveIdentifiers
+     */
     private static void appendQualityAnnotationsToAggregation(Aggregation aggregation,
                                                  List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
                                                  boolean preserveIdentifiers) {
