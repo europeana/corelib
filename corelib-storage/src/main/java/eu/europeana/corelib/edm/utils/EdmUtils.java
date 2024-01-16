@@ -374,11 +374,11 @@ public final class EdmUtils {
             List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
             for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
                 HasQualityAnnotation hasQualityAnnotation = new HasQualityAnnotation();
-                if (preserveIdentifiers) {
-                    hasQualityAnnotation.setResource(anno);
-                } else {
-                    hasQualityAnnotation.setResource(getBaseUrl(anno));
-                }
+//                if (preserveIdentifiers) {
+//                    hasQualityAnnotation.setResource(anno);
+//                } else {
+//                    hasQualityAnnotation.setResource(getBaseUrl(anno));
+//                }
                 qualityAnnotations.add(hasQualityAnnotation);
             }
             aggregation.setHasQualityAnnotationList(qualityAnnotations);
