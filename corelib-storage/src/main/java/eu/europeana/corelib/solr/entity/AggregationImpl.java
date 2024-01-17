@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Field;
-import dev.morphia.annotations.Index;
-import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import eu.europeana.corelib.definitions.edm.beans.FullBean;
@@ -68,11 +65,14 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 	private Map<String,List<String>> edmIntermediateProvider;
 
-//	private List<? extends QualityAnnotation> qualityAnnotations;
-
 	@Transient
 	@JsonIgnore
 	private FullBean parentBean;
+
+	// EA-3652 we need to add quality annotations in the aggregation object.
+	// But the value doesn't exist in the Mongo. Hence the Transient annotation
+	@Transient
+	private List<QualityAnnotation> dqvHasQualityAnnotation;
 
 	@Override
 	public String getAggregatedCHO() {
@@ -242,15 +242,13 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 		this.edmIntermediateProvider = edmIntermediateProvider;
 	}
 
-//	@Override
-//	public List<? extends QualityAnnotation> getQualityAnnotations() {
-//		return this.qualityAnnotations;
-//	}
-//
-//	@Override
-//	public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
-//		this.qualityAnnotations = qualityAnnotations;
-//	}
+	public List<QualityAnnotation> getDqvHasQualityAnnotation() {
+		return dqvHasQualityAnnotation;
+	}
+
+	public void setDqvHasQualityAnnotation(List<QualityAnnotation> dqvHasQualityAnnotation) {
+		this.dqvHasQualityAnnotation = dqvHasQualityAnnotation;
+	}
 
 	/**
 	 * Used to maintain a reference to the encapsulating Record which is referred to in the AttributionSnippet

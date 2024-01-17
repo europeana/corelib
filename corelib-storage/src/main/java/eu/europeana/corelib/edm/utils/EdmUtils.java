@@ -336,6 +336,8 @@ public final class EdmUtils {
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
 
+        // MET-5556 and EA-3652 third tier calculation will be added here in the future. For now, we need to remove it
+
 //        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
 //            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
 //            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
@@ -539,8 +541,7 @@ public final class EdmUtils {
             addAsList(aggregation, HasView.class, aggr.getHasView());
 
             // EA-3652 add quality annotations in aggregation.
-            // TODO - qualityAnnotations are present in old data, Not sure how it is present in new data in mongo
-            appendQualityAnnotationsToAggregation(aggregation, qualityAnnotations, preserveIdentifiers);
+            appendQualityAnnotationsToAggregation(aggregation, aggr.getAbout(), qualityAnnotations, preserveIdentifiers);
 
             aggregationList.add(aggregation);
             if (aggr.getWebResources() != null && !aggr.getWebResources().isEmpty()) {
@@ -554,39 +555,23 @@ public final class EdmUtils {
      * Append quality annotation to Aggregation
      * See - EA-3652 and MET-5632
      * Previously Aggregation object did not contain tier calculation information.
-     * The change is to insert the quality annotations here:
-     *
-     * {
-     *     "about" : "/aggregation/provider/test/LCVA",
-     *     "dqvHasQualityAnnotation" : [
-     *         {
-     *             "created" : "2023-02-22T19:03:54.498268Z",
-     *             "target" : [ "/aggregation/provider/test/LCVA" ],
-     *             "body" : "... /contentTiervalue"
-     *         },
-     *         ...
-     *     ],
-     *     ...
-     * }
+     * The change is to insert the quality annotations here
      * NOTE : the target field corresponds with about field of the Aggregation.
      *
      * @param aggregation
      * @param qualityAnnotations
      * @param preserveIdentifiers
      */
-    private static void appendQualityAnnotationsToAggregation(Aggregation aggregation,
+    private static void appendQualityAnnotationsToAggregation(Aggregation aggregation, String about,
                                                  List<? extends eu.europeana.corelib.definitions.edm.entity.QualityAnnotation> qualityAnnotations,
                                                  boolean preserveIdentifiers) {
         if (qualityAnnotations != null) {
             List<HasQualityAnnotation> resultList = new ArrayList<>();
 
             for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
-                System.out.println(aggregation.getAbout() + "   ======  " +anno.getTarget()[0]);
                 // aggregation.getAbout() might have a BASE_URL appended depending on the preserveIdentifiers value
-                if (StringUtils.contains(aggregation.getAbout(), anno.getTarget()[0])) {
-
-                    System.out.println("Adding.........");
-
+                // hence we have about field to match the target values
+                if (StringUtils.equals(about, anno.getTarget()[0])) {
                     QualityAnnotation qualityAnnotation = new QualityAnnotation();
 
                     Created created = new Created();
