@@ -61,14 +61,14 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 
 //	@Transient
 	@Reference
-	private List<WebResourceImpl> webResources = new ArrayList<>();;
+	private List<WebResourceImpl> webResources = new ArrayList<>();
 
 //	@GraphProperty
 	private Boolean edmPreviewNoDistribute;
 
 	private Map<String,List<String>> edmIntermediateProvider;
 
-	private List<? extends QualityAnnotation> qualityAnnotations;
+//	private List<? extends QualityAnnotation> qualityAnnotations;
 
 	@Transient
 	@JsonIgnore
@@ -242,15 +242,15 @@ public class AggregationImpl extends AbstractEdmEntityImpl implements Aggregatio
 		this.edmIntermediateProvider = edmIntermediateProvider;
 	}
 
-	@Override
-	public List<? extends QualityAnnotation> getQualityAnnotations() {
-		return this.qualityAnnotations;
-	}
-
-	@Override
-	public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
-		this.qualityAnnotations = qualityAnnotations;
-	}
+//	@Override
+//	public List<? extends QualityAnnotation> getQualityAnnotations() {
+//		return this.qualityAnnotations;
+//	}
+//
+//	@Override
+//	public void setQualityAnnotations(List<? extends QualityAnnotation> qualityAnnotations) {
+//		this.qualityAnnotations = qualityAnnotations;
+//	}
 
 	/**
 	 * Used to maintain a reference to the encapsulating Record which is referred to in the AttributionSnippet

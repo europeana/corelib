@@ -336,7 +336,6 @@ public final class EdmUtils {
         completeness.setString(Integer.toString(fBean.getEuropeanaCompleteness()));
         aggregation.setCompleteness(completeness);
 
-        System.out.println("here not adding quality annotations ");
 //        if (europeanaAggregation.getDqvHasQualityAnnotation() != null) {
 //            List<HasQualityAnnotation> qualityAnnotations = new ArrayList<>();
 //            for (String anno : europeanaAggregation.getDqvHasQualityAnnotation()) {
@@ -582,7 +581,12 @@ public final class EdmUtils {
             List<HasQualityAnnotation> resultList = new ArrayList<>();
 
             for (eu.europeana.corelib.definitions.edm.entity.QualityAnnotation anno : qualityAnnotations) {
-                if (StringUtils.equals(aggregation.getAbout(), anno.getTarget()[0])) {
+                System.out.println(aggregation.getAbout() + "   ======  " +anno.getTarget()[0]);
+                // aggregation.getAbout() might have a BASE_URL appended depending on the preserveIdentifiers value
+                if (StringUtils.contains(aggregation.getAbout(), anno.getTarget()[0])) {
+
+                    System.out.println("Adding.........");
+
                     QualityAnnotation qualityAnnotation = new QualityAnnotation();
 
                     Created created = new Created();
